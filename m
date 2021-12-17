@@ -2,226 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB08747823B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4312B47823E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhLQBn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 20:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbhLQBn1 (ORCPT
+        id S231910AbhLQBpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 20:45:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39802 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229834AbhLQBpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:43:27 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA2BC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:43:27 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q16so1168970wrg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H5OrUZjgQ1YXwPs3ZdZyzCT9xYTcrlDxGMN/Lkx3yjY=;
-        b=ENS69Ixmc+9rTshBrseGjbavY/beBCYucRDedT5GJlZuWvD3sm+w8lqALUgK5qk9xP
-         IsYf4fBr+/E51laHVZAO5tf08XgyZZcoxA8+fGFo9wpn9CptnrJxz+LTcPqNUs/zY3DZ
-         aXd/fKemZfmErtcoixOwRBewS98RcjuAQzv63mAutdmTtYYS1sDGyy18BtFqH1sfEIvU
-         aEzdoALJUPiFAbJW84tpPtyTCH132TMXXhvwoliy9fR7Kp7mBhoixVjXaCrTz9b0WFUj
-         B+Hx9ghk67vEfHTI1/eKIDed3BOuxVDYoZiqMt2wBkShjGMAcx26Pdan67uNITyKDX9r
-         m67g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H5OrUZjgQ1YXwPs3ZdZyzCT9xYTcrlDxGMN/Lkx3yjY=;
-        b=Q+moWT2M5nohV3hV/RncgBF9cLMksu3o0LtlL24irrMjtZjFQ/FQeAZPi1KjXOSF08
-         0NicCVQR1toorZlqHdmVKl0X7C60zJEFmAIASFg/fR7pQ15YBGhjnaQPuUrn/G9LNhhI
-         TgmIqrzK+dz6FccV3t6pO1v/H9spYk4wxexCe7FpMIsQfyrdgg0ejsKdwsN1VgKw+Qvi
-         qP7S4nhqWIbMBe7tJJkJBkM9azqob/jVkcYnF/GS6HR6wepx8U5Skfu3WzPkhDpm+pyM
-         8JmltRL0f9EosoQd2E8BiJqbvfaKp0d4Iex97uEZmuCj1/6iFTJfevlDx4obmsB1HpIn
-         fHPA==
-X-Gm-Message-State: AOAM531RhIzBw9VDoSid+rrQovmRKWva8xvKl9PIZJAIhpaiO0iGQdAK
-        YLnpFjiTdE37F5uRwpxRPmxS4YIKVgHumoTL3AMpa1atx+av4Rhy
-X-Google-Smtp-Source: ABdhPJyTlUWLnivczkfGrT9CphgkdB2Z9tQ9Xqgib9yoA4ZrAWb8bQ3ZsOF0ieh/tvf071MEYHoazsx1ETNdmJvtWnE=
-X-Received: by 2002:a5d:6d4c:: with SMTP id k12mr479403wri.511.1639705405890;
- Thu, 16 Dec 2021 17:43:25 -0800 (PST)
+        Thu, 16 Dec 2021 20:45:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5578B80B8A;
+        Fri, 17 Dec 2021 01:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CD4C36AE0;
+        Fri, 17 Dec 2021 01:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639705521;
+        bh=daQtaubSj1CShpr7MeB1121A3xqNkveGCGv+naWwWEg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=XWzKWirecBC/wLx3Kpm3Wgw0wlotDgM66Bj+0cEH5ioDZ8MXuNHM76eQziOfeCVtc
+         ZTVpemi08uoxqZi9QpJXEHBckwZCTiywv4+YBXlUe4OTcu5aswvuEke60GI9fBKDiP
+         kXaou+JDwB+OHlDgrB7XD3IDAnMssxCMPYl720r91y1ExFQz772Q5K3F5V6HILvNBC
+         SYlMEAQxYb4aAvmkqIzVzYb9BOK9moD5useuNcWqqnERbcKL312lVTddX6XCX8ekwT
+         BFiH8ItyqbET90IXCbjc9NRnB4IYaflGVr3wEkH5G8uuf4/unzBXuuVJ+gg+uzrM90
+         mkJfn1TUn0vcQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211129164951.220511-1-xiehuan09@gmail.com> <20211216235017.97f0769a63d2c478562d39a4@kernel.org>
-In-Reply-To: <20211216235017.97f0769a63d2c478562d39a4@kernel.org>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Fri, 17 Dec 2021 09:43:13 +0800
-Message-ID: <CAEr6+EACoE+7SSMJP10uz2g9DqKPwOK89kxAUC=_R43eMRK43w@mail.gmail.com>
-Subject: Re: [RFC][PATCH v6 0/5] trace: Introduce objtrace trigger to trace
- the kernel object
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YbvMkIhdsGdCfvFV@ripper>
+References: <20211203035601.3505780-1-bjorn.andersson@linaro.org> <20211216015136.96AD3C36AE1@smtp.kernel.org> <Ybqo+wUv6lNT75tJ@ripper> <20211216185856.27406C36AE2@smtp.kernel.org> <YbvMkIhdsGdCfvFV@ripper>
+Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Amit Nischal <anischal@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>, dmitry.baryshkov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Thu, 16 Dec 2021 17:45:19 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211217014521.55CD4C36AE0@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
+Quoting Bjorn Andersson (2021-12-16 15:32:32)
+> On Thu 16 Dec 10:58 PST 2021, Stephen Boyd wrote:
+>=20
+> > Quoting Bjorn Andersson (2021-12-15 18:48:27)
+> > > On Wed 15 Dec 17:51 PST 2021, Stephen Boyd wrote:
+> > >=20
+> > > > Quoting Bjorn Andersson (2021-12-02 19:56:01)
+> > > > > As GDSCs are turned on and off some associated clocks are momenta=
+rily
+> > > > > enabled for house keeping purposes. Failure to enable these clock=
+s seems
+> > > > > to have been silently ignored in the past, but starting in SM8350=
+ this
+> > > > > failure will prevent the GDSC to turn on.
+> > > > >=20
+> > > > > At least on SM8350 this operation will enable the RCG per the
+> > > > > configuration in CFG_REG. This means that the current model where=
+ the
+> > > > > current configuration is written back to CF_REG immediately after
+> > > > > parking the RCG doesn't work.
+> > > >=20
+> > > > Just to clarify, is the RCG off and "parked" at XO with the config
+> > > > register dirty and set to the desired frequency and then the RCG is
+> > > > turned on by the GDSC?
+> > > >=20
+> > >=20
+> > > Correct, that's exactly what I'm observing.
+> >=20
+> > Cool can you add that detail to the commit message?
+> >=20
+>=20
+> Sure.
+>=20
+> > >=20
+> > > > >=20
+> > > > > Instead, keep track of the currently requested rate of the clock =
+and
+> > > > > upon enabling the clock reapply the configuration per the saved r=
+ate.
+> > > >=20
+> > > > We already keep track of the requested rate and reapply it on enabl=
+e,
+> > > > just we're lazy and stash that information in the hardware and not =
+the
+> > > > software. I didn't think the gdsc would be turned on and ruin that =
+all,
+> > > > but it's fair.
+> > > >=20
+> > >=20
+> > > Up until SM8350 I see no evidence that this has been a problem, but n=
+ow
+> > > it is. So there's likely some changes in the hardware there...
+> > >=20
+> > > > >=20
+> > > > > Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe sou=
+rce as needed")
+> > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > > ---
+> > > > >  drivers/clk/qcom/clk-rcg.h  |  2 ++
+> > > > >  drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
+> > > > >  2 files changed, 19 insertions(+), 15 deletions(-)
+> > > > >=20
+> > > > > diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rc=
+g.h
+> > > > > index 99efcc7f8d88..6939f4e62768 100644
+> > > > > --- a/drivers/clk/qcom/clk-rcg.h
+> > > > > +++ b/drivers/clk/qcom/clk-rcg.h
+> > > > > @@ -139,6 +139,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
+> > > > >   * @freq_tbl: frequency table
+> > > > >   * @clkr: regmap clock handle
+> > > > >   * @cfg_off: defines the cfg register offset from the CMD_RCGR +=
+ CFG_REG
+> > > > > + * @current_rate: cached rate for parked RCGs
+> > > > >   */
+> > > > >  struct clk_rcg2 {
+> > > > >         u32                     cmd_rcgr;
+> > > > > @@ -149,6 +150,7 @@ struct clk_rcg2 {
+> > > > >         const struct freq_tbl   *freq_tbl;
+> > > > >         struct clk_regmap       clkr;
+> > > > >         u8                      cfg_off;
+> > > > > +       unsigned long           current_rate;
+> > > > >  };
+> > > > > =20
+> > > > >  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct=
+ clk_rcg2, clkr)
+> > > > > diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-r=
+cg2.c
+> > > > > index e1b1b426fae4..b574b38dcbd5 100644
+> > > > > --- a/drivers/clk/qcom/clk-rcg2.c
+> > > > > +++ b/drivers/clk/qcom/clk-rcg2.c
+> > > > > @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsig=
+ned long parent_rate)
+> > > > >  {
+> > > > >         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
+> > > > >         u32 cfg, hid_div, m =3D 0, n =3D 0, mode =3D 0, mask;
+> > > > > +       unsigned long rate;
+> > > > > =20
+> > > > >         regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
+> > > > > =20
+> > > > > @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsi=
+gned long parent_rate)
+> > > > >         hid_div =3D cfg >> CFG_SRC_DIV_SHIFT;
+> > > > >         hid_div &=3D mask;
+> > > > > =20
+> > > > > -       return calc_rate(parent_rate, m, n, mode, hid_div);
+> > > > > +       rate =3D calc_rate(parent_rate, m, n, mode, hid_div);
+> > > > > +       if (!rcg->current_rate)
+> > > > > +               rcg->current_rate =3D rate;
+> > > >=20
+> > > > Instead of doing this in recalc_rate, all the time, why not make an=
+ init
+> > > > clk op that does it once during registration? The other problem I s=
+ee is
+> > > > that the rate we calculate may be wrong if the parent is registered
+> > > > after this clk. I think this came up originally when the patch this=
+ is
+> > > > fixing was discussed.
+> > > >=20
+> > >=20
+> > > I would need to go back and reproduce the issue I saw, but I had to a=
+dd
+> > > this because I ended up in clk_rcg2_shared_enable() with current_rate=
+ =3D
+> > > 0, which I think would be equally bad to just committing the dirty
+> > > configuration.
+> >=20
+> > Alright.
+> >=20
+> > >=20
+> > > > So instead of saving the current_rate can we save the cfg register =
+value
+> > > > (or however many registers we need) to put back the frequency of th=
+e clk
+> > > > to what we want on enable? The other thing is that we made recalc_r=
+ate()
+> > > > work "seamlessly" here by stashing the frequency into the register =
+but
+> > > > leaving it uncommitted until enable. We may need to now look at the
+> > > > software copy of the registers in the shared rcg recalc rate operat=
+ion
+> > > > to figure out what the frequency is.
+> > > >=20
+> > >=20
+> > > I made an attempt at this, the problem I had was to come up within
+> > > something sane for how to deal with set_rate on parked clocks; because
+> > > we need to re-generate the register contents, without writing out the
+> > > value - and that got messy.
+> >=20
+> > Looking back on the introduction of this code[1] I see that it's not
+> > about the rate but more about the parent. i.e. we park the clk on the XO
+> > parent but don't care about the m/n values or pre divider because it
+> > doesn't really matter if the clk is running slowly. So nothing needs to
+> > be saved except for the cfg register, and we can do that in software
+> > with a single u32 instead of using a rate and looking it up and then
+> > reprogramming the other values. We should be able to cache the register
+> > content with an init clk_op.
+> >=20
+>=20
+> So you're suggesting that, in clk_rcg2_shared_set_rate(), when the RCG
+> is found to be disabled, I should write out M, N, D and calculate a new
+> cfg value which I stash until the next enable?
+>=20
+> Looks a little bit messy, but I will give it a try.
 
-Thanks for your review.
+No. I don't see where clk_rcg2_shared_set_rate() needs to change.
 
-On Thu, Dec 16, 2021 at 10:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Jeff,
->
-> On Tue, 30 Nov 2021 00:49:46 +0800
-> Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> > Introduce a method based on function tracer to trace any object and get
-> > the value of the object dynamically. the object can be obtained from the
-> > dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
->
-> Now you can remove [RFC] tag from this series, I think.
-> And can you also add a changelog (short description of the changes) from
-> the previous version, so that reviewers can find the difference
-> point easily? Unless that, I need to make a diff from your previous version. :(
+I'm suggesting we cache the config register on disable so it can be
+restored on enable. Basically everything is the same except now we don't
+write the cfg register and leave it dirty in the hardware. We need a
+shared rcg version of recalc rate that looks at the shadow cfg register
+instead of reading the hardware because we've changed the parent behind
+the back of the framework and we want to make it look like nothing has
+changed.=20
 
-Ok, I will remove the [RFC] and add changelog.
-
-> Thank you,
->
-> >
-> > Usage:
-> > When using the kprobe event, only need to set the objtrace(a new trigger),
-> > we can get the value of the object. The object is from the setting of the
-> > kprobe event.
-> >
-> > For example:
-> > For the function bio_add_page():
-> >
-> > int bio_add_page(struct bio *bio, struct page *page,
-> >       unsigned int len, unsigned int offset)
-> >
-> > Firstly, we can set the base of the object, thus the first string "arg1"
-> > stands for the value of the first parameter of this function bio_add_gage(),
-> >
-> > # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
-> >
-> > Secondly, we can get the value dynamically base the above object.
-> >
-> > find the offset of the bi_size in struct bio:
-> > $ gdb vmlinux
-> > (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> > $1 = (unsigned int *) 0x28
-> >
-> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> >       p_bio_add_page_0/trigger
-> >
-> > The best way to use this is that we can set the entrance event and exit
-> > event, for example, the following example is to set the read_papes as
-> > the entrance event, and set the __blk_account_io_start as the exit event.
-> >
-> > # cd /sys/kernel/debug/tracing/
-> > # echo 0 > ./tracing_on
-> > # echo 'p read_pages' >> ./kprobe_events
-> > # echo 'p __blk_account_io_start' >> ./kprobe_events
-> > # echo 'traceon if comm == "cat"' > ./events/kprobes/p_read_pages_0/trigger
-> > # echo 'traceoff if comm == "cat"' > ./events/kprobes/p___blk_account_io_start_0/trigger
-> > # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
-> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-> >
-> > # du -sh /test.txt
-> > 12.0K   /test.txt
-> >
-> > # cat  /test.txt > /dev/null
-> > # cat ./trace
-> >
-> > # tracer: nop
-> > #
-> > # entries-in-buffer/entries-written: 50/50   #P:1
-> > #
-> > #                                _-----=> irqs-off
-> > #                               / _----=> need-resched
-> > #                              | / _---=> hardirq/softirq
-> > #                              || / _--=> preempt-depth
-> > #                              ||| / _-=> migrate-disable
-> > #                              |||| /     delay
-> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > #              | |         |   |||||     |         |
-> >              cat-95      [000] .....     1.412065: _raw_spin_unlock_irqrestore <-event_triggers_call object:0xffff888108af6328 value:0x0
-> >              cat-95      [000] .....     1.412066: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x0
-> >              cat-95      [000] .....     1.412066: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x0
-> >              cat-95      [000] .....     1.412066: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412066: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412066: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412067: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x1000
-> >              cat-95      [000] .....     1.412067: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x2000
-> >              cat-95      [000] .....     1.412067: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x2000
-> >              cat-95      [000] .....     1.412067: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x2000
-> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x2000
-> >              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x2000
-> >              cat-95      [000] .....     1.412068: submit_bio <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: submit_bio_noacct <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: __submit_bio <-submit_bio_noacct object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: blk_try_enter_queue <-__submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: submit_bio_checks <-__submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: __cond_resched <-submit_bio_checks object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: rcu_all_qs <-__cond_resched object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412068: should_fail_bio <-submit_bio_checks object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: create_task_io_context <-submit_bio_checks object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: kmem_cache_alloc_node <-create_task_io_context object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: should_failslab <-kmem_cache_alloc_node object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: _raw_spin_lock <-create_task_io_context object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: blk_mq_submit_bio <-__submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: __blk_queue_split <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: bvec_split_segs <-__blk_queue_split object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412069: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: __blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: dd_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: _raw_spin_lock <-dd_bio_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: blk_mq_sched_try_merge <-dd_bio_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: elv_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: elv_rqhash_find <-elv_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: dd_request_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: elv_rb_find <-dd_request_merge object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412070: __blk_mq_alloc_request <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: dd_limit_depth <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: blk_mq_get_tag <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: __blk_mq_get_tag <-blk_mq_get_tag object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: blk_mq_rq_ctx_init.isra.0 <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: ktime_get <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: dd_prepare_request <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: __blk_account_io_start <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x3000
-> >              cat-95      [000] .....     1.412071: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x3000
-> >
-> > Jeff Xie (5):
-> >   trace: Add trace any kernel object
-> >   trace/objtrace: get the value of the object
-> >   trace/README: Document objtrace trigger syntax
-> >   trace/objtrace: Add testcases for objtrace
-> >   trace/objtrace: Add documentation for objtrace
-> >
-> >  Documentation/trace/events.rst                | 114 +++
-> >  include/linux/trace_events.h                  |   1 +
-> >  kernel/trace/Kconfig                          |  10 +
-> >  kernel/trace/Makefile                         |   1 +
-> >  kernel/trace/trace.c                          |   3 +
-> >  kernel/trace/trace.h                          |   8 +
-> >  kernel/trace/trace_entries.h                  |  18 +
-> >  kernel/trace/trace_events_trigger.c           |   1 +
-> >  kernel/trace/trace_object.c                   | 660 ++++++++++++++++++
-> >  kernel/trace/trace_output.c                   |  40 ++
-> >  .../ftrace/test.d/trigger/trigger-objtrace.tc |  39 ++
-> >  11 files changed, 895 insertions(+)
-> >  create mode 100644 kernel/trace/trace_object.c
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
-> >
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
-
----
-JeffXie
+This is all based on my understanding that the problem is the RCG is
+changing rate due to the gdsc turning on the clk for us. So we can't
+leave anything dirty in the hardware and have to keep it in software.
+I hope the change is minimal.

@@ -2,189 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FF6479729
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BE347972D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbhLQW3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:29:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50480 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229910AbhLQW3t (ORCPT
+        id S230359AbhLQWaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229808AbhLQWaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:29:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639780189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qL/JIX8EEyFG7lDdEcEOcgCQUQYx1MZeqTzUDIdfXMM=;
-        b=fy2uuB7xqaT1HBwqlcC9asm3mhqHl/caHSHCP+Q7H+pGE/xLwh6DNq42ZoS80yb2ukuodZ
-        2jqnlVaQZzX3+OHaYlYJhEMqmINPr2CMnxMoHkxBiJtPzS2mCWXkN9wfc3FR/3wgIzc7et
-        XequAnpndNnRCUb9hMmFyBUjJMmVn4I=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-eDwsHlgjPxKfHgSfKVYi9A-1; Fri, 17 Dec 2021 17:29:48 -0500
-X-MC-Unique: eDwsHlgjPxKfHgSfKVYi9A-1
-Received: by mail-wr1-f71.google.com with SMTP id s23-20020adf9797000000b001a24674f0f7so1002450wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:29:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=qL/JIX8EEyFG7lDdEcEOcgCQUQYx1MZeqTzUDIdfXMM=;
-        b=zFvVj54LW8HtDGGTvLcooDDT1X97IjViDiiyKfYMX9JpB7fZySDAspeiCIQOvTqMdk
-         KzlNVKBtEZ2vNZtOPWEVcGO/lC9O1zkSMY83wAmylBfIEd8nTo2SDInAV591KSW7IX4d
-         L1btJuoIW6ToCAq6kHZiWPwAL2K1PstlBw6VCgazF0SpI52f1/PBfuPHQQA0fKokJefT
-         56ZZUVMyO/ADklCJoW05wipAVMbXC+WRXJL+gFw6JcJt98+Hwqdc/JaDXHqNvnZSAP79
-         oB25CW3KV7QKgY+CCYzTZEV9l+S3EigteEitEhgvsd9IVGFJN63qVikXMIU4giDY+XUp
-         6A8Q==
-X-Gm-Message-State: AOAM532abPUQawdcPPJl83/NSt7zHsLD952qH8eEtPlGlo+m/HKZbcHg
-        1fEDV9ZseseiI8j9Cr+Ap+BY/33w772I8k9W3kGU5l9eclNW3u+yfeDgG9PikHPdV4gDyitD27L
-        hVmsiB6iqE9CccHoQS8ZeDNMU
-X-Received: by 2002:adf:f6c1:: with SMTP id y1mr2672031wrp.351.1639780186948;
-        Fri, 17 Dec 2021 14:29:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyY9P+G15WX8X9gRjoZbZF1GI9X6VoJGWLTrTMCgzZH7nR7syAHkYWmUCmVqISzyIQWE2QcUA==
-X-Received: by 2002:adf:f6c1:: with SMTP id y1mr2672021wrp.351.1639780186681;
-        Fri, 17 Dec 2021 14:29:46 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id e4sm7474338wrh.56.2021.12.17.14.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 14:29:46 -0800 (PST)
-Message-ID: <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
-Date:   Fri, 17 Dec 2021 23:29:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
+        Fri, 17 Dec 2021 17:30:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C6AC061574;
+        Fri, 17 Dec 2021 14:30:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 946F0B82A9B;
+        Fri, 17 Dec 2021 22:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E46BC36AE2;
+        Fri, 17 Dec 2021 22:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639780209;
+        bh=8wwtNzd+gqMtJWZe56YrMEoqcAh58nCen38oaJYWaO8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iEDPDsKO98XO/jvJbm+yFgRmQxDl4CmwNCCZ9O7HpbCSEXJA25pw5YHPwb3s5TQNN
+         i9BY1ubFlnf5uG9DhdB1upZgn3wBZ2U7zEKoZbzzSqONfP1iWr0lR/mc6vKNukUu4Y
+         v3rmzZ7PuTCgGnrM38gn5DW9gYtmVN5J+BeNUM4EZYyS4A+dHs/rlpxPuADA19S0dn
+         neVNoMO0dY5ql14VUQ62/P1PHlq3AtDvEc5p5JSO8vS0wwfJA0S0NhJ71hctL2lZr6
+         u+JH0mJiYdoKOw4PkNyE8E1OMgv4ObOm4BwqrAiECJ8clDjSowxx7LeV6ApqW7P8A6
+         w01dCRvRkkngQ==
+Date:   Fri, 17 Dec 2021 15:30:00 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com>
- <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
- <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
- <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
- <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
- <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
+Message-ID: <Yb0PaCyo/6z3XOlf@archlinux-ax161>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221814.900929381@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210221814.900929381@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.21 22:50, Linus Torvalds wrote:
-> On Fri, Dec 17, 2021 at 1:47 PM David Hildenbrand <david@redhat.com> wrote:
->>
->> For now I have not heard a compelling argument why the mapcount is
->> dubious, I repeat:
->>
->> * mapcount can only increase due to fork()
->> * mapcount can decrease due to unmap / zap
->>
->> We can protect from the transtition == 1 -> >1 using the mmap_lock.
->>
->> For COW the mapcount is the only thing that matters *if we take GUP* out
->> of the equation. And that's exactly what we
+Hi Thomas,
+
+On Fri, Dec 10, 2021 at 11:19:26PM +0100, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> What do you have against just doing what we already do in other parts,
-> that a/b thing?
-
-Let me put it that way: I just want to get all of this fixed for good. I
-don't particularly care how. *But* I will fight for something that is
-superior, logically makes sense (at least to me :) ) and not super
-complicated. And I call also avoiding unnecessary COW "superior".
-
-I do know that what this series proposes fixes the CVE: GUP after fork.
-I do know that the part 2 we'll be sending out next year will fix
-everything else we discovered so far, and it will rely on this as a
-basis, to not reintroduce any other COW issues we've seen so far.
-
-
-If someone can propose something comparable that makes all discovered
-problems go away I'll be *extremely* happy. We have reproducers for all
-issues, so it's easy to verify, and I'm planning on extending the
-selftests to cover even more corner cases.
-
-
-So far, I am not convinced that using the mapcount is dubious or
-problematic, I just don't see how. COW is an about sharing pages between
-processes, each expressed in the mapcount. It's a pure optimization for
-exactly that purpose.
-
-GUP is the problem, not COW, not the mapcount. To me the mapcount is the
-only thing that makes sense in COW+unsharing logic, and GUP has to be
-taught to identify it and resolve it -> unshare when it detects a shared
-anaonymous page.
-
-
+> Replace open coded MSI descriptor chasing and use the proper accessor
+> functions instead.
 > 
-> Which avoids the whole mmap_sem issue. That was a big issue for the
-> rdma people, afaik.
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-While I do care about future use cases, I cannot possibly see fork() not
-requiring the mmap_lock in the foreseeable future. Just so much depends
-on it as of now.
+Apologies if this has already been reported somewhere else or already
+fixed, I did a search of all of lore and did not see anything similar to
+it and I did not see any new commits in -tip around this.
 
-And after all, fixing everything what we discovered so far is more
-important to me than something like that for the future. We have other
-problems to solve in that regard.
+I just bisected a boot failure on my AMD test desktop to this patch as
+commit f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()") in
+-next. It looks like there is a problem with the NVMe drive after this
+change according to the logs. Given that the hard drive is not getting
+mounted for journald to write logs to, I am not really sure how to get
+them from the machine so I have at least taken a picture of what I see
+on my screen; open to ideas on that front!
 
-----------------------------------------------------------------------
+https://github.com/nathanchance/bug-files/blob/0d25d78b5bc1d5e9c15192b3bc80676364de8287/f48235900182/crash.jpg
 
-I didn't want to talk about hugetlb here but I will just because it's a
-good example why using the refocunt is just wrong -- because unnecessary
-COW are just absolutely problematic.
+Please let me know what information I can provide to make debugging this
+easier and I am more than happy to apply and test patches as needed.
 
-Assume you have a R/O mapped huge page that is only mapped into your
-process and you get a write fault. What should your COW logic do?
-
-a) Rely on the mapcount? Yes, iff GUP has been taught to unshare
-   properly, because then it expresses exactly what we want to know.
-   mapcount == 1 -> reuse. mapcount > 1 -> COW.
-
-b) Rely on the refocunt? If we have a speculative refrence on the page
-   we would COW. As huge pages are a scarce resource we can easily just
-   not have a free huge page anymore and crash the application. The app
-   didn't do anything wrong.
-
-So teaching the hugetlb COW code to rely on the refount would just be
-highly fragile.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers,
+Nathan

@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED7347856D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E1D47858F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbhLQHKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 02:10:21 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:40835 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhLQHKU (ORCPT
+        id S233678AbhLQH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 02:29:50 -0500
+Received: from esa4.hc1455-7.c3s2.iphmx.com ([68.232.139.117]:35439 "EHLO
+        esa4.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232167AbhLQH3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 02:10:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639725021; x=1671261021;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=OBF12AFTQ/rvRAEK+WbmtQAw/FieWK9byHw9Nr+Ga8M=;
-  b=H6/Fu+Sth2XcIUQTXGcakZllIdxmOXll2/PpjVG2sm5S9nclcqQXIH3X
-   e4v+gBzbSxK7DO4R3poJhBVXT3heO36Xk6vYOgaGyZP2ExXt4iGcQYjiI
-   XjHiEBMlIeacwrm+uJeJZo0aV+dXg7avV6FRuJaeBNCWZkiydplyjIpuP
-   Q=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 16 Dec 2021 23:10:21 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 23:10:19 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 16 Dec 2021 23:10:19 -0800
-Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 16 Dec 2021 23:10:14 -0800
-From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH v4] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for DWC3 controller
-Date:   Fri, 17 Dec 2021 12:39:57 +0530
-Message-ID: <1639724997-21809-1-git-send-email-quic_c_sanm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 17 Dec 2021 02:29:49 -0500
+IronPort-SDR: EONFwghqfOXhQ7yRCDxHVBD+5qmpH5m4vkgTUTmfuxls2fxNb/R6aEwZQHX2ADtVMIQH2o8b1m
+ 4jteIitB/nBdFE6Mtqwt0T8RjHK70bCqVjzlQYUaFmp6z1o4gnYa1oa9798fvXeGjJvI3xWBjr
+ ka/aOQcOBZdWGYoZq6toHJpEfEI16fPj6YfCpYl6EvQq0dryEyrEY3NI17Fxe9fUPKMJqu/AX0
+ JrpY7gM08km1zhKBnzkR0ZHlcWIWblgy909PK73Mb3tAy+FyLcU9lVxvkCz8aV/uPu1WWcVarp
+ WfbHCrjWniK8/DJI8IAiaJjX
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="56521217"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635174000"; 
+   d="scan'208";a="56521217"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 17 Dec 2021 16:29:47 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 58B7BE0AA0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 16:29:46 +0900 (JST)
+Received: from m3050.s.css.fujitsu.com (msm.b.css.fujitsu.com [10.134.21.208])
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 9A82AD9975
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 16:29:45 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3050.s.css.fujitsu.com (Postfix) with ESMTP id 4BB41A8;
+        Fri, 17 Dec 2021 16:29:45 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     ming.lei@redhat.com
+Cc:     hch@lst.de, kbusch@kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, tglx@linutronix.de, yamamoto.rei@jp.fujitsu.com
+Subject: Re: [PATCH] irq: consider cpus on nodes are unbalanced
+Date:   Fri, 17 Dec 2021 16:12:54 +0900
+Message-Id: <20211217071254.85061-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <Ybw0yPhi01lro7m2@T590>
+References: <Ybw0yPhi01lro7m2@T590>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-Runtime suspend of phy drivers was failing from DWC3 driver as runtime
-usage value is 2 because the phy is initialized from DWC3 and HCD core.
-DWC3 manages phy in their core drivers. Set this quirk to avoid phy
-initialization in HCD core.
+On Fri, Dec 17, 2021 at 14:57, Ming Lei wrote:
+> OK, I can understand the issue now, and only the following part is enough
+> since nmsk won't be empty:
+> 
+> 
+> diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
+> index f7ff8919dc9b..d2d01565d2ec 100644
+> --- a/kernel/irq/affinity.c
+> +++ b/kernel/irq/affinity.c
+> @@ -269,8 +269,9 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+>  	 */
+>  	if (numvecs <= nodes) {
+>  		for_each_node_mask(n, nodemsk) {
+> +			cpumask_and(nmsk, cpu_mask, node_to_cpumask[n]);
+>  			cpumask_or(&masks[curvec].mask, &masks[curvec].mask,
+> -				   node_to_cpumask[n]);
+> +				   nmsk);
+>  			if (++curvec == last_affv)
+>  				curvec = firstvec;
+>  		}
 
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
----
-v4:
-Changed pdev->dev.parent->of_node to sysdev->of_node
+OK, I will repost with the above code changes.
 
- drivers/usb/host/xhci-plat.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index c1edcc9..1a57573 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -327,6 +327,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 					 &xhci->imod_interval);
- 	}
- 
-+	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-+		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-+
- 	hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
- 	if (IS_ERR(hcd->usb_phy)) {
- 		ret = PTR_ERR(hcd->usb_phy);
--- 
-2.7.4
+Thanks,
+Rei
 

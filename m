@@ -2,176 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3064782FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AC4478301
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhLQCLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:11:37 -0500
-Received: from mga02.intel.com ([134.134.136.20]:16722 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhLQCLg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:11:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639707096; x=1671243096;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yAjiwUaIEdzf9SApDqxL8mfZBxrBi9Lf0q22oUAsn3o=;
-  b=McEoWApoDBlMJKB26LaHLQ05+ttbO4c0pOBd05qas3cYSDTnq6tlI1dm
-   3bG5uyYI0g+nEFl8VsfRlbE/lIKDaFoMXxx3M/2925n3X9tPSXEAeB7pf
-   X60aVsofH9ue9INnkQBhMp/Ui1m8R97/Mko6qG5mvDwPaVzr3rayZQ29C
-   yiohlu9PuBkuzetg/mLT2R5HenB14axa8vWojc1piJ0XeaYvnRhk8Pbwv
-   U20O08KGckHj/Vk0qHLq5WC0IioLWVOgmgJZR1nYpwVlK8OjBF0iSVMkC
-   oOD2dFAszvpR/PPYmg2BvmW0D/p6AwkhVoCtvSCQeeKUEEmxGpIC+tYVg
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226945614"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="226945614"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:11:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="756326021"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2021 18:11:33 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1my2ib-00045e-4r; Fri, 17 Dec 2021 02:11:33 +0000
-Date:   Fri, 17 Dec 2021 10:11:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, tytso@mit.edu
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] ext4: use min() to make code cleaner
-Message-ID: <202112171003.SXtQAHHE-lkp@intel.com>
-References: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
+        id S229893AbhLQCLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229449AbhLQCLx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:11:53 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423F7C061574;
+        Thu, 16 Dec 2021 18:11:53 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id m6so1582956oim.2;
+        Thu, 16 Dec 2021 18:11:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RSQtSqbGAahik3lofKuwuzkCALOuuG/K6xcfqSLYhNA=;
+        b=SHLw4f2H+5gWTcS6HVLp1w4KnEdCBxTCtWAdg4Qz+l7oer8vx4fAqjANgo0F1TbYx/
+         1GuYcQ16H7wTPRKWZMUxhJdHr/tCT4ZnTSHRgZxBkcxHgOEzGwOAbvsYuPlshL0i7T/F
+         hIV/v9Zczgwly4IeAYNKS9N1s+mNUlYCLZJbPR14S484XekgZZno/6rjwIDV6oBA6XV0
+         eZzupvk9wnrvUj72wP5c30fRVgIcXVsbB6GOi6lp2f7sUvcHs2HZV24JHdlYIzsnOozZ
+         OC8G+JFB3BY1JcmpyJKtRPxqioNGb5n8kSUazp5rPe9aQvq9DR1DhdXTIgNsv/llx3y6
+         Ld/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RSQtSqbGAahik3lofKuwuzkCALOuuG/K6xcfqSLYhNA=;
+        b=LrxyASK4flgHOnKpjhl0nCjR2Dy4YCzD53JsBCjbLZpacwRM0D+KUOd7tza1I3UIO9
+         Mdp9XqFiU6mKa2cZtPQ5gsd8Wq3JdH6/+KTApE9IxI1AR6BQZFFvWoyH4smdSvJFccfF
+         4DKaE63Rz5u4WxtayBpS7rLocH5f4vhslLuPdwImtn0UWhgZ/gvyCaCtog41Iil+LwYH
+         wPHNiM1rt+cpjMTpd8grxtIqFxSX+PGspcdUihUD2uv4fx5Va3TI8ugSC0aCt3yw3k6w
+         EtBGiBBn/mtSqg6ESVbLPC+9ctEWwLD2bOhP89uAEoGymY8DLdtc5SSZixcUMEIdwBjI
+         biGw==
+X-Gm-Message-State: AOAM530Xu1zZgBNcFxSr7JNjqzYuz9wdtzruzTompmk63nBqq/oq3WiE
+        pWrkElSwo22pwJ45sG8SGOqG+SKb5QBmgH0rOA0=
+X-Google-Smtp-Source: ABdhPJwfrvfnTOnAEYB4YjLS/zEy0yUDDe6beDVjzqRnidWGzK3Gg2JACukT+DRDVtVJseugwJuePp3UXhdTBNFRagg=
+X-Received: by 2002:a05:6808:68f:: with SMTP id k15mr6105547oig.5.1639707112651;
+ Thu, 16 Dec 2021 18:11:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com> <YbjWFTtNo9Ap7kDp@google.com>
+ <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com> <Ybtea42RxZ9aVzCh@google.com>
+In-Reply-To: <Ybtea42RxZ9aVzCh@google.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Fri, 17 Dec 2021 10:11:41 +0800
+Message-ID: <CANRm+CwbOw8sXL4h9e5S6O7XcerUkfD+uG=iNu365qROeJTMKw@mail.gmail.com>
+Subject: Re: The vcpu won't be wakened for a long time
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
+        Huangzhichao <huangzhichao@huawei.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 17 Dec 2021 at 07:48, Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Dec 16, 2021, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+> > > What kernel version?  There have been a variety of fixes/changes in the
+> > > area in recent kernels.
+> >
+> > The kernel version is 4.18, and it seems the latest kernel also has this problem.
+> >
+> > The following code can fixes this bug, I've tested it on 4.18.
+> >
+> > (4.18)
+> >
+> > @@ -3944,6 +3944,11 @@ static void vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+> >         if (pi_test_and_set_on(&vmx->pi_desc))
+> >                 return;
+> >
+> > +       if (swq_has_sleeper(kvm_arch_vcpu_wq(vcpu))) {
+> > +               kvm_vcpu_kick(vcpu);
+> > +               return;
+> > +       }
+> > +
+> >         if (vcpu != kvm_get_running_vcpu() &&
+> >                 !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+> >                 kvm_vcpu_kick(vcpu);
+> >
+> >
+> > (latest)
+> >
+> > @@ -3959,6 +3959,11 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+> >         if (pi_test_and_set_on(&vmx->pi_desc))
+> >                 return 0;
+> >
+> > +       if (rcuwait_active(&vcpu->wait)) {
+> > +               kvm_vcpu_kick(vcpu);
+> > +               return 0;
+> > +       }
+> > +
+> >         if (vcpu != kvm_get_running_vcpu() &&
+> >             !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+> >                 kvm_vcpu_kick(vcpu);
+> >
+> > Do you have any suggestions ?
+>
+> Hmm, that strongly suggests the "vcpu != kvm_get_running_vcpu()" is at fault.
 
-Thank you for the patch! Perhaps something to improve:
+This was introduced in 5.8-rc1, however, his kernel version is 4.18.
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on v5.16-rc5 next-20211215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: hexagon-randconfig-r026-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171003.SXtQAHHE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
-        git checkout ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/ext4/super.c:6926:12: warning: comparison of distinct pointer types ('typeof (sb->s_blocksize - offset) *' (aka 'unsigned long *') and 'typeof (toread) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   tocopy = min(sb->s_blocksize - offset, toread);
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags' [-Wunused-function]
-   EXT4_SET_CTX(flags);
-   ^
-   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:148:1: note: expanded from here
-   ctx_test_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags' [-Wunused-function]
-   EXT4_SET_CTX(mount_flags);
-   ^
-   fs/ext4/super.c:2163:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_clear_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:169:1: note: expanded from here
-   ctx_clear_mount_flags
-   ^
-   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags' [-Wunused-function]
-   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
-                      ^
-   <scratch space>:172:1: note: expanded from here
-   ctx_test_mount_flags
-   ^
-   4 warnings generated.
-
-
-vim +6926 fs/ext4/super.c
-
-  6904	
-  6905	/* Read data from quotafile - avoid pagecache and such because we cannot afford
-  6906	 * acquiring the locks... As quota files are never truncated and quota code
-  6907	 * itself serializes the operations (and no one else should touch the files)
-  6908	 * we don't have to be afraid of races */
-  6909	static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
-  6910				       size_t len, loff_t off)
-  6911	{
-  6912		struct inode *inode = sb_dqopt(sb)->files[type];
-  6913		ext4_lblk_t blk = off >> EXT4_BLOCK_SIZE_BITS(sb);
-  6914		int offset = off & (sb->s_blocksize - 1);
-  6915		int tocopy;
-  6916		size_t toread;
-  6917		struct buffer_head *bh;
-  6918		loff_t i_size = i_size_read(inode);
-  6919	
-  6920		if (off > i_size)
-  6921			return 0;
-  6922		if (off+len > i_size)
-  6923			len = i_size-off;
-  6924		toread = len;
-  6925		while (toread > 0) {
-> 6926			tocopy = min(sb->s_blocksize - offset, toread);
-  6927			bh = ext4_bread(NULL, inode, blk, 0);
-  6928			if (IS_ERR(bh))
-  6929				return PTR_ERR(bh);
-  6930			if (!bh)	/* A hole? */
-  6931				memset(data, 0, tocopy);
-  6932			else
-  6933				memcpy(data, bh->b_data+offset, tocopy);
-  6934			brelse(bh);
-  6935			offset = 0;
-  6936			toread -= tocopy;
-  6937			data += tocopy;
-  6938			blk++;
-  6939		}
-  6940		return len;
-  6941	}
-  6942	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Can you try running with the below commit?  It's currently sitting in kvm/queue,
+> but not marked for stable because I didn't think it was possible for the check
+> to a cause a missed wake event in KVM's current code base.
+>
+> commit 6a8110fea2c1b19711ac1ef718680dfd940363c6
+> Author: Sean Christopherson <seanjc@google.com>
+> Date:   Wed Dec 8 01:52:27 2021 +0000
+>
+>     KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
+>
+>     Drop a check that guards triggering a posted interrupt on the currently
+>     running vCPU, and more importantly guards waking the target vCPU if
+>     triggering a posted interrupt fails because the vCPU isn't IN_GUEST_MODE.
+>     The "do nothing" logic when "vcpu == running_vcpu" works only because KVM
+>     doesn't have a path to ->deliver_posted_interrupt() from asynchronous
+>     context, e.g. if apic_timer_expired() were changed to always go down the
+>     posted interrupt path for APICv, or if the IN_GUEST_MODE check in
+>     kvm_use_posted_timer_interrupt() were dropped, and the hrtimer fired in
+>     kvm_vcpu_block() after the final kvm_vcpu_check_block() check, the vCPU
+>     would be scheduled() out without being awakened, i.e. would "miss" the
+>     timer interrupt.
+>
+>     One could argue that invoking kvm_apic_local_deliver() from (soft) IRQ
+>     context for the current running vCPU should be illegal, but nothing in
+>     KVM actually enforces that rules.  There's also no strong obvious benefit
+>     to making such behavior illegal, e.g. checking IN_GUEST_MODE and calling
+>     kvm_vcpu_wake_up() is at worst marginally more costly than querying the
+>     current running vCPU.
+>
+>     Lastly, this aligns the non-nested and nested usage of triggering posted
+>     interrupts, and will allow for additional cleanups.
+>
+>     Signed-off-by: Sean Christopherson <seanjc@google.com>
+>     Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>     Message-Id: <20211208015236.1616697-18-seanjc@google.com>
+>     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 38749063da0e..f61a6348cffd 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -3995,8 +3995,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+>          * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
+>          * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
+>          */
+> -       if (vcpu != kvm_get_running_vcpu() &&
+> -           !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+> +       if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+>                 kvm_vcpu_wake_up(vcpu);
+>
+>         return 0;

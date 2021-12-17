@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44996478B18
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C39478AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236091AbhLQMJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236260AbhLQMJg (ORCPT
+        id S233904AbhLQMJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:09:03 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:22791 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233498AbhLQMJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:09:36 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA9C061759
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:09:35 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id s1so3672399wrg.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TpogRltD/BPLIa5iBku/o4kEHCjlMgOzFRWSLg+D5DY=;
-        b=Zr3oTIIiE4UtFg8dXb7VIOhTOza5J9sI7QJcI9iYvlfQaNZR/7ItD/cJO71lrpmhph
-         zb1jW31FT7jS8Li+1LGmaazUZjXZAYs7oKIGZSHjh/jv1UzgXtiQ99ga9ev+c9nSG4zT
-         T+GvTp/CJLXr1oErK8HA20LE7aAQxcDRMqQ5YS0mDt0okmuLh3yYIdcQKxdjm1gGCm5o
-         vdF28fy2+sp6eswLq5nQnnncKiz8HdmUTnFxlOO/rUIKF6BOdiUdvivlyAQ+gDzOcwO0
-         x1Es8C6Ir9P7GVJRPEQD7PUOhNCqaLzGbrz83CZsFz0fuTYkfay1qf73A514yEMnhV2E
-         466Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TpogRltD/BPLIa5iBku/o4kEHCjlMgOzFRWSLg+D5DY=;
-        b=c9Bb0IBryOm/TDLqTuWv/MNQ1UaEZgxIWxGsRTJUapHGK3h3wqpwwORPygOzfHDaiO
-         RDQru283PzArusvlYQBrSO0vwFUhMtlKTXuAioT+Bp4CKqKBsObUil5fNQM9wKk+Q/0D
-         H0+WNnKBtA6lKMw8lidG7K1zp02q0o/YXzD8yvFlWA5iVhiJihocf4ZRfnXzRL6k01LD
-         iNF6FOKW5pw6Grp1FzgW3QiI2airc8MGT7T3Kj7B9nXGZz2dpDjXDjG+cvUWAlLyVAWg
-         sUdxJkgzy5CnrESRUbKKcQwI+K/yGZ2aaBwB0zjqqSdSF2a8TsAdG5OJ5VMa4lCaRciW
-         7p/Q==
-X-Gm-Message-State: AOAM533aAUHFY/KqhH79DWPocLp3GqNDa5+thFPSNQbeC8kUQdmrGD5R
-        D1sY7eo713HwFn1KGWNm0YGgNsZPkRpwpRgou1Izrnf45uMXWA==
-X-Google-Smtp-Source: ABdhPJynCWaK+LT9ICjcxzHwwuwQCjPpQl3/7JBL1kclfNriHwhwbMSzSqkJP8t42glvYDUaOq9tt7Xwqq3UMuuij9I=
-X-Received: by 2002:a5d:4d91:: with SMTP id b17mr2434038wru.214.1639742974266;
- Fri, 17 Dec 2021 04:09:34 -0800 (PST)
+        Fri, 17 Dec 2021 07:09:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639742942; x=1671278942;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5yNcl5PFaEnlsYrSY4XKFQvCoguXPjXXv39ZU+sDjYk=;
+  b=s6RG5N3o7C4aQp8vnb8Bz9UXLwVt6/iQ6hmJV1Q62AWsjaCilXmbF1Vx
+   88gKQXPX9O/Kfw2en9mVLkVqUbnuQoN9tUdK6kDcOTsN1l3mT+rYwSqZx
+   DQ4ZEKdpRJqctsBlAjkm/c6X1pmxMUU5IhqgvDaTqsSKCNWOi1Dp8ZaEE
+   q20Fo/8t8MAO8R++BWxVyoH/hs5U8y7at5CmivFQbTcamI4PPCOjS38kA
+   T5Ljn2GVzOD780SAnP0rjxW/kS1S3MEIcfGbZDlag8CMaVU8Jj4xQGddb
+   wvbbFy4r7CMzU8VmqnG/0wlG0JermiGhf67ZQ03Ii+HQquYRNzr2wHQT6
+   w==;
+IronPort-SDR: xrS5fY5L/u5gYAf4IqzPmpLMqrcP8FdVLtpdZPGG6EuZUpkXw/knxp1mjPsha108y67IQHGXyD
+ tTGth3wU0cAb7ER4bAhM5c7p8OYyZukxbt0FC7APC3usT1qLNzdbUqQKga/qe2fb4r8t04egeQ
+ A8zfDrQ8IbYc+gYl/+cToPMO0+kMH7kZic3MgJxeoxRQB8ItBxRC0gXOD9jpkF48awzu3sVpFt
+ /8SohDYWfqOmZ1OEngYUDlX/BYvEYAtlbrvii08PpgsuK6Svjy/uXEqmSlHmUorXzO7NuCUy50
+ ElxP5Nmz8bKfMAbanL3Pe4zc
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="79909733"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 05:09:02 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 05:09:02 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 17 Dec 2021 05:08:59 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
+        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
+        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v6 0/9] net: lan966x: Add switchdev and vlan support
+Date:   Fri, 17 Dec 2021 13:10:08 +0100
+Message-ID: <20211217121017.282481-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
- <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com> <fd40010f-f2ec-b32a-6850-1e054af43725@canonical.com>
- <150C4E84-2C69-45DB-AF27-1E0C223D8D7A@jrtc27.com> <611d4055-c50c-55c1-0e02-43ffda66dbce@canonical.com>
-In-Reply-To: <611d4055-c50c-55c1-0e02-43ffda66dbce@canonical.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 17 Dec 2021 17:39:22 +0530
-Message-ID: <CAAhSdy3CXJAieR3toyhQtk07CiCkUkmK7hB1DiQ5Wrd7JCqcmA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Atish
+This patch series extends lan966x with switchdev and vlan support.
+The first patches just adds new registers and extend the MAC table to
+handle the interrupts when a new address is learn/forget.
 
-On Fri, Dec 17, 2021 at 4:12 PM Heinrich Schuchardt
-<heinrich.schuchardt@canonical.com> wrote:
->
->
->
-> On 12/16/21 17:51, Jessica Clarke wrote:
-> > On 16 Dec 2021, at 14:17, Heinrich Schuchardt <heinrich.schuchardt@cano=
-nical.com> wrote:
-> >>
-> >> On 12/16/21 14:49, Jessica Clarke wrote:
-> >>> On 16 Dec 2021, at 12:35, Heinrich Schuchardt <heinrich.schuchardt@ca=
-nonical.com> wrote:
-> >>>>
-> >>>> The SBI 0.1 specification is obsolete. The current version is 0.3.
-> >>>> Hence we should not rely by default on SBI 0.1 being implemented.
-> >>> It=E2=80=99s what BBL implements, and some people are still using it,
-> >>> especially given early hardware shipped before OpenSBI grew in
-> >>> popularity.
-> >>> Jess
-> >>
-> >> Do you mean BBL is not developed anymore?
-> >>
-> >> Some people may still be using a 0.1 SBI. But that minority stuck on a=
-n outdated software stack does not justify defaulting to deprecated setting=
-s in future Linux releases.
-> >
-> > BBL is still actively maintained; its most recent commit was 24 days
-> > ago. Also, the amount of code CONFIG_RISCV_SBI_V01 affects is tiny, so
-> > I see no tangible benefit from making this change, just unnecessary
-> > breakage of perfectly functional systems.
->
-> Only the default is changed. How could this break any existing system?
-> You can still compile with the deprecated setting.
->
-> I can not see why we should keep a default that will cause issues on
-> systems complying to the current SBI specification.
+v5->v6:
+- fix issues with the singletones, they were not really singletons
+- simplify the case where lan966x ports are added to bridges with foreign
+  ports
+- drop the cases NETDEV_PRE_UP and NETDEV_DOWN
+- fix the change of MAC address
+- drop the callbacks .ndo_set_features, .ndo_vlan_rx_add_vid,
+  .ndo_vlan_rx_kill_vid
+- remove duplicate code when port was added in a vlan, the MAC entries
+  will be added by the fdb
 
-I agree with Heinrich.
+v4->v5:
+- make the notifier_block from lan966x to be singletones
+- use switchdev_handle_port_obj_add and switchdev_handle_fdb_event_to_device
+  when getting callbacks in the lan966x
+- merge the two vlan patches in a single one
 
-Almost all SBI implementations (OpenSBI, EDK2, KVM, Xvisor, etc) are
-providing at least SBI v0.2 and we can't endlessly wait for BBL to move
-away from SBI v0.1. We can't totally remove SBI v0.1 but we should
-at least disable it by default.
+v3->v4:
+- split the last patch in multiple patches
+- replace spin_lock_irqsave/restore with spin_lock/spin_unlock
+- remove lan966x_port_change_rx_flags because it was copying all the frames to
+  the CPU instead of removing all RX filters.
+- implement SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
+- remove calls to __dev_mc_unsync/sync as they are not needed
+- replace 0/1 with false/true
+- make sure that the lan966x ports are not added to bridges that have other
+  interfaces except lan966x
+- and allow the lan966x ports to be part of only the same bridge.
 
-Same rationale applies to the spinwait CPU operations which are only
-required for systems using BBL. The sparse HART id series from Atish
-can include a patch to have spinwait CPU operations disabled by
-default.
+v2->v3:
+- separate the PVID used when the port is in host mode or vlan unaware
+- fix issue when the port was leaving the bridge
 
-@Atish/Palmer, what do you think ?
+v1->v2:
+- when allocating entries for the mac table use kzalloc instead of
+  devm_kzalloc
+- also use GFP_KERNEL instead of GFP_ATOMIC, because is never called
+  in atomic context
+- when deleting an mac table entry, the order of operations was wrong
+- if ana irq is enabled make sure it gets disabled when the driver is
+  removed
 
-Regards,
-Anup
+Horatiu Vultur (9):
+  net: lan966x: Add registers that are used for switch and vlan
+    functionality
+  dt-bindings: net: lan966x: Extend with the analyzer interrupt
+  net: lan966x: add support for interrupts from analyzer
+  net: lan966x: More MAC table functionality
+  net: lan966x: Remove .ndo_change_rx_flags
+  net: lan966x: Add support to offload the forwarding.
+  net: lan966x: Add vlan support.
+  net: lan966x: Extend switchdev bridge flags
+  net: lan966x: Extend switchdev with fdb support
+
+ .../net/microchip,lan966x-switch.yaml         |   2 +
+ .../net/ethernet/microchip/lan966x/Kconfig    |   1 +
+ .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
+ .../ethernet/microchip/lan966x/lan966x_fdb.c  | 244 +++++++++
+ .../ethernet/microchip/lan966x/lan966x_mac.c  | 342 +++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_main.c |  95 +++-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  64 ++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h | 129 +++++
+ .../microchip/lan966x/lan966x_switchdev.c     | 468 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_vlan.c | 312 ++++++++++++
+ 10 files changed, 1632 insertions(+), 28 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_fdb.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
+
+-- 
+2.33.0
+

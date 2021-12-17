@@ -2,122 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28628478713
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78AD4787FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbhLQJaw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Dec 2021 04:30:52 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:42936 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230497AbhLQJav (ORCPT
+        id S234529AbhLQJn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234263AbhLQJn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:30:51 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3Ajw9E5a9ry87+gneBHn9gDrUDxH+TJUtcMsCJ2f8?=
- =?us-ascii?q?bfWQNrUoi0GcDy2ZKDDiGO/uPYGr0c4x/a4S0ox8B7JLUzdM3QVdlrnsFo1Bi8?=
- =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/jRHOOjULe?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
- =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfoe6ffCfm75b7I0ruNiGEL+9VJEUrIYow8+N+Cmh?=
- =?us-ascii?q?W9OARLHYLYwzrr+m22rOgVuhlgOwpNsD2Oo4F/HBnpRnaAPs9SpfEQI3B5cVf2?=
- =?us-ascii?q?TYtg4ZJB/m2T9UQZRJkbA7HZhxSPxEQEp1WtPyom3D/Wz5VslSYoeww+We75Ad?=
- =?us-ascii?q?xyrn2LNvcfJqAX8xImEuCjn/M4mLlH1cRM9n34T6E9G+8w+zChyX2XKoMG7Cis?=
- =?us-ascii?q?P1nmluewioUEhJ+fV+6p+Spz02lVtZRN0EP5gIwoqUosk+mVN/wW1u/unHsg/K?=
- =?us-ascii?q?2c7K8CMVjsEfUlPWSuF3fWwA5ovd6QIROnKcLqfYCijdlR+/UOAE=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMiVVXaMf1ElnF8BcTv2jsMiBIKoaSvp037BL?=
- =?us-ascii?q?7TEUdfUxSKGlfq+V8sjzqiWftN98YhAdcLO7Scy9qBHnhP1ICOAqVN/MYOCMgh?=
- =?us-ascii?q?rLEGgN1+vf6gylMyj/28oY7q14bpV5YeeaMXFKyer8/ym0euxN/OW6?=
-X-IronPort-AV: E=Sophos;i="5.88,213,1635177600"; 
-   d="scan'208";a="119057162"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 17 Dec 2021 17:30:49 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 8AB7C4D146D7;
-        Fri, 17 Dec 2021 17:30:45 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 17 Dec 2021 17:30:44 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 17 Dec 2021 17:30:46 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <keescook@chromium.org>, <luto@amacapital.net>, <shuah@kernel.org>,
-        <christian@brauner.io>
-CC:     <wad@chromium.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>,
-        "yang xu" <xuyang2018.jy@cn.fujitsu.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2] kselftest: signal all child processes
-Date:   Fri, 17 Dec 2021 17:29:55 +0800
-Message-ID: <20211217092955.9472-1-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 17 Dec 2021 04:43:26 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DA3C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:43:25 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e5so2915925wrc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=1qtPajobApofFVdZSOx4QP5IGtLhy9B9FZ44qXwQbeQ=;
+        b=QbkwbMWST2Tc4n5emVo9rjXDx7r71Zk7kyElNDeyD7XIHF/vvZmJR0nn4sAlOOpbPG
+         vNuxL50TwamelNtotgVwCvL48xBepWVuIcrguiOdIia1A3MUYzIT4/41BWgxuh9JdnWi
+         /z1hJv/6i9lHZDizmoSxfNPAch2Oh72oacnKhhVpB0tYE//3bMWyrqpDDPMbpTUB3ypT
+         Wo0Qzx8ZblFyRUGzg6YaBJdqHDCnyukLqfrT/KJTM3R0/JBFSR0Y7rm1njH84Bo2qFEa
+         OdAPPUDI2s4b+thktJ+AsZMTYl1Q1wCHijPX61PGNaIsVVh8VulrIfkKYEkyu6e43IFf
+         DYBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=1qtPajobApofFVdZSOx4QP5IGtLhy9B9FZ44qXwQbeQ=;
+        b=E5hE+DLLVfLpn2k7d12UXqTs2OFORUFBEOqXrNosr9/hnnDA/+ZwTKUIHsMK7FaThp
+         CI19njZxZG9hDlWxojB8HWHo40r+FtRlUROyPvSuwoYahuXXRYcPSo09DRKEx04eAPTZ
+         QJn62nZO6boTxnGIisIll11Jb/MwcNcegzcWW1t5qjs2NWHIW25Ga6NrUh03AGcZ604F
+         u3BWRLJQC8N0I5IzFBpuOOUWq+Q5fo+8Qb5JZlChe/V9ririOlHpuRMMNumGhJ7tXJ2A
+         h+iN0t8stoyAw4MMi27kz/nSm3F+mljYl3ijq5I9sFCqYvpcNdObK6zrOlockXDXRtp/
+         r4Wg==
+X-Gm-Message-State: AOAM532YYlbmGIx637h3IbuaQIHBaezLG9moXeCMuv2CaM+DmKevOcgq
+        GrR2Ktuq4RQLzE1jv6OTSwH3kQ==
+X-Google-Smtp-Source: ABdhPJzBP7nsIuuUpr79idFo7tm7YmFNgyv2VOyh0hqoJVzqy1V4gKGIzQaGfi/DjJavTY31bnOSjg==
+X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr991199wrx.193.1639734204422;
+        Fri, 17 Dec 2021 01:43:24 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id e11sm8536601wrq.28.2021.12.17.01.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 01:43:24 -0800 (PST)
+References: <20210811050941.398360-1-art@khadas.com>
+ <64a6a9e1-64de-4b31-9413-cdfd981862de@baylibre.com>
+ <1jlf4ayrv1.fsf@starbuckisacylon.baylibre.com>
+ <CAKaHn9JOtmYoJsmZed4hLYAbtdyyMkhaM1iVThs0=2SV6y5ojQ@mail.gmail.com>
+ <1jtuhwvqxa.fsf@starbuckisacylon.baylibre.com>
+ <CAKaHn9LPYVZkXsDb-aAcHfDc1dX6tMd2cYpjrqysL62JCu3EYg@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Art Nikpal <email2tema@gmail.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Artem Lapkin <art@khadas.com>, Nick Xie <nick@khadas.com>,
+        Gouwa Wang <gouwa@khadas.com>
+Subject: Re: [PATCH] arm64: dts: meson-sm1: add spdifin spdifout nodes
+Date:   Fri, 17 Dec 2021 10:30:30 +0100
+In-reply-to: <CAKaHn9LPYVZkXsDb-aAcHfDc1dX6tMd2cYpjrqysL62JCu3EYg@mail.gmail.com>
+Message-ID: <1j8rwja7nr.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain
-X-yoursite-MailScanner-ID: 8AB7C4D146D7.A1546
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have some many cases that will create child process as well, such as
-pidfd_wait. Previously, we will signal/kill the parent process when it
-is time out, but this signal will not be sent to its child process. In
-such case, if child process doesn't terminate itself, ksefltest framework
-will hang forever.
 
-below ps tree show the situation when ksefltest is blocking:
-root      1172  0.0  0.0   5996  2500 ?        S    07:03   0:00  \_ /bin/bash /lkp/lkp/src/tests/kernel-selftests
-root      1216  0.0  0.0   4392  1976 ?        S    07:03   0:00      \_ make run_tests -C pidfd
-root      1218  0.0  0.0   2396  1652 ?        S    07:03   0:00          \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64-rhel-8.
-root     12491  0.0  0.0   2396   132 ?        S    07:03   0:00              \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64-rhe
-root     12492  0.0  0.0   2396   132 ?        S    07:03   0:00                  \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64
-root     12493  0.0  0.0   2396   132 ?        S    07:03   0:00                      \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x8
-root     12496  0.0  0.0   2396   132 ?        S    07:03   0:00                          \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftest
-root     12498  0.0  0.0  10564  6116 ?        S    07:03   0:00                              \_ perl /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/prefix.pl
-root     12503  0.0  0.0   2452   112 ?        T    07:03   0:00 ./pidfd_wait
-root     12621  0.0  0.0   2372  1600 ?        SLs  07:04   0:00 /usr/sbin/watchdog
-root     19438  0.0  0.0    992    60 ?        Ss   07:39   0:00 /lkp/lkp/src/bin/event/wakeup activate-monitor
+On Wed 15 Dec 2021 at 10:32, Art Nikpal <email2tema@gmail.com> wrote:
 
-Here we group all its child processes so that kill() can signal all of
-them in timeout.
+> On Mon, Oct 4, 2021 at 9:51 PM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>>
+>>
+>> On Mon 06 Sep 2021 at 19:56, Art Nikpal <email2tema@gmail.com> wrote:
+>>
+>> >> It would be nice to indicate how it was tested ?
+>> >
+>> > https://github.com/khadas/khadas-linux-kernel/blob/master/patches/linux-5.14-rc5.sound/0001-arm64-dts-meson-khadas-vim3-remake-simple-sound-for-.patch
+>> >
+>> > i have test it
+>> >
+>> > i2s  and spdif output from gpio headers - works well
+>>
+>> You have tested spdifout_a then.
+>>
+>> Nothing says spdifin (which was only tested on the axg series so far) or
+>> spdifout_b would actually work if enabled at a later point.
+>>
+>> I would prefer if things could at least be tested once before being
+>> added DT.
+>>
+>> >
+>> > On Mon, Sep 6, 2021 at 5:29 PM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>> >>
+>> >>
+>> >> On Thu 02 Sep 2021 at 15:31, Neil Armstrong <narmstrong@baylibre.com> wrote:
+>> >>
+>> >> > Hi,
+>> >> >
+>> >> > On 11/08/2021 07:09, Artem Lapkin wrote:
+>> >> >> Add spdifin spdifout spdifout_b nodes for Amlogic SM1 SoCs.
+>> >> >>
+>> >> >> Signed-off-by: Artem Lapkin <art@khadas.com>
+>> >> >> ---
+>> >> >>  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi | 40 ++++++++++++++++++++++
+>> >> >>  1 file changed, 40 insertions(+)
+>> >> >>
+>> >> >> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+>> >> >> index 3d8b1f4f2..1efdbb61e 100644
+>> >> >> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+>> >> >> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+>> >> >> @@ -356,6 +356,33 @@ tdmin_lb: audio-controller@3c0 {
+>> >> >>                      status = "disabled";
+>> >> >>              };
+>> >> >>
+>> >> >> +            spdifin: audio-controller@400 {
+>> >> >> +                    compatible = "amlogic,g12a-spdifin",
+>> >> >> +                    "amlogic,axg-spdifin";
+>> >> >> +                    reg = <0x0 0x400 0x0 0x30>;
+>> >> >> +                    #sound-dai-cells = <0>;
+>> >> >> +                    sound-name-prefix = "SPDIFIN";
+>> >> >> +                    interrupts = <GIC_SPI 151 IRQ_TYPE_EDGE_RISING>;
+>> >> >> +                    clocks = <&clkc_audio AUD_CLKID_SPDIFIN>,
+>> >> >> +                    <&clkc_audio AUD_CLKID_SPDIFIN_CLK>;
+>> >> >> +                    clock-names = "pclk", "refclk";
+>> >> >> +                    resets = <&clkc_audio AUD_RESET_SPDIFIN>;
+>> >> >> +                    status = "disabled";
+>> >> >> +            };
+>> >> >> +
+>> >> >> +            spdifout: audio-controller@480 {
+>> >> >> +                    compatible = "amlogic,g12a-spdifout",
+>> >> >> +                    "amlogic,axg-spdifout";
+>> >> >> +                    reg = <0x0 0x480 0x0 0x50>;
+>> >> >> +                    #sound-dai-cells = <0>;
+>> >> >> +                    sound-name-prefix = "SPDIFOUT";
+>> >> >> +                    clocks = <&clkc_audio AUD_CLKID_SPDIFOUT>,
+>> >> >> +                    <&clkc_audio AUD_CLKID_SPDIFOUT_CLK>;
+>> >> >> +                    clock-names = "pclk", "mclk";
+>> >> >> +                    resets = <&clkc_audio AUD_RESET_SPDIFOUT>;
+>> >> >> +                    status = "disabled";
+>> >> >> +            };
+>> >> >> +
+>> >> >>              tdmout_a: audio-controller@500 {
+>> >> >>                      compatible = "amlogic,sm1-tdmout";
+>> >> >>                      reg = <0x0 0x500 0x0 0x40>;
+>> >> >> @@ -401,6 +428,19 @@ tdmout_c: audio-controller@580 {
+>> >> >>                      status = "disabled";
+>> >> >>              };
+>> >> >>
+>> >> >> +            spdifout_b: audio-controller@680 {
+>> >> >> +                    compatible = "amlogic,g12a-spdifout",
+>> >> >> +                    "amlogic,axg-spdifout";
+>> >> >> +                    reg = <0x0 0x680 0x0 0x50>;
+>> >> >> +                    #sound-dai-cells = <0>;
+>> >> >> +                    sound-name-prefix = "SPDIFOUT_B";
+>> >> >> +                    clocks = <&clkc_audio AUD_CLKID_SPDIFOUT_B>,
+>> >> >> +                    <&clkc_audio AUD_CLKID_SPDIFOUT_B_CLK>;
+>> >> >> +                    clock-names = "pclk", "mclk";
+>> >> >> +                    resets = <&clkc_audio AUD_RESET_SPDIFOUT_B>;
+>> >> >> +                    status = "disabled";
+>> >> >> +            };
+>> >> >> +
+>> >> >>              toacodec: audio-controller@740 {
+>> >> >>                      compatible = "amlogic,sm1-toacodec",
+>> >> >>                                   "amlogic,g12a-toacodec";
+>> >> >>
+>> >> >
+>> >> > Jerome could you quickly review this ?
+>> >> >
+>> >>
+>> >> Just this, without the related card change is not usefull as it won't be
+>> >> part of the card.
+>
+> Current sound card dt configuration not configured for it, but we can
+> apply dt overlays anytime.
 
-Suggested-by: yang xu <xuyang2018.jy@cn.fujitsu.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-V2: add acked tag
----
- tools/testing/selftests/kselftest_harness.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Maybe you should do so
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index ae0f0f33b2a6..c7251396e7ee 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -875,7 +875,8 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
- 	}
- 
- 	t->timed_out = true;
--	kill(t->pid, SIGKILL);
-+	// signal process group
-+	kill(-(t->pid), SIGKILL);
- }
- 
- void __wait_for_test(struct __test_metadata *t)
-@@ -985,6 +986,7 @@ void __run_test(struct __fixture_metadata *f,
- 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
- 		t->passed = 0;
- 	} else if (t->pid == 0) {
-+		setpgrp();
- 		t->fn(t, variant);
- 		if (t->skip)
- 			_exit(255);
--- 
-2.33.0
+>
+> IMHO: current sound configuration is not ideal and for some tasks
+> better to use custom configuration.
+> but anyway i think meson-sm1.dtsi must be completed by missed spdif in/out nodes
+>
 
+Tested ones, sure
 
+>> >>
+>> >> It would be nice to indicate how it was tested ?
+>
+>> >>
+>> >> AFAIK:
+>> >> - spdifout b can only be routed to hdmi and dw-hdmi driver does not
+>> >>   support that yet
+>
+> Ok! But why not accept it at this moment - next time will be easy to
+> improve dw-hdmi driver
+> +like options i can submit new patch without spdifout_b node
+
+Because as it stands, it is useless. No one tried it. What lands in the
+kernel should work, or at least we should do our best to confirm it does.
+
+We should not place code here hoping everything will be fine when someone
+finally turns it on.
+
+When dw-hdmi driver support spdif input and you can confirm it works with
+your change, you are welcome to submit it again.
+
+>
+>> >> - the VIM3 does not have connectors for the spdif (in or out). If it
+>
+> we have test SPDIF in and SPDIF OUT both works fine on VIM3L meson-sm1
+
+Then adding to spdifin and spdifout_a nodes is fine by me
+
+>
+>> >>   requires some extension card, it should be noted somewhere, at least
+>
+> SPDIF in and SPDIF OUT both pins available via GPIO header ( SPDIF_OUT
+> PIN 13 and SPDIF_IN PIN 35 - same PWM_F )
+>
+
+Like other thing on those GPIO connectors, we don't enable them by
+default.
+
+Now that the kernel accepts overlays, it would be nice to submit one so
+other can replicate your test setup, if you wish to.
+
+>> >>
+>> >>
+>> >> > Thanks,
+>> >> > Neil
+>> >>
+>>
 

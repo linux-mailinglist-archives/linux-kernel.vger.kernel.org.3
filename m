@@ -2,190 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B514790F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B794790F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238844AbhLQQF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S237733AbhLQQGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238819AbhLQQFy (ORCPT
+        with ESMTP id S237556AbhLQQGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:05:54 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B231DC06173E;
-        Fri, 17 Dec 2021 08:05:53 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id l18so2521085pgj.9;
-        Fri, 17 Dec 2021 08:05:53 -0800 (PST)
+        Fri, 17 Dec 2021 11:06:48 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE6BC06173F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:06:48 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id y16so3608216ioc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:06:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fSgwCz/Z9D+vF+HDpWYjXKr9mr988NX6jKdB0/NhBGg=;
-        b=AUAAJjDIfVLtQ1k3d2TuFHkU0XMv1g+pzIono4q6BEgSCxyknskUwOaQab9bDEqmJX
-         mlAdgT64smgAG148TlTYKfw+GefdALmokNZ+Y3O+AXXhGGaB3AxCjn+jI9wzPKXYRigS
-         eJXUQLfd57LKx+ehXXu3WyuW0TFa2CsQi+gK60Lwmnqs0xUgQaN+F6q10K+u+oUfgb8H
-         BK022woOK3U6QyPBH3D+OgWa5ekcvcJEd/ZGaD48PemTiXdY+v0UA8p625PuqqVCEcSm
-         E/GCW9LkBcEamtOikLmOUiZ9oQG8XM+hVQh9aUaBOxXRrFmW7hJKGM2ELHesQOZmazXz
-         JqJw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=U+wvXPwvhucTVlxnfZp7fdTxV1dqI6RrlYLlpej7n+A=;
+        b=YUNyl6X1aOuNX0Zbv5o0SSJroo2f7qXWhGWhymmXexL8bFmeCHewg7/nbSEn3kGaCp
+         Yon0xvhF/EpQv1UH0R+YxczwOCH1+8GDnrtroJvu3Y2w2mbLAKf92Uu4IAoaMAeaVLeS
+         SxsnUxhj8R4S3m4M6+XYsZZeEQnLesRVOUB+IV/PgYYToEuJ/T25xS586YHoOzmauq94
+         Hw3z+fs9z4hfRC2JmjJM7NknDu1YwsS4X3yuo7TnWpCCuFbFCO6tJhwThr9PR+Fvx6La
+         /wnSswEeASWp2HeZTq41dInej/PH7y0QEVZQUyZqkjhnC51VamLvQjZVgKeH7jIpMmk1
+         rNPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fSgwCz/Z9D+vF+HDpWYjXKr9mr988NX6jKdB0/NhBGg=;
-        b=ro27eGJDG31Cb1pPETpts324u5zU0PX3gxUdB/S52RlfMyX5b0OLHS1dPJtcDNMVhB
-         fcm3UOVqLC9COn9l72fkBGH1MedD1TMHjVFQ6akJGTsiuZREcmt3PGPTVH5s3Y+xIf9f
-         jPBkumpMnbK4AZkn2Wqrqd+jI/mLZoZvbk5dnfZNDYD32oB9G4wFgFVhIalvJgDpj8s6
-         qfby9zzDYJ2nu6ZGq4Qdfhs1ELHCXwBmGtsnIlrZno/OtG5vIrerMmb10T6eKuJ/CMon
-         7lq6U5FM0hgQdc/W3si2ZDkNzjCuJWIoPpTod7sA/VfmkDTEPNhJpgklOiHnil8dEqIr
-         DgdQ==
-X-Gm-Message-State: AOAM532J81hIS4SI6cs6P3CBFCT4e+cE0huRs6f8dYdywl+KfiFyrbu0
-        DKWMsBKl2rEtcSGtPldXEc35PNceFTw=
-X-Google-Smtp-Source: ABdhPJwDGWrhzhR9vfHEEcvboxttzuXhb+r3KBvDyRPJlmmxtTk3OZDj3uCquSFCb44H2bGIM07q0w==
-X-Received: by 2002:a05:6a00:1995:b0:4b1:38b5:cc92 with SMTP id d21-20020a056a00199500b004b138b5cc92mr3732949pfl.7.1639757152112;
-        Fri, 17 Dec 2021 08:05:52 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z23sm4020760pfr.189.2021.12.17.08.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 08:05:51 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
-        ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE)
-Subject: [PATCH v5 2/2] dt-bindings: interrupt-controller: Merge BCM3380 with BCM7120
-Date:   Fri, 17 Dec 2021 08:05:46 -0800
-Message-Id: <20211217160546.497012-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217160546.497012-1-f.fainelli@gmail.com>
-References: <20211217160546.497012-1-f.fainelli@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=U+wvXPwvhucTVlxnfZp7fdTxV1dqI6RrlYLlpej7n+A=;
+        b=tjBGUNFxAg0XXe4NZYd4xpWSWPO0JKb5FxEJqeFMFb5JJgaI8uRJyHw4WkY0HV9ua+
+         0bZH2oQvTuqxWV4L1akDFu01V2pmHcOURdb5b8z7MZot7WnoUlVjq2U3MjXuA3iVAZKf
+         mdDvRmr9+MXD23Fwf2Izvun/OnAvabpO429vlURgsEBCqzGw4gKIl6YJMnpVA7avn7Am
+         3h1Xf4CRGBDyb1rU0wgLNEPSHZ4hm1prusO0G6Rf/UW8Dozsw0Pbg4QiJ0Mt7EIDgwlE
+         mCIos2kstDVpAmmwIMa+6ip3OYRhNyT18G4jxAR6BKBE/qrVs7g3b2fecKFyiI8rb6SG
+         vElg==
+X-Gm-Message-State: AOAM533Kc9aHP1qEHFgtB9Z9wbNqjB/QFRTgE5m6Ra3l0ofC6z3FaZs3
+        epxNtZlGR6waLQg6n2zH+tH0iPFDikpc4Cf+DMM=
+X-Google-Smtp-Source: ABdhPJwC2IjTLvVz1uHzGQnUbIInTQPb0xl8fiqsDI0S0ktdEOwbBVR0EWxAEzMHFUxd/w2kVL0WFA6l63VUM0bpwFc=
+X-Received: by 2002:a5e:c645:: with SMTP id s5mr1966693ioo.154.1639757207899;
+ Fri, 17 Dec 2021 08:06:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a5e:c915:0:0:0:0:0 with HTTP; Fri, 17 Dec 2021 08:06:47
+ -0800 (PST)
+Reply-To: mauhin13@gmail.com
+From:   Maureen Hinckley <josephinmnyinge70@gmail.com>
+Date:   Fri, 17 Dec 2021 19:06:47 +0300
+Message-ID: <CAEH2Oo=6bnNwbVkjrKBG99wik6g3ZX8sjiT43mYL-pSy7uQZhg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The two bindings are very similar and should be covered by the same
-document, do that so we can get rid of an additional binding file.
+--=20
+Hello,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- .../brcm,bcm3380-l2-intc.txt                  | 39 -------------------
- .../brcm,bcm7120-l2-intc.yaml                 | 31 +++++++++++++--
- 2 files changed, 28 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
+I am Maureen Hinckley and my foundation is donating ($2.2 Million.
+Dollars) to you. Contact us via my email at (mauhin13@gmail.com) for
+further details.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
-deleted file mode 100644
-index 37aea40d5430..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
-+++ /dev/null
-@@ -1,39 +0,0 @@
--Broadcom BCM3380-style Level 1 / Level 2 interrupt controller
--
--This interrupt controller shows up in various forms on many BCM338x/BCM63xx
--chipsets.  It has the following properties:
--
--- outputs a single interrupt signal to its interrupt controller parent
--
--- contains one or more enable/status word pairs, which often appear at
--  different offsets in different blocks
--
--- no atomic set/clear operations
--
--Required properties:
--
--- compatible: should be "brcm,bcm3380-l2-intc"
--- reg: specifies one or more enable/status pairs, in the following format:
--  <enable_reg 0x4 status_reg 0x4>...
--- interrupt-controller: identifies the node as an interrupt controller
--- #interrupt-cells: specifies the number of cells needed to encode an interrupt
--  source, should be 1.
--- interrupts: specifies the interrupt line in the interrupt-parent controller
--  node, valid values depend on the type of parent interrupt controller
--
--Optional properties:
--
--- brcm,irq-can-wake: if present, this means the L2 controller can be used as a
--  wakeup source for system suspend/resume.
--
--Example:
--
--irq0_intc: interrupt-controller@10000020 {
--	compatible = "brcm,bcm3380-l2-intc";
--	reg = <0x10000024 0x4 0x1000002c 0x4>,
--	      <0x10000020 0x4 0x10000028 0x4>;
--	interrupt-controller;
--	#interrupt-cells = <1>;
--	interrupt-parent = <&cpu_intc>;
--	interrupts = <2>;
--};
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
-index 5d7731ea4182..46b2eb3c43ee 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/interrupt-controller/brcm,bcm7120-l2-intc.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Broadcom BCM7120-style Level 2 interrupt controller
-+title: Broadcom BCM7120-style Level 2 and Broadcom BCM3380 Level 1 / Level 2
- 
- maintainers:
-   - Florian Fainelli <f.fainelli@gmail.com>
-@@ -59,15 +59,29 @@ description: >
-   ..
-   31 ........................ X
- 
-+  The BCM3380 Level 1 / Level 2 interrrupt controller shows up in various forms
-+  on many BCM338x/BCM63xx chipsets. It has the following properties:
-+
-+  - outputs a single interrupt signal to its interrupt controller parent
-+
-+  - contains one or more enable/status word pairs, which often appear at
-+    different offsets in different blocks
-+
-+  - no atomic set/clear operations
-+
- allOf:
-   - $ref: /schemas/interrupt-controller.yaml#
- 
- properties:
-   compatible:
--    const: brcm,bcm7120-l2-intc
-+    items:
-+      - enum:
-+          - brcm,bcm7120-l2-intc
-+          - brcm,bcm3380-l2-intc
- 
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 4
-     description: >
-       Specifies the base physical address and size of the registers
- 
-@@ -124,3 +138,14 @@ examples:
-       brcm,int-map-mask = <0xeb8>, <0x140>;
-       brcm,int-fwd-mask = <0x7>;
-     };
-+
-+  - |
-+    irq1_intc: interrupt-controller@10000020 {
-+       compatible = "brcm,bcm3380-l2-intc";
-+       reg = <0x10000024 0x4>, <0x1000002c 0x4>,
-+             <0x10000020 0x4>, <0x10000028 0x4>;
-+       interrupt-controller;
-+       #interrupt-cells = <1>;
-+       interrupt-parent = <&cpu_intc>;
-+       interrupts = <2>;
-+    };
--- 
-2.25.1
-
+Best Regards,
+Mrs. Maureen Hinckley,
+Copyright =C2=A92021 The Maureen Hinckley Foundation All Rights Reserved.

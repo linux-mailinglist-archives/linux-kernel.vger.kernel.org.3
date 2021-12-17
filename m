@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE518478668
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF4F47866C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhLQImG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbhLQImF (ORCPT
+        id S232531AbhLQIpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:45:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28204 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229617AbhLQIpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:42:05 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D54C061574;
-        Fri, 17 Dec 2021 00:42:05 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id t11so1900845qtw.3;
-        Fri, 17 Dec 2021 00:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=euNZsuO5chCnJL4h1RRy3rz6SEECSJxqExqR2vzYIgc=;
-        b=JlZ33jI3dKjdOEJgC8wH4AilxnMZqHDPYsqsHW1wAOROGwwJZjFWb53ZKEPOaepKAJ
-         n/hKq1qiMLl/EUBr6r9En2JP72cnEGK/S1xltCQNmn/2meQMvJG+YVrNCyvtfYsehQbb
-         bw1O6fkyOj/emvJnQUCWIBA0DbycVeQeDUrOZhZc79RdM1Fh46jgdnzqpJJTWGzNLymH
-         5BzVcJq740cmBHm0Gx/VotXUTXOi1R/FXV9rWEht8VYBW4eS+vtXyKDVElPXK53QMHby
-         W8t0QCB0iQ2K8017GLS48aYOHjteDPQE+ixJM440251YVvYC02YVGwtRjAv8NRm6pUkZ
-         PZsg==
+        Fri, 17 Dec 2021 03:45:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639730720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W1WFS25x/hLZ6A8mSaxKO8h95Gv9OAldcWDpPXz2GBE=;
+        b=VPCl7IUVCQQGI3WkJlh0cUY8iUhSUm1XEV+E1KtRSpmNpv2c1OQ6IVx7hpN7CFN2fFjupb
+        X9h2r5kGoC3o2yQnXWJET6KmeROqGb5UgaL83dTYGVbc11hzcfrdlq6Hq+1KLfrJ0UzrNJ
+        +/7QzLgQrZtYaB9ifFC9hlua84g011Q=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-0ispaATlNXCpVj0sSX9WIA-1; Fri, 17 Dec 2021 03:45:19 -0500
+X-MC-Unique: 0ispaATlNXCpVj0sSX9WIA-1
+Received: by mail-ed1-f69.google.com with SMTP id r26-20020aa7cfda000000b003f7fbbd9b5dso1269024edy.19
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 00:45:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=euNZsuO5chCnJL4h1RRy3rz6SEECSJxqExqR2vzYIgc=;
-        b=o0GuPzn9nTiqyypf2y3MNbbINBDQErIc1rReamdvGCMz0zUg+I+aC6Fpk02QmCZ4FU
-         GDOVtFCqgKQrl5ZhqD5IsIpxt1+1AKPKFMJfbNPaqhxoSZ5u8bs28IAy0E9xXtY+YcK/
-         oqU45+HKB1LsUZ3grOPShr6hGIKX4dpoGmfvxK4+psv4TmZyqZsxJuQcZSxI6SsfG3yU
-         1nUUDyrKWRiXmyl3v0LnJ4PV/5nQU4RyfpDUKc+5kDekSeFwrNNt3VJkgFctbq7Tim6P
-         3FAucDP9j6L+t01zTIVXCjB4hMiMnsQN4+9Lf2rNRLfvqRgUQm6LznuqKIbaGWWhuTta
-         ytlg==
-X-Gm-Message-State: AOAM531j0fUSabrS69MlQLkbz2fWhha4xUaefMfuT7jcku3Ax3+yMYg9
-        BR+8/vIhqIB19WQN6VhvfqE=
-X-Google-Smtp-Source: ABdhPJxMefYN6bC4KnrtZQAOdWJ8jW/5MZDBAfR2DrXl7H+Ww4eegx09BSvolw6t8k5h+v92HXYLZA==
-X-Received: by 2002:ac8:5c54:: with SMTP id j20mr1408448qtj.121.1639730524381;
-        Fri, 17 Dec 2021 00:42:04 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 14sm6436102qtx.84.2021.12.17.00.41.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 00:42:03 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     pbonzini@redhat.com
+        bh=W1WFS25x/hLZ6A8mSaxKO8h95Gv9OAldcWDpPXz2GBE=;
+        b=Ppi9R7wm9T5Wpv1DGQNlpqMWj5/eXyozWuZTnP58jNdh3m8lAqVfioO83+n5x6FrsU
+         orAkYczBN4wldLdX3ifhWf8YLxwLtj//J2WfH7CeNOWiYnfSirvtAfzk2P27Vu9SobP4
+         zdacbGcBwK0wbkALaLrbnX9YlE/yLbRX4ypm8vazafCSEm2PEofRlhGU8yBA5hTfn/za
+         rGWfNM9zHUpqOuAKJTduryw9EtwavABJIYyonOuQJvDjL9HnTDW774Twbrh7WeHYH3DO
+         ScRNBmrNFhDRPcVjp52I8c7rLuvYsimG1yd7ZPKU8KPQ0N9jq1EPyOl2j1uw/64iv3G9
+         p3MQ==
+X-Gm-Message-State: AOAM530SbIc0SwAfRHCER/KucXyNQix9519AtdEYDQQPxf349KaAsrcL
+        1qIK9cyJK0UogGPlrD7eS+e13uN4SgJxtXg4VEIHGCN93yA9sdMp86oS1i11UGFi8ie9bZqWjPU
+        mZZjQset/glmSMrQtAZKo4iYs
+X-Received: by 2002:a05:6402:1e92:: with SMTP id f18mr1829665edf.153.1639730717776;
+        Fri, 17 Dec 2021 00:45:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyulrYmwimpg1/zvrNRe0VHKW9o3WEZBH7A+DzvCdKBr++K0QKgOB5w5yxBs04sV5UeBcVGCA==
+X-Received: by 2002:a05:6402:1e92:: with SMTP id f18mr1829642edf.153.1639730717557;
+        Fri, 17 Dec 2021 00:45:17 -0800 (PST)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id b73sm1091762edf.37.2021.12.17.00.45.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 00:45:17 -0800 (PST)
+Message-ID: <afacee89-4edb-f4fb-156d-7b6c8dd0bb3b@redhat.com>
+Date:   Fri, 17 Dec 2021 09:44:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: x86: Use div64_ul instead of do_div
+Content-Language: en-US
+To:     cgel.zte@gmail.com
 Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
         jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -58,41 +68,47 @@ Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
         linux-kernel@vger.kernel.org,
         Changcheng Deng <deng.changcheng@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] KVM: x86: Use div64_ul instead of do_div
-Date:   Fri, 17 Dec 2021 08:41:55 +0000
-Message-Id: <20211217084155.452262-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211217084155.452262-1-deng.changcheng@zte.com.cn>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211217084155.452262-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 12/17/21 09:41, cgel.zte@gmail.com wrote:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+> to avoid a possible truncation.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>   arch/x86/kvm/lapic.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index c5028e6b0f96..3b629870632c 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1707,7 +1707,7 @@ static void start_sw_tscdeadline(struct kvm_lapic *apic)
+>   	guest_tsc = kvm_read_l1_tsc(vcpu, rdtsc());
+>   
+>   	ns = (tscdeadline - guest_tsc) * 1000000ULL;
+> -	do_div(ns, this_tsc_khz);
+> +	ns = div64_ul(ns, this_tsc_khz);
+>   
+>   	if (likely(tscdeadline > guest_tsc) &&
+>   	    likely(ns > apic->lapic_timer.timer_advance_ns)) {
+> 
 
-do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-to avoid a possible truncation.
+You could change this_tsc_khz to u32 instead, it's assigned from a 
+32-bit value.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- arch/x86/kvm/lapic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Using div64_ul would be unnecessary and less efficient.
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index c5028e6b0f96..3b629870632c 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1707,7 +1707,7 @@ static void start_sw_tscdeadline(struct kvm_lapic *apic)
- 	guest_tsc = kvm_read_l1_tsc(vcpu, rdtsc());
- 
- 	ns = (tscdeadline - guest_tsc) * 1000000ULL;
--	do_div(ns, this_tsc_khz);
-+	ns = div64_ul(ns, this_tsc_khz);
- 
- 	if (likely(tscdeadline > guest_tsc) &&
- 	    likely(ns > apic->lapic_timer.timer_advance_ns)) {
--- 
-2.25.1
+Paolo
 

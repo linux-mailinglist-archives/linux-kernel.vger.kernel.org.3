@@ -2,106 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29143479245
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3441479248
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239570AbhLQRBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:01:52 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:40194 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbhLQRBu (ORCPT
+        id S239575AbhLQRCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:02:01 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:46940 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233965AbhLQRCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:01:50 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:39618)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1myGc9-00F4QN-49; Fri, 17 Dec 2021 10:01:49 -0700
-Received: from ip68-227-161-49.om.om.cox.net ([68.227.161.49]:39676 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1myGc7-008PnM-I4; Fri, 17 Dec 2021 10:01:48 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-References: <20211216102956.GC10708@xsang-OptiPlex-9020>
-Date:   Fri, 17 Dec 2021 11:01:41 -0600
-In-Reply-To: <20211216102956.GC10708@xsang-OptiPlex-9020> (kernel test robot's
-        message of "Thu, 16 Dec 2021 18:29:56 +0800")
-Message-ID: <878rwjf9my.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 17 Dec 2021 12:02:00 -0500
+Received: by mail-ot1-f44.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so3599400oto.13;
+        Fri, 17 Dec 2021 09:02:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8g5Lsj8WxuGD8LrSO5qJLGi0ggNwHZB9aqoikJwvsGM=;
+        b=KO4uFyORxaMYbXteyVLfmhZ4Js/XvFIlD/sJAjaZVfmqbFTEn1sV6eqMP6Sz/jgNQC
+         GEh8HZ8fzGbye8rGsDyHy2FL1XYNsDLB0D1oluzYS7yKrcD6Yx9rl+3e6E25FkH8AOOx
+         3cXLceYbbnP9vXrAsJxhUBiMBJn7POe5Paj436Qj4EesMLYdr9njtk0sbtnnRUGkbBcx
+         l4/BY0jn6jFiqlCnZPRNc1TB1IzAfj0SWdI9imI8nooFRyPdJtnMzdHRRAoL9BG0ltGV
+         tKstzGUMyVdxTYgMGb2UYYsYmY+AC7+bGO66BO3/J5GwCRd79bhebAgI7Q4d209rsNSe
+         Fs8Q==
+X-Gm-Message-State: AOAM5332aVUNydJRdTMGinSYmVmTgAYgaCf7fP1Tdq0igmAL6zEW3wJ0
+        cuRnkT/qtpaRRkWykl4SpZao4bnXJhybJsIvpuM=
+X-Google-Smtp-Source: ABdhPJwYEwhOV1FAjDGBz5u0mu36ruUQNLhy02Bhf107/bjVVJgot/56+62cFieV+LFNasSTESlUDOc+3LqFR5rbG4I=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr2890397otu.254.1639760519595;
+ Fri, 17 Dec 2021 09:01:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1myGc7-008PnM-I4;;;mid=<878rwjf9my.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.161.49;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/4izyAnNpNnn9ME7g+2eFUG5FCcK/5Zts=
-X-SA-Exim-Connect-IP: 68.227.161.49
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,XMSubLong autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4891]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;kernel test robot <oliver.sang@intel.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 477 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 22 (4.5%), b_tie_ro: 20 (4.2%), parse: 1.26
-        (0.3%), extract_message_metadata: 25 (5.2%), get_uri_detail_list: 1.72
-        (0.4%), tests_pri_-1000: 22 (4.6%), tests_pri_-950: 1.83 (0.4%),
-        tests_pri_-900: 1.42 (0.3%), tests_pri_-90: 148 (31.1%), check_bayes:
-        129 (26.9%), b_tokenize: 8 (1.6%), b_tok_get_all: 6 (1.4%),
-        b_comp_prob: 3.0 (0.6%), b_tok_touch_all: 104 (21.8%), b_finish: 4.5
-        (0.9%), tests_pri_0: 235 (49.3%), check_dkim_signature: 0.73 (0.2%),
-        check_dkim_adsp: 17 (3.5%), poll_dns_idle: 1.66 (0.3%), tests_pri_10:
-        3.2 (0.7%), tests_pri_500: 11 (2.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [kthread]  40966e316f: WARNING:at_kernel/sched/core.c:#sched_init
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <20211217132415.39726-1-heikki.krogerus@linux.intel.com> <20211217132415.39726-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20211217132415.39726-2-heikki.krogerus@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Dec 2021 18:01:48 +0100
+Message-ID: <CAJZ5v0g9HjLr8n3OQwMY0EK5GdCc+8CJnO3mEUXom3g2sz9jXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] acpi: Store the known device locations
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot <oliver.sang@intel.com> writes:
+On Fri, Dec 17, 2021 at 2:24 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> This adds a list that will hold all the detected device
+> locations. The location of a device is known if it has
+> Physical Location of Device (_PLD) object within its scope.
 
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-9):
->
-> commit: 40966e316f86b8cfd83abd31ccb4df729309d3e7 ("kthread: Ensure struct kthread is present for all kthreads")
-> https://git.kernel.org/cgit/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
->
-> in testcase: trinity
-> version: trinity-x86_64-608712d8-1_20211207
-> with following parameters:
->
-> 	runtime: 300s
->
-> test-description: Trinity is a linux system call fuzz tester.
-> test-url: http://codemonkey.org.uk/projects/trinity/
->
->
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
->
-> caused below changes (please refer to attached dmesg/kmsg for entire
-> log/backtrace):
+This paragraph isn't really accurate any more, because the location
+information is not stored in that list.
 
+To be precise, the new list is a list of entries that each contain a
+list of devices sharing the same physical location information (and
+thus presumably being physically located in the same place or
+physically overlapping so to speak).
 
-Ok. That is very weird.  I will dig into it.
+Honestly, I would change the terminology and naming  to reflect that
+concept (see below).
 
-Silly question is there anything in this testing to cause memory
-allocations to fail early in boot?
+> Each entry in the list represents a known location, and each
+> of those locations can then have a list of devices that are
+> currently assigned to those locations.
+>
+> The location entry that contains the current location of a
+> device can be acquired with a new function
+> acpi_device_get_location(). The location structure returned
+> by this function contains the list of devices sharing it.
+>
+> The knowledge of the other devices that share a location
+> can be used in device drivers that need to know the
+> connections to other components inside a system. USB3 ports
+> will for example always share their location with a USB2
+> port.
+>
+> For now, the device locations can not be updated, so they
+> will only contain lists the devices that are initially in
+> those locations. But that can later be easily changed if
+> needed by adding API that can be used to update the
+> locations.
+>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/acpi/scan.c     | 77 +++++++++++++++++++++++++++++++++++++++++
+>  include/acpi/acpi_bus.h | 19 ++++++++++
+>  2 files changed, 96 insertions(+)
+>
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 5991dddbc9ceb..f147c0ad5f944 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/platform_data/x86/apple.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/crc32.h>
+>
+>  #include "internal.h"
+>
+> @@ -42,6 +43,8 @@ static LIST_HEAD(acpi_scan_handlers_list);
+>  DEFINE_MUTEX(acpi_device_lock);
+>  LIST_HEAD(acpi_wakeup_device_list);
+>  static DEFINE_MUTEX(acpi_hp_context_lock);
+> +static LIST_HEAD(acpi_location_list);
 
-Eric
+I would call this "acpi_location_sharing_list".
+
+> +static DEFINE_MUTEX(acpi_location_lock);
+
+And this "acpi_location_sharing_lock".
+
+>
+>  /*
+>   * The UART device described by the SPCR table is the only object which needs
+> @@ -485,6 +488,7 @@ static void acpi_device_del(struct acpi_device *device)
+>                         break;
+>                 }
+>
+> +       list_del(&device->location_list);
+>         list_del(&device->wakeup_list);
+>         mutex_unlock(&acpi_device_lock);
+>
+> @@ -654,6 +658,76 @@ static int acpi_tie_acpi_dev(struct acpi_device *adev)
+>         return 0;
+>  }
+>
+> +static void acpi_store_device_location(struct acpi_device *adev)
+
+This can be called "acpi_dev_save_location_sharing_info()".
+
+> +{
+> +       struct acpi_device_location *location;
+> +       struct acpi_pld_info *pld;
+> +       acpi_status status;
+> +       u32 crc;
+> +
+> +       status = acpi_get_physical_device_location(adev->handle, &pld);
+> +       if (ACPI_FAILURE(status))
+> +               return;
+> +
+> +       crc = crc32(~0, pld, sizeof(*pld));
+> +
+> +       mutex_lock(&acpi_location_lock);
+> +
+> +       list_for_each_entry(location, &acpi_location_list, node)
+> +               if (location->pld_crc == crc)
+> +                       goto out_add_to_location;
+> +
+> +       /* The location does not exist yet so creating it. */
+> +
+> +       location = kzalloc(sizeof(*location), GFP_KERNEL);
+> +       if (!location) {
+> +               acpi_handle_err(adev->handle, "Unable to store location\n");
+> +               goto err_unlock;
+> +       }
+> +
+> +       list_add_tail(&location->node, &acpi_location_list);
+> +       INIT_LIST_HEAD(&location->devices);
+> +       location->pld_crc = crc;
+> +
+> +out_add_to_location:
+> +       list_add_tail(&adev->location_list, &location->devices);
+> +
+> +err_unlock:
+> +       ACPI_FREE(pld);
+> +       mutex_unlock(&acpi_location_lock);
+> +}
+> +
+> +/**
+> + * acpi_device_get_location - Get the device location
+> + * @adev: ACPI device handle
+> + *
+> + * Return a pointer to a struct acpi_device_location object containing the
+> + * location information obtained by evaluating _PLD (Physical Location of
+> + * Device) for @adev when it is available, along with the list of devices
+> + * sharing the same location information (if any), or NULL otherwise.
+> + */
+> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
+
+And this "acpi_dev_get_location_sharing_info()".
+
+> +{
+> +       struct acpi_device_location *location;
+> +       struct list_head *tmp;
+> +
+> +       mutex_lock(&acpi_location_lock);
+> +
+> +       list_for_each_entry(location, &acpi_location_list, node) {
+> +               list_for_each(tmp, &location->devices) {
+> +                       if (tmp == &adev->location_list)
+> +                               goto out_unlock;
+> +               }
+> +       }
+> +       location = NULL;
+> +
+> +out_unlock:
+> +       mutex_unlock(&acpi_location_lock);
+> +
+> +       return location;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_device_get_location);
+> +
+>  static int __acpi_device_add(struct acpi_device *device,
+>                              void (*release)(struct device *))
+>  {
+> @@ -670,6 +744,7 @@ static int __acpi_device_add(struct acpi_device *device,
+>         INIT_LIST_HEAD(&device->wakeup_list);
+>         INIT_LIST_HEAD(&device->physical_node_list);
+>         INIT_LIST_HEAD(&device->del_list);
+> +       INIT_LIST_HEAD(&device->location_list);
+>         mutex_init(&device->physical_node_lock);
+>
+>         mutex_lock(&acpi_device_lock);
+> @@ -712,6 +787,8 @@ static int __acpi_device_add(struct acpi_device *device,
+>         if (device->wakeup.flags.valid)
+>                 list_add_tail(&device->wakeup_list, &acpi_wakeup_device_list);
+>
+> +       acpi_store_device_location(device);
+> +
+>         mutex_unlock(&acpi_device_lock);
+>
+>         if (device->parent)
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index d6fe27b695c3d..9123884e4e7ec 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -354,6 +354,18 @@ struct acpi_device_data {
+>         struct list_head subnodes;
+>  };
+>
+> +/*
+> + * struct acpi_device_location - Device location based on _PLD
+> + * @devices: List of devices that share this location
+> + * @node: Entry in the internal list of locations
+> + * @pld_crc: CRC-32 hash of the _PLD
+> + */
+> +struct acpi_device_location {
+
+"acpi_dev_location_sharing_info" ?
+
+> +       struct list_head devices;
+> +       struct list_head node;
+> +       u32 pld_crc;
+> +};
+> +
+>  struct acpi_gpio_mapping;
+>
+>  /* Device */
+> @@ -366,6 +378,7 @@ struct acpi_device {
+>         struct list_head node;
+>         struct list_head wakeup_list;
+>         struct list_head del_list;
+> +       struct list_head location_list;
+
+"location_sharing_list" ?
+
+>         struct acpi_device_status status;
+>         struct acpi_device_flags flags;
+>         struct acpi_device_pnp pnp;
+> @@ -731,11 +744,17 @@ static inline void acpi_bus_put_acpi_device(struct acpi_device *adev)
+>  {
+>         acpi_dev_put(adev);
+>  }
+> +
+> +struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev);
+>  #else  /* CONFIG_ACPI */
+>
+>  static inline int register_acpi_bus_type(void *bus) { return 0; }
+>  static inline int unregister_acpi_bus_type(void *bus) { return 0; }
+>
+> +static inline struct acpi_device_location *acpi_device_get_location(struct acpi_device *adev)
+> +{
+> +       return NULL;
+> +}
+>  #endif                         /* CONFIG_ACPI */
+>
+>  #endif /*__ACPI_BUS_H__*/
+> --
+
+And overall I'm wondering if this can be achieved by storing the
+pld_crc directly in struct acpi_device and doing a
+bus_for_each_dev(&acpi_bus_type, ...) walk every time a list of
+devices sharing a _PLD is needed?
+
+It looks like typec_link_ports() is the only user of this and it can
+easily afford doing a walk like the above if I'm not mistaken.

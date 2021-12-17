@@ -2,206 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF3C4788FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA13478902
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235117AbhLQKc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235058AbhLQKcX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:32:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0342C06173F;
-        Fri, 17 Dec 2021 02:32:22 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639737141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FcsZgKvhQhbNuvqvVY2U//4ZClIou7+A9xVPA3yEvPI=;
-        b=YTSubYE4uaDslTZwh55oUxp91bNIi1A0izag9UjO/QDim3HdzEFKe0XWdlPC0WXRqxwtcn
-        2iMtNkfE0/D024wVCooxTTZoC3+RMzcJo1ikNv6/Ay2odghbPW1lZgBiXlpLNwcjBDVOGF
-        3F2E/81JyhI06V8/jQfFAmzSWxsqwqsIqFcAYg4AeynCHHTyPa+RL2lg2ppggx7tpqL7lc
-        /I3J5+zTqP+HHP2ENfUplWzPUAVt64IjRdVJn3Eu1q52vkScQsrnDJZDqQfqfN4baxdIzw
-        9YYJONxTZU/RYC2S2fbt44DdYb6xT4tpSapPy4HjTSJEk5o8S4oMuQxF+QLg8g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639737141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FcsZgKvhQhbNuvqvVY2U//4ZClIou7+A9xVPA3yEvPI=;
-        b=0x19I31Ladf9yTS7zRuEOixy4Bd7SHtOhxu+gb95ULF+dfKkDKuL/98mPFsh2HxL/Ksun+
-        qUjLXYFyETuahuDw==
-To:     fcarli@gmail.com
-Cc:     linux-kernel@vger.kernel.org,
-        "Luis Claudio R . Goncalves" <lgoncalv@redhat.com>,
-        stable-rt@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 2/2] eventfd: Make signal recursion protection a task bit
-Date:   Fri, 17 Dec 2021 11:32:09 +0100
-Message-Id: <20211217103209.1122679-3-bigeasy@linutronix.de>
-In-Reply-To: <20211217103209.1122679-1-bigeasy@linutronix.de>
-References: <CAJuRqcAc19KZYik7T_dYFoqt_wX4QPHKBsh9A8BJwYE7uxs_1A@mail.gmail.com>
- <20211217103209.1122679-1-bigeasy@linutronix.de>
+        id S235111AbhLQKeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:34:14 -0500
+Received: from mga06.intel.com ([134.134.136.31]:51139 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233460AbhLQKeN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 05:34:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639737253; x=1671273253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NVNGMMi+GcP2D2tp7o/8LBJVGo1HVXYBvPe0/10EQVw=;
+  b=PXhr7E1ku2b7Z87olp2mGz94qbH52i6IKb11yKOcZOLysVMzlNUeHIRv
+   4mJ04bwtSdrC4PF8Ax9wpQnnvW5QJAmk6poShBq8D7JMxF5QYAbGiL88V
+   JrrtpAQvY9AdsFyT77WiKdlTF5I52lfXISiI+1v0baxeQHEahnF5ITHzQ
+   P0wFrk32D/ESeESydwo3OfYjBpHLfF3hRQmEJsNo15+k11r6y1mCH6fod
+   ezbPgUs3xYmHrN5wPRC0UP1G/Z7Okj2wO8iC4y+Xr8Vvc5V8yeX7QDgq1
+   BMtxod4eFknP4Zpllj78oCizwg/a5Ifmvv+vvSOmuVclCzUgCkM/T8aF+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300503413"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="300503413"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:34:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="605861172"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2021 02:34:09 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myAYz-0004bD-3w; Fri, 17 Dec 2021 10:34:09 +0000
+Date:   Fri, 17 Dec 2021 18:33:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/18] Structural cleanup for filesystem-based swap
+Message-ID: <202112171822.DW1WPE1G-lkp@intel.com>
+References: <163969850251.20885.10819272484905153807.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163969850251.20885.10819272484905153807.stgit@noble.brown>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Hi NeilBrown,
 
-Upstream commit b542e383d8c005f06a131e2b40d5889b812f19c6
+Thank you for the patch! Yet something to improve:
 
-The recursion protection for eventfd_signal() is based on a per CPU
-variable and relies on the !RT semantics of spin_lock_irqsave() for
-protecting this per CPU variable. On RT kernels spin_lock_irqsave() neither
-disables preemption nor interrupts which allows the spin lock held section
-to be preempted. If the preempting task invokes eventfd_signal() as well,
-then the recursion warning triggers.
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on axboe-block/for-next mszeredi-vfs/overlayfs-next rostedt-trace/for-next linus/master v5.16-rc5 next-20211216]
+[cannot apply to trondmy-nfs/linux-next hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Paolo suggested to protect the per CPU variable with a local lock, but
-that's heavyweight and actually not necessary. The goal of this protection
-is to prevent the task stack from overflowing, which can be achieved with a
-per task recursion protection as well.
+url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: arm-randconfig-r005-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171822.DW1WPE1G-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/6443c9d01129c1a1c19f3df4a594b01e3772e6bd
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+        git checkout 6443c9d01129c1a1c19f3df4a594b01e3772e6bd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfs/
 
-Replace the per CPU variable with a per task bit similar to other recursion
-protection bits like task_struct::in_page_owner. This works on both !RT and
-RT kernels and removes as a side effect the extra per CPU storage.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-No functional change for !RT kernels.
+All errors (new ones prefixed by >>):
 
-Reported-by: Daniel Bristot de Oliveira <bristot@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Daniel Bristot de Oliveira <bristot@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Link: https://lore.kernel.org/r/87wnp9idso.ffs@tglx
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>> fs/nfs/file.c:512:8: error: implicit declaration of function 'add_swap_extent' [-Werror,-Wimplicit-function-declaration]
+           ret = add_swap_extent(sis, 0, sis->max, 0);
+                 ^
+   1 error generated.
+
+
+vim +/add_swap_extent +512 fs/nfs/file.c
+
+   486	
+   487	static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
+   488							sector_t *span)
+   489	{
+   490		unsigned long blocks;
+   491		long long isize;
+   492		int ret;
+   493		struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
+   494		struct inode *inode = file->f_mapping->host;
+   495	
+   496		if (!file->f_mapping->a_ops->swap_rw)
+   497			/* Cannot support swap */
+   498			return -EINVAL;
+   499	
+   500		spin_lock(&inode->i_lock);
+   501		blocks = inode->i_blocks;
+   502		isize = inode->i_size;
+   503		spin_unlock(&inode->i_lock);
+   504		if (blocks*512 < isize) {
+   505			pr_warn("swap activate: swapfile has holes\n");
+   506			return -EINVAL;
+   507		}
+   508	
+   509		ret = rpc_clnt_swap_activate(clnt);
+   510		if (ret)
+   511			return ret;
+ > 512		ret = add_swap_extent(sis, 0, sis->max, 0);
+   513		if (ret < 0) {
+   514			rpc_clnt_swap_deactivate(clnt);
+   515			return ret;
+   516		}
+   517		*span = sis->pages;
+   518		sis->flags |= SWP_FS_OPS;
+   519		return ret;
+   520	}
+   521	
+
 ---
- fs/aio.c                |  2 +-
- fs/eventfd.c            | 12 +++++-------
- include/linux/eventfd.h | 11 +++++------
- include/linux/sched.h   |  4 ++++
- 4 files changed, 15 insertions(+), 14 deletions(-)
-
-diff --git a/fs/aio.c b/fs/aio.c
-index 76ce0cc3ee4ec..51b08ab01dffc 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -1695,7 +1695,7 @@ static int aio_poll_wake(struct wait_queue_entry *wai=
-t, unsigned mode, int sync,
- 		list_del(&iocb->ki_list);
- 		iocb->ki_res.res =3D mangle_poll(mask);
- 		req->done =3D true;
--		if (iocb->ki_eventfd && eventfd_signal_count()) {
-+		if (iocb->ki_eventfd && eventfd_signal_allowed()) {
- 			iocb =3D NULL;
- 			INIT_WORK(&req->work, aio_poll_put_work);
- 			schedule_work(&req->work);
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index df466ef81dddf..9035ca60bfcf3 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -25,8 +25,6 @@
- #include <linux/idr.h>
- #include <linux/uio.h>
-=20
--DEFINE_PER_CPU(int, eventfd_wake_count);
--
- static DEFINE_IDA(eventfd_ida);
-=20
- struct eventfd_ctx {
-@@ -67,21 +65,21 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n)
- 	 * Deadlock or stack overflow issues can happen if we recurse here
- 	 * through waitqueue wakeup handlers. If the caller users potentially
- 	 * nested waitqueues with custom wakeup handlers, then it should
--	 * check eventfd_signal_count() before calling this function. If
--	 * it returns true, the eventfd_signal() call should be deferred to a
-+	 * check eventfd_signal_allowed() before calling this function. If
-+	 * it returns false, the eventfd_signal() call should be deferred to a
- 	 * safe context.
- 	 */
--	if (WARN_ON_ONCE(this_cpu_read(eventfd_wake_count)))
-+	if (WARN_ON_ONCE(current->in_eventfd_signal))
- 		return 0;
-=20
- 	spin_lock_irqsave(&ctx->wqh.lock, flags);
--	this_cpu_inc(eventfd_wake_count);
-+	current->in_eventfd_signal =3D 1;
- 	if (ULLONG_MAX - ctx->count < n)
- 		n =3D ULLONG_MAX - ctx->count;
- 	ctx->count +=3D n;
- 	if (waitqueue_active(&ctx->wqh))
- 		wake_up_locked_poll(&ctx->wqh, EPOLLIN);
--	this_cpu_dec(eventfd_wake_count);
-+	current->in_eventfd_signal =3D 0;
- 	spin_unlock_irqrestore(&ctx->wqh.lock, flags);
-=20
- 	return n;
-diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
-index dc4fd8a6644dd..836b4c021a0a4 100644
---- a/include/linux/eventfd.h
-+++ b/include/linux/eventfd.h
-@@ -14,6 +14,7 @@
- #include <linux/err.h>
- #include <linux/percpu-defs.h>
- #include <linux/percpu.h>
-+#include <linux/sched.h>
-=20
- /*
-  * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
-@@ -42,11 +43,9 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n);
- int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx, wait_queue_entr=
-y_t *wait,
- 				  __u64 *cnt);
-=20
--DECLARE_PER_CPU(int, eventfd_wake_count);
--
--static inline bool eventfd_signal_count(void)
-+static inline bool eventfd_signal_allowed(void)
- {
--	return this_cpu_read(eventfd_wake_count);
-+	return !current->in_eventfd_signal;
- }
-=20
- #else /* CONFIG_EVENTFD */
-@@ -77,9 +76,9 @@ static inline int eventfd_ctx_remove_wait_queue(struct ev=
-entfd_ctx *ctx,
- 	return -ENOSYS;
- }
-=20
--static inline bool eventfd_signal_count(void)
-+static inline bool eventfd_signal_allowed(void)
- {
--	return false;
-+	return true;
- }
-=20
- #endif
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 409a24036952c..29e6ff1af1df9 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -852,6 +852,10 @@ struct task_struct {
- 	/* Stalled due to lack of memory */
- 	unsigned			in_memstall:1;
- #endif
-+#ifdef CONFIG_EVENTFD
-+	/* Recursion prevention for eventfd_signal() */
-+	unsigned			in_eventfd_signal:1;
-+#endif
-=20
- 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
-=20
---=20
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,140 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570FC478324
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3152447832D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbhLQCZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:25:43 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:53276 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbhLQCZl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:25:41 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BH2P8DH0015207, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BH2P8DH0015207
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 17 Dec 2021 10:25:08 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 17 Dec 2021 10:25:08 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 17 Dec 2021 10:25:07 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::1939:37f0:5383:397d]) by
- RTEXMBS01.realtek.com.tw ([fe80::1939:37f0:5383:397d%5]) with mapi id
- 15.01.2308.015; Fri, 17 Dec 2021 10:25:07 +0800
-From:   =?utf-8?B?RGVyZWsgW+aWueW+t+e+qV0=?= <derek.fang@realtek.com>
-To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        =?utf-8?B?U2h1bWluZyBb6IyD5pu46YqYXQ==?= <shumingf@realtek.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-CC:     Oder Chiou <oder_chiou@realtek.com>,
-        "Sunil-kumar.Dommati@amd.com" <Sunil-kumar.Dommati@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Basavaraj.Hiregoudar@amd.com" <Basavaraj.Hiregoudar@amd.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Vijendar.Mukunda@amd.com" <Vijendar.Mukunda@amd.com>,
-        "Alexander.Deucher@amd.com" <Alexander.Deucher@amd.com>,
-        Jack Yu <jack.yu@realtek.com>,
-        "Flove(HsinFu)" <flove@realtek.com>,
-        Albert Chen <albertchen@realtek.com>
-Subject: RE: [PATCH v2 1/1] ASoC: rt5682s: Add dapm switch to mute/unmute HP playback output
-Thread-Topic: [PATCH v2 1/1] ASoC: rt5682s: Add dapm switch to mute/unmute HP
- playback output
-Thread-Index: AQHX7GWRI6k5NgtuD0uEox0/duGRXKwo6UkAgAucCICAAXxS8A==
-Date:   Fri, 17 Dec 2021 02:25:07 +0000
-Message-ID: <372f49bfa3cf45838ffa994a14e844c0@realtek.com>
-References: <20211208185517.1555884-1-AjitKumar.Pandey@amd.com>
- <20211208185517.1555884-2-AjitKumar.Pandey@amd.com>
- <126eab881bb540bc84ecc5cb9c6865a8@realtek.com>
- <a08db422-7f51-4156-5e9e-62b7938dad29@amd.com>
-In-Reply-To: <a08db422-7f51-4156-5e9e-62b7938dad29@amd.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.102.142]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzE2IOS4i+WNiCAxMToyODowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S231310AbhLQCbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:31:37 -0500
+Received: from mga17.intel.com ([192.55.52.151]:62963 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229471AbhLQCbg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:31:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639708296; x=1671244296;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eFF78Je0CtfG03hk3mp/iE7iGFSVUhT+xxQARKuzI6g=;
+  b=ZEfWSiuKcMxykDZvVMOz5g3gZgTI/nPIe4Pw47CC8ji1Hw944v5z38p7
+   9PCsdOqJJzmnyqpgpnGJxD+FDdPQYmsvU6b22QErvU+5HC32aNAceAcZO
+   nGU30b86QFZI1krsdL5UkWrgT+TOTyceHfdhXW3CfZdmz4LfKsxrcv4s0
+   3+5BkAb7M8wN9cD2fi1J29+60GtP9JeovnCAgSjAvCNzThAM/PCxjPfWk
+   sy1mmXXpXOEIIbQwdy2U5KhAAjn8/6Qi5stBgN250SdpyE+nAeY+wgbu1
+   g70zcTF/tpUTYi+u5VcBVL0gWHbjmChAcNmPuLnT8c4BXaEJQXA3hYyh2
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="220342384"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="220342384"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:31:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="506589963"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 18:31:34 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my31x-000472-Nc; Fri, 17 Dec 2021 02:31:33 +0000
+Date:   Fri, 17 Dec 2021 10:31:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 107/152] arch/x86/kvm/vmx/tdx_stubs.c:13:12:
+ warning: no previous prototype for function 'tdx_vcpu_run'
+Message-ID: <202112171042.JZamNPE0-lkp@intel.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIHYyIDEvMV0gQVNvQzogcnQ1NjgyczogQWRkIGRhcG0gc3dp
-dGNoIHRvIG11dGUvdW5tdXRlDQo+IEhQIHBsYXliYWNrIG91dHB1dA0KPiANCj4gT24gMTIvOS8y
-MDIxIDc6NTUgQU0sIFNodW1pbmcgW+iMg+abuOmKmF0gd3JvdGU6DQo+ID4gW0NBVVRJT046IEV4
-dGVybmFsIEVtYWlsXQ0KPiA+DQo+ID4+IFN1YmplY3Q6IFtQQVRDSCB2MiAxLzFdIEFTb0M6IHJ0
-NTY4MnM6IEFkZCBkYXBtIHN3aXRjaCB0byBtdXRlL3VubXV0ZSBIUA0KPiA+PiBwbGF5YmFjayBv
-dXRwdXQNCj4gPj4NCj4gPj4gQWRkIGRhcG0gc3dpdGNoIGluIHBsYXliYWNrIHBhdGggdG8gbXV0
-ZSBvciB1bm11dGUgSFAgb3V0cHV0IGRhdGEuDQo+ID4+IFdlIHdpbGwgc2V0IGFuZCByZXNldCBN
-VVRFX1NGVCBiaXQgaW4gUlQ1NjgyU19IUF9DVFJMXzEgcmVnaXN0ZXIgYmFzZWQgb24NCj4gPj4g
-c3dpdGNoIHZhbHVlIHRvIG11dGUgb3IgdW5tdXRlIHJlc3BlY3RpdmUgY2hhbm5lbC4NCj4gPj4N
-Cj4gPj4gU2lnbmVkLW9mZi1ieTogQWppdCBLdW1hciBQYW5kZXkgPEFqaXRLdW1hci5QYW5kZXlA
-YW1kLmNvbT4NCj4gPj4gLS0tDQo+ID4+ICAgc291bmQvc29jL2NvZGVjcy9ydDU2ODJzLmMgfCAx
-OSArKysrKysrKysrKysrKysrKy0tDQo+ID4+ICAgMSBmaWxlIGNoYW5nZWQsIDE3IGluc2VydGlv
-bnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9zb3VuZC9zb2Mv
-Y29kZWNzL3J0NTY4MnMuYyBiL3NvdW5kL3NvYy9jb2RlY3MvcnQ1Njgycy5jIGluZGV4DQo+ID4+
-IGQ0OWE0ZjY4NTY2ZC4uMjFhYjVmN2RmNDIyIDEwMDY0NA0KPiA+PiAtLS0gYS9zb3VuZC9zb2Mv
-Y29kZWNzL3J0NTY4MnMuYw0KPiA+PiArKysgYi9zb3VuZC9zb2MvY29kZWNzL3J0NTY4MnMuYw0K
-PiA+PiBAQCAtMTU3Myw2ICsxNTczLDE0IEBAIHN0YXRpYyBjb25zdCBjaGFyICogY29uc3QNCj4g
-Pj4gcnQ1Njgyc19hZGNkYXRfcGluX3NlbGVjdFtdID0gew0KPiA+PiAgICAgICAgIkFEQ0RBVDEi
-LCAiQURDREFUMiIsDQo+ID4+ICAgfTsNCj4gPj4NCj4gPj4gKy8qIE91dCBTd2l0Y2ggKi8NCj4g
-Pj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgc25kX2tjb250cm9sX25ldyBocG9sX3N3aXRjaCA9DQo+
-ID4+ICsgICAgIFNPQ19EQVBNX1NJTkdMRV9BVVRPRElTQUJMRSgiU3dpdGNoIiwgUlQ1NjgyU19I
-UF9DVFJMXzEsDQo+ID4+ICsgICAgICAgICAgICAgUlQ1NjgyU19MX01VVEVfU0ZULCAxLCAxKTsN
-Cj4gPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgc25kX2tjb250cm9sX25ldyBocG9yX3N3aXRjaCA9
-DQo+ID4+ICsgICAgIFNPQ19EQVBNX1NJTkdMRV9BVVRPRElTQUJMRSgiU3dpdGNoIiwgUlQ1Njgy
-U19IUF9DVFJMXzEsDQo+ID4+ICsgICAgICAgICAgICAgUlQ1NjgyU19SX01VVEVfU0ZULCAxLCAx
-KTsNCj4gPj4gKw0KPiA+PiAgIHN0YXRpYyBTT0NfVkFMVUVfRU5VTV9TSU5HTEVfREVDTChydDU2
-ODJzX2FkY2RhdF9waW5fZW51bSwNCj4gPj4gICAgICAgIFJUNTY4MlNfR1BJT19DVFJMXzEsIFJU
-NTY4MlNfR1A0X1BJTl9TRlQsDQo+ID4+IFJUNTY4MlNfR1A0X1BJTl9NQVNLLA0KPiA+PiAgICAg
-ICAgcnQ1Njgyc19hZGNkYXRfcGluX3NlbGVjdCwgcnQ1Njgyc19hZGNkYXRfcGluX3ZhbHVlcyk7
-IEBADQo+IC0xNzQ2LDYNCj4gPj4gKzE3NTQsMTEgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBzbmRf
-c29jX2RhcG1fd2lkZ2V0DQo+ID4+IHJ0NTY4MnNfZGFwbV93aWRnZXRzW10gPSB7DQo+ID4+ICAg
-ICAgICBTTkRfU09DX0RBUE1fUEdBX1MoIkhQIEFtcCIsIDEsIFNORF9TT0NfTk9QTSwgMCwgMCwN
-Cj4gPj4gcnQ1Njgyc19ocF9hbXBfZXZlbnQsDQo+ID4+ICAgICAgICAgICAgICAgIFNORF9TT0Nf
-REFQTV9QT1NUX1BNRCB8DQo+IFNORF9TT0NfREFQTV9QT1NUX1BNVSksDQo+ID4+DQo+ID4+ICsg
-ICAgIFNORF9TT0NfREFQTV9TV0lUQ0goIkhQT0wgUGxheWJhY2siLCBTTkRfU09DX05PUE0sIDAs
-IDAsDQo+ID4+ICsgICAgICAgICAgICAgJmhwb2xfc3dpdGNoKSwNCj4gPj4gKyAgICAgU05EX1NP
-Q19EQVBNX1NXSVRDSCgiSFBPUiBQbGF5YmFjayIsIFNORF9TT0NfTk9QTSwgMCwgMCwNCj4gPj4g
-KyAgICAgICAgICAgICAmaHBvcl9zd2l0Y2gpLA0KPiA+PiArDQo+ID4+ICAgICAgICAvKiBDTEsg
-REVUICovDQo+ID4+ICAgICAgICBTTkRfU09DX0RBUE1fU1VQUExZKCJDTEtERVQgU1lTIiwgUlQ1
-NjgyU19DTEtfREVULA0KPiA+PiAgICAgICAgICAgICAgICBSVDU2ODJTX1NZU19DTEtfREVUX1NG
-VCwgMCwgTlVMTCwgMCksIEBAIC0xODk1LDgNCj4gKzE5MDgsMTAgQEANCj4gPj4gc3RhdGljIGNv
-bnN0IHN0cnVjdCBzbmRfc29jX2RhcG1fcm91dGUgcnQ1Njgyc19kYXBtX3JvdXRlc1tdID0gew0K
-PiA+PiAgICAgICAgeyJIUCBBbXAiLCBOVUxMLCAiQ0xLREVUIFNZUyJ9LA0KPiA+PiAgICAgICAg
-eyJIUCBBbXAiLCBOVUxMLCAiU0FSIn0sDQo+ID4+DQo+ID4+IC0gICAgIHsiSFBPTCIsIE5VTEws
-ICJIUCBBbXAifSwNCj4gPj4gLSAgICAgeyJIUE9SIiwgTlVMTCwgIkhQIEFtcCJ9LA0KPiA+PiAr
-ICAgICB7IkhQT0wgUGxheWJhY2siLCAiU3dpdGNoIiwgIkhQIEFtcCJ9LA0KPiA+PiArICAgICB7
-IkhQT1IgUGxheWJhY2siLCAiU3dpdGNoIiwgIkhQIEFtcCJ9LA0KPiA+PiArICAgICB7IkhQT0wi
-LCBOVUxMLCAiSFBPTCBQbGF5YmFjayJ9LA0KPiA+PiArICAgICB7IkhQT1IiLCBOVUxMLCAiSFBP
-UiBQbGF5YmFjayJ9LA0KPiA+PiAgIH07DQo+ID4NCj4gPiBSVDU2ODJTIGVuYWJsZXMgdGhlIDEg
-Yml0IGNvbnRyb2wgZm9yIEhQIG91dHB1dC4NCj4gPiBUaGVyZWZvcmUsIHRoZSBzZXR0aW5nIG9m
-IFJUNTY4MlNfSFBfQ1RSTF8xWzE1XVs3XSB3aWxsIGJlIG5vdCBlZmZlY3RpdmUuDQo+ID4NCj4g
-Pg0KPiBPaywgaXQgd2FzIGFjdHVhbGx5IGVmZmVjdGl2ZSBhbmQgbXV0ZWQgYXVkaW8gd2hlbiB3
-ZSB0ZXN0IGluIG91cg0KPiBwbGF0Zm9ybSwgcG9zc2libGUgYmVjYXVzZSBpJ20gdGVhcmluZyBk
-b3duIGRhcG0gcGF0aCBiYXNlZCBvbiBzd2l0Y2gNCj4gdmFsdWUuIElmIHdlIGRvbid0IGhhdmUg
-cmVnaXN0ZXIgYml0cyBhdmFpbGFibGUgdG8gbXV0ZSBpJ2xsIHJlc3VibWl0DQo+IHRoZSBjaGFu
-Z2Ugd2l0aCB2aXJ0dWFsIHN3aXRjaCB3aWRnZXQgdG8gZGlzYWJsZSBEQVBNIGFuZCBzdG9wIGF1
-ZGlvLg0KPiANCldoYXQgcHVycG9zZSBkbyB5b3Ugd2FudCB0byBhZGQgYW4gYWRkaXRpb25hbCBz
-d2l0Y2ggdG8gcG93ZXIgdXAvZG93biANCnRoZSBkYXBtIGluIHRoZSBjb2RlYyBkcml2ZXIgaW5z
-dGVhZCBvZiB1c2luZyBleGlzdGluZyBjb250cm9scz8NCkFuZCB3ZSB0aG91Z2h0IHRoZSB2aXJ0
-dWFsIHN3aXRjaCB5b3UgdGFsa2VkIGFib3V0IGNvdWxkIGJlIGltcGxlbWVudGVkIA0KaW4gdGhl
-IG1hY2hpbmUgZHJpdmVyLg0K
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: 4dce28ae6facd2c06b513bc1e6fa48e397438a3a [107/152] KVM: TDX: Implement TDX vcpu enter/exit path
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171042.JZamNPE0-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/4dce28ae6facd2c06b513bc1e6fa48e397438a3a
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout 4dce28ae6facd2c06b513bc1e6fa48e397438a3a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
+   void tdx_hardware_enable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_enable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
+   void tdx_hardware_disable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_disable(void) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:13:12: warning: no previous prototype for function 'tdx_vcpu_run' [-Wmissing-prototypes]
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:14:6: warning: no previous prototype for function 'tdx_vcpu_load' [-Wmissing-prototypes]
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:15:6: warning: no previous prototype for function 'tdx_vcpu_put' [-Wmissing-prototypes]
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:16:6: warning: no previous prototype for function 'tdx_prepare_switch_to_guest' [-Wmissing-prototypes]
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:18:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:19:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:20:72: error: use of undeclared identifier 'ENOPNOTSUPP'
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+                                                                          ^
+   arch/x86/kvm/vmx/tdx_stubs.c:20:5: warning: no previous prototype for function 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+       ^
+   arch/x86/kvm/vmx/tdx_stubs.c:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:22:6: warning: no previous prototype for function 'tdx_flush_tlb' [-Wmissing-prototypes]
+   void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+   ^
+   static 
+   arch/x86/kvm/vmx/tdx_stubs.c:23:6: warning: no previous prototype for function 'tdx_load_mmu_pgd' [-Wmissing-prototypes]
+   void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+   ^
+   static 
+   16 warnings and 1 error generated.
+
+
+vim +/tdx_vcpu_run +13 arch/x86/kvm/vmx/tdx_stubs.c
+
+     9	
+    10	int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+    11	void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+    12	void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+  > 13	fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+  > 14	void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+  > 15	void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+  > 16	void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+    17	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,121 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9298D47931D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321C5479320
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239315AbhLQRwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:52:13 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:45931 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbhLQRwM (ORCPT
+        id S239947AbhLQRw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236205AbhLQRwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:52:12 -0500
-Received: by mail-ot1-f49.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso3780500otf.12;
-        Fri, 17 Dec 2021 09:52:12 -0800 (PST)
+        Fri, 17 Dec 2021 12:52:55 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B3C06173F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 09:52:54 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id q14so3395585qtx.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 09:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=EdfDMc3dGy+rtz/PQ2kf0voPWh+Gy8fg3uDbtzFcCyk=;
+        b=s1yP2xfwlw4arGnpUI7y1LjifZqDnsQb1y/tviXNIW6r5+cfjaBQctF8AGDlp4uLNB
+         W+518UCjBVCrf2JL8fHE2MvU2mQVOH//19q5aMXsUTw604ZLTHK6jdaBHoalX/DnMxY2
+         N35BUyeBK3f++52UL7N848oA3qKgR+DYoWXvfGf5NeQEl7Nw9r3zp5I5wzl3HTaqMzu4
+         vkkieGMUrCPWq4Xx+cBvX8MGdQygOsQ+vQ/QMUwzPv372ygeMe3PAyLsywMGtsIZ18AW
+         EoDoqyI/DdKVHEP2ZpOy6pMCWvFaVKWNjx0B3Z/Zvphq8DpbL7P9aPFiTalah3iOG50j
+         d1/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fe76QOXnDpK1H1l8gPbmrZn/OhgK8G9yInA0bZrVdeg=;
-        b=zHugODi2s20KZkLnlWuhN18UVP2sW6qDdt0CRF7+KTvdqS6ivT6CaZElaI7aEqTRFl
-         4qfF/JNmCyolEdbTSX9kP4XWauv1vzFp1Knc8XmJ+WNGpS8vPqXPbVE5MiNKVrzDPtAo
-         GCeA/VVgDX5KOtRCDsfQhVHaM14Mk5o965wRcTpEY7p529QOH/6n1tZhO/6ZqIGSHxMU
-         8e8nv+LaxZFW+u7KhGCTTguJrDgcUpxt7Sf66DCsluEWp/O0CusGEcO2aUJV5nIEp4YR
-         oGr1bOB4IT9zK5HcKwaeeaur3Drao5pzS+wuEC1RwMmHO6nJvIoESkrJWQLFv6y2iw9J
-         RLBw==
-X-Gm-Message-State: AOAM5334q5PJKXt2nUzzL1HyMxU1o87j2dNzAiKKw/hMnfJ2L/buVZqF
-        lhbgHNFamtWavMVZudaqimrxfleNZiykvD7/0v333pCwubU=
-X-Google-Smtp-Source: ABdhPJzm42Z+otkyxL5wSvj8/hZCrDNtEV1UjaxA3ACkAZqx0RSmmWbeq1LOMvMxPcEkRtKe1+eaVYq3zlEA1Ibi58Y=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr3074208otu.254.1639763531658;
- Fri, 17 Dec 2021 09:52:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20211203212358.31444-1-anand.ashok.dumbre@xilinx.com> <20211203212358.31444-2-anand.ashok.dumbre@xilinx.com>
-In-Reply-To: <20211203212358.31444-2-anand.ashok.dumbre@xilinx.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 18:52:00 +0100
-Message-ID: <CAJZ5v0hG409ffmAiOO5j4O9iPN_qGp4Wnw8eNPKjm5kvncwRLA@mail.gmail.com>
-Subject: Re: [PATCH v12 1/5] device property: Add fwnode_iomap()
-To:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, git@xilinx.com, michals@xilinx.com,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=EdfDMc3dGy+rtz/PQ2kf0voPWh+Gy8fg3uDbtzFcCyk=;
+        b=vl323mp+/R7RapKniwyOzWy3876OLGg2iyNDhYb8aAOFrPrhcSYMjIToJlyGqtWGik
+         ajzBEzfAxTriuURk0k13VhzqPsfFSdl9jBKXyY76019ITdGTmUAGgGK/YZH+MOAutTgc
+         4hGya2OUq1dDaKJx0tcdoZ96uVDjpJtud0uIeoCyw196skCDGAYpeDfWv0tJogNEzFEL
+         F3qXYLEcBHYAsFN00RAjE5JC8uz0MzebQkxrlpBvrUh9pC6w8SKTqsHFrQh3+gwuwLVg
+         woynXrkfgSdDvkvQ1aRay0CiNaFLSEEvyFtfxxAnLJgHB9iJHwX1Zi/tS/tVpK9+2cyp
+         z+6Q==
+X-Gm-Message-State: AOAM533Fp/TpP/4Z1Fop00D5NOm4B4tjtA07zK8scthQ9QbduShJjaxI
+        yVAVliXrzKa0B3GIZiBrGfqYOw==
+X-Google-Smtp-Source: ABdhPJzydc3+rBb7SLARVOLCMtRjYOmkbg8KG3gbO/t8lzwiGUAnAnHeWbz325P00g8oSWik3/9jeQ==
+X-Received: by 2002:ac8:7f06:: with SMTP id f6mr3508448qtk.258.1639763574019;
+        Fri, 17 Dec 2021 09:52:54 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
+        by smtp.gmail.com with ESMTPSA id x13sm5683430qkp.102.2021.12.17.09.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 09:52:53 -0800 (PST)
+Message-ID: <41f0e00cf5e57668b643b096e6bb69c67635c540.camel@ndufresne.ca>
+Subject: Re: [RFC 0/5] arm64: imx8mm: Enable Hantro VPUs
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Adam Ford <aford173@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-media <linux-media@vger.kernel.org>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        cstevens@beaconembedded.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+        Heiko Stuebner <heiko@sntech.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+Date:   Fri, 17 Dec 2021 12:52:51 -0500
+In-Reply-To: <CAJ+vNU1ZxAAasKT8j1sfcFz1pk8fyYjwOW6wqxYq_ur8+2MX_Q@mail.gmail.com>
+References: <20211106183802.893285-1-aford173@gmail.com>
+         <718f7f6d6cd564d031c1963f1590c62d549ae725.camel@ndufresne.ca>
+         <CAHCN7xKM9RUE7z-+ug1on+D=nDoEm589R4m03ofys92Aq75ZVQ@mail.gmail.com>
+         <8db00a4b6faa99c940d9bc86e17161eb0db5efe3.camel@ndufresne.ca>
+         <CAJ+vNU28UJffFv9jQ2KryJMudqYxvCaoVOVcU5dPqRA209iN6A@mail.gmail.com>
+         <d91532c2c0772f9aa708ead36b2a97203727a7ea.camel@ndufresne.ca>
+         <CAJ+vNU3H-V+bPoZ3qKead45h=W7AhQK6Lhjrx5ssdF4c_qfe=A@mail.gmail.com>
+         <CAHCN7x+0LwwU_rEST+TZxGquswGKL19gnTy9WLofsXtGAtWqdw@mail.gmail.com>
+         <7f94eaacfddb8c5434c17f1e069ea87a17657ce9.camel@ndufresne.ca>
+         <CAHCN7xKRzxMBmPbDobWTuvNNSpTXk5XENvfBnfkhRY3eZKhn6w@mail.gmail.com>
+         <CAHCN7xJFLNi_g+HX8PCy1Rkgf0jnWpO5QGYVz8nH19xrJkwHrA@mail.gmail.com>
+         <CAJ+vNU3zFd=6k_Emc5aafxKkGwCPp4crgOFezQ-E_MbWsn1_EA@mail.gmail.com>
+         <fed6c2fd7cf4971062c417ce41ed1e3812b900e0.camel@ndufresne.ca>
+         <CAHCN7xK+wROHaqDcsY-3WYFQ82qX17L-LHNL3siSWnWvwFShzQ@mail.gmail.com>
+         <CAAEAJfC1xXvemaFP+vTFVJ3S-SpYtrxyZgDamSOgLC1F3ua5xw@mail.gmail.com>
+         <CAHCN7x+UMMP6RXsNm0=OC=UTQzh=RKqQo6B7FD5e4eoJAEfmpg@mail.gmail.com>
+         <CAJ+vNU1epi9SwPMHkuDmKcb68RLemYF=bsp7AVnzz06zKc2efw@mail.gmail.com>
+         <CAAEAJfCpjk5nWWkJYjjDT-YEpJi4pTZqZbzp_if9OGC0HKspzw@mail.gmail.com>
+         <CAJ+vNU2we5mGXgYsR6CfimvFXZsc0zktR3fDa-h6RRa02jTT0g@mail.gmail.com>
+         <CAHCN7xJrM9uZUnmx65uTxWEo6HAkjozd3kD3UoEv-pYd5DV4QA@mail.gmail.com>
+         <CAAEAJfBXU-AiKKhkhXzgUSR4p1yefysNuHFycBz3F-GzNewS6w@mail.gmail.com>
+         <CAHCN7xL4y67V6AW5MV=8iudvvGVBWs2LoUhu_2CUJf6bSycgFA@mail.gmail.com>
+         <8438070708d16c34c0f79aba19e67fa343adb169.camel@ndufresne.ca>
+         <CAJ+vNU1ZxAAasKT8j1sfcFz1pk8fyYjwOW6wqxYq_ur8+2MX_Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 10:24 PM Anand Ashok Dumbre
-<anand.ashok.dumbre@xilinx.com> wrote:
->
-> This patch introduces a new helper routine - fwnode_iomap(), which
-> allows to map the memory mapped IO for a given device node.
->
-> This implementation does not cover the ACPI case and may be expanded
-> in the future. The main purpose here is to be able to develop resource
-> provider agnostic drivers.
->
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/base/property.c  | 16 ++++++++++++++++
->  include/linux/property.h |  2 ++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index f1f35b48ab8b..ed4470410030 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -958,6 +958,22 @@ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
->  }
->  EXPORT_SYMBOL(fwnode_irq_get);
->
-> +/**
-> + * fwnode_iomap - Maps the memory mapped IO for a given fwnode
-> + * @fwnode:    Pointer to the firmware node
-> + * @index:     Index of the IO range
-> + *
-> + * Returns a pointer to the mapped memory.
-> + */
-> +void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index)
-> +{
-> +       if (IS_ENABLED(CONFIG_OF_ADDRESS) && is_of_node(fwnode))
-> +               return of_iomap(to_of_node(fwnode), index);
-> +
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL(fwnode_iomap);
+Le vendredi 17 décembre 2021 à 09:26 -0800, Tim Harvey a écrit :
+> On Fri, Dec 17, 2021 at 9:13 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
+> > 
+> > Le vendredi 17 décembre 2021 à 07:15 -0600, Adam Ford a écrit :
+> > > On Thu, Dec 16, 2021 at 10:49 PM Ezequiel Garcia
+> > > <ezequiel@vanguardiasur.com.ar> wrote:
+> > > > 
+> > > > Hi Adam,
+> > > > 
+> > > > > 
+> > > > > I will post a V2 last today with the Mini's post-processing removed.
+> > > > > Someone, I apologize that I forget who, mentioned it was fused out of
+> > > > > the Mini, so the testing I've been doing was with that removed and I
+> > > > > removed the H1 encoder since the Mini doesn't support JPEG encoding.
+> > > > > 
+> > > > [...]
+> > > > 
+> > > > Resurrecting this thread here. IMX8MMRM Rev. 0, 02/2019 mentions
+> > > > post-processor features for G1 and G2.
+> > > > 
+> > > > Have you checked the fuse and synth registers to see if they throw
+> > > > any useful information about the hardware? For instance,
+> > > > comparing PP fuse register (SWREG99) and
+> > > > Synthesis configuration register post-processor (SWREG100)
+> > > > in both 8MQ and 8MM could be useful.
+> > > > 
+> > > > As I mentioned on my previous mail, even if G1 PP is disabled
+> > > > on the Mini, I would imagine the G2 can do linear NV12 (aka raster-scan)
+> > > > which in our hantro driver jargon is a  "post-processed" format :-)
+> > > 
+> > > You're likely right.  I was going on memory from an e-mail from
+> > > Nicloas Defresne who wrote:
+> > > 
+> > > "I will check the patchset, but you need in the mini-variant to disable the G1
+> > > post processor, because this block was fused out. We didn't make it optional
+> > > from the start as according to the V1 of the TRM it was there, but that error
+> > > was corrected in V3."
+> > > 
+> > > In my head I assumed the G2 was affected as well, but when I double
+> > > checked his email, and based on the above statement, the G2
+> > > post-processing is probably there, so I'll run some tests with the G2
+> > > post-processing enabled.  I'll also double check those registers on
+> > > both to confirm what they read. I am not sure when I'll have time
+> > > because I leave for London next week, and I won't return until early
+> > > January, but I'll do what I can.
+> > 
+> > Sorry if this was a bit ambiguous, indeed I meant the G1 only. I've learned
+> > later that the design of the Mini is that there is a good pre-processor in the
+> > H1 block (encoder), so for the targeted use-cases this shall be sufficient for
+> > most users (the output of the G1 is suitable for GPU and Display already, so the
+> > post processor is not strictly needed).
+> > 
+> 
+> Nicolas,
+> 
+> Does this mean that if the IMX8MM G2 may be able to output a wider
+> array of pixel formats and that the H1 encoder may be able to accept a
+> wider array of pixel formats? Is this code already in place in the
 
-So why is this EXPORT_SYMBOL() and not EXPORT_SYMBOL_GPL()?
+No since the G2 post processor does not have a color converter (it is very
+limited). In term of format, this is pretty much identical, produces linear or
+tiled. The difference is that G1 supports the two layout natively, not the G2.
 
-Other than this I'm not an OF_ expert, but I trust Andy, so with the
-above addressed:
+> hantro driver and it just needs to be enabled if the IMX8MM can handle
+> it or is there code to be written?
+> 
+> I'm not clear if anyone is working on IMX8MM VPU H1 support. You had
+> mentioned that some support [1] and [2] can be derived from the RK3288
+> using the Google ChromeOS method (a v4l2 plugin that simulates in
+> userspace a stateful encoder). I'm not sure if this is worth pursuing
+> if others are working on stateless encode support in kernel and
+> gstreamer.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+My colleagues started last week the project of crafting mainline stateless
+encoder uAPI. This is too early. In older project, we have had good success with
+the emulated stateful encoder. It is of course quite limited, but works in
+gstreamer, ffmpeg and chromium. It is also likely safer compared to the vendor
+provided driver.
 
-> +
->  /**
->   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
->   * @fwnode: Pointer to the parent firmware node
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 88fa726a76df..6670d5a1ec2a 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -122,6 +122,8 @@ void fwnode_handle_put(struct fwnode_handle *fwnode);
->
->  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
->
-> +void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int index);
-> +
->  unsigned int device_get_child_node_count(struct device *dev);
->
->  static inline bool device_property_read_bool(struct device *dev,
-> --
-> 2.17.1
->
+p.s. From my knowledge, there is virtually no difference between the H1 on
+RK3288 and IMX8MM/P, but we've learn from G1 that there could effectively have
+more of less features.
+
+> 
+> Best Regards,
+> 
+> Tim
+> [1] libv4l plugins /
+> https://chromium.googlesource.com/chromiumos/third_party/libv4lplugins/+/refs/heads/master
+> [2] Kernel Driver /
+> https://chromium.googlesource.com/chromiumos/third_party/kernel/+/chromeos-4.4/drivers/media/platform/rockchip-vpu/
+

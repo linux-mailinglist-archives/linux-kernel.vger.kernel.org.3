@@ -2,77 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE44F478BB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F00F5478BB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbhLQMtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S236434AbhLQMs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbhLQMtB (ORCPT
+        with ESMTP id S236392AbhLQMsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:49:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA24C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=phfSQOq+yHoa1/Is//J703S9KmGy3k5Z+ZGw0hERoCw=; b=nqhpDQDdE4h3YoMocmuJgMOmWR
-        U9+JtecNnWJDXaXsYT4Q4SaMyfV8T0rbbFBXLx2zRmcUofUm3WVSBZ+YlroZwx2BXs1juzKuUnRNz
-        sBPovTeDZuncDOL5A0A1pROpidRxOMHDKNItT7POmhMUHeCW5DS7An/RIBLaP4ZGetRfiSo2BBUre
-        OvblY9ZV7SrCIJnIZiR/Pwj0UeTkDQP7goSGyJCZSBcgqpII2AEUFuNQk7T09VsR8/IkelBMOxCY/
-        Wd1bzGe8JrWFhHVd75XJh6D1vpk3MUZtpZJ3WCiKGr0w4a+CE3jlY6l4NQLHxiFbdCgANsxLTqMm8
-        QQMGWAAg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myCf6-00Gh52-Aa; Fri, 17 Dec 2021 12:48:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A0463000E6;
-        Fri, 17 Dec 2021 13:48:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AB0F426713FE3; Fri, 17 Dec 2021 13:48:35 +0100 (CET)
-Date:   Fri, 17 Dec 2021 13:48:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bill Wendling <morbo@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86: use builtins to read eflags
-Message-ID: <YbyHIxIvsisEtfr8@hirez.programming.kicks-ass.net>
-References: <20211215211847.206208-1-morbo@google.com>
- <87mtl1l63m.ffs@tglx>
- <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
+        Fri, 17 Dec 2021 07:48:55 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C48CC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:48:55 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id q16so3830303wrg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=snUeSCccdhoRxlfsg8Ts9j6VNOw1G6e55Lk+9WKqlyc=;
+        b=VrmeN3wpi1gNrML4Do0CYOVryw5xkN4me97Ek7NhAj7E67onCecFOZV06lH2uNNoJ0
+         YR5aTAScn+MqHEktNhQIouNZlSvvsSqlSYK5pSwn8ZCcOfFGQXYPYLSNyVpWYH2ymQrB
+         2/qLQ5fz8zm9gKd9baYQ2q+5P0Qc+27cwpVt1UayVc8QE1JtQhIVPcXFDxT5a1Mg3OXy
+         hupJvCEkFLVmuspWM2kMimCBqqJ+XCEPm+jiE3o2oOqxeeZZELizJuZJIoiaxKgrMqsV
+         yWiWsLt+2WpKUJlE59KZU1/7iNyhKk7B5XFEwrxms8hnaYVQ8erxC3etPvF7V8Qf5rOd
+         9Zew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=snUeSCccdhoRxlfsg8Ts9j6VNOw1G6e55Lk+9WKqlyc=;
+        b=SY3G9f+dh8+jbjnTQfVkHgEvNIjdUK7TjHxV8A/KMqQYviBvzl/09D8SRlsLsJi6E1
+         YgMSjFuMnKZKJ67gugjV2q3H758YOi1jTAhYHpGhHX7TbVib5kAmtVJXNdXhuDq5HTJo
+         WLBqemfeyn3fuNgSJeTzzlvRPM+kfgfB52NyqGW0D7vqKT49hziMF4Gnt1r4g52NGobP
+         XuB7ED3e+qep/d7TRiigwaAvHALLNfnUL3jXKnPs5Y/bmTwhhmLqH992cGkTKhCFj1bB
+         0aCaetoxKDHtSxuroPIgAy0H6d4qO585koYH97ySKTCq9EdBezlMYkrMS9u+5l3kpF6p
+         qHUw==
+X-Gm-Message-State: AOAM530yOVA7rJ37ypGKY3CyhIhMV49x+YrH9LXhmxckUaqTXOpRWXVl
+        sKQMySIQ+4Txwuhj8wH7SofyKjI89E90Ezsvzewl4Q==
+X-Google-Smtp-Source: ABdhPJy6jZjbGiy24EK1rrImb8JGalcQGHnt5zFcmV3cEzqNUYKetq2K2+tqD4tnFwJzeYSapqKjLx5IuF9v9+BKmaA=
+X-Received: by 2002:adf:efd0:: with SMTP id i16mr2505380wrp.86.1639745333595;
+ Fri, 17 Dec 2021 04:48:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com>
+References: <cover.1639744468.git.geert@linux-m68k.org> <4f409ac939e260a4657a0e6e6518ef8736527822.1639744468.git.geert@linux-m68k.org>
+In-Reply-To: <4f409ac939e260a4657a0e6e6518ef8736527822.1639744468.git.geert@linux-m68k.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 17 Dec 2021 18:18:42 +0530
+Message-ID: <CAAhSdy3g9WsBmQk7KOgdVNSw9qUouxF2i==q9M3WQq3iabXv7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: timer: sifive,clint: Fix number of interrupts
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:55:12AM -0800, Bill Wendling wrote:
-> On Wed, Dec 15, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > Bill,
-> >
-> > On Wed, Dec 15 2021 at 13:18, Bill Wendling wrote:
-> >
-> > please always CC the relevant mailing lists, i.e. this lacks a cc:
-> > linux-kernel@vger.kernel.org
-> >
-> I thought that was automatically added. But as Peter pointed out in
-> another email thread, no one has time to read the LKML, so it seems a
-> bit pointless? Nonetheless it's added now.
+On Fri, Dec 17, 2021 at 6:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> The number of interrupts lacks an upper bound, thus assuming one,
+> causing properly grouped "interrupts-extended" properties to be flagged
+> as an error by "make dtbs_check".
+>
+> Fix this by adding the missing "maxItems".  As the architectural maximum
+> is 4095 interrupts, using that as the limit would be unpractical.  Hence
+> limit it to 10 interrupts (two interrupts for a system management core,
+> and two interrupts per core for other cores).  This should be sufficient
+> for now, and the limit can always be increased when the need arises.
 
-It is archived and really handy for future references. If/when needed etc..
+Same comment as the PLIC DT binding patch.
+
+The "maxItems" should represent CLINT spec constraints so
+please don't add any synthetic value here.
+
+Regards,
+Anup
+
+
+
+>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+> v3:
+>   - Add Acked-by,
+>
+> v2:
+>   - Split in two patches,
+>   - Improve patch description and document limit rationale.
+> ---
+>  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> index 8d5f4687add9e81e..b75fd6f982b1ecb3 100644
+> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> @@ -44,6 +44,7 @@ properties:
+>
+>    interrupts-extended:
+>      minItems: 1
+> +    maxItems: 10
+>
+>  additionalProperties: false
+>
+> --
+> 2.25.1
+>

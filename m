@@ -2,137 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F3B478894
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98DF47889E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbhLQKOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:14:46 -0500
-Received: from mout.gmx.net ([212.227.15.15]:49661 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229608AbhLQKOp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:14:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639736072;
-        bh=VMjG6bovpLz2G78HsRtmB2+2FK8uKwPxs9hxlTIl/iI=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=fXmIvgVGez58dtp7BVu2vUVkc4qHWwuMOY5uBei99Yo2otkaHFxsFfEd2hOYVzWlE
-         BEFdNzBPpRtP1weK7C4IRm+cthnhsLMejO0Z3vrfwtrJMin+REqvDr0WWZN38Ek/Xv
-         PS/LMAZlYuRnV4Vq1hrFKfXMHJnI6J43QNfxfkr4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MWRRZ-1n16pY33ZD-00XurR; Fri, 17
- Dec 2021 11:14:32 +0100
-Message-ID: <69c7ac46-a469-d4d2-d4a7-c45f722816a0@gmx.com>
-Date:   Fri, 17 Dec 2021 18:14:25 +0800
+        id S234760AbhLQKUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:20:02 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4302 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229608AbhLQKUC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 05:20:02 -0500
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JFlKh4mnQz6896L;
+        Fri, 17 Dec 2021 18:17:44 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 11:19:59 +0100
+Received: from [10.47.26.158] (10.47.26.158) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 17 Dec
+ 2021 10:19:58 +0000
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+To:     Andrew Kilroy <andrew.kilroy@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "acme@kernel.org" <acme@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <48437bee-9c39-38ba-e990-ba9a6a5378b4@huawei.com>
+Date:   Fri, 17 Dec 2021 10:19:31 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+In-Reply-To: <20211214184240.24215-2-andrew.kilroy@arm.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Language: en-US
-To:     cgel.zte@gmail.com, clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20211217084522.452493-1-deng.changcheng@zte.com.cn>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH] btrfs: remove unneeded variable
-In-Reply-To: <20211217084522.452493-1-deng.changcheng@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JLmdbj5QbA/eFa3FJcz2IEBO1xZz/124hktQeRcZ2wF6wXnj2AN
- cyOy0JgCejNh+3MqRxyd+vVS909Psx0ln3UoKEm+r2jVlQYwXsSdoKyMFycZT7X0t2F6/CG
- 7hr+IwtAQ7f8tJOpe5cJATFNuPWuPFSYP5lp1VAUYoVMqSuBdz/+mlAC8MUqZQsA3Uyo0IH
- s5V3xUIkc0ZU++0+W7m5Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:o2wU9QDusCE=:atdBoiJMCnAHjLz1TogJRd
- lrVY2cOOe8TboLetl/atg41MNU2Wnl8k/nGUPrVr3aCKwzJEZyZwqKZq+woYBKRqgO+XCWzd4
- UmBxQUEL6iK/MdVRlQTnlKQkiCcZ/qZl+o1ZNsOKhIhCIXnvDIf+X5irPdxxO8wADuK0YlUM7
- voXc3KrJfc8JPXl00WqrtVdlgqLVsE7zfJo/CBExYcNrqrG6+VOkoy0VZjKsG39Fgshg3jpyx
- NaUNJXjFRf2dw0Rll3GZb4CGyRQ6leELbH8DEl8c2FTyAtvOdVPwKvplv4Jvz5rpE/OnleWNn
- 4MjmtsLEqYzmjr3yMHRb2AcEGUNrbyq1mQeQmfydutbHHbOwvzrpLC52X1m1Jo9sLJmCVTnRX
- X9zDJio5kXxAfl/fVtmR8WWHtrT86ERY0WoDdgIa7TbPddtLDUAPe20WCWTvCP7z9SQrFEk/3
- CRQPhSA1h3KNg7QMM4upBrinOlLxigfkOf7R7wqCAmFz0Tu1YrVUwrKmhin0ooKexL/T6M9o3
- 4a/jgabE8EJw8TatH3QE/wHpOSazzXjQ01P85JIOWMiOC3j6OB0Rb+W5lN0i2iOpaG35/NkR1
- GT13cp1cKc2iPCuY3zkWY+a9+FOyFT2iAFF/k8sxlhvJYnpdNzOoACtbGM2zMTgrjHhru+feI
- BzTfyYkyY0FMbGZgSXpvczyTgJAGDTq4cwATYxojjU3RtQQWUt/zhqfIbIgZq5oSBgbnbTNq4
- RBt2slBYekHt4UOB9ynBZ4KdKnYh+6H20tDtcH4QN5zUuanqWvhrhK6+WWXDtYyn/D54+j8zU
- 25uW/ovFF0CQ0nvZ9knMwIE6rMwgQ/eFdd9UDDRuI6IGeJt3HCBV0MWWznf9HvQX2K3u25tgM
- Jac642a/rldtJUNhvXdpRokWb4SGKrOVmSPwidnP0STosRC8VIEPa3/eNk+03+4TXBhU55bMN
- I+vFiOA+vfQqUaKo6VWyQrbZK+W0VcWoXD++FBo6q7s5jxGiWqKeFbmg1miGxUnAKwF8uOWmJ
- uJh0KQcFr7vXJRyG/bVfvk1L55KRJFJpSxXs5JUpM4u9ATPd76iH1W3A43EPPKAtazNF9hrEv
- jpfKIHIm+BXBTs=
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.26.158]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/12/2021 18:42, Andrew Kilroy wrote:
+> This patch implements the --topdown option by making use of metrics to
+> dictate what counters are obtained in order to show the various topdown
+> columns, e.g.  Frontend Bound, Backend Bound, Retiring and Bad
+> Speculation.
+> 
+> The MetricGroup name is used to identify which set of metrics are to be
+> shown.  For the moment use TopDownL1 and enable for arm64
+> 
+> Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
 
+This works in that it gives results, but does not supply the same output 
+format as for x86 nor has same restrictions in usage (-a commandline 
+required, for example, below).
 
-On 2021/12/17 16:45, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->
-> Remove unneeded variable used to store return value.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> ---
->   fs/btrfs/disk-io.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
-> index d94a1ca856aa..d33575e56da2 100644
-> --- a/fs/btrfs/disk-io.c
-> +++ b/fs/btrfs/disk-io.c
-> @@ -4658,7 +4658,6 @@ static int btrfs_destroy_delayed_refs(struct btrfs=
-_transaction *trans,
->   	struct rb_node *node;
->   	struct btrfs_delayed_ref_root *delayed_refs;
->   	struct btrfs_delayed_ref_node *ref;
-> -	int ret =3D 0;
+For my x86 broadwell:
 
-If you're removing @ret, it's better to also change the return value to
-void.
+john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown  sleep 1
+top down event configuration requires system-wide mode (-a)
 
-Normally I would suggest you to checker the caller and return proper
-error number instead.
+john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown -a sleep 1
+Performance counter stats for 'system wide':
 
-But in this particular case, this function is only called in transaction
-cleanup code, which means we have already aborted a transaction, thus
-there is not much meaning to further error out, and the cleanup is OK.
+                                    retiring      bad speculation 
+frontend bound        backend bound
+S0-D0-C0           2                29.2%                 6.3% 
+      37.4%                27.1%
+S0-D0-C1           2                20.4%                 6.2% 
+      42.1%                31.3%
 
+       0.998007338 seconds time elapsed
 
-So it would be fine for you to delete @ret, change the function to
-return void.
-And even better, to remove the "btrfs_" prefix of the function, as the
-function is not really exported.
+john@localhost:~/linux/tools/perf>
 
+---
 
-And a final suggest for your future patches, there is no need to bother
-btrfs maintainers at all, just sending the mail to btrfs mailing list is
-enough.
+Then my arm64 hip08 platform:
+
+john@debian:~/kernel-dev/tools/perf$ sudo ./perf stat  --topdown sleep 1
+
+  Performance counter stats for 'sleep 1':
+
+             retiring      bad_speculation        backend_bound 
+frontend_bound
+                 0.19                 0.17                 0.27 
+        0.37
+
+        1.000832714 seconds time elapsed
+
+        0.000891000 seconds user
+        0.000000000 seconds sys
+
+And there is no colouring for results which are above/below standard 
+thresholds (see stat-shadow.c:get_radio_color()).
+
+My impression is that we're not plugging the results from 
+metricgroup__parse_groups_to_evlist() into the --topdown print 
+functionality properly.
 
 Thanks,
-Qu
->
->   	delayed_refs =3D &trans->delayed_refs;
->
-> @@ -4666,7 +4665,7 @@ static int btrfs_destroy_delayed_refs(struct btrfs=
-_transaction *trans,
->   	if (atomic_read(&delayed_refs->num_entries) =3D=3D 0) {
->   		spin_unlock(&delayed_refs->lock);
->   		btrfs_debug(fs_info, "delayed_refs has NO entry");
-> -		return ret;
-> +		return 0;
->   	}
->
->   	while ((node =3D rb_first_cached(&delayed_refs->href_root)) !=3D NULL=
-) {
-> @@ -4729,7 +4728,7 @@ static int btrfs_destroy_delayed_refs(struct btrfs=
-_transaction *trans,
->
->   	spin_unlock(&delayed_refs->lock);
->
-> -	return ret;
-> +	return 0;
->   }
->
->   static void btrfs_destroy_delalloc_inodes(struct btrfs_root *root)
+John

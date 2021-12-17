@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200A47891A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EACB47891B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbhLQKmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:42:32 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:35010 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbhLQKmb (ORCPT
+        id S235120AbhLQKmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:42:35 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44702
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232014AbhLQKme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:42:31 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHAgF6S104426;
-        Fri, 17 Dec 2021 04:42:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639737735;
-        bh=S6ZLgkIQ+Q0XPCetUL1bICQ1qsCCb6+pIL5oIjtesTs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=lV632QdrOsQRlkyaqM2cUdBiRrVzfa0QSpJPZeWqv5owiKoUcW+dSJ3Hd7SuqkaEl
-         wO3IplgGBsMasb3gkjpFByCUO4HeQJP9ffYW7hugovsdk3h7Oi+dbjwdp0EgNO8rB1
-         s3occh+pM0vq8kIxBLkItuENFi3nzRpTfdV5uti0=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHAgFiS062610
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Dec 2021 04:42:15 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Dec 2021 04:42:15 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Dec 2021 04:42:15 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHAgEI9062172;
-        Fri, 17 Dec 2021 04:42:15 -0600
-Date:   Fri, 17 Dec 2021 16:12:14 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <michael@walle.cc>, <vigneshr@ti.com>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nicolas.ferre@microchip.com>,
-        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
-Subject: Re: [PATCH v2 1/2] mtd: spi-nor: core: Introduce SPI_NOR_SOFT_RESET
- flash_info fixup_flag
-Message-ID: <20211217104212.d37qeyomskjhdtvi@ti.com>
-References: <20211209190436.401946-1-tudor.ambarus@microchip.com>
+        Fri, 17 Dec 2021 05:42:34 -0500
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3D1493FFD0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:42:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639737750;
+        bh=Cch2YRuTHpQOb264zUOrMD/m+Xgx+o5ASl1QOhMgcdU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=g+/1IoatiKhPLDuO+Ml1DTYIcRH7o+dmuLSkkmuYEnQ1mRWhqaeMlfqgaD2tCDC/w
+         2zNhuN4/h4ejTqzYCohQKIaWtSyLMfJq+l70OTkAQU1QdGrkEOuJxI4Zaxed9c0wIb
+         GTCyvkSAL51PcLTWPGEI0bOl1jAYYTLmWlqvyUQjteauXjIUS68+rlO6KK8LR86VcY
+         3ifKPU00Wu+PzI0lDatcI9hd763RdnouXkecyxtsDV8TjOzz/jEWu+NQBtE58mX7/r
+         ATHJeiYH78nSp7K2PlOzKgtBJW/ZHtUAdGlWR+Xd9d5A/S0UH0x0Y1xf0Vz5CzsUbi
+         9lIQ2LDV/txlw==
+Received: by mail-wm1-f69.google.com with SMTP id z200-20020a1c7ed1000000b0034574ef8356so862640wmc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 02:42:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Cch2YRuTHpQOb264zUOrMD/m+Xgx+o5ASl1QOhMgcdU=;
+        b=Uw6fXBh/plb5KxaOUYSJoGy36YG8wpCKCAA/8Lm9SKGBEiaa8ugyCC50E/D5s7FNtz
+         sxQlSzYU0EC8hJPljVb0a66HlevMJ4bCL5sLkZmJsUVTProNGgPufm3aveTp45WnG975
+         HgHVE1Wf6hDFcOit/jBJf0z0AaQRIq9IQkzXXH7VEHjZVn284xLjHO+mIjL4zmsIqFJp
+         4r0SvtXm75T6QrJXdnNt0Viu6gwy40rfrim3L0Or2VNpDF5MCB2pevVmQPDHBoHXoxn8
+         Kzd+2A9YNmG7Ya6tAlXGTPT4dZgrC7/AoxiKjP00PMklc3vZNX3O6UpgaO9gmVHFZe/q
+         u4XQ==
+X-Gm-Message-State: AOAM531Cj4VEm6dRekLknxEJSuHZG4TuTaygcb8pwNE+FCAmIeNhPbmQ
+        yAws9XMNgbxiPg9YBSbhVKiJZqHc+dWH71AagqwBUAOOW7FK+6HzBe4+TSrJok/A5El0xVod7Vy
+        47s6N2aEcDZo9/mGdWLWhk0yzBo3v6JiqMh9WmaCIEA==
+X-Received: by 2002:a5d:64c8:: with SMTP id f8mr2199902wri.158.1639737748955;
+        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz5yYBNvNIR6wOPIyl83PueKllFASZM93qe3PncXh68LjxD9RvBVSXqlHNHsv81WWLN5bSd4g==
+X-Received: by 2002:a5d:64c8:: with SMTP id f8mr2199882wri.158.1639737748768;
+        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
+Received: from [192.168.123.35] (ip-88-152-144-157.hsi03.unitymediagroup.de. [88.152.144.157])
+        by smtp.gmail.com with ESMTPSA id b19sm11536525wmb.38.2021.12.17.02.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
+Message-ID: <611d4055-c50c-55c1-0e02-43ffda66dbce@canonical.com>
+Date:   Fri, 17 Dec 2021 11:42:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211209190436.401946-1-tudor.ambarus@microchip.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
+Content-Language: en-US
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
+ <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
+ <fd40010f-f2ec-b32a-6850-1e054af43725@canonical.com>
+ <150C4E84-2C69-45DB-AF27-1E0C223D8D7A@jrtc27.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <150C4E84-2C69-45DB-AF27-1E0C223D8D7A@jrtc27.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/21 09:04PM, Tudor Ambarus wrote:
-> The Soft Reset and Rescue Sequence Support is defined in BFPT_DWORD(16)
-> starting with JESD216A. The first version of SFDP, JESD216 (April 2011),
-> defines just the first 9 BFPT DWORDS, thus it does not contain information
-> about the Software Reset and Rescue Support. Since this support can not
-> be discovered by parsing the first SFDP version, introduce a flash_info
-> fixup_flag that will be used either by flashes that define
-> JESD216 (April 2011) or by flashes that do not define SFDP at all.
-> In case a flash defines BFPT_DWORD(16) but with wrong values, one should
-> instead use a post_bfpt() hook and set SNOR_F_SOFT_RESET.
+
+
+On 12/16/21 17:51, Jessica Clarke wrote:
+> On 16 Dec 2021, at 14:17, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
+>>
+>> On 12/16/21 14:49, Jessica Clarke wrote:
+>>> On 16 Dec 2021, at 12:35, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
+>>>>
+>>>> The SBI 0.1 specification is obsolete. The current version is 0.3.
+>>>> Hence we should not rely by default on SBI 0.1 being implemented.
+>>> It’s what BBL implements, and some people are still using it,
+>>> especially given early hardware shipped before OpenSBI grew in
+>>> popularity.
+>>> Jess
+>>
+>> Do you mean BBL is not developed anymore?
+>>
+>> Some people may still be using a 0.1 SBI. But that minority stuck on an outdated software stack does not justify defaulting to deprecated settings in future Linux releases.
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> BBL is still actively maintained; its most recent commit was 24 days
+> ago. Also, the amount of code CONFIG_RISCV_SBI_V01 affects is tiny, so
+> I see no tangible benefit from making this change, just unnecessary
+> breakage of perfectly functional systems.
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+Only the default is changed. How could this break any existing system?
+You can still compile with the deprecated setting.
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+I can not see why we should keep a default that will cause issues on 
+systems complying to the current SBI specification.
+
+Best regards
+
+Heinrich
+

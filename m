@@ -2,298 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC44789BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9114789B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbhLQLWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:22:40 -0500
-Received: from mga04.intel.com ([192.55.52.120]:1882 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233443AbhLQLWj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:22:39 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238478675"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="238478675"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:22:39 -0800
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="466472708"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:22:36 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1myBIz-007O9b-Ub;
-        Fri, 17 Dec 2021 13:21:41 +0200
-Date:   Fri, 17 Dec 2021 13:21:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     lakshmi.sowjanya.d@intel.com
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, bgolaszewski@baylibre.com,
-        linux-kernel@vger.kernel.org, tamal.saha@intel.com,
-        pandith.n@intel.com, kenchappa.demakkanavar@intel.com
-Subject: Re: [PATCH v3 2/2] pinctrl: Add Intel Thunder Bay pinctrl driver
-Message-ID: <YbxyxdiHCYgBKZlQ@smile.fi.intel.com>
-References: <20211216150100.21171-1-lakshmi.sowjanya.d@intel.com>
- <20211216150100.21171-3-lakshmi.sowjanya.d@intel.com>
+        id S235133AbhLQLV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233443AbhLQLV5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 06:21:57 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA2FC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 03:21:56 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id p36-20020a05600c1da400b003457428ec78so2637163wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 03:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=b7wCHOvs45jhnC7XuyqmlLe/ZuZPVp+HAfTPI5Xa2rc=;
+        b=IbGU0gXI3aj7M7rsWXaz58qc6sm5aCK8trwuh7TiyxQ05QF2Ev6sza9b8Cj1+fbjFw
+         T1el7Hw5I/roOh8tCcK/IFLPsfPHyDstzzcGCo1uunaMyBktXw1wtZVPi/+vuwR5l5vO
+         UaEl6idd2XIcfGLv1IlrUKn/Ai/TiMXHYFqwZ7mm6MsZFwKDsWlecYwwW5+ZZZMo92Lm
+         bitqJcDRSEjY0Fj6kKk6yZEb9zEwGM52vHQ5bzlYRAOX75ur5zfEuqCro4tzyH1jEpY4
+         jpAjeHUCzuNQXqwSrh0oPU0aBAd20bCxHT6MDs8jJWgmbMUimPl0Hle1Vzdst63QbdlQ
+         TRUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=b7wCHOvs45jhnC7XuyqmlLe/ZuZPVp+HAfTPI5Xa2rc=;
+        b=nIcvzmhYe546npoxylZz9gdVrBgli89vptdPXDSrCexMqEjsEIM7Dhtlno99wCGXu3
+         GJ/2dfgbZIawLSp+M90P6pfiwg/3iLPApkMGdJG97XJ6GONjuHQyr4lopYdjNmqKZSsK
+         S8QMCfkjPg020ljoAZ8sCZOy+Lnr1jgSRhPVvDIg/Dzo4D6XQuJMzuIeLJuzhgcbm5uZ
+         nS55SOHFosIAsZYTSwy/QpSE4ktQnPZ4KTNCHwceLfyk4JJpId04JSybIkcYIx5Ugj61
+         NiEAPOyiDHNDirdqdRaNNLZYlRsWp8QqnzuNPwKEZdX76baxnQpaf+5KJL1UlgVzyFTk
+         62Aw==
+X-Gm-Message-State: AOAM531oSGXA4yjF/d5ugUZlu4LJAcp4hmKGuOIDJ0M0oHZs2x0Rwpen
+        +7e0KEsHDBHWx7oQGSxhVkJ5xw==
+X-Google-Smtp-Source: ABdhPJyJc7u+feUS+x+soNm2i/bRHMLVWEnj454hUUTmnY+fjIXlM4qlznKBeLrAeEMn4fHfKRhvHQ==
+X-Received: by 2002:a7b:c452:: with SMTP id l18mr2318480wmi.46.1639740115302;
+        Fri, 17 Dec 2021 03:21:55 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g3sm3725926wrp.79.2021.12.17.03.21.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 03:21:54 -0800 (PST)
+Date:   Fri, 17 Dec 2021 11:21:52 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Xin Long <lucien.xin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        network dev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <Ybxy0HU5yfKm5sVF@google.com>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org>
+ <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
+ <Ybtrs56tSBbmyt5c@google.com>
+ <20211216124430.142a013c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211216150100.21171-3-lakshmi.sowjanya.d@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211216124430.142a013c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 08:31:00PM +0530, lakshmi.sowjanya.d@intel.com wrote:
-> From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+On Thu, 16 Dec 2021, Jakub Kicinski wrote:
+
+> On Thu, 16 Dec 2021 16:39:15 +0000 Lee Jones wrote:
+> > > > You should squash the two patches together.  
+> > 
+> > I generally like patches to encapsulate functional changes.
+> > 
+> > This one depends on the other, but they are not functionally related.
+> > 
+> > You're the boss though - I'll squash them if you insist.
 > 
-> About Intel Thunder Bay:
-> -----------------------
-> Intel Thunder Bay is a computer vision AI accelerator SoC based on ARM CPU.
-> 
-> Pinctrl IP:
-> ----------
-> The SoC has a customised pinmux controller IP which controls pin
-> multiplexing and configuration.
-> 
-> Thunder Bay pinctrl IP is not based on and have nothing in common with the
-> existing pinctrl drivers. The registers used are incompatible with the
-> existing drivers, so it requires a new driver.
-> 
-> Add pinctrl driver to enable pin control support in the Intel Thunder Bay
-> SoC.
-
-...
-
-+ bits.h.
-
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/irq.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_irq.h>
-
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-
-Can you move this...
-
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-
-...here?
-
-> +#include "core.h"
-> +#include "pinconf.h"
-> +#include "pinctrl-utils.h"
-> +#include "pinmux.h"
-
-...
-
-> +#define THB_GPIO_REG_OFFSET(pin_num)			((pin_num) * (0x4))
-
-'(0x4)' --> '4'
-
-...
-
-> +static int thb_write_gpio_data(struct gpio_chip *chip, unsigned int offset, unsigned int value)
-> +{
-> +	int data_offset;
-> +	u32 data_reg;
-> +
-> +	data_offset = 0x2000u + (offset / 32);
-> +
-> +	data_reg = thb_gpio_read_reg(chip, data_offset);
-> +
-> +	if (value > 0)
-
-if (value)
-
-> +		data_reg |= BIT(offset % 32);
-> +	else
-> +		data_reg &= ~BIT(offset % 32);
-> +
-> +	return thb_gpio_write_reg(chip, data_offset, data_reg);
-> +}
-
-...
-
-> +static int thunderbay_gpio_set_direction_input(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +	u32 reg = thb_gpio_read_reg(chip, offset);
-> +
-> +	/* set pin as input only if it is GPIO else error */
-> +	if (reg & THB_GPIO_PORT_SELECT_MASK) {
-
-Can it be
-
-	reg = thb_gpio_read_reg(chip, offset);
-	if (!(reg & THB_GPIO_PORT_SELECT_MASK))
-		return -EINVAL;
-
-?
-
-> +		reg &= (~THB_GPIO_PAD_DIRECTION_MASK);
-
-Too many parentheses.
-
-> +		thb_gpio_write_reg(chip, offset, reg);
-> +		return 0;
-> +	}
-> +	return -EINVAL;
-> +}
-
-...
-
-> +static int thunderbay_gpio_set_direction_output(struct gpio_chip *chip,
-> +						unsigned int offset, int value)
-> +{
-> +	u32 reg = thb_gpio_read_reg(chip, offset);
-> +
-> +	/* set pin as output only if it is GPIO else error */
-> +	if (reg & THB_GPIO_PORT_SELECT_MASK) {
-
-As per above.
-
-> +		reg |= THB_GPIO_PAD_DIRECTION_MASK;
-> +		thb_gpio_write_reg(chip, offset, reg);
-> +		thunderbay_gpio_set_value(chip, offset, value);
-> +		return 0;
-> +	}
-> +	return -EINVAL;
-> +}
-
-...
-
-> +static int thunderbay_gpio_get_value(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +	u32 reg = thb_gpio_read_reg(chip, offset);
-
-> +	int gpio_dir = 0;
-
-Useless assignment.
-
-> +	/* Read pin value only if it is GPIO else error */
-> +	if (reg & THB_GPIO_PORT_SELECT_MASK) {
-> +		/* 0=in, 1=out */
-> +		gpio_dir = (reg & THB_GPIO_PAD_DIRECTION_MASK) > 0;
-
-!!(reg & ...)
-
-> +		/* Returns negative value when pin is configured as PORT */
-> +		return thb_read_gpio_data(chip, offset, gpio_dir);
-> +	}
-> +	return -EINVAL;
-
-And as per above.
-
-> +}
-
-...
-
-> +	/* identifies the first GPIO number handled by this chip; or,
-> +	 * if negative during registration, requests dynamic ID allocation.
-> +	 * Please pass -1 as base to let gpiolib select the chip base in all possible cases.
-> +	 * We want to get rid of the static GPIO number space in the long run.
-> +	 */
-
-/*
- * Please, fix the style of the
- * multi-line comments. Pay attention
- * to the grammar, etc. Everywhere.
- */
-
-...
-
-> +	/* Number of GPIOs handled by this controller; the last GPIO handled is (base + ngpio - 1)*/
-
-Too long comment with missed white space.
-
-...
-
-> +	/* Register/add Thunder Bay GPIO chip with Linux framework */
-> +	ret = gpiochip_add_data(chip, tpc);
-
-Why not devm_*()?
-
-> +	if (ret)
-> +		dev_err(tpc->dev, "Failed to add gpiochip\n");
-
-> +	return ret;
-
-return 0;
-
-But overall, use dev_err_probe().
-
-I stopped here, since there are too many same comments over all functions in
-this driver.
-
-...
-
-> +	{
-> +		.compatible = "intel,thunderbay-pinctrl",
-> +		.data = &thunderbay_data
-
-+ Comma.
-
-> +	},
-
-...
-
-> +	of_id = of_match_node(thunderbay_pinctrl_match, pdev->dev.of_node);
-
-You already have dev, use it everywhere in the ->probe().
-
-> +	if (!of_id)
-> +		return -ENODEV;
-
-Use of_device_get_match_data() (or how is it called?).
-
-...
-
-> +	iomem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-
-> +	if (!iomem)
-> +		return -ENXIO;
-
-Redundant, but see below.
-
-> +
-> +	tpc->base0 =  devm_ioremap_resource(dev, iomem);
-> +	if (IS_ERR(tpc->base0))
-> +		return PTR_ERR(tpc->base0);
-
-I dunno if you read any of previous comments regarding to other drivers.
-The above is just one API call. Find it and use.
-
-...
-
-> +static int thunderbay_pinctrl_remove(struct platform_device *pdev)
-> +{
-> +	/* thunderbay_pinctrl_remove function to clear the assigned memory */
-> +	return 0;
-> +}
-
-Why do you need this stub? What for?
-
-...
-
-> +
-
-Redundant blank line.
-
-> +builtin_platform_driver(thunderbay_pinctrl_driver);
+> Yes, please squash them.
+
+I'm just about to make some changes to the patches.
+
+Specifically, I'm going to make sctp_endpoint_hold() return the
+endpoint it incremented, in order to prevent schedule related data
+corruption before/after the increment of refcnt.
+
+I'm going to keep the patches separate for the time being (since I'm
+going to submit this before you get out of bed most likely).  Just let
+me know if you still want them squashed, even with these additional
+changes (along with their explanation in the commit message), or feel
+free to squash them yourself if you choose to merge them.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,195 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D07478B5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61139478B67
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbhLQM1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:27:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54871 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233904AbhLQM1O (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:27:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639744034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PQn9QnfrMJ42qGC926SQJqMG9+yUqctk6joXXXUXODU=;
-        b=acO6m8+2o/aaSiX9Bw06uKn/LRzuqYGLFd7Olaz62H0OYEqy+0o8zTgBREYpKiXlx9JA2B
-        yh0/8l1/YEV166okOz2U3sU5uItPiUak4ZJOzgbx+Q2ubvKMH6fa+73CbXEXd/FBTJsbTT
-        QPDwWo9zQzThN9x/kUdLZ+gWC/g5m6I=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-goxnbnEgON6Az_SBSkz0Fg-1; Fri, 17 Dec 2021 07:27:12 -0500
-X-MC-Unique: goxnbnEgON6Az_SBSkz0Fg-1
-Received: by mail-wr1-f72.google.com with SMTP id s23-20020adf9797000000b001a24674f0f7so569777wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:27:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=PQn9QnfrMJ42qGC926SQJqMG9+yUqctk6joXXXUXODU=;
-        b=s7Tk+77mHNfzbmShePb8Dn56tpV7MletC5S15g8gpAmf3NgQ7OHvp/fpiouBXSdxqI
-         x/rJM/r8YFD/VMglzyI3vWMOeIhkukJ3mTVWVkbF1Th3XPTBPg2IGPquOkOsL+tpAswm
-         iLcREIRISWHOiXMHZ/trTLNv2cvbeSI5jCcY5zXERhbh12Q0n5fd4XHllBYWCePmKnWt
-         wPabmTl0kBH3HSB0PDrdA3JJ+S3Qcpr8YTWVj5tbP5mkpmRPhqjK/5fXd/xOOQF4FzHJ
-         0JxJ3jrxsDVDDWfXWxxCJRB3Pa1H+NGppymKHgzDZL3e4bt70Cw3NXwJ3XaALtCp7YSi
-         oRig==
-X-Gm-Message-State: AOAM5333wAo+S73Bd3q188KecnB8CMObsCDV7YSnXs2wLLZhBan3IRbU
-        HDXHYjXV8r1WXEXHw4ta+o0Cjyn96Zw+lStzko1bkAUu3ueB/BrDfJGWzs4Y+RcAaTa2SI71n0D
-        ctDcWLj9ZgtYgYSH4A6kXs2PY
-X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2380613wrd.420.1639744030910;
-        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyMU9oSbjos1l9GF9keeS6GGCVXwXiTHkH7R/bDnn/YWsy42XudUx//GCm2ssgumBD4iCJuwA==
-X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2380595wrd.420.1639744030687;
-        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id d2sm7152790wra.61.2021.12.17.04.27.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
-Message-ID: <88ce4f53-587b-c18a-9694-a3e173e6e030@redhat.com>
-Date:   Fri, 17 Dec 2021 13:27:09 +0100
+        id S236303AbhLQMdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:33:09 -0500
+Received: from mga04.intel.com ([192.55.52.120]:2609 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236284AbhLQMdI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 07:33:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238488180"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="238488180"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:33:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="465108799"
+Received: from jvowlesx-mobl.amr.corp.intel.com ([10.212.181.65])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:33:07 -0800
+Message-ID: <4d8308f4a3249b662536371e14e6cd6ef723f5a9.camel@linux.intel.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Specify no cache snooping on
+ TGL and ADL
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Ye Xiang <xiang.ye@intel.com>, jikos@kernel.org, jic23@kernel.org
+Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 17 Dec 2021 04:33:07 -0800
+In-Reply-To: <20211217074541.4705-1-xiang.ye@intel.com>
+References: <20211217074541.4705-1-xiang.ye@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/2] mm: cma: fix allocation may fail sometimes
-Content-Language: en-US
-To:     Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dongas86@gmail.com" <dongas86@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Jason Liu <jason.hui.liu@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "lecopzer.chen@mediatek.com" <lecopzer.chen@mediatek.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Shijie Qin <shijie.qin@nxp.com>
-References: <20211215080242.3034856-1-aisheng.dong@nxp.com>
- <20211215080242.3034856-2-aisheng.dong@nxp.com>
- <783f64f5-3a55-6c42-a740-19a12c2c7321@redhat.com>
- <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <7d9b7e5f-a6c0-2079-90e7-c02aaeb1f4c0@redhat.com>
- <DB9PR04MB8477037EE173D98F844DCAE680789@DB9PR04MB8477.eurprd04.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <DB9PR04MB8477037EE173D98F844DCAE680789@DB9PR04MB8477.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.21 04:44, Aisheng Dong wrote:
->> From: David Hildenbrand <david@redhat.com>
->> Sent: Thursday, December 16, 2021 6:57 PM
->>
->> On 16.12.21 03:54, Aisheng Dong wrote:
->>>> From: David Hildenbrand <david@redhat.com>
->>>> Sent: Wednesday, December 15, 2021 8:31 PM
->>>>
->>>> On 15.12.21 09:02, Dong Aisheng wrote:
->>>>> We met dma_alloc_coherent() fail sometimes when doing 8 VPU decoder
->>>>> test in parallel on a MX6Q SDB board.
->>>>>
->>>>> Error log:
->>>>> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret:
->>>>> -16
->>>>> cma: number of available pages:
->>>>>
->>>>
->> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@3607
->>>> 6+99@40477+108
->>>>> @40852+44@41108+20@41196+108@41364+108@41620+
->>>>>
->>>>
->> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49
->>>> 324+20@49388+
->>>>> 5076@49452+2304@55040+35@58141+20@58220+20@58284+
->>>>> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=>
->>>> 33161 free of
->>>>> 81920 total pages
->>>>>
->>>>> When issue happened, we saw there were still 33161 pages (129M) free
->>>>> CMA memory and a lot available free slots for 148 pages in CMA
->>>>> bitmap that we want to allocate.
->>>>>
->>>>> If dumping memory info, we found that there was also ~342M normal
->>>>> memory, but only 1352K CMA memory left in buddy system while a lot
->>>>> of pageblocks were isolated.
->>>>>
->>>>> Memory info log:
->>>>> Normal free:351096kB min:30000kB low:37500kB high:45000kB
->>>> reserved_highatomic:0KB
->>>>> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB
->>>> inactive_file:31776kB
->>>>> 	    unevictable:0kB writepending:0kB present:1048576kB
->>>> managed:1018328kB mlocked:0kB
->>>>> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB
->>>>> lowmem_reserve[]: 0 0 0
->>>>> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB
->>>> (UMECI) 65*64kB (UMCI)
->>>>> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI)
->>>> 4*2048kB (MI) 8*4096kB (EI)
->>>>> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
->>>>>
->>>>> The root cause of this issue is that since commit a4efc174b382
->>>>> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports
->>>> concurrent
->>>>> memory allocation. It's possible that the pageblock process A try to
->>>>> alloc has already been isolated by the allocation of process B
->>>>> during memory migration.
->>>>>
->>>>> When there're multi process allocating CMA memory in parallel, it's
->>>>> likely that other the remain pageblocks may have also been isolated,
->>>>> then CMA alloc fail finally during the first round of scanning of
->>>>> the whole available CMA bitmap.
->>>>
->>>> I already raised in different context that we should most probably
->>>> convert that -EBUSY to -EAGAIN --  to differentiate an actual
->>>> migration problem from a simple "concurrent allocations that target the
->> same MAX_ORDER -1 range".
->>>>
->>>
->>> Thanks for the info. Is there a patch under review?
->>
->> No, and I was too busy for now to send it out.
->>
->>> BTW i wonder that probably makes no much difference for my patch since
->>> we may prefer retry the next pageblock rather than busy waiting on the
->> same isolated pageblock.
->>
->> Makes sense. BUT as of now we isolate not only a pageblock but a
->> MAX_ORDER -1 page (e.g., 2 pageblocks on x86-64 (!) ). So you'll have the
->> same issue in that case.
+On Fri, 2021-12-17 at 15:45 +0800, Ye Xiang wrote:
+> Specify that both TGL and ADL don't support DMA cache snooping.
 > 
-> Yes, should I change to try next MAX_ORDER_NR_PAGES or keep as it is
-> and let the core to improve it later?
+> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+> ---
+>  drivers/hid/intel-ish-hid/ipc/ipc.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> I saw there's a patchset under review which is going to remove the
-> MAX_ORDER - 1 alignment requirement for CMA.
-> https://patchwork.kernel.org/project/linux-mm/cover/20211209230414.2766515-1-zi.yan@sent.com/
-> 
-> Once it's merged, I guess we can back to align with pageblock rather
-> than MAX_ORDER-1.
+> diff --git a/drivers/hid/intel-ish-hid/ipc/ipc.c b/drivers/hid/intel-
+> ish-hid/ipc/ipc.c
+> index 45e0c7b1c9ec..8ccb246b0114 100644
+> --- a/drivers/hid/intel-ish-hid/ipc/ipc.c
+> +++ b/drivers/hid/intel-ish-hid/ipc/ipc.c
+> @@ -909,7 +909,11 @@ static uint32_t ish_ipc_get_header(struct
+> ishtp_device *dev, int length,
+>   */
+>  static bool _dma_no_cache_snooping(struct ishtp_device *dev)
+>  {
+> -       return dev->pdev->device == EHL_Ax_DEVICE_ID;
+> +       return (dev->pdev->device == EHL_Ax_DEVICE_ID ||
+> +               dev->pdev->device == TGL_LP_DEVICE_ID ||
+> +               dev->pdev->device == TGL_H_DEVICE_ID ||
+> +               dev->pdev->device == ADL_S_DEVICE_ID ||
+> +               dev->pdev->device == ADL_P_DEVICE_ID);
+>  }
+>  
+>  static const struct ishtp_hw_ops ish_hw_ops = {
 
-While the goal is to get rid of the alignment requirement, we might
-still have to isolate all applicable MAX_ORDER-1 pageblocks. Depends on
-what we can or cannot achieve easily :)
-
-
--- 
-Thanks,
-
-David / dhildenb
 

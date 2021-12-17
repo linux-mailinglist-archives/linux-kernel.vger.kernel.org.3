@@ -2,112 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CB847919A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ECC47919B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239179AbhLQQkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:40:53 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:35610 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbhLQQkw (ORCPT
+        id S239190AbhLQQk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:40:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35892 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239189AbhLQQk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:40:52 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:44812)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1myGHq-00F1uD-8h; Fri, 17 Dec 2021 09:40:50 -0700
-Received: from ip68-227-161-49.om.om.cox.net ([68.227.161.49]:39008 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1myGHo-003qpt-7Y; Fri, 17 Dec 2021 09:40:49 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211216193412.2441434-1-broonie@kernel.org>
-        <YbugCP144uxXvRsk@sirena.org.uk>
-        <20211217184725.6be885a1@canb.auug.org.au>
-Date:   Fri, 17 Dec 2021 10:40:12 -0600
-In-Reply-To: <20211217184725.6be885a1@canb.auug.org.au> (Stephen Rothwell's
-        message of "Fri, 17 Dec 2021 18:47:25 +1100")
-Message-ID: <87wnk3famr.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 17 Dec 2021 11:40:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D77E3B82954
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 16:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576C8C36AE8;
+        Fri, 17 Dec 2021 16:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639759255;
+        bh=DuCWxOF8xwW5JZgXvfMFgH5c57m8bIZ61WHsH+oFdhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P4LmZfE+x3MA1XLc2RxCqg/y7GwxPw4nBjYm+1Ehsxu8hCKpDJ2iAFY9w2MaAth0b
+         14mCH2sbG4y7uw66bK1WYXvCj+Qx9ZVJAh34lCqbNRPr47FTCx+Zk43S+pIAST4bMj
+         /gvGCkJgYUXykwwYo9xpkKu//x7AXo0kDHDNWjrgqU8ICRuKcSLlifAmRX8Jd8Uqa6
+         xPNetUG9TJguYQPxrU+z+o3/xxi502uZXfjRJxtA8qFzBQYVbLg3zkRN7vAGkVPZQP
+         619/i4CENsIawt2jvx3vsc7oI1/iZyFuIIslUQR19R1qowlMjrKxW34/GmlKTUn63l
+         FW1Chc6eP+UcA==
+Date:   Fri, 17 Dec 2021 08:40:53 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Zhiguo Niu <niuzhiguo84@gmail.com>
+Cc:     Chao Yu <chao@kernel.org>,
+        =?utf-8?B?5aSP6Z2ZIChKaW5nIFhpYSk=?= <Jing.Xia@unisoc.com>,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH Vx 1/1] f2fs: Avoid deadlock between writeback
+ and checkpoint
+Message-ID: <Yby9lU7aAC1kWYlL@google.com>
+References: <YZU0TFBH6k2Q6fJZ@google.com>
+ <e28d4963-d816-b568-dec8-60a79a9fe88d@kernel.org>
+ <e25053e9-f97e-6a2f-3bac-acfcd689fdcb@kernel.org>
+ <Yaf1J/GtTrJekmtn@google.com>
+ <f0fa20e0-7c03-c454-d5a7-62457663412b@kernel.org>
+ <YakNSfMyzGAe2y42@google.com>
+ <80bc28c5-f050-05a9-e9a8-ff42781a191a@kernel.org>
+ <YbjqI0qvbxbW9aDz@google.com>
+ <YbvKGpea/C/UnT6J@google.com>
+ <CAHJ8P3KwWXAgRQRD5N6Ut6uEQX8ap368Pm9HOz3gapVS4ymHmA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1myGHo-003qpt-7Y;;;mid=<87wnk3famr.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.161.49;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19162OWtwDNXaQAc8aDHBDGKWREios9+bk=
-X-SA-Exim-Connect-IP: 68.227.161.49
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.3 required=8.0 tests=ALL_TRUSTED,BAYES_40,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.3756]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Stephen Rothwell <sfr@canb.auug.org.au>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1425 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (0.8%), b_tie_ro: 10 (0.7%), parse: 0.71
-        (0.1%), extract_message_metadata: 10 (0.7%), get_uri_detail_list: 0.85
-        (0.1%), tests_pri_-1000: 5 (0.4%), tests_pri_-950: 1.48 (0.1%),
-        tests_pri_-900: 1.20 (0.1%), tests_pri_-90: 58 (4.0%), check_bayes: 56
-        (3.9%), b_tokenize: 5 (0.4%), b_tok_get_all: 6 (0.4%), b_comp_prob:
-        1.86 (0.1%), b_tok_touch_all: 38 (2.7%), b_finish: 1.20 (0.1%),
-        tests_pri_0: 1155 (81.0%), check_dkim_signature: 0.48 (0.0%),
-        check_dkim_adsp: 3.4 (0.2%), poll_dns_idle: 164 (11.5%), tests_pri_10:
-        2.5 (0.2%), tests_pri_500: 176 (12.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: linux-next: manual merge of the userns tree with the cel tree
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHJ8P3KwWXAgRQRD5N6Ut6uEQX8ap368Pm9HOz3gapVS4ymHmA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+On 12/17, Zhiguo Niu wrote:
+> Hi Jaegeuk,
+> 
+> As f2fs_write_node_pages codes:
+> 
+> 2060  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/fs/f2fs/node.c#2060>
+> 	blk_start_plug
+> <http://172.29.60.15:8083/s?defs=blk_start_plug&project=sprdroidr_trunk>(&plug
+> <http://172.29.60.15:8083/s?defs=plug&project=sprdroidr_trunk>);2061
+> <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/fs/f2fs/node.c#2061>
+> 	f2fs_sync_node_pages
+> <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/fs/f2fs/node.c#f2fs_sync_node_pages>(sbi
+> <http://172.29.60.15:8083/s?defs=sbi&project=sprdroidr_trunk>, wbc
+> <http://172.29.60.15:8083/s?defs=wbc&project=sprdroidr_trunk>, *true*,
+> FS_NODE_IO <http://172.29.60.15:8083/s?defs=FS_NODE_IO&project=sprdroidr_trunk>);2062
+>  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/fs/f2fs/node.c#2062>
+> 	blk_finish_plug
+> <http://172.29.60.15:8083/s?defs=blk_finish_plug&project=sprdroidr_trunk>(&plug
+> <http://172.29.60.15:8083/s?defs=plug&project=sprdroidr_trunk>);
+> 
+> 
+> if writeback to sync node pages, blk_statr_plug in line 2060 just do nothing
 
-> Hi Mark,
->
-> On Thu, 16 Dec 2021 20:22:32 +0000 Mark Brown <broonie@kernel.org> wrote:
->>
->> On Thu, Dec 16, 2021 at 07:34:12PM +0000, broonie@kernel.org wrote:
->> > Hi all,
->> > 
->> > Today's linux-next merge of the userns tree got a conflict in:
->> > 
->> >   fs/nfsd/nfssvc.c  
->> 
->> This is also causing further build errors including but not limited to:
->> 
->> /tmp/next/build/kernel/fork.c: In function 'copy_process':
->> /tmp/next/build/kernel/fork.c:2106:4: error: label 'bad_fork_cleanup_threadgroup_lock' used but not defined
->>  2106 |    goto bad_fork_cleanup_threadgroup_lock;
->>       |    ^~~~
->> 
->> Partly due to vaccine side effects and partly in the interest of time
->> I'm going to use the userns tree from yesterday.
->
-> Caused by commit
->
->   40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads")
->
-> The label is guarded by CONFIG_NUMA, but the new goto is not.
->
-> This is still failing, so I have used the userns tree from next-20211215
-> for today.
+Isn't it a different task's plug, yes?
 
-Huh.  I thought I fixed that.
-
-I will dig in later today.  I just got power back after a bad storm so I
-have not see the emails until just now.
-
-Eric
+> 
+> 
+> 
+> 3449  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3449>
+> *void* blk_start_plug
+> <http://172.29.60.15:8083/s?refs=blk_start_plug&project=sprdroidr_trunk>(*struct*
+> blk_plug <http://172.29.60.15:8083/s?defs=blk_plug&project=sprdroidr_trunk>
+> *plug <http://172.29.60.15:8083/s?refs=plug&project=sprdroidr_trunk>)3450
+>  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3450>
+> {3451  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3451>
+> 	*struct* task_struct
+> <http://172.29.60.15:8083/s?defs=task_struct&project=sprdroidr_trunk>
+> *tsk <http://172.29.60.15:8083/s?refs=tsk&project=sprdroidr_trunk> =
+> current <http://172.29.60.15:8083/s?defs=current&project=sprdroidr_trunk>;3452
+>  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3452>
+> 3453  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3453>
+> 	/*3454  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3454>
+> 	 * If this is a nested plug, don't actually assign it.3455
+> <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3455>
+> 	 */3456  <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3456>
+> 	*if* (tsk <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#tsk>->plug
+> <http://172.29.60.15:8083/s?defs=plug&project=sprdroidr_trunk>)3457
+> <http://172.29.60.15:8083/xref/sprdroidr_trunk/bsp/kernel/kernel4.14/block/blk-core.c#3457>
+> 		*return*;
+> 
+> so the NodeA IO is pulged in writeback and stuck.
+> 
+> 
+> thanks
+> 
+> Jaegeuk Kim <jaegeuk@kernel.org> 于2021年12月17日周五 07:22写道：
+> 
+> > On 12/14, Jaegeuk Kim wrote:
+> > > On 12/03, Chao Yu wrote:
+> > > > On 2021/12/3 2:15, Jaegeuk Kim wrote:
+> > > > > On 12/02, Chao Yu wrote:
+> > > > > > On 2021/12/2 6:20, Jaegeuk Kim wrote:
+> > > > > > > On 11/20, Chao Yu wrote:
+> > > > > > > > On 2021/11/18 14:46, Chao Yu wrote:
+> > > > > > > > > On 2021/11/18 0:56, Jaegeuk Kim wrote:
+> > > > > > > > > > On 11/09, niuzhiguo84@gmail.com wrote:
+> > > > > > > > > > > From: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > > > > > > > > >
+> > > > > > > > > > > There could be a scenario as following:
+> > > > > > > > > > > The inodeA and inodeB are in b_io queue of writeback
+> > > > > > > > > > > inodeA : f2fs's node inode
+> > > > > > > > > > > inodeB : a dir inode with only one dirty pages, and the
+> > node page
+> > > > > > > > > > > of inodeB cached into inodeA
+> > > > > > > > > > >
+> > > > > > > > > > > writeback:
+> > > > > > > > > > >
+> > > > > > > > > > > wb_workfn
+> > > > > > > > > > > wb_writeback
+> > > > > > > > > > > blk_start_plug
+> > > > > > > > > > >             loop {
+> > > > > > > > > > >             queue_io
+> > > > > > > > > > >             progress=__writeback_inodes_wb
+> > > > > > > > > > >                     __writeback_single_inode
+> > > > > > > > > > >                             do_writepages
+> > > > > > > > > > >                                     f2fs_write_data_pages
+> > > > > > > > > > >                                     wbc->pages_skipped
+> > +=get_dirty_pages
+> > > > > > > > > > >                             inode->i_state &= ~dirty
+> > > > > > > > > > >                     wrote++
+> > > > > > > > > > >                     requeue_inode
+> > > > > > > > > > >             }
+> > > > > > > > > > > blk_finish_plug
+> > > > > > > > > > >
+> > > > > > > > > > > checkpoint:
+> > > > > > > > > > >
+> > > > > > > > > > > f2fs_write_checkpoint
+> > > > > > > > > > > f2fs_sync_dirty_inodes
+> > > > > > > > > > > filemap_fdatawrite
+> > > > > > > > > > > do_writepages
+> > > > > > > > > > > f2fs_write_data_pages
+> > > > > > > > > > >             f2fs_write_single_data_page
+> > > > > > > > > > >                     f2fs_do_write_data_page
+> > > > > > > > > > >                             set_page_writeback
+> > > > > > > > > > >                             f2fs_outplace_write_data
+> > > > > > > > > > >
+> >  f2fs_update_data_blkaddr
+> > > > > > > > > > >
+> >  f2fs_wait_on_page_writeback
+> > > > > > > > > > >                     inode_dec_dirty_pages
+> > > > > > > > > > >
+> > > > > > > > > > > 1. Writeback thread flush inodeA, and push it's bio
+> > request in task's plug;
+> > > > > > > > > > > 2. Checkpoint thread writes inodeB's dirty page, and
+> > then wait its node
+> > > > > > > > > > >         page writeback cached into inodeA which is in
+> > writeback task's plug
+> > > > > > > > > > > 3. Writeback thread flush inodeB and skip writing the
+> > dirty page as
+> > > > > > > > > > >         wb_sync_req[DATA] > 0.
+> > > > > > > > > > > 4. As none of the inodeB's page is marked as
+> > PAGECACHE_TAG_DIRTY, writeback
+> > > > > > > > > > >         thread clear inodeB's dirty state.
+> > > > > > > > > > > 5. Then inodeB is moved from b_io to b_dirty because of
+> > pages_skipped > 0
+> > > > > > > > > > >         as checkpoint thread is stuck before dec
+> > dirty_pages.
+> > > > > > > > > > >
+> > > > > > > > > > > This patch collect correct pages_skipped according to
+> > the tag state in
+> > > > > > > > > > > page tree of inode
+> > > > > > > > > > >
+> > > > > > > > > > > Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > > > > > > > > > Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+> > > > > > > > > > > ---
+> > > > > > > > > > >      fs/f2fs/data.c | 4 +++-
+> > > > > > > > > > >      1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > > > > > > > >
+> > > > > > > > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > > > > > > > > index f4fd6c246c9a..e98628e3868c 100644
+> > > > > > > > > > > --- a/fs/f2fs/data.c
+> > > > > > > > > > > +++ b/fs/f2fs/data.c
+> > > > > > > > > > > @@ -3237,7 +3237,9 @@ static int
+> > __f2fs_write_data_pages(struct address_space *mapping,
+> > > > > > > > > > >       return ret;
+> > > > > > > > > > >      skip_write:
+> > > > > > > > > > > -     wbc->pages_skipped += get_dirty_pages(inode);
+> > > > > > > > > > > +     wbc->pages_skipped +=
+> > > > > > > > > > > +             mapping_tagged(inode->i_mapping,
+> > PAGECACHE_TAG_DIRTY) ?
+> > > > > > > > > >
+> > > > > > > > > > Is there any race condition to get 0, if there's any dirty
+> > page? IOWs, it
+> > > > > > > > >
+> > > > > > > > > Quoted from Jing Xia's explanation:
+> > > > > > > > >
+> > > > > > > > > [T:writeback]                             [T:checkpoint]
+> > > > > > > >
+> > > > > > > > My bad, [1] should be here:
+> > > > > > > >
+> > > > > > > > bio contains NodeA was plugged in writeback threads
+> > > > > > > >
+> > > > > > > > Thanks,
+> > > > > > > >
+> > > > > > > > >                                   - do_writepages  -- sync
+> > write inodeB, inc wb_sync_req[DATA]
+> > > > > > > > >                                    - f2fs_write_data_pages
+> > > > > > > > >                                     -
+> > f2fs_write_single_data_page -- write last dirty page
+> > > > > > > > >                                      -
+> > f2fs_do_write_data_page
+> > > > > > > > >                                       - set_page_writeback
+> > -- clear page dirty flag and
+> > > > > > > > >                                       PAGECACHE_TAG_DIRTY
+> > tag in radix tree
+> > > > > > > > >                                       -
+> > f2fs_outplace_write_data
+> > > > > > > > >                                        -
+> > f2fs_update_data_blkaddr
+> > > > > > > > >                                         -
+> > f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+> > > > > > > > >                                      - inode_dec_dirty_pages
+> > > > > > > >
+> > > > > > > > > bio contains NodeA was plugged in writeback threads
+> > > > > > > >
+> > > > > > > > [1]
+> > > > > > > >
+> > > > > > > > Thanks,
+> > > > > > > >
+> > > > > > > > > - writeback_sb_inodes
+> > > > > > > > >      - writeback_single_inode
+> > > > > > > > >       - do_writepages
+> > > > > > > > >        - f2fs_write_data_pages -- skip writepages due to
+> > wb_sync_req[DATA]
+> > > > > > > > >         - wbc->pages_skipped += get_dirty_pages() --
+> > PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+> > > > > > > > >      - requeue_inode -- requeue inode to wb->b_dirty queue
+> > due to non-zero.pages_skipped
+> > > > > > >
+> > > > > > > So, my question was why this is the problem?
+> > > > > >
+> > > > > > kworker will loop writebacking this requeued inode.
+> > > > >
+> > > > > Does it make a problem?
+> > > >
+> > > > The problem here is kworker will loop for ever.
+> > >
+> > > Could you point out where it goes in the loop?
+> >
+> > How can we have NodeA IO being stuck in the plug forever?
+> > I think f2fs_write_node_pages() should have flushed it before.
+> >
+> > >
+> > > >
+> > > > Thanks,
+> > > >
+> > > > >
+> > > > > >
+> > > > > > Thanks,
+> > > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > > seems the current condition is just requeuing the inode as
+> > dirty, but next
+> > > > > > > > > > flushing time will remove it from dirty list. Is this
+> > giving too much overheads?
+> > > > > > > > >
+> > > > > > > > > I prefer to let writeback thread call blk_flush_plug() after
+> > skipping
+> > > > > > > > > writepages() due to wb_sync_req[DATA/NODE] check condition,
+> > thoughts?
+> > > > > > > > >
+> > > > > > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > > > > > > index 9f754aaef558..b6e1ed73f8f5 100644
+> > > > > > > > > --- a/fs/f2fs/data.c
+> > > > > > > > > +++ b/fs/f2fs/data.c
+> > > > > > > > > @@ -3087,6 +3087,8 @@ static int
+> > f2fs_write_cache_pages(struct address_space *mapping,
+> > > > > > > > >                           /* give a priority to WB_SYNC
+> > threads */
+> > > > > > > > >                           if
+> > (atomic_read(&sbi->wb_sync_req[DATA]) &&
+> > > > > > > > >                                           wbc->sync_mode ==
+> > WB_SYNC_NONE) {
+> > > > > > > > > +                         if (current->plug)
+> > > > > > > > > +
+> >  blk_flush_plug(current->plug, false);
+> > > > > > > > >                                   done = 1;
+> > > > > > > > >                                   break;
+> > > > > > > > >                           }
+> > > > > > > > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> > > > > > > > > index 556fcd8457f3..dd9a817d8dab 100644
+> > > > > > > > > --- a/fs/f2fs/node.c
+> > > > > > > > > +++ b/fs/f2fs/node.c
+> > > > > > > > > @@ -1946,6 +1946,8 @@ int f2fs_sync_node_pages(struct
+> > f2fs_sb_info *sbi,
+> > > > > > > > >                           if
+> > (atomic_read(&sbi->wb_sync_req[NODE]) &&
+> > > > > > > > >                                           wbc->sync_mode ==
+> > WB_SYNC_NONE) {
+> > > > > > > > >                                   done = 1;
+> > > > > > > > > +                         if (current->plug)
+> > > > > > > > > +
+> >  blk_flush_plug(current->plug, false);
+> > > > > > > > >                                   break;
+> > > > > > > > >                           }
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Thanks,
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > +             get_dirty_pages(inode) : 0;
+> > > > > > > > > > >       trace_f2fs_writepages(mapping->host, wbc, DATA);
+> > > > > > > > > > >       return 0;
+> > > > > > > > > > >      }
+> > > > > > > > > > > --
+> > > > > > > > > > > 2.28.0
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > _______________________________________________
+> > > > > > > > > Linux-f2fs-devel mailing list
+> > > > > > > > > Linux-f2fs-devel@lists.sourceforge.net
+> > > > > > > > >
+> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> > > > > > > > >
+> > >
+> > >
+> > > _______________________________________________
+> > > Linux-f2fs-devel mailing list
+> > > Linux-f2fs-devel@lists.sourceforge.net
+> > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> >

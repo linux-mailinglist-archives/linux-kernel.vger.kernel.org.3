@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029F24791DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580924791E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239354AbhLQQu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:50:58 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:42578 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbhLQQuz (ORCPT
+        id S239363AbhLQQwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239355AbhLQQvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:50:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639759855; x=1671295855;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=RC3FnMFpifE9fNebjGu/kjokm/vsi7FxGu0UtnO2J/g=;
-  b=KfrXre7uLeWBN0VIugl3UQsqm4qpXty7ctU9bf3Pr5sAx36xuYDZa12K
-   L7FJ/DZq4im7AOfmb/kYR5t9gg7HZIisfYfJlB3r5JoRv8C4amfSyCmXw
-   1CVPhRpN6TiIDBdL9wI7RGt+iWQ6npEBAD5LmCDlGoqaX2uUg+U+n76YF
-   g2FnKR+Ef0BB+DXqh96JOi0Z4NtqcU5WMamcq+sXIRb77Kv1/e5F5wcJ1
-   a1XhFqEddIeNcp/ACivinCwY1LB45Kwuod5sihZE03jzIcUwwsg9Du3Lf
-   BONdyrAWvUiou1OeRGY+jMYFmFYbGx5q5t3qB6AfrXE02IaRIIKjb6ZKB
-   w==;
-IronPort-SDR: KduGrjma49C9zIhYZ/5JhpvSrpydtCWCg61Xo5/z7vIE79xJIZzPiAMRXW3WW2609htLNC9uMR
- iHtZn93Za/SQPKuygDyzy16DjyRbz2xXz12yDF0OzyijgE6c0pElJLOjgU6Sb8lMQnqB0qUr4I
- 9QLF2ZV3laIQOWL3d4k2nOsPakXlbZ9rcB7PP1FCDizfm3wNO7IZQAU3+gEf+sVIYj+dN7A72B
- ZjTjd2iCQOPWZe9UEyRVVN4pXceqfley8YV+5Og3WQ8W+DOmVV8+abMEZ9N7MRH7Rr0l8jo2ET
- drkVVEsAjaXCkPZ1corgHTHv
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="79935474"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 09:50:53 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 17 Dec 2021 09:50:46 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 17 Dec 2021 09:50:45 -0700
-Subject: Re: [PATCH] ARM: configs: at91: sama7: Enable SPI NOR and QSPI
- controller
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <linux@armlinux.org.uk>, <claudiu.beznea@microchip.com>,
-        <codrin.ciubotariu@microchip.com>, <eugen.hristev@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211209153744.357465-1-tudor.ambarus@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <cb18bbec-1bc1-731d-65c0-57c5229f2c91@microchip.com>
-Date:   Fri, 17 Dec 2021 17:50:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 17 Dec 2021 11:51:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00C5C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:51:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F767B828FF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 16:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB3CC36AE1;
+        Fri, 17 Dec 2021 16:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639759911;
+        bh=tuQrVEIodDfTP/WIeUxfIZy0X9WpU5zJkldM4Fk5eCQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L+6n4O1OOPNczcbNWZxVZ3pF37qVcJ2KwXhaxcVrDGJkpQ6GF/Yhs68GXX8lzQF0e
+         UPywYr8tXGnjwMN7F7kDxF3A4j4/fROKAYwV3KblL01gCtAMmGVZZ+cmVjkOL02NGt
+         muAgEU/Fcu4oSmzZClLFzvfP3WeR85wqfqJm/VisMCkRyzxzpsodrz5KdFUq4GxH0w
+         f3vT8EW+Tvzyeb9dAbwSlQvJzgNr7UeMKV8/JsJeeusXRMwMVpizR2Ki92GSArZ19D
+         Pzo2e5fe1J3OR03v9y7e6/VtE+C/7cwecasJa+KHybXFoa87zuOZTPdjFeB5N1Z6lO
+         AZTV1n6Pnz+Xg==
+Date:   Fri, 17 Dec 2021 08:51:49 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     "Yang.Lee" <yang.lee@linux.alibaba.com>
+Cc:     chao <chao@kernel.org>,
+        linux-f2fs-devel <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: =?utf-8?B?5Zue5aSN77yaW1BBVEM=?= =?utf-8?Q?H?= -next] f2fs:
+ Simplify bool conversion
+Message-ID: <YbzAJWlnSHrnR4/X@google.com>
+References: <20211215023858.33303-1-yang.lee@linux.alibaba.com>
+ <YbuTLr/HJO3IMI6u@google.com>
+ <fc89c7e6-ced2-40e1-9d01-496a3b60b268.yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20211209153744.357465-1-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fc89c7e6-ced2-40e1-9d01-496a3b60b268.yang.lee@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 at 16:37, Tudor Ambarus wrote:
-> sama7g5ek comes with a SPI NOR flash connected to the QSPI
-> controller. Enable the SPI NOR subsystem and the QSPI controller.
+On 12/17, Yang.Lee wrote:
+> "Why not this?
+>   sbi->gc_urgent_high_limited = t;"
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Since 't' is an unsigned long type and 'gc_urgent_high_limited' is a bool type, the assignment operation will cause a new warning.
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Huh, that doesn't allow auto casting as well.
 
-Best regards,
-   Nicolas
-
-> ---
->   arch/arm/configs/sama7_defconfig | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-> index 938aae4bd80b..0368068e04d9 100644
-> --- a/arch/arm/configs/sama7_defconfig
-> +++ b/arch/arm/configs/sama7_defconfig
-> @@ -33,7 +33,6 @@ CONFIG_MODULES=y
->   CONFIG_MODULE_FORCE_LOAD=y
->   CONFIG_MODULE_UNLOAD=y
->   CONFIG_MODULE_FORCE_UNLOAD=y
-> -# CONFIG_BLK_DEV_BSG is not set
->   CONFIG_PARTITION_ADVANCED=y
->   # CONFIG_EFI_PARTITION is not set
->   # CONFIG_COREDUMP is not set
-> @@ -83,6 +82,7 @@ CONFIG_DEVTMPFS_MOUNT=y
->   CONFIG_MTD=y
->   CONFIG_MTD_TESTS=m
->   CONFIG_MTD_CMDLINE_PARTS=y
-> +CONFIG_MTD_SPI_NOR=y
->   CONFIG_BLK_DEV_LOOP=y
->   CONFIG_BLK_DEV_RAM=y
->   CONFIG_BLK_DEV_RAM_COUNT=1
-> @@ -90,6 +90,7 @@ CONFIG_BLK_DEV_RAM_SIZE=8192
->   CONFIG_EEPROM_AT24=y
->   CONFIG_SCSI=y
->   CONFIG_BLK_DEV_SD=y
-> +# CONFIG_BLK_DEV_BSG is not set
->   CONFIG_NETDEVICES=y
->   CONFIG_MACB=y
->   CONFIG_MICREL_PHY=y
-> @@ -104,8 +105,8 @@ CONFIG_I2C=y
->   CONFIG_I2C_CHARDEV=y
->   CONFIG_I2C_AT91=y
->   CONFIG_SPI=y
-> -CONFIG_SPI_MEM=y
->   CONFIG_SPI_ATMEL=y
-> +CONFIG_SPI_ATMEL_QUADSPI=y
->   CONFIG_SPI_GPIO=y
->   CONFIG_PINCTRL_AT91=y
->   CONFIG_PINCTRL_AT91PIO4=y
 > 
-
-
--- 
-Nicolas Ferre
+> ------------------------------------------------------------------
+> 发件人：Jaegeuk Kim <jaegeuk@kernel.org>
+> 发送时间：2021年12月17日(星期五) 03:27
+> 收件人：Yang Li <yang.lee@linux.alibaba.com>
+> 抄　送：chao <chao@kernel.org>; linux-f2fs-devel <linux-f2fs-devel@lists.sourceforge.net>; linux-kernel <linux-kernel@vger.kernel.org>; Abaci Robot <abaci@linux.alibaba.com>
+> 主　题：Re: [PATCH -next] f2fs: Simplify bool conversion
+> 
+> On 12/15, Yang Li wrote:
+> > Fix the following coccicheck warning:
+> > ./fs/f2fs/sysfs.c:491:41-46: WARNING: conversion to bool not needed here
+> > 
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> > ---
+> >  fs/f2fs/sysfs.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> > index 9e1cf44642ae..530c36b89bf1 100644
+> > --- a/fs/f2fs/sysfs.c
+> > +++ b/fs/f2fs/sysfs.c
+> > @@ -488,7 +488,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+> >  
+> >   if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
+> >    spin_lock(&sbi->gc_urgent_high_lock);
+> > -  sbi->gc_urgent_high_limited = t == 0 ? false : true;
+> > +  sbi->gc_urgent_high_limited = t != 0;
+> 
+> Why not this?
+>   sbi->gc_urgent_high_limited = t;
+> 
+> >    sbi->gc_urgent_high_remaining = t;
+> >    spin_unlock(&sbi->gc_urgent_high_lock);
+> >  
+> > -- 
+> > 2.20.1.7.g153144c
+> 

@@ -2,154 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8137A479642
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7C5479644
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbhLQV27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLQV26 (ORCPT
+        id S229661AbhLQV3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:29:23 -0500
+Received: from mail-yb1-f171.google.com ([209.85.219.171]:35526 "EHLO
+        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhLQV3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:28:58 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E472C061574;
-        Fri, 17 Dec 2021 13:28:58 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639776536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OFrA0YAB5NqcgCSPrjgoGq4+oWDLHK3CbDZuQ3ZUUlE=;
-        b=23WkD2MrN4FWPZMZ815HQRHb8Kn8Kwz/g45LGgLFfTVELNZuOt8QSHnnqk2GaK6fg1+LbS
-        HidnYXMpCYVouy+xx6UoXFeSEFpd6E4BfpTx2cnolJ2GYNYKzvg4RSBkoosy6FQ+dflAUq
-        qnvV1480A6xKYqRuOYH2RqiZyjUDbRCWHNLLScfwiL1DSulAD77f2QH3hjrrtj6azIbHmM
-        Q3DZIx9rpawA03rEbF7dz1kfPemGvD0HVcudSiW+JfFOWAQZfK3wTvn707G6ntdFK3jzYS
-        Ie5+SpYngYEEMbxMSgWVnGxSqlmr3VLbZU8kl7f1DOW5whlq/4tsn1JZ9GHqcQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639776536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OFrA0YAB5NqcgCSPrjgoGq4+oWDLHK3CbDZuQ3ZUUlE=;
-        b=CYGLcg86LFFqXWSljdKogfuduSWHPRdtVdDrKbtUpbxJmEqwqDghCeDcV1Kuus79KaN+Sa
-        Kr87YulrrMba1dAQ==
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
- variant
-In-Reply-To: <20211217113049.23850-2-david@redhat.com>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-2-david@redhat.com>
-Date:   Fri, 17 Dec 2021 22:28:55 +0100
-Message-ID: <87h7b6c44o.ffs@tglx>
+        Fri, 17 Dec 2021 16:29:20 -0500
+Received: by mail-yb1-f171.google.com with SMTP id f186so10180554ybg.2;
+        Fri, 17 Dec 2021 13:29:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pn0ur1BFCtLMdbUNUW1pRKzy9PScyNapSw3t2m+VPHs=;
+        b=x/oByh2QOKozuF1fNjucuXN1+6F6/nnHoeJnHVRi0TbWQkG9yPX1B5Sc5/gjFTzO34
+         nIdk6UXxJ2Y2L1Y7gxxaaMCvPxv9/NfhL8A4Rq6fAITWzFuIo4znbq6EFREzyM8bBYJ3
+         K665J8wLRZYtQWm/3E2afhx+gJGg0+pvKU7hv6BIaq/ScKECYgaMKskQ4IkgSADph/g2
+         cIE3xOFu1HkVTXrUqw6Rz+xfotGCtjn9UXMDoJuQXn5mXrdzEWRqrNp0rtd+dKFr9QQK
+         2HkUbEmWY3SayH+VpjrYgCgbwhSTASpQJxFb371SQobWolM8f4V2I5d3QGirCnfWccC9
+         4AmA==
+X-Gm-Message-State: AOAM531Kwo/rl03LNTrfTOhU8QmltuBVHJWHMZeQsg4NF6XlXmKnqqit
+        ynMXTS0g/9jNjgsKXA1lwnb5WLsCAei5H4ch2NhsFDs9
+X-Google-Smtp-Source: ABdhPJy6jeik1QNjwZIRl0fu/oN70pld3AjcZtGtfXBKs01Qz4BvvrtKocCFuNv13tHpUTDgy6zPXHoRVGxE6lOIV6g=
+X-Received: by 2002:a25:4c8:: with SMTP id 191mr6909174ybe.357.1639776559935;
+ Fri, 17 Dec 2021 13:29:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
+In-Reply-To: <163969801519.20885.3977673503103544412.stgit@noble.brown>
+From:   Anna Schumaker <anna.schumaker@netapp.com>
+Date:   Fri, 17 Dec 2021 16:29:04 -0500
+Message-ID: <CAFX2Jfn8jER-aV_ttiAe1tkh8f+m=5-whEBTWbHO1uVwf=B4bw@mail.gmail.com>
+Subject: Re: [PATCH 00/18 V2] Repair SWAP-over-NFS
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17 2021 at 12:30, David Hildenbrand wrote:
-> Sometimes it is required to have a seqcount implementation that uses
-> a structure with a fixed and minimal size -- just a bare unsigned int --
-> independent of the kernel configuration. This is especially valuable, when
-> the raw_ variants of the seqlock function will be used and the additional
-> lockdep part of the seqcount_t structure remains essentially unused.
+Hi Neil,
+
+On Thu, Dec 16, 2021 at 7:07 PM NeilBrown <neilb@suse.de> wrote:
 >
-> Let's provide a lockdep-free raw_seqcount_t variant that can be used via
-> the raw functions to have a basic seqlock.
+> swap-over-NFS currently has a variety of problems.
 >
-> The target use case is embedding a raw_seqcount_t in the "struct page",
-> where we really want a minimal size and cannot tolerate a sudden grow of
-> the seqcount_t structure resulting in a significant "struct page"
-> increase or even a layout change.
-
-Cannot tolerate? Could you please provide a reason and not just a
-statement?
-
-> Provide raw_read_seqcount_retry(), to make it easy to match to
-> raw_read_seqcount_begin() in the code.
+> swap writes call generic_write_checks(), which always fails on a swap
+> file, so it completely fails.
+> Even without this, various deadlocks are possible - largely due to
+> improvements in NFS memory allocation (using NOFS instead of ATOMIC)
+> which weren't tested against swap-out.
 >
-> Let's add a short documentation as well.
+> NFS is the only filesystem that has supported fs-based swap IO, and it
+> hasn't worked for several releases, so now is a convenient time to clean
+> up the swap-via-filesystem interfaces - we cannot break anything !
 >
-> Note: There might be other possible users for raw_seqcount_t where the
->       lockdep part might be completely unused and just wastes memory --
->       essentially any users that only use the raw_ function variants.
+> So the first few patches here clean up and improve various parts of the
+> swap-via-filesystem code.  ->activate_swap() is given a cleaner
+> interface, a new ->swap_rw is introduced instead of burdening
+> ->direct_IO, etc.
+>
+> Current swap-to-filesystem code only ever submits single-page reads and
+> writes.  These patches change that to allow multi-page IO when adjacent
+> requests are submitted.  Writes are also changed to be async rather than
+> sync.  This substantially speeds up write throughput for swap-over-NFS.
+>
+> Some of the NFS patches can land independently of the MM patches.  A few
+> require the MM patches to land first.
 
-Even when the reader side uses raw_seqcount_begin/retry() the writer
-side still can use the non-raw variant which validates that the
-associated lock is held on write.
+Thanks for fixing swap-over-NFS! Looks like it passes all the
+swap-related xfstests except for generic/357 on NFS v4.2. This test
+checks that we get -EINVAL on a reflinked swapfile, but I'm not sure
+if there is a way to check for that on the client side but if you have
+any ideas it would be nice to get that test passing while you're at
+it!
 
-Aside of that your proposed extra raw sequence count needs extra care
-vs. PREEMPT_RT and this want's to be very clearly documented. Why?
+Anna
 
-The lock association has two purposes:
-
-    1) Lockdep coverage which unearthed bugs already
-
-    2) PREEMPT_RT livelock prevention
-
-       Assume the following:
-
-       spin_lock(wrlock);
-       write_seqcount_begin(seq);
-
-       ---> preemption by a high priority reader
-
-       seqcount_begin(seq); <-- live lock
-
-       The RT substitution does:
-
-       seqcount_begin(seq)
-           cnt = READ_ONCE(seq->sequence);
-
-           if (cnt & 1) {
-           	lock(s->lock);
-                unlock(s->lock);
-           }
-
-       which prevents the deadlock because it makes the reader block on
-       the associated lock, which allows the preempted writer to make
-       progress.
-
-       This applies to raw_seqcount_begin() as well.
-
-I have no objections against the construct itself, but this has to be
-properly documented vs. the restriction this imposes.
-
-As you can see above the writer side therefore has to ensure that it
-cannot preempted on PREEMPT_RT, which limits the possibilities what you
-can do inside a preemption (or interrupt) disabled section on RT enabled
-kernels. See Documentation/locking/locktypes.rst for further information.
-
-Thanks,
-
-        tglx
+>
+> Thanks,
+> NeilBrown
+>
+>
+> ---
+>
+> NeilBrown (18):
+>       Structural cleanup for filesystem-based swap
+>       MM: create new mm/swap.h header file.
+>       MM: use ->swap_rw for reads from SWP_FS_OPS swap-space
+>       MM: perform async writes to SWP_FS_OPS swap-space
+>       MM: reclaim mustn't enter FS for SWP_FS_OPS swap-space
+>       MM: submit multipage reads for SWP_FS_OPS swap-space
+>       MM: submit multipage write for SWP_FS_OPS swap-space
+>       MM: Add AS_CAN_DIO mapping flag
+>       NFS: rename nfs_direct_IO and use as ->swap_rw
+>       NFS: swap IO handling is slightly different for O_DIRECT IO
+>       SUNRPC/call_alloc: async tasks mustn't block waiting for memory
+>       SUNRPC/auth: async tasks mustn't block waiting for memory
+>       SUNRPC/xprt: async tasks mustn't block waiting for memory
+>       SUNRPC: remove scheduling boost for "SWAPPER" tasks.
+>       NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
+>       SUNRPC: improve 'swap' handling: scheduling and PF_MEMALLOC
+>       NFSv4: keep state manager thread active if swap is enabled
+>       NFS: swap-out must always use STABLE writes.
+>
+>
+>  drivers/block/loop.c            |   4 +-
+>  fs/fcntl.c                      |   5 +-
+>  fs/inode.c                      |   3 +
+>  fs/nfs/direct.c                 |  56 ++++++----
+>  fs/nfs/file.c                   |  25 +++--
+>  fs/nfs/inode.c                  |   1 +
+>  fs/nfs/nfs4_fs.h                |   1 +
+>  fs/nfs/nfs4proc.c               |  20 ++++
+>  fs/nfs/nfs4state.c              |  39 ++++++-
+>  fs/nfs/read.c                   |   4 -
+>  fs/nfs/write.c                  |   2 +
+>  fs/open.c                       |   2 +-
+>  fs/overlayfs/file.c             |  10 +-
+>  include/linux/fs.h              |   2 +-
+>  include/linux/nfs_fs.h          |  11 +-
+>  include/linux/nfs_xdr.h         |   2 +
+>  include/linux/pagemap.h         |   3 +-
+>  include/linux/sunrpc/auth.h     |   1 +
+>  include/linux/sunrpc/sched.h    |   1 -
+>  include/linux/swap.h            | 121 --------------------
+>  include/linux/writeback.h       |   7 ++
+>  include/trace/events/sunrpc.h   |   1 -
+>  mm/madvise.c                    |   9 +-
+>  mm/memory.c                     |   3 +-
+>  mm/mincore.c                    |   1 +
+>  mm/page_alloc.c                 |   1 +
+>  mm/page_io.c                    | 189 ++++++++++++++++++++++++++------
+>  mm/shmem.c                      |   1 +
+>  mm/swap.h                       | 140 +++++++++++++++++++++++
+>  mm/swap_state.c                 |  32 ++++--
+>  mm/swapfile.c                   |   6 +
+>  mm/util.c                       |   1 +
+>  mm/vmscan.c                     |  31 +++++-
+>  net/sunrpc/auth.c               |   8 +-
+>  net/sunrpc/auth_gss/auth_gss.c  |   6 +-
+>  net/sunrpc/auth_unix.c          |  10 +-
+>  net/sunrpc/clnt.c               |   7 +-
+>  net/sunrpc/sched.c              |  29 +++--
+>  net/sunrpc/xprt.c               |  19 ++--
+>  net/sunrpc/xprtrdma/transport.c |  10 +-
+>  net/sunrpc/xprtsock.c           |   8 ++
+>  41 files changed, 558 insertions(+), 274 deletions(-)
+>  create mode 100644 mm/swap.h
+>
+> --
+> Signature
+>

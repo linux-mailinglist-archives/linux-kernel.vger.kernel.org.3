@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F0F478A4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0052478A51
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbhLQLoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:44:09 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50220 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbhLQLoI (ORCPT
+        id S235653AbhLQLpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233332AbhLQLpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:44:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2676B82789;
-        Fri, 17 Dec 2021 11:44:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E106C36AE8;
-        Fri, 17 Dec 2021 11:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639741444;
-        bh=N4SLJbonmm8jBnFacqm9G6G41H3dlxGpaFVouOO8aLE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aijgx0ZIQWQAeb7gNbL6SpclY57lW1QH0Tjj3lrF/XSwEDWHugwzvn5/s/1FKJOQZ
-         pMfarvCtO2n6TMepMbTJta2l2d2dBhZ30HsQGQnNMkZbX+M9wjvCIP45pe7ip0Jb6d
-         t1L4C3jdIyEZW4kIbK3N3eDfMSl9TMsVzWRs1icIJfjNRHDeum0xEfwgvz93MG4d6z
-         awp9XipBLcVyB2cWVHPejEh53NMcYLIPkxvC2cJ0CCKJZ+uBhrSnAe/auux+I3KTD5
-         xFRHR4vdmElgOxACGGACl9xld/yXnMVUL0Yvx2S8kxsPIfrWy8hEFEej6h92auURX4
-         Fm/jKx8mARyyg==
-Date:   Fri, 17 Dec 2021 11:43:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
-        Ivan.Griffin@microchip.com, atish.patra@wdc.com
-Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
- mpfs spi
-Message-ID: <Ybx3+3QaVe2lCcQP@sirena.org.uk>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-11-conor.dooley@microchip.com>
- <YbxxrlmYGC3Pg8+j@sirena.org.uk>
- <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
+        Fri, 17 Dec 2021 06:45:51 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3B2C061574;
+        Fri, 17 Dec 2021 03:45:50 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z29so6711739edl.7;
+        Fri, 17 Dec 2021 03:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Apv33f8CeP+v3Q4IBt73EAFtV6m4mVAZZ5ncRZ9Iy8=;
+        b=JN6YJYr/mNLhAqmvBm1HP/HIN+CsrQ+JXEEDfrR+99XvgLOwLsVU6kgc3CRm7uKF9P
+         gDi5ISLdmmDZwbm5qoR1O1B5M7P4mAeaz3rzaLyhIDOUQFy2C+UItPfQgjV6HcvJAD2c
+         LaXLgqFx+zpJtZ18oqbrwtLUGgsoTn/PzS/xRSte6XwSi7BU1zttgmLvX+pR4yOWFZDh
+         Jfbx1w4Q9iSBQhMvo+t5U+ihuHRQ3n/p6JSLLeAmJlUZ29VpY1V0gOGsZvhQoEQJSOsj
+         FTfpQWqphKdDEwZLx51zA4zoZJPIOtYc+LAbOdlH9/KmBN/e28YcW9LkSHwX+gAogwtj
+         HqQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Apv33f8CeP+v3Q4IBt73EAFtV6m4mVAZZ5ncRZ9Iy8=;
+        b=Y4bWyY2JbirXoGoYKVe0sUxzIcV0IE7fkTOxl0Ey0jUybVGX/YNQAGwvlIV5Q5WMdy
+         Pq2GLbZJQsfDAo9hkxo5MP2BIUbBXjzt4RLee6ssZDK4Z8SYhFbRJDx4Z61KBjmEYZRj
+         upAp+g3siKAgezMjkYN5NeNvHzwvpNgSkL6TQXeTdIJYD14ajxmYPjwMaKpljewK+Jlw
+         BCLcLNL3EXog2c+eM+cchLpi0p2EX20NDJFi524R0bC+34wzpQiymPDNu44RDdTyUQOT
+         U9yNtaN3dqmRK4eTme9lMadMLI5i5FXTEVqyivuKujlGxIDYwS8N75CCvG4hqdncB7pJ
+         kZ+g==
+X-Gm-Message-State: AOAM530uJ/4G+v9tbi2WOesM3qiYpNPw9RfMtkbH+QcLOKOmeJV71a2L
+        5V2j3l7m9iuOn71Hh7OTjcw=
+X-Google-Smtp-Source: ABdhPJwWbCuCqfZw0ZeX19bp2oQ98Q/jdnwz+N5FBXzQHwH7/pKSxKaERPrdVNXrzDoe8AMYJ7/aPw==
+X-Received: by 2002:a50:bae2:: with SMTP id x89mr2488341ede.337.1639741549449;
+        Fri, 17 Dec 2021 03:45:49 -0800 (PST)
+Received: from demon-pc.localdomain ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id 12sm2748410eja.187.2021.12.17.03.45.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 03:45:49 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] Add ADXL367 driver
+Date:   Fri, 17 Dec 2021 13:45:46 +0200
+Message-Id: <20211217114548.1659721-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AfGRrf1crhTWT0mA"
-Content-Disposition: inline
-In-Reply-To: <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
-X-Cookie: Pause for storage relocation.
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The ADXL367 is an ultralow power, 3-axis MEMS accelerometer.
 
---AfGRrf1crhTWT0mA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The ADXL367 does not alias input signals to achieve ultralow power
+consumption, it samples the full bandwidth of the sensor at all
+data rates. Measurement ranges of +-2g, +-4g, and +-8g are available,
+with a resolution of 0.25mg/LSB on the +-2 g range.
 
-On Fri, Dec 17, 2021 at 11:40:29AM +0000, Conor.Dooley@microchip.com wrote:
-> On 17/12/2021 11:17, Mark Brown wrote:
+In addition to its ultralow power consumption, the ADXL367
+has many features to enable true system level power reduction.
+It includes a deep multimode output FIFO, a built-in micropower
+temperature sensor, and an internal ADC for synchronous conversion
+of an additional analog input.
 
->  > Why do you need this property in the DT - isn't the number of chip
->  > selects in the IP a fixes property?
+V1 -> V2
+ * add support for vdd and vddio supplies
+ * lock fifo_watermark retrieval
+ * fix indentation of sysfs_emit for fifo_mode
+ * dt-bindings: add spi-max-frequency: true
+ * dt-bindings: remove cs-gpios property
+ * dt-bindings: remove status property
+ * dt-bindings: add support for vdd
 
-> Nope! It's an IP that's intended for use in FPGAs so the number of=20
-> selects may (and does) vary based on implementation.
+V2 -> V3
+ * MAINTAINERS: use wildcard for adxl367
+ * dt-bindings: adxl367@addr -> accelerometer@addr
+ * put asm include after linux includes
+ * drop registers accessed implicitly
+ * fifo_full -> fifo_watermark
+ * print expected device id
+ * remove INDIO_BUFFER_HARDWARE
+ * inline ADXL367_EVENT macro
+ * inline ADXL367_14BIT_SCAN_INFO
+ * inline regulator enum
+ * remove of.h in spi driver
+ * cast const void * to const u8 * in spi read
+ * switch to trigger-less buffer
+ * increase reset time as advised by hardware team
+ * let iio framework validate available channel masks
+ * enable adc or temp channel automatically on single read
+ * wait for 100ms after enabling adc or temp for output
+   to settle on single read (waiting on hardware team input)
+ * enable adc or temp channel automatically on buffered read
+ * claim direct mode when setting range
+ * claim direct mode when setting odr
+ * claim direct mode when setting event config
+ * sort status masks in descending bit order
+ * hardcode indio_dev name
+ * add some comments regarding spi message layout
+ * use bulk_write for activity and inactivity threshold
+ * use bulk_write for inactivity time
+ * use bool as return type of fifo format finding function
+ * remove shift from channels scan type
 
-That doesn't explain why the number is needed in the binding - why do
-you need this property in the DT?
+Cosmin Tanislav (2):
+  dt-bindings: iio: accel: add ADXL367
+  iio: accel: add ADXL367 driver
 
---AfGRrf1crhTWT0mA
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/iio/accel/adi,adxl367.yaml       |   79 +
+ MAINTAINERS                                   |    8 +
+ drivers/iio/accel/Kconfig                     |   27 +
+ drivers/iio/accel/Makefile                    |    3 +
+ drivers/iio/accel/adxl367.c                   | 1617 +++++++++++++++++
+ drivers/iio/accel/adxl367.h                   |   23 +
+ drivers/iio/accel/adxl367_i2c.c               |   89 +
+ drivers/iio/accel/adxl367_spi.c               |  163 ++
+ 8 files changed, 2009 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/accel/adi,adxl367.yaml
+ create mode 100644 drivers/iio/accel/adxl367.c
+ create mode 100644 drivers/iio/accel/adxl367.h
+ create mode 100644 drivers/iio/accel/adxl367_i2c.c
+ create mode 100644 drivers/iio/accel/adxl367_spi.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.34.1
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG8d/oACgkQJNaLcl1U
-h9BGLgf/SiqoIpPFvZymGI+lV8cyTUm+CuIWdAYRxHOotUpqpCdFDWSt6ungnucf
-L+CKgnigBiPYJ3jZs9yRuC1kaIDnha4hNFuGs8nlVgdVOd5k+PhGI3B6Vtz9sjv7
-UKnkHSHk7yEcMB1CKjrgWDs5d7dcaA9vwNNrQNLd0TaqtSPR8VPUuW4uM1/gPVbt
-g8MxN6GRUTiGKG8GIAVFXNQ1NFuGXti9FrbYZHelZQM811Gjua3bqRY6RfPGoaSu
-2AudboDMa+HNohXPvKaRolBubzwtXw2zX3GABTZSHaG9/X/3C9LeJFR53x1Avmib
-ak8CKqa7Sou8MLRP9OiktJGz1dPYTA==
-=9ef7
------END PGP SIGNATURE-----
-
---AfGRrf1crhTWT0mA--

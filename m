@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE044790E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CD54790EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238811AbhLQQCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S238599AbhLQQFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbhLQQCd (ORCPT
+        with ESMTP id S235165AbhLQQFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:02:33 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B863C061574;
-        Fri, 17 Dec 2021 08:02:33 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso4475705pjc.4;
-        Fri, 17 Dec 2021 08:02:33 -0800 (PST)
+        Fri, 17 Dec 2021 11:05:20 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD769C061574;
+        Fri, 17 Dec 2021 08:05:20 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so850575oog.2;
+        Fri, 17 Dec 2021 08:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gd9e5lJ9Xdrc0uDZFZ9we4a9UNXcjMLY1IV8r6XooqU=;
-        b=P/SaAriho7iCKhklzAF4N3rcbn4BTbLLOyk3nzchMsmBlnbpMzJP/FOTJNjiI86sef
-         T08XFDuGp7bGGrDGN7kWELynyg4wRP/M3xZR4ARCh5oWH7gBo+vzM/pxJ7D/R4nFhl/y
-         G//DWFZ6SI5FgPsRnGqGHtzwgaokBklcycF6NBUmsBwBeVCLEzQccEsreR6Mq5BQQEtz
-         5BbxhzsYuNmyQrxnztH+FwGXlP8JvKwFhJbTBGggTIwsMqITcFN7vWjWy3X+0A/hlIel
-         gcBztKtrVXpdisq6XPqJviDcSM3CsZz6SysItEShUAQf+HJB/dmZkI0x29HqKrcqan4A
-         ECIA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=j+RYYMyAC255ngvKr7ej8GXX/5rfv/bQjmLP0iJ8A7I=;
+        b=AiESwx+UVSv/jxu2pyy+csFCKtk7b2SwG1h1a9ORfhSYnJntga5tQSu+KfXLIL0Rn/
+         FnpkyTirsKY7JArj3n+ZVvROW5D3lFJce43btcxVIwouBD6WoYHewQ2O8OpA/hHvxlHB
+         AF/dCe/U+7d39cJE955XqjrYfcGEK+TVfVyfN8K0bPECIXq2ISnxg4CCA6LtMwCL5p6D
+         Hry7G+ac6C6ZkBYISfUqUqJf09JEmDBW58XpTngCjAn0Ku222ALtWanzBQZN7AB5aAEP
+         CNQp/Ni4c7lEBRFY3d4GjXeiB+xGoPI8sMP40d0H5Yyr9FM5u8jYWDDeKpgCQcyBrwLg
+         NMKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Gd9e5lJ9Xdrc0uDZFZ9we4a9UNXcjMLY1IV8r6XooqU=;
-        b=pG43LPfCIRCdWtSYfg//NDxbPOdvxAAYInLSWJVQt+lezSYTIhibmSoLuktk8hRhEx
-         03MO+dDz6AlCET9Y6rNiiBm6EA+jtmOHNZbQUGoxzidAPHLIc7kZziGKZuYxjoy3rszv
-         6/zl2x3J5ws2M3kel9HoIDQGRekq/9WAcSuAMss8GotMlJ8h7B3R9ddHpuCTL3EaXIP3
-         ITWmfhNvY6hd4+L8CRExM8/6OWk8KsiSdmgxLqMlA/LkpK4uPc4PfeHoVlZamG5dzeWd
-         +dL2aNtQt+b1ceCJWlXeTfjPFHe83X31F1Locl+l+qdhESrWLIXXGhjDHPIBnDQlJpGe
-         61Nw==
-X-Gm-Message-State: AOAM5310opaz1yRGS5Y8fEtFOx94yWyWeBMpP9pgPQpuQsqSPU0DfiVJ
-        9aK6s9M+4XDnPdBiKXYm6Ro=
-X-Google-Smtp-Source: ABdhPJz+DvgJl6fTwktZZBFCFPYBoNTGmMphKjTjgzXookL36RCV9ukcFuP5K0oNcQ1NRbvXr50XDw==
-X-Received: by 2002:a17:902:6b47:b0:142:82e1:6cf5 with SMTP id g7-20020a1709026b4700b0014282e16cf5mr4125468plt.28.1639756952578;
-        Fri, 17 Dec 2021 08:02:32 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id f21sm10691482pfc.85.2021.12.17.08.02.28
+        bh=j+RYYMyAC255ngvKr7ej8GXX/5rfv/bQjmLP0iJ8A7I=;
+        b=FSbMebMi0NOht4l1QQDKV/+15o/K54gPXiCpf2NNSG+xi0woQrfxaKKishlU2sj0Xc
+         5Trn7JdCPi4FumohQO9zYZfpcGYs8QTKyiDsJEkD87ds+hZcRlMu/F7R1YQGQRZ64PxZ
+         nO8E8NifLoEuKrrw22SuQHEenf36T+4NYEOuSRPM54lcLaFGajNlgDnY3FMCgXbvtM2W
+         ZenAta0lEu+NKFr3k7598pyjPk/A3cpuW3wVwftwG0oVgybUaeN7jpzpeOSftmGDT9gb
+         UMqQI2hqyJvbLAChz7zYYW98ZTZLf1J1Ac4JCiWJDlPTxDTGfBs6x/q5Hkfs3B/g1cK/
+         RBUA==
+X-Gm-Message-State: AOAM531PsR4kTmJC3Qw9v+v/KOE2LWAWLDfJuLNqfTml1/z1wp/gRhiT
+        Cs3MDJykvzO0Z4L8xI88oj3ooUMB6Xo=
+X-Google-Smtp-Source: ABdhPJyfkek1rEfr2BN6NY2jDcuv+eDhmSrtGdXKBkTC4n7SQ02w7Cuo/aP3r8aIzIg86nqLv8alEQ==
+X-Received: by 2002:a4a:d47:: with SMTP id 68mr2381251oob.92.1639757119848;
+        Fri, 17 Dec 2021 08:05:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j20sm1643616ota.76.2021.12.17.08.05.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 08:02:31 -0800 (PST)
-Message-ID: <23798061-647f-85fd-8e8e-fe50db09599e@gmail.com>
-Date:   Fri, 17 Dec 2021 08:02:27 -0800
+        Fri, 17 Dec 2021 08:05:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Arseny Demidov <arsdemal@gmail.com>
+Cc:     rahul.tanwar@linux.intel.com, Arseny Demidov <a.demidov@yadro.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211216083302.986-1-a.demidov@yadro.com>
+ <YbtK4mHxpdF5VtOk@smile.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <4a93a4cc-5b37-4524-add9-541bfbe3980e@roeck-us.net>
+Date:   Fri, 17 Dec 2021 08:05:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 3/6] ARM: dts: NSP: Rename SATA unit name
+In-Reply-To: <YbtK4mHxpdF5VtOk@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211217042001.479577-1-f.fainelli@gmail.com>
- <20211217042001.479577-4-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211217042001.479577-4-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/16/2021 8:19 PM, Florian Fainelli wrote:
-> Rename the SATA controller unit name from ahci to sata in preparation
-> for adding the Broadcom SATA3 controller YAML binding which will bring
-> validation.
+On 12/16/21 6:19 AM, Andy Shevchenko wrote:
+> On Thu, Dec 16, 2021 at 11:33:02AM +0300, Arseny Demidov wrote:
+>> In the file mr75203.c we have a macro named POWER_DELAY_CYCLE_256,
+>> the correct value should be 0x100. The register ip_tmr is expressed
+>> in units of IP clk cycles, in accordance with the datasheet.
+>> Typical power-up delays for Temperature Sensor are 256 cycles i.e. 0x100.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Should you provide Fixes tag?
 
-Applied to devicetree/next!
--- 
-Florian
+Yes. Also, please update the subject. This is not about "fix macro typo".
+it fixes a wrong/bad delay value.
+
+> 
+> ...
+> 
+>> -#define POWER_DELAY_CYCLE_256	0x80
+>> +#define POWER_DELAY_CYCLE_256	0x100
+>>   #define POWER_DELAY_CYCLE_64	0x40
+> 
+> I;m wondering why they are in hex? Perhaps the decimal is better for both.
+> 
+Maybe, but that is POV, and I tend to leave it up to driver authors to decide.
+It is definitely not something we would want to change as part of a bug fix.
+
+Thanks,
+Guenter

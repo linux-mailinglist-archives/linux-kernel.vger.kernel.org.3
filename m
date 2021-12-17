@@ -2,166 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD06F478D03
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A17478D06
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236930AbhLQOFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:05:43 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:41706 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhLQOFm (ORCPT
+        id S236940AbhLQOF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:05:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56664 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236749AbhLQOF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:05:42 -0500
-Received: by mail-ot1-f54.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so2960551otl.8;
-        Fri, 17 Dec 2021 06:05:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g03RicGR9jCGgYu9rbOy1z4bhFkncsLW5/9WH5otin0=;
-        b=2eRP517p2g/PP87LfQqdBzjdbYgEzvFgiOeFgRBSo6s+sUCF9n7SjKJO2Wt2A+4lm/
-         Yr9OIfU44fJrOdeAzlmKtVRTXPsHx7gWTv5OYBlwnm5QIAXi2dKQh1NMc0gDeKVYfu7U
-         Ic8sXTsX8GaTg4tlgsLGPjyQEzAcJBM+G3i+RTodPoMzYhAaE2367T9OfghI4MTiVjmT
-         8jWwTlK6OUg+PQSxJJ0iWSKTFtZQs4FfmufFG6qxgLjajDkfzCXRNNCtZ9/NTeYWnPt7
-         BPvM703SFq18jWSMhMUeHkVBaJlqg7dlGJ6WP0n7Cf61xQ0z5ZMD1otlagvaarTgW29R
-         11Rw==
-X-Gm-Message-State: AOAM530fD2QL0mrPF9/1Je+rUuh9Dtn1JyRiOqOuJu2cAJIfG/1s1U+B
-        W2Vjcz6FsAg58WqgJLTEj5rwMGU5h038i8u1nR0=
-X-Google-Smtp-Source: ABdhPJy/IphBLzZjsm4EXAGdbviICYzuhwIIecSgbras0W7fXy8zUbym4G24uZFUv9hMAT1aJFlGLXLsBT0coB58DYU=
-X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr2231331otj.16.1639749941912;
- Fri, 17 Dec 2021 06:05:41 -0800 (PST)
+        Fri, 17 Dec 2021 09:05:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0156A621DF;
+        Fri, 17 Dec 2021 14:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 630F5C36AEA;
+        Fri, 17 Dec 2021 14:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639749955;
+        bh=R3p4IlxpIOk+bhmWK3QHe8v2JljS8h79moLro0wuj0Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AwjlCQ4gubETPTyimE5qoeuOU4KeKvyoR2caZCn3yTlqTPhvAU8aifzMghWWptjt1
+         yomGTySuOrTSEsTI9lGYgcci4VctNHqo7SRB3OaNKw4IF2Iy5lKqZvTU82yaFUTIFT
+         yJehBlIjIlJ5S6sXAtFJGfbvx/aAZzV9zelX1E0ouwU9rr6T0C/6ZHTzjkA/jLhPVe
+         TRUKZylcDY0SvUZ8aaFqd5xypnXoAUiYvCTkOCvNoW4UAmM0p/jZKiEHuFEIakjd7N
+         44EdabyleIZnIq7zNUNoyQ7F6obG6RyEvVGMWfRgkd2HpSjFdoMiChJ3gP0gtpvmPg
+         +4Cp0y2AB3s5g==
+Received: by mail-wm1-f49.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so1616432wme.4;
+        Fri, 17 Dec 2021 06:05:55 -0800 (PST)
+X-Gm-Message-State: AOAM5324HyOuVjGWKDVWxl14ARxVMzjxdnVzNxR+bC+Aw7d1m6+ISjNI
+        NdeL0nhRBiaMwVXNuCFAsMeOzPQxZV12k8wYSCw=
+X-Google-Smtp-Source: ABdhPJxsUWz+N1ClJKnFPY/XkFL+DUSGHrR7kXnuztqtzZoPPENmUDb8MbOTP3vLH1mkgHgayBgiQkrzJxRkW3F2c7M=
+X-Received: by 2002:a1c:8013:: with SMTP id b19mr2770905wmd.35.1639749953718;
+ Fri, 17 Dec 2021 06:05:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-10-ray.huang@amd.com>
- <CAJZ5v0jbSC1Q1gn2+Hu6bJQN20uDDSbStdM3zHZ+UBR+YKsWQA@mail.gmail.com> <YbxByF9dEGrkR6Kr@amd.com>
-In-Reply-To: <YbxByF9dEGrkR6Kr@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 15:05:29 +0100
-Message-ID: <CAJZ5v0i_1kNWLeqWCR8_uPetq9o5yCYAxfpyciLn1KF55gb=6g@mail.gmail.com>
-Subject: Re: [PATCH v5 09/22] cpufreq: amd: add trace for amd-pstate module
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Steven Rostedt <rostedt@goodmins.org>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+ <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com> <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com> <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com> <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+In-Reply-To: <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 17 Dec 2021 15:05:37 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2=gm1OZtD+tN8Cn1RCuuOOCKFLyf6E2NzNYjeqNRq5bA@mail.gmail.com>
+Message-ID: <CAK8P3a2=gm1OZtD+tN8Cn1RCuuOOCKFLyf6E2NzNYjeqNRq5bA@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     John Garry <john.garry@huawei.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 8:53 AM Huang Rui <ray.huang@amd.com> wrote:
+On Fri, Dec 17, 2021 at 2:52 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > The CONFIG_LEGACY_PCI should take care of a lot of it, and I
+> > think that can be a single patch. I'd expand the Kconfig description
+> > to explain that this also covers PCIe devices that use the legacy
+> > I/O space even if they do not have a PCIe-to-PCI bridge in them.
+> >
+> > The introduction of CONFIG_HAS_IOPORT, plus selecting it from
+> > the respective architectures makes sense as another patch, but
+> > I would make that separate from the #ifdef and 'depends on'
+> > changes to individual subsystems or drivers, as they are
+> > better reviewed separately.
 >
-> On Fri, Dec 17, 2021 at 02:12:41AM +0800, Rafael J. Wysocki wrote:
-> > On Tue, Nov 30, 2021 at 1:38 PM Huang Rui <ray.huang@amd.com> wrote:
-> > >
-> > > Add trace event to monitor the performance value changes which is
-> > > controlled by cpu governors.
-> >
-> > This would need an ACK from Steve.
-> >
-> > >
-> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > > ---
-> > >  drivers/cpufreq/Makefile           |  6 ++-
-> > >  drivers/cpufreq/amd-pstate-trace.c |  2 +
-> > >  drivers/cpufreq/amd-pstate-trace.h | 77 ++++++++++++++++++++++++++++++
-> >
-> > Why are these two extra files necessary?
->
-> Please see below answer.
->
-> >
-> > >  drivers/cpufreq/amd-pstate.c       |  4 ++
-> > >  4 files changed, 88 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/cpufreq/amd-pstate-trace.c
-> > >  create mode 100644 drivers/cpufreq/amd-pstate-trace.h
-> > >
-> > > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> > > index c8d307010922..285de70af877 100644
-> > > --- a/drivers/cpufreq/Makefile
-> > > +++ b/drivers/cpufreq/Makefile
-> > > @@ -17,6 +17,10 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)  += cpufreq_governor_attr_set.o
-> > >  obj-$(CONFIG_CPUFREQ_DT)               += cpufreq-dt.o
-> > >  obj-$(CONFIG_CPUFREQ_DT_PLATDEV)       += cpufreq-dt-platdev.o
-> > >
-> > > +# Traces
-> > > +CFLAGS_amd-pstate-trace.o               := -I$(src)
-> > > +amd_pstate-y                           := amd-pstate.o amd-pstate-trace.o
-> > > +
-> > >  ##################################################################################
-> > >  # x86 drivers.
-> > >  # Link order matters. K8 is preferred to ACPI because of firmware bugs in early
-> > > @@ -25,7 +29,7 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)      += cpufreq-dt-platdev.o
-> > >  # speedstep-* is preferred over p4-clockmod.
-> > >
-> > >  obj-$(CONFIG_X86_ACPI_CPUFREQ)         += acpi-cpufreq.o
-> > > -obj-$(CONFIG_X86_AMD_PSTATE)           += amd-pstate.o
-> > > +obj-$(CONFIG_X86_AMD_PSTATE)           += amd_pstate.o
-> > >  obj-$(CONFIG_X86_POWERNOW_K8)          += powernow-k8.o
-> > >  obj-$(CONFIG_X86_PCC_CPUFREQ)          += pcc-cpufreq.o
-> > >  obj-$(CONFIG_X86_POWERNOW_K6)          += powernow-k6.o
-> > > diff --git a/drivers/cpufreq/amd-pstate-trace.c b/drivers/cpufreq/amd-pstate-trace.c
-> > > new file mode 100644
-> > > index 000000000000..891b696dcd69
-> > > --- /dev/null
-> > > +++ b/drivers/cpufreq/amd-pstate-trace.c
-> > > @@ -0,0 +1,2 @@
-> > > +#define CREATE_TRACE_POINTS
-> > > +#include "amd-pstate-trace.h"
-> > > diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
-> > > new file mode 100644
-> > > index 000000000000..647505957d4f
-> > > --- /dev/null
-> > > +++ b/drivers/cpufreq/amd-pstate-trace.h
-> > > @@ -0,0 +1,77 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + * amd-pstate-trace.h - AMD Processor P-state Frequency Driver Tracer
-> > > + *
-> > > + * Copyright (C) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
-> > > + *
-> > > + * Author: Huang Rui <ray.huang@amd.com>
-> > > + */
-> > > +
-> > > +#if !defined(_AMD_PSTATE_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-> > > +#define _AMD_PSTATE_TRACE_H
-> > > +
-> > > +#include <linux/cpufreq.h>
-> > > +#include <linux/tracepoint.h>
-> > > +#include <linux/trace_events.h>
-> > > +
-> > > +#undef TRACE_SYSTEM
-> > > +#define TRACE_SYSTEM amd_cpu
-> > > +
-> > > +#undef TRACE_INCLUDE_FILE
-> > > +#define TRACE_INCLUDE_FILE amd-pstate-trace
-> > > +
-> > > +#define TPS(x)  tracepoint_string(x)
-> > > +
-> > > +TRACE_EVENT(amd_pstate_perf,
-> >
-> > Could this be added to include/trace/events/power.h ?
-> >
->
-> Actually, that is my original idea, but once I move the trace into
-> include/trace/events/power.h, the amd-pstate driver cannot build as "ko"
-> anymore. This is the early stage, "ko" is friendly and flexible for us to
-> switch and compare between amd-pstate and acpi-cpufreq. I can move it into
-> "power" trace events once we address the performance issue on shared memory
-> solution.
+> Sounds like a plan. How should I mark authorship in the split up
+> patches. I definitely still see you as the main author to all of this
+> but of course I'll have to do quite a bit of editing and you shouldn't
+> get blamed for any mistakes I make. So not sure how to handle Sign-off-
+> bys and git's author property.
 
-OK, I guess it's fine then, but it still needs an ACK from Steve.
+I don't care much either way. The two options are:
+
+a) leave me as patch author, with my Signed-off-by, and list
+    in the changelog what you have changed that wasn't in
+    my version
+
+b) list me as 'Co-developed-by' and have yourself as the patch
+    author.
+
+        Arnd

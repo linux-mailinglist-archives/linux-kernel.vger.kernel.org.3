@@ -2,88 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F7D4795B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D623B4795B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240920AbhLQUoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:44:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28224 "EHLO
+        id S237097AbhLQUpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:45:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37747 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237055AbhLQUoG (ORCPT
+        by vger.kernel.org with ESMTP id S234486AbhLQUpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:44:06 -0500
+        Fri, 17 Dec 2021 15:45:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639773846;
+        s=mimecast20190719; t=1639773917;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HhXCW/gkgebaf8J387KILDsdSIH5KpfDKz809CKCWyo=;
-        b=eft0JoXDVzKrDmpkVzFwj8Ui1tuQEdzj8oWdk5ugmKhUzdHRTPzAvUC6q1hPg+XRMmGF17
-        tm8FGZC3PfjlE7aakh6O6KY6e8Z87X8J/h+PnXTneCllIKj+pPbj+RtPF2zsx/UKvJpltm
-        t2aN6AYl81JiE3dPOGVCOoZ4W718nUY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=mPpPJN7KbPRNIPZSMIG4COjk+/gblJ9JKatIFH/NkxI=;
+        b=eP1MYxRRl035onQPboTyMxsBeXMYeU/EzL3jWLA1HX/+l/Z1CThIxM7/GwBcjDaBqbSHnE
+        lF4WTdSZPnHce/XTwYUL+ybOpY4/mQknbjHYt7SqbbhTSIPKXZ22gT4flvh3jfpdF5LIwM
+        V5CB6+8uc7xTryECXc4dUbj7LxkEMYA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-473-r3psBnitNDePrXJsjLMkbA-1; Fri, 17 Dec 2021 15:44:02 -0500
-X-MC-Unique: r3psBnitNDePrXJsjLMkbA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 64B781006AA2;
-        Fri, 17 Dec 2021 20:43:58 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97E16610AE;
-        Fri, 17 Dec 2021 20:43:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <310b791fc8afde2a108af4eb06bbe678f4141fac.camel@kernel.org>
-References: <310b791fc8afde2a108af4eb06bbe678f4141fac.camel@kernel.org> <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk> <163967106467.1823006.6790864931048582667.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 18/68] fscache: Implement cookie user counting and resource pinning
+ us-mta-528-dPfq4ZCEOeKCHVNoaJXS8A-1; Fri, 17 Dec 2021 15:45:16 -0500
+X-MC-Unique: dPfq4ZCEOeKCHVNoaJXS8A-1
+Received: by mail-wm1-f69.google.com with SMTP id ay34-20020a05600c1e2200b00337fd217772so1551121wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:45:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=mPpPJN7KbPRNIPZSMIG4COjk+/gblJ9JKatIFH/NkxI=;
+        b=gGRGQXSm+pafK0DH5ydjwxmv1azH5IdrBKXs3sdKuY7XBLBP+wmrD3BnUl7wCM1d7I
+         yaPQWHhfnEiJpD1zmD/iSug71GTNsm7uyrE4MS34/BiOr0nsRgxnN05n8Hsn2DdDbsIE
+         M9BmEISs/6hMPDbLflorXOFSXMlK4EvPQPfcJpRJoZqlVco79bP/XEF5QaG1fj1vtYbV
+         XoRgBP0y6VpML14hTlF05rG0VM8vgfhZBRjbx3EL1+SyXTzPrGfgRvss1u2RrVYa+tMd
+         sxCbW8exqlHQDkSd4dfzKrtkKivPKNnoDU9/h30AJPB5zjWWBhd0+94X8OkocQip1wgL
+         WDyA==
+X-Gm-Message-State: AOAM532xdGZPByXg3UyZ40WSAoSR7YbJWovLWtsX1bFCnRgA+6y9MWVp
+        SjgxDBSAvra3nT865alyZIkFn/BxjM+iqYouz3uO6z775P7xgUaxeFAeWoJqr5Ut2BjRouGflxY
+        DpPzW/yN3C4iJQEozz686D5jM
+X-Received: by 2002:a5d:4706:: with SMTP id y6mr3943606wrq.435.1639773914799;
+        Fri, 17 Dec 2021 12:45:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxfFap8HkDu143lE7Idu4Dk3kJRb/So/+z+DQIixqjYZjuuVPkfH789mDxQMEKE7OKKkVrJlg==
+X-Received: by 2002:a5d:4706:: with SMTP id y6mr3943579wrq.435.1639773914589;
+        Fri, 17 Dec 2021 12:45:14 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id z11sm8830241wmf.9.2021.12.17.12.45.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 12:45:14 -0800 (PST)
+Message-ID: <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com>
+Date:   Fri, 17 Dec 2021 21:45:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2084363.1639773828.1@warthog.procyon.org.uk>
-Date:   Fri, 17 Dec 2021 20:43:48 +0000
-Message-ID: <2084364.1639773828@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
-
-> > +unsigned int fscache_lru_cookie_timeout = 10 * HZ;
-> >  
+On 17.12.21 20:04, Linus Torvalds wrote:
+> On Fri, Dec 17, 2021 at 3:34 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> + * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
+>> + * set) and then unmaps the target page, we have:
+>> + *
+>> + * * page has mapcount == 1 and refcount > 1
 > 
-> Looks like it only pops after 10s? That's a bit more than the "couple of
-> seconds" mentioned in the changelog. In fact, that seems like quite a
-> long time.
+
+Hi Linus,
+
+> All these games with mapcount makes me think this is still broken.
 > 
-> Did you arrive at this value empirically somehow?
+> mapcount has been a horribly broken thing in the past, and I'm not
+> convinced it's not a broken thing now.
 
-It was 2s originally, but I upped for some reason I don't remember.  I've left
-it as it seems to work, but it is arbitrary.  I should make this configurable
-perhaps and/or maybe make it based on the number of cookies on the LRU since
-the number of open files is what matters.
+It all started when Jann detected the security issue in GUP – and this
+patch set is fixing the problem exactly there, in GUP itself. Are you
+aware of COW issues regarding the mapcount if we would remove GUP from
+the equation? My point is that COW without GUP works just perfectly
+fine, but I’ll be happy to learn about other cases I was ignoring so far.
 
-I don't have a good heuristic, so I'll just fix the commit message for now.
+Unfortunately, page_count() is even more unreliable, and the issues
+we're just detecting (see the link in the cover letter: memory
+corruptions inside user space -- e.g., lost DMA writes) are even worse
+than what we had before -- IMHO of course.
 
-David
+> 
+>> +       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
+>> +       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
+>> +           page_mapcount(vmf->page) > 1) {
+> 
+> What keeps the mapcount stable in here?
+
+So, we're reading an atomic value here. It’s read via atomic_read for
+regular pages, and the THP mapcount case has also been made atomic (as
+lockless as page_count) in patch #5.
+
+If a page is mapped exactly once, page_mapcount(page) == 1 and there is
+nothing to do.
+
+If the page is mapped more than once, page_mapcount(page) > 1 and we
+would have to trigger unsharing. And it’s true that the value is
+unstable in this case, but we really only care about page_mapcount(page)
+> 1 vs. page_mapcount(page) == 1. In this respect, there is no
+difference from the instability of the page_count and the mapcount – we
+still only care if it’s >1 or == 1.
+
+So the only case we could care about is concurrent additional mappings
+that can increment the mapcount -- which can only happen due to
+concurrent fork. So if we're reading page_mapcount(page) == 1 the only
+way we can get page_mapcount(page) > 1 is due to fork(). But we're
+holding the mmap_lock in read mode during faults and fork requires the
+mmap_lock in write mode.
+
+
+> 
+> And I still believe that the whole notion that "COW should use
+> mapcount" is pure and utter garbage.
+> 
+> If we are doing a COW, we need an *exclusive* access to the page. That
+> is not mapcount, that is the page ref.
+
+I thought about this a lot, because initially I had the same opinion.
+
+But really, we don't care about any speculative references (pagecache,
+migration, daemon, pagevec, ...) or any short-term "I just want to grab
+this reference real quick such that the page can't get freed" references.
+
+All we care about are GUP references, and we attack that problem at the
+root by triggering unsharing exactly at the point where GUP comes into play.
+
+So IMHO GUP is the problem and needs unsharing either:
+* On write access to a shared anonymous page, which is just COW as we
+know it.
+* On read access to a shared anonymous page, which is what we’re
+proposing in this patch set.
+
+So as soon as GUP comes into play, even if only pinning R/O, we have to
+trigger unsharing . Doing so enforces the invariant that it is
+impossible to take a GUP pin on an anonymous page with a mapcount > 1.
+In turn, the COW does not need to worry about the GUP after fork()
+security issue anymore and it can focus on doing optimally the COW
+faults as if GUP just wouldn’t exist.
+
+
+-- 
+Thanks,
+
+David / dhildenb
 

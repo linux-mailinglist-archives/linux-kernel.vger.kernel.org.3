@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C25478EFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E8F478EFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237844AbhLQPGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S237856AbhLQPG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbhLQPGS (ORCPT
+        with ESMTP id S237848AbhLQPG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:06:18 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3661AC061574;
-        Fri, 17 Dec 2021 07:06:18 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id g14so8885603edb.8;
-        Fri, 17 Dec 2021 07:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LrO+5tCBVwi3dHMMdMTZMMTrnVmLv4B3ynaYuBuEgWI=;
-        b=W0L3ZZe0yg5YXP3H04rCaj1LWLOfuJQ/YqsO6rJ7yYUHmpJt+lLzbzJkPKi9zLEcnV
-         0kb2/tvBgoFG4+Ot3zW4aZcxBYx1VkpPVxdFyXRceygy/5UivxxPCHnuXDdK+qNqYjwR
-         /8vlS1Ii6w5io6oEEq3fvbEM9R89+ukzlWIN2rTKbpAyVqiqRvr4NrrbTIq66ilh6rPv
-         vqtp5DiBirwjn9VKW4yA6ecAIA/WvbWmS1Vw077ptAaQsgj6Pma2J395Q/qtkcexAmh5
-         mxPWaz0wXnwof8Uk0ZsX/lh0+7cGoi9q4MgB2dXLwuFJ7scWJr8KA/gvMJyRKX7MKNSm
-         B2pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LrO+5tCBVwi3dHMMdMTZMMTrnVmLv4B3ynaYuBuEgWI=;
-        b=DOwTHMcGqKFU22q6vrhnKGEYOie2ZNh1sAGtS//AqLI478PaDZtE7ih1LlbnLAqNqi
-         U/DVVTHue93NarOaawDinzf15h1igmdl187IG3NuCd1cGxRnuUWF78K2f2lHtzSRI57C
-         fx59xVEEdXFRwYZcUKmKJhAXIZ2GDK6cWIK3cURSm3qdEJrHkX8gj1m81OmhbLiHBm60
-         4oTag7YVXYEDNP76Hy7RAnxjWkjkBIkh4luPBGxLLC0l1135sO1rnfMJ7OsWxiC8fRTA
-         zA2v0CmpeqkRMz+TdYAC31a9w7kEcmhXSgq+PlcmE8QJFG44OKSJPBvdOlTG2Vyn4pRW
-         mvRg==
-X-Gm-Message-State: AOAM532ut7uU3yjp6DWl5eZi21+DxobDOJi8ficsXiqfcVuY9DjA2Vtj
-        sdiJs+uuKHIwaE/wRGT6QqO5w83KKPXkjK5Gffc=
-X-Google-Smtp-Source: ABdhPJwsMhiSSh7ZunvjuEXkwXYl6bLbA4p+WWapf8ST/Zlcwju0BVfRGdsZuLBjpVr7cpXFX9roobxiu5pEHS4NRNg=
-X-Received: by 2002:a50:9d48:: with SMTP id j8mr3181101edk.192.1639753576821;
- Fri, 17 Dec 2021 07:06:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20211215111845.2514-1-urezki@gmail.com> <20211215111845.2514-5-urezki@gmail.com>
- <YbpFfsTvB96g4+yU@pc638.lan> <YbtxBvfGR97C8r8U@google.com>
-In-Reply-To: <YbtxBvfGR97C8r8U@google.com>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Fri, 17 Dec 2021 16:06:05 +0100
-Message-ID: <CA+KHdyWn=+Y=EHK6zWvMQBrh37gxqtiMAe-5yPh=rqPXF_GkmA@mail.gmail.com>
-Subject: Re: [PATCH] mfd: dln2: Switch to kvfree_rcu() API
+        Fri, 17 Dec 2021 10:06:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EF0C061574;
+        Fri, 17 Dec 2021 07:06:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5014862258;
+        Fri, 17 Dec 2021 15:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02804C36AE7;
+        Fri, 17 Dec 2021 15:06:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639753587;
+        bh=reSbYJsb2lp4YkJ36gpZzEnh+V1VGf/jaqK9usFoEPE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jnTkSMMbUX0E4r7fq7fLheHX71+ibSEGk3+4BjQRMNluPyw8HQi0RLWXUlqPqOT5y
+         Pqj3qMedcF7cBPMtey0kEo9LB5eoxdBBzsxA1OvHDYZhxRaCpepAf5ec35tU89m2uY
+         5kw/217MJDC5GS9vGmS053m9XnjHueIwcnZLw13LiZtU+2P0EJLehLOM/vN5D1vLgY
+         7H5MDZ1Y21NSV+HxEBtYcdJuGvj7vkSoZAPlYJDiUEEUC1/P8Jb/kPr++rvDrzC4NK
+         0By1l2ewSIwogNC8udO0scT35o0X0VrJ2B4k6bkAw/S4W1U9F9aGMvwFcQIUeKUkCb
+         VuLvlY7Tln1UA==
+Date:   Fri, 17 Dec 2021 07:06:26 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Axtens <dja@axtens.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraju@codeaurora.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] sctp: export sctp_endpoint_{hold,put}() and
+ return incremented endpoint
+Message-ID: <20211217070626.790b8340@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211217134607.74983-1-lee.jones@linaro.org>
+References: <20211217134607.74983-1-lee.jones@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 6:02 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Wed, 15 Dec 2021, Uladzislau Rezki wrote:
->
-> > On Wed, Dec 15, 2021 at 12:18:41PM +0100, Uladzislau Rezki (Sony) wrote:
-> > > Instead of invoking a synchronize_rcu() to free a pointer
-> > > after a grace period we can directly make use of new API
-> > > that does the same but in more efficient way.
-> > >
-> > > TO: Lee Jones <lee.jones@linaro.org>
-> > > TO: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > ---
-> > >  drivers/mfd/dln2.c | 6 ++----
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
-> > > index 852129ea0766..365e3e77cac4 100644
-> > > --- a/drivers/mfd/dln2.c
-> > > +++ b/drivers/mfd/dln2.c
-> > > @@ -179,10 +179,8 @@ void dln2_unregister_event_cb(struct platform_device *pdev, u16 id)
-> > >
-> > >     spin_unlock_irqrestore(&dln2->event_cb_lock, flags);
-> > >
-> > > -   if (found) {
-> > > -           synchronize_rcu();
-> > > -           kfree(i);
-> > > -   }
-> > > +   if (found)
-> > > +           kvfree_rcu(i);
-> > >  }
-> > >  EXPORT_SYMBOL(dln2_unregister_event_cb);
-> > >
-> > + Lee Jones <lee.jones@linaro.org>
-> > + Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
->
-> I can't do anything with this.
->
-> Send it properly please.
->
-I got. Will do.
+On Fri, 17 Dec 2021 13:46:06 +0000 Lee Jones wrote:
+> For example, in sctp_sock_dump(), we could have the following hunk:
+> 
+> 	sctp_endpoint_hold(tsp->asoc->ep);
+> 	ep = tsp->asoc->ep;
+> 	sk = ep->base.sk
+> 	lock_sock(ep->base.sk);
+> 
+> It is possible for this task to be swapped out immediately following
+> the call into sctp_endpoint_hold() that would change the address of
+> tsp->asoc->ep to point to a completely different endpoint.  This means
+> a reference could be taken to the old endpoint and the new one would
+> be processed without a reference taken, moreover the new endpoint
+> could then be freed whilst still processing as a result, causing a
+> use-after-free.
+> 
+> If we return the exact pointer that was held, we ensure this task
+> processes only the endpoint we have taken a reference to.  The
+> resultant hunk now looks like this:
+> 
+>       ep = sctp_endpoint_hold(tsp->asoc->ep);
+> 	sk = ep->base.sk
+> 	lock_sock(sk);
 
-Thanks!
+If you have to explain what the next patch will do to make sense 
+of this one it really is better to merge the two patches.
+Exporting something is not a functional change, nor does it make
+the changes easier to review, in fact the opposite is true.
 
--- 
-Uladzislau Rezki
+> Fixes: 8f840e47f190c ("sctp: add the sctp_diag.c file")
+
+This patch in itself fixes exactly nothing.

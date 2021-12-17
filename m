@@ -2,134 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30056478AD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B01478AD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235869AbhLQMGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S235838AbhLQMGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235845AbhLQMGk (ORCPT
+        with ESMTP id S235463AbhLQMGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:06:40 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47652C061574;
-        Fri, 17 Dec 2021 04:06:40 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id fo11so2109570qvb.4;
-        Fri, 17 Dec 2021 04:06:40 -0800 (PST)
+        Fri, 17 Dec 2021 07:06:35 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DEFC061574;
+        Fri, 17 Dec 2021 04:06:35 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id cf39so4123991lfb.8;
+        Fri, 17 Dec 2021 04:06:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NwgjbNTF2AWawWSd7aciZMtjNd2TAYgTWjwPPG2Ao+k=;
-        b=WLDcyhSUVMyrmIGZVETG9Wal7qkdSO780y5q60sYc9FufGb/O32XqI9O/lOaVGIyMs
-         0AIgCVT1OzT4EOv9cczRYi8ZIc0KsygZDCZ5cGVI8Cg6I0KWUJY6zVJ3WFlUr2UM4RrJ
-         IZAyOrqfOaW0rUquoO0ImR9e4xbrqMhWirlRLzn8cqrQIcAEtCCUFv4wXH+h6EehUPBg
-         k7RtjdXFPVcIsEp3z3EmIfu0AYSYxAhGOxyyJZyfE107bHBFSi2S9aGc3YlI42Qn2vnL
-         d2Pbm8O+wZjknX9eqpwlF0itqPEMrYgdmPnKNtSANsnCcxP7Yb0U+e5TunVKf2MdoNs2
-         umqQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6M3MbQrHoUjpUccStJD6KzaqR/l6BqhCgeKQWrlruZU=;
+        b=TZoCeDKclfMpf9fXGrtQCub/8jPtGVwgTkHKJbppoixs0pKtAcjoKpemgHi/i3x8rS
+         draQrX0MrzCl9R7MruTD0r1GYRg2S7vYYc4K3KXhhKiWsyCKGWutKYWR+mCWCNFYGJf/
+         KbnH7XQPb/zrqU35iwF7arFogANOLfPAR7baPxccUPXXZbmBZLr0b+fpufMqiSqP+3Ny
+         UQI0zFAX4RsY8bnVxq8oAOsUrTQEmhuDG0xpx0dnsJx4jyFBDrJG79i+/v5sPhjEmIu1
+         oGEqtvRPrNQF/DN7SOMMxX2aY1ca2dSmacvnRY5ZxNZ6aJW9CwAjWWzQkqmWDGEvjmJh
+         b8Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NwgjbNTF2AWawWSd7aciZMtjNd2TAYgTWjwPPG2Ao+k=;
-        b=XrF9ic0pJN3wFlzfPH3zISymIigw8gO404x1VMVbWM89JW+XX0zqBpfYUlFbrFWRMg
-         cYjs27VEfHtDX1Yr7smpYGMjYbObkHOdXBvPYZMOtWNMUbwC9ccNwU3x+aAB4TqcLd2y
-         czmUyVfuLLZ5RZDWxiiXJyYmnaWZjdMGTMYk/danitwT+9NjCGcNlAexlq1/d8NBJWUT
-         r+Fc78JnsmtM36ro2fLzWrni36xAOSOezz4Lq1z+/QJVoo9O+xl0OqBIqrvalz4/f18+
-         hdQ7l122lmSnQDcB9Mlyx9cYt476Uk8NU47YdXWnC+j9hx6glLAK3FOrnhf0reSwx7U/
-         Szlg==
-X-Gm-Message-State: AOAM533gNPJB1dbRo7HH6SDtmYfnCJ9Ybk8RHpLYRvtudnVBdYQY+zqE
-        2M0EhQVZ4k1GGD90mL3cRbM/bMAWVANilwlr3bg=
-X-Google-Smtp-Source: ABdhPJwe96itCmXKag5ptWEiDyxw39VJXuH5D00/SrEDhhWF8d6dkOji7lVebUQhnuDBQ24ULsyNs3z2PAHJgCRYjoI=
-X-Received: by 2002:a0c:e808:: with SMTP id y8mr2009792qvn.48.1639742798029;
- Fri, 17 Dec 2021 04:06:38 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6M3MbQrHoUjpUccStJD6KzaqR/l6BqhCgeKQWrlruZU=;
+        b=Agro+9RDa6cqcwg0UOJf3GbUqdaoS5lpUMutARJNNDsb6pgHynkIw3XgY9McAqPf/K
+         fGhnvpgiWxVaz+R9XR9WsjQjMVSJjA9mCGcbL+UlwmirJJXDs+fENlXPAL4zePstUDGJ
+         NfyQILGesGEGwvNXkix/6sd9n3svkWgs65BHg3HvmDwNq61tyNhU5KOBOWXR2gN+wCD5
+         idIwaQ/Yb4yrSF9w+rxHekzD3vJUwC95HealBfPW0Urx5YvNvbqlJDLCJVazgrmKm1af
+         72z88Du2/3W8SNW0GFl/sqStrRcnoTaSuw8h8SmINdE16PyMWlwCybW2prBG8JE+Bg3q
+         Uc8g==
+X-Gm-Message-State: AOAM5329V2/wVRzaRXkeo5hfzVtzUHWY2npXwMfl/USovLuFmivLtwRd
+        uJTXAdJYprIi7AXLTq4ZMuY=
+X-Google-Smtp-Source: ABdhPJzKPM2snRZWBtYCKCXoiHebfGyxJ1l/pZ0YDKpe0OrL1gH62lsc4wfcprtQcDHiIm2pjUUsqg==
+X-Received: by 2002:a05:6512:3053:: with SMTP id b19mr2655278lfb.276.1639742793705;
+        Fri, 17 Dec 2021 04:06:33 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id h6sm1688183ljb.130.2021.12.17.04.06.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 04:06:33 -0800 (PST)
+Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20211204143725.31646-1-digetx@gmail.com>
+ <Ybo6tsnQM6OacoZs@sirena.org.uk>
+ <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com>
+ <7179a409-d838-0e9e-4600-785e69c3e3a6@gmail.com> <YbwoWhg6h8ChE5Xs@matsya>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4be76f91-17dc-520c-fe3b-bdfc13437da4@gmail.com>
+Date:   Fri, 17 Dec 2021 15:06:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211009221711.2315352-1-robimarko@gmail.com> <163890036783.24891.8718291787865192280.kvalo@kernel.org>
- <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com> <09a27912-9ea4-fe75-df72-41ba0fa5fd4e@gmail.com>
-In-Reply-To: <09a27912-9ea4-fe75-df72-41ba0fa5fd4e@gmail.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 17 Dec 2021 13:06:26 +0100
-Message-ID: <CAOX2RU6qaZ7NkeRe1bukgH6OxXOPvJS=z9PRp=UYAxMfzwD2oQ@mail.gmail.com>
-Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF selection
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     Kalle Valo <kvalo@kernel.org>, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Thibaut <hacks@slashdirt.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YbwoWhg6h8ChE5Xs@matsya>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 15:07, Christian Lamparter <chunkeey@gmail.com> wrote:
->
-> On 08/12/2021 13:21, Robert Marko wrote:
-> > On Tue, 7 Dec 2021 at 19:06, Kalle Valo <kvalo@kernel.org> wrote:
-> >>
-> >> Robert Marko <robimarko@gmail.com> wrote:
-> >>
-> >>> Some ath10k IPQ40xx devices like the MikroTik hAP ac2 and ac3 require the
-> >>> BDF-s to be extracted from the device storage instead of shipping packaged
-> >>> API 2 BDF-s.
-> >>>
-> >>> This is required as MikroTik has started shipping boards that require BDF-s
-> >>> to be updated, as otherwise their WLAN performance really suffers.
-> >>> This is however impossible as the devices that require this are release
-> >>> under the same revision and its not possible to differentiate them from
-> >>> devices using the older BDF-s.
-> >>>
-> >>> In OpenWrt we are extracting the calibration data during runtime and we are
-> >>> able to extract the BDF-s in the same manner, however we cannot package the
-> >>> BDF-s to API 2 format on the fly and can only use API 1 to provide BDF-s on
-> >>> the fly.
-> >>> This is an issue as the ath10k driver explicitly looks only for the
-> >>> board.bin file and not for something like board-bus-device.bin like it does
-> >>> for pre-cal data.
-> >>> Due to this we have no way of providing correct BDF-s on the fly, so lets
-> >>> extend the ath10k driver to first look for BDF-s in the
-> >>> board-bus-device.bin format, for example: board-ahb-a800000.wifi.bin
-> >>> If that fails, look for the default board file name as defined previously.
-> >>>
-> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >>
-> >> Can someone review this, please? I understand the need for this, but the board
-> >> handling is getting quite complex in ath10k so I'm hesitant.
-> >>
-> >> What about QCA6390 and other devices. Will they still work?
-> > Hi Kalle,
-> > everything else should just continue working as before unless the
-> > board-bus-device.bin file
-> > exists it will just use the current method to fetch the BDF.
-> >
-> > Also, this only applies to API1 BDF-s.
-> >
-> > We are really needing this as currently there are devices with the
-> > wrong BDF being loaded as
-> > we have no way of knowing where MikroTik changed it and dynamic
-> > loading would resolve
-> > all of that since they are one of the rare vendors that embed the
-> > BDF-s next to calibration data.
->
-> Isn't the only user of this the non-upstreamable rb_hardconfig
-> mikrotik platform driver? So, in your case the devices in question
-> needs to setup a detour through the userspace firmware (helper+scripts)
-> to pull on the sysfs of that mikrotik platform driver? Wouldn't it
-> be possible to do this more directly?
+17.12.2021 09:04, Vinod Koul пишет:
+> On 16-12-21, 17:29, Dmitry Osipenko wrote:
+>> 15.12.2021 22:19, Dmitry Osipenko пишет:
+>>> 15.12.2021 21:57, Mark Brown пишет:
+>>>> On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
+>>>>
+>>>>> I based S/PDIF patches on Arnd's Bergmann patch from a separate series [1]
+>>>>> that removes obsolete slave_id. This eases merging of the patches by
+>>>>> removing the merge conflict. This is a note for Mark Brown.
+>>>> That's not in my tree so I'll need either a pull request with the series
+>>>> or a resend after the merge window.
+>>> This patch is included as a part of this series, please see the patch #6.
+>>>
+>>> I saw that Vinod Koul already merged it into his DMA tree [1] a day ago,
+>>> but there is no stable branch there.
+>>>
+>>> [1]
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/log/?h=next
+>>>
+>>
+>> Vinod, will you be a able to create immutable branch for us with the
+>> "dmaengine: kill off dma_slave_config->slave_id" patches [1]?
+>>
+>> [1] https://lore.kernel.org/all/20211122222203.4103644-1-arnd@kernel.org/
+> 
+> Here you go:
+> 
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine_topic_slave_id_removal_5.17
+> 
+> for you to fetch changes up to 3c219644075795a99271d345efdfa8b256e55161:
+> 
+>   dmaengine: remove slave_id config field (2021-12-17 11:23:56 +0530)
+> 
+> ----------------------------------------------------------------
+> dmaengine_topic_slave_id_removal_5.17
+> 
+> Tag for dmaengine slave_id removal topic branch which should be merged
+> into v5.17
+> 
+> ----------------------------------------------------------------
+> Arnd Bergmann (11):
+>       ASoC: tegra20-spdif: stop setting slave_id
+>       dmaengine: tegra20-apb: stop checking config->slave_id
+>       ASoC: dai_dma: remove slave_id field
+>       spi: pic32: stop setting dma_config->slave_id
+>       mmc: bcm2835: stop setting chan_config->slave_id
+>       dmaengine: shdma: remove legacy slave_id parsing
+>       dmaengine: pxa/mmp: stop referencing config->slave_id
+>       dmaengine: sprd: stop referencing config->slave_id
+>       dmaengine: qcom-adm: stop abusing slave_id config
+>       dmaengine: xilinx_dpdma: stop using slave_id field
+>       dmaengine: remove slave_id config field
+> 
+>  drivers/dma/mmp_pdma.c             |  6 ------
+>  drivers/dma/pxa_dma.c              |  7 -------
+>  drivers/dma/qcom/qcom_adm.c        | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+>  drivers/dma/sh/shdma-base.c        |  8 --------
+>  drivers/dma/sprd-dma.c             |  3 ---
+>  drivers/dma/tegra20-apb-dma.c      |  6 ------
+>  drivers/dma/xilinx/xilinx_dpdma.c  | 17 +++++++++++------
+>  drivers/gpu/drm/xlnx/zynqmp_disp.c |  9 +++++++--
+>  drivers/mmc/host/bcm2835.c         |  2 --
+>  drivers/mtd/nand/raw/qcom_nandc.c  | 14 ++++++++++++--
+>  drivers/spi/spi-pic32.c            |  2 --
+>  drivers/tty/serial/msm_serial.c    | 15 +++++++++++++--
+>  include/linux/dma/qcom_adm.h       | 12 ++++++++++++
+>  include/linux/dma/xilinx_dpdma.h   | 11 +++++++++++
+>  include/linux/dmaengine.h          |  4 ----
+>  include/sound/dmaengine_pcm.h      |  2 --
+>  sound/core/pcm_dmaengine.c         |  5 ++---
+>  sound/soc/tegra/tegra20_spdif.c    |  1 -
+>  18 files changed, 117 insertions(+), 63 deletions(-)
+>  create mode 100644 include/linux/dma/qcom_adm.h
+>  create mode 100644 include/linux/dma/xilinx_dpdma.h
 
-Yes, its the sole current user as its the only vendor shipping the BDF
-as part of the
-factory data and not like a userspace blob.
+Thank you!
 
-I don't see how can it be more direct, its the same setup as when
-getting pre-cal
-data for most devices currently.
-
-I am adding Thibaut who is the author of the platform driver.
-
-Regards,
-Robert
->
-> Cheers,
-> Christian

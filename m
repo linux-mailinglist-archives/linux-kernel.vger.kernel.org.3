@@ -2,80 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 927F7478319
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB3547831B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhLQCVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:21:55 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:37088 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231211AbhLQCVx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:21:53 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowABXXp4r9Lthz_W3Aw--.16086S2;
-        Fri, 17 Dec 2021 10:21:31 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch, Hawking.Zhang@amd.com,
-        kevin1.wang@amd.com, Feifei.Xu@amd.com, Oak.Zeng@amd.com,
-        john.clements@amd.com, Jinzhou.Su@amd.com, Jiawei.Gu@amd.com,
-        Dennis.Li@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/amdgpu: potential dereference of null pointer
-Date:   Fri, 17 Dec 2021 10:21:29 +0800
-Message-Id: <20211217022129.470389-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231217AbhLQCXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230464AbhLQCXE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:23:04 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FC8C061574;
+        Thu, 16 Dec 2021 18:23:04 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u17so577892plg.9;
+        Thu, 16 Dec 2021 18:23:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=YkC57fIQYOJd6l+HEs53okpuCiM+wlfOFUu3D4S4VL8=;
+        b=TXf1+sH3CHPLox/x/TeYmaYOxV79u7dfdXQ4YqeSqa/l3eEKnkJtx4KSY8HOdZuiiY
+         3eQfX1Jng1kaqvPyoN1XCxZlGgcQTAF6QwsqXyweEFWegvgtIxHjsSFGJkr+v36bw2uI
+         wiQAUtMHbRbXTiU09zeUB7ARQPlHabIQZuzsy2SH/A0jZDVQWbkflYGxqfabvHCJkSJw
+         qzjk3qauAmyhK3F92Yh6MWN1Q/BBJ1x+yOImiHWr0QR8i2kFShYjVFkTUU8e4qivL2eF
+         wT+AwkmgReOqWAQmIXGSO4JseoIgPBCybbxj5spSkqVhqceov4lg1mheh+EHUT3cFkbK
+         9SJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=YkC57fIQYOJd6l+HEs53okpuCiM+wlfOFUu3D4S4VL8=;
+        b=WBKkYiMvyzSheZJkJexUpq2mlThah+19o8sVrtGD92jz/+derbKAjjX3d1MQDPIK1D
+         udtazMpSdbDoQJ4huS7o8iaguwVLwG+GsnJQCSEveq+wtxvYljiJWADQaaVnwL/auNiS
+         AN92Yz9Zgyp+zu5VVPmTbvONuw22cMOcGpNo/ykEmp0NnU+78Es5+697f9t9YboQqMge
+         HMpLXIcBPEGIldliAvEMmX7yWmrCHyAM3hSRcVq+VfB3HLTE0ay5i8Bcsg+TIfJI2BRW
+         0SBc9KbEjTmIkr6n6K0Q7eStClgropjB0KKLMJBNSzLh+dKB01ut22As0uRdopX8xcDc
+         YFxw==
+X-Gm-Message-State: AOAM532jVu+ZXaHQV9W6RfRQftH4o86mFaDMNCa2hJyIF8Kdfd2Tx+5t
+        WpLBvWQwmQAgt5HCJLDttHc=
+X-Google-Smtp-Source: ABdhPJwN1XrN5B8b4WgxB64cirDloPcYXtFP8VF7uv9k995G0YMwetE+9bSxfKVsRneLXsjqyRR1qw==
+X-Received: by 2002:a17:90b:1b03:: with SMTP id nu3mr9470286pjb.240.1639707784058;
+        Thu, 16 Dec 2021 18:23:04 -0800 (PST)
+Received: from localhost.localdomain ([43.128.78.144])
+        by smtp.gmail.com with ESMTPSA id m1sm548349pjv.28.2021.12.16.18.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 18:23:03 -0800 (PST)
+Date:   Fri, 17 Dec 2021 10:22:55 +0800
+From:   Aili Yao <yaoaili126@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yaoaili@kingsoft.com
+Subject: Re: [PATCH v2] KVM: LAPIC: Per vCPU control over
+ kvm_can_post_timer_interrupt
+Message-ID: <20211217102255.481a1e1d@gmail.com>
+In-Reply-To: <YbtfNVVtLlvxE2YB@google.com>
+References: <20211124125409.6eec3938@gmail.com>
+        <Ya/s17QDlGZi9COR@google.com>
+        <20211216162303.230dbdaa@gmail.com>
+        <YbtfNVVtLlvxE2YB@google.com>
+Organization: ksyun
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowABXXp4r9Lthz_W3Aw--.16086S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKry5uw45Kw45ZrW5AF1UWrg_yoWDXwc_CF
-        WUZFn3Xry3A3Z0vF17Z3yfZ3sFyF90vr4kur1SqFZ3t347X3yDZry2vry8JF48u3Z7CFsr
-        Ww4jgr15C3Z3CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUHWlkUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of dma_alloc_coherent() needs to be checked.
-To avoid use of null pointer in memcpy_toio() in case of the failure of
-alloc.
+On Thu, 16 Dec 2021 15:45:57 +0000
+Sean Christopherson <seanjc@google.com> wrote:
 
-Fixes: 57430471e2fa ("drm/amdgpu: Add support for USBC PD FW download")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> On Thu, Dec 16, 2021, Aili Yao wrote:
+> > On Tue, 7 Dec 2021 23:23:03 +0000
+> > Sean Christopherson <seanjc@google.com> wrote:  
+> > > On Tue, Nov 23, 2021 at 10:00 PM Wanpeng Li <kernellwp@gmail.com> wrote:  
+> > > > ---
+> > > >  arch/x86/kvm/lapic.c | 5 ++---
+> > > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > > > index 759952dd1222..8257566d44c7 100644
+> > > > --- a/arch/x86/kvm/lapic.c
+> > > > +++ b/arch/x86/kvm/lapic.c
+> > > > @@ -113,14 +113,13 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+> > > >
+> > > >  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > > -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
+> > > > +       return pi_inject_timer && kvm_mwait_in_guest(vcpu->kvm) && kvm_vcpu_apicv_active(vcpu);    
+> > > 
+> > > As Aili's changelog pointed out, MWAIT may not be advertised to the guest. 
+> > > 
+> > > So I think we want this?  With a non-functional, opinionated refactoring of
+> > > kvm_can_use_hv_timer() because I'm terrible at reading !(a || b).
+> > > 
+> > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > > index 40270d7bc597..c77cb386d03d 100644
+> > > --- a/arch/x86/kvm/lapic.c
+> > > +++ b/arch/x86/kvm/lapic.c
+> > > @@ -113,14 +113,25 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+> > > 
+> > >  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
+> > > +       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
+> > > +              (kvm_mwait_in_guest(vcpu) || kvm_hlt_in_guest(vcpu));
+> > >  }
+> > > 
+> > >  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return kvm_x86_ops.set_hv_timer
+> > > -              && !(kvm_mwait_in_guest(vcpu->kvm) ||
+> > > -                   kvm_can_post_timer_interrupt(vcpu));
+> > > +       /*
+> > > +        * Don't use the hypervisor timer, a.k.a. VMX Preemption Timer, if the
+> > > +        * guest can execute MWAIT without exiting as the timer will stop
+> > > +        * counting if the core enters C3 or lower.  HLT in the guest is ok as
+> > > +        * HLT is effectively C1 and the timer counts in C0, C1, and C2.
+> > > +        *
+> > > +        * Don't use the hypervisor timer if KVM can post a timer interrupt to
+> > > +        * the guest since posted the timer avoids taking an extra a VM-Exit
+> > > +        * when the timer expires.
+> > > +        */
+> > > +       return kvm_x86_ops.set_hv_timer &&
+> > > +              !kvm_mwait_in_guest(vcpu->kvm) &&
+> > > +              !kvm_can_post_timer_interrupt(vcpu));
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
+> > >   
+> > 
+> > It seems Sean and Wanpeng are busy with some other more important issues;
+> > So Please let me try to merge Sean, Wanpeng's ideas and suggestions together,also including my opinions
+> > into one possible approach and get it reviewed, Only if others are OK with this;
+> > 
+> > I will post a new patch for this later today or tomorrow.  
+> 
+> Sorry, I was waiting for someone to say "this works", but never actually said as
+> much.
+> 
+> Does the above change address your use case?  If not, what's missing?
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index a09483beb968..613e25bf87e5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@ -3034,6 +3034,10 @@ static ssize_t psp_usbc_pd_fw_sysfs_write(struct device *dev,
- 
- 	/* We need contiguous physical mem to place the FW  for psp to access */
- 	cpu_addr = dma_alloc_coherent(adev->dev, usbc_pd_fw->size, &dma_addr, GFP_KERNEL);
-+	if (!cpu_addr) {
-+		ret = -ENOMEM;
-+		goto rel_buf;
-+	}
- 
- 	ret = dma_mapping_error(adev->dev, dma_addr);
- 	if (ret)
--- 
-2.25.1
+After a little modifications, This works in my test.
 
+static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+{
+-       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
++       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
++              (kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
+ }
+
+and also you can delete or keep kvm_mwait_in_guest() check;
+
+Thanks!

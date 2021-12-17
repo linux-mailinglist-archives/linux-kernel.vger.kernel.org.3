@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B170B479696
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CA3479698
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbhLQVxk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Dec 2021 16:53:40 -0500
-Received: from mail-pj1-f42.google.com ([209.85.216.42]:51735 "EHLO
-        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhLQVxi (ORCPT
+        id S230324AbhLQVyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:54:20 -0500
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:51006 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230205AbhLQVyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:53:38 -0500
-Received: by mail-pj1-f42.google.com with SMTP id v16so3419375pjn.1;
-        Fri, 17 Dec 2021 13:53:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OSouNAXKfQ8rN33RQ1qzlpM1z5+txx2hdojNvqQ2iiA=;
-        b=PradlHJUTwS73dO0RntQab/fPAZ3DjFaFu6KNghZnSJDf/RyuYCD8k5EntbWZzAtuB
-         jwTLuNiTdZHuUjNU5RKwQTws2VfffXawpvRLmikslhHQYlDPNYDRE5K4TQRfy2wvEBgz
-         maNbEdGfsl7j9NDtUZ5PLvvu+eVboztVJIo0Vf4Q0eRuQG/hILv++VSFH1Sph0iJXLdm
-         P/whMlCe7ChhNF60w+gidRpd3LWNIr0Mrs9BILn/9pUbcxzgt/SkPIqwmn8gOhLjFjH0
-         s9U+qo9cOleWy7/au+7/WuKahHfyJ9FScdtbFhSFhbrwdm1ZdT6UUE3ln+eqohUZfQ7r
-         iYGA==
-X-Gm-Message-State: AOAM5330SYmT7oitayGLPRc2jUiRgCdHaWcVDrOfdOaRJEpra+asyxRO
-        p21ffb28qpzs73pW9e1RaDqAs+5ivVXoeUENYKc=
-X-Google-Smtp-Source: ABdhPJx1Zgynh4wUXHAumH4LM1mHoQULX+g2DiYYo478GOP+yyTFHo3EgCd7tYqK0eyI3a6CjCxf6rAt/dVCYOJdy8c=
-X-Received: by 2002:a17:902:7609:b0:148:daa5:8133 with SMTP id
- k9-20020a170902760900b00148daa58133mr4904314pll.48.1639778017978; Fri, 17 Dec
- 2021 13:53:37 -0800 (PST)
+        Fri, 17 Dec 2021 16:54:19 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id yLB7mDo2VUGqlyLB7mEfuG; Fri, 17 Dec 2021 22:54:18 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 17 Dec 2021 22:54:18 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        maz@kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] powerpc/mpic: Use bitmap_zalloc() when applicable
+Date:   Fri, 17 Dec 2021 22:54:12 +0100
+Message-Id: <aa145f674e08044c98f13f1a985faa9cc29c3708.1639777976.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211218003339.0061dcb4@canb.auug.org.au> <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
-In-Reply-To: <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Fri, 17 Dec 2021 22:53:26 +0100
-Message-ID: <CANBLGcynOdjJDS45YwMPZQ+MuYHf4w-rQ5GixokLyvuZ4ZM4vQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Dec 17 (drivers/reset/reset-starfive-jh7100.c)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+'mpic->protected' is a bitmap. So use 'bitmap_zalloc()' to simplify
+code and improve the semantic, instead of hand writing it.
 
-On Fri, 17 Dec 2021 at 22:48, Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 12/17/21 05:33, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20211216:
-> >
->
-> on i386:
->
-> ../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
-> ../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
->   value = readq(reg_assert);
->           ^~~~~
-> ../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
->   writeq(value, reg_assert);
->   ^~~~~~
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ arch/powerpc/sysdev/mpic.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Yes, It needs to include <linux/io-64-nonatomic-lo-hi.h> for compile
-testing to work on 32bit architectures without readq.
+diff --git a/arch/powerpc/sysdev/mpic.c b/arch/powerpc/sysdev/mpic.c
+index 995fb2ada507..626ba4a9f64f 100644
+--- a/arch/powerpc/sysdev/mpic.c
++++ b/arch/powerpc/sysdev/mpic.c
+@@ -1323,8 +1323,7 @@ struct mpic * __init mpic_alloc(struct device_node *node,
+ 	psrc = of_get_property(mpic->node, "protected-sources", &psize);
+ 	if (psrc) {
+ 		/* Allocate a bitmap with one bit per interrupt */
+-		unsigned int mapsize = BITS_TO_LONGS(intvec_top + 1);
+-		mpic->protected = kcalloc(mapsize, sizeof(long), GFP_KERNEL);
++		mpic->protected = bitmap_zalloc(intvec_top + 1, GFP_KERNEL);
+ 		BUG_ON(mpic->protected == NULL);
+ 		for (i = 0; i < psize/sizeof(u32); i++) {
+ 			if (psrc[i] > intvec_top)
+-- 
+2.30.2
 
-Arnd: Do I just send a patch or do I redo the pull-request?
-
-/Emil

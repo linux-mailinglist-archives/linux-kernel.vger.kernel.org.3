@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC3D47938B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365C547938D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236685AbhLQSHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:07:06 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:41938 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbhLQSHD (ORCPT
+        id S238142AbhLQSIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:08:30 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:46757 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234093AbhLQSI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:07:03 -0500
-Received: by mail-oi1-f176.google.com with SMTP id u74so4776343oie.8;
-        Fri, 17 Dec 2021 10:07:03 -0800 (PST)
+        Fri, 17 Dec 2021 13:08:29 -0500
+Received: by mail-oi1-f175.google.com with SMTP id s139so4742210oie.13;
+        Fri, 17 Dec 2021 10:08:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ybob68Tao9npH1BMjhdNd68JxeiPcth51L+wtZEs48k=;
-        b=muXBkQse5IeSpo3XYnO6SLnpag4cfdZDUGNx6rUrn3EkkFrkX1PwAbacygMD2Ksoze
-         EVAGtUQ1uPhEYpE3udr+75JmH20Ucy01fnyHUEVPHc6N9fmoBnfKIiMByxkMyTOP0Zy4
-         VfYeBq0asmmMtcGU1cFLJ+iTXxgLFahFWYHyTHF/4Mz6d7JukEp0kOrvE9AA4tPUAscC
-         JU8oAEYc1QbDFPEX9/XTgtl7agGT4FOq77ktBoMeAtmCBAWTMZCaWio8X2RwrKwlneJ/
-         8e9vB02PND7dTNf+TGHrfAEXFwe5d189AVGcK2AhTVS8q9TR2oEVQl1PT96OXXqZtbqK
-         vMEw==
-X-Gm-Message-State: AOAM531Z461jy2MmbSFB0oWZhnpi0hg5SFEXuBCL+ortMVfZpeewT1qZ
-        /rG8X5mlNhsEFmBWYt+hc95sgT1aEQMfEZLVuBn73w2w
-X-Google-Smtp-Source: ABdhPJwz8SBCJ/kWQwVPYisKaxbuW9fnlDJJnbLw64UAhwyucU9qETSQ6Fmcm3CH2NdzoDLV3QvSEsoCPgPnTimP96U=
-X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr3072060oiv.166.1639764422647;
- Fri, 17 Dec 2021 10:07:02 -0800 (PST)
+        bh=XGCz2Mkb3xw6Ly/YEIrj+GpLhNUOPqPMSl/tYzJrkMg=;
+        b=xqhdyCEdu1agfGXMWMjrOSuAilsvzkwfL7HIFASVlFVj9eZ7g6MMD0zfR9k1TL1NEf
+         qfvTCQTx1Pwqk+xAbJArAviD1pe0bwQP6zVJAA9TdjdIIsaXqEQQpRV666vBGoOpT2FP
+         8eQiIgGo7OgEzJ1kjJEzzEewWvbNzUiXkZHFNK2Cc8jKf2q3WApwQ5aGxmRVdf3Y5P4c
+         S7YNrgqBtBG4RN7Q8yDbVd2rsdTio3T+xJxJmpRWXzAHknhocVqITHCOKT35HmKYCEWy
+         5IYvaIewxtFb/oBuktk46vfArm0jVIU2twY7hisuZl+B1IKTVdy3AQZNF6JQkBJzFuNQ
+         56Bg==
+X-Gm-Message-State: AOAM531uuGt8i7tZ6jaeC3d1suMnR0pfaYlC1DjFzxEiDTlsCVC0A2zP
+        q02sC7Fv4bXOcGWyw5cHV2DSiUXsdEDBenxVe88=
+X-Google-Smtp-Source: ABdhPJzvcWJ4CbIp8GquSE1y4BVzbRL9LcXmxUSupzHHII7RqING+mGyTVf8dR4sJBAHZKUZGO8yGrju06v7Lm+hZgg=
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr2981766oiw.154.1639764508924;
+ Fri, 17 Dec 2021 10:08:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211212180527.1641362-1-AjitKumar.Pandey@amd.com> <20211212180527.1641362-3-AjitKumar.Pandey@amd.com>
-In-Reply-To: <20211212180527.1641362-3-AjitKumar.Pandey@amd.com>
+References: <20211213204632.56735-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211213204632.56735-1-andriy.shevchenko@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 19:06:51 +0100
-Message-ID: <CAJZ5v0i=LVsz2ZRBB5HzLpw8eR-zLAKtJyc3PFWu_kKCzjzZWw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/5] drivers: acpi: acpi_apd: Remove unused device
- property "is-rv"
-To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>, Vijendar.Mukunda@amd.com,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
+Date:   Fri, 17 Dec 2021 19:08:18 +0100
+Message-ID: <CAJZ5v0jq=XdH+xeHs5=wMGsu28i+r3nzZbhCNMJkfdOi65N0Gg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] ACPI: NFIT: Import GUID before use
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     nvdimm@lists.linux.dev,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Len Brown <lenb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 7:06 PM Ajit Kumar Pandey
-<AjitKumar.Pandey@amd.com> wrote:
+On Mon, Dec 13, 2021 at 9:46 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Initially "is-rv" device property is added for 48MHz fixed clock
-> support on Raven or RV architecture. It's unused now as we moved
-> to pci device_id based selection to extend such support on other
-> architectures. This change removed unused code from acpi driver.
+> Strictly speaking the comparison between guid_t and raw buffer
+> is not correct. Import GUID to variable of guid_t type and then
+> compare.
 >
-> Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-> Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Does this or the next patch depend on the rest of the series, or can I
-simply apply them both?
+Dan, are you going to take care of this or should I?
 
 > ---
->  drivers/acpi/acpi_apd.c               | 3 ---
->  include/linux/platform_data/clk-fch.h | 1 -
->  2 files changed, 4 deletions(-)
+>  drivers/acpi/nfit/core.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> index 6e02448d15d9..6913e9712852 100644
-> --- a/drivers/acpi/acpi_apd.c
-> +++ b/drivers/acpi/acpi_apd.c
-> @@ -87,9 +87,6 @@ static int fch_misc_setup(struct apd_private_data *pdata)
->         if (ret < 0)
->                 return -ENOENT;
+> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> index 7dd80acf92c7..e5d7f2bda13f 100644
+> --- a/drivers/acpi/nfit/core.c
+> +++ b/drivers/acpi/nfit/core.c
+> @@ -678,10 +678,12 @@ static const char *spa_type_name(u16 type)
 >
-> -       if (!acpi_dev_get_property(adev, "is-rv", ACPI_TYPE_INTEGER, &obj))
-> -               clk_data->is_rv = obj->integer.value;
-> -
->         list_for_each_entry(rentry, &resource_list, node) {
->                 clk_data->base = devm_ioremap(&adev->dev, rentry->res->start,
->                                               resource_size(rentry->res));
-> diff --git a/include/linux/platform_data/clk-fch.h b/include/linux/platform_data/clk-fch.h
-> index b9f682459f08..850ca776156d 100644
-> --- a/include/linux/platform_data/clk-fch.h
-> +++ b/include/linux/platform_data/clk-fch.h
-> @@ -12,7 +12,6 @@
+>  int nfit_spa_type(struct acpi_nfit_system_address *spa)
+>  {
+> +       guid_t guid;
+>         int i;
 >
->  struct fch_clk_data {
->         void __iomem *base;
-> -       u32 is_rv;
->  };
->
->  #endif /* __CLK_FCH_H */
+> +       import_guid(&guid, spa->range_guid);
+>         for (i = 0; i < NFIT_UUID_MAX; i++)
+> -               if (guid_equal(to_nfit_uuid(i), (guid_t *)&spa->range_guid))
+> +               if (guid_equal(to_nfit_uuid(i), &guid))
+>                         return i;
+>         return -1;
+>  }
 > --
-> 2.25.1
+> 2.33.0
 >

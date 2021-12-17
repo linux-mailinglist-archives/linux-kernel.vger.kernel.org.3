@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EF6478F07
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E535478F0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbhLQPHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:07:47 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:36836 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237855AbhLQPHq (ORCPT
+        id S237896AbhLQPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:08:02 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57440
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237830AbhLQPIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:07:46 -0500
-Received: by mail-oi1-f174.google.com with SMTP id t23so4021160oiw.3;
-        Fri, 17 Dec 2021 07:07:45 -0800 (PST)
+        Fri, 17 Dec 2021 10:08:02 -0500
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AA0D23FFD6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639753680;
+        bh=EscRM3zeuMe4QRAvQ51JRRs9n/Wn3urOySWDrMNRXHw=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=nC1a72Ms5+ElnHuPdN2ha9ZL/KcHJN7abHUw5eGA9yHhJXSXeduX+uT0/LnauQMQR
+         XRjaTBbUXi0Y/SJ23iOtKjrzxlC/ZP9G0scxhK80k3k+nL77IGB1z9u2rPvWqwySpT
+         got5nni0oO8da/9WPPAx8sS+RvxtuTLOWTMkOvIw9O1sDE10XcXDBknV59gGWOLbdt
+         2+EvuyxcaG2j16KeD/HVFGHOVdOQEZfwaY9PsjT/tF94MT2z3rIncHvEFY6a31+ihm
+         2500XL0o8Lh/xcHBf0AcZU92hO8V5mpilE7Ql2BuRUVQHa1PHXc/WGl/4KSU+fAnVX
+         AFhp8TjGMYrOw==
+Received: by mail-lj1-f198.google.com with SMTP id z18-20020a2e8e92000000b00218e583aff1so781994ljk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:08:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MbOJyx0ICqsDBsXqhrfTxawCvgzjFoYCCHF95Prip3E=;
-        b=RiDhcJMb78rRzBLmIxbP5OkQydXAjBA72RxB29xIUOpt1mXMykSZn6mCckNHkEwzPS
-         GQL6J66SU4X75b91WK8HeCgtaez2TjJ/UHOwXgM9pWI9r465Fa3ngUdKo7Wgi10hP/OH
-         KJKPS7UFIlQcHRrzfuY0NEinyMSUZQ4kUMv9Rw/X+E83fK1vnoWLi6Pu7FLYakRTLL3C
-         BlLNslq2d/KjdxmHx9U2FPiiNCiTmyBwaWNqAoGuUzEf3PshovvpbkdmYUvlYQ+5a8f2
-         2adkXUHo7sCIdUmoOv95OLzz5PSm9jMQfaHByvrunQRggT5jh50ikMh0pnensDt8ZShN
-         fxvA==
-X-Gm-Message-State: AOAM530SqCgXXA5nr1fq7vrgA/2WPyVOdewp9Kb/pm94JEkEV166MCzs
-        vLzRjXV0adm3p+Usa3xEiZNIL3DAIZukZfGc5vE=
-X-Google-Smtp-Source: ABdhPJzIcKm353itWUd26MvND37q/kv/4/a54huG34fc7b6KcS+FdmapZEPP8pthrG9sJ/xgldU8kp89r2g0YypaCFQ=
-X-Received: by 2002:aca:eb0b:: with SMTP id j11mr8185991oih.51.1639753665410;
- Fri, 17 Dec 2021 07:07:45 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=EscRM3zeuMe4QRAvQ51JRRs9n/Wn3urOySWDrMNRXHw=;
+        b=V3kvkRsiUgyvXnwJsYKahkCKlrW+aBdTORlGvhGThiTYRxmuazfqWwBNv4dbW5rfQb
+         bdGZbZYAl6UNthdNU1CObnKEluzAAQXMrx5QdHPzmH48cB9JvlQIFBY4Y++sN9FGfkFg
+         6I2w4dcDWKuS39Xzo4cP6Zoti9Shn2JoTfhI5brUWwKndiiWsjRS/HpBbflqHAEfARtv
+         24/YrfcmLjNsw0vj/6515zec8NMfuMqFAggM38mSUPVMthQc4JIbP/kCIwxwWQcBZXm6
+         DzzIcUKXHMJ9cRTkx7Mq8orIMHAvhapRvWynvLgILUY9oET+52jPcoEg5iuXqN77t3mY
+         UD3A==
+X-Gm-Message-State: AOAM5301Nmz/G9TxOOG6g+VD12sdpdekFkZk6oaC9UOAMwAx03VtWfUC
+        X7rt86pz6qTA/X+oNCyLm/Qg5sCotO9WMJobKU2VcwtbYgfdmQx/F43WREpBo9r8TUaDr8m/HM5
+        dSenZBbukwmBfoJij3SrITpP1EceNEn3Ba1oqxYnZfQ==
+X-Received: by 2002:a05:6512:368a:: with SMTP id d10mr3057513lfs.476.1639753678786;
+        Fri, 17 Dec 2021 07:07:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwjit/KxYQojMyrYyqg3tppu8lupjtyMuTl3o4zZeCjXmcoayEWshoXqKAPpfREvzZOsoCa7Q==
+X-Received: by 2002:a05:6512:368a:: with SMTP id d10mr3057453lfs.476.1639753678217;
+        Fri, 17 Dec 2021 07:07:58 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id 18sm1764464ljr.17.2021.12.17.07.07.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 07:07:57 -0800 (PST)
+Message-ID: <19cbe2ba-7df5-7c7c-289f-6dc419d9f477@canonical.com>
+Date:   Fri, 17 Dec 2021 16:07:51 +0100
 MIME-Version: 1.0
-References: <20211207002102.26414-1-paul@crapouillou.net> <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 16:07:34 +0100
-Message-ID: <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
-To:     Arnd Bergmann <arnd@arndb.de>, Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>, list@opendingux.net,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 06/17] dt-bindings: rng: add bindings for microchip
+ mpfs rng
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
+        ivan.griffin@microchip.com, atish.patra@wdc.com
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-7-conor.dooley@microchip.com>
+ <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
+In-Reply-To: <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 10:22 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 7, 2021 at 1:20 AM Paul Cercueil <paul@crapouillou.net> wrote:
-> >
-> > This patchset reworks the pm_ptr() macro I introduced a few versions
-> > ago, so that it is not conditionally defined.
-> >
-> > It applies the same treatment to the *_PM_OPS macros. Instead of
-> > modifying the existing ones, which would mean a 2000+ patch bomb, this
-> > patchset introduce two new macros to replace the now deprecated
-> > UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
-> >
-> > The point of all of this, is to progressively switch from a code model
-> > where PM callbacks are all protected behind CONFIG_PM guards, to a code
-> > model where PM callbacks are always seen by the compiler, but discarded
-> > if not used.
-> >
-> > Patch [4/5] and [5/5] are just examples to illustrate the use of the new
-> > macros. As such they don't really have to be merged at the same time as
-> > the rest and can be delayed until a subsystem-wide patchset is proposed.
-> >
-> > - Patch [4/5] modifies a driver that already used the pm_ptr() macro,
-> >   but had to use the __maybe_unused flag to avoid compiler warnings;
-> > - Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
-> >   around its suspend/resume functions.
->
-> This is fantastic, I love the new naming and it should provide a great path
-> towards converting all drivers eventually. I've added the patches to
-> my randconfig test build box to see if something breaks, but otherwise
-> I think these are ready to get into linux-next, at least patches 1-3,
-> so subsystem
-> maintainers can start queuing up the conversion patches once the
-> initial set is merged.
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On 17/12/2021 15:53, Krzysztof Kozlowski wrote:
+> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Add device tree bindings for the hardware rng device accessed via
+>> the system services on the Microchip PolarFire SoC.
+>>
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>>  .../bindings/rng/microchip,mpfs-rng.yaml      | 29 +++++++++++++++++++
+>>  1 file changed, 29 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>> new file mode 100644
+>> index 000000000000..32cbc37c9292
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>> @@ -0,0 +1,29 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Microchip MPFS random number generator
+>> +
+>> +maintainers:
+>> +  - Conor Dooley <conor.dooley@microchip.com>
+>> +
+>> +description: |
+>> +  The hardware random number generator on the Polarfire SoC is
+>> +  accessed via the mailbox interface provided by the system controller
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: microchip,mpfs-rng
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    hwrandom: hwrandom {
+> 
+> Three topics:
+> 1. Node name (as most of others are using): rng
+> 2. skip the label, not helping in example.
+> 3. This looks very simple, so I wonder if the bindings are complete. No
+> IO space/address... How is it going to be instantiated?
+> 
 
-Patches [0-3/5] applied as 5.17 material.
+OK, now I saw the usage in DTS. I have doubts this makes sense as
+separate bindings. It looks like integrated part of syscontroller, so
+maybe make it part of that binding? Or at least add ref to syscontroller
+bindings that such child is expected.
 
-The mmc patches need ACKs, but I can take them too.
+
+Best regards,
+Krzysztof

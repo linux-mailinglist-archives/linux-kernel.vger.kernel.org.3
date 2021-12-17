@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424AD4785A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7FC4785AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbhLQHk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 02:40:26 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:5721 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230224AbhLQHkY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 02:40:24 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0V-t9ojA_1639726819;
-Received: from 30.21.164.42(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V-t9ojA_1639726819)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 17 Dec 2021 15:40:20 +0800
-Message-ID: <907015a0-43f8-3ab4-524b-9c867d1f06d8@linux.alibaba.com>
-Date:   Fri, 17 Dec 2021 15:41:05 +0800
+        id S233753AbhLQHmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 02:42:16 -0500
+Received: from mga03.intel.com ([134.134.136.65]:41153 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229449AbhLQHmO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 02:42:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639726934; x=1671262934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ihr/UeVcwH+/UbgClCubV8h0JbZ+Jwe/QpDzJPDzJ0o=;
+  b=Vru0HX9XfI8cHrACicJ57mf0YTqT5WzpsadTRxrSiVk/wBNlvVZk6cCx
+   lSe2fnH7w9dpoEBqNNxVehesZEHx9y23VTvLLrLpDXKX0WcWeLtBfTKUR
+   BUfEUA9Lm3VbKysKtkajrISU73F8U3TtXwEeh3t6ZXHJAIWlbQlBADrZp
+   Rqp+WUdadDAs680yJQtBlNqKvSb9wQzx9cD95CSJPmAVOFXwMCngR4DzH
+   9q5b8nY676EG+DOzMayc4S/vD4WpzENSjGSDpW7zARYtkF1PKgNmT1OrR
+   YfNxNkNz1pIL/TnFtszoxKHtLm0apexrEfD6qJwRz7/LxlA8pjo1rYOh/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239651135"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="239651135"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 23:42:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="519641766"
+Received: from unknown (HELO zq-VirtualBox.bj.intel.com) ([10.238.128.201])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 23:42:10 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com
+Cc:     linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
+Subject: [PATCH v2] locking/rtmutex: Fix incorrect spinning condition
+Date:   Fri, 17 Dec 2021 15:42:07 +0800
+Message-Id: <20211217074207.77425-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH -V10 RESEND 3/6] memory tiering: skip to scan fast memory
-To:     Huang Ying <ying.huang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Feng Tang <feng.tang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-References: <20211207022757.2523359-1-ying.huang@intel.com>
- <20211207022757.2523359-4-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211207022757.2523359-4-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the lock owner is on CPU and not need resched, the current waiter
+need to be checked, if it not longer top the waiter, stop spinning.
 
+Fixes: c3123c431447 ("locking/rtmutex: Dont dereference waiter lockless")
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ v1->v2:
+ Modify description information.
 
-On 12/7/2021 10:27 AM, Huang Ying wrote:
-> If the NUMA balancing isn't used to optimize the page placement among
-> sockets but only among memory types, the hot pages in the fast memory
-> node couldn't be migrated (promoted) to anywhere.  So it's unnecessary
-> to scan the pages in the fast memory node via changing their PTE/PMD
-> mapping to be PROT_NONE.  So that the page faults could be avoided
-> too.
-> 
-> In the test, if only the memory tiering NUMA balancing mode is enabled, the
-> number of the NUMA balancing hint faults for the DRAM node is reduced to
-> almost 0 with the patch.  While the benchmark score doesn't change
-> visibly.
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Wei Xu <weixugc@google.com>
-> Cc: osalvador <osalvador@suse.de>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Hasan Al Maruf <hasanalmaruf@fb.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> ---
+ kernel/locking/rtmutex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-LGTM. Please feel free to add:
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 0c1f2e3f019a..8555c4efe97c 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -1383,7 +1383,7 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+ 		 *  - the VCPU on which owner runs is preempted
+ 		 */
+ 		if (!owner_on_cpu(owner) || need_resched() ||
+-		    rt_mutex_waiter_is_top_waiter(lock, waiter)) {
++		    !rt_mutex_waiter_is_top_waiter(lock, waiter)) {
+ 			res = false;
+ 			break;
+ 		}
+-- 
+2.25.1
+

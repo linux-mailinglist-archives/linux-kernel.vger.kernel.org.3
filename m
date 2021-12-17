@@ -2,323 +2,1377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67667479256
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A175479259
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbhLQREd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:04:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46364 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbhLQREc (ORCPT
+        id S239591AbhLQRFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239584AbhLQRFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:04:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E8EAB829C4;
-        Fri, 17 Dec 2021 17:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D145AC36AE1;
-        Fri, 17 Dec 2021 17:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639760669;
-        bh=aw9+og464mFBxOR5/J3/T5JSL/VHHP21aHx0UbGc/sc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UC8z9gi2dvAKygtpFd5ZWd0qFz3tLm3+PHrF7q6spL1IXQaPHtuS0NLTaNd8yqVC6
-         RJHkSXr9K5p3LW4C6onjyCCEn0G9UMEpFZhOVkPkaaIIMR3Y47B3cFBkKbmPR7YjCr
-         DHrPWD/eUVfF2xT2XB3lvtLpwwQBbaVPkDY7rP0WxAVPXirx4S/zZqpQNqpJQvjFiS
-         5kKZo45JP/yi4Sk4Yj+pUsEqGm1CmZql44sPdDAXRfxjw4ubNWgcj8uQnfSqE5UVyN
-         lqmIT1LAH2CbXpd8xjGRlAGffRwATo0N+mmA/GIBZcPh9b3xpiePyAOQ/3JsTyWWR+
-         +XZ73D7xY3qJw==
-Received: by mail-ed1-f41.google.com with SMTP id y22so10353196edq.2;
-        Fri, 17 Dec 2021 09:04:29 -0800 (PST)
-X-Gm-Message-State: AOAM5331++sWppsccbv/+g3AlDjp9SQVtwhqmp0cFHJk7qRyA2ZnQPxj
-        Rx0j+JuEisdhAlyzlMx499JhepHndS/Edo62YQ==
-X-Google-Smtp-Source: ABdhPJxoyix+q4b7WdGzxh8z/07qgwU3bU85A+kpz3cckVdXq/g6ifdxb7KHGabQvZ4PZz2sMcc0dOpEgxi/Y2hZJN4=
-X-Received: by 2002:a17:906:229b:: with SMTP id p27mr3239259eja.264.1639760668019;
- Fri, 17 Dec 2021 09:04:28 -0800 (PST)
+        Fri, 17 Dec 2021 12:05:12 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB97C06173F;
+        Fri, 17 Dec 2021 09:05:11 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id i22so5224325wrb.13;
+        Fri, 17 Dec 2021 09:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSrhxlLawVRmtFNu44bgS729p8zCG4OJyOEql62hlfo=;
+        b=Z9AnZgFlG0iG39mqGVZWwjgb0O5iN3V3p4hPvqyMExalAnWVLxvPXXUdUqVhgMAHv0
+         2rlb3TjVCH1l7ui//JPckf1AbAcCg7qXYmYAFzmZ6Ck3BjHvu7xMv4gH80eHFK7KqxI4
+         5gcz30+G7mf91jJsOf5pbjutX+vm348grnLIaaEmB0cBip2tEATM6E1L3wUZKhUSoCqV
+         vjfEwxVvPTuULpAqC/lOg5Zgwqcj5bMpvldjlnTmrzIniBREZCnX8AhV3if0ondjalco
+         X0ZIFRJOgJkexrKqb7kxlS7oI1Rbvgnq+S5ldVeYsdxMk99Occ5SzE+K3cnv1xDytqhK
+         fIew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSrhxlLawVRmtFNu44bgS729p8zCG4OJyOEql62hlfo=;
+        b=TVAwAnkF1BuAfvHZPYfoix/4jyzhzJ3wMGIioXLIMPYYQPExWCVCHjV7FEwddGdwLl
+         4DxkTcy+Wh2Wt99s0OFlSobjpUiY+QE31mncl/4p95+QCtBw1tH+3xjDDheJjivMuMEJ
+         CBT+NTMODB9SeoY/w7N6IF1XaWGOhn1gWJaozGU9D8nnvGGP6071TW5Pdi0YYOB9ZmVi
+         q00exzy+75SN5iZEqdfrQYpFY2zSvE55oWLhiGJc6cC4AkFnH+v2fPJsAdQyH5lEuVIC
+         5+524KYJpbIEQ/xPyE3OEtWXWph7KrmUXCnC5o7jOo1C1cB5cRDaS/TIJVl+R38ZtNuH
+         o4Fw==
+X-Gm-Message-State: AOAM531CAiw+HN0EtUzFElX46B2s2fnQDrkdY3WUN2kkhaqYDyTMV4jW
+        +/EUxms4CQ7wrCO515uMMg8=
+X-Google-Smtp-Source: ABdhPJwrd3Bcf31PJYY8v9l/Q9Iw4TkHbGvKceaEdtSt/nNYhKTfk4Hx2qX6z+TQ3f/RkASxfzpLbA==
+X-Received: by 2002:adf:eb02:: with SMTP id s2mr3433988wrn.551.1639760709914;
+        Fri, 17 Dec 2021 09:05:09 -0800 (PST)
+Received: from localhost ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id u15sm6544434wmq.13.2021.12.17.09.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 09:05:08 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] dt-bindings: regulator: palmas: Convert to json-schema
+Date:   Fri, 17 Dec 2021 18:05:02 +0100
+Message-Id: <20211217170507.2843568-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211217141715.29747-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211217141715.29747-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAL_Jsq+a94CE5iPF5oDznV8vzBaX=tVnbEOPn-zuKd5CnS6ViA@mail.gmail.com> <CA+V-a8ta2Bpp=3dwc2tB-Np+whGqg=92E4pRLp=a7KzwCGAz=w@mail.gmail.com>
-In-Reply-To: <CA+V-a8ta2Bpp=3dwc2tB-Np+whGqg=92E4pRLp=a7KzwCGAz=w@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 17 Dec 2021 11:04:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJtoZzF5yDOQ5yvf-a-1edrhWG1L-qpGgNGDgcJ4J1bOg@mail.gmail.com>
-Message-ID: <CAL_JsqJtoZzF5yDOQ5yvf-a-1edrhWG1L-qpGgNGDgcJ4J1bOg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ata: pata_platform: Merge pata_of_platform into pata_platform
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:42 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Rob,
->
-> On Fri, Dec 17, 2021 at 2:50 PM Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Fri, Dec 17, 2021 at 8:17 AM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > >
-> > > Merge the OF pata_of_platform driver into pata_platform.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > >  drivers/ata/Kconfig            |   3 +-
-> > >  drivers/ata/Makefile           |   1 -
-> > >  drivers/ata/pata_of_platform.c |  90 ---------------
-> > >  drivers/ata/pata_platform.c    | 199 +++++++++++++++++++++++++--------
-> > >  include/linux/ata_platform.h   |   9 --
-> > >  5 files changed, 153 insertions(+), 149 deletions(-)
-> > >  delete mode 100644 drivers/ata/pata_of_platform.c
-> > >
-> > > diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> > > index a7da8ea7b3ed..0fab5cae45d5 100644
-> > > --- a/drivers/ata/Kconfig
-> > > +++ b/drivers/ata/Kconfig
-> > > @@ -1122,7 +1122,8 @@ config PATA_PLATFORM
-> > >
-> > >  config PATA_OF_PLATFORM
-> > >         tristate "OpenFirmware platform device PATA support"
-> > > -       depends on PATA_PLATFORM && OF
-> > > +       depends on OF
-> > > +       select PATA_PLATFORM
-> >
-> > Can't we just kill the kconfig option?
-> >
-> No, as there are a couple defconfigs which have this option enabled.
-> So the plan is once this patch is merged for the send in the patches
-> for defconfig files for next release and a release later we can safely
-> drop this. So that we don't break anything.
+From: Thierry Reding <treding@nvidia.com>
 
-Wouldn't they all be fine since they already have
-CONFIG_PATA_PLATFORM=y as well?
+Convert the Texas Instruments Palmas bindings from the free-form text
+format to json-schema.
 
-Either way, that's fine.
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ .../clock/clk-palmas-clk32kg-clocks.txt       |  35 ----
+ .../bindings/clock/ti,palmas-clk32k.yaml      |  68 ++++++++
+ .../bindings/extcon/extcon-palmas.txt         |  22 ---
+ .../bindings/extcon/ti,palmas-usb-vid.yaml    |  65 ++++++++
+ .../devicetree/bindings/gpio/gpio-palmas.txt  |  27 ---
+ .../bindings/gpio/ti,palmas-gpio.yaml         |  53 ++++++
+ .../bindings/iio/adc/ti,palmas-gpadc.yaml     |  26 ++-
+ .../bindings/input/ti,palmas-pwrbutton.txt    |  35 ----
+ .../bindings/input/ti,palmas-pwrbutton.yaml   |  76 +++++++++
+ .../devicetree/bindings/mfd/palmas.txt        |  52 ------
+ .../devicetree/bindings/mfd/ti,palmas.yaml    | 117 +++++++++++++
+ .../bindings/pinctrl/pinctrl-palmas.txt       | 105 ------------
+ .../bindings/pinctrl/ti,palmas-pinctrl.yaml   | 154 ++++++++++++++++++
+ .../bindings/regulator/palmas-pmic.txt        |  89 ----------
+ .../bindings/regulator/ti,palmas-pmic.yaml    | 144 ++++++++++++++++
+ .../devicetree/bindings/rtc/rtc-palmas.txt    |  32 ----
+ .../bindings/rtc/ti,palmas-rtc.yaml           |  62 +++++++
+ 17 files changed, 756 insertions(+), 406 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/clk-palmas-clk32kg-clocks.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/ti,palmas-clk32k.yaml
+ delete mode 100644 Documentation/devicetree/bindings/extcon/extcon-palmas.txt
+ create mode 100644 Documentation/devicetree/bindings/extcon/ti,palmas-usb-vid.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-palmas.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/ti,palmas-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.txt
+ create mode 100644 Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/palmas.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,palmas.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-palmas.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/ti,palmas-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/palmas-pmic.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/ti,palmas-pmic.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-palmas.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/ti,palmas-rtc.yaml
 
->
-> > >         help
-> > >           This option enables support for generic directly connected ATA
-> > >           devices commonly found on embedded systems with OpenFirmware
-> >
-> >
-> > > diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
-> > > index cb3134bf88eb..b8d8d51bc562 100644
-> > > --- a/drivers/ata/pata_platform.c
-> > > +++ b/drivers/ata/pata_platform.c
-> > > @@ -11,21 +11,42 @@
-> > >   * License.  See the file "COPYING" in the main directory of this archive
-> > >   * for more details.
-> > >   */
-> > > -#include <linux/kernel.h>
-> > > -#include <linux/module.h>
-> > > -#include <linux/blkdev.h>
-> > > -#include <scsi/scsi_host.h>
-> > >  #include <linux/ata.h>
-> > > +#include <linux/ata_platform.h>
-> > > +#include <linux/blkdev.h>
-> > > +#include <linux/kernel.h>
-> > >  #include <linux/libata.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_address.h>
-> > >  #include <linux/platform_device.h>
-> > > -#include <linux/ata_platform.h>
-> > > +#include <scsi/scsi_host.h>
-> > >
-> > >  #define DRV_NAME "pata_platform"
-> > >  #define DRV_VERSION "1.2"
-> > >
-> > >  static int pio_mask = 1;
-> > >  module_param(pio_mask, int, 0);
-> > > -MODULE_PARM_DESC(pio_mask, "PIO modes supported, mode 0 only by default");
-> > > +MODULE_PARM_DESC(pio_mask, "PIO modes supported, mode 0 only by default (param valid only for non DT users)");
-> > > +
-> > > +/**
-> > > + * struct pata_platform_priv - Private info
-> > > + * @io_res: Resource representing I/O base
-> > > + * @ctl_res: Resource representing CTL base
-> > > + * @irq_res: Resource representing IRQ and its flags
-> > > + * @ioport_shift: I/O port shift
-> > > + * @mask: PIO mask
-> > > + * @sht: scsi_host_template to use when registering
-> > > + * @use16bit: Flag to indicate 16-bit IO instead of 32-bit
-> > > + */
-> > > +struct pata_platform_priv {
-> > > +       struct resource *io_res;
-> > > +       struct resource *ctl_res;
-> > > +       struct resource *irq_res;
-> > > +       unsigned int ioport_shift;
-> > > +       int mask;
-> > > +       struct scsi_host_template *sht;
-> > > +       bool use16bit;
-> > > +};
-> > >
-> > >  /*
-> > >   * Provide our own set_mode() as we don't want to change anything that has
-> > > @@ -66,15 +87,9 @@ static void pata_platform_setup_port(struct ata_ioports *ioaddr,
-> > >  }
-> > >
-> > >  /**
-> > > - *     __pata_platform_probe           -       attach a platform interface
-> > > + *     pata_platform_host_activate - attach a platform interface
-> > >   *     @dev: device
-> > > - *     @io_res: Resource representing I/O base
-> > > - *     @ctl_res: Resource representing CTL base
-> > > - *     @irq_res: Resource representing IRQ and its flags
-> > > - *     @ioport_shift: I/O port shift
-> > > - *     @__pio_mask: PIO mask
-> > > - *     @sht: scsi_host_template to use when registering
-> > > - *     @use16bit: Flag to indicate 16-bit IO instead of 32-bit
-> > > + *     @priv: Pointer to struct pata_platform_priv
-> > >   *
-> > >   *     Register a platform bus IDE interface. Such interfaces are PIO and we
-> > >   *     assume do not support IRQ sharing.
-> > > @@ -94,10 +109,7 @@ static void pata_platform_setup_port(struct ata_ioports *ioaddr,
-> > >   *
-> > >   *     If no IRQ resource is present, PIO polling mode is used instead.
-> > >   */
-> > > -int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> > > -                         struct resource *ctl_res, struct resource *irq_res,
-> > > -                         unsigned int ioport_shift, int __pio_mask,
-> > > -                         struct scsi_host_template *sht, bool use16bit)
-> > > +static int pata_platform_host_activate(struct device *dev, struct pata_platform_priv *priv)
-> > >  {
-> > >         struct ata_host *host;
-> > >         struct ata_port *ap;
-> > > @@ -108,15 +120,15 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> > >         /*
-> > >          * Check for MMIO
-> > >          */
-> > > -       mmio = (( io_res->flags == IORESOURCE_MEM) &&
-> > > -               (ctl_res->flags == IORESOURCE_MEM));
-> > > +       mmio = ((priv->io_res->flags == IORESOURCE_MEM) &&
-> > > +               (priv->ctl_res->flags == IORESOURCE_MEM));
-> > >
-> > >         /*
-> > >          * And the IRQ
-> > >          */
-> > > -       if (irq_res && irq_res->start > 0) {
-> > > -               irq = irq_res->start;
-> > > -               irq_flags = (irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
-> > > +       if (priv->irq_res && priv->irq_res->start > 0) {
-> > > +               irq = priv->irq_res->start;
-> > > +               irq_flags = (priv->irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
-> > >         }
-> > >
-> > >         /*
-> > > @@ -131,12 +143,12 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> > >         ap->ops->inherits = &ata_sff_port_ops;
-> > >         ap->ops->cable_detect = ata_cable_unknown;
-> > >         ap->ops->set_mode = pata_platform_set_mode;
-> > > -       if (use16bit)
-> > > +       if (priv->use16bit)
-> > >                 ap->ops->sff_data_xfer = ata_sff_data_xfer;
-> > >         else
-> > >                 ap->ops->sff_data_xfer = ata_sff_data_xfer32;
-> > >
-> > > -       ap->pio_mask = __pio_mask;
-> > > +       ap->pio_mask = priv->mask;
-> > >         ap->flags |= ATA_FLAG_SLAVE_POSS;
-> > >
-> > >         /*
-> > > @@ -151,15 +163,15 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> > >          * Handle the MMIO case
-> > >          */
-> > >         if (mmio) {
-> > > -               ap->ioaddr.cmd_addr = devm_ioremap(dev, io_res->start,
-> > > -                               resource_size(io_res));
-> > > -               ap->ioaddr.ctl_addr = devm_ioremap(dev, ctl_res->start,
-> > > -                               resource_size(ctl_res));
-> > > +               ap->ioaddr.cmd_addr = devm_ioremap(dev, priv->io_res->start,
-> > > +                                                  resource_size(priv->io_res));
-> > > +               ap->ioaddr.ctl_addr = devm_ioremap(dev, priv->ctl_res->start,
-> > > +                                                  resource_size(priv->ctl_res));
-> > >         } else {
-> > > -               ap->ioaddr.cmd_addr = devm_ioport_map(dev, io_res->start,
-> > > -                               resource_size(io_res));
-> > > -               ap->ioaddr.ctl_addr = devm_ioport_map(dev, ctl_res->start,
-> > > -                               resource_size(ctl_res));
-> > > +               ap->ioaddr.cmd_addr = devm_ioport_map(dev, priv->io_res->start,
-> > > +                                                     resource_size(priv->io_res));
-> > > +               ap->ioaddr.ctl_addr = devm_ioport_map(dev, priv->ctl_res->start,
-> > > +                                                     resource_size(priv->ctl_res));
-> > >         }
-> > >         if (!ap->ioaddr.cmd_addr || !ap->ioaddr.ctl_addr) {
-> > >                 dev_err(dev, "failed to map IO/CTL base\n");
-> > > @@ -168,23 +180,83 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
-> > >
-> > >         ap->ioaddr.altstatus_addr = ap->ioaddr.ctl_addr;
-> > >
-> > > -       pata_platform_setup_port(&ap->ioaddr, ioport_shift);
-> > > +       pata_platform_setup_port(&ap->ioaddr, priv->ioport_shift);
-> > >
-> > >         ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
-> > > -                     (unsigned long long)io_res->start,
-> > > -                     (unsigned long long)ctl_res->start);
-> > > +                     (unsigned long long)priv->io_res->start,
-> > > +                     (unsigned long long)priv->ctl_res->start);
-> > >
-> > >         /* activate */
-> > >         return ata_host_activate(host, irq, irq ? ata_sff_interrupt : NULL,
-> > > -                                irq_flags, sht);
-> > > +                                irq_flags, priv->sht);
-> > >  }
-> > > -EXPORT_SYMBOL_GPL(__pata_platform_probe);
-> > >
-> > > -static int pata_platform_probe(struct platform_device *pdev)
-> > > +static int pata_of_platform_get_pdata(struct platform_device *ofdev,
-> > > +                                     struct pata_platform_priv *priv)
-> > >  {
-> > > -       struct resource *io_res;
-> > > +       struct device_node *dn = ofdev->dev.of_node;
-> > >         struct resource *ctl_res;
-> > >         struct resource *irq_res;
-> > > +       struct resource *io_res;
-> > > +       int pio_mode = 0;
-> > > +       int irq;
-> > > +       int ret;
-> > > +
-> > > +       ctl_res = devm_kzalloc(&ofdev->dev, sizeof(*ctl_res), GFP_KERNEL);
-> > > +       io_res = devm_kzalloc(&ofdev->dev, sizeof(*io_res), GFP_KERNEL);
-> > > +       irq_res = devm_kzalloc(&ofdev->dev, sizeof(*irq_res), GFP_KERNEL);
-> > > +       if (!ctl_res || !io_res || !irq_res)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ret = of_address_to_resource(dn, 0, io_res);
-> > > +       if (ret) {
-> > > +               dev_err(&ofdev->dev, "can't get IO address from device tree\n");
-> > > +               return -EINVAL;
-> > > +       }
-> > > +       priv->io_res = io_res;
-> > > +
-> > > +       ret = of_address_to_resource(dn, 1, ctl_res);
-> > > +       if (ret) {
-> > > +               dev_err(&ofdev->dev, "can't get CTL address from device tree\n");
-> > > +               return -EINVAL;
-> > > +       }
-> > > +       priv->ctl_res = ctl_res;
-> > > +
-> > > +       irq = platform_get_irq_optional(ofdev, 0);
-> > > +       if (irq <= 0 && irq != -ENXIO)
-> > > +               return irq ? irq : -ENXIO;
-> > > +
-> > > +       if (irq > 0) {
-> > > +               irq_res->start = irq;
-> > > +               irq_res->end = irq;
-> > > +               irq_res->flags = IORESOURCE_IRQ | irq_get_trigger_type(irq);
-> >
-> > Though of_irq_to_resource() does the same thing, I think the irq code
-> > handles the flags automatically for DT.
-> >
-> sorry you mean to drop the flags?
+diff --git a/Documentation/devicetree/bindings/clock/clk-palmas-clk32kg-clocks.txt b/Documentation/devicetree/bindings/clock/clk-palmas-clk32kg-clocks.txt
+deleted file mode 100644
+index 4208886d834a..000000000000
+--- a/Documentation/devicetree/bindings/clock/clk-palmas-clk32kg-clocks.txt
++++ /dev/null
+@@ -1,35 +0,0 @@
+-* Palmas 32KHz clocks *
+-
+-Palmas device has two clock output pins for 32KHz, KG and KG_AUDIO.
+-
+-This binding uses the common clock binding ./clock-bindings.txt.
+-
+-Required properties:
+-- compatible :	"ti,palmas-clk32kg" for clk32kg clock
+-		"ti,palmas-clk32kgaudio" for clk32kgaudio clock
+-- #clock-cells : shall be set to 0.
+-
+-Optional property:
+-- ti,external-sleep-control: The external enable input pins controlled the
+-	enable/disable of clocks.  The external enable input pins ENABLE1,
+-	ENABLE2 and NSLEEP. The valid values for the external pins are:
+-		PALMAS_EXT_CONTROL_PIN_ENABLE1 for ENABLE1 pin
+-		PALMAS_EXT_CONTROL_PIN_ENABLE2 for ENABLE2 pin
+-		PALMAS_EXT_CONTROL_PIN_NSLEEP for NSLEEP pin
+-	Option 0 or missing this property means the clock is enabled/disabled
+-	via register access and these pins do not have any control.
+-	The macros of external control pins for DTS is defined at
+-	dt-bindings/mfd/palmas.h
+-
+-Example:
+-	#include <dt-bindings/mfd/palmas.h>
+-	...
+-	palmas: tps65913@58 {
+-		...
+-		clk32kg: palmas_clk32k@0 {
+-			compatible = "ti,palmas-clk32kg";
+-			#clock-cells = <0>;
+-			ti,external-sleep-control = <PALMAS_EXT_CONTROL_PIN_NSLEEP>;
+-		};
+-		...
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/ti,palmas-clk32k.yaml b/Documentation/devicetree/bindings/clock/ti,palmas-clk32k.yaml
+new file mode 100644
+index 000000000000..c24887e76481
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/ti,palmas-clk32k.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/ti,palmas-clk32k.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (clocks)
++
++maintainers:
++  - Michael Turquette <mturquette@baylibre.com>
++  - Stephen Boyd <sboyd@kernel.org>
++
++description:
++  Palmas devices have two clock output pins for 32KHz, KG and KG_AUDIO. This binding uses the
++  common clock binding ./clock-bindings.txt.
++
++properties:
++  compatible:
++    enum:
++      - ti,palmas-clk32kg
++      - ti,palmas-clk32kgaudio
++
++  "#clock-cells":
++    const: 0
++
++  ti,external-sleep-control:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The external enable input pins controlled the enable/disable of clocks. The external enable
++      input pins ENABLE1, ENABLE2 and NSLEEP. The valid values for the external pins are:
++
++        PALMAS_EXT_CONTROL_PIN_ENABLE1 for ENABLE1 pin
++        PALMAS_EXT_CONTROL_PIN_ENABLE2 for ENABLE2 pin
++        PALMAS_EXT_CONTROL_PIN_NSLEEP for NSLEEP pin
++
++      Option 0 or missing this property means the clock is enabled/disabled via register access
++      and these pins do not have any control. The macros of external control pins for DTS are
++      defined in dt-bindings/mfd/palmas.h.
++    enum: [ 0, 1, 2, 3 ]
++
++additionalProperties: false
++
++required:
++  - compatible
++  - "#clock-cells"
++
++examples:
++  - |
++    #include <dt-bindings/mfd/palmas.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      tps65913@58 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x58>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        clk32k {
++          compatible = "ti,palmas-clk32kg";
++          #clock-cells = <0>;
++          ti,external-sleep-control = <PALMAS_EXT_CONTROL_PIN_NSLEEP>;
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/extcon/extcon-palmas.txt b/Documentation/devicetree/bindings/extcon/extcon-palmas.txt
+deleted file mode 100644
+index f61d5af44a27..000000000000
+--- a/Documentation/devicetree/bindings/extcon/extcon-palmas.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-EXTCON FOR PALMAS/TWL CHIPS
+-
+-PALMAS USB COMPARATOR
+-Required Properties:
+- - compatible: should contain one of:
+-   * "ti,palmas-usb-vid".
+-   * "ti,twl6035-usb-vid".
+-   * "ti,palmas-usb" (DEPRECATED - use "ti,palmas-usb-vid").
+-   * "ti,twl6035-usb" (DEPRECATED - use "ti,twl6035-usb-vid").
+-
+-Optional Properties:
+- - ti,wakeup : To enable the wakeup comparator in probe
+- - ti,enable-id-detection: Perform ID detection. If id-gpio is specified
+-		it performs id-detection using GPIO else using OTG core.
+- - ti,enable-vbus-detection: Perform VBUS detection.
+- - id-gpio: gpio for GPIO ID detection. See gpio binding.
+- - debounce-delay-ms: debounce delay for GPIO ID pin in milliseconds.
+-
+-palmas-usb {
+-       compatible = "ti,twl6035-usb", "ti,palmas-usb";
+-       ti,wakeup;
+-};
+diff --git a/Documentation/devicetree/bindings/extcon/ti,palmas-usb-vid.yaml b/Documentation/devicetree/bindings/extcon/ti,palmas-usb-vid.yaml
+new file mode 100644
+index 000000000000..29cd9bd68676
+--- /dev/null
++++ b/Documentation/devicetree/bindings/extcon/ti,palmas-usb-vid.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/extcon/ti,palmas-usb-vid.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (extcon)
++
++maintainers:
++  - MyungJoo Ham <myungjoo.ham@samsung.com>
++  - Chanwoo Choi <cw00.choi@samsung.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: ti,palmas-usb-vid
++      - const: ti,twl6035-usb-vid
++      - const: ti,palmas-usb
++        deprecated: true
++      - const: ti,twl6035-usb
++        deprecated: true
++
++  ti,wakeup:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: To enable the wakeup comparator in probe
++
++  ti,enable-id-detection:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Perform ID detection. If id-gpios is specified it performs id-detection using
++      GPIO else using OTG core.
++
++  ti,enable-vbus-detection:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Perform VBUS detection.
++
++  id-gpios:
++    description: GPIO for GPIO ID detection. See GPIO bindings.
++
++  debounce-delay-ms:
++    description: debounce delay for GPIO ID pin in milliseconds
++
++additionalProperties: false
++
++required:
++  - compatible
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@38 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x38>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        palmas_usb {
++          compatible = "ti,palmas-usb-vid";
++          ti,wakeup;
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-palmas.txt b/Documentation/devicetree/bindings/gpio/gpio-palmas.txt
+deleted file mode 100644
+index 08b5b52a3ae0..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-palmas.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Palmas GPIO controller bindings
+-
+-Required properties:
+-- compatible:
+-  - "ti,palams-gpio" for palma series of the GPIO controller
+-  - "ti,tps80036-gpio" for Palma series device TPS80036.
+-  - "ti,tps65913-gpio" for palma series device TPS65913.
+-  - "ti,tps65914-gpio" for palma series device TPS65914.
+-- #gpio-cells : Should be two.
+-  - first cell is the gpio pin number
+-  - second cell is used to specify the gpio polarity:
+-      0 = active high
+-      1 = active low
+-- gpio-controller : Marks the device node as a GPIO controller.
+-
+-Note: This gpio node will be sub node of palmas node.
+-
+-Example:
+-	palmas: tps65913@58 {
+-		:::::::::::
+-		palmas_gpio: palmas_gpio {
+-			compatible = "ti,palmas-gpio";
+-			gpio-controller;
+-			#gpio-cells = <2>;
+-		};
+-		:::::::::::
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/ti,palmas-gpio.yaml b/Documentation/devicetree/bindings/gpio/ti,palmas-gpio.yaml
+new file mode 100644
+index 000000000000..46cd30b5541a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/ti,palmas-gpio.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gpio/ti,palmas-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (GPIO)
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++properties:
++  compatible:
++    enum:
++      - ti,palmas-gpio
++      - ti,tps80036-gpio
++      - ti,tps65913-gpio
++      - ti,tps65914-gpio
++
++  # from gpio.yaml
++  gpio-controller: true
++  "#gpio-cells": true
++
++allOf:
++  - $ref: gpio.yaml
++
++additionalProperties: false
++
++required:
++  - compatible
++  - gpio-controller
++  - "#gpio-cells"
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@58 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x58>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        palmas_gpio {
++          compatible = "ti,palmas-gpio";
++          gpio-controller;
++          #gpio-cells = <2>;
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+index 7b895784e008..a1f4271b9aa6 100644
+--- a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+@@ -70,16 +70,24 @@ required:
+ examples:
+   - |
+     #include <dt-bindings/clock/mt8183-clk.h>
+-    pmic {
+-        compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
++
++    i2c {
++      #address-cells = <1>;
++      #size-cels = <0>;
++
++      pmic@48 {
++        compatible = "ti,palmas";
++        reg = <0x48>;
++
+         adc {
+-            compatible = "ti,palmas-gpadc";
+-            interrupts = <18 0
+-                          16 0
+-                          17 0>;
+-            #io-channel-cells = <1>;
+-            ti,channel0-current-microamp = <5>;
+-            ti,channel3-current-microamp = <10>;
++          compatible = "ti,palmas-gpadc";
++          interrupts = <18 0>,
++                       <16 0>,
++                       <17 0>;
++          #io-channel-cells = <1>;
++          ti,channel0-current-microamp = <5>;
++          ti,channel3-current-microamp = <10>;
+         };
++      };
+     };
+ ...
+diff --git a/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.txt b/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.txt
+deleted file mode 100644
+index c829e18e1a05..000000000000
+--- a/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.txt
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Texas Instruments Palmas family power button module
+-
+-This module is part of the Palmas family of PMICs. For more details
+-about the whole chip see:
+-Documentation/devicetree/bindings/mfd/palmas.txt.
+-
+-This module provides a simple power button event via an Interrupt.
+-
+-Required properties:
+-- compatible: should be one of the following
+-   - "ti,palmas-pwrbutton": For Palmas compatible power on button
+-- interrupts: Interrupt number of power button submodule on device.
+-
+-Optional Properties:
+-
+-- ti,palmas-long-press-seconds: Duration in seconds which the power
+-  button should be kept pressed for Palmas to power off automatically.
+-  NOTE: This depends on OTP support and POWERHOLD signal configuration
+-  on platform. Valid values are 6, 8, 10 and 12.
+-- ti,palmas-pwron-debounce-milli-seconds: Duration in milliseconds
+-  which the power button should be kept pressed for Palmas to register
+-  a press for debouncing purposes. NOTE: This depends on specific
+-  Palmas variation capability. Valid values are 15, 100, 500 and 1000.
+-
+-Example:
+-
+-&palmas {
+-	palmas_pwr_button: pwrbutton {
+-		compatible = "ti,palmas-pwrbutton";
+-		interrupt-parent = <&tps659038>;
+-		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+-		ti,palmas-long-press-seconds = <12>;
+-		ti,palmas-pwron-debounce-milli-seconds = <15>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.yaml b/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.yaml
+new file mode 100644
+index 000000000000..c248ed1d0e67
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/ti,palmas-pwrbutton.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/ti,palmas-pwrbutton.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (power button)
++
++maintainers:
++  - Nishanth Menon <nm@ti.com>
++
++description: |
++  This module is part of the Palmas family of PMICs. For more details about the whole chip see:
++
++    Documentation/devicetree/bindings/mfd/palmas.txt
++
++  This module provides a simple power button event via an interrupt.
++
++properties:
++  compatible:
++    const: ti,palmas-pwrbutton
++
++  interrupts:
++    maxItems: 1
++
++  wakeup-source:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Enables wake up of host system on power button press.
++
++  ti,palmas-long-press-seconds:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Duration in seconds which the power button should be kept pressed for Palmas to power off
++      automatically.
++
++      NOTE: This depends on OTP support and POWERHOLD signal configuration on platform.
++    enum: [ 6, 8, 10, 12 ]
++
++  ti,palmas-pwron-debounce-milli-seconds:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Duration in milliseconds which the power button should be kept pressed for Palmas to
++      register a press for debouncing purposes. NOTE: This depends on specific Palmas variation
++      capability.
++    enum: [ 15, 100, 500, 1000 ]
++
++additionalProperties: false
++
++required:
++  - compatible
++  - interrupts
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@48 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x48>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        pwrbutton {
++          compatible = "ti,palmas-pwrbutton";
++          interrupt-parent = <&tps659038>;
++          interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++          ti,palmas-long-press-seconds = <12>;
++          ti,palmas-pwron-debounce-milli-seconds = <15>;
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/mfd/palmas.txt b/Documentation/devicetree/bindings/mfd/palmas.txt
+deleted file mode 100644
+index e736ab3012a6..000000000000
+--- a/Documentation/devicetree/bindings/mfd/palmas.txt
++++ /dev/null
+@@ -1,52 +0,0 @@
+-* palmas device tree bindings
+-
+-The TI palmas family current members :-
+-twl6035 (palmas)
+-twl6037 (palmas)
+-tps65913 (palmas)
+-tps65914 (palmas)
+-tps659038
+-tps65917
+-
+-Required properties:
+-- compatible : Should be from the list
+-  ti,twl6035
+-  ti,twl6036
+-  ti,twl6037
+-  ti,tps65913
+-  ti,tps65914
+-  ti,tps80036
+-  ti,tps659038
+-  ti,tps65917
+-and also the generic series names
+-  ti,palmas
+-- interrupt-controller : palmas has its own internal IRQs
+-- #interrupt-cells : should be set to 2 for IRQ number and flags
+-  The first cell is the IRQ number.
+-  The second cell is the flags, encoded as the trigger masks from
+-  Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
+-
+-Optional properties:
+-  ti,mux-padX : set the pad register X (1-2) to the correct muxing for the
+-		hardware, if not set will use muxing in OTP.
+-
+-Example:
+-
+-palmas {
+-	compatible = "ti,twl6035", "ti,palmas";
+-	reg = <0x48>
+-	interrupt-parent = <&intc>;
+-	interrupt-controller;
+-	#interrupt-cells = <2>;
+-
+-	ti,mux-pad1 = <0>;
+-	ti,mux-pad2 = <0>;
+-
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-
+-	pmic {
+-		compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
+-		....
+-	};
+-}
+diff --git a/Documentation/devicetree/bindings/mfd/ti,palmas.yaml b/Documentation/devicetree/bindings/mfd/ti,palmas.yaml
+new file mode 100644
+index 000000000000..3d8c823bba13
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/ti,palmas.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/ti,palmas.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs
++
++maintainers:
++  - Lee Jones <lee.jones@linaro.org>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - ti,twl6035
++          - ti,twl6036
++          - ti,twl6037
++          - ti,tps65913
++          - ti,tps65914
++          - ti,tps80036
++          - ti,tps659038
++          - ti,tps65917
++      - const: ti,palmas
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller:
++    description: The Palmas chip has its own internal IRQs.
++
++  "#interrupt-cells":
++    description: The first cell is the IRQ number and the second cell is the flags, encoded as the
++      trigger mask from ../interrupt-controller/interrupts.txt.
++    const: 2
++
++  ti,mux-pad1:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Set the pad register 1 to the correct muxing for the hardware. Otherwise the
++     muxing will be obtained from OTP.
++
++  ti,mux-pad2:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Set the pad register 2 to the correct muxing for the hardware. Otherwise the
++     muxing will be obtained from OTP.
++
++  ti,power-ctrl:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Specifies the value to program into the POWER_CTRL register.
++
++  ti,system-power-controller:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Specifies whether or not this PMIC is controlling the system power.
++
++  pinctrl:
++    $ref: ../pinctrl/ti,palmas-pinctrl.yaml
++
++  pwrbutton:
++    $ref: ../input/ti,palmas-pwrbutton.yaml
++
++  rtc:
++    $ref: ../rtc/ti,palmas-rtc.yaml
++
++patternProperties:
++  "^(palmas_)?adc$":
++    $ref: ../iio/adc/ti,palmas-gpadc.yaml
++
++  "^(palmas_)?(clk32k|clk32kg|clk32kgaudio)$":
++    $ref: ../clock/ti,palmas-clk32k.yaml
++
++  "^(palmas_)?gpio$":
++    $ref: ../gpio/ti,palmas-gpio.yaml
++
++  "^(palmas_)?pinmux$":
++    $ref: ../pinctrl/ti,palmas-pinctrl.yaml
++
++  "^(palmas_)?pmic$":
++    $ref: ../regulator/ti,palmas-pmic.yaml
++
++  "^(palmas_)?usb$":
++    $ref: ../extcon/ti,palmas-usb-vid.yaml
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - "#interrupt-cells"
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@48 {
++        compatible = "ti,twl6035", "ti,palmas";
++        reg = <0x48>;
++        interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
++        interrupt-parent = <&intc>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        ti,mux-pad1 = <0>;
++        ti,mux-pad2 = <0>;
++
++        pmic {
++          compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-palmas.txt b/Documentation/devicetree/bindings/pinctrl/pinctrl-palmas.txt
+deleted file mode 100644
+index c28d4eb83b76..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/pinctrl-palmas.txt
++++ /dev/null
+@@ -1,105 +0,0 @@
+-Palmas Pincontrol bindings
+-
+-The pins of Palmas device can be set on different option and provides
+-the configuration for Pull UP/DOWN, open drain etc.
+-
+-Required properties:
+-- compatible: It must be one of following:
+-  - "ti,palmas-pinctrl" for Palma series of the pincontrol.
+-  - "ti,tps65913-pinctrl" for Palma series device TPS65913.
+-  - "ti,tps80036-pinctrl" for Palma series device TPS80036.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-Palmas's pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-list of pins. This configuration can include the mux function to select on
+-those pin(s), and various pin configuration parameters, such as pull-up,
+-open drain.
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-Optional properties:
+-- ti,palmas-enable-dvfs1: Enable DVFS1. Configure pins for DVFS1 mode.
+-	Selection primary or secondary function associated to I2C2_SCL_SCE,
+-	I2C2_SDA_SDO pin/pad for DVFS1 interface
+-- ti,palmas-enable-dvfs2: Enable DVFS2. Configure pins for DVFS2 mode.
+-	Selection primary or secondary function associated to GPADC_START
+-	and SYSEN2 pin/pad for DVFS2 interface
+-- ti,palmas-override-powerhold: This is applicable for PMICs for which
+-	GPIO7 is configured in POWERHOLD mode which has higher priority
+-	over DEV_ON bit and keeps the PMIC supplies on even after the DEV_ON
+-	bit is turned off. This property enables driver to over ride the
+-	POWERHOLD value to GPIO7 so as to turn off the PMIC in power off
+-	scenarios. So for GPIO7 if ti,palmas-override-powerhold is set
+-	then the GPIO_7 field should never be muxed to anything else.
+-	It should be set to POWERHOLD by default and only in case of
+-	power off scenarios the driver will over ride the mux value.
+-
+-This binding uses the following generic properties as defined in
+-pinctrl-bindings.txt:
+-
+-Required: pins
+-Options: function, bias-disable, bias-pull-up, bias-pull-down,
+-	 drive-open-drain.
+-
+-Note that many of these properties are only valid for certain specific pins.
+-See the Palmas device datasheet for complete details regarding which pins
+-support which functionality.
+-
+-Valid values for pin names are:
+-	gpio0, gpio1, gpio2, gpio3, gpio4, gpio5, gpio6, gpio7, gpio8, gpio9,
+-	gpio10, gpio11, gpio12, gpio13, gpio14, gpio15, vac, powergood,
+-	nreswarm, pwrdown, gpadc_start, reset_in, nsleep, enable1, enable2,
+-	int.
+-
+-Valid value of function names are:
+-	gpio, led, pwm, regen, sysen, clk32kgaudio, id, vbus_det, chrg_det,
+-	vac, vacok, powergood, usb_psel, msecure, pwrhold, int, nreswarm,
+-	simrsto, simrsti, low_vbat, wireless_chrg1, rcm, pwrdown, gpadc_start,
+-	reset_in, nsleep, enable.
+-
+-There are 4 special functions: opt0, opt1, opt2 and opt3. If any of these
+-functions is selected then directly pins register will be written with 0, 1, 2
+-or 3 respectively if it is valid for that pins or list of pins.
+-
+-Example:
+-	palmas: tps65913 {
+-		....
+-		pinctrl {
+-			compatible = "ti,tps65913-pinctrl";
+-			ti,palmas-enable-dvfs1;
+-			pinctrl-names = "default";
+-			pinctrl-0 = <&palmas_pins_state>;
+-
+-			palmas_pins_state: pinmux {
+-				gpio0 {
+-					pins = "gpio0";
+-					function = "id";
+-					bias-pull-up;
+-				};
+-
+-				vac {
+-					pins = "vac";
+-					function = "vacok";
+-					bias-pull-down;
+-				};
+-
+-				gpio5 {
+-					pins = "gpio5";
+-					function = "opt0";
+-					drive-open-drain = <1>;
+-				};
+-			};
+-		};
+-		....
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/ti,palmas-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ti,palmas-pinctrl.yaml
+new file mode 100644
+index 000000000000..63f3b858fd62
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/ti,palmas-pinctrl.yaml
+@@ -0,0 +1,154 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/ti,palmas-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (pin control)
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++description: The pins of Palmas device can be set on different option and provides the
++  configuration for Pull UP/DOWN, open drain etc.
++
++properties:
++  compatible:
++    enum:
++      - ti,palmas-pinctrl
++      - ti,tps65913-pinctrl
++      - ti,tps80036-pinctrl
++
++  ti,palmas-enable-dvfs1:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Enable DVFS1. Configure pins for DVFS1 mode. Selection primary or secondary
++      function associated to I2C2_SCL_SCE, I2C2_SDA_SDO pin/pad for DVFS1 interface.
++
++  ti,palmas-enable-dvfs2:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Enable DVFS2. Configure pins for DVFS2 mode. Selection primary or secondary
++      function associated to GPADC_START and SYSEN2 pin/pad for DVFS2 interface.
++
++  ti,palmas-override-powerhold:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: This is applicable for PMICs for which GPIO7 is configured in POWERHOLD mode
++      which has higher priority over DEV_ON bit and keeps the PMIC supplies on even after the
++      DEV_ON bit is turned off. This property enables driver to over ride the POWERHOLD value to
++      GPIO7 so as to turn off the PMIC in power off scenarios. So for GPIO7 if
++      ti,palmas-override-powerhold is set then the GPIO_7 field should never be muxed to anything
++      else. It should be set to POWERHOLD by default and only in case of power off scenarios the
++      driver will over ride the mux value.
++
++required:
++  - compatible
++
++additionalProperties:
++  type: object
++  description: |
++    Please refer to pinctrl-bindings.txt in this directory for details of the common pinctrl
++    bindings used by client devices, including the meaning of the phrase "pin configuration node".
++
++    Palmas's pin configuration nodes act as a container for an arbitrary number of subnodes. Each
++    of these subnodes represents some desired configuration for a list of pins. This configuration
++    can include the mux function to select on those pin(s), and various pin configuration
++    parameters, such as pull-up, open drain.
++
++  properties:
++    phandle:
++      $ref: /schemas/types.yaml#/definitions/uint32
++
++  additionalProperties:
++    type: object
++    description: |
++      The name of each subnode is not important; all subnodes should be enumerated and processed
++      purely based on their content.
++
++      Each subnode only affects those parameters that are explicitly listed. In other words, a
++      subnode that lists a mux function but no pin configuration parameters implies no information
++      about any pin configuration parameters. Similarly, a pin subnode that describes a pullup
++      parameter implies no information about e.g. the mux function.
++
++      Note that many of these properties are only valid for certain specific pins. See the Palmas
++      device datasheet for complete details regarding which pins support which functionality.
++
++    properties:
++      pins:
++        $ref: /schemas/types.yaml#/definitions/string-array
++        items:
++          enum: [ gpio0, gpio1, gpio2, gpio3, gpio4, gpio5, gpio6, gpio7, gpio8, gpio9, gpio10,
++                  gpio11, gpio12, gpio13, gpio14, gpio15, vac, powergood, nreswarm, pwrdown,
++                  gpadc_start, reset_in, nsleep, enable1, enable2, int ]
++
++      function:
++        $ref: /schemas/types.yaml#/definitions/string
++        description: Note that the opt0, opt1, opt2 and opt3 functions are special and if any of
++          these functions is selected then directly pins register will be written with 0, 1, 2 or 3,
++          respectively, if the function is valid for that pin or list of pins.
++        enum: [ gpio, led, pwm, regen, sysen, clk32kgaudio, id, vbus_det, chrg_det, vac, vacok,
++                powergood, usb_psel, msecure, pwrhold, int, nreswarm, simrsto, simrsti, low_vbat,
++                wireless_chrg1, rcm, pwrdown, gpadc_start, reset_in, nsleep, enable, opt0, opt1,
++                opt2, opt3 ]
++
++      bias-disable:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description: disable bias
++
++      bias-pull-up:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description: pull-up bias
++
++      bias-pull-down:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description: pull-down bias
++
++      drive-open-drain:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: configure for open drain
++        enum: [ 0, 1 ]
++
++    additionalProperties: false
++
++    required:
++      - pins
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@58 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x58>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        pinctrl {
++          compatible = "ti,tps65913-pinctrl";
++          ti,palmas-enable-dvfs1;
++          pinctrl-names = "default";
++          pinctrl-0 = <&palmas_pins_state>;
++
++          palmas_pins_state: pinmux {
++            gpio0 {
++              pins = "gpio0";
++              function = "id";
++              bias-pull-up;
++            };
++
++            vac {
++              pins = "vac";
++              function = "vacok";
++              bias-pull-down;
++            };
++
++            gpio5 {
++              pins = "gpio5";
++              function = "opt0";
++              drive-open-drain = <1>;
++            };
++          };
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/regulator/palmas-pmic.txt b/Documentation/devicetree/bindings/regulator/palmas-pmic.txt
+deleted file mode 100644
+index 84bc76a7c39e..000000000000
+--- a/Documentation/devicetree/bindings/regulator/palmas-pmic.txt
++++ /dev/null
+@@ -1,89 +0,0 @@
+-* palmas regulator IP block devicetree bindings
+-
+-The tps659038 for the AM57x class have OTP spins that
+-have different part numbers but the same functionality. There
+-is not a need to add the OTP spins to the palmas driver. The
+-spin devices should use the tps659038 as it's compatible value.
+-This is the list of those devices:
+-tps659037
+-
+-Required properties:
+-- compatible : Should be from the list
+-  ti,twl6035-pmic
+-  ti,twl6036-pmic
+-  ti,twl6037-pmic
+-  ti,tps65913-pmic
+-  ti,tps65914-pmic
+-  ti,tps65917-pmic
+-  ti,tps659038-pmic
+-and also the generic series names
+-  ti,palmas-pmic
+-- interrupts : The interrupt number and the type which can be looked up here:
+-	       arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h
+-- interrupts-name: The names of the individual interrupts.
+-
+-Optional properties:
+-- ti,ldo6-vibrator : ldo6 is in vibrator mode
+-
+-Optional nodes:
+-- regulators : Must contain a sub-node per regulator from the list below.
+-	       Each sub-node should contain the constraints and initialization
+-	       information for that regulator. See regulator.txt for a
+-	       description of standard properties for these sub-nodes.
+-	       Additional custom properties  are listed below.
+-
+-	       For ti,palmas-pmic - smps12, smps123, smps3 depending on OTP,
+-	       smps45, smps457, smps7 depending on variant, smps6, smps[8-9],
+-	       smps10_out2, smps10_out1, ldo[1-9], ldoln, ldousb.
+-
+-	       Optional sub-node properties:
+-	       ti,warm-reset - maintain voltage during warm reset(boolean)
+-	       ti,roof-floor - This takes as optional argument on platform supporting
+-	       the rail from desired external control. If there is no argument then
+-	       it will be assume that it is controlled by NSLEEP pin.
+-	       The valid value for external pins are:
+-			ENABLE1 then 1,
+-			ENABLE2 then 2 or
+-			NSLEEP then 3.
+-	       ti,mode-sleep - mode to adopt in pmic sleep 0 - off, 1 - auto,
+-	       2 - eco, 3 - forced pwm
+-	       ti,smps-range - OTP has the wrong range set for the hardware so override
+-	       0 - low range, 1 - high range.
+-
+-- ti,system-power-controller: Telling whether or not this pmic is controlling
+-			      the system power.
+-
+-Example:
+-
+-#include <dt-bindings/interrupt-controller/irq.h>
+-
+-pmic {
+-	compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
+-	interrupt-parent = <&palmas>;
+-	interrupts = <14 IRQ_TYPE_NONE>;
+-	interrupts-name = "short-irq";
+-
+-	ti,ldo6-vibrator;
+-
+-	ti,system-power-controller;
+-
+-	regulators {
+-		smps12_reg : smps12 {
+-			regulator-name = "smps12";
+-			regulator-min-microvolt = < 600000>;
+-			regulator-max-microvolt = <1500000>;
+-			regulator-always-on;
+-			regulator-boot-on;
+-			ti,warm-reset;
+-			ti,roof-floor = <1>; /* ENABLE1 control */
+-			ti,mode-sleep = <0>;
+-			ti,smps-range = <1>;
+-		};
+-
+-		ldo1_reg: ldo1 {
+-			regulator-name = "ldo1";
+-			regulator-min-microvolt = <2800000>;
+-			regulator-max-microvolt = <2800000>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/regulator/ti,palmas-pmic.yaml b/Documentation/devicetree/bindings/regulator/ti,palmas-pmic.yaml
+new file mode 100644
+index 000000000000..da71e3ebcd32
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/ti,palmas-pmic.yaml
+@@ -0,0 +1,144 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/ti,palmas-pmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of PMICs regulator IP block
++
++maintainers:
++  - Mark Brown <broonie@kernel.org>
++
++description: |
++  The TPS659038 for the AM57x class have OTP spins that have different part numbers but the same
++  functionality. There is not a need to add the OTP spins to the Palmas driver. The spin devices
++  should use the TPS659038 as it's compatible value.
++
++  This is the list of those devices: tps659037
++
++definitions:
++  regulator:
++    type: object
++    properties:
++      ti,warm-reset:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description: maintain voltage during warm reset
++
++      ti,roof-floor:
++        description: This takes as optional argument on platform supporting the rail from
++          desired external control. If there is no argument then it will be assume that it is
++          controlled by NSLEEP pin.
++        oneOf:
++          - $ref: /schemas/types.yaml#/definitions/flag
++          - $ref: /schemas/types.yaml#/definitions/uint32
++            #oneOf:
++            #  - description: ENABLE1 pin
++            #    const: 1
++            #  - description: ENABLE2 pin
++            #    const: 2
++            #  - description: NSLEEP pin
++            #    const: 3
++
++      ti,mode-sleep:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: Mode to adopt in PMIC sleep.
++        #oneOf:
++        #  - description: off
++        #    const: 0
++        #  - description: auto
++        #    const: 1
++        #  - description: ECO
++        #    const: 2
++        #  - description: forced PWM
++        #    const: 3
++
++      ti,smps-range:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: OTP has the wrong range set for the hardware so override
++        #oneOf:
++        #  - description: low range
++        #    const: 0
++        #  - description: high range
++        #    const: 1
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - ti,twl6035-pmic
++          - ti,twl6036-pmic
++          - ti,twl6037-pmic
++          - ti,tps65913-pmic
++          - ti,tps65914-pmic
++          - ti,tps65917-pmic
++          - ti,tps659038-pmic
++      - const: ti,palmas-pmic
++
++  interrupts:
++    maxItems: 1
++
++  ti,ldo6-vibrator:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Specifies whether LDO6 is in vibrator mode or not.
++
++  regulators:
++    type: object
++    description: |
++      Must contain a sub-node per regulator from the list below. Each sub-node should contain the
++      constraints and initialization information for that regulator. See regulator.txt for a
++      description of standard properties for these sub-nodes. Additional custom properties are
++      listed below.
++
++    patternProperties:
++      "^smps(12|123|3|34|457|6|7|8|9|10_out1|10_out2)$":
++        $ref: "#/definitions/regulator"
++
++      "^ldo[1-9]|ldoln|ldousb$":
++        $ref: "#/definitions/regulator"
++
++patternProperties:
++  "^smps(([1-9]|10)-in-)|(smps10-out2-)supply$":
++    description: Input supply for the corresponding SMPS regulator.
++
++  "^ldo([1-9]|ln|usb)-in-supply$":
++    description: Input supply for the corresponding LDO regulator.
++
++additionalProperties: false
++
++required:
++  - compatible
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    pmic {
++      compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
++      interrupt-parent = <&palmas>;
++      interrupts = <14 IRQ_TYPE_NONE>;
++      interrupts-name = "short-irq";
++
++      ti,ldo6-vibrator;
++
++      ti,system-power-controller;
++
++      regulators {
++        smps12_reg: smps12 {
++          regulator-name = "smps12";
++          regulator-min-microvolt = < 600000>;
++          regulator-max-microvolt = <1500000>;
++          regulator-always-on;
++          regulator-boot-on;
++          ti,warm-reset;
++          ti,roof-floor = <1>; /* ENABLE1 control */
++          ti,mode-sleep = <0>;
++          ti,smps-range = <1>;
++        };
++
++        ldo1_reg: ldo1 {
++          regulator-name = "ldo1";
++          regulator-min-microvolt = <2800000>;
++          regulator-max-microvolt = <2800000>;
++        };
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-palmas.txt b/Documentation/devicetree/bindings/rtc/rtc-palmas.txt
+deleted file mode 100644
+index c6cf37758a77..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-palmas.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Palmas RTC controller bindings
+-
+-Required properties:
+-- compatible:
+-  - "ti,palmas-rtc" for palma series of the RTC controller
+-- interrupts: Interrupt number of RTC submodule on device.
+-
+-Optional properties:
+-
+-- ti,backup-battery-chargeable: The Palmas series device like TPS65913 or
+-	TPS80036 supports the backup battery for powering the RTC when main
+-	battery is removed or in very low power state. The backup battery
+-	can be chargeable or non-chargeable. This flag will tells whether
+-	battery is chargeable or not. If charging battery then driver can
+-	enable the charging.
+-- ti,backup-battery-charge-high-current: Enable high current charging in
+-	backup battery. Device supports the < 100uA and > 100uA charging.
+-	The high current will be > 100uA. Absence of this property will
+-	charge battery to lower current i.e. < 100uA.
+-
+-Example:
+-	palmas: tps65913@58 {
+-		...
+-		palmas_rtc: rtc {
+-			compatible = "ti,palmas-rtc";
+-			interrupt-parent = <&palmas>;
+-			interrupts = <8 0>;
+-			ti,backup-battery-chargeable;
+-			ti,backup-battery-charge-high-current;
+-		};
+-		...
+-	};
+diff --git a/Documentation/devicetree/bindings/rtc/ti,palmas-rtc.yaml b/Documentation/devicetree/bindings/rtc/ti,palmas-rtc.yaml
+new file mode 100644
+index 000000000000..f236385d5d66
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/ti,palmas-rtc.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/ti,palmas-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments Palmas family of Power-Management ICs (RTC)
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++properties:
++  compatible:
++    const: ti,palmas-rtc
++
++  interrupts:
++    maxItems: 1
++
++  ti,backup-battery-chargeable:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: The Palmas series device like TPS65913 or TPS80036 supports the backup battery
++      for powering the RTC when main battery is removed or in very low power state. The backup
++      battery can be chargeable or non-chargeable. This flag will tells whether battery is
++      chargeable or not. If charging battery then driver can enable the charging.
++
++  ti,backup-battery-charge-high-current:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Enable high current charging in backup battery. Device supports the < 100uA and >
++      100uA charging. The high current will be > 100uA. Absence of this property will charge
++      battery to lower current i.e. < 100uA.
++
++allOf:
++  - $ref: rtc.yaml
++
++additionalProperties: false
++
++required:
++  - compatible
++  - interrupts
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      tps65913@58 {
++        compatible = "ti,tps65913", "ti,palmas";
++        reg = <0x58>;
++
++        #interrupt-cells = <2>;
++        interrupt-controller;
++
++        rtc {
++          compatible = "ti,palmas-rtc";
++          interrupt-parent = <&palmas>;
++          interrupts = <8 0>;
++          ti,backup-battery-chargeable;
++          ti,backup-battery-charge-high-current;
++        };
++      };
++    };
+-- 
+2.34.1
 
-Right.
-
-Rob

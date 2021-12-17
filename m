@@ -2,305 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55354478238
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB08747823B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbhLQBh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 20:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S230495AbhLQBn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 20:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhLQBh1 (ORCPT
+        with ESMTP id S229834AbhLQBn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:37:27 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718EC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:37:26 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id 30so1481712uag.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:37:26 -0800 (PST)
+        Thu, 16 Dec 2021 20:43:27 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA2BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:43:27 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q16so1168970wrg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:43:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ULm8F1jUKPQA5lXk5boYZppCWt+QFr5wkiSxlguZEnY=;
-        b=l1c1ElnqZemsukJbKE2Rxh6HSF2h/6AZiWfJIH4M9AMKhIbyhoRoe/Bcdbvd3uOPxF
-         yAJd1J4PRKLinEyqo0HJ7VMgLw45f6qYxCbHIGEJjC44QDM3gZUDhVZN7Qsk2OqvmT6m
-         PKelgt0+2CGU59vWqD/NCh3hPsmCt1fc+H+AOzzJRKZ0HIdJg+fjIL3+6pFt2EQ5lXgQ
-         dK6QkrkBWqurcgSqHIk39b4eRtfWc6QYk/Md6YPbI420uTx+KnMCsZsMrmVgwnp6aeEK
-         ogC+9wxuqGZ5A40JgL5Q4MIrJk/x33EDYdz/3uWShhq5BK0ePiRDygnlqxHBEf3I9mDk
-         +GXQ==
+        bh=H5OrUZjgQ1YXwPs3ZdZyzCT9xYTcrlDxGMN/Lkx3yjY=;
+        b=ENS69Ixmc+9rTshBrseGjbavY/beBCYucRDedT5GJlZuWvD3sm+w8lqALUgK5qk9xP
+         IsYf4fBr+/E51laHVZAO5tf08XgyZZcoxA8+fGFo9wpn9CptnrJxz+LTcPqNUs/zY3DZ
+         aXd/fKemZfmErtcoixOwRBewS98RcjuAQzv63mAutdmTtYYS1sDGyy18BtFqH1sfEIvU
+         aEzdoALJUPiFAbJW84tpPtyTCH132TMXXhvwoliy9fR7Kp7mBhoixVjXaCrTz9b0WFUj
+         B+Hx9ghk67vEfHTI1/eKIDed3BOuxVDYoZiqMt2wBkShjGMAcx26Pdan67uNITyKDX9r
+         m67g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ULm8F1jUKPQA5lXk5boYZppCWt+QFr5wkiSxlguZEnY=;
-        b=D4JSuRl9sq7hKHD95kI+2WhP70dbb7haHMQXdN9FQHYUehrWh/5lrI4DojQS3hGq+I
-         /4G3qt2KaZ2xLFzceSMirXAg1SFR+VhNv2AmdVx3oKkZ76kG7WBjMCNd8oTvAAbR1dzw
-         hbH3/iQY0e/wh9XgWUx6SqxKYM7VYrbX4GcKpShUBKdtql962T/jiqyZ1o0/LQoZrPi4
-         lJKqJNdA5GzxaiNb/d9pwMFoko44HfRG8EKKJ8NT4Jo8qGbtNHHLhUIQGe6XRMWBZ3hw
-         VQTSlEgt6l7YxLwbOhqxjY3sNhbZ0w360XaapsOrGwcJHV5BJS/qdYkdFSa69nfXV7eU
-         eBeA==
-X-Gm-Message-State: AOAM533JNAaobox/lpJ+u69ZgskFFwx8DZOe1oiDad+kFoiHs4DZGfQ3
-        qoDFTvq5Op/uL4sEB1WALvX0WTWjdOl8xPpN3RFUlg==
-X-Google-Smtp-Source: ABdhPJyruSK7tH/BTjcldQoAu0YUpSBd65lTPCLNFuSaDsp8UC1z/jZAcY7igh5H6TK/nb71yxIS9+VyqE6JrTxpzpg=
-X-Received: by 2002:ab0:61d9:: with SMTP id m25mr213664uan.114.1639705045957;
- Thu, 16 Dec 2021 17:37:25 -0800 (PST)
+        bh=H5OrUZjgQ1YXwPs3ZdZyzCT9xYTcrlDxGMN/Lkx3yjY=;
+        b=Q+moWT2M5nohV3hV/RncgBF9cLMksu3o0LtlL24irrMjtZjFQ/FQeAZPi1KjXOSF08
+         0NicCVQR1toorZlqHdmVKl0X7C60zJEFmAIASFg/fR7pQ15YBGhjnaQPuUrn/G9LNhhI
+         TgmIqrzK+dz6FccV3t6pO1v/H9spYk4wxexCe7FpMIsQfyrdgg0ejsKdwsN1VgKw+Qvi
+         qP7S4nhqWIbMBe7tJJkJBkM9azqob/jVkcYnF/GS6HR6wepx8U5Skfu3WzPkhDpm+pyM
+         8JmltRL0f9EosoQd2E8BiJqbvfaKp0d4Iex97uEZmuCj1/6iFTJfevlDx4obmsB1HpIn
+         fHPA==
+X-Gm-Message-State: AOAM531RhIzBw9VDoSid+rrQovmRKWva8xvKl9PIZJAIhpaiO0iGQdAK
+        YLnpFjiTdE37F5uRwpxRPmxS4YIKVgHumoTL3AMpa1atx+av4Rhy
+X-Google-Smtp-Source: ABdhPJyTlUWLnivczkfGrT9CphgkdB2Z9tQ9Xqgib9yoA4ZrAWb8bQ3ZsOF0ieh/tvf071MEYHoazsx1ETNdmJvtWnE=
+X-Received: by 2002:a5d:6d4c:: with SMTP id k12mr479403wri.511.1639705405890;
+ Thu, 16 Dec 2021 17:43:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217013005.16646-1-semen.protsenko@linaro.org> <20211217013005.16646-8-semen.protsenko@linaro.org>
-In-Reply-To: <20211217013005.16646-8-semen.protsenko@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 17 Dec 2021 03:37:14 +0200
-Message-ID: <CAPLW+4nSAjugncJkr49k=nkWiKXs-mo16_qfq1KRGkaaWu-R7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] arm64: dts: exynos: Add initial E850-96 board support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211129164951.220511-1-xiehuan09@gmail.com> <20211216235017.97f0769a63d2c478562d39a4@kernel.org>
+In-Reply-To: <20211216235017.97f0769a63d2c478562d39a4@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Fri, 17 Dec 2021 09:43:13 +0800
+Message-ID: <CAEr6+EACoE+7SSMJP10uz2g9DqKPwOK89kxAUC=_R43eMRK43w@mail.gmail.com>
+Subject: Re: [RFC][PATCH v6 0/5] trace: Introduce objtrace trigger to trace
+ the kernel object
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 at 03:30, Sam Protsenko <semen.protsenko@linaro.org> wrote:
->
-> E850-96 is a 96boards development board manufactured by WinLink. It
-> incorporates Samsung Exynos850 SoC, and is compatible with 96boards
-> mezzanine boards [1], as it follows 96boards standards.
->
-> This patch adds minimal support for E850-96 board. Next features are
-> enabled in board dts file and verified with minimal BusyBox rootfs:
->
->  * User buttons
->  * LEDs
->  * Serial console
->  * Watchdog timers
->  * RTC
->  * eMMC
->
-> [1] https://www.96boards.org/products/mezzanine/
->
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v2:
->   - Removed board_id and board_rev properties
->   - Removed BOARD_ID and BOARD_REV constants
->   - Put dtb in alphabetical order in Makefile
->   - Added "color" and "function" properties to LED nodes
->   - Sorted all phandle overrides by phandle name
->   - Removed 'broken-cd' property in eMMC node
->   - Added memory node
->
->  arch/arm64/boot/dts/exynos/Makefile           |   1 +
->  .../boot/dts/exynos/exynos850-e850-96.dts     | 175 ++++++++++++++++++
->  2 files changed, 176 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
->
-> diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-> index b41e86df0a84..be9df8e85c59 100644
-> --- a/arch/arm64/boot/dts/exynos/Makefile
-> +++ b/arch/arm64/boot/dts/exynos/Makefile
-> @@ -3,4 +3,5 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
->         exynos5433-tm2.dtb      \
->         exynos5433-tm2e.dtb     \
->         exynos7-espresso.dtb    \
-> +       exynos850-e850-96.dtb   \
->         exynosautov9-sadk.dtb
-> diff --git a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-> new file mode 100644
-> index 000000000000..952a47c417d4
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-> @@ -0,0 +1,175 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * WinLink E850-96 board device tree source
-> + *
-> + * Copyright (C) 2018 Samsung Electronics Co., Ltd.
-> + * Copyright (C) 2021 Linaro Ltd.
-> + *
-> + * Device tree source file for WinLink's E850-96 board which is based on
-> + * Samsung Exynos850 SoC.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "exynos850.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +       model = "WinLink E850-96 board";
-> +       compatible = "winlink,e850-96", "samsung,exynos850";
-> +
-> +       chosen {
-> +               stdout-path = &serial_0;
-> +       };
-> +
-> +       /*
-> +        * 4 GiB eMCP:
-> +        *   - 2 GiB at 0x80000000
-> +        *   - 2 GiB at 0x880000000
-> +        *
-> +        * 0xbab00000..0xbfffffff: secure memory (85 MiB).
-> +        */
-> +       memory@80000000 {
-> +               device_type = "memory";
-> +               reg = <0x0 0x80000000 0x3ab00000>,
-> +                     <0x0 0xc0000000 0x40000000>,
-> +                     <0x8 0x80000000 0x80000000>;
-> +       };
-> +
-> +       gpio-keys {
-> +               compatible = "gpio-keys";
-> +               pinctrl-names = "default";
-> +               pinctrl-0 = <&key_voldown_pins &key_volup_pins>;
-> +
-> +               volume-down-key {
-> +                       label = "Volume Down";
-> +                       linux,code = <KEY_VOLUMEDOWN>;
-> +                       gpios = <&gpa1 0 GPIO_ACTIVE_LOW>;
-> +               };
-> +
-> +               volume-up-key {
-> +                       label = "Volume Up";
-> +                       linux,code = <KEY_VOLUMEUP>;
-> +                       gpios = <&gpa0 7 GPIO_ACTIVE_LOW>;
-> +               };
-> +       };
-> +
-> +       leds {
-> +               compatible = "gpio-leds";
-> +
-> +               /* HEART_BEAT_LED */
-> +               user_led1: led-1 {
-> +                       label = "yellow:user1";
-> +                       gpios = <&gpg2 2 GPIO_ACTIVE_HIGH>;
-> +                       color = <LED_COLOR_ID_YELLOW>;
-> +                       function = LED_FUNCTION_HEARTBEAT;
-> +                       linux,default-trigger = "heartbeat";
-> +               };
-> +
-> +               /* eMMC_LED */
-> +               user_led2: led-2 {
-> +                       label = "yellow:user2";
-> +                       gpios = <&gpg2 3 GPIO_ACTIVE_HIGH>;
-> +                       color = <LED_COLOR_ID_YELLOW>;
-> +                       linux,default-trigger = "mmc0";
-> +               };
-> +
-> +               /* SD_LED */
-> +               user_led3: led-3 {
-> +                       label = "white:user3";
-> +                       gpios = <&gpg2 4 GPIO_ACTIVE_HIGH>;
-> +                       color = <LED_COLOR_ID_WHITE>;
-> +                       function = LED_FUNCTION_SD;
-> +                       linux,default-trigger = "mmc2";
-> +               };
-> +
-> +               /* WIFI_LED */
-> +               wlan_active_led: led-4 {
-> +                       label = "yellow:wlan";
-> +                       gpios = <&gpg2 6 GPIO_ACTIVE_HIGH>;
-> +                       color = <LED_COLOR_ID_YELLOW>;
-> +                       function = LED_FUNCTION_WLAN;
-> +                       linux,default-trigger = "phy0tx";
-> +                       default-state = "off";
-> +               };
-> +
-> +               /* BLUETOOTH_LED */
-> +               bt_active_led: led-5 {
-> +                       label = "blue:bt";
-> +                       gpios = <&gpg2 7 GPIO_ACTIVE_HIGH>;
-> +                       color = <LED_COLOR_ID_BLUE>;
-> +                       function = LED_FUNCTION_BLUETOOTH;
-> +                       linux,default-trigger = "hci0rx";
-> +                       default-state = "off";
-> +               };
-> +       };
-> +};
-> +
-> +&mmc_0 {
-> +       status = "okay";
-> +       mmc-hs200-1_8v;
-> +       mmc-hs400-1_8v;
-> +       cap-mmc-highspeed;
-> +       non-removable;
-> +       mmc-hs400-enhanced-strobe;
-> +       card-detect-delay = <200>;
-> +       clock-frequency = <800000000>;
-> +       bus-width = <8>;
-> +       samsung,dw-mshc-ciu-div = <3>;
-> +       samsung,dw-mshc-sdr-timing = <0 4>;
-> +       samsung,dw-mshc-ddr-timing = <2 4>;
-> +       samsung,dw-mshc-hs400-timing = <0 2>;
-> +
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&sd0_clk_pins &sd0_cmd_pins &sd0_rdqs_pins &sd0_nreset_pins
-> +                    &sd0_bus1_pins &sd0_bus4_pins &sd0_bus8_pins>;
-> +};
-> +
-> +&oscclk {
-> +       clock-frequency = <26000000>;
-> +};
-> +
-> +&rtc {
-> +       status = "okay";
-> +};
-> +
-> +&rtcclk {
-> +       clock-frequency = <32768>;
-> +};
-> +
-> +&serial_0 {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&uart1_pins>;
-> +};
-> +
-> +&usi_uart {
-> +       samsung,clkreq-on; /* needed for UART mode */
-> +       status = "okay";
-> +};
-> +
-> +&watchdog_cl0 {
-> +       status = "okay";
-> +};
-> +
-> +&watchdog_cl1 {
-> +       status = "okay";
-> +};
-> +
-> +&pinctrl_alive {
+Hi Masami,
 
-Forgot to order pinctrl node. Will send v3 soon, sorry for the noise.
+Thanks for your review.
 
-> +       key_voldown_pins: key-voldown-pins {
-> +               samsung,pins = "gpa1-0";
-> +               samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-> +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +               samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-> +       };
-> +
-> +       key_volup_pins: key-volup-pins {
-> +               samsung,pins = "gpa0-7";
-> +               samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-> +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +               samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-> +       };
-> +};
+On Thu, Dec 16, 2021 at 10:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jeff,
+>
+> On Tue, 30 Nov 2021 00:49:46 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Introduce a method based on function tracer to trace any object and get
+> > the value of the object dynamically. the object can be obtained from the
+> > dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
+>
+> Now you can remove [RFC] tag from this series, I think.
+> And can you also add a changelog (short description of the changes) from
+> the previous version, so that reviewers can find the difference
+> point easily? Unless that, I need to make a diff from your previous version. :(
+
+Ok, I will remove the [RFC] and add changelog.
+
+> Thank you,
+>
+> >
+> > Usage:
+> > When using the kprobe event, only need to set the objtrace(a new trigger),
+> > we can get the value of the object. The object is from the setting of the
+> > kprobe event.
+> >
+> > For example:
+> > For the function bio_add_page():
+> >
+> > int bio_add_page(struct bio *bio, struct page *page,
+> >       unsigned int len, unsigned int offset)
+> >
+> > Firstly, we can set the base of the object, thus the first string "arg1"
+> > stands for the value of the first parameter of this function bio_add_gage(),
+> >
+> > # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
+> >
+> > Secondly, we can get the value dynamically base the above object.
+> >
+> > find the offset of the bi_size in struct bio:
+> > $ gdb vmlinux
+> > (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> > $1 = (unsigned int *) 0x28
+> >
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> >       p_bio_add_page_0/trigger
+> >
+> > The best way to use this is that we can set the entrance event and exit
+> > event, for example, the following example is to set the read_papes as
+> > the entrance event, and set the __blk_account_io_start as the exit event.
+> >
+> > # cd /sys/kernel/debug/tracing/
+> > # echo 0 > ./tracing_on
+> > # echo 'p read_pages' >> ./kprobe_events
+> > # echo 'p __blk_account_io_start' >> ./kprobe_events
+> > # echo 'traceon if comm == "cat"' > ./events/kprobes/p_read_pages_0/trigger
+> > # echo 'traceoff if comm == "cat"' > ./events/kprobes/p___blk_account_io_start_0/trigger
+> > # echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+> >
+> > # du -sh /test.txt
+> > 12.0K   /test.txt
+> >
+> > # cat  /test.txt > /dev/null
+> > # cat ./trace
+> >
+> > # tracer: nop
+> > #
+> > # entries-in-buffer/entries-written: 50/50   #P:1
+> > #
+> > #                                _-----=> irqs-off
+> > #                               / _----=> need-resched
+> > #                              | / _---=> hardirq/softirq
+> > #                              || / _--=> preempt-depth
+> > #                              ||| / _-=> migrate-disable
+> > #                              |||| /     delay
+> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> > #              | |         |   |||||     |         |
+> >              cat-95      [000] .....     1.412065: _raw_spin_unlock_irqrestore <-event_triggers_call object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x0
+> >              cat-95      [000] .....     1.412066: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412066: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412066: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x1000
+> >              cat-95      [000] .....     1.412067: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x2000
+> >              cat-95      [000] .....     1.412068: submit_bio <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: submit_bio_noacct <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: __submit_bio <-submit_bio_noacct object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: blk_try_enter_queue <-__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: submit_bio_checks <-__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: __cond_resched <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: rcu_all_qs <-__cond_resched object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412068: should_fail_bio <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: create_task_io_context <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: kmem_cache_alloc_node <-create_task_io_context object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: should_failslab <-kmem_cache_alloc_node object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: _raw_spin_lock <-create_task_io_context object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: blk_mq_submit_bio <-__submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: __blk_queue_split <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: bvec_split_segs <-__blk_queue_split object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412069: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: __blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: dd_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: _raw_spin_lock <-dd_bio_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: blk_mq_sched_try_merge <-dd_bio_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_rqhash_find <-elv_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: dd_request_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: elv_rb_find <-dd_request_merge object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412070: __blk_mq_alloc_request <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: dd_limit_depth <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: blk_mq_get_tag <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: __blk_mq_get_tag <-blk_mq_get_tag object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: blk_mq_rq_ctx_init.isra.0 <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: ktime_get <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: dd_prepare_request <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: __blk_account_io_start <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x3000
+> >              cat-95      [000] .....     1.412071: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x3000
+> >
+> > Jeff Xie (5):
+> >   trace: Add trace any kernel object
+> >   trace/objtrace: get the value of the object
+> >   trace/README: Document objtrace trigger syntax
+> >   trace/objtrace: Add testcases for objtrace
+> >   trace/objtrace: Add documentation for objtrace
+> >
+> >  Documentation/trace/events.rst                | 114 +++
+> >  include/linux/trace_events.h                  |   1 +
+> >  kernel/trace/Kconfig                          |  10 +
+> >  kernel/trace/Makefile                         |   1 +
+> >  kernel/trace/trace.c                          |   3 +
+> >  kernel/trace/trace.h                          |   8 +
+> >  kernel/trace/trace_entries.h                  |  18 +
+> >  kernel/trace/trace_events_trigger.c           |   1 +
+> >  kernel/trace/trace_object.c                   | 660 ++++++++++++++++++
+> >  kernel/trace/trace_output.c                   |  40 ++
+> >  .../ftrace/test.d/trigger/trigger-objtrace.tc |  39 ++
+> >  11 files changed, 895 insertions(+)
+> >  create mode 100644 kernel/trace/trace_object.c
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+> >
+> > --
+> > 2.25.1
+> >
+>
+>
 > --
-> 2.30.2
->
+> Masami Hiramatsu <mhiramat@kernel.org>
+
+---
+JeffXie

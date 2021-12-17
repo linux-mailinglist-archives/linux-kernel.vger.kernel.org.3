@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365C547938D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87FB47939A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238142AbhLQSIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:08:30 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:46757 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbhLQSI3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:08:29 -0500
-Received: by mail-oi1-f175.google.com with SMTP id s139so4742210oie.13;
-        Fri, 17 Dec 2021 10:08:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XGCz2Mkb3xw6Ly/YEIrj+GpLhNUOPqPMSl/tYzJrkMg=;
-        b=xqhdyCEdu1agfGXMWMjrOSuAilsvzkwfL7HIFASVlFVj9eZ7g6MMD0zfR9k1TL1NEf
-         qfvTCQTx1Pwqk+xAbJArAviD1pe0bwQP6zVJAA9TdjdIIsaXqEQQpRV666vBGoOpT2FP
-         8eQiIgGo7OgEzJ1kjJEzzEewWvbNzUiXkZHFNK2Cc8jKf2q3WApwQ5aGxmRVdf3Y5P4c
-         S7YNrgqBtBG4RN7Q8yDbVd2rsdTio3T+xJxJmpRWXzAHknhocVqITHCOKT35HmKYCEWy
-         5IYvaIewxtFb/oBuktk46vfArm0jVIU2twY7hisuZl+B1IKTVdy3AQZNF6JQkBJzFuNQ
-         56Bg==
-X-Gm-Message-State: AOAM531uuGt8i7tZ6jaeC3d1suMnR0pfaYlC1DjFzxEiDTlsCVC0A2zP
-        q02sC7Fv4bXOcGWyw5cHV2DSiUXsdEDBenxVe88=
-X-Google-Smtp-Source: ABdhPJzvcWJ4CbIp8GquSE1y4BVzbRL9LcXmxUSupzHHII7RqING+mGyTVf8dR4sJBAHZKUZGO8yGrju06v7Lm+hZgg=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr2981766oiw.154.1639764508924;
- Fri, 17 Dec 2021 10:08:28 -0800 (PST)
+        id S239922AbhLQSMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:12:07 -0500
+Received: from mga12.intel.com ([192.55.52.136]:62049 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230432AbhLQSMF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:12:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="219821298"
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="219821298"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:10:26 -0800
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="605965790"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:10:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1myHfd-007YU0-SR;
+        Fri, 17 Dec 2021 20:09:29 +0200
+Date:   Fri, 17 Dec 2021 20:09:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v1 1/1] serial: 8520_mtk: Prepare for
+ platform_get_irq_optional() changes
+Message-ID: <YbzSWas9OfeZzY3o@smile.fi.intel.com>
+References: <20211217151034.62046-1-andriy.shevchenko@linux.intel.com>
+ <YbzA3y5jp5K5zL/+@kroah.com>
 MIME-Version: 1.0
-References: <20211213204632.56735-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211213204632.56735-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 19:08:18 +0100
-Message-ID: <CAJZ5v0jq=XdH+xeHs5=wMGsu28i+r3nzZbhCNMJkfdOi65N0Gg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] ACPI: NFIT: Import GUID before use
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     nvdimm@lists.linux.dev,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbzA3y5jp5K5zL/+@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 9:46 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Strictly speaking the comparison between guid_t and raw buffer
-> is not correct. Import GUID to variable of guid_t type and then
-> compare.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Fri, Dec 17, 2021 at 05:54:55PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Dec 17, 2021 at 05:10:34PM +0200, Andy Shevchenko wrote:
+> > The platform_get_irq_optional() is going to be changed in a way
+> > that the result of it:
+> >    = 0 means no IRQ is provided
+> >    < 0 means the error which needs to be propagated to the upper layers
+> >    > 0 valid vIRQ is allocated
+> 
+> What about 0 being a valid irq?
 
-Dan, are you going to take care of this or should I?
+For this driver it can't be possible. The driver is instantiated via DT only
+and OF APIs never return 0 for IRQ. If it's the case, it's a regression in the
+OF APIs.
 
-> ---
->  drivers/acpi/nfit/core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-> index 7dd80acf92c7..e5d7f2bda13f 100644
-> --- a/drivers/acpi/nfit/core.c
-> +++ b/drivers/acpi/nfit/core.c
-> @@ -678,10 +678,12 @@ static const char *spa_type_name(u16 type)
->
->  int nfit_spa_type(struct acpi_nfit_system_address *spa)
->  {
-> +       guid_t guid;
->         int i;
->
-> +       import_guid(&guid, spa->range_guid);
->         for (i = 0; i < NFIT_UUID_MAX; i++)
-> -               if (guid_equal(to_nfit_uuid(i), (guid_t *)&spa->range_guid))
-> +               if (guid_equal(to_nfit_uuid(i), &guid))
->                         return i;
->         return -1;
->  }
-> --
-> 2.33.0
->
+I can elaborate in the commit message.
+
+> > In this case, drop check for 0. Note, the 0 is not valid vIRQ and
+> > platform_get_irq_optional() issues a big WARN() in such case,
+> 
+> But it still is a valid irq, so why did you just break things?  Yes, a
+> warning will happen, but the driver and platform will still work.
+
+In general yes, but not in this case. See above.
+
+...
+
+> > -	if (irq >= 0)
+> > +	if (irq > 0)
+> >  		disable_irq_wake(irq);
+> 
+> Why change this now?  What does this solve at this point in time?
+
+As explained in the commit message, it's a preparation patch to fix the logic
+behind platform_get_irq_optional().
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

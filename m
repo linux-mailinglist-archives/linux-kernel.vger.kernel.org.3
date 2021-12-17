@@ -2,120 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90150478E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F8A478E9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237633AbhLQOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:55:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10888 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231971AbhLQOzR (ORCPT
+        id S237638AbhLQOzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231971AbhLQOzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:55:17 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHDaxFG022998;
-        Fri, 17 Dec 2021 14:55:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=jn+7vU3DeFwv40C/Xn8u61FAyk08AIabx42PwN2Qc20=;
- b=kCKpv+yClD+BkC6ITtMnuH2kAQymlt+5UtAcFL1gxsQaJpfckIo7vvxmdnUzKdPNS+++
- niiAC+Cpn3Srq/FWxfvPOzrO4bgiR2Imbyr0/iqxn1ES7LTA4TUtxt3aN8vxlLndAkae
- wMGAqaLubw1zr1pYFIE4TosBfLqcNvLNqL7sHnDsH31H4b1ybPwiQnARkou0rS9IeYY5
- vOyz3PNJ0Rub/rsY7rpVEZ5kla2sOJq0Pif4oiWeNoT1XdwU/djmit8mgwHiTfkqQRck
- W9OitakvcE2LoYVWmzGF2cyINDRDZBHd/c+Y6Ya0H73iecqXmXkDxFGisXdZAziICI6q iA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d0pywyx5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 14:55:16 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHEX4VG007533;
-        Fri, 17 Dec 2021 14:55:16 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d0pywyx3x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 14:55:16 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHEal4j009415;
-        Fri, 17 Dec 2021 14:55:13 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3cy7k3sawg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 14:55:13 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHEtABG39452952
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 14:55:10 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3ADF52050;
-        Fri, 17 Dec 2021 14:55:09 +0000 (GMT)
-Received: from [9.171.60.51] (unknown [9.171.60.51])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 102EA5204F;
-        Fri, 17 Dec 2021 14:55:09 +0000 (GMT)
-Message-ID: <5073966a-0e99-977b-dc97-e72f55ff7091@linux.ibm.com>
-Date:   Fri, 17 Dec 2021 15:55:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 32/32] MAINTAINERS: additional files related kvm s390 pci
- passthrough
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, alex.williamson@redhat.com
-Cc:     cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        Fri, 17 Dec 2021 09:55:48 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA3C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:55:48 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id p19so2783542qtw.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XtcOS73MMuTSnqyUtIZf+L5nKHAZxvPbB6o8V1hZyjM=;
+        b=pKzUbHI9kfxRcJMTXcxX2W7LVyGkKWWnRlhLTz18NC3a6Uw4UYaNyPZtpwt6qBxBEO
+         67k5oPomwL3gtNL1xQh6P65FuwlhK2Db0I48xQZiCiNXGfqpeia3DrOzV5uC52XmInc1
+         jkaLNT+DWr9r4CAwPxzeY679YTNtSJBbbb85BBmJxZM52rK/v+hQ/yTVF7WfasqSBG9S
+         QV2RCbNA+KUT345Yc99H59W/c09gh1m8/GMiJqc063Qdi0lUC7ny5i48aF1dBPlTiUEy
+         eqTbjt8wqgRoyp130yPT78Hwdhr+nkcIG+bB93N3U3h1d/yI2wZa1pr2NFr/Yk109xL8
+         7ptQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XtcOS73MMuTSnqyUtIZf+L5nKHAZxvPbB6o8V1hZyjM=;
+        b=7kKS1gYzisFamh5vbietDItS7xLPSnNGdqHXqDYoAK3PNwsqFb8a5Eky+72Qa6i2ZM
+         hbmtC2JZNRLPo9eH0ExOAm7FJyZCaMmTiiTPtXmbaFM8QNHe6Xyae4Bwa8vFNcGBzVGH
+         27gaUGgwJBSptUjYm2O1iuikN/vO4/nO9/PZ5+R4bDtMZdN9d2f5BCak71H3oAL9DapE
+         URmqQSPC4DNlIgki6toeZ5MbNJWF3HxnNXXcan6H1bdDI+SJ18DaZ9yUvFITzoLLIh3G
+         44TAoMG+U7NsFfptVy8OZwtKbSx8Lfg4rm3qUdxjPEXNdNFH6+GMGUMHqFP1tESR9ync
+         8q5A==
+X-Gm-Message-State: AOAM532ZATAVaoUoYrGpEgTMbVQqpLsdp7M90G+BqnZM2CCQ0Uhl8hAV
+        oN7Fyyx5RtYRfwc1nrKQepCYY8kWQHUxjg==
+X-Google-Smtp-Source: ABdhPJw8N/0bg1xJaQNrA1IXrd7by/PdqZLXyIW33rKr6C/KJpBOUuMXNA18L5ZKhPD9XSKNURmCDw==
+X-Received: by 2002:a05:622a:14:: with SMTP id x20mr2604178qtw.1.1639752947547;
+        Fri, 17 Dec 2021 06:55:47 -0800 (PST)
+Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
+        by smtp.gmail.com with ESMTPSA id t35sm8310727qtc.83.2021.12.17.06.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 06:55:47 -0800 (PST)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
         linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-33-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-33-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: z7n_tkup5mnXNl0_WSrva9gAXKtIGLKC
-X-Proofpoint-ORIG-GUID: XeGCCKbsEKjIvCA7LCjSS-Iai_Io2P_s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-17_05,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 suspectscore=0 impostorscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112170084
+Subject: [PATCH v2] mfd: rk808: add reboot support to rk808.c
+Date:   Fri, 17 Dec 2021 09:55:43 -0500
+Message-Id: <20211217145544.341617-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This adds reboot support to the rk808o pmic driver and enables it for
+the rk809 and rk817 devices.
+This only enables if the rockchip,system-power-controller flag is set.
 
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+This patch was created to address issues with psci-reset on rk356x
+chips. Until the rk356x series ATF open source code is released so we
+can fix the issue at the source, this is the only way to ensure reliable
+resetting on devices using these chips.
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> Add entries from the s390 kvm subdirectory related to pci passthrough.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+After testing the rk808 (thanks Robin!), it was found DEV_OFF_RST does
+not reset the PMIC to a power on state. Since the rk805 and rk818 match
+this register layout, I'm removing support for all three in the v2.
+It may be possible to add support to them using an RTC wakeup, but that
+has not been explored and is outside the scope of this patch.
 
-Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Changelog:
+V2:
+- Squash the patch from Frank Wunderlich for rk809 support.
+- Remove support for the rk805, rk808, and rk818 devices.
+- Only register the reset handler for supported devices.
+- Remove unnecessary dev_err and dev_warn statements.
+- Register the reset handler directly
 
-Question for Alex. Shall I take these and future patches regarding KVM hw support for PCI passthru via my tree or via your vfio tree?
+ drivers/mfd/rk808.c       | 43 +++++++++++++++++++++++++++++++++++++++
+ include/linux/mfd/rk808.h |  1 +
+ 2 files changed, 44 insertions(+)
 
-> ---
->   MAINTAINERS | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 43007f2d29e0..a88f8e4f2c80 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16689,6 +16689,8 @@ M:	Eric Farman <farman@linux.ibm.com>
->   L:	linux-s390@vger.kernel.org
->   L:	kvm@vger.kernel.org
->   S:	Supported
-> +F:	arch/s390/include/asm/kvm_pci.h
-> +F:	arch/s390/kvm/pci*
->   F:	drivers/vfio/pci/vfio_pci_zdev.c
->   F:	include/uapi/linux/vfio_zdev.h
->   
-> 
+diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
+index b181fe401330..6fa7fbf9b695 100644
+--- a/drivers/mfd/rk808.c
++++ b/drivers/mfd/rk808.c
+@@ -19,6 +19,7 @@
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/regmap.h>
++#include <linux/reboot.h>
+ 
+ struct rk808_reg_data {
+ 	int addr;
+@@ -543,6 +544,7 @@ static void rk808_pm_power_off(void)
+ 		reg = RK808_DEVCTRL_REG,
+ 		bit = DEV_OFF_RST;
+ 		break;
++	case RK809_ID:
+ 	case RK817_ID:
+ 		reg = RK817_SYS_CFG(3);
+ 		bit = DEV_OFF;
+@@ -559,6 +561,34 @@ static void rk808_pm_power_off(void)
+ 		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
+ }
+ 
++static int rk808_restart_notify(struct notifier_block *this, unsigned long mode, void *cmd)
++{
++	int ret;
++	unsigned int reg, bit;
++	struct rk808 *rk808 = i2c_get_clientdata(rk808_i2c_client);
++
++	switch (rk808->variant) {
++	case RK809_ID:
++	case RK817_ID:
++		reg = RK817_SYS_CFG(3);
++		bit = DEV_RST;
++		break;
++
++	default:
++		return NOTIFY_DONE;
++	}
++	ret = regmap_update_bits(rk808->regmap, reg, bit, bit);
++	if (ret)
++		dev_err(&rk808_i2c_client->dev, "Failed to restart device!\n");
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block rk808_restart_handler = {
++	.notifier_call = rk808_restart_notify,
++	.priority = 255,
++};
++
+ static void rk8xx_shutdown(struct i2c_client *client)
+ {
+ 	struct rk808 *rk808 = i2c_get_clientdata(client);
+@@ -727,6 +757,19 @@ static int rk808_probe(struct i2c_client *client,
+ 	if (of_property_read_bool(np, "rockchip,system-power-controller")) {
+ 		rk808_i2c_client = client;
+ 		pm_power_off = rk808_pm_power_off;
++
++		switch (rk808->variant) {
++		case RK809_ID:
++		case RK817_ID:
++			ret = register_restart_handler(&rk808_restart_handler);
++			break;
++		default:
++			dev_info(&client->dev, "pmic controlled board reset not supported\n");
++			break;
++		}
++
++		if (ret)
++			dev_err(&client->dev, "failed to register restart handler, %d\n", ret);
+ 	}
+ 
+ 	return 0;
+diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
+index a96e6d43ca06..58602032e642 100644
+--- a/include/linux/mfd/rk808.h
++++ b/include/linux/mfd/rk808.h
+@@ -373,6 +373,7 @@ enum rk805_reg {
+ #define SWITCH2_EN	BIT(6)
+ #define SWITCH1_EN	BIT(5)
+ #define DEV_OFF_RST	BIT(3)
++#define DEV_RST		BIT(2)
+ #define DEV_OFF		BIT(0)
+ #define RTC_STOP	BIT(0)
+ 
+-- 
+2.25.1
+

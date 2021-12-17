@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008454791AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434E24791BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbhLQQnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235796AbhLQQnX (ORCPT
+        id S235749AbhLQQnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:43:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38040 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239263AbhLQQnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:43:23 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05E6C061574;
-        Fri, 17 Dec 2021 08:43:22 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id y68so8218157ybe.1;
-        Fri, 17 Dec 2021 08:43:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PEi6Hg+qpmCegDUptK8uXeraoYtQySx5+iFXDlrrumM=;
-        b=V8ibWEWEQ4BIx84gCk1TKVkRlql7baDM5YjzIiRhH/x+Do49q+tWWQDHPDloNsSgzS
-         NNKOxJ8ghcKv6LgElON+Bcwz1RahvLrwlcsXxpUa7UpriD/gLcK6hgCAeMPOuqiFN1uY
-         0HAzPoTkCRu+dF+KCL5gBxlAnYNyPcqfuJjB8x3Rd7pW+dCt8+sFwfXmCiz31Dm1VgSC
-         VrqohetlqlEyIlj0YwaKBYe+aqds251A6c7kMRX/nais2ickyKXBbnnTSpeQmB9oyd/g
-         DALT4dCnnI0UJPLkGvJcM0hwkg/PYueeCjEvsUWvDrgvLdH9QlCLxf3rgh1ciZ18+Wjk
-         8BlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PEi6Hg+qpmCegDUptK8uXeraoYtQySx5+iFXDlrrumM=;
-        b=iUoFfY5mekUAV6eG8peqyyArhFwlH0NgrnBc2ivtnOTehtL097oh6o/2djz+qoHUCM
-         0BmiWj4MEF7WV3e4vFWpIPINgg5TFDWHjzzrgIkk2VuQFx2AFj3Ju6+ZmJrNv/jz/lh6
-         a2XhJl2IInUSMFAoA/HwpgLK3cMYeQKKSLK57BY/1mYePxhMBWhip+qSDBUR47yCMcrJ
-         CyvOgjcwfUfBOKDT0jVgvUcaiHBPj1oM1zG2IFsMqq6OmiUbw9sL7BGLv1gJZPWi/jwC
-         MOlV5U2laE6iDtcArOMAKY104BR+P6+gjYCF6yzvTrI0OxyhxdFqopPplyykIM73oq1h
-         PK1g==
-X-Gm-Message-State: AOAM532eOxRdb6WjNyyadhhrUKI6YhZW2xolpFD+bTWs9VBFRiwsFseK
-        Y/5CH14HngpflQzig7iTRxzO/MHp0eXyiBPVc1c=
-X-Google-Smtp-Source: ABdhPJzC9ELVuCk0Ucd+qF84sdX3qBQOw0u/JzlnEMqw6tA3GDiL/eXCMkOwTPX0mSip9sY2S28ZuaKmK7dtw7bzMds=
-X-Received: by 2002:a25:e90a:: with SMTP id n10mr5296330ybd.180.1639759402213;
- Fri, 17 Dec 2021 08:43:22 -0800 (PST)
+        Fri, 17 Dec 2021 11:43:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9968A6230A;
+        Fri, 17 Dec 2021 16:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02971C36AE7;
+        Fri, 17 Dec 2021 16:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639759426;
+        bh=xkjazaXf9e0HqFX4MjQxPv2BOTPj/MpAXhlPTHttWyk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YTyCfVjTbg8mkVA2Tl/PRClrCiLA5+/UCpd2WHbEicmlSu1k3xM+dYHodKxffl8b1
+         oLAiR6feNwRR4jQoVGH/HJ8fMd5Kq1xMf4rm7gvYH1W7xCCFaaNU8NlGU/rUbBfaIE
+         UjAd8hWR1dkLvYeB3mHyP96fW28SU3ai4apASxn63KF/33o/jJN1XtpLoXy1F8m4C4
+         BRE9Dgxkf9WqlnBX6gvB9+qFh5atzLePTsxhNhwzgGfqduKE+hzHHS8iVr2ZQ3fy7p
+         diHCHPtH7Cdw1rxSh7MA7FvwC34TyKXEoZ2fCr6rB74jgDrY4xQEKd4DxnT2c2Wy+H
+         fZ5rTE4xchqqw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AFDCB5C0610; Fri, 17 Dec 2021 08:43:45 -0800 (PST)
+Date:   Fri, 17 Dec 2021 08:43:45 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>, maz <maz@kernel.org>,
+        frederic <frederic@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+Message-ID: <20211217164345.GT641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+ <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+ <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+ <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
+ <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
+ <20211217160749.GS641268@paulmck-ThinkPad-P17-Gen-1>
+ <27231550b5600072da918aa41c07404dea13590e.camel@redhat.com>
 MIME-Version: 1.0
-References: <20211215060102.3793196-1-song@kernel.org> <CAEf4BzaFYPWCycTx+pHefhRHgD2n1WPyy9-L9TDJ8rHyGTaQSQ@mail.gmail.com>
- <DC857926-ECDA-4DF0-8058-C53DD15226AE@fb.com> <CAEf4BzbfqSGHCbG6-EC=DLd=yFCwDiKEFWMtG4hbY78dm2OA=Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzbfqSGHCbG6-EC=DLd=yFCwDiKEFWMtG4hbY78dm2OA=Q@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 17 Dec 2021 08:43:11 -0800
-Message-ID: <CAEf4Bzb3sbf5Ddq4FaBsZpyiqhoFD+PxxbZHP6ips6h01EuNYg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/7] bpf_prog_pack allocator
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Peter Ziljstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27231550b5600072da918aa41c07404dea13590e.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 8:42 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Dec 16, 2021 at 5:53 PM Song Liu <songliubraving@fb.com> wrote:
-> >
-> >
-> >
-> > > On Dec 16, 2021, at 12:06 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Tue, Dec 14, 2021 at 10:01 PM Song Liu <song@kernel.org> wrote:
-> > >>
-> > >> Changes v1 => v2:
-> > >> 1. Use text_poke instead of writing through linear mapping. (Peter)
-> > >> 2. Avoid making changes to non-x86_64 code.
-> > >>
-> > >> Most BPF programs are small, but they consume a page each. For systems
-> > >> with busy traffic and many BPF programs, this could also add significant
-> > >> pressure to instruction TLB.
-> > >>
-> > >> This set tries to solve this problem with customized allocator that pack
-> > >> multiple programs into a huge page.
-> > >>
-> > >> Patches 1-5 prepare the work. Patch 6 contains key logic of the allocator.
-> > >> Patch 7 uses this allocator in x86_64 jit compiler.
-> > >>
-> > >
-> > > There are test failures, please see [0]. But I was also wondering if
-> > > there could be an explicit selftest added to validate that all this
-> > > huge page machinery is actually activated and working as expected?
-> >
-> > We can enable some debug option that dumps the page table. Then from the
-> > page table, we can confirm the programs are running on a huge page. This
-> > only works on x86_64 though. WDYT?
-> >
->
-> I don't know what exactly is involved, so it's hard to say. Ideally
-> whatever we do doesn't complicate our CI setup. Can we use BPF tracing
-> magic to check this from inside the kernel somehow?
->
+On Fri, Dec 17, 2021 at 05:20:21PM +0100, Nicolas Saenz Julienne wrote:
+> Hi Paul,
+> 
+> On Fri, 2021-12-17 at 08:07 -0800, Paul E. McKenney wrote:
+> > On Fri, Dec 17, 2021 at 04:54:22PM +0100, Paolo Bonzini wrote:
+> > > On 12/17/21 15:38, Mark Rutland wrote:
+> > > > For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
+> > > > vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
+> > > > guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
+> > > > elsewhere. Also, guest_enter_irq_off() conditionally calls
+> > > > rcu_virt_note_context_switch(), but I can't immediately spot anything on the
+> > > > exit side that corresponded with that, which looks suspicious.
+> > > 
+> > > rcu_note_context_switch() is a point-in-time notification; it's not strictly
+> > > necessary, but it may improve performance a bit by avoiding unnecessary IPIs
+> > > from the RCU subsystem.
+> > > 
+> > > There's no benefit from doing it when you're back from the guest, because at
+> > > that point the CPU is just running normal kernel code.
+> > 
+> > Do scheduling-clock interrupts from guest mode have the "user" parameter
+> > set?  If so, that would keep RCU happy.
+> 
+> Are you referring to the user_mode() check in irqentry_enter()? If so I don't
+> think it'll help, arm64 doesn't use that function. It directly calls
+> enter_from_{user,kernel}_mode() through its custom entry/exit routines.
 
-But I don't feel strongly about this, if it's hard to detect, it's
-fine to not have a specific test (especially that it's very
-architecture-specific)
+I am talking about rcu_sched_clock_irq(), which is called from
+update_process_times(), which is called from various places depending
+on .config.  These call sites pass in either user_mode(regs) or
+user_mode(get_irq_regs()).
 
-> > Thanks,
-> > Song
-> >
-> >
-> > >
-> > >  [0] https://github.com/kernel-patches/bpf/runs/4530372387?check_suite_focus=true
-> > >
-> > >> Song Liu (7):
-> > >>  x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
-> > >>  bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
-> > >>  bpf: use size instead of pages in bpf_binary_header
-> > >>  bpf: add a pointer of bpf_binary_header to bpf_prog
-> > >>  x86/alternative: introduce text_poke_jit
-> > >>  bpf: introduce bpf_prog_pack allocator
-> > >>  bpf, x86_64: use bpf_prog_pack allocator
-> > >>
-> > >> arch/x86/Kconfig                     |   1 +
-> > >> arch/x86/include/asm/text-patching.h |   1 +
-> > >> arch/x86/kernel/alternative.c        |  28 ++++
-> > >> arch/x86/net/bpf_jit_comp.c          |  93 ++++++++++--
-> > >> include/linux/bpf.h                  |   4 +-
-> > >> include/linux/filter.h               |  23 ++-
-> > >> kernel/bpf/core.c                    | 213 ++++++++++++++++++++++++---
-> > >> kernel/bpf/trampoline.c              |   6 +-
-> > >> 8 files changed, 328 insertions(+), 41 deletions(-)
-> > >>
-> > >> --
-> > >> 2.30.2
-> >
+Huh.  Maybe I should be looking into using user_mode(get_irq_regs())
+in other places within RCU.  Except that I bet the possibility of RCU
+being invoked from NMI handlers makes this a bit tricky.
+
+							Thanx, Paul

@@ -2,149 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C354790DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6744790DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238744AbhLQQBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:01:13 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:43721 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbhLQQBM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:01:12 -0500
-Received: by mail-ua1-f51.google.com with SMTP id 107so5152588uaj.10;
-        Fri, 17 Dec 2021 08:01:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=26SVdMAvextSC77CuMirCaLKRwkRmDU6eDmV5JlcvTE=;
-        b=wdKfN40HnD0hT+qP+NY/jOENtou4k/ks/33gBT2qbgVfvQv4TdspK1Dx9lHozPEFRX
-         +fQp1YklhadmLXT8AqeQlT2mXAD1J7KrFg22/F6gqX4ttpRausngwgJa+KO7avqpls6a
-         lQM727awJcP1cyAjoW6DwgGKoElk0fNuZxGa8I8xeviSrUq0ZpxFbKx/tuBDz0EyoEss
-         cK04x2s5Elfe65bNK89oChB7ixyCtxDPuRTpikvRC1ouKQkNbfemMKXdGzBbpNdsFCxK
-         aHLij/80xPtzSlcO2ZnpihwaIfawj9cGE213ieAkDLawhnrdYVtQ+P7mVyXo4lGruxvf
-         48QA==
-X-Gm-Message-State: AOAM530OO2LtUm2PNYq/N1t1F0aW8+MTcI/Y2a2t0wF8Z5rsmnufEo6G
-        vQ76rHF6ACUn4X/hIEncA8okQhNfxVJV0Q==
-X-Google-Smtp-Source: ABdhPJy23LMR5SNJpFHss4xovtLz25ABoH0p7MPdH+DItroYIxfeLMGvKEz5RhoxNtKNH9O0cYWzwQ==
-X-Received: by 2002:a67:c11c:: with SMTP id d28mr1347257vsj.54.1639756870935;
-        Fri, 17 Dec 2021 08:01:10 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id d16sm1871297vko.29.2021.12.17.08.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 08:01:10 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id y22so5248663uap.2;
-        Fri, 17 Dec 2021 08:01:09 -0800 (PST)
-X-Received: by 2002:a9f:248b:: with SMTP id 11mr1321684uar.14.1639756869466;
- Fri, 17 Dec 2021 08:01:09 -0800 (PST)
+        id S238786AbhLQQBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:01:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:59584 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235191AbhLQQBm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:01:42 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95D071476;
+        Fri, 17 Dec 2021 08:01:41 -0800 (PST)
+Received: from [10.57.5.231] (unknown [10.57.5.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B00BB3F774;
+        Fri, 17 Dec 2021 08:01:39 -0800 (PST)
+Subject: Re: [PATCH v5 6/6] perf arm64: inject missing frames if perf-record
+ used "--call-graph=fp"
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Alexandre Truong <alexandre.truong@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20211217154521.80603-1-german.gomez@arm.com>
+ <20211217154521.80603-7-german.gomez@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <207eade3-6719-f028-22a1-d050c10288e0@arm.com>
+Date:   Fri, 17 Dec 2021 16:01:38 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-15-conor.dooley@microchip.com> <CAMuHMdV0N-15kNZ1fnzaj_psNVCRUQP506Noc-tHawmgxqCVeA@mail.gmail.com>
- <11333b59-733c-186f-3708-7357f72d7bef@microchip.com>
-In-Reply-To: <11333b59-733c-186f-3708-7357f72d7bef@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Dec 2021 17:00:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUiSnxmXFroHi1drcmkqkhshC+X=6mtw0_wFnS+P=O9Cw@mail.gmail.com>
-Message-ID: <CAMuHMdUiSnxmXFroHi1drcmkqkhshC+X=6mtw0_wFnS+P=O9Cw@mail.gmail.com>
-Subject: Re: [PATCH v2 14/17] riscv: dts: microchip: add fpga fabric section
- to icicle kit
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <Lewis.Hanly@microchip.com>,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        Atish Patra <atishp@atishpatra.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211217154521.80603-7-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Fri, Dec 17, 2021 at 4:32 PM <Conor.Dooley@microchip.com> wrote:
-> On 17/12/2021 13:43, Geert Uytterhoeven wrote:
-> > On Fri, Dec 17, 2021 at 10:33 AM <conor.dooley@microchip.com> wrote:
-> >> From: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> Split the device tree for the Microchip MPFS into two sections by adding
-> >> microchip-mpfs-fabric.dtsi, which contains peripherals contained in the
-> >> FPGA fabric.
-> >>
-> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Thanks for your patch!
-> >
-> >> --- /dev/null
-> >> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> >> @@ -0,0 +1,13 @@
-> >> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> >> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
-> >> +
-> >> +/ {
-> >> +       corePWM0: pwm@41000000 {
-> >> +               compatible = "microchip,corepwm";
-> >> +               reg = <0x0 0x41000000 0x0 0xF0>;
-> >> +               microchip,sync-update = /bits/ 8 <0>;
-> >> +               #pwm-cells = <2>;
-> >> +               clocks = <&clkcfg CLK_FIC3>;
-> >> +               status = "disabled";
-> >> +       };
-> >
-> > I'm wondering if these should be grouped under a "fabric" subnode,
-> > like we have an "soc" subnode for on-SoC devices? Rob?
-> >
-> > BTW, do you already have a naming plan for different revisions of
-> > FPGA fabric cores?
-> Not yet (assuming you mean specifically how we will handle it in the
-> device tree) - although i was talking to someone about it yesterday.
-> It's possible that we might handle that via a register, but if you have
-> a suggestion or some precedence that you're aware of that would be useful.
->
-> The actual naming convention of the IP cores themselves, yeah. I will
-> dig it up for you on Monday.
-
-I meant what if corepwm is enhanced, and how to detect that?
-
-SiFive uses an integer version number, even for hard cores[1].
-OpenCores uses an "-rtlsvnN" suffix (isn't svn dead? ;-)
-No idea what e.g. LiteX and Microwatt are planning.
-
-[1] Documentation/devicetree/bindings/sifive/sifive-blocks-ip-versioning.txt
 
 
-Gr{oetje,eeting}s,
+On 17/12/2021 15:45, German Gomez wrote:
+> From: Alexandre Truong <alexandre.truong@arm.com>
+> 
+> When unwinding using frame pointers on ARM64, the return address of the
+> current function may not have been pushed into the stack when a function
+> was interrupted, which makes perf show an incorrect call graph to the
+> user.
+> 
+> Consider the following example program:
+> 
+>   void leaf() {
+>       /* long computation */
+>   }
+> 
+>   void parent() {
+>       // (1)
+>       leaf();
+>       // (2)
+>   }
+> 
+>   ... could be compiled into (using gcc -fno-inline -fno-omit-frame-pointer):
+> 
+>   leaf:
+>       /* long computation */
+>       nop
+>       ret
+>   parent:
+>       // (1)
+>       stp     x29, x30, [sp, -16]!
+>       mov     x29, sp
+>       bl      parent
+>       nop
+>       ldp     x29, x30, [sp], 16
+>       // (2)
+>       ret
+> 
+> If the program is interrupted at (1), (2), or any point in "leaf:", the
+> call graph will skip the callers of the current function. We can unwind
+> using the dwarf info and check if the return addr is the same as the LR
+> register, and inject the missing frame into the call graph.
+> 
+> Before this patch, the above example shows the following call-graph when
+> recording using "--call-graph fp" mode in ARM64:
+> 
+>   # Children      Self  Command   Shared Object     Symbol
+>   # ........  ........  ........  ................  ......................
+>   #
+>       99.86%    99.86%  program3  program3          [.] leaf
+>   	    |
+>   	    ---_start
+>   	       __libc_start_main
+>   	       main
+>   	       leaf
+> 
+> As can be seen, the "parent" function is missing. This is specially
+> problematic in "leaf" because for leaf functions the compiler may always
+> omit pushing the return addr into the stack. After this patch, it shows
+> the correct graph:
+> 
+>   # Children      Self  Command   Shared Object     Symbol
+>   # ........  ........  ........  ................  ......................
+>   #
+>       99.86%    99.86%  program3  program3          [.] leaf
+>   	    |
+>   	    ---_start
+>   	       __libc_start_main
+>   	       main
+>   	       parent
+>   	       leaf
+> 
+> Signed-off-by: Alexandre Truong <alexandre.truong@arm.com>
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+>  tools/perf/util/Build                         |  1 +
+>  .../util/arm64-frame-pointer-unwind-support.c | 63 +++++++++++++++++++
+>  .../util/arm64-frame-pointer-unwind-support.h | 10 +++
+>  tools/perf/util/machine.c                     | 19 ++++--
+>  tools/perf/util/machine.h                     |  1 +
+>  5 files changed, 89 insertions(+), 5 deletions(-)
+>  create mode 100644 tools/perf/util/arm64-frame-pointer-unwind-support.c
+>  create mode 100644 tools/perf/util/arm64-frame-pointer-unwind-support.h
+> 
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 2e5bfbb69960..03d4c647bd86 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -1,3 +1,4 @@
+> +perf-y += arm64-frame-pointer-unwind-support.o
+>  perf-y += annotate.o
+>  perf-y += block-info.o
+>  perf-y += block-range.o
+> diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+> new file mode 100644
+> index 000000000000..4f5ecf51ed38
+> --- /dev/null
+> +++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+> @@ -0,0 +1,63 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "arm64-frame-pointer-unwind-support.h"
+> +#include "callchain.h"
+> +#include "event.h"
+> +#include "perf_regs.h" // SMPL_REG_MASK
+> +#include "unwind.h"
+> +
+> +#define perf_event_arm_regs perf_event_arm64_regs
+> +#include "../arch/arm64/include/uapi/asm/perf_regs.h"
+> +#undef perf_event_arm_regs
+> +
+> +struct entries {
+> +	u64 stack[2];
+> +	size_t length;
+> +};
+> +
+> +static bool get_leaf_frame_caller_enabled(struct perf_sample *sample)
+> +{
+> +	return callchain_param.record_mode == CALLCHAIN_FP && sample->user_regs.regs
+> +		&& sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_LR);
+> +}
+> +
+> +static int add_entry(struct unwind_entry *entry, void *arg)
+> +{
+> +	struct entries *entries = arg;
+> +
+> +	entries->stack[entries->length++] = entry->ip;
+> +	return 0;
+> +}
+> +
+> +u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int usr_idx)
+> +{
+> +	int ret;
+> +	struct entries entries = {};
+> +	struct regs_dump old_regs = sample->user_regs;
+> +
+> +	if (!get_leaf_frame_caller_enabled(sample))
+> +		return 0;
+> +
+> +	/*
+> +	 * If PC and SP are not recorded, get the value of PC from the stack
+> +	 * and set its mask. SP is not used when doing the unwinding but it
+> +	 * still needs to be set to prevent failures.
+> +	 */
+> +
+> +	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_PC))) {
+> +		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_PC);
+> +		sample->user_regs.cache_regs[PERF_REG_ARM64_PC] = sample->callchain->ips[usr_idx+1];
+> +	}
+> +
+> +	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_SP))) {
+> +		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_SP);
+> +		sample->user_regs.cache_regs[PERF_REG_ARM64_SP] = 0;
+> +	}
+> +
+> +	ret = unwind__get_entries(add_entry, &entries, thread, sample, 2);
+> +	sample->user_regs = old_regs;
+> +
+> +	if (ret || entries.length != 2)
+> +		return ret;
+> +
+> +	return callchain_param.order == ORDER_CALLER ? entries.stack[0] : entries.stack[1];
+> +}
+> diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.h b/tools/perf/util/arm64-frame-pointer-unwind-support.h
+> new file mode 100644
+> index 000000000000..32af9ce94398
+> --- /dev/null
+> +++ b/tools/perf/util/arm64-frame-pointer-unwind-support.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
+> +#define __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
+> +
+> +#include "event.h"
+> +#include "thread.h"
+> +
+> +u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int user_idx);
+> +
+> +#endif /* __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H */
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 3eddad009f78..a00fd6796b35 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -34,6 +34,7 @@
+>  #include "bpf-event.h"
+>  #include <internal/lib.h> // page_size
+>  #include "cgroup.h"
+> +#include "arm64-frame-pointer-unwind-support.h"
+>  
+>  #include <linux/ctype.h>
+>  #include <symbol/kallsyms.h>
+> @@ -2710,10 +2711,13 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
+>  	return err;
+>  }
+>  
+> -static u64 get_leaf_frame_caller(struct perf_sample *sample __maybe_unused,
+> -		struct thread *thread __maybe_unused, int usr_idx __maybe_unused)
+> +static u64 get_leaf_frame_caller(struct perf_sample *sample,
+> +		struct thread *thread, int usr_idx)
+>  {
+> -	return 0;
+> +	if (machine__normalize_is(thread->maps->machine, "arm64"))
+> +		return get_leaf_frame_caller_aarch64(sample, thread, usr_idx);
+> +	else
+> +		return 0;
+>  }
+>  
+>  static int thread__resolve_callchain_sample(struct thread *thread,
+> @@ -3114,14 +3118,19 @@ int machine__set_current_tid(struct machine *machine, int cpu, pid_t pid,
+>  }
+>  
+>  /*
+> - * Compares the raw arch string. N.B. see instead perf_env__arch() if a
+> - * normalized arch is needed.
+> + * Compares the raw arch string. N.B. see instead perf_env__arch() or
+> + * machine__normalize_is() if a normalized arch is needed.
+>   */
+>  bool machine__is(struct machine *machine, const char *arch)
+>  {
+>  	return machine && !strcmp(perf_env__raw_arch(machine->env), arch);
+>  }
+>  
+> +bool machine__normalize_is(struct machine *machine, const char *arch)
+> +{
+> +	return machine && !strcmp(perf_env__arch(machine->env), arch);
+> +}
+> +
 
-                        Geert
+I think this function name would be clearer as something like "machine__normalized_is" or
+"machine__normalized_arch_is". The tense is slightly off because it's a test rather than a
+verb.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With that change, for the whole set:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: James Clark <james.clark@arm.com>
+
+
+>  int machine__nr_cpus_avail(struct machine *machine)
+>  {
+>  	return machine ? perf_env__nr_cpus_avail(machine->env) : 0;
+> diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
+> index a143087eeb47..665535153411 100644
+> --- a/tools/perf/util/machine.h
+> +++ b/tools/perf/util/machine.h
+> @@ -208,6 +208,7 @@ static inline bool machine__is_host(struct machine *machine)
+>  }
+>  
+>  bool machine__is(struct machine *machine, const char *arch);
+> +bool machine__normalize_is(struct machine *machine, const char *arch);
+>  int machine__nr_cpus_avail(struct machine *machine);
+>  
+>  struct thread *__machine__findnew_thread(struct machine *machine, pid_t pid, pid_t tid);
+> 

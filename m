@@ -2,100 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE556478A78
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FC7478AA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbhLQLzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbhLQLzw (ORCPT
+        id S235914AbhLQL6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:58:38 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:18860 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235953AbhLQL6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:55:52 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3CBC061574;
-        Fri, 17 Dec 2021 03:55:51 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id l22so4070615lfg.7;
-        Fri, 17 Dec 2021 03:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IVoSwh1vrOcOYMzSFZcBGiekwmrvmnu/yu9ynAy3UtA=;
-        b=Gj4M7BgLMNPwhiJBvGzl/JDenwkO7HDujABojJBRvVGLCRYQeHHyruewEpwh6ybCyL
-         Av1yUjLdjkR52TDV9592LyZLu1xchFpalL3pBfN/s4J6GTD8OOlofaYsxubHYKVU2D6O
-         CbHHedms1cH2t6sC0TTo3ffEOH/fd2BqYI9jaqOIfwtwvVCamaraABKsvlzeRrJ4cZOF
-         7tXhjqCqOV+AEwTPnXm7hTyGdi7sLrHvX26MLPYSwDk05X49ikx2cs4YXE2R435mCgYf
-         BeB9yakD/M3i6mbNh1aJSrhdCmtLCJpriqea6faSFaKjZhK9ZTwQb/aCz6oBwahpX3C/
-         o4oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IVoSwh1vrOcOYMzSFZcBGiekwmrvmnu/yu9ynAy3UtA=;
-        b=z24fdkHbYLzg7UxrboHqqqZFpGhMnZsCZap+/Mf4c/kGeH1tz3ktwzbICDTakfM88Y
-         ejY4YfOqx6lRIz1lXA0npasqZl4ktqNUeQnVbA94fPCi2edYFc1emOyxFgUZMpurKoyO
-         A/Hsx1LwNxhvc8M0ZEGRSAZCvVJ0MKD23VqrXtHanAZyRq7+j6LHJboUZJbkdQ1Vhpvj
-         AAdtDP+9aq++9gEnDkXNrJPLBDDmeuRpzNUq2RqLBvq78SrXA1fVUw0C9OAnm/dwLIuP
-         s88lSWsd5KsfUVjsBSl6xZsIUPMQ4CRvDZbbMF0o+a9pq1WN8bQ4WiMWhLNDEZIUZ8+U
-         aBcw==
-X-Gm-Message-State: AOAM533c1Y7Efdp5fWbuC/VAUVHz9uD0MuI0CTZDal27D+Ex8tc1s+P2
-        yPCc8mRqo+eyRnzgSzDkDCLoSe2kNro=
-X-Google-Smtp-Source: ABdhPJzR7F4ntqza5TxeJHdnruw3Sr909Ky7UaeX6gfiS/xaUtY7aJ1DkExo+7MWJU3p6Tpo8cWycQ==
-X-Received: by 2002:a05:6512:308b:: with SMTP id z11mr2508194lfd.177.1639742150078;
-        Fri, 17 Dec 2021 03:55:50 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id f10sm1355834lfg.211.2021.12.17.03.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 03:55:49 -0800 (PST)
-Subject: Re: [PATCH v4 04/22] dt-bindings: host1x: Document optional HDMI
- sound-dai-cells
-To:     Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
+        Fri, 17 Dec 2021 06:58:13 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BH8Oppf016817;
+        Fri, 17 Dec 2021 05:57:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=iGpzReHZyHBG3ZWw3aYZlYLVq98QdfPHOZmwdb+XdNQ=;
+ b=B10mronPYEWIFVibRBx6IrbvK30QPyEly9lasmrq52FNtsyn0VByqDURU+bD4LP9ONgs
+ 1jq1/fMhkzWL8Fc41XJUfvHvdz8W8caisjpEU7qo9pL3OLrH0nccshdEBMSDCp2SZdjo
+ hDFi7FaopO0yG8IEGBPcVDYColiUETVOyHZL//DqcwCwQZZEUYRvbzoy2HquFFiCUdtn
+ L/UsHUWPLqS3q83HzrxSPRjglTGup+PHcrR8qOCKgrkICH0TyDbGoWBUVgvTmeLCp11h
+ V+Dm2wUcgf5/O58U0SC0rvygt4rwFkPhjGYXN8i9TwrMtJkIs0cVDDHKF8M+9wxcvu2v Kw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3d0q0m06ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 17 Dec 2021 05:57:21 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 17 Dec
+ 2021 11:57:20 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 11:57:20 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.39])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 97C18B10;
+        Fri, 17 Dec 2021 11:57:19 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20211204143725.31646-1-digetx@gmail.com>
- <20211204143725.31646-5-digetx@gmail.com> <YbtLJeIxXlVyQhd3@orome>
- <Ybxwovlw2GARzqUO@sirena.org.uk>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4edfbff2-ffd9-1c33-de0c-013a29dc286c@gmail.com>
-Date:   Fri, 17 Dec 2021 14:55:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v6 00/10] Add support for CS35L41 in HDA systems
+Date:   Fri, 17 Dec 2021 11:56:58 +0000
+Message-ID: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <Ybxwovlw2GARzqUO@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ntGAQ9zuKPsuD8ushoKhdDHS5ks-qg4r
+X-Proofpoint-GUID: ntGAQ9zuKPsuD8ushoKhdDHS5ks-qg4r
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-17.12.2021 14:12, Mark Brown пишет:
-> On Thu, Dec 16, 2021 at 03:20:21PM +0100, Thierry Reding wrote:
->> On Sat, Dec 04, 2021 at 05:37:07PM +0300, Dmitry Osipenko wrote:
->>> Document new optional sound-dai-cells property of HDMI node. This node will
->>> be used as endpoint of HDMI sound DAI graph.
-> 
->> It's probably best for this to go through ASoC along with the other
->> audio-related bindings.
-> 
->> Alternatively, I've just sent out a patch that converts the host1x
->> bindings to json-schema, so I could work this into that as well.
-> 
-> It doesn't apply to the ASoC tree for whatever reason so probably best
-> to roll it in with those JSON updates.
-> 
+Add support for laptops that have CS35L41 connected to an HDA
+codec by I2S and direct I2C connection to the CPU.
 
-This hos1tx binding patch indeed will conflict with the Thierry's patch.
+Laptops that use CS35L41 and are SPI will be added in the future,
+after the support for it is resolved at i2c-multi-instantiate driver.
+i2c-multi-instantiate thread: https://lkml.org/lkml/2021/12/10/557
 
-Thierry, will you be able to take the binding patches into the Tegra
-tree and resolve all those hos1tx binding conflicts there?
+Hardware:
+ - Some laptops have two CS35L41 amplifiers, connected to Realtek ALC287
+   by an I2S bus and by and direct I2C to the CPU.
+ - The ALC287 codec is connected to the CPU by an HDA bus.
+ - The CS35L41 has a DSP which will require firmware to be loaded.
+
+Architecture:
+ - Creation of a library of shared functions for CS35L41 ASoC and HDA
+ - HDA codec driver (RealTek) and CS35L41 HDA driver are combined
+ by using component binding, where it uses device names to find the
+ components and bind to the master
+ - The HDA CS35L41 driver applies pre-defined registers sequences
+ for each action in playback for HDA Sound card
+
+Changes from V5:
+ - Fix build issues reported by Intel Test Bot
+ - Check devm_kasprintf return
+ - Add ACPI dependency to HDA drivers
+V5: https://lkml.org/lkml/2021/12/16/430
+
+Changes from V4:
+ - Save index received from ACPI for latter use in DSP Support
+ - Move CS35L41_DSP1_CCM_CORE_CTRL to regmap_write so doesn't
+affect DSP hibernation feature
+V4: https://lkml.org/lkml/2021/12/14/487
+
+Changes from V3:
+ - SPI bus driver starter added
+ - Use separate modules approach instead of liking library
+ - Add CSC3551 ACPI _HID for more I2C laptops
+ - Removed regulators from HDA driver
+ - Add note about Non-conforming _HID
+V3: https://lkml.org/lkml/2021/11/23/723
+
+Changes from V2:
+ - Not an RFC
+ - Create a new HDA driver for CS35L41 instead of using the ASoC one
+ - Use component binding and device names to find the CS35L41 driver
+ - Create a shared library for ASoC and HDA CS35L41 drivers
+v2: https://lkml.org/lkml/2021/10/8/344
+
+Lucas Tanure (9):
+  ASoC: cs35l41: Convert tables to shared source code
+  ASoC: cs35l41: Move cs35l41_otp_unpack to shared code
+  ASoC: cs35l41: Move power initializations to reg_sequence
+  ASoC: cs35l41: Create shared function for errata patches
+  ASoC: cs35l41: Create shared function for setting channels
+  ASoC: cs35l41: Create shared function for boost configuration
+  hda: cs35l41: Add support for CS35L41 in HDA systems
+  ACPI / scan: Create platform device for CLSA0100 and CSC3551 ACPI
+    nodes
+  ALSA: hda/realtek: Add support for Legion 7 16ACHg6 laptop
+
+Stefan Binding (1):
+  ALSA: hda/realtek: Add CS35L41 support for Thinkpad laptops
+
+ MAINTAINERS                                   |   2 +
+ drivers/acpi/scan.c                           |   3 +
+ drivers/platform/x86/i2c-multi-instantiate.c  |  11 +
+ include/sound/cs35l41.h                       | 739 ++++++++++++++++++
+ sound/pci/hda/Kconfig                         |  29 +
+ sound/pci/hda/Makefile                        |  10 +
+ sound/pci/hda/cs35l41_hda.c                   | 527 +++++++++++++
+ sound/pci/hda/cs35l41_hda.h                   |  69 ++
+ sound/pci/hda/cs35l41_hda_i2c.c               |  66 ++
+ sound/pci/hda/cs35l41_hda_spi.c               |  63 ++
+ sound/pci/hda/hda_component.h                 |  20 +
+ sound/pci/hda/patch_realtek.c                 | 146 ++++
+ sound/soc/codecs/Kconfig                      |  11 +-
+ sound/soc/codecs/Makefile                     |   4 +-
+ sound/soc/codecs/cs35l41-i2c.c                |   1 -
+ .../{cs35l41-tables.c => cs35l41-lib.c}       | 355 ++++++++-
+ sound/soc/codecs/cs35l41-spi.c                |   1 -
+ sound/soc/codecs/cs35l41.c                    | 360 +--------
+ sound/soc/codecs/cs35l41.h                    | 734 -----------------
+ 19 files changed, 2055 insertions(+), 1096 deletions(-)
+ create mode 100644 sound/pci/hda/cs35l41_hda.c
+ create mode 100644 sound/pci/hda/cs35l41_hda.h
+ create mode 100644 sound/pci/hda/cs35l41_hda_i2c.c
+ create mode 100644 sound/pci/hda/cs35l41_hda_spi.c
+ create mode 100644 sound/pci/hda/hda_component.h
+ rename sound/soc/codecs/{cs35l41-tables.c => cs35l41-lib.c} (71%)
+
+-- 
+2.34.1
+

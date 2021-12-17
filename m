@@ -2,109 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883B4479112
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F6D47910A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238922AbhLQQOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S238893AbhLQQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235959AbhLQQOf (ORCPT
+        with ESMTP id S231298AbhLQQMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:14:35 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C379C061574;
-        Fri, 17 Dec 2021 08:14:35 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o29so1974369wms.2;
-        Fri, 17 Dec 2021 08:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9PrIKDIDs5G43xHziGUw5xjWzhxUWAXkgHn7b6XgCRg=;
-        b=Hb1kRPY1nKW9YV5BDJ24z1aQxe8ouBR/JIGR5EyD7fr3bFji4yk6B8QP1W6tac5gd1
-         /4YLednLOdFW8IUd7HtzA0EI1cD6DbmIL79LQnA19NwTP/Cm8+JkKvrc3WQau8PidGSF
-         9sdbEafRfcQ1i9FwBj50umoGXFSePHO4MK3s7kxFFw5RvIwdyGoO4qaWmxSuQ3OV6R9I
-         obF0C6HZCqlkmnxqreFnTtYSim1QLQyliZzfsR+6E/XYRlL8YLkiDdBJpxbUmc3QxYto
-         sUAlbJMbOvQVP3Ygr9db+oEoEiKJWD6d01P6MehYT1s0iN747OY6Zd0t1St2B+aXbYCR
-         qvPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9PrIKDIDs5G43xHziGUw5xjWzhxUWAXkgHn7b6XgCRg=;
-        b=bTS7UsXcLvSAVu42bREtYbifSMKezLj8GPJ7q2D9crj7Yqgz+QZJfAzG5Mm2lJ4YAE
-         GcT58SrpyYOxWvkg61ZK/O8TxgkrRv5xCkIAGOPo9uOMFCDXzibQhkK1AMW3BqwDNRLP
-         UCBBLISpweYhMF7UZ5lo8qZlGfnSpIyHFSiPssrs7+UTzYYUOdmIUSvAKiuYHYH7EfaV
-         tNs1i0dRLRkIqDh7w1mmhXB2mYJNgj960fXfMjXn77RCvlAcoV0QtM0W+Hb6/PDQ4sd4
-         50bd2eIUYmA5gtmsVLwfCtNph/fNnEuDfCW+O/OKtd5mCDwmOFxYoI/S+S4aqrBskJpT
-         W9tA==
-X-Gm-Message-State: AOAM532BS5yWj1scfzt9THj/LNmg6IgwdZh9dU4u3hVoz9tNMEwJpIfS
-        v/+0yQ6FVwe4cgiSVcyQJJdEPYrSWsM80A==
-X-Google-Smtp-Source: ABdhPJzcrnukyGJtVPRgJ+/YGbCE1v003rEfdzpBi5YbuLBsqBBWAW+Xrcj0X+FY12GRtvH+rdgAxQ==
-X-Received: by 2002:a05:600c:3797:: with SMTP id o23mr2879199wmr.178.1639757673970;
-        Fri, 17 Dec 2021 08:14:33 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id h27sm12002300wmc.43.2021.12.17.08.14.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 08:14:33 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [GIT PULL] memory: tegra: Changes for v5.17-rc1
-Date:   Fri, 17 Dec 2021 17:14:31 +0100
-Message-Id: <20211217161431.1524285-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Dec 2021 11:12:53 -0500
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56801C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:12:53 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JFvCQ0TrvzMqY50;
+        Fri, 17 Dec 2021 17:12:50 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4JFvCL6NPdzlj3vw;
+        Fri, 17 Dec 2021 17:12:46 +0100 (CET)
+Message-ID: <d20861d0-8432-76d7-bcda-1b80401e0a22@digikod.net>
+Date:   Fri, 17 Dec 2021 17:15:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: 
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, keescook@chromium.org, yzaikin@google.com,
+        nixiaoming@huawei.com, ebiederm@xmission.com, steve@sk2.org,
+        mcgrof@bombadil.infradead.org, andriy.shevchenko@linux.intel.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211129205548.605569-1-mcgrof@kernel.org>
+ <20211129205548.605569-5-mcgrof@kernel.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH 4/9] sysctl: move maxolduid as a sysctl specific const
+In-Reply-To: <20211129205548.605569-5-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+This patch introduces a bug in -next:
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+On 29/11/2021 21:55, Luis Chamberlain wrote:
+> The maxolduid value is only shared for sysctl purposes for
+> use on a max range. Just stuff this into our shared const
+> array.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   fs/proc/proc_sysctl.c  |  2 +-
+>   include/linux/sysctl.h |  3 +++
+>   kernel/sysctl.c        | 12 ++++--------
+>   3 files changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 7dec3d5a9ed4..675b625fa898 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -26,7 +26,7 @@ static const struct file_operations proc_sys_dir_file_operations;
+>   static const struct inode_operations proc_sys_dir_operations;
+>   
+>   /* shared constants to be used in various sysctls */
+> -const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, INT_MAX };
+> +const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 65535, INT_MAX };
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+The new SYSCTL_MAXOLDUID uses the index 10 of sysctl_vals[] but the same
+commit replaces index 8 (SYSCTL_THREE_THOUSAND used by
+vm.watermark_scale_factor) instead of adding a new entry.
 
-are available in the Git repository at:
+It should be:
++const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, 
+INT_MAX, 65535 };
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.17-memory
 
-for you to fetch changes up to 9ecccfabc29df15e1fd03a440f3f6e611ebff062:
 
-  memory: tegra: Add Tegra234 support (2021-12-16 16:48:21 +0100)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-memory: tegra: Changes for v5.17-rc1
-
-This contains the stable tag that shares the device tree includes
-between the memory and Tegra trees. I've also applied the Tegra234
-support patch on top for your convenience.
-
-----------------------------------------------------------------
-Mikko Perttunen (1):
-      dt-bindings: Update headers for Tegra234
-
-Thierry Reding (4):
-      dt-bindings: memory: tegra: Update for Tegra194
-      dt-bindings: memory: tegra: Add Tegra234 support
-      Merge tag 'tegra-for-5.17-dt-bindings-memory' into for-5.17/memory
-      memory: tegra: Add Tegra234 support
-
- .../memory-controllers/nvidia,tegra186-mc.yaml     | 98 +++++++++++++++++++---
- drivers/memory/tegra/Makefile                      |  1 +
- drivers/memory/tegra/mc.c                          |  3 +
- drivers/memory/tegra/mc.h                          |  7 +-
- drivers/memory/tegra/tegra186-emc.c                |  3 +
- drivers/memory/tegra/tegra234.c                    | 81 ++++++++++++++++++
- include/dt-bindings/clock/tegra234-clock.h         | 26 +++++-
- include/dt-bindings/memory/tegra234-mc.h           | 32 +++++++
- include/dt-bindings/reset/tegra234-reset.h         | 12 ++-
- 9 files changed, 246 insertions(+), 17 deletions(-)
- create mode 100644 drivers/memory/tegra/tegra234.c
- create mode 100644 include/dt-bindings/memory/tegra234-mc.h
+>   EXPORT_SYMBOL(sysctl_vals);
+>   
+>   const unsigned long sysctl_long_vals[] = { 0, 1, LONG_MAX };
+> diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+> index 2de6d20d191b..bb921eb8a02d 100644
+> --- a/include/linux/sysctl.h
+> +++ b/include/linux/sysctl.h
+> @@ -49,6 +49,9 @@ struct ctl_dir;
+>   #define SYSCTL_THREE_THOUSAND		((void *)&sysctl_vals[8])
+>   #define SYSCTL_INT_MAX			((void *)&sysctl_vals[9])
+>   
+> +/* this is needed for the proc_dointvec_minmax for [fs_]overflow UID and GID */
+> +#define SYSCTL_MAXOLDUID		((void *)&sysctl_vals[10])
+> +
+>   extern const int sysctl_vals[];
+>   
+>   #define SYSCTL_LONG_ZERO	((void *)&sysctl_long_vals[0])
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index dbd267d0f014..05d9dd85e17f 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -109,10 +109,6 @@ static const int six_hundred_forty_kb = 640 * 1024;
+>   /* this is needed for the proc_doulongvec_minmax of vm_dirty_bytes */
+>   static const unsigned long dirty_bytes_min = 2 * PAGE_SIZE;
+>   
+> -/* this is needed for the proc_dointvec_minmax for [fs_]overflow UID and GID */
+> -static const int maxolduid = 65535;
+> -/* minolduid is SYSCTL_ZERO */
+> -
+>   static const int ngroups_max = NGROUPS_MAX;
+>   static const int cap_last_cap = CAP_LAST_CAP;
+>   
+> @@ -2126,7 +2122,7 @@ static struct ctl_table kern_table[] = {
+>   		.mode		= 0644,
+>   		.proc_handler	= proc_dointvec_minmax,
+>   		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= (void *)&maxolduid,
+> +		.extra2		= SYSCTL_MAXOLDUID,
+>   	},
+>   	{
+>   		.procname	= "overflowgid",
+> @@ -2135,7 +2131,7 @@ static struct ctl_table kern_table[] = {
+>   		.mode		= 0644,
+>   		.proc_handler	= proc_dointvec_minmax,
+>   		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= (void *)&maxolduid,
+> +		.extra2		= SYSCTL_MAXOLDUID,
+>   	},
+>   #ifdef CONFIG_S390
+>   	{
+> @@ -2907,7 +2903,7 @@ static struct ctl_table fs_table[] = {
+>   		.mode		= 0644,
+>   		.proc_handler	= proc_dointvec_minmax,
+>   		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= (void *)&maxolduid,
+> +		.extra2		= SYSCTL_MAXOLDUID,
+>   	},
+>   	{
+>   		.procname	= "overflowgid",
+> @@ -2916,7 +2912,7 @@ static struct ctl_table fs_table[] = {
+>   		.mode		= 0644,
+>   		.proc_handler	= proc_dointvec_minmax,
+>   		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= (void *)&maxolduid,
+> +		.extra2		= SYSCTL_MAXOLDUID,
+>   	},
+>   #ifdef CONFIG_FILE_LOCKING
+>   	{
+> 

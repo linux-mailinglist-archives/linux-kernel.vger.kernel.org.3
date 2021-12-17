@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB0347834B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42030478357
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbhLQCmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:42:44 -0500
-Received: from mga14.intel.com ([192.55.52.115]:55539 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229471AbhLQCmn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:42:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639708962; x=1671244962;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CSbl0+RPrs7o5cCRB3i4ahUHL/2Yzz/T3+j9xH6WCvo=;
-  b=cWgOn0UbqV7DnCmD4WRZLn8ufRcr3AYh84q5y0GopUHYhtA3N5e/tCZw
-   0HMOxw/2zw6IN1uf7SY7diJl5J9yJxnRYNf7TP6ugUHbu3tll/sa3cs5w
-   2VledaH9nkrayaz+Kt/DZSCMsb79cZGBAFUgs3QXQSWHFK+8a4He8hDEk
-   iVa7dBlDtNinSRl5ims9kEnc2amPbGWumwHHxgXmdUdfgZnu82j9AoYUT
-   0lzm8bjBZpaHbAekpsYD/SC/vHzuDyH+B6R9N9lPPcqJ3AjQV9nrAHrQp
-   lRW0O76qS67TrfsS+vDepZJ2kFWm5UWPSmh11UHg4/ydb8/ADLmai1dTd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239886336"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="239886336"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:42:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="506592531"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 18:42:37 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1my3Cc-00047u-0U; Fri, 17 Dec 2021 02:42:34 +0000
-Date:   Fri, 17 Dec 2021 10:41:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [t-kristo-pm:usi-5.16-v5-bpf 16/19] drivers/hid/hid-bpf.c:696:36:
- sparse: sparse: incorrect type in argument 1 (different address spaces)
-Message-ID: <202112171058.s47VBRgI-lkp@intel.com>
+        id S231740AbhLQCpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:45:34 -0500
+Received: from relay027.a.hostedemail.com ([64.99.140.27]:17450 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229471AbhLQCpe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:45:34 -0500
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 28D8B21DE8;
+        Fri, 17 Dec 2021 02:45:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 807072E;
+        Fri, 17 Dec 2021 02:45:31 +0000 (UTC)
+Message-ID: <44b1244ad563a6de661766b8cc7bfacde82d221b.camel@perches.com>
+Subject: Re: [RFC] Add a 'tag' field to MAINTAINERS
+From:   Joe Perches <joe@perches.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 18:45:30 -0800
+In-Reply-To: <286e55e0c37d2ae60c123412318f90accf0473d0.camel@perches.com>
+References: <Ybuy++k9sitvrem3@casper.infradead.org>
+         <286e55e0c37d2ae60c123412318f90accf0473d0.camel@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.71
+X-Stat-Signature: gojekmtr5fapiqyhcda46bto8mh1ixtq
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 807072E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18yWhVIbbe4wOaRwEGaz3Y0h7S09ERZwU0=
+X-HE-Tag: 1639709131-391824
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/t-kristo/linux-pm usi-5.16-v5-bpf
-head:   82a2c7cbd9682f2664179cd7e01647e46272c316
-commit: 8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f [16/19] HID: bpf: add support for new workqueue triggering BPF call
-config: arm64-randconfig-s031-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171058.s47VBRgI-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/t-kristo/linux-pm/commit/8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f
-        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
-        git fetch --no-tags t-kristo-pm usi-5.16-v5-bpf
-        git checkout 8ffc42bfd37f05ffa2c284b71a6c3bb5021fac8f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/ drivers/pinctrl/
+(apologies for the blank reply, evolution email client isn't great)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, 2021-12-16 at 21:43 +0000, Matthew Wilcox wrote:
+> People find it hard to use the right tag when sending patches which
+> affect a maintainer that they don't interact with often.  If we add
+> a field to MAINTAINERS, perhaps a tool will be written some day that
+> automatically adds it to patches.
+
+I am not against the concept, but at least the initial entries
+should mirror what is currently used.
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -14927,6 +14929,7 @@ M:	Pawel Osciak <pawel@osciak.com>
+>  M:	Marek Szyprowski <m.szyprowski@samsung.com>
+>  M:	Kyungmin Park <kyungmin.park@samsung.com>
+>  L:	linux-media@vger.kernel.org
+> +J:	videobuf
+>  S:	Maintained
+>  F:	drivers/media/v4l2-core/videobuf2-*
+>  F:	include/media/videobuf2-*
+
+This isn't useful.
+
+Almost every patch to this pattern is prefixed with something else.
+
+$ git log --pretty=oneline --no-merges -- 'drivers/media/v4l2-core/videobuf2-*'
+03fbdb2fc2b8bb27b0ee0534fd3e9c57cdc3854a media: move videobuf2 to drivers/media/common
+c0cb76589c77b9a05f6271691be8707104ff0241 media: vb2: unify calling of set_page_dirty_lock
+327553ae8eb87a66b2c9e041e890ea66f21009b2 media: vb2: clear V4L2_BUF_FLAG_LAST when filling vb2_buffer
+d28b2cf969b1e887450700191c22df8085574e9b media: v4l2-core: Fix kernel-doc markups
+2a87af6ba1b9df4dda91d7e1a7d750f295ce1e57 media: videobuf2: don't use kernel-doc "/**" markups
+c4860ad60564838994b74e7ee7dd12ceeda0f520 lib/scatterlist: Fix offset type in sg_alloc_table_from_pages
+5b6f9abe5a49df81737fbbfba890ee5b093f8168 media: vb2: add bidirectional flag in vb2_queue
+07ca2d4c0f44086eb38bbe0b3f86a379a701e2dc media: vb2: core: Lower the log level of debug outputs
+efaf515f0d5124193393e37adbef423866a99273 media: vb2 dma-sg: Constify dma_buf_ops structures
+59310b7a06c1f9c7d8fd2d981dbc85226214dc32 media: vb2 vmalloc: Constify dma_buf_ops structures
+6e03db38631f5607e81856418ffe779c29e53c56 media: vb2 dma-contig: Constify dma_buf_ops structures
+758d90e161382c134b7cbd5f724df4de02f3c67e [media] v4l2-core: Use kvmalloc() for potentially big allocations
+72b7876c2e3b6087c72ce030d8145ec4a7328121 [media] vb2: Fix error handling in '__vb2_buf_mem_alloc'
+a136f59c0a1f1b09eb203951975e3fc5e8d3e722 [media] vb2: Move buffer cache synchronisation to prepare from queue
+6aca5b8fb86681954e6715494e74106db505701c [media] vb2: Rename confusingly named internal buffer preparation functions
+ef6ff8f47263b1a98b7c3a8d7ee30c1d5b0afdfa [media] vb2: Fix an off by one error in 'vb2_plane_vaddr'
+f9b67f0014cba18f1aabb6fa9272335a043eb6fd dma-buf: Rename dma-ops to prevent conflict with kunmap_atomic macro
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/hid/hid-bpf.c:38:21: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:38:21: sparse:    struct bpf_prog_array [noderef] __rcu *
-   drivers/hid/hid-bpf.c:38:21: sparse:    struct bpf_prog_array *
-   drivers/hid/hid-bpf.c:48:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:48:9: sparse:    struct bpf_prog_array [noderef] __rcu *
-   drivers/hid/hid-bpf.c:48:9: sparse:    struct bpf_prog_array *
-   drivers/hid/hid-bpf.c:68:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:68:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:83:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:83:59: sparse:     expected struct bpf_prog_array **array
-   drivers/hid/hid-bpf.c:83:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
-   drivers/hid/hid-bpf.c:85:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:85:59: sparse:     expected struct bpf_prog_array **array
-   drivers/hid/hid-bpf.c:85:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
-   drivers/hid/hid-bpf.c:87:52: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog **target @@     got struct bpf_prog [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:87:52: sparse:     expected struct bpf_prog **target
-   drivers/hid/hid-bpf.c:87:52: sparse:     got struct bpf_prog [noderef] __rcu **
-   drivers/hid/hid-bpf.c:93:53: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog **target @@     got struct bpf_prog [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:93:53: sparse:     expected struct bpf_prog **target
-   drivers/hid/hid-bpf.c:93:53: sparse:     got struct bpf_prog [noderef] __rcu **
-   drivers/hid/hid-bpf.c:111:21: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:111:21: sparse:    struct bpf_prog_array [noderef] __rcu *
-   drivers/hid/hid-bpf.c:111:21: sparse:    struct bpf_prog_array *
-   drivers/hid/hid-bpf.c:121:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:121:9: sparse:    struct bpf_prog_array [noderef] __rcu *
-   drivers/hid/hid-bpf.c:121:9: sparse:    struct bpf_prog_array *
-   drivers/hid/hid-bpf.c:140:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:140:20: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:140:20: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:140:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:140:20: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:140:20: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:156:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:156:59: sparse:     expected struct bpf_prog_array **array
-   drivers/hid/hid-bpf.c:156:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
-   drivers/hid/hid-bpf.c:158:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
-   drivers/hid/hid-bpf.c:158:59: sparse:     expected struct bpf_prog_array **array
-   drivers/hid/hid-bpf.c:158:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
-   drivers/hid/hid-bpf.c:160:26: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:160:26: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:160:26: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:169:26: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/hid/hid-bpf.c:169:26: sparse:    struct bpf_prog *
-   drivers/hid/hid-bpf.c:169:26: sparse:    struct bpf_prog [noderef] __rcu *
-   drivers/hid/hid-bpf.c:228:27: sparse: sparse: symbol 'hid_prog_ops' was not declared. Should it be static?
-   drivers/hid/hid-bpf.c:243:23: sparse: sparse: symbol 'hid_bpf_add_report' was not declared. Should it be static?
-   drivers/hid/hid-bpf.c:271:6: sparse: sparse: symbol 'hid_bpf_free_reports' was not declared. Should it be static?
-   drivers/hid/hid-bpf.c:649:31: sparse: sparse: symbol 'hid_verifier_ops' was not declared. Should it be static?
->> drivers/hid/hid-bpf.c:696:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct bpf_prog const *prog @@     got struct bpf_prog [noderef] __rcu *work_prog @@
-   drivers/hid/hid-bpf.c:857:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct bpf_prog const *prog @@     got struct bpf_prog [noderef] __rcu *rdesc_fixup_prog @@
-   drivers/hid/hid-bpf.c:909:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct bpf_prog *prog @@     got struct bpf_prog [noderef] __rcu *rdesc_fixup_prog @@
-
-vim +696 drivers/hid/hid-bpf.c
-
-   688	
-   689	static void hid_bpf_work(struct work_struct *work)
-   690	{
-   691		struct hid_bpf_ctx *ctx =
-   692			container_of(work, struct hid_bpf_ctx, work.work);
-   693	
-   694		migrate_disable();
-   695	
- > 696		bpf_prog_run(ctx->hdev->bpf.work_prog, ctx);
-   697	
-   698		migrate_enable();
-   699	}
-   700	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

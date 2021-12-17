@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A262B478DE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51D8478DE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbhLQOfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhLQOfT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:35:19 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFCBC06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:35:18 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso1931509wmd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:35:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=fMc2v4K0kX8aTPiSum+unuVGgdc5yJF7LINDGiGWUew=;
-        b=fLOXS9FhsTNV9RSn2jJgKHrgfZsBKIOk6Zng68+o441kBjLUkzkFnj15TTQHxcLdQc
-         pjKw0rpv457ulgWkqE3PzIq5xYDL3g5cx41ZxyPHpOsYP+X5IUzN+5uQfnTszxPmWKSy
-         w47WRu+/P8FwDUnXo2lvAQ6DqyYhY3i4XkFKXA0cRJxhl8vSCbVW4qVGxuGYHYa3vmoU
-         xj+NOKfGIkt0YzbQDSrj2UVZA1r0bWdqIDSmAG+QrngKPBumfrn0jFsEjfedw233f5vR
-         Hbsvn5el4csxPNgCl8RgA35k9A2KgzuD/bzutJtXKK8yEFGdmQQ/WgZntajEXafRqXl6
-         kENA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fMc2v4K0kX8aTPiSum+unuVGgdc5yJF7LINDGiGWUew=;
-        b=bdZGfw4jWPjQ9DO/hSR3DpU4CDhxxlXj7vGFPYYxMyEbOWxHHwukKZSwSpPnW97ySW
-         L93fdBhmfbyFXVvb8nyNB+vnBZxiftrYB1JTFd6T7n3f1QAqIngx8jB04uf+Ev6yOu4W
-         i+FMXmienOdliq8OpfaJrSqGHuKcZLpq+Ruaa9WQRcW+0ayP9vpZvAdJ8cnrgOo9vajq
-         QSgFB2hBUC7nlXtinOqAXwJrQWODmR+VzRHFCEZUMfsmI5BgdGqfcRjALmaqxPxYURwz
-         ZXRjyQP++x1RN7ArpXIZz/SEqBcTAgnY/UAcYESC6vhGXXbzhTQvi60tOMLklKK0a+DW
-         eyVQ==
-X-Gm-Message-State: AOAM5331mhiSzmywteMSG9XTaiREelnRd1f64XjFfWTBTSGEMieT88Ph
-        W4FsOeYXP2lUVLGK2NpgY9BwSw==
-X-Google-Smtp-Source: ABdhPJzbKCEHjADe51tS6VDfOuaX6CXkgQz1c2MofRXJbYQ7ugSokbF05hcC9VmLN5sBSTghlR1Plw==
-X-Received: by 2002:a05:600c:3c9b:: with SMTP id bg27mr2909352wmb.163.1639751717439;
-        Fri, 17 Dec 2021 06:35:17 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id d2sm3707114wrw.26.2021.12.17.06.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 06:35:16 -0800 (PST)
-Date:   Fri, 17 Dec 2021 14:35:15 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] sctp: export sctp_endpoint_{hold,put}() and
- return incremented endpoint
-Message-ID: <YbygIz4oqlTkrQgD@google.com>
-References: <20211217134607.74983-1-lee.jones@linaro.org>
- <1458e6e239e2493e9147fd95ec32d9fd@AcuMS.aculab.com>
+        id S237304AbhLQOgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:36:17 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:36072 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230248AbhLQOgQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:36:16 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADHnKVIoLxhdjfKAw--.51920S2;
+        Fri, 17 Dec 2021 22:35:52 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v4] isoc: mediatek: potential use of error pointer
+Date:   Fri, 17 Dec 2021 22:35:51 +0800
+Message-Id: <20211217143551.675368-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1458e6e239e2493e9147fd95ec32d9fd@AcuMS.aculab.com>
+X-CM-TRANSID: qwCowADHnKVIoLxhdjfKAw--.51920S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4kWryfJw15Cw4kXFWDJwb_yoW8Cry5pF
+        18ta4ayrWrJrW7WrWv9r4DuFy3K34IyasrK34a9w4rA3s8Jrn5JFyrZa4jyF4kAFZ7K3W3
+        tF4YqrWfCF1UZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUBHqcUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021, David Laight wrote:
+The return value of devm_clk_get() needs to be checked.
+To avoid use of error pointer in case of the failure of alloc.
 
-> From: Lee Jones
-> > Sent: 17 December 2021 13:46
-> > 
-> > net/sctp/diag.c for instance is built into its own separate module
-> > (sctp_diag.ko) and requires the use of sctp_endpoint_{hold,put}() in
-> > order to prevent a recently found use-after-free issue.
-> > 
-> > In order to prevent data corruption of the pointer used to take a
-> > reference on a specific endpoint, between the time of calling
-> > sctp_endpoint_hold() and it returning, the API now returns a pointer
-> > to the exact endpoint that was incremented.
-> > 
-> > For example, in sctp_sock_dump(), we could have the following hunk:
-> > 
-> > 	sctp_endpoint_hold(tsp->asoc->ep);
-> > 	ep = tsp->asoc->ep;
-> > 	sk = ep->base.sk
-> > 	lock_sock(ep->base.sk);
-> > 
-> > It is possible for this task to be swapped out immediately following
-> > the call into sctp_endpoint_hold() that would change the address of
-> > tsp->asoc->ep to point to a completely different endpoint.  This means
-> > a reference could be taken to the old endpoint and the new one would
-> > be processed without a reference taken, moreover the new endpoint
-> > could then be freed whilst still processing as a result, causing a
-> > use-after-free.
-> > 
-> > If we return the exact pointer that was held, we ensure this task
-> > processes only the endpoint we have taken a reference to.  The
-> > resultant hunk now looks like this:
-> > 
-> > 	ep = sctp_endpoint_hold(tsp->asoc->ep);
-> > 	sk = ep->base.sk
-> > 	lock_sock(sk);
-> 
-> Isn't that just the same as doing things in the other order?
-> 	ep = tsp->assoc->ep;
-> 	sctp_endpoint_hold(ep);
+Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple platform")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Sleep for a few milliseconds between those lines and see what happens.
+v3 -> v4
 
-'ep' could still be freed between the assignment and the call.
+*Change 1. Change the "-ENOMEM" to "ERR_PTR(-ENOMEM)".
+*Change 2. Add the IS_ERR to check the error code from devm_clk_get().
+*Change 3. Change back the "ERR_PTR(-ENOMEM)" to "-ENOMEM".
+---
+ drivers/soc/mediatek/mtk-scpsys.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-> But if tsp->assoc->ep is allowed to change, can't it also change to
-> something invalid?
-
-Not sure I follow.
-
-> So I've have thought you should be holding some kind of lock that
-> stops the data being changed before being 'allowed' to follow the pointers.
-> In which case the current code is just a missing optimisatoion.
-
-Locking would be another potential solution.
-
-The current code already tries to lock.
-
-	lock_sock(sk);
-
-The difficultly here is that we don't know whether 'sk' is still valid
-at this point.  I've seen the current code panic here.  Xin Long
-suggested something similar using the RCU infrastructure, but this
-code can sleep, so it wasn't suitable.
-
-If we were to use locking, we'd need to figure out a) what to apply
-the lock to and b) where to apply the lock.
-
+diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
+index ca75b14931ec..778d6ffc42b8 100644
+--- a/drivers/soc/mediatek/mtk-scpsys.c
++++ b/drivers/soc/mediatek/mtk-scpsys.c
+@@ -411,12 +411,16 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+ 	return ret;
+ }
+ 
+-static void init_clks(struct platform_device *pdev, struct clk **clk)
++static int init_clks(struct platform_device *pdev, struct clk **clk)
+ {
+ 	int i;
+ 
+-	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
++	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
+ 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
++		if (IS_ERR(clk[i]))
++			return -ENOMEM;
++	}
++	return 0;
+ }
+ 
+ static struct scp *init_scp(struct platform_device *pdev,
+@@ -426,7 +430,7 @@ static struct scp *init_scp(struct platform_device *pdev,
+ {
+ 	struct genpd_onecell_data *pd_data;
+ 	struct resource *res;
+-	int i, j;
++	int i, j, ret;
+ 	struct scp *scp;
+ 	struct clk *clk[CLK_MAX];
+ 
+@@ -481,7 +485,9 @@ static struct scp *init_scp(struct platform_device *pdev,
+ 
+ 	pd_data->num_domains = num;
+ 
+-	init_clks(pdev, clk);
++	ret = init_clks(pdev, clk);
++	if (ret)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct scp_domain *scpd = &scp->domains[i];
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+

@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B8D479481
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860FA479483
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240541AbhLQTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 14:03:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:33588 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235807AbhLQTDv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:03:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 880B812FC;
-        Fri, 17 Dec 2021 11:03:50 -0800 (PST)
-Received: from bogus (unknown [10.57.36.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 914A53F774;
-        Fri, 17 Dec 2021 11:03:48 -0800 (PST)
-Date:   Fri, 17 Dec 2021 19:03:45 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morse <james.morse@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
-        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
-Message-ID: <20211217190345.kskfhnelqg3yx4j7@bogus>
-References: <20211216233125.1130793-1-robh@kernel.org>
- <20211216233125.1130793-3-robh@kernel.org>
- <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
- <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+        id S240550AbhLQTFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 14:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234115AbhLQTFH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 14:05:07 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A60C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:05:06 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z9so11597343edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:05:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
+        b=ZjQ4/n3jpC4K+CjIh7Q22vd534RgwvYHtS9nR1P4Lv9P3PuipIG4Ky5i+x88FHfNU+
+         COO7Q+1L2Wl2VME7dDHc3akKiuLmeIvlviUDhdeTrCBSljMxVDX7hZf2YhkozKnphVFk
+         YaiCt3VRfbmQic5ajEaNqa5Otx58kYxFTYkgk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
+        b=n+GNWCystq6OhLZPLpnE1ao2eHnJqFfsu+PHtO0JXKJiroj+uVz4QeKQaixASiBF8G
+         4gYYtk4muUD3M7IHvA1uyCTa+3sq4XnaE8YB4cJV72pczahY/2LVmd87RnDTKcNA0CWT
+         xH4gp4FF7T6crSrd6+HKa+EYs4EL/S9oaM8/tzkTq0+Dp8nrjSMNvmcmh6olU3QB16aI
+         DZGTZOL8Rbq2bmSonvLPWhg4Htca4I5R0SiiaonHQ5BDDBZ51tzgjiotmEz7Vs+l7yhK
+         OzQKaFjnNgnMo2jMyr1afScx4sBWb6RUR9jXA9a8lFZBWDXZlZ7HFTbTslJCLgIlYsER
+         iA5Q==
+X-Gm-Message-State: AOAM53314/21kKpULNY5M2WgZmQXfg+nWBgUxJW5dGUwFII/b4BJ7YU1
+        gYdDQftDVtUVJdMn/PZEK+a/JzZaZmlJ9wJku5M=
+X-Google-Smtp-Source: ABdhPJzWBOHRB9F0HTSDG7+BpP+aG/FRGwPr2cbV5BVlKypiGY/lf7fBsmcPO1hhq0ycwMWVqPUXDg==
+X-Received: by 2002:a17:906:fac1:: with SMTP id lu1mr3574120ejb.171.1639767905196;
+        Fri, 17 Dec 2021 11:05:05 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id qw25sm3274702ejc.185.2021.12.17.11.05.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 11:05:04 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id o29so2271594wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:05:03 -0800 (PST)
+X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr1762683wmb.152.1639767903770;
+ Fri, 17 Dec 2021 11:05:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+In-Reply-To: <20211217113049.23850-7-david@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 11:04:47 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:14:22PM -0600, Rob Herring wrote:
-> On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
-> >
-> > Hi Rob,
-> >
-> > On 2021-12-16 23:31, Rob Herring wrote:
-> > > Use the minimum CPU h/w id of the CPUs associated with the cache for the
-> > > cache 'id'. This will provide a stable id value for a given system. As
-
-I am trying to follow the code. IIUC, the level one(I$ and D$) are skipped
-in this logic and the private unified cache if any will get the cpu hwid as
-the cache id which is all fine. But what happens if there are 2 levels of
-unified private cache ? I am assuming we only care about shared caches for
-MPAM and ignore private caches which sounds OK but I just wanted to confirm.
-
-> > > we need to check all possible CPUs, we can't use the shared_cpu_map
-> > > which is just online CPUs. There's not a cache to CPUs mapping in DT, so
-> > > we have to walk all CPU nodes and then walk cache levels.
-
-I would have preferred to add the cache IDs in DT similar to ACPI but I see
-you have certain concerns with that which are valid as well.
-
-> >
-> > I believe another expected use of the cache ID exposed in sysfs is to
-> > program steering tags for cache stashing (typically in VFIO-based
-> > userspace drivers like DPDK so we can't realistically mediate it any
-> > other way). There were plans afoot last year to ensure that ACPI PPTT
-> > could provide the necessary ID values for arm64 systems which will
-> > typically be fairly arbitrary (but unique) due to reflecting underlying
-> > interconnect routing IDs. Assuming that there will eventually be some
-> > interest in cache stashing on DT-based systems too, we probably want to
-> > allow for an explicit ID property on DT cache nodes in a similar manner.
-> 
-> If you have a suggestion for ID values that correspond to the h/w,
-> then we can add them. I'd like a bit more than just trusting that ID
-> is something real.
+On Fri, Dec 17, 2021 at 3:34 AM David Hildenbrand <david@redhat.com> wrote:
 >
+> + * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
+> + * set) and then unmaps the target page, we have:
+> + *
+> + * * page has mapcount == 1 and refcount > 1
 
-I agree, probably architecture must do better job at defining these. But
-generated IDs IMO might cause issues especial if we have to change the
-logic without breaking the backward compatibility.
+All these games with mapcount makes me think this is still broken.
 
-> While the ACPI folks may be willing to take an arbitrary index, it's
-> something we (mostly) avoid for DT.
->
+mapcount has been a horribly broken thing in the past, and I'm not
+convinced it's not a broken thing now.
 
-Not sure if we can call that *arbitrary* 😄, in that case we can imagine
-the same at several places in the firmware.
+> +       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
+> +       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
+> +           page_mapcount(vmf->page) > 1) {
 
-> > That said, I think it does make sense to have some kind of
-> > auto-generated fallback scheme *as well*, since I'm sure there will be
-> > plenty systems which care about MPAM but don't support stashing, and
-> > therefore wouldn't have a meaningful set of IDs to populate their DT
-> > with. Conversely I think that might also matter for ACPI too - one point
-> > I remember from previous discussions is that PPTT may use a compact
-> > representation where a single entry represents all equivalent caches at
-> > that level, so I'm not sure we can necessarily rely on IDs out of that
-> > path being unique either.
-> 
-> AIUI, cache ids break the compact representation.
->
+What keeps the mapcount stable in here?
 
-IIRC, a note was added to avoid compaction if an implementation requires
-any cache instance to be referenced uniquely.
+And I still believe that the whole notion that "COW should use
+mapcount" is pure and utter garbage.
 
--- 
-Regards,
-Sudeep
+If we are doing a COW, we need an *exclusive* access to the page. That
+is not mapcount, that is the page ref.
+
+mapcount is insane, and I think this is making this worse again.
+
+                Linus

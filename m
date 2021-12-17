@@ -2,152 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B0E4784A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B234784A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbhLQFr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 00:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbhLQFr1 (ORCPT
+        id S233060AbhLQFtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 00:49:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59894 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231998AbhLQFtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 00:47:27 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB28BC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:47:27 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id y68so3399131ybe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BwdXAZqwcOgfTzbPvhOiD7YDfbOTo8m/P9qk7qvdRbg=;
-        b=TbJ8b6Q1XadCQi/ETXO7KnR0eVyxVPo6CYumNoLxIIHHsWte48o341tqjtH/OZIKz1
-         D+yS5qpJMo9NJYArpISYebQHEghellf1QZRJq/vkFJfRf8fIv8WO2io3c2Az6JqJXRFZ
-         oH7HEaBC/awQW4WTz17249wf3AtN3MwJMqYso=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BwdXAZqwcOgfTzbPvhOiD7YDfbOTo8m/P9qk7qvdRbg=;
-        b=PDsAcLPZMUc+rw9bc1hhecO3y/PgyTZhNFJj5JpFWvfAZqG6yNsb7wJsTBkJe52syK
-         wQMWrq/jvnNoZVlQjRiA3bAs1Mvt0TnZ0qMh6TspLlP5sYTp3lR5FkB+RsUOX0/G8QCm
-         XiNWPrd0r6MnXLaRp4bAUUGMBd1HULLTUmH1TDi3+bJcMMyncKWH6hgsrcNXv8v/4zi3
-         ttbggmHnhIfFi4efWttWiiSjnDm/duOZpkjN0zJXE5pazdDrOnLp0nidyAJ5YK+zxeE/
-         pr5nSSsUXE362teopJr1ouEotbGWBMDAOiC58HlsC6cSAFQpjxNwHTYJeAWmTlVLVftU
-         HnJA==
-X-Gm-Message-State: AOAM533g6cXx8bi09/0leV1+5Du8DSJDPqTODTK8WHUYW1M+b1Yv8Xr5
-        ALLmDYi2F0n1jQ0wqtQPR9RoP7VAhwVIGgX7TKVC
-X-Google-Smtp-Source: ABdhPJym0ejx2zDX2ah9KB9aFnBYNo3/Jeu0eMo9QzZYrU+lCsv59ObD5++THmdkCuYRNxANRZg8W5NhsjmGjXossFA=
-X-Received: by 2002:a25:2450:: with SMTP id k77mr2228286ybk.121.1639720046870;
- Thu, 16 Dec 2021 21:47:26 -0800 (PST)
+        Fri, 17 Dec 2021 00:49:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE306B826F3;
+        Fri, 17 Dec 2021 05:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB8FC36AE1;
+        Fri, 17 Dec 2021 05:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639720139;
+        bh=ydzG2zIgQsWBNpyzfdxjKlQ0X202UtZWG0YBtLKpMIU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o/ep/K41NgBq9irO3oGoQL5v/UDvxSkWdy7NTADZMU5n0HdxMISG0N7GnralXm4o8
+         pAOPR6/MSe1VpY/utQfr3sIEbPm4k+o6GR3r6X9NOBvHy8cpy2vsowdpVylWFx5ZXL
+         ac5UdjgiG+O02uZyquIXxaMNX/jvtM32dTVBHe4YryNYMTV0PHmWcoh+oXgXhr1UBU
+         My3orC7X9OiiX8TkJnAYhE4AI2NGRAvEHrTNhFLh9MYF8oba2K7U7Mv3b8u35FKd1O
+         zp884iYlqNXqGorCi9gL007hioXKwKWtQVhSdZmIz4KCx5DTy2eWzJbenw2inNqsWj
+         zpm4mkOG78XDw==
+Date:   Fri, 17 Dec 2021 11:18:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: dmaengine fixes for v5.16
+Message-ID: <Ybwkx9ZapFijTpqX@matsya>
 MIME-Version: 1.0
-References: <20211129075451.418122-1-anup.patel@wdc.com> <20211129075451.418122-3-anup.patel@wdc.com>
-In-Reply-To: <20211129075451.418122-3-anup.patel@wdc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 16 Dec 2021 21:47:16 -0800
-Message-ID: <CAOnJCU+Yft5EjgUUCi=nW79pYSGYPWB1ew5iyTjViFvGGQxQCA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] RISC-V: KVM: Add VM capability to allow userspace
- get GPA bits
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mvuO0Yesg5hJsVpm"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:10 AM Anup Patel <anup.patel@wdc.com> wrote:
->
-> The number of GPA bits supported for a RISC-V Guest/VM is based on the
-> MMU mode used by the G-stage translation. The KVM RISC-V will detect and
-> use the best possible MMU mode for the G-stage in kvm_arch_init().
->
-> We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
-> the KVM userspace to get the number of GPA (guest physical address) bits
-> supported for a Guest/VM.
->
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> ---
->  arch/riscv/include/asm/kvm_host.h | 1 +
->  arch/riscv/kvm/mmu.c              | 5 +++++
->  arch/riscv/kvm/vm.c               | 3 +++
->  include/uapi/linux/kvm.h          | 1 +
->  4 files changed, 10 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 37589b953bcb..ae5d238607fe 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -221,6 +221,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
->  void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
->  void kvm_riscv_stage2_mode_detect(void);
->  unsigned long kvm_riscv_stage2_mode(void);
-> +int kvm_riscv_stage2_gpa_size(void);
->
->  void kvm_riscv_stage2_vmid_detect(void);
->  unsigned long kvm_riscv_stage2_vmid_bits(void);
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 9ffd0255af43..9b6d6465094f 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -760,3 +760,8 @@ unsigned long kvm_riscv_stage2_mode(void)
->  {
->         return stage2_mode >> HGATP_MODE_SHIFT;
->  }
-> +
-> +int kvm_riscv_stage2_gpa_size(void)
-> +{
-> +       return stage2_gpa_bits;
-> +}
 
-The ioctl & the underlying stage2_gpa_bits has bits.
-Maybe rename the function to kvm_riscv_stage2_gpa_bits as well ?
+--mvuO0Yesg5hJsVpm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index fb18af34a4b5..6f959639ec45 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->         case KVM_CAP_NR_MEMSLOTS:
->                 r = KVM_USER_MEM_SLOTS;
->                 break;
-> +       case KVM_CAP_VM_GPA_BITS:
-> +               r = kvm_riscv_stage2_gpa_size();
-> +               break;
->         default:
->                 r = 0;
->                 break;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 1daa45268de2..469f05d69c8d 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
->  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
->  #define KVM_CAP_ARM_MTE 205
->  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> +#define KVM_CAP_VM_GPA_BITS 207
->
->  #ifdef KVM_CAP_IRQ_ROUTING
->
-> --
-> 2.25.1
->
+Hello Linus,
 
-Other than that, it looks good to me.
+Please pull to recieve bunch of driver fixes for dmaengine subsystem.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
+aengine-fix-5.16
+
+for you to fetch changes up to 822c9f2b833c53fc67e8adf6f63ecc3ea24d502c:
+
+  dmaengine: st_fdma: fix MODULE_ALIAS (2021-12-13 13:18:48 +0530)
+
+----------------------------------------------------------------
+dmaengine fixes for v5.16
+
+Bunch of driver fixes, notably:
+ - uninit variable fix for dw-axi-dmac driver
+ - return value check dw-edma driver
+ - calling wq quiesce inside spinlock and missed completion for idxd driver
+ - mod alias fix for st_fdma driver
+
+----------------------------------------------------------------
+Alyssa Ross (1):
+      dmaengine: st_fdma: fix MODULE_ALIAS
+
+Christophe JAILLET (1):
+      dmaengine: dw-edma: Fix return value check for dma_set_mask_and_coher=
+ent()
+
+Dave Jiang (2):
+      dmaengine: idxd: fix calling wq quiesce inside spinlock
+      dmaengine: idxd: fix missed completion on abort path
+
+Tim Gardner (1):
+      dmaengine: dw-axi-dmac: Fix uninitialized variable in axi_chan_block_=
+xfer_start()
+
+Vignesh Raghavendra (1):
+      dmaengine: ti: k3-udma: Fix smatch warnings
+
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c |   4 +-
+ drivers/dma/dw-edma/dw-edma-pcie.c             |  10 +-
+ drivers/dma/idxd/irq.c                         |   2 +-
+ drivers/dma/idxd/submit.c                      |  18 ++-
+ drivers/dma/st_fdma.c                          |   2 +-
+ drivers/dma/ti/k3-udma.c                       | 157 +++++++++++++++++----=
+----
+ 6 files changed, 129 insertions(+), 64 deletions(-)
 
 
--- 
-Regards,
-Atish
+Thanks
+--=20
+~Vinod
+
+--mvuO0Yesg5hJsVpm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmG8JMcACgkQfBQHDyUj
+g0cslBAAu8nQ8EbmkhkF8DvCY7mS2cAA3sqhHTMmRy1gE2FBkPn0XQqw4BLk+9rS
+wIObUjzrR0zBUnknMfAsN4Kgr1s9OXg/A7yKiKKKqmP8ikpoSxNhGBm3ZMnEyVpR
+D4jm/91P+3QhETwGzt3zgs6lJsFcHqugWefeFfyk4vR14MrgXyxsCt0m6fQV4HyV
+dI+3EH+b270e41iNTVLG+ySO8x96Axrha9oB9IA3FX25EzZDgTe0tTlXx66Xydyy
+k4Oao2zzdfVI4SAL8GVZ03/9vioNqt9PxP8mDVmU+h2PQ80sXcxsANOx3TKC0azW
+nDmVrAarJa9aKPxO76+DsQhqc2aOcEh4xb0Y1lKaFuw7TzSlJusHZLwEFH68PNDJ
+2iXxXMxMnZ1hHjMxQqrmXhr410yJawJCQnpbIUhuP2Pe+wvWKdfng/ciPHngKTp4
+JxtI+23J5cLCRlWg1HaD2cYVgxhk43SAtAEhsrMRDyeGkHy3aNUCgOWLFT7DvDDb
+ySJitml/KWTT862LIKcU+ChrJ9D/y3TmIdsp8wtrinbhhA6HqvzW8mc0q9/SWUaF
+PlVjJgPnnvJKlSygQeYw9X7nnoc/U/ZQe21DPLw4IZ9qrr2j6WvoZqqU6W0eCr1m
+wx36mBSccj/YPLEvEaMSiNka/1SlhmmocMV21dO9NpYHqZC+FuA=
+=enPn
+-----END PGP SIGNATURE-----
+
+--mvuO0Yesg5hJsVpm--

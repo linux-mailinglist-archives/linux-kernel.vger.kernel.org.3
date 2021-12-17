@@ -2,240 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98AA478F35
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EFD478F30
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238024AbhLQPJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238019AbhLQPJf (ORCPT
+        id S238023AbhLQPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:09:36 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57590
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237975AbhLQPJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:09:35 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1797C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:09:34 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a9so4622714wrr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KyUN6E8qUmReiqQY1FT8fQDaFbqmWwGXJe5qEAY70jQ=;
-        b=K/MGP2xsclZBpeUNmmwVhlNMJMWnloZ+j9jqvMDqLv5G2R84p8K/w3EX7kJRSzhxjk
-         5/1ceuxfG+sCg048+PlNQSI8WpPG55aPVHP4tveKPrXYl3Fy4aICmTN5nfYv5fnX6Xdr
-         HpEuDWKPQUbULqHW+Qc3DR0kbQjsU4vER/zBHWUEzmRXE66mmA3Naa1xwrMVBIsjLv41
-         gZxBDc9U7b2vT2eNwijvllmLAqiJyWhKNK+kfELxqO98XHqpbPUX+Jr24WweCzuHR9PP
-         SfEB+HeX2M7Y57ejckVSppJ0/Qng1/hBYawTg2b8BkY49/Syd58aIea2DTVWtoyQs8/K
-         cXWQ==
+        Fri, 17 Dec 2021 10:09:29 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2C2E13FFCF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639753768;
+        bh=Ekcv8bNIXIYPhjro0Nb278CmOGUMMLIkTcaAs3AM2AE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Do/jdZyBbq4amroDFWhuro6C9gA/+dMiz461LOqJ7EDP83+1+6Zlos6EZcR2fChBu
+         pQfklqmmaH428N4NFkFeGi19K4fTTdixySvSAP/NohYsHG2/kTgTQ7ei+D10FuG+q+
+         sdE94PpCdLfkqlTyRlbZW1COjJVlccskMv+GxF3XcFwEELVdKHD+v6q0HsgKzhhL8F
+         AKowHhom6nJ+gOqEe0/h8OGEKaSRyYgiV+9VNl4ovOFGQhcAquJ8dxmUPzp3XFb24X
+         godsKSK8Pf3RKekg/PuPqVx7HmNqqGNhs7CvVsKNKF8IsKKb/g46btmO4ByHM+5yTE
+         OGJgTTJgD6xKg==
+Received: by mail-lj1-f197.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso787970lji.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:09:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KyUN6E8qUmReiqQY1FT8fQDaFbqmWwGXJe5qEAY70jQ=;
-        b=e5gS9/ptYAekHQisWA4af4arazXJJVBoaxrVYH0AO8SXsSjW/MmuggAzdTe2WJpfVK
-         6vHYrjKEDP/gQM+uGfIimu/SxvAwPbNU+MbSCuuB+jS+cDmKi0XAbiiNcQVMXoyIwXnN
-         rX0yPNjymtjlfyhCrzjx0BxchEi2jGvLGX7YQLS9wcTk7Fj5dtOK0J5mbgk4WQm2q8bY
-         r9uEDF7gpJW/pQ+ikj2lWYasK8ucxnGLA5nnorbMQ4ah30lwIAV2xFAP1hVqU6Jz7U8n
-         hq5XSlrK+hCRm4/BhPQMR4UeRBrrXswj3JZRhKm05UFjusTOdp6WGYftd+D8VqSmxW+d
-         Ntxw==
-X-Gm-Message-State: AOAM532NyjzFRCTILfG9H0Y7yYAYUiCDsgXrmwSLe/RdK6C650WE0voK
-        Z9nYrs8PzFTD+7NHRxNQGRwQiw==
-X-Google-Smtp-Source: ABdhPJx6XLRFsU6ZGuvuPBKBJJ4/O2TOahGBNVwvg3cI532ukCaPRvC49dHF78Pflf+1YhJyugmUGg==
-X-Received: by 2002:a5d:5986:: with SMTP id n6mr2939240wri.297.1639753773296;
-        Fri, 17 Dec 2021 07:09:33 -0800 (PST)
-Received: from localhost.localdomain (2a02-8440-6441-43a4-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6441:43a4:3074:96af:9642:3])
-        by smtp.gmail.com with ESMTPSA id g18sm12655132wmq.4.2021.12.17.07.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 07:09:32 -0800 (PST)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 8/8] drm/mediatek: Add mt8195 eDP support
-Date:   Fri, 17 Dec 2021 16:08:54 +0100
-Message-Id: <20211217150854.2081-9-granquet@baylibre.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211217150854.2081-1-granquet@baylibre.com>
-References: <20211217150854.2081-1-granquet@baylibre.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ekcv8bNIXIYPhjro0Nb278CmOGUMMLIkTcaAs3AM2AE=;
+        b=zd36WI8RQlIc7vQvNAhwy9I1U7Q4bJjZzaGxUQ6oZbPr3rHwD7XB0DrIl6woZplQAD
+         DB47qdS+Bu13/etA/agrDbLdKjSZaaEOO7PJowpjproDQAAHHELNyYyNlNnX7mXgRjkk
+         mee3fKBfWA7aqRFSAiPf59iVliH+5Z7wQ3ML5+avEFOej9FGumo4sxnogs2rzc7ZwhJ4
+         YFemt+Zwg8y16/5b5yOQ1pAUe+vrr1uJ2AKE3i5MEVxgkbHkb7opWC04G2Mac0A8GFmQ
+         ei/zojwEycGH9CsD0efeG1mm9V5gVV8xNvzcOXIh0JuHlA+gxiVr3aXmS/xsycWKOWU5
+         B6VA==
+X-Gm-Message-State: AOAM532vHUbLMePE6Hh3rfUbwdHi2Il6NS1zDYIqh4rrjALzE4sKdQAi
+        OdwLqoI7C4qf/6VMz2rkhhQChWsXjRgoKkOOjIg2ZfKvG/r5B939B9MxrSsmtE4P0KU8CGaZCCi
+        ZiL3jaZkkb0qmFMzIVp6DGxqH+7WJgA135KrBG7t7BQ==
+X-Received: by 2002:a05:651c:324:: with SMTP id b4mr3004615ljp.188.1639753756756;
+        Fri, 17 Dec 2021 07:09:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyHJzYnX2gs6VoqK9iRkmiSREooJ2FXXIbMDOX3XDHzAr4mBWfowLrbkwZGknR7FEjLbWDk2Q==
+X-Received: by 2002:a05:651c:324:: with SMTP id b4mr3004581ljp.188.1639753756369;
+        Fri, 17 Dec 2021 07:09:16 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id d4sm1429654lfg.82.2021.12.17.07.09.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 07:09:15 -0800 (PST)
+Message-ID: <61ae4cfd-a544-96d3-d521-877b8b38b5fc@canonical.com>
+Date:   Fri, 17 Dec 2021 16:09:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
+Content-Language: en-US
+To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
+        ivan.griffin@microchip.com, atish.patra@wdc.com
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-18-conor.dooley@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211217093325.30612-18-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support of eDP panel to the mt8195 DP driver.
+On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Update the RISC-V/Microchip entry by adding the microchip dts
+> directory and myself as maintainer
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7a2345ce8521..3b1d6be7bd56 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16348,8 +16348,10 @@ K:	riscv
+>  
+>  RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
+>  M:	Lewis Hanly <lewis.hanly@microchip.com>
+> +M:	Conor Dooley <conor.dooley@microchip.com>
+>  L:	linux-riscv@lists.infradead.org
+>  S:	Supported
+> +F:	arch/riscv/boot/dts/microchip/
+>  F:	drivers/mailbox/mailbox-mpfs.c
+>  F:	drivers/soc/microchip/
+>  F:	include/soc/microchip/mpfs.h
+> 
 
-This driver is based on an initial version by
-Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+Good to have the DTS covered, so FWIW:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 102 +++++++++++++++++++++---------
- 1 file changed, 73 insertions(+), 29 deletions(-)
+You still should get Lewis' ack (unless he merges it)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index 41e95a0bcaa2c..a256d55346a23 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -228,6 +228,11 @@ static struct regmap_config mtk_dp_regmap_config = {
- 	.name = "mtk-dp-registers",
- };
- 
-+static bool mtk_dp_is_edp(struct mtk_dp *mtk_dp)
-+{
-+	return mtk_dp->next_bridge;
-+}
-+
- static struct mtk_dp *mtk_dp_from_bridge(struct drm_bridge *b)
- {
- 	return container_of(b, struct mtk_dp, bridge);
-@@ -1185,26 +1190,49 @@ static int mtk_dp_get_calibration_data(struct mtk_dp *mtk_dp)
- 		return PTR_ERR(buf);
- 	}
- 
--	cal_data->glb_bias_trim =
--		check_cal_data_valid(1, 0x1e, (buf[0] >> 27) & 0x1f, 0xf);
--	cal_data->clktx_impse =
--		check_cal_data_valid(1, 0xe, (buf[0] >> 13) & 0xf, 0x8);
--	cal_data->ln0_tx_impsel_pmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 28) & 0xf, 0x8);
--	cal_data->ln0_tx_impsel_nmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 24) & 0xf, 0x8);
--	cal_data->ln1_tx_impsel_pmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 20) & 0xf, 0x8);
--	cal_data->ln1_tx_impsel_nmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 16) & 0xf, 0x8);
--	cal_data->ln2_tx_impsel_pmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 12) & 0xf, 0x8);
--	cal_data->ln2_tx_impsel_nmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 8) & 0xf, 0x8);
--	cal_data->ln3_tx_impsel_pmos =
--		check_cal_data_valid(1, 0xe, (buf[1] >> 4) & 0xf, 0x8);
--	cal_data->ln3_tx_impsel_nmos =
--		check_cal_data_valid(1, 0xe, buf[1] & 0xf, 0x8);
-+	if (mtk_dp_is_edp(mtk_dp)) {
-+		cal_data->glb_bias_trim =
-+			check_cal_data_valid(1, 0x1e, (buf[3] >> 27) & 0x1f, 0xf);
-+		cal_data->clktx_impse =
-+			check_cal_data_valid(1, 0xe, (buf[0] >> 9) & 0xf, 0x8);
-+		cal_data->ln0_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 28) & 0xf, 0x8);
-+		cal_data->ln0_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 24) & 0xf, 0x8);
-+		cal_data->ln1_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 20) & 0xf, 0x8);
-+		cal_data->ln1_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 16) & 0xf, 0x8);
-+		cal_data->ln2_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 12) & 0xf, 0x8);
-+		cal_data->ln2_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 8) & 0xf, 0x8);
-+		cal_data->ln3_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[2] >> 4) & 0xf, 0x8);
-+		cal_data->ln3_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, buf[2] & 0xf, 0x8);
-+	} else {
-+		cal_data->glb_bias_trim =
-+			check_cal_data_valid(1, 0x1e, (buf[0] >> 27) & 0x1f, 0xf);
-+		cal_data->clktx_impse =
-+			check_cal_data_valid(1, 0xe, (buf[0] >> 13) & 0xf, 0x8);
-+		cal_data->ln0_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 28) & 0xf, 0x8);
-+		cal_data->ln0_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 24) & 0xf, 0x8);
-+		cal_data->ln1_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 20) & 0xf, 0x8);
-+		cal_data->ln1_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 16) & 0xf, 0x8);
-+		cal_data->ln2_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 12) & 0xf, 0x8);
-+		cal_data->ln2_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 8) & 0xf, 0x8);
-+		cal_data->ln3_tx_impsel_pmos =
-+			check_cal_data_valid(1, 0xe, (buf[1] >> 4) & 0xf, 0x8);
-+		cal_data->ln3_tx_impsel_nmos =
-+			check_cal_data_valid(1, 0xe, buf[1] & 0xf, 0x8);
-+	}
- 
- 	kfree(buf);
- 
-@@ -1322,7 +1350,11 @@ static void mtk_dp_video_mute(struct mtk_dp *mtk_dp, bool enable)
- 	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3000, val,
- 			   VIDEO_MUTE_SEL_DP_ENC0_P0_MASK |
- 			   VIDEO_MUTE_SW_DP_ENC0_P0_MASK);
--	mtk_dp_sip_atf_call(MTK_DP_SIP_ATF_VIDEO_UNMUTE, enable);
-+
-+	if (mtk_dp_is_edp(mtk_dp))
-+		mtk_dp_sip_atf_call(MTK_DP_SIP_ATF_EDP_VIDEO_UNMUTE, enable);
-+	else
-+		mtk_dp_sip_atf_call(MTK_DP_SIP_ATF_VIDEO_UNMUTE, enable);
- }
- 
- static void mtk_dp_audio_mute(struct mtk_dp *mtk_dp, bool mute)
-@@ -2326,6 +2358,9 @@ static enum drm_connector_status mtk_dp_bdg_detect(struct drm_bridge *bridge)
- 	enum drm_connector_status ret = connector_status_disconnected;
- 	u8 sink_count = 0;
- 
-+	if (mtk_dp_is_edp(mtk_dp))
-+		return connector_status_connected;
-+
- 	if (mtk_dp_plug_state(mtk_dp)) {
- 		drm_dp_dpcd_readb(&mtk_dp->aux, DP_SINK_COUNT, &sink_count);
- 		if (DP_GET_SINK_COUNT(sink_count))
-@@ -2888,7 +2923,11 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	}
- 
- 	mtk_dp->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
--	if (IS_ERR(mtk_dp->next_bridge)) {
-+	if (IS_ERR(mtk_dp->next_bridge) && PTR_ERR(mtk_dp->next_bridge) == -ENODEV) {
-+		dev_info(dev,
-+			 "No panel connected in devicetree, continuing as external DP\n");
-+		mtk_dp->next_bridge = NULL;
-+	} else if (IS_ERR(mtk_dp->next_bridge)) {
- 		ret = PTR_ERR(mtk_dp->next_bridge);
- 		dev_err_probe(dev, ret, "Failed to get bridge\n");
- 		return ret;
-@@ -2915,12 +2954,14 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, mtk_dp);
- 
--	mutex_init(&mtk_dp->update_plugged_status_lock);
--	ret = mtk_dp_register_audio_driver(dev);
--	if (ret) {
--		dev_err(dev, "Failed to register audio driver: %d\n",
--			ret);
--		return ret;
-+	if (!mtk_dp_is_edp(mtk_dp)) {
-+		mutex_init(&mtk_dp->update_plugged_status_lock);
-+		ret = mtk_dp_register_audio_driver(dev);
-+		if (ret) {
-+			dev_err(dev, "Failed to register audio driver: %d\n",
-+				ret);
-+			return ret;
-+		}
- 	}
- 
- 	mtk_dp->phy_dev = platform_device_register_data(dev, "mediatek-dp-phy",
-@@ -2944,7 +2985,10 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 
- 	mtk_dp->bridge.funcs = &mtk_dp_bridge_funcs;
- 	mtk_dp->bridge.of_node = dev->of_node;
--	mtk_dp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-+	if (mtk_dp_is_edp(mtk_dp))
-+		mtk_dp->bridge.type = DRM_MODE_CONNECTOR_eDP;
-+	else
-+		mtk_dp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
- 
- 	mtk_dp->bridge.ops =
- 		DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_HPD;
--- 
-2.32.0
-
+Best regards,
+Krzysztof

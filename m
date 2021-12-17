@@ -2,134 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3673B478884
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AF047888B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234809AbhLQKND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbhLQKM5 (ORCPT
+        id S234906AbhLQKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:13:17 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:34804 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234763AbhLQKM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:12:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F107AC061574;
-        Fri, 17 Dec 2021 02:12:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93761620E5;
-        Fri, 17 Dec 2021 10:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB46C36B02;
-        Fri, 17 Dec 2021 10:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639735975;
-        bh=pH4F/hKaDAo8h6YPe6yQklEHUIa1UBskbn4kAw+qsCc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tXUeT8Gm2htr6bczJiWXTKy3jOVbIOrSOFrbGb1thqmqXwArWD5IogeHg3xGGCJRs
-         Hv2lsxBzZFahv82wUsQsSUe9jnKWcZ/7bo/xc0T4nZLz8pIHLzWy8K9lDW6TEljNq5
-         wVgIpGIh1MSFgkce8pVmDNtiJ66ugWAQgnbZm8gF0ecRAg6i6ewnNq6hYYbMOZIIG/
-         jUJW6vbTTcibIPKmP2rTN2tg0GixZTeBhFH3PQmXG8ZLnGantpjHbZoDyKqVXykdOm
-         qPJy9h+2evxMjqjVrsfC0u6tRKkPbhiA4d6Z/CjnIs3pQnDNuwHfOK8pnjgecetXoV
-         oipw2czCh9cgA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1myAEP-000g6W-FP; Fri, 17 Dec 2021 11:12:53 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Wei Xu <xuwei5@hisilicon.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v2 7/7] arm64: dts: hisilicon: Add usb mux hub for hikey960
-Date:   Fri, 17 Dec 2021 11:12:51 +0100
-Message-Id: <dd91fa5d635f90072ffe74c6c42dfcdfc4c30495.1639735742.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1639735742.git.mchehab@kernel.org>
-References: <cover.1639735742.git.mchehab@kernel.org>
+        Fri, 17 Dec 2021 05:12:59 -0500
+X-UUID: ff84da27beff43c0bca72e430d15bf05-20211217
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HUN21q7AmJHL7HLN5+p2io8f1jf3Mzl1xVuyGCioDeM=;
+        b=kvta8LCn3yt0tXBCHqRk3MxlYDtP7ij0shIOM+pIhBTcDkuAf2cHXeC9avM41sS0gwWKLEZ3MQzjmo+SYRoY8SFppZ3yrpqGZCPVrUUjV/T/7I8KSZCWBH5DJfaU1oO62FIjixUDhdpTO/cSW5s21xlSkZk3f3l/bNmNPeJPf8U=;
+X-UUID: ff84da27beff43c0bca72e430d15bf05-20211217
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 316147769; Fri, 17 Dec 2021 18:12:55 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 17 Dec 2021 18:12:54 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 17 Dec 2021 18:12:53 +0800
+Message-ID: <675c774ec23b1d541ea58a7307a6766bda314734.camel@mediatek.com>
+Subject: Re: [next PATCH] dt-bindings: nvmem: convert mtk-efuse.txt to YAML
+ schema
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 17 Dec 2021 18:12:55 +0800
+In-Reply-To: <YboeNrekGcGOZES8@robh.at.kernel.org>
+References: <20211209024213.16612-1-chunfeng.yun@mediatek.com>
+         <YboeNrekGcGOZES8@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Stultz <john.stultz@linaro.org>
-
-Add dt bindings for Kirin 960 USB HUB. Such board comes with an
-integrated USB HUB provided via a Microchip USB5734 4-port high-speed
-hub controller.
-
-[mchehab: modified it to adapt to the merged DT schema]
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-See [PATCH v2 0/7] at: https://lore.kernel.org/all/cover.1639735742.git.mchehab@kernel.org/
-
- .../boot/dts/hisilicon/hi3660-hikey960.dts    | 35 +++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-index f68580dc87d8..135501e57f86 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-+++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-@@ -197,6 +197,37 @@ optee {
- 			method = "smc";
- 		};
- 	};
-+
-+	usb_hub_vdd: usb_hub_vdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "hub-vdd";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio5 6 0>;
-+		enable-active-high;
-+	};
-+
-+	usb-hub {
-+		compatible = "hisilicon,usbhub";
-+		typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
-+		otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
-+		hub-vdd-supply = <&usb_hub_vdd>;
-+		usb-role-switch;
-+
-+		port {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			hikey_usb_ep0: endpoint@0 {
-+				reg = <0>;
-+				remote-endpoint = <&dwc3_role_switch>;
-+			};
-+			hikey_usb_ep1: endpoint@1 {
-+				reg = <1>;
-+				remote-endpoint = <&rt1711h_ep>;
-+			};
-+		};
-+	};
- };
- 
- /*
-@@ -564,7 +595,7 @@ port {
- 
- 			rt1711h_ep: endpoint@0 {
- 				reg = <0>;
--				remote-endpoint = <&dwc3_role_switch>;
-+				remote-endpoint = <&hikey_usb_ep1>;
- 			};
- 		};
- 	};
-@@ -686,7 +717,7 @@ port {
- 		#size-cells = <0>;
- 		dwc3_role_switch: endpoint@0 {
- 			reg = <0>;
--			remote-endpoint = <&rt1711h_ep>;
-+			remote-endpoint = <&hikey_usb_ep0>;
- 		};
- 
- 		dwc3_ss: endpoint@1 {
--- 
-2.33.1
+T24gV2VkLCAyMDIxLTEyLTE1IGF0IDEwOjU2IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gVGh1LCBEZWMgMDksIDIwMjEgYXQgMTA6NDI6MTNBTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
+b3RlOg0KPiA+IENvbnZlcnQgbXRrLWVmdXNlLnR4dCB0byBZQU1MIHNjaGVtYSBtZWRpYXRlayxl
+ZnVzZS55YW1sDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVu
+Zy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vYmluZGluZ3MvbnZtZW0vbWVk
+aWF0ZWssZWZ1c2UueWFtbCAgICAgICAgfCA4OQ0KPiA+ICsrKysrKysrKysrKysrKysrKysNCj4g
+PiAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvbnZtZW0vbXRrLWVmdXNlLnR4dCAgIHwgNDMgLS0t
+LS0tLS0tDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgODkgaW5zZXJ0aW9ucygrKSwgNDMgZGVsZXRp
+b25zKC0pDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+IERvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9udm1lbS9tZWRpYXRlayxlZnVzZS55YW1sDQo+ID4gIGRlbGV0ZSBtb2Rl
+IDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbnZtZW0vbXRrLQ0KPiA+
+IGVmdXNlLnR4dA0KPiA+IA0KPiA+IGRpZmYgLS1naXQNCj4gPiBhL0RvY3VtZW50YXRpb24vZGV2
+aWNldHJlZS9iaW5kaW5ncy9udm1lbS9tZWRpYXRlayxlZnVzZS55YW1sDQo+ID4gYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbnZtZW0vbWVkaWF0ZWssZWZ1c2UueWFtbA0KPiA+
+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi43MzMyMTk1ZTdm
+MDANCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL252bWVtL21lZGlhdGVrLGVmdXNlLnlhbWwNCj4gPiBAQCAtMCwwICsxLDg5IEBA
+DQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTIt
+Q2xhdXNlKQ0KPiA+ICslWUFNTCAxLjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2Rldmlj
+ZXRyZWUub3JnL3NjaGVtYXMvbnZtZW0vbWVkaWF0ZWssZWZ1c2UueWFtbCMNCj4gPiArJHNjaGVt
+YTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0K
+PiA+ICt0aXRsZTogTWVkaWFUZWsgZWZ1c2UgZGV2aWNlIHRyZWUgYmluZGluZ3MNCj4gPiArDQo+
+ID4gK2Rlc2NyaXB0aW9uOiB8DQo+ID4gKyAgTWVkaWFUZWsncyBlZnVzZSBpcyB1c2VkIGZvciBz
+dG9yaW5nIGNhbGlicmF0aW9uIGRhdGEsIGl0IGNhbiBiZQ0KPiA+IGFjY2Vzc2VkDQo+ID4gKyAg
+b24gQVJNIGRldmljZXMgdXNpb25nIEkvTyBtYXBwZWQgbWVtb3J5Lg0KPiA+ICsNCj4gPiArbWFp
+bnRhaW5lcnM6DQo+ID4gKyAgLSBBbmRyZXctQ1QgQ2hlbiA8YW5kcmV3LWN0LmNoZW5AbWVkaWF0
+ZWsuY29tPg0KPiA+ICsNCj4gPiArYWxsT2Y6DQo+ID4gKyAgLSAkcmVmOiAibnZtZW0ueWFtbCMi
+DQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgICRub2RlbmFtZToNCj4gPiArICAgIHBh
+dHRlcm46ICJeZWZ1c2VAWzAtOWEtZl0rJCINCj4gPiArDQo+ID4gKyAgY29tcGF0aWJsZToNCj4g
+PiArICAgIG9uZU9mOg0KPiA+ICsgICAgICAtIGl0ZW1zOg0KPiA+ICsgICAgICAgICAgLSBlbnVt
+Og0KPiA+ICsgICAgICAgICAgICAgIC0gbWVkaWF0ZWssbXQ3NjIyLWVmdXNlDQo+ID4gKyAgICAg
+ICAgICAgICAgLSBtZWRpYXRlayxtdDc2MjMtZWZ1c2UNCj4gPiArICAgICAgICAgICAgICAtIG1l
+ZGlhdGVrLG10ODE3My1lZnVzZQ0KPiA+ICsgICAgICAgICAgICAgIC0gbWVkaWF0ZWssbXQ4MTky
+LWVmdXNlDQo+ID4gKyAgICAgICAgICAgICAgLSBtZWRpYXRlayxtdDgxOTUtZWZ1c2UNCj4gPiAr
+ICAgICAgICAgICAgICAtIG1lZGlhdGVrLG10ODUxNi1lZnVzZQ0KPiA+ICsgICAgICAgICAgLSBj
+b25zdDogbWVkaWF0ZWssZWZ1c2UNCj4gPiArICAgICAgLSBjb25zdDogbWVkaWF0ZWssbXQ4MTcz
+LWVmdXNlDQo+ID4gKyAgICAgICAgZGVwcmVjYXRlZDogdHJ1ZQ0KPiA+ICsNCj4gPiArICByZWc6
+DQo+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsNCj4gDQo+IEFsbCBvZjogDQo+IA0KPiA+ICsg
+ICIjYWRkcmVzcy1jZWxscyI6DQo+ID4gKyAgICBjb25zdDogMQ0KPiA+ICsNCj4gPiArICAiI3Np
+emUtY2VsbHMiOg0KPiA+ICsgICAgY29uc3Q6IDENCj4gPiArDQo+ID4gK3BhdHRlcm5Qcm9wZXJ0
+aWVzOg0KPiA+ICsgICJeLipAWzAtOWEtZl0rJCI6DQo+ID4gKyAgICB0eXBlOiBvYmplY3QNCj4g
+PiArDQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICByZWc6DQo+ID4gKyAgICAgICAg
+bWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICAgIGJpdHM6DQo+ID4gKyAgICAgICAgbWF4SXRl
+bXM6IDENCj4gPiArDQo+ID4gKyAgICByZXF1aXJlZDoNCj4gPiArICAgICAgLSByZWcNCj4gPiAr
+DQo+ID4gKyAgICBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4gDQo+IC4uLnRoaXMgaXMg
+Y292ZXJlZCBieSBudm1lbS55YW1sIGFuZCBjYW4gYmUgZHJvcHBlZC4NCk9rLCB0aGFua3MNCg0K
+PiANCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0g
+cmVnDQo+ID4gKw0KPiA+ICt1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+
+ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4gPiArICAgIGVmdXNlQDEwMjA2MDAwIHsNCj4gPiAr
+ICAgICAgICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE3My1lZnVzZSI7DQo+ID4gKyAgICAg
+ICAgcmVnID0gPDB4MTAyMDYwMDAgMHgxMDAwPjsNCj4gPiArICAgICAgICAjYWRkcmVzcy1jZWxs
+cyA9IDwxPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwxPjsNCj4gPiArDQo+ID4gKyAg
+ICAgICAgdTJfaW50cl9wMDogdXNiMi1pbnRyLXAwQDE4OCB7DQo+ID4gKyAgICAgICAgICAgIHJl
+ZyA9IDwweDE4OCAweDE+Ow0KPiA+ICsgICAgICAgICAgICBiaXRzID0gPDAgNT47DQo+ID4gKyAg
+ICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgdTJfaW50cl9wMTogdXNiMi1pbnRyLXAxQDE4
+OCB7DQo+ID4gKyAgICAgICAgICAgIHJlZyA9IDwweDE4OCAweDI+Ow0KPiA+ICsgICAgICAgICAg
+ICBiaXRzID0gPDUgNT47DQo+ID4gKyAgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgdGhl
+cm1hbF9jYWxpYnJhdGlvbjogY2FsaWJANTI4IHsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDB4
+NTI4IDB4Yz47DQo+ID4gKyAgICAgICAgfTsNCj4gPiArICAgIH07DQo+ID4gZGlmZiAtLWdpdCBh
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9udm1lbS9tdGstZWZ1c2UudHh0DQo+
+ID4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbnZtZW0vbXRrLWVmdXNlLnR4
+dA0KPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDM5ZDUyOTU5OTQ0NC4u
+MDAwMDAwMDAwMDAwDQo+ID4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L252bWVtL210ay1lZnVzZS50eHQNCj4gPiArKysgL2Rldi9udWxsDQo+ID4gQEAgLTEsNDMgKzAs
+MCBAQA0KPiA+IC09IE1lZGlhdGVrIE1USy1FRlVTRSBkZXZpY2UgdHJlZSBiaW5kaW5ncyA9DQo+
+ID4gLQ0KPiA+IC1UaGlzIGJpbmRpbmcgaXMgaW50ZW5kZWQgdG8gcmVwcmVzZW50IE1USy1FRlVT
+RSB3aGljaCBpcyBmb3VuZCBpbg0KPiA+IG1vc3QgTWVkaWF0ZWsgU09Dcy4NCj4gPiAtDQo+ID4g
+LVJlcXVpcmVkIHByb3BlcnRpZXM6DQo+ID4gLS0gY29tcGF0aWJsZTogc2hvdWxkIGJlDQo+ID4g
+LQkgICAgICAibWVkaWF0ZWssbXQ3NjIyLWVmdXNlIiwgIm1lZGlhdGVrLGVmdXNlIjogZm9yIE1U
+NzYyMg0KPiA+IC0JICAgICAgIm1lZGlhdGVrLG10NzYyMy1lZnVzZSIsICJtZWRpYXRlayxlZnVz
+ZSI6IGZvciBNVDc2MjMNCj4gPiAtCSAgICAgICJtZWRpYXRlayxtdDgxNzMtZWZ1c2UiIG9yICJt
+ZWRpYXRlayxlZnVzZSI6IGZvciBNVDgxNzMNCj4gPiAtCSAgICAgICJtZWRpYXRlayxtdDgxOTIt
+ZWZ1c2UiLCAibWVkaWF0ZWssZWZ1c2UiOiBmb3IgTVQ4MTkyDQo+ID4gLQkgICAgICAibWVkaWF0
+ZWssbXQ4MTk1LWVmdXNlIiwgIm1lZGlhdGVrLGVmdXNlIjogZm9yIE1UODE5NQ0KPiA+IC0JICAg
+ICAgIm1lZGlhdGVrLG10ODUxNi1lZnVzZSIsICJtZWRpYXRlayxlZnVzZSI6IGZvciBNVDg1MTYN
+Cj4gPiAtLSByZWc6IFNob3VsZCBjb250YWluIHJlZ2lzdGVycyBsb2NhdGlvbiBhbmQgbGVuZ3Ro
+DQo+ID4gLS0gYml0czogY29udGFpbiB0aGUgYml0cyByYW5nZSBieSBvZmZzZXQgYW5kIHNpemUN
+Cj4gPiAtDQo+ID4gLT0gRGF0YSBjZWxscyA9DQo+ID4gLUFyZSBjaGlsZCBub2RlcyBvZiBNVEst
+RUZVU0UsIGJpbmRpbmdzIG9mIHdoaWNoIGFzIGRlc2NyaWJlZCBpbg0KPiA+IC1iaW5kaW5ncy9u
+dm1lbS9udm1lbS50eHQNCj4gPiAtDQo+ID4gLUV4YW1wbGU6DQo+ID4gLQ0KPiA+IC0JZWZ1c2U6
+IGVmdXNlQDEwMjA2MDAwIHsNCj4gPiAtCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE3My1l
+ZnVzZSI7DQo+ID4gLQkJcmVnCSAgID0gPDAgMHgxMDIwNjAwMCAwIDB4MTAwMD47DQo+ID4gLQkJ
+I2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gLQkJI3NpemUtY2VsbHMgPSA8MT47DQo+ID4gLQ0K
+PiA+IC0JCS8qIERhdGEgY2VsbHMgKi8NCj4gPiAtCQl0aGVybWFsX2NhbGlicmF0aW9uOiBjYWxp
+YkA1Mjggew0KPiA+IC0JCQlyZWcgPSA8MHg1MjggMHhjPjsNCj4gPiAtCQl9Ow0KPiA+IC0JfTsN
+Cj4gPiAtDQo+ID4gLT0gRGF0YSBjb25zdW1lcnMgPQ0KPiA+IC1BcmUgZGV2aWNlIG5vZGVzIHdo
+aWNoIGNvbnN1bWUgbnZtZW0gZGF0YSBjZWxscy4NCj4gPiAtDQo+ID4gLUZvciBleGFtcGxlOg0K
+PiA+IC0NCj4gPiAtCXRoZXJtYWwgew0KPiA+IC0JCS4uLg0KPiA+IC0JCW52bWVtLWNlbGxzID0g
+PCZ0aGVybWFsX2NhbGlicmF0aW9uPjsNCj4gPiAtCQludm1lbS1jZWxsLW5hbWVzID0gImNhbGli
+cmF0aW9uIjsNCj4gPiAtCX07DQo+ID4gLS0gDQo+ID4gMi4xOC4wDQo+ID4gDQo+ID4gDQo=
 

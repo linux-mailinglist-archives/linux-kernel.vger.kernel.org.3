@@ -2,88 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE68B478542
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF861478545
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbhLQGoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 01:44:12 -0500
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:41738 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhLQGoL (ORCPT
+        id S233450AbhLQGtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 01:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229757AbhLQGs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 01:44:11 -0500
-Received: by mail-lf1-f46.google.com with SMTP id cf39so2586390lfb.8;
-        Thu, 16 Dec 2021 22:44:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=fJUE8k2+qpHDPc4B6+jQ9Hnyt7WdEWRQUyO5Bymsaf8=;
-        b=BG9v8GAgJgPqIe7DO2hOxzFn4s3QpQ1scgvLR6O/beHMQqTlYmUB/GMladROnt2zjf
-         Rh8AYTYVkoPnQt9hZWrC+d5MXMBOPzfibOkRCAeGM1//wpO6g+nNXsWpbWDR7ENVLi5g
-         76rZ40a4P+i68DnLxOqKLmcE35kg1ZKnhLljikvmlHIbUzr0/NaU/QTeRWvMChsakbwO
-         l5OPIgHu8pS7UudU2meBWNodILN+L6pHoZndwQiwWwJSr4gmD9OB1zBYrrNoQoIMd+0W
-         /2//70pUdkHANfi2b/gCS1Q1AaCMyvelaYtniMaPvwM+JwtJyYqPnZ1Pl+RF77n2QUrO
-         KHSA==
-X-Gm-Message-State: AOAM5326LT4CFo0YBQMVeD+pBk5oraO34IGgivtkqbiuA55TSwWoQrbs
-        IiXIkOYMZBhkANfROZbOTZo=
-X-Google-Smtp-Source: ABdhPJxHrH2xosVVOFH0R8QnnEyKiwxocG5OBOcL66n2+ouZn2N5TUdBTPH6I/4v9bKWYqd2OqzTBA==
-X-Received: by 2002:ac2:4857:: with SMTP id 23mr384894lfy.217.1639723449744;
-        Thu, 16 Dec 2021 22:44:09 -0800 (PST)
-Received: from [10.68.32.65] (broadband-109-173-81-86.ip.moscow.rt.ru. [109.173.81.86])
-        by smtp.gmail.com with ESMTPSA id b28sm130017lff.305.2021.12.16.22.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 22:44:09 -0800 (PST)
-Message-ID: <aac18497-f420-a04a-16ab-c3e2149904b5@linux.com>
-Date:   Fri, 17 Dec 2021 09:44:10 +0300
+        Fri, 17 Dec 2021 01:48:59 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95DC061574;
+        Thu, 16 Dec 2021 22:48:59 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFfhk0KS4z4xd4;
+        Fri, 17 Dec 2021 17:48:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639723734;
+        bh=gFk5/QqDd8VJz6rqZGtf1IKla5sQ6pkJ8hS21Pz6AtI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u1ynZpLs725npANjqRPRAuAJ4CNjvdLUQ98cQcXUzD3URaknbzZe28S2f1YLwG4XW
+         b9mT/5qY5AwZIbFjauJ/ItJJ4R8xTlPgjtmPO+AbvjCRFHH2apVH8jB2wFEU67TslG
+         x/K4B5Hm2u7rRSTfLnlBzyZftnLFrGzMsKcMMnpyODgcC802u+/OhxiWNyYLSLG+qM
+         a6JCCaLqe6wDeWDQK7uX7li7UcCvV+BChg8NimR5fQBTbc1JHyKR7EkMxPAxx7GGcb
+         8AtcyjOw1HvuTRMEmbuiCiodz66bPoTIpOwSurrt00hqi9YvWaDD8R33a3+BwU9Gdk
+         HDSxRO1xFIJkQ==
+Date:   Fri, 17 Dec 2021 17:48:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     broonie@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        NeilBrown <neilb@suse.de>
+Subject: Re: linux-next: manual merge of the userns tree with the cel tree
+Message-ID: <20211217174853.752c032f@canb.auug.org.au>
+In-Reply-To: <20211216193412.2441434-1-broonie@kernel.org>
+References: <20211216193412.2441434-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     "Dae R. Jeong" <threeearcat@gmail.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     yjkwon@kaist.ac.kr
-References: <YbbKf6fU7y3GGZum@archdragon>
-From:   Denis Efremov <efremov@linux.com>
-Subject: Re: WARNING in schedule_bh
-In-Reply-To: <YbbKf6fU7y3GGZum@archdragon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/XPcCR3XZL5Mlb4khvQ+9MYm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> So, for me, concurrent execution of floppy_shutdown() and
-> fd_locked_ioctl() is suspicious. Could you please check the above
-> scenario is reasonable?
-> 
+Hi all,
 
-Thank you for the analysis. You are right and concurrent execution
-of floppy_shutdown() and fd_locked_ioctl() looks suspicious. I know about
-this warning more than 2 years already since I wrote syzkaller descriptions
-for the floppy. I can only wonder why did it take so long for the syzbot
-to find it.
-However, this bug is not reproducible on real hardware. I would prefer not
-to touch the code significantly unless there is a security reason for it.
-The pros here are that bugs should be fixed. The cons here are that changing
-the code more-or-less significantly is hard to test on real hardware
-(there was a regression in UAPI of floppy not so long ago, it took almost
-half of a year before it was reported and it took another couple of months
-before distros released kernels with a fix); floppy driver contains
-undocumented/poorly-documented hacks (e.g. O_ACCMODE
-https://github.com/google/syzkaller/commit/3ea5a3451b2bfa90a3b73397273560f17d587efc#diff-07b38a9cc5b8b1eed725414265f033c41abffbbe537567799ed678dfe9c49d7a);
-/dev/fd0 is accessible only by root/disk user on most of the distros nowadays;
-races are highly likely not reproducible on real hardware because floppy
-devices are slow; from the functional point of view the driver worked with
-this bug almost 10 years (maybe more) and I doubt it's possible to
-face this bug during normal workflow (without direct intention to trigger it);
-I think that usage of floppies inside VMs is limited to some specific
-workflows and I doubt it's really broad.
-If you see an easy way to fix this issue, please send a patch.
+On Thu, 16 Dec 2021 19:34:12 +0000 broonie@kernel.org wrote:
+>
+> Today's linux-next merge of the userns tree got a conflict in:
+>=20
+>   fs/nfsd/nfssvc.c
+>=20
+> between commit:
+>=20
+>   cfb05a7336741 ("NFSD: narrow nfsd_mutex protection in nfsd thread")
 
-Thanks,
-Denis
+This is now commit 9d3792aefdcd
+
+> from the cel tree and commit:
+>=20
+>   ca3574bd653ab ("exit: Rename module_put_and_exit to module_put_and_kthr=
+ead_exit")
+>=20
+> from the userns tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc fs/nfsd/nfssvc.c
+> index 14c1ef6f8cc74,5ce9f14318c4e..0000000000000
+> --- a/fs/nfsd/nfssvc.c
+> +++ b/fs/nfsd/nfssvc.c
+> @@@ -977,25 -982,11 +977,25 @@@ out
+>   	/* Release the thread */
+>   	svc_exit_thread(rqstp);
+>  =20
+>  -	nfsd_destroy(net);
+>  +	/* We need to drop a ref, but may not drop the last reference
+>  +	 * without holding nfsd_mutex, and we cannot wait for nfsd_mutex as th=
+at
+>  +	 * could deadlock with nfsd_shutdown_threads() waiting for us.
+>  +	 * So three options are:
+>  +	 * - drop a non-final reference,
+>  +	 * - get the mutex without waiting
+>  +	 * - sleep briefly andd try the above again
+>  +	 */
+>  +	while (!svc_put_not_last(nn->nfsd_serv)) {
+>  +		if (mutex_trylock(&nfsd_mutex)) {
+>  +			nfsd_put(net);
+>  +			mutex_unlock(&nfsd_mutex);
+>  +			break;
+>  +		}
+>  +		msleep(20);
+>  +	}
+>  =20
+>   	/* Release module */
+> - 	module_put_and_exit(0);
+>  -	mutex_unlock(&nfsd_mutex);
+> + 	module_put_and_kthread_exit(0);
+>   	return 0;
+>   }
+>  =20
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8MtUACgkQAVBC80lX
+0Gxfcgf/fByZMYKohnucUb30kNvtm100Zygyt0qTkGEEnnvKu1VgcTZe3UnZcGmQ
+zGVJUIi9zxPnZLX1b30hVZSW2UNwwZbBYfiv/LpXdTjvU5AWLr2tnpl1Gdan+wo3
+mWn5nRh90g3CD3xltkXNVCfEYBQDdwCRtgRA3SMl/L+BA6wx7fVVCEfYuBIp0O+T
+Aex9mb9dDZ4hraQk008k1/4LxL3ms99FMPnSsempg6Im3/3XHtCgJctFacTrlXw6
+RokpfoAsjygE2dmKKnnE8q8q2c2qv2d1u461ZneYFRc9abpiXgjwdk16O8g8Lklh
+00LKa+YuZPGb1mTsr/IDsfi0mM4QkQ==
+=PvYi
+-----END PGP SIGNATURE-----
+
+--Sig_/XPcCR3XZL5Mlb4khvQ+9MYm--

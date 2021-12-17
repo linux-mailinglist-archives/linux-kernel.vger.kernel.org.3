@@ -2,184 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE33479679
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B069E479680
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbhLQVqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:46:47 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:59088 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230038AbhLQVqq (ORCPT
+        id S230143AbhLQVrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230107AbhLQVrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:46:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1639777606;
-        bh=5RH04GAzRjsm9xh3EJanqHXpdqffprXUcbtUleZ8qWs=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=hJ3i/8+ywu9yrODakkn4P8eDnLen2+ujJp3c8Uz8CNiE9LqzmNjfRJBHl+LBUn99T
-         3lGLoHn4Qc13GJrchX1JF25Ixk3opZcSv/wyCJZG/vvjWnbdYiAJewAKUmi657j6Lo
-         PS6NwOtlFYrDpoYXHABj4zbrwtYEHocABiU5YzrA=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 769911280493;
-        Fri, 17 Dec 2021 16:46:46 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2bWBQjFT4-4z; Fri, 17 Dec 2021 16:46:46 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1639777606;
-        bh=5RH04GAzRjsm9xh3EJanqHXpdqffprXUcbtUleZ8qWs=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=hJ3i/8+ywu9yrODakkn4P8eDnLen2+ujJp3c8Uz8CNiE9LqzmNjfRJBHl+LBUn99T
-         3lGLoHn4Qc13GJrchX1JF25Ixk3opZcSv/wyCJZG/vvjWnbdYiAJewAKUmi657j6Lo
-         PS6NwOtlFYrDpoYXHABj4zbrwtYEHocABiU5YzrA=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id ECD0F12801C0;
-        Fri, 17 Dec 2021 16:46:45 -0500 (EST)
-Message-ID: <d2fdf91ea840cd1cd88e5ef12f35034056fcb801.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.16-rc5
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 17 Dec 2021 16:46:44 -0500
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 17 Dec 2021 16:47:39 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B547C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:47:39 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id y13so12785732edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9YVjp7krYySQqC7CQqhrlLalS/tCzUZljrfIOgYw9c8=;
+        b=ds0Or9hUQyHWLCwuDzWn0BKOyesMRrRWFAKar1GQ2Glri5544c68TYGrWEXROYpOzL
+         3HFDKHjNGSZ9FTZxNFcCLsbmtVOfzMJBKlb4ukSA7MWWGzaKNuseZyUbLT1hCeuSu72c
+         t3oVGGJ/WmgNaZQxKCKLDJRhLacQipu6zfyGg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9YVjp7krYySQqC7CQqhrlLalS/tCzUZljrfIOgYw9c8=;
+        b=hpbm3vLPEIcVip456dUicIHUfehJIyvOIXBCbVXaolVl35L52cnuL5q68b9QNersIV
+         njueqO72VqtHDJbOJjq0ng/c1cgmFdZvb8SxMofctcxv5qV4HwmBB1ox2NWQkRmbCwos
+         8qGeVZHGfI5M9nMR6BJLbTqUwUFobQQJ1KK8u/zVJNPpOoCt0LXv30PvywCApUQV+dnn
+         Bbj8FRJ51x/9eQ6RxpEk//s/8XRIKLxYBQdgAgxhquKL/sEp2KL7LP+BYlngHpU0gihL
+         okbLWxVb/hptVPDZLSWgk3p8p1dc5x0FvJvYL79VbUyI7WrBpuiEipOppTqXun4SYtTt
+         iocA==
+X-Gm-Message-State: AOAM530/6wsW7wnLSiT9erCAK0GgPe6wGlUBlQQaEbyfRuw57xnh4RyB
+        9HiV+TBlHlYdGShzLpUsNVYH4UlD53DXyrrzQNw=
+X-Google-Smtp-Source: ABdhPJwqomkCxbc8xsQ6xXmG2OSa/iTMybEQ3ws8brLIPPWl5SD4tElQ4w4J+QUn+Ew8qHE5TTFIdg==
+X-Received: by 2002:a50:dac5:: with SMTP id s5mr4712651edj.180.1639777657882;
+        Fri, 17 Dec 2021 13:47:37 -0800 (PST)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id oz31sm3227974ejc.35.2021.12.17.13.47.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 13:47:37 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id c4so6471590wrd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:47:36 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr3990177wrp.442.1639777656558;
+ Fri, 17 Dec 2021 13:47:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <CAHC9VhS=WgqJgqpQq9J+0Pec9u8e1VnvGwqOimR54wm6TRptVA@mail.gmail.com>
+ <CAHk-=wiiqvcA3noHDqJt2=ik5ikQbycdFQ7s=uq70FcGxWgXvg@mail.gmail.com> <CAN-5tyEKGQu1Y=o8KfsX3q9NkP4XZRos5stwmrT=ZV1hr1fWrQ@mail.gmail.com>
+In-Reply-To: <CAN-5tyEKGQu1Y=o8KfsX3q9NkP4XZRos5stwmrT=ZV1hr1fWrQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 13:47:20 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiDT0aZO6UFnb9sW4rfuxp4xfPTSydnifVgL6H8b5Rb4Q@mail.gmail.com>
+Message-ID: <CAHk-=wiDT0aZO6UFnb9sW4rfuxp4xfPTSydnifVgL6H8b5Rb4Q@mail.gmail.com>
+Subject: Re: [GIT PULL] SELinux fixes for v5.16 (#3)
+To:     Olga Kornievskaia <aglo@umich.edu>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        Scott Mayhew <smayhew@redhat.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One driver fix: the pm8001 has never actually worked on a system with
-an IOMMU and this fixes that use case.
+On Fri, Dec 17, 2021 at 1:08 PM Olga Kornievskaia <aglo@umich.edu> wrote:
+>
+> Can you please elaborate on what is problematic with the two patches
+> you've highlighted.
 
-The patch is available here:
+Commit ec1ade6a0448 ("nfs: account for selinux security context when
+deciding to share superblock") adds the call to
+security_sb_mnt_opts_compat() from the nfs_compare_mount_options()
+function.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+But nfs_compare_mount_options() is called from nfs_compare_super(),
+which is used as the the "test" callback function for the "sget_fc()"
+call:
 
-The short changelog is:
+        s = sget_fc(fc, compare_super, nfs_set_super);
 
-John Garry (1):
-      scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+and sget_fc() traverses all the mounted filesystems of this type -
+while holding the superblock lock that protects that list.
 
-And the diffstat:
+So nfs_compare_super() may not sleep. It's called while holding a very
+core low-level lock, and it really is supposed to only do a "test".
+Not some complex operation that may do dynamic memory allocations and
+sleep.
 
- drivers/scsi/pm8001/pm80xx_hwi.c | 38 +++++++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+Yet that is exactly what security_sb_mnt_opts_compat() does, as done
+in 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an
+existing mount").
 
-With full diff below.
+So those two patches are completely broken.
 
-James
+Now, commit cc274ae7763d ("selinux: fix sleeping function called from
+invalid context") that I just merged "fixes" this by making the
+allocations in parse_sid() be GFP_NOWAIT.
 
----
+That is a *HORRIBLE* fix. It's a horrible fix because
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index b9f6d83ff380..2101fc5761c3 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -3053,7 +3053,6 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 	struct smp_completion_resp *psmpPayload;
- 	struct task_status_struct *ts;
- 	struct pm8001_device *pm8001_dev;
--	char *pdma_respaddr = NULL;
- 
- 	psmpPayload = (struct smp_completion_resp *)(piomb + 4);
- 	status = le32_to_cpu(psmpPayload->status);
-@@ -3080,19 +3079,23 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		if (pm8001_dev)
- 			atomic_dec(&pm8001_dev->running_req);
- 		if (pm8001_ha->smp_exp_mode == SMP_DIRECT) {
-+			struct scatterlist *sg_resp = &t->smp_task.smp_resp;
-+			u8 *payload;
-+			void *to;
-+
- 			pm8001_dbg(pm8001_ha, IO,
- 				   "DIRECT RESPONSE Length:%d\n",
- 				   param);
--			pdma_respaddr = (char *)(phys_to_virt(cpu_to_le64
--						((u64)sg_dma_address
--						(&t->smp_task.smp_resp))));
-+			to = kmap_atomic(sg_page(sg_resp));
-+			payload = to + sg_resp->offset;
- 			for (i = 0; i < param; i++) {
--				*(pdma_respaddr+i) = psmpPayload->_r_a[i];
-+				*(payload + i) = psmpPayload->_r_a[i];
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "SMP Byte%d DMA data 0x%x psmp 0x%x\n",
--					   i, *(pdma_respaddr + i),
-+					   i, *(payload + i),
- 					   psmpPayload->_r_a[i]);
- 			}
-+			kunmap_atomic(to);
- 		}
- 		break;
- 	case IO_ABORTED:
-@@ -4236,14 +4239,14 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
- 	struct sas_task *task = ccb->task;
- 	struct domain_device *dev = task->dev;
- 	struct pm8001_device *pm8001_dev = dev->lldd_dev;
--	struct scatterlist *sg_req, *sg_resp;
-+	struct scatterlist *sg_req, *sg_resp, *smp_req;
- 	u32 req_len, resp_len;
- 	struct smp_req smp_cmd;
- 	u32 opc;
- 	struct inbound_queue_table *circularQ;
--	char *preq_dma_addr = NULL;
--	__le64 tmp_addr;
- 	u32 i, length;
-+	u8 *payload;
-+	u8 *to;
- 
- 	memset(&smp_cmd, 0, sizeof(smp_cmd));
- 	/*
-@@ -4280,8 +4283,9 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
- 		pm8001_ha->smp_exp_mode = SMP_INDIRECT;
- 
- 
--	tmp_addr = cpu_to_le64((u64)sg_dma_address(&task->smp_task.smp_req));
--	preq_dma_addr = (char *)phys_to_virt(tmp_addr);
-+	smp_req = &task->smp_task.smp_req;
-+	to = kmap_atomic(sg_page(smp_req));
-+	payload = to + smp_req->offset;
- 
- 	/* INDIRECT MODE command settings. Use DMA */
- 	if (pm8001_ha->smp_exp_mode == SMP_INDIRECT) {
-@@ -4289,7 +4293,7 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
- 		/* for SPCv indirect mode. Place the top 4 bytes of
- 		 * SMP Request header here. */
- 		for (i = 0; i < 4; i++)
--			smp_cmd.smp_req16[i] = *(preq_dma_addr + i);
-+			smp_cmd.smp_req16[i] = *(payload + i);
- 		/* exclude top 4 bytes for SMP req header */
- 		smp_cmd.long_smp_req.long_req_addr =
- 			cpu_to_le64((u64)sg_dma_address
-@@ -4320,20 +4324,20 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
- 		pm8001_dbg(pm8001_ha, IO, "SMP REQUEST DIRECT MODE\n");
- 		for (i = 0; i < length; i++)
- 			if (i < 16) {
--				smp_cmd.smp_req16[i] = *(preq_dma_addr+i);
-+				smp_cmd.smp_req16[i] = *(payload + i);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "Byte[%d]:%x (DMA data:%x)\n",
- 					   i, smp_cmd.smp_req16[i],
--					   *(preq_dma_addr));
-+					   *(payload));
- 			} else {
--				smp_cmd.smp_req[i] = *(preq_dma_addr+i);
-+				smp_cmd.smp_req[i] = *(payload + i);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "Byte[%d]:%x (DMA data:%x)\n",
- 					   i, smp_cmd.smp_req[i],
--					   *(preq_dma_addr));
-+					   *(payload));
- 			}
- 	}
--
-+	kunmap_atomic(to);
- 	build_smp_cmd(pm8001_dev->device_id, smp_cmd.tag,
- 				&smp_cmd, pm8001_ha->smp_exp_mode, length);
- 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &smp_cmd,
+ (a) GFP_NOWAIT can fail very easily, causing the mount to randomly
+fail for non-obvious reasons.
 
+ (b) even when it doesn't fail, you really shouldn't do things like
+this under a very core spinlock.
+
+Also, the original place - nfs_compare_mount_options() is called over
+and over for each mount, so you're parsing those same mount options
+over and over again. So not only was this sequence buggy, it's really
+not very smart to begin with.
+
+That's why I say that a much better approach would have been to parse
+the mount options _once_ at the beginning, saving them off in some
+temporary supoerblock (or whatever - anything that can hold those
+pre-parsed mount options), and then have the "test" callback literally
+just check those parsed options.
+
+That's not necessarily the only way to go about this - there are
+probably other approaches too, I didn't really think too much about
+this. But those two commits on their own are buggy, and the fix is
+somewhat problematic too.
+
+                     Linus

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802C64796C2
+	by mail.lfdr.de (Postfix) with ESMTP id C8DAF4796C3
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhLQWBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:01:49 -0500
+        id S231133AbhLQWBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:01:50 -0500
 Received: from mga11.intel.com ([192.55.52.93]:26492 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229708AbhLQWBr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:01:47 -0500
+        id S230488AbhLQWBs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 17:01:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639778507; x=1671314507;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0jm2eAYVlDkuiCKKJYYzdwdod6o9ZLQ3TVZ+0dw78z8=;
-  b=PHljiFdMrr4lTv7Esqhi6Nn/Li5hDbPM3sXHS0WPzcuYEuK7xj8SH+b2
-   m6VZ/r8KT0Kt5072rS2vPgrJzX/5Be95FQ4S3t8CLIUuhaU555AAxx1ts
-   7a32ZtcXvn7MbJA6F4yl0rvBNIxZFePlAHBQgwGHCtTQzr/vI2JMNpKfN
-   qtkp+wGGukzWcdutdYgyuBJugbFEyv0k65xSkxPEpmvWPdKK7p1lzQm9Y
-   wN2/uXIVSQvUS2ejxi5z8p5fGo2Dwas9Qnq0PE5k06qXhVcaVRwk+ju/r
-   mMOYuj8iG4LTRwwxnh+9Jdmr2uDPXPRkT6YpJOvT6RrrP3XdhPq3oN9me
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381581"
+  t=1639778508; x=1671314508;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vrJ/zKRVUU6ZR06GrFfxZCmYCCjEMizfBdO6/ux2RvU=;
+  b=JOsmFRhquO0/lkAVTgVBlCwKFAfp2cLo5PR+wlM5c3ku2pnFQ5RmIIeo
+   zbiClsJYg4jCLevU9ZYKgtdMkyLikacHb8kP6vZaaWCO2jriXV9usIyXF
+   mRRNWBlBK0hktsSFsA1/2zGLSp9UePpyuGGthWSyaA93Pse40KT/UFg3i
+   BQb/zJ1GyGRdLs5m+2j5SEvfvZ8W3/vCYY8jHCCO97vbVxaEhqhtFcmDo
+   Q13yKUFj6g3VDoJlf6bEs3lyLhE5ac5hSegucN1a6+OUBAdVfNTBxVPat
+   lf4dCgLOMOuUjQqKxUavkIxaewceK6khdGfs/+7qM3g1WDeB0VS1vWQEa
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381584"
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="237381581"
+   d="scan'208";a="237381584"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 14:01:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="506928069"
+   d="scan'208";a="506928073"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 14:01:46 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -50,89 +50,115 @@ To:     "Thomas Gleixner" <tglx@linutronix.de>,
 Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2 00/11] Re-enable ENQCMD and PASID MSR
-Date:   Fri, 17 Dec 2021 22:01:25 +0000
-Message-Id: <20211217220136.2762116-1-fenghua.yu@intel.com>
+Subject: [PATCH v2 01/11] iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
+Date:   Fri, 17 Dec 2021 22:01:26 +0000
+Message-Id: <20211217220136.2762116-2-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211217220136.2762116-1-fenghua.yu@intel.com>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Problems in the old code to manage SVM (Shared Virtual Memory) devices
-and the PASID (Process Address Space ID) led to that code being
-disabled.
+This CONFIG option originally only referred to the Shared
+Virtual Address (SVA) library. But it is now also used for
+non-library portions of code.
 
-Subsequent discussions resulted in a far simpler approach:
+Drop the "_LIB" suffix so that there is just one configuration
+options for all code relating to SVA.
 
-1) PASID life cycle is from first allocation by a process until that
-   process exits.
-2) All tasks begin with PASID disabled
-3) The #GP fault handler tries to fix faulting ENQCMD instructions very
-   early (thus avoiding complexities of the XSAVE infrastructure)
-
-Change Log:
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+---
 v2:
-- Free PASID on mm exit instead of in exit(2) or unbind() (Thomas, AndyL,
-  PeterZ)
-- Directly write IA32_PASID MSR in fixup while local IRQ is still disabled
-  (Thomas)
-- Simplify handling ENQCMD in objtool (PeterZ and Josh)
-- Define mm_pasid_get(), mm_pasid_drop(), and mm_pasid_init() in mm and
-  call the functions from IOMMU (Dave Hansen).
-- A few changes in the #GP fixup function (Dave Hansen, Tony Luck).
-- Initial PASID value is changed to INVALID_PASID (Ashok Raj and
-  Jacob Pan).
-- Add mm_pasid_init(), mm_pasid_get(), and mm_pasid_drop() functions in mm.
-  So the mm's PASID operations are generic for both X86 and ARM
-  (Dave Hansen).
-- Rename CONFIG_IOMMU_SVA_LIB to more useful and accurate
-  CONFIG_IOMMU_SVA
-- Use CONFIG_IOMMU_SVA for PASID processing condition (Jacob)
-- The patch that cleans up old update_pasid() function is in upstream
-  now (commit: 00ecd5401349 "iommu/vt-d: Clean up unused PASID updating
-  functions") and therefore it's removed from this version.
+- Add this patch for more meaningful name CONFIG_IOMMU_SVA
 
-v1 can be found at https://lore.kernel.org/lkml/20210920192349.2602141-1-fenghua.yu@intel.com/T/#md6d542091da1d1159eda0a44a16e57d0c0dfb209
+ drivers/iommu/Kconfig         | 6 +++---
+ drivers/iommu/Makefile        | 2 +-
+ drivers/iommu/intel/Kconfig   | 2 +-
+ drivers/iommu/iommu-sva-lib.h | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Fenghua Yu (10):
-  iommu/sva: Rename CONFIG_IOMMU_SVA_LIB to CONFIG_IOMMU_SVA
-  mm: Change CONFIG option for mm->pasid field
-  iommu/ioasid: Introduce a helper to check for valid PASIDs
-  kernel/fork: Initialize mm's PASID
-  iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm
-    exit
-  x86/fpu: Clear PASID when copying fpstate
-  x86/traps: Demand-populate PASID MSR via #GP
-  x86/cpufeatures: Re-enable ENQCMD
-  tools/objtool: Check for use of the ENQCMD instruction in the kernel
-  docs: x86: Change documentation for SVA (Shared Virtual Addressing)
-
-Peter Zijlstra (1):
-  sched: Define and initialize a flag to identify valid PASID in the
-    task
-
- Documentation/x86/sva.rst                     | 58 +++++++++++++++----
- arch/x86/include/asm/disabled-features.h      |  7 ++-
- arch/x86/kernel/fpu/core.c                    |  7 +++
- arch/x86/kernel/traps.c                       | 55 ++++++++++++++++++
- drivers/iommu/Kconfig                         |  6 +-
- drivers/iommu/Makefile                        |  2 +-
- .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  5 +-
- drivers/iommu/intel/Kconfig                   |  2 +-
- drivers/iommu/intel/svm.c                     |  9 ---
- drivers/iommu/iommu-sva-lib.c                 | 39 ++++---------
- drivers/iommu/iommu-sva-lib.h                 |  7 +--
- include/linux/ioasid.h                        |  9 +++
- include/linux/mm_types.h                      |  2 +-
- include/linux/sched.h                         |  3 +
- include/linux/sched/mm.h                      | 26 +++++++++
- kernel/fork.c                                 | 15 +++--
- mm/init-mm.c                                  |  4 ++
- tools/objtool/arch/x86/decode.c               | 11 +++-
- 18 files changed, 194 insertions(+), 73 deletions(-)
-
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index 3eb68fa1b8cc..c79a0df090c0 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -144,8 +144,8 @@ config IOMMU_DMA
+ 	select IRQ_MSI_IOMMU
+ 	select NEED_SG_DMA_LENGTH
+ 
+-# Shared Virtual Addressing library
+-config IOMMU_SVA_LIB
++# Shared Virtual Addressing
++config IOMMU_SVA
+ 	bool
+ 	select IOASID
+ 
+@@ -379,7 +379,7 @@ config ARM_SMMU_V3
+ config ARM_SMMU_V3_SVA
+ 	bool "Shared Virtual Addressing support for the ARM SMMUv3"
+ 	depends on ARM_SMMU_V3
+-	select IOMMU_SVA_LIB
++	select IOMMU_SVA
+ 	select MMU_NOTIFIER
+ 	help
+ 	  Support for sharing process address spaces with devices using the
+diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
+index bc7f730edbb0..44475a9b3eea 100644
+--- a/drivers/iommu/Makefile
++++ b/drivers/iommu/Makefile
+@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
+ obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
+ obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
+ obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
+-obj-$(CONFIG_IOMMU_SVA_LIB) += iommu-sva-lib.o io-pgfault.o
++obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
+ obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
+ obj-$(CONFIG_APPLE_DART) += apple-dart.o
+diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+index 247d0f2d5fdf..39a06d245f12 100644
+--- a/drivers/iommu/intel/Kconfig
++++ b/drivers/iommu/intel/Kconfig
+@@ -52,7 +52,7 @@ config INTEL_IOMMU_SVM
+ 	select PCI_PRI
+ 	select MMU_NOTIFIER
+ 	select IOASID
+-	select IOMMU_SVA_LIB
++	select IOMMU_SVA
+ 	help
+ 	  Shared Virtual Memory (SVM) provides a facility for devices
+ 	  to access DMA resources through process address space by
+diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
+index 031155010ca8..95dc3ebc1928 100644
+--- a/drivers/iommu/iommu-sva-lib.h
++++ b/drivers/iommu/iommu-sva-lib.h
+@@ -17,7 +17,7 @@ struct device;
+ struct iommu_fault;
+ struct iopf_queue;
+ 
+-#ifdef CONFIG_IOMMU_SVA_LIB
++#ifdef CONFIG_IOMMU_SVA
+ int iommu_queue_iopf(struct iommu_fault *fault, void *cookie);
+ 
+ int iopf_queue_add_device(struct iopf_queue *queue, struct device *dev);
+@@ -28,7 +28,7 @@ struct iopf_queue *iopf_queue_alloc(const char *name);
+ void iopf_queue_free(struct iopf_queue *queue);
+ int iopf_queue_discard_partial(struct iopf_queue *queue);
+ 
+-#else /* CONFIG_IOMMU_SVA_LIB */
++#else /* CONFIG_IOMMU_SVA */
+ static inline int iommu_queue_iopf(struct iommu_fault *fault, void *cookie)
+ {
+ 	return -ENODEV;
+@@ -64,5 +64,5 @@ static inline int iopf_queue_discard_partial(struct iopf_queue *queue)
+ {
+ 	return -ENODEV;
+ }
+-#endif /* CONFIG_IOMMU_SVA_LIB */
++#endif /* CONFIG_IOMMU_SVA */
+ #endif /* _IOMMU_SVA_LIB_H */
 -- 
 2.34.1
 

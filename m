@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300C4796EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C5A4796F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhLQWQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:16:05 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36080 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbhLQWQD (ORCPT
+        id S229966AbhLQWSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhLQWSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:16:03 -0500
-Date:   Fri, 17 Dec 2021 22:16:00 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639779362;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LwucGkdHW2AGD5uQLtH16eVlF+0ZkoFxd0RELR7jY/I=;
-        b=MifcnrkXm5YazgnCPBRrhPTdyg9bAS+7ugyOdEnpExMzkF8Nc1hI7KL4jCNg45btFEjIfN
-        NorCPG9F0lMAejAOBrecNV4irPZekRTHO0siDJ+H2ppRbjOWUqbDgdPC4pDYK7pjV0Bw7o
-        dQyBU0j6TmMP4ISwtFoFJYgQ7X2PZdNCVF5YADLK3Dfb2KnkiNgIb111wrovGLHzRMT3/X
-        YgNOFjNFXKoUv46eY3M+Vu+ie7aQpGqIuV7KRmWDJtMVk+ExgyFZr/UJmDk9EeLZ0t3zLj
-        UoKWdsZgXPgydQBQTatVpQqPEoj8UTXt9MDKmr6iLjGCHIv9saERP6hLBZKN3w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639779362;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LwucGkdHW2AGD5uQLtH16eVlF+0ZkoFxd0RELR7jY/I=;
-        b=hhLZ01sTJSEwovB8cwxoBtu5RKqqNpI0zyrf3G4KR8mmHuviWzOY8pQMGEP6t+C7WD3efP
-        MbOz5rjjM7yK3ZCA==
-From:   "tip-bot2 for Yu Liao" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] timekeeping: Really make sure wall_to_monotonic
- isn't positive
-Cc:     Yu Liao <liaoyu15@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211213135727.1656662-1-liaoyu15@huawei.com>
-References: <20211213135727.1656662-1-liaoyu15@huawei.com>
+        Fri, 17 Dec 2021 17:18:30 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F02C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:18:29 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x15so13252319edv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5dEiolkPpvvhLwx2+Ioc9tJdHpFervZFA65QfTIT8vY=;
+        b=UNpQI26wi57RyV1YxwSTRqGoF8pfqkrpBA7VJxkw1ZxwY2/GrWansyaJMvj0VZ+zMR
+         214ZaRKvpcMDVsjVSqCzfpGWodtPb3EbTzuTia7DZiYsm/Guy70EmsRf0kdKbipswVN4
+         hCq+6iDJno8XBTK4ljnI1AIK0LnvRqZevuKic=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5dEiolkPpvvhLwx2+Ioc9tJdHpFervZFA65QfTIT8vY=;
+        b=sdzI4BdChoGQ2PPdRdLHdXQ3oFhaDO0nd8xqL/Jj9nMvxuffrD1W4cR09P8itLZ0Hh
+         V9ga0wfesRHHrRgYz1NdH5YhNELzghAElPJ9Jk6cl3P6FRz332fcG/Dxr2IIVO4v7jBN
+         KfqF/LIWK8zkrgnOkITiAPXymgJeQ3J1mA5JgH54KwFM5weE+mAhEHfPWLQeb6sZxbw0
+         zuGWP8S5diUvdQc3pZZV8uRlNLPF9YaDDQbKtTreef0Z3cbY9VK/vO30iAfRmsJ8rbCH
+         wu348lVNNWAizNqAPdQiV1zZ1065KBBAE5Cgi3t2o3l8TwlmhChXlM+XAiUOKkUDVTTd
+         6I8Q==
+X-Gm-Message-State: AOAM53125StevTnUjAmOFcskfwOMJGF99w5c9QFypzMveOJ32HfV8NYE
+        ss+I6z1Tvw9yDnDBwpcP34drM/vSsM+a6HGieq8=
+X-Google-Smtp-Source: ABdhPJx1pGIfeiuXXmEYJE2laCaPaBSoXPrjw68p37zPZTU9dMtYT3LI1+PMW0atiexGufelJ+sw/Q==
+X-Received: by 2002:a05:6402:2756:: with SMTP id z22mr4716493edd.200.1639779507745;
+        Fri, 17 Dec 2021 14:18:27 -0800 (PST)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id nd22sm3205235ejc.91.2021.12.17.14.18.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 14:18:26 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id s1so6643371wrg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:18:26 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr4057992wrp.442.1639779505799;
+ Fri, 17 Dec 2021 14:18:25 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163977936091.23020.4635277365571231741.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
+In-Reply-To: <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 14:18:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+Message-ID: <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
+On Fri, Dec 17, 2021 at 1:47 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> For now I have not heard a compelling argument why the mapcount is
+> dubious, I repeat:
+>
+> * mapcount can only increase due to fork()
+> * mapcount can decrease due to unmap / zap
 
-Commit-ID:     4e8c11b6b3f0b6a283e898344f154641eda94266
-Gitweb:        https://git.kernel.org/tip/4e8c11b6b3f0b6a283e898344f154641eda94266
-Author:        Yu Liao <liaoyu15@huawei.com>
-AuthorDate:    Mon, 13 Dec 2021 21:57:27 +08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 17 Dec 2021 23:06:22 +01:00
+And to answer the "why is this dubious", let' sjust look at your
+actual code that I reacted to:
 
-timekeeping: Really make sure wall_to_monotonic isn't positive
++       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
++       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
++           page_mapcount(vmf->page) > 1) {
 
-Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
-isn't positive") it is still possible to make wall_to_monotonic positive
-by running the following code:
+Note how you don't just check page_mapcount(). Why not? Because
+mapcount is completely immaterial if it's not a PageAnon page, so you
+test for that.
 
-    int main(void)
-    {
-        struct timespec time;
+So even when you do the mapcount read as one atomic thing, it's one
+atomic thing that depends on _other_ things, and all these checks are
+not atomic.
 
-        clock_gettime(CLOCK_MONOTONIC, &time);
-        time.tv_nsec = 0;
-        clock_settime(CLOCK_REALTIME, &time);
-        return 0;
-    }
+But a PageAnon() page can actually become a swap-backed page, and as
+far as I can tell, your code doesn't have any locking to protect
+against that.
 
-The reason is that the second parameter of timespec64_compare(), ts_delta,
-may be unnormalized because the delta is calculated with an open coded
-substraction which causes the comparison of tv_sec to yield the wrong
-result:
+So now you need not only the mmap_sem (to protect against fork), you
+also need the page lock (to protect against rmap changing the type of
+page).
 
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
+I don't see you taking the page lock anywhere. Maybe the page table
+lock ends up serializing sufficiently with the rmap code that it ends
+up working
 
-That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
-but actually the result should be wall_to_monotonic > ts_delta.
+In the do_wp_page() path, we currently do those kinds of racy checks
+too, but then we do a trylock_page, and re-do them. And at any time
+there is any question about things, we fall back to copying - because
+a copy is always safe.
 
-After normalization, the result of timespec64_compare() is correct because
-the tv_sec comparison is not longer misleading:
+Well, it's always safe if we have the rule that "once we've pinned
+things, we don't cause them to be COW again".
 
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
+But that "it's safe if" was exactly my (b) case.
 
-Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
-issue.
+That's why I much prefer the model I'm trying to push - it's
+conceptually quite simple. I can literally explain mine at a
+conceptual level with that "break pre-existing COW, make sure no
+future COW" model.
 
-Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
----
- kernel/time/timekeeping.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+In contrast, I look at your page_mapcount() code, and I go "there is
+no conceptual rules here, and the actual implementation details look
+dodgy".
 
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index b348749..dcdcb85 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -1306,8 +1306,7 @@ int do_settimeofday64(const struct timespec64 *ts)
- 	timekeeping_forward_now(tk);
- 
- 	xt = tk_xtime(tk);
--	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
--	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
-+	ts_delta = timespec64_sub(*ts, xt);
- 
- 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
- 		ret = -EINVAL;
+I personally like having clear conceptual rules - as opposed to random
+implementation details.
+
+             Linus

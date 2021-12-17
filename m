@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D639478A42
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F0F478A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbhLQLmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbhLQLmx (ORCPT
+        id S235643AbhLQLoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:44:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50220 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233332AbhLQLoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:42:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53761C061574;
-        Fri, 17 Dec 2021 03:42:53 -0800 (PST)
-Date:   Fri, 17 Dec 2021 12:42:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639741371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3/ancgIFgkXeO3NDEPeVGpgn07wkYNrxt0m0tDBAo20=;
-        b=r9nEpz+wZp4vfF/Gu2Vs1J8cQGszY5GTzaCwHMLoUcdK3QhP58IZzWaQFpOl+Ez/g+yCDV
-        eL/PwjSebD3D9tVO0d90NcbkeO5fuNs7862UwJMTdZAWnjZ8R8qQqHzTkzkKdDp7zqiXIq
-        rLLI/ShKnpmtSAlFha/c+luhZDNoXDSsst+e4bBBauovDVvfRAqXQ1F4R6aakFAcvHt7Ow
-        EGjtvUzpTu17fPvqlkxE68I18P3FNsJRsu4ZW6Fk7eu90NOJfYi5wnKF+daB8+NXUk/Wvo
-        O/f7RsowfsQxUmnbG3+uzA/zWnxCTJcaqyg339qiPsuTRQP1+Ly3bLAMLsY/OQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639741371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3/ancgIFgkXeO3NDEPeVGpgn07wkYNrxt0m0tDBAo20=;
-        b=ExKsbpBJPazNTYPG4oRZ2RNYzMs9Rfo2Vd/yrEk6XGqBqAS5LzFrUd0qDG1XzlNZGMUfFQ
-        L/wNcK/zVkl+fJAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH-next v3] mm/memcg: Properly handle memcg_stock access for
- PREEMPT_RT
-Message-ID: <Ybx3ubNFfGpCqhn0@linutronix.de>
-References: <20211214144412.447035-1-longman@redhat.com>
+        Fri, 17 Dec 2021 06:44:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2676B82789;
+        Fri, 17 Dec 2021 11:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E106C36AE8;
+        Fri, 17 Dec 2021 11:43:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639741444;
+        bh=N4SLJbonmm8jBnFacqm9G6G41H3dlxGpaFVouOO8aLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aijgx0ZIQWQAeb7gNbL6SpclY57lW1QH0Tjj3lrF/XSwEDWHugwzvn5/s/1FKJOQZ
+         pMfarvCtO2n6TMepMbTJta2l2d2dBhZ30HsQGQnNMkZbX+M9wjvCIP45pe7ip0Jb6d
+         t1L4C3jdIyEZW4kIbK3N3eDfMSl9TMsVzWRs1icIJfjNRHDeum0xEfwgvz93MG4d6z
+         awp9XipBLcVyB2cWVHPejEh53NMcYLIPkxvC2cJ0CCKJZ+uBhrSnAe/auux+I3KTD5
+         xFRHR4vdmElgOxACGGACl9xld/yXnMVUL0Yvx2S8kxsPIfrWy8hEFEej6h92auURX4
+         Fm/jKx8mARyyg==
+Date:   Fri, 17 Dec 2021 11:43:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, atish.patra@wdc.com
+Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
+ mpfs spi
+Message-ID: <Ybx3+3QaVe2lCcQP@sirena.org.uk>
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-11-conor.dooley@microchip.com>
+ <YbxxrlmYGC3Pg8+j@sirena.org.uk>
+ <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AfGRrf1crhTWT0mA"
 Content-Disposition: inline
-In-Reply-To: <20211214144412.447035-1-longman@redhat.com>
+In-Reply-To: <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
+X-Cookie: Pause for storage relocation.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-14 09:44:12 [-0500], Waiman Long wrote:
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -2096,7 +2096,12 @@ struct obj_stock {
->  #endif
->  };
->  
-> +/*
-> + * The local_lock protects the whole memcg_stock_pcp structure including
-> + * the embedded obj_stock structures.
-> + */
->  struct memcg_stock_pcp {
-> +	local_lock_t lock;
->  	struct mem_cgroup *cached; /* this never be root cgroup */
->  	unsigned int nr_pages;
->  	struct obj_stock task_obj;
-> @@ -2145,7 +2150,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
->  	if (nr_pages > MEMCG_CHARGE_BATCH)
->  		return ret;
->  
-> -	local_irq_save(flags);
-> +	local_lock_irqsave(&memcg_stock.lock, flags);
 
-This still does not explain why the lock is acquired here where it
-appears to be unrelated to memcg_stock.lock.
+--AfGRrf1crhTWT0mA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  
->  	stock = this_cpu_ptr(&memcg_stock);
->  	if (memcg == stock->cached && stock->nr_pages >= nr_pages) {
-> @@ -2779,29 +2784,34 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
->   * which is cheap in non-preempt kernel. The interrupt context object stock
->   * can only be accessed after disabling interrupt. User context code can
->   * access interrupt object stock, but not vice versa.
-> + *
-> + * This task and interrupt context optimization is disabled for PREEMPT_RT
-> + * as there is no performance gain in this case and changes will be made to
-> + * irq_obj only.
-> + *
-> + * For non-PREEMPT_RT, we are not replacing preempt_disable() by local_lock()
-> + * as nesting of task_obj and irq_obj are allowed which may cause lockdep
-> + * splat if local_lock() is used. Using separate local locks will complicate
-> + * the interaction between obj_stock and the broader memcg_stock object.
->   */
->  static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
->  {
-> -	struct memcg_stock_pcp *stock;
-> -
-> -	if (likely(in_task())) {
-> +	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
->  		*pflags = 0UL;
->  		preempt_disable();
-> -		stock = this_cpu_ptr(&memcg_stock);
-> -		return &stock->task_obj;
-> +		return this_cpu_ptr(&memcg_stock.task_obj);
+On Fri, Dec 17, 2021 at 11:40:29AM +0000, Conor.Dooley@microchip.com wrote:
+> On 17/12/2021 11:17, Mark Brown wrote:
 
-Do we need to keep the memcg_stock.task_obj for !RT?
-I'm not really convinced that disabling either preemption or interrupts
-is so much better compared to actual locking locking with lockdep
-annotation. Looking at the history, I'm also impressed by that fact that
-disabling/ enabling interrupts is *so* expensive that all this is
-actually worth it.
+>  > Why do you need this property in the DT - isn't the number of chip
+>  > selects in the IP a fixes property?
 
->  	}
->  
-> -	local_irq_save(*pflags);
-> -	stock = this_cpu_ptr(&memcg_stock);
-> -	return &stock->irq_obj;
-> +	local_lock_irqsave(&memcg_stock.lock, *pflags);
-> +	return this_cpu_ptr(&memcg_stock.irq_obj);
->  }
->  
+> Nope! It's an IP that's intended for use in FPGAs so the number of=20
+> selects may (and does) vary based on implementation.
 
-Sebastian
+That doesn't explain why the number is needed in the binding - why do
+you need this property in the DT?
+
+--AfGRrf1crhTWT0mA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG8d/oACgkQJNaLcl1U
+h9BGLgf/SiqoIpPFvZymGI+lV8cyTUm+CuIWdAYRxHOotUpqpCdFDWSt6ungnucf
+L+CKgnigBiPYJ3jZs9yRuC1kaIDnha4hNFuGs8nlVgdVOd5k+PhGI3B6Vtz9sjv7
+UKnkHSHk7yEcMB1CKjrgWDs5d7dcaA9vwNNrQNLd0TaqtSPR8VPUuW4uM1/gPVbt
+g8MxN6GRUTiGKG8GIAVFXNQ1NFuGXti9FrbYZHelZQM811Gjua3bqRY6RfPGoaSu
+2AudboDMa+HNohXPvKaRolBubzwtXw2zX3GABTZSHaG9/X/3C9LeJFR53x1Avmib
+ak8CKqa7Sou8MLRP9OiktJGz1dPYTA==
+=9ef7
+-----END PGP SIGNATURE-----
+
+--AfGRrf1crhTWT0mA--

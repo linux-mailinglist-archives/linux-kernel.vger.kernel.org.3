@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98DF47889E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821604788A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234760AbhLQKUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:20:02 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4302 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhLQKUC (ORCPT
+        id S234808AbhLQKVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234763AbhLQKVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:20:02 -0500
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JFlKh4mnQz6896L;
-        Fri, 17 Dec 2021 18:17:44 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 17 Dec 2021 11:19:59 +0100
-Received: from [10.47.26.158] (10.47.26.158) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 17 Dec
- 2021 10:19:58 +0000
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "acme@kernel.org" <acme@kernel.org>
-CC:     Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com>
- <20211214184240.24215-2-andrew.kilroy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <48437bee-9c39-38ba-e990-ba9a6a5378b4@huawei.com>
-Date:   Fri, 17 Dec 2021 10:19:31 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 17 Dec 2021 05:21:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D033C061574;
+        Fri, 17 Dec 2021 02:21:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45A62B82786;
+        Fri, 17 Dec 2021 10:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DDC36AE5;
+        Fri, 17 Dec 2021 10:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639736461;
+        bh=2teeFR2yBHydQbTTji8WNKKuU3muuq8kxiUQqfKibPM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oolcDwbf+5N65JdL6ltHflrYCGqF51rUsLvpmjIbbh6ofeOg9LLVWnV9q5RGkilLK
+         f8eM/bU9iaF1TaQsvxG8lvqq7g9p/W7AMwBc2jNre3c+trIlIHRMSKDsRmCR0S7aiS
+         sKaWpwBJbk+O11rz57Ntjyz5L6BTR3Jmffr0Y20s=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.167
+Date:   Fri, 17 Dec 2021 11:20:57 +0100
+Message-Id: <16397364573237@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211214184240.24215-2-andrew.kilroy@arm.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.26.158]
-X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 18:42, Andrew Kilroy wrote:
-> This patch implements the --topdown option by making use of metrics to
-> dictate what counters are obtained in order to show the various topdown
-> columns, e.g.  Frontend Bound, Backend Bound, Retiring and Bad
-> Speculation.
-> 
-> The MetricGroup name is used to identify which set of metrics are to be
-> shown.  For the moment use TopDownL1 and enable for arm64
-> 
-> Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
+I'm announcing the release of the 5.4.167 kernel.
 
-This works in that it gives results, but does not supply the same output 
-format as for x86 nor has same restrictions in usage (-a commandline 
-required, for example, below).
+All users of the 5.4 kernel series must upgrade.
 
-For my x86 broadwell:
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown  sleep 1
-top down event configuration requires system-wide mode (-a)
+thanks,
 
-john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown -a sleep 1
-Performance counter stats for 'system wide':
+greg k-h
 
-                                    retiring      bad speculation 
-frontend bound        backend bound
-S0-D0-C0           2                29.2%                 6.3% 
-      37.4%                27.1%
-S0-D0-C1           2                20.4%                 6.2% 
-      42.1%                31.3%
+------------
 
-       0.998007338 seconds time elapsed
+ Makefile                                              |    2 
+ arch/arm/mm/init.c                                    |   37 ++--
+ arch/arm/mm/ioremap.c                                 |    4 
+ arch/x86/kvm/hyperv.c                                 |    7 
+ drivers/char/agp/parisc-agp.c                         |    6 
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crc.c |    8 
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c     |    4 
+ drivers/gpu/drm/msm/dsi/dsi_host.c                    |    2 
+ drivers/hwmon/dell-smm-hwmon.c                        |    7 
+ drivers/i2c/busses/i2c-rk3x.c                         |    4 
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c       |    6 
+ kernel/bpf/devmap.c                                   |    4 
+ kernel/trace/tracing_map.c                            |    3 
+ mm/memblock.c                                         |    3 
+ net/core/sock_map.c                                   |    2 
+ net/netlink/af_netlink.c                              |    5 
+ net/nfc/netlink.c                                     |    6 
+ security/selinux/ss/services.c                        |  159 +++++++++---------
+ 18 files changed, 165 insertions(+), 104 deletions(-)
 
-john@localhost:~/linux/tools/perf>
+Armin Wolf (1):
+      hwmon: (dell-smm) Fix warning on /proc/i8k creation error
 
----
+Bui Quang Minh (1):
+      bpf: Fix integer overflow in argument calculation for bpf_map_area_alloc
 
-Then my arm64 hip08 platform:
+Chen Jun (1):
+      tracing: Fix a kmemleak false positive in tracing_map
 
-john@debian:~/kernel-dev/tools/perf$ sudo ./perf stat  --topdown sleep 1
+Erik Ekman (1):
+      net/mlx4_en: Update reported link modes for 1/10G
 
-  Performance counter stats for 'sleep 1':
+Greg Kroah-Hartman (1):
+      Linux 5.4.167
 
-             retiring      bad_speculation        backend_bound 
-frontend_bound
-                 0.19                 0.17                 0.27 
-        0.37
+Harshit Mogalapalli (1):
+      net: netlink: af_netlink: Prevent empty skb by adding a check on len.
 
-        1.000832714 seconds time elapsed
+Helge Deller (1):
+      parisc/agp: Annotate parisc agp init functions with __init
 
-        0.000891000 seconds user
-        0.000000000 seconds sys
+Mike Rapoport (5):
+      memblock: free_unused_memmap: use pageblock units instead of MAX_ORDER
+      memblock: align freed memory map on pageblock boundaries with SPARSEMEM
+      memblock: ensure there is no overflow in memblock_overlaps_region()
+      arm: extend pfn_valid to take into account freed memory map alignment
+      arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
 
-And there is no colouring for results which are above/below standard 
-thresholds (see stat-shadow.c:get_radio_color()).
+Mustapha Ghaddar (1):
+      drm/amd/display: Fix for the no Audio bug with Tiled Displays
 
-My impression is that we're not plugging the results from 
-metricgroup__parse_groups_to_evlist() into the --topdown print 
-functionality properly.
+Ondrej Jirman (1):
+      i2c: rk3x: Handle a spurious start completion interrupt flag
 
-Thanks,
-John
+Ondrej Mosnacek (1):
+      selinux: fix race condition when computing ocontext SIDs
+
+Perry Yuan (1):
+      drm/amd/display: add connector type check for CRC source set
+
+Philip Chen (1):
+      drm/msm/dsi: set default num_data_lanes
+
+Sean Christopherson (1):
+      KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
+
+Tadeusz Struk (1):
+      nfc: fix segfault in nfc_genl_dump_devices_done
+

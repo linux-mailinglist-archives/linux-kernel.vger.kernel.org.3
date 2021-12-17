@@ -2,132 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 763A24792B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064B04792B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239798AbhLQRTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:19:41 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:36472 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239802AbhLQRTa (ORCPT
+        id S239830AbhLQRTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239802AbhLQRTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:19:30 -0500
-Received: by mail-ot1-f42.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so3732980otl.3;
-        Fri, 17 Dec 2021 09:19:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Zx+iGaRJx7HOeobGJtBFJYWR+l1UjgQTuzqvPExFxA=;
-        b=OBKyvldax38jIlnpPKhTu9pbhs2ZETjR7ogsPt3bO3Ymd46sSl57RxVPjCgmT1mEKX
-         UNUOxcwoR9PU2lRjIAK6AveJ+Bi+xipAk03oCKATotrUZRVqTcQUz9PQdYhbxJ6bf9QB
-         qj1SRf6RXsL60ShJXqgXDPWsDM68mF8NJdVItTw7wApSRFnntebdVnAiHHgJdP4cN18k
-         ihVHiIlB2ntJ8wpPWZZXFhJCrjaWz1pTGP59aVbJkOA0YEpSq1Nb0sK0TdAM1xJj+ksV
-         CqjhxdVnN7PAFB/MEon1I83NUkWkNLoYzxM0i79GP0ygm0uIijztHk73/57kgnurlJr9
-         3U9w==
-X-Gm-Message-State: AOAM5328tmSprvYRfpn48pOrg6ranNKvtWyz+WDx9TOTHXqYaQGTzs9s
-        dbnUo5ic3im3fTL8jHhyKbRDrE12u37i4G+1jS8=
-X-Google-Smtp-Source: ABdhPJztoPqn/1Su9cfXcuaCyeozUoTqwJGGdS30ToTcoGqzV+VCNtcC4Lcb+2ReZtjWo+NLFWB5n59F2HXnfpyLmtU=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr2958544otu.254.1639761569499;
- Fri, 17 Dec 2021 09:19:29 -0800 (PST)
+        Fri, 17 Dec 2021 12:19:41 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FCAC061574;
+        Fri, 17 Dec 2021 09:19:41 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1myGtO-0002Mw-9f; Fri, 17 Dec 2021 18:19:38 +0100
+Message-ID: <2f27c760-7679-c8d6-15f0-da1423ee9eb8@leemhuis.info>
+Date:   Fri, 17 Dec 2021 18:19:37 +0100
 MIME-Version: 1.0
-References: <20211217115708.882525-1-tanureal@opensource.cirrus.com> <20211217115708.882525-9-tanureal@opensource.cirrus.com>
-In-Reply-To: <20211217115708.882525-9-tanureal@opensource.cirrus.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 18:19:18 +0100
-Message-ID: <CAJZ5v0jTELqFeO6q6w_mYNo_yf1R9SX66RrEz0ZSe27w7E6kog@mail.gmail.com>
-Subject: Re: [PATCH v6 08/10] ACPI / scan: Create platform device for CLSA0100
- and CSC3551 ACPI nodes
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [Bug Report] Desktop monitor sleep regression
+Content-Language: en-BS
+To:     Imre Deak <imre.deak@intel.com>
+Cc:     Brandon Nielsen <nielsenb@jetfuse.net>,
+        linux-fbdev@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        amd-gfx@lists.freedesktop.org, pjones@redhat.com,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        David Airlie <airlied@linux.ie>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net>
+ <962fe0af-a080-fc0d-15f3-203166ff4584@leemhuis.info>
+ <dca67eb4-d007-2fa0-e0c2-b21d124967f1@leemhuis.info>
+ <20211217145202.GB1572087@ideak-desk.fi.intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20211217145202.GB1572087@ideak-desk.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639761581;456d6697;
+X-HE-SMSGID: 1myGtO-0002Mw-9f
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:57 PM Lucas Tanure
-<tanureal@opensource.cirrus.com> wrote:
->
-> The ACPI device with CLSA0100 or CSC3551 is a sound card
-> with multiple instances of CS35L41 connectec by I2C to
 
-"connected" I suppose?
 
-> the main CPU.
->
-> We add an ID to the i2c_multi_instantiate_ids list to enumerate
-> all I2C slaves correctly.
->
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+On 17.12.21 15:52, Imre Deak wrote:
+> On Fri, Dec 17, 2021 at 03:46:21PM +0100, Thorsten Leemhuis wrote:
+>> added some CCs Geert added in his reply
+>>
+>> On 07.12.21 08:20, Thorsten Leemhuis wrote:
+>>>
+>>> [TLDR: adding this regression to regzbot; most of this mail is compiled
+>>> from a few templates paragraphs some of you might have seen already.]
+>>>
+>>> Hi, this is your Linux kernel regression tracker speaking.
+>>
+>> /me again
+>>
+>> What's up here? We are getting close to rc6, but there afaics wasn't any
+>> reply of substance since the report ten days ago. Hence:
+>>
+>> Could anybody please comment on this? Imre Deak, the commit Brandon
+>> found in the bisection contains a patch of yours, do you maybe have an
+>> idea what's up here?
+> 
+> Yes,
+> https://bugzilla.kernel.org/show_bug.cgi?id=215203
+> 
+> based on which the problem is somehere in the AMD driver.
 
-This requires an ACK from Hans.
+Ha, sorry for the noise then, I really feel stupid: I have no idea why I
+didn't check the bug report for an update, as I do normally do. Much
+have slipped through. Ohh well, hopefully we one day have have a central
+place to handle these things.
 
-If you receive one, please feel free to add my ACK to it too.
+Ciao, Thorsten
 
-Thanks!
-
-> ---
->  drivers/acpi/scan.c                          |  3 +++
->  drivers/platform/x86/i2c-multi-instantiate.c | 11 +++++++++++
->  2 files changed, 14 insertions(+)
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index b7a6b982226e..8740cfa11f59 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -1712,8 +1712,11 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
->         static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
->                 {"BSG1160", },
->                 {"BSG2150", },
-> +               {"CSC3551", },
->                 {"INT33FE", },
->                 {"INT3515", },
-> +               /* Non-conforming _HID for Cirrus Logic already released */
-> +               {"CLSA0100", },
->                 {}
->         };
->
-> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/platform/x86/i2c-multi-instantiate.c
-> index 4956a1df5b90..a889789b966c 100644
-> --- a/drivers/platform/x86/i2c-multi-instantiate.c
-> +++ b/drivers/platform/x86/i2c-multi-instantiate.c
-> @@ -147,6 +147,14 @@ static const struct i2c_inst_data int3515_data[]  = {
->         {}
->  };
->
-> +static const struct i2c_inst_data cs35l41_hda[] = {
-> +       { "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
-> +       { "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
-> +       { "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
-> +       { "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
-> +       {}
-> +};
-> +
->  /*
->   * Note new device-ids must also be added to i2c_multi_instantiate_ids in
->   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
-> @@ -154,7 +162,10 @@ static const struct i2c_inst_data int3515_data[]  = {
->  static const struct acpi_device_id i2c_multi_inst_acpi_ids[] = {
->         { "BSG1160", (unsigned long)bsg1160_data },
->         { "BSG2150", (unsigned long)bsg2150_data },
-> +       { "CSC3551", (unsigned long)cs35l41_hda },
->         { "INT3515", (unsigned long)int3515_data },
-> +       /* Non-conforming _HID for Cirrus Logic already released */
-> +       { "CLSA0100", (unsigned long)cs35l41_hda },
->         { }
->  };
->  MODULE_DEVICE_TABLE(acpi, i2c_multi_inst_acpi_ids);
-> --
-> 2.34.1
->
+>> Ciao, Thorsten
+>>
+>> #regzbot poke
+>>
+>>> Adding the regression mailing list to the list of recipients, as it
+>>> should be in the loop for all regressions, as explained here:
+>>> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+>>>
+>>> Also adding the authors and reviewers of the culprit and two appropriate
+>>> mailing lists.
+>>>
+>>> On 07.12.21 01:21, Brandon Nielsen wrote:
+>>>> Monitors no longer sleep properly on my system (dual monitor connected
+>>>> via DP->DVI, amdgpu, x86_64). The monitors slept properly on 5.14, but
+>>>> stopped during the 5.15 series. I have also filed this bug on the kernel
+>>>> bugzilla[0] and downstream[1].
+>>>>
+>>>> I have performed a bisect, first "bad" commit to master is
+>>>> 55285e21f04517939480966164a33898c34b2af2[1], the same change made it
+>>>> into the 5.15 branch as e3b39825ed0813f787cb3ebdc5ecaa5131623647.
+>>>
+>>> TWIMC: That was for 5.15.3
+>>>
+>>>> I have
+>>>> verified the issue exists in latest master
+>>>> (a51e3ac43ddbad891c2b1a4f3aa52371d6939570).
+>>>>
+>>>> Steps to reproduce:
+>>>>
+>>>>   1. Boot system (Fedora Workstation 35 in this case)
+>>>>   2. Log in
+>>>>   3. Lock screen (after a few seconds, monitors will enter power save
+>>>> "sleep" state with backlight off)
+>>>>   4. Wait (usually no more than 30 seconds, sometimes up to a few minutes)
+>>>>   5. Observe monitor leaving "sleep" state (backlight comes back on),
+>>>> but nothing is displayed
+>>>>
+>>>> [0] - https://bugzilla.kernel.org/show_bug.cgi?id=215203
+>>>> [1] - https://bugzilla.redhat.com/show_bug.cgi?id=2028613
+>>>
+>>> To be sure this issue doesn't fall through the cracks unnoticed, I'm
+>>> adding it to regzbot, my Linux kernel regression tracking bot:
+>>>
+>>> #regzbot ^introduced 55285e21f04517939480966164a33898c34b2af2
+>>> #regzbot title fbdev/efifb: Monitors no longer sleep (amdgpu dual
+>>> monitor setup)
+>>> #regzbot ignore-activity
+>>>
+>>> Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+>>> to the report (the parent of this mail), then regzbot will automatically
+>>> mark the regression as resolved once the fix lands in the appropriate
+>>> tree. For more details about regzbot see footer.
+>>>
+>>> Sending this to everyone that got the initial report, to make all aware
+>>> of the tracking. I also hope that messages like this motivate people to
+>>> directly get at least the regression mailing list and ideally even
+>>> regzbot involved when dealing with regressions, as messages like this
+>>> wouldn't be needed then.
+>>>
+>>> Don't worry, I'll send further messages wrt to this regression just to
+>>> the lists (with a tag in the subject so people can filter them away), as
+>>> long as they are intended just for regzbot. With a bit of luck no such
+>>> messages will be needed anyway.
+>>>
+>>> Ciao, Thorsten, your Linux kernel regression tracker.
+>>>
+>>> P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+>>> on my table. I can only look briefly into most of them. Unfortunately
+>>> therefore I sometimes will get things wrong or miss something important.
+>>> I hope that's not the case here; if you think it is, don't hesitate to
+>>> tell me about it in a public reply. That's in everyone's interest, as
+>>> what I wrote above might be misleading to everyone reading this; any
+>>> suggestion I gave they thus might sent someone reading this down the
+>>> wrong rabbit hole, which none of us wants.
+>>>
+>>> BTW, I have no personal interest in this issue, which is tracked using
+>>> regzbot, my Linux kernel regression tracking bot
+>>> (https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+>>> this mail to get things rolling again and hence don't need to be CC on
+>>> all further activities wrt to this regression.
+>>>
+> 

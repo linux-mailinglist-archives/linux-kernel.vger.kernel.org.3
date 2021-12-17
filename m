@@ -2,163 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B6047884E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C4F478852
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbhLQJ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:58:59 -0500
-Received: from mail-bn8nam12on2058.outbound.protection.outlook.com ([40.107.237.58]:55520
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231983AbhLQJ66 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:58:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e5JHKqQFPgxQKOdVAi2tWdqKLtK0Ia216XkBohaMdlcZeqKm5YZRu+7Y9oEfHxNlK1WtkgbCaNxB7KIpNVw/9DIelv1XywUWLZP7BjDXCNZUAOY9z8C0t0QDfbZyz18j+dt1MnP3Hbm5Av2c6AcoZkGR9jHtQp8rd3K+Iyn+PaE4P6zpAcpQPAM31Ougu/llFMyGgGCWA/Frzko8VJ7VQ4Y5oBw5AqKlKplQgy0S6OueXJMUvvpmUwxJ+pmSpFLZak94vC2Ok3B5+rITGHysC33CIIpmrFzQjyhdjgQ9p3PaoXq1mr4O1CIm5WqaCIVp6NUfakvOsQPk/okXdzpFzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d3Kyl6QH3KgJIIQZ5kzA+/5EaRPv33f3bLVIGMxhEic=;
- b=T9jUO0jwka6KbSHnjOC1wRsgJD5vGwUNsKviEfKVMU0rions/OrsLGWmhrNiJi9RLJ5ukrljiqmNYANcd2UWL2md5gbcEIN4gjBDbiRhoycGMg+Bq288oHvpuEpiKR62lKDwx1yaFQyAB7+VyB3YeNFczfSqY7jhyLxP8OpVWY6E5ohbJYs+48Tz/xbIqqGuwRELNSLPZHQrT+50To8I+DBJ/IFqMkfWg9p3VWscbVxFEBRVuZrjhf5sphl46AKRm0RWlcvZFapSSOG9JINepebHTcv5oExP2d49ibsJdsf404G3IHBvBLeKeV2qS7Bk2nfN6jRvoAJ+dPQnwkfzqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d3Kyl6QH3KgJIIQZ5kzA+/5EaRPv33f3bLVIGMxhEic=;
- b=C230Peh2oiRQN39EixDDEFN1kQ3jlJbOJZX8vR1sSPdlAqTiPQL0ayrC9Ho++s8TX8qBo400pOl9IY56AkAfSyDmzB5wpkSx4ihyGy5uvNyIj7ur5JZ0P1cYwcrtT2HhMZDfkm3WlpnePXc24Un0JNiuFLSPoFLovyMRn1FKc9E=
-Received: from DM5PR05CA0012.namprd05.prod.outlook.com (2603:10b6:3:d4::22) by
- MN2PR12MB4784.namprd12.prod.outlook.com (2603:10b6:208:39::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.18; Fri, 17 Dec 2021 09:58:54 +0000
-Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:d4:cafe::79) by DM5PR05CA0012.outlook.office365.com
- (2603:10b6:3:d4::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.10 via Frontend
- Transport; Fri, 17 Dec 2021 09:58:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Fri, 17 Dec 2021 09:58:54 +0000
-Received: from sanjuamdntb2.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 17 Dec
- 2021 03:58:50 -0600
-From:   Sanjay R Mehta <Sanju.Mehta@amd.com>
-To:     <vkoul@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <dan.j.williams@intel.com>,
-        <Thomas.Lendacky@amd.com>, <robh@kernel.org>,
-        <mchehab+samsung@kernel.org>, <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        Sanjay R Mehta <sanju.mehta@amd.com>
-Subject: [PATCH] dmaengine: ptdma: fix concurrency issue with multiple dma transfer
-Date:   Fri, 17 Dec 2021 03:58:38 -0600
-Message-ID: <1639735118-9798-1-git-send-email-Sanju.Mehta@amd.com>
-X-Mailer: git-send-email 2.7.4
+        id S234549AbhLQKD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:03:26 -0500
+Received: from mga02.intel.com ([134.134.136.20]:31526 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231968AbhLQKDZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 05:03:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639735405; x=1671271405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=difKERNCUGT+yNj8Ji0RjwMEgrFy7uvw5aDaT8WIo6c=;
+  b=PVM1cPAHDHSDT8QzmYdiQDcHGnsqkt+M45g1nHYpZ2/H3Hl7LA1bLvzJ
+   G6B2DjEhqjpA9IKafQf482yKA0gPOpE1LF24bOYzCgsHLx29dBn5p17v/
+   HBEeH45aaJpT+VM7itnGRJ5tUgJ8NSqSstgzjUrNH+e8JMWFb1zlbeAvb
+   Zcmb/izIp9J57RiFTziXxtqA/KQNmcnY2Mhg1CxBd0QREH4dtK/D7FtGE
+   aC3dWKYn5lyZVvtiTOLB+OFl349Fe8FEx4imLtkuBnBm/D6EU/mxKUfyC
+   EfLhgPRFD9GI0yI3ThAEBZPLw5nA9InhUm19PuCM6JeDQ2N7JwveHjNV8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="227010841"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="227010841"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:03:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="615512643"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 17 Dec 2021 02:03:09 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myA4y-0004Yr-EB; Fri, 17 Dec 2021 10:03:08 +0000
+Date:   Fri, 17 Dec 2021 18:03:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/18] MM: create new mm/swap.h header file.
+Message-ID: <202112171739.uSeLyZ1M-lkp@intel.com>
+References: <163969850279.20885.7172996032577523902.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 696ce793-fe2d-4e6c-8b82-08d9c143d5ac
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4784:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB478454109150774880BF3010E5789@MN2PR12MB4784.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Iq1Hea1q1JU3UhkXtzO+KsJl/o/CmQF69vJL61P+mXN1gI32uHH2OZPN6rBKoxo08cbPgzXnrsb58/q4SK23PKGPK/fxmOH2DUKEGXp3D7+PgayBtkBBuA/vn21lsTC0EuzMwRbhzdpTVJ7aikZMVg3G58496Z9raAkLAi9qn3PauvbXwB2qGcTYrcRJrA2sFq+yEwQOVE8aKHIIZB5ldUcRGoyaY1orcW15nsnaAMZyHIpqFvVkkR6VFaIwrLXe0j/ceLDlZemlVBk9prbXD7DkjuFTVD1poTKDUBcQHa5NqPWmdm+0PIX0zwIRitnJKj1qVQYo5xI3/+jSLdVeJiH/I5GAMK9jNTGDmGDqJhNZuNXfI1+DVwCqReFebgqbFWC4LO3f9DB0sMmbcXR00xuVeO50CwZfLhxCDV1vqW25gPQ6qIRTlLMyLDA+3X52SpOCg0+q8W0JHCcH53zcs+XeqkP15stHGpzTP6gNgNeS+I3bSxyE/Tt3hOc0CyVwpRkD1KZzRcLLo33Lmcr4gyOyynLefskn67rzKYyLiXfcmKVRYKJS0UnzY5dYCnIcCPcndwAgmRqpsQi+JLbbzSEx51ptYmunIW1K01OaO2R6ALSbwvV3W5eyuFxLPAFmVaK5fVYTD+/5EH2skL0jPe9L/Eh83zFbzczk1fHOgstSrxC3sGIOzBBCgfa6Eew+YcSpyLAF8/eTkXXspnSNtBq2Ypq0DLNq4bW/6syGtM1PoFnMvrLJCYyTkeql1UVaKC6H4/zzszE8VDQY814zh8hZ9SujnMAziDjgwGBv8aM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(26005)(36756003)(4326008)(2616005)(316002)(83380400001)(70586007)(5660300002)(81166007)(426003)(356005)(8676002)(336012)(8936002)(54906003)(16526019)(86362001)(70206006)(6916009)(508600001)(186003)(47076005)(82310400004)(36860700001)(2906002)(6666004)(40460700001)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 09:58:54.0679
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 696ce793-fe2d-4e6c-8b82-08d9c143d5ac
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4784
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163969850279.20885.7172996032577523902.stgit@noble.brown>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sanjay R Mehta <sanju.mehta@amd.com>
+Hi NeilBrown,
 
-The command should be submitted only if the engine is idle,
-for this, the next available descriptor is checked and set the flag
-to false in case the descriptor is non-empty.
+Thank you for the patch! Yet something to improve:
 
-Also need to segregate the cases when DMA is complete or not.
-In case if DMA is already complete there is no need to handle it
-again and gracefully exit from the function.
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on axboe-block/for-next rostedt-trace/for-next linus/master v5.16-rc5]
+[cannot apply to trondmy-nfs/linux-next hnaz-mm/master next-20211216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: hexagon-randconfig-r045-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171739.uSeLyZ1M-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/3dd9e64650d0340fd6469ba4f8abc183bb2eea15
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+        git checkout 3dd9e64650d0340fd6469ba4f8abc183bb2eea15
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> mm/memcontrol.c:5532:9: error: implicit declaration of function 'find_get_incore_page' [-Werror,-Wimplicit-function-declaration]
+           return find_get_incore_page(vma->vm_file->f_mapping,
+                  ^
+>> mm/memcontrol.c:5532:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct page *' [-Wint-conversion]
+           return find_get_incore_page(vma->vm_file->f_mapping,
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +/find_get_incore_page +5532 mm/memcontrol.c
+
+90254a65833b67 Daisuke Nishimura       2010-05-26  5521  
+87946a72283be3 Daisuke Nishimura       2010-05-26  5522  static struct page *mc_handle_file_pte(struct vm_area_struct *vma,
+48384b0b76f366 Peter Xu                2021-11-05  5523  			unsigned long addr, pte_t ptent)
+87946a72283be3 Daisuke Nishimura       2010-05-26  5524  {
+87946a72283be3 Daisuke Nishimura       2010-05-26  5525  	if (!vma->vm_file) /* anonymous vma */
+87946a72283be3 Daisuke Nishimura       2010-05-26  5526  		return NULL;
+1dfab5abcdd404 Johannes Weiner         2015-02-11  5527  	if (!(mc.flags & MOVE_FILE))
+87946a72283be3 Daisuke Nishimura       2010-05-26  5528  		return NULL;
+87946a72283be3 Daisuke Nishimura       2010-05-26  5529  
+87946a72283be3 Daisuke Nishimura       2010-05-26  5530  	/* page is moved even if it's not RSS of this task(page-faulted). */
+aa3b189551ad8e Hugh Dickins            2011-08-03  5531  	/* shmem/tmpfs may report page out on swap: account for that too. */
+f5df8635c5a3c9 Matthew Wilcox (Oracle  2020-10-13 @5532) 	return find_get_incore_page(vma->vm_file->f_mapping,
+f5df8635c5a3c9 Matthew Wilcox (Oracle  2020-10-13  5533) 			linear_page_index(vma, addr));
+87946a72283be3 Daisuke Nishimura       2010-05-26  5534  }
+87946a72283be3 Daisuke Nishimura       2010-05-26  5535  
+
 ---
- drivers/dma/ptdma/ptdma-dmaengine.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
-index c9e52f6..91b93e8 100644
---- a/drivers/dma/ptdma/ptdma-dmaengine.c
-+++ b/drivers/dma/ptdma/ptdma-dmaengine.c
-@@ -100,12 +100,17 @@ static struct pt_dma_desc *pt_handle_active_desc(struct pt_dma_chan *chan,
- 		spin_lock_irqsave(&chan->vc.lock, flags);
- 
- 		if (desc) {
--			if (desc->status != DMA_ERROR)
--				desc->status = DMA_COMPLETE;
--
--			dma_cookie_complete(tx_desc);
--			dma_descriptor_unmap(tx_desc);
--			list_del(&desc->vd.node);
-+			if (desc->status != DMA_COMPLETE) {
-+				if (desc->status != DMA_ERROR)
-+					desc->status = DMA_COMPLETE;
-+
-+				dma_cookie_complete(tx_desc);
-+				dma_descriptor_unmap(tx_desc);
-+				list_del(&desc->vd.node);
-+			} else {
-+				/* Don't handle it twice */
-+				tx_desc = NULL;
-+			}
- 		}
- 
- 		desc = pt_next_dma_desc(chan);
-@@ -233,9 +238,14 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
- 	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
- 	struct pt_dma_desc *desc;
- 	unsigned long flags;
-+	bool engine_is_idle = true;
- 
- 	spin_lock_irqsave(&chan->vc.lock, flags);
- 
-+	desc = pt_next_dma_desc(chan);
-+	if (desc)
-+		engine_is_idle = false;
-+
- 	vchan_issue_pending(&chan->vc);
- 
- 	desc = pt_next_dma_desc(chan);
-@@ -243,7 +253,7 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
- 	spin_unlock_irqrestore(&chan->vc.lock, flags);
- 
- 	/* If there was nothing active, start processing */
--	if (desc)
-+	if (engine_is_idle)
- 		pt_cmd_callback(desc, 0);
- }
- 
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

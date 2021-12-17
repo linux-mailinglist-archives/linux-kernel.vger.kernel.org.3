@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6954796B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 379534796C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbhLQV7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:59:01 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:52241 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbhLQV7A (ORCPT
+        id S230481AbhLQWBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhLQWBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:59:00 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id yLFamDpNSUGqlyLFamEgAB; Fri, 17 Dec 2021 22:58:59 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 17 Dec 2021 22:58:59 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
-        will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] iommu/vt-d: Use bitmap_zalloc() when applicable
-Date:   Fri, 17 Dec 2021 22:58:49 +0100
-Message-Id: <367914663187b8fe043e31b352cd6ad836088f0a.1639778255.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        Fri, 17 Dec 2021 17:01:36 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A246C061574;
+        Fri, 17 Dec 2021 14:01:36 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id 107so6852212uaj.10;
+        Fri, 17 Dec 2021 14:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uoEwO82N8JEJoXnSUG+GSVerpCTUhZOMlIkAkpcH0vQ=;
+        b=Xo5yARbZhf+HJHyZ9+lD5Ng7hKxiuYlix90Nptjkg4t9MI+hDvUf1acjGabAWwR1Hh
+         vpVxZqovEKlGWkRm1uXZex7OnD/6rEMYUsTnfGHj7G9fqIFjSy4pjjuABQLfAnX1R3ng
+         mwDwLcRByce69MErW0yO8jAcvcTe9nj/c5CF//Jw/OdI0T2DJbvxnelSgZthDns9Q/uU
+         wjqCpGrRKaTOIWG4yTVGJ8IEV773cnNnkLt+6Siohn0AbLESe90gJZyL+JcBOnE1aMD0
+         fhFbX/9apLmNNQTDLXN2c/OXJ4oGhiEw5J9SDYvc8k+yXte5aAWl43kCb9Szl6mw0LiK
+         J7KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uoEwO82N8JEJoXnSUG+GSVerpCTUhZOMlIkAkpcH0vQ=;
+        b=GHy293IB30kELNHhbbqX09C1uDW1OHy9fl/0itNDZalnhlIxSvPLP/wGRUpso2Gsg8
+         92mQeizkl8H6s0HCPZxJmiCCOIGUxHq/C7VBlUZtq6oi4t7OyvVRcY/XqymQJQcmLnV0
+         sHe+jXVGC0w/XiYduJLIOlhZlIaDzhkGEWXivJN5x3UNxnNabEIx9KQqyjfUG4FrUL4Y
+         s1W9rDcGKXWcB5F3P568ul0K0ls0zfxsCRNw8jJkgiy9lf4IFmvZ4dK55HjdeEV6sTzW
+         /deq2XLzbDQuV5C0wMMFgstU2eqWstl6lTDe2zbZxRwl68dcRVkY0DOPPp3MY24Ljn7N
+         AvtQ==
+X-Gm-Message-State: AOAM531rrK0fQ4+9+IoryIgLIXOqWtTJm7IWvZCbDDjFknx50i4EwX84
+        1eLizlxjggjvjgTJWpNbUiiTBPZSrtFK+OOjFKU=
+X-Google-Smtp-Source: ABdhPJyOQlZt+douINckO8KsRS1LBU/hwg7J4MMY8sqbCzTxE/Bdgg6fVJIB4GfB50fc8S0OBdUnDebj2Wgrk+LU4vQ=
+X-Received: by 2002:a05:6102:316c:: with SMTP id l12mr2040300vsm.1.1639778495180;
+ Fri, 17 Dec 2021 14:01:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211217021610.12801-1-yajun.deng@linux.dev> <YbyTuRWkB0gYbn7x@linutronix.de>
+ <CAPhsuW7GhYyfNOQg3VovU7cqC0nnRTbm1B7bFkWWa75k8YgHew@mail.gmail.com>
+In-Reply-To: <CAPhsuW7GhYyfNOQg3VovU7cqC0nnRTbm1B7bFkWWa75k8YgHew@mail.gmail.com>
+From:   Daniel Vacek <neelx.g@gmail.com>
+Date:   Fri, 17 Dec 2021 23:01:23 +0100
+Message-ID: <CAA7rmPFvJbK_3fx3cphMNGCMBGYobNSyscKbct1g_g5xZYet8w@mail.gmail.com>
+Subject: Re: [PATCH v3] lib/raid6: Reduce high latency by using migrate
+ instead of preempt
+To:     Song Liu <song@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Yajun Deng <yajun.deng@linux.dev>, masahiroy@kernel.org,
+        williams@redhat.com, Paul Menzel <pmenzel@molgen.mpg.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>, stable@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'ommu->domain_ids' is a bitmap. So use 'bitmap_zalloc()' to simplify
-code and improve the semantic, instead of hand writing it.
+On Fri, Dec 17, 2021 at 10:57 PM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Dec 17, 2021 at 5:42 AM Sebastian Andrzej Siewior
+> <bigeasy@linutronix.de> wrote:
+> >
+> > On 2021-12-17 10:16:10 [+0800], Yajun Deng wrote:
+> > > We found an abnormally high latency when executing modprobe raid6_pq, the
+> > > latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=y, greater than
+> > > 67ms when CONFIG_PREEMPT=y, and greater than 16ms when CONFIG_PREEMPT_RT=y.
+> > >
+> > > How to reproduce:
+> > >  - Install cyclictest
+> > >      sudo apt install rt-tests
+> > >  - Run cyclictest example in one terminal
+> > >      sudo cyclictest -S -p 95 -d 0 -i 1000 -D 24h -m
+> > >  - Modprobe raid6_pq in another terminal
+> > >      sudo modprobe raid6_pq
+> > >
+> > > This is caused by ksoftirqd fail to scheduled due to disable preemption,
+> > > this time is too long and unreasonable.
+> > >
+> > > Reduce high latency by using migrate_disabl()/emigrate_enable() instead of
+> > > preempt_disable()/preempt_enable(), the latency won't greater than 100us.
+> > >
+> > > This patch beneficial for CONFIG_PREEMPT=y or CONFIG_PREEMPT_RT=y, but no
+> > > effect for CONFIG_PREEMPT_VOLUNTARY=y.
+> >
+> > Why does it matter? This is only during boot-up/ module loading or do I
+> > miss something?
+>
+> Yes this only happens on boot-up and module loading.I don't know RT well
+> enough to tell whether latency during module loading is an issue.
 
-Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-consistency.
+Nope. It is not.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/iommu/intel/iommu.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> > The delay is a jiffy so it depends on CONFIG_HZ. You do benchmark for
+> > the best algorithm and if you get preempted during that period then your
+> > results may be wrong and you make a bad selection.
+>
+> With current code, the delay _should be_ 16 jiffies. However, the experiment
+> hits way longer latencies. I agree this may cause inaccurate benchmark results
+> and thus suboptimal RAID algorithm.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index b6a8f3282411..4acc97765209 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1878,17 +1878,16 @@ static void iommu_disable_translation(struct intel_iommu *iommu)
- 
- static int iommu_init_domains(struct intel_iommu *iommu)
- {
--	u32 ndomains, nlongs;
-+	u32 ndomains;
- 	size_t size;
- 
- 	ndomains = cap_ndoms(iommu->cap);
- 	pr_debug("%s: Number of Domains supported <%d>\n",
- 		 iommu->name, ndomains);
--	nlongs = BITS_TO_LONGS(ndomains);
- 
- 	spin_lock_init(&iommu->lock);
- 
--	iommu->domain_ids = kcalloc(nlongs, sizeof(unsigned long), GFP_KERNEL);
-+	iommu->domain_ids = bitmap_zalloc(ndomains, GFP_KERNEL);
- 	if (!iommu->domain_ids)
- 		return -ENOMEM;
- 
-@@ -1903,7 +1902,7 @@ static int iommu_init_domains(struct intel_iommu *iommu)
- 	if (!iommu->domains || !iommu->domains[0]) {
- 		pr_err("%s: Allocating domain array failed\n",
- 		       iommu->name);
--		kfree(iommu->domain_ids);
-+		bitmap_free(iommu->domain_ids);
- 		kfree(iommu->domains);
- 		iommu->domain_ids = NULL;
- 		iommu->domains    = NULL;
-@@ -1964,7 +1963,7 @@ static void free_dmar_iommu(struct intel_iommu *iommu)
- 		for (i = 0; i < elems; i++)
- 			kfree(iommu->domains[i]);
- 		kfree(iommu->domains);
--		kfree(iommu->domain_ids);
-+		bitmap_free(iommu->domain_ids);
- 		iommu->domains = NULL;
- 		iommu->domain_ids = NULL;
- 	}
--- 
-2.30.2
+I explained this in the original thread. All the observed latencies
+are really expected.
 
+> I guess the key question is whether long latency at module loading time matters.
+> If that doesn't matter, we should just drop this.
+
+Again, it does not matter at all and here it is rather desired by design.
+
+Drop this, please.
+
+--nX
+
+> Thanks,
+> Song

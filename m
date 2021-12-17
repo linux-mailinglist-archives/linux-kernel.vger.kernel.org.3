@@ -2,92 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71086478F55
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887D6478F5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbhLQPRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:17:11 -0500
-Received: from 113.196.136.146.ll.static.sparqnet.net ([113.196.136.146]:51504
-        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235100AbhLQPQz (ORCPT
+        id S237724AbhLQPTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:19:11 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61278 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231348AbhLQPTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:16:55 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg02.sunplus.com with MailGates ESMTP Server V5.0(9396:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Fri, 17 Dec 2021 23:16:59 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Fri, 17 Dec 2021 23:16:53 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Fri, 17 Dec 2021 23:16:53 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v3 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Topic: [PATCH v3 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Index: AQHX7Nr0VlQujKq+xkKIOnlLCZbqnqwpZLYAgA1h0BA=
-Date:   Fri, 17 Dec 2021 15:16:53 +0000
-Message-ID: <5c01390c485a44b6913dcb42e3677ed1@sphcmbx02.sunplus.com.tw>
-References: <cover.1639039163.git.tonyhuang.sunplus@gmail.com>
- <bc15d5e8d7a5ec96582799fe513de4ace6fd4b8b.1639039163.git.tonyhuang.sunplus@gmail.com>
- <CAK8P3a2UGr6ZbHk6G=wh5XG_EGdJxGf6SfyN1sTb4aaUgiK8Lw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2UGr6ZbHk6G=wh5XG_EGdJxGf6SfyN1sTb4aaUgiK8Lw@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 17 Dec 2021 10:19:10 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHEHhPh016380;
+        Fri, 17 Dec 2021 15:19:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LmhtobFpfbhe6CnXrUzcqxfVYLSg15S+JL4hsbqQs/0=;
+ b=fQ/wdDLvnNkPLkxwIoVG3AMlS/2i0c8cHbv96OovQi4tqkuqYsD5x+urzsMmig70opA+
+ ctuGDrPmAFBcXOht4dVfKtVnz9SM3FrtKFZfo0x1IMeI6lby6Rjl4U9eccWMbbAAhkuC
+ wQwwKpKIiQePyo9e/DEObW3+QoGIinuzL+cPSQ7U0PgwS5CaL0oep0/zL38lfq3qhBZN
+ BhsGoMptYU9VkbtwaC3kReizf8TYPO+TDWMpx/6UN/9gTLL0xJL/I94RRAkSgA3GDzfM
+ q0mMWAaYvUH5vv8eRsLJGAAmW8n8+WDQrd98rR5iwOTW/OE6wFFwWXcgchfwr9YiYBi1 8A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v689b90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 15:19:09 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHFAsEY029605;
+        Fri, 17 Dec 2021 15:19:09 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v689b8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 15:19:09 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHFDSKr002926;
+        Fri, 17 Dec 2021 15:19:08 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma03dal.us.ibm.com with ESMTP id 3cy772bcxj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 15:19:08 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHFJ7Ja14549482
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 15:19:07 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB51F12405C;
+        Fri, 17 Dec 2021 15:19:06 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D928B124069;
+        Fri, 17 Dec 2021 15:19:02 +0000 (GMT)
+Received: from [9.211.79.24] (unknown [9.211.79.24])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Dec 2021 15:19:02 +0000 (GMT)
+Message-ID: <edd0dcee-12db-bc31-203a-bc1c94a072a5@linux.ibm.com>
+Date:   Fri, 17 Dec 2021 10:19:01 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 16/32] KVM: s390: expose the guest zPCI interpretation
+ facility
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-17-mjrosato@linux.ibm.com>
+ <23ee6e80-b857-11ab-1d80-c8b1f4ff6f04@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <23ee6e80-b857-11ab-1d80-c8b1f4ff6f04@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1Qt-TK5IIhz3iqrFs_Hock8DMrn_5rHx
+X-Proofpoint-GUID: xrYnc8mY-vB6ZjuDRqwRaDG3FxoMAjoh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_05,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112170088
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBBcm5kOg0KDQo+IE9uIFRodSwgRGVjIDksIDIwMjEgYXQgOTo1OCBBTSBUb255IEh1YW5n
-IDx0b255aHVhbmcuc3VucGx1c0BnbWFpbC5jb20+DQo+IHdyb3RlOg0KPiA+DQo+ID4gSU9QIChJ
-TyBQcm9jZXNzb3IpIGVtYmVkZGVkIGluc2lkZSBTUDcwMjEgd2hpY2ggaXMgdXNlZCBhcyBQcm9j
-ZXNzb3INCj4gPiBmb3IgSS9PIGNvbnRyb2wsIFJUQyB3YWtlLXVwIGFuZCBjb29wZXJhdGlvbiB3
-aXRoIENQVSAmIFBNQyBpbiBwb3dlcg0KPiA+IG1hbmFnZW1lbnQgcHVycG9zZS4NCj4gPiBUaGUg
-SU9QIGNvcmUgaXMgRFE4MDUxLCBzbyBhbHNvIG5hbWVkIElPUDgwNTEsIGl0IHN1cHBvcnRzIGRl
-ZGljYXRlZA0KPiA+IEpUQUcgZGVidWcgcGlucyB3aGljaCBzaGFyZSB3aXRoIFNQNzAyMS4NCj4g
-PiBJbiBzdGFuZGJ5IG1vZGUgb3BlcmF0aW9uLCB0aGUgcG93ZXIgc3BlYyByZWFjaCA0MDB1QS4N
-Cj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFRvbnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdt
-YWlsLmNvbT4NCj4gDQo+IFRoYW5rcyBmb3IgdGhlIGltcHJvdmVtZW50cywgdGhpcyBhZ2FpbiBs
-b29rcyBiZXR0ZXIgdGhhbiB0aGUgcHJldmlvdXMgdmVyc2lvbi4NCj4gSSBzdGlsbCBoYXZlIHNv
-bWUgbWlub3IgY29tbWVudHMsIGFuZCB0aGVyZSBhcmUgYSBjb3VwbGUgb2YgZGV0YWlscyBJIGhh
-dmUNCj4gY29tbWVudGVkIG9uIGJlZm9yZSB0aGF0IHdvdWxkIG5lZWQgdG8gYmUgYWRkcmVzc2Vk
-LCBidXQgbGV0J3MgZm9jdXMgb24gdGhlDQo+IG9uZSBtYWluIGlzc3VlIGZvciBub3c6DQo+IA0K
-PiBUaGUgZHJpdmVyIHN0aWxsIGRvZXNuJ3QgYWN0dWFsbHkgL2RvLyBhbnl0aGluZzogeW91IGxv
-YWQgdGhlIGZpcm13YXJlIHdoZW4gdGhlDQo+IGRyaXZlciBpcyBsb2FkZWQsIGFuZCB5b3Ugc2h1
-dCBpdCBkb3duIHdoZW4gdGhlIGRyaXZlciBpcyByZW1vdmVkLCBidXQNCj4gb3RoZXJ3aXNlIHRo
-ZXJlIGlzIG5vIHdheSB0byBpbnRlcmFjdCB3aXRoIHRoZSBpb3AuIFlvdSBoYWQgdGhlIG1pc2Nk
-ZXZpY2UNCj4gZWFybGllciwgYW5kIHlvdSBzdGlsbCByZWdpc3RlciB0aGF0LCBidXQgdGhlcmUg
-YXJlIG5vIGZpbGVfb3BlcmF0aW9ucyBhc3NvY2lhdGVkDQo+IHdpdGggaXQsIHNvIGl0IHN0aWxs
-IGRvZXNuJ3QgaGF2ZSBhbnkgZWZmZWN0Lg0KPiANCj4gSW4gdGhlIG9yaWdpbmFsIHZlcnNpb24g
-eW91IGhhZCBhIGNvdXBsZSBvZiB1c2VyLXNpZGUgaW50ZXJmYWNlcywgZm9yIHdoaWNoIEdyZWcN
-Cj4gYW5kIEkgY29tbWVudGVkIHRoYXQgdGhleSB3ZXJlIG5vdCB1c2luZyB0aGUgY29ycmVjdCBh
-YnN0cmFjdGlvbnMsIGFuZCB5b3UNCj4gc3RpbGwgbGlzdCB0aGVtIGluIHRoZSBjaGFuZ2Vsb2cg
-dGV4dCBhcyAiSS9PIGNvbnRyb2wsIFJUQyB3YWtlLXVwIGFuZA0KPiBjb29wZXJhdGlvbiB3aXRo
-IENQVSAmIFBNQyBpbiBwb3dlciBtYW5hZ2VtZW50Ii4NCj4gDQo+IElmIHlvdSB3YW50IHRvIG1h
-a2UgYW55IHByb2dyZXNzIHdpdGggYWRkaW5nIHRoZSBkcml2ZXIsIEknZCBzYXkgeW91IHNob3Vs
-ZA0KPiBpbXBsZW1lbnQgYXQgbGVhc3QgdHdvIG9mIHRob3NlIGhpZ2gtbGV2ZWwgaW50ZXJmYWNl
-cyB0aGF0IGludGVyYWN0IHdpdGggdGhlDQo+IHJlc3BlY3RpdmUga2VybmVsIHN1YnN5c3RlbXMg
-aW4gb3JkZXIgdG8gc2hvdyB0aGF0IHRoZSBhYnN0cmFjdGlvbiB3b3Jrcy4NCj4gDQoNClE6Indp
-dGggcmVzcGVjdGl2ZSBrZXJuZWwgc3Vic3lzdGVtcyBpbiBvcmRlciB0byBzaG93IHRoYXQgdGhl
-IGFic3RyYWN0aW9uIHdvcmtzLiINCk1heSBJIGFzayB5b3UgYWJvdXQgcmVwZWN0aXZlIGtlcm5l
-bCBzdWJzeXN0ZW0uDQpJZiBJIHVzZSB0aGUgZmlsZV9vcGVyYXRpb24gbWV0aG9kDQpQcm92aWRl
-IHVzZXIgY2FuIHJlYWQgYW5kIHdyaXRlIElPUCg4MDUxKSdzIHJlZ2lzdGVyLg0KSXMgdGhpcyBh
-IHJlcGVjdGl2ZSBrZXJuZWwgc3Vic3lzdGVtPw0KaWYgbm90DQpUaGVyZSBhcmUgb3RoZXIgZHJp
-dmVyIGNvZGUgY2FuIGdpdmUgbWUgcmVmZXJlbmNlDQoNCg==
+On 12/17/21 10:05 AM, Christian Borntraeger wrote:
+> 
+> 
+> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+>> This facility will be used to enable interpretive execution of zPCI
+>> instructions.
+>>
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+>>   arch/s390/kvm/kvm-s390.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>> index c8fe9b7c2395..09991d05c871 100644
+>> --- a/arch/s390/kvm/kvm-s390.c
+>> +++ b/arch/s390/kvm/kvm-s390.c
+>> @@ -2751,6 +2751,10 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned 
+>> long type)
+>>           set_kvm_facility(kvm->arch.model.fac_mask, 147);
+>>           set_kvm_facility(kvm->arch.model.fac_list, 147);
+>>       }
+>> +    if (sclp.has_zpci_interp && test_facility(69)) {
+>> +        set_kvm_facility(kvm->arch.model.fac_mask, 69);
+>> +        set_kvm_facility(kvm->arch.model.fac_list, 69);
+>> +    }
+> 
+> 
+> Do we need the setting of these stfle bits somewhere? I think QEMU sets 
+> them as well for the guest. > We only need this when the kernel probes for this (test_kvm_facility)
+> But then the question is, shouldnt
+> we then simply check for sclp bits in those places?
+> See also patch 19. We need to build it in a way that allows VSIE support 
+> later on.
+> 
+
+Right, so this currently sets the facility bits but we don't set the 
+associated guest SCLP bits.  I guess since we are not enabling for VSIE 
+now it would make sense to not set either.
+
+So then just to confirm we are on the same page:  I will drop these 
+patches 16-18 and leave the kvm facilities unset until we wish to enable 
+VSIE.  And then also make sure we are checking sclp bits (e.g. patch 
+19).  OK?
+
+>>       if (css_general_characteristics.aiv && test_facility(65))
+>>           set_kvm_facility(kvm->arch.model.fac_mask, 65);
+>>
+

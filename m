@@ -2,80 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D16478A14
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CB9478A1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbhLQLfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:35:00 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:6082 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231717AbhLQLex (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:34:53 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BH8OJiB016240;
-        Fri, 17 Dec 2021 05:33:41 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=qQFrIlpFszZ1RBg9pe9JzRRyFu+mammDM6kqccfXLE8=;
- b=Yg+MvWuvysTVkyIgfPcJ5PQtMnreTVx82mpk3ZiP8ycfdJdl/WRhkDSEycI4U7OpTenz
- zxkYqASWtupMkWASRAYLb/xgBjF7UlAFFFPI6VGaknAcc5t4+6sYDRNkjgiNjQjEBabZ
- tTUgzBOilnmmA3TwDlMDQLi40TDhzCnLPi/QXNxz20VkZ/iUDQQUtL/AcVs7ZIu4XBBo
- ETX8cPnerazAewrqi7UbsS31QohDCX0EagbjjcWjgoTLYMHjgin5DR8G/+ErZEI3zAaD
- TcFfoQKwUZ4VO9SoqrNq69Fyuk9W3AG9aWeWfpDXeNozq+YS/G/kJIEr4lTe+hAvZ9Rr zQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3d0q0m05wg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 17 Dec 2021 05:33:41 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 17 Dec
- 2021 11:33:40 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 17 Dec 2021 11:33:40 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 96C10478;
-        Fri, 17 Dec 2021 11:33:39 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 11:33:39 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>
-Subject: Re: [PATCH v3 1/1] pinctrl: Propagate firmware node from a parent
- device
-Message-ID: <20211217113339.GV18506@ediswmail.ad.cirrus.com>
-References: <20211216151227.58687-1-andriy.shevchenko@linux.intel.com>
+        id S235558AbhLQLhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:37:02 -0500
+Received: from muru.com ([72.249.23.125]:39412 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231373AbhLQLhB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 06:37:01 -0500
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id A19EE80FB;
+        Fri, 17 Dec 2021 11:37:41 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-omap@vger.kernel.org, Tero Kristo <kristo@kernel.org>
+Subject: [PATCH] dt-bindings: clock: Add binding for TI clksel
+Date:   Fri, 17 Dec 2021 13:36:40 +0200
+Message-Id: <20211217113640.59840-1-tony@atomide.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211216151227.58687-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: nzCZZVgiqNxCMOFILECwBs6o2giAwtqQ
-X-Proofpoint-GUID: nzCZZVgiqNxCMOFILECwBs6o2giAwtqQ
-X-Proofpoint-Spam-Reason: safe
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:12:27PM +0200, Andy Shevchenko wrote:
-> When creating MFD platform devices the firmware node is left unset.
-> This, in particular, prevents GPIO library to use it for different
-> purposes. Propagate firmware node from the parent device and let
-> GPIO library do the right thing.
-> 
-> While at it, slightly modify the headers to reflect the usage of APIs.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
+In order to prepare for fixing lots of devicetree unique_unit_address
+warnings for the TI clock nodes, let's add a binding for the clksel
+clocks. This allows us to move the overlapping devicetree clocks to be
+children of the related clksel nodes. And then we need the reg property
+only for the parent clksel node.
 
-For the Madera bits:
+We want to set #clock-cells = <1> in case we ever start parsing the clkcsel
+clocks directly using a clksel driver rather than using the existing
+component clock drivers and child nodes. We also need to update the clock
+drivers to get the IO address from the parent clksel node before updating
+the dts files. These will be posted as separate patches.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: Tero Kristo <kristo@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ .../bindings/clock/ti/ti,clksel.yaml          | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
 
-Thanks,
-Charles
+diff --git a/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
+new file mode 100644
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/ti/ti,clksel.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Binding for TI clksel clock
++
++maintainers:
++  - Tony Lindgren <tony@atomide.com>
++
++description: |
++  The TI CLKSEL clocks consist of consist of a mux, divider, multiplier and
++  gate bits.
++
++properties:
++  compatible:
++    const: ti,clksel
++
++  reg:
++    maxItems: 1
++    description: The CLKSEL register
++
++  "#clock-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++
++additionalProperties: true
++
++examples:
++  - |
++    clksel_gfx_fclk: clock@52c {
++      compatible = "ti,clksel";
++      reg = <0x25c 0x4>;
++      #clock-cells = <1>;
++    };
++...
+-- 
+2.34.1

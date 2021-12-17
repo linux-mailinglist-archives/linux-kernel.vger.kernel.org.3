@@ -2,169 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CD24795BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49D04795C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbhLQUrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:47:11 -0500
-Received: from mail-co1nam11on2066.outbound.protection.outlook.com ([40.107.220.66]:42721
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229587AbhLQUrJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:47:09 -0500
+        id S237163AbhLQUsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:48:37 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:63544 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229587AbhLQUsf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 15:48:35 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHJsQDm011690;
+        Fri, 17 Dec 2021 20:47:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=RuZgaJt5hZzn1+i4IPgya94LgXt4i0Ex3Xhl8/DEK0Q=;
+ b=KmLQrKJGt16ij+LuPX5udgnh6ndZ7iVl57vpYVOGeWMWFNpGMEK90UgS13N50+90ps7i
+ dRial13G9bVfoQmDcqkibVtDpwSjZntT5Q6qYFUcw0aRvwa8gCyXdlPPSD0GBJJAVGVq
+ hjJpioEEPeXqjg81IIkp/xPfwERjuAwwTxRtKE6iEJWz62fhbwsd0FnVt4DJNpAKOHlW
+ WDyHK+69rZpWG7F8qroSy0E0IMh6ty0/2nswPcLj1bJPbnE7t14f0kjSwusZRnoTkIfi
+ Yae5j4hJsEpTnB4VkQVfjvE4XLMISa1n9GRmK64I/k7tr2YcX93xUUAX39kxLZkj1oUO 7g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cykm5ev96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 20:47:37 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BHKkMFJ155717;
+        Fri, 17 Dec 2021 20:47:36 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by aserp3030.oracle.com with ESMTP id 3cyjubv4yd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 20:47:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EjBBMphFZOFsQesTz2olEKSlToOAe96PkrwzVAZv/a781Dej6XgN5xmoN9t8Ai64cfJIBxExqfhAa90owEjCUwB17ehRverL+BWYFnYI1FIxWqGAsMh9lpASq1chbm5OS/Yn44ScTDDVO6CpegghTlxPexqcv7fiW1dPQaTRrQrQk5YePlYZhv+Mi3P5zzvQvHvpXjmKrB4liZm9Q/1GMyIVTD7Jhlo6tKL7JJV9GYx+HffCy10GHlvf2K5TNv1WpGMHCcQ14QYkFFg6FpyZpbDI54m2Bs8cMjV1tZMB5oYH/yb21nmIyCvMxlgxSxQLkte7GZrKarxKGxL4lSgPig==
+ b=JwwWuQ2xEQ2YMgPsKUDIDKB1QY8CpBa5r0kf4jqLxdCCMEX9vOXhtxxinB50rrjm6j+YcHo39gXDW9rWcTCyRiFjVROI1h4fGFegYFIkmdSgkU6FyTFRqGmfDkgl4Ri2E6KkzqnM4u6M1RU9klvaZSvgfYwV1DzOvLMJhPpsEWcXXrpey2JZw8JPFAarCI7maZtHjaiK4+qzTS/yyeFlazbj9mf/dBdPjRYZ4/P1IWCEUsbm+1I78jyhZdF2yAS//mu3gMfiVL4j5qRlrPZHkUNU8ZzZAdXOBwn80MJb8ajN7br3cvraMlHvROAjVOdFn6IXcC4aupEc3mZF1B1vGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rIvlkk8Ha0ed4pfpqDSCQEEMTkF16VvZH8ohpznvT3Q=;
- b=TiY1YlyeIoG85VjARI2oLmozE5nefo6m0xJ86FveNiF/txpAKaRGSJOpXHOYkmheEZbKxCAi0IOFrVnnnkpiEQr3czCUrg/KSfXFb5tLXN1o8Q27VX/WS3luvuwVh+/xu+vMsl1U58QZoKfjv0FV4uwUhAsStXsXSN0p47FFH53N151KqTvad2D12w/+DTAyV6FzR4+ddVg7DghIl7WKwSsYYHar6wX4fCCaoHkd4O6loEkGdwPBN0YnkVVhUrgofPUWKyIDq6ll6cveR8yyEUlZs7f5KB9dQ0B4ABn2yyMt9R/agDePzwjN9l7Qdt2XTaY8m3bCiCuFf/Y1exXaIA==
+ bh=RuZgaJt5hZzn1+i4IPgya94LgXt4i0Ex3Xhl8/DEK0Q=;
+ b=IgfdPdFfXD+zDXvbLkQl+ZkAMMvT97eheWonB5E4lOnRNQ4oDvqtCXpTBNbedSziMC62wI+GfQmE2tl51CxCi1TTPhAMicFpenPeVczRGFvMQCZP1xYJTSN8g8BlW+zM3Zj8QsVxKC/LKzRKfiTrS/vF7ZGPb+xOzlwavMTmNflvzB5r6avy0sGI63CFLMZ3GYppVeFc0MTRipGvQ2+zvrEXM8FVNcSz7nsRUTbWyt62iX1Ujed56PVrULtNolZ89CqyC0fMGHqrQCQXH9mbjtvIH3RS6xmsSbD2Reh65jhPTBxcIjKKS5/HPrdEU9xBru7cjXa9SGRtS6cZPNetGw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rIvlkk8Ha0ed4pfpqDSCQEEMTkF16VvZH8ohpznvT3Q=;
- b=b5kU60mus0JJ0gAIx+nc/BgSK27pY0vA5wC+irdStbhYQHDIkjgzG905DrSnCJCSp148PgcEM1xU0jh/hzxOKxhedWKYV60v6f5kq657bpNV85e8SRQoYoqFHH4PB4tvs7MPU4PXs7ZkPf/LPlv9ROAc14L3Dzmu0VY0CEeMPPz51fPfCYrAlDE7d/qlW4imdxnT/QvVDhm33QaUzdLlbaWh93jCJ4T1rNZVW40KcRwxN5Tg9IkiEjXkHO76py/G1h4I0sMcjY26LdAEM2i2eXbBAnKwAQPIzcIep+fwSJrXvOS/GKTezId3SXg4sbcqaJZsV/PxROEi0EwFN09WJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5206.namprd12.prod.outlook.com (2603:10b6:208:31c::5) with
+ bh=RuZgaJt5hZzn1+i4IPgya94LgXt4i0Ex3Xhl8/DEK0Q=;
+ b=VVnM+HqwH9AaH1yhEtvI4eMG/eR23eOP9mFIvMT6yhFm4roElfO0CsqsV7Zix1TNWlt0NeL1YMlabWJelbxE1TQJgoc1Z8IyGzppifrj3X+njoHc9z5riCDWTc7F6TCRUAqFdaPjpndZQSIZjVkAI4LCQ7pKOEBAabkS1NzZ1Mk=
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
+ by SA2PR10MB4425.namprd10.prod.outlook.com (2603:10b6:806:11b::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Fri, 17 Dec
- 2021 20:47:07 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%8]) with mapi id 15.20.4801.017; Fri, 17 Dec 2021
- 20:47:07 +0000
-Date:   Fri, 17 Dec 2021 16:47:05 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Fri, 17 Dec
+ 2021 20:47:33 +0000
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4801.017; Fri, 17 Dec 2021
+ 20:47:33 +0000
+Date:   Fri, 17 Dec 2021 14:47:24 -0600
+From:   Venu Busireddy <venu.busireddy@oracle.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <20211217204705.GF6385@nvidia.com>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 09/40] x86/compressed: Add helper for validating pages
+ in the decompression stage
+Message-ID: <Ybz3XFbThJTUySNY@dt>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-10-brijesh.singh@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
-X-ClientProxiedBy: MN2PR15CA0024.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::37) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+In-Reply-To: <20211210154332.11526-10-brijesh.singh@amd.com>
+X-ClientProxiedBy: SN6PR08CA0016.namprd08.prod.outlook.com
+ (2603:10b6:805:66::29) To SN6PR10MB2576.namprd10.prod.outlook.com
+ (2603:10b6:805:44::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 17c20d20-3ebd-4c5b-0b78-08d9c19e638b
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5206:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB52067CD4FAF0D08697EEDCF5C2789@BL1PR12MB5206.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: da89eeb6-b6fb-47a9-fa1c-08d9c19e7372
+X-MS-TrafficTypeDiagnostic: SA2PR10MB4425:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR10MB442522022D9E52421026CAA7E6789@SA2PR10MB4425.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HFHqgpAeYGGRUsr9uq87mdVrktShu+eLlS4cYNGAast+IuGY90hDVijy/qxWw+UeeGJ8NIAzczS0Dq/MxWDXlPTAGFddV0Ef/vHKhAxBXfWTNaqDC/xFdl0E0EfABN4c3ki+0YjutOHEZjN3b/9cblekcPAGxugPugP4QRjebZtf7C8u7AIbBchXWCJh/FkuPtakKfNqpAzaSOGPU3kIWHT/XTL2tRPVI5OZBIo/jG4e1vFoTUm+AElHBPuhkn+OxCOuvlQ9dXMrxWa950nwIt+WFm/peeQTxm5WbVN0BznqORONeo5XJ5ATwXn71Nl7+8/eCXPcicH5R1nLhyaIMsYGGstklHKZP8JN2sODaLDUBER++ere7KIQy5+DEPa7vePDqkgqDIaC6vASs9sUCUiKVMLrIaoyCqy/tciT9Zp+9GwsCy6oyKV06KrsRDPj7q0Onv3MkikElWvnAwVsjYW+WysI0Z9bvVumk8Ltq3ZTMplYzK7LaIQgcPBL8OAVmrJyLd7zsS5yS+mADZft72r6OELSKPsSsHwp0ax5UynqAjRnehCWyiRVpqli42jMxYphAp54RXWssCPujW1MJWS5H4KOy8yztwnzrmuxgK4rs4Ihq1dOoVrP0yqksEIZ978LWJZNEbJP+XzqE+ZQEQ517wD/IczDI2DfSm3axepBkrJEmrfvSxo485k9s25n7UwiuXllLrE7BQhALCPvsw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(8676002)(86362001)(2906002)(508600001)(8936002)(54906003)(7416002)(6916009)(38100700002)(33656002)(83380400001)(316002)(1076003)(36756003)(66946007)(66556008)(26005)(186003)(6512007)(6506007)(5660300002)(4326008)(2616005)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: VGWyaHC/JZ5qcYwVHwpu2aRqCYaCIs4icKp4psAtqGKSJHvMfzjMN2KGd586RxcKEAca/saNxTz01CdwBeWjG3jL9AdLmjX1NvADyXw4pNm3fuWASvGqQjeAOVtuw8JOShmLbeE5QGkGfprENraq1UhT25QacD2M75bCyCHn8s0vteF3RIJTRdxHlGhnbcOTGlGNe4nFPfqKpmKKq5Mov1XQLFKy2815bz5hVkQToGHcsjTJjsI7gujQ9+2Qu512H4/b17C1BL/iDnlasdg3oW5+oIJ/Bd/XL3Xa+6QMPa0WZrejUDos7fKZx8fZAGbFQZpQkM9ijNE6Qo2HbR86yN2FuRncpB1lrIWR+Z1ogrc03eUShFOwnmMWW0/iW1hbhmsAS1KtG/q9TUW7cKFgN81kxzSA1cDY3HaGhCdKgAYAC490UlzLuDBG6vz3guIwpO+wzEVNfO7ryg+fL8wjvxbYcE3MiyBSK+BFmJ7WZyapAW0mBrmxERl7Lxt2uxwTxwJlSVrbvzyAxng8dTTsnd8d4CTRrPMEQN9gLE2LfkstzhQQ6EqxZPNGs1CEkB22FIqiuXXmexnxht9wlYjv/YvbuWDou3uGkLRcMC0Hd3J5OPXz3yhsxmdMre3DFHZAW1X8uypc83JVts5tzdjYSw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(5660300002)(6486002)(44832011)(4001150100001)(66476007)(316002)(66556008)(66946007)(86362001)(6666004)(8936002)(54906003)(2906002)(26005)(6506007)(7416002)(8676002)(7406005)(4326008)(33716001)(83380400001)(186003)(508600001)(6916009)(6512007)(9686003)(53546011)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SN92GiVwSUInwaDBLHwp6du51Fs1QswNMoRC3t1RYZ6vtCk1KKiUulHkLHkI?=
- =?us-ascii?Q?Kv25QjXkN7rg7ii4bhH6b8AF6pMgDD1IsgYQ8goZA+tmGeERr070/e3z3vJl?=
- =?us-ascii?Q?E2xNZUF63xmsunQfKWwWi9HJOa0zRfm4f6uwmyDA2jEKbRAdOXmLsXweSEOa?=
- =?us-ascii?Q?tH1gYPowcHZWtI/PJ4JhXWUIbg5I7v6FwjD+28c6P5Fp10turuqg7D/MK7R8?=
- =?us-ascii?Q?bcKOJklVNCykzIkmvLp9b8PSoRn/xpze4jD0y9/sJ7mPUQWVoC2q0k6gN6zX?=
- =?us-ascii?Q?CeNTr+EWmWUoEAgciV2RZhNgn7XIvBeYJOu2HWYryWCUDHK4+EC6dvSE7dYi?=
- =?us-ascii?Q?sn/2fbvgwBpJMuxxDx1CtErzsFQLJ98rOT7Nuh6yMcxaw5XN5mwpwsZ7Np5F?=
- =?us-ascii?Q?2X/16t+KbTwaVRjt0Ac78YX7b67PZKGM4HJqWBzzJTHHC3ubYJVu0b9/KMGm?=
- =?us-ascii?Q?2aSW3aBiDVjJFJR980tllseQbdbDE1hod3jQefQ6vdarK/BerJw6O3iehiNO?=
- =?us-ascii?Q?OFc5BuHRLu/cWYnwOfv7JPIvmYkZvGMERZj8yoflezmWyKfsFWlaSCGOPrKW?=
- =?us-ascii?Q?a7Kg6mlWGB+qgkel8J3vSTEqKFOtJ2K77nDkmbbEzpnTsuwIeOpjI+tO+Nc6?=
- =?us-ascii?Q?D1ep/TqPSZITJ9OFxuTYD80e2+mjY83wE+L8qt70c/lM+G1ck9dWPbieshAq?=
- =?us-ascii?Q?OlQ6u1Ym51NNLtfw5VflxoiPTb4EJl0IQFJK/V39ugF2t/Y/C1UO3Xa9cv21?=
- =?us-ascii?Q?Lk6Ehsvl3LAvnhQLKbpYO6fr30zstQAdGL/yUDQ9wKVqIVbPmYzpus0lXUyH?=
- =?us-ascii?Q?Mhr8tNb80yAddiFwOBhuZBL5Br1tLxXIWWA2BlbYD27pfcmAAvp+6r50AZ5b?=
- =?us-ascii?Q?HhfFjH0uR+ySf7WN90dga+eMHXhhjUwfCkZsUww+csKmbJJ2bRuCaxcfDVsK?=
- =?us-ascii?Q?gMLvf9hf+bZfyJjFPoeblZ5Nb4E0CYyohTb8Di1WWqiIcPT1yhiCp8kkS16x?=
- =?us-ascii?Q?mz/mxVh006uGxLaTMQ8tBpKVCdyGfK6zm23kYqoXZQIraMz643IabDG1Cy2O?=
- =?us-ascii?Q?mKWbJbqJ2oqE05PAYCJqRXFMcaEvCNDRj3wmVakZyodeyzUwbfYpruybMYAx?=
- =?us-ascii?Q?9WWjA11tJxifgMP8h6iZlMCxm2Z24Q16yxB29Y3KqoYNy5XscymtCcLJxEIl?=
- =?us-ascii?Q?s3EPhJzfRq9mNf7LopkhmdaLa0SNDaIqYdkzreKtGtGPKKMAwr0Yh/5BSLgF?=
- =?us-ascii?Q?4Y2c9ZDyLx18xOmzQcOTQghuLsnRLXm6Rz1h5UHnS0s55pOSTPvXpd6wuAmm?=
- =?us-ascii?Q?M1/8m629kTp2rCPnYlsg8JB/x86RK84mwkFlOjQ3ry0N4WiXSayaoSRmEQ3Y?=
- =?us-ascii?Q?JOknCLH2JkSypsKZLe15vTa47alupHvQfmp0Iy9AulJmFk7cYBLjy0odTvIf?=
- =?us-ascii?Q?QgXKIoB9VCQ7o0IfTllGepPrxZSAZeqd9h2yHy7YaFm2H4aLuv2n+TTq4Hz6?=
- =?us-ascii?Q?cE2ZqAPBeeZzfYCs1oygIN19Shp6nw/pakQGeAKSgeidkUUA4IwVt/VF70KD?=
- =?us-ascii?Q?2lGsPlbAEsDRMblUbY4=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17c20d20-3ebd-4c5b-0b78-08d9c19e638b
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jTZt9AxGRH11yKTUHwxnGVXrmdr37C3t4YNPe2UeNOmQ9N0nJiGkYRKGtU+i?=
+ =?us-ascii?Q?dIJojsIzVm7txKhfLDDU9GcLlQyh4uyjSr/oyIe9WL4ndqh58G3JuUXQhuq7?=
+ =?us-ascii?Q?co0gzxHgx3+eIgji+eDhe2TORG3nyISNXnFQrnncqNhtkvl4u8Rl4oU8zMlR?=
+ =?us-ascii?Q?qJyqT8MTq3p5ALcza7z94yMBUzzpTqfr9nyl64Cg/J1b5g1z+vo9zuUWwhj2?=
+ =?us-ascii?Q?XVroRrJlGuauYDIE//h72CIdwURoj7KS50AKo0PcZA78g9HcTp3tHSnwKjrz?=
+ =?us-ascii?Q?uSj9ma3I3EA1Y9GszWa75iXHl3lRyCZv8+EKPGvGvwLWdHn1D6f6HfbHkq3g?=
+ =?us-ascii?Q?4Lo1/J9TLkRSWjqc7PAQOwHqSTTMcmQk0FX9iaE90KcfkzGi7eC8LXmL9vHo?=
+ =?us-ascii?Q?JU5Gnqpx/ayOnOcaoGxDiKMWialB+BKGGPvsLvqopeTqkZG933Q5SJGmHEEp?=
+ =?us-ascii?Q?sy28Z4ExNRVxY/JLQVSXjCcSAtrO5qi3n8vDeRf4xx27tRJD2NcgAoRSu+kG?=
+ =?us-ascii?Q?iiomQXExUQZJqJ8IBE1utuSvp67ePZNyRU5Fk/aBhU9dXMkrJkoX9bRcu2sp?=
+ =?us-ascii?Q?LYVmcYJhNhnV6GGDN8mtRtdfTXydlEhHbWdYQjDlTFoZ7bdcQqNEb4KovLZw?=
+ =?us-ascii?Q?nyZT1VVc3fOhOSxT/y71z60dXerXj2E6n1Z1TVD5plqd0Jf2iTHz6ay+EpX8?=
+ =?us-ascii?Q?UbYuqVT4aJ91HtnckJnwpv/LUd0b3yL9HmPJwmBZpYZ60/Ol3x8wq6UoSN7G?=
+ =?us-ascii?Q?vSJsX7AcKsvhHcf9ABKPQsG+On1qxqPi6eCAPyPCrpqrxrCS/00Nahrh8srj?=
+ =?us-ascii?Q?iWu4l3h39XU7VaT2hWRYiidLyJWG9FpoDSOUxvfg3IoOSF52VQXZclENVE9i?=
+ =?us-ascii?Q?5VGLRiUdiRfW9TacV1wv7MOoDHrpKFoMDpccPVnbprOJ5A8CDmkzt/Acymv5?=
+ =?us-ascii?Q?jVSF2ypVCA5XWtv/5U4co89RDgdBYLoUbY4y3brMmOq8kua4OKIfWl4v/EMN?=
+ =?us-ascii?Q?AcMSJcLzeZ+XjNWxvgXI7JrZ8GyY3LTPankaFR1NbdmxTkkGKElmw+3wRqYu?=
+ =?us-ascii?Q?8QfSLzjnFZRheQjCdpAZsOOyOhKhZ/X9GxG9QPUgkoTd7EbN+JWxoOUXiJMO?=
+ =?us-ascii?Q?saW9aA21psBwdhHATPdrsKIhdODTlvclGyivuqxU+SOVY2IgtW6sFSslbqDU?=
+ =?us-ascii?Q?tqyJZoP5xR2YiQdrFSd2+VhKVXcr+CQULPQcnctSL8EYPJOznlQygTkyPyxW?=
+ =?us-ascii?Q?WzqI5fBtFXmjJwB7rjn3A3dvFl6iaeVJsuI1A0NfB2WR9s87dxitbxRDh5/S?=
+ =?us-ascii?Q?eYZnPVz3k2tZDYGdKgDhQaLRV5ZHYsEYtnQOfqUu57HDKJ5iDQifxgpdoIvy?=
+ =?us-ascii?Q?JoZ2gYIsjA3PQ3p6tzfWW0ag5TZR0UWPneTuqLApScIOKrhpOCJtlHt4iCvU?=
+ =?us-ascii?Q?ahJ6eWGA1LIJ1EJ8mCIBfY0ip9ClCwGSyKQpF+u/JrXgsuDMBuEdMl0AtdaT?=
+ =?us-ascii?Q?7PKFPpY4OZllu1Ry6IV0SCuzTDKHDdYuSOOTNZUTDuFPxM3VJ0eTfV5NV43a?=
+ =?us-ascii?Q?kuG+JCN9PzRTQXUAzlm4MG+jgLNhMm10ooFnltEZNhBS6WnYKsNyL/QxCHxx?=
+ =?us-ascii?Q?9hnxprqcDsDdLvlC/GVCkwhR0VLF+7QZ8lXCYCJHTY8CPtwh9GWIZXJg8FhG?=
+ =?us-ascii?Q?6belJQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da89eeb6-b6fb-47a9-fa1c-08d9c19e7372
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 20:47:07.1654
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 20:47:33.7243
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: guycdAW0uS7uq/EBNgHMx/O2ChcsO3V4OlMoHZZBSYLjVrc1eNf70ZEHRbe08ZSi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5206
+X-MS-Exchange-CrossTenant-UserPrincipalName: yd89ZpN15+qE+oWsJy/TNZwkWIZXp3PyBRNU17LMqqIBAYkVpf21JGATIdyVaRo7iogTKrCV1g+RTJxiF0JIixB5eafHebcIoBzzpr9jKyI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4425
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10201 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170116
+X-Proofpoint-GUID: NR7D1ctXh-5qKxj3YZHHvgag0Cg42jY_
+X-Proofpoint-ORIG-GUID: NR7D1ctXh-5qKxj3YZHHvgag0Cg42jY_
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:36:43PM -0800, Linus Torvalds wrote:
-
-> > 5. Take a R/O pin (RDMA, VFIO, ...)
-> > -> refcount > 1
-> >
-> > 6. memset(mem, 0xff, pagesize);
-> > -> Write fault -> COW
+On 2021-12-10 09:43:01 -0600, Brijesh Singh wrote:
+> Many of the integrity guarantees of SEV-SNP are enforced through the
+> Reverse Map Table (RMP). Each RMP entry contains the GPA at which a
+> particular page of DRAM should be mapped. The VMs can request the
+> hypervisor to add pages in the RMP table via the Page State Change VMGEXIT
+> defined in the GHCB specification. Inside each RMP entry is a Validated
+> flag; this flag is automatically cleared to 0 by the CPU hardware when a
+> new RMP entry is created for a guest. Each VM page can be either
+> validated or invalidated, as indicated by the Validated flag in the RMP
+> entry. Memory access to a private page that is not validated generates
+> a #VC. A VM must use PVALIDATE instruction to validate the private page
+> before using it.
 > 
-> I do not believe this is actually a bug.
+> To maintain the security guarantee of SEV-SNP guests, when transitioning
+> pages from private to shared, the guest must invalidate the pages before
+> asking the hypervisor to change the page state to shared in the RMP table.
 > 
-> You asked for a R/O pin, and you got one.
+> After the pages are mapped private in the page table, the guest must issue
+> a page state change VMGEXIT to make the pages private in the RMP table and
+> validate it.
 > 
-> Then somebody else modified that page, and you got exactly what you
-> asked for - a COW event. The original R/O pin has the original page
-> that it asked for, and can read it just fine.
+> On boot, BIOS should have validated the entire system memory. During
+> the kernel decompression stage, the VC handler uses the
+> set_memory_decrypted() to make the GHCB page shared (i.e clear encryption
+> attribute). And while exiting from the decompression, it calls the
+> set_page_encrypted() to make the page private.
+> 
+> Add sev_snp_set_page_{private,shared}() helper that is used by the
 
-To remind all, the GUP users, like RDMA, VFIO use
-FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
-COW breaking the coherence. In these case 'r/o pin' does not mean
-"snapshot the data", but its only a promise not to write to the pages
-and still desires coherence with the memory map.
+Since the functions being added are snp_set_page_{private,shared}(),
 
-Eg in RDMA we know of apps asking for a R/O pin of something in .bss
-then filling that something with data finally doing the actual
-DMA. Breaking COW after pin breaks those apps.
+s/sev_snp_set_page_/snp_set_page_/
 
-The above #5 can occur for O_DIRECT read and in that case the
-'snapshot the data' is perfectly fine as racing the COW with the
-O_DIRECT read just resolves the race toward the read() direction.
+Also, s/helper that is/helpers that are/
 
-IIRC there is some other scenario that motivated this patch?
+> set_memory_{decrypt,encrypt}() to change the page state in the RMP table.
 
-Jason
+s/decrypt,encrypt/decrypted,encrypted/
+
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/boot/compressed/ident_map_64.c | 18 +++++++++-
+>  arch/x86/boot/compressed/misc.h         |  4 +++
+>  arch/x86/boot/compressed/sev.c          | 46 +++++++++++++++++++++++++
+>  arch/x86/include/asm/sev-common.h       | 26 ++++++++++++++
+>  4 files changed, 93 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+> index f7213d0943b8..ef77453cc629 100644
+> --- a/arch/x86/boot/compressed/ident_map_64.c
+> +++ b/arch/x86/boot/compressed/ident_map_64.c
+> @@ -275,15 +275,31 @@ static int set_clr_page_flags(struct x86_mapping_info *info,
+>  	 * Changing encryption attributes of a page requires to flush it from
+>  	 * the caches.
+>  	 */
+> -	if ((set | clr) & _PAGE_ENC)
+> +	if ((set | clr) & _PAGE_ENC) {
+>  		clflush_page(address);
+>  
+> +		/*
+> +		 * If the encryption attribute is being cleared, then change
+> +		 * the page state to shared in the RMP table.
+> +		 */
+> +		if (clr)
+
+This function is also called by set_page_non_present() with clr set to
+_PAGE_PRESENT. Do we want to change the page state to shared even when
+the page is not present? If not, shouldn't the check be (clr & _PAGE_ENC)?
+
+> +			snp_set_page_shared(pte_pfn(*ptep) << PAGE_SHIFT);
+> +	}
+> +
+>  	/* Update PTE */
+>  	pte = *ptep;
+>  	pte = pte_set_flags(pte, set);
+>  	pte = pte_clear_flags(pte, clr);
+>  	set_pte(ptep, pte);
+>  
+> +	/*
+> +	 * If the encryption attribute is being set, then change the page state to
+> +	 * private in the RMP entry. The page state must be done after the PTE
+> +	 * is updated.
+> +	 */
+> +	if (set & _PAGE_ENC)
+> +		snp_set_page_private(__pa(address & PAGE_MASK));
+> +
+>  	/* Flush TLB after changing encryption attribute */
+>  	write_cr3(top_level_pgt);
+>  
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 23e0e395084a..01cc13c12059 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -124,6 +124,8 @@ static inline void console_init(void)
+>  void sev_enable(struct boot_params *bp);
+>  void sev_es_shutdown_ghcb(void);
+>  extern bool sev_es_check_ghcb_fault(unsigned long address);
+> +void snp_set_page_private(unsigned long paddr);
+> +void snp_set_page_shared(unsigned long paddr);
+>  #else
+>  static inline void sev_enable(struct boot_params *bp) { }
+>  static inline void sev_es_shutdown_ghcb(void) { }
+> @@ -131,6 +133,8 @@ static inline bool sev_es_check_ghcb_fault(unsigned long address)
+>  {
+>  	return false;
+>  }
+> +static inline void snp_set_page_private(unsigned long paddr) { }
+> +static inline void snp_set_page_shared(unsigned long paddr) { }
+>  #endif
+>  
+>  /* acpi.c */
+> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> index 9be369f72299..12a93acc94ba 100644
+> --- a/arch/x86/boot/compressed/sev.c
+> +++ b/arch/x86/boot/compressed/sev.c
+> @@ -119,6 +119,52 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
+>  /* Include code for early handlers */
+>  #include "../../kernel/sev-shared.c"
+>  
+> +static inline bool sev_snp_enabled(void)
+> +{
+> +	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
+> +}
+> +
+> +static void __page_state_change(unsigned long paddr, enum psc_op op)
+> +{
+> +	u64 val;
+> +
+> +	if (!sev_snp_enabled())
+> +		return;
+> +
+> +	/*
+> +	 * If private -> shared then invalidate the page before requesting the
+
+This comment is confusing. We don't know what the present state is,
+right? If we don't, shouldn't we just say:
+
+    If the operation is SNP_PAGE_STATE_SHARED, invalidate the page before
+    requesting the state change in the RMP table.
+
+> +	 * state change in the RMP table.
+> +	 */
+> +	if (op == SNP_PAGE_STATE_SHARED && pvalidate(paddr, RMP_PG_SIZE_4K, 0))
+> +		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
+> +
+> +	/* Issue VMGEXIT to change the page state in RMP table. */
+> +	sev_es_wr_ghcb_msr(GHCB_MSR_PSC_REQ_GFN(paddr >> PAGE_SHIFT, op));
+> +	VMGEXIT();
+> +
+> +	/* Read the response of the VMGEXIT. */
+> +	val = sev_es_rd_ghcb_msr();
+> +	if ((GHCB_RESP_CODE(val) != GHCB_MSR_PSC_RESP) || GHCB_MSR_PSC_RESP_VAL(val))
+> +		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
+> +
+> +	/*
+> +	 * Now that page is added in the RMP table, validate it so that it is
+> +	 * consistent with the RMP entry.
+
+The page is not "added", right? Shouldn't we just say:
+
+    Validate the page so that it is consistent with the RMP entry.
+
+Venu

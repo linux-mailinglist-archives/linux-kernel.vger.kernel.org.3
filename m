@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FDF47902E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C313347903F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbhLQPoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:44:37 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44934
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235158AbhLQPof (ORCPT
+        id S235739AbhLQPqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:46:05 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55616 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235533AbhLQPqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:44:35 -0500
-Received: from mussarela.. (unknown [179.93.189.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CBCBA41846;
-        Fri, 17 Dec 2021 15:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639755874;
-        bh=K4KepFetoeRSfUTPalIOPzR+mpPdGckMTE+MuEeJBEg=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=QeXiqAqUaxwoXwEDY3haRWNFv6f06HivPJz5bC3eCpqdUTV7XXgBMyR+ctTHZfych
-         QkD/pP2A6sAk5oReAGvNE8wd5jAE4AdaKZmh0nbKUnA2bhBCW4H+Q68QbTwBRi4Cxr
-         1nBo1tMtHdtDHucC3HaMC4ZFCP5YN8qZXHCPCtdricG84JHXbzeQBhVU/l4THiXqLA
-         8hVF2qSNUYyVEDoM0rA9XCgcoV2Bq4ezBNU0TXJzNdFmnCu/u8+NjaNtGCBEcex9M+
-         bccKLPbjEHRx/xc2us3k+cuadym0eQSboeoCuqWYyFe1UKSNgwv+q0/yt/oM56p0Zm
-         DklJl5wfytF/g==
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     openipmi-developer@lists.sourceforge.net
-Cc:     linux-kernel@vger.kernel.org, minyard@acm.org,
-        ioanna-maria.alifieraki@canonical.com, minyard@mvista.com,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] ipmi: fix initialization when workqueue allocation fails
-Date:   Fri, 17 Dec 2021 12:44:10 -0300
-Message-Id: <20211217154410.1228673-2-cascardo@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211217154410.1228673-1-cascardo@canonical.com>
-References: <20211217154410.1228673-1-cascardo@canonical.com>
+        Fri, 17 Dec 2021 10:46:04 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id A9E8D1F470D2
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639755963; bh=g8FzHrZONn+sq9yOxyyO15ASj7LcA+jTCZr3Ns4ferM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nlMI2xDSeiHBllF1vsZmXyGv5d2IAsLBYIPL0wQQWGfBPsd2HROAFZ+xUNU5Wxp1E
+         mn3cSZQ47JnpIRrBD4O/x7kLbF/5mFfgEa7Z/7OQosw15fm5hpnYy8jGOq97az7oqO
+         v1cFNmah41dGEaqrn/5dXt9bVZ6uwLvVAAnYh43ZqfzXP3YQo4lg2Vrh0RYKDeVvI5
+         lxcHMKydJVUHHT4RWaafnfr1/0CZds3/h/AV2FGZJPfv4BbIOXVNrjXQxCAFZSc4QT
+         z3OeqGv8P/N63tsZFyoxle0yesiS1xyE08UIqfM4cYYf0RG6cFflvcM9t9Pc4MpN6q
+         nbnwqcrp/gw9w==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+Subject: [PATCH] arm64: defconfig: Enable cpufreq for MediaTek
+Date:   Fri, 17 Dec 2021 10:44:52 -0500
+Message-Id: <20211217154452.868419-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the workqueue allocation fails, the driver is marked as not initialized,
-and timer and panic_notifier will be left registered.
+The MediaTek CPUFreq driver provides control of CPU frequency/voltage
+on MediaTek SoCs. Since there's no device-tree node to bind it to, the
+driver needs to be enabled built-in. Enable it so.
 
-Instead of removing those when workqueue allocation fails, do the workqueue
-initialization before doing it, and cleanup srcu_struct if it fails.
-
-Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: Corey Minyard <cminyard@mvista.com>
-Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index 84975b21fff2..266c7bc58dda 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -5396,20 +5396,23 @@ static int ipmi_init_msghandler(void)
- 	if (rv)
- 		goto out;
- 
--	timer_setup(&ipmi_timer, ipmi_timeout, 0);
--	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
--
--	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
--
- 	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
- 	if (!remove_work_wq) {
- 		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
- 		rv = -ENOMEM;
--		goto out;
-+		goto out_wq;
- 	}
- 
-+	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-+	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
-+
-+	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-+
- 	initialized = true;
- 
-+out_wq:
-+	if (rv)
-+		cleanup_srcu_struct(&ipmi_interfaces_srcu);
- out:
- 	mutex_unlock(&ipmi_interfaces_mutex);
- 	return rv;
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f2e2b9bdd702..829e8bc045f7 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -96,6 +96,7 @@ CONFIG_ARM_QCOM_CPUFREQ_HW=y
+ CONFIG_ARM_RASPBERRYPI_CPUFREQ=m
+ CONFIG_ARM_SCMI_CPUFREQ=y
+ CONFIG_ARM_TEGRA186_CPUFREQ=y
++CONFIG_ARM_MEDIATEK_CPUFREQ=y
+ CONFIG_QORIQ_CPUFREQ=y
+ CONFIG_ARM_SCMI_PROTOCOL=y
+ CONFIG_ARM_SCPI_PROTOCOL=y
 -- 
-2.32.0
+2.34.1
 

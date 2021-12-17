@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61679479719
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DCF479723
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbhLQW2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:28:14 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:42621 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbhLQW2N (ORCPT
+        id S230286AbhLQW20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:28:26 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:44748 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229521AbhLQW2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:28:13 -0500
-Received: by mail-oi1-f175.google.com with SMTP id p4so5691537oia.9;
-        Fri, 17 Dec 2021 14:28:13 -0800 (PST)
+        Fri, 17 Dec 2021 17:28:25 -0500
+Received: by mail-ot1-f42.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso4573462otj.11;
+        Fri, 17 Dec 2021 14:28:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Oy9ynnGy4whY6EBqSRstAqc45+euDKF4+pC9GX/4BXs=;
-        b=Gb6OHycm4nZihTCf0KxrOs740ZOOEdLZyChylO9TJxt4U12NhwcQYqPYikf+DZpnZY
-         WyaxXSQ//T4e4kd6vj8sOkf639vPhK8Dlkd5TDB+eKZcfbnsDC5JAClrdKfsdxZIoA0D
-         PmepwPMk7UNOiC1K+vk55QsT5yDv9MDJ82ECLHu6mODCrRg5QTGTHxMXE7wCfVYlHSPJ
-         DTBWAQwt2zD3NmAeiICHYXiG9+5GjX8FyirmVkwD+a6MNNWEOwYhBvyKO0k6F3NPPI4D
-         r1tGxp/6Fz/jp7sCbrxYM0hV8matHZK9OTH1N0VQFVn5MU0UbOX0QzzPtDWARR00LdQ1
-         CnRw==
-X-Gm-Message-State: AOAM530mqo7aUYEw7s3YpeI2WouI2yBFn0b5SilkuLWm5Be+fFHAw269
-        MN3vFm2S3k3ifqFadCyK6w==
-X-Google-Smtp-Source: ABdhPJwlsYxGfa1AkrtvMTj870rRm62U72cdIXe+xbuPtfbgEuKhRH9cvsMXxaFaKqWbBOqikIDd/A==
-X-Received: by 2002:a54:480b:: with SMTP id j11mr3796414oij.102.1639780093236;
-        Fri, 17 Dec 2021 14:28:13 -0800 (PST)
+        bh=w0FVigHbSupuS2iOeVxLq4I6AIyzIF2DwIK5997zYiE=;
+        b=HoVUWXz0JBLLMHJ0HsLBDGHdXDDu91qsmVxhVWUK5/ycMXWJj7PK8dbwXLf1apTGZ1
+         m+s+UeZ/JW9vBXdp2fEGqrE/XNTwO4AJ5OYBhW2enf6BkOpIFvWyBfImFZNCVWBy+Ihe
+         gvH7z+Am6o7jTUbEleQO3c5Zw3I/tdln6Hs03fg0ObeZKXcVNoiraTns9wRHc2QVRs6J
+         e1b4RETpPqmXrE+ZoRvQ82iKBO5ds7iLNCf16ipvc2GQxhESVDUFplP2pV0aKaxwbVqM
+         ik1N2q9UNUZv0hwe8ZvTBdA5IkctHahO6P+CrmKj+YLPG0ArzL3ark+ahzFcG/RXpOxi
+         TqKQ==
+X-Gm-Message-State: AOAM530xOs3Ox+6opZO8e75xbOBfWPJk2K3WwsBQEHk1nx26LDdsNh1v
+        xOrN0WPOrwS4OGzRmYQerw==
+X-Google-Smtp-Source: ABdhPJxyzl5fqXhMNvKMBwTNd8zobu66Hnp+wp3/Q9ena3gos2v+Om4OWEKqNrCT65AJBE+xBXIC7w==
+X-Received: by 2002:a05:6830:200d:: with SMTP id e13mr3878879otp.109.1639780104674;
+        Fri, 17 Dec 2021 14:28:24 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o6sm1781611oou.41.2021.12.17.14.28.12
+        by smtp.gmail.com with ESMTPSA id n11sm1745387oor.9.2021.12.17.14.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 14:28:12 -0800 (PST)
-Received: (nullmailer pid 3693043 invoked by uid 1000);
-        Fri, 17 Dec 2021 22:28:11 -0000
-Date:   Fri, 17 Dec 2021 16:28:11 -0600
+        Fri, 17 Dec 2021 14:28:24 -0800 (PST)
+Received: (nullmailer pid 3693509 invoked by uid 1000);
+        Fri, 17 Dec 2021 22:28:23 -0000
+Date:   Fri, 17 Dec 2021 16:28:23 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v5 1/2] dt-bindings: interrupt-controller: Convert
- BCM7120 L2 to YAML
-Message-ID: <Yb0O+3EDUJnFvJGR@robh.at.kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v5 2/2] dt-bindings: interrupt-controller: Merge BCM3380
+ with BCM7120
+Message-ID: <Yb0PB2dOGnzC2kSZ@robh.at.kernel.org>
 References: <20211217160546.497012-1-f.fainelli@gmail.com>
- <20211217160546.497012-2-f.fainelli@gmail.com>
+ <20211217160546.497012-3-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217160546.497012-2-f.fainelli@gmail.com>
+In-Reply-To: <20211217160546.497012-3-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 08:05:45 -0800, Florian Fainelli wrote:
-> Convert the Broadcom BCM7120 Level 2 interrupt controller Device Tree
-> binding to YAML to help with validation.
+On Fri, 17 Dec 2021 08:05:46 -0800, Florian Fainelli wrote:
+> The two bindings are very similar and should be covered by the same
+> document, do that so we can get rid of an additional binding file.
 > 
 > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  .../brcm,bcm7120-l2-intc.txt                  |  88 ------------
->  .../brcm,bcm7120-l2-intc.yaml                 | 126 ++++++++++++++++++
->  2 files changed, 126 insertions(+), 88 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+>  .../brcm,bcm3380-l2-intc.txt                  | 39 -------------------
+>  .../brcm,bcm7120-l2-intc.yaml                 | 31 +++++++++++++--
+>  2 files changed, 28 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
 > 
 
 Applied, thanks!

@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31E5478816
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B13747881A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbhLQJtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:49:03 -0500
-Received: from mail-vk1-f177.google.com ([209.85.221.177]:42998 "EHLO
-        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbhLQJtC (ORCPT
+        id S234557AbhLQJue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231786AbhLQJuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:49:02 -0500
-Received: by mail-vk1-f177.google.com with SMTP id s1so1136054vks.9;
-        Fri, 17 Dec 2021 01:49:01 -0800 (PST)
+        Fri, 17 Dec 2021 04:50:32 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C040C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:50:32 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id r5so1604905pgi.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:50:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rypggmWj2ZAR/qBSI7OyiNkg4p9nnMtSBFRsWhsabrA=;
+        b=eMaXZ9DNADrf6LYLKFamcJVyOxhIpEzD5wgYlnNTckyKN6ED+hY8L3FhTE4y8fdsHI
+         Ju3yYPhoSEroXER7y14QuqbTCrF80FPNrHtPP+Xj6TsKGEy+dc9TaqAHqapB1RGQBYnL
+         FT3QVDFvHKBEoVNw+0dZjmKyY3RAPbEpfR3s+UyTmZnMiGtnj/fmP9k3tpnWwpPctkmX
+         wWbGw+FOnrPXvlZF/IeVFvae6JzbTTYJzDph840A+fyfbns7UFtkehiwJz1OcitgBEWR
+         ZrYRKKn4+hJJS1tJqLBcj1b8GAaqlZ1CzdmEtELhKAiBnSB7XUXy84fwa23aS0Krthsc
+         sRYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pV3wufp8Dvr2hDhjItQtnYu6eMKRgXVIFNhbTAtUVzU=;
-        b=yvw5bl0T3tZKXmmpbo/vH01xbr9fzBmv3P+W8H9MtsOKaHt097Nw+0XrQD2L+wMmvr
-         z42lzBUSdFLgxNCKEfMrizK1dIgAR36ZSS6XknytaEWq4mCVg6lsRzb+E1VV6U2BZWbA
-         0mDznrCCYwfZMU3VPpLgdJdCGP2DhqorfKRiuUYFpyabSrujE/j2ofb0DZqwuDOYv1ca
-         qVs97xUcVgHu8B4juOldyJ8X4eTq2aQszGvEcWRea/Ij2wDse4yb7HW/Qht5Sw9cP7oQ
-         2TIUtTHA8iiYmAVgma7H7PrU9qGz1cQb7gG0iGdvHUFWfm4kibiUQErz83Y7dsE5mH3g
-         7kWg==
-X-Gm-Message-State: AOAM531njpYNAKJMNAqxkfZBOusG9qAeRZ8tO0G/b+dUbhBV+QKsnRT/
-        gzDMo1flr+ij0c2Qpxc0ZdqgZ5Je5BWdSw==
-X-Google-Smtp-Source: ABdhPJzlqo2h8WQv5SAzvK4/3sicPepHkLvrIy/RzWGDskdL9bfhn0NyB/ZFWmKRXYRwhZRJgvObZA==
-X-Received: by 2002:a1f:a556:: with SMTP id o83mr811562vke.9.1639734540702;
-        Fri, 17 Dec 2021 01:49:00 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id v8sm1679419vkc.52.2021.12.17.01.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 01:48:59 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id u40so3318675uad.1;
-        Fri, 17 Dec 2021 01:48:59 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr650580vsj.77.1639734538930;
- Fri, 17 Dec 2021 01:48:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rypggmWj2ZAR/qBSI7OyiNkg4p9nnMtSBFRsWhsabrA=;
+        b=3JTSNYQH6IAjGzXcNS2AuB+lX4XXmmLPJRVoqvRDpr8cV0pPD7hdfGHu47WDWVUhAP
+         axHUnQoexveqH9CCDQ2Wd0+59cEk5XSU8k5SeeGAQjkcKeBRhpfgHdI+wzbUY1mfN5am
+         6V+dIBOCQyp2NQgnvNFjd/ITsTzKcPZHolwZEYMKJ1KOoGEhyyPx13+llG8zYrC03Vbf
+         JcHlBKaczzff3UCw8OHcxk7COVu4uja38jupwKmhNq6JPfQh4g3cP4nInUCbA7q/21HD
+         jvNnHU+mdrfz4f6yakgdpTOL/5C8TJ0Lk6j0z4iEKD0SRMs7wGZqOaYMFgqnX10BPN9k
+         s2Ow==
+X-Gm-Message-State: AOAM531Tj5TBWkDkQ/BLao50U/sPG8BLqPXns6VKPJ4++4oSrVNbOJuC
+        5PI0VjjTonihSAUscJdS/5uyvA==
+X-Google-Smtp-Source: ABdhPJyXAe+mFABlJukIfX+yxy5iTzogn0nR/bdksiB/PzmFmpvw9Y1V/5Vxtri71v0ALhcbkADZlQ==
+X-Received: by 2002:a63:f651:: with SMTP id u17mr2148049pgj.256.1639734631784;
+        Fri, 17 Dec 2021 01:50:31 -0800 (PST)
+Received: from C02CPFUZMD6M.bytedance.net ([61.120.150.71])
+        by smtp.gmail.com with ESMTPSA id nv12sm8759229pjb.49.2021.12.17.01.50.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Dec 2021 01:50:31 -0800 (PST)
+From:   Ting Liu <liuting.0x7c00@bytedance.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
+        shakeelb@google.com, willy@infradead.org, sjpark@amazon.de,
+        "liuting.0x7c00" <liuting.0x7c00@bytedance.com>
+Subject: [PATCH] mm: make some vars and functions static or __init
+Date:   Fri, 17 Dec 2021 17:50:23 +0800
+Message-Id: <20211217095023.67293-1-liuting.0x7c00@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
-In-Reply-To: <20211217093325.30612-1-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Dec 2021 10:48:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWTjrAiHosU0cGyJYkK=9JzNgHb=tjHXPdYxTWmkVzeYQ@mail.gmail.com>
-Message-ID: <CAMuHMdWTjrAiHosU0cGyJYkK=9JzNgHb=tjHXPdYxTWmkVzeYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Update the Icicle Kit device tree
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atish.patra@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+From: "liuting.0x7c00" <liuting.0x7c00@bytedance.com>
 
-On Fri, Dec 17, 2021 at 10:31 AM <conor.dooley@microchip.com> wrote:
-> Also depends on Geert's format changes to interrupt grouping etc [2].
->
-> Additionally, the interrupt-extended warnings on the plic/clint are
-> cleared by [3] & [4], which lore appears to have been very confused about.
+"page_idle_ops" as a global var, but its scope of use within this
+document. So it should be static.
+"page_ext_ops" is a var used in the kernel initial phase. And other
+functions are aslo used in the kernel initial phase. So they should be
+__init or __initdata to reclaim memory.
 
-Right, it ended up being even more messier than I thought, and confuses
-"b4 am" too.
-I will resend these 3 series later today.
+Signed-off-by: liuting.0x7c00 <liuting.0x7c00@bytedance.com>
+Signed-off-by: Ting Liu <liuting.0x7c00@bytedance.com>
+---
+ include/linux/page_idle.h | 1 -
+ mm/page_ext.c             | 4 ++--
+ mm/page_owner.c           | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-> [1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
-> [2] https://lore.kernel.org/linux-riscv/cover.1639660956.git.geert@linux-m68k.org/T/
-> [3] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639662093.git.geert@linux-m68k.org/
-> [4] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639661878.git.geert@linux-m68k.org/
+diff --git a/include/linux/page_idle.h b/include/linux/page_idle.h
+index 83abf95e9fa7..4663dfed1293 100644
+--- a/include/linux/page_idle.h
++++ b/include/linux/page_idle.h
+@@ -13,7 +13,6 @@
+  * If there is not enough space to store Idle and Young bits in page flags, use
+  * page ext flags instead.
+  */
+-extern struct page_ext_operations page_idle_ops;
+ 
+ static inline bool folio_test_young(struct folio *folio)
+ {
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 6242afb24d84..eecd7221143d 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -63,12 +63,12 @@ static bool need_page_idle(void)
+ {
+ 	return true;
+ }
+-struct page_ext_operations page_idle_ops = {
++static struct page_ext_operations page_idle_ops __initdata = {
+ 	.need = need_page_idle,
+ };
+ #endif
+ 
+-static struct page_ext_operations *page_ext_ops[] = {
++static struct page_ext_operations *page_ext_ops[] __initdata = {
+ #ifdef CONFIG_PAGE_OWNER
+ 	&page_owner_ops,
+ #endif
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 4f924957ce7a..5eea061bb1e5 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -46,7 +46,7 @@ static int __init early_page_owner_param(char *buf)
+ }
+ early_param("page_owner", early_page_owner_param);
+ 
+-static bool need_page_owner(void)
++static __init bool need_page_owner(void)
+ {
+ 	return page_owner_enabled;
+ }
+@@ -75,7 +75,7 @@ static noinline void register_early_stack(void)
+ 	early_handle = create_dummy_stack();
+ }
+ 
+-static void init_page_owner(void)
++static __init void init_page_owner(void)
+ {
+ 	if (!page_owner_enabled)
+ 		return;
+-- 
+2.20.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

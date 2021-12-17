@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFB9478174
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB74478175
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhLQAiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:38:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51680 "EHLO
+        id S231244AbhLQAiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:38:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31135 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231150AbhLQAiI (ORCPT
+        by vger.kernel.org with ESMTP id S231156AbhLQAiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:38:08 -0500
+        Thu, 16 Dec 2021 19:38:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639701488;
+        s=mimecast20190719; t=1639701489;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/41J8DAM1gdd3WP+PUnIuvtC1QrJS0LZN5dpagEG/EU=;
-        b=AJ3S4EhdohlXR/YVHQ6iRmS7KuxXfDpSNWRJGbrssw1OFQb5RsuA2vKoHuWCqiH0wZwLu3
-        8uGF287WUld+O0mN7kAY+0qbKojFDGGkep59iYSsS0rNiDn33zbm92b1Kjze/dixVWp9Kt
-        zJj/Eghhhxx8zjX0g+7Wt+st4Jv2FBM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BjSPCkabpBJdylyAzsXsZ678mzFYTORqarlksLIyBUc=;
+        b=XMv3gZVn6d2ufj+pfZZr72cZs7ZTWDuaVdkAz0GWNUREdoiegeZWLUE1vDbgASALvwovFj
+        16HMKSxupemFCnEKVpAkGuFrh+iB8/21zIiyu4P26lEkrcteVy0SQioL9LValngqfuBuwq
+        izBox6P2rdpechdWKHr4TlpA5Jc+rhA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-cFE2eZhbNYCkn4_ORDkjig-1; Thu, 16 Dec 2021 19:38:06 -0500
-X-MC-Unique: cFE2eZhbNYCkn4_ORDkjig-1
-Received: by mail-wr1-f70.google.com with SMTP id y4-20020adfd084000000b00186b16950f3so142864wrh.14
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:38:06 -0800 (PST)
+ us-mta-524-sRn5Pv10MTqlLhWQiusnGw-1; Thu, 16 Dec 2021 19:38:08 -0500
+X-MC-Unique: sRn5Pv10MTqlLhWQiusnGw-1
+Received: by mail-wr1-f69.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso139492wrd.21
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:38:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/41J8DAM1gdd3WP+PUnIuvtC1QrJS0LZN5dpagEG/EU=;
-        b=4MScvffrFrpZX+hM5rByudfUckHlyOEEHYdRPXXHBnkepWRC0ol/z6TK6yhcBvPEzg
-         A/B8Ab7ExktymUlC+FstSP3fX0hyGejSfmdC0FkepCXNA+gewU4tLZRjJ72rrbtr/ELI
-         ghihnVNeWN7B6kGcTDNx4nrPHCWZqVMsq9Paa/8qe0Pa8A4zCN4ULTWLOW+o6A/1uUiL
-         +tDADfCrhDEokKRrrduj9AHbOJg3IublsIbvhzGs3426XH92ZLWK6mwIv22rmrw5Ri+3
-         mIwsWgWPZwUuW17JHacy2huCeWJyF2kY6JRRhV+MrfauEkiOmod5Rz2PTLhQSs8sQnxB
-         cm1g==
-X-Gm-Message-State: AOAM5325IxPHWm7c1YHEOzneMKH5QWL36n3VdAGCcM6i19DPgbcks/bz
-        ozxe/TRZhCbLDSlwktStdTEUbEPUKWQRk010hBFpaefAiSfIeweLesL/Ak0VQTVxyjwBoI8H/Hh
-        Kr2Vp8kc2nqlLI76Y0MYHOq0P6a6h/DtO8tQGehvEoVV4dydj1/97/Gz+Lb4wZjlUgpIRDBHUFc
-        w=
-X-Received: by 2002:adf:cf05:: with SMTP id o5mr362393wrj.325.1639701485570;
-        Thu, 16 Dec 2021 16:38:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjZVTrbXpQQ+uX2glLN271I37ZMYitMAf7//HnyLzVu2ZhFdMQrRZkMmi8So3CiwT6jRlLCg==
-X-Received: by 2002:adf:cf05:: with SMTP id o5mr362380wrj.325.1639701485328;
-        Thu, 16 Dec 2021 16:38:05 -0800 (PST)
+        bh=BjSPCkabpBJdylyAzsXsZ678mzFYTORqarlksLIyBUc=;
+        b=1yKeOisM0X9vuU5myz0NipxrGqvfgTTRy/DypL0yaSngHXtdrTONNzyOhuuGeKEBCS
+         duWJM9ihAkIUcuZRPeN4KpSoHQ7k2Hy9E05t9cPqfFHXN0r/2RKBmbgMrwt0IF7OiU8e
+         QYu837QSVeEjgrslwCj6nGuTD4AVHiX9MK93/EJ/iHjauGZOBg1KoAXoli8m5TDTwS0+
+         OxQlVnvd04tJ7W+VLz7FI3MW3/0q1XfFN2c9lRw6QTs00qeosCiZ4vnwmf2CmC/g7wlx
+         eHp3DxtdrVeGgFwhCUVhCE7AZcpqseGJsbIgZtQuMfSXuH33/FFrP32f64ShBMbrktLB
+         /HHg==
+X-Gm-Message-State: AOAM533gwHZS1yclb4uzpTPwr03nUMD+bBNAC15OqDsWwUrinKaBjpTC
+        DDuzbzFKA3HduXHQLyaoddD8KZodwprwQnO/zczZkTS++YEtXnEY9aW8vbhaqupzFLREgYhrIYT
+        rC+LmG2UFkIAo+q9kEKwKAhF8eVilACdMGHQCVoHswFg6JdHRoNcR6AG4yz0UgIx32+X3kp1bQX
+        Y=
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr380235wrv.371.1639701486698;
+        Thu, 16 Dec 2021 16:38:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzV0faymaogyu1Cxq+hBi0+XoYVAsqf6T3xAeGgzAF9pGm4bakxsL0yZU74Co8dJ+wx1cPcxg==
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr380219wrv.371.1639701486464;
+        Thu, 16 Dec 2021 16:38:06 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg12sm7368433wmb.5.2021.12.16.16.38.04
+        by smtp.gmail.com with ESMTPSA id bg12sm7368433wmb.5.2021.12.16.16.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 16:38:04 -0800 (PST)
+        Thu, 16 Dec 2021 16:38:06 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: [PATCH v2 07/37] drm/atmel-hlcdc: Use drm_module_platform_driver() to register the driver
-Date:   Fri, 17 Dec 2021 01:37:22 +0100
-Message-Id: <20211217003752.3946210-8-javierm@redhat.com>
+        Alison Wang <alison.wang@nxp.com>,
+        Stefan Agner <stefan@agner.ch>
+Subject: [PATCH v2 08/37] drm/fsl-dcu: Use drm_module_platform_driver() to register the driver
+Date:   Fri, 17 Dec 2021 01:37:23 +0100
+Message-Id: <20211217003752.3946210-9-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211217003752.3946210-1-javierm@redhat.com>
 References: <20211217003752.3946210-1-javierm@redhat.com>
@@ -78,22 +78,22 @@ Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
 (no changes since v1)
 
- drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c | 2 +-
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
-index 1656d27b78b6..3c01ede792bb 100644
---- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
-+++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c
-@@ -833,7 +833,7 @@ static struct platform_driver atmel_hlcdc_dc_platform_driver = {
- 		.of_match_table = atmel_hlcdc_dc_of_match,
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+index 660fe573db96..b24265f69523 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+@@ -368,7 +368,7 @@ static struct platform_driver fsl_dcu_drm_platform_driver = {
  	},
  };
--module_platform_driver(atmel_hlcdc_dc_platform_driver);
-+drm_module_platform_driver(atmel_hlcdc_dc_platform_driver);
  
- MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
- MODULE_AUTHOR("Boris Brezillon <boris.brezillon@free-electrons.com>");
+-module_platform_driver(fsl_dcu_drm_platform_driver);
++drm_module_platform_driver(fsl_dcu_drm_platform_driver);
+ 
+ MODULE_DESCRIPTION("Freescale DCU DRM Driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.33.1
 

@@ -2,166 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9F64781FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B26478200
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbhLQBQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 20:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbhLQBQu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:16:50 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489C4C061574;
-        Thu, 16 Dec 2021 17:16:49 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id g17so1779069ybe.13;
-        Thu, 16 Dec 2021 17:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CxroxGpED4ebB7+ml5TK6/oHJjco3q8gRiWmo9QG7KA=;
-        b=GikRGHKvM48x348muCoHHjZE+J2Ho76W8ZGYgKq5Px0yDgaII/6byXEpe7T9mI5oux
-         Io2C/9zZ4Wl2CVDv6Hd4SxyaKGpCf1tYOXMhVVF7gXU1JGpll2e9yWlKXigogEF8mKeP
-         5rdye4tyujsx7McW9oXjlel2pAQZ57Bj6eDQbvR+SpelIOWckKqk+HVC4h0fFBVFDxcR
-         Q0Hy7yQITyf9uZOMnP7ClYNd13GBqevVMdANSwoBHX3zm1JsFT0ycSVaXvAze1xyDrlX
-         awBBkHQZ+m1io6Xts2PfzgB14KmDu3DWtoKLA/W2x3M5zUQgpVVUmTJmqErSs2RuqLEh
-         IzGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CxroxGpED4ebB7+ml5TK6/oHJjco3q8gRiWmo9QG7KA=;
-        b=r6+HcwbK2kzN+vxMEfVqPVCLnGlOZN6ImpDx86tB6e0llAigVXrFRtzl/lWSP9chR0
-         zSWayQPf3TgORpPaKuFf/XbjtXaE+DB8D/mIfs3QMAU58/HImJFwxwGknHwK/6JCkG01
-         6yp/rgl8SBDdftZiGoSLC09tXQSEkdcNDgUF1qL9uiW2tkl+4O4eAsJZ6PM8I1ui7c/m
-         HXwwLuGGFmr67xaa9a5nWjFgQAeBMlwdpDQDgWZzv53ifHCGx+m5KxpZJ/PhcJhlAI6w
-         7kWmTLLY1DwmPjQ5w4DilsZdVZphMgfjcZ45fLWpN3JLxfa34OQgNEO3Ux0lEoyXrnAF
-         ZRIw==
-X-Gm-Message-State: AOAM5306xQGzbWDPqyY/vHSv8O9bEuxgeQHinMX2UwJixOI8NV/LYS5D
-        r6HlIEb6YOhQT3bt/vQkr+Jey+XGx84nLBFr1O/IUVWok8lmKQ==
-X-Google-Smtp-Source: ABdhPJwRNPsT87LmhYEe2k4TjApsmTNJZSqksXUBA3DXWm69lqwyLpmMBd9YbNv3o3oyBbjr8rCKsxCYLwTN1uAM/a8=
-X-Received: by 2002:a25:148a:: with SMTP id 132mr1052771ybu.251.1639703808506;
- Thu, 16 Dec 2021 17:16:48 -0800 (PST)
+        id S231740AbhLQBUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 20:20:35 -0500
+Received: from mga11.intel.com ([192.55.52.93]:11069 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229994AbhLQBUe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 20:20:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639704034; x=1671240034;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KdNS2igUlIaBd7oMETpPxnplZBWgkb8hOV7I8TmPuxM=;
+  b=FR3WoQdVy/BCixt5uuqYxT+NMktBE1mKnfLdAenfw09vClzMFsxqIw+v
+   sa66bF7dHHH1o/a90d1jHYaKMV21/M6Dm9L/3nh4JpB6e3dV+nvi1/ggs
+   LM7ykgOZHoh4O+zv0+vmF/vuWKufRyhbiDAOigFW1DBOiPJAuMZB7OyB9
+   h+VkqtnJC7oRvviJM25zS5s0rMIPiiZvTYb9Z3EU+/Wn27NtLOYdhrMdK
+   g5N7I7SgXD6d3qf8M5Z2jwjl6gQxjzL8TsMS4UegPKQLeE2nniBgpbtxp
+   +KKrDqVivH1ouD8VNi8NytO0j0GYbt/WLxbvddAKbGeQv1O0+qwb80OEU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237190801"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="237190801"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 17:20:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="466307445"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Dec 2021 17:20:32 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my1vE-00043P-6D; Fri, 17 Dec 2021 01:20:32 +0000
+Date:   Fri, 17 Dec 2021 09:20:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [t-kristo-pm:usi-5.16-v5-bpf 15/19] drivers/hid/hid-bpf.c:87:52:
+ sparse: sparse: incorrect type in argument 2 (different address spaces)
+Message-ID: <202112170956.AkNj0dHk-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211217001238.16298-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <d25d6c6f-098a-1dbc-0c85-00f97f491e99@opensource.wdc.com>
-In-Reply-To: <d25d6c6f-098a-1dbc-0c85-00f97f491e99@opensource.wdc.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 17 Dec 2021 01:16:22 +0000
-Message-ID: <CA+V-a8s=WhzjX-Cw5xXJ5Y1uADx42tHMWYuVruSPt87T9BNUeg@mail.gmail.com>
-Subject: Re: [PATCH] ata: pata_of_platform: Use of_irq_to_resource() to
- populate IRQ resource
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-ide@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien,
+tree:   https://github.com/t-kristo/linux-pm usi-5.16-v5-bpf
+head:   82a2c7cbd9682f2664179cd7e01647e46272c316
+commit: 8f11b49b2cc9d2bf0e94f43218c8e9de47fd960f [15/19] HID: bpf: change hid_bpf_prog_attach/detach_rdesc to be more generic
+config: arm64-randconfig-s031-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170956.AkNj0dHk-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/t-kristo/linux-pm/commit/8f11b49b2cc9d2bf0e94f43218c8e9de47fd960f
+        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
+        git fetch --no-tags t-kristo-pm usi-5.16-v5-bpf
+        git checkout 8f11b49b2cc9d2bf0e94f43218c8e9de47fd960f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/ drivers/pinctrl/
 
-Thank you for the review.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, Dec 17, 2021 at 12:23 AM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 12/17/21 09:12, Lad Prabhakar wrote:
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypassed the hierarchical setup and messed up the
->
-> s/bypassed/bypasses
-> s/messed/messes
->
-Ok will update this.
 
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use of_irq_to_resource().
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > Hi,
-> >
-> > Dropping usage of platform_get_resource() was agreed based on
-> > the discussion [0].
-> >
-> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/
-> > patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> >
-> > Cheers,
-> > Prabhakar
-> > ---
-> >  drivers/ata/pata_of_platform.c | 11 ++++++++---
-> >  1 file changed, 8 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/ata/pata_of_platform.c b/drivers/ata/pata_of_platform.c
-> > index 35aa158fc976..557f349eb533 100644
-> > --- a/drivers/ata/pata_of_platform.c
-> > +++ b/drivers/ata/pata_of_platform.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_address.h>
-> > +#include <linux/of_irq.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/ata_platform.h>
-> >  #include <linux/libata.h>
-> > @@ -25,11 +26,12 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
-> >       struct device_node *dn = ofdev->dev.of_node;
-> >       struct resource io_res;
-> >       struct resource ctl_res;
-> > -     struct resource *irq_res;
-> > +     struct resource irq_res;
-> >       unsigned int reg_shift = 0;
-> >       int pio_mode = 0;
-> >       int pio_mask;
-> >       bool use16bit;
-> > +     int irq;
-> >
-> >       ret = of_address_to_resource(dn, 0, &io_res);
-> >       if (ret) {
-> > @@ -45,7 +47,9 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
-> >               return -EINVAL;
-> >       }
-> >
-> > -     irq_res = platform_get_resource(ofdev, IORESOURCE_IRQ, 0);
-> > +     irq = of_irq_to_resource(dn, 0, &irq_res);
-> > +     if (irq <= 0 && irq != -ENXIO)
-> > +             return irq ? irq : -ENXIO;
->
-> Why are you making an exception for ENXIO ? I suspect this is to cover
-> the case "there is no IRQ for this node", but then how does this
-> differentiate from a real error case ?
->
--ENXIO to handle no interrupt case. In case of actual error case we
-fallback to polling mode..
+sparse warnings: (new ones prefixed by >>)
+   drivers/hid/hid-bpf.c:38:21: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:38:21: sparse:    struct bpf_prog_array [noderef] __rcu *
+   drivers/hid/hid-bpf.c:38:21: sparse:    struct bpf_prog_array *
+   drivers/hid/hid-bpf.c:48:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:48:9: sparse:    struct bpf_prog_array [noderef] __rcu *
+   drivers/hid/hid-bpf.c:48:9: sparse:    struct bpf_prog_array *
+   drivers/hid/hid-bpf.c:68:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog [noderef] __rcu *
+   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog *
+   drivers/hid/hid-bpf.c:68:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog [noderef] __rcu *
+   drivers/hid/hid-bpf.c:68:20: sparse:    struct bpf_prog *
+   drivers/hid/hid-bpf.c:83:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
+   drivers/hid/hid-bpf.c:83:59: sparse:     expected struct bpf_prog_array **array
+   drivers/hid/hid-bpf.c:83:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
+   drivers/hid/hid-bpf.c:85:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
+   drivers/hid/hid-bpf.c:85:59: sparse:     expected struct bpf_prog_array **array
+   drivers/hid/hid-bpf.c:85:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
+>> drivers/hid/hid-bpf.c:87:52: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog **target @@     got struct bpf_prog [noderef] __rcu ** @@
+   drivers/hid/hid-bpf.c:87:52: sparse:     expected struct bpf_prog **target
+   drivers/hid/hid-bpf.c:87:52: sparse:     got struct bpf_prog [noderef] __rcu **
+   drivers/hid/hid-bpf.c:109:21: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:109:21: sparse:    struct bpf_prog_array [noderef] __rcu *
+   drivers/hid/hid-bpf.c:109:21: sparse:    struct bpf_prog_array *
+   drivers/hid/hid-bpf.c:119:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:119:9: sparse:    struct bpf_prog_array [noderef] __rcu *
+   drivers/hid/hid-bpf.c:119:9: sparse:    struct bpf_prog_array *
+   drivers/hid/hid-bpf.c:138:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:138:20: sparse:    struct bpf_prog [noderef] __rcu *
+   drivers/hid/hid-bpf.c:138:20: sparse:    struct bpf_prog *
+   drivers/hid/hid-bpf.c:138:20: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:138:20: sparse:    struct bpf_prog [noderef] __rcu *
+   drivers/hid/hid-bpf.c:138:20: sparse:    struct bpf_prog *
+   drivers/hid/hid-bpf.c:154:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
+   drivers/hid/hid-bpf.c:154:59: sparse:     expected struct bpf_prog_array **array
+   drivers/hid/hid-bpf.c:154:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
+   drivers/hid/hid-bpf.c:156:59: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct bpf_prog_array **array @@     got struct bpf_prog_array [noderef] __rcu ** @@
+   drivers/hid/hid-bpf.c:156:59: sparse:     expected struct bpf_prog_array **array
+   drivers/hid/hid-bpf.c:156:59: sparse:     got struct bpf_prog_array [noderef] __rcu **
+   drivers/hid/hid-bpf.c:158:26: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/hid/hid-bpf.c:158:26: sparse:    struct bpf_prog *
+   drivers/hid/hid-bpf.c:158:26: sparse:    struct bpf_prog [noderef] __rcu *
+   drivers/hid/hid-bpf.c:221:27: sparse: sparse: symbol 'hid_prog_ops' was not declared. Should it be static?
+   drivers/hid/hid-bpf.c:236:23: sparse: sparse: symbol 'hid_bpf_add_report' was not declared. Should it be static?
+   drivers/hid/hid-bpf.c:264:6: sparse: sparse: symbol 'hid_bpf_free_reports' was not declared. Should it be static?
+   drivers/hid/hid-bpf.c:622:31: sparse: sparse: symbol 'hid_verifier_ops' was not declared. Should it be static?
+   drivers/hid/hid-bpf.c:816:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct bpf_prog const *prog @@     got struct bpf_prog [noderef] __rcu *rdesc_fixup_prog @@
+   drivers/hid/hid-bpf.c:868:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct bpf_prog *prog @@     got struct bpf_prog [noderef] __rcu *rdesc_fixup_prog @@
 
-> >
-> >       of_property_read_u32(dn, "reg-shift", &reg_shift);
-> >
-> > @@ -63,7 +67,8 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
-> >       pio_mask = 1 << pio_mode;
-> >       pio_mask |= (1 << pio_mode) - 1;
-> >
-> > -     return __pata_platform_probe(&ofdev->dev, &io_res, &ctl_res, irq_res,
-> > +     return __pata_platform_probe(&ofdev->dev, &io_res, &ctl_res,
-> > +                                  irq > 0 ? &irq_res : NULL,
-.. here is check for irq number again.
+vim +87 drivers/hid/hid-bpf.c
 
-Cheers,
-Prabhakar
-> >                                    reg_shift, pio_mask, &pata_platform_sht,
-> >                                    use16bit);
-> >  }
-> >
->
->
-> --
-> Damien Le Moal
-> Western Digital Research
+    76	
+    77	static int hid_bpf_prog_attach(struct hid_device *hdev, const union bpf_attr *attr, struct bpf_prog *prog)
+    78	{
+    79		int ret;
+    80	
+    81		switch (attr->attach_type) {
+    82		case BPF_HID_RAW_EVENT:
+    83			return __hid_bpf_prog_attach_array(hdev, &hdev->bpf.event_progs, prog);
+    84		case BPF_HID_KERNEL_EVENT:
+    85			return __hid_bpf_prog_attach_array(hdev, &hdev->bpf.kevent_progs, prog);
+    86		case BPF_HID_RDESC_FIXUP:
+  > 87			ret = __hid_bpf_prog_attach(hdev, &hdev->bpf.rdesc_fixup_prog, prog);
+    88			if (ret)
+    89				return ret;
+    90	
+    91			return hid_reconnect(hdev);
+    92		}
+    93	
+    94		return -EINVAL;
+    95	}
+    96	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

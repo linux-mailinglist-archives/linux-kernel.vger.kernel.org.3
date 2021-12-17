@@ -2,260 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 119AE478D13
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2CE478D22
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbhLQOLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:11:43 -0500
-Received: from mail-eopbgr90088.outbound.protection.outlook.com ([40.107.9.88]:24189
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229599AbhLQOLm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:11:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VNFxFzmHcC7TtqTHQYqj1zwJApOjxv8ysQZEa7E8Q9aU/RLX+wtpvZyYDbolTqT+Dj+H6QjJSosw8yfU9KZsD2eQXRxf2T9MHqGAsB1iC6BHxMkmuuYcsIRcExJhRAfqWbCscnVf19Q14pZOCCD4E0TQVuGmN8mIDFfF3vq1dNA56NjAsSSPbmzMLl3+NYbz4BatKiu/DatKaWCaCP1tBIt3cBJ6+rv+pguc4qcgcJxhL6B1fu6oAlIm4Wuy3TzOPleCa0xllkfbl9gdnRXRNFy3m7YgU+gcnkbUJWsNupagC8+27ClHKV0gg0wft4u69792kLvpgqpiHYqKcKvgPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F6gQUmn42eZRNdI4sq7fopsldfWd2uDGg0wfM4iSnu0=;
- b=Ck1VdEx7IgE1//hENIXFw42EMOog4IpImPjXP9PU/8qUVj/VxRDp4z2El10C95t5zbKvlxmkE3yve2pogOamuCaSzdDhz0V8c6RBl1xNPoJQzw8kI7erKq2kBKir1FR073tC3IrB/S9xvyuzwEmE50xus/S4VoYEdmIi96oKA+AmB52YkPdMLiyksc0fHTiGbjWvtmHjl9wKtytuyDOMjif7k1DJcfoEHzYX8HIDKU5YQWrq/Q7uNPewb+/UXLEVdlXw36PCMly+JhMkvRCRWAaKX/CFOiZbLWE981HBTxz0CzHqqPTb0xFHEkkzBe5z3ggrul/oqbnBVYngksMCSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1606.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:9::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4801.14; Fri, 17 Dec 2021 14:11:38 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%5]) with mapi id 15.20.4801.016; Fri, 17 Dec 2021
- 14:11:38 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Paul Moore <paul@paul-moore.com>
-CC:     =?utf-8?B?Q8OpZHJpYyBMZSBHb2F0ZXI=?= <clg@kaod.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
-Thread-Topic: linux-next: manual merge of the audit tree with the powerpc tree
-Thread-Index: AQHXyhGlv9NcChlzxUqn6eTOsDZjzavlG8oAgAA7YoCAAWBkAIAAA16AgAAsAgCAS62bAIAABqsAgAATXwCAABARAIACZh0AgADpvYCAAP1egA==
-Date:   Fri, 17 Dec 2021 14:11:38 +0000
-Message-ID: <23e9c126-d167-254f-2f4b-391e9f01396c@csgroup.eu>
-References: <20211026133147.35d19e00@canb.auug.org.au>
- <87k0i0awdl.fsf@mpe.ellerman.id.au>
- <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
- <87tuh2aepp.fsf@mpe.ellerman.id.au>
- <2012df5e-62ec-06fb-9f4d-e27dde184a3f@csgroup.eu>
- <CAHC9VhRHs8Lx8+v+LHmJByxO_m330sfLWRsGDsFtQxyQ1860eg@mail.gmail.com>
- <dc5705cf-d47a-57b0-65da-2a2af8d71b19@csgroup.eu>
- <CAHC9VhQPizVLkr2+sqRCS0gS4+ZSw-AMkJM5V64-ku8AQe+QQg@mail.gmail.com>
- <1a78709f-162e-0d78-0550-4e9ef213f9c6@csgroup.eu>
- <102e59ba-fcf0-dd85-9338-75b7ce5fbd83@kaod.org>
- <5f83d1fe-4e6e-1d08-b0c2-aec8ee852065@csgroup.eu>
- <CAHC9VhTcV6jn4z7uGXZb=RZ5k7W4KW1vnoAUMHN6Zhkxsw1Xpg@mail.gmail.com>
-In-Reply-To: <CAHC9VhTcV6jn4z7uGXZb=RZ5k7W4KW1vnoAUMHN6Zhkxsw1Xpg@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5f5a163f-b6ea-49e4-561d-08d9c167242f
-x-ms-traffictypediagnostic: MRZP264MB1606:EE_
-x-microsoft-antispam-prvs: <MRZP264MB1606A9A7ED3796305AC99D47ED789@MRZP264MB1606.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Hgtm6rL6SrFiF4R9pXQC48uCgj7GKDerApDzhKW0Lc4LmuiNJrDsqTDUPGw2O9NFDSWaYd5z37jrnWehoJyLbgbVj0vMg/R1SvdFLYN589I15OJ0Qcy6Zq81RrrzmlWOYTFrEk6yHOoiSsXR4KRaLpmU8MGUuvhNAxHtVP6bCW4BskRvjnhMdrWtATRFZjjMs8g8W7Mo1G6sV5CLBC/06umMIJKqqALFbHygPdkLxdeJvjMu74KpzoluhrnqzYr3x4Ou3bZXeR67OChspp/YrMWX+I74pdoZF/kQrYDS1xLdVL8ZpdKAshQ2qCUdIcInZpKebWDKJ55yuryjHfWNOPjR4wxrIlLpuxJCRuk9J/IJaP94JH/5n24Wsb9/reOWQY68F2H4AbvmTGJVZIjPaLQPirrBudgyfNvWohzA/kjWTn+haYqEfQYyTSMLPVwiXdBlVcREaVWoqUQC+ibTxLh6q3PcVajo2q0KMbWm/NjBlg0TX+91a34dfjqkljdeyRUVLAP/2mXTY4J4XzgbGJo2TM6ublhjB5Y/4KJ36vinTtNQcLL3Xo+0OtBHXQxV3IGx8QiEpMYOSfNBJmDSclL2+cry3QCW/CFwBCfhKTxXo3euVNFq/BVwJnHJzUs/AklH6WUyOq614AQ9LH20pt+I0rh5szWOrXLUVRPd1S1GLtJns+2ogGsBZmLF227jT9KxZg5BMDzp4Lvx+bo7VngYHER45MrWDchlwHq7CYnA0iXx0WTUa+gcFSj2/nB9cIp49P1diWJqnFvBvQVu/Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(6506007)(5660300002)(6486002)(4326008)(26005)(31696002)(6512007)(83380400001)(44832011)(2906002)(6916009)(38070700005)(54906003)(2616005)(8676002)(316002)(53546011)(508600001)(86362001)(66556008)(91956017)(8936002)(76116006)(66476007)(66946007)(66446008)(64756008)(66574015)(122000001)(31686004)(38100700002)(36756003)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OEQvQlp2bVFWTGZVdkVPSnRTdWtuOFFJVjRhM3FBbnBMMDR5SnNyTlR2S3JC?=
- =?utf-8?B?ZERlL3A5b1FxUXIxSlJObVY4Rk9EdDBlejJDRnMyajlyZ1Y1d0hjWmJVTzVM?=
- =?utf-8?B?MjNKN3F2QUF6S2Flb0hLUElnMUV1NDdkbkMxTStsV21HRUdNU1RuRWNwKzky?=
- =?utf-8?B?WU9uSTZnbFFVdWJ2SnZEeEVRc2Y5VjJKNmRjd2ltUzBVcjRsWFhaSHgvaU5o?=
- =?utf-8?B?Ukc3bWQ4RmhCenZkUTFsR25LenhCSGNCM2dwUi9pK1o2WmVzQlVSbXYyWnJJ?=
- =?utf-8?B?ejdldVdoWmpCT3gzN1c2STFFbHhKa3BmT1Z0U2xET212ZnNQS0plNlk0TnNN?=
- =?utf-8?B?VWZMdjBrTTlnWFVBYUtrQVlVZEdjSFBWVkpPNzV6RW1TUkpTR3pUa0c0RjFs?=
- =?utf-8?B?STcvODhtbTJ2Z0tHRzdCdjlFaGlYMlFNMWpXcXcwN1FmQ3dKYjhlVCtOdUpN?=
- =?utf-8?B?eFR3V3hENGkyQ0pWV09IbFcxc2g4ZVhSVDhHcmJpaU5Sbjh1eWdHTytBRE5o?=
- =?utf-8?B?OXhKWkpQbGRjQnFUN0EyY2lRU2F2a3QzZCtUdVRzTnBVUVkrY2tCZFp2S2Fy?=
- =?utf-8?B?YzQxa2Myb1ZlQ0FHMk5SaWl3ZXN2UXF6Y2x1bjFDbDVZSENDS0RJTlNqVFBQ?=
- =?utf-8?B?c1pwL1UzbjZpdm44c2tqK2o4UFpkNDBMb05oaHVXeHVJL2JKNC94QndyVkpt?=
- =?utf-8?B?U081RG03bWxDWkplU3Arc1J2UVFSQ3B1ZlZpQ1BORzNkWU1Lb0ZBY1hsNVVi?=
- =?utf-8?B?YUYxN3JOYi9ERForeFFUTmZkV3FPdGMrbzY5QThYZkZpUmw5MGxVZnJ0T05z?=
- =?utf-8?B?aUV5aTZIaWowWTdYQVRJaWYyV2FJVmJTeDBqM01EMHpyei92RkJuUitzMDlt?=
- =?utf-8?B?YkQ2T3c1R3FXcW10TENnaC8xbHFEZGRCM1JDN2lCZUNVS3ZBRGxPSDVrb2RW?=
- =?utf-8?B?aS9Uak5UVElYVS9yTFMremdlbmlOTFRHYzNaUHB5M3BZaW9YYWtXanAyQVB4?=
- =?utf-8?B?WWZHWkQreVB0UW1JLzU3VGx6blVDMXUvbm9FTUpSNmMzZ0V2dDlucFRpZkF1?=
- =?utf-8?B?Z1Z4WTNSQlZvS2U4bkluRXRUYW1oRFB0RkJMTGlxYzlGSVFrRjZ2WTF2QTJa?=
- =?utf-8?B?VzI2Sy9LM3JzMnZ3ZnhhaGRtSFR3MVUwRG90MGFZOTQ3eWpDWlNGWEpIczN0?=
- =?utf-8?B?ZWJhV0JDbVVSV1BGZWt2L1piU203UmVoU3Exdjlub3lLNk1sWGJCVlBkV05y?=
- =?utf-8?B?Uk81YWRIRGxRajJmSFpldkxPc1B0ZEQrbHcyOEVyallvVDNpdEdJdW0zUU9S?=
- =?utf-8?B?Q21EbWpVTysrRkRUWk1TcUhHV0pRQUt6MCtQek5leUtMeEZJdmd3ZEd2bGow?=
- =?utf-8?B?aG5id0dCcWNsK2htYU9sUE5tYjdzcFZ2OHBhRCt1YjNzQ3RrL09iV2FReWpU?=
- =?utf-8?B?Y2hpeTB0bVNnR0tLeG0wRjUxQWkzb2lSUW1TNXpobjVORWZxTnlYdzBhSTc1?=
- =?utf-8?B?VVcyWFBPSmlGaG5ZS1d1SG54QXZuYUhNQk03Y2pMUjljT0U5VGNRT0tkNHc3?=
- =?utf-8?B?bUc0MW82R3BUaTVmRTVkcE50bjRDMlF0L0Q1Ykx2a2QyYmV1MWlrdmhBSGdD?=
- =?utf-8?B?Q2tpdWlEbllGUEtlNDZyaytWcG9FLzkvbE5INURvaTUxV0RLR09pbi8wTDhR?=
- =?utf-8?B?RnVCd0xjNlJjU3FaQXJFVFY1dU8vUGFxc0JBbUUwb3hNUklXay9Ea2I1aGRM?=
- =?utf-8?B?NGNrMGhieDFjc3ZxRXBjNGJQdEZoTGIwYjFTRnprV3FnWUVzd0d4ZFpSR3Jm?=
- =?utf-8?B?K1Q4TndsQTRuL29pS2J0TnNhRHZRRkNjRVcya0cwMTVnaGcxZ091N3lwVnNP?=
- =?utf-8?B?bWNzTGxWYUw4S1lMZHpPQ2lOb0d5QmFJVVMzcGErOEVVZjhBcng0bjY4anlr?=
- =?utf-8?B?b1BJd3VRZm1VWlpseXJYK2VmaFVvbGt1bHVnRlpYTGNqVFExV1VDOXRGQ0xU?=
- =?utf-8?B?czZZdDRvNmJLOWY2aXBqdmhZYmlISU1OaTg1akdCcWRkVlVYTHlDSzIxQk1H?=
- =?utf-8?B?QlJXMVNEK2RYTU5OREEzREFiSkVsdGkzRjBLZVJQZy9xR1BNVXdaTWEwSTh2?=
- =?utf-8?B?bDh2RWlxclhaSVIyUjVaRkN5SjQwZlBFWWdCV2hlQko4clQ5bE9xZy9IRmtU?=
- =?utf-8?B?UTRobDdJZmFxUXQvOVRWbGh0UXZyMzMydVRrMUx0UERGeXN5aDVPdEQ5ZmtV?=
- =?utf-8?Q?VxAw/Mnr6VxJS14CT/SKMpOec1x+pYTPPTkHYaJqWg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DB0025BCB8C0B04DA9A34685B5B85275@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S236971AbhLQOO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:14:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53359 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236724AbhLQOO1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:14:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639750466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sfPI3FqXkss9BSfDirskzdNZTrv4kuVcNuTx2DR50Yg=;
+        b=LKo+2RKIeDPySxpVwf7unvzdCnirsX3iW5+ARS2bgrVFL0RF2hIrs3LaKevqUplsJLsqwv
+        WGgDJ3UYF28BTupPFnatdmlVkaBHd2p8gy+67hRJhSpYjzy2NkJimnhHZHo383fvm/17Bm
+        USIeETRCimX/joC1w0PjjqmTz40beAo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-539-H540If8aOzaJLYdAm0CEAg-1; Fri, 17 Dec 2021 09:14:23 -0500
+X-MC-Unique: H540If8aOzaJLYdAm0CEAg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EF3A01018722;
+        Fri, 17 Dec 2021 14:14:19 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.193.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E483709E0;
+        Fri, 17 Dec 2021 14:13:49 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, stable@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v6] x86/PCI: Ignore E820 reservations for bridge windows on newer systems
+Date:   Fri, 17 Dec 2021 15:13:48 +0100
+Message-Id: <20211217141348.379461-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f5a163f-b6ea-49e4-561d-08d9c167242f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 14:11:38.1728
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1zLyIRtDJnEsJ9uNTe9gxOWBclROM9KID560u4Q6ZM3YKX1uyOxgbWxKNGfNRQ9dzmw1EcJqXqonMUSz9yc7I/PjqXjEfPBgxu/b8LH5MVM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1606
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE3LzEyLzIwMjEgw6AgMDA6MDQsIFBhdWwgTW9vcmUgYSDDqWNyaXTCoDoNCj4gT24g
-VGh1LCBEZWMgMTYsIDIwMjEgYXQgNDowOCBBTSBDaHJpc3RvcGhlIExlcm95DQo+IDxjaHJpc3Rv
-cGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPj4gVGhhbmtzIEPDqWRyaWMsIEkndmUgbm93
-IGJlZW4gYWJsZSB0byBpbnN0YWxsIGRlYmlhbiBQUEMzMiBwb3J0IG9mIERFQklBTg0KPj4gMTEg
-b24gUUVNVSBhbmQgcnVuIHRoZSB0ZXN0cy4NCj4+DQo+PiBJIGZvbGxvd2VkIGluc3RydWN0aW9u
-cyBpbiBmaWxlIFJFQURNRS5tZCBwcm92aWRlZCBpbiB0aGUgdGVzdCBzdWl0ZS4NCj4+IEkgYWxz
-byBtb2RpZmllZCB0ZXN0cy9NYWtlZmlsZSB0byBmb3JjZSBNT0RFIDo9IDMyDQo+Pg0KPj4gSSd2
-ZSBnb3QgYSBsb3Qgb2YgZmFpbHVyZXMsIGFtIEkgbWlzc2luZyBzb21lIG9wdGlvbnMgaW4gdGhl
-IGtlcm5lbCBvcg0KPj4gc29tZXRoaW5nID8NCj4+DQo+PiBSdW5uaW5nIGFzICAgdXNlciAgICBy
-b290DQo+PiAgICAgICAgICAgd2l0aCBjb250ZXh0IHJvb3Q6OjoNCj4+ICAgICAgICAgICBvbiAg
-IHN5c3RlbQ0KPiANCj4gV2hpbGUgU0VMaW51eCBpcyBub3QgcmVxdWlyZWQgZm9yIGF1ZGl0LCBJ
-IGRvbid0IHRoaW5rIEkndmUgZXZlciBydW4NCj4gaXQgb24gc3lzdGVtIHdpdGhvdXQgU0VMaW51
-eC4gIEluIHRoZW9yeSB0aGUgYXVkaXQtdGVzdHN1aXRlIHNob3VsZG4ndA0KPiByZWx5IG9uIFNF
-TGludXggYmVpbmcgcHJlc2VudCAob3RoZXIgdGhhbiB0aGUgU0VMaW51eCBzcGVjaWZpYyB0ZXN0
-cw0KPiBvZiBjb3Vyc2UpLCBidXQgSSdtIG5vdCBjb25maWRlbnQgZW5vdWdoIHRvIHNheSB0aGF0
-IHRoZSB0ZXN0IHN1aXRlDQo+IHdpbGwgcnVuIHdpdGhvdXQgcHJvYmxlbSB3aXRob3V0IFNFTGlu
-dXguDQo+IA0KPiBJZiBpdCBpc24ndCB0b28gZGlmZmljdWx0LCBJIHdvdWxkIHN1Z2dlc3QgZW5h
-YmxpbmcgU0VMaW51eCBpbiB5b3VyDQo+IGtlcm5lbCBidWlsZCBhbmQgZW5zdXJpbmcgdGhlIG5l
-Y2Vzc2FyeSB1c2Vyc3BhY2UsIHBvbGljeSwgZXRjLiBpcw0KPiBpbnN0YWxsZWQuICBZb3UgZG9u
-J3QgbmVlZCB0byB3b3JyeSBhYm91dCBnZXR0aW5nIGl0IGFsbCBydW5uaW5nDQo+IGNvcnJlY3Rs
-eTsgdGhlIGF1ZGl0LXRlc3RzdWl0ZSBzaG91bGQgcGFzcyB3aXRoIFNFTGludXggaW4gcGVybWlz
-c2l2ZQ0KPiBtb2RlLg0KPiANCj4gSWYgeW91J3JlIHN0aWxsIHNlZWluZyBhbGwgdGhlc2UgZmFp
-bHVyZXMgYWZ0ZXIgdHJ5aW5nIHRoYXQgbGV0IHVzIGtub3cuDQo+IA0KDQpTdGlsbCB0aGUgc2Ft
-ZSBpdCBzZWVtczoNCg0KUnVubmluZyBhcyAgIHVzZXIgICAgcm9vdA0KICAgICAgICAgd2l0aCBj
-b250ZXh0IHVuY29uZmluZWRfdTp1bmNvbmZpbmVkX3I6dW5jb25maW5lZF90OnMwLXMwOmMwLmMx
-MDIzDQogICAgICAgICBvbiAgIHN5c3RlbQ0KDQojIFRlc3QgMyBnb3Q6ICIyNTYiIChiYWNrbG9n
-X3dhaXRfdGltZV9hY3R1YWxfcmVzZXQvdGVzdCBhdCBsaW5lIDE1MSkNCiMgICBFeHBlY3RlZDog
-IjAiDQojICBiYWNrbG9nX3dhaXRfdGltZV9hY3R1YWxfcmVzZXQvdGVzdCBsaW5lIDE1MSBpczog
-b2soICRyZXN1bHQsIDAgKTsgDQogICMgV2FzIGFuIGV2ZW50IGZvdW5kPw0KIyBUZXN0IDQgZ290
-OiAiMCIgKGJhY2tsb2dfd2FpdF90aW1lX2FjdHVhbF9yZXNldC90ZXN0IGF0IGxpbmUgMTY4KQ0K
-IyAgIEV4cGVjdGVkOiAiMSINCiMgIGJhY2tsb2dfd2FpdF90aW1lX2FjdHVhbF9yZXNldC90ZXN0
-IGxpbmUgMTY4IGlzOiBvayggJGZvdW5kX21zZywgMSApOyANCiAgICAjIFdhcyB0aGUgbWVzc2Fn
-ZSB3ZWxsLWZvcm1lZD8NCiMgRmFpbGVkIHRlc3QgNSBpbiBiYWNrbG9nX3dhaXRfdGltZV9hY3R1
-YWxfcmVzZXQvdGVzdCBhdCBsaW5lIDE2OQ0KIyAgYmFja2xvZ193YWl0X3RpbWVfYWN0dWFsX3Jl
-c2V0L3Rlc3QgbGluZSAxNjkgaXM6IG9rKCAkcmVzZXRfcmMgPT0gDQokcmVzZXRfbXNnICkNCmJh
-Y2tsb2dfd2FpdF90aW1lX2FjdHVhbF9yZXNldC90ZXN0IC4uDQpGYWlsZWQgMy81IHN1YnRlc3Rz
-DQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpzaDogMTogU3ludGF4IGVycm9y
-OiBCYWQgZmQgbnVtYmVyDQpleGVjX2V4ZWN2ZS90ZXN0IC4uLi4uLi4uLi4uLi4uLi4uLi4uLiBv
-aw0Kc2g6IDE6IFN5bnRheCBlcnJvcjogQmFkIGZkIG51bWJlcg0Kc2g6IDE6IFN5bnRheCBlcnJv
-cjogQmFkIGZkIG51bWJlcg0KIyBGYWlsZWQgdGVzdCA3IGluIGV4ZWNfbmFtZS90ZXN0IGF0IGxp
-bmUgMTQ1IGZhaWwgIzQNCiMgIGV4ZWNfbmFtZS90ZXN0IGxpbmUgMTQ1IGlzOiAgICAgICAgIG9r
-KCAkZm91bmRbJF9dID09ICRleHBlY3RlZFskX10gKTsNCnNoOiAxOiBTeW50YXggZXJyb3I6IEJh
-ZCBmZCBudW1iZXINCiMgRmFpbGVkIHRlc3QgMTEgaW4gZXhlY19uYW1lL3Rlc3QgYXQgbGluZSAx
-NDUgZmFpbCAjNw0Kc2g6IDE6IFN5bnRheCBlcnJvcjogQmFkIGZkIG51bWJlcg0KIyBGYWlsZWQg
-dGVzdCAxNSBpbiBleGVjX25hbWUvdGVzdCBhdCBsaW5lIDE0NSBmYWlsICMxMA0KIyBGYWlsZWQg
-dGVzdCAxNyBpbiBleGVjX25hbWUvdGVzdCBhdCBsaW5lIDE0NSBmYWlsICMxMg0Kc2g6IDE6IFN5
-bnRheCBlcnJvcjogQmFkIGZkIG51bWJlcg0KIyBGYWlsZWQgdGVzdCAxOSBpbiBleGVjX25hbWUv
-dGVzdCBhdCBsaW5lIDE0NSBmYWlsICMxMw0Kc2g6IDE6IFN5bnRheCBlcnJvcjogQmFkIGZkIG51
-bWJlcg0KIyBGYWlsZWQgdGVzdCAyMyBpbiBleGVjX25hbWUvdGVzdCBhdCBsaW5lIDE0NSBmYWls
-ICMxNg0KIyBGYWlsZWQgdGVzdCAyNCBpbiBleGVjX25hbWUvdGVzdCBhdCBsaW5lIDE0NSBmYWls
-ICMxNw0Kc2g6IDE6IFN5bnRheCBlcnJvcjogQmFkIGZkIG51bWJlcg0KRXJyb3Igc2VuZGluZyBh
-ZGQgcnVsZSBkYXRhIHJlcXVlc3QgKFJ1bGUgZXhpc3RzKQ0KIyBGYWlsZWQgdGVzdCAyOSBpbiBl
-eGVjX25hbWUvdGVzdCBhdCBsaW5lIDE0NSBmYWlsICMyMQ0Kc2g6IDE6IFN5bnRheCBlcnJvcjog
-QmFkIGZkIG51bWJlcg0KZXhlY19uYW1lL3Rlc3QgLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCkZh
-aWxlZCA4LzI5IHN1YnRlc3RzDQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQoj
-IEZhaWxlZCB0ZXN0IDIgaW4gZmlsZV9jcmVhdGUvdGVzdCBhdCBsaW5lIDEyMQ0KIyAgZmlsZV9j
-cmVhdGUvdGVzdCBsaW5lIDEyMSBpczogb2soJGZvdW5kX3N5c2NhbGwpOw0KIyBGYWlsZWQgdGVz
-dCAzIGluIGZpbGVfY3JlYXRlL3Rlc3QgYXQgbGluZSAxMjINCiMgIGZpbGVfY3JlYXRlL3Rlc3Qg
-bGluZSAxMjIgaXM6IG9rKCRmb3VuZF9wYXJlbnQpOw0KIyBGYWlsZWQgdGVzdCA0IGluIGZpbGVf
-Y3JlYXRlL3Rlc3QgYXQgbGluZSAxMjMNCiMgIGZpbGVfY3JlYXRlL3Rlc3QgbGluZSAxMjMgaXM6
-IG9rKCRmb3VuZF9jcmVhdGUpOw0Kc2g6IDE6IFN5bnRheCBlcnJvcjogQmFkIGZkIG51bWJlcg0K
-ZmlsZV9jcmVhdGUvdGVzdCAuLi4uLi4uLi4uLi4uLi4uLi4uLi4NCkZhaWxlZCAzLzQgc3VidGVz
-dHMNCnNoOiAxOiBTeW50YXggZXJyb3I6IEJhZCBmZCBudW1iZXINCiMgRmFpbGVkIHRlc3QgMiBp
-biBmaWxlX2RlbGV0ZS90ZXN0IGF0IGxpbmUgMTIyDQojICBmaWxlX2RlbGV0ZS90ZXN0IGxpbmUg
-MTIyIGlzOiBvaygkZm91bmRfc3lzY2FsbCk7DQojIEZhaWxlZCB0ZXN0IDMgaW4gZmlsZV9kZWxl
-dGUvdGVzdCBhdCBsaW5lIDEyMw0KIyAgZmlsZV9kZWxldGUvdGVzdCBsaW5lIDEyMyBpczogb2so
-JGZvdW5kX3BhcmVudCk7DQojIEZhaWxlZCB0ZXN0IDQgaW4gZmlsZV9kZWxldGUvdGVzdCBhdCBs
-aW5lIDEyNA0KIyAgZmlsZV9kZWxldGUvdGVzdCBsaW5lIDEyNCBpczogb2soJGZvdW5kX2RlbGV0
-ZSk7DQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpmaWxlX2RlbGV0ZS90ZXN0
-IC4uLi4uLi4uLi4uLi4uLi4uLi4uLg0KRmFpbGVkIDMvNCBzdWJ0ZXN0cw0Kc2g6IDE6IFN5bnRh
-eCBlcnJvcjogQmFkIGZkIG51bWJlcg0KIyBGYWlsZWQgdGVzdCAyIGluIGZpbGVfcmVuYW1lL3Rl
-c3QgYXQgbGluZSAxMzgNCiMgIGZpbGVfcmVuYW1lL3Rlc3QgbGluZSAxMzggaXM6IG9rKCRmb3Vu
-ZF9zeXNjYWxsKTsNCiMgVGVzdCAzIGdvdDogIjAiIChmaWxlX3JlbmFtZS90ZXN0IGF0IGxpbmUg
-MTM5KQ0KIyAgIEV4cGVjdGVkOiAiMiINCiMgIGZpbGVfcmVuYW1lL3Rlc3QgbGluZSAxMzkgaXM6
-IG9rKCAkZm91bmRfcGFyZW50LCAyICk7DQojIEZhaWxlZCB0ZXN0IDQgaW4gZmlsZV9yZW5hbWUv
-dGVzdCBhdCBsaW5lIDE0MA0KIyAgZmlsZV9yZW5hbWUvdGVzdCBsaW5lIDE0MCBpczogb2soJGZv
-dW5kX2NyZWF0ZSk7DQojIEZhaWxlZCB0ZXN0IDUgaW4gZmlsZV9yZW5hbWUvdGVzdCBhdCBsaW5l
-IDE0MQ0KIyAgZmlsZV9yZW5hbWUvdGVzdCBsaW5lIDE0MSBpczogb2soJGZvdW5kX2RlbGV0ZSk7
-DQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpmaWxlX3JlbmFtZS90ZXN0IC4u
-Li4uLi4uLi4uLi4uLi4uLi4uLg0KRmFpbGVkIDQvNSBzdWJ0ZXN0cw0Kc2g6IDE6IFN5bnRheCBl
-cnJvcjogQmFkIGZkIG51bWJlcg0KIyBUZXN0IDIwIGdvdDogIjI1NiIgKGZpbHRlcl9leGNsdWRl
-L3Rlc3QgYXQgbGluZSAxNjcpDQojICAgIEV4cGVjdGVkOiAiMCINCiMgIGZpbHRlcl9leGNsdWRl
-L3Rlc3QgbGluZSAxNjcgaXM6IG9rKCAkcmVzdWx0LCAwICk7DQojIFRlc3QgMjEgZ290OiAiMCIg
-KGZpbHRlcl9leGNsdWRlL3Rlc3QgYXQgbGluZSAxNzkpDQojICAgIEV4cGVjdGVkOiAiMSINCiMg
-IGZpbHRlcl9leGNsdWRlL3Rlc3QgbGluZSAxNzkgaXM6IG9rKCAkZm91bmRfbXNnLCAxICk7DQpz
-aDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpmaWx0ZXJfZXhjbHVkZS90ZXN0IC4u
-Li4uLi4uLi4uLi4uLi4uLg0KRmFpbGVkIDIvMjEgc3VidGVzdHMNCnNoOiAxOiBjYW5ub3QgY3Jl
-YXRlIC9kZXYvdWRwLzEyNy4wLjAuMS8yNDI0MjogRGlyZWN0b3J5IG5vbmV4aXN0ZW50DQojIFRl
-c3QgMyBnb3Q6ICIyNTYiIChmaWx0ZXJfc2FkZHJfZmFtL3Rlc3QgYXQgbGluZSA4OCkNCiMgICBF
-eHBlY3RlZDogIjAiDQojICBmaWx0ZXJfc2FkZHJfZmFtL3Rlc3QgbGluZSA4OCBpczogb2soICRy
-ZXN1bHQsIDAgKTsgICAgIyBXYXMgYW4gZXZlbnQgDQpmb3VuZD8NCiMgVGVzdCA0IGdvdDogIjAi
-IChmaWx0ZXJfc2FkZHJfZmFtL3Rlc3QgYXQgbGluZSAxMjkpDQojICAgRXhwZWN0ZWQ6ICIxIg0K
-IyAgZmlsdGVyX3NhZGRyX2ZhbS90ZXN0IGxpbmUgMTI5IGlzOiBvayggJGZvdW5kX21zZywgICAg
-MSApOyAgICAgIyBXYXMgDQp0aGUgaW5ldCBtZXNzYWdlIGZvdW5kPw0KZmlsdGVyX3NhZGRyX2Zh
-bS90ZXN0IC4uLi4uLi4uLi4uLi4uLi4NCkZhaWxlZCAyLzUgc3VidGVzdHMNCnNoOiAxOiBTeW50
-YXggZXJyb3I6IEJhZCBmZCBudW1iZXINCnNoOiAxOiBTeW50YXggZXJyb3I6IEJhZCBmZCBudW1i
-ZXINCmZpbHRlcl9zZXNzaW9uaWQvdGVzdCAuLi4uLi4uLi4uLi4uLi4uIG9rDQpzaDogMTogU3lu
-dGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVt
-YmVyDQpsb2dpbl90dHkvdGVzdCAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiBvaw0KIyBUZXN0IDMg
-Z290OiAiMjU2IiAobG9zdF9yZXNldC90ZXN0IGF0IGxpbmUgMTUwKQ0KIyAgIEV4cGVjdGVkOiAi
-MCINCiMgIGxvc3RfcmVzZXQvdGVzdCBsaW5lIDE1MCBpczogb2soICRyZXN1bHQsIDAgKTsgICAg
-IyBXYXMgYW4gZXZlbnQgZm91bmQ/DQojIFRlc3QgNCBnb3Q6ICIwIiAobG9zdF9yZXNldC90ZXN0
-IGF0IGxpbmUgMTY3KQ0KIyAgIEV4cGVjdGVkOiAiMSINCiMgIGxvc3RfcmVzZXQvdGVzdCBsaW5l
-IDE2NyBpczogb2soICRmb3VuZF9tc2csIDEgKTsgICAgICAgICAgICAgICMgV2FzIA0KdGhlIG1l
-c3NhZ2Ugd2VsbC1mb3JtZWQ/DQojIEZhaWxlZCB0ZXN0IDUgaW4gbG9zdF9yZXNldC90ZXN0IGF0
-IGxpbmUgMTY4DQojICBsb3N0X3Jlc2V0L3Rlc3QgbGluZSAxNjggaXM6IG9rKCAkcmVzZXRfcmMg
-PT0gJHJlc2V0X21zZyApOyAgICAjIERvIA0KdGhlIHR3byBsb3N0IHZhbHVlcyBhZ3JlZT8NCmxv
-c3RfcmVzZXQvdGVzdCAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uDQpGYWlsZWQgMy81IHN1YnRlc3Rz
-DQpzaDogMTogU3ludGF4IGVycm9yOiBCYWQgZmQgbnVtYmVyDQpzaDogMTogY2Fubm90IGNyZWF0
-ZSAvZGV2L3VkcC8xMjcuMC4wLjEvNDI0MjQ6IERpcmVjdG9yeSBub25leGlzdGVudA0Kc2g6IDE6
-IGNhbm5vdCBjcmVhdGUgL2Rldi91ZHAvOjoxLzQyNDI0OiBEaXJlY3Rvcnkgbm9uZXhpc3RlbnQN
-CnNoOiAxOiBjYW5ub3QgY3JlYXRlIC9kZXYvdGNwLzEyNy4wLjAuMS80MjQyNDogRGlyZWN0b3J5
-IG5vbmV4aXN0ZW50DQpzaDogMTogY2Fubm90IGNyZWF0ZSAvZGV2L3RjcC86OjEvNDI0MjQ6IERp
-cmVjdG9yeSBub25leGlzdGVudA0KIyBGYWlsZWQgdGVzdCA0IGluIG5ldGZpbHRlcl9wa3QvdGVz
-dCBhdCBsaW5lIDE0NCBmYWlsICMzDQojICBuZXRmaWx0ZXJfcGt0L3Rlc3QgbGluZSAxNDQgaXM6
-ICAgICBvayggJGZvdW5kWyRfXSApOyAgICAjIFdhcyB0aGUgDQpuZm1hcmtlZCBwYXJja2V0IGZv
-dW5kPw0KIyBGYWlsZWQgdGVzdCA1IGluIG5ldGZpbHRlcl9wa3QvdGVzdCBhdCBsaW5lIDE0NCBm
-YWlsICM0DQojIEZhaWxlZCB0ZXN0IDYgaW4gbmV0ZmlsdGVyX3BrdC90ZXN0IGF0IGxpbmUgMTQ0
-IGZhaWwgIzUNCiMgRmFpbGVkIHRlc3QgNyBpbiBuZXRmaWx0ZXJfcGt0L3Rlc3QgYXQgbGluZSAx
-NDQgZmFpbCAjNg0KIyBGYWlsZWQgdGVzdCAxMCBpbiBuZXRmaWx0ZXJfcGt0L3Rlc3QgYXQgbGlu
-ZSAxNDggZmFpbCAjMw0KIyAgbmV0ZmlsdGVyX3BrdC90ZXN0IGxpbmUgMTQ4IGlzOiAgICAgb2so
-ICRmaWVsZHNbJF9dID09ICRmaWVsZHMgKTsgDQojICRfIENvcnJlY3QgbnVtYmVyIG9mIGZpZWxk
-cz8NCiMgRmFpbGVkIHRlc3QgMTEgaW4gbmV0ZmlsdGVyX3BrdC90ZXN0IGF0IGxpbmUgMTQ4IGZh
-aWwgIzQNCiMgRmFpbGVkIHRlc3QgMTIgaW4gbmV0ZmlsdGVyX3BrdC90ZXN0IGF0IGxpbmUgMTQ4
-IGZhaWwgIzUNCiMgRmFpbGVkIHRlc3QgMTMgaW4gbmV0ZmlsdGVyX3BrdC90ZXN0IGF0IGxpbmUg
-MTQ4IGZhaWwgIzYNCnNoOiAxOiBTeW50YXggZXJyb3I6IEJhZCBmZCBudW1iZXINCg0KDQpDaHJp
-c3RvcGhl
+Some BIOS-es contain a bug where they add addresses which map to system
+RAM in the PCI host bridge window returned by the ACPI _CRS method, see
+commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
+space").
+
+To work around this bug Linux excludes E820 reserved addresses when
+allocating addresses from the PCI host bridge window since 2010.
+
+Recently (2019) some systems have shown-up with E820 reservations which
+cover the entire _CRS returned PCI bridge memory window, causing all
+attempts to assign memory to PCI BARs which have not been setup by the
+BIOS to fail. For example here are the relevant dmesg bits from a
+Lenovo IdeaPad 3 15IIL 81WE:
+
+ [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+ pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+
+The ACPI specifications appear to allow this new behavior:
+
+The relationship between E820 and ACPI _CRS is not really very clear.
+ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
+
+  This range of addresses is in use or reserved by the system and is
+  not to be included in the allocatable memory pool of the operating
+  system's memory manager.
+
+and it may be used when:
+
+  The address range is in use by a memory-mapped system device.
+
+Furthermore, sec 15.2 says:
+
+  Address ranges defined for baseboard memory-mapped I/O devices, such
+  as APICs, are returned as reserved.
+
+A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
+and its apertures are in use and certainly should not be included in
+the general allocatable pool, so the fact that some BIOS-es reports
+the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
+
+So it seems that the excluding of E820 reserved addresses is a mistake.
+
+Ideally Linux would fully stop excluding E820 reserved addresses,
+but then the old systems this was added for will regress.
+Instead keep the old behavior for old systems, while ignoring
+the E820 reservations for any systems from now on.
+
+Old systems are defined here as BIOS year < 2018, this was chosen to make
+sure that E820 reservations will not be used on the currently affected
+systems, while at the same time also taking into account that the systems
+for which the E820 checking was originally added may have received BIOS
+updates for quite a while (esp. CVE related ones), giving them a more
+recent BIOS year then 2010.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+BugLink: https://bugs.launchpad.net/bugs/1878279
+BugLink: https://bugs.launchpad.net/bugs/1931715
+BugLink: https://bugs.launchpad.net/bugs/1932069
+BugLink: https://bugs.launchpad.net/bugs/1921649
+Cc: Benoit Grégoire <benoitg@coeus.ca>
+Cc: Hui Wang <hui.wang@canonical.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Changes in v6:
+- Remove the possibility to change the behavior from the commandline
+  because of worries that users may use this to paper over other problems
+
+Changes in v5:
+- Drop mention of Windows behavior from the commit msg, replace with a
+  reference to the specs
+- Improve documentation in Documentation/admin-guide/kernel-parameters.txt
+- Reword the big comment added, use "PCI host bridge window" in it and drop
+  all refences to Windows
+
+Changes in v4:
+- Rewrap the big comment block to fit in 80 columns
+- Add Rafael's Acked-by
+- Add Cc: stable@vger.kernel.org
+
+Changes in v3:
+- Commit msg tweaks (drop dmesg timestamps, typo fix)
+- Use "defined(CONFIG_...)" instead of "defined CONFIG_..."
+- Add Mika's Reviewed-by
+
+Changes in v2:
+- Replace the per model DMI quirk approach with disabling E820 reservations
+  checking for all systems with a BIOS year >= 2018
+- Add documentation for the new kernel-parameters to
+  Documentation/admin-guide/kernel-parameters.txt
+---
+Other patches trying to address the same issue:
+https://lore.kernel.org/r/20210624095324.34906-1-hui.wang@canonical.com
+https://lore.kernel.org/r/20200617164734.84845-1-mika.westerberg@linux.intel.com
+V1 patch:
+https://lore.kernel.org/r/20211005150956.303707-1-hdegoede@redhat.com
+---
+ arch/x86/kernel/resource.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+index 9b9fb7882c20..9ae64f9af956 100644
+--- a/arch/x86/kernel/resource.c
++++ b/arch/x86/kernel/resource.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <linux/dmi.h>
+ #include <linux/ioport.h>
+ #include <asm/e820/api.h>
+ 
+@@ -23,11 +24,31 @@ static void resource_clip(struct resource *res, resource_size_t start,
+ 		res->start = end + 1;
+ }
+ 
++/*
++ * Some BIOS-es contain a bug where they add addresses which map to
++ * system RAM in the PCI host bridge window returned by the ACPI _CRS
++ * method, see commit 4dc2287c1805 ("x86: avoid E820 regions when
++ * allocating address space"). To avoid this Linux by default excludes
++ * E820 reservations when allocating addresses since 2010.
++ * In 2019 some systems have shown-up with E820 reservations which cover
++ * the entire _CRS returned PCI host bridge window, causing all attempts
++ * to assign memory to PCI BARs to fail if Linux uses E820 reservations.
++ *
++ * Ideally Linux would fully stop using E820 reservations, but then
++ * the old systems this was added for will regress.
++ * Instead keep the old behavior for old systems, while ignoring the
++ * E820 reservations for any systems from now on.
++ */
+ static void remove_e820_regions(struct resource *avail)
+ {
+-	int i;
++	int i, year = dmi_get_bios_year();
+ 	struct e820_entry *entry;
+ 
++	if (year >= 2018)
++		return;
++
++	pr_info_once("PCI: Removing E820 reservations from host bridge windows\n");
++
+ 	for (i = 0; i < e820_table->nr_entries; i++) {
+ 		entry = &e820_table->entries[i];
+ 
+-- 
+2.33.1
+

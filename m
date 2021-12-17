@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBE04796CA
+	by mail.lfdr.de (Postfix) with ESMTP id E65764796CB
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbhLQWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:02:00 -0500
+        id S231402AbhLQWCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:02:01 -0500
 Received: from mga11.intel.com ([192.55.52.93]:26498 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230514AbhLQWBt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:01:49 -0500
+        id S231137AbhLQWBu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 17:01:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639778509; x=1671314509;
+  t=1639778510; x=1671314510;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TQwS440v7IbXqfoaDLFqxTIfDX/CqMUM6Yd9UQpEfkM=;
-  b=mIsEDPgkD6OT7Ly2jNONj0ryFJbw+1opi891FL15RdfrzIViMwnqqyvP
-   BfyzIRDv3D+w0cpTOR5AxA3wrlxHnWCp/EsqEnwijy2ZUul5jnnMRt+E7
-   12CmYoc564mwxabRHNNdbacvdrPJxmcfZBayhlpW7aTG/+8r4Pkh/qROa
-   oXDrptkE4RwXibnZ7SPeuVC/ObS0wd7qyhVnLwapfw4f20vCuRvapJp+F
-   3MaroBD6UIWiOWmjfqnWDVszmpy3KyksGAsqiML1Sht28BJqtAnCKG40l
-   ECwAIrmiNTUH/Pu2aKASonxIL4C4D/lSaQcLIKDE7qN1ih/snngzKSaJ0
+  bh=UnMZO3dIpMprFJhYU1oJBcxLAM+pPp7MOtKZRkV+U7g=;
+  b=WO26FheBg1Pje1/l8YZ3TYZHiCSumGFB8YBYuKbU/Golyi6ge2yFL2Tx
+   dMd/hhAieM1qK14LoyORbd8ph9moEvAqUkeoh+YriV5HHb+YGGDD+0Axt
+   MdanOQXPdKquM1vN4oTxm8UO5S77I2C2I+5g42Ieo1rrKkmBipnJsglJH
+   mO+Pe+OQ8GK+Obz/PA5DOWujVT3xar4Rtx3IcHPmNK56JuxBDzl6QOwY9
+   k80RAI/mDi5KabIdHOLzsIt6ok+/iE2cLGRQxo4p/kH/+ISXq8yJ57Y9D
+   9BC25vFGczcu2iDetGGMkv0sUN87mAB7IkiNIF1Wr2W5Q0j3nN4UWGfeW
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381594"
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381600"
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="237381594"
+   d="scan'208";a="237381600"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 14:01:49 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 14:01:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="506928098"
+   d="scan'208";a="506928102"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 14:01:49 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -50,9 +50,9 @@ To:     "Thomas Gleixner" <tglx@linutronix.de>,
 Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2 06/11] x86/fpu: Clear PASID when copying fpstate
-Date:   Fri, 17 Dec 2021 22:01:31 +0000
-Message-Id: <20211217220136.2762116-7-fenghua.yu@intel.com>
+Subject: [PATCH v2 07/11] sched: Define and initialize a flag to identify valid PASID in the task
+Date:   Fri, 17 Dec 2021 22:01:32 +0000
+Message-Id: <20211217220136.2762116-8-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211217220136.2762116-1-fenghua.yu@intel.com>
 References: <20211217220136.2762116-1-fenghua.yu@intel.com>
@@ -62,64 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel must allocate a Process Address Space ID (PASID) on behalf of
-each process which will use ENQCMD and program it into the new MSR to
-communicate the process identity to platform hardware. ENQCMD uses the
-PASID stored in this MSR to tag requests from this process.
+From: Peter Zijlstra <peterz@infradead.org>
 
-The PASID state must be cleared on fork() since fork creates a
-new address space.
+Add a new single bit field to the task structure to track whether this task
+has initialized the IA32_PASID MSR to the mm's PASID.
 
-For clone(), it would be functionally OK to copy the PASID. However,
-clearing it is _also_ functionally OK since any PASID use will trigger
-the #GP handler to populate the MSR.
+Initialize the field to zero when creating a new task with fork/clone.
 
-Copying the PASID state has two main downsides:
- * It requires differentiating fork() and clone() in the code,
-   both in the FPU code and keeping tsk->pasid_activated consistent.
- * It guarantees that the PASID is out of its init state, which
-   incurs small but non-zero cost on every XSAVE/XRSTOR.
-
-The main downside of clearing the PASID at fpstate copy is the future,
-one-time #GP for the thread.
-
-Use the simplest approach: clear the PASID state both on clone() and
-fork().  Rely on the #GP handler for MSR population in children.
-
-Also, just clear the PASID bit from xfeatures if XSAVE is supported.
-This will have no effect on systems that do not have PASID support.  It
-is virtually zero overhead because 'dst_fpu' was just written and
-the whole thing is cache hot.
-
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
 v2:
-- Rewrite changelog (Dave Hansen).
-- Move xfeature tweaking into fpu_clone() and make it unconditional
-  if XSAVE is supported (Dave Hansen).
+- Change condition to more accurate CONFIG_IOMMU_SVA (Jacob)
 
- arch/x86/kernel/fpu/core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/sched.h | 3 +++
+ kernel/fork.c         | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 8ea306b1bf8e..13fc0ea52237 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -518,6 +518,13 @@ int fpu_clone(struct task_struct *dst, unsigned long clone_flags)
- 		fpu_inherit_perms(dst_fpu);
- 	fpregs_unlock();
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 78c351e35fec..41a0b5703f94 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -933,6 +933,9 @@ struct task_struct {
+ 	/* Recursion prevention for eventfd_signal() */
+ 	unsigned			in_eventfd_signal:1;
+ #endif
++#ifdef CONFIG_IOMMU_SVA
++	unsigned			pasid_activated:1;
++#endif
  
-+	/*
-+	 * Children never inherit PASID state.
-+	 * Force it to have its init value:
-+	 */
-+	if (use_xsave())
-+		dst_fpu->fpstate->regs.xsave.header.xfeatures &= ~XFEATURE_MASK_PASID;
+ 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 3adad225cc09..cd297926b6f2 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -967,6 +967,10 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	tsk->use_memdelay = 0;
+ #endif
+ 
++#ifdef CONFIG_IOMMU_SVA
++	tsk->pasid_activated = 0;
++#endif
 +
- 	trace_x86_fpu_copy_src(src_fpu);
- 	trace_x86_fpu_copy_dst(dst_fpu);
- 
+ #ifdef CONFIG_MEMCG
+ 	tsk->active_memcg = NULL;
+ #endif
 -- 
 2.34.1
 

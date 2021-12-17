@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A928E4796C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839EE4796CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbhLQWCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:02:07 -0500
+        id S231475AbhLQWCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:02:05 -0500
 Received: from mga11.intel.com ([192.55.52.93]:26506 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230488AbhLQWBw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S230494AbhLQWBw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Dec 2021 17:01:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639778512; x=1671314512;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=38m/Q2AQH9Kv2z7BUSt3cLQo4zzkwKxvDeDlsUIPs6Y=;
-  b=fZhWndzYNf+obEbGwvxXTTQ1by0lyNl6vp9IqV7WhX6x869DgVEDyO93
-   g01aTeWt60rBhO0AXiX1qdURf9MxyliqS+w0teVoRdhFno+y5Nxu60HlH
-   fjyXAcxamWFR5phFcgsSXv6Ep0NZoo/lcuEJ2KkAZ7Y6cvjJJA0/5IUs9
-   JHPPMR7bKx06dlLlj4/7PpaY0zi3TzpcafhKVKd510Nr8Rhw+OuEXvPc9
-   jPUHkytwHYRUVlqb4rsqMeYjNgQqePRtS77Nihzo3E8Tb+Lt9rA7gwfBb
-   DPgKdT4dCHwvI8+RMSFVXSA/mIkmEwApV2MEiyPGbM/XUBKGdnvRJQCvy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381602"
+  bh=WUETfejsiNGR9gILAkgt74/RWnHGbmhPzWPMpp74bp0=;
+  b=Il+bB43Ak33zpq3/eSK8DrhhP//vZ2BIH8zirx4LW6OqQGTh+gSDjI6g
+   0VKMk47Aic2bBFl0hKtb50opQf6Ovhoc9oKeObg1JSSPTqzPk4C8cygub
+   nFFAM1u9dJVzre+m6GR1SIon3gHrYMjK9cJjiD6DbHlLwfnQ5FH8dtvZ+
+   +JgwQ7jFoxLzHGC6qSdfiMQg2uFZ72B7u00ACTwCX4M0KbJlRjn9prlan
+   2utZzMz7hZu4rUn239R+qLrI+R0lEsWwg7sR2kQBG+DApNuK33TTvn8i8
+   TrzjplY/h8oUY+oFUhRY9MTAPtALxtA2JpYRO23tHh2Wr6rH1K7i1LHB2
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381604"
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="237381602"
+   d="scan'208";a="237381604"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 14:01:51 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="506928107"
+   d="scan'208";a="506928110"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 14:01:51 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -50,9 +50,9 @@ To:     "Thomas Gleixner" <tglx@linutronix.de>,
 Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2 09/11] x86/cpufeatures: Re-enable ENQCMD
-Date:   Fri, 17 Dec 2021 22:01:34 +0000
-Message-Id: <20211217220136.2762116-10-fenghua.yu@intel.com>
+Subject: [PATCH v2 10/11] tools/objtool: Check for use of the ENQCMD instruction in the kernel
+Date:   Fri, 17 Dec 2021 22:01:35 +0000
+Message-Id: <20211217220136.2762116-11-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211217220136.2762116-1-fenghua.yu@intel.com>
 References: <20211217220136.2762116-1-fenghua.yu@intel.com>
@@ -62,39 +62,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ENQCMD is handled by #GP fix up, it can be re-enabled.
+The ENQCMD implicitly accesses the PASID_MSR to fill in the pasid field
+of the descriptor being submitted to an accelerator. But there is no
+precise (and stable across kernel changes) point at which the PASID_MSR
+is updated from the value for one task to the next.
 
-The ENQCMD feature can only be used if CONFIG_INTEL_IOMMU_SVM is set. Add
-X86_FEATURE_ENQCMD to the disabled features mask as appropriate so that
-cpu_feature_enabled() can be used to check the feature.
+Kernel code that uses accelerators must always use the ENQCMDS instruction
+which does not access the PASID_MSR.
+
+Check for use of the ENQCMD instruction in the kernel and warn on its
+usage.
 
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
 v2:
-- Update the commit message (Tony).
+- Simplify handling ENQCMD (PeterZ and Josh)
 
- arch/x86/include/asm/disabled-features.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/objtool/arch/x86/decode.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index 8f28fafa98b3..1231d63f836d 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -56,8 +56,11 @@
- # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
- #endif
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index 4d6d7fc13255..11ffa0e53f84 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -112,7 +112,7 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 	const struct elf *elf = file->elf;
+ 	struct insn insn;
+ 	int x86_64, ret;
+-	unsigned char op1, op2,
++	unsigned char op1, op2, op3,
+ 		      rex = 0, rex_b = 0, rex_r = 0, rex_w = 0, rex_x = 0,
+ 		      modrm = 0, modrm_mod = 0, modrm_rm = 0, modrm_reg = 0,
+ 		      sib = 0, /* sib_scale = 0, */ sib_index = 0, sib_base = 0;
+@@ -139,6 +139,7 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
  
--/* Force disable because it's broken beyond repair */
--#define DISABLE_ENQCMD		(1 << (X86_FEATURE_ENQCMD & 31))
-+#ifdef CONFIG_INTEL_IOMMU_SVM
-+# define DISABLE_ENQCMD		0
-+#else
-+# define DISABLE_ENQCMD		(1 << (X86_FEATURE_ENQCMD & 31))
-+#endif
+ 	op1 = insn.opcode.bytes[0];
+ 	op2 = insn.opcode.bytes[1];
++	op3 = insn.opcode.bytes[2];
  
- #ifdef CONFIG_X86_SGX
- # define DISABLE_SGX	0
+ 	if (insn.rex_prefix.nbytes) {
+ 		rex = insn.rex_prefix.bytes[0];
+@@ -491,6 +492,14 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			/* nopl/nopw */
+ 			*type = INSN_NOP;
+ 
++		} else if (op2 == 0x38 && op3 == 0xf8) {
++			if (insn.prefixes.nbytes == 1 &&
++			    insn.prefixes.bytes[0] == 0xf2) {
++				/* ENQCMD cannot be used in the kernel. */
++				WARN("ENQCMD instruction at %s:%lx", sec->name,
++				     offset);
++			}
++
+ 		} else if (op2 == 0xa0 || op2 == 0xa8) {
+ 
+ 			/* push fs/gs */
 -- 
 2.34.1
 

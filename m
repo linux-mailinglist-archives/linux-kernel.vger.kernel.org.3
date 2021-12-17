@@ -2,155 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7757047862F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE36478638
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbhLQI2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:28:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58923 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233805AbhLQI2K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:28:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639729690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=26LIJ1YdIsB73eNvPXzazi/kBaf5btKN6tb7Yo1wgdw=;
-        b=DX6oml4OvvSEAGq0CZt+6lqvsxVuN7EB7yGU9OXtRwjRLEQ3WTPhZ13wRgFMYKozC/l5Zz
-        8Nc7x60obBl85UdDEFpj7Z5YIqjSt9YQ5TwZwxp4T/PmTNEaYeEv9LF4mby6iswUdJmaKs
-        Gwc2M8ai5bZUcIIbUpaNoYXo/KChXgY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-r-hRNGmiOv65y3OoL-Dudw-1; Fri, 17 Dec 2021 03:28:08 -0500
-X-MC-Unique: r-hRNGmiOv65y3OoL-Dudw-1
-Received: by mail-wm1-f71.google.com with SMTP id j20-20020a05600c1c1400b00343ad0c4c40so2631920wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 00:28:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=26LIJ1YdIsB73eNvPXzazi/kBaf5btKN6tb7Yo1wgdw=;
-        b=v8JSS3u1af0GnbqT78xDaRfa85NVkoJoUcfS/KEcXCa8Ab1BhNttCuOqPVSRyx0nPh
-         GlTM9r8K9N+gjh6fcEW4a4deAHwuoe5fv2ABntrYkS7MfS1yV/zjqUErQckmlDSJoaCs
-         sFRbtGNHkeWEHjJsxWRiyQkIeIuiYLd96Kt/dei4WhnjIG5kFs6pNee/TyL4o4ZtHMxJ
-         K/UzUTiDsYGmXg8t9vtT4zuHgyu74vfCASHff0nORepDhzOgAP9+4G4CFq+TAJMjVz+Y
-         L0CIc0OKwsvzuP4+b240uJmnpgVHRUOs2nq7RGFEGGfccKazaf0trUvfbjkpmke+V0ci
-         Lbsw==
-X-Gm-Message-State: AOAM530poyE2cdVbpZZgoWipt+UfedPbQQdLevFOBL1Dr1r5xh2x94sg
-        m7EhyAA4ael0vbdwwNyszXcWLhVqVZ7EEnoLkQSMpw3adHGUWgwfmqiVkSjn29QETrqFrj76TAP
-        00vxzlC3dkVx1EKa3j/J8Pp4A
-X-Received: by 2002:adf:f10f:: with SMTP id r15mr1465016wro.553.1639729687526;
-        Fri, 17 Dec 2021 00:28:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqmD+ti2U+gXLkJIXbA6dH/cRko3HnTprM5FpnCFB+dff8kIv2MHRCc7cqlV3ofyjCfG18KQ==
-X-Received: by 2002:adf:f10f:: with SMTP id r15mr1464998wro.553.1639729687242;
-        Fri, 17 Dec 2021 00:28:07 -0800 (PST)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id m6sm8866287wrp.34.2021.12.17.00.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 00:28:06 -0800 (PST)
-Message-ID: <3c5472f4-44ce-9ba8-4dbc-967ea377ae10@redhat.com>
-Date:   Fri, 17 Dec 2021 09:28:00 +0100
+        id S233837AbhLQIcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:32:03 -0500
+Received: from mga18.intel.com ([134.134.136.126]:25759 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231342AbhLQIcB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 03:32:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639729921; x=1671265921;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iglvLuA70muVTCsH8ovshWuebvD9eTwnQIys6JC1ewQ=;
+  b=nsL+8LoJl2sddMTg6tGuOotcGRos38/RRPXMlPwYHKyeQonhy+N7aNVV
+   iA1kRMGXrFNJCjP6IIy5ZfuPouPi3Mhak2pqIKzMqCB/2HXOody4e6h/m
+   5URjX1151WkLHH/ydZw0NIu3AwmqB/NhhxN/xW3mbODqEynh4fyDVbYI4
+   8MAu3Cz0GtUIpcS/Lo0pp4RekN+wyqtS939NobvhJRYYKhCcXFCFjDU4T
+   /1eXoW2Es7pvqs97Oiz/Q/RvkwvxLz7vHkxB32cpCvRTHRLVj0tUtXT/b
+   Uh5MJSTEPNyHxVrQDBqc2PvEwQACUL+ONm2vFcEu9qRzHJ6whw0/Ul/2s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226570573"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="226570573"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 00:32:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="683309750"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 17 Dec 2021 00:32:00 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my8el-0004UB-IC; Fri, 17 Dec 2021 08:31:59 +0000
+Date:   Fri, 17 Dec 2021 16:31:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [pinchartl-media:gmsl/max9286/bindings 44/45]
+ drivers/media/v4l2-core/v4l2-subdev.c:1595:41: error: 'struct v4l2_subdev'
+ has no member named 'entity'
+Message-ID: <202112171621.k6d6CR2S-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 2/4] RISC-V: KVM: Add VM capability to allow userspace
- get GPA bits
-Content-Language: en-US
-To:     Anup Patel <anup.patel@wdc.com>, Shuah Khan <shuah@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20211129075451.418122-1-anup.patel@wdc.com>
- <20211129075451.418122-3-anup.patel@wdc.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211129075451.418122-3-anup.patel@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 08:54, Anup Patel wrote:
-> The number of GPA bits supported for a RISC-V Guest/VM is based on the
-> MMU mode used by the G-stage translation. The KVM RISC-V will detect and
-> use the best possible MMU mode for the G-stage in kvm_arch_init().
-> 
-> We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
-> the KVM userspace to get the number of GPA (guest physical address) bits
-> supported for a Guest/VM.
-> 
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> ---
->   arch/riscv/include/asm/kvm_host.h | 1 +
->   arch/riscv/kvm/mmu.c              | 5 +++++
->   arch/riscv/kvm/vm.c               | 3 +++
->   include/uapi/linux/kvm.h          | 1 +
->   4 files changed, 10 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 37589b953bcb..ae5d238607fe 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -221,6 +221,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
->   void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
->   void kvm_riscv_stage2_mode_detect(void);
->   unsigned long kvm_riscv_stage2_mode(void);
-> +int kvm_riscv_stage2_gpa_size(void);
->   
->   void kvm_riscv_stage2_vmid_detect(void);
->   unsigned long kvm_riscv_stage2_vmid_bits(void);
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 9ffd0255af43..9b6d6465094f 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -760,3 +760,8 @@ unsigned long kvm_riscv_stage2_mode(void)
->   {
->   	return stage2_mode >> HGATP_MODE_SHIFT;
->   }
-> +
-> +int kvm_riscv_stage2_gpa_size(void)
-> +{
-> +	return stage2_gpa_bits;
-> +}
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index fb18af34a4b5..6f959639ec45 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_NR_MEMSLOTS:
->   		r = KVM_USER_MEM_SLOTS;
->   		break;
-> +	case KVM_CAP_VM_GPA_BITS:
-> +		r = kvm_riscv_stage2_gpa_size();
-> +		break;
->   	default:
->   		r = 0;
->   		break;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 1daa45268de2..469f05d69c8d 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
->   #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
->   #define KVM_CAP_ARM_MTE 205
->   #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> +#define KVM_CAP_VM_GPA_BITS 207
->   
->   #ifdef KVM_CAP_IRQ_ROUTING
->   
-> 
+tree:   git://linuxtv.org/pinchartl/media.git gmsl/max9286/bindings
+head:   b551a93fb443867f1a950d6063910639bd303daf
+commit: 1bf95761342cbb5585b976194300d58bc6f30000 [44/45] media: subdev: Extend routing validation helper
+config: sparc64-randconfig-r014-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171621.k6d6CR2S-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
+        git fetch --no-tags pinchartl-media gmsl/max9286/bindings
+        git checkout 1bf95761342cbb5585b976194300d58bc6f30000
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/media/v4l2-core/
 
-This is nice and other architectures could support it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Paolo
+All errors (new ones prefixed by >>):
 
+   drivers/media/v4l2-core/v4l2-subdev.c: In function '__v4l2_subdev_init_finalize':
+   drivers/media/v4l2-core/v4l2-subdev.c:1409:17: error: implicit declaration of function '__v4l2_subdev_state_alloc' [-Werror=implicit-function-declaration]
+    1409 |         state = __v4l2_subdev_state_alloc(sd, name, key);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c:1409:15: warning: assignment to 'struct v4l2_subdev_state *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    1409 |         state = __v4l2_subdev_state_alloc(sd, name, key);
+         |               ^
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_cleanup':
+   drivers/media/v4l2-core/v4l2-subdev.c:1421:9: error: implicit declaration of function '__v4l2_subdev_state_free' [-Werror=implicit-function-declaration]
+    1421 |         __v4l2_subdev_state_free(sd->active_state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_routing_validate':
+>> drivers/media/v4l2-core/v4l2-subdev.c:1595:41: error: 'struct v4l2_subdev' has no member named 'entity'
+    1595 |                 remote_pads = kcalloc(sd->entity.num_pads, sizeof(*remote_pads),
+         |                                         ^~
+   drivers/media/v4l2-core/v4l2-subdev.c:1600:35: error: 'struct v4l2_subdev' has no member named 'entity'
+    1600 |                 for (i = 0; i < sd->entity.num_pads; ++i)
+         |                                   ^~
+   drivers/media/v4l2-core/v4l2-subdev.c:1608:42: error: 'struct v4l2_subdev' has no member named 'entity'
+    1608 |                 if (route->sink_pad >= sd->entity.num_pads ||
+         |                                          ^~
+   drivers/media/v4l2-core/v4l2-subdev.c:1609:25: error: 'struct v4l2_subdev' has no member named 'entity'
+    1609 |                     !(sd->entity.pads[route->sink_pad].flags & MEDIA_PAD_FL_SINK)) {
+         |                         ^~
+   drivers/media/v4l2-core/v4l2-subdev.c:1615:44: error: 'struct v4l2_subdev' has no member named 'entity'
+    1615 |                 if (route->source_pad >= sd->entity.num_pads ||
+         |                                            ^~
+   drivers/media/v4l2-core/v4l2-subdev.c:1616:25: error: 'struct v4l2_subdev' has no member named 'entity'
+    1616 |                     !(sd->entity.pads[route->source_pad].flags & MEDIA_PAD_FL_SOURCE)) {
+         |                         ^~
+   cc1: some warnings being treated as errors
+
+
+vim +1595 drivers/media/v4l2-core/v4l2-subdev.c
+
+  1585	
+  1586	int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+  1587					 const struct v4l2_subdev_krouting *routing,
+  1588					 enum v4l2_subdev_routing_restriction disallow)
+  1589	{
+  1590		u32 *remote_pads = NULL;
+  1591		unsigned int i, j;
+  1592		int ret = -EINVAL;
+  1593	
+  1594		if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+> 1595			remote_pads = kcalloc(sd->entity.num_pads, sizeof(*remote_pads),
+  1596					      GFP_KERNEL);
+  1597			if (!remote_pads)
+  1598				return -ENOMEM;
+  1599	
+  1600			for (i = 0; i < sd->entity.num_pads; ++i)
+  1601				remote_pads[i] = U32_MAX;
+  1602		}
+  1603	
+  1604		for (i = 0; i < routing->num_routes; ++i) {
+  1605			const struct v4l2_subdev_route *route = &routing->routes[i];
+  1606	
+  1607			/* Validate the sink and source pad numbers. */
+  1608			if (route->sink_pad >= sd->entity.num_pads ||
+  1609			    !(sd->entity.pads[route->sink_pad].flags & MEDIA_PAD_FL_SINK)) {
+  1610				dev_dbg(sd->dev, "route %u sink (%u) is not a sink pad\n",
+  1611					i, route->sink_pad);
+  1612				goto out;
+  1613			}
+  1614	
+  1615			if (route->source_pad >= sd->entity.num_pads ||
+  1616			    !(sd->entity.pads[route->source_pad].flags & MEDIA_PAD_FL_SOURCE)) {
+  1617				dev_dbg(sd->dev, "route %u source (%u) is not a source pad\n",
+  1618					i, route->source_pad);
+  1619				goto out;
+  1620			}
+  1621	
+  1622			/*
+  1623			 * V4L2_SUBDEV_ROUTING_NO_STREAM_MIX: Streams on the same pad
+  1624			 * may not be routed to streams on different pads.
+  1625			 */
+  1626			if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+  1627				if (remote_pads[route->sink_pad] != U32_MAX &&
+  1628				    remote_pads[route->sink_pad] != route->source_pad) {
+  1629					dev_dbg(sd->dev,
+  1630						"route %u attempts to mix %s streams\n",
+  1631						i, "sink");
+  1632					goto out;
+  1633				}
+  1634	
+  1635				if (remote_pads[route->source_pad] != U32_MAX &&
+  1636				    remote_pads[route->source_pad] != route->sink_pad) {
+  1637					dev_dbg(sd->dev,
+  1638						"route %u attempts to mix %s streams\n",
+  1639						i, "source");
+  1640					goto out;
+  1641				}
+  1642	
+  1643				remote_pads[route->sink_pad] = route->source_pad;
+  1644				remote_pads[route->source_pad] = route->sink_pad;
+  1645			}
+  1646	
+  1647			for (j = i + 1; j < routing->num_routes; ++j) {
+  1648				const struct v4l2_subdev_route *r = &routing->routes[j];
+  1649	
+  1650				/*
+  1651				 * V4L2_SUBDEV_ROUTING_NO_1_TO_N: No two routes can
+  1652				 * originate from the same (sink) stream.
+  1653				 */
+  1654				if ((disallow & V4L2_SUBDEV_ROUTING_NO_1_TO_N) &&
+  1655				    route->sink_pad == r->sink_pad &&
+  1656				    route->sink_stream == r->sink_stream) {
+  1657					dev_dbg(sd->dev,
+  1658						"routes %u and %u originate from same sink (%u/%u)\n",
+  1659						i, j, route->sink_pad,
+  1660						route->sink_stream);
+  1661					goto out;
+  1662				}
+  1663	
+  1664				/*
+  1665				 * V4L2_SUBDEV_ROUTING_NO_N_TO_1: No two routes can end
+  1666				 * at the same (source) stream.
+  1667				 */
+  1668				if ((disallow & V4L2_SUBDEV_ROUTING_NO_N_TO_1) &&
+  1669				    route->source_pad == r->source_pad &&
+  1670				    route->source_stream == r->source_stream) {
+  1671					dev_dbg(sd->dev,
+  1672						"routes %u and %u end at same source (%u/%u)\n",
+  1673						i, j, route->source_pad,
+  1674						route->source_stream);
+  1675					goto out;
+  1676				}
+  1677			}
+  1678		}
+  1679	
+  1680		ret = 0;
+  1681	
+  1682	out:
+  1683		kfree(remote_pads);
+  1684		return ret;
+  1685	}
+  1686	EXPORT_SYMBOL_GPL(v4l2_subdev_routing_validate);
+  1687	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

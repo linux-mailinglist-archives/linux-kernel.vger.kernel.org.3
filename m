@@ -2,77 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C819847842D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11912478432
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbhLQEkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 23:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S232844AbhLQEph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 23:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbhLQEkM (ORCPT
+        with ESMTP id S232492AbhLQEpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:40:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A72C061574;
-        Thu, 16 Dec 2021 20:40:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F1CF62012;
-        Fri, 17 Dec 2021 04:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AF18CC36AE1;
-        Fri, 17 Dec 2021 04:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639716010;
-        bh=2CsWWtAHCm+l0ZkLS+oAoYIPBPoAdtnqvNR7sVQ6I4c=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=U7dIHx/fXRFSKFSzc2eJqMJlDnKjA+ji6pr+BBGWcyiOoK7bhijJJNn2GYevHYljF
-         tTgiN4vv6fZVFvE5jt/8oJB5PygXGsyW1hUENC1W7Pbjum7UQv2/1g8KoG5/0/ulC2
-         zVns/gH07raI94sPnEbNxuSGcht63wUI3IUvbCA1dPa4GwPw8NrHN73hkCJ59CGxI1
-         sJJidlzTbRpw0d9tfmG5T6RqGeT3EuBVSvRyBxfkqKcekIBQiJ6IQAdPR8t02xl0A5
-         +PF6EZderwPupfjd5ZDbp4IkPlrMpHR216JkhvtbiBrgfDxHQrNVQvBVh9ZN4qA/U5
-         0fIXf+ZqjLCpA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 98BA660A27;
-        Fri, 17 Dec 2021 04:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Dec 2021 23:45:36 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2469EC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:45:36 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id p2so2082005uad.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:45:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bowteYFUSb68Kk+FpHsWHap6R+P/0DEq2g+PO5y0/q0=;
+        b=jSGXJygNb1E1nAR6rmGlUVenCpyjwwAAFaQhJcsGVhEm4Fd9yN62dfzM7X/a/IU+Vb
+         cKFXAvT4MJzhKVGE6SFjqlNuxXJOJRtwmzW28Al05snTpNKuHf1nhk2Fa9CAwlgoFZkJ
+         /hBTWaXSKEBXHLwnNQ6qBVIZgHOkEqmv0q2CKy+KvXOdyN7GTgjF+XwkKOirv5oSfIBY
+         +9y3gheMuiqO1+My6StdOsq1kYtiLOQeiaq8Ox5YiVWC8wq8JV0q0mOE7ILQ6EGqZ4NM
+         zw1JG3ZCB33RXJgfsykIYaHFbQIjJ5rJ0wmUGwJ0Y1u4kyNsWUCHMAk3d+yoqttBTCMk
+         21ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bowteYFUSb68Kk+FpHsWHap6R+P/0DEq2g+PO5y0/q0=;
+        b=QyD0m2G/RfdG72F+PYcfe7LPqVs183pPsmF3CxyuJu53R59ZYT+lJ9GM7zTPGZqofX
+         TexibJcGo4i9ZZaJI2GE5ni8W0MZvuXMemYl65PZfcM5rID78Y5K8KXxh/L9zb3OJzGO
+         EQzQghCi7Dpyo8XHXbYX106gQdZEa442YA7Hoxq4rBkkopk8HI3+QBXcX8/Q/3qmVv8j
+         yq04mBmm1Jvrzw1SF65tIX8YRsEX7ZqAPmvX0sMALlEKagmXH6lu4jQRrSgWGtYiQgRR
+         2ZDhXVAVhN8RLPHkARZiYCuh83vKUe1MNEJVDZrDHUNon32wqiFwqiTwiQKRnwvLJLnb
+         jQ3w==
+X-Gm-Message-State: AOAM531PRqoOtXTAVw16uIjFtifxpcKFR57juYP1Pkr0deeuC6RX5fIb
+        xx85XLbMBLRgcZJ3opXKhnTOz3RbinbnyjFY3eQ=
+X-Google-Smtp-Source: ABdhPJwqkSCZfBjG15LUJnU8YhuTZ86T+fZvgz4qN0xNwe9C9ep6lWgdhhzcGiURSfTOogQ9rEQSsKsKGZvDHlkI6G4=
+X-Received: by 2002:a05:6102:c46:: with SMTP id y6mr399610vss.53.1639716335162;
+ Thu, 16 Dec 2021 20:45:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] net: vertexcom: remove unneeded semicolon
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163971601062.6242.8119580778387345247.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Dec 2021 04:40:10 +0000
-References: <20211216015433.83383-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20211216015433.83383-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
+References: <20211216125157.631992-1-chenhuacai@loongson.cn>
+ <20211216125356.632067-1-chenhuacai@loongson.cn> <20211216125356.632067-2-chenhuacai@loongson.cn>
+ <87pmpwwpw5.wl-maz@kernel.org>
+In-Reply-To: <87pmpwwpw5.wl-maz@kernel.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 17 Dec 2021 12:45:24 +0800
+Message-ID: <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
+Subject: Re: [PATCH V8 02/10] irqchip/loongson-pch-pic: Add ACPI init support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi, Marc,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+On Thu, Dec 16, 2021 at 11:06 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Thu, 16 Dec 2021 12:53:48 +0000,
+> Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > We are preparing to add new Loongson (based on LoongArch, not compatible
+> > with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
+> > as its boot protocol, so add ACPI init support.
+> >
+> > PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+> > Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+> > please refer Documentation/loongarch/irq-chip-model.rst.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  drivers/irqchip/irq-loongson-pch-pic.c | 108 ++++++++++++++++++-------
+> >  1 file changed, 81 insertions(+), 27 deletions(-)
+>
+> [...]
+>
+> >
+> > +#ifdef CONFIG_ACPI
+> > +
+> > +struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+> > +                                     struct acpi_madt_bio_pic *acpi_pchpic)
+>
+> Who is calling this? This works the opposite way from what the arm64
+> irqchips are doing. Why? I have the ugly feeling that this is called
+> from the arch code, bypassing the existing infrastructure...
+Yes, this is called from the arch code and a bit ugly, but I can't
+find a better way to do this.
 
-On Thu, 16 Dec 2021 09:54:33 +0800 you wrote:
-> Eliminate the following coccicheck warning:
-> ./drivers/net/ethernet/vertexcom/mse102x.c:414:2-3: Unneeded semicolon
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/net/ethernet/vertexcom/mse102x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Is the "existing infrastructure" declare the irqchip init function
+with  IRQCHIP_ACPI_DECLARE and the arch code only need to call
+irqchip_init()? Then we have a problem: our irqchips have a 4 level
+hierachy and the parent should be initialized before its children. In
+FDT world this is not a problem, because of_irq_init() will sort
+irqchip drivers to ensure the right order. But in ACPI world,
+acpi_probe_device_table just call init functions in the linking order.
+If we want to control the order, it seems we can only sort the drivers
+in drivers/irq/Makefile. But I don't think this is a good idea...
 
-Here is the summary with links:
-  - [-next] net: vertexcom: remove unneeded semicolon
-    https://git.kernel.org/netdev/net-next/c/431b9b4d9789
+If there are better solutions, please let me know. Thanks.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Huacai
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

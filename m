@@ -2,145 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFFA479617
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40D5479619
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241017AbhLQVRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:17:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37317 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237226AbhLQVRU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:17:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639775839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q8mMbbXNNFkQCye2i+vJ7bGpp5qprCcUMSqt2cqb7yI=;
-        b=Q8t8TmEh1Y2ojgaaD0+/HkaNqG+bbMROip/uKihExUBYsiQsq4Tp0FzZCwFSZFMFV8w1/7
-        /5LIc4+Jt9qVR7PgbDs3VP2hzDvVzj4yO6wKrXwc2DqdvyWLD1ZtBV+MrKTdA95tFKGXYg
-        uHYEBhbILTeY+kvprxEH8JZZujEDg/c=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-nbP4CQg8PluhpgNBDRRHoA-1; Fri, 17 Dec 2021 16:17:18 -0500
-X-MC-Unique: nbP4CQg8PluhpgNBDRRHoA-1
-Received: by mail-wm1-f71.google.com with SMTP id n41-20020a05600c502900b003335ab97f41so1594694wmr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:17:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Q8mMbbXNNFkQCye2i+vJ7bGpp5qprCcUMSqt2cqb7yI=;
-        b=Ax5Mvmu9ZuUsQ02ZKjGAAv72f4DmmegD2Y6MGzLu4OOFkSSosxv6rU8u3lMx4AUPF1
-         V4EtzDH5gwukoHKgY7JuUUnnjcHAtcfDeFgTeou6+50NxWGZpdR8GR182iIbkwl0kQAf
-         19JKyQopDaVAPzrckwjl+nJy1Ky2fEHMFn9PjDKKfIZn1+p0fB1U1+tbgH5yhEc05m8u
-         hclVuu/giv3diYFZVdAeT4w9jAZWr0Xvh8IznYJIkdPxykzV0k7gOSkuImQ4Ut3vWL8p
-         H3h54Ir3Easr6U8ekbhlyzUn5hP2vQNSuFBYZxN+CtDfatFzQJcLvyxgtoTdiWMW6NLH
-         bACQ==
-X-Gm-Message-State: AOAM532Uw3YyRii+oez3V8xZ8FZCrVfpt0JWXnMVrhW6QeF0QdgmrQgJ
-        UTl4Ob4dVNt7ZQ81bHt6au02zuXw/7abtsP7QQi0AafShGUUoVL0xi7023+vldBBHZi2q3QLht3
-        AQPQEWq2Rn4Q8VdDElkHKUQLM
-X-Received: by 2002:adf:ce84:: with SMTP id r4mr4060393wrn.131.1639775837475;
-        Fri, 17 Dec 2021 13:17:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzyHFjtfUP+UrzLUR48hxKqEKlGEluE4bUcCBZtUym2XEAAEZjLDhDIAoq52AL8Giwi/+zzjw==
-X-Received: by 2002:adf:ce84:: with SMTP id r4mr4060376wrn.131.1639775837280;
-        Fri, 17 Dec 2021 13:17:17 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id m3sm1977816wms.25.2021.12.17.13.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 13:17:16 -0800 (PST)
-Message-ID: <4bc68a26-5924-4766-2e6a-b18a523a2621@redhat.com>
-Date:   Fri, 17 Dec 2021 22:17:15 +0100
+        id S241023AbhLQVRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:17:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:6486 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237156AbhLQVRp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 16:17:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639775865; x=1671311865;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=0MGr81aqkNa4jKgg4hdu/6la1f3mjEWrRC+B7fBMBug=;
+  b=fcdskudsWqc1h0PTqvNUHMpLoUmtmmD5GmeIsIO2bqcI0rQrHlYOcii6
+   rBlOVQFuLYVHbSXxB8VczIfA0533ElSEhure4pNCY7Ft8zzw+tDArPcO4
+   7+lZtWrjeZ1XtjeRZoN/YK4Oqz+WT4uJPLf1FcDfzgjA0qtqYtD6d63LT
+   F5lJeva2kmqT0qJ83R4KYr0Rmt30VmUv3vSpvCSdRRZLyShK1RwomsLY7
+   zMLbZ2i6dMPrro85NxSZPyQfOWmaO0TeY37hUskWl+RTMmL0h+BZRQfoY
+   djnKuoVUP9QFEnhsIuu3rF4SCk/mikmF68dymhUjNYilUkoshksd0JwJH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237376125"
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="237376125"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 13:17:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="683522144"
+Received: from mkundu-mobl1.amr.corp.intel.com (HELO [10.212.216.75]) ([10.212.216.75])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 13:17:45 -0800
+Subject: Re: [PATCH v13 2/2] x86/sgx: Add an attribute for the amount of SGX
+ memory in a NUMA node
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, reinette.chatre@intel.com,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org
+References: <20211116162116.93081-1-jarkko@kernel.org>
+ <20211116162116.93081-2-jarkko@kernel.org> <YbzhBrimHGGpddDM@archlinux-ax161>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <b744d47e-4b7f-d372-f8ba-758555c08993@intel.com>
+Date:   Fri, 17 Dec 2021 13:17:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
+In-Reply-To: <YbzhBrimHGGpddDM@archlinux-ax161>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <CAHk-=wgO9Zmc3S+cG=xFuUAgkZ3Ti9fOdUr4Q72EPwrxX67YAA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <CAHk-=wgO9Zmc3S+cG=xFuUAgkZ3Ti9fOdUr4Q72EPwrxX67YAA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.21 21:56, Linus Torvalds wrote:
-> On Fri, Dec 17, 2021 at 12:47 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
->>
->> To remind all, the GUP users, like RDMA, VFIO use
->> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
->> COW breaking the coherence. In these case 'r/o pin' does not mean
->> "snapshot the data", but its only a promise not to write to the pages
->> and still desires coherence with the memory map.
->>
->> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
->> then filling that something with data finally doing the actual
->> DMA. Breaking COW after pin breaks those apps.
-> 
-> I agree.
-> 
+On 12/17/21 11:12 AM, Nathan Chancellor wrote:
+> With this patch in -next as commit 50468e431335 ("x86/sgx: Add an
+> attribute for the amount of SGX memory in a NUMA node"), this sysfs node
+> causes an OOPS for me on at least one of my test systems (Intel based):
 
-I agree that breaking COW after a pin should never be done. Therefore,
-break the COW before the pin -> unsharing as implemented here.
+Thanks for the report!
 
-> And my argument is that those kinds of things that ask for a R/O pin
-> are broken, and should just make sure to use the shared pins.
-
-And trigger a write fault although they are just reading. To me this is
-just a band aid instead of eventually ...
-
-...
-> What's the downside of just doing this properly?
-
-Doing it properly by fixing GUP and not the COW logic. GUP and COW are
-just incompatible and we should unshare early.
-
-Honestly, the memory corruptions we can trigger in user space due to the
-current COW logic *especially* with FOLL_WRITE users such O_DIRECT,
-io_uring or vfio are not a joke anymore. (again, link in the cover letter)
-
--- 
-Thanks,
-
-David / dhildenb
-
+Could you share /proc/cpuinfo and a full dmesg from when this happens?
+I'm curious if your system has SGX at all and if it had any issues
+during initialization.

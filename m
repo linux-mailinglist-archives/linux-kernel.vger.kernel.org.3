@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810854791E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA314791E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239369AbhLQQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:52:47 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:48858 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239352AbhLQQwq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:52:46 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowACnrVlKwLxhCKpqAw--.17695S2;
-        Sat, 18 Dec 2021 00:52:26 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] isoc: mediatek: Fix dereference of null pointer while alloc fail
-Date:   Sat, 18 Dec 2021 00:52:20 +0800
-Message-Id: <20211217165220.675485-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S239376AbhLQQwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:52:55 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:39488 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239352AbhLQQwy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:52:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639759974; x=1671295974;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=iO4uINCczmYLYeM2/AnU1KacYcfGgrDWAAuMG5ogDok=;
+  b=MCD8NS2QIt/fnvE8jKjhgsKOfMXXXh9MXfL0MH76x607XuggNvDgstUl
+   YhdUcuJCIakDnYYDIwhTpKjqMV59X6WPa0WPqfWSHX62//JFHvfCLduo0
+   naIEJvJdzV41qN4b0M5aYJxHmFH+2VDgFyn/2cnNDqdG0qiqwkzK0zlEb
+   u64kkYK4EWxvUVOLlupbmbBii6VbkSwYo3ZVFPE+6OcRtEq7Kz2nsx8AC
+   Dn3BYrb0pXQ89FIwbINm1uoSUwCmdrmKmELcBTweVCXZAJVHkzD6LQeab
+   DO7p4sJpDXWt5vmYyGrNQeOp5SIqb1OvVxFUi7kG8ArQOItlU7tBeNXE2
+   w==;
+IronPort-SDR: 7mBRlMm6IGT4dTpqn8iABGA5wPpvelC6FuryohQ7Z5Yn+WMUtLfba5FqxwO6M8qcr2T0JMBf2O
+ +noG+d01dqpDeo7W+Wg8hRmj4PVR0y667yZ3wTUQLre7R/Xu9fVhsi+8aIU4mDHb57qW91cviA
+ Cq6TOQbytRlmchIRHp3mHWwvDBOtO2mlF2cDz+gJrny/u2JwGBp4vY7g1Pb/YdS1RLJVSspnKD
+ au9pmJZlN16UBO1/lIavTGC3M+n/jbZxoAzWtwEgG/pC+h2hX6T0768ktmbcyJ6DKWSl9Ihpbe
+ fLzB5fwCdhuB71nA9FGnjlry
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="142784408"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 09:52:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 09:52:53 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 09:52:51 -0700
+Subject: Re: [PATCH v3] ARM: configs: at91: Enable crypto software
+ implementations
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <claudiu.beznea@microchip.com>, <dianders@chromium.org>,
+        <emil.velikov@collabora.com>, <sam@ravnborg.org>,
+        <codrin.ciubotariu@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211215134311.304427-1-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <c161698a-8b18-8aa7-9f61-1f82cc2252ed@microchip.com>
+Date:   Fri, 17 Dec 2021 17:52:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACnrVlKwLxhCKpqAw--.17695S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3tFy7ZrW8XFyDKFy3Arb_yoW8tr43pF
-        48tay2yrWrGrW7Wr1vkrWDuFyS934Iya47K34Ygw1av3s8Jrn5JFyFya4jyF4kCFykKa13
-        tr42qrWxCF1UZF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_JwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUj_-PUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <20211215134311.304427-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, maybe I do not fully understand the meaning of your review
-comments and I really fail to behave polite.
-This time I carefully check all the comments and believe I have already
-obey all the request.
-The message as follow is my new comments.
-If there are also problems, please let me know and I will correct in
-time.
+On 15/12/2021 at 14:43, Tudor Ambarus wrote:
+> Enable at least the same amount of algs as the hardware IPs are
+> supporting so that they are able to fallback to the software
+> implementations in case they need it.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-Because devm_clk_get() will not always success.
-It should be better to check the return value in order to
-avoid use of error pointer in case of the failure.
-Therefore, we should use the IS_ERR() to check the error pointer and
-return -ENOMEM if it is and 0 if not.
-Also, we deal with the return value in init_scp.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple platform")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+And queued on at91-defconfig for 5.17.
 
-v1 -> v2
+Thanks, best regards,
+   Nicolas
 
-*Change 1. Correct the commit message.
----
- drivers/soc/mediatek/mtk-scpsys.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
-index ca75b14931ec..778d6ffc42b8 100644
---- a/drivers/soc/mediatek/mtk-scpsys.c
-+++ b/drivers/soc/mediatek/mtk-scpsys.c
-@@ -411,12 +411,16 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
- 	return ret;
- }
- 
--static void init_clks(struct platform_device *pdev, struct clk **clk)
-+static int init_clks(struct platform_device *pdev, struct clk **clk)
- {
- 	int i;
- 
--	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
-+	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
- 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
-+		if (IS_ERR(clk[i]))
-+			return -ENOMEM;
-+	}
-+	return 0;
- }
- 
- static struct scp *init_scp(struct platform_device *pdev,
-@@ -426,7 +430,7 @@ static struct scp *init_scp(struct platform_device *pdev,
- {
- 	struct genpd_onecell_data *pd_data;
- 	struct resource *res;
--	int i, j;
-+	int i, j, ret;
- 	struct scp *scp;
- 	struct clk *clk[CLK_MAX];
- 
-@@ -481,7 +485,9 @@ static struct scp *init_scp(struct platform_device *pdev,
- 
- 	pd_data->num_domains = num;
- 
--	init_clks(pdev, clk);
-+	ret = init_clks(pdev, clk);
-+	if (ret)
-+		return ERR_PTR(-ENOMEM);
- 
- 	for (i = 0; i < num; i++) {
- 		struct scp_domain *scpd = &scp->domains[i];
+> ---
+> v3: drop CONFIG_CRYPTO_MD5, as MD5 is not hw accelerated.
+> 
+> v2:
+> - add CONFIG_CRYPTO_HMAC
+> - update commit message
+> - ignore other non-crypto changes that are revealed with
+>    "make savedefconfig"
+> 
+>   arch/arm/configs/at91_dt_defconfig | 9 ++++++++-
+>   arch/arm/configs/sama5_defconfig   | 8 ++++++++
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
+> index a6310c8abcc3..549d01be0b47 100644
+> --- a/arch/arm/configs/at91_dt_defconfig
+> +++ b/arch/arm/configs/at91_dt_defconfig
+> @@ -216,7 +216,14 @@ CONFIG_NLS_CODEPAGE_437=y
+>   CONFIG_NLS_CODEPAGE_850=y
+>   CONFIG_NLS_ISO8859_1=y
+>   CONFIG_NLS_UTF8=y
+> -CONFIG_CRYPTO_ECB=y
+> +CONFIG_CRYPTO_CBC=y
+> +CONFIG_CRYPTO_CFB=y
+> +CONFIG_CRYPTO_OFB=y
+> +CONFIG_CRYPTO_XTS=y
+> +CONFIG_CRYPTO_HMAC=y
+> +CONFIG_CRYPTO_SHA1=y
+> +CONFIG_CRYPTO_SHA512=y
+> +CONFIG_CRYPTO_DES=y
+>   CONFIG_CRYPTO_USER_API_HASH=m
+>   CONFIG_CRYPTO_USER_API_SKCIPHER=m
+>   CONFIG_CRYPTO_DEV_ATMEL_AES=y
+> diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
+> index fe0d7ccc8fb2..03dd80c2a19e 100644
+> --- a/arch/arm/configs/sama5_defconfig
+> +++ b/arch/arm/configs/sama5_defconfig
+> @@ -232,6 +232,14 @@ CONFIG_NLS_CODEPAGE_437=y
+>   CONFIG_NLS_CODEPAGE_850=y
+>   CONFIG_NLS_ISO8859_1=y
+>   CONFIG_NLS_UTF8=y
+> +CONFIG_CRYPTO_CBC=y
+> +CONFIG_CRYPTO_CFB=y
+> +CONFIG_CRYPTO_OFB=y
+> +CONFIG_CRYPTO_XTS=y
+> +CONFIG_CRYPTO_HMAC=y
+> +CONFIG_CRYPTO_SHA1=y
+> +CONFIG_CRYPTO_SHA512=y
+> +CONFIG_CRYPTO_DES=y
+>   CONFIG_CRYPTO_USER_API_HASH=m
+>   CONFIG_CRYPTO_USER_API_SKCIPHER=m
+>   CONFIG_CRYPTO_DEV_ATMEL_AES=y
+> 
+
+
 -- 
-2.25.1
-
+Nicolas Ferre

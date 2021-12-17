@@ -2,166 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 806A44794A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220C64794A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240570AbhLQTMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 14:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbhLQTMM (ORCPT
+        id S240593AbhLQTMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 14:12:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45828 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240588AbhLQTMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:12:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AF5C061574;
-        Fri, 17 Dec 2021 11:12:12 -0800 (PST)
+        Fri, 17 Dec 2021 14:12:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B574B62384;
-        Fri, 17 Dec 2021 19:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE00FC36AE2;
-        Fri, 17 Dec 2021 19:12:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AEEC62384;
+        Fri, 17 Dec 2021 19:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F30BC36AE2;
+        Fri, 17 Dec 2021 19:12:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639768331;
-        bh=abrj6yZx1CS+4y6rWVn3ZtFqCwKgtGVKaalJpu0TSPw=;
+        s=k20201202; t=1639768334;
+        bh=SOOVbUhP4h272D7VGTusCnUo4jcab+85YDFYNjdJ2lc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFvjRiN6uSj8POfLPxfk9KGf6ZdjpD+TnGDpp9MGbIAz1LAjqAdYKmLTfC6BpGnj1
-         oTYHkkU5U2duNyVqLi8UivDcqe/kPxza/hz0G+mUYZhXwZsPug04xNRWFzTeR4twbS
-         7fb/f+UOonucgP8HSJhyuHK014XzSmjZ8FEcP2lSr/7Rl/TKmIwyYXcGd/ev2nCiv3
-         u/bVR8z2NDMcyAqUFfQnm525Ov6KYtqfacvhvi0rzWBy7y5jMxlcOHVIz5V5/aoxyd
-         LSHihi8FSO5U3l0UGv7gyxXbej+kSvpiQcE5ltAZRIn9tUWNmJ1SyOxj8qy+nxDh0t
-         0h3gDLGhjYoug==
-Date:   Fri, 17 Dec 2021 12:12:06 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, reinette.chatre@intel.com,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org
-Subject: Re: [PATCH v13 2/2] x86/sgx: Add an attribute for the amount of SGX
- memory in a NUMA node
-Message-ID: <YbzhBrimHGGpddDM@archlinux-ax161>
-References: <20211116162116.93081-1-jarkko@kernel.org>
- <20211116162116.93081-2-jarkko@kernel.org>
+        b=EuhGuv57ieGlfugFXuclOConO6Yi7aq5Wjt/sugl8vYfx+hfYa5qWa5x+JWuJ+9mt
+         L5H2U/EIicbeJgzGVcNKXWAuVelzL7tDr07RDuZJQbsYNWDJAL/wqikAbLwnFdOfJj
+         YDtoM23OtrM2G1buLJF377i673lNubMlrPndHZE5B7/soolegIDC/X2IvzdDNaYSR4
+         nU/fbhQ7fddipF4lj8nbe5tLo4B3aT1kDLRVEMnEOCCrd4sJP3eu4rloIhBRmL27tb
+         A6QJRQFUAlhPpMOAYj1uJYYmQq0oPX+IaGWOOGmzRWl5GBK8cqq+gk3zNW9liGtmd8
+         Fii1jl6TRpeow==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9134C40B92; Fri, 17 Dec 2021 16:12:11 -0300 (-03)
+Date:   Fri, 17 Dec 2021 16:12:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Yonghong Song <yhs@fb.com>,
+        Douglas RAILLARD <douglas.raillard@arm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Matteo Croce <mcroce@microsoft.com>
+Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
+Message-ID: <YbzhCwlbArsS4b0d@kernel.org>
+References: <YSQSZQnnlIWAQ06v@kernel.org>
+ <YbC5MC+h+PkDZten@kernel.org>
+ <YbkTAPn3EEu6BUYR@archlinux-ax161>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211116162116.93081-2-jarkko@kernel.org>
+In-Reply-To: <YbkTAPn3EEu6BUYR@archlinux-ax161>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
-
-On Tue, Nov 16, 2021 at 06:21:16PM +0200, Jarkko Sakkinen wrote:
-> The amount of SGX memory on the system is determined by the BIOS and it
-> varies wildly between systems.  It can be from dozens of MB's on desktops
-> or VM's, up to many GB's on servers.  Just like for regular memory, it is
-> sometimes useful to know the amount of usable SGX memory in the system.
+Em Tue, Dec 14, 2021 at 02:56:16PM -0700, Nathan Chancellor escreveu:
+> Hi Arnaldo,
 > 
-> Introduce CONFIG_HAVE_ARCH_NODE_DEV_GROUP opt-in flag to expose an arch
-> specific attribute group, and add an attribute for the amount of SGX
-> memory in bytes to each NUMA node:
+> On Wed, Dec 08, 2021 at 10:54:56AM -0300, Arnaldo Carvalho de Melo wrote:
+> > - Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
+> >   matching .dwo file to be used instead. Automagically doing this is in the
+> >   plans for a future release.
 > 
-> /sys/devices/system/node/nodeX/x86/sgx_total_bytes
+> This change [1] appears to break building on older distributions for me,
+> which I use in containers for access to older versions of GCC. I see the
+> error with Debian Stretch and Ubuntu Xenial, which have an older
+> libelf-dev.  Is this expected? I don't mind sticking with 1.22 for
+> those, I just want to be sure!
 > 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> /tmp/dwarves-1.23/dwarf_loader.c: In function 'die__process':
+> /tmp/dwarves-1.23/dwarf_loader.c:2529:13: error: 'DW_TAG_skeleton_unit' undeclared (first use in this function)
+>   if (tag == DW_TAG_skeleton_unit) {
+>              ^
+> 
+> [1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
+> 
 
-Apologies if this has already been reported or fixed, I haven't seen
-anything from a full search of lore.kernel.org.
+with the following patch:
 
-With this patch in -next as commit 50468e431335 ("x86/sgx: Add an
-attribute for the amount of SGX memory in a NUMA node"), this sysfs node
-causes an OOPS for me on at least one of my test systems (Intel based):
+commit 2f7d61b2bfb59427926867c886595ff28dd50607
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Fri Dec 17 15:50:17 2021 -0300
 
-# cat /sys/devices/system/node/node0/x86/sgx_total_bytes
-fish: Job 1, 'cat /sys/devices/system/node/no…' terminated by signal SIGKILL (Forced quit)
+    core: Define DW_TAG_skeleton_unit if not available on current dwarf.h
+    
+    We use this in both the dwarf_loader.c and in fprintf.c, so define it in
+    dwarves.h that is included in both.
+    
+    Reported-by: Nathan Chancellor <nathan@kernel.org>
+    Link: https://lore.kernel.org/all/YbkTAPn3EEu6BUYR@archlinux-ax161
+    Cc: Domenico Andreoli <domenico.andreoli@linux.com>
+    Cc: Douglas RAILLARD <douglas.raillard@arm.com>
+    Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+    Cc: Jan Engelhardt <jengelh@inai.de>
+    Cc: Jiri Olsa <jolsa@kernel.org>
+    Cc: Matteo Croce <mcroce@microsoft.com>
+    Cc: Matthias Schwarzott <zzam@gentoo.org>
+    Cc: Yonghong Song <yhs@fb.com>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-# dmesg
-[   56.956995] BUG: kernel NULL pointer dereference, address: 0000000000000020
-[   56.957003] #PF: supervisor read access in kernel mode
-[   56.957006] #PF: error_code(0x0000) - not-present page
-[   56.957009] PGD 0 P4D 0
-[   56.957013] Oops: 0000 [#2] PREEMPT SMP PTI
-[   56.957017] CPU: 1 PID: 866 Comm: cat Tainted: G      D           5.16.0-rc5-next-20211217-debug #1 15ae5b0f28a4b9b6343440ee595affa8e1b5cf57
-[   56.957022] Hardware name: ASUSTeK COMPUTER INC. Q302LA/Q302LA, BIOS Q302LA.203 05/15/2014
-[   56.957024] RIP: 0010:sgx_total_bytes_show+0x28/0x40
-[   56.957032] Code: 66 90 0f 1f 44 00 00 49 89 f8 48 89 d7 48 c7 c6 5f b1 52 a4 41 8b 80 98 02 00 00 48 8d 04 40 48 c1 e0 04 48 03 05 38 b1 3c 02 <48> 8b 50 20 e8 ff ee 3b 00 48 98 31 d2 89 d6 89 d7 41 89 d0 c3 0f
-[   56.957035] RSP: 0018:ffffb79c81447d60 EFLAGS: 00010246
-[   56.957039] RAX: 0000000000000000 RBX: ffffffffa4c30ec0 RCX: 0000000000000000
-[   56.957041] RDX: ffff95d502b95000 RSI: ffffffffa452b15f RDI: ffff95d502b95000
-[   56.957044] RBP: ffffffffa41567c0 R08: ffff95d5002a0400 R09: 0000000000000000
-[   56.957046] R10: 0000000000000000 R11: 0000000000000000 R12: ffffb79c81447e28
-[   56.957048] R13: ffffb79c81447e00 R14: ffff95d5041247a8 R15: 0000000000000001
-[   56.957051] FS:  00007f4ab25af600(0000) GS:ffff95d616e80000(0000) knlGS:0000000000000000
-[   56.957054] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   56.957056] CR2: 0000000000000020 CR3: 00000001029e8005 CR4: 00000000001706e0
-[   56.957060] Call Trace:
-[   56.957062]  <TASK>
-[   56.957064]  dev_attr_show+0x19/0x40
-[   56.957072]  sysfs_kf_seq_show+0xa1/0x120
-[   56.957080]  seq_read_iter+0x12e/0x4c0
-[   56.957085]  new_sync_read+0x159/0x1f0
-[   56.957093]  vfs_read+0xff/0x1a0
-[   56.957099]  ksys_read+0x67/0xf0
-[   56.957105]  do_syscall_64+0x5c/0x90
-[   56.957110]  ? syscall_exit_to_user_mode+0x23/0x50
-[   56.957116]  ? exc_page_fault+0x72/0x180
-[   56.957121]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   56.957128] RIP: 0033:0x7f4ab24d1862
-[   56.957131] Code: c0 e9 b2 fe ff ff 50 48 8d 3d 5a 29 0a 00 e8 55 e4 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
-[   56.957134] RSP: 002b:00007ffff14dac78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[   56.957137] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007f4ab24d1862
-[   56.957140] RDX: 0000000000020000 RSI: 00007f4ab20d8000 RDI: 0000000000000003
-[   56.957142] RBP: 00007f4ab20d8000 R08: 00007f4ab20d7010 R09: 0000000000000000
-[   56.957144] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000020000
-[   56.957146] R13: 0000000000000003 R14: 0000000000000000 R15: 00007ffff14daf18
-[   56.957150]  </TASK>
-[   56.957152] Modules linked in: 8021q garp mrp stp llc snd_hda_codec_hdmi ccm
-algif_aead cbc x86_pkg_temp_thermal des_generic intel_powerclamp libdes
-coretemp ecb kvm_intel algif_skcipher kvm ax88796b irqbypass cmac
-crct10dif_pclmul i915 crc32_pclmul md4 ghash_clmulni_intel algif_hash
-snd_hda_codec_realtek af_alg snd_hda_codec_generic ledtrig_audio uvcvideo
-asus_nb_wmi aesni_intel snd_hda_intel intel_spi_platform i2c_algo_bit iwlmvm
-videobuf2_vmalloc asus_wmi snd_intel_dspcfg ttm snd_intel_sdw_acpi crypto_simd
-joydev ak8975 intel_spi iTCO_wdt btusb mousedev spi_nor sparse_keymap
-intel_pmc_bxt at24 cryptd videobuf2_memops iTCO_vendor_support mac80211
-hid_multitouch mtd platform_profile btrtl intel_rapl_msr mei_hdcp snd_hda_codec
-btbcm rapl libarc4 videobuf2_v4l2 drm_kms_helper intel_cstate
-processor_thermal_device_pci_legacy asix intel_uncore syscopyarea selftests
-btintel snd_hda_core videobuf2_common pcspkr iwlwifi snd_hwdep
-processor_thermal_device vfat btmtk i2c_i801 sysfillrect usbnet
-[   56.957229]  snd_pcm processor_thermal_rfim psmouse fat sysimgblt i2c_smbus
-bluetooth videodev processor_thermal_mbox snd_timer processor_thermal_rapl
-fb_sys_fops mii cfg80211 mei_me usbhid snd ecdh_generic mdio_devres mc
-inv_mpu6050_i2c intel_rapl_common cec crc16 int340x_thermal_zone libphy lpc_ich
-rfkill intel_gtt mei soundcore intel_soc_dts_iosf inv_mpu6050 acpi_als wmi
-dell_smo8800 industrialio_triggered_buffer int3400_thermal video i2c_mux
-kfifo_buf soc_button_array industrialio acpi_thermal_rel asus_wireless mac_hid
-drm pkcs8_key_parser fuse bpf_preload ip_tables x_tables xfs libcrc32c
-crc32c_generic serio_raw atkbd libps2 i8042 crc32c_intel xhci_pci
-xhci_pci_renesas serio
-[   56.957286] CR2: 0000000000000020
-[   56.957289] ---[ end trace 0000000000000000 ]---
-[   56.957291] RIP: 0010:sgx_total_bytes_show+0x28/0x40
-[   56.957296] Code: 66 90 0f 1f 44 00 00 49 89 f8 48 89 d7 48 c7 c6 5f b1 52 a4 41 8b 80 98 02 00 00 48 8d 04 40 48 c1 e0 04 48 03 05 38 b1 3c 02 <48> 8b 50 20 e8 ff ee 3b 00 48 98 31 d2 89 d6 89 d7 41 89 d0 c3 0f
-[   56.957299] RSP: 0018:ffffb79c8118fd58 EFLAGS: 00010246
-[   56.957301] RAX: 0000000000000000 RBX: ffffffffa4c30ec0 RCX: 0000000000000000
-[   56.957304] RDX: ffff95d50403d000 RSI: ffffffffa452b15f RDI: ffff95d50403d000
-[   56.957306] RBP: ffffffffa41567c0 R08: ffff95d5002a0400 R09: 0000000000000000
-[   56.957308] R10: 0000000000000000 R11: 0000000000000000 R12: ffffb79c8118fe20
-[   56.957310] R13: ffffb79c8118fdf8 R14: ffff95d503fd0550 R15: 0000000000000001
-[   56.957312] FS:  00007f4ab25af600(0000) GS:ffff95d616e80000(0000) knlGS:0000000000000000
-[   56.957315] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   56.957317] CR2: 0000000000000020 CR3: 00000001029e8005 CR4: 00000000001706e0
+diff --git a/dwarves.h b/dwarves.h
+index 52d162d67456bf12..2132da0ef02b78fd 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -1390,4 +1390,8 @@ extern bool no_bitfield_type_recode;
+ 
+ extern const char tabs[];
+ 
++#ifndef DW_TAG_skeleton_unit
++#define DW_TAG_skeleton_unit 0x4a
++#endif
++
+ #endif /* _DWARVES_H_ */
 
-If I can provide any further information or testing, let me know!
 
-Cheers,
-Nathan
+And using the perf build containers to build with both gcc and clang
+only a few older distros are failing, I'll make buildcmd.sh, that is in
+the dwarves repo, to build using the system libbpf-devel (or equivalent)
+package and have this running after processing patches as I did for 1.22
+but forgot to do for 1.23 :-/
+
+- Arnaldo
+
+[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/pahole/dwarves-1.24.tar.xz
+[perfbuilder@five ~]$ export BUILD_CMD=buildcmd.sh
+[perfbuilder@five ~]$ time dm -X
+   1     3.67 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+   2     0.96 alpine:3.4                    : FAIL gcc version 5.3.0 (Alpine 5.3.0)
+
+   3     0.96 alpine:3.5                    : FAIL gcc version 6.2.1 20160822 (Alpine 6.2.1)
+
+   4     1.06 alpine:3.6                    : FAIL gcc version 6.3.0 (Alpine 6.3.0)
+
+   5     1.06 alpine:3.7                    : FAIL gcc version 6.4.0 (Alpine 6.4.0)
+
+   6     0.96 alpine:3.8                    : FAIL gcc version 6.4.0 (Alpine 6.4.0)
+
+   7     0.86 alpine:3.9                    : FAIL gcc version 8.3.0 (Alpine 8.3.0)
+
+   8     1.06 alpine:3.10                   : FAIL gcc version 8.3.0 (Alpine 8.3.0)
+
+   9     0.76 alpine:3.11                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
+
+  10     4.47 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+  11     4.87 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
+  12     4.87 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+  13     4.77 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+  14     5.07 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
+  15     3.27 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+  16     3.66 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+  17     3.57 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+  18     3.66 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20210911 (ALT Sisyphus 11.2.1-alt1) , ALT Linux Team clang version 12.0.1
+  19     3.16 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
+  20     3.26 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
+  21     3.46 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+  22     3.46 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-3) , clang version 12.0.1 (Red Hat 12.0.1-2.module_el8.6.0+937+1cafe22c)
+  23     3.57 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20211208 releases/gcc-11.2.0-562-gbd918acae2 , clang version 11.1.0
+  24     3.77 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
+  25     3.67 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
+  26     3.67 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
+  27     3.87 debian:experimental           : Ok   gcc (Debian 11.2.0-12) 11.2.0 , Debian clang version 13.0.0-9+b1
+  28     3.16 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.5.0 (tags/RELEASE_350/final)
+  29     3.46 fedora:23                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.7.0 (tags/RELEASE_370/final)
+  30     3.47 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) , clang version 3.8.1 (tags/RELEASE_381/final)
+  31     3.48 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) , clang version 3.9.1 (tags/RELEASE_391/final)
+  32     3.67 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) , clang version 4.0.1 (tags/RELEASE_401/final)
+  33     3.46 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) , clang version 5.0.2 (tags/RELEASE_502/final)
+  34     3.87 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 6.0.1 (tags/RELEASE_601/final)
+  35     3.87 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 7.0.1 (Fedora 7.0.1-6.fc29)
+  36     3.67 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 8.0.0 (Fedora 8.0.0-3.fc30)
+  37     3.56 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
+  38     3.76 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
+  39     3.57 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+  40     3.67 fedora:34                     : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+  41     3.87 fedora:35                     : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+  42     3.87 fedora:rawhide                : Ok   gcc (GCC) 11.2.1 20211203 (Red Hat 11.2.1-7) , clang version 13.0.0 (Fedora 13.0.0-5.fc36)
+  43     3.97 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
+  44     3.37 mageia:6                      : Ok   gcc (Mageia 5.5.0-1.mga6) 5.5.0 , clang version 3.9.1 (tags/RELEASE_391/final)
+  45     3.97 mageia:7                      : Ok   gcc (Mageia 8.4.0-1.mga7) 8.4.0 , clang version 8.0.0 (Mageia 8.0.0-1.mga7)
+  46     4.67 openmandriva:cooker           : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
+
+  47     3.97 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] , clang version 5.0.1 (tags/RELEASE_501/final 312548)
+  48     3.57 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 7.0.1 (tags/RELEASE_701/final 349238)
+  49     3.46 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1
+  50     3.36 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+  51     3.97 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 11.2.1 20210816 [revision 056e324ce46a7924b5cf10f61010cf9dd2ca10e9] , clang version 13.0.0
+  52     3.57 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
+  53     3.67 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module+el8.5.0+715+58f51d49)
+  54     3.47 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 , clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)
+  55     3.67 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 , clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+  56     3.97 ubuntu:20.04                  : Ok   gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0 , clang version 10.0.0-4ubuntu1
+  57     3.87 ubuntu:20.10                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1~20.10) 10.3.0 , Ubuntu clang version 11.0.0-2
+  58     3.57 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
+  59     3.66 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
+60 199.605
+
+real	4m55.822s
+user	1m16.561s
+sys	0m17.551s
+[perfbuilder@five ~]$
+
+

@@ -2,217 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE10447955C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DA4479564
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbhLQUSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:18:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53437 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238985AbhLQUSD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:18:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639772282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2c0VJ6vHzyhRBdOsA/CnnUPbNYIb49wsJ7s121sWUXc=;
-        b=Q7hPSNCO0OB4ewxvHR+/rFt3Lvl5v1t5QCDcRFhE6vNtFrpR2DoCUUHhy4OGxQG86a6yUt
-        K2UQ+kdBo2zp9CeyQ/FHPQeB8N13ScoUPD2uHKsrsL2AFD/ZaSc+yk6MHJ2Fs4zTKAFHcW
-        s2qHttDb2yXhVkrsgR6d3hyPCEWs3l4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-cQQBbdnwMg6a4rurBzCAfA-1; Fri, 17 Dec 2021 15:18:01 -0500
-X-MC-Unique: cQQBbdnwMg6a4rurBzCAfA-1
-Received: by mail-wm1-f69.google.com with SMTP id i15-20020a05600c354f00b0034566ac865bso1518081wmq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:18:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=2c0VJ6vHzyhRBdOsA/CnnUPbNYIb49wsJ7s121sWUXc=;
-        b=77cWwxPr/cVDa/ecCLYgrrc6mauZoYIpn3uKzDyoL4kONM8IeNXpu75wPDHvD2t8nJ
-         rIeF49JLrYoWt+8XvB0ejvFiabn3Goa22X6ymld+CRZVke6WQVUhY/DfPBDAr/Nh9Rz6
-         1Vn7vwGzAg79N7QcZgTdLTcIRMg11q4iXLz16GnqnzuBKQ7O+jhcf7B3smDvLMpbUAO/
-         g8hGm90bIKVvJSb30H+nCr7aJqUxeqdEZtQUF5+Uck/TfH8KSz0o9dfDVHF4G2qttGfF
-         jVcPzBx076QiosoG3E4DxTg282lWfFO7BPzFHJVSF6vq4n7VeHxZWeZN+6/Hp8rEgWxV
-         By2Q==
-X-Gm-Message-State: AOAM532ezTodN+NUZMEvdWjnn31gHdsCIFHp6LA/dKURTPaVHr/TieZj
-        BA3+c4UX7cryLAfpN9r5yKRmj96JpHlSbjDQocRyxSCXbh0/wRyICjO/SdSrk6oU08e4OrZ4aPE
-        HvrV3dSFet0dYbn6pzT4T8pCq
-X-Received: by 2002:a1c:9d55:: with SMTP id g82mr8940533wme.58.1639772280204;
-        Fri, 17 Dec 2021 12:18:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLQJHbpNL5QwotNaX3cEFF/5ZCFCReDKEtVQIwIqRfkG0LtWKZ65TBS/l/u2j7qT9xkJUMWw==
-X-Received: by 2002:a1c:9d55:: with SMTP id g82mr8940497wme.58.1639772279937;
-        Fri, 17 Dec 2021 12:17:59 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id o64sm8355019wme.28.2021.12.17.12.17.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 12:17:59 -0800 (PST)
-Message-ID: <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
-Date:   Fri, 17 Dec 2021 21:17:58 +0100
+        id S236872AbhLQUWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:22:54 -0500
+Received: from foss.arm.com ([217.140.110.172]:34292 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231205AbhLQUWx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 15:22:53 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A332912FC;
+        Fri, 17 Dec 2021 12:22:52 -0800 (PST)
+Received: from [192.168.122.166] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 338BC3F5A1;
+        Fri, 17 Dec 2021 12:22:52 -0800 (PST)
+Message-ID: <54582d01-6da1-cc2f-f318-e42b9c473daf@arm.com>
+Date:   Fri, 17 Dec 2021 14:22:51 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
+References: <20211216233125.1130793-1-robh@kernel.org>
+ <20211216233125.1130793-3-robh@kernel.org>
+ <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
+ <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+ <836fd983-463c-040d-beb3-fee3faf215d6@arm.com>
+ <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.21 20:22, Linus Torvalds wrote:
-> On Fri, Dec 17, 2021 at 11:04 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+Hi,
+
+On 12/17/21 13:35, Rob Herring wrote:
+> On Fri, Dec 17, 2021 at 1:08 PM Robin Murphy <robin.murphy@arm.com> wrote:
 >>
->> If we are doing a COW, we need an *exclusive* access to the page. That
->> is not mapcount, that is the page ref.
+>> On 2021-12-17 18:14, Rob Herring wrote:
+>>> On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>>
+>>>> Hi Rob,
+>>>>
+>>>> On 2021-12-16 23:31, Rob Herring wrote:
+>>>>> Use the minimum CPU h/w id of the CPUs associated with the cache for the
+>>>>> cache 'id'. This will provide a stable id value for a given system. As
+>>>>> we need to check all possible CPUs, we can't use the shared_cpu_map
+>>>>> which is just online CPUs. There's not a cache to CPUs mapping in DT, so
+>>>>> we have to walk all CPU nodes and then walk cache levels.
+>>>>
+>>>> I believe another expected use of the cache ID exposed in sysfs is to
+>>>> program steering tags for cache stashing (typically in VFIO-based
+>>>> userspace drivers like DPDK so we can't realistically mediate it any
+>>>> other way). There were plans afoot last year to ensure that ACPI PPTT
+>>>> could provide the necessary ID values for arm64 systems which will
+>>>> typically be fairly arbitrary (but unique) due to reflecting underlying
+>>>> interconnect routing IDs. Assuming that there will eventually be some
+>>>> interest in cache stashing on DT-based systems too, we probably want to
+>>>> allow for an explicit ID property on DT cache nodes in a similar manner.
+>>>
+>>> If you have a suggestion for ID values that correspond to the h/w,
+>>> then we can add them. I'd like a bit more than just trusting that ID
+>>> is something real.
+>>>
+>>> While the ACPI folks may be willing to take an arbitrary index, it's
+>>> something we (mostly) avoid for DT.
 >>
->> mapcount is insane, and I think this is making this worse again.
+>> Not really. On the CHI side there are two fields - StashNID, which could
+>> be any node ID value depending on the interconnect layout, plus
+>> (optionally) StashLPID to address a specific cache within that node if
+>> it's something like a CPU cluster. However, how a PCIe TLP steering tag
+>> translates to those fields in the resulting CHI flit is largely up to
+>> the root complex.
 > 
-> Maybe I'm misreading this, but afaik
+> Knowing next to nothing about CHI, this means pretty much nothing to me. :(
 > 
->  - get a "readonly" copy of a local private page using FAULT_FLAG_UNSHARE.
+> I would guess there is a bit more to supporting CHI in DT systems than
+> just a cache ID.
 > 
->    This just increments the page count, because mapcount == 1.
+>> I think it's going to be more like a "reg" property than a nice
+>> validatable index.
+>>
+>>>> That said, I think it does make sense to have some kind of
+>>>> auto-generated fallback scheme *as well*, since I'm sure there will be
+>>>> plenty systems which care about MPAM but don't support stashing, and
+>>>> therefore wouldn't have a meaningful set of IDs to populate their DT
+>>>> with. Conversely I think that might also matter for ACPI too - one point
+>>>> I remember from previous discussions is that PPTT may use a compact
+>>>> representation where a single entry represents all equivalent caches at
+>>>> that level, so I'm not sure we can necessarily rely on IDs out of that
+>>>> path being unique either.
+>>>
+>>> AIUI, cache ids break the compact representation.
+>>
+>> Right, firmware authors can't use it if they do want to specify IDs, but
+>> that also means that if we find we *are* consuming a compact PPTT, then
+>> chances are we're not getting meaningful IDs out of it for MPAM to rely on.
 > 
->  - fork()
+> Sounds like broken firmware is in our future. ;) Or ACPI can default
+> to the same id scheme.
 > 
->  - unmap in the original
-> 
->  - child now has "mapcount == 1" on a page again, but refcount is
-> elevated, and child HAS TO COW before writing.
 
-Hi Linus,
+Yah, that is a problem. The ID's provided by the ACPI cache ID field are 
+as officially meaningless as the ones we can generate from the existing 
+fw_token mechanism. Given that, they don't really add anything beyond 
+what we can achieve simply by encoding the level somewhere in the 
+fw_token currently in use if we want something that is globally unique 
+rather than just unique for a given cache level+I/D. Their one advantage 
+though is that they can be more human readable at the cost of 2-3X the 
+size of the table, with the additional problem of having to worry about 
+them being populated in all the cache structures in the table. Its 
+almost easier to revisit some of the earlier discussion and generate a 
+uniq id, and then renumber them at the end.
 
-This is just GUP before fork(), which is in general
-problematic/incompatible with sharing. What we're concerned about in the
-context of this series (see the security issue) is GUP after fork(). And
-we're not changing GUP before fork() or even the COW logic in the
-context of this series.
 
-I agree that GUP before fork() has to be handled differently: during
-fork(): don't share something that cannot possibly be shared in a safe
-way. Don't allow COW semantics for something that is just broken with COW.
+If you want to encode some kind of routing ID in them, then that will 
+have to be standardized, and I would guess it might be easier to add the 
+routing ID's to the structure than retroactively add meaning to the ID 
+field if anyone is actually using it. Or just create yet another lookup 
+table to translate the id to something meaningful.
 
-> 
-> Notice? "mapcount" is complete BS. The number of times a page is
-> mapped is irrelevant for COW. All that matters is that we get an
-> exclusive access to the page before we can write to it.
 
-We have to be very careful about the two sides of the story: GUP before
-fork and GUP after fork.
 
-> 
-> Anybody who takes mapcount into account at COW time is broken, and it
-> worries me how this is all mixing up with the COW logic.
-> 
-> Now, maybe this "unshare" case is sufficiently different from COW that
-> it's ok to look at mapcount for FAULT_FLAG_UNSHARE, as long as it
-> doesn't happen for a real COW.
-> 
-> But honestly, for "unshare", I still don't see that the mapcount
-> matters. What does "mapcount == 1" mean? Why is it meaningful?
 
-I'll reply to your first mail in a sec.
 
-GUP is the problem with COW, not ordinary processes mapping a page
-(mapcount), where you will only get new sharers during fork() -- in a
-very controlled way. So GUP has to take care to unshare *before* taking
-a reference, such that we can never reach the point of missed COW. GUP
-really is the problematic bit with it all.
 
-Without GUP, we'd be living in a wonderful world in regards to COW.
-
-> 
-> Because if COW does things right, and always breaks a COW based on
-> refcount, then what's the problem with taking a read-only ref to the
-> page whether it is mapped multiple times or mapped just once? Anybody
-> who already had write access to the page can write to it regardless,
-> and any new writers go through COW and get a new page.
-
-Let's just take a look at what refcount does *wrong*. Let's use an
-adjusted version of your example above, because it's a perfect fit:
-
-1. mem = mmap(pagesize, MAP_PRIVATE)
--> refcount == 1
-
-2. memset(mem, 0, pagesize); /* Page is mapped R/W */
-
-3. fork() /* Page gets mapped R/O */
--> refcount > 1
-
-4. child quits
--> refcount == 1
-
-5. Take a R/O pin (RDMA, VFIO, ...)
--> refcount > 1
-
-6. memset(mem, 0xff, pagesize);
--> Write fault -> COW
-
-And GUP sees something different than our MM -- and this is perfectly
-valid, the R/O pin is just reading page content we might be modifying
-afterwrds. Take out 3. and 4. and it works as expected. This wouldn't
-happen when relying on the mapcount.
-
-And 3+4 can really be anything that results in a R/O mapping of an
-anonymous page, even if it's just swapout followed by read fault that
-maps the page R/O.
-
-> 
-> I must be missing something realyl fundamental here, but to me it
-> really reads like "mapcount can fundamentally never be relevant for
-> COW, and if it's not relevant for COW, how can it be relevant for a
-> read-only copy?"
-
-It really is the right value to use. Only GUP is the problematic bit
-that has to trigger unsharing to not mess up COW logic later. Take GUP
-out of the equation and COW just works as expected with the mapcount --
- as long as we can read an atomic value and synchronize against fork.
-(again, still composing the other mail :) )
-
--- 
-Thanks,
-
-David / dhildenb
 

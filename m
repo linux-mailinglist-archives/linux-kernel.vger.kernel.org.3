@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDCD478E9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2128D478EA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237648AbhLQOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:55:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:58390 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237641AbhLQOz5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:55:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E86CB1435;
-        Fri, 17 Dec 2021 06:55:54 -0800 (PST)
-Received: from [10.57.83.65] (unknown [10.57.83.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A42063F774;
-        Fri, 17 Dec 2021 06:55:53 -0800 (PST)
-Message-ID: <5ae9ef1d-76bb-6ff3-fa34-27e9399f0110@arm.com>
-Date:   Fri, 17 Dec 2021 14:55:52 +0000
+        id S237660AbhLQO40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:56:26 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:49545 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234609AbhLQO40 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:56:26 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C54943201EA8;
+        Fri, 17 Dec 2021 09:56:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 17 Dec 2021 09:56:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=uWdbuu7/zAxioolr7xAyIcvJl7f
+        t2nWZebfQdaeVQgM=; b=qTyIVfTTuCKwH6l/RtdsRYhh3fnDFTl3QPIZVdW8Ul2
+        Wgs3CoS7uOLhMP8VD6l+PdLQGUMLD4ZpbzpAIEENDftY79s/AHXdeBTLWmc0gKIK
+        hqz+BPFoXiFLU5OPaNe4Ow/0IYW5ImxROdf2FBOULsP8cp6N6+CMwdXyCLwnnRzm
+        AbYGpfc69CJTCUC9cLrVk0c9vFnVaSDzr02teeNCZ2eT2gAYrkv0tIjb9V22kvGK
+        5uiAfj7DZsJwBQ1NV0jlCNk8HdEhp//wAPnXxMCfooQEnuvb8pIiwsT8CnmAuN2f
+        muELjq2+1u4Et2xOluBg6QFFiS5L/vkaoOWI8x3W/Lw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=uWdbuu
+        7/zAxioolr7xAyIcvJl7ft2nWZebfQdaeVQgM=; b=GS+AoKvCZdAHon+Y+NBM4l
+        zBWeo2CCgFCZ8ozv1EiSmqLC05P1RJDQ6qgIOBonW6/zdvMghxa/5nJGaQggCtt/
+        +XIcZcu0HzqsANUx7quJJO7+DSwGd6RbO6LZk5y1rfqpVeqNj+l0KCcGztDpu7ff
+        AKLQzUjsHgNqA3r3y/NWsloTwgQgSNuztD+xth2C9vLXHs6ke3dVUlctk3fvpQIH
+        QgvaevPneSu+PvJGf3rHBtDJ6l7wAZ00dhLCz0tsqGcgvER3SmEz2P6Icagl1e/C
+        fKKxI6oR4ATijz00ZLuvIutOZeLQZfLebwHoueuktfix7ArR5mzMATLJzvsWrwHQ
+        ==
+X-ME-Sender: <xms:GKW8YRDCaVTC5rP-8GU73DHcg8bQhRpKaP-ZE3jdF6smUYLlYbN4OA>
+    <xme:GKW8YfgcGAQgmDhVub3BzaNrug6oZAW_zHpqZGo66ynbvOundOEgpaCyMsrGfe8ph
+    980AN7z1q184w>
+X-ME-Received: <xmr:GKW8Ycl9SyS3qOPO-nc1rDMVvS9eeqJhJtCzlfwqwEOD_ABemeUqNK3mE-Ab4GkzL-t35I6FiFoHhJmr7dbTkBvoaL2xGQAW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeigdejudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:GKW8YbyQVs8WHIBUt1xbmrEsaG4ynJLPiLjFEqW9XjSZLwZHKsB40g>
+    <xmx:GKW8YWRMeL8UOK3FncxlMMF-hn74n_WIfZWpEcGV4LHQhFbM9kbewQ>
+    <xmx:GKW8Yeb68D_1TWKTobksf4p2omVZ3ayXjipgtZ47RRrXPP9HTJiKaA>
+    <xmx:GKW8YVHLC90QWDhTrBQ_D591XFWi7s90PtGJFYWyAFgbEZ5ZQc8Pbg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Dec 2021 09:56:23 -0500 (EST)
+Date:   Fri, 17 Dec 2021 15:56:21 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Anand Jain <anand.jain@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH stable-5.15.y 0/4] backport test case btrfs/216 fixes
+Message-ID: <YbylFav0uyKztfKX@kroah.com>
+References: <cover.1639658429.git.anand.jain@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH 01/12] perf test: Shell - Limit to only run executable
- scripts in tests
-To:     carsten.haitzler@foss.arm.com, linux-kernel@vger.kernel.org
-Cc:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        inux-perf-users@vger.kernel.org, acme@kernel.org
-References: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1639658429.git.anand.jain@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2021 16:03, carsten.haitzler@foss.arm.com wrote:
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
+On Thu, Dec 16, 2021 at 09:04:09PM +0800, Anand Jain wrote:
+> In an attempt to make all the fstests test cases pass on stable-5.15.y,
+> backport fixes for the test case btrfs/216.
 > 
-> Perf test's shell runner will just run everything in the tests
-> directory (as long as it's not another directory or does not begin
-> with a dot), but sometimes you find files in there that are not shell
-> scripts - perf.data output for example if you do some testing and then
-> the next time you run perf test it tries to run these. Check the files
-> are executable so they are actually intended to be test scripts and
-> not just some "random junk" files there.
+> Anand Jain (4):
+>   btrfs: convert latest_bdev type to btrfs_device and rename
+>   btrfs: use latest_dev in btrfs_show_devname
+>   btrfs: update latest_dev when we create a sprout device
+>   btrfs: remove stale comment about the btrfs_show_devname
 > 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
->   tools/perf/tests/builtin-test.c |  4 +++-
->   tools/perf/util/path.c          | 12 ++++++++++++
->   tools/perf/util/path.h          |  1 +
->   3 files changed, 16 insertions(+), 1 deletion(-)
+>  fs/btrfs/disk-io.c   |  6 +++---
+>  fs/btrfs/extent_io.c |  2 +-
+>  fs/btrfs/inode.c     |  2 +-
+>  fs/btrfs/super.c     | 26 ++++++--------------------
+>  fs/btrfs/volumes.c   | 19 +++++++------------
+>  fs/btrfs/volumes.h   |  6 +++++-
+>  6 files changed, 23 insertions(+), 38 deletions(-)
 > 
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index 8cb5a1c3489e..ece272b55587 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -295,7 +295,9 @@ static const char *shell_test__description(char *description, size_t size,
->   
->   #define for_each_shell_test(entlist, nr, base, ent)	                \
->   	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
-> -		if (!is_directory(base, ent) && ent->d_name[0] != '.')
-> +		if (!is_directory(base, ent) && \
-> +			is_executable_file(base, ent) && \
-> +			ent->d_name[0] != '.')
+> -- 
+> 2.33.1
+> 
 
-If we reorder the checks, we could potentially avoid a few
-syscalls for hidden items. i.e., if we do ent->d_name[0] != '.'
-first.
+Now queued up, thanks.
 
->   
->   static const char *shell_tests__dir(char *path, size_t size)
->   {
-> diff --git a/tools/perf/util/path.c b/tools/perf/util/path.c
-> index caed0336429f..7dde8c230ae8 100644
-> --- a/tools/perf/util/path.c
-> +++ b/tools/perf/util/path.c
-> @@ -92,3 +92,15 @@ bool is_directory(const char *base_path, const struct dirent *dent)
->   
->   	return S_ISDIR(st.st_mode);
->   }
-> +
-> +bool is_executable_file(const char *base_path, const struct dirent *dent)
-> +{
-> +	char path[PATH_MAX];
-> +	struct stat st;
-> +
-> +	sprintf(path, "%s/%s", base_path, dent->d_name);
-
-Should this be snprintf() for additional safety ?
-
-> +	if (stat(path, &st))
-> +		return false;
-> +
-> +	return !S_ISDIR(st.st_mode) && (st.st_mode & S_IXUSR);
-
-Otherwise looks good to me.
-
-Suzuki
+greg k-h

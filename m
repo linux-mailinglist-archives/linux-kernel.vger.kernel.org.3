@@ -2,105 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCF5478DF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9984478E06
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237333AbhLQOjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S237409AbhLQOld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhLQOjx (ORCPT
+        with ESMTP id S237359AbhLQOlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:39:53 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160F2C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:39:53 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id u40so4772983uad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:39:53 -0800 (PST)
+        Fri, 17 Dec 2021 09:41:31 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773DBC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:41:30 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so8694483edu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:41:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=pOPPbcR2qV34Yko1uWDMcjVgVlmtgKTskEKD1tHYfveUCo/RZo+39ZaptW/Fm6Nh7E
-         dOvnzZaXXUCDbQyYcKutIlSt2FxfImnFh+X6m/CJiin0VLEOBNYBGW/H7yZLo6jx42eX
-         XyfKJ1/Q/4aX2Kjizdg6eLDsyL4M82MQCXN1ZBMZdz4tfyMoi3/2ztx1BSbLnGKCp64s
-         FzknK67y5n37dFYWNjrM8Wh4sXt4XgXNJdgQfxtLFeBxSCFqPzoUWCaHCQMTGQv76z1K
-         iBVK/mpOnj4F7seTfY6VeJ0DpnPk+sGBJWMrleo1M6Rf7HCT5jSahvXI8ZvlJ7RU03vk
-         w/oA==
+        bh=JWU5jrx8uzkoFd78Ys23ZOK1dm9ivQmIi4HaxP6dlv4=;
+        b=srPPgox/P4r9sfCVltI+UJtw85Ur7AFZ8AZRDLTGxMAk100H6kAK5Ftg3iXYEvXZQk
+         Me46k6XmXZC68vyWHLGa9eYmBrYBrmqoh08oeB5TnwfRLioU5Jf8IuHWIoZEVknT7TNT
+         wl8znefbBNhzi+k+7tkJr5SrnBd9N1cSNZ7V/0R0kV3bzZWMFolV32V4o/f85igw6MXu
+         AAqvxnAGLHnIqhX2zWHx2/cb1HBIVQZWTvpBUQidP79OmvLkjOnRbASsgGWsgwv9w4ni
+         hWoJ4MNsWDuKzeAjledCOt3f7M7bJEjcsvJtdj9scRpGPjFtQ0/vMt5YfG8xP0KSxsxz
+         5bAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=iQgWUMFYkjYqrGc6Ln2tBPTimxF3yzD6dcuCSF1P7mZ+tKVMgWwCJuawGnRWsr7xL8
-         DeelAMD1NFk+N0fgOMlJszakBvcGPaIzr3PWUsKYmkuHxks2cTMubjKc4epmZT487lbF
-         TNyTtIZ8TmyUXFhy9NEsBK+GQ0XDBO+4TMSvCJ5QN65Wmq+KpGiTZrdq84fD6zf1qvLc
-         Joh5YkrdY77PB9zq16taCrNr+cOsJzh0UyTOryhatqMPFcZ8S+DJG9wle/Zmr2FyhdCm
-         eDlrtpeiYADT2y4L9bjuZiLzZNLz1QzFBXff8YRjgo6LBDVneQN/lUfx1dYEbLtlG+3x
-         hlVw==
-X-Gm-Message-State: AOAM5307hmGuAol+R5QFzla9GamiQ+HeVoGYDsNeYqqVJHCWoZRt196Z
-        TAgIMwB/yD5pCqH1zgrJpbJaoLaF42UjgeXYCok=
-X-Google-Smtp-Source: ABdhPJyfiVpDFsjEuY4sCJxVVgORAJr49jJ/PbSq9N8OpVsSCk/hKnJcfOSf4NkPAcX5I9GPXMy6mFd5Qen3eIaVqrw=
-X-Received: by 2002:ab0:3e8:: with SMTP id 95mr1113768uau.26.1639751992103;
- Fri, 17 Dec 2021 06:39:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JWU5jrx8uzkoFd78Ys23ZOK1dm9ivQmIi4HaxP6dlv4=;
+        b=27ox1mAMFKI43vb59cHE+FoCXaqupiMCOyKuGtc8k7moKIyBVobxD5VY5Q5cjNQKD0
+         k6WxvyABBf4R24dEjnLmLIZhqiFUdqKlji4syuJ1/mLCkHCYHp67qBlmX+IZR3LorKUv
+         dmOnr/LeBeVQm/8lPIUf0QrepjpVGoOBYjRySTRkwGvgrE1OZtpnMXwjnjlUBK3DMQds
+         zON9IJW1S5OxS03XNmC6SrqpJnDPKvQO17I86za2kHLKmjHbGHT9W9aZbQ/pkuLUMtFb
+         u5Sd8xoP5FM460inAuu/kRzTKnl/viiYhriYGNi19J+6RI7YBgkciehtDaKyPCLVYSME
+         EqAg==
+X-Gm-Message-State: AOAM5324O8p89cFUqDFfWhGaAzlnTbVJ/pfWt135C3vPKI8vLidRNm/8
+        Z2LciFGC2zL7PLWEt/Pwz8Y4DQ==
+X-Google-Smtp-Source: ABdhPJxtfTdSZePgXYvUJVdJibMGa/wzwmXarJ/4RQ28O0+SZzhzgxhTWq0yn7DSjpJVmywKNwTn4A==
+X-Received: by 2002:a50:fb98:: with SMTP id e24mr3196629edq.80.1639752088840;
+        Fri, 17 Dec 2021 06:41:28 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id c12sm3864770edx.80.2021.12.17.06.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 06:41:28 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
+        huxinming820@gmail.com, kvalo@codeaurora.org,
+        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, dmitry.torokhov@gmail.com,
+        ndesaulniers@google.com, nathan@kernel.org,
+        linux-input@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 4.19 0/6] fix warning and errors on arm built with clang
+Date:   Fri, 17 Dec 2021 15:41:13 +0100
+Message-Id: <20211217144119.2538175-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Sender: aishagaddafi1056@gmail.com
-Received: by 2002:a59:755:0:b0:271:736b:41c7 with HTTP; Fri, 17 Dec 2021
- 06:39:51 -0800 (PST)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Fri, 17 Dec 2021 14:39:51 +0000
-X-Google-Sender-Auth: MeUM17A0c4_4_KoiqIBSw9-RHC4
-Message-ID: <CANtwLy0Rqeh8hbm2ZsOj=aSK7CLYizz4Y7X9z=aKmVG2X0wr=w@mail.gmail.com>
-Subject: Calvary greetings.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello my dear,
+Hi,
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country  for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die.. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+Can this patchset be applied to linux-4.19.y. I've tried to build an arm
+kernel for these defconfigs:
 
-I'm waiting for your immediate reply..
+mini2440_defconfig, mxs_defconfig, imx_v4_v5_defconfig,
+integrator_defconfig, lpc32xx_defconfig, s3c2410_defconfig,
+nhk8815_defconfig, imx_v6_v7_defconfig, at91_dt_defconfig,
+shmobile_defconfig, omap1_defconfig, multi_v5_defconfig,
+orion5x_defconfig, footbridge_defconfig, davinci_all_defconfig
 
-May God Bless you,
-Mrs. Dina. Howley Mckenna.
+Without this patchset these configs faild to build.
+Also I fixed a few warnings.
+
+There are still a few more warnings to fix.
+But this is a start.
+
+I built the kernel with tuxmake and this is the command:
+tuxmake --runtime podman --target-arch arm --toolchain clang-nightly --kconfig tinyconfig LLVM=1 LLVM_IAS=0
+
+Similar results with clang-13.
+
+
+Patch "net: lan78xx: Avoid unnecessary self assignment" fixes:
+
+drivers/net/usb/lan78xx.c:949:11: warning: explicitly assigning value of variable of type 'u32' (aka 'unsigned int') to itself [-Wself-assign]
+                        offset = offset;
+                        ~~~~~~ ^ ~~~~~~
+1 warning generated.
+
+
+Patch "ARM: 8805/2: remove unneeded naked function usage" fixes:
+
+arch/arm/mm/copypage-v4wb.c:47:9: error: parameter references not allowed in naked functions
+        : "r" (kto), "r" (kfrom), "I" (PAGE_SIZE / 64));
+               ^
+/builds/linux/arch/arm/mm/copypage-v4wb.c:25:13: note: attribute is here
+static void __naked
+            ^
+/builds/linux/include/linux/compiler_types.h:249:34: note: expanded from macro '__naked'
+#define __naked                 __attribute__((naked)) notrace
+                                               ^
+1 error generated.
+
+
+Patch "mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO" fixes:
+
+drivers/net/wireless/marvell/mwifiex/cmdevt.c:219:22: warning: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Wcompound-token-split-by-macro]
+        host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/include/linux/byteorder/generic.h:90:21: note: expanded from macro 'cpu_to_le16'
+#define cpu_to_le16 __cpu_to_le16
+                    ^
+
+
+Patch "Input: touchscreen - avoid bitwise vs logical OR warning" fixes:
+
+drivers/input/touchscreen/of_touchscreen.c:80:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+        data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-x",
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Patch "ARM: 8788/1: ftrace: remove old mcount support" fixes:
+
+arch/arm/kernel/entry-ftrace.S:56:2: error: Ftrace requires CONFIG_FRAME_POINTER=y with GCC older than 4.4.0.
+#error Ftrace requires CONFIG_FRAME_POINTER=y with GCC older than 4.4.0.
+ ^
+1 error generated.
+
+
+Patch "ARM: 8800/1: use choice for kernel unwinders" fixes the build
+error:
+
+clang: error: unknown argument: '-mapcs'
+clang: error: unknown argument: '-mno-sched-prolog'
+
+
+Cheers,
+Anders
+
+Nathan Chancellor (3):
+  net: lan78xx: Avoid unnecessary self assignment
+  mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+  Input: touchscreen - avoid bitwise vs logical OR warning
+
+Nicolas Pitre (1):
+  ARM: 8805/2: remove unneeded naked function usage
+
+Stefan Agner (2):
+  ARM: 8800/1: use choice for kernel unwinders
+  ARM: 8788/1: ftrace: remove old mcount support
+
+ arch/arm/Kconfig.debug                        | 45 +++++----
+ arch/arm/include/asm/ftrace.h                 |  3 -
+ arch/arm/kernel/armksyms.c                    |  3 -
+ arch/arm/kernel/entry-ftrace.S                | 75 +-------------
+ arch/arm/kernel/ftrace.c                      | 51 ----------
+ arch/arm/mm/copypage-fa.c                     | 35 ++++---
+ arch/arm/mm/copypage-feroceon.c               | 98 +++++++++----------
+ arch/arm/mm/copypage-v4mc.c                   | 19 ++--
+ arch/arm/mm/copypage-v4wb.c                   | 41 ++++----
+ arch/arm/mm/copypage-v4wt.c                   | 37 ++++---
+ arch/arm/mm/copypage-xsc3.c                   | 71 ++++++--------
+ arch/arm/mm/copypage-xscale.c                 | 71 +++++++-------
+ drivers/input/touchscreen/of_touchscreen.c    | 18 ++--
+ drivers/net/usb/lan78xx.c                     |  6 +-
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c |  4 +-
+ drivers/net/wireless/marvell/mwifiex/fw.h     |  8 +-
+ lib/Kconfig.debug                             |  6 +-
+ 17 files changed, 228 insertions(+), 363 deletions(-)
+
+-- 
+2.34.1
+

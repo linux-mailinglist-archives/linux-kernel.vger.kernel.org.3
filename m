@@ -2,189 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB74479694
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B170B479696
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbhLQVxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:53:23 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:58241 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhLQVxV (ORCPT
+        id S230314AbhLQVxk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Dec 2021 16:53:40 -0500
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:51735 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230211AbhLQVxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:53:21 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id BBA1720004;
-        Fri, 17 Dec 2021 21:53:17 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 22:53:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Zeh, Werner" <werner.zeh@siemens.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] x86/kernel/rtc: add sanity check for RTC date and
- time
-Message-ID: <Yb0Gzb3tdexY7utU@piout.net>
-References: <20210614110946.15587-1-werner.zeh@siemens.com>
- <20210624081507.15602-1-werner.zeh@siemens.com>
- <YNn6FqAfLwQ/Wwnu@piout.net>
- <AM0PR10MB2580E68ADF9D1AC6804DB2DF9F019@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
- <YN8ebqVR0JYTurDY@piout.net>
- <AM0PR10MB258011D56CF0A2E3BC0449F99F709@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
- <YbHDSubjFrQXpfRk@piout.net>
- <AM0PR10MB2580E140E290888632566E3A9F709@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
+        Fri, 17 Dec 2021 16:53:38 -0500
+Received: by mail-pj1-f42.google.com with SMTP id v16so3419375pjn.1;
+        Fri, 17 Dec 2021 13:53:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OSouNAXKfQ8rN33RQ1qzlpM1z5+txx2hdojNvqQ2iiA=;
+        b=PradlHJUTwS73dO0RntQab/fPAZ3DjFaFu6KNghZnSJDf/RyuYCD8k5EntbWZzAtuB
+         jwTLuNiTdZHuUjNU5RKwQTws2VfffXawpvRLmikslhHQYlDPNYDRE5K4TQRfy2wvEBgz
+         maNbEdGfsl7j9NDtUZ5PLvvu+eVboztVJIo0Vf4Q0eRuQG/hILv++VSFH1Sph0iJXLdm
+         P/whMlCe7ChhNF60w+gidRpd3LWNIr0Mrs9BILn/9pUbcxzgt/SkPIqwmn8gOhLjFjH0
+         s9U+qo9cOleWy7/au+7/WuKahHfyJ9FScdtbFhSFhbrwdm1ZdT6UUE3ln+eqohUZfQ7r
+         iYGA==
+X-Gm-Message-State: AOAM5330SYmT7oitayGLPRc2jUiRgCdHaWcVDrOfdOaRJEpra+asyxRO
+        p21ffb28qpzs73pW9e1RaDqAs+5ivVXoeUENYKc=
+X-Google-Smtp-Source: ABdhPJx1Zgynh4wUXHAumH4LM1mHoQULX+g2DiYYo478GOP+yyTFHo3EgCd7tYqK0eyI3a6CjCxf6rAt/dVCYOJdy8c=
+X-Received: by 2002:a17:902:7609:b0:148:daa5:8133 with SMTP id
+ k9-20020a170902760900b00148daa58133mr4904314pll.48.1639778017978; Fri, 17 Dec
+ 2021 13:53:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM0PR10MB2580E140E290888632566E3A9F709@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
+References: <20211218003339.0061dcb4@canb.auug.org.au> <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
+In-Reply-To: <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Fri, 17 Dec 2021 22:53:26 +0100
+Message-ID: <CANBLGcynOdjJDS45YwMPZQ+MuYHf4w-rQ5GixokLyvuZ4ZM4vQ@mail.gmail.com>
+Subject: Re: linux-next: Tree for Dec 17 (drivers/reset/reset-starfive-jh7100.c)
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 09:07:46+0000, Zeh, Werner wrote:
-> > I'm not the maintainer for that part of the kernel, I expect this to go through
-> > the x86 tree.
-> 
-> OK, understood. Thank you.
-> Any hint whom I can contact directly in this regard?
-> I had a hard time to debug this issue and it would be a pity if it will not make it in possibly causing issues for other users.
-> 
+Hi Randy,
 
-Well, tglx and mingo are in copy of the thread. You can probably resend
-with my:
+On Fri, 17 Dec 2021 at 22:48, Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 12/17/21 05:33, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Changes since 20211216:
+> >
+>
+> on i386:
+>
+> ../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
+> ../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
+>   value = readq(reg_assert);
+>           ^~~~~
+> ../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
+>   writeq(value, reg_assert);
+>   ^~~~~~
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Yes, It needs to include <linux/io-64-nonatomic-lo-hi.h> for compile
+testing to work on 32bit architectures without readq.
 
-to get their attention.
+Arnd: Do I just send a patch or do I redo the pull-request?
 
-> Werner
-> 
-> > -----Original Message-----
-> > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Sent: Thursday, December 9, 2021 9:50 AM
-> > To: Zeh, Werner (DI MC MTS SP HW 1) <werner.zeh@siemens.com>
-> > Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de; x86@kernel.org;
-> > a.zummo@towertech.it; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 1/1] x86/kernel/rtc: add sanity check for RTC date and
-> > time
-> >
-> > Hello,
-> >
-> > On 09/12/2021 08:05:10+0000, Zeh, Werner wrote:
-> > > Hi Alexandre.
-> > >
-> > > Is there anything more I can do for that patch in order to get some process
-> > on it?
-> > > Or why is this patch stuck for a long time?
-> > >
-> >
-> > I'm not the maintainer for that part of the kernel, I expect this to go through
-> > the x86 tree.
-> >
-> > > Thanks
-> > > Werner
-> > >
-> > > > -----Original Message-----
-> > > > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > > Sent: Friday, July 2, 2021 4:11 PM
-> > > > To: Zeh, Werner (DI MC MTS SP HW 1) <werner.zeh@siemens.com>
-> > > > Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
-> > > > x86@kernel.org; a.zummo@towertech.it; linux-kernel@vger.kernel.org
-> > > > Subject: Re: [PATCH 1/1] x86/kernel/rtc: add sanity check for RTC
-> > > > date and time
-> > > >
-> > > > On 30/06/2021 06:25:44+0000, Zeh, Werner wrote:
-> > > > > Hi Alexandre
-> > > > >
-> > > > > > Hello,
-> > > > > >
-> > > > > > On 24/06/2021 10:15:07+0200, Werner Zeh wrote:
-> > > > > > > The timekeeper is synchronized with the CMOS RTC when it is
-> > > > initialized.
-> > > > > > > If the RTC buffering is bad (not buffered at all, empty
-> > > > > > > battery) the RTC registers can contain random data. In order
-> > > > > > > to avoid date and time being completely rubbish check the
-> > > > > > > sanity of the registers before calling mktime64. If the values
-> > > > > > > are not valid, set tv_sec to 0 so that at least the starting time is valid.
-> > > > > > >
-> > > > > > > Signed-off-by: Werner Zeh <werner.zeh@siemens.com>
-> > > > > > > ---
-> > > > > > > [resent due to wrong lkml address] [added RTC maintainers to
-> > > > > > > the recipients] This change introduces the same validity check
-> > > > > > > that is already done in drivers/rtc/interface.c.
-> > > > > > > If it is not done here, the timekeeper can be set up wrongly
-> > > > > > > in the first run and won't be corrected once the RTC driver is
-> > > > > > > started because the validity check in the RTC driver drops the
-> > > > > > > time and date due to invalid entries.
-> > > > > > >
-> > > > > > >  arch/x86/kernel/rtc.c | 12 +++++++++++-
-> > > > > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
-> > > > > > > index
-> > > > > > > 586f718b8e95..f4af7b18c6c0 100644
-> > > > > > > --- a/arch/x86/kernel/rtc.c
-> > > > > > > +++ b/arch/x86/kernel/rtc.c
-> > > > > > > @@ -9,6 +9,7 @@
-> > > > > > >  #include <linux/export.h>
-> > > > > > >  #include <linux/pnp.h>
-> > > > > > >  #include <linux/of.h>
-> > > > > > > +#include <linux/rtc.h>
-> > > > > > >
-> > > > > > >  #include <asm/vsyscall.h>
-> > > > > > >  #include <asm/x86_init.h>
-> > > > > > > @@ -64,6 +65,7 @@ void mach_get_cmos_time(struct timespec64
-> > > > *now)
-> > > > > > {
-> > > > > > >         unsigned int status, year, mon, day, hour, min, sec, century = 0;
-> > > > > > >         unsigned long flags;
-> > > > > > > +       struct rtc_time tm = {0};
-> > > > > > >
-> > > > > > >         /*
-> > > > > > >          * If pm_trace abused the RTC as storage, set the
-> > > > > > > timespec to 0, @@
-> > > > > > > -118,7 +120,15 @@ void mach_get_cmos_time(struct timespec64
-> > > > *now)
-> > > > > > >         } else
-> > > > > > >                 year += CMOS_YEARS_OFFS;
-> > > > > > >
-> > > > > > > -       now->tv_sec = mktime64(year, mon, day, hour, min, sec);
-> > > > > > > +       tm.tm_sec = sec;
-> > > > > > > +       tm.tm_min = min;
-> > > > > > > +       tm.tm_hour = hour;
-> > > > > > > +       tm.tm_mday = day;
-> > > > > > > +       tm.tm_mon = mon;
-> > > > > > > +       tm.tm_year = year;
-> > > > > > > +       now->tv_sec = 0;
-> > > > > > > +       if (rtc_valid_tm(&tm) == 0)
-> > > > > >
-> > > > > > Doesn't that make the x86 architecture depend on CONFIG_RTC_LIB?
-> > > > > >
-> > > > > CONFIG_RTC_LIB is already default enabled for x86, see
-> > arch/x86/Kconfig.
-> > > > > Do you have any other dependencies in mind I have overseen?
-> > > > >
-> > > >
-> > > > Nope, everything is fine, it would be better if we could get rid of
-> > > > mach_get_cmos_time but I don't have any clue as to why this is
-> > necessary.
-> > > >
-> > > >
-> > > > --
-> > > > Alexandre Belloni, co-owner and COO, Bootlin Embedded Linux and
-> > > > Kernel engineering
-> > > >
-> > https://bootlin.com
-> > >
-> >
-> > --
-> > Alexandre Belloni, co-owner and COO, Bootlin Embedded Linux and Kernel
-> > engineering
-> > https://bootlin.com
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/Emil

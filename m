@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B124747940E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EFD47940A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240344AbhLQSYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:24:09 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:39532 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhLQSYI (ORCPT
+        id S240308AbhLQSYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbhLQSYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:24:08 -0500
-Received: by mail-oi1-f181.google.com with SMTP id bf8so4870710oib.6;
-        Fri, 17 Dec 2021 10:24:08 -0800 (PST)
+        Fri, 17 Dec 2021 13:24:03 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4DFC061574;
+        Fri, 17 Dec 2021 10:24:03 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r17so5336274wrc.3;
+        Fri, 17 Dec 2021 10:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
+        b=BsipFRerfGIbeJTeuRbVUn3UqG+64FCNItkHw9vUN1xUtYkwmFpROX+fv9Eilq+qp7
+         gns9xBw9nZZrqh/+sdZN6fmr1lxvZIl4N/UHYog9gLv54yldzSWj4a0K/MfIB622DQKx
+         2H4lemRpOOukPWNQST9JYB+Q0m871UzMN+AFEXHqfDWegjIxX2PWf0fRexRDcX8D3SKG
+         sWu/Kx+g05AUpBzeAWXvV3l/KOclFVpJyxto2ZExTDggkwBVYMkjZq+8tqqptamPspX9
+         KqieSXOyC7KmwoV3WnRNmN+d9kMmGhlRZ84w7HVVNOZslGEpScfBsZk/5C394TMGPjuy
+         bk5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PqESVUEXiGE9fUPPJtSvg45ZiqTaR8hZjs1IUaZRb/w=;
-        b=7FUOwY/X/hY/5Ugi3lvK3tM5q0DOAdiHxO6sk+QJLTiktBD+zhnQnv3ciXQIVd8GJS
-         bDr2LaWAfKI1emtieJYcuGzdfQrKQl0BAcQh7PytESAwcx2XpmYaBjlHGMwYVOUQ5o2L
-         KO0OVn0Vv971AJTc5ICUjMyCI15lA21DEcwS0/TBBrMeLdik4qRLY6XgG8sgI+wmCelB
-         RwTKcUrN2ngUBkNaAjG/R8g1le45A0EaYrmhcAm20u39BdGsa7A0IGbAuMgRje/TwztN
-         WWYpyh37/jgIvETKfN+SCmqDFl6sr4NfgJaeaTvtMJp4luCZh6U3sSe9OqrVaScaDdv6
-         Qedg==
-X-Gm-Message-State: AOAM533s3U3SXgb34blyW3nLY7cUj7RlmcoOJZKXy3NvtLMiSvoAipSM
-        a7klZo5MSlofmk6vYcNBbg5C1nKHpUte8M1cpbIYHvdd
-X-Google-Smtp-Source: ABdhPJzSHIE9NiA8wrnjx5swIQTDaNO47Eh/jPY6u0cKl22eGvZUG+q9gVUcR2YDpTUkejMwRaoJ5/335VboacRU31E=
-X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr3139061oiv.166.1639765448173;
- Fri, 17 Dec 2021 10:24:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
+        b=bbypZdo5ZVAHi5FIoC9kHzE6hS2v9sTgmIV+8+8dC6dc3UBfh3ABLsNiK9dypxlD3P
+         OF7zrDG4VcDwKoyY3+G8sRxr0G0hPF/uAqKztfaBJswRyJvyQgpRzfXmEHXLm56brUjH
+         +rfWDQSSn5nSWtnlDMWkDFX66BId3oCmrtqvcdxmzcMu8IaGcTUJtHqERBXs5O+KbdJw
+         IJP80A49TCXeUO+SZKplqjF7fAg0KrlPhFDzzgIjYdH5oAHUCaKzSCBMJvExMXZ2Gnth
+         upYkyADIHKEuG3l28cLZ36jFPFoboqmbmf6wH2g7d7+ka2DhixZ4il6H3RO0GpjEIOjo
+         uZJA==
+X-Gm-Message-State: AOAM531UXoU9E5n3XlSbsNAvWmJIIewC++KTu72Uu0j0EE6boiZmdPTt
+        u1AzvWi8e4cHMkZFUJxFWWM=
+X-Google-Smtp-Source: ABdhPJwzAPXhWGTvt6MEl6bjCoE4AGsG11ijHe8AsJObT74ax5zenkB6BRkQI/+L4y18/l4UW6Gh6Q==
+X-Received: by 2002:adf:9146:: with SMTP id j64mr3540685wrj.487.1639765441644;
+        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id q123sm10860191wma.30.2021.12.17.10.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] bpf, selftests: Fix spelling mistake "tained" -> "tainted"
+Date:   Fri, 17 Dec 2021 18:24:00 +0000
+Message-Id: <20211217182400.39296-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211212180527.1641362-1-AjitKumar.Pandey@amd.com>
- <20211212180527.1641362-3-AjitKumar.Pandey@amd.com> <CAJZ5v0i=LVsz2ZRBB5HzLpw8eR-zLAKtJyc3PFWu_kKCzjzZWw@mail.gmail.com>
- <SA0PR12MB45101C5839BC373C083B19FEE2789@SA0PR12MB4510.namprd12.prod.outlook.com>
-In-Reply-To: <SA0PR12MB45101C5839BC373C083B19FEE2789@SA0PR12MB4510.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 19:23:57 +0100
-Message-ID: <CAJZ5v0i0csL=w8cmLkpY7NNrKFy2bMymFGO51CrmDD+DAxJ-hw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/5] drivers: acpi: acpi_apd: Remove unused device
- property "is-rv"
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Pandey, Ajit Kumar" <AjitKumar.Pandey@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
-        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:19 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
-> > -----Original Message-----
-> > From: Rafael J. Wysocki <rafael@kernel.org>
-> > Sent: Friday, December 17, 2021 12:07
-> > To: Pandey, Ajit Kumar <AjitKumar.Pandey@amd.com>
-> > Cc: Stephen Boyd <sboyd@kernel.org>; linux-clk <linux-clk@vger.kernel.org>;
-> > Mukunda, Vijendar <Vijendar.Mukunda@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Hiregoudar, Basavaraj
-> > <Basavaraj.Hiregoudar@amd.com>; Dommati, Sunil-kumar <Sunil-
-> > kumar.Dommati@amd.com>; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; Rafael J. Wysocki <rafael@kernel.org>; Len
-> > Brown <lenb@kernel.org>; open list:ACPI <linux-acpi@vger.kernel.org>; open
-> > list <linux-kernel@vger.kernel.org>
-> > Subject: Re: [PATCH v5 2/5] drivers: acpi: acpi_apd: Remove unused device
-> > property "is-rv"
-> >
-> > On Sun, Dec 12, 2021 at 7:06 PM Ajit Kumar Pandey
-> > <AjitKumar.Pandey@amd.com> wrote:
-> > >
-> > > Initially "is-rv" device property is added for 48MHz fixed clock
-> > > support on Raven or RV architecture. It's unused now as we moved
-> > > to pci device_id based selection to extend such support on other
-> > > architectures. This change removed unused code from acpi driver.
-> > >
-> > > Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-> > > Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
-> >
-> > Does this or the next patch depend on the rest of the series, or can I
-> > simply apply them both?
->
-> There are (intentional) dependencies within this series on the order.  It
-> would be better for the whole series to come through one tree.
+There appears to be a spelling mistake in a bpf test message. Fix it.
 
-So please route these two along with the rest of the series and I
-don't think you need my ACKs for this.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/verifier/value_ptr_arith.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> >
-> > > ---
-> > >  drivers/acpi/acpi_apd.c               | 3 ---
-> > >  include/linux/platform_data/clk-fch.h | 1 -
-> > >  2 files changed, 4 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> > > index 6e02448d15d9..6913e9712852 100644
-> > > --- a/drivers/acpi/acpi_apd.c
-> > > +++ b/drivers/acpi/acpi_apd.c
-> > > @@ -87,9 +87,6 @@ static int fch_misc_setup(struct apd_private_data
-> > *pdata)
-> > >         if (ret < 0)
-> > >                 return -ENOENT;
-> > >
-> > > -       if (!acpi_dev_get_property(adev, "is-rv", ACPI_TYPE_INTEGER, &obj))
-> > > -               clk_data->is_rv = obj->integer.value;
-> > > -
-> > >         list_for_each_entry(rentry, &resource_list, node) {
-> > >                 clk_data->base = devm_ioremap(&adev->dev, rentry->res->start,
-> > >                                               resource_size(rentry->res));
-> > > diff --git a/include/linux/platform_data/clk-fch.h
-> > b/include/linux/platform_data/clk-fch.h
-> > > index b9f682459f08..850ca776156d 100644
-> > > --- a/include/linux/platform_data/clk-fch.h
-> > > +++ b/include/linux/platform_data/clk-fch.h
-> > > @@ -12,7 +12,6 @@
-> > >
-> > >  struct fch_clk_data {
-> > >         void __iomem *base;
-> > > -       u32 is_rv;
-> > >  };
-> > >
-> > >  #endif /* __CLK_FCH_H */
-> > > --
-> > > 2.25.1
-> > >
+diff --git a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+index 4d347bc53aa2..359f3e8f8b60 100644
+--- a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
++++ b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+@@ -1078,7 +1078,7 @@
+ 	.errstr_unpriv = "R0 pointer -= pointer prohibited",
+ },
+ {
+-	"map access: trying to leak tained dst reg",
++	"map access: trying to leak tainted dst reg",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-- 
+2.33.1
+

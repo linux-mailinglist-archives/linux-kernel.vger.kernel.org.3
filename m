@@ -2,211 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A694790B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21EE4790B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbhLQP4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S238599AbhLQP4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238539AbhLQPzw (ORCPT
+        with ESMTP id S238592AbhLQP4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:55:52 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF90BC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:55:51 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id g14so9454326edb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=M2WbEnBbDQgsL2Z6AiQ6BSUsHGfqd+FRDLIjDGY984c=;
-        b=XpLaJNf7l0burOcMud+Y/VNOXEkyFXWUEHIk8Y7s5tKNFIHAjMfOcaCWrx41B+Kc0m
-         mvcNEknsWkwTV7KeKr7rfN5L/Le/BnZMTuNzUrRGAC00oA6BK3Zv3JW1YsEyyUvU3ILk
-         Q/3JEnlteQoPxIYMBDHuhvjjDbOM29L3iJOOk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=M2WbEnBbDQgsL2Z6AiQ6BSUsHGfqd+FRDLIjDGY984c=;
-        b=qvRnb8Ck+c6Cbvz6padMBvFJ1zDng02DjX07fgSbge99InLstbZkHCDdpwePvnBTzd
-         PWgP/swVKhojjBc3WCbtKBG8p0Wkg6n1MW1ARRRW25GLGLNnHi3pp5/wI2xXm2mMe+tQ
-         W5Zzcis3pG8ALdU+41AJS+AHzTpr5iMvD9dkfK8j9WZyU2NTywdtl2s+AIXtowTzzBW6
-         vYWYNgJgEqz6W1B5+VtzfVpgTDXMuvl+LqECdE/50zUO2EajbwYTbf0p9N1+zdaj1ohQ
-         lJ/s+eh2EAO5ZVsN875rfjwtPpWfD++OsBfOXw91pSrXyJTJswRYfmLutPyxNhX4/3d9
-         ynUA==
-X-Gm-Message-State: AOAM533PIj3f5zC7nHWIeQ/zWThOaER/fNX+wZP9wfDPXIHPEPCW2E7u
-        7sk9O4dDDf0vHfzU2gBn7BtALKJQI3jMFg==
-X-Google-Smtp-Source: ABdhPJzcYU0Q7QsepmRT6KYkMrmqU1jUmvusl/ehkTaW1AoUEGp3p/Eox5oq238UDGwWXE0qaV/eiQ==
-X-Received: by 2002:a17:906:3586:: with SMTP id o6mr3065886ejb.186.1639756550286;
-        Fri, 17 Dec 2021 07:55:50 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-79-56-50-241.retail.telecomitalia.it. [79.56.50.241])
-        by smtp.gmail.com with ESMTPSA id i6sm772158edx.46.2021.12.17.07.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 07:55:49 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: [RFC PATCH 4/4] mtd: rawnand: gpmi: validate controller clock rate
-Date:   Fri, 17 Dec 2021 16:55:12 +0100
-Message-Id: <20211217155512.1877408-5-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
-References: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
+        Fri, 17 Dec 2021 10:56:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD96DC061574;
+        Fri, 17 Dec 2021 07:56:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4606229D;
+        Fri, 17 Dec 2021 15:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13FAC36AE1;
+        Fri, 17 Dec 2021 15:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639756574;
+        bh=aJGSLOLDVZQ4jsbHaydJnZJEiQHbT56U8N8TFU09vpM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=masnrHG+L03rpmbA+aizifZZ7NBeotxg2pGAudbMiSrZI95ppAePqshrrCbG5xJ4t
+         BKM3jU6UoEiJbBeaEXNWQrXYuzIQokYiAQoQeokV3xJjoXfvwYKLQ3lbIyYMxgte1D
+         lu6YPHYeBcsitoFH0CpT1kbmAM7NBZAiGtq7uKdsTPG7HxADYEH53i8wS3T6q8/bxn
+         xfgdTP6l0cyPr5PoAV3ZSOesRrBYEz5u//kuVHq9dzDy1FASepwOVipH6oT+/SeWhw
+         rgKL1X4Xx8sZKFQzfcT8K0I2hn65uvqUI8F9LlCmhdo4rjrswDTF1cXK+BSNJyPOHU
+         0PU5xQtZ6O2cg==
+Received: by mail-wr1-f46.google.com with SMTP id v11so4867947wrw.10;
+        Fri, 17 Dec 2021 07:56:14 -0800 (PST)
+X-Gm-Message-State: AOAM532b1ZN+SUeC5II5+ijdEdSbLeEYr+JzQH1XK6inh3FR74smJZFT
+        NgZPHs5zqYhXRPh/1y0epSsXHqIVEdOMS98ndu0=
+X-Google-Smtp-Source: ABdhPJzcVwEAILjoidpzItkyOHn+6QWhp7hZttF+ca01hCIVaSRmevaz8Fi541ZypirYAk0kDkqtzlmA+kdeyY9H0gI=
+X-Received: by 2002:adf:f051:: with SMTP id t17mr3088681wro.192.1639756572995;
+ Fri, 17 Dec 2021 07:56:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com> <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com> <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com> <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+ <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+In-Reply-To: <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 17 Dec 2021 16:55:56 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+Message-ID: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     John Garry <john.garry@huawei.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-What to do when the real rate of the gpmi clock is not equal to the
-required one? The solutions proposed in [1] did not lead to a conclusion
-on how to validate the clock rate, so, inspired by the document [2], I
-consider the rate correct only if not greater than the rate of the
-previous edo. In fact, in chapter 4.16.2 (NV-DDR) of the document [2],
-it is written that "If the host selects timing mode n, then its clock
-period shall be faster than the clock period of timing mode n-1 and
-slower than or equal to the clock period of timing mode n.". I thought
-that it could therefore also be used in this case, without therefore
-having to define the valid rate ranges empirically.
+On Fri, Dec 17, 2021 at 4:27 PM John Garry <john.garry@huawei.com> wrote:
+> On 17/12/2021 14:32, Arnd Bergmann wrote:
+>  From looking at the patch Niklas directed us at, as I understand,
+> HAS_IOPORT is to decide whether the arch/platform may support PIO
+> accessors - inb et al. And on that basis I am confused why it is not
+> selected for arm64. And further compounded by:
+>
+>   config INDIRECT_PIO
+>                 bool "Access I/O in non-MMIO mode"
+>                 depends on ARM64
+>         +       depends on HAS_IOPORT
+>
+> If arm64 does not select, then why depend on it?
 
-[1] https://lore.kernel.org/r/20210702065350.209646-5-ebiggers@kernel.org
-[2] http://www.onfi.org/-/media/client/onfi/specs/onfi_3_0_gold.pdf?la=en
+Right, both arm32 and arm64 need to select HAS_IOPORT.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+>  > If you have a better way of finding the affected drivers,
+>  > that would be great.
+>
+> Assuming arm64 should select HAS_IOPORT, I am talking about f71805f as
+> an example. According to that patch, this driver additionally depends on
+> HAS_IOPORT; however I would rather arm64, like powerpc, should not allow
+> that driver to be built at all.
 
----
+Agreed, I missed these when I looked through the HAS_IOPORT users,
+that's why I suggested to split up that part of the patch per subsystem
+so they can be inspected more carefully.
 
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 70 +++++++++++++++++-----
- 1 file changed, 54 insertions(+), 16 deletions(-)
+My feeling is that in this case we want some other dependency, e.g. a
+new CONFIG_LPC. It should actually be possible to use this driver on
+any machine with an LPC bus, which would by definition be the primary
+I/O space, so it should be possible to load it on Arm64.
 
-diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index 0517b81bb24c..3d37cd49abd5 100644
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -570,6 +570,27 @@ static int bch_set_geometry(struct gpmi_nand_data *this)
- 	return ret;
- }
- 
-+struct edo_mode {
-+	u32 tRC_min;
-+	long clk_rate;
-+	u8 wrn_dly_sel;
-+};
-+
-+static const struct edo_mode edo_modes[] = {
-+	{.tRC_min = 30000, .clk_rate = 22000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
-+	{.tRC_min = 30000, .clk_rate = 22000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
-+	{.tRC_min = 30000, .clk_rate = 22000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
-+	{.tRC_min = 30000, .clk_rate = 22000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS},
-+	{.tRC_min = 25000, .clk_rate = 80000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY},
-+	{.tRC_min = 20000, .clk_rate = 100000000,
-+	 .wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY},
-+};
-+
- /*
-  * <1> Firstly, we should know what's the GPMI-clock means.
-  *     The GPMI-clock is the internal clock in the gpmi nand controller.
-@@ -644,8 +665,8 @@ static int bch_set_geometry(struct gpmi_nand_data *this)
-  *         RDN_DELAY = -----------------------     {3}
-  *                           RP
-  */
--static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
--				     const struct nand_sdr_timings *sdr)
-+static int gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
-+				    const struct nand_sdr_timings *sdr)
- {
- 	struct gpmi_nfc_hardware_timing *hw = &this->hw;
- 	struct resources *r = &this->resources;
-@@ -657,22 +678,35 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
- 	int sample_delay_ps, sample_delay_factor;
- 	u16 busy_timeout_cycles;
- 	u8 wrn_dly_sel;
-+	long clk_rate;
-+	int i, emode = -1;
- 
--	if (sdr->tRC_min >= 30000) {
--		/* ONFI non-EDO modes [0-3] */
--		hw->clk_rate = 22000000;
--		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_4_TO_8NS;
--	} else if (sdr->tRC_min >= 25000) {
--		/* ONFI EDO mode 4 */
--		hw->clk_rate = 80000000;
--		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
--	} else {
--		/* ONFI EDO mode 5 */
--		hw->clk_rate = 100000000;
--		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
-+	/* Search the required EDO mode */
-+	for (i = 0; i < ARRAY_SIZE(edo_modes); i++) {
-+		if (sdr->tRC_min >= edo_modes[i].tRC_min) {
-+			emode = i;
-+			break;
-+		}
-+	}
-+
-+	if (emode < 0) {
-+		dev_err(this->dev, "tRC_min %d not supported\n", sdr->tRC_min);
-+		return -ENOTSUPP;
-+	}
-+
-+	clk_rate = clk_round_rate(r->clock[0], edo_modes[emode].clk_rate);
-+	if (emode > 0 && !(clk_rate <= edo_modes[emode].clk_rate &&
-+			   clk_rate > edo_modes[emode - 1].clk_rate)) {
-+		dev_err(this->dev,
-+			"edo mode %d clock setting: expected %ld, got %ld\n",
-+			emode, edo_modes[emode].clk_rate, clk_rate);
-+		return -ENOTSUPP;
- 	}
- 
--	hw->clk_rate = clk_round_rate(r->clock[0], hw->clk_rate);
-+	dev_dbg(this->dev, "edo mode %d @ %ld Hz\n", emode, clk_rate);
-+
-+	hw->clk_rate = clk_rate;
-+	wrn_dly_sel = edo_modes[emode].wrn_dly_sel;
- 
- 	/* SDR core timings are given in picoseconds */
- 	period_ps = div_u64((u64)NSEC_PER_SEC * 1000, hw->clk_rate);
-@@ -714,6 +748,7 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
- 		hw->ctrl1n |= BF_GPMI_CTRL1_RDN_DELAY(sample_delay_factor) |
- 			      BM_GPMI_CTRL1_DLL_ENABLE |
- 			      (use_half_period ? BM_GPMI_CTRL1_HALF_PERIOD : 0);
-+	return 0;
- }
- 
- static int gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
-@@ -769,6 +804,7 @@ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
- {
- 	struct gpmi_nand_data *this = nand_get_controller_data(chip);
- 	const struct nand_sdr_timings *sdr;
-+	int ret;
- 
- 	/* Retrieve required NAND timings */
- 	sdr = nand_get_sdr_timings(conf);
-@@ -784,7 +820,9 @@ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
- 		return 0;
- 
- 	/* Do the actual derivation of the controller timings */
--	gpmi_nfc_compute_timings(this, sdr);
-+	ret = gpmi_nfc_compute_timings(this, sdr);
-+	if (ret)
-+		return ret;
- 
- 	this->hw.must_apply_timings = true;
- 
--- 
-2.32.0
-
+         Arnd

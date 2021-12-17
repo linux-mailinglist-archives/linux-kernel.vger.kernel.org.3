@@ -2,167 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABAA478A84
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74991478A8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbhLQL5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:57:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52486 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbhLQL5g (ORCPT
+        id S235804AbhLQL5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:57:50 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:30315 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235779AbhLQL5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:57:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D48D62156;
-        Fri, 17 Dec 2021 11:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C911C36AE5;
-        Fri, 17 Dec 2021 11:57:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639742255;
-        bh=c6Vt/mqAoytgxRlY0EVJ39v8sl6iHxhWoqby1+a7sdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Shvljr+rmCn+Ab1sQuudUyuD2nJRFzgvZ4xwWoUtkMlK+GCjrAf+v02m3MmCN6G+y
-         FVxL4V3WuDD4dkmiq66YNVCRePIIv5LBTL/VnE5NnR/w5E/e0pBWPDRh2Y827MkQYt
-         sQei/NcOhhAisUSQN+tQN734zkwpIPCo1Hxrp/NY=
-Date:   Fri, 17 Dec 2021 12:57:33 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Salah Triki <salah.triki@gmail.com>,
-        Dean Anderson <dean@sensoray.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_reset.
-Message-ID: <Ybx7LfqaPbr/mL9Q@kroah.com>
-References: <96948a63d1a33da63b4f226e89ea90d21e9b0f82.1639528369.git.plr.vincent@gmail.com>
- <YbxdmB1gYAiOZrtN@kroah.com>
- <CAF78GY0pX35672aVZOzgsUdXA5PmnOiydHkmRiiC2=fk+atV7g@mail.gmail.com>
+        Fri, 17 Dec 2021 06:57:47 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20211217115745euoutp014d02e3823d14daefcc701fe12c2744bb~BiOcjLfgT1698716987euoutp01l
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:57:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20211217115745euoutp014d02e3823d14daefcc701fe12c2744bb~BiOcjLfgT1698716987euoutp01l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639742265;
+        bh=3flGcue8yQlSWFbdPjV3HW/NQbAgnVPzim2zrj2GJss=;
+        h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+        b=sYDcWSP8t/zaNzM7J16WggrtpJ21iuNPWlU92wphXql3oe+jHtLBbz6+D4dJ1DRkW
+         389el7UblcK/2MRG8gnsKIT432Rclsb3TkPeQED8boVsQHahcim+sAB+aknZhkPwQR
+         4HVlFl5ufbXCE5svWg24jAcRonOpevoQSD+osQmI=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20211217115744eucas1p1e5ae04360c6a0fa5e1afc16688a61687~BiObM7XeP3220932209eucas1p19;
+        Fri, 17 Dec 2021 11:57:44 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id EC.32.10260.83B7CB16; Fri, 17
+        Dec 2021 11:57:44 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211217115743eucas1p10e721164cd845176f9dc5c4c2ad86838~BiOahoFWn0622806228eucas1p1b;
+        Fri, 17 Dec 2021 11:57:43 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211217115743eusmtrp256c283f037189c963dbaba5ef4a4edce~BiOagnhlG2810628106eusmtrp2a;
+        Fri, 17 Dec 2021 11:57:43 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-34-61bc7b386426
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 68.1F.09522.73B7CB16; Fri, 17
+        Dec 2021 11:57:43 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211217115742eusmtip2046e9ef2fb651de062f0fd6f67bd7c48~BiOZY8LEF1330513305eusmtip2T;
+        Fri, 17 Dec 2021 11:57:42 +0000 (GMT)
+Message-ID: <17b6b4fc-ecbe-1b36-5843-d9394baaf669@samsung.com>
+Date:   Fri, 17 Dec 2021 12:57:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAF78GY0pX35672aVZOzgsUdXA5PmnOiydHkmRiiC2=fk+atV7g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH 4/6] ASoC: soc-pcm: serialize BE triggers
+Content-Language: en-US
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org, vkoul@kernel.org,
+        Sameer Pujar <spujar@nvidia.com>,
+        Gyeongtaek Lee <gt82.lee@samsung.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        linux-kernel@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <660cd57a-d445-63ba-b0bf-6bf6168ffee0@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7djP87oW1XsSDR5NYLO4cvEQk8XUh0/Y
+        LOZ9Sbe4cuctu8X58xvYLV4d3sVo8e1KB5PF5V1z2CxmnN/HZNG5q5/V4shzJYtf/58xWdxd
+        95fF4vCbdlaLjjtqFhu+r2W0eLn5DZPFzjsnmC22/KpxEPbY8LmJzWPnrLvsHptWdbJ5zDsZ
+        6NHb/I7NY9/bZWwe385MZPHo27KK0WP9lqssHptPV3t83iQXwB3FZZOSmpNZllqkb5fAlTHz
+        3hGWgiW5FVsutbM2MP6J62Lk5JAQMJF4dOovaxcjF4eQwApGibYFd5ggnC+MEmt6+9ghnM+M
+        EksermOEaemf2APVspxR4lPvBUYI5yOjxKzHF1lBqngF7CQuvJ4M1sEioCqxsO8qG0RcUOLk
+        zCcsILaoQJJEa8cfJhBbWMBWYvaWjWC9zALiEreezAeLswkYSnS97QLrFRGIk1j+5TzYScwC
+        s1kl5ly7CLSAg4NTwF5ixzQhiF55ieats5lBaiQE7nFKdJxfygZxtovEuiuXoWxhiVfHt7BD
+        2DIS/3fOZ4JoaGaUeHhuLTuE08MocblpBtTT1hJ3zv1iA9nGLKApsX6XPkTYUaLrewMrSFhC
+        gE/ixltBiCP4JCZtm84MEeaV6GgTgqhWk5h1fB3c2oMXLjFPYFSahRQss5C8PwvJO7MQ9i5g
+        ZFnFKJ5aWpybnlpsnJdarlecmFtcmpeul5yfu4kRmC5P/zv+dQfjilcf9Q4xMnEwHmKU4GBW
+        EuFVXL47UYg3JbGyKrUoP76oNCe1+BCjNAeLkjhvcuaGRCGB9MSS1OzU1ILUIpgsEwenVAOT
+        eJeqhqLoVHUthoxNq6fuDDln2Si8VO/v3/r9Jeuv+t6duOHP+9XvVRYd+dJTvEJEtTh2696n
+        9oE8wXs7C3km+Fd4yCw33akkV+BTcF92deyPLh9Rg7N3iyrtyhicjt31ERG53mYRz+nbKMr9
+        oPFNO9sJ2aafxc8fmjRfYZ1689GDDS1inH1ip++qHowIZbgiubj4lcfl+P3eW/NM4wQmf7yu
+        rvCvs3rOI5bFCvVCRi3f+uxuKm5e/WrD96XiQa9+CSx5XCH6p+nYrKb7+acivyt+0W/N/V/2
+        d6XJQqU72T1GpXOqZTwO+URuWMhtOOGeqMkk6XietyUOG1a+UtxYVa0wX0gxoyHg955/1U+V
+        WIozEg21mIuKEwF5gMVfBgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplleLIzCtJLcpLzFFi42I5/e/4PV3z6j2JBse3ClpcuXiIyWLqwyds
+        FvO+pFtcufOW3eL8+Q3sFq8O72K0+Halg8ni8q45bBYzzu9jsujc1c9qceS5ksWv/8+YLO6u
+        +8ticfhNO6tFxx01iw3f1zJavNz8hsli550TzBZbftU4CHts+NzE5rFz1l12j02rOtk85p0M
+        9Ohtfsfmse/tMjaPb2cmsnj0bVnF6LF+y1UWj82nqz0+b5IL4I7SsynKLy1JVcjILy6xVYo2
+        tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy5h57whLwZLcii2X2lkbGP/EdTFy
+        ckgImEj0T+xh7WLk4hASWMooMWfpZRaIhIzEyWkNrBC2sMSfa11sEEXvGSUunuoBK+IVsJO4
+        8HoyI4jNIqAqsbDvKhtEXFDi5MwnYDWiAkkSu9dtBYsLC9hKzN6yEWwos4C4xK0n85lAbDYB
+        Q4mut11gNSICcRK7Fx5iAVnGLDCXVaLv4W1miM37GCU2tRxk72Lk4OAUsJfYMU0IYpCZRNfW
+        LkYIW16ieets5gmMQrOQ3DELyb5ZSFpmIWlZwMiyilEktbQ4Nz232FCvODG3uDQvXS85P3cT
+        IzA9bDv2c/MOxnmvPuodYmTiYDzEKMHBrCTCq7h8d6IQb0piZVVqUX58UWlOavEhRlNgYExk
+        lhJNzgcmqLySeEMzA1NDEzNLA1NLM2MlcV7Pgo5EIYH0xJLU7NTUgtQimD4mDk6pBqZCaUGb
+        P3kr2uLF57z+mHj64CUVTZ3+5mafon/sqekJd9dNUxeyWb/Swlv1bN2zLRde8/NOvBd93Pu0
+        ccCKRu0LkyuK5p5zPD8/x+gi99YQxv2bN0/U6D0xOyZ0Zw3DHlfOq5ufrI5v6z2ZrOJaudRy
+        o92p+Q/ebOd6/+1x1GkJfr+Tu55cZLH3Pmt37Uj99+f2kr0dQctVPrGyFaa+22X0JLRWvyp6
+        o9CHtU90nW4bcq540J1nwR4qu6pSakWBm6DWwQieN+H1+veOzMtcJNR8XiG670ew0+tN01+F
+        P719g93Sukn+UZ2rf9DVqxfeT905XddKuf5CUtFfSxameTcbV19eayO9/lrVvhUKPN5KLMUZ
+        iYZazEXFiQB2R/3omAMAAA==
+X-CMS-MailID: 20211217115743eucas1p10e721164cd845176f9dc5c4c2ad86838
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20211217115743eucas1p10e721164cd845176f9dc5c4c2ad86838
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20211217115743eucas1p10e721164cd845176f9dc5c4c2ad86838
+References: <20211207173745.15850-1-pierre-louis.bossart@linux.intel.com>
+        <20211207173745.15850-5-pierre-louis.bossart@linux.intel.com>
+        <660cd57a-d445-63ba-b0bf-6bf6168ffee0@samsung.com>
+        <CGME20211217115743eucas1p10e721164cd845176f9dc5c4c2ad86838@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 08:29:54PM +0900, Vincent Pelletier wrote:
-> On Fri, Dec 17, 2021 at 6:51 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Dec 15, 2021 at 12:32:49AM +0000, Vincent Pelletier wrote:
-> > > ffs_data_reset is called from both ffs_fs_kill_sb and ffs_ep0_release, so
-> > > it ends up being called twice when userland closes ep0 and then unmounts
-> > > f_fs. If userland provided an eventfd along with function's USB
-> > > descriptors, ffs_data_clear (via ffs_data_reset) ends up calling
-> > > eventfd_ctx_put as many times, causing a refcount underflow warning
-> > > (as of 5.15 at least). NULL-ify ffs_eventfd to prevent these extraneous
-> > > eventfd_ctx_put calls.
-> > >
-> > > For completeness, ffs_data_clear actually ends up being called thrice, the
-> > > last call being before the whole ffs structure gets freed, so when this
-> > > specific sequence happens there is a second underflow happening (but not
-> > > being reported):
-> > >
-> > > /sys/kernel/debug/tracing# modprobe usb_f_fs
-> > > /sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
-> > > /sys/kernel/debug/tracing# echo function > current_tracer
-> > > /sys/kernel/debug/tracing# echo 1 > tracing_on
-> > > (setup gadget, run and kill function userland process, teardown gadget)
-> > > /sys/kernel/debug/tracing# echo 0 > tracing_on
-> > > /sys/kernel/debug/tracing# cat trace
-> > > # tracer: function
-> > > #
-> > > # entries-in-buffer/entries-written: 3/3   #P:1
-> > > #
-> > > #                                _-----=> irqs-off
-> > > #                               / _----=> need-resched
-> > > #                              | / _---=> hardirq/softirq
-> > > #                              || / _--=> preempt-depth
-> > > #                              ||| / _-=> migrate-disable
-> > > #                              |||| /     delay
-> > > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > > #              | |         |   |||||     |         |
-> > >  smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs_data_closed
-> > >  smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs_data_closed
-> > >  smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs_data_put
-> > >
-> > > Warning output corresponding to above trace:
-> > > [ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15c
-> > > [ 1946.293094] refcount_t: underflow; use-after-free.
-> > > [ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) hci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobuf2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha512_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcmfmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillrect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) fb_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E) rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
-> > > [ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G         C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
-> > > [ 1946.417950] Hardware name: BCM2835
-> > > [ 1946.425442] Backtrace:
-> > > [ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_stack+0x20/0x24)
-> > > [ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
-> > > [ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+0x28/0x30)
-> > > [ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8/0x154)
-> > > [ 1946.482067]  r5:c04a948c r4:c0a71dc8
-> > > [ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_fmt+0xa0/0xe4)
-> > > [ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
-> > > [ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refcount_warn_saturate+0x110/0x15c)
-> > > [ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a17c0
-> > > [ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] (eventfd_ctx_put+0x48/0x74)
-> > > [ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_data_clear+0xd0/0x118 [usb_f_fs])
-> > > [ 1946.582664]  r5:c3b84c00 r4:c2695b00
-> > > [ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0>] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
-> > > [ 1946.609608]  r5:bf54d014 r4:c2695b00
-> > > [ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
-> > > [ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
-> > > [ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50>] (deactivate_locked_super+0x54/0x9c)
-> > > [ 1946.664893]  r5:bf54d014 r4:c229f000
-> > > [ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>] (deactivate_super+0x60/0x64)
-> > > [ 1946.690722]  r5:c2a09000 r4:c229f000
-> > > [ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (cleanup_mnt+0xe4/0x14c)
-> > > [ 1946.715553]  r5:c2a09000 r4:00000000
-> > > [ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_mnt+0x1c/0x20)
-> > > [ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
-> > > [ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_work_run+0x84/0xb8)
-> > > [ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_pending+0x470/0x56c)
-> > > [ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
-> > > [ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_work_pending+0xc/0x20)
-> > > [ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
-> > > [ 1946.820129] bfa0:                                     00000000 00000000 000000aa b5e21430
-> > > [ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86790 bef86794 bef867a0
-> > > [ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23760
-> > > [ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef86840 r5:00000001
-> > > [ 1946.881914]  r4:bef867a0
-> > > [ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
-> > >
-> > > Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_fs.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > > index e20c19a0f106..437141a11ec6 100644
-> > > --- a/drivers/usb/gadget/function/f_fs.c
-> > > +++ b/drivers/usb/gadget/function/f_fs.c
-> > > @@ -1791,6 +1791,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
-> > >       ffs_data_clear(ffs);
-> > >
-> > >       ffs->epfiles = NULL;
-> > > +     ffs->ffs_eventfd = NULL;
-> >
-> > Shouldn't this be happening in ffs_data_clear() instead?  After the call
-> > to eventfd_ctx_put() as that is when the file descriptor is properly
-> > dropped.
-> 
-> This was my initial intent while debugging, but when preparing this
-> submission I realised epfiles is in the same boat, and
-> ffs_data_reset is where it is getting set to NULL.
-> So I followed the pattern.
-> 
-> If preferred, I can move both to ffs_data_clear, as I think it would
-> make the code more obviously correct (...and it may have made
-> this bug more obvious and maybe avoided it entirely).
+Dear All,
 
-Both should be moved there, that is the correct thing to do.
+On 17.12.2021 11:11, Marek Szyprowski wrote:
+> On 07.12.2021 18:37, Pierre-Louis Bossart wrote:
+>> From: Takashi Iwai <tiwai@suse.de>
+>>
+>> When more than one FE is connected to a BE, e.g. in a mixing use case,
+>> the BE can be triggered multiple times when the FE are opened/started
+>> concurrently. This race condition is problematic in the case of
+>> SoundWire BE dailinks, and this is not desirable in a general
+>> case.
+>>
+>> This patch relies on the existing BE PCM lock, which takes atomicity 
+>> into
+>> account. The locking model assumes that all interactions start with
+>> the FE, so that there is no deadlock between FE and BE locks.
+>>
+>> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+>> [test, checkpatch fix and clarification of commit message by plbossart]
+>> Signed-off-by: Pierre-Louis Bossart 
+>> <pierre-louis.bossart@linux.intel.com>
+>> Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+>> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+>> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+>
+> This patch recently landed in linux-next (next-20211215) as commit 
+> b2ae80663008 ("ASoC: soc-pcm: serialize BE triggers").
 
-thanks,
+It turned out that the issue is caused by the previous patch "[PATCH 
+3/6] ASoC: soc-pcm: Fix and cleanup DPCM locking 
+<https://lore.kernel.org/all/20211207173745.15850-4-pierre-louis.bossart@linux.intel.com/#r>", 
+merged as commit b7898396f4bb ("ASoC: soc-pcm: Fix and cleanup DPCM 
+locking"), for some reasons 'git bisect' pointed me initially to the 
+wrong patch. I will re-report it under the proper patch. Reverting it 
+and the next patches on top of linux-next fixes the issue.
 
-greg k-h
+
+> I found that it triggers a warning on my test boards. This is the one 
+> from Exynos4412-based Odroid U3 board:
+>
+> # speaker-test -l1
+>
+> speaker-test 1.1.8
+>
+> Playback device is default
+> Stream parameters are 48000Hz, S16_LE, 1 channels
+> Using 16 octaves of pink noise
+> Rate set to 48000Hz (requested 48000Hz)
+> Buffer size range from 128 to 131072
+> Period size range from 64 to 65536
+> Using max buffer size 131072
+> Periods = 4
+> was set period_size = 32768
+> was set buffer_size = 131072
+>  0 - Front Left
+>
+> ============================================
+> WARNING: possible recursive locking detected
+> 5.16.0-rc1-00270-gb2ae80663008 #11109 Not tainted
+> --------------------------------------------
+> speaker-test/1312 is trying to acquire lock:
+> c1d78ca4 (&group->lock){....}-{2:2}, at: dpcm_be_dai_trigger+0x80/0x300
+>
+> but task is already holding lock:
+> c1d788a4 (&group->lock){....}-{2:2}, at: 
+> snd_pcm_action_lock_irq+0x68/0x7c
+>
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+>
+>        CPU0
+>        ----
+>   lock(&group->lock);
+>   lock(&group->lock);
+>
+>  *** DEADLOCK ***
+>
+>  May be due to missing lock nesting notation
+>
+> 1 lock held by speaker-test/1312:
+>  #0: c1d788a4 (&group->lock){....}-{2:2}, at: 
+> snd_pcm_action_lock_irq+0x68/0x7c
+>
+> stack backtrace:
+> CPU: 0 PID: 1312 Comm: speaker-test Not tainted 
+> 5.16.0-rc1-00270-gb2ae80663008 #11109
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> [<c0110b30>] (unwind_backtrace) from [<c010c618>] (show_stack+0x10/0x14)
+> [<c010c618>] (show_stack) from [<c0b65d24>] (dump_stack_lvl+0x58/0x70)
+> [<c0b65d24>] (dump_stack_lvl) from [<c0193740>] 
+> (__lock_acquire+0x15ac/0x319c)
+> [<c0193740>] (__lock_acquire) from [<c0195dd8>] 
+> (lock_acquire+0x14c/0x424)
+> [<c0195dd8>] (lock_acquire) from [<c0b745b8>] 
+> (_raw_spin_lock_irqsave+0x44/0x60)
+> [<c0b745b8>] (_raw_spin_lock_irqsave) from [<c0926b6c>] 
+> (dpcm_be_dai_trigger+0x80/0x300)
+> [<c0926b6c>] (dpcm_be_dai_trigger) from [<c0927004>] 
+> (dpcm_fe_dai_do_trigger+0x124/0x1e4)
+> [<c0927004>] (dpcm_fe_dai_do_trigger) from [<c090728c>] 
+> (snd_pcm_action+0x74/0xb0)
+> [<c090728c>] (snd_pcm_action) from [<c0907eac>] 
+> (snd_pcm_action_lock_irq+0x3c/0x7c)
+> [<c0907eac>] (snd_pcm_action_lock_irq) from [<c02f13a0>] 
+> (sys_ioctl+0x568/0xd44)
+> [<c02f13a0>] (sys_ioctl) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
+> Exception stack(0xc4777fa8 to 0xc4777ff0)
+> 7fa0:                   004f5210 b6e27394 00000004 00004142 004f5398 
+> 004f5398
+> 7fc0: 004f5210 b6e27394 00020000 00000036 00000000 00000000 bee588e8 
+> 00008000
+> 7fe0: b6e277c4 bee58874 b6d8e888 b6c751dc
+> Time per period = 0.253397
+> max98090 1-0010: PLL unlocked
+> BUG: sleeping function called from invalid context at 
+> kernel/locking/rwsem.c:1526
+> in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1312, name: 
+> speaker-test
+> preempt_count: 1, expected: 0
+> RCU nest depth: 0, expected: 0
+> INFO: lockdep is turned off.
+> irq event stamp: 8158
+> hardirqs last  enabled at (8157): [<c0b747d0>] 
+> _raw_spin_unlock_irqrestore+0x5c/0x60
+> hardirqs last disabled at (8158): [<c0b74570>] 
+> _raw_spin_lock_irq+0x58/0x5c
+> softirqs last  enabled at (7854): [<c0101578>] __do_softirq+0x348/0x610
+> softirqs last disabled at (7849): [<c012e7a4>] __irq_exit_rcu+0x144/0x1ec
+> Preemption disabled at:
+> [<00000000>] 0x0
+> CPU: 0 PID: 1312 Comm: speaker-test Not tainted 
+> 5.16.0-rc1-00270-gb2ae80663008 #11109
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> [<c0110b30>] (unwind_backtrace) from [<c010c618>] (show_stack+0x10/0x14)
+> [<c010c618>] (show_stack) from [<c0b65d24>] (dump_stack_lvl+0x58/0x70)
+> [<c0b65d24>] (dump_stack_lvl) from [<c0158b04>] 
+> (__might_resched+0x1c0/0x288)
+> [<c0158b04>] (__might_resched) from [<c0b71898>] (down_write+0x24/0x8c)
+> [<c0b71898>] (down_write) from [<c030ed64>] 
+> (simple_recursive_removal+0x6c/0x370)
+> [<c030ed64>] (simple_recursive_removal) from [<c04d07a4>] 
+> (debugfs_remove+0x38/0x4c)
+> [<c04d07a4>] (debugfs_remove) from [<c0928784>] 
+> (dpcm_be_disconnect+0x160/0x2c4)
+> [<c0928784>] (dpcm_be_disconnect) from [<c092895c>] 
+> (dpcm_fe_dai_cleanup+0x74/0xb0)
+> [<c092895c>] (dpcm_fe_dai_cleanup) from [<c0928d90>] 
+> (dpcm_fe_dai_close+0xe8/0x14c)
+> [<c0928d90>] (dpcm_fe_dai_close) from [<c090977c>] 
+> (snd_pcm_release_substream.part.0+0x3c/0xcc)
+> [<c090977c>] (snd_pcm_release_substream.part.0) from [<c0909878>] 
+> (snd_pcm_release+0x54/0xa4)
+> [<c0909878>] (snd_pcm_release) from [<c02dc400>] (__fput+0x88/0x258)
+> [<c02dc400>] (__fput) from [<c014cd44>] (task_work_run+0x8c/0xc8)
+> [<c014cd44>] (task_work_run) from [<c010c08c>] 
+> (do_work_pending+0x4a4/0x598)
+> [<c010c08c>] (do_work_pending) from [<c0100088>] 
+> (slow_work_pending+0xc/0x20)
+> Exception stack(0xc4777fb0 to 0xc4777ff8)
+> 7fa0:                                     00000000 004f5260 004eaa9c 
+> 00000000
+> 7fc0: 004f5260 004f536c 004f5210 00000006 004fb700 004e6e8c 004d6120 
+> bee58cc4
+> 7fe0: b6e27e64 bee58928 b6d8eda4 b6d09ac0 60000050 00000004
+>
+> Let me know how I can help debugging this issue.
+>
+>> ---
+>>   sound/soc/soc-pcm.c | 46 ++++++++++++++++++++++++++++-----------------
+>>   1 file changed, 29 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+>> index 2e282c42bac2..7043857e30b1 100644
+>> --- a/sound/soc/soc-pcm.c
+>> +++ b/sound/soc/soc-pcm.c
+>> @@ -46,12 +46,18 @@ static inline void 
+>> snd_soc_dpcm_stream_lock_irq(struct snd_soc_pcm_runtime *rtd,
+>>       snd_pcm_stream_lock_irq(snd_soc_dpcm_get_substream(rtd, stream));
+>>   }
+>>   +#define snd_soc_dpcm_stream_lock_irqsave(rtd, stream, flags) \
+>> +    snd_pcm_stream_lock_irqsave(snd_soc_dpcm_get_substream(rtd, 
+>> stream), flags)
+>> +
+>>   static inline void snd_soc_dpcm_stream_unlock_irq(struct 
+>> snd_soc_pcm_runtime *rtd,
+>>                             int stream)
+>>   {
+>>       snd_pcm_stream_unlock_irq(snd_soc_dpcm_get_substream(rtd, 
+>> stream));
+>>   }
+>>   +#define snd_soc_dpcm_stream_unlock_irqrestore(rtd, stream, flags) \
+>> + snd_pcm_stream_unlock_irqrestore(snd_soc_dpcm_get_substream(rtd, 
+>> stream), flags)
+>> +
+>>   #define DPCM_MAX_BE_USERS    8
+>>     static inline const char *soc_cpu_dai_name(struct 
+>> snd_soc_pcm_runtime *rtd)
+>> @@ -2079,6 +2085,7 @@ int dpcm_be_dai_trigger(struct 
+>> snd_soc_pcm_runtime *fe, int stream,
+>>   {
+>>       struct snd_soc_pcm_runtime *be;
+>>       struct snd_soc_dpcm *dpcm;
+>> +    unsigned long flags;
+>>       int ret = 0;
+>>         for_each_dpcm_be(fe, stream, dpcm) {
+>> @@ -2087,9 +2094,11 @@ int dpcm_be_dai_trigger(struct 
+>> snd_soc_pcm_runtime *fe, int stream,
+>>           be = dpcm->be;
+>>           be_substream = snd_soc_dpcm_get_substream(be, stream);
+>>   +        snd_soc_dpcm_stream_lock_irqsave(be, stream, flags);
+>> +
+>>           /* is this op for this BE ? */
+>>           if (!snd_soc_dpcm_be_can_update(fe, be, stream))
+>> -            continue;
+>> +            goto next;
+>>             dev_dbg(be->dev, "ASoC: trigger BE %s cmd %d\n",
+>>               be->dai_link->name, cmd);
+>> @@ -2099,77 +2108,80 @@ int dpcm_be_dai_trigger(struct 
+>> snd_soc_pcm_runtime *fe, int stream,
+>>               if ((be->dpcm[stream].state != 
+>> SND_SOC_DPCM_STATE_PREPARE) &&
+>>                   (be->dpcm[stream].state != SND_SOC_DPCM_STATE_STOP) &&
+>>                   (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
+>>               break;
+>>           case SNDRV_PCM_TRIGGER_RESUME:
+>>               if ((be->dpcm[stream].state != 
+>> SND_SOC_DPCM_STATE_SUSPEND))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
+>>               break;
+>>           case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+>>               if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
+>>               break;
+>>           case SNDRV_PCM_TRIGGER_STOP:
+>>               if ((be->dpcm[stream].state != 
+>> SND_SOC_DPCM_STATE_START) &&
+>>                   (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
+>> -                continue;
+>> +                goto next;
+>>                 if (!snd_soc_dpcm_can_be_free_stop(fe, be, stream))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_STOP;
+>>               break;
+>>           case SNDRV_PCM_TRIGGER_SUSPEND:
+>>               if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
+>> -                continue;
+>> +                goto next;
+>>                 if (!snd_soc_dpcm_can_be_free_stop(fe, be, stream))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_SUSPEND;
+>>               break;
+>>           case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+>>               if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START)
+>> -                continue;
+>> +                goto next;
+>>                 if (!snd_soc_dpcm_can_be_free_stop(fe, be, stream))
+>> -                continue;
+>> +                goto next;
+>>                 ret = soc_pcm_trigger(be_substream, cmd);
+>>               if (ret)
+>> -                goto end;
+>> +                goto next;
+>>                 be->dpcm[stream].state = SND_SOC_DPCM_STATE_PAUSED;
+>>               break;
+>>           }
+>> +next:
+>> +        snd_soc_dpcm_stream_unlock_irqrestore(be, stream, flags);
+>> +        if (ret)
+>> +            break;
+>>       }
+>> -end:
+>>       if (ret < 0)
+>>           dev_err(fe->dev, "ASoC: %s() failed at %s (%d)\n",
+>>               __func__, be->dai_link->name, ret);
+>
+> Best regards
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+

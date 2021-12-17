@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5388047917E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F4E479181
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239129AbhLQQah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:30:37 -0500
-Received: from mga12.intel.com ([192.55.52.136]:52544 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231193AbhLQQah (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:30:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639758637; x=1671294637;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WZoWLbwvk72sjBrsflJAsBLZK2RLWN0sMTnR+iKK/PU=;
-  b=d5apCf5aUs2kcoqNFNVJt30u7xwjKgC29P5aogdFUbIk1mfgtEUacqUg
-   Tz+wTiArGrXp+4L0WrMrPSMp5jtjNXxLJ7H77/EyNewSX8Iu8DgP5jaZw
-   CNhRM4RNQWiaWtDCiWyLeqNcs469nspUAzN4HhsHuUrzabu8oqywDtrB6
-   MtUDAwUOGbXhBYJt5zkI0yLYoB42KIjX1CeZ64CgYnIuyEvy/tWsgbH1n
-   abhdjd06hHnRx9KuUlZ2QYVRZI98oI3SVy2ttYgxzh0OO4Y1T/zmzt1mk
-   yEorR9l8NP/NmPsnVAzeJZVC+oTZFlI7wB+IrRTXp4SEwXUg4ZxxpWUFi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="219797929"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="219797929"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 08:30:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="605937516"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2021 08:30:19 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myG7e-0004vt-RY; Fri, 17 Dec 2021 16:30:18 +0000
-Date:   Sat, 18 Dec 2021 00:29:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     kbuild-all@lists.01.org, cosmin.tanislav@analog.com,
-        demonsingur@gmail.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] iio: accel: add ADXL367 driver
-Message-ID: <202112180019.g2mLoEZq-lkp@intel.com>
-References: <20211217114548.1659721-3-cosmin.tanislav@analog.com>
+        id S239142AbhLQQao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:30:44 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4305 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231193AbhLQQam (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:30:42 -0500
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JFvVs4yb0z67gb0;
+        Sat, 18 Dec 2021 00:26:13 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 17:30:40 +0100
+Received: from [10.47.26.158] (10.47.26.158) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 17 Dec
+ 2021 16:30:39 +0000
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
+ <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
+ <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+ <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+ <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+ <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+ <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+ <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <d45ee18a-1faa-9c56-071d-18f5737d225c@huawei.com>
+Date:   Fri, 17 Dec 2021 16:30:15 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217114548.1659721-3-cosmin.tanislav@analog.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.26.158]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cosmin,
+On 17/12/2021 15:55, Arnd Bergmann wrote:
+>> > If you have a better way of finding the affected drivers,
+>>   > that would be great.
+>>
+>> Assuming arm64 should select HAS_IOPORT, I am talking about f71805f as
+>> an example. According to that patch, this driver additionally depends on
+>> HAS_IOPORT; however I would rather arm64, like powerpc, should not allow
+>> that driver to be built at all.
+> Agreed, I missed these when I looked through the HAS_IOPORT users,
+> that's why I suggested to split up that part of the patch per subsystem
+> so they can be inspected more carefully.
 
-I love your patch! Perhaps something to improve:
+ok
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on robh/for-next linus/master v5.16-rc5 next-20211217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+ >
+ > My feeling is that in this case we want some other dependency, e.g. a
+ > new CONFIG_LPC. It should actually be possible to use this driver on
+ > any machine with an LPC bus, which would by definition be the primary
+ > I/O space, so it should be possible to load it on Arm64.
 
-url:    https://github.com/0day-ci/linux/commits/Cosmin-Tanislav/Add-ADXL367-driver/20211217-194722
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211218/202112180019.g2mLoEZq-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c227f49f87d7be7884f44bfdd422713610cdd29c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Cosmin-Tanislav/Add-ADXL367-driver/20211217-194722
-        git checkout c227f49f87d7be7884f44bfdd422713610cdd29c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/iio/accel/ net/netfilter/
+You did suggest HARDCODED_IOPORT earlier in this thread, and the 
+definition/premise there seemed sensible to me.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Anyway it seems practical to make all these changes in a single series, 
+so need a way forward as Niklas has no such changes for this additional 
+kconfig option.
 
-All warnings (new ones prefixed by >>):
+As a start, may I suggest we at least have Niklas' patch committed to a 
+dev branch based on -next or latest mainline release for further analysis?
 
->> drivers/iio/accel/adxl367.c:990:5: warning: no previous prototype for 'adxl367_write_raw_get_fmt' [-Wmissing-prototypes]
-     990 | int adxl367_write_raw_get_fmt(struct iio_dev *indio_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/accel/adxl367.c:212:18: warning: 'adxl367_time_scale_tbl' defined but not used [-Wunused-const-variable=]
-     212 | static const int adxl367_time_scale_tbl[] = {
-         |                  ^~~~~~~~~~~~~~~~~~~~~~
+Thanks,
+John
 
 
-vim +/adxl367_write_raw_get_fmt +990 drivers/iio/accel/adxl367.c
-
-   989	
- > 990	int adxl367_write_raw_get_fmt(struct iio_dev *indio_dev,
-   991				      struct iio_chan_spec const *chan,
-   992				      long info)
-   993	{
-   994		switch (info) {
-   995		case IIO_CHAN_INFO_SCALE:
-   996			if (chan->type != IIO_ACCEL)
-   997				return -EINVAL;
-   998	
-   999			return IIO_VAL_INT_PLUS_NANO;
-  1000		default:
-  1001			return IIO_VAL_INT_PLUS_MICRO;
-  1002		}
-  1003	}
-  1004	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

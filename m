@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A804795CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F7D4795B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237247AbhLQUwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbhLQUwG (ORCPT
+        id S240920AbhLQUoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:44:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28224 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237055AbhLQUoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:52:06 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED356C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:52:05 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o20so12413187eds.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JJnsIIpunEWMbh/Qgzu/ClbtA+crRRC9ykjwMsxp4Xg=;
-        b=Q7KfwzCp7ey3Od1yatE7bs9sLO+eQCx8S/bb7oiRSzyMiKD0DWQ2xXPhmdnChne7nw
-         86EM0hENEKAQr1TC1SKiTfMK5A+B3tCj9YW0qlShYCfu1WuGRaW1hfigEOBc39FylfMA
-         K1VH5SRGwn742s/Dv9UxpopSjgjurI0JlTzfA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JJnsIIpunEWMbh/Qgzu/ClbtA+crRRC9ykjwMsxp4Xg=;
-        b=uaV95DFC7PNHVxvXFfSs7ijCY2LfKFES0+jxxVbmhEfzucm3CbK9uDYOC1P19q9tIL
-         ivQo0ljR/kiRU1ALl8wFxT379GeooHxk182CNU3qt319dAlwNhO8cGUv5cNan/0RwYpv
-         9iwD7D+DtmjdCnqOen8t2xs/KIbhngGAwPqQxjJ7qPPpBjFA1sHMwrZCy0QfJVS2n4e6
-         iXJMeuNHlYz6Hz140hNPJmhT9anUAjj31xQFKqBwhSD8floKlwQSGMwewziAVJ38tY2k
-         t9wQ4ItOct98UEjDuHLO69Z+QpLSmwbwtr+CPQDI+l7+Wfp/tdJQYP6TB/pyF7qrLTjy
-         of3w==
-X-Gm-Message-State: AOAM531hs6PDXtwo65q3Si19ESNbLiXEuamAF94Kzahet1GW2h3ArnsI
-        5Za9ucTandZlL17WfxsvdPU8dD94M5q9rrlKAlQ=
-X-Google-Smtp-Source: ABdhPJxgM+uNnKX3xw0wwafHeTD2fvpnJCffvA8UCGZSz+5oWoDrgrnK+/s2juSCBlrWZMwS9+oVTw==
-X-Received: by 2002:aa7:cd12:: with SMTP id b18mr4398751edw.355.1639774324227;
-        Fri, 17 Dec 2021 12:52:04 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id he14sm3000993ejc.55.2021.12.17.12.52.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 12:52:04 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so2269729wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:52:04 -0800 (PST)
-X-Received: by 2002:a7b:cb17:: with SMTP id u23mr11177984wmj.155.1639773838912;
- Fri, 17 Dec 2021 12:43:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <CAHk-=wgD1Y_hV3eCRL55m+sGfmwic0wbq+0LV8youYKirHJTog@mail.gmail.com>
-In-Reply-To: <CAHk-=wgD1Y_hV3eCRL55m+sGfmwic0wbq+0LV8youYKirHJTog@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 12:43:42 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wge4Pcrhg-uCyCRVaUBb5B4NdSxb3TNhB5pnnqDqw6Ztg@mail.gmail.com>
-Message-ID: <CAHk-=wge4Pcrhg-uCyCRVaUBb5B4NdSxb3TNhB5pnnqDqw6Ztg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Fri, 17 Dec 2021 15:44:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639773846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HhXCW/gkgebaf8J387KILDsdSIH5KpfDKz809CKCWyo=;
+        b=eft0JoXDVzKrDmpkVzFwj8Ui1tuQEdzj8oWdk5ugmKhUzdHRTPzAvUC6q1hPg+XRMmGF17
+        tm8FGZC3PfjlE7aakh6O6KY6e8Z87X8J/h+PnXTneCllIKj+pPbj+RtPF2zsx/UKvJpltm
+        t2aN6AYl81JiE3dPOGVCOoZ4W718nUY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-r3psBnitNDePrXJsjLMkbA-1; Fri, 17 Dec 2021 15:44:02 -0500
+X-MC-Unique: r3psBnitNDePrXJsjLMkbA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 64B781006AA2;
+        Fri, 17 Dec 2021 20:43:58 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 97E16610AE;
+        Fri, 17 Dec 2021 20:43:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <310b791fc8afde2a108af4eb06bbe678f4141fac.camel@kernel.org>
+References: <310b791fc8afde2a108af4eb06bbe678f4141fac.camel@kernel.org> <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk> <163967106467.1823006.6790864931048582667.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
         Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 18/68] fscache: Implement cookie user counting and resource pinning
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2084363.1639773828.1@warthog.procyon.org.uk>
+Date:   Fri, 17 Dec 2021 20:43:48 +0000
+Message-ID: <2084364.1639773828@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:39 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> At the time of such a shared pin, you can do what we already do:
-> re-use the page if it has a refcount of 1. Or do an early COW event
-> (feel free to avoid the "mark it writable and dirty").
+Jeff Layton <jlayton@kernel.org> wrote:
 
-Note that this also depends on fork() doing the right thing, marking
-things for "a fork() can not share this page any more".
+> > +unsigned int fscache_lru_cookie_timeout = 10 * HZ;
+> >  
+> 
+> Looks like it only pops after 10s? That's a bit more than the "couple of
+> seconds" mentioned in the changelog. In fact, that seems like quite a
+> long time.
+> 
+> Did you arrive at this value empirically somehow?
 
-Which it does for regular pages, and is exactly what that
-page_needs_cow_for_dma() logic is all about (and the special
-write_protect_seq around gup/fork).
+It was 2s originally, but I upped for some reason I don't remember.  I've left
+it as it seems to work, but it is arbitrary.  I should make this configurable
+perhaps and/or maybe make it based on the number of cookies on the LRU since
+the number of open files is what matters.
 
-I do believe that huge-pages don't do it right. But I think that as
-you try to fix hugepages, you are now breaking the normal case.
+I don't have a good heuristic, so I'll just fix the commit message for now.
 
-If all your logic was only about hugepages, I wouldn't care so much.
-But you are playing questionable games with code that I think is
-correct.
+David
 
-Please explain why.
-
-              Linus

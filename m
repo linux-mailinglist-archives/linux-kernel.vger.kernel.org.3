@@ -2,305 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5BA47822B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4951947822D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhLQBa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 20:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbhLQBaV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:30:21 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F143CC061757
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:30:20 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g11so1489876lfu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0EaeJHVapfeG+0ow4kbqvK0MBEVKM2dNg2z2A86xtXI=;
-        b=qCLFxkn1Oxg3mgj5UDpi8TECWroR+JgiKV/Js3+lYAk4UXybclOAziiyNnicrX+o36
-         7pHNQjXCJ949VL0WqCUY7MSS7YZGOLGcO4gy+FwwBzGJC5CGVPH+tJzYHOTN7c/PwraY
-         /cco9CyY3KAmBLWmz+G6u9R+SyQ5iOP1IsajXVzwTLFQeVO2C838MXr4wQUhfmhUUiRP
-         KXyCmus6zkuhS9bzdTDlJEIJ2gojIXNR2bThpq4SI9dqkhSh6IiLnNhxrx7U58839XGY
-         5iqjUTHj8H18ESB2zxnZUh2MsX+LScrjHpw9sFtf3IQJVgyHdLIpGQpbpqg8qtN6HUCo
-         4YMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0EaeJHVapfeG+0ow4kbqvK0MBEVKM2dNg2z2A86xtXI=;
-        b=hlxU6IHJUGakApZKC2wufQsdaAyoCdjOgEVnuSoytCNSxkOaLwDXMTf19aZ/Cd1ykb
-         k8hNrujOUSPYPwGVUKIVrdVKtC71I75ZygCm8pucPZKY2W1CSFK+yUabnif51O7Tzx8x
-         U/hSvaq+MyI16URUozFjl10Pi5TgKaISjKkUzlS9rK0A7DuXOMSNRTjWSeMn1nvFyObD
-         x/V1D0Hm+0VvMxjjYW8zKHgfpV/OyimqNoUaAEwgbYoNi5SSpVEIycmkuZsQV+qgDF6C
-         U2p1kzNHwzIJAmsTb7mC8O2nBCwTg8agjg35ikCEn4wISmqSL5YOIGmoQgMILxEWN5ro
-         CkGA==
-X-Gm-Message-State: AOAM532JFQzwKq0+VNbvTi2bAZHgZjvDifUmf3gD+vjz2by/kgMwmDIF
-        nmhek+2aBPL0fG10FzrQOGNOrQ==
-X-Google-Smtp-Source: ABdhPJyBeQGZz7+zmb0FO0BdsfqamVmyBShDesR+suzc3yUz9WoSpS+we4qdDYL/DsrOkkvER/cBQQ==
-X-Received: by 2002:a05:6512:c0b:: with SMTP id z11mr721871lfu.343.1639704619194;
-        Thu, 16 Dec 2021 17:30:19 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id bt18sm53317lfb.50.2021.12.16.17.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 17:30:18 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v2 7/7] arm64: dts: exynos: Add initial E850-96 board support
-Date:   Fri, 17 Dec 2021 03:30:05 +0200
-Message-Id: <20211217013005.16646-8-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211217013005.16646-1-semen.protsenko@linaro.org>
-References: <20211217013005.16646-1-semen.protsenko@linaro.org>
+        id S230252AbhLQBbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 20:31:35 -0500
+Received: from mga18.intel.com ([134.134.136.126]:7311 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229543AbhLQBbe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 20:31:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639704694; x=1671240694;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ypKpg1yUs6DllvxG5E3wQNWOcvJF9DYjAoPkfeVehmo=;
+  b=HIkZhbKAiWT5tZrbVPq3LBEi+PBH7+rKJTNwt9kmMroO4SlVKuu2140i
+   ECFV/1jaZQc46L9laDU29ktzgktpxiITc/gVFQUPlCI6mwqvOBWBgDnoL
+   EIgKqW0vV3YzCaSsOyAtkeK3RJXOBmeH89JYjhvjZtqmgpo+cDQDOozqO
+   +HTYoQiX6w4W8LEmkut13E5d+59mBylT1J4v6e2BEJqT4dEqfe/oo0JgZ
+   nQA9CCrCAliFvHtjMvV1NILN/9QJ9RHpvnWjEMiUEgjKwBFF7H7IHEyfZ
+   t4aQMuQ6qFFsAy5CPiMdLJwDSn26l2wvGIHnaaPLC2FYLroZ9FE4o6GaP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226512802"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="226512802"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 17:31:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="506573953"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 17:31:33 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my25s-00044A-CG; Fri, 17 Dec 2021 01:31:32 +0000
+Date:   Fri, 17 Dec 2021 09:30:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 126/152] arch/x86/kvm/vmx/tdx_stubs.c:13:6:
+ error: no previous prototype for 'tdx_inject_nmi'
+Message-ID: <202112170946.DGxiGpMv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-E850-96 is a 96boards development board manufactured by WinLink. It
-incorporates Samsung Exynos850 SoC, and is compatible with 96boards
-mezzanine boards [1], as it follows 96boards standards.
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: e5add375b2478be4f63bfc75497bfaae0d514fa0 [126/152] KVM: TDX: Implement methods to inject NMI
+config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170946.DGxiGpMv-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/e5add375b2478be4f63bfc75497bfaae0d514fa0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout e5add375b2478be4f63bfc75497bfaae0d514fa0
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-This patch adds minimal support for E850-96 board. Next features are
-enabled in board dts file and verified with minimal BusyBox rootfs:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- * User buttons
- * LEDs
- * Serial console
- * Watchdog timers
- * RTC
- * eMMC
+All errors (new ones prefixed by >>):
 
-[1] https://www.96boards.org/products/mezzanine/
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: error: no previous prototype for 'tdx_pre_kvm_init' [-Werror=missing-prototypes]
+       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+         |             ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: error: no previous prototype for 'tdx_hardware_setup' [-Werror=missing-prototypes]
+       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+         |            ^~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: error: no previous prototype for 'tdx_hardware_enable' [-Werror=missing-prototypes]
+       7 | void tdx_hardware_enable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: error: no previous prototype for 'tdx_hardware_disable' [-Werror=missing-prototypes]
+       8 | void tdx_hardware_disable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: error: no previous prototype for 'tdx_vcpu_create' [-Werror=missing-prototypes]
+      10 | int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: error: no previous prototype for 'tdx_vcpu_free' [-Werror=missing-prototypes]
+      11 | void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: error: no previous prototype for 'tdx_vcpu_reset' [-Werror=missing-prototypes]
+      12 | void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+         |      ^~~~~~~~~~~~~~
+>> arch/x86/kvm/vmx/tdx_stubs.c:13:6: error: no previous prototype for 'tdx_inject_nmi' [-Werror=missing-prototypes]
+      13 | void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:14:12: error: no previous prototype for 'tdx_vcpu_run' [-Werror=missing-prototypes]
+      14 | fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+         |            ^~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:15:6: error: no previous prototype for 'tdx_vcpu_load' [-Werror=missing-prototypes]
+      15 | void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:16:6: error: no previous prototype for 'tdx_vcpu_put' [-Werror=missing-prototypes]
+      16 | void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:17:6: error: no previous prototype for 'tdx_prepare_switch_to_guest' [-Werror=missing-prototypes]
+      17 | void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:18:6: error: no previous prototype for 'tdx_handle_exit_irqoff' [-Werror=missing-prototypes]
+      18 | void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:19:5: error: no previous prototype for 'tdx_handle_exit' [-Werror=missing-prototypes]
+      19 | int tdx_handle_exit(struct kvm_vcpu *vcpu,
+         |     ^~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:21:6: error: no previous prototype for 'tdx_is_emulated_msr' [-Werror=missing-prototypes]
+      21 | bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:22:5: error: no previous prototype for 'tdx_get_msr' [-Werror=missing-prototypes]
+      22 | int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+         |     ^~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:23:5: error: no previous prototype for 'tdx_set_msr' [-Werror=missing-prototypes]
+      23 | int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+         |     ^~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:25:6: error: no previous prototype for 'tdx_apicv_post_state_restore' [-Werror=missing-prototypes]
+      25 | void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:26:5: error: no previous prototype for 'tdx_deliver_posted_interrupt' [-Werror=missing-prototypes]
+      26 | int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector) { return 0; }
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:27:6: error: no previous prototype for 'tdx_get_exit_info' [-Werror=missing-prototypes]
+      27 | void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
+         |      ^~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:30:5: error: no previous prototype for 'tdx_dev_ioctl' [-Werror=missing-prototypes]
+      30 | int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:31:5: error: no previous prototype for 'tdx_vm_ioctl' [-Werror=missing-prototypes]
+      31 | int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:32:5: error: no previous prototype for 'tdx_vcpu_ioctl' [-Werror=missing-prototypes]
+      32 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:32:72: error: 'ENOPNOTSUPP' undeclared (first use in this function); did you mean 'EOPNOTSUPP'?
+      32 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                        ^~~~~~~~~~~
+         |                                                                        EOPNOTSUPP
+   arch/x86/kvm/vmx/tdx_stubs.c:32:72: note: each undeclared identifier is reported only once for each function it appears in
+   arch/x86/kvm/vmx/tdx_stubs.c: At top level:
+   arch/x86/kvm/vmx/tdx_stubs.c:34:6: error: no previous prototype for 'tdx_flush_tlb' [-Werror=missing-prototypes]
+      34 | void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:35:6: error: no previous prototype for 'tdx_load_mmu_pgd' [-Werror=missing-prototypes]
+      35 | void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+         |      ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:32:85: error: control reaches end of non-void function [-Werror=return-type]
+      32 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                                     ^
+   cc1: all warnings being treated as errors
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+vim +/tdx_inject_nmi +13 arch/x86/kvm/vmx/tdx_stubs.c
+
+     9	
+  > 10	int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+    11	void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+    12	void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+  > 13	void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
+    14	fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+    15	void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+    16	void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+    17	void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+    18	void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
+    19	int tdx_handle_exit(struct kvm_vcpu *vcpu,
+    20			enum exit_fastpath_completion fastpath) { return 0; }
+    21	bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
+    22	int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+    23	int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
+    24	
+
 ---
-Changes in v2:
-  - Removed board_id and board_rev properties
-  - Removed BOARD_ID and BOARD_REV constants
-  - Put dtb in alphabetical order in Makefile
-  - Added "color" and "function" properties to LED nodes
-  - Sorted all phandle overrides by phandle name
-  - Removed 'broken-cd' property in eMMC node
-  - Added memory node
-
- arch/arm64/boot/dts/exynos/Makefile           |   1 +
- .../boot/dts/exynos/exynos850-e850-96.dts     | 175 ++++++++++++++++++
- 2 files changed, 176 insertions(+)
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-
-diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-index b41e86df0a84..be9df8e85c59 100644
---- a/arch/arm64/boot/dts/exynos/Makefile
-+++ b/arch/arm64/boot/dts/exynos/Makefile
-@@ -3,4 +3,5 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
- 	exynos5433-tm2.dtb	\
- 	exynos5433-tm2e.dtb	\
- 	exynos7-espresso.dtb	\
-+	exynos850-e850-96.dtb	\
- 	exynosautov9-sadk.dtb
-diff --git a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-new file mode 100644
-index 000000000000..952a47c417d4
---- /dev/null
-+++ b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * WinLink E850-96 board device tree source
-+ *
-+ * Copyright (C) 2018 Samsung Electronics Co., Ltd.
-+ * Copyright (C) 2021 Linaro Ltd.
-+ *
-+ * Device tree source file for WinLink's E850-96 board which is based on
-+ * Samsung Exynos850 SoC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "exynos850.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "WinLink E850-96 board";
-+	compatible = "winlink,e850-96", "samsung,exynos850";
-+
-+	chosen {
-+		stdout-path = &serial_0;
-+	};
-+
-+	/*
-+	 * 4 GiB eMCP:
-+	 *   - 2 GiB at 0x80000000
-+	 *   - 2 GiB at 0x880000000
-+	 *
-+	 * 0xbab00000..0xbfffffff: secure memory (85 MiB).
-+	 */
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x3ab00000>,
-+		      <0x0 0xc0000000 0x40000000>,
-+		      <0x8 0x80000000 0x80000000>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&key_voldown_pins &key_volup_pins>;
-+
-+		volume-down-key {
-+			label = "Volume Down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&gpa1 0 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		volume-up-key {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&gpa0 7 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		/* HEART_BEAT_LED */
-+		user_led1: led-1 {
-+			label = "yellow:user1";
-+			gpios = <&gpg2 2 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			function = LED_FUNCTION_HEARTBEAT;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		/* eMMC_LED */
-+		user_led2: led-2 {
-+			label = "yellow:user2";
-+			gpios = <&gpg2 3 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			linux,default-trigger = "mmc0";
-+		};
-+
-+		/* SD_LED */
-+		user_led3: led-3 {
-+			label = "white:user3";
-+			gpios = <&gpg2 4 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_SD;
-+			linux,default-trigger = "mmc2";
-+		};
-+
-+		/* WIFI_LED */
-+		wlan_active_led: led-4 {
-+			label = "yellow:wlan";
-+			gpios = <&gpg2 6 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			function = LED_FUNCTION_WLAN;
-+			linux,default-trigger = "phy0tx";
-+			default-state = "off";
-+		};
-+
-+		/* BLUETOOTH_LED */
-+		bt_active_led: led-5 {
-+			label = "blue:bt";
-+			gpios = <&gpg2 7 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_BLUETOOTH;
-+			linux,default-trigger = "hci0rx";
-+			default-state = "off";
-+		};
-+	};
-+};
-+
-+&mmc_0 {
-+	status = "okay";
-+	mmc-hs200-1_8v;
-+	mmc-hs400-1_8v;
-+	cap-mmc-highspeed;
-+	non-removable;
-+	mmc-hs400-enhanced-strobe;
-+	card-detect-delay = <200>;
-+	clock-frequency = <800000000>;
-+	bus-width = <8>;
-+	samsung,dw-mshc-ciu-div = <3>;
-+	samsung,dw-mshc-sdr-timing = <0 4>;
-+	samsung,dw-mshc-ddr-timing = <2 4>;
-+	samsung,dw-mshc-hs400-timing = <0 2>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sd0_clk_pins &sd0_cmd_pins &sd0_rdqs_pins &sd0_nreset_pins
-+		     &sd0_bus1_pins &sd0_bus4_pins &sd0_bus8_pins>;
-+};
-+
-+&oscclk {
-+	clock-frequency = <26000000>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&rtcclk {
-+	clock-frequency = <32768>;
-+};
-+
-+&serial_0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart1_pins>;
-+};
-+
-+&usi_uart {
-+	samsung,clkreq-on; /* needed for UART mode */
-+	status = "okay";
-+};
-+
-+&watchdog_cl0 {
-+	status = "okay";
-+};
-+
-+&watchdog_cl1 {
-+	status = "okay";
-+};
-+
-+&pinctrl_alive {
-+	key_voldown_pins: key-voldown-pins {
-+		samsung,pins = "gpa1-0";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-+	};
-+
-+	key_volup_pins: key-volup-pins {
-+		samsung,pins = "gpa0-7";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-+	};
-+};
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

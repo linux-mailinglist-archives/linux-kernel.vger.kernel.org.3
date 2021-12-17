@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF861478545
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090C247854B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbhLQGtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 01:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S233507AbhLQGyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 01:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbhLQGs7 (ORCPT
+        with ESMTP id S229757AbhLQGyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 01:48:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95DC061574;
-        Thu, 16 Dec 2021 22:48:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 17 Dec 2021 01:54:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71039C061574;
+        Thu, 16 Dec 2021 22:54:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFfhk0KS4z4xd4;
-        Fri, 17 Dec 2021 17:48:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639723734;
-        bh=gFk5/QqDd8VJz6rqZGtf1IKla5sQ6pkJ8hS21Pz6AtI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u1ynZpLs725npANjqRPRAuAJ4CNjvdLUQ98cQcXUzD3URaknbzZe28S2f1YLwG4XW
-         b9mT/5qY5AwZIbFjauJ/ItJJ4R8xTlPgjtmPO+AbvjCRFHH2apVH8jB2wFEU67TslG
-         x/K4B5Hm2u7rRSTfLnlBzyZftnLFrGzMsKcMMnpyODgcC802u+/OhxiWNyYLSLG+qM
-         a6JCCaLqe6wDeWDQK7uX7li7UcCvV+BChg8NimR5fQBTbc1JHyKR7EkMxPAxx7GGcb
-         8AtcyjOw1HvuTRMEmbuiCiodz66bPoTIpOwSurrt00hqi9YvWaDD8R33a3+BwU9Gdk
-         HDSxRO1xFIJkQ==
-Date:   Fri, 17 Dec 2021 17:48:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     broonie@kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CC3CB8273C;
+        Fri, 17 Dec 2021 06:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21F1C36AE1;
+        Fri, 17 Dec 2021 06:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639724087;
+        bh=p6kCMyX2FcZyDvW47gsSNm7t4OPV1fFHJBSG/seWwr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=drPa5bYYNpFNIxGEMsxDQQUhoLFAPAVLUiKQatw3BI9YvsHAQzs9voZ5U1VGT3gZ9
+         tm+erfngXaT6V52612rJBL2O0iHJ9u7j0kKWi5IeXmQh5keWES0rqHGRM6SeyKlqRE
+         WDCloKmFnHmXGEfifYGhexNJ27dyFr2qCFEZFKU4=
+Date:   Fri, 17 Dec 2021 07:54:39 +0100
+From:   gregkh <gregkh@linuxfoundation.org>
+To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: Re: linux-next: manual merge of the userns tree with the cel tree
-Message-ID: <20211217174853.752c032f@canb.auug.org.au>
-In-Reply-To: <20211216193412.2441434-1-broonie@kernel.org>
-References: <20211216193412.2441434-1-broonie@kernel.org>
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
+Subject: Re: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Message-ID: <Ybw0Lw1bTV5sGKVc@kroah.com>
+References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a0CnCK-Dfodp-jTzZApM_1NpdY7DV2fRqnO=gaju5xGwg@mail.gmail.com>
+ <CAHpW4oQmtd-gG1HYZT-Dk=QAvXKsKebzcOaVtrEeoujwoL9zSg@mail.gmail.com>
+ <316c16afbff74160b07bd74444f3b8e1@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XPcCR3XZL5Mlb4khvQ+9MYm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <316c16afbff74160b07bd74444f3b8e1@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 17, 2021 at 02:44:43AM +0000, Tony Huang 黃懷厚 wrote:
+> Dear Arnd:
+> 
+> On Thu, Dec 16, 2021 at 2:38 AM Tony Huang <tonyhuang.sunplus@gmail.com<mailto:tonyhuang.sunplus@gmail.com>> wrote:
+> >>
+> >> IOP (IO Processor) embedded inside SP7021 which is used as
+> >> Processor for I/O control, RTC wake-up and cooperation with
+> >> CPU & PMC in power management purpose.
+> >> The IOP core is DQ8051, so also named IOP8051,
+> >> it supports dedicated JTAG debug pins which share with SP7021.
+> >> In standby mode operation, the power spec reach 400uA.
+> >>
+> >> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com<mailto:tonyhuang.sunplus@gmail.com>>
+> >> ---
+> >> Changes in v4:
+> >>  - Addressed comments from Arnd Bergmann.
+> 
+> >I don't think you did: I asked you specifically to add code to interact with
+> >the existing in-kernel interfaces to use the functionality provided by the
+> >device. Pick any (at least two) subsystems and add support, but leave
+> >out any custom user space interfaces (miscdevice, debugfs, sysfs, ...)
+> >for the moment.
+> 
+> 1. IOP can run sp_iop_platform_driver_shudown() through the poweroff command and the kernel. Perform system power-off actions.
+> 2. Wake up the system by relying on the 8051 internal RTC wake-up mechanism and external GPIO input signals to wake up.
+> 3.So you ask me to control IOP(8051) through file_operations, not through DEVICE_ATTR
 
-Hi all,
+Your DEVICE_ATTR() calls did not do anything normal, they did not print
+out or accept data through sysfs at all.  That is not ok.
 
-On Thu, 16 Dec 2021 19:34:12 +0000 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the userns tree got a conflict in:
->=20
->   fs/nfsd/nfssvc.c
->=20
-> between commit:
->=20
->   cfb05a7336741 ("NFSD: narrow nfsd_mutex protection in nfsd thread")
+thanks,
 
-This is now commit 9d3792aefdcd
-
-> from the cel tree and commit:
->=20
->   ca3574bd653ab ("exit: Rename module_put_and_exit to module_put_and_kthr=
-ead_exit")
->=20
-> from the userns tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc fs/nfsd/nfssvc.c
-> index 14c1ef6f8cc74,5ce9f14318c4e..0000000000000
-> --- a/fs/nfsd/nfssvc.c
-> +++ b/fs/nfsd/nfssvc.c
-> @@@ -977,25 -982,11 +977,25 @@@ out
->   	/* Release the thread */
->   	svc_exit_thread(rqstp);
->  =20
->  -	nfsd_destroy(net);
->  +	/* We need to drop a ref, but may not drop the last reference
->  +	 * without holding nfsd_mutex, and we cannot wait for nfsd_mutex as th=
-at
->  +	 * could deadlock with nfsd_shutdown_threads() waiting for us.
->  +	 * So three options are:
->  +	 * - drop a non-final reference,
->  +	 * - get the mutex without waiting
->  +	 * - sleep briefly andd try the above again
->  +	 */
->  +	while (!svc_put_not_last(nn->nfsd_serv)) {
->  +		if (mutex_trylock(&nfsd_mutex)) {
->  +			nfsd_put(net);
->  +			mutex_unlock(&nfsd_mutex);
->  +			break;
->  +		}
->  +		msleep(20);
->  +	}
->  =20
->   	/* Release module */
-> - 	module_put_and_exit(0);
->  -	mutex_unlock(&nfsd_mutex);
-> + 	module_put_and_kthread_exit(0);
->   	return 0;
->   }
->  =20
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8MtUACgkQAVBC80lX
-0Gxfcgf/fByZMYKohnucUb30kNvtm100Zygyt0qTkGEEnnvKu1VgcTZe3UnZcGmQ
-zGVJUIi9zxPnZLX1b30hVZSW2UNwwZbBYfiv/LpXdTjvU5AWLr2tnpl1Gdan+wo3
-mWn5nRh90g3CD3xltkXNVCfEYBQDdwCRtgRA3SMl/L+BA6wx7fVVCEfYuBIp0O+T
-Aex9mb9dDZ4hraQk008k1/4LxL3ms99FMPnSsempg6Im3/3XHtCgJctFacTrlXw6
-RokpfoAsjygE2dmKKnnE8q8q2c2qv2d1u461ZneYFRc9abpiXgjwdk16O8g8Lklh
-00LKa+YuZPGb1mTsr/IDsfi0mM4QkQ==
-=PvYi
------END PGP SIGNATURE-----
-
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm--
+greg k-h

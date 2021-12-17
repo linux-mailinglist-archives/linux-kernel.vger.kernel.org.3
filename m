@@ -2,102 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7220F479620
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371EB479623
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbhLQVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:19:50 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57680 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLQVTt (ORCPT
+        id S229544AbhLQVUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:20:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32258 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229436AbhLQVUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:19:49 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0CA761F394;
-        Fri, 17 Dec 2021 21:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639775988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=AKWJYbPYNpbWTxZMffWahj22ArP1wNrhDJN3ZuIxhhE=;
-        b=poboJ8hawWCy8WFXDLhVxVC3LfXCfNVGYz1FpY9+8cIeZWlZbs5/thFPxNd2H2Pl/zzoQe
-        s+DtdiIOVRTUBnKeZSbCkxh2g/3KIhDrtMQJgxMaZFWELG00Us8R6V4HGtAvaThbzdALFs
-        qc1qjH2kWh84KRrjBLhVLItKflIwKuo=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 0523EA3B81;
-        Fri, 17 Dec 2021 21:19:48 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 1C848DA781; Fri, 17 Dec 2021 22:19:27 +0100 (CET)
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Btrfs fixes for 5.16-rc6
-Date:   Fri, 17 Dec 2021 22:19:27 +0100
-Message-Id: <cover.1639775076.git.dsterba@suse.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 17 Dec 2021 16:20:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639776033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
+        b=ApO3o05P6MqO26v8j8WB3M6RGAzbCRgLobY6g7jDdqUVDfAWFH7yaRlmexJmH4E8fMkwcS
+        jAvXcwNga9DOdXVhVrdURF5fT7SG1IUmVrA+OAr1mEydM00tP5uyvP9z4Gi19AkvMn7mDp
+        b2GFnC9RvS6poGkBaDrcQN/pNT1d1EE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-JPIg0WnOP82lNA3z_0H4YA-1; Fri, 17 Dec 2021 16:20:32 -0500
+X-MC-Unique: JPIg0WnOP82lNA3z_0H4YA-1
+Received: by mail-wm1-f71.google.com with SMTP id 69-20020a1c0148000000b0033214e5b021so1255991wmb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:20:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
+        b=ShZ2Z7pD+YlGbdh/FibgnGe0Epwhh9UL+e0qa0XHEINtYCTMp2IR0gcg/MSe0bMQ5E
+         zLfDQtH1WN63q3wVoXmQ6v0jzEOw9ma21qrpSyexbKUIjtd3SvktWebwBA5xPJKSrWIF
+         a3Wcpwonu4strkjAIr+2wC2DziIIB0XPe6fJPkWoSHaWyjTp7i8dJw7agVGeJttROwwf
+         Mvu7QBXqJJIuKab4I19SbaW7ym1rcc2Z7y7AVnL+y+chUzKVFabA3Vx3FI24QZBNBQdw
+         YQM3NixPJCe/s2iSIixi7dXdnLw3ATB/aZExFws/FW7TEb71/bzI3gY2qRA2+kvk5hdJ
+         Auig==
+X-Gm-Message-State: AOAM530d8m+mxEMvtpisokF10IFAQBU3O1wWdn4khmrPOytiJ3gA4sre
+        jlwAC9qKpIwsRLe2y7Zj43AZ4udAN3Tw8WezIVPNbQ/Pq74iiftc7Rqgl7ucAO1kAY0Md3qnFSO
+        8gbWne3z2Hwy/fplWbvj9Fk4y
+X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927165wrb.148.1639776031462;
+        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJynyrJqHzLIVQ/5dOHLdUALTS3GVx082kmC3nUnoCPPI43f3cBoGLl7cQzviQKhtACK6Zxaeg==
+X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927144wrb.148.1639776031272;
+        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id b13sm8544391wrh.32.2021.12.17.13.20.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 13:20:30 -0800 (PST)
+Message-ID: <0d96835d-bcf4-1192-536c-0af314405880@redhat.com>
+Date:   Fri, 17 Dec 2021 22:20:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+ <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 17.12.21 22:15, Nadav Amit wrote:
+> 
+> 
+>> On Dec 17, 2021, at 12:47 PM, Jason Gunthorpe <jgg@nvidia.com> wrote:
+>>
+>> On Fri, Dec 17, 2021 at 12:36:43PM -0800, Linus Torvalds wrote:
+>>
+>>>> 5. Take a R/O pin (RDMA, VFIO, ...)
+>>>> -> refcount > 1
+>>>>
+>>>> 6. memset(mem, 0xff, pagesize);
+>>>> -> Write fault -> COW
+>>>
+>>> I do not believe this is actually a bug.
+>>>
+>>> You asked for a R/O pin, and you got one.
+>>>
+>>> Then somebody else modified that page, and you got exactly what you
+>>> asked for - a COW event. The original R/O pin has the original page
+>>> that it asked for, and can read it just fine.
+>>
+>> To remind all, the GUP users, like RDMA, VFIO use
+>> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
+>> COW breaking the coherence. In these case 'r/o pin' does not mean
+>> "snapshot the data", but its only a promise not to write to the pages
+>> and still desires coherence with the memory map.
+>>
+>> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
+>> then filling that something with data finally doing the actual
+>> DMA. Breaking COW after pin breaks those apps.
+>>
+>> The above #5 can occur for O_DIRECT read and in that case the
+>> 'snapshot the data' is perfectly fine as racing the COW with the
+>> O_DIRECT read just resolves the race toward the read() direction.
+>>
+>> IIRC there is some other scenario that motivated this patch?
+> 
+> I think that there is an assumption that once a page is COW-broken,
+> it would never have another write-fault that might lead to COW
+> breaking later.
+> 
+> AFAIK at least after userfaultfd-WP followed by
+> userfaultfd-write-unprotect a page might be write-protected and
+> go through do_wp_page() a second time to be COW-broken again. In
+> such case, I think the FOLL_FORCE|FOLL_WRITE would not help.
+> 
+> I suspect (not sure) that this might even happen with mprotect()
+> since I do not see all code-paths preserving whether the page
+> was writable.
+> 
 
-still there are a few more fixes, almost all error handling one-liners
-and for stable.  Please pull, thanks.
+uffd-wp and mprotect() are broken as well, yes. But the easiest example
+is just swap + read fault.
 
-* regression fix in directory logging items
+Section 2 and 3 in [1], along with reproducers.
 
-* regression fix of extent buffer status bits handling after an error
+Note that I didn't mention uffd-wp and mprotect(), because these require
+"manual intervention". With swap, it's not your application doing
+something "special".
 
-* fix memory leak in error handling path in tree-log
+[1]
+https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
 
-* fix freeing invalid anon device number when handling errors during
-  subvolume creation
+-- 
+Thanks,
 
-* fix warning when freeing leaf after subvolume creation failure
+David / dhildenb
 
-* fix missing blkdev put in device scan error handling
-
-* fix invalid delayed ref after subvolume creation failure
-
-----------------------------------------------------------------
-The following changes since commit 8289ed9f93bef2762f9184e136d994734b16d997:
-
-  btrfs: replace the BUG_ON in btrfs_del_root_ref with proper error handling (2021-12-08 15:45:27 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.16-rc5-tag
-
-for you to fetch changes up to 4989d4a0aed3fb30f5b48787a689d7090de6f86d:
-
-  btrfs: fix missing blkdev_put() call in btrfs_scan_one_device() (2021-12-15 17:07:34 +0100)
-
-----------------------------------------------------------------
-Filipe Manana (4):
-      btrfs: fix double free of anon_dev after failure to create subvolume
-      btrfs: fix missing last dir item offset update when logging directory
-      btrfs: fix invalid delayed ref after subvolume creation failure
-      btrfs: fix warning when freeing leaf after subvolume creation failure
-
-Jianglei Nie (1):
-      btrfs: fix memory leak in __add_inode_ref()
-
-Josef Bacik (1):
-      btrfs: check WRITE_ERR when trying to read an extent buffer
-
-Shin'ichiro Kawasaki (1):
-      btrfs: fix missing blkdev_put() call in btrfs_scan_one_device()
-
- fs/btrfs/ctree.c           | 17 +++++++++--------
- fs/btrfs/ctree.h           |  7 ++++++-
- fs/btrfs/disk-io.c         |  8 ++++++++
- fs/btrfs/extent-tree.c     | 13 +++++++------
- fs/btrfs/extent_io.c       |  8 ++++++++
- fs/btrfs/free-space-tree.c |  4 ++--
- fs/btrfs/ioctl.c           | 10 ++++++----
- fs/btrfs/qgroup.c          |  3 ++-
- fs/btrfs/tree-log.c        |  2 ++
- fs/btrfs/volumes.c         |  6 ++++--
- 10 files changed, 54 insertions(+), 24 deletions(-)

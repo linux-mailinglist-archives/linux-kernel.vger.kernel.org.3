@@ -2,87 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE204795F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED694795F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbhLQVDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhLQVDn (ORCPT
+        id S240980AbhLQVEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:04:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37729 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229461AbhLQVEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:03:43 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A22C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:03:43 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id n8so2894999plf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:03:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ywG3K+b0v1h1vdIosCw5UiVznpeUbvFW73m/kjIxzss=;
-        b=ld7kptwqGnD4zk5IhoFmhvMK4R5EJnfGLnrMKQP5DDbv8WJ9B9CatvpCefcpFWKeMA
-         2BEcQfmwZkF9V6r5rqLsGYBg6BZu7ZwCTasBOnb1p9PrG4uSalG2hL3IbVK0P5b+pFNJ
-         gMByKg/IcZj9Wfy6ol4DddS+VqVRbnjKMJVSZrswjwlOmk3H0GG1vh9IgX352Jn07yAm
-         kpcxj78x9j171y98iRjpt6QWN8IusAkB/uti3XxaJXWDiuRv4Vjsz2KvsERTCieACJfS
-         sqQA8JpLI5JqIzr5i1KioAdR03u/2MSWgxu3ADNcshoxHdsoOmAI1xm0HPEZpssnivnP
-         ObsQ==
+        Fri, 17 Dec 2021 16:04:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639775055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X31p6tGXAI/4Wa5g0Y2TluwrYpW6tkT7axEPjjTo9xw=;
+        b=BXT/qwyE3vw3b+IaCQAMPITXpcLto2ZBDYfa8Y1MGfWoIu0ywRR0FXKWTRTQ8VfeIyLDwn
+        fmo1ayn2XwlMc9px0ejP/s+3UIXymyk/HhamhC/JlQsNl+ozje5u8xbNi2AKj/SROTfnjt
+        p+KqsPHMAvP/rqPdUh1iEzQWYP7QSUQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-192-XAPvnKM7N1-8jPc6Pe3o-Q-1; Fri, 17 Dec 2021 16:04:14 -0500
+X-MC-Unique: XAPvnKM7N1-8jPc6Pe3o-Q-1
+Received: by mail-wm1-f69.google.com with SMTP id v62-20020a1cac41000000b0033719a1a714so1231082wme.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:04:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ywG3K+b0v1h1vdIosCw5UiVznpeUbvFW73m/kjIxzss=;
-        b=Y1yeGvZcz2PR6FWh7zpzcr4hvPGXHJJpT6tBx2cFI5SZq7VrdOZPoERs+JDp/P+GnE
-         xgGA5dm08BrZuGIJ/8XH5bvcI2P3PyczqqBroMNFLiqHyQlGscZ+yd26tT+QvVZD9xDU
-         2DaTpcrJoh/tFTk+WqVqew0cpze/A/s3p5eCxgMWxvCupt2VuoDE3T2cxsNUKbHuQhpE
-         XPR8GGTEyjs5g4vVAiawnMvZYjy1/WUBQ4JuTHnf/kzPiX9OMR/AMGLde8guaKiWFQwX
-         lxz7YADTAzDhW7HZl5MV/gC1LsNK6xGcbnYKeFL6zWLWxNlewa3jCX5Js53bCwCtiOu8
-         Dp4A==
-X-Gm-Message-State: AOAM533ydVvJui5cZLrmwgomXfxYIqmyEqepxADhzgbt1Q57iewXXCYt
-        8ASP4VNVplZ8zpaAgXhWXhFk2g==
-X-Google-Smtp-Source: ABdhPJz+MLn1Xx7Uc9uThUDUYZ5pqe46UztRNM5KMmNkA7etR6yNz8Tlu0PiQsNJNWqbXmFESBlnxA==
-X-Received: by 2002:a17:902:7686:b0:148:cba4:26b0 with SMTP id m6-20020a170902768600b00148cba426b0mr4970263pll.2.1639775022794;
-        Fri, 17 Dec 2021 13:03:42 -0800 (PST)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id 145sm9265280pgd.0.2021.12.17.13.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 13:03:42 -0800 (PST)
-Date:   Fri, 17 Dec 2021 13:03:40 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
-Cc:     netdev@vger.kernel.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 6/6] net: marvell: prestera: Implement initial
- inetaddr notifiers
-Message-ID: <20211217130340.67cb775b@hermes.local>
-In-Reply-To: <20211217195440.29838-7-yevhen.orlov@plvision.eu>
-References: <20211217195440.29838-1-yevhen.orlov@plvision.eu>
-        <20211217195440.29838-7-yevhen.orlov@plvision.eu>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=X31p6tGXAI/4Wa5g0Y2TluwrYpW6tkT7axEPjjTo9xw=;
+        b=u/dYhW8mkwtQFEPtiBeFqQEZ5U9q1rGo6YEaENTvcWJ5XfNhVey5HrD5uswLe/zpow
+         A65ksUPwbuMbQ2qqnfZRl6nTgEBVYInc0zV1VlEN8kxACb09EqOUkFHK0JctDbU/YFhf
+         h4DwKa57rFWB02OVGGb+Rr2Xpx+wbUtMIxncdxx8rqu4zz3aEig5Rz6mf35qnknBv/OD
+         f8bK2okflmFy3fv+vbEvaHH+TIkIhn9vGQO+V6bsQI81VP9lGBj5lDm5kJGoPtWbAYg+
+         S7VSgjmLRrM7aJvpNbYoBmgU0fqYUlPYX/vZMqPR6q5vFgVeeLmUcEJzylg90fFtRgH0
+         tCSg==
+X-Gm-Message-State: AOAM5317gbcVysRl1aaupMjysyZ+vdXMAWDI1WYGF9WUl79fja+RHbTJ
+        b0aYQfhoUvEWkDlrnwhdz7e2yiKqURcgGGH1dN4IpQsxlUCVKQuLYnofYiaNM+TutdmlGmPCjN+
+        0SNZw0nGsgOD5kLqrSQvtLpQw
+X-Received: by 2002:a05:600c:4e01:: with SMTP id b1mr4204399wmq.109.1639775053258;
+        Fri, 17 Dec 2021 13:04:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJznXkM6loj8ay2QFCN9NcJYgHiicqLXnTDXzjHllmEEggLkSjiKUdQu6Tr1gd/pfJFDFDvzag==
+X-Received: by 2002:a05:600c:4e01:: with SMTP id b1mr4204377wmq.109.1639775053074;
+        Fri, 17 Dec 2021 13:04:13 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id h19sm8592852wmq.0.2021.12.17.13.04.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 13:04:12 -0800 (PST)
+Message-ID: <37dddd67-7e2d-8217-b1e2-31d79bb85693@redhat.com>
+Date:   Fri, 17 Dec 2021 22:04:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <20211217204705.GF6385@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 21:54:38 +0200
-Yevhen Orlov <yevhen.orlov@plvision.eu> wrote:
+On 17.12.21 21:47, Jason Gunthorpe wrote:
+> On Fri, Dec 17, 2021 at 12:36:43PM -0800, Linus Torvalds wrote:
+> 
+>>> 5. Take a R/O pin (RDMA, VFIO, ...)
+>>> -> refcount > 1
+>>>
+>>> 6. memset(mem, 0xff, pagesize);
+>>> -> Write fault -> COW
+>>
+>> I do not believe this is actually a bug.
+>>
+>> You asked for a R/O pin, and you got one.
+>>
+>> Then somebody else modified that page, and you got exactly what you
+>> asked for - a COW event. The original R/O pin has the original page
+>> that it asked for, and can read it just fine.
+> 
 
-> +/* This util to be used, to convert kernel rules for default vr in hw_vr */
-> +static u32 prestera_fix_tb_id(u32 tb_id)
-> +{
-> +	if (tb_id == RT_TABLE_UNSPEC ||
-> +	    tb_id == RT_TABLE_LOCAL ||
-> +	    tb_id == RT_TABLE_DEFAULT)
-> +		return tb_id = RT_TABLE_MAIN;
+Hi Jason
 
-That is a useless assignment why?
+> To remind all, the GUP users, like RDMA, VFIO use
+> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
+
+I heard that statement often. Can you point me at the code?
+
+VFIO: drivers/vfio/vfio_iommu_type1.c
+
+vaddr_get_pfns() will end up doing a 
+pin_user_pages_remote(FOLL_LONGTERM) without 
+FOLL_FORCE|FOLL_WRITE.
+
+Is that added automatically internally?
+
+Note the comment in the next patch
+
++ *
++ * TODO: although the security issue described does no longer apply in any case,
++ * the full consistency between the pinned pages and the pages mapped into the
++ * page tables of the MM only apply to short-term pinnings only. For
++ * FOLL_LONGTERM, FOLL_WRITE|FOLL_FORCE is required for now, which can be
++ * inefficient and still result in some consistency issues. Extend this
++ * mechanism to also provide full synchronicity to FOLL_LONGTERM, avoiding
++ * FOLL_WRITE|FOLL_FORCE.
+
+> 
+> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
+> then filling that something with data finally doing the actual
+> DMA. Breaking COW after pin breaks those apps.
+> 
+> The above #5 can occur for O_DIRECT read and in that case the
+> 'snapshot the data' is perfectly fine as racing the COW with the
+> O_DIRECT read just resolves the race toward the read() direction.
+> 
+> IIRC there is some other scenario that motivated this patch?
+
+1. I want to fix the COW security issue as documented.
+   Reproducers in patch #11
+
+2. I want to fix all of the other issues as documented and linked
+   in the cover letter that result from the imprecise page_count
+   check in COW code. Especially the ones where we have memory
+   corruptions, because this is just not acceptable. There are
+   reproducers as well for everybody that doesn't believe me.
+
+But this series really just wants to fix the security issue as "part 1".
+Without any more breakages.
+
+I'm sorry, but it's all described in the cover letter. Maybe TL;DR
+
+-- 
+Thanks,
+
+David / dhildenb
 

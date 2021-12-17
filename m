@@ -2,149 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6F24796C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191864796D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbhLQWCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:02:06 -0500
-Received: from mga11.intel.com ([192.55.52.93]:26506 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231181AbhLQWBw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:01:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639778512; x=1671314512;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jOdSxuEtbkAQOM8wsD7B/5P8akQ7YsOBzOXhYbomw+g=;
-  b=jLdSpHPkPFRJOXBaJuVcQ/Pa3Vdia25j5Kfdk+imj/sWXyUhOCjgvpYo
-   x/JQLOd4xHNp+4nfy9UKNjQSBSYFrsiNlmrHava8GmBAJJrgrSeRLiO50
-   bQBFI8Q6SCaZ0bIKjNz3PPw35AlPRrlFnVfx6H5FVX0iYrUNSnm9WzAoM
-   z1U0+7OyxZ8+HLR7N+gdwMT6iLg9hgg+THpuEgKqaXpIYfmYx3QmjQ2ZB
-   kZiiGtNIfhRoZQJfeo+0WxiMEd4BU2NLiAuTxqBZnTd48Zwr7sYULdzi/
-   ZWBy13OacXU8DyMu2PO1MZX9tFVUfkLOkR3g/AZrYKEQcXERwuH3c8ItD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="237381605"
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="237381605"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 14:01:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="506928113"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 14:01:51 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Ashok Raj" <ashok.raj@intel.com>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     iommu@lists.linux-foundation.org, "x86" <x86@kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2 11/11] docs: x86: Change documentation for SVA (Shared Virtual Addressing)
-Date:   Fri, 17 Dec 2021 22:01:36 +0000
-Message-Id: <20211217220136.2762116-12-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217220136.2762116-1-fenghua.yu@intel.com>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+        id S229743AbhLQWDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:03:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32199 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231211AbhLQWC5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 17:02:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639778576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KoZY8J6zdihNxPty00DekWdMgSgINIRofX014qBfuXc=;
+        b=b3ByYYAU/iKiN4JGsonPzBR3/8b0ovzTpDcExPJEhiDfgZDR3ur1tSziDSZ13LIo7s5pfM
+        WOcqBLaQKmY71PuXq/e1/iHKKXCneJJxphX74yjB0QgiXbiCH0CSEOT/vTnuOOfUaU0QWl
+        Dc/62chGivOaI60CDdPjxp05kd+BTCU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-edhEXfWWPPGDpk-CWos9KQ-1; Fri, 17 Dec 2021 17:02:55 -0500
+X-MC-Unique: edhEXfWWPPGDpk-CWos9KQ-1
+Received: by mail-wr1-f70.google.com with SMTP id r7-20020adfbb07000000b001a254645f13so923198wrg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:02:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=KoZY8J6zdihNxPty00DekWdMgSgINIRofX014qBfuXc=;
+        b=e6sikyKNgShFyGRZddEZAbhZPk8eMbsnSbaEjKmpnRsyr3hlQwUaDJzt+y7tOayMu4
+         sKMOm92GClSlXd1AOHVY6q/B+4hdWGgMFvMWfrrqFLaByqOccXYp1QxIeqQbxNOhVDdy
+         jOmBDQj8p337+ZjPJcFqcpqpN7aTrE6BpMoGq53wELxTD3al0KZCgv5hdfZTVbg2EtMP
+         nZgVF0O4MYaIWuxNBqm1aBnWw5Ona9HlqOM5Enyl9PQ/Xt92ESa1n+rNhABd/uEM8SLL
+         bJDglbcLmls2VJ+uDPyv+IZ2ioOUWDXuCFjKivG9CBhdG74XLlJoKBvYPB7zwyyj197w
+         9HqA==
+X-Gm-Message-State: AOAM531qv7g7aqU6bgkfaGImRa8iOLBS+wD3joIkjxk2+P/Lfwm5e96Y
+        feA5pW2ldlrU4HmDf/KD8q2kb1BB3Cj1lfidmMioBhdWeINZwlS0W9b+D69Da4LR6gPgLBBDdJK
+        l5oCOPJfr/98qm7PaITWHsEiq
+X-Received: by 2002:adf:eb0f:: with SMTP id s15mr4024607wrn.690.1639778574331;
+        Fri, 17 Dec 2021 14:02:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxuRL5qmAQJevVVPuYVbWt7BvxHm1ZgAzZFI4yLinNO0rt5Hd/+vPnwjD/ORD2+QLU8xQHpiA==
+X-Received: by 2002:adf:eb0f:: with SMTP id s15mr4024592wrn.690.1639778574107;
+        Fri, 17 Dec 2021 14:02:54 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id w25sm8541965wmk.20.2021.12.17.14.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 14:02:53 -0800 (PST)
+Message-ID: <644daada-1d77-68bb-1682-fb67f0b427f0@redhat.com>
+Date:   Fri, 17 Dec 2021 23:02:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-2-david@redhat.com> <87h7b6c44o.ffs@tglx>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
+ variant
+In-Reply-To: <87h7b6c44o.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since allocating, freeing and fixing up PASID are changed, the
-documentation is updated to reflect the changes.
+On 17.12.21 22:28, Thomas Gleixner wrote:
+> On Fri, Dec 17 2021 at 12:30, David Hildenbrand wrote:
+>> Sometimes it is required to have a seqcount implementation that uses
+>> a structure with a fixed and minimal size -- just a bare unsigned int --
+>> independent of the kernel configuration. This is especially valuable, when
+>> the raw_ variants of the seqlock function will be used and the additional
+>> lockdep part of the seqcount_t structure remains essentially unused.
+>>
+>> Let's provide a lockdep-free raw_seqcount_t variant that can be used via
+>> the raw functions to have a basic seqlock.
+>>
+>> The target use case is embedding a raw_seqcount_t in the "struct page",
+>> where we really want a minimal size and cannot tolerate a sudden grow of
+>> the seqcount_t structure resulting in a significant "struct page"
+>> increase or even a layout change.
+> 
 
-Originally-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
-v2:
-- Update life cycle info (Tony and Thomas).
-- Update initial PASID value to INVALID_IOASID on fork().
+Hi Thomas,
 
- Documentation/x86/sva.rst | 58 +++++++++++++++++++++++++++++++--------
- 1 file changed, 46 insertions(+), 12 deletions(-)
+thanks for your feedback!
 
-diff --git a/Documentation/x86/sva.rst b/Documentation/x86/sva.rst
-index 076efd51ef1f..92341f26e525 100644
---- a/Documentation/x86/sva.rst
-+++ b/Documentation/x86/sva.rst
-@@ -104,18 +104,52 @@ The MSR must be configured on each logical CPU before any application
- thread can interact with a device. Threads that belong to the same
- process share the same page tables, thus the same MSR value.
- 
--PASID is cleared when a process is created. The PASID allocation and MSR
--programming may occur long after a process and its threads have been created.
--One thread must call iommu_sva_bind_device() to allocate the PASID for the
--process. If a thread uses ENQCMD without the MSR first being populated, a #GP
--will be raised. The kernel will update the PASID MSR with the PASID for all
--threads in the process. A single process PASID can be used simultaneously
--with multiple devices since they all share the same address space.
--
--One thread can call iommu_sva_unbind_device() to free the allocated PASID.
--The kernel will clear the PASID MSR for all threads belonging to the process.
--
--New threads inherit the MSR value from the parent.
-+PASID Life Cycle Management
-+==========================
-+
-+PASID is initialized as INVALID_IOASID (-1) when a process is created.
-+
-+Only processes that access SVA-capable devices need to have a PASID
-+allocated. This allocation happens when a process opens/binds an SVA-capable
-+device but finds no PASID for this process. Subsequent binds of the same, or
-+other devices will share the same PASID.
-+
-+Although the PASID is allocated to the process by opening a device,
-+it is not active in any of the threads of that process. It's loaded to the
-+IA32_PASID MSR lazily when a thread tries to submit a work descriptor
-+to a device using the ENQCMD.
-+
-+That first access will trigger a #GP fault because the IA32_PASID MSR
-+has not been initialized with the PASID value assigned to the process
-+when the device was opened. The Linux #GP handler notes that a PASID has
-+been allocated for the process, and so initializes the IA32_PASID MSR
-+and returns so that the ENQCMD instruction is re-executed.
-+
-+On fork(2) or exec(2) the PASID is removed from the process as it no
-+longer has the same address space that it had when the device was opened.
-+
-+On clone(2) the new task shares the same address space, so will be
-+able to use the PASID allocated to the process. The IA32_PASID is not
-+preemptively initialized as the PASID value might not be allocated yet or
-+the kernel does not know whether this thread is going to access the device
-+and the cleared IA32_PASID MSR reduces context switch overhead by xstate
-+init optimization. Since #GP faults have to be handled on any threads that
-+were created before the PASID was assigned to the mm of the process, newly
-+created threads might as well be treated in a consistent way.
-+
-+Due to complexity of freeing the PASID and clearing all IA32_PASID MSRs in
-+all threads in unbind, free the PASID lazily only on mm exit. Track the
-+PASID's reference count in the following way:
-+
-+- Initialize the PASID's reference to 1 when the PASID is first allocated
-+  to the mm. The reference is held for the rest life time of the mm until
-+  it's dropped to 0 and the PASID is freed on mm exit.
-+
-+If a process does a close(2) of the device file descriptor and munmap(2)
-+of the device MMIO portal, then the driver will unbind the device. The
-+PASID is still marked VALID in the PASID_MSR for any threads in the
-+process that accessed the device. But this is harmless as without the
-+MMIO portal they cannot submit new work to the device.
- 
- Relationships
- =============
+> Cannot tolerate? Could you please provide a reason and not just a
+> statement?
+
+Absolutely.
+
+"struct page" is supposed to have a minimal size with a fixed layout.
+Embedding something inside such a structure can change the fixed layout
+in a way that it can just completely breaks any assumptions on location
+of values.
+
+Therefore, embedding a complex structure in it is usually avoided -- and
+if we have to (spin_lock), we work around sudden size increases.
+
+There are ways around it: allocate the lock and only store the pointer
+in the struct page. But that most certainly adds complexity, which is
+why I want to avoid it for now.
+
+
+I'll extend that answer and add it to the patch description.
+
+> 
+>> Provide raw_read_seqcount_retry(), to make it easy to match to
+>> raw_read_seqcount_begin() in the code.
+>>
+>> Let's add a short documentation as well.
+>>
+>> Note: There might be other possible users for raw_seqcount_t where the
+>>       lockdep part might be completely unused and just wastes memory --
+>>       essentially any users that only use the raw_ function variants.
+> 
+> Even when the reader side uses raw_seqcount_begin/retry() the writer
+> side still can use the non-raw variant which validates that the
+> associated lock is held on write.
+
+Yes, that's my understanding as well.
+
+> 
+> Aside of that your proposed extra raw sequence count needs extra care
+> vs. PREEMPT_RT and this want's to be very clearly documented. Why?
+> 
+> The lock association has two purposes:
+> 
+>     1) Lockdep coverage which unearthed bugs already
+
+Yes, that's a real shame to lose.
+
+> 
+>     2) PREEMPT_RT livelock prevention
+> 
+>        Assume the following:
+> 
+>        spin_lock(wrlock);
+>        write_seqcount_begin(seq);
+> 
+>        ---> preemption by a high priority reader
+> 
+>        seqcount_begin(seq); <-- live lock
+> 
+>        The RT substitution does:
+> 
+>        seqcount_begin(seq)
+>            cnt = READ_ONCE(seq->sequence);
+> 
+>            if (cnt & 1) {
+>            	lock(s->lock);
+>                 unlock(s->lock);
+>            }
+> 
+>        which prevents the deadlock because it makes the reader block on
+>        the associated lock, which allows the preempted writer to make
+>        progress.
+> 
+>        This applies to raw_seqcount_begin() as well.
+> 
+> I have no objections against the construct itself, but this has to be
+> properly documented vs. the restriction this imposes.
+
+Absolutely, any input is highly appreciated.
+
+But to mention it again: whatever you can do with raw_seqcount_t, you
+can do with seqcount_t, and there are already users relying completely
+on the raw_ function variants (see my other reply).
+
+So the documentation should most probably be extended to cover the raw_
+functions and seqcount_t in general.
+
+> 
+> As you can see above the writer side therefore has to ensure that it
+> cannot preempted on PREEMPT_RT, which limits the possibilities what you
+> can do inside a preemption (or interrupt) disabled section on RT enabled
+> kernels. See Documentation/locking/locktypes.rst for further information.
+
+It's going to be used for THP, which are currently incompatible with
+PREEMPT_RT (disabled in the Kconfig). But preemption is also disabled
+because we're using bit_spin_lock(), which does a bit_spin_lock().
+
+Certainly worth documenting!
+
+Thanks for your input!
+
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 

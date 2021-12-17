@@ -2,310 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560BA47979F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 00:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8364797A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 00:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbhLQXr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 18:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S231418AbhLQXrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 18:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhLQXr1 (ORCPT
+        with ESMTP id S229779AbhLQXrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 18:47:27 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60FEC061574;
-        Fri, 17 Dec 2021 15:47:26 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d38so7888286lfv.0;
-        Fri, 17 Dec 2021 15:47:26 -0800 (PST)
+        Fri, 17 Dec 2021 18:47:47 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEA8C061574;
+        Fri, 17 Dec 2021 15:47:47 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so4807411otl.3;
+        Fri, 17 Dec 2021 15:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QlFNM4FD2HgKx84+rRYvJilJof1j2UVdcH/nqDBWIEM=;
-        b=oh5bH4c4rjxf+HVJES4j+6EmqHScMRHf4bEF7TOOSUghm5QV6dCT4+Ovo1WLDx4y3J
-         W+BB0kYESaeq/lPyCYZX5DMu2p4wl7sUC0vRPNaF7pa/f4wh6szGct4phCWDxFZZ6m9x
-         gVcCd3x7NAcpZ4zhYizfo5OLqWkiSAZup4fstbsFmbLE8aQ+dRA7mGV8vbVs0CCElxHc
-         E6fBZGq8jMP/NjgSbdnTV/UyKlZKsCzHdtTQmGmNBZCZe/LfTLiZfPovDPnz8hHTIS1J
-         M+VM7bp32Oc/vY7hfhVUhlXRElwYGC7v6kh7tojW4awfVz8WrzXCnN2x3lEpOvsmtRMG
-         ZDtw==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0AFImQH1jxveNZAS/rrsUWhnMnHTnqUdIP1E4lcaoQ8=;
+        b=TKT0UJsRYaX08bpCDjrGexfZqywLftsF5LQUNCpB2NPAE3KLR2aOc9IZ/Y4mELz5O0
+         urIJsnuZErAwzKRTgvJ1hIiTcf4A41+mJAFlWvh+pVDqL7D23shCcNiiRlVlHi02nUr8
+         zRXggEFmu9mvljSHSE54o1dxmMevztqHbpMfn/OnfDPuPwY5aNFPOuT0CSkAHqAwjBl7
+         yM4B+CvwjdnMYbSsAVK0MYtuRTo6kECnt3dMT8bWjBRFuGlX4CBcabEYN/7zUlHy8SsN
+         FVi5PMbE6UnA7PsHsRW/NxS1o9JWqdmGnYI2swM9CWy6oLNcpqSjpekjNwnIwVMg1xXL
+         ruiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QlFNM4FD2HgKx84+rRYvJilJof1j2UVdcH/nqDBWIEM=;
-        b=Be0kqSV8hf9pfwJ+O3XycU0D9H7CViDfth1n4lIS4LxFoM7GF5NaKBtSdAArbrdseC
-         VqL6CINcMhvrNed6lMJ5gJ7oT5aqW8F/eSXHbfLedcmXQ+ANjxjyaly0qEQeIFnH6NRx
-         eHiIrdNAcdIvHjEEZkPBg7CaFzs3WX551A6rcdlW1zmqVYlHj/xFudmVXy8asfGTM8Mt
-         BlFzZ7zyEJAY7gCw1Y6rWa/r8Y3P5RMagfE3cTvdv9iqECjcKPFIQrT9BdruGfX6baGd
-         FPpg/yGFTDfRu2zlb4ehuD0t/edCgZHzRDoubqkUKPD9vIxhtYzikXtZ5EfWDxmulmyY
-         aHYw==
-X-Gm-Message-State: AOAM532VnKzJCRToq8T0wIppf1F6jTHuuarbsWzfmKyG72++o6v1oJdH
-        0lBsD1WhiMblPOoNzx21dwUJWuPxa0w=
-X-Google-Smtp-Source: ABdhPJwfJ5wxVQ9tSaeK9fONzc9Pgzsz0z8hEymbnVIirA+yF8TuSPEijNhKulo8kw3rtLQPfPXPLQ==
-X-Received: by 2002:ac2:4311:: with SMTP id l17mr4782770lfh.538.1639784845020;
-        Fri, 17 Dec 2021 15:47:25 -0800 (PST)
-Received: from localhost.localdomain (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.gmail.com with ESMTPSA id u25sm1547766lfc.72.2021.12.17.15.47.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 15:47:24 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v1] memory: tegra30-emc: Print additional memory info
-Date:   Sat, 18 Dec 2021 02:47:11 +0300
-Message-Id: <20211217234711.8353-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        bh=0AFImQH1jxveNZAS/rrsUWhnMnHTnqUdIP1E4lcaoQ8=;
+        b=J6IWlnrsvUvOvloqkaN5RWqY68WAac2OWmO1G3z5VvkUh/DPes5dKSx3Wts80FpAE+
+         Blf40+GGJBavpcCuD8K06OAJp2PhQVbc4JIDc+Rm6RKyxoZP6AGb89kLoxA7szWp/rFf
+         7dJIJYH6N24biBrS75rLTG7ABC8D8J8N8Tm60d8ZC3pocl1QCgM0QQXuYYjWWcDLT6At
+         BLvpMajazeAQZxhCI7Ee04XIQ/khh0DvQzFDRKBND5z/R/7agGTaYIh+SoYWHVUziLBm
+         z+G5cMyp3WnVXh+Xn3ptUA3mgTqAyiJ60vd+O7j6ziJcOPzjM7gM8vDgbVgtxUfld4dF
+         TOng==
+X-Gm-Message-State: AOAM533aRTq+NYIwx0YNMwYyI0ZLHad3VMzpSSFpLbnejJYwQIasMuBP
+        cPCC1eMoFFYxp3h7Ry9i8RPs/1D8oGE=
+X-Google-Smtp-Source: ABdhPJwYON1OMYK30Blayf0FfnEiyJV5zA7eFstXb4avRPMsYOtLZ3AOxbaWkQNxuUtLc+5wXKm7Ig==
+X-Received: by 2002:a9d:6a84:: with SMTP id l4mr3849608otq.216.1639784866230;
+        Fri, 17 Dec 2021 15:47:46 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q10sm1974364oiw.17.2021.12.17.15.47.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 15:47:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+References: <20211217164307.1514192-1-eugene.shalygin@gmail.com>
+ <20211217164307.1514192-2-eugene.shalygin@gmail.com>
+ <20211217215233.GA490048@roeck-us.net>
+ <CAB95QATUTvoopfCUez3exhStcGtPGacpyAYW-rswGnVSw-cmjw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+Message-ID: <caab79d7-6c48-5426-5d3a-dbbe88fd13f9@roeck-us.net>
+Date:   Fri, 17 Dec 2021 15:47:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <CAB95QATUTvoopfCUez3exhStcGtPGacpyAYW-rswGnVSw-cmjw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Print out memory type and LPDDR2 configuration on Tegra30, making it
-similar to the memory info printed by the Tegra20 memory driver. This
-info is useful for debugging purposes.
+On 12/17/21 2:33 PM, Eugene Shalygin wrote:
+> Günter,
+> 
+> On Fri, 17 Dec 2021 at 22:52, Guenter Roeck <linux@roeck-us.net> wrote:
+>> There is a lot of complexity around mutex_path in this driver, yet there is
+>> always exactly one entry for each board, and the name of the mutex is always
+>> the same for all boards. This doesn't make sense. Either the code is needed
+>> or it isn't. We don't usually add complex code like this into the kernel
+>> "just because it may be needed at some point in the future". Either give me
+>> a use case, or drop it all.
+> 
+> When we discussed this approach which utilises an ACPI mutex, Andy and
+> Denis were sceptical about its maintainability. One of the objections
+> was that the mutex name is internal to the DSDT code and can be
+> changed by ASUS. I know when older AM4 boards received BIOS updates
+> for Ryzen 5000, their BIOS changed completely and I overheard that the
+> DSDT code changed too. Unfortunately, I have no samples at hand. So I
+> went ahead and added version support. I can, of course, revert that
+> and apply it if somebody encounters such a BIOS update. To some extent
+> I wanted to demonstrate how overcoming the problem with possible
+> changes of the mutex path can look.
+> 
 
-Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # T30 ASUS TF201 LPDDR2
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/memory/tegra/Kconfig       |   1 +
- drivers/memory/tegra/tegra30-emc.c | 131 ++++++++++++++++++++++++++---
- 2 files changed, 122 insertions(+), 10 deletions(-)
+That is not how kernel development works. It does not make sense to
+introduce code that isn't used. The code is by its nature untested,
+and it is completely unknown if it is even going to work if it is ever
+needed. We simply can not predict how a future BIOS version / DSDT
+looks like.
 
-diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
-index 7951764b4efe..3fe83d7c2bf8 100644
---- a/drivers/memory/tegra/Kconfig
-+++ b/drivers/memory/tegra/Kconfig
-@@ -28,6 +28,7 @@ config TEGRA30_EMC
- 	default y
- 	depends on ARCH_TEGRA_3x_SOC || COMPILE_TEST
- 	select PM_OPP
-+	select DDR
- 	help
- 	  This driver is for the External Memory Controller (EMC) found on
- 	  Tegra30 chips. The EMC controls the external DRAM on the board.
-diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
-index 80f98d717e13..4c0432704f46 100644
---- a/drivers/memory/tegra/tegra30-emc.c
-+++ b/drivers/memory/tegra/tegra30-emc.c
-@@ -9,6 +9,7 @@
-  * Copyright (C) 2019 GRATE-DRIVER project
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk/tegra.h>
- #include <linux/debugfs.h>
-@@ -31,11 +32,15 @@
- #include <soc/tegra/common.h>
- #include <soc/tegra/fuse.h>
- 
-+#include "../jedec_ddr.h"
-+#include "../of_memory.h"
-+
- #include "mc.h"
- 
- #define EMC_INTSTATUS				0x000
- #define EMC_INTMASK				0x004
- #define EMC_DBG					0x008
-+#define EMC_ADR_CFG				0x010
- #define EMC_CFG					0x00c
- #define EMC_REFCTRL				0x020
- #define EMC_TIMING_CONTROL			0x028
-@@ -81,6 +86,7 @@
- #define EMC_EMRS				0x0d0
- #define EMC_SELF_REF				0x0e0
- #define EMC_MRW					0x0e8
-+#define EMC_MRR					0x0ec
- #define EMC_XM2DQSPADCTRL3			0x0f8
- #define EMC_FBIO_SPARE				0x100
- #define EMC_FBIO_CFG5				0x104
-@@ -208,6 +214,13 @@
- 
- #define EMC_REFRESH_OVERFLOW_INT		BIT(3)
- #define EMC_CLKCHANGE_COMPLETE_INT		BIT(4)
-+#define EMC_MRR_DIVLD_INT			BIT(5)
-+
-+#define EMC_MRR_DEV_SELECTN			GENMASK(31, 30)
-+#define EMC_MRR_MRR_MA				GENMASK(23, 16)
-+#define EMC_MRR_MRR_DATA			GENMASK(15, 0)
-+
-+#define EMC_ADR_CFG_EMEM_NUMDEV			BIT(0)
- 
- enum emc_dram_type {
- 	DRAM_TYPE_DDR3,
-@@ -378,6 +391,8 @@ struct tegra_emc {
- 
- 	/* protect shared rate-change code path */
- 	struct mutex rate_lock;
-+
-+	bool mrr_error;
- };
- 
- static int emc_seq_update_timing(struct tegra_emc *emc)
-@@ -1008,12 +1023,18 @@ static int emc_load_timings_from_dt(struct tegra_emc *emc,
- 	return 0;
- }
- 
--static struct device_node *emc_find_node_by_ram_code(struct device *dev)
-+static struct device_node *emc_find_node_by_ram_code(struct tegra_emc *emc)
- {
-+	struct device *dev = emc->dev;
- 	struct device_node *np;
- 	u32 value, ram_code;
- 	int err;
- 
-+	if (emc->mrr_error) {
-+		dev_warn(dev, "memory timings skipped due to MRR error\n");
-+		return NULL;
-+	}
-+
- 	if (of_get_child_count(dev->of_node) == 0) {
- 		dev_info_once(dev, "device-tree doesn't have memory timings\n");
- 		return NULL;
-@@ -1035,11 +1056,73 @@ static struct device_node *emc_find_node_by_ram_code(struct device *dev)
- 	return NULL;
- }
- 
-+static int emc_read_lpddr_mode_register(struct tegra_emc *emc,
-+					unsigned int emem_dev,
-+					unsigned int register_addr,
-+					unsigned int *register_data)
-+{
-+	u32 memory_dev = emem_dev + 1;
-+	u32 val, mr_mask = 0xff;
-+	int err;
-+
-+	/* clear data-valid interrupt status */
-+	writel_relaxed(EMC_MRR_DIVLD_INT, emc->regs + EMC_INTSTATUS);
-+
-+	/* issue mode register read request */
-+	val  = FIELD_PREP(EMC_MRR_DEV_SELECTN, memory_dev);
-+	val |= FIELD_PREP(EMC_MRR_MRR_MA, register_addr);
-+
-+	writel_relaxed(val, emc->regs + EMC_MRR);
-+
-+	/* wait for the LPDDR2 data-valid interrupt */
-+	err = readl_relaxed_poll_timeout_atomic(emc->regs + EMC_INTSTATUS, val,
-+						val & EMC_MRR_DIVLD_INT,
-+						1, 100);
-+	if (err) {
-+		dev_err(emc->dev, "mode register %u read failed: %d\n",
-+			register_addr, err);
-+		emc->mrr_error = true;
-+		return err;
-+	}
-+
-+	/* read out mode register data */
-+	val = readl_relaxed(emc->regs + EMC_MRR);
-+	*register_data = FIELD_GET(EMC_MRR_MRR_DATA, val) & mr_mask;
-+
-+	return 0;
-+}
-+
-+static void emc_read_lpddr_sdram_info(struct tegra_emc *emc,
-+				      unsigned int emem_dev)
-+{
-+	union lpddr2_basic_config4 basic_conf4;
-+	unsigned int manufacturer_id;
-+	unsigned int revision_id1;
-+	unsigned int revision_id2;
-+
-+	/* these registers are standard for all LPDDR JEDEC memory chips */
-+	emc_read_lpddr_mode_register(emc, emem_dev, 5, &manufacturer_id);
-+	emc_read_lpddr_mode_register(emc, emem_dev, 6, &revision_id1);
-+	emc_read_lpddr_mode_register(emc, emem_dev, 7, &revision_id2);
-+	emc_read_lpddr_mode_register(emc, emem_dev, 8, &basic_conf4.value);
-+
-+	dev_info(emc->dev, "SDRAM[dev%u]: manufacturer: 0x%x (%s) rev1: 0x%x rev2: 0x%x prefetch: S%u density: %uMbit iowidth: %ubit\n",
-+		 emem_dev, manufacturer_id,
-+		 lpddr2_jedec_manufacturer(manufacturer_id),
-+		 revision_id1, revision_id2,
-+		 4 >> basic_conf4.arch_type,
-+		 64 << basic_conf4.density,
-+		 32 >> basic_conf4.io_width);
-+}
-+
- static int emc_setup_hw(struct tegra_emc *emc)
- {
-+	u32 fbio_cfg5, emc_cfg, emc_dbg, emc_adr_cfg;
- 	u32 intmask = EMC_REFRESH_OVERFLOW_INT;
--	u32 fbio_cfg5, emc_cfg, emc_dbg;
-+	static bool print_sdram_info_once;
- 	enum emc_dram_type dram_type;
-+	const char *dram_type_str;
-+	unsigned int emem_numdev;
- 
- 	fbio_cfg5 = readl_relaxed(emc->regs + EMC_FBIO_CFG5);
- 	dram_type = fbio_cfg5 & EMC_FBIO_CFG5_DRAM_TYPE_MASK;
-@@ -1076,6 +1159,34 @@ static int emc_setup_hw(struct tegra_emc *emc)
- 	emc_dbg &= ~EMC_DBG_FORCE_UPDATE;
- 	writel_relaxed(emc_dbg, emc->regs + EMC_DBG);
- 
-+	switch (dram_type) {
-+	case DRAM_TYPE_DDR1:
-+		dram_type_str = "DDR1";
-+		break;
-+	case DRAM_TYPE_LPDDR2:
-+		dram_type_str = "LPDDR2";
-+		break;
-+	case DRAM_TYPE_DDR2:
-+		dram_type_str = "DDR2";
-+		break;
-+	case DRAM_TYPE_DDR3:
-+		dram_type_str = "DDR3";
-+		break;
-+	}
-+
-+	emc_adr_cfg = readl_relaxed(emc->regs + EMC_ADR_CFG);
-+	emem_numdev = FIELD_GET(EMC_ADR_CFG_EMEM_NUMDEV, emc_adr_cfg) + 1;
-+
-+	dev_info_once(emc->dev, "%u %s %s attached\n", emem_numdev,
-+		      dram_type_str, emem_numdev == 2 ? "devices" : "device");
-+
-+	if (dram_type == DRAM_TYPE_LPDDR2 && !print_sdram_info_once) {
-+		while (emem_numdev--)
-+			emc_read_lpddr_sdram_info(emc, emem_numdev);
-+
-+		print_sdram_info_once = true;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1538,14 +1649,6 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	emc->clk_nb.notifier_call = emc_clk_change_notify;
- 	emc->dev = &pdev->dev;
- 
--	np = emc_find_node_by_ram_code(&pdev->dev);
--	if (np) {
--		err = emc_load_timings_from_dt(emc, np);
--		of_node_put(np);
--		if (err)
--			return err;
--	}
--
- 	emc->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(emc->regs))
- 		return PTR_ERR(emc->regs);
-@@ -1554,6 +1657,14 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	np = emc_find_node_by_ram_code(emc);
-+	if (np) {
-+		err = emc_load_timings_from_dt(emc, np);
-+		of_node_put(np);
-+		if (err)
-+			return err;
-+	}
-+
- 	err = platform_get_irq(pdev, 0);
- 	if (err < 0)
- 		return err;
--- 
-2.33.1
+I don't have an answer for the maintainability problem, but introducing
+speculative code is most definitely not the answer.
 
+Guenter

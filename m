@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DE0478D8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182EB478D5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbhLQOVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:21:49 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:45599 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbhLQOVj (ORCPT
+        id S237087AbhLQOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:21:26 -0500
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:36681 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232073AbhLQOVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:21:39 -0500
-Received: by mail-oi1-f182.google.com with SMTP id 7so3761514oip.12;
-        Fri, 17 Dec 2021 06:21:38 -0800 (PST)
+        Fri, 17 Dec 2021 09:21:25 -0500
+Received: by mail-oo1-f49.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so755304oof.3;
+        Fri, 17 Dec 2021 06:21:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=9o4EOmq+ROwfzC6UvQVhsNjTkGdilWZSOYUxWW+IJhU=;
-        b=3tNzg+70gK8qkrpWuOlO5ML4uSGsja+bXzvvlSIFW4U/N164inoW/Gu8DgW69NHQY9
-         tpVFKsEvZDPD9uiLeSJ4f+GCWGF5wFg8Ikiaq8Ciu7VP+a0MaHbpLCvwFeOibw7Ah5JM
-         PFoJoawykdSh18ZGeuUBxDC1xs8/BV7J2983+cKS6XY8PzBJmdPOKUR5TPiLSySiY7hw
-         wyeTRxopzlKN141lRG5aVnErxxs5RFCw6Z0KD+D5WTy7hi39YrxCKih8cRkinDwtx/mM
-         hN4cSVTGPElGxkmKYUyC7jgj4EnqPzjTmbneeod8Wu6epp7jy0yNYaLTdvCtWfLY8x1i
-         kqEQ==
-X-Gm-Message-State: AOAM533X9LvSp6xf4BRIOmdGn8WLAdHQCtcmLhWDp4JQh8Ewa3Odpd1Z
-        lBdMIbT8PU0nJblIJTXQmA==
-X-Google-Smtp-Source: ABdhPJwd27y64wtW+mXglGkwTczy+y8F0FV0caGHNfX0/bkBe8x1ZLiaYabb22tee0bgLK+EssyWUw==
-X-Received: by 2002:aca:44c5:: with SMTP id r188mr8352516oia.177.1639750898331;
-        Fri, 17 Dec 2021 06:21:38 -0800 (PST)
+        bh=wkAFS0gqpntm7Rar5jEd8yMr1SM1y7rL2Y3F6yNnnb4=;
+        b=k935k5Anz7Xn7aGBCjSM8vAj+UCjUY0CB1Gf9zn5u6VQ9PaJQn9WQtcQlxNQUK7hW2
+         fxxsOVrxVUOBmbDJHOmIARH5GWfcoHlGsEqVfqzf01pSZq0dY1xJOsKMzaHgsHHt+lB1
+         r+ect8hQqRJBFy0sTQLl/Rzflv7WydU8xORiKpddH+UNHQT+jfrX+W1BxcFpjX9KXwL+
+         huSoY5WRkyGIAt02y4lpML51pZMgDX1zJGYZ9sLxlCD5mnXuUj/6bXFbrKBCavw0UFw1
+         sboXI7IpjV0zudEAVa/cZSBKR6O+G9f5j6BdYdoKKj+oUjzElSj99HwZSjpS8O//V2Y9
+         fcew==
+X-Gm-Message-State: AOAM531KQPIy7busCEZtXkHGho3c+L9zF4N7DUNQG/uEhjpYCO4EFDUJ
+        A+dI6z06UyLNUiIQSqjSkg==
+X-Google-Smtp-Source: ABdhPJwfsjVeZSJcEumwC7rI8OiKwXwCweJpgTsSim/Ubs2nJHyVI3S60NqCJLQl/ivrLxwO2ySB9A==
+X-Received: by 2002:a4a:cf12:: with SMTP id l18mr2047389oos.25.1639750884738;
+        Fri, 17 Dec 2021 06:21:24 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d6sm1597483otb.4.2021.12.17.06.21.36
+        by smtp.gmail.com with ESMTPSA id q2sm1672622otg.64.2021.12.17.06.21.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 06:21:37 -0800 (PST)
-Received: (nullmailer pid 2814885 invoked by uid 1000);
+        Fri, 17 Dec 2021 06:21:24 -0800 (PST)
+Received: (nullmailer pid 2814878 invoked by uid 1000);
         Fri, 17 Dec 2021 14:21:22 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     conor.dooley@microchip.com
-Cc:     jassisinghbrar@gmail.com, devicetree@vger.kernel.org,
-        bgolaszewski@baylibre.com, palmer@dabbelt.com,
-        linux-crypto@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-        linus.walleij@linaro.org, linux-rtc@vger.kernel.org,
-        lee.jones@linaro.org, bin.meng@windriver.com, robh+dt@kernel.org,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        paul.walmsley@sifive.com, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, linux-usb@vger.kernel.org,
+Cc:     jassisinghbrar@gmail.com, alexandre.belloni@bootlin.com,
+        atish.patra@wdc.com, linux-rtc@vger.kernel.org,
+        a.zummo@towertech.it, lee.jones@linaro.org,
+        linux-i2c@vger.kernel.org, ivan.griffin@microchip.com,
+        devicetree@vger.kernel.org, daire.mcnamara@microchip.com,
+        palmer@dabbelt.com, robh+dt@kernel.org, bgolaszewski@baylibre.com,
+        heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, thierry.reding@gmail.com,
+        linux-gpio@vger.kernel.org, broonie@kernel.org,
         linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        aou@eecs.berkeley.edu, heiko@sntech.de, ivan.griffin@microchip.com,
-        thierry.reding@gmail.com, linux-gpio@vger.kernel.org,
-        daire.mcnamara@microchip.com, atish.patra@wdc.com,
-        linux-i2c@vger.kernel.org, a.zummo@towertech.it,
-        linux-spi@vger.kernel.org, lewis.hanly@microchip.com,
-        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com
-In-Reply-To: <20211217093325.30612-10-conor.dooley@microchip.com>
-References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-10-conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 09/17] dt-bindings: gpio: add bindings for microchip mpfs gpio
+        linus.walleij@linaro.org, aou@eecs.berkeley.edu,
+        linux-usb@vger.kernel.org, bin.meng@windriver.com,
+        geert@linux-m68k.org, krzysztof.kozlowski@canonical.com,
+        lewis.hanly@microchip.com, paul.walmsley@sifive.com,
+        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        linux-riscv@lists.infradead.org
+In-Reply-To: <20211217093325.30612-3-conor.dooley@microchip.com>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-3-conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 02/17] dt-bindings: soc/microchip: update syscontroller compatibles
 Date:   Fri, 17 Dec 2021 08:21:22 -0600
-Message-Id: <1639750882.674842.2814884.nullmailer@robh.at.kernel.org>
+Message-Id: <1639750882.632899.2814877.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 09:33:17 +0000, conor.dooley@microchip.com wrote:
+On Fri, 17 Dec 2021 09:33:10 +0000, conor.dooley@microchip.com wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Add device tree bindings for the gpio controller on
-> the Microchip PolarFire SoC.
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree.
 > 
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../bindings/gpio/microchip,mpfs-gpio.yaml    | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+>  ...larfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} | 6 +++---
+>  ...s-controller.yaml => microchip,mpfs-sys-controller.yaml} | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+>  rename Documentation/devicetree/bindings/soc/microchip/{microchip,polarfire-soc-sys-controller.yaml => microchip,mpfs-sys-controller.yaml} (75%)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -81,17 +86,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
+Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.example.dt.yaml:0:0: /example-0/soc/mailbox@37020000: failed to match any schema with compatible: ['mpfs-mailbox']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1569834
+See https://patchwork.ozlabs.org/patch/1569804
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

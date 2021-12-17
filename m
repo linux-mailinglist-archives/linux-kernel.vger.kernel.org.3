@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F31478499
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B053747849E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbhLQFfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 00:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S233026AbhLQFms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 00:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbhLQFfC (ORCPT
+        with ESMTP id S230052AbhLQFmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 00:35:02 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B28C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:35:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id mj19so1229597pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:35:01 -0800 (PST)
+        Fri, 17 Dec 2021 00:42:47 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662BBC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:42:47 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id v138so3236233ybb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CTKXdWbXYFCcZS3TCZsbdeP+y1YkG9m0hcHXCbzMHfM=;
-        b=A4M9QeI+3ITdTU3nEB+emC4vcyx+RAPXNHc00k+QZaVfIv+tswGciZ0liMjWSBUY1e
-         DzU51tl6VIka910nqnfFhTtBy7NN35fgeTEE4y5KpuRqf3O9EneSu9iI6iv3pGqeYbnd
-         OftXqjemeUxNgZlZKVGNivuRcYejGt1AfV76STSMgZQ96wBeXb8Ee2HIYjbzyfRI6R4X
-         cEtN7hKnS9omG+gm+dWusTvfCsirNk1GtOg7wYiqXixd4c69Eu4FSjYkTYn/4n+fRpIv
-         0CjVJ6ZCcf/j39XFI/l+wiVbKsK/0xx81J3peOGp6cK9O8sOkrIyFQZawH0J03RFvRwU
-         xfDQ==
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NSzRgyKxQMByJDnhlFllsd6YBcOS/JIx8Ap+A3lLZVg=;
+        b=IRPPeiVShrf2EHVF/zr+4wNVsvaB3yZ09DlCKxTDHT/IYnuRNWSJspvOYQqf6SQW32
+         TergXgX2aWeH6nRMclgctg1HXcpL4ABn2DGUFSWbhgYU3MPCf13INK4Q9x9DYFFf+H4S
+         pYuqEWXwrJ4PkMuareW6NigdpZhNmcTCB9e0w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=CTKXdWbXYFCcZS3TCZsbdeP+y1YkG9m0hcHXCbzMHfM=;
-        b=JolGUV9YiYDOEUiqW8gppH0upCChTrW8nHNRGD4IvcuDGx4XnT3lgCMBeiCBTbzdzn
-         GhT4RbfN8p/EQ8NOMjU8PXfP6I6+z3WEUMq5lvkXbGKcTMGI8xZNfs5QQBCfWbRpUuoL
-         ByKoXXk/aroLzCMl/c53ZvmlgSjMpLPbziSC3m0bBsAMXy3Vat7lHqpmjbgjLJJIMs6t
-         SKI1UgTAi6FXjCit2YKCHK/tEwqiRvhByB5r6a6XmD8Y8unecnqt8bOVwNyWkWDtlwNo
-         CBhuMn8Wc7dC0vL9j67ylJPzf4cqwIn2W82cNL3xb2IFAqsnDS+IHN6EVQihZFgdSa9o
-         Bx0g==
-X-Gm-Message-State: AOAM532cLNpzoba9Rk60+ugAL8gfwumBCj1k2AoSpRLgylo1og2qOv/C
-        EcfhLwa8DUz4g3LmFJAYDJ6wcQ==
-X-Google-Smtp-Source: ABdhPJw5nyrUeaDehYt+dPK8PDeUMkeASbVvAJf4VuOnAdah2SxYnJZ8OzLk5tw2P3bphJ0UMxxIgA==
-X-Received: by 2002:a17:90a:909:: with SMTP id n9mr1943440pjn.1.1639719301358;
-        Thu, 16 Dec 2021 21:35:01 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id m67sm687523pfb.36.2021.12.16.21.35.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 21:35:00 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:35:00 -0800 (PST)
-X-Google-Original-Date: Thu, 16 Dec 2021 21:30:12 PST (-0800)
-Subject:     Re: [PATCH v3 4/6] riscv: dts: sifive unmatched: Expose the FU740 core supply regulator
-In-Reply-To: <5ab111e71e88d545d7f03233f10b6d84ef3d6c21.1637362542.git.plr.vincent@gmail.com>
-CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        qiuwenbo@kylinos.com.cn, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        david.abdurachmanov@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     plr.vincent@gmail.com
-Message-ID: <mhng-854afd5f-800b-4b58-af68-cdc6afdc0a4a@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NSzRgyKxQMByJDnhlFllsd6YBcOS/JIx8Ap+A3lLZVg=;
+        b=H37q1vzM0O5h2UBStYOMA4E4il+5tdM5+n6akKhqkxsmx8HIJbO3aJufs2yRquwY64
+         GFmpQWbFsyksSJJ9eMlcI53wWNrXGhPQKQ+vbgnPTc5zs+sRZVlOvudPBzRPMGY2+OaF
+         WeTcqllWTwrFzLphdhVTDEFxygMyIB4jS2Hmju3UUavShxHaQskhpgcvw15PyLOS/qF0
+         r5dVtnbTWieT0aCVUMOP75xA4MkmsxJrWrv/1bKbWTAD7j14Ggn5KEfnug5XOPNxLxkX
+         VmiJARF7uIaTb5KcqnIPOj7U6jzAOV5yLqVviyWKGlTHmP02ygtFVxu1OuaIWqBjtA4p
+         9ehQ==
+X-Gm-Message-State: AOAM531lDYKeliXEpMu6tGF/PnZmVBj/sy5UE1oBpVszvLI1oQBXNFeJ
+        aMC8JoHZEbfb6jun5Z0j8hZo4v5NaVy8GRDy8EyK
+X-Google-Smtp-Source: ABdhPJzmQEGSsZWBthsTvOSELeG8VS6EgUDmAeiuIV8vOPQMT9GShkXgjRb8/dyL69PldIEwTWjMSAxbclT2NqOHX4w=
+X-Received: by 2002:a05:6902:568:: with SMTP id a8mr2394655ybt.472.1639719766471;
+ Thu, 16 Dec 2021 21:42:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20211129075451.418122-1-anup.patel@wdc.com> <20211129075451.418122-2-anup.patel@wdc.com>
+In-Reply-To: <20211129075451.418122-2-anup.patel@wdc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 16 Dec 2021 21:42:35 -0800
+Message-ID: <CAOnJCU+=SfN0e-prQsrR8BHfcs7hP9Ab61cnD-yOEZZQ2Gh9cA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] RISC-V: KVM: Forward SBI experimental and vendor extensions
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Nov 2021 14:55:40 PST (-0800), plr.vincent@gmail.com wrote:
-> Provides monitoring of core voltage and current:
-> tps544b20-i2c-0-1e
-> Adapter: i2c-ocores
-> vout1:       906.00 mV
-> temp1:        -40.0°C  (high = +125.0°C, crit = +150.0°C)
-> iout1:         5.06 A  (max = +20.00 A, crit max = +26.00 A)
+On Mon, Nov 29, 2021 at 12:10 AM Anup Patel <anup.patel@wdc.com> wrote:
 >
-> Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+> The SBI experimental extension space is for temporary (or experimental)
+> stuff whereas SBI vendor extension space is for hardware vendor specific
+> stuff. Both these SBI extension spaces won't be standardized by the SBI
+> specification so let's blindly forward such SBI calls to the userspace.
 >
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
 > ---
-> Note: checkpatch.pl complains about undocumented devicetree binding,
-> which is fixed by:
->   https://lore.kernel.org/linux-devicetree/20211116110207.68494-1-krzysztof.kozlowski@canonical.com/T/#u
+>  arch/riscv/kvm/vcpu_sbi.c      |  4 ++++
+>  arch/riscv/kvm/vcpu_sbi_base.c | 27 +++++++++++++++++++++++++++
+>  2 files changed, 31 insertions(+)
 >
-> Changes since v2:
-> - Fix end-of-commit-message separator so change lists do not end up in them.
-> Changes since v1:
-> - Added missing "ti," prefix in compatible string.
-> - Remove trailing "." on subject line.
-> - Rename tree node.
-
-I see this in Rob's for-next as 761de79adc2c ("dt-bindings: hwmon: add
-TI DC-DC converters"), so I'm going to hold off on this one until the
-bindings land.
-
-I've put the others on fixes.
-
-Thanks!
-
-> ---
->  arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 5 +++++
->  1 file changed, 5 insertions(+)
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index f62d25bc9733..78aa3db76225 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -46,6 +46,8 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
 >
-> diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> index 270360b258b7..6e7775fdae32 100644
-> --- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> +++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> @@ -51,6 +51,11 @@ &uart1 {
->  &i2c0 {
->  	status = "okay";
+>  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>         &vcpu_sbi_ext_v01,
+> @@ -54,6 +56,8 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>         &vcpu_sbi_ext_ipi,
+>         &vcpu_sbi_ext_rfence,
+>         &vcpu_sbi_ext_hsm,
+> +       &vcpu_sbi_ext_experimental,
+> +       &vcpu_sbi_ext_vendor,
+>  };
 >
-> +	regulator@1e {
-> +		compatible = "ti,tps544b20";
-> +		reg = <0x1e>;
-> +	};
+>  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 641015549d12..ac0537d479d8 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -68,3 +68,30 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+>         .extid_end = SBI_EXT_BASE,
+>         .handler = kvm_sbi_ext_base_handler,
+>  };
 > +
->  	temperature-sensor@4c {
->  		compatible = "ti,tmp451";
->  		reg = <0x4c>;
+> +static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
+> +                                       struct kvm_run *run,
+> +                                       unsigned long *out_val,
+> +                                       struct kvm_cpu_trap *utrap,
+> +                                       bool *exit)
+> +{
+> +       /*
+> +        * Both SBI experimental and vendor extensions are
+> +        * unconditionally forwarded to userspace.
+> +        */
+> +       kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> +       *exit = true;
+> +       return 0;
+> +}
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
+> +       .extid_start = SBI_EXT_EXPERIMENTAL_START,
+> +       .extid_end = SBI_EXT_EXPERIMENTAL_END,
+> +       .handler = kvm_sbi_ext_forward_handler,
+> +};
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
+> +       .extid_start = SBI_EXT_VENDOR_START,
+> +       .extid_end = SBI_EXT_VENDOR_END,
+> +       .handler = kvm_sbi_ext_forward_handler,
+> +};
+> --
+> 2.25.1
+>
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+
+--
+Regards,
+Atish
+
+-- 
+Regards,
+Atish

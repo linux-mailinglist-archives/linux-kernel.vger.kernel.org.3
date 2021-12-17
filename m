@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B2747960E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB63947960B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbhLQVOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:14:38 -0500
-Received: from mga12.intel.com ([192.55.52.136]:11171 "EHLO mga12.intel.com"
+        id S239157AbhLQVN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:13:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:34790 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236219AbhLQVOh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:14:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639775677; x=1671311677;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PKD8agw6OrHky9JhV5gyaeJZna8zqKMQWp+esUG9fLg=;
-  b=ZcwQbWYTTLqm484SFVq1Z8fBuGLfhKeujns+zXyttujpJFnaQ6+FQukY
-   rzTNwDAipKwTxAS+krgr1esAegrWu0fZcHEOe65VRsHL0vKr/lPZ7r7mq
-   WyI0gTX9NmmeaJGgs0ACJqQH2529pPfULRvA6nW1lgyuTTnImO/8OscCg
-   VwmRyNCbx1XXeo4xWTAgVB4gHEqSNvvgXTCCsKOImGojqm8TOONZzDeFh
-   kJ0MM2mCKXicuzHqQn8pbeWlWffcZ/I2oA25AAwg+3NAjT9INCGhENfZ4
-   Br/9DrIwk1lf1XhuebsOJuVR01FilkTaUg8hEWzhybXiOnfPIs6L0Dqby
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="219849002"
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="219849002"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 13:14:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="569138237"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Dec 2021 13:14:34 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myKYj-0005DT-UD; Fri, 17 Dec 2021 21:14:33 +0000
-Date:   Sat, 18 Dec 2021 05:13:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sumit Gupta <sumitg@nvidia.com>, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org
-Cc:     kbuild-all@lists.01.org, sumitg@nvidia.com, bbasu@nvidia.com,
-        vsethi@nvidia.com, jsequeira@nvidia.com
-Subject: Re: [Patch v2 5/9] soc: tegra: cbb: Add CBB1.0 driver for Tegra194
-Message-ID: <202112180528.6oINgaDF-lkp@intel.com>
-References: <20211217120656.16480-6-sumitg@nvidia.com>
+        id S236219AbhLQVN5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 16:13:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC88511FB;
+        Fri, 17 Dec 2021 13:13:56 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63DA93F73B;
+        Fri, 17 Dec 2021 13:13:54 -0800 (PST)
+Message-ID: <d23b1c54-4047-79b3-d283-b584b6dd1e1c@arm.com>
+Date:   Fri, 17 Dec 2021 21:13:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217120656.16480-6-sumitg@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morse <james.morse@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
+References: <20211216233125.1130793-1-robh@kernel.org>
+ <20211216233125.1130793-3-robh@kernel.org>
+ <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
+ <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+ <836fd983-463c-040d-beb3-fee3faf215d6@arm.com>
+ <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sumit,
+On 2021-12-17 19:35, Rob Herring wrote:
+> On Fri, Dec 17, 2021 at 1:08 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>>
+>> On 2021-12-17 18:14, Rob Herring wrote:
+>>> On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>>
+>>>> Hi Rob,
+>>>>
+>>>> On 2021-12-16 23:31, Rob Herring wrote:
+>>>>> Use the minimum CPU h/w id of the CPUs associated with the cache for the
+>>>>> cache 'id'. This will provide a stable id value for a given system. As
+>>>>> we need to check all possible CPUs, we can't use the shared_cpu_map
+>>>>> which is just online CPUs. There's not a cache to CPUs mapping in DT, so
+>>>>> we have to walk all CPU nodes and then walk cache levels.
+>>>>
+>>>> I believe another expected use of the cache ID exposed in sysfs is to
+>>>> program steering tags for cache stashing (typically in VFIO-based
+>>>> userspace drivers like DPDK so we can't realistically mediate it any
+>>>> other way). There were plans afoot last year to ensure that ACPI PPTT
+>>>> could provide the necessary ID values for arm64 systems which will
+>>>> typically be fairly arbitrary (but unique) due to reflecting underlying
+>>>> interconnect routing IDs. Assuming that there will eventually be some
+>>>> interest in cache stashing on DT-based systems too, we probably want to
+>>>> allow for an explicit ID property on DT cache nodes in a similar manner.
+>>>
+>>> If you have a suggestion for ID values that correspond to the h/w,
+>>> then we can add them. I'd like a bit more than just trusting that ID
+>>> is something real.
+>>>
+>>> While the ACPI folks may be willing to take an arbitrary index, it's
+>>> something we (mostly) avoid for DT.
+>>
+>> Not really. On the CHI side there are two fields - StashNID, which could
+>> be any node ID value depending on the interconnect layout, plus
+>> (optionally) StashLPID to address a specific cache within that node if
+>> it's something like a CPU cluster. However, how a PCIe TLP steering tag
+>> translates to those fields in the resulting CHI flit is largely up to
+>> the root complex.
+> 
+> Knowing next to nothing about CHI, this means pretty much nothing to me. :(
+> 
+> I would guess there is a bit more to supporting CHI in DT systems than
+> just a cache ID.
 
-Thank you for the patch! Perhaps something to improve:
+I use CHI as an example because it's what I'm familiar with, and my 
+involvement in cache stashing discussions has been in the context of Arm 
+CMN interconnects which are CHI-based. Other folks who build their own 
+interconnects may have different details of how exactly they support 
+cache stashing, but the overall point is that the required IDs are 
+typically going to boil down to some amount (likely around 8-16 bits or 
+so) of address-like information in a system-specific format which can't 
+be reasoned about beyond that.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on tegra-drm/drm/tegra/for-next v5.16-rc5 next-20211217]
-[cannot apply to tegra/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>> I think it's going to be more like a "reg" property than a nice
+>> validatable index.
+>>
+>>>> That said, I think it does make sense to have some kind of
+>>>> auto-generated fallback scheme *as well*, since I'm sure there will be
+>>>> plenty systems which care about MPAM but don't support stashing, and
+>>>> therefore wouldn't have a meaningful set of IDs to populate their DT
+>>>> with. Conversely I think that might also matter for ACPI too - one point
+>>>> I remember from previous discussions is that PPTT may use a compact
+>>>> representation where a single entry represents all equivalent caches at
+>>>> that level, so I'm not sure we can necessarily rely on IDs out of that
+>>>> path being unique either.
+>>>
+>>> AIUI, cache ids break the compact representation.
+>>
+>> Right, firmware authors can't use it if they do want to specify IDs, but
+>> that also means that if we find we *are* consuming a compact PPTT, then
+>> chances are we're not getting meaningful IDs out of it for MPAM to rely on.
+> 
+> Sounds like broken firmware is in our future. ;) Or ACPI can default
+> to the same id scheme.
 
-url:    https://github.com/0day-ci/linux/commits/Sumit-Gupta/CBB-driver-for-Tegra194-Tegra234-Tegra-Grace/20211217-200840
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20211218/202112180528.6oINgaDF-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4289c950622627160bdc937ad22a311db38f4ca8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sumit-Gupta/CBB-driver-for-Tegra194-Tegra234-Tegra-Grace/20211217-200840
-        git checkout 4289c950622627160bdc937ad22a311db38f4ca8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/tegra/cbb/
+I don't really see this being an opportunity for firmware to be any more 
+broken than usual. Systems that support cache stashing will need to 
+provide the correct hardware IDs for targetable caches via their 
+firmware tables, which it seems that MPAM's notion of cache IDs will 
+have to coexist with. Systems that do not support cache stashing may not 
+even have a meaningful notion of hardware IDs for caches, and thus 
+cannot be expected to provide any in firmware. Linux will need to cope 
+with both situations.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/soc/tegra/cbb/tegra-cbb.c: In function 'print_cbb_err':
->> drivers/soc/tegra/cbb/tegra-cbb.c:31:17: warning: function 'print_cbb_err' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      31 |                 seq_vprintf(file, fmt, args);
-         |                 ^~~~~~~~~~~
-
-
-vim +31 drivers/soc/tegra/cbb/tegra-cbb.c
-
-    22	
-    23	void print_cbb_err(struct seq_file *file, const char *fmt, ...)
-    24	{
-    25		va_list args;
-    26		struct va_format vaf;
-    27	
-    28		va_start(args, fmt);
-    29	
-    30		if (file) {
-  > 31			seq_vprintf(file, fmt, args);
-    32		} else {
-    33			vaf.fmt = fmt;
-    34			vaf.va = &args;
-    35			pr_crit("%pV", &vaf);
-    36		}
-    37	
-    38		va_end(args);
-    39	}
-    40	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Robin.

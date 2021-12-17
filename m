@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCC147975F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DCD479761
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbhLQW5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:57:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60942 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229741AbhLQW5M (ORCPT
+        id S229914AbhLQW7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229569AbhLQW7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:57:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639781832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+KxH5v9Eb3o+QR18pfErKc1z+d/J0pC61Cr5tDyvWcc=;
-        b=b1HnszjaX33gofi4ATvSJONR6lDXP1Fnmzed0ivcD+wuv3nPB7vsq8/wkJQtQqApJ2IpvF
-        9uBuFTLfqDXfu/rNnt0LZuhlxfY1RKx2iA0iLs0aCau+AIS6dsPRsIjuAq6Q9ncjP0wFfM
-        ATDjNQJTLTNF0D3c6eCXbMYnLfKRIGc=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-wkZl_EUeNV2pe-mC7of01A-1; Fri, 17 Dec 2021 17:57:11 -0500
-X-MC-Unique: wkZl_EUeNV2pe-mC7of01A-1
-Received: by mail-qv1-f71.google.com with SMTP id kl17-20020a056214519100b003ba5b03606fso4079916qvb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:57:11 -0800 (PST)
+        Fri, 17 Dec 2021 17:59:17 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3400C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:16 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z7so13303400edc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
+        b=WSqIxUtqn5jcmA6NC9BVpsfsO/6YYpI4P+quaDiBpik06F329fj372+mpAs6nkU6hi
+         UgKtVq/JNx9O5+tUI1FaDEc9lAWL66/z1RpLwMtAJZ086ni6cHm+R02sIgHA08fo/qlY
+         ertG4Ei0o7WJ3lUoVgGOz1iW744OYt4w3zD7E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+KxH5v9Eb3o+QR18pfErKc1z+d/J0pC61Cr5tDyvWcc=;
-        b=TwVmR7WlD8/B7yaURPkTcYRn2dRjX4eRfuZ+bBAletsatYRyZdS8EKUl+hLCifSahI
-         CSTOqW+PHXvQgxVcFotG2FIW0Kl5Qww0ql6+1aRPBU6NnUfaFhd1Ui+9qrRRyYLmrLh8
-         nzeusyvXHmeg+DtqaBhEH8p9pOwXRWUCXLfbZjh5h25GRCfZqZ8CiMhifIChkgpFDm8V
-         +Os/qMHb9TyeF2i5Rz0Jb/mKyhArDwzkk1bRTF9B+A4UNrWctRKS7cCy0sW7QPF3Tl/t
-         3OkWS7r6X7lcKaYIltD2tqaqOnmmzXn4OLet2aZfDLLby7bikQfFxFEeSVVX3bmsUDBY
-         0F8Q==
-X-Gm-Message-State: AOAM533MOn4eZCk6hY/I+kmNx3srsiWpfKyAHTnbq0hFFNKrxDGPsn8I
-        M37GDpQDj4vXBlySWrc8be/rfofr0pOUKDMnvhpn4weZjGKNeQYDDYpDwUtAn3P27ffCI//x4qR
-        t2o8adoLeB1SmD+ckiZSGAyqN
-X-Received: by 2002:a05:620a:c4f:: with SMTP id u15mr3355595qki.565.1639781830646;
-        Fri, 17 Dec 2021 14:57:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyXTuyfhYWKF4pQk89sjuYVjRKVvS7QNC4FUSVmFAhRcqT4DCDcP4pbJoonGDrl/wkVMlwLfw==
-X-Received: by 2002:a05:620a:c4f:: with SMTP id u15mr3355589qki.565.1639781830438;
-        Fri, 17 Dec 2021 14:57:10 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id g12sm8095977qtk.69.2021.12.17.14.57.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 14:57:10 -0800 (PST)
-Date:   Fri, 17 Dec 2021 14:57:06 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 10/11] tools/objtool: Check for use of the ENQCMD
- instruction in the kernel
-Message-ID: <20211217225706.32ahbyf5yeuzrhre@treble>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-11-fenghua.yu@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
+        b=X/LwqGhdVkCHrekthijCnB31nijQ/mwaWWYdEV6DVH4tWdUGj5woDi38oHv6spZqqx
+         2oEYsLpz5gJx54iW9U0852NgdRy4CP8ntY8OIEio47tCmcf+WB1R8am2vxLYiJt/BUmZ
+         XNwIGVw0DeQYLo/sfuqaMe031MMj6F2EZq3ivM6dEIlKfqDez5DHArjevlCy2O26icmw
+         dCXWe4PzeslxBgdTBBPU1+KBYMqbVb/wMiNbCD9i+yHHbsVLH9CljRiaTaN27NGkZZKP
+         1leIQ9pcxWS1IO0UdI4Oaj+q80mu5PYzcGzCjhSglV0gSoXygoNs0Y2c2nMLO3yI4UAa
+         IokA==
+X-Gm-Message-State: AOAM530oWJMLmRiBXDV1bTiAqZabYGz2ydkPkoRzZVH7p5HmD9VVkNPZ
+        AmLR/nG0M49zZIzbB/GcCjfrG+t+Bnv79Bq6Tk0=
+X-Google-Smtp-Source: ABdhPJyF5JPJskv4DAKcUQGOFhVddwY0rl+EJjRz6gGqbhRi8vVuNL11J6wfri+lp0zlH9cJkVH1eg==
+X-Received: by 2002:a17:907:2da1:: with SMTP id gt33mr4303290ejc.378.1639781954759;
+        Fri, 17 Dec 2021 14:59:14 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id y17sm4285928edd.31.2021.12.17.14.59.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 14:59:13 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id i22so6662495wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:13 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr4140437wrp.442.1639781952748;
+ Fri, 17 Dec 2021 14:59:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211217220136.2762116-11-fenghua.yu@intel.com>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
+ <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
+In-Reply-To: <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 14:58:56 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
+Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:01:35PM +0000, Fenghua Yu wrote:
-> The ENQCMD implicitly accesses the PASID_MSR to fill in the pasid field
-> of the descriptor being submitted to an accelerator. But there is no
-> precise (and stable across kernel changes) point at which the PASID_MSR
-> is updated from the value for one task to the next.
-> 
-> Kernel code that uses accelerators must always use the ENQCMDS instruction
-> which does not access the PASID_MSR.
-> 
-> Check for use of the ENQCMD instruction in the kernel and warn on its
-> usage.
-> 
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> ---
-> v2:
-> - Simplify handling ENQCMD (PeterZ and Josh)
+On Fri, Dec 17, 2021 at 2:29 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> While I do care about future use cases, I cannot possibly see fork() not
+> requiring the mmap_lock in the foreseeable future. Just so much depends
+> on it as of now.
 
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+It's not that *fork()* depends on it.
 
--- 
-Josh
+Of course fork() takes the mmap_sem.
 
+It's that fast-gup really really doesn't want it, and can't take it.
+
+So any fast-gup user fundamentally cannot look at mapcount(), because
+that would be fundamentally wrong and racy, and could race with fork.
+
+And yet, as far as I can tell, that's *exactly* what your gup patches
+do, with gup_pte_range() adding
+
++               if (!pte_write(pte) && gup_must_unshare(flags, page, false)) {
++                       put_compound_head(head, 1, flags);
++                       goto pte_unmap;
++               }
+
+which looks at the page mapcount without holding the mmap sem at all.
+
+And see my other email - I think there are other examples of your
+patches looking at data that isn't stable because you don't hold the
+right locks.
+
+And you can't even do the optimistic case without taking the lock,
+because in your world, a COW that optimistically copies in the case of
+a race condition is fundamentally *wrong* and buggy. Because in your
+world-view, GUP and COW are very different and have different rules,
+but you need things to be *exact*, and they aren't.
+
+And none of this is anything at least I can think about, because I
+don't see what the "design" is.
+
+I really have a hard time following what the rules actually are. You
+seem to think that "page_mapcount()" is a really simple rule, and I
+fundamentally disagree. It's a _very_ complicated thing indeed, with
+locking issues, AND YOU ACTIVELY VIOLATE THE LOCKING RULES!
+
+See why I'm so unhappy?
+
+We *did* do the page_mapcount() thing. It was bad. It forced COW to
+always take the page lock. There's a very real reason why I'm pushing
+my "let's have a _design_ here", instead of your "let's look at
+page_mapcount without even doing the locking".
+
+And yes, I *know* that fork() takes the mmap_sem, and likely always
+will. That really isn't the problem here. The problem is that your
+page_mapcount() paths DO NOT take that lock.
+
+Btw, maybe I'm misreading things. I looked at the individual patches,
+I didn't apply them, maybe I missed something. But I don't think I am.
+
+             Linus

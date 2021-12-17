@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11912478432
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51214478436
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbhLQEph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 23:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S232852AbhLQEtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 23:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbhLQEpg (ORCPT
+        with ESMTP id S231966AbhLQEtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:45:36 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2469EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:45:36 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id p2so2082005uad.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:45:36 -0800 (PST)
+        Thu, 16 Dec 2021 23:49:06 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B9C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:49:05 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o20so3152109eds.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 20:49:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bowteYFUSb68Kk+FpHsWHap6R+P/0DEq2g+PO5y0/q0=;
-        b=jSGXJygNb1E1nAR6rmGlUVenCpyjwwAAFaQhJcsGVhEm4Fd9yN62dfzM7X/a/IU+Vb
-         cKFXAvT4MJzhKVGE6SFjqlNuxXJOJRtwmzW28Al05snTpNKuHf1nhk2Fa9CAwlgoFZkJ
-         /hBTWaXSKEBXHLwnNQ6qBVIZgHOkEqmv0q2CKy+KvXOdyN7GTgjF+XwkKOirv5oSfIBY
-         +9y3gheMuiqO1+My6StdOsq1kYtiLOQeiaq8Ox5YiVWC8wq8JV0q0mOE7ILQ6EGqZ4NM
-         zw1JG3ZCB33RXJgfsykIYaHFbQIjJ5rJ0wmUGwJ0Y1u4kyNsWUCHMAk3d+yoqttBTCMk
-         21ig==
+        bh=6GJxpDiLpbpPINaOcBipsmIBKGtNQ+pTxcsj8dWvqKk=;
+        b=XYX28P5JN9Qi9AqY6RdU8NHuKgyb2ni3yWGjFXejI92Mjdz2ktEGfEELSSPmDUvvYi
+         VwQtocGg4rHGd9xMk3Bi7dczQ0gTHV5gGIrlx7knTiCdNgY+HQZBz3LLpZ4Hmn7qVHes
+         b6+7t6q1ga50czfzqpOCqajlT9bPCwJePv67e86JcPtB3x8/o2wmaOaJh+aSsocy2jIW
+         uiJmVzeCGY4indD/+XgNQjohvs6YD7OA6wjDxp4Lislknx/3m2e9qrNEXEnMidcoVu6P
+         3mA3ziprDkCer2OKiwRwYJdJ6zmntOfz6XUSs3BPscVTzwRuSZ3YtGD/NsqR1YnuqO3r
+         v4bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bowteYFUSb68Kk+FpHsWHap6R+P/0DEq2g+PO5y0/q0=;
-        b=QyD0m2G/RfdG72F+PYcfe7LPqVs183pPsmF3CxyuJu53R59ZYT+lJ9GM7zTPGZqofX
-         TexibJcGo4i9ZZaJI2GE5ni8W0MZvuXMemYl65PZfcM5rID78Y5K8KXxh/L9zb3OJzGO
-         EQzQghCi7Dpyo8XHXbYX106gQdZEa442YA7Hoxq4rBkkopk8HI3+QBXcX8/Q/3qmVv8j
-         yq04mBmm1Jvrzw1SF65tIX8YRsEX7ZqAPmvX0sMALlEKagmXH6lu4jQRrSgWGtYiQgRR
-         2ZDhXVAVhN8RLPHkARZiYCuh83vKUe1MNEJVDZrDHUNon32wqiFwqiTwiQKRnwvLJLnb
-         jQ3w==
-X-Gm-Message-State: AOAM531PRqoOtXTAVw16uIjFtifxpcKFR57juYP1Pkr0deeuC6RX5fIb
-        xx85XLbMBLRgcZJ3opXKhnTOz3RbinbnyjFY3eQ=
-X-Google-Smtp-Source: ABdhPJwqkSCZfBjG15LUJnU8YhuTZ86T+fZvgz4qN0xNwe9C9ep6lWgdhhzcGiURSfTOogQ9rEQSsKsKGZvDHlkI6G4=
-X-Received: by 2002:a05:6102:c46:: with SMTP id y6mr399610vss.53.1639716335162;
- Thu, 16 Dec 2021 20:45:35 -0800 (PST)
+        bh=6GJxpDiLpbpPINaOcBipsmIBKGtNQ+pTxcsj8dWvqKk=;
+        b=bom5nmANqPjBHARIP7sGa9esgH8FAvSzFY03KYyLjUrUHIYqpd1yeiDjF1WG6Sd6A/
+         fYZNzWbVbHt/jB/ulSOcAJNz6y464nsPvWnPP7Hgud2C3MPBFbyC9w8KqBWvBYRb/lQw
+         6/b3f/jrHKrVqC9Rf1Q7YUkEjk8/RSrn5qc5exU77zKdu1d3k4l71mmHSIHRfrPYhw+L
+         RLg/uxWro2l+6mOJ2eQ4LTdK2XWhNdBONIAUEy+QpXJd1ISjtNis2Abj79EgFeyMhrN/
+         NqQV32/BBWIWJQzbdhszZaLYEMHfhoBshpF4XIQ9JC6YpQ3Pue91tuskjUYoM3FT8CeK
+         W7cw==
+X-Gm-Message-State: AOAM532mDtVAu06M5Q1uDnwwJYssKS54WIZmy0U9mDJVwzcbKqGabTd3
+        GF+Aq5qbKqq7x4dr4jyusiHkX9MNzUPoUMNH/o4yIA==
+X-Google-Smtp-Source: ABdhPJzaIuToc0djVyjp+VsjCbme0PeMuRClgq6NqRenM+df1YY9uQXZCbxUdpPkTSZu7ypDqPFBB+GLvvmn9r8MBmg=
+X-Received: by 2002:a17:907:16ac:: with SMTP id hc44mr1138627ejc.363.1639716544065;
+ Thu, 16 Dec 2021 20:49:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216125157.631992-1-chenhuacai@loongson.cn>
- <20211216125356.632067-1-chenhuacai@loongson.cn> <20211216125356.632067-2-chenhuacai@loongson.cn>
- <87pmpwwpw5.wl-maz@kernel.org>
-In-Reply-To: <87pmpwwpw5.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 17 Dec 2021 12:45:24 +0800
-Message-ID: <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
-Subject: Re: [PATCH V8 02/10] irqchip/loongson-pch-pic: Add ACPI init support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20211106183802.893285-1-aford173@gmail.com> <718f7f6d6cd564d031c1963f1590c62d549ae725.camel@ndufresne.ca>
+ <CAHCN7xKM9RUE7z-+ug1on+D=nDoEm589R4m03ofys92Aq75ZVQ@mail.gmail.com>
+ <8db00a4b6faa99c940d9bc86e17161eb0db5efe3.camel@ndufresne.ca>
+ <CAJ+vNU28UJffFv9jQ2KryJMudqYxvCaoVOVcU5dPqRA209iN6A@mail.gmail.com>
+ <d91532c2c0772f9aa708ead36b2a97203727a7ea.camel@ndufresne.ca>
+ <CAJ+vNU3H-V+bPoZ3qKead45h=W7AhQK6Lhjrx5ssdF4c_qfe=A@mail.gmail.com>
+ <CAHCN7x+0LwwU_rEST+TZxGquswGKL19gnTy9WLofsXtGAtWqdw@mail.gmail.com>
+ <7f94eaacfddb8c5434c17f1e069ea87a17657ce9.camel@ndufresne.ca>
+ <CAHCN7xKRzxMBmPbDobWTuvNNSpTXk5XENvfBnfkhRY3eZKhn6w@mail.gmail.com>
+ <CAHCN7xJFLNi_g+HX8PCy1Rkgf0jnWpO5QGYVz8nH19xrJkwHrA@mail.gmail.com>
+ <CAJ+vNU3zFd=6k_Emc5aafxKkGwCPp4crgOFezQ-E_MbWsn1_EA@mail.gmail.com>
+ <fed6c2fd7cf4971062c417ce41ed1e3812b900e0.camel@ndufresne.ca>
+ <CAHCN7xK+wROHaqDcsY-3WYFQ82qX17L-LHNL3siSWnWvwFShzQ@mail.gmail.com>
+ <CAAEAJfC1xXvemaFP+vTFVJ3S-SpYtrxyZgDamSOgLC1F3ua5xw@mail.gmail.com>
+ <CAHCN7x+UMMP6RXsNm0=OC=UTQzh=RKqQo6B7FD5e4eoJAEfmpg@mail.gmail.com>
+ <CAJ+vNU1epi9SwPMHkuDmKcb68RLemYF=bsp7AVnzz06zKc2efw@mail.gmail.com>
+ <CAAEAJfCpjk5nWWkJYjjDT-YEpJi4pTZqZbzp_if9OGC0HKspzw@mail.gmail.com>
+ <CAJ+vNU2we5mGXgYsR6CfimvFXZsc0zktR3fDa-h6RRa02jTT0g@mail.gmail.com> <CAHCN7xJrM9uZUnmx65uTxWEo6HAkjozd3kD3UoEv-pYd5DV4QA@mail.gmail.com>
+In-Reply-To: <CAHCN7xJrM9uZUnmx65uTxWEo6HAkjozd3kD3UoEv-pYd5DV4QA@mail.gmail.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Fri, 17 Dec 2021 01:48:52 -0300
+Message-ID: <CAAEAJfBXU-AiKKhkhXzgUSR4p1yefysNuHFycBz3F-GzNewS6w@mail.gmail.com>
+Subject: Re: [RFC 0/5] arm64: imx8mm: Enable Hantro VPUs
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media <linux-media@vger.kernel.org>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        cstevens@beaconembedded.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc,
+Hi Adam,
 
-On Thu, Dec 16, 2021 at 11:06 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> On Thu, 16 Dec 2021 12:53:48 +0000,
-> Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > We are preparing to add new Loongson (based on LoongArch, not compatible
-> > with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
-> > as its boot protocol, so add ACPI init support.
-> >
-> > PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
-> > Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
-> > please refer Documentation/loongarch/irq-chip-model.rst.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  drivers/irqchip/irq-loongson-pch-pic.c | 108 ++++++++++++++++++-------
-> >  1 file changed, 81 insertions(+), 27 deletions(-)
+> I will post a V2 last today with the Mini's post-processing removed.
+> Someone, I apologize that I forget who, mentioned it was fused out of
+> the Mini, so the testing I've been doing was with that removed and I
+> removed the H1 encoder since the Mini doesn't support JPEG encoding.
 >
-> [...]
->
-> >
-> > +#ifdef CONFIG_ACPI
-> > +
-> > +struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
-> > +                                     struct acpi_madt_bio_pic *acpi_pchpic)
->
-> Who is calling this? This works the opposite way from what the arm64
-> irqchips are doing. Why? I have the ugly feeling that this is called
-> from the arch code, bypassing the existing infrastructure...
-Yes, this is called from the arch code and a bit ugly, but I can't
-find a better way to do this.
+[...]
 
-Is the "existing infrastructure" declare the irqchip init function
-with  IRQCHIP_ACPI_DECLARE and the arch code only need to call
-irqchip_init()? Then we have a problem: our irqchips have a 4 level
-hierachy and the parent should be initialized before its children. In
-FDT world this is not a problem, because of_irq_init() will sort
-irqchip drivers to ensure the right order. But in ACPI world,
-acpi_probe_device_table just call init functions in the linking order.
-If we want to control the order, it seems we can only sort the drivers
-in drivers/irq/Makefile. But I don't think this is a good idea...
+Resurrecting this thread here. IMX8MMRM Rev. 0, 02/2019 mentions
+post-processor features for G1 and G2.
 
-If there are better solutions, please let me know. Thanks.
+Have you checked the fuse and synth registers to see if they throw
+any useful information about the hardware? For instance,
+comparing PP fuse register (SWREG99) and
+Synthesis configuration register post-processor (SWREG100)
+in both 8MQ and 8MM could be useful.
 
-Huacai
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+As I mentioned on my previous mail, even if G1 PP is disabled
+on the Mini, I would imagine the G2 can do linear NV12 (aka raster-scan)
+which in our hantro driver jargon is a  "post-processed" format :-)
+
+Thanks,
+Ezequiel

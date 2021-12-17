@@ -2,210 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB2E478496
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F31478499
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbhLQFbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 00:31:51 -0500
-Received: from mail-bn8nam11on2061.outbound.protection.outlook.com ([40.107.236.61]:18080
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230106AbhLQFbu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 00:31:50 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nVRcJI9stBJLuwzVyc9vVobMG1YpKpnTBWsEs71E5vLSXR5r24tzX/ACQYj+A1SJC93chyQ1cT+wfN6vfaYaHUnaTrIptuIJE6M3fDMAo+2YkDrF9fO6wbFFGuDpSbniRxX7Xpwxdoqy1BekBxqBfZyziyfhb+Y5FmVJ1ylMYbvTqxrjq9JF1rWWCyYFdTRL6P2H5/aCvYFkOgdopo0gv3NhCgk96tJ/iHQs+V+kBS1nsuWrpm4NnskS4pM0KhyKVy4D4PuQG+zPyOhsOuEH6sLHEjN2ZnIGyLzuAeiEwxdYciZjC2xDL+0QEHa/gRBuq082aYDPOhmXJ4lVsISpiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ykuK1K43Yyf5KTVhpdyaXJvqKXKV5fTFIEpEKdeCR1Q=;
- b=OC85wmNEAU1+GEUeMFj+KN4sdp0anWhI7nBKUhzs0PfMEh9aVQHFLd5Fq/EwCzBoObQ29Sklg/TxQAUVbzzAWF4G733f/LDxZO2BpwRzxjpeigKKT3SpyG34eKwlkkAunz0jHTRm8u8lLLT4LNuSd/1b6Q70J0/ZKnX2MRhrbO7uEzE6/Qcjh7wPvfefyKH57Io6iQikDDw5fWtL6/wG5QVUgEkIBwpXChDWmRooWS++zr6Q5wa9fJM6iz6/O3uM/6zffwYYT5wxb5IWPSTUtlUFrMXC6DrmyFDFpOQr42/6f8g3JqohKAMR43JTaHbFU7l3eAuGjMoKx92OVq422A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ykuK1K43Yyf5KTVhpdyaXJvqKXKV5fTFIEpEKdeCR1Q=;
- b=bW4qlGGhcSbfPm7DAgGvPCj2WMSm2hJZTq6rvk21eQjZaQR64tU+dQX/Q8QbbC2uCdZPGK7S+N5Ec1cwPzFWBpSq2aAJL9BdytRj4NZ84FDnkVUIN2JrfMNMy/AmWEDPuFanmcR7pNX0YiBcg4ggHVeNhUHDCNGT97PZq3NVy9XRJDIDYhHKiOhKZ9Z36BUMJK4ELeLxztvZGCVTcJrvuzBliUSxQAw8XPFW0ezYOk2PW6mZ+dXH4TmVhU+L3SiTJ95WDFgZXt3bVBwcb0+7E9qho5bizfU1YvYgAhmvl0hedXjfCAkT+es3MYxDeiNmfCqXkJ3+aqTGOdejMbfwVA==
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
- by BN9PR12MB5306.namprd12.prod.outlook.com (2603:10b6:408:103::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Fri, 17 Dec
- 2021 05:31:48 +0000
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::6867:d54e:5040:2167]) by BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::6867:d54e:5040:2167%5]) with mapi id 15.20.4801.015; Fri, 17 Dec 2021
- 05:31:48 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Wolfram Sang <wsa@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Suresh Mangipudi <smangipudi@nvidia.com>
-Subject: RE: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
-Thread-Topic: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
-Thread-Index: AQHX8n7my/abMo8OBEe71trFCBr2/aw1NiAAgAAG55CAAFJGAIAAhfUA
-Date:   Fri, 17 Dec 2021 05:31:48 +0000
-Message-ID: <BN9PR12MB52736B1658C0B13526728119C0789@BN9PR12MB5273.namprd12.prod.outlook.com>
-References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
- <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75VcvrM0qLQE-04UZEkxbAvkE-MNSN7RGC7mPxj+1hoUyTw@mail.gmail.com>
- <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
- <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
-In-Reply-To: <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 557a686f-a881-479b-c0db-08d9c11e8584
-x-ms-traffictypediagnostic: BN9PR12MB5306:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB530631550C637574B43CECC7C0789@BN9PR12MB5306.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ndbW7rKmRFSNpbsTRMmDyiGbEKX0hzOLyZ5+aH8KhpO8oZR0aNIYj+EjsgRyB1rLOyqJvsAIcr2FkF0zOeBsRvSMKRoE4KXxUn+D91LsMEXFR49HEiBuBJ1GFkbB33CdtQ5jpADzGLcZ1PqGd1ZchkzL1+Qy+8VDAddKLiq5R9qh07xmCpAp5eLSJnxlaV41pVMqY6dPT9s7WwP7JmnANObIeq2Zgbo0dB8G1K4GItA78S94vDnGHQzERNpXkcB10WaH9MPHJQD3nrptmLE515YcNWMR11GBk32RLDqw2jfUoNjfkpJVl7kCeVVHiCDQDtoItmVs52Ph/ONR9MMUhqx38utOiztNKXeMD8rVXgPI22DB+WOtySgReV2Jb2l8AvKalLjVsbqXP1Ymo+Yc1ggPYWxgtq7en/eui5hMeR2u6smr7jkN9AU5E6fWn+9RZD+u7JpzVN7Rs4/TA4AXL022TW3fAa/93tIz1cjRaQ+ksy3TAk56pC2Pecq2E+CCa0gLFIeUSHp7xv48dYfD/jvCW8YxpLhgkbwyoFU3XEGVr/wAU6Ti3qdzYOwKfnMqnjCWIPAlvHD/MPFHeOPuHLXOe3EulFZka+xctbt/TcnNUSLsX406oZ2ZrQEUefZfjJNYz8zXZPKMdC5QTuc5eQKibuRB0K3bfnup2empmfdGgk5/v+oWZbsT6aAePXxjUj6NXuvktvPYoKJmBe4MbRj7dbORgV7B68Oh0J2Ll8AJDCf3hb0GvbRvVJ021bC5Rd9GJEvEQ2Bxi6gKk4uU5dzCA7nmd+Jd7vbO0r7W7XV8ic+hgSqfOgDoJ57lCjESlwWkZFliStWfyH9WvbOv7A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(5660300002)(76116006)(55016003)(7696005)(71200400001)(83380400001)(86362001)(4326008)(107886003)(52536014)(64756008)(66446008)(66946007)(9686003)(66556008)(316002)(2906002)(186003)(26005)(66476007)(8676002)(38100700002)(8936002)(6506007)(7416002)(53546011)(966005)(33656002)(54906003)(122000001)(6916009)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1DmGqXO8mpdZtZy4wkkyC8HeHQSGrW9sIlSCoQOsF9nAtVuLYo0YmuP+bSvF?=
- =?us-ascii?Q?Kj+qNigEoUQQI5MyObY90n9WrcbVr4swuoPsE3kqZh3w3Gn8sVt/O5aFHTEb?=
- =?us-ascii?Q?40DDRmvdKHl4oBXpl/gud3aL5SGfNCKE9OFI26iI6IaORQNLDigxSgXykrBH?=
- =?us-ascii?Q?Ku+5pejfNFI1jbxck+pVjEXnzR9SJTDMacMsmj3ha3ZV1s6fPk8q72zzxyt0?=
- =?us-ascii?Q?eFSPe3F49Hb8gyN9T085Bu8NWXeZPAkIh66yD8cybA8jNhTuoqv+wDeBhJOu?=
- =?us-ascii?Q?UGKCHWz+SSAfdkStwAumilNB2vxHuS8HBesO1dUtOkFAXEgAjmiOYSdKGmZM?=
- =?us-ascii?Q?/8008CDakprgORzsB22s7uXnnvSkiB8f6JDYGKGoEcHA2xn9Jiu8vjC+XXnj?=
- =?us-ascii?Q?W+sroATYPnDpzR0jRsX2SBMksQzf7ifXoWSLPse9YXc0n4MghPbLBOxQ2DHI?=
- =?us-ascii?Q?Kfpj4sO9A/o4fbjZqdSf0IHKSS2rFW25mpbk/fwQRm6pBR86TYMxsCXWKFEH?=
- =?us-ascii?Q?dsRQROxPXSWq0mtynlmMVANDHoyN+jX+MBNTujUmpkgnWUiMHb9lhCWH8zQ0?=
- =?us-ascii?Q?fvbVipGmUueEAkoroRoiec9Nf+KpP7MDB30lP2UwTpm7EbC2t1NBvPLMiQQ8?=
- =?us-ascii?Q?2T6DhkbcKI6mpJ3nR1nbkdSz/DSkSPLfm0zN1+8RsNX+8kSSrbUjKkGRlR52?=
- =?us-ascii?Q?WglY6J1VY8byxf3Z6x9MPPMYXtZMYjS8VhsUBpzQbhtZC9Rp06Zv0E7r6ngr?=
- =?us-ascii?Q?VIL52wDSATCebPXlJgJ6iPrCG37DfWFQqlOO/cvZTn9C1oU9NOzeRBfSYZzP?=
- =?us-ascii?Q?dIi64G8BJm+t2L8RtfMa6CmjFMMcJqdcNnd/DZoTlBJOqNpOyUANvhsTYlOl?=
- =?us-ascii?Q?0HLA1M9UreY0kNaksWG2WCxbgmRbv5LsdHXl8kJ85vxL7xdAm7c6395NRTIg?=
- =?us-ascii?Q?8ZCzQ9LHDG9QceVfFhtEF60uJMvuy+zd85Vrwr8m6SZYV3/DnbpFqz5Of3/g?=
- =?us-ascii?Q?V8lSmaMloxXHLHdPeyDQY1chS/kgagnJK+vyGzPV8UDNWSj170Ox7dJ9p+3F?=
- =?us-ascii?Q?OABNQLXho+48s+dZMvWQ4foWMSa3CJwGt2FW4rQTVVWBJLuPaMIsX5pDDPI2?=
- =?us-ascii?Q?Azq9jnRUt4b1xAoavDBOboFh06Q44xm1avWvAz6HnP4AAvrI064KhMqYCXPT?=
- =?us-ascii?Q?fQ/OqH4Rtw2QsET0/clizgwgE2ePr2K8AL5FHlnDqVHlodXrwNTxLNe0uKUk?=
- =?us-ascii?Q?hibZpaz3XPT1WmKBsdhD5Op8Frnf4e5/mKtsBKZVqrL1aDs2f321uCgO4nCq?=
- =?us-ascii?Q?Ozivh7LxioeNfQd4E/dZdFl49MbdW0NdT6awNuf9vEwz0CbBDNapyrQd3bv0?=
- =?us-ascii?Q?kLyUe7uj0ieeZLqyMVeOitJKnHGqCUXsptLgBzacYby+DOCmvFZRr3anfWKA?=
- =?us-ascii?Q?HtlYYXIAFzdxJpDFVrkM3kdkuwELHWnQwrdbSBFj/LBKpQ2xj6B/wLvcat0h?=
- =?us-ascii?Q?1hZqRJFVcBzvIqe7qx99Nb1CZ1tbOjZXTXebCeReJH10HcfdDtxKlgkUrnGG?=
- =?us-ascii?Q?qMyyiJXnhihrHB3LfZ5QhZYoD8mU6HeY8cDcIlH98nZDxHL4kf3JUTM6LSGb?=
- =?us-ascii?Q?sQ0aIRxAStNf5jQEsSpTEi0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 557a686f-a881-479b-c0db-08d9c11e8584
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 05:31:48.2260
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NhqRCd8880EUi55oLTcRkzXA8r+w6awRuYTU+f+KKG/3ZqNEFYWT+LG/a9ilBpFz/e3ifWbtuzme+NcesxYOpA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5306
+        id S233006AbhLQFfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 00:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230052AbhLQFfC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 00:35:02 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B28C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:35:02 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id mj19so1229597pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 21:35:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CTKXdWbXYFCcZS3TCZsbdeP+y1YkG9m0hcHXCbzMHfM=;
+        b=A4M9QeI+3ITdTU3nEB+emC4vcyx+RAPXNHc00k+QZaVfIv+tswGciZ0liMjWSBUY1e
+         DzU51tl6VIka910nqnfFhTtBy7NN35fgeTEE4y5KpuRqf3O9EneSu9iI6iv3pGqeYbnd
+         OftXqjemeUxNgZlZKVGNivuRcYejGt1AfV76STSMgZQ96wBeXb8Ee2HIYjbzyfRI6R4X
+         cEtN7hKnS9omG+gm+dWusTvfCsirNk1GtOg7wYiqXixd4c69Eu4FSjYkTYn/4n+fRpIv
+         0CjVJ6ZCcf/j39XFI/l+wiVbKsK/0xx81J3peOGp6cK9O8sOkrIyFQZawH0J03RFvRwU
+         xfDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=CTKXdWbXYFCcZS3TCZsbdeP+y1YkG9m0hcHXCbzMHfM=;
+        b=JolGUV9YiYDOEUiqW8gppH0upCChTrW8nHNRGD4IvcuDGx4XnT3lgCMBeiCBTbzdzn
+         GhT4RbfN8p/EQ8NOMjU8PXfP6I6+z3WEUMq5lvkXbGKcTMGI8xZNfs5QQBCfWbRpUuoL
+         ByKoXXk/aroLzCMl/c53ZvmlgSjMpLPbziSC3m0bBsAMXy3Vat7lHqpmjbgjLJJIMs6t
+         SKI1UgTAi6FXjCit2YKCHK/tEwqiRvhByB5r6a6XmD8Y8unecnqt8bOVwNyWkWDtlwNo
+         CBhuMn8Wc7dC0vL9j67ylJPzf4cqwIn2W82cNL3xb2IFAqsnDS+IHN6EVQihZFgdSa9o
+         Bx0g==
+X-Gm-Message-State: AOAM532cLNpzoba9Rk60+ugAL8gfwumBCj1k2AoSpRLgylo1og2qOv/C
+        EcfhLwa8DUz4g3LmFJAYDJ6wcQ==
+X-Google-Smtp-Source: ABdhPJw5nyrUeaDehYt+dPK8PDeUMkeASbVvAJf4VuOnAdah2SxYnJZ8OzLk5tw2P3bphJ0UMxxIgA==
+X-Received: by 2002:a17:90a:909:: with SMTP id n9mr1943440pjn.1.1639719301358;
+        Thu, 16 Dec 2021 21:35:01 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id m67sm687523pfb.36.2021.12.16.21.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 21:35:00 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:35:00 -0800 (PST)
+X-Google-Original-Date: Thu, 16 Dec 2021 21:30:12 PST (-0800)
+Subject:     Re: [PATCH v3 4/6] riscv: dts: sifive unmatched: Expose the FU740 core supply regulator
+In-Reply-To: <5ab111e71e88d545d7f03233f10b6d84ef3d6c21.1637362542.git.plr.vincent@gmail.com>
+CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        qiuwenbo@kylinos.com.cn, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        david.abdurachmanov@sifive.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     plr.vincent@gmail.com
+Message-ID: <mhng-854afd5f-800b-4b58-af68-cdc6afdc0a4a@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Dec 16, 2021 at 6:08 PM Akhil R <akhilrajeev@nvidia.com> wrote:
-> > > On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrot=
-e:
->=20
-> ...
->=20
-> > > > -       irq =3D of_property_match_string(adapter->dev.of_node, "int=
-errupt-
-> > > names",
-> > > > -                                      "smbus_alert");
-> > > > +       irq =3D device_property_match_string(adapter->dev.parent,
-> > > > + "interrupt-
-> > > names",
-> > > > +                                          "smbus_alert");
-> > >
-> > > Hmm... Adapter device node is not the same as the node for its parent=
-.
-> > > Do you have some code that propagates of_node from parent to child?
-> > Adapter device does not have an of_node unless the adapter driver sets
-> > it, I guess. I see all the adapter drivers add the of_node and parent
-> > for adapter. Also, there are many places in i2c-core-base and
-> > i2c-core-acpi where adapter->dev.parent is referred to as the adapter
-> > driver device.
-> >
-> > Basically, adapter->dev.parent and adapter->dev.of_node would
-> > ultimately refer to the same device (or the of_node of that device),
-> > as far as I understand.
-> > >
-> > > I.o.w. I would expect to see
-> > >
-> > >        irq =3D device_property_match_string(&adapter->dev,
-> > > "interrupt-names",
-> > >
-> > > here.
-> > It would then require adding the fw_node as well from the adapter drive=
-r.
-> > I felt it made more sense to refer adapter->dev.parent here as most of
-> > the (or rather all of the) adapter drivers already sets it.
->=20
-> Is this
-> https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.=
-c#L1047
+On Fri, 19 Nov 2021 14:55:40 PST (-0800), plr.vincent@gmail.com wrote:
+> Provides monitoring of core voltage and current:
+> tps544b20-i2c-0-1e
+> Adapter: i2c-ocores
+> vout1:       906.00 mV
+> temp1:        -40.0°C  (high = +125.0°C, crit = +150.0°C)
+> iout1:         5.06 A  (max = +20.00 A, crit max = +26.00 A)
 >
-> what you are looking for?
-This, I suppose, is for the i2c client driver.
-I meant the individual adapter drivers.
-https://elixir.bootlin.com/linux/latest/source/drivers/i2c/busses/i2c-tegra=
-.c#L1786
-similar is there in all drivers.
-If to use adapter->dev for interrupt-names, I assume, it would require to a=
-dd
+> Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+>
+> ---
+> Note: checkpatch.pl complains about undocumented devicetree binding,
+> which is fixed by:
+>   https://lore.kernel.org/linux-devicetree/20211116110207.68494-1-krzysztof.kozlowski@canonical.com/T/#u
+>
+> Changes since v2:
+> - Fix end-of-commit-message separator so change lists do not end up in them.
+> Changes since v1:
+> - Added missing "ti," prefix in compatible string.
+> - Remove trailing "." on subject line.
+> - Rename tree node.
 
-	adapter->dev.fwnode =3D i2c_dev->dev->fwnode;
+I see this in Rob's for-next as 761de79adc2c ("dt-bindings: hwmon: add
+TI DC-DC converters"), so I'm going to hold off on this one until the
+bindings land.
 
-in all drivers (or at least in the drivers which does not use devicetree).
-I thought it would be decent to use adapter->dev.parent as all the drivers =
-already
-set it.
+I've put the others on fixes.
 
->=20
-> ...
->=20
-> > > >         if (irq =3D=3D -EINVAL || irq =3D=3D -ENODATA)
-> > > >                 return 0;
-> > > >         else if (irq < 0)
-> > >
-> > > TBH the entire code smells. "Interesting" way of getting an optional
-> > > named interrupt.
-> > I felt it useful to have it this way as it would remain agnostic to
-> > device tree and the ACPI. We would not have to add redundant codes in
-> > adapter drivers that are using ACPI table.
-> >
-> > Named interrupts for the ACPI as well, I feel would be a useful
-> > addition that can prove to be of value more than this change; I believe=
-.
->=20
-> Me too. My comment was about current state of affairs, and not to your
-> change.
-Got it :)
+Thanks!
 
-Thanks,
-Akhil
-
+> ---
+>  arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> index 270360b258b7..6e7775fdae32 100644
+> --- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> +++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> @@ -51,6 +51,11 @@ &uart1 {
+>  &i2c0 {
+>  	status = "okay";
+>
+> +	regulator@1e {
+> +		compatible = "ti,tps544b20";
+> +		reg = <0x1e>;
+> +	};
+> +
+>  	temperature-sensor@4c {
+>  		compatible = "ti,tmp451";
+>  		reg = <0x4c>;

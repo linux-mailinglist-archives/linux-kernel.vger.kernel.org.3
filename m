@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B8F478CD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0127478CEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbhLQNxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 08:53:51 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:60444 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbhLQNxu (ORCPT
+        id S236886AbhLQN4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 08:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231667AbhLQN4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 08:53:50 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5256C1F38E;
-        Fri, 17 Dec 2021 13:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639749229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CcG6BQv75lCkRJLlbFilpoVUlToHcP+R3qfFgZRh2A=;
-        b=Y8LxUiAOWhhavFYPwneJLDxSYrR5g5fbWBaSt9lj7ZuUgZeGUxyWqBPe/Q3QdxmF774GcG
-        y2pWqQxLJvPQwAiCQNH2XHxeHpuHBwajQhl+thhHM5a8B+hUkSP1Zuosf3Ol3FQFoedtxn
-        g+frlAHzcN0teSzkoGvZTkgk167bLHA=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2F96FA3B8B;
-        Fri, 17 Dec 2021 13:53:49 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 14:53:48 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     David Vernet <void@manifault.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-doc@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, joe.lawrence@redhat.com,
-        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
-Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Message-ID: <YbyWbNmK6rvYVzXp@alley>
-References: <20211213191734.3238783-1-void@manifault.com>
- <YbhZwVocHDX9ZBAc@alley>
- <alpine.LSU.2.21.2112141012090.20187@pobox.suse.cz>
- <Ybi3qcA5ySDYpyib@dev0025.ash9.facebook.com>
- <Ybi9NzbvWU7ka8m1@kroah.com>
- <YbmlL0ZyfSuek9OB@alley>
- <YboLPAmOc8/6khu2@kroah.com>
- <YbtJzonSJjcUaUwh@alley>
- <YbtX088SeDWaEih1@dev0025.ash9.facebook.com>
+        Fri, 17 Dec 2021 08:56:49 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C022C061574;
+        Fri, 17 Dec 2021 05:56:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ae8cpPHySj4MeIsuauebRN5hQTqe/wQO8gCu7jDTS48=; b=UbyWErt5wUL9FjVlGl/lqJCWU+
+        uexwlh/J+gD4lhMSPZZs5uBqOo0WUspykoVmmUSGqmvFWsNOEXdtTxxGM5X3QS4oNRxV2VUX1U0cC
+        oMFsAdBSo4FlOxPdifSBqNfSsg/jF1MSFgNBFfuqok6yu6mUUId/GsLoFQstU5/Qczc3XIA/k04aS
+        vU/krnwBn8G+esYTDVUnFiqkVEApawiq9PbkUKXZXEYiYsFGelkf2tqWs+UYx/kQLirX9oM622c7k
+        XP1QsctFAX2lvqBEFlOf+b9JjcbVtZL2sL8zOWp66909gpXNQpyxTBhFzdt3yJysVgjgbiufYorVZ
+        6hbqiKlA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1myDhW-001tPq-SX; Fri, 17 Dec 2021 13:55:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 860C73001CD;
+        Fri, 17 Dec 2021 14:55:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4058120D11FE1; Fri, 17 Dec 2021 14:55:07 +0100 (CET)
+Date:   Fri, 17 Dec 2021 14:55:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbtX088SeDWaEih1@dev0025.ash9.facebook.com>
+In-Reply-To: <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2021-12-16 07:14:27, David Vernet wrote:
-> Petr Mladek <pmladek@suse.com> wrote on Thu [2021-Dec-16 15:14:38 +0100]:
-> > > Now it does.  In the past, I think we did create some memory.  I know
-> > > when we hook debugobjects up to kobjects (there's an external patch for
-> > > that floating around somewhere), that is one reason to keep the
-> > > kobject_put() rule, and there might have been other reasons in the past
-> > > 20+ years as well.
-> > > 
-> > > So yes, while you are correct today, the "normal" reference counted
-> > > object model patern is "after the object is initialized, it MUST only be
-> > > freed by handling its reference count."  So let's stick to that rule for
-> > > now.
-> > 
-> > Good point.
+On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
+> I can reproduce this.
+> Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
 > 
-> Thanks for the discussion all. I think we've landed on the fact that this
-> is a refcounting bug that needs to be fixed, but isn't a leak in how the
-> kobject implementation exists today.
-> 
-> Petr - are you OK with me sending out a v3 of the patch with the following
-> changes:
->   - The patch description is updated to not claim that a leak is being
->     fixed, but rather that a kobject reference counting bug is being fixed.
->   - All of the NULL checking in klp_init_patch_early() is brought into
->     klp_enable_patch(), and klp_init_patch_early() is updated to be void,
->     per Josh's suggestion. This would address the refcounting issue and IMO
->     also simplifies and improves the code. I know you were onboard with
->     moving try_module_get() into klp_enable_patch(), but I don't think we
->     ever resolved the point about moving the rest of the NULL checking out
->     as well.
+> 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
 
-Just for record. I have answered this in the other thread where it was
-discussed, see https://lore.kernel.org/r/YbyV7nsLXbQ6/44S@alley
+I can confirm, reverting that solves the boot hang, things aren't quite
+working for me though.
 
-Best Regards,
-Petr
+> Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
+> Maybe  it's too early for ktime.
+
+It certainly is, using ktime for delay loops sounds daft to me anyhow.
+
+> After reverting that patch it works again for me.
+
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0-rc3+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc force_early_printk sched_verbose ftrace=nop mitigations=off nokaslr
+...
+[    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+...
+[    3.161367] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+
+The machine does boot.. but I *am* getting tons of:
+
+[  485.546898] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
+[  485.546963] usb usb4-port4: config error
+
+However, when I do:
+
+$ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+
+I get:
+
+[  569.442899] xhci_hcd 0000:00:14.0: DbC connected
+[  569.898910] xhci_hcd 0000:00:14.0: DbC configured
+
+And the remote machine gets:
+
+[2318863.729022] usb 2-3: new SuperSpeed USB device number 8 using xhci_hcd
+[2318863.749299] usb 2-3: LPM exit latency is zeroed, disabling LPM.
+[2318863.749529] usb 2-3: New USB device found, idVendor=1d6b, idProduct=0010, bcdDevice= 0.10
+[2318863.749531] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[2318863.749532] usb 2-3: Product: Linux USB Debug Target
+[2318863.749533] usb 2-3: Manufacturer: Linux Foundation
+[2318863.749534] usb 2-3: SerialNumber: 0001
+[2318863.751142] usb_debug 2-3:1.0: xhci_dbc converter detected
+[2318863.751268] usb 2-3: xhci_dbc converter now attached to ttyUSB0
+
+and a subsequent:
+
+$ echo ponies > /dev/ttyDBC0
+
+Does show up on the remote machine...
+
+
+So XDBC 'works' but earlyprintk is still refusing service.
+
+

@@ -2,124 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DF7478665
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE518478668
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbhLQIlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:41:01 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:58486 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231280AbhLQIlB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:41:01 -0500
-X-UUID: 9ebb265394f644a28082d8fa0cf33104-20211217
-X-CPASD-INFO: ab51b6a6359040eda70f8bc932f74613@qrJvUY9oj2ZfVXt8g3OwnoFoYJZpjoO
-        IdWyGZ2JmXVOVhH5xTWJsXVKBfG5QZWNdYVN_eGpQY19gZFB5i3-XblBgXoZgUZB3sKRvUZJkkQ==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: ab51b6a6359040eda70f8bc932f74613
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:184.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:246.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4488.0,FROMTO:0,AD:0,FFOB:0.0,CF
-        OB:0.0,SPC:0.0,SIG:-5,AUF:98,DUF:27000,ACD:135,DCD:238,SL:0,AG:0,CFC:0.347,CF
-        SR:0.061,UAT:0,RAF:0,VERSION:2.3.4
-X-CPASD-ID: 9ebb265394f644a28082d8fa0cf33104-20211217
-X-CPASD-BLOCK: 1001
-X-CPASD-STAGE: 1, 1
-X-UUID: 9ebb265394f644a28082d8fa0cf33104-20211217
-X-User: yinxiujiang@kylinos.cn
-Received: from localhost.localdomain [(118.26.139.139)] by nksmu.kylinos.cn
-        (envelope-from <yinxiujiang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1550983070; Fri, 17 Dec 2021 16:48:58 +0800
-From:   Yin Xiujiang <yinxiujiang@kylinos.cn>
-To:     thomas.kuehnel@avm.de, almaz.alexandrovich@paragon-software.com
-Cc:     kbuild-all@lists.01.org, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org, n.schier@avm.de
-Subject: [PATCH] Fix slab-out-of-bounds in r_page
-Date:   Fri, 17 Dec 2021 16:40:45 +0800
-Message-Id: <20211217084045.363818-1-yinxiujiang@kylinos.cn>
-X-Mailer: git-send-email 2.30.0
+        id S232482AbhLQImG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbhLQImF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 03:42:05 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D54C061574;
+        Fri, 17 Dec 2021 00:42:05 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id t11so1900845qtw.3;
+        Fri, 17 Dec 2021 00:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=euNZsuO5chCnJL4h1RRy3rz6SEECSJxqExqR2vzYIgc=;
+        b=JlZ33jI3dKjdOEJgC8wH4AilxnMZqHDPYsqsHW1wAOROGwwJZjFWb53ZKEPOaepKAJ
+         n/hKq1qiMLl/EUBr6r9En2JP72cnEGK/S1xltCQNmn/2meQMvJG+YVrNCyvtfYsehQbb
+         bw1O6fkyOj/emvJnQUCWIBA0DbycVeQeDUrOZhZc79RdM1Fh46jgdnzqpJJTWGzNLymH
+         5BzVcJq740cmBHm0Gx/VotXUTXOi1R/FXV9rWEht8VYBW4eS+vtXyKDVElPXK53QMHby
+         W8t0QCB0iQ2K8017GLS48aYOHjteDPQE+ixJM440251YVvYC02YVGwtRjAv8NRm6pUkZ
+         PZsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=euNZsuO5chCnJL4h1RRy3rz6SEECSJxqExqR2vzYIgc=;
+        b=o0GuPzn9nTiqyypf2y3MNbbINBDQErIc1rReamdvGCMz0zUg+I+aC6Fpk02QmCZ4FU
+         GDOVtFCqgKQrl5ZhqD5IsIpxt1+1AKPKFMJfbNPaqhxoSZ5u8bs28IAy0E9xXtY+YcK/
+         oqU45+HKB1LsUZ3grOPShr6hGIKX4dpoGmfvxK4+psv4TmZyqZsxJuQcZSxI6SsfG3yU
+         1nUUDyrKWRiXmyl3v0LnJ4PV/5nQU4RyfpDUKc+5kDekSeFwrNNt3VJkgFctbq7Tim6P
+         3FAucDP9j6L+t01zTIVXCjB4hMiMnsQN4+9Lf2rNRLfvqRgUQm6LznuqKIbaGWWhuTta
+         ytlg==
+X-Gm-Message-State: AOAM531j0fUSabrS69MlQLkbz2fWhha4xUaefMfuT7jcku3Ax3+yMYg9
+        BR+8/vIhqIB19WQN6VhvfqE=
+X-Google-Smtp-Source: ABdhPJxMefYN6bC4KnrtZQAOdWJ8jW/5MZDBAfR2DrXl7H+Ww4eegx09BSvolw6t8k5h+v92HXYLZA==
+X-Received: by 2002:ac8:5c54:: with SMTP id j20mr1408448qtj.121.1639730524381;
+        Fri, 17 Dec 2021 00:42:04 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 14sm6436102qtx.84.2021.12.17.00.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 00:42:03 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     pbonzini@redhat.com
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] KVM: x86: Use div64_ul instead of do_div
+Date:   Fri, 17 Dec 2021 08:41:55 +0000
+Message-Id: <20211217084155.452262-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When PAGE_SIZE is 64K, if read_log_page is called by log_read_rst for
-the first time, the size of *buffer would be equal to
-DefaultLogPageSize(4K).But for *buffer operations like memcpy,
-if the memory area size(n) which being assigned to buffer is larger
-than 4K (log->page_size(64K) or bytes(64K-page_off)), it will cause
-an out of boundary error.
- Call trace:
-  [...]
-  kasan_report+0x44/0x130
-  check_memory_region+0xf8/0x1a0
-  memcpy+0xc8/0x100
-  ntfs_read_run_nb+0x20c/0x460
-  read_log_page+0xd0/0x1f4
-  log_read_rst+0x110/0x75c
-  log_replay+0x1e8/0x4aa0
-  ntfs_loadlog_and_replay+0x290/0x2d0
-  ntfs_fill_super+0x508/0xec0
-  get_tree_bdev+0x1fc/0x34c
-  [...]
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Fix this by setting variable r_page to NULL in log_read_rst.
+do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+to avoid a possible truncation.
 
-Signed-off-by: Yin Xiujiang <yinxiujiang@kylinos.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 ---
- fs/ntfs3/fslog.c | 24 +-----------------------
- 1 file changed, 1 insertion(+), 23 deletions(-)
+ arch/x86/kvm/lapic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-index 06492f088d60..4fdb5bdfc2ee 100644
---- a/fs/ntfs3/fslog.c
-+++ b/fs/ntfs3/fslog.c
-@@ -1180,10 +1180,7 @@ static int log_read_rst(struct ntfs_log *log, u32 l_size, bool first,
- 			struct restart_info *info)
- {
- 	u32 skip, vbo;
--	struct RESTART_HDR *r_page = kmalloc(DefaultLogPageSize, GFP_NOFS);
--
--	if (!r_page)
--		return -ENOMEM;
-+	struct RESTART_HDR *r_page = NULL;
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index c5028e6b0f96..3b629870632c 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1707,7 +1707,7 @@ static void start_sw_tscdeadline(struct kvm_lapic *apic)
+ 	guest_tsc = kvm_read_l1_tsc(vcpu, rdtsc());
  
- 	memset(info, 0, sizeof(struct restart_info));
+ 	ns = (tscdeadline - guest_tsc) * 1000000ULL;
+-	do_div(ns, this_tsc_khz);
++	ns = div64_ul(ns, this_tsc_khz);
  
-@@ -1199,7 +1196,6 @@ static int log_read_rst(struct ntfs_log *log, u32 l_size, bool first,
- 	/* Loop continuously until we succeed. */
- 	for (; vbo < l_size; vbo = 2 * vbo + skip, skip = 0) {
- 		bool usa_error;
--		u32 sys_page_size;
- 		bool brst, bchk;
- 		struct RESTART_AREA *ra;
- 
-@@ -1253,24 +1249,6 @@ static int log_read_rst(struct ntfs_log *log, u32 l_size, bool first,
- 			goto check_result;
- 		}
- 
--		/* Read the entire restart area. */
--		sys_page_size = le32_to_cpu(r_page->sys_page_size);
--		if (DefaultLogPageSize != sys_page_size) {
--			kfree(r_page);
--			r_page = kzalloc(sys_page_size, GFP_NOFS);
--			if (!r_page)
--				return -ENOMEM;
--
--			if (read_log_page(log, vbo,
--					  (struct RECORD_PAGE_HDR **)&r_page,
--					  &usa_error)) {
--				/* Ignore any errors. */
--				kfree(r_page);
--				r_page = NULL;
--				continue;
--			}
--		}
--
- 		if (is_client_area_valid(r_page, usa_error)) {
- 			info->valid_page = true;
- 			ra = Add2Ptr(r_page, le16_to_cpu(r_page->ra_off));
+ 	if (likely(tscdeadline > guest_tsc) &&
+ 	    likely(ns > apic->lapic_timer.timer_advance_ns)) {
 -- 
-2.30.0
+2.25.1
 

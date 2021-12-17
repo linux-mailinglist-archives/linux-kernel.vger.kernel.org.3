@@ -2,149 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0A9479361
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0569479339
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240188AbhLQR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:58:51 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:34777 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240143AbhLQR6f (ORCPT
+        id S239981AbhLQR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:57:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1080 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231484AbhLQR5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:58:35 -0500
-Received: by mail-oi1-f172.google.com with SMTP id t19so4785611oij.1;
-        Fri, 17 Dec 2021 09:58:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ju8OzVEWeqn38Sxf5W5cqeLG9DtSTl3egiQMpAHM4i8=;
-        b=CsraecoNhjbXeJ6828TcHiyeg7eZ9u5HmStLTXiDw9Uitq2GM0PaMGUhy+tEVH5PcZ
-         FeQOBvIEmGCRnKjgR1t2GGHrS2+H3iiENKZJ3+PnpxzZtejKqyCGUbtNRj4MY7mX55TF
-         zzRwz5qpQrFaOvQkx9TaZfeT6DjDjk2o6SCxrIxeBXSybuoEmZvUsc6tIZd+TL1soQuk
-         0pQbe3PRLANfyGKQ5Ulq8Si0uChZY3CpkAQxsZYElW7FAv1RWLGn6WXk5NioF76Pgc+/
-         l1lz8CmQZU1ga8z/NxuMfi0eJIS4RcQDW3wd4bn4o/b5pc/sOoEnP4W9pl9Ssiq7eZUm
-         1isg==
-X-Gm-Message-State: AOAM532M8KtY6W8ZsgaVcoTD9+bDz8hOENDZZSQdb7SpDB+VrwrGnVOa
-        PwigGDsJUocACtJN3VL4ZxTReeCYHTkbxdnxU9cKq4pe
-X-Google-Smtp-Source: ABdhPJzS1nTc55coW+SAnqOI8mx8RMuP/8ef94L5FdLgyqetV9XmNddl8qfFPkc2VOHITxa05DYcOqbfuLm5tT+1eMU=
-X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr3035678oiv.166.1639763914916;
- Fri, 17 Dec 2021 09:58:34 -0800 (PST)
+        Fri, 17 Dec 2021 12:57:30 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGm4RG016380;
+        Fri, 17 Dec 2021 17:57:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Px0gHa/xF3R2YbQc314meTWg/6unS2hUUFzimmLwPb8=;
+ b=Wviyyya3u8WURVEbROZ5a/B2GF0+uOX6VyHqQ15G6P+7RKuE4Wqv0AVrMJXtq1akm0oJ
+ zAeisPMOKkfaCLVDA5xG6EJqqioZVvXqrO/SoZNzvL6vMj04uOLCxu9xiIJUm/DK6VUp
+ MECiNPCtz0NnxFGRTFOk+WBSR8Bt9Q/proyvWqlXCjBl1e6m+C8j25tihmd8WbG4mztA
+ xAN24hvazCn0OeyoW0ZF0e8MeUg8UnIey59Dkb5pXMs0n+QAnD4MFus+aG4S9ssjmJVM
+ x6+jA56eTb/KWZVJFfNGLGMKa0aB32/w7XGhMEST3i47ogoD6JfaZWnimFKw1osH/ASI Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v68csvm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:57:29 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHHlgav006379;
+        Fri, 17 Dec 2021 17:57:28 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v68csv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:57:28 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHH4YEM017475;
+        Fri, 17 Dec 2021 17:57:26 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3cy7sk2hcc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:57:26 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHHvNSo31326488
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 17:57:23 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E4054203F;
+        Fri, 17 Dec 2021 17:57:23 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A83642042;
+        Fri, 17 Dec 2021 17:57:22 +0000 (GMT)
+Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.25.249])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Dec 2021 17:57:22 +0000 (GMT)
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, pmorel@linux.ibm.com,
+        wintera@linux.ibm.com
+Subject: [PATCH v6 0/1] s390x: KVM: CPU Topology
+Date:   Fri, 17 Dec 2021 18:58:26 +0100
+Message-Id: <20211217175827.134108-1-pmorel@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
- <20211206122952.74139-1-kirill.shutemov@linux.intel.com> <20211206122952.74139-4-kirill.shutemov@linux.intel.com>
- <Ya4mTij+eQPq8dnu@hirez.programming.kicks-ass.net> <CAJZ5v0hjcKn0g=Tc90aK_EchOG+sWi8na1HVb0GdtQsYn7sAKQ@mail.gmail.com>
- <20211209133335.u4suzd2u5sjly67l@black.fi.intel.com>
-In-Reply-To: <20211209133335.u4suzd2u5sjly67l@black.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 18:58:23 +0100
-Message-ID: <CAJZ5v0hsqzT1e8QuaYYC=q+vEmFurruUcLoRH0ng8EZ98LccSQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] ACPI: processor idle: Only flush cache on entering C3
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lTR-y0c6DD1KYzt8mxi8uG3eS4NuAVq5
+X-Proofpoint-GUID: EurF6H67fRvEyyDDg2-LLtnf-IrFb6Xl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_07,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 clxscore=1011 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112170100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 2:33 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Wed, Dec 08, 2021 at 05:26:12PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Dec 6, 2021 at 4:03 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Mon, Dec 06, 2021 at 03:29:51PM +0300, Kirill A. Shutemov wrote:
-> > > > According to the ACPI spec v6.4, section 8.2, cache flushing required
-> > > > on entering C3 power state.
-> > > >
-> > > > Avoid flushing cache on entering other power states.
-> > > >
-> > > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > > ---
-> > > >  drivers/acpi/processor_idle.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> > > > index 76ef1bcc8848..01495aca850e 100644
-> > > > --- a/drivers/acpi/processor_idle.c
-> > > > +++ b/drivers/acpi/processor_idle.c
-> > > > @@ -567,7 +567,8 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
-> > > >  {
-> > > >       struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
-> > > >
-> > > > -     ACPI_FLUSH_CPU_CACHE();
-> > > > +     if (cx->type == ACPI_STATE_C3)
-> > > > +             ACPI_FLUSH_CPU_CACHE();
-> > > >
-> > >
-> > > acpi_idle_enter() already does this, acpi_idle_enter_s2idle() has it
-> > > confused again,
-> >
-> > No, they do the same thing: acpi_idle_enter_bm() if flags.bm_check is set.
-> >
-> > > Also, I think acpi_idle_enter() does it too late; consider
-> > > acpi_idle_enter_mb(). Either that or the BM crud needs more comments.
-> >
-> > I think the latter.
-> >
-> > Evidently, acpi_idle_play_dead(() doesn't support FFH and the BM
-> > thing, so it is only necessary to flush the cache when using
-> > ACPI_CSTATE_SYSTEMIO and when cx->type is C3.
->
-> I'm new to this and not completely follow what I need to change.
->
-> Does it look correct?
+Hi all,
 
-It does, but I liked the original one more and so that one has been
-applied as 5.17 material (with some edits in the changelog).
+@Claudio, I kept your reviewed-by because I think the changes
+are only cosmetics... of course tell me if it is right.
 
-Thanks!
+This new series add the implementation of interpretation for
+the PTF instruction.
 
-> From 3c544bc95a16d6a23dcb0aa50ee905d5e97c9ce5 Mon Sep 17 00:00:00 2001
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Date: Thu, 9 Dec 2021 16:24:44 +0300
-> Subject: [PATCH] ACPI: processor idle: Only flush cache on entering C3
->
-> According to the ACPI spec v6.4, section 8.2, cache flushing required
-> on entering C3 power state.
->
-> Avoid flushing cache on entering other power states.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  drivers/acpi/processor_idle.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 76ef1bcc8848..d2a4d4446eff 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -567,7 +567,9 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
->  {
->         struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
->
-> -       ACPI_FLUSH_CPU_CACHE();
-> +       if (cx->entry_method == ACPI_CSTATE_SYSTEMIO &&
-> +           cx->type == ACPI_STATE_C3)
-> +               ACPI_FLUSH_CPU_CACHE();
->
->         while (1) {
->
-> --
->  Kirill A. Shutemov
+The series provides:
+1- interception of the STSI instruction forwarding the CPU topology
+2- interpretation of the PTF instruction
+3- a KVM capability for the userland hypervisor to ask KVM to 
+   setup PTF interpretation.
+
+
+0- Foreword
+
+The S390 CPU topology is reported using two instructions:
+- PTF, to get information if the CPU topology did change since last
+  PTF instruction or a subsystem reset.
+- STSI, to get the topology information, consisting of the topology
+  of the CPU inside the sockets, of the sockets inside the books etc.
+
+The PTF(2) instruction report a change if the STSI(15.1.2) instruction
+will report a difference with the last STSI(15.1.2) instruction*.
+With the SIE interpretation, the PTF(2) instruction will report a
+change to the guest if the host sets the SCA.MTCR bit.
+
+*The STSI(15.1.2) instruction reports:
+- The cores address within a socket
+- The polarization of the cores
+- The CPU type of the cores
+- If the cores are dedicated or not
+
+We decided to implement the CPU topology for S390 in several steps:
+
+- first we report CPU hotplug
+- modification of the CPU mask inside sockets
+
+In future development we will provide:
+
+- handling of shared CPUs
+- reporting of the CPU Type
+- reporting of the polarization
+
+
+1- Interception of STSI
+
+To provide Topology information to the guest through the STSI
+instruction, we forward STSI with Function Code 15 to the
+userland hypervisor which will take care to provide the right
+information to the guest.
+
+To let the guest use both the PTF instruction  to check if a topology
+change occurred and sthe STSI_15.x.x instruction we add a new KVM
+capability to enable the topology facility.
+
+2- Interpretation of PTF with FC(2)
+
+The PTF instruction will report a topology change if there is any change
+with a previous STSI(15.1.2) SYSIB.
+Changes inside a STSI(15.1.2) SYSIB occur if CPU bits are set or clear
+inside the CPU Topology List Entry CPU mask field, which happens with
+changes in CPU polarization, dedication, CPU types and adding or
+removing CPUs in a socket.
+
+The reporting to the guest is done using the Multiprocessor
+Topology-Change-Report (MTCR) bit of the utility entry of the guest's
+SCA which will be cleared during the interpretation of PTF.
+
+To check if the topology has been modified we use a new field of the
+arch vCPU prev_cpu, to save the previous real CPU ID at the end of a
+schedule and verify on next schedule that the CPU used is in the same
+socket, this field is initialized to -1 on vCPU creation.
+
+
+Regards,
+Pierre
+
+Pierre Morel (1):
+  s390x: KVM: guest support for topology function
+
+ Documentation/virt/kvm/api.rst   | 16 +++++++++++
+ arch/s390/include/asm/kvm_host.h | 12 ++++++--
+ arch/s390/kvm/kvm-s390.c         | 48 +++++++++++++++++++++++++++++++-
+ arch/s390/kvm/kvm-s390.h         | 25 +++++++++++++++++
+ arch/s390/kvm/priv.c             | 14 +++++++---
+ arch/s390/kvm/vsie.c             |  3 ++
+ include/uapi/linux/kvm.h         |  1 +
+ 7 files changed, 111 insertions(+), 8 deletions(-)
+
+-- 
+2.27.0
+
+Changelog:
+
+from v5 to v6
+
+- make the subject more accurate
+  (Claudio)
+
+- Change the kvm_s390_set_mtcr() function to have vcpu in the name
+  (Janosch)
+
+- Replace the checks on ECB_PTF wit the check of facility 11
+  (Janosch)
+
+- modify kvm_arch_vcpu_load, move the check in a function in
+  the header file
+  (Janosh)
+
+- No magical number replace the "new cpu value" of -1 with a define
+  (Janosch)
+
+- Make the checks for STSI validity clearer
+  (Janosch)
+
+from v4 tp v5
+
+- modify the way KVM_CAP is tested to be OK with vsie
+  (David)
+
+from v3 to v4
+
+- squatch both patches
+  (David)
+
+- Added Documentation
+  (David)
+
+- Modified the detection for new vCPUs
+  (Pierre)
+
+from v2 to v3
+
+- use PTF interpretation
+  (Christian)
+
+- optimize arch_update_cpu_topology using PTF
+  (Pierre)
+
+from v1 to v2:
+
+- Add a KVM capability to let QEMU know we support PTF and STSI 15
+  (David)
+
+- check KVM facility 11 before accepting STSI fc 15
+  (David)
+
+- handle all we can in userland
+  (David)
+
+- add tracing to STSI fc 15
+  (Connie)
+

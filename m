@@ -2,159 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4BF4791DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029F24791DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbhLQQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:49:22 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7322 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235967AbhLQQtR (ORCPT
+        id S239354AbhLQQu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:50:58 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:42578 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231258AbhLQQuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:49:17 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGeqGt016438;
-        Fri, 17 Dec 2021 16:49:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=k09d+GGnx5zwaMlBATH76XnriCr9KMVpFUw6EzYvU+0=;
- b=H6Pgyh5RFoMBGchwYLvyD/32j/Mqj8nbn7UNkDN7zbNo85nPeZH24XSdLrHCF2xe/7NN
- ymGrTJgiVY6ZfH8Ehvy5J4JHxuqstbVPsB901XhwqLWfPzv/AqpZ3ewKi/8t8NJyyV7c
- hyJSGMbO93zeIb9o9DziOh9QtyBG8fA5QJ3QUtv1hqeSoV7Sw3c2QlCKXdysEqxHgvKf
- SqnoRaD7j+LibAMrOtfJKoKXwM0r1HT7ku65wIPTKqcukninu+4L8EnqwxMGllSUOfe1
- w76xbpJE+zqMqKAEj2gq20b7fFyXgq/rwCysTZPQ+6GR9Z79QTFHZjoq4D3RpVlhidAn 0g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v68bcrc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 16:49:12 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHGUNr1017364;
-        Fri, 17 Dec 2021 16:49:12 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d0v68bcqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 16:49:12 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGOYWi006552;
-        Fri, 17 Dec 2021 16:49:10 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3cy7k9t9bm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 16:49:10 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHGn7sd42598910
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 16:49:07 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0964411C058;
-        Fri, 17 Dec 2021 16:49:07 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CF2811C04C;
-        Fri, 17 Dec 2021 16:49:06 +0000 (GMT)
-Received: from [9.171.54.231] (unknown [9.171.54.231])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Dec 2021 16:49:06 +0000 (GMT)
-Message-ID: <01530507-184c-782d-0ae3-632df0308d56@linux.ibm.com>
-Date:   Fri, 17 Dec 2021 17:49:05 +0100
+        Fri, 17 Dec 2021 11:50:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639759855; x=1671295855;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=RC3FnMFpifE9fNebjGu/kjokm/vsi7FxGu0UtnO2J/g=;
+  b=KfrXre7uLeWBN0VIugl3UQsqm4qpXty7ctU9bf3Pr5sAx36xuYDZa12K
+   L7FJ/DZq4im7AOfmb/kYR5t9gg7HZIisfYfJlB3r5JoRv8C4amfSyCmXw
+   1CVPhRpN6TiIDBdL9wI7RGt+iWQ6npEBAD5LmCDlGoqaX2uUg+U+n76YF
+   g2FnKR+Ef0BB+DXqh96JOi0Z4NtqcU5WMamcq+sXIRb77Kv1/e5F5wcJ1
+   a1XhFqEddIeNcp/ACivinCwY1LB45Kwuod5sihZE03jzIcUwwsg9Du3Lf
+   BONdyrAWvUiou1OeRGY+jMYFmFYbGx5q5t3qB6AfrXE02IaRIIKjb6ZKB
+   w==;
+IronPort-SDR: KduGrjma49C9zIhYZ/5JhpvSrpydtCWCg61Xo5/z7vIE79xJIZzPiAMRXW3WW2609htLNC9uMR
+ iHtZn93Za/SQPKuygDyzy16DjyRbz2xXz12yDF0OzyijgE6c0pElJLOjgU6Sb8lMQnqB0qUr4I
+ 9QLF2ZV3laIQOWL3d4k2nOsPakXlbZ9rcB7PP1FCDizfm3wNO7IZQAU3+gEf+sVIYj+dN7A72B
+ ZjTjd2iCQOPWZe9UEyRVVN4pXceqfley8YV+5Og3WQ8W+DOmVV8+abMEZ9N7MRH7Rr0l8jo2ET
+ drkVVEsAjaXCkPZ1corgHTHv
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="79935474"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 09:50:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 09:50:46 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 17 Dec 2021 09:50:45 -0700
+Subject: Re: [PATCH] ARM: configs: at91: sama7: Enable SPI NOR and QSPI
+ controller
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <linux@armlinux.org.uk>, <claudiu.beznea@microchip.com>,
+        <codrin.ciubotariu@microchip.com>, <eugen.hristev@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211209153744.357465-1-tudor.ambarus@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <cb18bbec-1bc1-731d-65c0-57c5229f2c91@microchip.com>
+Date:   Fri, 17 Dec 2021 17:50:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 25/32] vfio/pci: re-introduce CONFIG_VFIO_PCI_ZDEV
+In-Reply-To: <20211209153744.357465-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-26-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-26-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tBUQpTeDvmphaPRVLfZB_mhTL0Yu_Izk
-X-Proofpoint-GUID: 2ZJ3pyQlADeZbsWjn6FIHIYfN-RFBW11
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-17_06,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
- bulkscore=0 priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112170095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> This was previously removed as unnecessary; while that was true, subsequent
-> changes will make KVM an additional required component for vfio-pci-zdev.
-> Let's re-introduce CONFIG_VFIO_PCI_ZDEV as now there is actually a reason
-> to say 'n' for it (when not planning to CONFIG_KVM).
+On 09/12/2021 at 16:37, Tudor Ambarus wrote:
+> sama7g5ek comes with a SPI NOR flash connected to the QSPI
+> controller. Enable the SPI NOR subsystem and the QSPI controller.
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Best regards,
+   Nicolas
+
 > ---
->   drivers/vfio/pci/Kconfig      | 11 +++++++++++
->   drivers/vfio/pci/Makefile     |  2 +-
->   include/linux/vfio_pci_core.h |  2 +-
->   3 files changed, 13 insertions(+), 2 deletions(-)
+>   arch/arm/configs/sama7_defconfig | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index 860424ccda1b..fedd1d4cb592 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -42,5 +42,16 @@ config VFIO_PCI_IGD
->   	  and LPC bridge config space.
->   
->   	  To enable Intel IGD assignment through vfio-pci, say Y.
-> +
-> +config VFIO_PCI_ZDEV
-> +	bool "VFIO PCI extensions for s390x KVM passthrough"
-> +	depends on S390 && KVM
-
-does this also depend on vfio-pci?
-
-> +	default y
-> +	help
-> +	  Support s390x-specific extensions to enable support for enhancements
-> +	  to KVM passthrough capabilities, such as interpretive execution of
-> +	  zPCI instructions.
-> +
-> +	  To enable s390x KVM vfio-pci extensions, say Y.
->   endif
->   endif
-> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
-> index 349d68d242b4..01b1f83d83d7 100644
-> --- a/drivers/vfio/pci/Makefile
-> +++ b/drivers/vfio/pci/Makefile
-> @@ -1,7 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   
->   vfio-pci-core-y := vfio_pci_core.o vfio_pci_intrs.o vfio_pci_rdwr.o vfio_pci_config.o
-> -vfio-pci-core-$(CONFIG_S390) += vfio_pci_zdev.o
-> +vfio-pci-core-$(CONFIG_VFIO_PCI_ZDEV) += vfio_pci_zdev.o
->   obj-$(CONFIG_VFIO_PCI_CORE) += vfio-pci-core.o
->   
->   vfio-pci-y := vfio_pci.o
-> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-> index ef9a44b6cf5d..5e2bca3b89db 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -195,7 +195,7 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
->   }
->   #endif
->   
-> -#ifdef CONFIG_S390
-> +#ifdef CONFIG_VFIO_PCI_ZDEV
->   extern int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->   				       struct vfio_info_cap *caps);
->   #else
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> index 938aae4bd80b..0368068e04d9 100644
+> --- a/arch/arm/configs/sama7_defconfig
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -33,7 +33,6 @@ CONFIG_MODULES=y
+>   CONFIG_MODULE_FORCE_LOAD=y
+>   CONFIG_MODULE_UNLOAD=y
+>   CONFIG_MODULE_FORCE_UNLOAD=y
+> -# CONFIG_BLK_DEV_BSG is not set
+>   CONFIG_PARTITION_ADVANCED=y
+>   # CONFIG_EFI_PARTITION is not set
+>   # CONFIG_COREDUMP is not set
+> @@ -83,6 +82,7 @@ CONFIG_DEVTMPFS_MOUNT=y
+>   CONFIG_MTD=y
+>   CONFIG_MTD_TESTS=m
+>   CONFIG_MTD_CMDLINE_PARTS=y
+> +CONFIG_MTD_SPI_NOR=y
+>   CONFIG_BLK_DEV_LOOP=y
+>   CONFIG_BLK_DEV_RAM=y
+>   CONFIG_BLK_DEV_RAM_COUNT=1
+> @@ -90,6 +90,7 @@ CONFIG_BLK_DEV_RAM_SIZE=8192
+>   CONFIG_EEPROM_AT24=y
+>   CONFIG_SCSI=y
+>   CONFIG_BLK_DEV_SD=y
+> +# CONFIG_BLK_DEV_BSG is not set
+>   CONFIG_NETDEVICES=y
+>   CONFIG_MACB=y
+>   CONFIG_MICREL_PHY=y
+> @@ -104,8 +105,8 @@ CONFIG_I2C=y
+>   CONFIG_I2C_CHARDEV=y
+>   CONFIG_I2C_AT91=y
+>   CONFIG_SPI=y
+> -CONFIG_SPI_MEM=y
+>   CONFIG_SPI_ATMEL=y
+> +CONFIG_SPI_ATMEL_QUADSPI=y
+>   CONFIG_SPI_GPIO=y
+>   CONFIG_PINCTRL_AT91=y
+>   CONFIG_PINCTRL_AT91PIO4=y
 > 
+
+
+-- 
+Nicolas Ferre

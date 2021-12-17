@@ -2,146 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C6D478967
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51669478965
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbhLQLDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbhLQLDe (ORCPT
+        id S235212AbhLQLD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:03:29 -0500
+Received: from 113.196.136.146.ll.static.sparqnet.net ([113.196.136.146]:47292
+        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232148AbhLQLD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:03:34 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E971C061574;
-        Fri, 17 Dec 2021 03:03:34 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x15so6427476edv.1;
-        Fri, 17 Dec 2021 03:03:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDoMAsyrmIhOeAjKc2RWkPHbxFIM7lBCTp7TztuEVSM=;
-        b=MDJ84xLUZGssdONWgL/SN10UAeKqN7bBEFx3ruzn6B3byC9hOFP3xuCpwvyrpt6IVz
-         zOiZiqDwApqetBUdv9a1ylXlirPcfUoaHkKrPvwJU2nLvOYsrwbiIH8SWJU50y3wwMMp
-         GDCsT7FHr+13NdQwA9l5damw0NDi7MSGrIjokzpoPeq+gXA3sWxksnXHsiCM3AsCsLpd
-         fUTEPj/ziYMrTtabvtfjG9PKcJvSsn42R5lS89FUCW8laTMjuhrh9rlWIVCPTAVOX1fg
-         0B52X1ha9xjYwlZQqxLd4/QNzhZfsU8p3ShTib7FzAfj/6upE63bCyOdD+NmLLBbCNYm
-         yBTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDoMAsyrmIhOeAjKc2RWkPHbxFIM7lBCTp7TztuEVSM=;
-        b=ctuIVxDMMFNh2SHLOh2Z9bRymA310BCbzaMAuHJnEGc1jwYk/TV2ZiHzNAMdVKEDzW
-         awlsCBYRvK6zK0pWqX/1pnpU4ZNBvACFVYfhADH/HSwN+nB2O4fVdhSI3t+4m8SuZrpk
-         8sO9Zrnj5YjYFaAJGl1zILzdMjkw8pMQbKqdAJLMc0vHslcrxcNexHEt9K10EJ1BfHhA
-         4vrRSqWzJlmr/6v6fIVyO0n75SChdPj6bGNt7zVbDSzHczH3O3RNC/58M3hhUXsgoPEd
-         7LUDQogcPZ7a5wWjPfAmb7GgqwEUTudGFLkvUEq+aC9ZwRdscmtzEwHfcCPE5Cx0Ay6F
-         o71g==
-X-Gm-Message-State: AOAM530RZOX2WT7EMQi5jFYCCmiARUmfKOr/TjKx91FCufLfA9+Uytue
-        6i/5QyjY1a7hbp5gb3igtvQ335xQu4UpG64oKSg=
-X-Google-Smtp-Source: ABdhPJyAJvENyGKzfsDhCwjGvbjVkd+Q0jA2QYceLQE6nq1Jktig1JBhZE+VrImWjWMGjOoN5o5JjCf3Ip+ALI540JU=
-X-Received: by 2002:a17:907:76d4:: with SMTP id kf20mr2141413ejc.44.1639739013073;
- Fri, 17 Dec 2021 03:03:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20211217172931.01c24d4b@canb.auug.org.au>
-In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 17 Dec 2021 13:02:05 +0200
-Message-ID: <CAHp75Vd9O=A9_N=KLDV2mJ2haFybNqnSL2AdByf4Pc6zjjD94w@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Kiran Kumar S <kiran.kumar1.s@intel.com>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Fri, 17 Dec 2021 06:03:28 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(9398:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Fri, 17 Dec 2021 19:03:37 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Fri, 17 Dec 2021 19:03:36 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Fri, 17 Dec 2021 19:03:36 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
+Subject: RE: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Index: AQHX8mCd69RkrTnSM0GRURxouCuBCKw1+gLA///W7ICAALVacA==
+Date:   Fri, 17 Dec 2021 11:03:36 +0000
+Message-ID: <d7db8a508e9b4eb8933f4862087919b2@sphcmbx02.sunplus.com.tw>
+References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a0CnCK-Dfodp-jTzZApM_1NpdY7DV2fRqnO=gaju5xGwg@mail.gmail.com>
+ <CAHpW4oQmtd-gG1HYZT-Dk=QAvXKsKebzcOaVtrEeoujwoL9zSg@mail.gmail.com>
+ <316c16afbff74160b07bd74444f3b8e1@sphcmbx02.sunplus.com.tw>
+ <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:29 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pinctrl tree got conflicts in:
->
->   drivers/pinctrl/Kconfig
->   drivers/pinctrl/Makefile
->
-> between commit:
->
->   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
->
-> from the arm-soc tree and commits:
->
->   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
->   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
->
-> from the pinctrl tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-
-Thanks!
-To me it seems like a correct fix.
-
-> diff --cc drivers/pinctrl/Kconfig
-> index 0d5b61e4c21e,c27c9ee89f0e..000000000000
-> --- a/drivers/pinctrl/Kconfig
-> +++ b/drivers/pinctrl/Kconfig
-> diff --cc drivers/pinctrl/Makefile
-> index f5bdd6b209a6,6be6c3fc6663..000000000000
-> --- a/drivers/pinctrl/Makefile
-> +++ b/drivers/pinctrl/Makefile
-> @@@ -30,26 -39,16 +39,17 @@@ obj-$(CONFIG_PINCTRL_OXNAS)        += pinctrl-
->   obj-$(CONFIG_PINCTRL_PALMAS)  += pinctrl-palmas.o
->   obj-$(CONFIG_PINCTRL_PIC32)   += pinctrl-pic32.o
->   obj-$(CONFIG_PINCTRL_PISTACHIO)       += pinctrl-pistachio.o
-> + obj-$(CONFIG_PINCTRL_RK805)   += pinctrl-rk805.o
->   obj-$(CONFIG_PINCTRL_ROCKCHIP)        += pinctrl-rockchip.o
->   obj-$(CONFIG_PINCTRL_SINGLE)  += pinctrl-single.o
-> - obj-$(CONFIG_PINCTRL_SX150X)  += pinctrl-sx150x.o
-> - obj-$(CONFIG_ARCH_TEGRA)      += tegra/
-> - obj-$(CONFIG_PINCTRL_XWAY)    += pinctrl-xway.o
-> - obj-$(CONFIG_PINCTRL_LANTIQ)  += pinctrl-lantiq.o
-> - obj-$(CONFIG_PINCTRL_LPC18XX) += pinctrl-lpc18xx.o
-> - obj-$(CONFIG_PINCTRL_TB10X)   += pinctrl-tb10x.o
-> + obj-$(CONFIG_PINCTRL_STMFX)   += pinctrl-stmfx.o
->   obj-$(CONFIG_PINCTRL_ST)      += pinctrl-st.o
->  +obj-$(CONFIG_PINCTRL_STARFIVE)        += pinctrl-starfive.o
-> - obj-$(CONFIG_PINCTRL_STMFX)   += pinctrl-stmfx.o
-> - obj-$(CONFIG_PINCTRL_ZYNQ)    += pinctrl-zynq.o
-> + obj-$(CONFIG_PINCTRL_SX150X)  += pinctrl-sx150x.o
-> + obj-$(CONFIG_PINCTRL_TB10X)   += pinctrl-tb10x.o
-> + obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
->   obj-$(CONFIG_PINCTRL_ZYNQMP)  += pinctrl-zynqmp.o
-> - obj-$(CONFIG_PINCTRL_INGENIC) += pinctrl-ingenic.o
-> - obj-$(CONFIG_PINCTRL_RK805)   += pinctrl-rk805.o
-> - obj-$(CONFIG_PINCTRL_OCELOT)  += pinctrl-ocelot.o
-> - obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO) += pinctrl-microchip-sgpio.o
-> - obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   += pinctrl-equilibrium.o
-> - obj-$(CONFIG_PINCTRL_K210)    += pinctrl-k210.o
-> - obj-$(CONFIG_PINCTRL_KEEMBAY) += pinctrl-keembay.o
-> + obj-$(CONFIG_PINCTRL_ZYNQ)    += pinctrl-zynq.o
->
->   obj-y                         += actions/
->   obj-$(CONFIG_ARCH_ASPEED)     += aspeed/
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+RGVhciBBcm5kOg0KPiANCj4gPiAzLlNvIHlvdSBhc2sgbWUgdG8gY29udHJvbCBJT1AoODA1MSkg
+dGhyb3VnaCBmaWxlX29wZXJhdGlvbnMsIG5vdA0KPiA+IHRocm91Z2ggREVWSUNFX0FUVFINCj4g
+DQo+IE5vLCBuZWl0aGVyIG9mIHRoZW0uIFVzZSB0aGUgYXBwcm9wcmlhdGUgZHJpdmVycy8qLyBz
+dWJzeXN0ZW1zIGZvciBhbnkNCj4gZnVuY3Rpb25hbGl0eSB0aGF0IGhhcyBhbiBleGlzdGluZyBz
+dWJzeXN0ZW0uIElmIHRoZXJlIGlzIHNvbWV0aGluZyB0aGF0IHRoZSBpb3ANCj4gZG9lcyB0aGF0
+IGRvZXMgbm90IHlldCBoYXZlIGEgc3Vic3lzdGVtLCB0aGF0IHJlcXVpcmVzIGEgbW9yZSB0aG9y
+b3VnaCBkZXNpZ24NCj4gZGlzY3Vzc2lvbiBmb3IgY3JlYXRpbmcgYSBuZXcgdXNlciBpbnRlcmZh
+Y2UsIGlkZWFsbHkgaW4gYSBoYXJkd2FyZS1pbmRlcGVuZGVudA0KPiB3YXkuIFlvdSBzaG91bGQg
+bm90IHN0YXJ0IHdpdGggdGhhdCB1bnRpbCBhbGwgdGhlIG5vcm1hbCBmZWF0dXJlcyAocnRjLCB3
+YWtldXAsDQo+IHN1c3BlbmQsIGdwaW8sIC4uLikgYXJlIHN1cHBvcnRlZC4NCj4gDQoNCklPUCg4
+MDUxKSBoYXMgMTIgYnl0ZXMgTWFpbGJveCByZWdpc3RlcnMsIHdoaWNoIGNhbiBiZSByZWFkIGFu
+ZCB3cml0dGVuIGJ5IElPUCg4MDUxKSBhbmQgU3lzdGVtLCB1c2VkIHRvIGV4Y2hhbmdlIGluZm9y
+bWF0aW9uIHdpdGggdGhlIHN5c3RlbSwgZmFzdGVyIHRoYW4gc2hhcmVkIG1lbW9yeS4NCg0KVGhh
+bmtzCQkJDQo=

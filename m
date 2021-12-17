@@ -2,155 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B81478CE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2BA478C7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbhLQNyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 08:54:22 -0500
-Received: from gate.crashing.org ([63.228.1.57]:60104 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231667AbhLQNyV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 08:54:21 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1BHDZQmf021580;
-        Fri, 17 Dec 2021 07:35:26 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 1BHDZJZQ021573;
-        Fri, 17 Dec 2021 07:35:19 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 17 Dec 2021 07:35:18 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Rich Felker <dalias@libc.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        X86 ML <x86@kernel.org>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-m68k <linux-m68k@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>, Stafford Horne <shorne@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Yoshinori Sato <ysato@users.osdn.me>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-ntfs-dev@lists.sourceforge.net" 
-        <linux-ntfs-dev@lists.sourceforge.net>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Subject: Re: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Message-ID: <20211217133518.GR614@gate.crashing.org>
-References: <20210514100106.3404011-1-arnd@kernel.org> <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com> <20211216185620.GP614@gate.crashing.org> <698cfc52a0d441f7b9f29424be82b2e8@AcuMS.aculab.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <698cfc52a0d441f7b9f29424be82b2e8@AcuMS.aculab.com>
-User-Agent: Mutt/1.4.2.3i
+        id S234468AbhLQNju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 08:39:50 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:40142 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234437AbhLQNjp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 08:39:45 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BH95VjB017120;
+        Fri, 17 Dec 2021 14:39:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=sf5uZNarzEN4TERvydNuYULwo+KSEp3Kwpq0Fge0HkQ=;
+ b=MahiPfCpeGVzNejyi725J/V/qh66zSiStEiMcYOVnSPo2in4TbexVHP5jf01iOR36i8S
+ o/T1JN/ahixC1p3tIYU4fbsrBGwfuNgcxlu2ew9pLaKmGq6TRXPMkz/ZpgbZhb++U/jk
+ k+wfrIP/8w++BiqHpZHCmZbplEUdh/R0Teo3AnLV81A3EGW95Dg1MC7ZKp5FKSU1gtPj
+ 3eTTOf/p/pkvs+IOHqB/fAmAdnb/hrCCTEN9y6XgjQDNrgkBZ3m1TbR0PcIt2DgsB4k7
+ QLomrl/6AtCDAroSQyXCMbqPA6FMCxFMRjzk0DPgQgG8FJRoLHlcEjLUJb+De828wEZy aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d0hd83gak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 14:39:13 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 21D0910002A;
+        Fri, 17 Dec 2021 14:39:12 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F1F692259D3;
+        Fri, 17 Dec 2021 14:39:11 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 17 Dec
+ 2021 14:39:11 +0100
+Subject: Re: [PATCH v2 1/5] dt-bindings: interrupt-controller: Update STM32
+ EXTI interrupt controller
+To:     Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+References: <20211215105847.2328-1-alexandre.torgue@foss.st.com>
+ <20211215105847.2328-2-alexandre.torgue@foss.st.com>
+ <YbueUmqyzwS9rOu5@robh.at.kernel.org>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Message-ID: <3f8acbb8-0b7e-2f47-eefc-67e5a7632445@foss.st.com>
+Date:   Fri, 17 Dec 2021 14:39:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <YbueUmqyzwS9rOu5@robh.at.kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_05,2021-12-16_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:34:53PM +0000, David Laight wrote:
-> From: Segher Boessenkool
-> > Sent: 16 December 2021 18:56
-> ...
-> > > The only remaining problem here is reinterpreting a char* pointer to a
-> > > u32*, e.g., for accessing the IP address in an Ethernet frame when
-> > > NET_IP_ALIGN == 2, which could suffer from the same UB problem again,
-> > > as I understand it.
-> > 
-> > The problem is never casting a pointer to pointer to character type, and
-> > then later back to an appriopriate pointer type.
-> > These things are both required to work.
+On 12/16/21 9:15 PM, Rob Herring wrote:
+> On Wed, Dec 15, 2021 at 11:58:43AM +0100, Alexandre Torgue wrote:
+>> Document new entry "st,exti-mapping" which links EXTI lines with GIC
+>> interrupt lines and add an include file to define EXTI interrupt type.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>
+>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+>> index d19c881b4abc..e08bb51e97a8 100644
+>> --- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+>> +++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+>> @@ -41,6 +41,17 @@ properties:
+>>       description:
+>>         Interrupts references to primary interrupt controller
+>>   
+>> +  st,exti-mapping:
+>> +    $ref: "/schemas/types.yaml#/definitions/uint32-matrix"
+>> +    description: |
+>> +            Define mapping between EXTI lines and GIC irq lines. Should be:
+>> +            st,exti-mapping = <EXTI_LINE GIC_IRQ EXTI_TYPE>, ...;
+>> +            With:
+>> +            - EXTI_LINE: EXTI line number.
+>> +            - GIC_IRQ: GIC IRQ associated to the EXTI line.
+>> +            - EXTI_TYPE: STM32_EXTI_TYPE_CONFIGURABLE or STM32_EXTI_TYPE_DIRECT.
+>> +              Defined in include/dt-bindings/interrupt-controller/stm32-exti.h
 > 
-> I think that is true of 'void *', not 'char *'.
-
-No, see 6.3.2.3/7.  Both are allowed (and behave the same in fact).
-
-> 'char' is special in that 'strict aliasing' doesn't apply to it.
-> (Which is actually a pain sometimes.)
-
-That has nothing to do with it.  Yes, you can validly access any memory
-as a character type, but that has nothing to do with what pointer casts
-are allowed and which are not.
-
-> > The problem always is accessing something as if it
-> > was something of another type, which is not valid C.  This however is
-> > exactly what -fno-strict-aliasing allows, so that works as well.
+> No custom properties for this. See[1][2][3].
 > 
-> IIRC the C language only allows you to have pointers to valid data items.
-> (Since they can only be generated by the & operator on a valid item.)
 
-Not so.  For example you are explicitly allowed to have pointers one
-past the last element of an array (and do arithmetic on that!), and of
-course null pointers are a thing.
+Thanks for inputs. In my case the mapping consists to map an EXTI line 
+with a GIC irq line which could be done using interrupt-map (avoiding to 
+parse it in my driver). But for each EXTI/GIC association I would like 
+also to describe the EXTI_TYPE (which actually describe the well irqchip 
+to use inside my exti driver) . This property is not generic and so I 
+assume I can't use a generic binding such "interrupt-map".
 
-C allows you to make up pointers from integers as well.  This is
-perfectly fine to do.  Accessing anything via such pointers might well
-be not standard C, of course.
+If the solution consists to use a common binding (i.e. interrupt-map) 
+plus a conversion table in exti driver to affect the well irq_chip to 
+the well EXTI line then we could envisage to keep the whole mapping 
+inside the driver (even if it's not the best solution).
 
-> Indirecting any other pointer is probably UB!
+Another solution could be to define two exti irq-controllers (one for 
+configurable type and another one for direct type) and use interrupt-map 
+inside each. It means to have 2 child node inside (one per irq 
+controller) EXTI node.
 
-If a pointer points to an object, indirecting it gives an lvalue of that
-object.  It does not matter how you got that pointer, all that matters
-is that it points at a valid object.
-
-> This (sort of) allows the compiler to 'look through' casts to find
-> what the actual type is (or might be).
-> It can then use that information to make optimisation choices.
-> This has caused grief with memcpy() calls that are trying to copy
-> a structure that the coder knows is misaligned to an aligned buffer.
-
-This is 6.5/7.
-
-Alignment is 6.2.8 but it doesn't actually come into play at all here.
-
-> So while *(unaligned_ptr *)char_ptr probably has to work.
-
-Only if the original pointer points to an object that is correct
-(including correctly aligned) for such an lvalue.
-
-> If the compiler can see *(unaligned_ptr *)(char *)int_ptr it can
-> assume the alignment of the 'int_ptr' and do a single aligned access.
-
-It is undefined behaviour to have an address in int_ptr that is not
-correctly aligned for whatever type it points to.
+Alex
 
 
-Segher
+> Rob
+> 
+> 
+> [1] https://lore.kernel.org/all/20211122103032.517923-1-maz@kernel.org/
+> [2] https://lore.kernel.org/all/87k0g8jlmg.wl-maz@kernel.org/
+> [3] https://lore.kernel.org/all/CAL_JsqK2Shj6smam7HgNAmy3UG+vVQPkU3Q0OjyEHOEJB45n0A@mail.gmail.com/
+> 
+

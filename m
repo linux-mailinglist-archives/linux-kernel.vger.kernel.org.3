@@ -2,129 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB68479495
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA35E479498
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240578AbhLQTII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 14:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbhLQTIG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:08:06 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4D4C061574;
-        Fri, 17 Dec 2021 11:08:06 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z29so11539949edl.7;
-        Fri, 17 Dec 2021 11:08:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WK+ToRqRpjFtq55fzYiMQ1E3tNzI8dYyryjt+FG5VtA=;
-        b=e3QOqhJFnWNU33dn6TdBmexF6Tj1Ak7tnkpcMVyJfCT0u0P8ryrezyUiXLZfV3VbJ0
-         2G9O9DuPHQ6udecssDn3Tk2EFn6tJHwYNPrDaW9+4R/QAg5nBeUVngPwmhyBRzWvnLRY
-         TtVzMMJfYcm5sdj9uORbLvFDR1UOT7LFi0EOAtYyXmFoxTN3xsgtl6VNVyYdYbiPshd2
-         YBBapDFxpVF6HY/m8xNCYiOg1tvdqhtus9Ql8+kS3jBIY9fQvswUAn2acIY6CMDaEYLR
-         JZ+Mb+0Tp/SdWbk6XyNv5K8lJXQbQm8ULUIxB6VGbgfvxLPTDNrDVOFcZRANVR2S8YKs
-         KBvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WK+ToRqRpjFtq55fzYiMQ1E3tNzI8dYyryjt+FG5VtA=;
-        b=QJnS/xqi1y41k3BnefSxN8yZGA3pp3DSUszg3zMW41uQ9gUSQ/UX3IbOwbDETdGM1N
-         bTzUrzozMTok4v2UJqtzW+TFHlbDCB2fM299ZAmQPkx6JX8+Ny0AFC0XQKhv5e3IBdqo
-         8Hr4cJEZHGRGtX8DKOTCA8rsRyS7O7LyE39GzJmZTkk3GpL8mD/XyMD8lSv5DDuYcqlh
-         73grLJsgpmHY01yDaheczPc6lII4vGjY1si7yMuGVkIGSy5txrx4r9X81DNRnGACx9p2
-         A6ocSmyfi4KLZgjCM3Am/6vIQf3TGgoUJ/0NlVJtnioxGoi5XqIgOeSpzkcZPchqqWym
-         kMOg==
-X-Gm-Message-State: AOAM533mGBlZZ6R0CneUNfLPTtIlzIzPV4oxf/4n4Eg0TCXB5ZoRQscu
-        vaxpOJpHv6qhM3eGeugOeGFKS+jWQiQO7hl86wA=
-X-Google-Smtp-Source: ABdhPJxmvZsapI9CGh3nUlgNVxMedtvtv3rAtu/K2ti94lr2XS6pUN4PkGiaeOCycRylTjivSImbajYp/8Nj+gol7G4=
-X-Received: by 2002:a05:6402:430e:: with SMTP id m14mr4102234edc.93.1639768084985;
- Fri, 17 Dec 2021 11:08:04 -0800 (PST)
+        id S240581AbhLQTIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 14:08:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:33636 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231704AbhLQTIR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 14:08:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F1AC12FC;
+        Fri, 17 Dec 2021 11:08:17 -0800 (PST)
+Received: from bogus (unknown [10.57.36.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D19D33F774;
+        Fri, 17 Dec 2021 11:08:13 -0800 (PST)
+Date:   Fri, 17 Dec 2021 19:08:10 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morse <james.morse@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
+Message-ID: <20211217190810.qz44e3ff2bq4wmf2@bogus>
+References: <20211216233125.1130793-1-robh@kernel.org>
+ <20211216233125.1130793-3-robh@kernel.org>
+ <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
+ <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+ <20211217190345.kskfhnelqg3yx4j7@bogus>
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-4-david@redhat.com>
-In-Reply-To: <20211217113049.23850-4-david@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 17 Dec 2021 11:07:52 -0800
-Message-ID: <CAHbLzkpgqu0HWtxRqf7vhVBmeMAP0OxXdidHeM8NRjC_uUwo=A@mail.gmail.com>
-Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in __page_mapcount()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217190345.kskfhnelqg3yx4j7@bogus>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 3:33 AM David Hildenbrand <david@redhat.com> wrote:
->
-> Let's return early for hugetlb, which really only relies on the compound
-> mapcount so far and does not support PageDoubleMap() yet. Use the chance
-> to cleanup the file-THP case to make it easier to grasp. While at it, use
-> head_compound_mapcount().
->
-> This is a preparation for further changes.
->
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Fri, Dec 17, 2021 at 07:03:45PM +0000, Sudeep Holla wrote:
+> On Fri, Dec 17, 2021 at 12:14:22PM -0600, Rob Herring wrote:
+> > On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
+> > >
+> > > Hi Rob,
+> > >
+> > > On 2021-12-16 23:31, Rob Herring wrote:
+> > > > Use the minimum CPU h/w id of the CPUs associated with the cache for the
+> > > > cache 'id'. This will provide a stable id value for a given system. As
+> 
+> I am trying to follow the code. IIUC, the level one(I$ and D$) are skipped
+> in this logic and the private unified cache if any will get the cpu hwid as
+> the cache id which is all fine. But what happens if there are 2 levels of
+> unified private cache ? I am assuming we only care about shared caches for
+> MPAM and ignore private caches which sounds OK but I just wanted to confirm.
+> 
+> > > > we need to check all possible CPUs, we can't use the shared_cpu_map
+> > > > which is just online CPUs. There's not a cache to CPUs mapping in DT, so
+> > > > we have to walk all CPU nodes and then walk cache levels.
+> 
+> I would have preferred to add the cache IDs in DT similar to ACPI but I see
+> you have certain concerns with that which are valid as well.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+One thing I forgot to add is for some weird reasons, some platform supports
+both DT and ACPI, this will force the ID generated here to be used in ACPI as
+well to ensure same userspace scripts can be used to manage both. That doesn't
+sound so great to me.
 
-> ---
->  mm/util.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/util.c b/mm/util.c
-> index 741ba32a43ac..3239e75c148d 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -732,15 +732,18 @@ int __page_mapcount(struct page *page)
->  {
->         int ret;
->
-> -       ret = atomic_read(&page->_mapcount) + 1;
-> +       if (PageHuge(page))
-> +               return compound_mapcount(page);
->         /*
->          * For file THP page->_mapcount contains total number of mapping
->          * of the page: no need to look into compound_mapcount.
->          */
-> -       if (!PageAnon(page) && !PageHuge(page))
-> -               return ret;
-> +       if (!PageAnon(page))
-> +               return atomic_read(&page->_mapcount) + 1;
-> +
-> +       ret = atomic_read(&page->_mapcount) + 1;
->         page = compound_head(page);
-> -       ret += atomic_read(compound_mapcount_ptr(page)) + 1;
-> +       ret += head_compound_mapcount(page);
->         if (PageDoubleMap(page))
->                 ret--;
->         return ret;
-> --
-> 2.31.1
->
+-- 
+Regards,
+Sudeep

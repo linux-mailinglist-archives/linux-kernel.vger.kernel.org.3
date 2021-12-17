@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D4C479119
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05C347911F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238929AbhLQQPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S238948AbhLQQP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbhLQQPx (ORCPT
+        with ESMTP id S238932AbhLQQPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:15:53 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B49FC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:15:52 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id z7so5603843lfi.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:15:52 -0800 (PST)
+        Fri, 17 Dec 2021 11:15:54 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EF4C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:15:54 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id 207so4115364ljf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SGIO3bUbOyLAGLDGNDrVtdjpSJVfbgrhp+VoDayZdrk=;
-        b=TmoqaDCxyyJi03kZKNb6qgmFdHHqq0uvGuzh+zRXdJf+NIPgakylfVxINqTUj0gWnr
-         irgX8tiRgh8EaQRfjyGBCNLuJNWSjlonyJBfAXjptr8JRmP4pNee5UpL2DvUYbyuTUo9
-         pBRKmQTCYVObcdWYI82YWG7CHpgJsMHY1AnD35R1fpggwg1Q7og49BLXnu76zCz4ROmO
-         9bYsLy2/6n3wicuHVvUOXI09qMN1Ybj+G8dkexO3ab6rKle8YKqijJH0kayHaXBnE7VV
-         yoPiT0Nzq/k+sd8YyW31/38GJC6mfj7HcivceXBpoKjjXZgIdvjNzIbW0XjIYqGmuzqp
-         FS/w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uYUgzkFeggr15Llsv7e4ur2WY7UgMDKixIFqjG977bw=;
+        b=F2jtMQd6lFhjMlrZmy5glgqNLxj8Apz92pg2lAKfSb8G1i0CNoBUFiP9jX3BYPIVDD
+         mfF7M4tzVp735bLJg/h3OQ9Shd8fRY1aYbW6hSik+O6qtKqWPHoJaoz6F68AlOsgxC8F
+         lhCUxPVnU6lZZIVnroe6HKt7cp69kFRALfdxnKiuSbv+ayQEpNPzdxFf8Z5PxTBEfRkx
+         a0jz6+Ofm6k3Rh5ippSmoMBPY+oV6CP3kE7NcIxGcE1WhiXU5FlApoD259firKb7AOJv
+         E871UhUt0AwGXETud/tRgwH+wW7aAahl6wqbIUXzLVU8GlS05qXJS+prwp+bsKBG7HKn
+         DIcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SGIO3bUbOyLAGLDGNDrVtdjpSJVfbgrhp+VoDayZdrk=;
-        b=gbXEUhMg3XgGp9wqOjUXMVUwVZqhEcAz8vAnq378DTs5IZbb1m2q58RcefShryv55e
-         t1NkYrq5/IgmDDvtboOHEOvfEqG9btbkcnt5nKBLZLw20PO9fSNsRkEIFj+owv5aBJbG
-         oiqGa8cVZN7BcYOZQ9iqM4YIMf2uXX8870PiECc/nqxRcA+m926x+FSuvx36yPlpaswa
-         XAWUurhCtXfiTU+ornYopfbH8FN2kxoXzH5aolNU/6aL6JP6NZvSzqGejSS7ctDx72l3
-         ZLb9T6DgSpYKv8/UheKPeXgkugJDPECqjPnPePZWNrcYhY4QzuL4gWSbq5SEufDhH01Z
-         FD2g==
-X-Gm-Message-State: AOAM533tinKBJLKirIwpV93bR+jwgY198/8s1iaUtxqqSEuLU+4UF53s
-        rAC71d4tKWtUhxYCE1eHVI7b6w==
-X-Google-Smtp-Source: ABdhPJwAkXX5v3eIXx7quTKRqHz6jqdTRtrSxcGiIlzEa97n8FLx2pK0A1N73AVgaI9SOjje9iGvcg==
-X-Received: by 2002:a19:fc01:: with SMTP id a1mr3369591lfi.594.1639757750762;
-        Fri, 17 Dec 2021 08:15:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uYUgzkFeggr15Llsv7e4ur2WY7UgMDKixIFqjG977bw=;
+        b=lUHdXv9M57mJ0HN/eRyZ6+GM1uASskydsvPxCdpxUwWUSV0WK2zhW6lXLy/0k3zFcs
+         kHK/lFoQdtx/WMV1t44Vln/dZli6qQ09V/tFiYq5q/9xw0Y0IpdtHqBXfOkOTjJgxfiz
+         azH+Wn6+qNKOUlSUiQMD5cLAboJU7f6st/LALcHhGEvKsMZ8mzL30DaOrawDc6A0FZip
+         9pujEWuEcJ0ldL27QHZb1m9u3Qde+9JdstJKCpHVL+HYcIKXomY2g+9o88aCBtNoS0H3
+         3vWfTb3roRr7eq2l0asTso7cPeb28o2DMqhPpHhz+8WO/+Rdm5rf3/g+o3v0eS/B15sP
+         MnSw==
+X-Gm-Message-State: AOAM530iAmbFrj+hOxni2wdlTSxYaGEwoos3wP1c0szQWpxlCawt9Esf
+        3PEBzVlnZodTLJWqxN/UB/EXXA==
+X-Google-Smtp-Source: ABdhPJy0VR2MXAw5jDzn//v7uQ/IRIcK/YKLE/K7Gvn2bHvsL5z9YVii0mln7K2J8Er4j8Ywf3eYdA==
+X-Received: by 2002:a2e:870b:: with SMTP id m11mr3277105lji.20.1639757752333;
+        Fri, 17 Dec 2021 08:15:52 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id t4sm1452171lfe.220.2021.12.17.08.15.49
+        by smtp.gmail.com with ESMTPSA id w23sm1455089lfa.191.2021.12.17.08.15.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 08:15:50 -0800 (PST)
+        Fri, 17 Dec 2021 08:15:51 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -66,68 +66,81 @@ Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 0/7] arm64: dts: exynos: Add E850-96 board support
-Date:   Fri, 17 Dec 2021 18:15:42 +0200
-Message-Id: <20211217161549.24836-1-semen.protsenko@linaro.org>
+Subject: [PATCH v4 1/7] dt-bindings: clock: exynos850: Add bindings for Exynos850 sysreg clocks
+Date:   Fri, 17 Dec 2021 18:15:43 +0200
+Message-Id: <20211217161549.24836-2-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211217161549.24836-1-semen.protsenko@linaro.org>
+References: <20211217161549.24836-1-semen.protsenko@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WinLink's E850-96 is a dev board based on Exynos850 SoC [1]. The board's
-design follows 96boards specifications, hence it's compatible with
-96boards mezzanines [2].
+System Register is used to configure system behavior, like USI protocol,
+etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+make it possible to modify SYSREG registers.
 
-This patch series adds the initial support for E850-96 board and
-Exynos850 SoC, along with corresponding bindings. Only basic platform
-components are enabled at the moment (like serial, I2C, eMMC, RTC, WDT,
-clock driver, etc). Right now with this patch series it's possible to
-run the kernel with BusyBox rootfs as a RAM disk. More features are
-coming soon.
+While at it, add also missing PMU and GPIO clocks, which looks necessary
+and might be needed for corresponding Exynos850 features soon.
 
-[1] https://www.samsung.com/semiconductor/minisite/exynos/products/mobileprocessor/exynos-850/
-[2] https://www.96boards.org/products/mezzanine/
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
 Changes in v4:
-  - Removed slew_rate pin nodes
-  - Moved rtcclk clock to board dts file
+  - (none)
 
 Changes in v3:
-  - Ordered the pinctrl_alive phandle alphabetically (patch 7/7)
-  - No other changes in v3
+  - (none)
 
 Changes in v2:
-  - Rebased on krzk/linux.git (for-next), to account for Exynos7885
-    changes
-  - Added missing and new tags (R-b and Ack)
-  - Addressed all comments for v1
+  - Added R-b tag by Krzysztof Kozlowski
+  - Added Ack tag by Rob Herring
+  - Added Ack tag by Chanwoo Choi
 
-Sam Protsenko (7):
-  dt-bindings: clock: exynos850: Add bindings for Exynos850 sysreg
-    clocks
-  clk: samsung: exynos850: Add missing sysreg clocks
-  dt-bindings: Add vendor prefix for WinLink
-  dt-bindings: arm: samsung: Document E850-96 board binding
-  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850
-  arm64: dts: exynos: Add initial Exynos850 SoC support
-  arm64: dts: exynos: Add initial E850-96 board support
+ include/dt-bindings/clock/exynos850.h | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
- .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm64/boot/dts/exynos/Makefile           |   1 +
- .../boot/dts/exynos/exynos850-e850-96.dts     | 195 +++++
- .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 643 +++++++++++++++
- arch/arm64/boot/dts/exynos/exynos850.dtsi     | 741 ++++++++++++++++++
- drivers/clk/samsung/clk-exynos850.c           |  29 +
- include/dt-bindings/clock/exynos850.h         |  12 +-
- include/dt-bindings/pinctrl/samsung.h         |  13 +-
- 9 files changed, 1638 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
-
+diff --git a/include/dt-bindings/clock/exynos850.h b/include/dt-bindings/clock/exynos850.h
+index 8aa5e82af0d3..0b6a3c6a7c90 100644
+--- a/include/dt-bindings/clock/exynos850.h
++++ b/include/dt-bindings/clock/exynos850.h
+@@ -82,7 +82,10 @@
+ #define CLK_GOUT_I3C_PCLK		19
+ #define CLK_GOUT_I3C_SCLK		20
+ #define CLK_GOUT_SPEEDY_PCLK		21
+-#define APM_NR_CLK			22
++#define CLK_GOUT_GPIO_ALIVE_PCLK	22
++#define CLK_GOUT_PMU_ALIVE_PCLK		23
++#define CLK_GOUT_SYSREG_APM_PCLK	24
++#define APM_NR_CLK			25
+ 
+ /* CMU_CMGP */
+ #define CLK_RCO_CMGP			1
+@@ -99,7 +102,8 @@
+ #define CLK_GOUT_CMGP_USI0_PCLK		12
+ #define CLK_GOUT_CMGP_USI1_IPCLK	13
+ #define CLK_GOUT_CMGP_USI1_PCLK		14
+-#define CMGP_NR_CLK			15
++#define CLK_GOUT_SYSREG_CMGP_PCLK	15
++#define CMGP_NR_CLK			16
+ 
+ /* CMU_HSI */
+ #define CLK_MOUT_HSI_BUS_USER		1
+@@ -167,7 +171,9 @@
+ #define CLK_GOUT_MMC_EMBD_SDCLKIN	10
+ #define CLK_GOUT_SSS_ACLK		11
+ #define CLK_GOUT_SSS_PCLK		12
+-#define CORE_NR_CLK			13
++#define CLK_GOUT_GPIO_CORE_PCLK		13
++#define CLK_GOUT_SYSREG_CORE_PCLK	14
++#define CORE_NR_CLK			15
+ 
+ /* CMU_DPU */
+ #define CLK_MOUT_DPU_USER		1
 -- 
 2.30.2
 

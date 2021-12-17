@@ -2,151 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B981247935E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B57479332
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240017AbhLQR6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S239966AbhLQR4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240072AbhLQR6R (ORCPT
+        with ESMTP id S231484AbhLQR4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:58:17 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3B4C06175C;
-        Fri, 17 Dec 2021 09:58:13 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b22so6215122lfb.9;
-        Fri, 17 Dec 2021 09:58:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YIQlcF3gP50Ac2XyP/mWCT3TH1MR8AJE0l0k33C2rI4=;
-        b=U31Jz7S+v6lmx5fTO+U88D6SrE37ODp+9q0365LAbGwqPixsRAWvweUHL1knkSgjxc
-         dR9mrquyapfnZDQ8ZNd1f2W7h7y/ODKbkHmhIys72E0VX/dM1CUxUlU9QF26Rrk/UOqd
-         0WLY4RHukrOaZ02RrMyfR0BrjoLiqbJFsectgqGMP0lpf5VTdIa6zWGG/U7jMQXDE6PK
-         3YIKyAah8jH1PVDFwXVjtI+mWyciZ6Id16W7dqP3pkkkC5Wv3xSZ0WCWQcJPuzOXNzAy
-         T8N1Q+IwsZK+1oNI0nnPfAEiboZsZT3ol230avvwaJzmPwmKJTWKxVvbHD2LtBxp7o6o
-         BkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YIQlcF3gP50Ac2XyP/mWCT3TH1MR8AJE0l0k33C2rI4=;
-        b=GFzI/wM3q6l6ZI22o1qjAiSmt/TNnKweYaLkGvL3q1tOgdMdUarqdroNejxjerbTf6
-         FMH/t/uRS3saLrcQsIDlrUqIbWF7fthnJGKDvGt7/PY6HRjQMu9S7jsmeg63lyKxFCvy
-         2vr1BtpTDwz1HQ7qb9W/z3QeJIfkFiC2P4cCUgbYY5k8ItvnWAXpMkbnZxd6niVhzuMo
-         CuwGo29jRzV0CRVO6mgxoN7EJqi0gDL32ky7g0+/4V5uG/DPBquOFpfT8M4zJcWaSbW2
-         hID/NMvuq38r0YTOiI1x4C+ff9xjbU1bvcb9E5pVPdRWkL99nCg/pfzEmsCMBNlyH00M
-         K03w==
-X-Gm-Message-State: AOAM532c0Gub1KseVP9A7h9GAOqQLWjk2Vl5ljNoehhjM4VxCQL963id
-        K+PHxYkt69iZcvybNsyUswk=
-X-Google-Smtp-Source: ABdhPJyEg+R6x5sc59XnGJjYnjPKD7SF9ULXc8Ov81sZnNr6zNhkgoNGoFiA05i3KxASVuxbn4LMvw==
-X-Received: by 2002:a05:6512:5c8:: with SMTP id o8mr2954480lfo.659.1639763891645;
-        Fri, 17 Dec 2021 09:58:11 -0800 (PST)
-Received: from localhost.localdomain (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.gmail.com with ESMTPSA id w23sm1479244lfa.191.2021.12.17.09.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 09:58:11 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Agneli <poczt@protonmail.ch>
-Cc:     linux-tegra@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v5 11/11] ASoC: tegra20: i2s: Filter out unsupported rates
-Date:   Fri, 17 Dec 2021 20:56:06 +0300
-Message-Id: <20211217175606.22645-12-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211217175606.22645-1-digetx@gmail.com>
-References: <20211217175606.22645-1-digetx@gmail.com>
+        Fri, 17 Dec 2021 12:56:49 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04BFC061574;
+        Fri, 17 Dec 2021 09:56:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 18DC1CE2607;
+        Fri, 17 Dec 2021 17:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36499C36AE7;
+        Fri, 17 Dec 2021 17:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639763805;
+        bh=KCW1lWZbjvReZP/7JHwJgi2VLsdq6dNTG2h9PueIXys=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=lBl8FVniEwJfkBmgdSXJFmxAheEHcfrVw/KdDB+ms3HfMEGVNQ7Udc0tHWXOJ+0Dz
+         7Kjc/ixxEYm6+B7KlAnFE72+CxHqlA7clgt/Yg7kIGzJFKOdtHT4eTob82aGJgjxSn
+         GTIpnE1tSX70kd8XAOWJtnZk/2V0xZ+bIoJgKGSSiBteTVJ9NUmYhU36dHeyTIw5S6
+         V3UlJPhGlxRuE+WueVoPLbsqryiW6MwHOOJsmqvZUygA7JYIBvY+GOb60l76rCDWXH
+         n+3EJ0meGUWqznHNexIqX969cErMbsPErb376bShbzm6DVvZoy+IKPJmUOl5FGpd+K
+         WotDMYD4jYgnQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 000EE5C0610; Fri, 17 Dec 2021 09:56:44 -0800 (PST)
+Date:   Fri, 17 Dec 2021 09:56:44 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     tglx@linutronix.de, mark.rutland@arm.com, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rcu@vger.kernel.org, peterz@infradead.org, mtosatti@redhat.com,
+        frederic@kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v3 2/2] Documentation: core-api: entry: Add comments
+ about nesting
+Message-ID: <20211217175644.GZ641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211217105753.892855-1-nsaenzju@redhat.com>
+ <20211217105753.892855-2-nsaenzju@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217105753.892855-2-nsaenzju@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support new nvidia,fixed-parent-rate device-tree property which instructs
-I2S that board wants parent clock rate to stay at a fixed rate. This allows
-to play audio over S/PDIF and I2S simultaneously. The root of the problem
-is that audio components on Tegra share the same audio PLL, and thus, only
-a subset of rates can be supported if we want to play audio simultaneously.
-Filter out audio rates that don't match parent clock rate if device-tree
-has the nvidia,fixed-parent-rate property.
+On Fri, Dec 17, 2021 at 11:57:53AM +0100, Nicolas Saenz Julienne wrote:
+> The topic of nesting and reentrancy in the context of early entry code
+> hasn't been addressed so far. So do it.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- sound/soc/tegra/tegra20_i2s.c | 49 +++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+Looks good!  Just a few small suggestions below.
 
-diff --git a/sound/soc/tegra/tegra20_i2s.c b/sound/soc/tegra/tegra20_i2s.c
-index 266d2cab9f49..27365a877e47 100644
---- a/sound/soc/tegra/tegra20_i2s.c
-+++ b/sound/soc/tegra/tegra20_i2s.c
-@@ -262,10 +262,59 @@ static int tegra20_i2s_probe(struct snd_soc_dai *dai)
- 	return 0;
- }
- 
-+static const unsigned int tegra20_i2s_rates[] = {
-+	8000, 11025, 16000, 22050, 32000, 44100, 48000, 64000, 88200, 96000
-+};
-+
-+static int tegra20_i2s_filter_rates(struct snd_pcm_hw_params *params,
-+				    struct snd_pcm_hw_rule *rule)
-+{
-+	struct snd_interval *r = hw_param_interval(params, rule->var);
-+	struct snd_soc_dai *dai = rule->private;
-+	struct tegra20_i2s *i2s = dev_get_drvdata(dai->dev);
-+	struct clk *parent = clk_get_parent(i2s->clk_i2s);
-+	long i, parent_rate, valid_rates = 0;
-+
-+	parent_rate = clk_get_rate(parent);
-+	if (parent_rate <= 0) {
-+		dev_err(dai->dev, "Can't get parent clock rate: %ld\n",
-+			parent_rate);
-+		return parent_rate ?: -EINVAL;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(tegra20_i2s_rates); i++) {
-+		if (parent_rate % (tegra20_i2s_rates[i] * 128) == 0)
-+			valid_rates |= BIT(i);
-+	}
-+
-+	/*
-+	 * At least one rate must be valid, otherwise the parent clock isn't
-+	 * audio PLL. Nothing should be filtered in this case.
-+	 */
-+	if (!valid_rates)
-+		valid_rates = BIT(ARRAY_SIZE(tegra20_i2s_rates)) - 1;
-+
-+	return snd_interval_list(r, ARRAY_SIZE(tegra20_i2s_rates),
-+				 tegra20_i2s_rates, valid_rates);
-+}
-+
-+static int tegra20_i2s_startup(struct snd_pcm_substream *substream,
-+			       struct snd_soc_dai *dai)
-+{
-+	if (!device_property_read_bool(dai->dev, "nvidia,fixed-parent-rate"))
-+		return 0;
-+
-+	return snd_pcm_hw_rule_add(substream->runtime, 0,
-+				   SNDRV_PCM_HW_PARAM_RATE,
-+				   tegra20_i2s_filter_rates, dai,
-+				   SNDRV_PCM_HW_PARAM_RATE, -1);
-+}
-+
- static const struct snd_soc_dai_ops tegra20_i2s_dai_ops = {
- 	.set_fmt	= tegra20_i2s_set_fmt,
- 	.hw_params	= tegra20_i2s_hw_params,
- 	.trigger	= tegra20_i2s_trigger,
-+	.startup	= tegra20_i2s_startup,
- };
- 
- static const struct snd_soc_dai_driver tegra20_i2s_dai_template = {
--- 
-2.33.1
+							Thanx, Paul
 
+> ---
+> 
+> NOTE: I moved this into a separate patch to simplify the review.
+> 
+>  Documentation/core-api/entry.rst | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/core-api/entry.rst b/Documentation/core-api/entry.rst
+> index 3f80537f2826..f665f201ead0 100644
+> --- a/Documentation/core-api/entry.rst
+> +++ b/Documentation/core-api/entry.rst
+> @@ -105,6 +105,8 @@ has to do extra work between the various steps. In such cases it has to
+>  ensure that enter_from_user_mode() is called first on entry and
+>  exit_to_user_mode() is called last on exit.
+>  
+> +Syscalls shouldn't nest. If it were to happen, RCU / context tracking will
+> +catch the misbehavior and print out a warning.
+
+How about like this?
+
+Do not nest syscalls.  Nested systcalls will cause RCU and/or context
+tracking to print a warning.
+
+>  KVM
+>  ---
+> @@ -121,6 +123,9 @@ Task work handling is done separately for guest at the boundary of the
+>  vcpu_run() loop via xfer_to_guest_mode_handle_work() which is a subset of
+>  the work handled on return to user space.
+>  
+> +Nesting doesn't make sense in the context of KVM entry/exit transitions, it
+> +shouldn't happen.
+
+Like this?
+
+Do not nest KVM entry/exit transitions because doing so is nonsensical.
+
+>  Interrupts and regular exceptions
+>  ---------------------------------
+>  
+> @@ -180,6 +185,16 @@ before it handles soft interrupts, whose handlers must run in BH context rather
+>  than irq-disabled context. In addition, irqentry_exit() might schedule, which
+>  also requires that HARDIRQ_OFFSET has been removed from the preemption count.
+>  
+> +Even though interrupt handlers are expected to run with local interrupts
+> +disabled, interrupt nesting is common from an entry/exit perspective. For
+> +example, softirq handling happens within an irqentry_{enter,exit}() block, with
+
+The last comma on the above line needs to be removed, so just a space
+character between "block" and "with".
+
+> +local interrupts enabled. Also, although uncommon, nothing prevents an
+> +interrupt handler from re-enabling interrupts.
+> +
+> +Interrupt entry/exit code doesn't strictly need to handle reentrancy, since it
+> +runs with local interrupts disabled. But NMIs can happen anytime, and a lot of
+> +the entry code is shared between the two.
+> +
+>  NMI and NMI-like exceptions
+>  ---------------------------
+>  
+> @@ -259,3 +274,7 @@ and for e.g. a debug exception it can look like this:
+>  
+>  There is no combined irqentry_nmi_if_kernel() function available as the
+>  above cannot be handled in an exception-agnostic way.
+> +
+> +NMIs can happen in any context. For example, an NMI-like exception triggered
+> +while handling an NMI. So NMI entry code has to be reentrant and state updates
+> +need to handle nesting.
+> -- 
+> 2.33.1
+> 

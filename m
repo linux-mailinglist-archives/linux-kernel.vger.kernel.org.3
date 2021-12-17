@@ -2,108 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1815E4783ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA4B4783F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbhLQETr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 23:19:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60162 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbhLQETr (ORCPT
+        id S232694AbhLQEUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 23:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232655AbhLQEUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:19:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B675BB826F4;
-        Fri, 17 Dec 2021 04:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A77C36AE1;
-        Fri, 17 Dec 2021 04:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639714784;
-        bh=x0hkHvk18e34yjLkRd7XIXuSC+n9Puz6Q2aRYGsQVRI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TFQtas4OZYGvTi5Bgwg0pv15S1Y1H59H0oIUE3UP3boXf9oLjsPfuIij/kytUrm+n
-         luCfVwJcSCaSGoImKnlwl19zpl8sUta+vM1qNHxCBwvxNPbK6bZK6Lzj0sD0aupIU/
-         Sf4w3DJEHI3eaWSErMRI7ounkoWH8h09wXFCf8YCllka7L8Oo/qldVard1JdkJMGf2
-         IqPpamUVbcZ+GGsX8iGq+OyzB76NBT4gK1n0RCUIWePXZDSMVbHC8QoYOL6G27N9LF
-         Ifcom4THUD5c6nZScRg2ip/eAlkqE/OUotwSkGI2joKvfr183ct2eik0ad9c6g0DoA
-         4FfYwXzWr2fIw==
-Date:   Thu, 16 Dec 2021 20:19:42 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] sfc: potential dereference of null pointer
-Message-ID: <20211216201942.06e10166@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211216084902.329009-1-jiasheng@iscas.ac.cn>
-References: <20211216084902.329009-1-jiasheng@iscas.ac.cn>
+        Thu, 16 Dec 2021 23:20:10 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91E6C061574;
+        Thu, 16 Dec 2021 20:20:10 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id l18so949978pgj.9;
+        Thu, 16 Dec 2021 20:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXlXaQzQ+nfyK3zsVRGeFn4YVh8Bg3qKyVZtZQPRG+Q=;
+        b=jpr4no+MdZr+tiCxsYI0JTilC48QiI4Rln1XP1lhrhq/aGjQhbhUdM7b2Tvdg/S5xF
+         kfU3wS0R1slmczGsRZi8opS2qxTsLOFbzpI9w7CyAu/mFiSDAZA6fhw70rRuImTf3mxM
+         UWBsCYa2QN3F3mAQ7FZgoeLLYJJAtRAkLBCxvyFmdQcYl4A1akBw+oF1LzbYplkG3N9w
+         ctRuzJiLOJ+lprgD5KTm6wDYVLncFB6nQVlOYeL7l41PO70XfHg6b+EllgDia8IA3Cx7
+         Nd71632sicRjx2CPxoDhzG16Nnl4zTXfVuAJUC5/BB7l5F9GUIkrLVbvfsw/T0G6+saf
+         xtzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WXlXaQzQ+nfyK3zsVRGeFn4YVh8Bg3qKyVZtZQPRG+Q=;
+        b=YH7JnGFtNCReZ6xvAGBETrdgN8SXstfhtInsDcPaa5vUfvaGiiU/7NDhA8XBk33pZd
+         9uGudoesioDEdoh4baStxpLqRkDFpXgtxzYamsxOrttMSFoF5gJ//pSRuS7F/1N5VGzM
+         N4Wxlr/RNyPct0c6llE9nokvlo6O8Kz2gVZGeSvkLvH59PE/C4TukMg+miZvmG75KfmD
+         TsKr0rzpU8uqe5N8OEZ9QwwoyBpy2u4fDo7pQFjpWaHmTLmwu/7eRESYJKxOFCtaL4Kx
+         jJqWokOzNIGAtbBHBndrGaJ8mL9RShlp53Y3GkzzAio3/mynSQOEdHFK6e5sMJ4WE4l3
+         fNSA==
+X-Gm-Message-State: AOAM5315fqE/s4MT++zsFWFhg6XIudMhUu0ncn+3KXBxvqNdmLcs7tWO
+        l3XhO2kLTU/AoTPn9c1YWUVizMyJy+0=
+X-Google-Smtp-Source: ABdhPJwOMKCRXTbQlcDoh+2QnIwrqTxR94/znbwNVzvHpdBleP/ncp2gnAca4nMx6/kpLJ5IKuwQLw==
+X-Received: by 2002:aa7:86c6:0:b0:4a4:ac66:99fc with SMTP id h6-20020aa786c6000000b004a4ac6699fcmr1120244pfo.83.1639714809820;
+        Thu, 16 Dec 2021 20:20:09 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id mq10sm7553496pjb.3.2021.12.16.20.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 20:20:09 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
+        ARCHITECTURE), Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
+        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE),
+        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+Subject: [PATCH v4 0/6] Broadcom DT bindings updates to YAML
+Date:   Thu, 16 Dec 2021 20:19:55 -0800
+Message-Id: <20211217042001.479577-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 16:49:02 +0800 Jiasheng Jiang wrote:
-> [PATCH] sfc: potential dereference of null pointer
+Hi Rob,
 
-Please give the commit a more unique name.
+This patch series contains a number of device tree bindings being
+converted to YAML to help with validation.
 
-> The return value of kcalloc() needs to be checked.
-> To avoid dereference of null pointer in case of the failure of alloc,
-> such as efx_fini_rx_recycle_ring().
-> Therefore, it should be better to change the definition of page_ptr_mask
-> to signed int and then assign the page_ptr_mask to -1 when page_ring is
-> NULL, in order to avoid the use in the loop in
-> efx_fini_rx_recycle_ring().
+There will be second, and possibly third rounds later on after those
+land in.
 
-What about uses of this ring, you mention avoiding null-deref in the
-freeing function but presumably something is actually using this ring
-at runtime. Seems like we should return -ENOMEM.
+Thanks!
 
-> Fixes: 3d95b884392f ("sfc: move more rx code")
+Changes in v4:
+- removed the patches that have already been merged
+- fixed errors in brcm,bcm7120-l2 binding
+- added interrupt descriptions and comments to compatibles of
+  brcm,gisb-arb
+- added description of the 'phys' for BDC and dropped 'ref'
+- combined all enums into a single one for brcm,sata-brcm,yaml
 
-Moving buggy code does not introduce the problem, please find a Fixes
-tag referring to where the bad code was _introduced_.
+Changes in v3;
 
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/ethernet/sfc/net_driver.h | 2 +-
->  drivers/net/ethernet/sfc/rx_common.c  | 5 ++++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-> index 9b4b25704271..beba3e0a6027 100644
-> --- a/drivers/net/ethernet/sfc/net_driver.h
-> +++ b/drivers/net/ethernet/sfc/net_driver.h
-> @@ -407,7 +407,7 @@ struct efx_rx_queue {
->  	unsigned int page_recycle_count;
->  	unsigned int page_recycle_failed;
->  	unsigned int page_recycle_full;
-> -	unsigned int page_ptr_mask;
-> +	int page_ptr_mask;
->  	unsigned int max_fill;
->  	unsigned int fast_fill_trigger;
->  	unsigned int min_fill;
-> diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-> index 68fc7d317693..d9d0a5805f1c 100644
-> --- a/drivers/net/ethernet/sfc/rx_common.c
-> +++ b/drivers/net/ethernet/sfc/rx_common.c
-> @@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
->  					    efx->rx_bufs_per_page);
->  	rx_queue->page_ring = kcalloc(page_ring_size,
->  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
-> -	rx_queue->page_ptr_mask = page_ring_size - 1;
-> +	if (!rx_queue->page_ring)
-> +		rx_queue->page_ptr_mask = -1;
-> +	else
-> +		rx_queue->page_ptr_mask = page_ring_size - 1;
->  }
->  
->  static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+- added Gregorys' Acked-by to the GPIO binding patch
+- added Uwe's Acked-by to the PWM binding patch
+- fixed STB L2 binding to include the missing 2711 compatible string
+  and interrupt-names property for 7445
+- fixed the NSP SATA3 controller node unit name and added a missing
+  check for the 63138 variant to check for the reset/reset-names
+  property
+
+Changes in v2:
+
+- rebased against dt/next
+- addressed Gregory's feedback on the GPIO binding change
+- added Damien's Acked-by to the ATA binding patch
+
+Florian Fainelli (6):
+  dt-bindings: interrupt-controller: Convert BCM7120 L2 to YAML
+  dt-bindings: interrupt-controller: Merge BCM3380 with BCM7120
+  ARM: dts: NSP: Rename SATA unit name
+  dt-bindings: ata: Convert Broadcom SATA to YAML
+  dt-bindings: bus: Convert GISB arbiter to YAML
+  dt-bindings: usb: Convert BDC to YAML
+
+ .../bindings/ata/brcm,sata-brcm.txt           |  45 ------
+ .../bindings/ata/brcm,sata-brcm.yaml          |  90 +++++++++++
+ .../devicetree/bindings/bus/brcm,gisb-arb.txt |  34 ----
+ .../bindings/bus/brcm,gisb-arb.yaml           |  66 ++++++++
+ .../brcm,bcm3380-l2-intc.txt                  |  39 -----
+ .../brcm,bcm7120-l2-intc.txt                  |  88 -----------
+ .../brcm,bcm7120-l2-intc.yaml                 | 149 ++++++++++++++++++
+ .../devicetree/bindings/usb/brcm,bdc.txt      |  29 ----
+ .../devicetree/bindings/usb/brcm,bdc.yaml     |  49 ++++++
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/bcm-nsp.dtsi                |   2 +-
+ 11 files changed, 356 insertions(+), 237 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+ create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
+ create mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
+
+-- 
+2.25.1
 

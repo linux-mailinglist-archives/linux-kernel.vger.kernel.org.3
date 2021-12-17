@@ -2,149 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AA9479669
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FBF479658
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbhLQVm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbhLQVm6 (ORCPT
+        id S229799AbhLQVhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:37:20 -0500
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:61057 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229772AbhLQVhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:42:58 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73B1C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:57 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id e3so12940342edu.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C9IysSCKwmnVf0clSv3vqtB9fmhRZmRL64GBWJwRw/Y=;
-        b=NsoM3bp5z1ViaGMsoT3rdJ0GTTkM2nxbtO1rOArzSMsTMLZJNzIeeDbkuFjfjllNC8
-         xn6hGkr0DopwV/8Eu5djljv17PjTjMOTC8v7g/t2TyO7f8rn0uZpLJ8UcnwQTupGApwJ
-         t6+Rs305ThbmGf+HCSQiO/fTN2vHb+5yfsROE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C9IysSCKwmnVf0clSv3vqtB9fmhRZmRL64GBWJwRw/Y=;
-        b=eQ/W7WY7+lb00qPe8xj5eGQQtOzD26PDVTFhf8N2DDNhWU96Bcx/AM65AWmoZmpdZk
-         T1oAEsu5xEMrnmf7rULNVpIZ8Nz6UM4hFI9Pwkzs4Mudaq2sB2hWVhRB1z51Fk5btSIu
-         OAunLAWGoenR0r7P1oMJITAYh14weLpoRU6o02JbpENIRMYaDb/hTMWOe2y9nofr4VL/
-         LQbnScJOg5eNfFsunxbnh7eGqoUNZKOTn7IIMYTRmFiDkHHNzwHvKYKliTGZePE1Qg63
-         SoEfzVvfWO+fjrR+wOHD6X2ZQTKdVI+AZnshKlQRtBdfcZNeC/eMy28qrTrmLW5NemAz
-         GTwA==
-X-Gm-Message-State: AOAM530gXNQsUeEF0qPZUw5mdhMO9MV5QEZc8RUwv1ULIvkQ9hcAkKRi
-        VWSYxpHIR2qBNztH5K+jXwKQPHbhbFvmx1Y4p/c=
-X-Google-Smtp-Source: ABdhPJwsIzDjrjKvSWU/a4Q35aj2v7UBHjgVWGJkek/yC7gIh+8KcJpZocDS6VCOSBZORs+4TZ4Juw==
-X-Received: by 2002:a17:906:278d:: with SMTP id j13mr4262685ejc.230.1639777376170;
-        Fri, 17 Dec 2021 13:42:56 -0800 (PST)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id e19sm3938392edu.47.2021.12.17.13.42.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 13:42:56 -0800 (PST)
-Received: by mail-wm1-f41.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2347483wmc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:56 -0800 (PST)
-X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr2170336wmb.152.1639777018053;
- Fri, 17 Dec 2021 13:36:58 -0800 (PST)
+        Fri, 17 Dec 2021 16:37:19 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id yKuhmDixnUGqlyKuhmEejY; Fri, 17 Dec 2021 22:37:16 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 17 Dec 2021 22:37:16 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     vneethv@linux.ibm.com, oberpar@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, borntraeger@linux.ibm.com,
+        agordeev@linux.ibm.com
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] powerpc/mpic: Use bitmap_zalloc() when applicable
+Date:   Fri, 17 Dec 2021 22:37:13 +0100
+Message-Id: <c323cce0ce286d41f4bf2d316c0e4cce0f4abfa8.1639776929.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
- <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
-In-Reply-To: <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 13:36:41 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
-Message-ID: <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:55 PM David Hildenbrand <david@redhat.com> wrote:
->
-> If we have a shared anonymous page we cannot have GUP references, not
-> even R/O ones. Because GUP would have unshared and copied the page,
-> resulting in a R/O mapped anonymous page.
+'mpic->protected' is a bitmap. So use 'bitmap_zalloc()' to simplify
+code and improve the semantic, instead of hand writing it.
 
-Doing a GUP on an actual shared page is wrong to begin with.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/s390/cio/idset.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-You even know that, you try to use "page_mapcount() > 1" to disallow it.
+diff --git a/drivers/s390/cio/idset.c b/drivers/s390/cio/idset.c
+index 45f9c0736be4..7e5550230c0f 100644
+--- a/drivers/s390/cio/idset.c
++++ b/drivers/s390/cio/idset.c
+@@ -25,11 +25,10 @@ static struct idset *idset_new(int num_ssid, int num_id)
+ {
+ 	struct idset *set;
+ 
+-	set = vmalloc(sizeof(struct idset) + bitmap_size(num_ssid, num_id));
++	set = vzalloc(sizeof(struct idset) + bitmap_size(num_ssid, num_id));
+ 	if (set) {
+ 		set->num_ssid = num_ssid;
+ 		set->num_id = num_id;
+-		memset(set->bitmap, 0, bitmap_size(num_ssid, num_id));
+ 	}
+ 	return set;
+ }
+-- 
+2.30.2
 
-My point is that it's wrong regardless, and that "mapcount" is
-dubious, and that COW cannot - and must not - use mapcount, and that I
-think your shared case should strive to avoid it for the exact same
-reason.
-
-So, what I think should happen is:
-
- (a) GUP makes sure that it only ever looks up pages that can be
-shared with this VM. This may in involve breaking COW early with any
-past fork().
-
- (b) it marks such pages so that any future work will not cause them
-to COW either
-
-Note that (a) is not necessarily "always COW and have to allocate and
-copy new page". In particular, if the page is already writable, you
-know you already have exclusive access to it and don't need to COW.
-
-And if it isn't writable, then the other common case is "the cow has
-only one user, and it's us" - that's the "refcount == 1" case.
-
-And (b) is what we do with that page_maybe_dma_pinned() logic for
-fork(), but also for things like swap cache creation (eg see commit
-feb889fb40fa: "mm: don't put pinned pages into the swap cache").
-
-Note that this code all already exists, and already works - even
-without getting the (very expensive) mmap_sem. So it works with
-fast-GUP and it can race with concurrent forking by another thread,
-which is why we also have that seqcount thing.
-
-As far as I can tell, your "mapcount" logic fundamentally requires
-mmap_sem for the fork() race avoidance, for example.
-
-So this is why I don't like the mapcount games - I think they are very
-fragile, and not at all as logical as the two simple rules a/b above.
-
-I believe you can make mapcount games _work_ - we used to have
-something like that. It was incredibly fragile, and it had its own set
-of bugs, but with enough care it's doable.
-
-But my argument really is that I think it's the wrong approach, and
-that we should simply strive to follow the two simple conceptual rules
-above.
-
-            Linus

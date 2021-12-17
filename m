@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603614784D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDD04784D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbhLQGJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 01:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S233190AbhLQGLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 01:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhLQGJN (ORCPT
+        with ESMTP id S230405AbhLQGLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 01:09:13 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B21C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:09:13 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id t26so2026009wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:09:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7QH2bkz/dvyar0Slq99MmeQR+6WQT9L3G9+6vCacYMo=;
-        b=waZfM5crmwh+YUwgryZwAjwMKciDhj6hG65pBTNwrjBM1A46dmd2m6KpjWRAhkl7wd
-         JS5DVW8eO8Uimxc6CRvZGASqDGLGtIxT4pSS0Q2yP0/cxQFGmnbL+M26OJP39exU97n0
-         ETsBk5MuDSbC3hzEQ70IMoZ4xcLGze2MiNSUmzKUo7GcPuIT1FE30tKffUNi1PngZwEz
-         lUWM2lZNQcNejkV4FWNaW92ubDzXPPfkhSVPEav86ScTugM5bW0DnVYgUtNU/mGHdZve
-         pdei1icgv91nuiO75ZrsV1uhdHx38sMaqJ68d4EfYlXeJWiU/6kGGxyhzSsxq/sH6LyP
-         ojqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7QH2bkz/dvyar0Slq99MmeQR+6WQT9L3G9+6vCacYMo=;
-        b=AXmtjtQPt4068iTIwWm4BHLpzPfhzZRM6cZvUtUdnY2+fBrkNdlKf4vrAa6q1bZl/H
-         bV41Fc59YC+LnL7XS5F1MqKgDlr2AvYnzQjVzXq1h53TeeJZwGEK5wXzEu9iK9/aPRlu
-         T7zVinBvc1q6g6XJw4MLPeQlZGdQKSGd51ivBqLLvIcYJVyxZTfcLCBehJJFCfDq5eH5
-         vRinh65D9aRkn0Jf5iNJDLqR/8eD8hppLrbnfdQmE/Nf+IRrQ5gxVCZ1crqfTWZPH1G0
-         /LXrv5g4xi+DCiLpAykRwcrpi6YVeRuH5NdwlKmfC03UCHYRzwzQ0wIEUmBXFu0mlUhO
-         hb9g==
-X-Gm-Message-State: AOAM531WiT2ctjulPI1rNM5F5LtBCoZqf5b2EUeC2j6zEihnALBsqfCv
-        JhaJq60t1OBcTRwBWWK9itikuCP1cbiduKIsTJZlsg==
-X-Google-Smtp-Source: ABdhPJwEquvnLOderDNKIdJ1HekDsTALy8TIENkzMKo1N7N3wuyG5X3zylXVjua0nOnoW8rY/7T9uIm++VL6JFu35Vw=
-X-Received: by 2002:a5d:56c2:: with SMTP id m2mr1095151wrw.313.1639721351448;
- Thu, 16 Dec 2021 22:09:11 -0800 (PST)
+        Fri, 17 Dec 2021 01:11:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AECC061574;
+        Thu, 16 Dec 2021 22:11:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFdsk4XXLz4xd4;
+        Fri, 17 Dec 2021 17:11:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639721499;
+        bh=Za/01V58nQo09u7OF+a0FvV7p4G/Co3VNwo5n7//oKg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e5ixP0Z1YeWWwmOxEBf4SdIbxyofHMFQm4r5QI+NB8Kso6OIgSQhAZPyMFau+p8rf
+         ekXUtgVZtYuQfKLBLScTRiBGFs+UaaqASMfunv2xdeG8OU15f1W735ZKolKjwgvQ8B
+         5dOCvEVZlf9fyY8p6wMNKRjEdwNZqoI4QLlUzm0uifwAKO/Tyj0m65lg9GNN+js4mp
+         DmKDrhkSpda1g4AGXDFOOJxP5q1EgoKmmKPGy7rKaBjhZsCAWKAFgLWQVApx72C78R
+         uhoLLDBG8HueE1RxeqLnKN+PiSoziNuMpimkSvxTp5CCG1TWt5tSkrj7NC7JFNCAPu
+         bwO5lXFGg2rMQ==
+Date:   Fri, 17 Dec 2021 17:11:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the gpio-sim tree with the
+ gpio-brgl-fixes tree
+Message-ID: <20211217171136.613b02d3@canb.auug.org.au>
+In-Reply-To: <20211116103924.3a26ba23@canb.auug.org.au>
+References: <20211116103924.3a26ba23@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20211129075451.418122-1-anup.patel@wdc.com> <20211129075451.418122-3-anup.patel@wdc.com>
- <CAOnJCU+Yft5EjgUUCi=nW79pYSGYPWB1ew5iyTjViFvGGQxQCA@mail.gmail.com>
-In-Reply-To: <CAOnJCU+Yft5EjgUUCi=nW79pYSGYPWB1ew5iyTjViFvGGQxQCA@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 17 Dec 2021 11:38:59 +0530
-Message-ID: <CAAhSdy1WXnoFw2_o+6E1zjx5bP96FeW3ijMuOp3R794Yxasskg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] RISC-V: KVM: Add VM capability to allow userspace
- get GPA bits
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Anup Patel <anup.patel@wdc.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/8r4jz=pFV_Fr_+RTffJGt/I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 11:17 AM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Mon, Nov 29, 2021 at 12:10 AM Anup Patel <anup.patel@wdc.com> wrote:
-> >
-> > The number of GPA bits supported for a RISC-V Guest/VM is based on the
-> > MMU mode used by the G-stage translation. The KVM RISC-V will detect and
-> > use the best possible MMU mode for the G-stage in kvm_arch_init().
-> >
-> > We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
-> > the KVM userspace to get the number of GPA (guest physical address) bits
-> > supported for a Guest/VM.
-> >
-> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> > ---
-> >  arch/riscv/include/asm/kvm_host.h | 1 +
-> >  arch/riscv/kvm/mmu.c              | 5 +++++
-> >  arch/riscv/kvm/vm.c               | 3 +++
-> >  include/uapi/linux/kvm.h          | 1 +
-> >  4 files changed, 10 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> > index 37589b953bcb..ae5d238607fe 100644
-> > --- a/arch/riscv/include/asm/kvm_host.h
-> > +++ b/arch/riscv/include/asm/kvm_host.h
-> > @@ -221,6 +221,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
-> >  void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_stage2_mode_detect(void);
-> >  unsigned long kvm_riscv_stage2_mode(void);
-> > +int kvm_riscv_stage2_gpa_size(void);
-> >
-> >  void kvm_riscv_stage2_vmid_detect(void);
-> >  unsigned long kvm_riscv_stage2_vmid_bits(void);
-> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > index 9ffd0255af43..9b6d6465094f 100644
-> > --- a/arch/riscv/kvm/mmu.c
-> > +++ b/arch/riscv/kvm/mmu.c
-> > @@ -760,3 +760,8 @@ unsigned long kvm_riscv_stage2_mode(void)
-> >  {
-> >         return stage2_mode >> HGATP_MODE_SHIFT;
-> >  }
-> > +
-> > +int kvm_riscv_stage2_gpa_size(void)
-> > +{
-> > +       return stage2_gpa_bits;
-> > +}
->
-> The ioctl & the underlying stage2_gpa_bits has bits.
-> Maybe rename the function to kvm_riscv_stage2_gpa_bits as well ?
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, I will rename in the next revision.
+Hi all,
 
-Thanks,
-Anup
+On Tue, 16 Nov 2021 10:39:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the gpio-sim tree got a conflict in:
+>=20
+>   tools/testing/selftests/gpio/Makefile
+>=20
+> between commits:
+>=20
+>   92a59d7f381d ("selftests: gpio: fix gpio compiling error")
+>   4f4d0af7b2d9 ("selftests: gpio: restore CFLAGS options")
+>=20
+> from the gpio-brgl-fixes tree and commits:
+>=20
+>   79d93060a28e ("selftests: gpio: provide a helper for reading chip info")
+>   60283bc9fceb ("selftests: gpio: add a helper for reading GPIO line name=
+s")
+>=20
+> from the gpio-sim tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
->
-> > diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> > index fb18af34a4b5..6f959639ec45 100644
-> > --- a/arch/riscv/kvm/vm.c
-> > +++ b/arch/riscv/kvm/vm.c
-> > @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> >         case KVM_CAP_NR_MEMSLOTS:
-> >                 r = KVM_USER_MEM_SLOTS;
-> >                 break;
-> > +       case KVM_CAP_VM_GPA_BITS:
-> > +               r = kvm_riscv_stage2_gpa_size();
-> > +               break;
-> >         default:
-> >                 r = 0;
-> >                 break;
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 1daa45268de2..469f05d69c8d 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
-> >  #define KVM_CAP_ARM_MTE 205
-> >  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> > +#define KVM_CAP_VM_GPA_BITS 207
-> >
-> >  #ifdef KVM_CAP_IRQ_ROUTING
-> >
-> > --
-> > 2.25.1
-> >
->
-> Other than that, it looks good to me.
->
-> Reviewed-by: Atish Patra <atishp@rivosinc.com>
->
->
-> --
-> Regards,
-> Atish
+This is now a conflict between the gpio-brgl tree and Linus' tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8KhkACgkQAVBC80lX
+0GzN6wf9GhM4xpYIOfwBoRup3596AgstRrIRLS6bPOqSDCnU4LWsnEBIVBv1HXAQ
++5BQD2lXbuenU5SRtDlqesXsx08EaX32DycReJ/ySQc+Gslxa801OotDqgm+W5JF
+bd/MoHl1g4RJ4Il9Xp6esbMx1W1/po8fRwC8g2WP37wvcUwDhNYx6S0+m3n1XvoZ
+ZxrkqfQdqU7E7n+zKfttd0pNsLIY21jTeONeBvdg+jufUfWhGDsdiK5WLAsIvMmN
+vtUIG7cGRQslX979OOEexoZQyQJAxOsPxiucHdvJw6s5sIuX0v4bLd3364W+k8HO
+983AZE0+aJZYPGTa1wOSz7+CQdTMng==
+=IChE
+-----END PGP SIGNATURE-----
+
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I--

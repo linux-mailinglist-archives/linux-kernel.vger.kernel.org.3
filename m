@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27552478620
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFE7478624
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbhLQIYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:24:17 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:54417 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhLQIYP (ORCPT
+        id S233799AbhLQIYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:24:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41986 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231287AbhLQIYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:24:15 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 17 Dec 2021 03:24:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFhph45M0z4xd4;
-        Fri, 17 Dec 2021 19:24:11 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639729453;
-        bh=Soc6Js56cJBQ+ScAW2BGXXHcvZWzV4TJj3H9B52peOA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PFWlLq1dI2UzQBoGHpJriT2df2OY1Ai014vhJhbZ/WDrn1ndXhTibb9tlGB5iU/gn
-         ru+zJj7EvVODGZ1JTq+Iyu3FDHRigw9FvKg5Y1RaIAp48lAX9LoIQDwalpHIlqqXSe
-         Igj3TVQ9kD7UJlp68ApGbU6Ac7pU5yI7RZzmUA/hawKKRXHIDXWAdHhl4UhMqujeEv
-         rEVzKuacxrn/bxUq0UZ377DMCfityzcV3GyaSCgbHCEqN0+GH40+Wrsf5kXRmjK6hJ
-         IwGQW4PFPAMSrHIFx7T+fjXscj3JLB02jo0Lq+gwTRNTctO9Jh+kC8EvPVz/9cLO6l
-         olSGd0sl36DdA==
-Date:   Fri, 17 Dec 2021 19:24:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     broonie@kernel.org, Dan Williams <dan.j.williams@intel.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A460061FCC;
+        Fri, 17 Dec 2021 08:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B924C36AE1;
+        Fri, 17 Dec 2021 08:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639729487;
+        bh=CbaFWW4ZNZTH1DI4qN8igDyU8NcMcrxlUtLugBF1z2Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OwzwgO2/tQcE5OVcqx2S7YU5QuqvLtn5aK9H2iIw5ACZaTLINdbqFwQU1vkQXHo4U
+         j9MCOhlncsTM2ifqf7eAeFjqN1UIiLKfU5pplziMDORm0yB7tGjxygPPpLLRNBsX3v
+         x2jzmYHFxI2iYxCMcoZPx3AUFh9/eQEMksdrkR8Y=
+Date:   Fri, 17 Dec 2021 09:24:43 +0100
+From:   gregkh <gregkh@linuxfoundation.org>
+To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
+Cc:     Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: linux-next: manual merge of the nvdimm tree with the ext4 tree
-Message-ID: <20211217192410.3fedc457@canb.auug.org.au>
-In-Reply-To: <20211216082833.GA24677@lst.de>
-References: <20211210174740.2695216-1-broonie@kernel.org>
-        <20211216082833.GA24677@lst.de>
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
+Subject: Re: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
+Message-ID: <YbxJSxjumZ8nkOm8@kroah.com>
+References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
+ <YbrsbtBgUDnjZJ/o@kroah.com>
+ <CAHpW4oRTcXq6k2o4cjFeHznZrR737947UPE60nWyPTRLPTR0Gw@mail.gmail.com>
+ <3a2820c389444f7db99712f7cd11de30@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GCGqd/odkevrb4E1C/O0vcx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3a2820c389444f7db99712f7cd11de30@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GCGqd/odkevrb4E1C/O0vcx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 17, 2021 at 08:10:45AM +0000, Tony Huang 黃懷厚 wrote:
+> Dear Gregkh:
+> 
+> > > +
+> > > +static ssize_t sp_iop_state1_show(struct device *dev, struct
+> > > +device_attribute *attr, char *buf) {
+> > > +     struct sp_iop *iop = dev_get_drvdata(dev);
+> > > +     ssize_t len = 0;
+> > > +
+> > > +     sp_iop_standby_mode(iop);
+> > > +     mdelay(10);
+> > > +     sp_iop_s1mode(dev, iop);
+> > > +     return len;
+> > > +}
+> > 
+> > This function is not showing anything.
+> > 
+> 							
+> The purpose of this function:							
+> SP7021 has three power states:S0, S1 and S3.							
+> S0:Default domain is on. IOP domain is on. AO domain is on.							
+> S1:Default domain is off. IOP domain is on. AO domain is on.							
+> S3:Default domain is off. IOP domain is off. AO domain is on.							
+> System enter S1 mode when read sysfs sp_iop_state1,							
 
-Hi all,
+That is not what sysfs is for, sorry.
 
-On Thu, 16 Dec 2021 09:28:33 +0100 Christoph Hellwig <hch@lst.de> wrote:
->
-> On Fri, Dec 10, 2021 at 05:47:40PM +0000, broonie@kernel.org wrote:
-> > I'm not comfortable with resolving this in something as critical as ext4
-> > at this point on a Friday evening with the code motion that's going on
-> > so I've dropped the nvdimm tree for today, I'll look again on Monday. =
-=20
->=20
-> Given that it is Thursday now I've done the (pretty simple) merge
-> myself, it can be found here:
->=20
-> http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/ext4-dax-=
-merge
+> I hope to provide users with the ability to enter S1 mode by themselves.							
+> So I cannot use DEVICE_ATTR. I should use file_operations method.							
 
-I have used that today.
+No, please use the normal power management callbacks for your driver
+that all other drivers use in the kernel.  There is nothing special
+about this one driver to warrant a totally new user/kernel api for it.
 
---=20
-Cheers,
-Stephen Rothwell
+thanks,
 
---Sig_/GCGqd/odkevrb4E1C/O0vcx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8SSsACgkQAVBC80lX
-0GzABwf9Fusht9zCn9RLMB9k2bDxql4i9K4ITeTsFRmzey00go58OejVck4hH1R0
-/MAChqjIWeHzihIsKEOT87BZpJY2hS9azbu8DXYuyXOvU5RfZcjEagJE5TtRhxe+
-5/EUbPjRFOimPxFJBIDMSdjYZ/HhE/rf9TTjDNXmkFvGn6DvGd1W5uLInLBm7cf4
-T3hMjZ6k7PjLvMHnSxeBQByHkYwFrsHNB9AbaFQmqsIUdpfGc8MQsPsEU4sIfXE6
-WQsXuhLz858xA3F37P0aLHBgLYM0mx0FL2M1HctiNQhUsuXmY2IZ1BxN4ZTIjZ+s
-fjP5BZTDIo1CDRzOwTaSjxRTRL3qJA==
-=LpzG
------END PGP SIGNATURE-----
-
---Sig_/GCGqd/odkevrb4E1C/O0vcx--
+greg k-h

@@ -2,86 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB49E4787CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E8E4787C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbhLQJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbhLQJff (ORCPT
+        id S232041AbhLQJfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:35:16 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:48990
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231778AbhLQJfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:35:35 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79131C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:35:35 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id e17so1369663plh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:35:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tRXGW/amIFoMeO9Hmp2aPYcTAm/VwGo6IbA1+ruwk4s=;
-        b=ZoBjskmxyV3ORj3CJZy9HrkO54Nw9+cIJAbXSGpBztVCjtYp3SG0dXX4m8Btt1xHbf
-         Fzr+OzhfAyqo3aY58rZo8yRELG1/TAiEVSrAN8JF/WMJ2bQrAy5Qw+GE8MXTpsXxtk3z
-         r5SuY7Rj0mh5gbxgZfMPhhTWA2opo6mmth8cw=
+        Fri, 17 Dec 2021 04:35:14 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5E1893FFD6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 09:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639733712;
+        bh=z2ulb+DVZsgqJd2LDgGlq8D+/PB9tFXsgdrZEe6FKTw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=dGr7HKPDvmMNTlGHP350Rq2sxz2mYrR04S0Mb2aUqxNrrYQHJpOd19+199fdLsNRM
+         oIkCexFFiGFG5hojPV+UYl40F2UTTh1G7EHQXoV0u86Ri4P24pynJ2LSzazIHTpiVQ
+         xCL5nRzSqPgQhZIAKYCtY5of+LHpx1dkCDLRnbe5zSblblqhg8U1nX3VgE2Ew2e2zx
+         3i6XBjG+d1OXSCgNO1w6EHu5mcltPiyZHhCKwxNW9iOi0oLticnd95aW+sVbYki2cu
+         nbagT4IvpyTfaipv2uTncbyI2WdEIhfS2mpM9/bLxI3bh9Os95Lmr2h1IKV5NQ7SGg
+         x4w9a/fkK66ow==
+Received: by mail-lf1-f70.google.com with SMTP id h7-20020ac24da7000000b0042521f16f1fso760583lfe.21
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:35:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tRXGW/amIFoMeO9Hmp2aPYcTAm/VwGo6IbA1+ruwk4s=;
-        b=REKW444VhwoCw+4FMMrGmDIKsZ0OW1Ke265wk1AkmN8gSSwpEnK/PliMTAa8D2+T7h
-         UsTsaqL9kllfmGCvFDXa8NkAhlbQZPbnMpLa+D8mgCqodLI0/oszUJOXKtYv9rwlP8Cv
-         A4GjPaLSBWJiTZfnxbzLC7FzdEkesqfH4D/Tv03xbsCAlFJBwInzZKepaMewHj4b9new
-         y2nJdtO2ra/TMXJ8OPiyQXXtS7g7feKw8w+9mjyF/ezRGJnSYUcB8YSyqBtmXzOabl1K
-         RTybcLkzyXbfXXWUCszQM4azlCxknXd+9830PoAjf4/6XhR7U6xWh1AAo3GdABNbjlj/
-         jqRA==
-X-Gm-Message-State: AOAM533d9RV91icJ5YwutzjAfUgjbG+czSb4SFohLrpml2RUx8HHEFZ1
-        JKkJ8E9rI7L5T/p/UXnCVmxWkg==
-X-Google-Smtp-Source: ABdhPJx4exFmZj/8lFkaKx4YXK6ECrpm8b2ZS0J1c2OmTDwEEQjHd9p81sRYpIkDyoiWmrgXzy1VTQ==
-X-Received: by 2002:a17:902:9a43:b0:148:9d8b:bead with SMTP id x3-20020a1709029a4300b001489d8bbeadmr2188693plv.76.1639733735053;
-        Fri, 17 Dec 2021 01:35:35 -0800 (PST)
-Received: from shiro.work (p864106-ipngn200510sizuokaden.shizuoka.ocn.ne.jp. [180.9.58.106])
-        by smtp.googlemail.com with ESMTPSA id o9sm7650143pgs.65.2021.12.17.01.35.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 01:35:34 -0800 (PST)
-From:   Daniel Palmer <daniel@0x0f.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, romain.perier@gmail.com, livelwh@outlook.com
-Cc:     linux-kernel@vger.kernel.org, Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH 2/3] dt-bindings: arm: mstar: Add compatible for 100ask DongShanPiOne
-Date:   Fri, 17 Dec 2021 18:35:09 +0900
-Message-Id: <20211217093510.3674590-3-daniel@0x0f.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217093510.3674590-1-daniel@0x0f.com>
-References: <20211217093510.3674590-1-daniel@0x0f.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=z2ulb+DVZsgqJd2LDgGlq8D+/PB9tFXsgdrZEe6FKTw=;
+        b=XKG/bi7bjL92sA+PbNY2Ern0x0enGf37qw22G4czUZTgCwt2+XFr+oflmFN/dIT6ET
+         d7dVp3P/LNMZIUrzMWZ/OCnf6wW1fT9itwEGe+SlU5wM34PI2Qp7tn//lBmMs+/evxtB
+         UdME1Spk0nCP9B3Jg4INZLE69JN/2GDqLWjmR1Bbjv4BcxxQRMX8u8RHEh2MkP/TsiOc
+         sYzRdXTwzX7kUxH/fdu3x4sLCuiVsl6KHWptaIb4REvMIkTmpsvUhb9f6UrfxWZKeYhK
+         WFyYTX5GnqthVswIT5rj2LsC7ukXtFxufUAxEC2DVzf3k5K7jYkzrQ1itKYZDKr7OOzv
+         wT+g==
+X-Gm-Message-State: AOAM531lYh5t/ZfjLa44msskRLe+pUbAPlT6TnXnt3B11nLWsr/B3J9d
+        sBQFKJKBdS6JeEQjnK4vhZO+5Rhns3lDHjjg9qh+G5WTU/sd3FkN6JMVIpuVty7pUijjnTiPesP
+        Pd01rmaL7AqQtQKwkkipAG55u3XjLYHQldpR0YlJUSg==
+X-Received: by 2002:a05:6512:261b:: with SMTP id bt27mr2134395lfb.68.1639733711849;
+        Fri, 17 Dec 2021 01:35:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3vfcxbokbMTir1a2F1ktl93PTYnZK69spGTwWf5wxnVgnRpbKDs2qjbIy8UtGLc3PLoeRVA==
+X-Received: by 2002:a05:6512:261b:: with SMTP id bt27mr2134385lfb.68.1639733711553;
+        Fri, 17 Dec 2021 01:35:11 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id w15sm1300450lfe.245.2021.12.17.01.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 01:35:10 -0800 (PST)
+Message-ID: <4e0ab991-1149-5e40-2109-d0a2405dd7de@canonical.com>
+Date:   Fri, 17 Dec 2021 10:35:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2] watchdog: s3c2410: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211216214747.10454-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211216214747.10454-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DongShanPiOne is a SigmaStar SSD202D based module.
-Add a compatible for it to the list of infinity2m boards.
+On 16/12/2021 22:47, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Dropped goto and directly returned on error
+> ---
+>  drivers/watchdog/s3c2410_wdt.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
 
-Link: http://linux-chenxing.org/infinity2/dongshanpione/
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
----
- Documentation/devicetree/bindings/arm/mstar/mstar.yaml | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
-index a316eef1b728..371267b63a88 100644
---- a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
-+++ b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
-@@ -23,6 +23,7 @@ properties:
-       - description: infinity2m boards
-         items:
-           - enum:
-+              - 100ask,dongshanpione # 100ask DongShanPiOne
-               - honestar,ssd201htv2 # Honestar SSD201_HT_V2 devkit
-               - m5stack,unitv2 # M5Stack UnitV2
-           - const: mstar,infinity2m
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+
+Best regards,
+Krzysztof

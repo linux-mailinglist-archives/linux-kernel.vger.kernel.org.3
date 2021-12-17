@@ -2,226 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C11479384
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882F64793AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbhLQSGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:06:11 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:35685 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbhLQSGJ (ORCPT
+        id S240119AbhLQSQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:16:13 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53456 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240112AbhLQSQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:06:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639764369; x=1671300369;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7XoT/Zd0al9LkgfYRX4SVC3MU9eq62RqvTfnO0Pj/TM=;
-  b=yvluu6t+2hUf3CxjNYWaOZfXYgaT6egpEMySO30TPHoVwgcty2jqGr3u
-   ESVsAKAAFzIUm6S+9WS9Sp2Tq8kGg+hUW0uBG/BQvT+Nu5xomZZAiIG9S
-   c5u+KO2aJ2Q8hSUi/jQRTSmPF9IcZfvA5W5QlMj2NX8sr/zfSKvsODUnQ
-   xNlf5/2WpDAen4O5CPhilQvQsom4dMgv4VhHv2YsO4Faouwdeozj8CXUr
-   FeaHV6a84Yx3W4Is3vuzROEUS8qaZhbfG5y/mNCLmu1XVfYH0ogYirrb2
-   1OjGrWFSTSt4y7+mw9RX4zQYfkO5uj+84bGTbqm4EqTZQXbKUxHDNHPXe
-   A==;
-IronPort-SDR: W3A/4QsslP8YGxhMo3EIK9dGGnOtnjuAoVe2nXC3hI24jcngBQst4/LdHrh89JWRrGY5oMYpnf
- 04zGwx2MoZE+nbx5BNXOfWbWXhRPC2IfSjxlBFZ7WkEtIVbOhsCW/nlAjZ4tiTQ4rICmFcsXQ0
- hR+RHKX6/oS34pyXcnbpaJmlsgo+kN8wlrOxCRVZjPOczLEoKXhuAXlFC2C9byxj7FaW36Tttr
- WxXjLG762iFHS9AIJy9S4k++zn2NPepjw/iwOjiLitfZMV4wkmIGcHuEgzLmSOcWmoRJgXVgSB
- PHWjbGm5nsrAYQ/PeP8RLfio
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="140162208"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 11:06:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 17 Dec 2021 11:06:07 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 17 Dec 2021 11:06:05 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>, <michael@walle.cc>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v5 2/2] mtd: spi-nor: macronix: Add support for mx66lm1g45g
-Date:   Fri, 17 Dec 2021 20:06:01 +0200
-Message-ID: <20211217180601.585825-2-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217180601.585825-1-tudor.ambarus@microchip.com>
-References: <20211217180601.585825-1-tudor.ambarus@microchip.com>
+        Fri, 17 Dec 2021 13:16:09 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGXpOi005184;
+        Fri, 17 Dec 2021 18:06:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=ATgH5rjnSHjqFTm/Ohxf2SxukCqgFOQZ/F8RxzrBEaMOjEUEyQMFiYu8KjC9GL5S78DV
+ XzYEXPf38RobUlL78DY+nkGN3Lqv6AHJEZSqOIevUQ3O+A8x7NvVUmMVSbl42gozmmb1
+ 9WRZ9D8sWXP31SF+TgECdPW18DSueSbHuLXICA7TGcDNhjC/R67goHkWKfJTakRnk0/I
+ sACcd/eH4JLGMvgn0/t+hjglFi4do9eImQGJ5rHh51oV1ROaty/GOJc/vxEg8MfDUWOW
+ WqufPdIt+poNSDzJUarE2oQZFvzAff0QWVuqCVDEMOfZh6MPdjUKGAJjZcnSjxeUOU4r 1g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknc6eph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 18:06:34 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BHI0Jos024168;
+        Fri, 17 Dec 2021 18:06:33 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2104.outbound.protection.outlook.com [104.47.70.104])
+        by aserp3030.oracle.com with ESMTP id 3cyjubq0a1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 18:06:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EF0E9DLCa6CCZchucG9EU0GibWq1QhTnpxIgefY22UMgLYhzZtr+JCZm80gB+QxlG55SGKEAgMTbTJkr1se9xZ5Q+VynRSOFLm2I+uCmfzLJ4oW9m0iIKcuVxNj2EUo7i8664sojrmhyGHE2gLiyC+VvdEsXEhFDGjJk93sBhtbpaogjwblAx7d2ZMVBegP+rM4utK+phENlRmn6f3QDooKHnYNiqyQak/dQYeQgLYH70wljFtf7MpQiNVFjsgZs3hy1b+fD+94EpTfj1oixUxj2snLaFKDABTq0QMwDIhP17Xclrn9DJUujSjCrKFQ9acQOl2k4enkjWgM7dIhOjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=YInsWLdHH95GEIFHldS0Htr7UGt4P+JAP8irtaU7/d/sd4G7jeaLkKoRmCcaoIFCVZAV1bZk0jRUj3bdf+MA6i1KCGhOyWsp8rwBMbdzEHnhIRJ+pt4hk6u067Sp3Ic6mLQ0HaCrMMlytH+hZb1L1bYHevLVrUmUyZYL1rJPRXT44sYpFJo6AXr7vWx3zZoR+OXVKArKgu+MqVUoWGp3X6T7Rhf7RvVYwjNKSKOkOAGm3bdQNJO3bC2iE+P//4aYKnoz2yZJ1BuPy9rj5uzv8Zl7pUmbeolVdWxFQcSOU2E3xe0++KCMemoYm5MLnSwc2U2oEgPrjN5UsXlX2hqVTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=uMU5XoMkXH/VSkAx1R9DKtLeI84ZwDmSrsDdEqW8UbcngDclooiBeJ199nDgXgPiggowForY+cSDidi+4KXsmGi+O2pmCMWUCq0eCqud6BSmUX+HjzGrIQ06c80qZRLxiVgi85PR0p8k+il5zKvucB4FzGm3/dHdOXCxDTvWzG8=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ0PR10MB4541.namprd10.prod.outlook.com (2603:10b6:a03:2db::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Fri, 17 Dec
+ 2021 18:06:31 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::5d0a:ae15:7255:722c]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::5d0a:ae15:7255:722c%6]) with mapi id 15.20.4778.018; Fri, 17 Dec 2021
+ 18:06:31 +0000
+Message-ID: <0b0007b3-bf6f-ccd7-96cf-3dd861abf224@oracle.com>
+Date:   Fri, 17 Dec 2021 10:06:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in
+ __page_mapcount()
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-4-david@redhat.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <20211217113049.23850-4-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR04CA0037.namprd04.prod.outlook.com
+ (2603:10b6:300:ee::23) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2075be1-56b6-4664-3800-08d9c187f3fc
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB4541:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR10MB454115671CAEF1183BF4076AE2789@SJ0PR10MB4541.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9YnOdaj/1xzoqAdfOJdXAWl3aT4bgdjirZDHTerEGR1s4VEzUVvDAs2GJ4ktYVTc6/RayqbaGhKt3PUfpDiqfOwcmp9oPRhoEwHi2+oXKIWfNIO5mn3r3GGD79p4xGvp7sBopES0Y+HEEH9z6oLj/Hy5mT3yTuniGde9xiVfuZtgwVPdOU+zskMKVGDaV/1WNBUdcQdsqyEPrtwdsaN3od6AWsK9CFxclB+TZgSu9xFo6KulVsuQveTYsGISJMCwSao+OBBUAJI95niCRhN6+f2I0nf09YoS6l5PFkEP8ar529/bgJEozmQxUnZWH2yfXiWKXbMf90mrBlo4HArKtkf+wvdTmW+KJ+33oQvTshs5qaWatUj25c4SkW6fwfZqr78sca+3cwlICWBNyy/sZwBqimixrRE9jobOdbYoq4/ZN10VTyyTFCvKRapLzlP0JpalQtbAIJwQmkn98DXKgH2OsId/GkLmR/l/Bn3IZaJ3qgQEtCovyyubvsN/9rBqrMtXsbEVp3f9aApM9PcuhaQ2TCSWFWVyLuVHVzF0SNbrnKuu0izlGDkhlEHFi56P1uvMxsHRoiyDx3316kinyiwCIan4Q5JLv3xnq6ihRDFNmS/y5cpb3W10FIY8KSaaG4OxxTyZXUXFx9pVVwWBf4CveM2E0Q/KYKE3QKFPCXghC+VhxQx9tmE4dMpWpd/FoYbOdIFJ2HpuHKFZFIHJTvAGrhLQIyuc0rxTjGxXxijDyUYN+M5HiLbB3xA1TIV+XEpcTLvB8eSSck+oEXeccQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(36756003)(86362001)(6666004)(316002)(4326008)(2616005)(66946007)(186003)(26005)(508600001)(8936002)(66476007)(83380400001)(7416002)(2906002)(66556008)(5660300002)(52116002)(53546011)(31686004)(38350700002)(6506007)(38100700002)(8676002)(6486002)(54906003)(6512007)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RSt5bGRMT1RGRFZ6cGlPTStISmJBRHorOXJXaU8yZnM4NGZhN25UNlJQbUgw?=
+ =?utf-8?B?cGFWL204b0FKSElRbFFZY0JPSGl1dGlYMUNwQXFyWkFOd1VXekRCTjZvZ3ND?=
+ =?utf-8?B?UDVMcU5HNGtOUjl6RDBnZklyM3k4d2xhZmkzZVF0NktMbFZOYnZ5OWNNUXJw?=
+ =?utf-8?B?bnlSMWR4Z1FjUnNrQVdvdkpadGVGRnNRR2tpRlpZbVVNZHpzZmFvY3g2dDd6?=
+ =?utf-8?B?cTZ4WHhpMVFDa3lZa2djUHBrSk5ENldMUUs3SGpoa2szNVhSbjFLeTJxUEYy?=
+ =?utf-8?B?aEdZajBTWXRkM25RSFNZcE5EYVk1cVVpanE0a1NuTXd6QkMycTlQZDQyVkds?=
+ =?utf-8?B?aUtlK1hGR0UyOHNNTUJQNlRoS25ENlhwUEMwbGtLTUNhZHp5MEU3Y3ViYWwr?=
+ =?utf-8?B?dXpqaDQ2bTh4aTMxa281UzRWRE1SekszM2xDNTFZYmhwNys5Z3lBcFlWM0ZJ?=
+ =?utf-8?B?NEJTZitmWFNPQ21BUk1zTVNUbzlVY3F3aFpvMHJvb1lnOXlzZVNicHJVNGRT?=
+ =?utf-8?B?Syt3NG1EQmFnY3lMOFk2M3lKL2ZTRWRzMUhjRjlWTWpOZVB3S3F2WjRzMnNy?=
+ =?utf-8?B?VEJGUEptb3ZETm8vbTVvQXlJQXYxV0lXcnh3NWgzMnBscnNyVGtycVp5YW1u?=
+ =?utf-8?B?SzREN2ZtMVVqTy94V0krZCtBTFVyODZMMS9vM1BqVUEzelFYcms1Q29xaTE1?=
+ =?utf-8?B?U1VlcVpQeWErTFZURnhhdk93eFNoeUZyTXZqaE5ESW1XZVVMckRvL3VNN1l0?=
+ =?utf-8?B?VkZjZEpOcGp5elNzWHlKVndtcVRQWHFBcU5GQ3E2UTU0a21EZzJnUzZVTE5B?=
+ =?utf-8?B?eGhZWHNGYlFiR2hnSkpUczV0eThPa1poWktXOGVWNE5VRWV1ZjZhUnJoaUxC?=
+ =?utf-8?B?L1krRXg1L2xsK2RaclJGZU12dnQwdVdKc2ZyaHBYRnZLbnB0V0tjR1F4ckRJ?=
+ =?utf-8?B?NUEwOXdxOU96REZzSXNmL2s2eG0wWnVOVFFwbkg0NlFkQ00rbExjQy9Wa3Ir?=
+ =?utf-8?B?ZW5TN2RRUHFaT0FzT1p0c1ZXM0wrSXJmZUVuaXZRaXYwVHhDbFFwbUtURm56?=
+ =?utf-8?B?QnliL0tnSnNqaU80a2lraHI5d3AweDhNc2FsZWV3akpidzcxMzYxN0dhTG9u?=
+ =?utf-8?B?OXphL214ZTdFUjlXc2ZEanQ0K3NaOWZabzl1L1ZVclpRUVlWR3ZaZzVwV0wv?=
+ =?utf-8?B?NnR0MFV1MHhXY2Z0WU14aW1TZVdkMDhLcjh4dU9oc1pmNVk4QXNDV3lzV1Zu?=
+ =?utf-8?B?RFEzcEpSZmh4K1AzMHY2Vy9xZ0NZbFZrTlRaQ0dSdnRSdTQ5dElrSEpqMW5K?=
+ =?utf-8?B?WUJ5bnZEcUhGMkdJQ255b2VtZ0dVREIzL1JvOFFSWTlMMkIrV2lhYzduUDBr?=
+ =?utf-8?B?UW1PM3MxblBNTzJtdHZjWGMyZ016T0xDaXVZTk5oNjZxVFlndXByWHRqa2hy?=
+ =?utf-8?B?QStvdWVTMEI5QzJUOE9NeHFmanViVzN1RFdqdFhkVzNCRC8rUVBNbHdPYnBx?=
+ =?utf-8?B?NThCMGRGQlZSTThHTTBJelJ3VFpNUjd1eC9ieTZ5NXloY1I2eUJ5UjY1WVlX?=
+ =?utf-8?B?MkJZYWNOeUEzQlgvVzJnVHIreE9CMlpHTkIvMVcyNHpjUEJBZEdibGs0VEVX?=
+ =?utf-8?B?MmNkR1R2c0MzeE13ZEhvYTY2Z0VwUWdRcFNlYW1oOGs1ZFAxa3FtZmcyVTla?=
+ =?utf-8?B?L1kxbXlUUUhFUldJVm8yNm8yZlJSQVNSNi82cjQrZFB6SDN1T1ZpQ1VnS1RF?=
+ =?utf-8?B?aGZla3F4eDBrVjE5a0lNd3hUZWdsS2t4aDZROHlRaE9sbHE0aTB2QzlrQnVr?=
+ =?utf-8?B?Z2VMRzdPTXFBQkQzVCt0VElCWEtSQ2p3Y0R5dzJLbUFFMStwSFpmMWY3QVkz?=
+ =?utf-8?B?eEJwQnBFOCtvUFNQS0tIbGxZV0lnWDFFMVV2cWJmT3lmNVNwRjQyN2U2ZjVJ?=
+ =?utf-8?B?UGxnM1cyN2h1eUlJZU1zYlBLa3pveTNhZkN2TkNjaGRIallzaHBXalZWbjJ3?=
+ =?utf-8?B?Y1E3UWhxT0FOckw4aDZxM3JmNlhOZ0t3NVBXa3dyL1h5Ky8rTENlYXBlcm9k?=
+ =?utf-8?B?UzZaS252V3N3YUo1K1dkWHR1eC8zN0dldjRtSDRTNmovSXQ1UWZCdlh1bkN5?=
+ =?utf-8?B?RkY3Ukg5aUE2WWxBSkttZzgySHNpaVNRb0oyalAwVm1Pa21DWjZvZ1p0Z2wv?=
+ =?utf-8?Q?5afXCiBdgguFFu2x8lwke8I=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2075be1-56b6-4664-3800-08d9c187f3fc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 18:06:30.9492
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HNaHec1SaLMRsFAc4c1rxzHEiFGDhqmlyCFF36feCZTL+Z4fAE93VL5l/5oeY5gyLCSF6g1dWfLtj0kqa7bJcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4541
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10201 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170102
+X-Proofpoint-ORIG-GUID: kYZHRfk0ePyuGTbK3nImEKwSs3KYWAEj
+X-Proofpoint-GUID: kYZHRfk0ePyuGTbK3nImEKwSs3KYWAEj
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mx66lm1g45g supports just 1-1-1, 8-8-8 and 8D-8D-8D modes. There are
-versions of mx66lm1g45g which do not support SFDP, thus use
-SPI_NOR_SKIP_SFDP. The RDID command issued through the octal peripheral
-interface outputs data always in STR mode for whatever reason. Since
-8D-8D-8S is not common, avoid reading the ID when enabling the octal dtr
-mode. Instead, read back the CR2 to check if the switch was successful.
-Tested in 1-1-1 and 8d-8d-8d modes using sama7g5 QSPI IP.
+On 12/17/21 03:30, David Hildenbrand wrote:
+> Let's return early for hugetlb, which really only relies on the compound
+> mapcount so far and does not support PageDoubleMap() yet. Use the chance
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
-v5: drop superfluous "buf" local variable in
-spi_nor_macronix_read/write_cr2. buf was used only once, no need for a
-dedicated local variable.
+It is too early to say if hugetlb double mapping will use PageDoubleMap().
+I do not think (hope) it will be necessary.  So, I think you can drop mention
+of it here.
 
-v4: macronix requires that undefined register addresses to keep their
-value unchanged. The second byte of CR2 is not defined. Read the second
-byte of CR2 before disabling Octal DTR mode, so that we don't modify its
-value when disabling Octal DTR.
+> to cleanup the file-THP case to make it easier to grasp. While at it, use
+> head_compound_mapcount().
+> 
+> This is a preparation for further changes.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-v3:
-- drop setting of dummy cycles, use the default value
-- avoid odd lengths in octal dtr mode
-- s/8d-8d-8d/8D-8D-8D
-
-v2: SPI_NOR_SOFT_RESET as a FIXUP_FLAG
-
-# cat /sys/devices/platform/soc/e080c000.spi/spi_master/spi1/spi1.0/spi-nor/jedec_id
-c2853b
-# cat /sys/devices/platform/soc/e080c000.spi/spi_master/spi1/spi1.0/spi-nor/manufacturer
-macronix
-# cat /sys/devices/platform/soc/e080c000.spi/spi_master/spi1/spi1.0/spi-nor/partname
-mx66lm1g45g
-# cat /sys/devices/platform/soc/e080c000.spi/spi_master/spi1/spi1.0/spi-nor/sfdp
-cat: can't open '/sys/devices/platform/soc/e080c000.spi/spi_master/spi1/spi1.0/spi-nor/sfdp': No such file or directory
- drivers/mtd/spi-nor/macronix.c | 107 +++++++++++++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 67aaa83038b6..88b1218f19f4 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -32,6 +32,106 @@ static struct spi_nor_fixups mx25l25635_fixups = {
- 	.post_bfpt = mx25l25635_post_bfpt_fixups,
- };
- 
-+#define SPINOR_OP_READ_CR2		0x71
-+#define SPINOR_OP_WRITE_CR2		0x72
-+#define SPINOR_OP_MX_DTR_RD		0xee
-+
-+#define SPINOR_REG_CR2_MODE_ADDR	0
-+#define SPINOR_REG_CR2_DTR_OPI_ENABLE	BIT(1)
-+#define SPINOR_REG_CR2_SPI		0
-+
-+static int spi_nor_macronix_read_cr2(struct spi_nor *nor, bool octal_dtr)
-+{
-+	struct spi_mem_op op =
-+		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_READ_CR2, 1),
-+			   SPI_MEM_OP_ADDR(4, SPINOR_REG_CR2_MODE_ADDR, 1),
-+			   SPI_MEM_OP_DUMMY(octal_dtr ? 4 : 0, 1),
-+			   SPI_MEM_OP_DATA_IN(octal_dtr ? 2 : 1, nor->bouncebuf, 1));
-+
-+	if (octal_dtr)
-+		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+	return spi_mem_exec_op(nor->spimem, &op);
-+}
-+
-+static int spi_nor_macronix_write_cr2(struct spi_nor *nor, bool octal_dtr)
-+{
-+	struct spi_mem_op op =
-+		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WRITE_CR2, 1),
-+			   SPI_MEM_OP_ADDR(4, SPINOR_REG_CR2_MODE_ADDR, 1),
-+			   SPI_MEM_OP_NO_DUMMY,
-+			   SPI_MEM_OP_DATA_OUT(octal_dtr ? 2 : 1, nor->bouncebuf, 1));
-+	int ret;
-+
-+	if (octal_dtr)
-+		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+
-+	ret = spi_nor_write_enable(nor);
-+	if (ret)
-+		return ret;
-+	return spi_mem_exec_op(nor->spimem, &op);
-+}
-+
-+static int spi_nor_macronix_octal_dtr_enable(struct spi_nor *nor, bool enable)
-+{
-+	u8 *buf = nor->bouncebuf;
-+	int ret;
-+
-+	/* Set/unset the octal and DTR enable bits. */
-+	if (enable) {
-+		buf[0] = SPINOR_REG_CR2_DTR_OPI_ENABLE;
-+	} else {
-+		/*
-+		 * One byte transactions are not allowed in 8D-8D-8D mode.
-+		 * mx66lm1g45g requires that undefined register addresses to
-+		 * keep their value unchanged. Its second CR2 byte value is not
-+		 * defined. Read the second byte value of CR2 so that we can
-+		 * write it back when disabling Octal DTR mode.
-+		 */
-+		ret = spi_nor_macronix_read_cr2(nor, true);
-+		if (ret)
-+			return ret;
-+		buf[0] = SPINOR_REG_CR2_SPI;
-+	}
-+	ret = spi_nor_macronix_write_cr2(nor, !enable);
-+	if (ret)
-+		return ret;
-+
-+	/* Read back CR2 to make sure the switch was successful. */
-+	ret = spi_nor_macronix_read_cr2(nor, enable);
-+	if (ret)
-+		return ret;
-+	if (enable) {
-+		if (buf[0] != SPINOR_REG_CR2_DTR_OPI_ENABLE) {
-+			dev_dbg(nor->dev, "Failed to enable 8D-8D-8D mode.\n");
-+			return -EINVAL;
-+		}
-+	} else if (buf[0] != SPINOR_REG_CR2_SPI) {
-+		dev_dbg(nor->dev, "Failed to disable 8D-8D-8D mode.\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static void mx66lm1g45g_late_init(struct spi_nor *nor)
-+{
-+	nor->params->octal_dtr_enable = spi_nor_macronix_octal_dtr_enable;
-+
-+	/* Set the Fast Read settings. */
-+	nor->params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-+	spi_nor_set_read_settings(&nor->params->reads[SNOR_CMD_READ_8_8_8_DTR],
-+				  0, 20, SPINOR_OP_MX_DTR_RD,
-+				  SNOR_PROTO_8_8_8_DTR);
-+
-+	nor->cmd_ext_type = SPI_NOR_EXT_INVERT;
-+	nor->params->rdsr_dummy = 4;
-+	nor->params->rdsr_addr_nbytes = 4;
-+}
-+
-+static struct spi_nor_fixups mx66lm1g45g_fixups = {
-+	.late_init = mx66lm1g45g_late_init,
-+};
-+
- static const struct flash_info macronix_parts[] = {
- 	/* Macronix */
- 	{ "mx25l512e",   INFO(0xc22010, 0, 64 * 1024,   1)
-@@ -100,6 +200,13 @@ static const struct flash_info macronix_parts[] = {
- 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+	{ "mx66lm1g45g", INFO(0xc2853b, 0, 64 * 1024, 2048)
-+		NO_SFDP_FLAGS(SPI_NOR_SKIP_SFDP | SECT_4K |
-+			      SPI_NOR_OCTAL_DTR_READ | SPI_NOR_OCTAL_DTR_PP)
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES | SPI_NOR_IO_MODE_EN_VOLATILE |
-+			    SPI_NOR_SOFT_RESET)
-+		.fixups = &mx66lm1g45g_fixups,
-+	},
- };
- 
- static void macronix_default_init(struct spi_nor *nor)
+Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 -- 
-2.25.1
+Mike Kravetz
+
+> ---
+>  mm/util.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index 741ba32a43ac..3239e75c148d 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -732,15 +732,18 @@ int __page_mapcount(struct page *page)
+>  {
+>  	int ret;
+>  
+> -	ret = atomic_read(&page->_mapcount) + 1;
+> +	if (PageHuge(page))
+> +		return compound_mapcount(page);
+>  	/*
+>  	 * For file THP page->_mapcount contains total number of mapping
+>  	 * of the page: no need to look into compound_mapcount.
+>  	 */
+> -	if (!PageAnon(page) && !PageHuge(page))
+> -		return ret;
+> +	if (!PageAnon(page))
+> +		return atomic_read(&page->_mapcount) + 1;
+> +
+> +	ret = atomic_read(&page->_mapcount) + 1;
+>  	page = compound_head(page);
+> -	ret += atomic_read(compound_mapcount_ptr(page)) + 1;
+> +	ret += head_compound_mapcount(page);
+>  	if (PageDoubleMap(page))
+>  		ret--;
+>  	return ret;
+> 
+
 

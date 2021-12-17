@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A244789F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298F24789FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235463AbhLQLdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:33:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40165 "EHLO
+        id S235474AbhLQLdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:33:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52886 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235464AbhLQLdo (ORCPT
+        by vger.kernel.org with ESMTP id S235480AbhLQLdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:33:44 -0500
+        Fri, 17 Dec 2021 06:33:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639740823;
+        s=mimecast20190719; t=1639740830;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5QROTR0DNwNeGtld/DWtRhC9lgRjF4ZhB5ZKs8M3xpY=;
-        b=bJ1AnTaaNEq1iS2vANoD6D+9FleOvjDmN3K+jIJogLrOhrLm8K+rCAoNc/80acWktBcFL8
-        HzG/h1y6tFIjiPMZaBnIZVp5d3CW39+r3NYp90riy/pXMP1DJ9mXlCUGhDoDI1+loi4f1f
-        w9/vKE8QvxX7J3FsbGEulSdw3WlFr/4=
+        bh=UOrVV2NFx26u84MVGLWI5jLwDTFzF180mJVk+c6k5Rs=;
+        b=LP9cYkBmRz5Ar02eqg9HK/rGzNpsYo5hK6y4moId+FzAwwIIEBS9etJAay3yQLSVKK06GQ
+        5C4APEcZbLJZmDSJE5AndVbBbR1JlPHqz/8xYvMLndpNBOoluopJfa6U32V+GWXKa295rw
+        pnZi+RCWYeJZrR3JOXLy4KTla1+H8/8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-523-AfuQXayyNmuryw_8DqcZug-1; Fri, 17 Dec 2021 06:33:40 -0500
-X-MC-Unique: AfuQXayyNmuryw_8DqcZug-1
+ us-mta-272-rZlAI3i2NSemwQWONFDUoA-1; Fri, 17 Dec 2021 06:33:47 -0500
+X-MC-Unique: rZlAI3i2NSemwQWONFDUoA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65304801AAB;
-        Fri, 17 Dec 2021 11:33:37 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1E0C61018723;
+        Fri, 17 Dec 2021 11:33:45 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.193.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A036E8D5AC;
-        Fri, 17 Dec 2021 11:33:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C61F08ACF7;
+        Fri, 17 Dec 2021 11:33:37 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -60,9 +60,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in __page_mapcount()
-Date:   Fri, 17 Dec 2021 12:30:41 +0100
-Message-Id: <20211217113049.23850-4-david@redhat.com>
+Subject: [PATCH v1 04/11] mm: thp: simlify total_mapcount()
+Date:   Fri, 17 Dec 2021 12:30:42 +0100
+Message-Id: <20211217113049.23850-5-david@redhat.com>
 In-Reply-To: <20211217113049.23850-1-david@redhat.com>
 References: <20211217113049.23850-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,46 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's return early for hugetlb, which really only relies on the compound
-mapcount so far and does not support PageDoubleMap() yet. Use the chance
-to cleanup the file-THP case to make it easier to grasp. While at it, use
-head_compound_mapcount().
+Let's simplify a bit, returning for PageHuge() early and using
+head_compound_page() as we are only getting called for HEAD pages.
+
+Note the VM_BUG_ON_PAGE(PageTail(page), page) check at the beginning of
+total_mapcount().
 
 This is a preparation for further changes.
 
 Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/util.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ mm/huge_memory.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/mm/util.c b/mm/util.c
-index 741ba32a43ac..3239e75c148d 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -732,15 +732,18 @@ int __page_mapcount(struct page *page)
- {
- 	int ret;
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 4751d03947da..826cabcad11a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2506,12 +2506,11 @@ int total_mapcount(struct page *page)
  
--	ret = atomic_read(&page->_mapcount) + 1;
+ 	if (likely(!PageCompound(page)))
+ 		return atomic_read(&page->_mapcount) + 1;
 +	if (PageHuge(page))
-+		return compound_mapcount(page);
- 	/*
- 	 * For file THP page->_mapcount contains total number of mapping
- 	 * of the page: no need to look into compound_mapcount.
- 	 */
--	if (!PageAnon(page) && !PageHuge(page))
--		return ret;
-+	if (!PageAnon(page))
-+		return atomic_read(&page->_mapcount) + 1;
-+
-+	ret = atomic_read(&page->_mapcount) + 1;
- 	page = compound_head(page);
--	ret += atomic_read(compound_mapcount_ptr(page)) + 1;
-+	ret += head_compound_mapcount(page);
- 	if (PageDoubleMap(page))
- 		ret--;
- 	return ret;
++		return head_compound_mapcount(page);
+ 
+-	compound = compound_mapcount(page);
+ 	nr = compound_nr(page);
+-	if (PageHuge(page))
+-		return compound;
+-	ret = compound;
++	ret = compound = head_compound_mapcount(page);
+ 	for (i = 0; i < nr; i++)
+ 		ret += atomic_read(&page[i]._mapcount) + 1;
+ 	/* File pages has compound_mapcount included in _mapcount */
 -- 
 2.31.1
 

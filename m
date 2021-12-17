@@ -2,164 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FFC4784CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603614784D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbhLQGIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 01:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S233174AbhLQGJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 01:09:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhLQGIB (ORCPT
+        with ESMTP id S230405AbhLQGJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 01:08:01 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76039C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:08:01 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id u17so973887plg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:08:01 -0800 (PST)
+        Fri, 17 Dec 2021 01:09:13 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B21C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:09:13 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id t26so2026009wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 22:09:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=tKUR11+VJDxu6abRc3pnA0Mxj4gPKgi7U53J9cfBDfI=;
-        b=kUqCuV1ZrKslAqq0lWt9KzC8x5lNvA4MryDIBzosvZTihVPlN9ag1apZ5nDd9MTx5p
-         f0zWqpBWEdEoveQv8mywuScLwtIsDvB0/CYVB8qTxx975po75pIwOdoem/8A8fEsYaWZ
-         +lb50jDoeeTewKuA6ER+mfRZOIqItAgFXb5Z18ykcZyj9RRX7c4qozgHhv779TEw7JG7
-         5W39OBfgTsXdmTDT/vqAEm1s5HqYiOmhPErb3PSZllsMpfnoKFNxZsQ9hR/oLTQzqK7S
-         /t/fYtC+DVFoyYReLa9APcarMnjqf6k6awmF/oz3tbd9yl+nrtiHx4MPPQJo7PYDjjRo
-         xk/g==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7QH2bkz/dvyar0Slq99MmeQR+6WQT9L3G9+6vCacYMo=;
+        b=waZfM5crmwh+YUwgryZwAjwMKciDhj6hG65pBTNwrjBM1A46dmd2m6KpjWRAhkl7wd
+         JS5DVW8eO8Uimxc6CRvZGASqDGLGtIxT4pSS0Q2yP0/cxQFGmnbL+M26OJP39exU97n0
+         ETsBk5MuDSbC3hzEQ70IMoZ4xcLGze2MiNSUmzKUo7GcPuIT1FE30tKffUNi1PngZwEz
+         lUWM2lZNQcNejkV4FWNaW92ubDzXPPfkhSVPEav86ScTugM5bW0DnVYgUtNU/mGHdZve
+         pdei1icgv91nuiO75ZrsV1uhdHx38sMaqJ68d4EfYlXeJWiU/6kGGxyhzSsxq/sH6LyP
+         ojqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=tKUR11+VJDxu6abRc3pnA0Mxj4gPKgi7U53J9cfBDfI=;
-        b=M8f4cwM+OviGWk4KGddFMxB6+l7OeTToWBA+OtqTxX/cUkGtkzqPZAIObWlbvOe14g
-         nYmQKGmpI50YsLEcqQPDsL2m5oVDEiAUakwVX50MdVDSQwqDX6/eMxAd8SpauOr0M4/i
-         BiElmxwqmbwOrCynqQAJuQ/d/kdd8SbNi4dOKUUQovwda0sfMsTxvf7zMUgO/p7Gf2G2
-         zmEhR22TykG1yRrTFux8i13E7A9CkF3sWadBal9URitpWJEEZxOq++Kxk9re5xMcFfh9
-         hn/jXa0vevG2joy7Q6XVshnHJPvg4JryhlAl2ojsaUnWJXwLXgAYl3cwMT9Uru0POM2F
-         KZkw==
-X-Gm-Message-State: AOAM5301SKZ3txg1KNC5XTLNwg+NlzJa0axBi8v1T2PPXLNpfQxlV1+6
-        SFosuXl19/jtoCpmr0e0aYoqiFdDIFQf4w==
-X-Google-Smtp-Source: ABdhPJyQrahQsPOsq74gZi8Q7kzz4sDyg/XCu6jWUXOWPNgITfm97mUYPL/Olr8NuC2oZjGJ77riQQ==
-X-Received: by 2002:a17:902:d488:b0:141:f3a3:d2f4 with SMTP id c8-20020a170902d48800b00141f3a3d2f4mr1842703plg.86.1639721280927;
-        Thu, 16 Dec 2021 22:08:00 -0800 (PST)
-Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id h5sm8569339pfc.113.2021.12.16.22.07.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Dec 2021 22:08:00 -0800 (PST)
-From:   Huangzhaoyang <huangzhaoyang@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] psi: fix possible trigger missing in the window
-Date:   Fri, 17 Dec 2021 14:07:44 +0800
-Message-Id: <1639721264-12294-1-git-send-email-huangzhaoyang@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7QH2bkz/dvyar0Slq99MmeQR+6WQT9L3G9+6vCacYMo=;
+        b=AXmtjtQPt4068iTIwWm4BHLpzPfhzZRM6cZvUtUdnY2+fBrkNdlKf4vrAa6q1bZl/H
+         bV41Fc59YC+LnL7XS5F1MqKgDlr2AvYnzQjVzXq1h53TeeJZwGEK5wXzEu9iK9/aPRlu
+         T7zVinBvc1q6g6XJw4MLPeQlZGdQKSGd51ivBqLLvIcYJVyxZTfcLCBehJJFCfDq5eH5
+         vRinh65D9aRkn0Jf5iNJDLqR/8eD8hppLrbnfdQmE/Nf+IRrQ5gxVCZ1crqfTWZPH1G0
+         /LXrv5g4xi+DCiLpAykRwcrpi6YVeRuH5NdwlKmfC03UCHYRzwzQ0wIEUmBXFu0mlUhO
+         hb9g==
+X-Gm-Message-State: AOAM531WiT2ctjulPI1rNM5F5LtBCoZqf5b2EUeC2j6zEihnALBsqfCv
+        JhaJq60t1OBcTRwBWWK9itikuCP1cbiduKIsTJZlsg==
+X-Google-Smtp-Source: ABdhPJwEquvnLOderDNKIdJ1HekDsTALy8TIENkzMKo1N7N3wuyG5X3zylXVjua0nOnoW8rY/7T9uIm++VL6JFu35Vw=
+X-Received: by 2002:a5d:56c2:: with SMTP id m2mr1095151wrw.313.1639721351448;
+ Thu, 16 Dec 2021 22:09:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20211129075451.418122-1-anup.patel@wdc.com> <20211129075451.418122-3-anup.patel@wdc.com>
+ <CAOnJCU+Yft5EjgUUCi=nW79pYSGYPWB1ew5iyTjViFvGGQxQCA@mail.gmail.com>
+In-Reply-To: <CAOnJCU+Yft5EjgUUCi=nW79pYSGYPWB1ew5iyTjViFvGGQxQCA@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 17 Dec 2021 11:38:59 +0530
+Message-ID: <CAAhSdy1WXnoFw2_o+6E1zjx5bP96FeW3ijMuOp3R794Yxasskg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] RISC-V: KVM: Add VM capability to allow userspace
+ get GPA bits
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Anup Patel <anup.patel@wdc.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Fri, Dec 17, 2021 at 11:17 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Mon, Nov 29, 2021 at 12:10 AM Anup Patel <anup.patel@wdc.com> wrote:
+> >
+> > The number of GPA bits supported for a RISC-V Guest/VM is based on the
+> > MMU mode used by the G-stage translation. The KVM RISC-V will detect and
+> > use the best possible MMU mode for the G-stage in kvm_arch_init().
+> >
+> > We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
+> > the KVM userspace to get the number of GPA (guest physical address) bits
+> > supported for a Guest/VM.
+> >
+> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_host.h | 1 +
+> >  arch/riscv/kvm/mmu.c              | 5 +++++
+> >  arch/riscv/kvm/vm.c               | 3 +++
+> >  include/uapi/linux/kvm.h          | 1 +
+> >  4 files changed, 10 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> > index 37589b953bcb..ae5d238607fe 100644
+> > --- a/arch/riscv/include/asm/kvm_host.h
+> > +++ b/arch/riscv/include/asm/kvm_host.h
+> > @@ -221,6 +221,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
+> >  void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
+> >  void kvm_riscv_stage2_mode_detect(void);
+> >  unsigned long kvm_riscv_stage2_mode(void);
+> > +int kvm_riscv_stage2_gpa_size(void);
+> >
+> >  void kvm_riscv_stage2_vmid_detect(void);
+> >  unsigned long kvm_riscv_stage2_vmid_bits(void);
+> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > index 9ffd0255af43..9b6d6465094f 100644
+> > --- a/arch/riscv/kvm/mmu.c
+> > +++ b/arch/riscv/kvm/mmu.c
+> > @@ -760,3 +760,8 @@ unsigned long kvm_riscv_stage2_mode(void)
+> >  {
+> >         return stage2_mode >> HGATP_MODE_SHIFT;
+> >  }
+> > +
+> > +int kvm_riscv_stage2_gpa_size(void)
+> > +{
+> > +       return stage2_gpa_bits;
+> > +}
+>
+> The ioctl & the underlying stage2_gpa_bits has bits.
+> Maybe rename the function to kvm_riscv_stage2_gpa_bits as well ?
 
-There could be missing wake up if the rest of the window remain the
-same stall states as the polling_total updates for every polling_min_period.
+Okay, I will rename in the next revision.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/psi_types.h |  2 ++
- kernel/sched/psi.c        | 30 ++++++++++++++++++------------
- 2 files changed, 20 insertions(+), 12 deletions(-)
+Thanks,
+Anup
 
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index 0a23300..9533d2e 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -132,6 +132,8 @@ struct psi_trigger {
- 
- 	/* Refcounting to prevent premature destruction */
- 	struct kref refcount;
-+
-+	bool new_stall;
- };
- 
- struct psi_group {
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 1652f2b..402718c 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -458,9 +458,12 @@ static void psi_avgs_work(struct work_struct *work)
- static void window_reset(struct psi_window *win, u64 now, u64 value,
- 			 u64 prev_growth)
- {
-+	struct psi_trigger *t = container_of(win, struct psi_trigger, win);
-+
- 	win->start_time = now;
- 	win->start_value = value;
- 	win->prev_growth = prev_growth;
-+	t->new_stall = false;
- }
- 
- /*
-@@ -515,7 +518,6 @@ static void init_triggers(struct psi_group *group, u64 now)
- static u64 update_triggers(struct psi_group *group, u64 now)
- {
- 	struct psi_trigger *t;
--	bool new_stall = false;
- 	u64 *total = group->total[PSI_POLL];
- 
- 	/*
-@@ -523,19 +525,26 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 	 * watchers know when their specified thresholds are exceeded.
- 	 */
- 	list_for_each_entry(t, &group->triggers, node) {
--		u64 growth;
--
- 		/* Check for stall activity */
- 		if (group->polling_total[t->state] == total[t->state])
- 			continue;
- 
- 		/*
--		 * Multiple triggers might be looking at the same state,
--		 * remember to update group->polling_total[] once we've
--		 * been through all of them. Also remember to extend the
--		 * polling time if we see new stall activity.
-+		 * update the trigger if there is new stall which will be
-+		 * reset when run out of the window
- 		 */
--		new_stall = true;
-+		t->new_stall = true;
-+
-+		memcpy(&group->polling_total[t->state], &total[t->state],
-+				sizeof(group->polling_total[t->state]));
-+	}
-+
-+	list_for_each_entry(t, &group->triggers, node) {
-+		u64 growth;
-+
-+		/* check if new stall happened during this window*/
-+		if (!t->new_stall)
-+			continue;
- 
- 		/* Calculate growth since last update */
- 		growth = window_update(&t->win, now, total[t->state]);
-@@ -552,10 +561,6 @@ static u64 update_triggers(struct psi_group *group, u64 now)
- 		t->last_event_time = now;
- 	}
- 
--	if (new_stall)
--		memcpy(group->polling_total, total,
--				sizeof(group->polling_total));
--
- 	return now + group->poll_min_period;
- }
- 
-@@ -1152,6 +1157,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
- 	t->last_event_time = 0;
- 	init_waitqueue_head(&t->event_wait);
- 	kref_init(&t->refcount);
-+	t->new_stall = false;
- 
- 	mutex_lock(&group->trigger_lock);
- 
--- 
-1.9.1
-
+>
+> > diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> > index fb18af34a4b5..6f959639ec45 100644
+> > --- a/arch/riscv/kvm/vm.c
+> > +++ b/arch/riscv/kvm/vm.c
+> > @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> >         case KVM_CAP_NR_MEMSLOTS:
+> >                 r = KVM_USER_MEM_SLOTS;
+> >                 break;
+> > +       case KVM_CAP_VM_GPA_BITS:
+> > +               r = kvm_riscv_stage2_gpa_size();
+> > +               break;
+> >         default:
+> >                 r = 0;
+> >                 break;
+> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> > index 1daa45268de2..469f05d69c8d 100644
+> > --- a/include/uapi/linux/kvm.h
+> > +++ b/include/uapi/linux/kvm.h
+> > @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
+> >  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
+> >  #define KVM_CAP_ARM_MTE 205
+> >  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
+> > +#define KVM_CAP_VM_GPA_BITS 207
+> >
+> >  #ifdef KVM_CAP_IRQ_ROUTING
+> >
+> > --
+> > 2.25.1
+> >
+>
+> Other than that, it looks good to me.
+>
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
+>
+>
+> --
+> Regards,
+> Atish

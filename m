@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDE1479039
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B22C47903B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbhLQPpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:45:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:59280 "EHLO foss.arm.com"
+        id S235563AbhLQPpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:45:45 -0500
+Received: from foss.arm.com ([217.140.110.172]:59298 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235466AbhLQPpi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:45:38 -0500
+        id S235559AbhLQPpm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 10:45:42 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0947C14BF;
-        Fri, 17 Dec 2021 07:45:38 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DA831515;
+        Fri, 17 Dec 2021 07:45:41 -0800 (PST)
 Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CA81F3F774;
-        Fri, 17 Dec 2021 07:45:35 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6C8013F774;
+        Fri, 17 Dec 2021 07:45:39 -0800 (PST)
 From:   German Gomez <german.gomez@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         acme@kernel.org
@@ -31,9 +31,9 @@ Cc:     Alexandre Truong <alexandre.truong@arm.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 2/6] perf tools: add a mechanism to inject stack frames
-Date:   Fri, 17 Dec 2021 15:45:16 +0000
-Message-Id: <20211217154521.80603-3-german.gomez@arm.com>
+Subject: [PATCH v5 3/6] perf tools: Refactor script__setup_sample_type()
+Date:   Fri, 17 Dec 2021 15:45:17 +0000
+Message-Id: <20211217154521.80603-4-german.gomez@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211217154521.80603-1-german.gomez@arm.com>
 References: <20211217154521.80603-1-german.gomez@arm.com>
@@ -45,80 +45,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexandre Truong <alexandre.truong@arm.com>
 
-Add a mechanism for platforms to inject stack frames for the leaf
-frame caller if there is enough information to determine a frame
-is missing from dwarf or other post processing mechanisms.
+Refactoring script__setup_sample_type() by using
+callchain_param_setup() to replace the duplicate code
+for callchain parameter setting up.
 
 Signed-off-by: Alexandre Truong <alexandre.truong@arm.com>
 Signed-off-by: German Gomez <german.gomez@arm.com>
 ---
- tools/perf/util/machine.c | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ tools/perf/builtin-script.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index fb8496df8432..3eddad009f78 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -2710,6 +2710,12 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
- 	return err;
- }
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index da2175d70ac9..ab7d575f97f2 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -3468,16 +3468,7 @@ static void script__setup_sample_type(struct perf_script *script)
+ 	struct perf_session *session = script->session;
+ 	u64 sample_type = evlist__combined_sample_type(session->evlist);
  
-+static u64 get_leaf_frame_caller(struct perf_sample *sample __maybe_unused,
-+		struct thread *thread __maybe_unused, int usr_idx __maybe_unused)
-+{
-+	return 0;
-+}
-+
- static int thread__resolve_callchain_sample(struct thread *thread,
- 					    struct callchain_cursor *cursor,
- 					    struct evsel *evsel,
-@@ -2723,9 +2729,10 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 	struct ip_callchain *chain = sample->callchain;
- 	int chain_nr = 0;
- 	u8 cpumode = PERF_RECORD_MISC_USER;
--	int i, j, err, nr_entries;
-+	int i, j, err, nr_entries, usr_idx;
- 	int skip_idx = -1;
- 	int first_call = 0;
-+	u64 leaf_frame_caller;
+-	if (symbol_conf.use_callchain || symbol_conf.cumulate_callchain) {
+-		if ((sample_type & PERF_SAMPLE_REGS_USER) &&
+-		    (sample_type & PERF_SAMPLE_STACK_USER)) {
+-			callchain_param.record_mode = CALLCHAIN_DWARF;
+-			dwarf_callchain_users = true;
+-		} else if (sample_type & PERF_SAMPLE_BRANCH_STACK)
+-			callchain_param.record_mode = CALLCHAIN_LBR;
+-		else
+-			callchain_param.record_mode = CALLCHAIN_FP;
+-	}
++	callchain_param_setup(sample_type);
  
- 	if (chain)
- 		chain_nr = chain->nr;
-@@ -2850,6 +2857,34 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 			continue;
- 		}
- 
-+		/*
-+		 * PERF_CONTEXT_USER allows us to locate where the user stack ends.
-+		 * Depending on callchain_param.order and the position of PERF_CONTEXT_USER,
-+		 * the index will be different in order to add the missing frame
-+		 * at the right place.
-+		 */
-+
-+		usr_idx = callchain_param.order == ORDER_CALLEE ? j-2 : j-1;
-+
-+		if (usr_idx >= 0 && chain->ips[usr_idx] == PERF_CONTEXT_USER) {
-+
-+			leaf_frame_caller = get_leaf_frame_caller(sample, thread, usr_idx);
-+
-+			/*
-+			 * check if leaf_frame_Caller != ip to not add the same
-+			 * value twice.
-+			 */
-+
-+			if (leaf_frame_caller && leaf_frame_caller != ip) {
-+
-+				err = add_callchain_ip(thread, cursor, parent,
-+					       root_al, &cpumode, leaf_frame_caller,
-+					       false, NULL, NULL, 0);
-+				if (err)
-+					return (err < 0) ? err : 0;
-+			}
-+		}
-+
- 		err = add_callchain_ip(thread, cursor, parent,
- 				       root_al, &cpumode, ip,
- 				       false, NULL, NULL, 0);
+ 	if (script->stitch_lbr && (callchain_param.record_mode != CALLCHAIN_LBR)) {
+ 		pr_warning("Can't find LBR callchain. Switch off --stitch-lbr.\n"
 -- 
 2.25.1
 

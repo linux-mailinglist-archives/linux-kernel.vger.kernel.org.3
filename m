@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8EF478164
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B228C478166
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhLQAfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbhLQAfd (ORCPT
+        id S230510AbhLQAfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:35:48 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:42225 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230354AbhLQAfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:35:33 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAE9C061574;
-        Thu, 16 Dec 2021 16:35:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFVPv01KWz4xgr;
-        Fri, 17 Dec 2021 11:35:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639701331;
-        bh=0yV4OjD2/txk+TqQ+snBZ4pY8OoYKPgmVqfvt4PRsCU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sl3m0o6/giPv1SF5VKfZhidknItSkuy66u3pbKyrtZJuEVl5HikeQu2fnt6JAyp64
-         we+tBfMeVMIv87DaZJTMGVVg7Ad4qH38j8p2ntpeVCtTSYluWhgyNi4fKhIVgFh+pV
-         kTDp7CnqgiyRx9IGPvANDI0Fctl6nkK5Aa4OnWmUhbnGvoGYudN2/4M0bjO3t9/iKB
-         RuPfwadszv4OTMlJ3oQAjyLDDOlcWsNAyLv7ritHOBLSg8x2tB9LgnWTjdfYLVkfeN
-         yaQZaDcVySCoD1Uaw3ZKO+Q/KyE3gaza7tKYjBvtYuCVfHqSzQaNGpVWju5HHqgsE8
-         11ljeoWox7nvg==
-Date:   Fri, 17 Dec 2021 11:35:30 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the fscache tree with the asm-generic
- tree
-Message-ID: <20211217113530.30f9e48a@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yKsQczCucaJ2uF2GZ12Xrpr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Thu, 16 Dec 2021 19:35:47 -0500
+X-IronPort-AV: E=Sophos;i="5.88,212,1635174000"; 
+   d="scan'208";a="104217566"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 17 Dec 2021 09:35:45 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 011A3415CA7A;
+        Fri, 17 Dec 2021 09:35:43 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] net: mv643xx_eth: Propagate errors from of_irq_to_resource()
+Date:   Fri, 17 Dec 2021 00:35:40 +0000
+Message-Id: <20211217003540.21344-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yKsQczCucaJ2uF2GZ12Xrpr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The driver overrides the error code returned by of_irq_to_resource() to
+-EINVAL. Switch to propagating the error code upstream so that errors
+such as -EPROBE_DEFER are handled.
 
-Hi all,
+While at it drop the memset() operation as of_irq_to_resource()
+does call memset() before filling in the IRQ resource.
 
-Today's linux-next merge of the fscache tree got a conflict in:
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-  fs/fscache/object.c
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index 105247582684..7a5ff629d158 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -2716,10 +2716,10 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
+ 	memset(&ppd, 0, sizeof(ppd));
+ 	ppd.shared = pdev;
+ 
+-	memset(&res, 0, sizeof(res));
+-	if (of_irq_to_resource(pnp, 0, &res) <= 0) {
++	ret = of_irq_to_resource(pnp, 0, &res);
++	if (ret <= 0) {
+ 		dev_err(&pdev->dev, "missing interrupt on %pOFn\n", pnp);
+-		return -EINVAL;
++		return ret ? ret : -ENXIO;
+ 	}
+ 
+ 	if (of_property_read_u32(pnp, "reg", &ppd.port_number)) {
+-- 
+2.17.1
 
-between commit:
-
-  5c61c384095a ("Documentation, arch, fs: Remove leftovers from fscache obj=
-ect list")
-
-from the asm-generic tree and commit:
-
-  b03429170e20 ("fscache: Remove the contents of the fscache driver, pendin=
-g rewrite")
-
-from the fscache tree.
-
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yKsQczCucaJ2uF2GZ12Xrpr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG721IACgkQAVBC80lX
-0Gwhpgf+N4t9doOVE5rHmf6OvLp27vydq2u11sqV6/+LNL0JI+5f4mAYua60H+/S
-9/7kVObvWVlI69rs+A6YNV+Z4u24cx+ueB9H9FlxX9ns9Z+JW4v4lvv0ejvz/0bn
-M67ZM2j0D+9QKyMT5KNkIjUFtihB3WzVf0YsjHAWF9mCU3DhTW+bh/pJcCaUdv92
-saGjg+5da20feB7RcfRbAdtKect+Jf24mg8uMavksbw++UJbZZko0SfLXcHsInit
-v4PraqvUKfU4FGCMUZNzdZjQlE8j6Q7KxZtD343C7FPFRFOjlvlvYSgEQME6V0uN
-IaM9F9okkkLerzMZEoQbuG7GGGVTBg==
-=KWML
------END PGP SIGNATURE-----
-
---Sig_/yKsQczCucaJ2uF2GZ12Xrpr--

@@ -2,144 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA13478902
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BDC47890E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbhLQKeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:34:14 -0500
-Received: from mga06.intel.com ([134.134.136.31]:51139 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233460AbhLQKeN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:34:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639737253; x=1671273253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NVNGMMi+GcP2D2tp7o/8LBJVGo1HVXYBvPe0/10EQVw=;
-  b=PXhr7E1ku2b7Z87olp2mGz94qbH52i6IKb11yKOcZOLysVMzlNUeHIRv
-   4mJ04bwtSdrC4PF8Ax9wpQnnvW5QJAmk6poShBq8D7JMxF5QYAbGiL88V
-   JrrtpAQvY9AdsFyT77WiKdlTF5I52lfXISiI+1v0baxeQHEahnF5ITHzQ
-   P0wFrk32D/ESeESydwo3OfYjBpHLfF3hRQmEJsNo15+k11r6y1mCH6fod
-   ezbPgUs3xYmHrN5wPRC0UP1G/Z7Okj2wO8iC4y+Xr8Vvc5V8yeX7QDgq1
-   BMtxod4eFknP4Zpllj78oCizwg/a5Ifmvv+vvSOmuVclCzUgCkM/T8aF+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300503413"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="300503413"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 02:34:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="605861172"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Dec 2021 02:34:09 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myAYz-0004bD-3w; Fri, 17 Dec 2021 10:34:09 +0000
-Date:   Fri, 17 Dec 2021 18:33:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/18] Structural cleanup for filesystem-based swap
-Message-ID: <202112171822.DW1WPE1G-lkp@intel.com>
-References: <163969850251.20885.10819272484905153807.stgit@noble.brown>
+        id S235123AbhLQKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:37:38 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:34362 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233421AbhLQKhh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 05:37:37 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHAbFQl103265;
+        Fri, 17 Dec 2021 04:37:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639737435;
+        bh=+nXhcjKNNROdKntOJztmSKywAUuemvkNHfzpB9oXqY0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Wn2HMULsh4Ek3bx430KH0iZt2ggBb19Ef5zzPQFh/mksTKmTKMqcpgocVO7uExFDn
+         OmuEMkjvSkFVzIm5yVNSVLtJoKKFPyw9VeVEt9X0kmiO1nhMJk3abNcfD+jPYUgKjT
+         3ZfCUyyewp0GaQDgtb3pjisRNOZGS48hNyxEz4yc=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHAbEXx055352
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Dec 2021 04:37:15 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Dec 2021 04:37:14 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Dec 2021 04:37:14 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHAbDjX018824;
+        Fri, 17 Dec 2021 04:37:14 -0600
+Date:   Fri, 17 Dec 2021 16:07:13 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] mtd: spi-nor: micron-st: make mt25ql02g/mt25qu02g
+ match more specific, add 4B opcodes
+Message-ID: <20211217103711.vrwx45spgzl73emp@ti.com>
+References: <a69181ccf225424a8bd11349aad0df7face9715e.1633607826.git.matthias.schiffer@ew.tq-group.com>
+ <20211216185254.pt3quvb4wkzou6wh@ti.com>
+ <fd52c394b8c5f727b04166ca29e893baa940e2a5.camel@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <163969850251.20885.10819272484905153807.stgit@noble.brown>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <fd52c394b8c5f727b04166ca29e893baa940e2a5.camel@ew.tq-group.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi NeilBrown,
+On 17/12/21 11:07AM, Matthias Schiffer wrote:
+> On Fri, 2021-12-17 at 00:22 +0530, Pratyush Yadav wrote:
+> > Hi Matthias,
+> > 
+> > On 07/10/21 02:08PM, Matthias Schiffer wrote:
+> > > Change the mt25ql02g/mt25qu02g entries to include
+> > > SPI_NOR_4B_OPCODES. In
+> > > addition, the SPI_NOR_DUAL_READ flag is added to mt25ql02g; this
+> > > seems
+> > > to have been an accidental omission, as mt25ql02g and mt25qu02g
+> > > should
+> > > support the same features.
+> > 
+> > The way flags are specified are changed a bit. See [0]. Please re-
+> > roll 
+> > your patch to use the new flag types. If this flash supports SFDP
+> > you 
+> > should ideally just need to set the sfdp flag to true and the core 
+> > should take care of the rest. Test reports with the new changes would
+> > be 
+> > much appreciated :-)
+> 
+> Will do. Is there an easy way to check which features the kernel
+> detected from the SFDP with the new code?
 
-Thank you for the patch! Yet something to improve:
+Hm, I don't think so. I think you would have to add debug prints in the 
+driver to know which flags were discovered by SFDP.
 
-[auto build test ERROR on cifs/for-next]
-[also build test ERROR on axboe-block/for-next mszeredi-vfs/overlayfs-next rostedt-trace/for-next linus/master v5.16-rc5 next-20211216]
-[cannot apply to trondmy-nfs/linux-next hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: arm-randconfig-r005-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171822.DW1WPE1G-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/6443c9d01129c1a1c19f3df4a594b01e3772e6bd
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-        git checkout 6443c9d01129c1a1c19f3df4a594b01e3772e6bd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/nfs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/nfs/file.c:512:8: error: implicit declaration of function 'add_swap_extent' [-Werror,-Wimplicit-function-declaration]
-           ret = add_swap_extent(sis, 0, sis->max, 0);
-                 ^
-   1 error generated.
-
-
-vim +/add_swap_extent +512 fs/nfs/file.c
-
-   486	
-   487	static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
-   488							sector_t *span)
-   489	{
-   490		unsigned long blocks;
-   491		long long isize;
-   492		int ret;
-   493		struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
-   494		struct inode *inode = file->f_mapping->host;
-   495	
-   496		if (!file->f_mapping->a_ops->swap_rw)
-   497			/* Cannot support swap */
-   498			return -EINVAL;
-   499	
-   500		spin_lock(&inode->i_lock);
-   501		blocks = inode->i_blocks;
-   502		isize = inode->i_size;
-   503		spin_unlock(&inode->i_lock);
-   504		if (blocks*512 < isize) {
-   505			pr_warn("swap activate: swapfile has holes\n");
-   506			return -EINVAL;
-   507		}
-   508	
-   509		ret = rpc_clnt_swap_activate(clnt);
-   510		if (ret)
-   511			return ret;
- > 512		ret = add_swap_extent(sis, 0, sis->max, 0);
-   513		if (ret < 0) {
-   514			rpc_clnt_swap_deactivate(clnt);
-   515			return ret;
-   516		}
-   517		*span = sis->pages;
-   518		sis->flags |= SWP_FS_OPS;
-   519		return ret;
-   520	}
-   521	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

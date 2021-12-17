@@ -2,156 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD021478C93
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D67478C94
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbhLQNoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 08:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236709AbhLQNon (ORCPT
+        id S236757AbhLQNor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 08:44:47 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:6445 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236709AbhLQNoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 08:44:43 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B1C061574;
-        Fri, 17 Dec 2021 05:44:43 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id w1so1624324ilh.9;
-        Fri, 17 Dec 2021 05:44:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=/1U8rmm2v6IW4IrlYfu1WGU3nMyw7RqXx+g8a0tWtd8=;
-        b=J7gTZ5TlrzQDpy3rrzs2OPkxDkRN8Dlke+E+3xJl+6SbHzTuzoDgXjjl0t2CJjrDLy
-         pO0Sg4QrDFHAdMaHwr6c2Ve3txnkLqqhVgAfDndOYO4S3fct3uYmfBO2kL8CvOXgp67x
-         O359f5MCFQwYMYZBDac4HTrVXnXLOQQTEa3leh4kGoD3/P45UxVEMF6N2h5hnLDvJrUO
-         AOvTmuj557deI/P2K1dCNQmWRBNyhxb2vxs5OrPG7PfoUH4yE+2OPUQcE9ExMnykbu5/
-         jizkXWMJaWSYEzL8KVWCwbNSeGoJLmo82qgOha5fGyVd3HWz9zovyZ51buC9vjHHy2Am
-         2u+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=/1U8rmm2v6IW4IrlYfu1WGU3nMyw7RqXx+g8a0tWtd8=;
-        b=2pxU3PDk8Hwwsb37YvMsVilPAKw+1fQ6j90mW9+6GaOIroUcL11uyhTiZjauxC+6za
-         CXL5jgYftpyksJufrCY5f+4Ot3LsoDNjCa1iJOie04YuTAN0H6epd4rwSPcCaFbExTIs
-         JsRwyECcZdnDKCYk73O4qJ8fQQ49QCISRZ/u2mqkztfat03e9uc4Sb1mb64y52envo97
-         aEUHC8DpJXR1s9Q585GnylA/YeTRuJ/SF52LgaX1A9pFQS+kXWQa9mEVhYADbvvQBgwu
-         WrF2OHbxBDCgD22dF2Ro02NM/614EOTxDP1+HtNpRj9p21pMgTTBeLsu9TMDUU/bh3GH
-         58Yg==
-X-Gm-Message-State: AOAM533/+koahT9RZvG3IFZAGUvvPd8wy1J9b4SdxEUcTD1567RSJW7t
-        nUPx/8Wsqpr2LI7fQIPC8pBfux4+ZlSYupGTEPA=
-X-Google-Smtp-Source: ABdhPJyekkbwWcJQs6XjMX15028dFAptq/1f6BUnjcBFltMAWPJUtvD9jqGfG3HcakoEEBti8xAUenGk38bfuQzMQuc=
-X-Received: by 2002:a05:6e02:180d:: with SMTP id a13mr1518285ilv.1.1639748682866;
- Fri, 17 Dec 2021 05:44:42 -0800 (PST)
+        Fri, 17 Dec 2021 08:44:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639748686; x=1671284686;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9w1DxWP4zjlu6ehwUCfkUegP1MtCz8ADBKVsvfDk+Yw=;
+  b=ekh4fn5CkCeujIbmZZ8GKkOYX4IiQYFH9SOaQPV1MzI9YvCbJTmVDr7L
+   kQRlrrnd96gF5mn3+pTeQEXdbT6eIEHc1sRcZVZH7w1x/dbATUiEde9KE
+   aZMDDc9WJ6Xd1HSYoXBykGfRuUyf4cwsyd2CItJ/nB4Lv9GpwUDG+5ASI
+   ozw4MNW4GyktDAslsfFoWFE2QT6oD/yMR0xmOfHDxBqApIkZs4YHIQlhU
+   h/BhILD68QO7SWFjFrQPv6rMoUTIe2Ng+nGxFPBmBX+bxnQw3ygMt2WO/
+   3ARA+bU/lrz2bp89WWMUN6zbtNiq9w2vGrKJceyQf7TNQswLHFAowI+Y7
+   Q==;
+IronPort-SDR: 89iDa8JCPrGIsCy1CaWmnWR5htcCtVCN+gpbDp7stZL2+i0fLezHnDkUmkNz0G4iGJAE9LFBiH
+ aeL7eDJqEkM9b0N/OTQGSCp8TQLWF/YElvpQzWiBuiddfPzPPpmSGtRwdY9kDyoU2l9Wh78CTJ
+ Rl8MOvfUl68B6jcESrVwAATuRJDBO/n9EZHx/cQ4wK0qSJdkctLll4aOVDBCOIpaaLNd3155Dw
+ VFyzKJ+9zvxUGDH5IchH934/yBI332U5+Id7oMgTORvlpdKUEmn7FMJoGeejj7XP0eOxJV+B/U
+ Qwr6EdHfmx/WSG36qVjm6bdy
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="79916992"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 06:44:46 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 06:44:45 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 17 Dec 2021 06:44:43 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <p.yadav@ti.com>, <michael@walle.cc>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PATCH v3 1/2] mtd: spi-nor: core: Introduce SPI_NOR_SOFT_RESET flash_info fixup_flag
+Date:   Fri, 17 Dec 2021 15:44:41 +0200
+Message-ID: <20211217134442.497950-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211124153105.155739-1-alex_y_xu@yahoo.ca> <20211124153105.155739-2-alex_y_xu@yahoo.ca>
- <CA+icZUUZwGG-mJg26DOmadZksm4fMCE5QUmnX4ZghWxXzAy9HQ@mail.gmail.com>
-In-Reply-To: <CA+icZUUZwGG-mJg26DOmadZksm4fMCE5QUmnX4ZghWxXzAy9HQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 17 Dec 2021 14:44:06 +0100
-Message-ID: <CA+icZUXLrENSgHJHy1Huy-tX-STpEQXyjQGO_fmdnhq7oMKhzA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kbuild: pass --stream-size --no-content-size to zstd
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Nick Terrell <terrelln@fb.com>
-Cc:     Michael Forney <forney@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 9:51 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Wed, Nov 24, 2021 at 4:30 PM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
-> >
-> > Otherwise, it allocates 2 GB of memory at once. Even though the majority
-> > of this memory is never touched, the default heuristic overcommit
-> > refuses this request if less than 2 GB of RAM+swap is currently
-> > available. This results in "zstd: error 11 : Allocation error : not
-> > enough memory" and the kernel failing to build.
-> >
-> > When the size is specified, zstd will reduce the memory request
-> > appropriately. For typical kernel sizes of ~32 MB, the largest mmap
-> > request will be reduced to 512 MB, which will succeed on all but the
-> > smallest devices.
-> >
-> > For inputs around this size, --stream-size --no-content-size may
-> > slightly decrease the compressed size, or slightly increase it:
-> > https://github.com/facebook/zstd/issues/2848.
-> >
->
-> Hi Alex and Nick T.,
->
-> some questions:
->
-> Can I apply this patch as a single patch - without patch 1/2?
->
-> Is there an impact also on the kernel's ZRAM/ZSWAP support plus using
-> ZSTD as (de)comp-algo?
->
-> Here I have:
->
-> $ grep -i zstd /boot/config-5.15.7-1-amd64-clang13-lto | egrep -i 'zram|zswap'
-> CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD=y
-> CONFIG_ZSWAP_COMPRESSOR_DEFAULT="zstd"
-> CONFIG_ZRAM_DEF_COMP_ZSTD=y
-> CONFIG_ZRAM_DEF_COMP="zstd"
->
+The Soft Reset and Rescue Sequence Support is defined in BFPT_DWORD(16)
+starting with JESD216A. The first version of SFDP, JESD216 (April 2011),
+defines just the first 9 BFPT DWORDS, thus it does not contain information
+about the Software Reset and Rescue Support. Since this support can not
+be discovered by parsing the first SFDP version, introduce a flash_info
+fixup_flag that will be used either by flashes that define
+JESD216 (April 2011) or by flashes that do not define SFDP at all.
+In case a flash defines BFPT_DWORD(16) but with wrong values, one should
+instead use a post_bfpt() hook and set SNOR_F_SOFT_RESET.
 
-$ egrep 'stream-size' build-log_5.15.9-1-amd64-clang13-lto.txt
-49360:  { cat arch/x86/boot/compressed/vmlinux.bin
-arch/x86/boot/compressed/vmlinux.relocs | zstd --stream-size=53340760
---no-content-size -22 --ultra; printf \130\352
-\055\003; } > arch/x86/boot/compressed/vmlinux.bin.zst
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+---
+v3:
+- resend the patch, this time prefixed with v3
+- collect R-b
+v2: no changes
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+ drivers/mtd/spi-nor/core.c | 3 +++
+ drivers/mtd/spi-nor/core.h | 3 +++
+ 2 files changed, 6 insertions(+)
 
-- Sedat -
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 2e21d5ac0e2d..32d80fdaa2a2 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2699,6 +2699,9 @@ static void spi_nor_init_fixup_flags(struct spi_nor *nor)
+ 
+ 	if (fixup_flags & SPI_NOR_IO_MODE_EN_VOLATILE)
+ 		nor->flags |= SNOR_F_IO_MODE_EN_VOLATILE;
++
++	if (fixup_flags & SPI_NOR_SOFT_RESET)
++		nor->flags |= SNOR_F_SOFT_RESET;
+ }
+ 
+ /**
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 2afb610853a9..70c6bb7f5f04 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -373,6 +373,8 @@ struct spi_nor_fixups {
+  *                            memory size above 128Mib.
+  *   SPI_NOR_IO_MODE_EN_VOLATILE: flash enables the best available I/O mode
+  *                            via a volatile bit.
++ *   SPI_NOR_SOFT_RESET:      flash supports software reset enable, reset
++ *                            sequence.
+  * @mfr_flags:      manufacturer private flags. Used in the manufacturer fixup
+  *                  hooks to differentiate support between flashes of the same
+  *                  manufacturer.
+@@ -416,6 +418,7 @@ struct flash_info {
+ 	u8 fixup_flags;
+ #define SPI_NOR_4B_OPCODES		BIT(0)
+ #define SPI_NOR_IO_MODE_EN_VOLATILE	BIT(1)
++#define SPI_NOR_SOFT_RESET		BIT(2)
+ 
+ 	u8 mfr_flags;
+ 
+-- 
+2.25.1
 
-> Thanks.
->
-> Regards,
-> - Sedat -
->
-> > Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
-> > ---
-> >  scripts/Makefile.lib | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index ca901814986a..c98a82ca38e6 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -466,12 +466,20 @@ quiet_cmd_xzmisc = XZMISC  $@
-> >  # single pass, so zstd doesn't need to allocate a window buffer. When streaming
-> >  # decompression is used, like initramfs decompression, zstd22 should likely not
-> >  # be used because it would require zstd to allocate a 128 MB buffer.
-> > +#
-> > +# --stream-size to reduce zstd memory usage (otherwise zstd -22 --ultra
-> > +# allocates, but does not use, 2 GB) and potentially improve compression.
-> > +#
-> > +# --no-content-size to save three bytes which we do not use (we use size_append).
-> > +
-> > +# zstd --stream-size is only supported since 1.4.4
-> > +zstd_stream_size = $(shell $(ZSTD) -1c --stream-size=0 --no-content-size </dev/null >/dev/null 2>&1 && printf '%s' '--stream-size=$(total_size) --no-content-size')
-> >
-> >  quiet_cmd_zstd = ZSTD    $@
-> > -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
-> > +      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -19; $(size_append); } > $@
-> >
-> >  quiet_cmd_zstd22 = ZSTD22  $@
-> > -      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
-> > +      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -22 --ultra; $(size_append); } > $@
-> >
-> >  # ASM offsets
-> >  # ---------------------------------------------------------------------------
-> > --
-> > 2.34.0
-> >

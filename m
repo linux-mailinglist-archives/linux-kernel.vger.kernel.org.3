@@ -2,324 +2,573 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6C64790A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933C64790AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbhLQPyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:54:36 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:42937 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235218AbhLQPyf (ORCPT
+        id S238487AbhLQPyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237566AbhLQPyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:54:35 -0500
-Received: by mail-ot1-f51.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so3360975otv.9;
-        Fri, 17 Dec 2021 07:54:34 -0800 (PST)
+        Fri, 17 Dec 2021 10:54:53 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15125C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:54:53 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id p2so5098911uad.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nS2x2gqlG+bhPprzA0z5qM3MBjo1SUOX64D/HwGO8bk=;
+        b=sNLhBpw1G/gomyJsouqw4hnm787p5poCn0czKaaVvBFCHuiT+JfQ7RuFPUQBR/NbNT
+         aBt5XceY04HkDZOI6cc04RMmcYozHdluXC2dJzVzez9mIbQ48YRm4SByTyGCryuQBMLb
+         0rii2/NHFfDtHJbSYYeccJEVbxMWwyvDRLLKEpLlnPWHDChxRZbKJwQiSCB8DyqeN82D
+         FxzQ+biYoGnlCt27ypMHpovvGxnWFjo+SaZqskzvU3UG93dwXg6feTKbhikMrMEfLYsT
+         jK/C5kdHuqJ4wD9UL6LtURxwsJMpEucN5Mo7KSnBC1u3FeS87ULkgGQz1mbOFi2J3DE8
+         6AZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=I6UGou8tw+hrlIjDJe1HLV3R0pIt3Y543ZdUOr3KwlA=;
-        b=PcXuAtVzX1XjzDFbSab2EXzacqp/LelUg9IRS5UQwRO/ZVb0yyrZHQY32Rg2ukIguc
-         FL06NAGyho9ujVs9Z5FpkQm6Te8qz42NNc8J+tewpmF3R1M+VqucPIcJO8RyELDjY4Pl
-         rTlR6oRz21+Kuh/StfJ8vAfokDV6+HD5kyLQ/pFkOaCrdlZQBRCKg0eBLHttweAC1+Ih
-         3eEAZZyZQW2VnYEr2qgQJQxGnsYngqhLzrcebKZx2OwoNg1nyB9Gi0f5mQO34ASnQj1I
-         v3QpCIh/3J/O3pJ28HVChWhrhu479s4aJ+z31fQNjy0/hHikstUT38xif9sZvAJvQKnU
-         q3Kw==
-X-Gm-Message-State: AOAM532GzcgpacP3W5NxYYY+WFnfWOMlB75weiIIUiVh5oJEwxliC34S
-        qVZY2gqco1A1v+XfyqEfp4TQGzBQNoOINeFnUGI=
-X-Google-Smtp-Source: ABdhPJxI3BFGfLFn0Yu88v5KngM9c9AtMViqvZSJAYfUkxvNCzgOHV6K0D9M8WiHcjjUOGN3r4Pi9QGTqYO86BcqXvA=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr2555238otf.198.1639756474489;
- Fri, 17 Dec 2021 07:54:34 -0800 (PST)
+        bh=nS2x2gqlG+bhPprzA0z5qM3MBjo1SUOX64D/HwGO8bk=;
+        b=RzBAFTqcCPGg/rX2kzsE1iAU1ahkTLDe3CgyVl28gTM3/SZS0yc9WSayxhkrYLzrRh
+         G1KaemiQ+9ibYfWjaLsfOo5NDy7oy7VVXQMe0Xyrq0FrooJV1C43mf2jEIYQeybrZrxW
+         dUW7Fcx+Hwj5dJGVjFxhdYsvXIdPVEesqpqGkcrgU5WmWlBMtEnEBxD/YpKhKgXy/bYh
+         0Z8u+H80h7cQVXlNmK83TkYiHD3Bs5XDZnl5DRfHnU2b0i4dXlUarV4wnQmgYSWWsvhu
+         5+T3zy3cJIRMqPN5Xa+eXnAZ4M/MjcFEp3DVnQm28Rjp51I4u7IYu5e0vyrGdXcTeljt
+         zyiA==
+X-Gm-Message-State: AOAM532UVCV5oDyFhXPQAVsC9gu9olPSJQ4EI/7gN1A0ymHMgrNZMM5e
+        mM01oJBOyqiby5hIhdEQRag0xyAcb7Gcw0kZNGatQg==
+X-Google-Smtp-Source: ABdhPJy6BCcjq4hY9r2oMWK8K6ZhdePsTsW1+4RdzD5TMRVWHTXl7km5G1usrqIzmvsPjYSp85r41P8iEK/3JX4M7nQ=
+X-Received: by 2002:a67:d31c:: with SMTP id a28mr1265245vsj.20.1639756492152;
+ Fri, 17 Dec 2021 07:54:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216225320.2957053-1-qais.yousef@arm.com> <20211216225320.2957053-2-qais.yousef@arm.com>
-In-Reply-To: <20211216225320.2957053-2-qais.yousef@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 16:54:23 +0100
-Message-ID: <CAJZ5v0h4xWs5EregN4nM-WEJYtQ8hyfdrEybyy6eZsaqSFaNmg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/sugov: Ignore 'busy' filter when rq is capped
- by uclamp_max
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Beata Michalska <Beata.Michalska@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+ <CGME20211215160918epcas2p1d7063cfe3abca5fcc0ccf4eee388c396@epcas2p1.samsung.com>
+ <20211215160906.17451-7-semen.protsenko@linaro.org> <001101d7f2f4$119b9570$34d2c050$@samsung.com>
+In-Reply-To: <001101d7f2f4$119b9570$34d2c050$@samsung.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 17 Dec 2021 17:54:39 +0200
+Message-ID: <CAPLW+4=85JKS9a7v1eNitYguDp_KpUK32F9b7-9jY0grpdA5tg@mail.gmail.com>
+Subject: Re: [PATCH 6/7] arm64: dts: exynos: Add initial Exynos850 SoC support
+To:     Chanho Park <chanho61.park@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:53 PM Qais Yousef <qais.yousef@arm.com> wrote:
+On Fri, 17 Dec 2021 at 05:13, Chanho Park <chanho61.park@samsung.com> wrote:
 >
-> sugov_update_single_{freq, perf}() contains a 'busy' filter that ensures
-> we don't bring the frqeuency down if there's no idle time (CPU is busy).
+> Hi,
 >
-> The problem is that with uclamp_max we will have scenarios where a busy
-> task is capped to run at a lower frequency and this filter prevents
-> applying the capping when this task starts running.
+> > -----Original Message-----
+> > From: Sam Protsenko <semen.protsenko@linaro.org>
+> > Sent: Thursday, December 16, 2021 1:09 AM
+> > To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Rob Herring
+> > <robh+dt@kernel.org>; Sylwester Nawrocki <s.nawrocki@samsung.com>
+> > Cc: Jaewon Kim <jaewon02.kim@samsung.com>; Chanho Park
+> > <chanho61.park@samsung.com>; David Virag <virag.david003@gmail.com>;
+> > Youngmin Nam <youngmin.nam@samsung.com>; Tomasz Figa
+> > <tomasz.figa@gmail.com>; Chanwoo Choi <cw00.choi@samsung.com>; Michael
+> > Turquette <mturquette@baylibre.com>; Stephen Boyd <sboyd@kernel.org>;
+> > Linus Walleij <linus.walleij@linaro.org>; Daniel Palmer <daniel@0x0f.com>;
+> > Hao Fang <fanghao11@huawei.com>; linux-arm-kernel@lists.infradead.org;
+> > linux-samsung-soc@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-clk@vger.kernel.org
+> > Subject: [PATCH 6/7] arm64: dts: exynos: Add initial Exynos850 SoC support
+> >
+> > Samsung Exynos850 is ARMv8-based mobile-oriented SoC. This patch adds
+> > initial SoC support. It's not comprehensive yet, some more devices will be
+> > added later. Right now only crucial system components and most needed
+> > platform devices are defined.
+> >
+> > Crucial features (needed to boot Linux up to shell with serial console):
+> >
+> >   * Octa cores (Cortex-A55), supporting PSCI v1.0
+> >   * ARM architected timer (armv8-timer)
+> >   * Interrupt controller (GIC-400)
+> >   * Pinctrl nodes for GPIO
+> >   * Serial node
+> >
+> > Basic platform features:
+> >
+> >   * Clock controller CMUs
+> >   * OSCCLK clock
+> >   * RTC clock
+> >   * MCT timer
+> >   * ARM PMU (Performance Monitor Unit)
+> >   * Chip-id
+> >   * RTC
+> >   * Reset
+> >   * Watchdog timers
+> >   * eMMC
+> >   * I2C
+> >   * HSI2C
+> >   * USI
+> >
+> > All those features were already enabled and tested on E850-96 board with
+> > minimal BusyBox rootfs.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 755 ++++++++++++++++++
+> >  arch/arm64/boot/dts/exynos/exynos850.dtsi     | 755 ++++++++++++++++++
+> >  2 files changed, 1510 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+> >  create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+> > b/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+> > new file mode 100644
+> > index 000000000000..ba4e8d3129ac
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+> > @@ -0,0 +1,755 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Samsung's Exynos850 SoC pin-mux and pin-config device tree source
+> > + *
+> > + * Copyright (C) 2017 Samsung Electronics Co., Ltd.
+> > + * Copyright (C) 2021 Linaro Ltd.
+> > + *
+> > + * Samsung's Exynos850 SoC pin-mux and pin-config options are listed as
+> > +device
+> > + * tree nodes in this file.
+> > + */
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/pinctrl/samsung.h>
+> > +
+> > +&pinctrl_alive {
+> > +     gpa0: gpa0 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpa1: gpa1 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpa2: gpa2 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpa3: gpa3 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpa4: gpa4 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>,
+> > +                          <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpq0: gpq0 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +     };
+> > +
+> > +     /* I2C5 (also called CAM_PMIC_I2C in TRM) */
+> > +     i2c5_pins: i2c5-pins {
+> > +             samsung,pins = "gpa3-5", "gpa3-6";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     /* I2C6 (also called MOTOR_I2C in TRM) */
+> > +     i2c6_pins: i2c6-pins {
+> > +             samsung,pins = "gpa3-7", "gpa4-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     /* USI: UART_DEBUG_0 pins */
+> > +     uart0_pins: uart0-pins {
+> > +             samsung,pins = "gpq0-0", "gpq0-1";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +
+> > +     /* USI: UART_DEBUG_1 pins */
+> > +     uart1_pins: uart1-pins {
+> > +             samsung,pins = "gpa3-7", "gpa4-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +};
+> > +
+> > +&pinctrl_cmgp {
+> > +     gpm0: gpm0 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpm1: gpm1 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpm2: gpm2 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpm3: gpm3 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpm4: gpm4 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     gpm5: gpm5 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +             interrupt-parent = <&gic>;
+> > +             interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> > +     };
+> > +
+> > +     /* USI_CMGP0: HSI2C function */
+> > +     hsi2c3_pins: hsi2c3-pins {
+> > +             samsung,pins = "gpm0-0", "gpm1-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     /* USI_CMGP0: UART function (4 pins, Auto Flow Control) */
+> > +     uart1_single_pins: uart1-single-pins {
+> > +             samsung,pins = "gpm0-0", "gpm1-0", "gpm2-0", "gpm3-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +
+> > +     /* USI_CMGP0: UART function (2 pins, Non-Auto Flow Control) */
+> > +     uart1_dual_pins: uart1-dual-pins {
+> > +             samsung,pins = "gpm0-0", "gpm1-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +
+> > +     /* USI_CMGP0: SPI function */
+> > +     spi1_pins: spi1-pins {
+> > +             samsung,pins = "gpm0-0", "gpm1-0", "gpm2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     spi1_cs_pins: spi1-cs-pins {
+> > +             samsung,pins = "gpm3-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     spi1_cs_func_pins: spi1-cs-func-pins {
+> > +             samsung,pins = "gpm3-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     /* USI_CMGP1: HSI2C function */
+> > +     hsi2c4_pins: hsi2c4-pins {
+> > +             samsung,pins = "gpm4-0", "gpm5-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     /* USI_CMGP1: UART function (4 pins, Auto Flow Control) */
+> > +     uart2_single_pins: uart2-single-pins {
+> > +             samsung,pins = "gpm4-0", "gpm5-0", "gpm6-0", "gpm7-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +
+> > +     /* USI_CMGP1: UART function (2 pins, Non-Auto Flow Control) */
+> > +     uart2_dual_pins: uart2-dual-pins {
+> > +             samsung,pins = "gpm4-0", "gpm5-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +     };
+> > +
+> > +     /* USI_CMGP1: SPI function */
+> > +     spi2_pins: spi2-pins {
+> > +             samsung,pins = "gpm4-0", "gpm5-0", "gpm6-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     spi2_cs_pins: spi2-cs-pins {
+> > +             samsung,pins = "gpm7-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     spi2_cs_func_pins: spi2-cs-func-pins {
+> > +             samsung,pins = "gpm7-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
+> > +     };
+> > +};
+> > +
+> > +&pinctrl_aud {
+> > +     gpb0: gpb0 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +     };
+> > +
+> > +     gpb1: gpb1 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +     };
+> > +
+> > +     aud_codec_mclk_pins: aud-codec-mclk-pins {
+> > +             samsung,pins = "gpb0-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_codec_mclk_idle_pins: aud-codec-mclk-idle-pins {
+> > +             samsung,pins = "gpb0-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_i2s0_pins: aud-i2s0-pins {
+> > +             samsung,pins = "gpb0-1", "gpb0-2", "gpb0-3", "gpb0-4";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_i2s0_idle_pins: aud-i2s0-idle-pins {
+> > +             samsung,pins = "gpb0-1", "gpb0-2", "gpb0-3", "gpb0-4";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_i2s1_pins: aud-i2s1-pins {
+> > +             samsung,pins = "gpb1-0", "gpb1-1", "gpb1-2", "gpb1-3";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_i2s1_idle_pins: aud-i2s1-idle-pins {
+> > +             samsung,pins = "gpb1-0", "gpb1-1", "gpb1-2", "gpb1-3";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_fm_pins: aud-fm-pins {
+> > +             samsung,pins = "gpb1-4";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +
+> > +     aud_fm_idle_pins: aud-fm-idle-pins {
+> > +             samsung,pins = "gpb1-4";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+> > +     };
+> > +};
+> > +
+> > +&pinctrl_hsi {
+> > +     gpf2: gpf2 {
+> > +             gpio-controller;
+> > +             #gpio-cells = <2>;
+> > +
+> > +             interrupt-controller;
+> > +             #interrupt-cells = <2>;
+> > +     };
+> > +
+> > +     sd2_clk_pins: sd2-clk-pins {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV2>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_1x_pins: sd2-clk-fast-slew-rate-1x-pins {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV1>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_1_5x_pins: sd2-clk-fast-slew-rate-1-5x-pins
+> > {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV1_5>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_2x_pins: sd2-clk-fast-slew-rate-2x-pins {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV2>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_2_5x_pins: sd2-clk-fast-slew-rate-2-5x-pins
+> > {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV2_5>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_3x_pins: sd2-clk-fast-slew-rate-3x-pins {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV3>;
+> > +     };
+> > +
+> > +     sd2_clk_fast_slew_rate_4x_pins: sd2-clk-fast-slew-rate-4x-pins {
+> > +             samsung,pins = "gpf2-0";
+> > +             samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +             samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +             samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV4>;
+> > +     };
 >
-> We handle this by skipping the filter when uclamp is enabled and the rq
-> is being capped by uclamp_max.
+> All the flew_rate_XX pins are necessary to be defined? They might be
+> required by board dts files and it's convenient to use them but I don't
+> think they should be pre-defined. We can override the sd2_clk_pins like
+> below in a board dts file.
 >
-> We introduce a new function uclamp_rq_is_capped() to help detecting when
-> this capping is taking effect. Some code shuffling was required to allow
-> using cpu_util_{cfs, rt}() in this new function.
+> &sd2_clk_pins {
+>         samsung,pin-drv = <EXYNOS850_HSI_PIN_DRV_LV4>;
 >
-> On 2 Core SMT2 Intel laptop I see:
->
-> Without this patch:
->
->         uclampset -M 0 sysbench --test=cpu --threads = 4 run
->
-> produces a score of ~3200 consistently. Which is the highest possible.
->
-> Compiling the kernel also results in frequency running at max 3.1GHz all
-> the time - running uclampset -M 400 to cap it has no effect without this
-> patch.
->
-> With this patch:
->
->         uclampset -M 0 sysbench --test=cpu --threads = 4 run
->
-> produces a score of ~1100 with some outliers in ~1700. Uclamp max
-> aggregates the performance requirements, so having high values sometimes
-> is expected if some other task happens to require that frequency starts
-> running at the same time.
->
-> When compiling the kernel with uclampset -M 400 I can see the
-> frequencies mostly in the ~2GHz region. Helpful to conserve power and
-> prevent heating when not plugged in.
->
-> Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->
-> I haven't dug much into the busy filter, but I assume it is something that is
-> still required right?
 
-It is AFAICS.
+Thanks for the suggestion! Will remove slew_rate pins in v4.
 
-> If there's a better alternative we can take to make this
-> filter better instead, I'm happy to hear ideas. Otherwise hopefully this
-> proposal is logical too.
-
-It looks reasonable to me.
-
-For the schedutil changes:
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-> uclampset is a tool available in util-linux v2.37.2
+> Otherwise, looks good to me.
 >
->  kernel/sched/cpufreq_schedutil.c |  10 ++-
->  kernel/sched/sched.h             | 139 +++++++++++++++++--------------
->  2 files changed, 86 insertions(+), 63 deletions(-)
+> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 >
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index e7af18857371..48327970552a 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -348,8 +348,11 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
->         /*
->          * Do not reduce the frequency if the CPU has not been idle
->          * recently, as the reduction is likely to be premature then.
-> +        *
-> +        * Except when the rq is capped by uclamp_max.
->          */
-> -       if (sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-> +       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
-> +           sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
->                 next_f = sg_policy->next_freq;
->
->                 /* Restore cached freq as next_freq has changed */
-> @@ -395,8 +398,11 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
->         /*
->          * Do not reduce the target performance level if the CPU has not been
->          * idle recently, as the reduction is likely to be premature then.
-> +        *
-> +        * Except when the rq is capped by uclamp_max.
->          */
-> -       if (sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
-> +       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
-> +           sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
->                 sg_cpu->util = prev_util;
->
->         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index eb971151e7e4..294ebc22413c 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2841,6 +2841,67 @@ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags)
->  static inline void cpufreq_update_util(struct rq *rq, unsigned int flags) {}
->  #endif /* CONFIG_CPU_FREQ */
->
-> +#ifdef arch_scale_freq_capacity
-> +# ifndef arch_scale_freq_invariant
-> +#  define arch_scale_freq_invariant()  true
-> +# endif
-> +#else
-> +# define arch_scale_freq_invariant()   false
-> +#endif
-> +
-> +#ifdef CONFIG_SMP
-> +static inline unsigned long capacity_orig_of(int cpu)
-> +{
-> +       return cpu_rq(cpu)->cpu_capacity_orig;
-> +}
-> +
-> +/**
-> + * enum cpu_util_type - CPU utilization type
-> + * @FREQUENCY_UTIL:    Utilization used to select frequency
-> + * @ENERGY_UTIL:       Utilization used during energy calculation
-> + *
-> + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-> + * need to be aggregated differently depending on the usage made of them. This
-> + * enum is used within effective_cpu_util() to differentiate the types of
-> + * utilization expected by the callers, and adjust the aggregation accordingly.
-> + */
-> +enum cpu_util_type {
-> +       FREQUENCY_UTIL,
-> +       ENERGY_UTIL,
-> +};
-> +
-> +unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> +                                unsigned long max, enum cpu_util_type type,
-> +                                struct task_struct *p);
-> +
-> +static inline unsigned long cpu_bw_dl(struct rq *rq)
-> +{
-> +       return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;
-> +}
-> +
-> +static inline unsigned long cpu_util_dl(struct rq *rq)
-> +{
-> +       return READ_ONCE(rq->avg_dl.util_avg);
-> +}
-> +
-> +static inline unsigned long cpu_util_cfs(struct rq *rq)
-> +{
-> +       unsigned long util = READ_ONCE(rq->cfs.avg.util_avg);
-> +
-> +       if (sched_feat(UTIL_EST)) {
-> +               util = max_t(unsigned long, util,
-> +                            READ_ONCE(rq->cfs.avg.util_est.enqueued));
-> +       }
-> +
-> +       return util;
-> +}
-> +
-> +static inline unsigned long cpu_util_rt(struct rq *rq)
-> +{
-> +       return READ_ONCE(rq->avg_rt.util_avg);
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_UCLAMP_TASK
->  unsigned long uclamp_eff_value(struct task_struct *p, enum uclamp_id clamp_id);
->
-> @@ -2897,6 +2958,21 @@ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
->         return clamp(util, min_util, max_util);
->  }
->
-> +/* Is the rq being capped/throttled by uclamp_max? */
-> +static inline bool uclamp_rq_is_capped(struct rq *rq)
-> +{
-> +       unsigned long rq_util;
-> +       unsigned long max_util;
-> +
-> +       if (!static_branch_likely(&sched_uclamp_used))
-> +               return false;
-> +
-> +       rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
-> +       max_util = READ_ONCE(rq->uclamp[UCLAMP_MAX].value);
-> +
-> +       return max_util != SCHED_CAPACITY_SCALE && rq_util >= max_util;
-> +}
-> +
->  /*
->   * When uclamp is compiled in, the aggregation at rq level is 'turned off'
->   * by default in the fast path and only gets turned on once userspace performs
-> @@ -2917,73 +2993,14 @@ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
->         return util;
->  }
->
-> +static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
-> +
->  static inline bool uclamp_is_used(void)
->  {
->         return false;
->  }
->  #endif /* CONFIG_UCLAMP_TASK */
->
-> -#ifdef arch_scale_freq_capacity
-> -# ifndef arch_scale_freq_invariant
-> -#  define arch_scale_freq_invariant()  true
-> -# endif
-> -#else
-> -# define arch_scale_freq_invariant()   false
-> -#endif
-> -
-> -#ifdef CONFIG_SMP
-> -static inline unsigned long capacity_orig_of(int cpu)
-> -{
-> -       return cpu_rq(cpu)->cpu_capacity_orig;
-> -}
-> -
-> -/**
-> - * enum cpu_util_type - CPU utilization type
-> - * @FREQUENCY_UTIL:    Utilization used to select frequency
-> - * @ENERGY_UTIL:       Utilization used during energy calculation
-> - *
-> - * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
-> - * need to be aggregated differently depending on the usage made of them. This
-> - * enum is used within effective_cpu_util() to differentiate the types of
-> - * utilization expected by the callers, and adjust the aggregation accordingly.
-> - */
-> -enum cpu_util_type {
-> -       FREQUENCY_UTIL,
-> -       ENERGY_UTIL,
-> -};
-> -
-> -unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
-> -                                unsigned long max, enum cpu_util_type type,
-> -                                struct task_struct *p);
-> -
-> -static inline unsigned long cpu_bw_dl(struct rq *rq)
-> -{
-> -       return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;
-> -}
-> -
-> -static inline unsigned long cpu_util_dl(struct rq *rq)
-> -{
-> -       return READ_ONCE(rq->avg_dl.util_avg);
-> -}
-> -
-> -static inline unsigned long cpu_util_cfs(struct rq *rq)
-> -{
-> -       unsigned long util = READ_ONCE(rq->cfs.avg.util_avg);
-> -
-> -       if (sched_feat(UTIL_EST)) {
-> -               util = max_t(unsigned long, util,
-> -                            READ_ONCE(rq->cfs.avg.util_est.enqueued));
-> -       }
-> -
-> -       return util;
-> -}
-> -
-> -static inline unsigned long cpu_util_rt(struct rq *rq)
-> -{
-> -       return READ_ONCE(rq->avg_rt.util_avg);
-> -}
-> -#endif
-> -
->  #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
->  static inline unsigned long cpu_util_irq(struct rq *rq)
->  {
-> --
-> 2.25.1
+> Best Regards,
+> Chanho Park
 >

@@ -2,173 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375274784B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E844784B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 06:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbhLQFve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 00:51:34 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28327 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbhLQFvd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 00:51:33 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JFdQ75Z7yzbjWd;
-        Fri, 17 Dec 2021 13:51:11 +0800 (CST)
-Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 17 Dec 2021 13:51:31 +0800
-Received: from dggpeml100016.china.huawei.com ([7.185.36.216]) by
- dggpeml100016.china.huawei.com ([7.185.36.216]) with mapi id 15.01.2308.020;
- Fri, 17 Dec 2021 13:51:31 +0800
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-To:     Wanpeng Li <kernellwp@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Huangzhichao <huangzhichao@huawei.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: RE: The vcpu won't be wakened for a long time
-Thread-Topic: The vcpu won't be wakened for a long time
-Thread-Index: Adfw8hOY5GAlKZgbTtqexw2IMvmqfP//t/OA//yjT/CABmGSgIAAr8SA//8+jxA=
-Date:   Fri, 17 Dec 2021 05:51:31 +0000
-Message-ID: <648cfc7dc43d4f15a719a078e85f2148@huawei.com>
-References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
- <YbjWFTtNo9Ap7kDp@google.com> <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
- <Ybtea42RxZ9aVzCh@google.com>
- <CANRm+CwbOw8sXL4h9e5S6O7XcerUkfD+uG=iNu365qROeJTMKw@mail.gmail.com>
-In-Reply-To: <CANRm+CwbOw8sXL4h9e5S6O7XcerUkfD+uG=iNu365qROeJTMKw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.148.223]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232100AbhLQFw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 00:52:59 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:58062 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230405AbhLQFw6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 00:52:58 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1my6AO-0007S3-2k; Fri, 17 Dec 2021 16:52:29 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 17 Dec 2021 16:52:27 +1100
+Date:   Fri, 17 Dec 2021 16:52:27 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Nicolai Stange <nstange@suse.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Stephan =?iso-8859-1?Q?M=FCller?= <smueller@chronox.de>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+Subject: Re: [PATCH v2 03/18] crypto: dh - optimize domain parameter
+ serialization for well-known groups
+Message-ID: <20211217055227.GA20698@gondor.apana.org.au>
+References: <20211209090358.28231-1-nstange@suse.de>
+ <20211209090358.28231-4-nstange@suse.de>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209090358.28231-4-nstange@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogV2FucGVuZyBMaSBbbWFp
-bHRvOmtlcm5lbGx3cEBnbWFpbC5jb21dDQo+IFNlbnQ6IEZyaWRheSwgRGVjZW1iZXIgMTcsIDIw
-MjEgMTA6MTIgQU0NCj4gVG86IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUuY29t
-Pg0KPiBDYzogTG9uZ3BlbmcgKE1pa2UsIENsb3VkIEluZnJhc3RydWN0dXJlIFNlcnZpY2UgUHJv
-ZHVjdCBEZXB0LikNCj4gPGxvbmdwZW5nMkBodWF3ZWkuY29tPjsgcGJvbnppbmlAcmVkaGF0LmNv
-bTsga3ZtQHZnZXIua2VybmVsLm9yZzsgR29uZ2xlaQ0KPiAoQXJlaSkgPGFyZWkuZ29uZ2xlaUBo
-dWF3ZWkuY29tPjsgSHVhbmd6aGljaGFvIDxodWFuZ3poaWNoYW9AaHVhd2VpLmNvbT47DQo+IFdh
-bnBlbmcgTGkgPHdhbnBlbmdsaUB0ZW5jZW50LmNvbT47IFZpdGFseSBLdXpuZXRzb3YgPHZrdXpu
-ZXRzQHJlZGhhdC5jb20+Ow0KPiBKaW0gTWF0dHNvbiA8am1hdHRzb25AZ29vZ2xlLmNvbT47IEpv
-ZXJnIFJvZWRlbCA8am9yb0A4Ynl0ZXMub3JnPjsNCj4gbGludXgta2VybmVsIDxsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnPg0KPiBTdWJqZWN0OiBSZTogVGhlIHZjcHUgd29uJ3QgYmUgd2Fr
-ZW5lZCBmb3IgYSBsb25nIHRpbWUNCj4gDQo+IE9uIEZyaSwgMTcgRGVjIDIwMjEgYXQgMDc6NDgs
-IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUuY29tPiB3cm90ZToNCj4gPg0KPiA+
-IE9uIFRodSwgRGVjIDE2LCAyMDIxLCBMb25ncGVuZyAoTWlrZSwgQ2xvdWQgSW5mcmFzdHJ1Y3R1
-cmUgU2VydmljZSBQcm9kdWN0DQo+IERlcHQuKSB3cm90ZToNCj4gPiA+ID4gV2hhdCBrZXJuZWwg
-dmVyc2lvbj8gIFRoZXJlIGhhdmUgYmVlbiBhIHZhcmlldHkgb2YgZml4ZXMvY2hhbmdlcyBpbiB0
-aGUNCj4gPiA+ID4gYXJlYSBpbiByZWNlbnQga2VybmVscy4NCj4gPiA+DQo+ID4gPiBUaGUga2Vy
-bmVsIHZlcnNpb24gaXMgNC4xOCwgYW5kIGl0IHNlZW1zIHRoZSBsYXRlc3Qga2VybmVsIGFsc28g
-aGFzIHRoaXMNCj4gcHJvYmxlbS4NCj4gPiA+DQo+ID4gPiBUaGUgZm9sbG93aW5nIGNvZGUgY2Fu
-IGZpeGVzIHRoaXMgYnVnLCBJJ3ZlIHRlc3RlZCBpdCBvbiA0LjE4Lg0KPiA+ID4NCj4gPiA+ICg0
-LjE4KQ0KPiA+ID4NCj4gPiA+IEBAIC0zOTQ0LDYgKzM5NDQsMTEgQEAgc3RhdGljIHZvaWQgdm14
-X2RlbGl2ZXJfcG9zdGVkX2ludGVycnVwdChzdHJ1Y3QNCj4ga3ZtX3ZjcHUgKnZjcHUsIGludCB2
-ZWN0b3IpDQo+ID4gPiAgICAgICAgIGlmIChwaV90ZXN0X2FuZF9zZXRfb24oJnZteC0+cGlfZGVz
-YykpDQo+ID4gPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+ID4NCj4gPiA+ICsgICAgICAg
-aWYgKHN3cV9oYXNfc2xlZXBlcihrdm1fYXJjaF92Y3B1X3dxKHZjcHUpKSkgew0KPiA+ID4gKyAg
-ICAgICAgICAgICAgIGt2bV92Y3B1X2tpY2sodmNwdSk7DQo+ID4gPiArICAgICAgICAgICAgICAg
-cmV0dXJuOw0KPiA+ID4gKyAgICAgICB9DQo+ID4gPiArDQo+ID4gPiAgICAgICAgIGlmICh2Y3B1
-ICE9IGt2bV9nZXRfcnVubmluZ192Y3B1KCkgJiYNCj4gPiA+ICAgICAgICAgICAgICAgICAha3Zt
-X3ZjcHVfdHJpZ2dlcl9wb3N0ZWRfaW50ZXJydXB0KHZjcHUsIGZhbHNlKSkNCj4gPiA+ICAgICAg
-ICAgICAgICAgICBrdm1fdmNwdV9raWNrKHZjcHUpOw0KPiA+ID4NCj4gPiA+DQo+ID4gPiAobGF0
-ZXN0KQ0KPiA+ID4NCj4gPiA+IEBAIC0zOTU5LDYgKzM5NTksMTEgQEAgc3RhdGljIGludCB2bXhf
-ZGVsaXZlcl9wb3N0ZWRfaW50ZXJydXB0KHN0cnVjdA0KPiBrdm1fdmNwdSAqdmNwdSwgaW50IHZl
-Y3RvcikNCj4gPiA+ICAgICAgICAgaWYgKHBpX3Rlc3RfYW5kX3NldF9vbigmdm14LT5waV9kZXNj
-KSkNCj4gPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gMDsNCj4gPiA+DQo+ID4gPiArICAgICAg
-IGlmIChyY3V3YWl0X2FjdGl2ZSgmdmNwdS0+d2FpdCkpIHsNCj4gPiA+ICsgICAgICAgICAgICAg
-ICBrdm1fdmNwdV9raWNrKHZjcHUpOw0KPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAwOw0K
-PiA+ID4gKyAgICAgICB9DQo+ID4gPiArDQo+ID4gPiAgICAgICAgIGlmICh2Y3B1ICE9IGt2bV9n
-ZXRfcnVubmluZ192Y3B1KCkgJiYNCj4gPiA+ICAgICAgICAgICAgICFrdm1fdmNwdV90cmlnZ2Vy
-X3Bvc3RlZF9pbnRlcnJ1cHQodmNwdSwgZmFsc2UpKQ0KPiA+ID4gICAgICAgICAgICAgICAgIGt2
-bV92Y3B1X2tpY2sodmNwdSk7DQo+ID4gPg0KPiA+ID4gRG8geW91IGhhdmUgYW55IHN1Z2dlc3Rp
-b25zID8NCj4gPg0KPiA+IEhtbSwgdGhhdCBzdHJvbmdseSBzdWdnZXN0cyB0aGUgInZjcHUgIT0g
-a3ZtX2dldF9ydW5uaW5nX3ZjcHUoKSIgaXMgYXQgZmF1bHQuDQo+IA0KPiBUaGlzIHdhcyBpbnRy
-b2R1Y2VkIGluIDUuOC1yYzEsIGhvd2V2ZXIsIGhpcyBrZXJuZWwgdmVyc2lvbiBpcyA0LjE4Lg0K
-PiANCg0KRG8geW91IG1lYW4gdGhlIGZvbGxvd2luZyBjb21taXQgPw0KDQpgYGANCldoaWxlIG9w
-dGltaXppbmcgcG9zdGVkLWludGVycnVwdCBkZWxpdmVyeSBlc3BlY2lhbGx5IGZvciB0aGUgdGlt
-ZXINCmZhc3RwYXRoIHNjZW5hcmlvLCBJIG1lYXN1cmVkIGt2bV94ODZfb3BzLmRlbGl2ZXJfcG9z
-dGVkX2ludGVycnVwdCgpDQp0byBpbnRyb2R1Y2Ugc3Vic3RhbnRpYWwgbGF0ZW5jeSBiZWNhdXNl
-IHRoZSBwcm9jZXNzb3IgaGFzIHRvIHBlcmZvcm0NCmFsbCB2bWVudHJ5IHRhc2tzLCBhY2sgdGhl
-IHBvc3RlZCBpbnRlcnJ1cHQgbm90aWZpY2F0aW9uIHZlY3RvciwNCnJlYWQgdGhlIHBvc3RlZC1p
-bnRlcnJ1cHQgZGVzY3JpcHRvciBldGMuDQoNClRoaXMgaXMgbm90IG9ubHkgc2xvdywgaXQgaXMg
-YWxzbyB1bm5lY2Vzc2FyeSB3aGVuIGRlbGl2ZXJpbmcgYW4NCmludGVycnVwdCB0byB0aGUgY3Vy
-cmVudCBDUFUgKGFzIGlzIHRoZSBjYXNlIGZvciB0aGUgTEFQSUMgdGltZXIpIGJlY2F1c2UNClBJ
-Ui0+SVJSIGFuZCBJUlItPlJWSSBzeW5jaHJvbml6YXRpb24gaXMgYWxyZWFkeSBwZXJmb3JtZWQg
-b24gdm1lbnRyeQ0KVGhlcmVmb3JlIHNraXAga3ZtX3ZjcHVfdHJpZ2dlcl9wb3N0ZWRfaW50ZXJy
-dXB0IGluIHRoaXMgY2FzZSwgYW5kDQppbnN0ZWFkIGRvIHZteF9zeW5jX3Bpcl90b19pcnIoKSBv
-biB0aGUgRVhJVF9GQVNUUEFUSF9SRUVOVEVSX0dVRVNUDQpmYXN0cGF0aCBhcyB3ZWxsLg0KDQpU
-ZXN0ZWQtYnk6IEhhaXdlaSBMaSA8bGloYWl3ZWlAdGVuY2VudC5jb20+DQpDYzogSGFpd2VpIExp
-IDxsaWhhaXdlaUB0ZW5jZW50LmNvbT4NClN1Z2dlc3RlZC1ieTogUGFvbG8gQm9uemluaSA8cGJv
-bnppbmlAcmVkaGF0LmNvbT4NClNpZ25lZC1vZmYtYnk6IFdhbnBlbmcgTGkgPHdhbnBlbmdsaUB0
-ZW5jZW50LmNvbT4NCk1lc3NhZ2UtSWQ6IDwxNTg4MDU1MDA5LTEyNjc3LTYtZ2l0LXNlbmQtZW1h
-aWwtd2FucGVuZ2xpQHRlbmNlbnQuY29tPg0KU2lnbmVkLW9mZi1ieTogUGFvbG8gQm9uemluaSA8
-cGJvbnppbmlAcmVkaGF0LmNvbT4NCmBgYA0KDQpJdCB3YXMgYmFja3BvcnRlZCB0byBvdXIgY29k
-ZWJhc2Ugd2hlbiB3ZSBzeW5jaHJvbml6ZWQgcGF0Y2hlcyBmcm9tIHVwc3RyZWFtLg0KDQo+ID4g
-Q2FuIHlvdSB0cnkgcnVubmluZyB3aXRoIHRoZSBiZWxvdyBjb21taXQ/ICBJdCdzIGN1cnJlbnRs
-eSBzaXR0aW5nIGluIGt2bS9xdWV1ZSwNCj4gPiBidXQgbm90IG1hcmtlZCBmb3Igc3RhYmxlIGJl
-Y2F1c2UgSSBkaWRuJ3QgdGhpbmsgaXQgd2FzIHBvc3NpYmxlIGZvciB0aGUgY2hlY2sNCj4gPiB0
-byBhIGNhdXNlIGEgbWlzc2VkIHdha2UgZXZlbnQgaW4gS1ZNJ3MgY3VycmVudCBjb2RlIGJhc2Uu
-DQo+ID4NCj4gPiBjb21taXQgNmE4MTEwZmVhMmMxYjE5NzExYWMxZWY3MTg2ODBkZmQ5NDAzNjNj
-Ng0KPiA+IEF1dGhvcjogU2VhbiBDaHJpc3RvcGhlcnNvbiA8c2VhbmpjQGdvb2dsZS5jb20+DQo+
-ID4gRGF0ZTogICBXZWQgRGVjIDggMDE6NTI6MjcgMjAyMSArMDAwMA0KPiA+DQo+ID4gICAgIEtW
-TTogVk1YOiBXYWtlIHZDUFUgd2hlbiBkZWxpdmVyaW5nIHBvc3RlZCBJUlEgZXZlbiBpZiB2Q1BV
-ID09IHRoaXMgdkNQVQ0KPiA+DQo+ID4gICAgIERyb3AgYSBjaGVjayB0aGF0IGd1YXJkcyB0cmln
-Z2VyaW5nIGEgcG9zdGVkIGludGVycnVwdCBvbiB0aGUgY3VycmVudGx5DQo+ID4gICAgIHJ1bm5p
-bmcgdkNQVSwgYW5kIG1vcmUgaW1wb3J0YW50bHkgZ3VhcmRzIHdha2luZyB0aGUgdGFyZ2V0IHZD
-UFUgaWYNCj4gPiAgICAgdHJpZ2dlcmluZyBhIHBvc3RlZCBpbnRlcnJ1cHQgZmFpbHMgYmVjYXVz
-ZSB0aGUgdkNQVSBpc24ndCBJTl9HVUVTVF9NT0RFLg0KPiA+ICAgICBUaGUgImRvIG5vdGhpbmci
-IGxvZ2ljIHdoZW4gInZjcHUgPT0gcnVubmluZ192Y3B1IiB3b3JrcyBvbmx5IGJlY2F1c2UgS1ZN
-DQo+ID4gICAgIGRvZXNuJ3QgaGF2ZSBhIHBhdGggdG8gLT5kZWxpdmVyX3Bvc3RlZF9pbnRlcnJ1
-cHQoKSBmcm9tIGFzeW5jaHJvbm91cw0KPiA+ICAgICBjb250ZXh0LCBlLmcuIGlmIGFwaWNfdGlt
-ZXJfZXhwaXJlZCgpIHdlcmUgY2hhbmdlZCB0byBhbHdheXMgZ28gZG93biB0aGUNCj4gPiAgICAg
-cG9zdGVkIGludGVycnVwdCBwYXRoIGZvciBBUElDdiwgb3IgaWYgdGhlIElOX0dVRVNUX01PREUg
-Y2hlY2sgaW4NCj4gPiAgICAga3ZtX3VzZV9wb3N0ZWRfdGltZXJfaW50ZXJydXB0KCkgd2VyZSBk
-cm9wcGVkLCBhbmQgdGhlIGhydGltZXIgZmlyZWQgaW4NCj4gPiAgICAga3ZtX3ZjcHVfYmxvY2so
-KSBhZnRlciB0aGUgZmluYWwga3ZtX3ZjcHVfY2hlY2tfYmxvY2soKSBjaGVjaywgdGhlIHZDUFUN
-Cj4gPiAgICAgd291bGQgYmUgc2NoZWR1bGVkKCkgb3V0IHdpdGhvdXQgYmVpbmcgYXdha2VuZWQs
-IGkuZS4gd291bGQgIm1pc3MiIHRoZQ0KPiA+ICAgICB0aW1lciBpbnRlcnJ1cHQuDQo+ID4NCj4g
-PiAgICAgT25lIGNvdWxkIGFyZ3VlIHRoYXQgaW52b2tpbmcga3ZtX2FwaWNfbG9jYWxfZGVsaXZl
-cigpIGZyb20gKHNvZnQpIElSUQ0KPiA+ICAgICBjb250ZXh0IGZvciB0aGUgY3VycmVudCBydW5u
-aW5nIHZDUFUgc2hvdWxkIGJlIGlsbGVnYWwsIGJ1dCBub3RoaW5nIGluDQo+ID4gICAgIEtWTSBh
-Y3R1YWxseSBlbmZvcmNlcyB0aGF0IHJ1bGVzLiAgVGhlcmUncyBhbHNvIG5vIHN0cm9uZyBvYnZp
-b3VzIGJlbmVmaXQNCj4gPiAgICAgdG8gbWFraW5nIHN1Y2ggYmVoYXZpb3IgaWxsZWdhbCwgZS5n
-LiBjaGVja2luZyBJTl9HVUVTVF9NT0RFIGFuZCBjYWxsaW5nDQo+ID4gICAgIGt2bV92Y3B1X3dh
-a2VfdXAoKSBpcyBhdCB3b3JzdCBtYXJnaW5hbGx5IG1vcmUgY29zdGx5IHRoYW4gcXVlcnlpbmcg
-dGhlDQo+ID4gICAgIGN1cnJlbnQgcnVubmluZyB2Q1BVLg0KPiA+DQo+ID4gICAgIExhc3RseSwg
-dGhpcyBhbGlnbnMgdGhlIG5vbi1uZXN0ZWQgYW5kIG5lc3RlZCB1c2FnZSBvZiB0cmlnZ2VyaW5n
-IHBvc3RlZA0KPiA+ICAgICBpbnRlcnJ1cHRzLCBhbmQgd2lsbCBhbGxvdyBmb3IgYWRkaXRpb25h
-bCBjbGVhbnVwcy4NCj4gPg0KPiA+ICAgICBTaWduZWQtb2ZmLWJ5OiBTZWFuIENocmlzdG9waGVy
-c29uIDxzZWFuamNAZ29vZ2xlLmNvbT4NCj4gPiAgICAgUmV2aWV3ZWQtYnk6IE1heGltIExldml0
-c2t5IDxtbGV2aXRza0ByZWRoYXQuY29tPg0KPiA+ICAgICBNZXNzYWdlLUlkOiA8MjAyMTEyMDgw
-MTUyMzYuMTYxNjY5Ny0xOC1zZWFuamNAZ29vZ2xlLmNvbT4NCj4gPiAgICAgU2lnbmVkLW9mZi1i
-eTogUGFvbG8gQm9uemluaSA8cGJvbnppbmlAcmVkaGF0LmNvbT4NCj4gPg0KPiA+IGRpZmYgLS1n
-aXQgYS9hcmNoL3g4Ni9rdm0vdm14L3ZteC5jIGIvYXJjaC94ODYva3ZtL3ZteC92bXguYw0KPiA+
-IGluZGV4IDM4NzQ5MDYzZGEwZS4uZjYxYTYzNDhjZmZkIDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gv
-eDg2L2t2bS92bXgvdm14LmMNCj4gPiArKysgYi9hcmNoL3g4Ni9rdm0vdm14L3ZteC5jDQo+ID4g
-QEAgLTM5OTUsOCArMzk5NSw3IEBAIHN0YXRpYyBpbnQgdm14X2RlbGl2ZXJfcG9zdGVkX2ludGVy
-cnVwdChzdHJ1Y3Qga3ZtX3ZjcHUNCj4gKnZjcHUsIGludCB2ZWN0b3IpDQo+ID4gICAgICAgICAg
-KiBndWFyYW50ZWVkIHRvIHNlZSBQSUQuT049MSBhbmQgc3luYyB0aGUgUElSIHRvIElSUiBpZiB0
-cmlnZ2VyaW5nDQo+IGENCj4gPiAgICAgICAgICAqIHBvc3RlZCBpbnRlcnJ1cHQgImZhaWxzIiBi
-ZWNhdXNlIHZjcHUtPm1vZGUgIT0gSU5fR1VFU1RfTU9ERS4NCj4gPiAgICAgICAgICAqLw0KPiA+
-IC0gICAgICAgaWYgKHZjcHUgIT0ga3ZtX2dldF9ydW5uaW5nX3ZjcHUoKSAmJg0KPiA+IC0gICAg
-ICAgICAgICFrdm1fdmNwdV90cmlnZ2VyX3Bvc3RlZF9pbnRlcnJ1cHQodmNwdSwgZmFsc2UpKQ0K
-PiA+ICsgICAgICAgaWYgKCFrdm1fdmNwdV90cmlnZ2VyX3Bvc3RlZF9pbnRlcnJ1cHQodmNwdSwg
-ZmFsc2UpKQ0KPiA+ICAgICAgICAgICAgICAgICBrdm1fdmNwdV93YWtlX3VwKHZjcHUpOw0KPiA+
-DQo+ID4gICAgICAgICByZXR1cm4gMDsNCg==
+On Thu, Dec 09, 2021 at 10:03:43AM +0100, Nicolai Stange wrote:
+>> diff --git a/include/crypto/dh.h b/include/crypto/dh.h
+> index 67f3f6bca527..f0ed899e2168 100644
+> --- a/include/crypto/dh.h
+> +++ b/include/crypto/dh.h
+> @@ -19,6 +19,11 @@
+>   * the KPP API function call of crypto_kpp_set_secret.
+>   */
+>  
+> +/** enum dh_group_id - identify well-known domain parameter sets */
+> +enum dh_group_id {
+> +	DH_GROUP_ID_UNKNOWN = 0, /* Constants are used in test vectors. */
+> +};
+
+We try to avoid hard-coded ID lists like these in the Crypto API.
+
+I've had a look at your subsequent patches and I don't think you
+really need this.
+
+For instance, instead of shoehorning this into "dh", you could
+instead create new kpp algorithms modpXXXX and ffdheXXXX which
+can be templates around the underlying dh algorithm.  Sure this
+might involve a copy of the parameters but given the speed of
+the algorithms that we're talking about here I don't think it's
+really relevant.
+
+That way the underlying drivers don't need to be touched at all.
+
+Yes I do realise that this means the keyrings DH user-space API
+cannot be used in FIPS mode, but that is probably a good thing
+as users who care about modp/ffdhe shouldn't really have to stuff
+the raw vectors into this interface just to access the kernel DH
+implementation.
+
+On a side note, are there really keyrings DH users out there in
+the wild? If not can we deprecate and remove this interface
+completely?
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

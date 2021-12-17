@@ -2,226 +2,601 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9D647944F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1C4479447
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240463AbhLQSuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:50:21 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:27652 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234059AbhLQSuU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:50:20 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGXphG005180;
-        Fri, 17 Dec 2021 18:50:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=tjvUJrJwjwrPbylADWYXEGRby1frnpVOW0h2l/TR65U=;
- b=R8W7H3VG/lMxsJ8xAR28V2vmPswgEYhHUHyIXoFjETodaNCynhruCymCKFMnWfjJEIc3
- D9peZjsFA3LWmAub1c+X3ydlhVNmoHnDO7GfBQGztlJczAvt/yU4cm/6StjrX1CzRe8g
- sYL0tiVRUNDx6f+c2FNOxZUdCrMbZoM+uENYHT5f+WbDrjStQQcWpA1icjlPpSXN24KD
- ef4ZLrtslYFg5djhpTSjGLxEEvt5xAZt9k2U8fYuDYlSHxKCu79OuzqSjitj5uizutr7
- zKcEOvDcd9hGRTLixUrKbBl6X4ACiZ/GSMgx/LiMu+oQqNb2K77Q2x9BcwdiS9ae3h59 vA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknc6ht0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 18:50:04 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BHIkjYx118999;
-        Fri, 17 Dec 2021 18:50:03 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
-        by userp3030.oracle.com with ESMTP id 3cvh444tu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 18:50:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UrNDIiZrchezrBFdolAKnUbswsaFzxr5Vte0Lmbr5cJX/uvbMMMq1IbopjPTabsUzKinlf9MI91OB82ZMeQgxbC4YUtmZgswNiQrKehHAQrpMp+2MA+u8lTLoUpE0PgDlvgRw2tK3ObZ+E7STaVfwMWB9xl5MvPEkP2qxfZsjco76Aafwhh3woBZ6kHhMVyy0iYC8sIJ+7hM8fIViUTgAJoy7OYr8GVQmUFSs0u0loVSPIT90dpxYVq63k0hfGkoKF/Ft+14kduzYq2TFftWyyJPqAc8kBSvizFR0tpOx9BqCKbnUH6ClPin6vu7urmnwsrN0aGnqMpAJ1Mxl38WBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tjvUJrJwjwrPbylADWYXEGRby1frnpVOW0h2l/TR65U=;
- b=DSKT+TSchK76HV5PueJlOpdRcAKjIwi6QIPq1yV76hdf013FF2lG83q6YTL2qXroCsD8mDilzsNduerw2qM3T5oZUl60xkP4HR87dIsBlhmnS+TG+5GWrsfZd1ilx1CyWQr74JKvsXocqbVnCRLcJ9Kq3Z5FmdtR+qJIG1wFpaBNOB2xKMlKRs6UJBkiUkTGZK287pHSrITinlAzQMglTV1o+iFWOUno4YPkZI2nNZfpjXW8BXBbrrGdfP4dk/S+8yadjvl2LnTfNbtCYTppXja1rGUdVm0aEsT63Q2IkXajAITMVU9dNcJ+d1thvNrg8n888RGHShTeX/ectEvf6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tjvUJrJwjwrPbylADWYXEGRby1frnpVOW0h2l/TR65U=;
- b=JK92chhBH7WHiyPaDEioNGOofxRF35UkOhKbQaGnDhwfBVvGVKIorRupL57GSVviZIMT0zUJKzEA31mp0NZP8yxXG2iDXkm+k4CkscyDSIGVZbnIhd6WUQAtoUcYLq0pu9VjepYojON+cWJxja8BSofbaoPei+829IgZ/HAS5qU=
-Received: from BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8)
- by BN6PR10MB1634.namprd10.prod.outlook.com (2603:10b6:405:5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Fri, 17 Dec
- 2021 18:50:00 +0000
-Received: from BN0PR10MB5192.namprd10.prod.outlook.com
- ([fe80::4440:4f39:6d92:a14c]) by BN0PR10MB5192.namprd10.prod.outlook.com
- ([fe80::4440:4f39:6d92:a14c%8]) with mapi id 15.20.4801.015; Fri, 17 Dec 2021
- 18:50:00 +0000
-From:   George Kennedy <george.kennedy@oracle.com>
-To:     sdf@google.com, ast@kernel.org, daniel@iogearbox.net
-Cc:     george.kennedy@oracle.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: check size before calling kvmalloc
-Date:   Fri, 17 Dec 2021 13:48:04 -0500
-Message-Id: <1639766884-1210-1-git-send-email-george.kennedy@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: SN2PR01CA0020.prod.exchangelabs.com (2603:10b6:804:2::30)
- To BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8)
+        id S240443AbhLQStS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:49:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:33436 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231670AbhLQStQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:49:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382391042;
+        Fri, 17 Dec 2021 10:49:16 -0800 (PST)
+Received: from e123771.cambridge.arm.com (e123771.cambridge.arm.com [10.1.33.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1868E3F774;
+        Fri, 17 Dec 2021 10:49:14 -0800 (PST)
+From:   Chetankumar Mistry <chetan.mistry@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+Date:   Fri, 17 Dec 2021 18:49:06 +0000
+Message-Id: <20211217184907.2103677-1-chetan.mistry@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 748f2587-b617-42e9-ebec-08d9c18e0777
-X-MS-TrafficTypeDiagnostic: BN6PR10MB1634:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB1634A2155DA9EA1E8FB62CA1E6789@BN6PR10MB1634.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DC+noNEygsNXZ7GQufI48z2E8pin6JonniDqGqQLfoKcdHwOXnTOM/8fq6HSJA5f4vsdR3gmUCQsQLwCzk6zFYMD2shgSxv8BIVWdZ7dc/QF8TCG4Adft4cK2mRjo+7Z9uMUvSFs5mly32ElGPADeWW4vRFDHd94ODV/Ei0p4u6rIdWkunqp+hiEnEBa2p7S7TY1VpykKEk6uj4l+eXeTrWQ090FzRvrMULszpDsXvrRUcPKQQhE3dRXCyNniZ54ZpdGW2DBdxTS+682MoYUSOn1ogRe8yiFjw5UmCu6m75bZicEfokczd3p4W+RpLkDcAbZ2ZQBWTzKOthNxm3WhOeVOEuU2P+tZgaKrpdIc1I9CTyBNYIA7/aD11KjZ2smuNaeO/8QbdP16V8yf5fTbthauBfavXIAqvBdouJFjr/jVKsm7xPJyLGd4I6aJVKI56SYVcBQO+Yh62be8smKCn4/nO7pYwyDMc/KBI9mtM9/alJph6axLE1yZ8cOeUNqKF+rDluqha06YIv5jbNiX3BlqP1YfTeGDuK/xNl4pFIGhDo1fy1n/H2i+E+duk+Le/Kz2/P3+TwV4npoV4FaxhB1PNUYryAK6BpFPQbyscOG4F83YQB5Nb+lGM1MXCA8BYOQCzuZQBG59GeSeHHLxkAl8y7OJc31NZuNrdX+Tlgr0DLyeoKf3Ji2GTq29bcW3vU0IcEDqQELMPFLW9TdFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5192.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6512007)(83380400001)(5660300002)(508600001)(4326008)(66556008)(2906002)(66476007)(66946007)(186003)(26005)(8676002)(316002)(52116002)(6486002)(2616005)(38100700002)(38350700002)(86362001)(6506007)(8936002)(44832011)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gD9uy23N/ZpISZpVc1g01uLegijGMjeVEhCsvNrPNPUFtZbr2VkRRRr1owsh?=
- =?us-ascii?Q?o5Y91MmuuB+wgUI23XaEVGicjKb0OQUB2au+740BILCn25q7HQbeZ6LQXUOT?=
- =?us-ascii?Q?kb9tUlldK3kqnoU4gQ0ZEqKIlpekpL4CrNvt9USJUpfHcboEfOo9KSTS301A?=
- =?us-ascii?Q?SudNs8hNlhG0KRfhpmJpV4uZeDDwnYfjVSks9jJhDeqFoEeQzIqRoh4o/OI9?=
- =?us-ascii?Q?I+j12BMfKZ5J8OQSOAjUgAH6kcaxKKONk4PPczoO0JAejAVFIRc/QElnu14c?=
- =?us-ascii?Q?CKnnGKI3Kev2mZ6Ec//7iizG6vfov0IfmE/8M3Vd5PHzZdLIuAKLggfVGVas?=
- =?us-ascii?Q?5rR1LkUzamUb6HggMBhQWFrDKwVTfvyykj6Pbx+2afOSHCA6mRBmVrMB+5Ox?=
- =?us-ascii?Q?6c5rPv3ssVvy6fnRAXgDN+vo52O+yrZlEL6j8nFJ9t8YnGuvNXxylOg006VV?=
- =?us-ascii?Q?y88xrwHo5WHK+mm2G/0jixRMNoJVPM71w+eECgbxLHBFK4n1s1v5xmI83Z+u?=
- =?us-ascii?Q?mQfqJBuUJwMm+gQOpNDUHa8rHjZaa7GWAoMSH0bljvLDh7SCUCV5kQTgqvVe?=
- =?us-ascii?Q?JoaeLZzGwVNZalHVpN07BTeGFzFWt+WgWo+LrgsrvAMORai3GSv6oa0Mv0p4?=
- =?us-ascii?Q?EALtijtFwFqhNlKXgvFPWakZuJnuS6LG6SitCvqcP55r8qri7g2ahuq3NQoN?=
- =?us-ascii?Q?K8PxAk4DLHCdlxz9Wns+4V30whs65Rw0VDRpHUvsxLgRli1/mPvlgm+MgfHA?=
- =?us-ascii?Q?oZlZ64U2qLnqRAS8VonpP7Y6WxStrLr7V71o4vQk3/yOErGS4Pc5I06flvOT?=
- =?us-ascii?Q?9rDDr0kbk2zmYYOQpS93DHcvHZjoAh7dqgBN+5gEue7G0czUpSlsHnbFbkux?=
- =?us-ascii?Q?m3Sqlliw1aFTSnVCZIFhg2Tayt3lGG2NgVsy6bvJB4+EhGwRec+xzmAt+kPW?=
- =?us-ascii?Q?BMQk0HfRxHhHOnMFPbrf6snoyREOSPsVuOj6AUPszmE3kjV9LWGS51pQtO/w?=
- =?us-ascii?Q?jb2CW3mks3OADw1I6T4uwfUNFgtHNphny2h4NxGiJSgWQI3jgEJaYidd3NmZ?=
- =?us-ascii?Q?SDTxl9bZet/S5JAzsF5xr56wZ+buC4QLVfxTfdQOXmuUPcComDaRr3bl2Wfa?=
- =?us-ascii?Q?xLZPaUcepNqqUEjG5byUWoevgzR4V9D3hs+dH1aq8H5HwoLtSniskYxATOCg?=
- =?us-ascii?Q?b0xmpUaRz9PzHsjMAHfqyUy4QWRb8A/EaOuH5lj5Fj/s0YSSxQTfFlQ5N99X?=
- =?us-ascii?Q?aiED/vFiPjncMGFVHwwxi4BXniz/ochcvc6O5fns6eqA/7hMJ7Yhet42gI1X?=
- =?us-ascii?Q?WZgoYl8f8kdjx+TVc72ptD3tnoGeT9CD1onhzSjVB4L560BV0Lzw6XPeWo28?=
- =?us-ascii?Q?DB5dfTDds3U2oYR3f+Uu4i+fpi94QiO5DP/agW+j0hdzfNoQTC1df71uWvQ/?=
- =?us-ascii?Q?v9S738dUWujZSI7LT9p3FsIcumd6JubV5ZVf6QPKiXwj9TP5ClQ+G76K4Od4?=
- =?us-ascii?Q?4JkT/Tfd86uofKN9I+jubNaKXevXunrouF7ojwnB/UzNnsoEhLAB941nesFE?=
- =?us-ascii?Q?bg35LjAUkyQGS+9JOqacbgPAV3lcQWq7q7MkvMKzHWcKaRj+hzrIcqy8bk0z?=
- =?us-ascii?Q?SQy00LDlX7pI2tf69zD37UjpdHb0w+nc9z5QkJi8ifoUc+F5RyqM4p0qeY53?=
- =?us-ascii?Q?McS6aA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 748f2587-b617-42e9-ebec-08d9c18e0777
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5192.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 18:50:00.5858
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NaDiWr0vvFR4SfW5DFm8mgovsC6XGyDlV9gfQIekEe4ykjhlybzkvTJF4de5RCmk8Y0Rc0d19eE9cB+2Oq0QRPmSTdGT8ST6ILdcSO5JpoE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1634
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10201 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=711 bulkscore=0 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112170106
-X-Proofpoint-ORIG-GUID: fHBNVBCOmYX37VC3jAW-d2OHM8aN5TLe
-X-Proofpoint-GUID: fHBNVBCOmYX37VC3jAW-d2OHM8aN5TLe
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ZERO_SIZE_PTR ((void *)16) is returned by kvmalloc() instead of NULL
-if size is zero. Currently, return values from kvmalloc() are only
-checked for NULL. Before calling kvmalloc() check for size of zero
-and return error if size is zero to avoid the following crash.
+Implement the Ziegler-Nichols Heuristic algorithm to better
+estimate the PID Coefficients for a running platform.
+The values are tuned to minimuse the amount of overshoot in
+the temperature of the platform and subsequently minimise
+the number of switches for cdev states.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-PGD 1030bd067 P4D 1030bd067 PUD 103497067 PMD 0
-Oops: 0010 [#1] PREEMPT SMP KASAN NOPTI
-CPU: 1 PID: 15094 Comm: syz-executor344 Not tainted 5.16.0-rc1-syzk #1
-Hardware name: Red Hat KVM, BIOS
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-RSP: 0018:ffff888017627b78 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff8880215d0780 RCX: ffffffff81b63c60
-RDX: 0000000000000010 RSI: 0000000000000000 RDI: ffff8881035db400
-RBP: ffff888017627f08 R08: ffffed1003697209 R09: ffffed1003697209
-R10: ffff88801b4b9043 R11: ffffed1003697208 R12: ffffffff8f15d580
-R13: 1ffff11002ec4f77 R14: ffff8881035db400 R15: 0000000000000000
-FS:  00007f62bca78740(0000) GS:ffff888107880000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000002282a000 CR4: 00000000000006e0
-Call Trace:
- <TASK>
- map_get_next_key kernel/bpf/syscall.c:1279 [inline]
- __sys_bpf+0x384d/0x5b30 kernel/bpf/syscall.c:4612
- __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
- __x64_sys_bpf+0x7a/0xc0 kernel/bpf/syscall.c:4720
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
 ---
- kernel/bpf/syscall.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+Changelog v2:
+- Updated Kernel-Docs to use ':' delimiter (asked by Randy Dunlap)
+- Changed divide operation to use div_frac (requested by kernel_test_robot)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1033ee8..9873723 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1278,10 +1278,18 @@ static int map_get_next_key(union bpf_attr *attr)
- 		key = NULL;
- 	}
+ drivers/thermal/gov_power_allocator.c | 418 ++++++++++++++++++++++++++
+ drivers/thermal/thermal_sysfs.c       |   2 +
+ include/linux/thermal.h               |   7 +
+ 3 files changed, 427 insertions(+)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 13e375751d22..b7e85ee8a673 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -49,6 +49,59 @@ static inline s64 div_frac(s64 x, s64 y)
+ 	return div_s64(x << FRAC_BITS, y);
+ }
  
-+	if (!map->key_size) {
-+		err = -EINVAL;
-+		goto err_put;
++/**
++ * enum pivot_type - Values representing what type of pivot the current error
++ *                   value is
++ * @PEAK:       The current error is a peak
++ * @TROUGH:     The current error is a trough
++ * @MIDPOINT:   The current error is neither a peak or trough and is some midpoint
++ *             in between
++ */
++enum pivot_type { PEAK = 1, TROUGH = -1, MIDPOINT = 0 };
++
++/**
++ * enum ZN_VALUES - Values which the Ziegler-Nichols variable can take. This
++ *                  determines which set of PID Coefficients to use
++ * @ZN_ORIGINAL: Use the Original PID Coefficients when the thermal zone was
++ *               initially bound
++ * @ZN_OFF:      Use the current set of PID Coefficients
++ * @ZN_ON:       Use Ziegler-Nichols to determine the best set of PID Coefficients
++ * @ZN_RESET:    Reset the Ziegler-Nichols set of PID Coefficients so they can be
++ *               found again
++ */
++enum ZN_VALUES { ZN_ORIGINAL = -1, ZN_OFF = 0, ZN_ON = 1, ZN_RESET = 2 };
++
++/**
++ * struct zn_coefficients - values used by the Ziegler-Nichols Heuristic to
++ *                          determine what the optimal PID coefficients are
++ * @zn_found:   Determine whether we have found or are still searching for
++ *              optimal PID coefficients
++ * @prev_err: Previous err logged
++ * @curr_err: Current err being processed
++ * @t_prev_peak: Timestamp for the previous "Peak"
++ * @period: Period of osciallation
++ * @k_ultimate: Value of k_P which produces stable oscillations
++ * @base_peak: Err value of the current peak
++ * @base_trough: Err value fo the current trough
++ * @oscillation_count: Number of stable oscillations we have observed
++ * @prev_pivot: Whether the previous pivot was a peak or trough
++ * @zn_state: Current Ziegler-Nichols state
++ *
++ */
++struct zn_coefficients {
++	bool zn_found;
++	s32 prev_err;
++	s32 curr_err;
++	u32 t_prev_peak;
++	u32 period;
++	u32 k_ultimate;
++
++	s32 base_peak;
++	s32 base_trough;
++	s32 oscillation_count;
++	enum pivot_type prev_pivot;
++};
++
+ /**
+  * struct power_allocator_params - parameters for the power allocator governor
+  * @allocated_tzp:	whether we have allocated tzp for this thermal zone and
+@@ -65,6 +118,8 @@ static inline s64 div_frac(s64 x, s64 y)
+  *					controlling for.
+  * @sustainable_power:	Sustainable power (heat) that this thermal zone can
+  *			dissipate
++ * @zn_coeffs:  Structure to hold information used by the Ziegler-Nichols
++ *              heuristic
+  */
+ struct power_allocator_params {
+ 	bool allocated_tzp;
+@@ -73,6 +128,7 @@ struct power_allocator_params {
+ 	int trip_switch_on;
+ 	int trip_max_desired_temperature;
+ 	u32 sustainable_power;
++	struct zn_coefficients *zn_coeffs;
+ };
+ 
+ /**
+@@ -85,6 +141,8 @@ struct power_allocator_params {
+  * can give some degree of functionality.  For optimal performance of
+  * this governor, provide a sustainable_power in the thermal zone's
+  * thermal_zone_params.
++ *
++ * Return: the sustainable power for this thermal_zone
+  */
+ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
+ {
+@@ -171,6 +229,8 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+  * on variables which might be updated by the user sysfs interface. If that
+  * happen the new value is going to be estimated and updated. It is also used
+  * after thermal zone binding, where the initial values where set to 0.
++ *
++ * Return: The sustainable power for this thermal_zone
+  */
+ static u32 get_sustainable_power(struct thermal_zone_device *tz,
+ 				 struct power_allocator_params *params,
+@@ -196,6 +256,330 @@ static u32 get_sustainable_power(struct thermal_zone_device *tz,
+ 	return sustainable_power;
+ }
+ 
++/**
++ * set_original_pid_coefficients() - Reset PID Coefficients in the Thermal Zone
++ *                                   to original values
++ * @tzp: Thermal Zone Parameters we want to update
++ *
++ */
++static inline void set_original_pid_coefficients(struct thermal_zone_params *tzp)
++{
++	static bool init = true;
++	static s32 k_po, k_pu, k_i, k_d, integral_cutoff;
++
++	if (init) {
++		k_po = tzp->k_po;
++		k_pu = tzp->k_pu;
++		k_i = tzp->k_i;
++		k_d = tzp->k_d;
++		integral_cutoff = tzp->integral_cutoff;
++		init = false;
++	} else {
++		tzp->k_po = k_po;
++		tzp->k_pu = k_pu;
++		tzp->k_i = k_i;
++		tzp->k_d = k_d;
++		tzp->integral_cutoff = integral_cutoff;
++	}
++}
++
++/**
++ * set_zn_pid_coefficients() - Calculate and set PID Coefficients based
++ *                             on Ziegler-Nichols Heuristic
++ * @tzp: thermal zone params to set
++ * @period: time taken for error to cycle 1 period
++ * @k_ultimate: the Ultimate Proportional Gain value at which
++ *              the error oscillates around the set-point
++ *
++ * This function sets the PID Coefficients of the thermal device
++ */
++static inline void set_zn_pid_coefficients(struct thermal_zone_params *tzp,
++					   u32 period, s32 k_ultimate)
++{
++	/* Convert time in ms for 1 cycle to cycles/s */
++	s32 freq = 1000 / period;
++
++	/* Make k_pu and k_po identical so it represents k_p */
++	tzp->k_pu = k_ultimate * 1 / 10;
++	tzp->k_po = tzp->k_pu;
++
++	tzp->k_i = freq / 2;
++	/* We want an integral term so if the value is 0, set it to 1 */
++	tzp->k_i = tzp->k_i > 0 ? tzp->k_i : 1;
++
++	tzp->k_d = (33 * freq) / 100;
++	/* We want an integral term so if the value is 0, set it to 1 */
++	tzp->k_d = tzp->k_d > 0 ? tzp->k_d : 1;
++}
++
++/**
++ * is_error_acceptable() - Check whether the error determined to be a pivot
++ *                         point is within the acceptable range
++ * @err: error value we are checking
++ * @base: the base_line value we are comparing against
++ *
++ * This function is used to determine whether our current pivot point is within
++ * the acceptable limits. The value of base is the first pivot point within
++ * this series of oscillations
++ *
++ * Return: boolean representing whether or not the error was within the acceptable
++ *         range
++ */
++static inline bool is_error_acceptable(s32 err, s32 base)
++{
++	/* Margin for error in milli-celcius */
++	const s32 MARGIN = 500;
++	s32 lower = abs(base) - MARGIN;
++	s32 upper = abs(base) + MARGIN;
++
++	if (lower < abs(err) && abs(err) < upper)
++		return true;
++	return false;
++}
++
++/**
++ * is_error_pivot() - Determine whether an error value is a pivot based on the
++ *                    previous and next error values
++ * @next_err: the next error in a series
++ * @curr_err: the current error value we are checking
++ * @prev_err: the previous error in a series
++ * @peak_trough: integer value to output what kind of pivot (if any)
++ *                    the error value is
++ *
++ * Determine whether or not the current value of error is a pivot and if it is
++ * a pivot, which type of pivot it is (peak or trough).
++ *
++ * Return: Bool representing whether the current value is a pivot point and
++ *         integer set to PEAK, TROUGH or MIDPOINT
++ */
++static inline bool is_error_pivot(s32 next_err, s32 curr_err, s32 prev_err,
++				  enum pivot_type *peak_trough)
++{
++	/*
++	 * Check whether curr_err is at it's highest value compared to its neighbours and that error
++	 * value is positive
++	 */
++	if (prev_err < curr_err && curr_err > next_err && curr_err > 0) {
++		*peak_trough = PEAK;
++		return true;
++	}
++	/*
++	 * Check whether curr_err is at it's lowest value compared to its neighbours and that error
++	 * value is negative
++	 */
++	if (prev_err > curr_err && curr_err < next_err && curr_err < 0) {
++		*peak_trough = TROUGH;
++		return true;
++	}
++	/* If the error is not a pivot then it must be somewhere between pivots */
++	*peak_trough = MIDPOINT;
++	return false;
++}
++
++/**
++ * update_oscillation_count() - Update the Oscillation Count for this set of pivots
++ * @curr_err: the current error value we are checking
++ * @base_pivot: the amplitude we are comparing against
++ * @peak_trough: the type of pivot we are currently processing
++ * @zn_coeffs: the data structure holding information used by the Ziegler-Nichols Hueristic
++ *
++ * Update the number of times we have oscillated based on our current error value being within the
++ * accepted range from the amplitude of previous pivots in this oscillation series.
++ *
++ * Return: Integer count of the number of oscillations
++ */
++static inline s32 update_oscillation_count(s32 curr_err, s32 *base_pivot,
++					   enum pivot_type peak_trough,
++					   struct zn_coefficients *zn_coeffs)
++{
++	if (is_error_acceptable(curr_err, *base_pivot) &&
++	    zn_coeffs->prev_pivot == -peak_trough) {
++		zn_coeffs->oscillation_count++;
++	} else {
++		zn_coeffs->oscillation_count = 0;
++		*base_pivot = curr_err;
++	}
++	zn_coeffs->prev_pivot = peak_trough;
++	return zn_coeffs->oscillation_count;
++}
++
++/**
++ * get_oscillation_count() - Update and get the number of times we have oscillated
++ * @curr_err: the current error value we are checking
++ * @peak_trough: the type of pivot we are currently processing
++ * @zn_coeffs: the data structure holding information used by the
++ *                    Ziegler-Nichols Hueristic
++ *
++ * Return: The number of times we have oscillated for this k_ultimate
++ */
++static inline s32 get_oscillation_count(s32 curr_err,
++					enum pivot_type peak_trough,
++					struct zn_coefficients *zn_coeffs)
++{
++	s32 *base_pivot = 0;
++
++	if (peak_trough == PEAK)
++		base_pivot = &zn_coeffs->base_peak;
++	else if (peak_trough == TROUGH)
++		base_pivot = &zn_coeffs->base_trough;
++
++	return update_oscillation_count(curr_err, base_pivot, peak_trough,
++					zn_coeffs);
++}
++
++/**
++ * get_zn_state() - Update and get the current Ziegler-Nichols State
++ * @tzp: The thermal zone params to check to determine the current state
++ * @zn_state: The current state which should be returned if no changes are
++ * made
++ *
++ * Return: The next zieger-nichols state for this pass of the PID controller
++ */
++static inline int get_zn_state(struct thermal_zone_params *tzp, int zn_state)
++{
++	if (tzp->k_po == ZN_RESET && tzp->k_pu == ZN_RESET)
++		return ZN_RESET;
++
++	if (tzp->k_po == ZN_ORIGINAL && tzp->k_pu == ZN_ORIGINAL)
++		return ZN_ORIGINAL;
++
++	if (tzp->k_po == ZN_ON && tzp->k_pu == ZN_ON)
++		return ZN_ON;
++
++	return zn_state;
++}
++
++/**
++ * is_temperature_safe() - Check if the current temperature is within 10% of
++ *                         the target
++ *
++ * @current_temperature: Current reported temperature
++ * @control_temp:        Control Temperature we are targeting
++ *
++ * Return: True if current temperature is within 10% of the target, False otherwise
++ */
++static inline bool is_temperature_safe(int current_temperature,
++				       int control_temp)
++{
++	return (current_temperature - control_temp) < (control_temp / 10) ?
++		       true :
++		       false;
++}
++
++/**
++ * reset_ziegler_nichols() - Reset the Values used to Track Ziegler-Nichols
++ *
++ * @zn_coeffs: the data structure holding information used by the Ziegler-Nichols Hueristic
++ *
++ */
++static inline void reset_ziegler_nichols(struct zn_coefficients *zn_coeffs)
++{
++	zn_coeffs->zn_found = false;
++	zn_coeffs->k_ultimate = 10;
++	zn_coeffs->prev_err = 0;
++	zn_coeffs->curr_err = 0;
++	zn_coeffs->t_prev_peak = 0;
++	zn_coeffs->period = 0;
++	/* Manually input INT_MAX as a previous value so the system cannot use it accidentally */
++	zn_coeffs->oscillation_count = update_oscillation_count(
++		INT_MAX, &zn_coeffs->curr_err, PEAK, zn_coeffs);
++}
++
++/**
++ * ziegler_nichols() - Calculate the k_ultimate and period for the thermal device
++ *                      and use these values to calculate and set the PID coefficients based on
++ *                      the Ziegler-Nichols Heuristic
++ * @tz: The thermal device we are operating on
++ * @next_err: The next error value to be used for calculations
++ * @control_temp: The temperature we are trying to target
++ *
++ * The Ziegler-Nichols PID Coefficient Tuning Method works by determining a K_Ultimate value. This
++ * is the largest K_P which yields a stable set of oscillations in error. By using historic and
++ * current values of error, this function attempts to determine whether or not it is oscillating,
++ * and increment the value of K_Ultimate accordingly.  Once it has determined that the system is
++ * oscillating, it calculates the time between "peaks" to determine its period
++ *
++ */
++static inline void ziegler_nichols(struct thermal_zone_device *tz, s32 next_err,
++				   int control_temp)
++{
++	struct power_allocator_params *params = tz->governor_data;
++	struct zn_coefficients *zn_coeffs = params->zn_coeffs;
++	const int NUMBER_OF_OSCILLATIONS = 10;
++
++	u32 t_now = (u32)div_frac(ktime_get_real_ns(), 1000000);
++	enum pivot_type peak_trough = MIDPOINT;
++	s32 oscillation_count = 0;
++	bool is_pivot;
++	bool is_safe =
++		is_temperature_safe((control_temp - next_err), control_temp);
++
++	if (tz->tzp->ziegler_nichols == ZN_RESET) {
++		reset_ziegler_nichols(zn_coeffs);
++		tz->tzp->ziegler_nichols = ZN_ON;
 +	}
 +
- 	err = -ENOMEM;
- 	next_key = kvmalloc(map->key_size, GFP_USER);
--	if (!next_key)
--		goto free_key;
-+	if (!next_key) {
-+		if (key)
-+			goto free_key;
-+		goto err_put;
++	/* Override default PID Coefficients. These will be updated later according to the
++	 * Heuristic
++	 */
++	tz->tzp->k_po = zn_coeffs->k_ultimate;
++	tz->tzp->k_pu = zn_coeffs->k_ultimate;
++	tz->tzp->k_i = 0;
++	tz->tzp->k_d = 0;
++
++	if (!zn_coeffs->zn_found) {
++		/* Make sure that the previous errors have been logged and this isn't executed on
++		 * first pass
++		 */
++		if (zn_coeffs->curr_err != zn_coeffs->prev_err &&
++		    zn_coeffs->prev_err != 0) {
++			if (!is_safe)
++				goto set_zn;
++			is_pivot = is_error_pivot(next_err, zn_coeffs->curr_err,
++						  zn_coeffs->prev_err,
++						  &peak_trough);
++			if (is_pivot) {
++				oscillation_count = get_oscillation_count(
++					zn_coeffs->curr_err, peak_trough,
++					zn_coeffs);
++				if (oscillation_count >=
++				    NUMBER_OF_OSCILLATIONS) {
++					goto set_zn;
++				}
++				if (peak_trough == PEAK)
++					zn_coeffs->t_prev_peak = t_now;
++			}
++			if (!is_pivot || !oscillation_count)
++				zn_coeffs->k_ultimate += 10;
++		}
++		goto update_errors;
++	} else {
++		set_zn_pid_coefficients(tz->tzp, zn_coeffs->period,
++					zn_coeffs->k_ultimate);
++		tz->tzp->ziegler_nichols = ZN_OFF;
 +	}
++	return;
++
++update_errors:
++	zn_coeffs->prev_err = zn_coeffs->curr_err;
++	zn_coeffs->curr_err = next_err;
++	return;
++
++set_zn:
++	if (zn_coeffs->t_prev_peak) {
++		zn_coeffs->zn_found = true;
++		zn_coeffs->period = abs(t_now - zn_coeffs->t_prev_peak);
++		set_zn_pid_coefficients(tz->tzp, zn_coeffs->period,
++					zn_coeffs->k_ultimate);
++		((struct power_allocator_params *)tz->governor_data)
++			->err_integral = 0;
++		tz->tzp->ziegler_nichols = ZN_OFF;
++	} else {
++		if (peak_trough == PEAK)
++			zn_coeffs->t_prev_peak = t_now;
++	}
++}
++
+ /**
+  * pid_controller() - PID controller
+  * @tz:	thermal zone we are operating in
+@@ -228,6 +612,26 @@ static u32 pid_controller(struct thermal_zone_device *tz,
+ 	sustainable_power = get_sustainable_power(tz, params, control_temp);
  
- 	if (bpf_map_is_dev_bound(map)) {
- 		err = bpf_map_offload_get_next_key(map, key, next_key);
-@@ -1331,6 +1339,8 @@ int generic_map_delete_batch(struct bpf_map *map,
- 	if (!max_count)
- 		return 0;
+ 	err = control_temp - tz->temperature;
++
++	switch (tz->tzp->ziegler_nichols) {
++	case ZN_ORIGINAL: {
++		set_original_pid_coefficients(tz->tzp);
++		tz->tzp->ziegler_nichols = ZN_OFF;
++		break;
++	}
++	case ZN_RESET: {
++		ziegler_nichols(tz, err, control_temp);
++		tz->tzp->ziegler_nichols = ZN_ON;
++		break;
++	}
++	case ZN_ON: {
++		ziegler_nichols(tz, err, control_temp);
++		break;
++	}
++	default:
++		break;
++	}
++
+ 	err = int_to_frac(err);
  
-+	if (!map->key_size)
-+		return -EINVAL;
- 	key = kvmalloc(map->key_size, GFP_USER | __GFP_NOWARN);
- 	if (!key)
+ 	/* Calculate the proportional term */
+@@ -375,6 +779,7 @@ static void divvy_up_power(u32 *req_power, u32 *max_power, int num_actors,
+ 	if (capped_extra_power > 0)
+ 		for (i = 0; i < num_actors; i++) {
+ 			u64 extra_range = (u64)extra_actor_power[i] * extra_power;
++
+ 			granted_power[i] += DIV_ROUND_CLOSEST_ULL(extra_range,
+ 							 capped_extra_power);
+ 		}
+@@ -644,6 +1049,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	int ret;
+ 	struct power_allocator_params *params;
+ 	int control_temp;
++	struct zn_coefficients *zn_coeffs;
+ 
+ 	ret = check_power_actors(tz);
+ 	if (ret)
+@@ -653,6 +1059,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	if (!params)
  		return -ENOMEM;
-@@ -1388,6 +1398,8 @@ int generic_map_update_batch(struct bpf_map *map,
- 	if (!max_count)
- 		return 0;
  
-+	if (!map->key_size)
-+		return -EINVAL;
- 	key = kvmalloc(map->key_size, GFP_USER | __GFP_NOWARN);
- 	if (!key)
- 		return -ENOMEM;
-@@ -1452,6 +1464,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
- 	if (put_user(0, &uattr->batch.count))
- 		return -EFAULT;
++	zn_coeffs = kzalloc(sizeof(*zn_coeffs), GFP_KERNEL);
++	if (!zn_coeffs)
++		return -ENOMEM;
++
++	params->zn_coeffs = zn_coeffs;
++
+ 	if (!tz->tzp) {
+ 		tz->tzp = kzalloc(sizeof(*tz->tzp), GFP_KERNEL);
+ 		if (!tz->tzp) {
+@@ -676,6 +1088,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+ 					       params->trip_switch_on,
+ 					       control_temp);
++		/* Store the original PID coefficient values */
++		set_original_pid_coefficients(tz->tzp);
+ 	}
  
-+	if (!map->key_size)
-+		return -EINVAL;
- 	buf_prevkey = kvmalloc(map->key_size, GFP_USER | __GFP_NOWARN);
- 	if (!buf_prevkey)
- 		return -ENOMEM;
+ 	reset_pid_controller(params);
+@@ -696,6 +1110,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 
+ 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+ 
++	kfree(params->zn_coeffs);
++	params->zn_coeffs = NULL;
++
+ 	if (params->allocated_tzp) {
+ 		kfree(tz->tzp);
+ 		tz->tzp = NULL;
+@@ -749,4 +1166,5 @@ static struct thermal_governor thermal_gov_power_allocator = {
+ 	.unbind_from_tz	= power_allocator_unbind,
+ 	.throttle	= power_allocator_throttle,
+ };
++
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index f154bada2906..d2f410a33995 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -342,6 +342,7 @@ create_s32_tzp_attr(k_po);
+ create_s32_tzp_attr(k_pu);
+ create_s32_tzp_attr(k_i);
+ create_s32_tzp_attr(k_d);
++create_s32_tzp_attr(ziegler_nichols);
+ create_s32_tzp_attr(integral_cutoff);
+ create_s32_tzp_attr(slope);
+ create_s32_tzp_attr(offset);
+@@ -375,6 +376,7 @@ static struct attribute *thermal_zone_dev_attrs[] = {
+ 	&dev_attr_k_pu.attr,
+ 	&dev_attr_k_i.attr,
+ 	&dev_attr_k_d.attr,
++	&dev_attr_ziegler_nichols.attr,
+ 	&dev_attr_integral_cutoff.attr,
+ 	&dev_attr_slope.attr,
+ 	&dev_attr_offset.attr,
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index c314893970b3..ed8cd6a826ed 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -282,6 +282,13 @@ struct thermal_zone_params {
+ 	 * 		Used by thermal zone drivers (default 0).
+ 	 */
+ 	int offset;
++
++	/*
++	 * Ziegler-Nichols estimation setting. Allows the user to decide
++	 * whether to use original PID coefficients or calculate using
++	 * the Ziegler-Nichols algorithm
++	 */
++	s32 ziegler_nichols;
+ };
+ 
+ /**
 -- 
-1.8.3.1
+2.25.1
 

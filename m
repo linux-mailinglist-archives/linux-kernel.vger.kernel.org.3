@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA2B4788E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1E94788E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbhLQKaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S235050AbhLQKaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbhLQKaB (ORCPT
+        with ESMTP id S235014AbhLQKaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:30:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87893C06173E;
-        Fri, 17 Dec 2021 02:30:01 -0800 (PST)
+        Fri, 17 Dec 2021 05:30:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44586C06173E;
+        Fri, 17 Dec 2021 02:30:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51504B82787;
-        Fri, 17 Dec 2021 10:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F7BC36AE1;
-        Fri, 17 Dec 2021 10:29:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CF4620F7;
+        Fri, 17 Dec 2021 10:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF9AC36AE8;
+        Fri, 17 Dec 2021 10:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639736999;
-        bh=MeirT4xGsKt7osRpBz1wQ0uIbtgu/8LH4Sy26maoJnk=;
+        s=k20201202; t=1639737002;
+        bh=33+oNgZLqDGwuRKfoQVGuh5cPLd3WugMokzWh54u7Sg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sbwo7JFWmmshN6xvIhp6y49zTWllXsbvLvYOP0ZotJzJjDWtVWNPSmzUqeCdFKG0s
-         Yk5NIa63dlFwmTggoGOj06ZanK/eYCT/Zel0396hDXLKhRBih6XeqVREw4XANrkEJX
-         ywhjDqjsyu3oNF3BgYg/ajfEWWGA2n1cJoQqzRgUCQcr4auFGuysKTk90DBO8jYOgA
-         pFElyxL9uQKeXZhaJCiC99V17d5xCgFpGx+6Cpz18kKsza1XPZJA1uLH7dBmVKJ4tq
-         hXTxpGLaD01mrq2djX1I2LO5RJ5CZwmlyrz0suZuz7amRl4yP6fsPFxXbBnyADhWdf
-         hMHUIpe4kVZiQ==
+        b=AOWtCCx9Lq5tSKEtfCacLJwWBVzGQF2dilHSi3qbWGnGMNv4rbPO6AkFPZOexePBT
+         0wZwikFaPw8nxQkiyTrzfOFIG+kiHs0UwnG2LRgAOcNCoUVWTz+H4sLj8yXTIRK2bl
+         ypJFsCo+vC7/6DSpfYmoe4ta81PdTgwiM6LcmaASGO+dHs9HX/a1SPepYjyj1yyL8S
+         ETm+pZsW9Z8Z9eiDMhcKHUEqowlNoGlajhA1/U7UVjDr3CYTvg7fgBTl5BxMaSxKP+
+         /mvvR98NJZRSi7Oy+I7nD0C1TZNcOh+KkntxFPQTSulsXtbCaM+UHheLZ7S8D863LY
+         frfH2NnlnjjGg==
 From:   Roger Quadros <rogerq@kernel.org>
 To:     krzysztof.kozlowski@canonical.com, tony@atomide.com
 Cc:     robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
         linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v3 2/4] memory: omap-gpmc: Add support for GPMC on AM64 SoC
-Date:   Fri, 17 Dec 2021 12:29:43 +0200
-Message-Id: <20211217102945.17432-3-rogerq@kernel.org>
+Subject: [PATCH v3 3/4] memory: omap-gpmc: Use a compatible match table when checking for NAND controller
+Date:   Fri, 17 Dec 2021 12:29:44 +0200
+Message-Id: <20211217102945.17432-4-rogerq@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211217102945.17432-1-rogerq@kernel.org>
 References: <20211217102945.17432-1-rogerq@kernel.org>
@@ -47,100 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TI's AM64 SoC has the GPMC module. Add compatible for it.
-
-Traditionally GPMC external addresses have always been mapped to first
-1GB physical address. However newer platforms, can have it mapped
-at different locations. Support this address provision via device tree.
+As more compatibles can be added to the GPMC NAND controller driver
+use a compatible match table.
 
 Signed-off-by: Roger Quadros <rogerq@kernel.org>
 ---
- drivers/memory/omap-gpmc.c | 40 ++++++++++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 10 deletions(-)
+ drivers/memory/omap-gpmc.c                   | 8 +++++++-
+ drivers/mtd/nand/raw/omap2.c                 | 2 +-
+ include/linux/platform_data/mtd-nand-omap2.h | 5 +++++
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
-index be0858bff4d3..624153048182 100644
+index 624153048182..814ddb45c13d 100644
 --- a/drivers/memory/omap-gpmc.c
 +++ b/drivers/memory/omap-gpmc.c
-@@ -237,6 +237,7 @@ struct gpmc_device {
- 	struct omap3_gpmc_regs context;
- 	int nirqs;
- 	unsigned int is_suspended:1;
-+	struct resource *data;
- };
+@@ -2091,6 +2091,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+ 	u32 val;
+ 	struct gpio_desc *waitpin_desc = NULL;
+ 	struct gpmc_device *gpmc = platform_get_drvdata(pdev);
++	bool is_nand = false;
  
- static struct irq_domain *gpmc_irq_domain;
-@@ -1456,12 +1457,18 @@ static void gpmc_mem_exit(void)
+ 	if (of_property_read_u32(child, "reg", &cs) < 0) {
+ 		dev_err(&pdev->dev, "%pOF has no 'reg' property\n",
+@@ -2183,7 +2184,12 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+ 		}
  	}
+ 
+-	if (of_device_is_compatible(child, "ti,omap2-nand")) {
++#if defined(CONFIG_MTD_NAND_OMAP2)
++	if (of_match_node(omap_nand_ids, child))
++		is_nand = true;
++#endif
++
++	if (is_nand) {
+ 		/* NAND specific setup */
+ 		val = 8;
+ 		of_property_read_u32(child, "nand-bus-width", &val);
+diff --git a/drivers/mtd/nand/raw/omap2.c b/drivers/mtd/nand/raw/omap2.c
+index b26d4947af02..fff834ee726f 100644
+--- a/drivers/mtd/nand/raw/omap2.c
++++ b/drivers/mtd/nand/raw/omap2.c
+@@ -2352,7 +2352,7 @@ static int omap_nand_remove(struct platform_device *pdev)
+ 	return ret;
  }
  
--static void gpmc_mem_init(void)
-+static void gpmc_mem_init(struct gpmc_device *gpmc)
- {
- 	int cs;
- 
--	gpmc_mem_root.start = GPMC_MEM_START;
--	gpmc_mem_root.end = GPMC_MEM_END;
-+	if (!gpmc->data) {
-+		/* All legacy devices have same data IO window */
-+		gpmc_mem_root.start = GPMC_MEM_START;
-+		gpmc_mem_root.end = GPMC_MEM_END;
-+	} else {
-+		gpmc_mem_root.start = gpmc->data->start;
-+		gpmc_mem_root.end = gpmc->data->end;
-+	}
- 
- 	/* Reserve all regions that has been set up by bootloader */
- 	for (cs = 0; cs < gpmc_cs_num; cs++) {
-@@ -1888,6 +1895,7 @@ static const struct of_device_id gpmc_dt_ids[] = {
- 	{ .compatible = "ti,omap3430-gpmc" },	/* omap3430 & omap3630 */
- 	{ .compatible = "ti,omap4430-gpmc" },	/* omap4430 & omap4460 & omap543x */
- 	{ .compatible = "ti,am3352-gpmc" },	/* am335x devices */
-+	{ .compatible = "ti,am64-gpmc" },
- 	{ }
+-static const struct of_device_id omap_nand_ids[] = {
++const struct of_device_id omap_nand_ids[] = {
+ 	{ .compatible = "ti,omap2-nand", },
+ 	{},
  };
- 
-@@ -2502,13 +2510,25 @@ static int gpmc_probe(struct platform_device *pdev)
- 	gpmc->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, gpmc);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENOENT;
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-+	if (!res) {
-+		/* legacy DT */
-+		gpmc_base = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(gpmc_base))
-+			return PTR_ERR(gpmc_base);
-+	} else {
-+		gpmc_base = devm_ioremap_resource(&pdev->dev, res);
-+		if (IS_ERR(gpmc_base))
-+			return PTR_ERR(gpmc_base);
+diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
+index de6ada739121..e1bb90a8db03 100644
+--- a/include/linux/platform_data/mtd-nand-omap2.h
++++ b/include/linux/platform_data/mtd-nand-omap2.h
+@@ -61,4 +61,9 @@ struct gpmc_nand_regs {
+ 	void __iomem	*gpmc_bch_result5[GPMC_BCH_NUM_REMAINDER];
+ 	void __iomem	*gpmc_bch_result6[GPMC_BCH_NUM_REMAINDER];
+ };
 +
-+		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "data");
-+		if (!res) {
-+			dev_err(&pdev->dev, "couldn't get data reg resource\n");
-+			return -ENOENT;
-+		}
- 
--	gpmc_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(gpmc_base))
--		return PTR_ERR(gpmc_base);
-+		gpmc->data = res;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 	if (!res) {
-@@ -2562,7 +2582,7 @@ static int gpmc_probe(struct platform_device *pdev)
- 	dev_info(gpmc->dev, "GPMC revision %d.%d\n", GPMC_REVISION_MAJOR(l),
- 		 GPMC_REVISION_MINOR(l));
- 
--	gpmc_mem_init();
-+	gpmc_mem_init(gpmc);
- 	rc = gpmc_gpio_init(gpmc);
- 	if (rc)
- 		goto gpio_init_failed;
++#if defined(CONFIG_MTD_NAND_OMAP2)
++extern const struct of_device_id omap_nand_ids[];
++#endif
++
+ #endif
 -- 
 2.17.1
 

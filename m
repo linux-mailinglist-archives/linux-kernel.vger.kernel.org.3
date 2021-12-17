@@ -2,63 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD414783E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CC44783EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 05:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbhLQEOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 23:14:17 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:58054 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229874AbhLQEOQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:14:16 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1my4d9-0006M3-Vp; Fri, 17 Dec 2021 15:14:05 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 17 Dec 2021 15:14:03 +1100
-Date:   Fri, 17 Dec 2021 15:14:03 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Stephan Mueller <smueller@chronox.de>
-Cc:     Yujie Liu <yujie.liu@intel.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, lkp@intel.com,
-        "Sang, Oliver" <oliver.sang@intel.com>
-Subject: Re: [security] d3b04a4398:
- WARNING:at_crypto/kdf_sp800108.c:#crypto_kdf108_init
-Message-ID: <20211217041403.GA19847@gondor.apana.org.au>
-References: <20211130080419.GC29514@xsang-OptiPlex-9020>
- <3438006.aCxCBeP46V@positron.chronox.de>
- <766e5415-cc94-1b46-2326-d55343a80388@intel.com>
- <3737408.Lz6Wf2Li4r@tauon.chronox.de>
+        id S232620AbhLQETH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 23:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229874AbhLQETF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 23:19:05 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556BC061574;
+        Thu, 16 Dec 2021 20:19:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFbMq3bGSz4xd4;
+        Fri, 17 Dec 2021 15:19:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639714743;
+        bh=yp0Ur0rx7YNSHB/zptC4hYpq036nZ3WtqihqjHB1tGs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ssC4Rr3KiYVZ7xbm9EV7NgpDdNvK8mLuC9HXi2LWzue7+FZRSiuzhOflmdg8/RIoP
+         yEAoF2P/HlVOjl8fSbwh4tBpLKTvEweA+Js42kmHwWqXgEg3nnd0iZMwhsBnLPZDMO
+         wdGBwuJr1+sfToaUTLhkDj1QcB96iWLAu2orZ8AnU3btGrIDkVpfqULoPgeFObnYnD
+         VadSCEX5Eup0CJXD8cG3KhJy6itFP34leo05AY+e0A7aLeb+z/LbH7VXGjzF5ADonK
+         CIzGB0ZJfZe+9IP0U6stMiSjgiPF65K4V7qlj+ppg/0VlCMgdLTtuoYcq6/tQwSjMO
+         Zcj/Awh86mftQ==
+Date:   Fri, 17 Dec 2021 15:19:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Quentin Perret <qperret@google.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20211217151902.2ae43d1f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3737408.Lz6Wf2Li4r@tauon.chronox.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/GUwPDrOjltl_sEP2d_WZhqs";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 03:16:34PM +0100, Stephan Mueller wrote:
->
-> Herbert, what is your preference in handling this:
-> 
-> - we could SELECT CRYPTO_SHA256 when the KDF is compiled. This would only be 
-> necessary to satisfy the self test. Yet, there is no guarantee that SHA-256 
-> would truly be needed because the DH code that calls the KDF obtains the 
-> reference to the hash from user space. In the end we could hard compile a 
-> crypto algorithm into the kernel that may never be used.
+--Sig_/GUwPDrOjltl_sEP2d_WZhqs
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-...
+Hi all,
 
-> I would prefer to consider the first option to also statically compile 
-> SHA-256.
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-I think KDF800108_CTR should select SHA256 instead of HASH.
+  arch/arm64/kvm/arm.c
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+between commit:
+
+  27592ae8dbe4 ("KVM: Move wiping of the kvm->vcpus array to common code")
+
+from the kvm tree and commit:
+
+  52b28657ebd7 ("KVM: arm64: pkvm: Unshare guest structs during teardown")
+
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/kvm/arm.c
+index 7385bbdfdc42,6057f3c5aafe..000000000000
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@@ -179,7 -181,15 +179,9 @@@ void kvm_arch_destroy_vm(struct kvm *kv
+ =20
+  	kvm_vgic_destroy(kvm);
+ =20
+ -	for (i =3D 0; i < KVM_MAX_VCPUS; ++i) {
+ -		if (kvm->vcpus[i]) {
+ -			kvm_vcpu_destroy(kvm->vcpus[i]);
+ -			kvm->vcpus[i] =3D NULL;
+ -		}
+ -	}
+ -	atomic_set(&kvm->online_vcpus, 0);
+ +	kvm_destroy_vcpus(kvm);
++=20
++ 	kvm_unshare_hyp(kvm, kvm + 1);
+  }
+ =20
+  int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+
+--Sig_/GUwPDrOjltl_sEP2d_WZhqs
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8D7YACgkQAVBC80lX
+0GzSXgf/R6Xx9mnLIXjZlcoQKleXRwbNv28RwZWo1wBigNpv5ITzTYWKPfRk4VWm
+Hwz6QvLyrq66Sq1v3/i/84ivbqqXlIMApRQJrhf8HzfSKSUFvVoCTHf85Kjr9uhF
+sg0DE2t2A8iDuYigW9a+ABuGgggTNjCMN3rYsiVf6ITVzhXl+FEqIyvbzB3IVXhT
+BG+PibeY3lWUULjQ+CrZVeYC/qz9V9+mei4MUcZaGekerVxZ8zX8Rp8AKX35Rc/B
+KrHnctwF6XwXZF09zHMYRFnzyXlTARZKjMSyeVJyzTgbi09BIy/SgEyvlG45IDb+
+bittel+ZmOShhMldlrRx/FTwGvfiEQ==
+=1UaZ
+-----END PGP SIGNATURE-----
+
+--Sig_/GUwPDrOjltl_sEP2d_WZhqs--

@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA36478A74
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE556478A78
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbhLQLyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:54:12 -0500
-Received: from smtpcmd0871.aruba.it ([62.149.156.71]:49388 "EHLO
-        smtpcmd0871.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbhLQLyK (ORCPT
+        id S235745AbhLQLzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231258AbhLQLzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:54:10 -0500
-Received: from [192.168.50.18] ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id yBoMmGIqJAiELyBoMmk6vi; Fri, 17 Dec 2021 12:54:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1639742048; bh=Cg6MxKPvLr6Syz/mZJuzyddObRpzBUMOq66KSTVgZcY=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=YsK1gOTHau77ToD4V3DSSMyI7USDTkBZwjl/woPrapr/aTfPHPS0/GTxklvDY8ec4
-         Jm1+a2tF0knFjA8/Jx/yNjAIk3WpE4DeAkr58+XhjYn4nxMmBUHj2fWzUWwVI6052I
-         e+xTjt7/WaN21gWO7T7lCwQoi0OlwHjZFRcvo+ByNiUL6UlLOklSFoPPgSbZQzxXMc
-         dLgBd92UMup1b6Bc9e4CF6dWRCfohLkugosh37uTaJmvkvden7X9le4bd1G1Bf4VbO
-         L7LXWJTT1QrasjtS7fa/uj3C16xs4UMTvGYkliZYnToAYR7sKcd+jBlDoOPQz5E1mR
-         QorLYS3xfKQrw==
-Subject: Re: [RESEND in plain-test] Re: [PATCH v5 0/9] Add initial support for
- the i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jesse Taube <mr.bossman075@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Vladimir Murzin <vladimir.murzin@arm.com>
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
- <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com>
- <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
- <CAK8P3a1oZK1qMRBE3D8otCTY6Lg4jMXxVpAZHQzLTA8woA3_UQ@mail.gmail.com>
- <634e9304-2eba-4ea9-65ac-5d4f5d011b70@benettiengineering.com>
- <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <88f5ec3a-8765-48b2-0429-d182402826be@benettiengineering.com>
-Date:   Fri, 17 Dec 2021 12:54:05 +0100
+        Fri, 17 Dec 2021 06:55:52 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3CBC061574;
+        Fri, 17 Dec 2021 03:55:51 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id l22so4070615lfg.7;
+        Fri, 17 Dec 2021 03:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IVoSwh1vrOcOYMzSFZcBGiekwmrvmnu/yu9ynAy3UtA=;
+        b=Gj4M7BgLMNPwhiJBvGzl/JDenwkO7HDujABojJBRvVGLCRYQeHHyruewEpwh6ybCyL
+         Av1yUjLdjkR52TDV9592LyZLu1xchFpalL3pBfN/s4J6GTD8OOlofaYsxubHYKVU2D6O
+         CbHHedms1cH2t6sC0TTo3ffEOH/fd2BqYI9jaqOIfwtwvVCamaraABKsvlzeRrJ4cZOF
+         7tXhjqCqOV+AEwTPnXm7hTyGdi7sLrHvX26MLPYSwDk05X49ikx2cs4YXE2R435mCgYf
+         BeB9yakD/M3i6mbNh1aJSrhdCmtLCJpriqea6faSFaKjZhK9ZTwQb/aCz6oBwahpX3C/
+         o4oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IVoSwh1vrOcOYMzSFZcBGiekwmrvmnu/yu9ynAy3UtA=;
+        b=z24fdkHbYLzg7UxrboHqqqZFpGhMnZsCZap+/Mf4c/kGeH1tz3ktwzbICDTakfM88Y
+         ejY4YfOqx6lRIz1lXA0npasqZl4ktqNUeQnVbA94fPCi2edYFc1emOyxFgUZMpurKoyO
+         A/Hsx1LwNxhvc8M0ZEGRSAZCvVJ0MKD23VqrXtHanAZyRq7+j6LHJboUZJbkdQ1Vhpvj
+         AAdtDP+9aq++9gEnDkXNrJPLBDDmeuRpzNUq2RqLBvq78SrXA1fVUw0C9OAnm/dwLIuP
+         s88lSWsd5KsfUVjsBSl6xZsIUPMQ4CRvDZbbMF0o+a9pq1WN8bQ4WiMWhLNDEZIUZ8+U
+         aBcw==
+X-Gm-Message-State: AOAM533c1Y7Efdp5fWbuC/VAUVHz9uD0MuI0CTZDal27D+Ex8tc1s+P2
+        yPCc8mRqo+eyRnzgSzDkDCLoSe2kNro=
+X-Google-Smtp-Source: ABdhPJzR7F4ntqza5TxeJHdnruw3Sr909Ky7UaeX6gfiS/xaUtY7aJ1DkExo+7MWJU3p6Tpo8cWycQ==
+X-Received: by 2002:a05:6512:308b:: with SMTP id z11mr2508194lfd.177.1639742150078;
+        Fri, 17 Dec 2021 03:55:50 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id f10sm1355834lfg.211.2021.12.17.03.55.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 03:55:49 -0800 (PST)
+Subject: Re: [PATCH v4 04/22] dt-bindings: host1x: Document optional HDMI
+ sound-dai-cells
+To:     Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20211204143725.31646-1-digetx@gmail.com>
+ <20211204143725.31646-5-digetx@gmail.com> <YbtLJeIxXlVyQhd3@orome>
+ <Ybxwovlw2GARzqUO@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4edfbff2-ffd9-1c33-de0c-013a29dc286c@gmail.com>
+Date:   Fri, 17 Dec 2021 14:55:48 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3kpzi6ozLkTH9GtWqvs=JHkm6mp=dLs2vOHjrW=FoYdw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <Ybxwovlw2GARzqUO@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJkrPNgY2+yCcbV01jLFZAj1mqsZnNe8M/nRv60DgHLOmija7PShQ+EryWAp90sIzvVBOOmU9lzp3hN/5wtsXuLUTv/PpOoR3jJE3ByA5PuCx+8ImBF6
- bNNvhhw1qf58KbFLdL+BjpDhoXoFBJlwBgcSb8c2H2lpAUuufgHAfRiAHrka1/R/SampTSjjHwiQlgKjj71a7MoVRj4IPbd4M53DKvluKfROlfQTFJv7UqHM
- ROMGiZEO/UrWyowI8X8RUja+FsHyXMqgFhvmnc2mf5fPJfXjgAABfTU/Tae437yyToK/lMzhSoc8fw7ZWn09WfT7+5vjVeGLsQGPhN29R63yQgC5lh9jSckL
- eNm4oWEFDxh5xbihmqI1SOXV4xLya5KmgiehLCj8U9LPteR1kMPjALtPShU/YgZIewwT0jt92y6tnAtCsgkqwjdkZxA1L1c6MyHhmPYxFW80h6cWExblQhMg
- /aPT/EURA/fgwS4/JgDj/RPiWdIsB3zD857uNDnMzlP9Auq6yr/t0ZnylZ+I7NYjfvAwOZeiNeUxRz5+hhpjW5CBrP/eLegkCl3tTXgwezY6HkM5ikYJE+OS
- v9XT6jlGaKNj0ZJybeUWzGQ9zq32CPNoJPMlTFtxpK2FAEfxXOofQHbTp9umQ367/Ib5L+hZP3SHszgNze0QRSghRq+UZ0VCFQwlm6y9BKOGSYrV1FF2azBD
- UZxPArzt+mvZEja2/thGmIHLhDn3kKsgCsmBzbIpOadwU986xSOaVWqBj9a7s3TG3RMY3OtBPrdvD17mkvOK599Z0P2x18yGxpBXT9WvEMmy+EoGU3Jj1iCR
- 0PZNREN2Ia4Xtm9FpftLzuhgeUR1OtuDIqIn+SmjZMbsm8ImNXlfAe2EB0Tu8+RqOMGH831DwHK8CJCdq/06uOaG0bMQB5Pw4xaWZZGThJ5bRLPROHxj7Vuu
- xXm5iaGAzsiwptM6t16hU/4vS0xgpnZmLPGKaPlbXsCiZHI9kpVYoMh4rBbs7MtRjsM3Opiir7z/ZH4fZ5xIB9Skwr5lgVTo/4MPheKkXtLSI6d0Y3rlkowo
- VK6P7nIbxg/7rPJLqPaRtZhw4NoTzOECAWzFqxsCepa0W+o0ZbkkiOJqJJ5Wz/lAStg8Ypm/VM00P4QpuH+qAa/uw2ZANULR0KTElLNKAPibBwRv8rKqpzdJ
- ReshPf2u4Q5p1FV2JBFzWQ==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/12/21 11:28, Arnd Bergmann wrote:
-> On Fri, Dec 17, 2021 at 10:54 AM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->> On 16/12/21 22:13, Arnd Bergmann wrote:
->>
->>> Vladimir has put some work into making Cortex-R work in the kernel, and
->>> he may have some other thoughts on this question.
->>
->> I'm curious if he has something specific to Cortex-R to tell.
->>
->> I've found that Cortex-R82 has a MMU:
->> https://www.arm.com/products/silicon-ip-cpu/cortex-r/cortex-r82
->> but I can't find any SoC that uses it. Also, I don't know how many
->> people could use it honestly.
+17.12.2021 14:12, Mark Brown пишет:
+> On Thu, Dec 16, 2021 at 03:20:21PM +0100, Thierry Reding wrote:
+>> On Sat, Dec 04, 2021 at 05:37:07PM +0300, Dmitry Osipenko wrote:
+>>> Document new optional sound-dai-cells property of HDMI node. This node will
+>>> be used as endpoint of HDMI sound DAI graph.
 > 
-> R82 is fairly new, but I expect that we will see support in Linux in the
-> future. Aside from having an MMU, it also 64-bit-only, so we'd treat
-> it like a normal ARMv8-A core in arch/arm64.
+>> It's probably best for this to go through ASoC along with the other
+>> audio-related bindings.
+> 
+>> Alternatively, I've just sent out a patch that converts the host1x
+>> bindings to json-schema, so I could work this into that as well.
+> 
+> It doesn't apply to the ASoC tree for whatever reason so probably best
+> to roll it in with those JSON updates.
+> 
 
-Ah yes, that's fine. So let's wait for the future, in the meanwhile we 
-focus con i.MXRT :-)
+This hos1tx binding patch indeed will conflict with the Thierry's patch.
 
-Thank you
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+Thierry, will you be able to take the binding patches into the Tegra
+tree and resolve all those hos1tx binding conflicts there?

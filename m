@@ -2,119 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00F5478BB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43455478BCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236434AbhLQMs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbhLQMsz (ORCPT
+        id S236466AbhLQMwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:52:54 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:49170 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236242AbhLQMwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:48:55 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C48CC06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:48:55 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id q16so3830303wrg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=snUeSCccdhoRxlfsg8Ts9j6VNOw1G6e55Lk+9WKqlyc=;
-        b=VrmeN3wpi1gNrML4Do0CYOVryw5xkN4me97Ek7NhAj7E67onCecFOZV06lH2uNNoJ0
-         YR5aTAScn+MqHEktNhQIouNZlSvvsSqlSYK5pSwn8ZCcOfFGQXYPYLSNyVpWYH2ymQrB
-         2/qLQ5fz8zm9gKd9baYQ2q+5P0Qc+27cwpVt1UayVc8QE1JtQhIVPcXFDxT5a1Mg3OXy
-         hupJvCEkFLVmuspWM2kMimCBqqJ+XCEPm+jiE3o2oOqxeeZZELizJuZJIoiaxKgrMqsV
-         yWiWsLt+2WpKUJlE59KZU1/7iNyhKk7B5XFEwrxms8hnaYVQ8erxC3etPvF7V8Qf5rOd
-         9Zew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=snUeSCccdhoRxlfsg8Ts9j6VNOw1G6e55Lk+9WKqlyc=;
-        b=SY3G9f+dh8+jbjnTQfVkHgEvNIjdUK7TjHxV8A/KMqQYviBvzl/09D8SRlsLsJi6E1
-         YgMSjFuMnKZKJ67gugjV2q3H758YOi1jTAhYHpGhHX7TbVib5kAmtVJXNdXhuDq5HTJo
-         WLBqemfeyn3fuNgSJeTzzlvRPM+kfgfB52NyqGW0D7vqKT49hziMF4Gnt1r4g52NGobP
-         XuB7ED3e+qep/d7TRiigwaAvHALLNfnUL3jXKnPs5Y/bmTwhhmLqH992cGkTKhCFj1bB
-         0aCaetoxKDHtSxuroPIgAy0H6d4qO585koYH97ySKTCq9EdBezlMYkrMS9u+5l3kpF6p
-         qHUw==
-X-Gm-Message-State: AOAM530yOVA7rJ37ypGKY3CyhIhMV49x+YrH9LXhmxckUaqTXOpRWXVl
-        sKQMySIQ+4Txwuhj8wH7SofyKjI89E90Ezsvzewl4Q==
-X-Google-Smtp-Source: ABdhPJy6jZjbGiy24EK1rrImb8JGalcQGHnt5zFcmV3cEzqNUYKetq2K2+tqD4tnFwJzeYSapqKjLx5IuF9v9+BKmaA=
-X-Received: by 2002:adf:efd0:: with SMTP id i16mr2505380wrp.86.1639745333595;
- Fri, 17 Dec 2021 04:48:53 -0800 (PST)
+        Fri, 17 Dec 2021 07:52:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7195E210FD;
+        Fri, 17 Dec 2021 12:52:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639745572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WCJzCAu4NNbPu9CjU+dpWTMGM68h7akARlwvYcO0EDE=;
+        b=iKDDlvKV5UYfjmcjAX8OluOyRHPfBCizZ1yURVD3o8Yju5wJWpvUWNrfyIC2XdEbp/Y4f/
+        tPj75a9uTLnfeuKVIkeDQos9Ts4XyKSEKpJ08XypV5ZUrhACefNDJ9bKSMMXknOZuRygGW
+        ZDRjBPC6DRgzbaciynuJaplNRCS6+Xo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639745572;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WCJzCAu4NNbPu9CjU+dpWTMGM68h7akARlwvYcO0EDE=;
+        b=ALXR23ne3O7y66oLqaGwre53xF2l3uwYDxXPyarKkVe5yZDk743MnnN3YOR7MsNjbGJBih
+        pa+QI0l2Je2UAmDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CF5613DD4;
+        Fri, 17 Dec 2021 12:52:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BrhXESSIvGG1cgAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 17 Dec 2021 12:52:52 +0000
+Date:   Fri, 17 Dec 2021 13:52:53 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com, bfields@fieldses.org,
+        llvm@lists.linux.dev
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+Message-ID: <YbyIJYzqtHPKRMFt@zn.tnic>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
 MIME-Version: 1.0
-References: <cover.1639744468.git.geert@linux-m68k.org> <4f409ac939e260a4657a0e6e6518ef8736527822.1639744468.git.geert@linux-m68k.org>
-In-Reply-To: <4f409ac939e260a4657a0e6e6518ef8736527822.1639744468.git.geert@linux-m68k.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 17 Dec 2021 18:18:42 +0530
-Message-ID: <CAAhSdy3g9WsBmQk7KOgdVNSw9qUouxF2i==q9M3WQq3iabXv7Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: timer: sifive,clint: Fix number of interrupts
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 6:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> The number of interrupts lacks an upper bound, thus assuming one,
-> causing properly grouped "interrupts-extended" properties to be flagged
-> as an error by "make dtbs_check".
->
-> Fix this by adding the missing "maxItems".  As the architectural maximum
-> is 4095 interrupts, using that as the limit would be unpractical.  Hence
-> limit it to 10 interrupts (two interrupts for a system management core,
-> and two interrupts per core for other cores).  This should be sufficient
-> for now, and the limit can always be increased when the need arises.
+Add Bruce and clang folks to the party.
 
-Same comment as the PLIC DT binding patch.
+On Thu, Dec 16, 2021 at 08:21:15PM +0800, Yin Fengwei wrote:
+> Hi Boris,
+>=20
+> On 12/16/2021 7:58 PM, Carel Si wrote:
+> > Hi Boris,
+> >=20
+> > On Thu, Dec 16, 2021 at 11:06:59AM +0100, Borislav Petkov wrote:
+> >> On Thu, Dec 16, 2021 at 03:04:16PM +0800, Yin Fengwei wrote:
+> >>> The testing was with Qemu.
+> >>
+> >> This is hardly what I asked for.
+> >>
+> >>> And we found that the hang is related with clang-14.
+> >>
+> >> I saw that already.
+> >>
+> >>> The original report showed the kernel is built with clang-14:
+> >>>         # build kernel
+> >>> 	cd linux
+> >>> 	cp config-5.16.0-rc3-00003-gf154f290855b .config
+> >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 olddefconfig prep=
+are modules_prepare bzImage modules
+> >>> 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 INSTALL_MOD_PATH=
+=3D<mod-install-dir> modules_install
+> >>
+> >> I saw that too.
+> >>
+> >>> Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_OFF=
+SET and asan_report).
+> >>> This function is early function called before kasan_init.
+> >>>
+> >>> Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cpu/=
+common.c. So clang-14 will
+> >>> be happy with this kind of early TLB flush? Thanks.
+> >>
+> >> Ok, I don't understand: I asked for how exactly to reproduce and wheth=
+er
+> >> you can send me your vmlinux you built with your clang-14. What I get =
+is
+> >> some possible explanation about what might be happening.
+> >>
+> >> So what do you expect me to do? Say, "oh, sure, you're right, send me a
+> >> patch" without even being able to see for myself what the root cause i=
+s?
+> >>
+> >> What if it is not the kernel's fault but clang-14 is miscompiling crap
+> >> as in so many other cases?
+> >>
+> >> I built clang-14 and built with your .config and it works here fine. So
+> >> why does yours fail?
+> >>
+> >> Or what's the point of all this?
+>=20
+> I had concern that our report is an invalid report because you can't repr=
+oduce
+> it in your side. If that's the case, it could waste more your time. That'=
+s why
+> I did check and shared what I got. I am very sorry if I did it wrong.
 
-The "maxItems" should represent CLINT spec constraints so
-please don't add any synthetic value here.
+Sure, you can always add your analysis but I'd like to reproduce myself
+too. So, in the future, please answer the questions and then feel free
+to add your analysis - I'll gladly have a look.
 
-Regards,
-Anup
+Which wasn't that far from the truth, btw.
+
+But it isn't KASAN but GCOV profiling. Or is it KCOV profiling which
+clang does.
+
+That thing adds some counting glue to native_write_cr4():
+
+(my comments from the actual singlestepping in qemu start with '##' below)
+
+	movq	$__llvm_gcov_ctr.48+8, %rbx				##  mov    $0xffffffff8837d3c0,%rbx
+=2ELBB8_1:                                # %set_register
+                                        # =3D>This Inner Loop Header: Depth=
+=3D1
+
+	jmp	.Ltmp42
+	...
+
+=2ELtmp42:                                # Block address taken
+=2ELBB8_7:                                # %if.end79
+        movq    %rbx, %rax						## 0xffffffff8837d3c0
+        shrq    $3, %rax						## 0x1ffffffff106fa78
+        movabsq $-2305847407260205056, %rcx     # imm =3D 0xDFFFFC000000000=
+0	## 0xdffffc0000000000
+        cmpb    $0, (%rax,%rcx)
+        je      .LBB8_9
+
+so the memory address CMP accesses is something as nonsensical as
+
+  0xfffffbfff106fa78
+
+so I'm guessing we need to setup something for that __llvm_gcov_ctr to
+deref properly but I haven't dug deeper.
+
+The important thing is that this triggers with clang-13 and -14. gcc is
+fine with the same config but that probably is because gcc does other
+profiling - gcov - I guess. Looking at the resulting asm, it has a bunch
+of those counter increments:
+
+        incq    __gcov0.native_write_cr4+88(%rip)       # __gcov0.native_wr=
+ite_cr4[11]
+
+but no weird memory references.
+
+So, clang folks, what's up?
+
+The fix is simple but I'd like to understand first why does this fail
+only with clang, 13 and newer.
+
+(I mean, melver pointed me to
+
+  380d53c45ff2 ("compiler_attributes.h: define __no_profile, add to noinstr=
+")
+
+which explains why 13 and newer).
+
+Btw, joro, that second hunk is I think needed too because a couple of
+lines earlier we set up the cr4 shadow so I think you should use it
+instead of touching the hw CR4.
+
+---
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 0083464de5e3..79b3d67addcc 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
+ }
+ EXPORT_SYMBOL(native_write_cr0);
+=20
+-void native_write_cr4(unsigned long val)
++void __no_profile native_write_cr4(unsigned long val)
+ {
+ 	unsigned long bits_changed =3D 0;
+=20
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 75acb6027a87..68d2b7f9a913 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(ch=
+ar * real_mode_data)
+ 	/* Kill off the identity-map trampoline */
+ 	reset_early_page_tables();
+=20
+-	__native_tlb_flush_global(native_read_cr4());
++	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+=20
+ 	clear_bss();
+=20
 
 
+Leaving in the rest for the newly added folks.
 
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
-> v3:
->   - Add Acked-by,
->
-> v2:
->   - Split in two patches,
->   - Improve patch description and document limit rationale.
-> ---
->  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> index 8d5f4687add9e81e..b75fd6f982b1ecb3 100644
-> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> @@ -44,6 +44,7 @@ properties:
->
->    interrupts-extended:
->      minItems: 1
-> +    maxItems: 10
->
->  additionalProperties: false
->
-> --
-> 2.25.1
->
+> If you don't want to use lkp tool to reproduce the issue, following comma=
+nd
+> could be used as well:
+>=20
+> Use Qemu command so only kernel image need be downloaded:
+> qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G -s -S -kern=
+el vmlinuz-5.16.0-rc3-00003-gf154f290855b -nographic -append "console=3Dtty=
+S0 earlyprintk=3DttyS0,115200"
+> to reproduce it.
+>=20
+>=20
+>=20
+> Regards
+> Yin, Fengwei
+>=20
+>=20
+>=20
+> >>
+> >> I mean, if you cannot send me what I ask for, you can say so. Then I c=
+an
+> >> ignore this whole report altogether and waste my time somewhere else.
+> >=20
+> > We have uploaded vmlinuz, modules.cgz, config as well as other related =
+file to:
+> > https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig-a0=
+13-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/
+> >=20
+> > Machine types can refer to:
+> > https://zerobin.net/?e107cf7b56495d80#MQLh14wUT9Osv1tWCwiQx/okkAN48Nq+d=
+rVPE0PiNPw=3D
+> >=20
+> > If there's any other msg needed, pls feel free to propose, thanks.
+> >=20
+> > Below are our full steps to reproduce the issue:
+> >=20
+> > # download lkp-tests
+> > $ git clone https://github.com/intel/lkp-tests.git
+> >=20
+> > $ cd lkp-tests/
+> >=20
+> > # download vmlinuz
+> > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randco=
+nfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinu=
+z-5.16.0-rc3-00003-gf154f290855b
+> >=20
+> > # dowmload modules.cgz
+> > $ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randco=
+nfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/module=
+s.cgz
+> >=20
+> > # download job-script which is attached
+> >=20
+> > # run lkp qemu
+> > lkp-tests$ sudo bin/lkp qemu -k vmlinuz-5.16.0-rc3-00003-gf154f290855b =
+-m modules.cgz job-script
+> >=20
+> > ~/lkp-tests/pkg/lkp-src ~/lkp-tests
+> > x86_64
+> > =3D=3D> Making package: lkp-src 0-1 (Thu 16 Dec 2021 07:26:22 PM CST)
+> > =3D=3D> Checking runtime dependencies...
+> > =3D=3D> Checking buildtime dependencies...
+> > =3D=3D> WARNING: Using existing $srcdir/ tree
+> > =3D=3D> Removing existing $pkgdir/ directory...
+> > =3D=3D> Starting build()...
+> > make: Entering directory '/home/carel/lkp-tests/bin/event'
+> > klcc  -D_FORTIFY_SOURCE=3D2  -c -o wakeup.o wakeup.c
+> > klcc  -Wl,-O1,--sort-common,--as-needed,-z,relro -static -o wakeup wake=
+up.o
+> > rm -f wakeup.o
+> > strip wakeup
+> > make: Leaving directory '/home/carel/lkp-tests/bin/event'
+> > =3D=3D> Entering fakeroot environment...
+> > x86_64
+> > =3D=3D> Starting package()...
+> > =3D=3D> Creating package "lkp-src"...
+> > 103987 blocks
+> > renamed '/home/carel/.lkp/cache/lkp-x86_64.cgz.tmp' -> '/home/carel/.lk=
+p/cache/lkp-x86_64.cgz'
+> > =3D=3D> Leaving fakeroot environment.
+> > =3D=3D> Finished making: lkp-src 0-1 (Thu 16 Dec 2021 07:26:24 PM CST)
+> > ~/lkp-tests
+> > 12 blocks
+> > result_root: /home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-=
+20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd=
+44ad253c0ef8a9337bb/0
+> > downloading initrds ...
+> > use local modules: /home/carel/.lkp/cache/modules.cgz
+> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
+http://0day.sh.intel.com:80/~lkp/osimage/debian/debian-10.4-x86_64-20200603=
+=2Ecgz -N -P /home/carel/.lkp/cache/osimage/debian
+> > 440459 blocks
+> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
+http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
+gz/run-ipconfig_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debi=
+an-10.4-x86_64-20200603.cgz
+> > 1773 blocks
+> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
+http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
+gz/lkp_20210707.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-10.4-x=
+86_64-20200603.cgz
+> > 2321 blocks
+> > /usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 =
+http://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.c=
+gz/rsync-rootfs_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debi=
+an-10.4-x86_64-20200603.cgz
+> > 6856 blocks
+> > exec command: qemu-system-x86_64 -enable-kvm -fsdev local,id=3Dtest_dev=
+,path=3D/home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-20200603.=
+cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0=
+ef8a9337bb/0,security_model=3Dnone -device virtio-9p-pci,fsdev=3Dtest_dev,m=
+ount_tag=3D9p/virtfs_mount -kernel vmlinuz-5.16.0-rc3-00003-gf154f290855b -=
+append root=3D/dev/ram0 user=3Dlkp job=3D/lkp/jobs/scheduled/vm-snb-192/boo=
+t-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337b=
+b-20211208-23538-lnvkeg-5.yaml ARCH=3Dx86_64 kconfig=3Dx86_64-randconfig-a0=
+13-20211207 branch=3Dtip/x86/mm commit=3Df154f290855b070cc94dd44ad253c0ef8a=
+9337bb BOOT_IMAGE=3D/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f15=
+4f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f290855=
+b vmalloc=3D128M initramfs_async=3D0 page_owner=3Don max_uptime=3D600 RESUL=
+T_ROOT=3D/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randc=
+onfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3 LKP=
+_LOCAL_RUN=3D1 selinux=3D0 debug apic=3Ddebug sysrq_always_enabled rcupdate=
+=2Ercu_cpu_stall_timeout=3D100 net.ifnames=3D0 printk.devkmsg=3Don panic=3D=
+-1 softlockup_panic=3D1 nmi_watchdog=3Dpanic oops=3Dpanic load_ramdisk=3D2 =
+prompt_ramdisk=3D0 drbd.minor_count=3D8 systemd.log_level=3Derr ignore_logl=
+evel console=3Dtty0 earlyprintk=3DttyS0,115200 console=3DttyS0,115200 vga=
+=3Dnormal rw  ip=3Ddhcp result_service=3D9p/virtfs_mount -initrd /home/care=
+l/.lkp/cache/final_initrd -smp 2 -m 3144M -no-reboot -watchdog i6300esb -rt=
+c base=3Dlocaltime -device e1000,netdev=3Dnet0 -netdev user,id=3Dnet0 -disp=
+lay none -monitor null -serial stdio
+> > early console in setup code
+> > early console in extract_kernel
+> > input_data: 0x0000000006ffc2e0
+> > input_len: 0x000000000260cb2b
+> > output: 0x0000000001000000
+> > output_len: 0x00000000079e7da4
+> > kernel_total_size: 0x0000000008a2c000
+> > needed_size: 0x0000000008c00000
+> > trampoline_32bit: 0x000000000009d000
+> > Physical KASLR using RDTSC...
+> > Virtual KASLR using RDTSC...
+> >=20
+> > Decompressing Linux... Parsing ELF... Performing relocations... done.
+> > Booting the kernel.
+> >=20
+> >>
+> >> --=20
+> >> Regards/Gruss,
+> >>     Boris.
+> >>
+> >> SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG N=
+=C3=BCrnberg
+
+--=20
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG N=C3=BCr=
+nberg

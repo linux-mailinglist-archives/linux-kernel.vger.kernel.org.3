@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1590478D0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFD4478D1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236899AbhLQOHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:07:19 -0500
-Received: from mga01.intel.com ([192.55.52.88]:48436 "EHLO mga01.intel.com"
+        id S236963AbhLQOMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:12:35 -0500
+Received: from mga07.intel.com ([134.134.136.100]:40646 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232823AbhLQOHS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:07:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639750038; x=1671286038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1Tr3Rfy4DHDjc7WiTpOq+P1aPRKZ4mJe5JHJHgReMOE=;
-  b=YEzyGT+tefUj7JmoOp98lgfzbv3criP97KApuUHartantg2V0Y+3J0by
-   x3zSI4xIhh7i2526ziZATgA3Fss5f2xZdXmDpS19MMmtJAf+bnp1A+0Ws
-   o7wsXl+L3sqvPjGN9QIF/l+xBuS5TU9lsx4I0MRBpPG3y+2SZqotgqKcS
-   eYQVpjcG8N5fx3fKjvdrsQN1onrmpQUnPU6IqQJk2/7L8t655wLwcajov
-   MMCPxPeMC+cLyUFr+KGxCUGAdBbdAB8SJXhk+7hCerGXqnf6i5/Kqekcp
-   RCecX1RGXaDY6pY8yIf6Faf7Om5qdWynq0jlF62td0GfcIPWkGUqVnS0w
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="263934257"
+        id S229599AbhLQOMe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:12:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="303135892"
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="263934257"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:07:16 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="303135892"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:12:34 -0800
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="466519954"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Dec 2021 06:07:14 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myDtB-0004nD-Ce; Fri, 17 Dec 2021 14:07:13 +0000
-Date:   Fri, 17 Dec 2021 22:06:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, matthias.bgg@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH v2] isoc: mediatek: potential use of error pointer
-Message-ID: <202112172128.4DTbSyzc-lkp@intel.com>
-References: <20211217120845.628024-1-jiasheng@iscas.ac.cn>
+   d="scan'208";a="683401263"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 06:12:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1myDxQ-007Rmr-5V;
+        Fri, 17 Dec 2021 16:11:36 +0200
+Date:   Fri, 17 Dec 2021 16:11:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] acpi: Store _PLD information and convert users
+Message-ID: <Ybyal+QmjEQWI+hh@smile.fi.intel.com>
+References: <20211217132415.39726-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217120845.628024-1-jiasheng@iscas.ac.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211217132415.39726-1-heikki.krogerus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiasheng,
+On Fri, Dec 17, 2021 at 04:24:11PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> The _PLD buffer is no longer stored as requested by Rafael, so the
+> drivers will need to continue to evaluate the _PLD if they need it.
+> 
+> The stored locations will therefore only contain the list of other
+> devices that share the location, but that is most important, and in
+> practice the main goal of the series in any case.
+> 
+> 
+> v2 cover letter:
+> 
+> I'm now using the helpers device_match_acpi_dev() and
+> device_match_fwnode() like Andy suggested. No other changes.
+> 
+> 
+> The original cover letter:
+> 
+> This removes the need for the drivers to always separately evaluate
+> the _PLD. With the USB Type-C connector and USB port mapping this
+> allows us to start using the component framework and remove the custom
+> APIs.
+> 
+> So far the only users of the _PLD information have been the USB
+> drivers, but it seems it will be used also at least in some camera
+> drivers later. These nevertheless touch mostly USB drivers.
+> 
+> Rafael, is it still OK if Greg takes these?
+> 
+> Prashant, can you test these?
 
-Thank you for the patch! Perhaps something to improve:
+I guess I have given tag, anyway here we are, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on broonie-spi/for-next linus/master mbgg-mediatek/for-next v5.16-rc5 next-20211216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jiasheng-Jiang/isoc-mediatek-potential-use-of-error-pointer/20211217-201022
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20211217/202112172128.4DTbSyzc-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1b5bac7d5052521b10c6c7ab2279cbd8c31cd458
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jiasheng-Jiang/isoc-mediatek-potential-use-of-error-pointer/20211217-201022
-        git checkout 1b5bac7d5052521b10c6c7ab2279cbd8c31cd458
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/mediatek/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/soc/mediatek/mtk-scpsys.c: In function 'init_clks':
->> drivers/soc/mediatek/mtk-scpsys.c:421:32: warning: returning 'void *' from a function with return type 'int' makes integer from pointer without a cast [-Wint-conversion]
-     421 |                         return ERR_PTR(-ENOMEM);
-         |                                ^~~~~~~~~~~~~~~~
+P.S. AFAICS only the first patch was slightly changed.
 
 
-vim +421 drivers/soc/mediatek/mtk-scpsys.c
+> Heikki Krogerus (4):
+>   acpi: Store the known device locations
+>   usb: Link the ports to the connectors they are attached to
+>   usb: typec: port-mapper: Convert to the component framework
+>   usb: Remove usb_for_each_port()
+> 
+>  Documentation/ABI/testing/sysfs-bus-usb |   9 +
+>  drivers/acpi/scan.c                     |  77 +++++++
+>  drivers/usb/core/port.c                 |  32 +++
+>  drivers/usb/core/usb.c                  |  46 ----
+>  drivers/usb/typec/Makefile              |   3 +-
+>  drivers/usb/typec/class.c               |   2 -
+>  drivers/usb/typec/class.h               |  10 +-
+>  drivers/usb/typec/port-mapper.c         | 280 +++---------------------
+>  include/acpi/acpi_bus.h                 |  19 ++
+>  include/linux/usb.h                     |   9 -
+>  include/linux/usb/typec.h               |  12 -
+>  11 files changed, 180 insertions(+), 319 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
-   413	
-   414	static int init_clks(struct platform_device *pdev, struct clk **clk)
-   415	{
-   416		int i;
-   417	
-   418		for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
-   419			clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
-   420			if (!clk[i])
- > 421				return ERR_PTR(-ENOMEM);
-   422		}
-   423		return 0;
-   424	}
-   425	
+-- 
+With Best Regards,
+Andy Shevchenko
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+

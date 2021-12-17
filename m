@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 111B5478B3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCB3478B3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbhLQMRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:17:24 -0500
-Received: from muru.com ([72.249.23.125]:39494 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236062AbhLQMRX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:17:23 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 8DBEB80FB;
-        Fri, 17 Dec 2021 12:18:05 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 14:17:21 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Jarkko Nikula <jarkko.nikula@bitmer.com>
-Cc:     linux-omap@vger.kernel.org,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
-Message-ID: <Ybx/0fIXWDD09c42@atomide.com>
-References: <20211125144834.52457-1-tony@atomide.com>
- <ef843afa-c99d-328d-853a-00ef293a47f2@bitmer.com>
- <20211212190455.qbggbhmr5nquw7bw@bitmer.com>
- <Ybbdnr96H58TkytD@atomide.com>
+        id S236141AbhLQMSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231462AbhLQMSP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 07:18:15 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EEFC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:18:15 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id q16so1907958pgq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:18:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PgAQMoF3FxS7poQ4mxvqYG6svwwslz8uWPPj24m9se8=;
+        b=Iofd42j4mTOfr0SG+Evy5gGD5mw+5PXFf2rxKMxLAn6HcrjQB/xGKPlYZw3PMWJS+4
+         c12KQ5Eogt2y6DsJpyo1VUieWzFjUmq1PjAutPukvsTn3nWth5Y+2Fy/+stobWMz/U6E
+         87Ml2KUdWmM9b57NNN0KzIlStoXlKeCHKHtO6f7K0SUMrdVWt7f1uNYZ0RPM2WjEPYCl
+         USFoc4+BBOMm4TbhaZVNKlCopODsxDOhgtYXxQNOSWDFObeIlE8K9BU3N9GI+dNeSAA3
+         wfn8aO9MWb5MYO5Qt8mdy28bMnESuJWbMmAqpAaChEHb4MqO8Jl2IhO6BKKRcZhVx9oh
+         gaAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PgAQMoF3FxS7poQ4mxvqYG6svwwslz8uWPPj24m9se8=;
+        b=po/l3X6GQ0Bj6OfIpyvhu1cTZ+cx7YukacQmbTFQayGhR7JzGGimy1QsSIMYZRO6+y
+         O6B9RuAUanZ8SU61uTgBhy2zNHgIcPr/JHI8P3X9BLt3izGbqLvBVEu0y9aXL10WYxEj
+         MsUWudtoncbDeN96g6drmTV+RxZhK38wFcoQHE5XxvSP9CmMw6Q0HlKgE5COxURrDuV1
+         JJnUyVuV0kS+M8S856V39Tc+lsl/vEQ4DL/YV+a0WWldULYZF3sOgcDtuOlS4xf26gzP
+         Chk23UWHDPbXZaB7LzcjK4FuOO8MGffDaeFD5E/Ybv/SuOGaw5b9kQ8eiWqHbo1riRtK
+         UtGg==
+X-Gm-Message-State: AOAM532Yl0alMMhmZrJYL+eRuBwHaruKhyb+g+VAMfefLOD9K/evT/Yz
+        HrOudobDuEkxkxHVWb0QFgsJ1szP4BzqkOai1/A=
+X-Google-Smtp-Source: ABdhPJylU40kUwGUIr+LpOSZLJp1W+S1gJU/w3SokSll/EKJGwPkgmpVkEgMvb5gLdSuUNeO4i+q7ICiMZIt0aPEUbk=
+X-Received: by 2002:a65:418b:: with SMTP id a11mr2671509pgq.620.1639743494651;
+ Fri, 17 Dec 2021 04:18:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybbdnr96H58TkytD@atomide.com>
+Received: by 2002:a05:6a10:cd15:0:0:0:0 with HTTP; Fri, 17 Dec 2021 04:18:14
+ -0800 (PST)
+Reply-To: johnjake628@gmail.com
+From:   =?UTF-8?B?QnJ5YW7CoEpvaG5zb27CoMKgU2NvdGlucw==?= 
+        <veronicegbenou@gmail.com>
+Date:   Fri, 17 Dec 2021 13:18:14 +0100
+Message-ID: <CAKidhb+YZwqtrLjJgC1rqqmDfjTWmLnfSFbR03_1AakpS5_KLw@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [211213 05:44]:
-> * Jarkko Nikula <jarkko.nikula@bitmer.com> [211212 19:05]:
-> > On Sat, Dec 11, 2021 at 05:30:57PM +0200, Jarkko Nikula wrote:
-> > This I used years before your patch and by some reason I confused to use
-> > new omap3-beagle-ab4.dtb when testing your patch yesterday:
-> > 
-> > > cat arch/arm/boot/dts/omap3-beagle-ab4.dtb >>arch/arm/boot/zImage
-> > 
-> > without realizing my Beagle Board version is not between A to B4 but C2.
-> > So when using the omap3-beagle.dtb your patch fixes the regression I
-> > found.
-> > 
-> > Tested-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
-> 
-> OK good to hear omap3-beagle.dtb now works for beagles that don't have
-> the A to B4 hardware timer issue :) And thanks for testing.
-> 
-> It seems the beagle revisions A to B4 are broken for any kind of power
-> management as the clockevent timer for those boards is not always on.
-> Probably not worth spending much effort on those. Maybe the PMIC could
-> be reconfigured on the buggy revisions in addition to the timer quirks
-> if somebody still cares for those board revisions.
-
-Anyways, applying this fix into omap-for-v5.17/fixes-not-urgent.
-
-Regards,
-
-Tony
+Have you received my first message to you

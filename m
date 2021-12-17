@@ -2,179 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A344784C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9925A4784CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 07:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbhLQGEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 01:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhLQGEQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 01:04:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3EAC061574;
-        Thu, 16 Dec 2021 22:04:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 198FE62065;
-        Fri, 17 Dec 2021 06:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861F2C36AE1;
-        Fri, 17 Dec 2021 06:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639721054;
-        bh=kwoVfr91sfDbXUKT7OKdnlYuZVy9njagc98xzPanrDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YTqFvg/hfF0lUestaWcAB80XJkTL/iy6IDSt7jP6+ESZr8GI22Qxo/LvXAVjMA9wq
-         aUGU8kGBf/IzSMOTdwqvmn7Zv5xXM35fcywMFOxtbDPDLcLJjuV5k5+1cF9OLZ4XyU
-         Fw5WunmhHxTS9QOwc415W6U1sieJ6CgG4x8bFG/EjBo2FJSvAyUEdSYNcpB3rmPfzE
-         24OvE8RF7pDyG0MXG2IDRoWLBYB1QNxwL+Z+R5rYRs4cV62FVd82Bcu6879lwHrzn/
-         Tln06klRkA2ylotphb2f4yW7FkDjX1poS4ObMcnA5TXaqXqIhXWWedor/7V3CH6geF
-         edUqAttGhYDnw==
-Date:   Fri, 17 Dec 2021 11:34:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
-Message-ID: <YbwoWhg6h8ChE5Xs@matsya>
-References: <20211204143725.31646-1-digetx@gmail.com>
- <Ybo6tsnQM6OacoZs@sirena.org.uk>
- <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com>
- <7179a409-d838-0e9e-4600-785e69c3e3a6@gmail.com>
+        id S233159AbhLQGEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 01:04:43 -0500
+Received: from mga12.intel.com ([192.55.52.136]:32358 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230405AbhLQGEm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 01:04:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639721081; x=1671257081;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bFEVMJxeRa9ekTrfK0RrMtiUWZHIrEtrBM4r//TN7XA=;
+  b=WOn1VqUTlCknE0hAjOXSM58UwVPFSywKeMpmmkpj9snIi5n2KZ2ko/xZ
+   16x+3MbcM/0X65fNJBx2ohM9POX5iJDXsDXXnZZlIuJr7rtfSsdENtbEQ
+   sStsA3wgB0NUubs6oYiV223wFiWLUhkaVNunOxELODKqGhoYQuFLP4yT8
+   Q1jzQ2yIsWjeuB48dDCS9qlgFNZ5xW5dbNJvT9sNKRDutyXipYk72zPs1
+   WNex4Sj7jgl0xGbpdmuOfVgSmUtsfxqxdtlAADV+YO+p+dpBSUBQNlmDo
+   a8lOJbzu2bSi4NQl915g4Aj3WP8bHnd7bT/aZh49Y1c6bxxy+c4cBucRF
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="219703183"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="219703183"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 22:04:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="506641621"
+Received: from unknown (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 22:04:38 -0800
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Subject: [PATCH -V3 RESEND] numa balancing: move some document to make it consistent with the code
+Date:   Fri, 17 Dec 2021 14:04:26 +0800
+Message-Id: <20211217060426.3076856-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H5lYUFRYsnZI2oAy"
-Content-Disposition: inline
-In-Reply-To: <7179a409-d838-0e9e-4600-785e69c3e3a6@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
+debugfs"), some NUMA balancing sysctls enclosed with SCHED_DEBUG has
+been moved to debugfs.  This patch move the document for these
+sysctls from
 
---H5lYUFRYsnZI2oAy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Documentation/admin-guide/sysctl/kernel.rst
 
-On 16-12-21, 17:29, Dmitry Osipenko wrote:
-> 15.12.2021 22:19, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > 15.12.2021 21:57, Mark Brown =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
-> >>
-> >>> I based S/PDIF patches on Arnd's Bergmann patch from a separate serie=
-s [1]
-> >>> that removes obsolete slave_id. This eases merging of the patches by
-> >>> removing the merge conflict. This is a note for Mark Brown.
-> >> That's not in my tree so I'll need either a pull request with the seri=
-es
-> >> or a resend after the merge window.
-> > This patch is included as a part of this series, please see the patch #=
-6.
-> >=20
-> > I saw that Vinod Koul already merged it into his DMA tree [1] a day ago,
-> > but there is no stable branch there.
-> >=20
-> > [1]
-> > https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/log=
-/?h=3Dnext
-> >=20
->=20
-> Vinod, will you be a able to create immutable branch for us with the
-> "dmaengine: kill off dma_slave_config->slave_id" patches [1]?
->=20
-> [1] https://lore.kernel.org/all/20211122222203.4103644-1-arnd@kernel.org/
+to
 
-Here you go:
+  Documentation/scheduler/sched-debug.rst
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+to make the document consistent with the code.
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 46 +-----------------
+ Documentation/scheduler/index.rst           |  1 +
+ Documentation/scheduler/sched-debug.rst     | 54 +++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/scheduler/sched-debug.rst
 
-are available in the Git repository at:
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 0e486f41185e..603469d42fb9 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -609,51 +609,7 @@ be migrated to a local memory node.
+ The unmapping of pages and trapping faults incur additional overhead that
+ ideally is offset by improved memory locality but there is no universal
+ guarantee. If the target workload is already bound to NUMA nodes then this
+-feature should be disabled. Otherwise, if the system overhead from the
+-feature is too high then the rate the kernel samples for NUMA hinting
+-faults may be controlled by the `numa_balancing_scan_period_min_ms,
+-numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
+-numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
+-
+-
+-numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms, numa_balancing_scan_size_mb
+-===============================================================================================================================
+-
+-
+-Automatic NUMA balancing scans tasks address space and unmaps pages to
+-detect if pages are properly placed or if the data should be migrated to a
+-memory node local to where the task is running.  Every "scan delay" the task
+-scans the next "scan size" number of pages in its address space. When the
+-end of the address space is reached the scanner restarts from the beginning.
+-
+-In combination, the "scan delay" and "scan size" determine the scan rate.
+-When "scan delay" decreases, the scan rate increases.  The scan delay and
+-hence the scan rate of every task is adaptive and depends on historical
+-behaviour. If pages are properly placed then the scan delay increases,
+-otherwise the scan delay decreases.  The "scan size" is not adaptive but
+-the higher the "scan size", the higher the scan rate.
+-
+-Higher scan rates incur higher system overhead as page faults must be
+-trapped and potentially data must be migrated. However, the higher the scan
+-rate, the more quickly a tasks memory is migrated to a local node if the
+-workload pattern changes and minimises performance impact due to remote
+-memory accesses. These sysctls control the thresholds for scan delays and
+-the number of pages scanned.
+-
+-``numa_balancing_scan_period_min_ms`` is the minimum time in milliseconds to
+-scan a tasks virtual memory. It effectively controls the maximum scanning
+-rate for each task.
+-
+-``numa_balancing_scan_delay_ms`` is the starting "scan delay" used for a task
+-when it initially forks.
+-
+-``numa_balancing_scan_period_max_ms`` is the maximum time in milliseconds to
+-scan a tasks virtual memory. It effectively controls the minimum scanning
+-rate for each task.
+-
+-``numa_balancing_scan_size_mb`` is how many megabytes worth of pages are
+-scanned for a given scan.
+-
++feature should be disabled.
+ 
+ oops_all_cpu_backtrace
+ ======================
+diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+index 88900aabdbf7..30cca8a37b3b 100644
+--- a/Documentation/scheduler/index.rst
++++ b/Documentation/scheduler/index.rst
+@@ -17,6 +17,7 @@ Linux Scheduler
+     sched-nice-design
+     sched-rt-group
+     sched-stats
++    sched-debug
+ 
+     text_files
+ 
+diff --git a/Documentation/scheduler/sched-debug.rst b/Documentation/scheduler/sched-debug.rst
+new file mode 100644
+index 000000000000..4d3d24f2a439
+--- /dev/null
++++ b/Documentation/scheduler/sched-debug.rst
+@@ -0,0 +1,54 @@
++=================
++Scheduler debugfs
++=================
++
++Booting a kernel with CONFIG_SCHED_DEBUG=y will give access to
++scheduler specific debug files under /sys/kernel/debug/sched. Some of
++those files are described below.
++
++numa_balancing
++==============
++
++`numa_balancing` directory is used to hold files to control NUMA
++balancing feature.  If the system overhead from the feature is too
++high then the rate the kernel samples for NUMA hinting faults may be
++controlled by the `scan_period_min_ms, scan_delay_ms,
++scan_period_max_ms, scan_size_mb` files.
++
++
++scan_period_min_ms, scan_delay_ms, scan_period_max_ms, scan_size_mb
++-------------------------------------------------------------------
++
++Automatic NUMA balancing scans tasks address space and unmaps pages to
++detect if pages are properly placed or if the data should be migrated to a
++memory node local to where the task is running.  Every "scan delay" the task
++scans the next "scan size" number of pages in its address space. When the
++end of the address space is reached the scanner restarts from the beginning.
++
++In combination, the "scan delay" and "scan size" determine the scan rate.
++When "scan delay" decreases, the scan rate increases.  The scan delay and
++hence the scan rate of every task is adaptive and depends on historical
++behaviour. If pages are properly placed then the scan delay increases,
++otherwise the scan delay decreases.  The "scan size" is not adaptive but
++the higher the "scan size", the higher the scan rate.
++
++Higher scan rates incur higher system overhead as page faults must be
++trapped and potentially data must be migrated. However, the higher the scan
++rate, the more quickly a tasks memory is migrated to a local node if the
++workload pattern changes and minimises performance impact due to remote
++memory accesses. These files control the thresholds for scan delays and
++the number of pages scanned.
++
++``scan_period_min_ms`` is the minimum time in milliseconds to scan a
++tasks virtual memory. It effectively controls the maximum scanning
++rate for each task.
++
++``scan_delay_ms`` is the starting "scan delay" used for a task when it
++initially forks.
++
++``scan_period_max_ms`` is the maximum time in milliseconds to scan a
++tasks virtual memory. It effectively controls the minimum scanning
++rate for each task.
++
++``scan_size_mb`` is how many megabytes worth of pages are scanned for
++a given scan.
+-- 
+2.30.2
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
-aengine_topic_slave_id_removal_5.17
-
-for you to fetch changes up to 3c219644075795a99271d345efdfa8b256e55161:
-
-  dmaengine: remove slave_id config field (2021-12-17 11:23:56 +0530)
-
-----------------------------------------------------------------
-dmaengine_topic_slave_id_removal_5.17
-
-Tag for dmaengine slave_id removal topic branch which should be merged
-into v5.17
-
-----------------------------------------------------------------
-Arnd Bergmann (11):
-      ASoC: tegra20-spdif: stop setting slave_id
-      dmaengine: tegra20-apb: stop checking config->slave_id
-      ASoC: dai_dma: remove slave_id field
-      spi: pic32: stop setting dma_config->slave_id
-      mmc: bcm2835: stop setting chan_config->slave_id
-      dmaengine: shdma: remove legacy slave_id parsing
-      dmaengine: pxa/mmp: stop referencing config->slave_id
-      dmaengine: sprd: stop referencing config->slave_id
-      dmaengine: qcom-adm: stop abusing slave_id config
-      dmaengine: xilinx_dpdma: stop using slave_id field
-      dmaengine: remove slave_id config field
-
- drivers/dma/mmp_pdma.c             |  6 ------
- drivers/dma/pxa_dma.c              |  7 -------
- drivers/dma/qcom/qcom_adm.c        | 56 ++++++++++++++++++++++++++++++++++=
-+++++++++++++++-------
- drivers/dma/sh/shdma-base.c        |  8 --------
- drivers/dma/sprd-dma.c             |  3 ---
- drivers/dma/tegra20-apb-dma.c      |  6 ------
- drivers/dma/xilinx/xilinx_dpdma.c  | 17 +++++++++++------
- drivers/gpu/drm/xlnx/zynqmp_disp.c |  9 +++++++--
- drivers/mmc/host/bcm2835.c         |  2 --
- drivers/mtd/nand/raw/qcom_nandc.c  | 14 ++++++++++++--
- drivers/spi/spi-pic32.c            |  2 --
- drivers/tty/serial/msm_serial.c    | 15 +++++++++++++--
- include/linux/dma/qcom_adm.h       | 12 ++++++++++++
- include/linux/dma/xilinx_dpdma.h   | 11 +++++++++++
- include/linux/dmaengine.h          |  4 ----
- include/sound/dmaengine_pcm.h      |  2 --
- sound/core/pcm_dmaengine.c         |  5 ++---
- sound/soc/tegra/tegra20_spdif.c    |  1 -
- 18 files changed, 117 insertions(+), 63 deletions(-)
- create mode 100644 include/linux/dma/qcom_adm.h
- create mode 100644 include/linux/dma/xilinx_dpdma.h
-
-Thanks
---=20
-~Vinod
-
---H5lYUFRYsnZI2oAy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmG8KFoACgkQfBQHDyUj
-g0cMEA/+LySLtN5xrYUyWQlJYPXEglgbzTuSsOz/GvVvGIvw2UqVR4njIWmVypWh
-aE7r7IgA4bM3ApFbwXEfNgeXmjRKuBiL7YyxaZ6JxLPyG9kis+yl7j3pwTMkLEW7
-W2vcO0jH+QSP2K/nPyQRdyCBfdP0ECtBefVwcpdpDcN7vPhcVKLHADJ9cN4cBTmW
-XRji1kutNFxbWPbL068ZBU2t9hl3WVVg3jqVUrEMOeo4RZUyFQDBB7mH4tE+Gj4u
-eJUh5ZA0Sn2+DiESYzHdpMvdciS6L2Fe7ujbZFyMQBwA52MtR50pyNlHFxrL7z/C
-BHdjuGKWBTP3Jah9AXEQcMpRKZ67NdbNYE4DXwyOscWFkv79Tc3vC7XxHiT4Jztc
-2IPIO+vJLORfAxEupml/ARZYwr+pNdA41v4c5aOp+3ZADRN2TLnZfIVkRdx6Zs6F
-t9Q2B7xKXIHuS5sLEArpGyHNroJ1f0sF7b4OL/vbKCd6fO/XZvumXpQNHj4N91ET
-LjtBtnfLeMRdAei1aqaQzAkLPigBa1E3cYjvdN4uyWDiU7c5NJ91i9U2jE8sR/Oj
-2oVUsPTHHQMOQcmoei16ajYF7UFClyGxV/w71L06uCEnFXqRF+Jvd0l2MAxgOMVP
-AIB/FPoyX4VkOMZNCbN+iRZ+VUwAaqz11fbGv+O1fbV6j397pvw=
-=EFS8
------END PGP SIGNATURE-----
-
---H5lYUFRYsnZI2oAy--

@@ -2,168 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AC4478301
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D506478303
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbhLQCLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLQCLx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:11:53 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423F7C061574;
-        Thu, 16 Dec 2021 18:11:53 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id m6so1582956oim.2;
-        Thu, 16 Dec 2021 18:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RSQtSqbGAahik3lofKuwuzkCALOuuG/K6xcfqSLYhNA=;
-        b=SHLw4f2H+5gWTcS6HVLp1w4KnEdCBxTCtWAdg4Qz+l7oer8vx4fAqjANgo0F1TbYx/
-         1GuYcQ16H7wTPRKWZMUxhJdHr/tCT4ZnTSHRgZxBkcxHgOEzGwOAbvsYuPlshL0i7T/F
-         hIV/v9Zczgwly4IeAYNKS9N1s+mNUlYCLZJbPR14S484XekgZZno/6rjwIDV6oBA6XV0
-         eZzupvk9wnrvUj72wP5c30fRVgIcXVsbB6GOi6lp2f7sUvcHs2HZV24JHdlYIzsnOozZ
-         OC8G+JFB3BY1JcmpyJKtRPxqioNGb5n8kSUazp5rPe9aQvq9DR1DhdXTIgNsv/llx3y6
-         Ld/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RSQtSqbGAahik3lofKuwuzkCALOuuG/K6xcfqSLYhNA=;
-        b=LrxyASK4flgHOnKpjhl0nCjR2Dy4YCzD53JsBCjbLZpacwRM0D+KUOd7tza1I3UIO9
-         Mdp9XqFiU6mKa2cZtPQ5gsd8Wq3JdH6/+KTApE9IxI1AR6BQZFFvWoyH4smdSvJFccfF
-         4DKaE63Rz5u4WxtayBpS7rLocH5f4vhslLuPdwImtn0UWhgZ/gvyCaCtog41Iil+LwYH
-         wPHNiM1rt+cpjMTpd8grxtIqFxSX+PGspcdUihUD2uv4fx5Va3TI8ugSC0aCt3yw3k6w
-         EtBGiBBn/mtSqg6ESVbLPC+9ctEWwLD2bOhP89uAEoGymY8DLdtc5SSZixcUMEIdwBjI
-         biGw==
-X-Gm-Message-State: AOAM530Xu1zZgBNcFxSr7JNjqzYuz9wdtzruzTompmk63nBqq/oq3WiE
-        pWrkElSwo22pwJ45sG8SGOqG+SKb5QBmgH0rOA0=
-X-Google-Smtp-Source: ABdhPJwfrvfnTOnAEYB4YjLS/zEy0yUDDe6beDVjzqRnidWGzK3Gg2JACukT+DRDVtVJseugwJuePp3UXhdTBNFRagg=
-X-Received: by 2002:a05:6808:68f:: with SMTP id k15mr6105547oig.5.1639707112651;
- Thu, 16 Dec 2021 18:11:52 -0800 (PST)
+        id S230169AbhLQCOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:14:07 -0500
+Received: from spam.zju.edu.cn ([61.164.42.155]:47158 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229449AbhLQCOG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:14:06 -0500
+Received: from localhost.localdomain (unknown [222.205.0.213])
+        by mail-app2 (Coremail) with SMTP id by_KCgB3fMBm8rthNrdgAA--.6886S4;
+        Fri, 17 Dec 2021 10:14:00 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, jirislaby@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v0] hamradio: improve the incomplete fix to avoid NPD
+Date:   Fri, 17 Dec 2021 10:13:56 +0800
+Message-Id: <20211217021356.27322-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com> <YbjWFTtNo9Ap7kDp@google.com>
- <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com> <Ybtea42RxZ9aVzCh@google.com>
-In-Reply-To: <Ybtea42RxZ9aVzCh@google.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Fri, 17 Dec 2021 10:11:41 +0800
-Message-ID: <CANRm+CwbOw8sXL4h9e5S6O7XcerUkfD+uG=iNu365qROeJTMKw@mail.gmail.com>
-Subject: Re: The vcpu won't be wakened for a long time
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Huangzhichao <huangzhichao@huawei.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: by_KCgB3fMBm8rthNrdgAA--.6886S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF15Ary7AFWDGF47Cr1Dtrb_yoW8CFWkpF
+        45Ka4akF4kJr1kAw4DAFWkZFyDXFsrtayUur4I934q9w4qyr1UZr10ga4j9r1UurZ3Arya
+        vF15A3yIqF1Fy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 at 07:48, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Dec 16, 2021, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
-> > > What kernel version?  There have been a variety of fixes/changes in the
-> > > area in recent kernels.
-> >
-> > The kernel version is 4.18, and it seems the latest kernel also has this problem.
-> >
-> > The following code can fixes this bug, I've tested it on 4.18.
-> >
-> > (4.18)
-> >
-> > @@ -3944,6 +3944,11 @@ static void vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
-> >         if (pi_test_and_set_on(&vmx->pi_desc))
-> >                 return;
-> >
-> > +       if (swq_has_sleeper(kvm_arch_vcpu_wq(vcpu))) {
-> > +               kvm_vcpu_kick(vcpu);
-> > +               return;
-> > +       }
-> > +
-> >         if (vcpu != kvm_get_running_vcpu() &&
-> >                 !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-> >                 kvm_vcpu_kick(vcpu);
-> >
-> >
-> > (latest)
-> >
-> > @@ -3959,6 +3959,11 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
-> >         if (pi_test_and_set_on(&vmx->pi_desc))
-> >                 return 0;
-> >
-> > +       if (rcuwait_active(&vcpu->wait)) {
-> > +               kvm_vcpu_kick(vcpu);
-> > +               return 0;
-> > +       }
-> > +
-> >         if (vcpu != kvm_get_running_vcpu() &&
-> >             !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-> >                 kvm_vcpu_kick(vcpu);
-> >
-> > Do you have any suggestions ?
->
-> Hmm, that strongly suggests the "vcpu != kvm_get_running_vcpu()" is at fault.
+The previous commit 3e0588c291d6 ("hamradio: defer ax25 kfree after
+unregister_netdev") reorder the kfree operations and unregister_netdev
+operation to prevent UAF.
 
-This was introduced in 5.8-rc1, however, his kernel version is 4.18.
+This commit improves the previous one by also deferring the nullify of
+the ax->tty pointer. Otherwise, a NULL pointer dereference bug occurs.
+Partial of the stack trace is shown below.
 
-> Can you try running with the below commit?  It's currently sitting in kvm/queue,
-> but not marked for stable because I didn't think it was possible for the check
-> to a cause a missed wake event in KVM's current code base.
->
-> commit 6a8110fea2c1b19711ac1ef718680dfd940363c6
-> Author: Sean Christopherson <seanjc@google.com>
-> Date:   Wed Dec 8 01:52:27 2021 +0000
->
->     KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
->
->     Drop a check that guards triggering a posted interrupt on the currently
->     running vCPU, and more importantly guards waking the target vCPU if
->     triggering a posted interrupt fails because the vCPU isn't IN_GUEST_MODE.
->     The "do nothing" logic when "vcpu == running_vcpu" works only because KVM
->     doesn't have a path to ->deliver_posted_interrupt() from asynchronous
->     context, e.g. if apic_timer_expired() were changed to always go down the
->     posted interrupt path for APICv, or if the IN_GUEST_MODE check in
->     kvm_use_posted_timer_interrupt() were dropped, and the hrtimer fired in
->     kvm_vcpu_block() after the final kvm_vcpu_check_block() check, the vCPU
->     would be scheduled() out without being awakened, i.e. would "miss" the
->     timer interrupt.
->
->     One could argue that invoking kvm_apic_local_deliver() from (soft) IRQ
->     context for the current running vCPU should be illegal, but nothing in
->     KVM actually enforces that rules.  There's also no strong obvious benefit
->     to making such behavior illegal, e.g. checking IN_GUEST_MODE and calling
->     kvm_vcpu_wake_up() is at worst marginally more costly than querying the
->     current running vCPU.
->
->     Lastly, this aligns the non-nested and nested usage of triggering posted
->     interrupts, and will allow for additional cleanups.
->
->     Signed-off-by: Sean Christopherson <seanjc@google.com>
->     Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
->     Message-Id: <20211208015236.1616697-18-seanjc@google.com>
->     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 38749063da0e..f61a6348cffd 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -3995,8 +3995,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
->          * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
->          * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
->          */
-> -       if (vcpu != kvm_get_running_vcpu() &&
-> -           !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-> +       if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
->                 kvm_vcpu_wake_up(vcpu);
->
->         return 0;
+BUG: kernel NULL pointer dereference, address: 0000000000000538
+RIP: 0010:ax_xmit+0x1f9/0x400
+...
+Call Trace:
+ dev_hard_start_xmit+0xec/0x320
+ sch_direct_xmit+0xea/0x240
+ __qdisc_run+0x166/0x5c0
+ __dev_queue_xmit+0x2c7/0xaf0
+ ax25_std_establish_data_link+0x59/0x60
+ ax25_connect+0x3a0/0x500
+ ? security_socket_connect+0x2b/0x40
+ __sys_connect+0x96/0xc0
+ ? __hrtimer_init+0xc0/0xc0
+ ? common_nsleep+0x2e/0x50
+ ? switch_fpu_return+0x139/0x1a0
+ __x64_sys_connect+0x11/0x20
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+The crash point is shown as below
+
+static void ax_encaps(...) {
+  ...
+  set_bit(TTY_DO_WRITE_WAKEUP, &ax->tty->flags); // ax->tty = NULL!
+  ...
+}
+
+By placing the nullify action after the unregister_netdev, the ax->tty
+pointer won't be assigned as NULL net_device framework layer is well
+synchronized.
+
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ drivers/net/hamradio/mkiss.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/hamradio/mkiss.c b/drivers/net/hamradio/mkiss.c
+index 7da2bb8a443c..edde9c3ae12b 100644
+--- a/drivers/net/hamradio/mkiss.c
++++ b/drivers/net/hamradio/mkiss.c
+@@ -794,14 +794,14 @@ static void mkiss_close(struct tty_struct *tty)
+ 	 */
+ 	netif_stop_queue(ax->dev);
+ 
+-	ax->tty = NULL;
+-
+ 	unregister_netdev(ax->dev);
+ 
+ 	/* Free all AX25 frame buffers after unreg. */
+ 	kfree(ax->rbuff);
+ 	kfree(ax->xbuff);
+ 
++	ax->tty = NULL;
++
+ 	free_netdev(ax->dev);
+ }
+ 
+-- 
+2.33.1
+

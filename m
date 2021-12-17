@@ -2,95 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A2A47909B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6C64790A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbhLQPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235223AbhLQPy0 (ORCPT
+        id S238448AbhLQPyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:54:36 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:42937 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235218AbhLQPyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:54:26 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B26C061574;
-        Fri, 17 Dec 2021 07:54:25 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id o13so4847134wrs.12;
-        Fri, 17 Dec 2021 07:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AHfUikZmyD4dINCWakIQJtobxvYGz5CvtkfmXC/JM0U=;
-        b=kkoc4FHM+YuQr9vZVtoceLdb6WDPQLhgj4yrAneG0S9X+rspnO/cHTjzzLHoFMucxW
-         f/hpbjjYx/5FXX57Y9KVVq6kXDhnnu1UaInliIeJ1fVNCwxAG7x1ch6jrIUGx3e4q4vb
-         i4ozNkufUfpUMXtDhBwJxFdBi5dYXn3N6+rAKS49Kca2spsxiL1X5jXW5OxxQExxyPB5
-         mtn8C7cwExGjebtfAkAs6vAWhPNDr6SD3aHoHqaB73+jKuH7VQjS2Rp4CFL3Cqyr7pTJ
-         p8dmjR4mYm6fdo4+GoSjpl6nYl4XwkcOKU0xajZXIL2YxeDPiL3khk6uQ3bl7z+Kg35W
-         HKGQ==
+        Fri, 17 Dec 2021 10:54:35 -0500
+Received: by mail-ot1-f51.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so3360975otv.9;
+        Fri, 17 Dec 2021 07:54:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AHfUikZmyD4dINCWakIQJtobxvYGz5CvtkfmXC/JM0U=;
-        b=ULL3w/O3QGgSQ0xr5HBhJYm4PjfFL60bxQoxavULTaTn3XRp5cQTTQdhQ3/gGIHK2p
-         iD3mJA2vnsZrNfMdt3BEq4h/w99kW8JNbhn3hajYwEChtv96vl79Y6fsVPKfAmVomYvN
-         0arzn/td1zk0PFoCVvb/x+XdLqsAlxdJGCl/bi3j5vNY4CicFgTdDs5u5Zq9MTnR8hN3
-         9vGLaRHbRDMTXGGaVqTmI/Ht7g4Ws4a4keZcFIMCz5fIADb1Jmj2ZGcSE1usokZNtoLP
-         Ux2cl33cpQR8cj1ycCsq5uRegqJEpPSa96Nl036yVVqzpi8pzB/9SxUnUVyhpnu28cq3
-         DLag==
-X-Gm-Message-State: AOAM530HSxGI4ESVpZwC3rSk23zit9McxI4wZwBobCplU5PGYqQXVPwm
-        XIgX6OtgUnpuLCmr5WCLxGY=
-X-Google-Smtp-Source: ABdhPJyGxYhZSxDUxszzp9INdkaMS8zLvwT/pmwuIPWM1rk+PG085n9I8oYQLKBFYA2zw6Fgd+MA6A==
-X-Received: by 2002:a5d:6d8b:: with SMTP id l11mr3077055wrs.25.1639756464297;
-        Fri, 17 Dec 2021 07:54:24 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
-        by smtp.googlemail.com with ESMTPSA id k13sm7619520wri.6.2021.12.17.07.54.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 07:54:23 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
-Date:   Fri, 17 Dec 2021 16:54:22 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I6UGou8tw+hrlIjDJe1HLV3R0pIt3Y543ZdUOr3KwlA=;
+        b=PcXuAtVzX1XjzDFbSab2EXzacqp/LelUg9IRS5UQwRO/ZVb0yyrZHQY32Rg2ukIguc
+         FL06NAGyho9ujVs9Z5FpkQm6Te8qz42NNc8J+tewpmF3R1M+VqucPIcJO8RyELDjY4Pl
+         rTlR6oRz21+Kuh/StfJ8vAfokDV6+HD5kyLQ/pFkOaCrdlZQBRCKg0eBLHttweAC1+Ih
+         3eEAZZyZQW2VnYEr2qgQJQxGnsYngqhLzrcebKZx2OwoNg1nyB9Gi0f5mQO34ASnQj1I
+         v3QpCIh/3J/O3pJ28HVChWhrhu479s4aJ+z31fQNjy0/hHikstUT38xif9sZvAJvQKnU
+         q3Kw==
+X-Gm-Message-State: AOAM532GzcgpacP3W5NxYYY+WFnfWOMlB75weiIIUiVh5oJEwxliC34S
+        qVZY2gqco1A1v+XfyqEfp4TQGzBQNoOINeFnUGI=
+X-Google-Smtp-Source: ABdhPJxI3BFGfLFn0Yu88v5KngM9c9AtMViqvZSJAYfUkxvNCzgOHV6K0D9M8WiHcjjUOGN3r4Pi9QGTqYO86BcqXvA=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr2555238otf.198.1639756474489;
+ Fri, 17 Dec 2021 07:54:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     paulmck <paulmck@kernel.org>, maz <maz@kernel.org>,
-        frederic <frederic@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
- <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
- <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
- <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211216225320.2957053-1-qais.yousef@arm.com> <20211216225320.2957053-2-qais.yousef@arm.com>
+In-Reply-To: <20211216225320.2957053-2-qais.yousef@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Dec 2021 16:54:23 +0100
+Message-ID: <CAJZ5v0h4xWs5EregN4nM-WEJYtQ8hyfdrEybyy6eZsaqSFaNmg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/sugov: Ignore 'busy' filter when rq is capped
+ by uclamp_max
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Beata Michalska <Beata.Michalska@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 15:38, Mark Rutland wrote:
-> For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
-> vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
-> guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
-> elsewhere. Also, guest_enter_irq_off() conditionally calls
-> rcu_virt_note_context_switch(), but I can't immediately spot anything on the
-> exit side that corresponded with that, which looks suspicious.
+On Thu, Dec 16, 2021 at 11:53 PM Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> sugov_update_single_{freq, perf}() contains a 'busy' filter that ensures
+> we don't bring the frqeuency down if there's no idle time (CPU is busy).
+>
+> The problem is that with uclamp_max we will have scenarios where a busy
+> task is capped to run at a lower frequency and this filter prevents
+> applying the capping when this task starts running.
+>
+> We handle this by skipping the filter when uclamp is enabled and the rq
+> is being capped by uclamp_max.
+>
+> We introduce a new function uclamp_rq_is_capped() to help detecting when
+> this capping is taking effect. Some code shuffling was required to allow
+> using cpu_util_{cfs, rt}() in this new function.
+>
+> On 2 Core SMT2 Intel laptop I see:
+>
+> Without this patch:
+>
+>         uclampset -M 0 sysbench --test=cpu --threads = 4 run
+>
+> produces a score of ~3200 consistently. Which is the highest possible.
+>
+> Compiling the kernel also results in frequency running at max 3.1GHz all
+> the time - running uclampset -M 400 to cap it has no effect without this
+> patch.
+>
+> With this patch:
+>
+>         uclampset -M 0 sysbench --test=cpu --threads = 4 run
+>
+> produces a score of ~1100 with some outliers in ~1700. Uclamp max
+> aggregates the performance requirements, so having high values sometimes
+> is expected if some other task happens to require that frequency starts
+> running at the same time.
+>
+> When compiling the kernel with uclampset -M 400 I can see the
+> frequencies mostly in the ~2GHz region. Helpful to conserve power and
+> prevent heating when not plugged in.
+>
+> Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> ---
+>
+> I haven't dug much into the busy filter, but I assume it is something that is
+> still required right?
 
-rcu_note_context_switch() is a point-in-time notification; it's not 
-strictly necessary, but it may improve performance a bit by avoiding 
-unnecessary IPIs from the RCU subsystem.
+It is AFAICS.
 
-There's no benefit from doing it when you're back from the guest, 
-because at that point the CPU is just running normal kernel code.
+> If there's a better alternative we can take to make this
+> filter better instead, I'm happy to hear ideas. Otherwise hopefully this
+> proposal is logical too.
 
-Paolo
+It looks reasonable to me.
+
+For the schedutil changes:
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> uclampset is a tool available in util-linux v2.37.2
+>
+>  kernel/sched/cpufreq_schedutil.c |  10 ++-
+>  kernel/sched/sched.h             | 139 +++++++++++++++++--------------
+>  2 files changed, 86 insertions(+), 63 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index e7af18857371..48327970552a 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -348,8 +348,11 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>         /*
+>          * Do not reduce the frequency if the CPU has not been idle
+>          * recently, as the reduction is likely to be premature then.
+> +        *
+> +        * Except when the rq is capped by uclamp_max.
+>          */
+> -       if (sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
+> +       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+> +           sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
+>                 next_f = sg_policy->next_freq;
+>
+>                 /* Restore cached freq as next_freq has changed */
+> @@ -395,8 +398,11 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+>         /*
+>          * Do not reduce the target performance level if the CPU has not been
+>          * idle recently, as the reduction is likely to be premature then.
+> +        *
+> +        * Except when the rq is capped by uclamp_max.
+>          */
+> -       if (sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
+> +       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+> +           sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
+>                 sg_cpu->util = prev_util;
+>
+>         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index eb971151e7e4..294ebc22413c 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2841,6 +2841,67 @@ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags)
+>  static inline void cpufreq_update_util(struct rq *rq, unsigned int flags) {}
+>  #endif /* CONFIG_CPU_FREQ */
+>
+> +#ifdef arch_scale_freq_capacity
+> +# ifndef arch_scale_freq_invariant
+> +#  define arch_scale_freq_invariant()  true
+> +# endif
+> +#else
+> +# define arch_scale_freq_invariant()   false
+> +#endif
+> +
+> +#ifdef CONFIG_SMP
+> +static inline unsigned long capacity_orig_of(int cpu)
+> +{
+> +       return cpu_rq(cpu)->cpu_capacity_orig;
+> +}
+> +
+> +/**
+> + * enum cpu_util_type - CPU utilization type
+> + * @FREQUENCY_UTIL:    Utilization used to select frequency
+> + * @ENERGY_UTIL:       Utilization used during energy calculation
+> + *
+> + * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+> + * need to be aggregated differently depending on the usage made of them. This
+> + * enum is used within effective_cpu_util() to differentiate the types of
+> + * utilization expected by the callers, and adjust the aggregation accordingly.
+> + */
+> +enum cpu_util_type {
+> +       FREQUENCY_UTIL,
+> +       ENERGY_UTIL,
+> +};
+> +
+> +unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+> +                                unsigned long max, enum cpu_util_type type,
+> +                                struct task_struct *p);
+> +
+> +static inline unsigned long cpu_bw_dl(struct rq *rq)
+> +{
+> +       return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;
+> +}
+> +
+> +static inline unsigned long cpu_util_dl(struct rq *rq)
+> +{
+> +       return READ_ONCE(rq->avg_dl.util_avg);
+> +}
+> +
+> +static inline unsigned long cpu_util_cfs(struct rq *rq)
+> +{
+> +       unsigned long util = READ_ONCE(rq->cfs.avg.util_avg);
+> +
+> +       if (sched_feat(UTIL_EST)) {
+> +               util = max_t(unsigned long, util,
+> +                            READ_ONCE(rq->cfs.avg.util_est.enqueued));
+> +       }
+> +
+> +       return util;
+> +}
+> +
+> +static inline unsigned long cpu_util_rt(struct rq *rq)
+> +{
+> +       return READ_ONCE(rq->avg_rt.util_avg);
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_UCLAMP_TASK
+>  unsigned long uclamp_eff_value(struct task_struct *p, enum uclamp_id clamp_id);
+>
+> @@ -2897,6 +2958,21 @@ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
+>         return clamp(util, min_util, max_util);
+>  }
+>
+> +/* Is the rq being capped/throttled by uclamp_max? */
+> +static inline bool uclamp_rq_is_capped(struct rq *rq)
+> +{
+> +       unsigned long rq_util;
+> +       unsigned long max_util;
+> +
+> +       if (!static_branch_likely(&sched_uclamp_used))
+> +               return false;
+> +
+> +       rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+> +       max_util = READ_ONCE(rq->uclamp[UCLAMP_MAX].value);
+> +
+> +       return max_util != SCHED_CAPACITY_SCALE && rq_util >= max_util;
+> +}
+> +
+>  /*
+>   * When uclamp is compiled in, the aggregation at rq level is 'turned off'
+>   * by default in the fast path and only gets turned on once userspace performs
+> @@ -2917,73 +2993,14 @@ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
+>         return util;
+>  }
+>
+> +static inline bool uclamp_rq_is_capped(struct rq *rq) { return false; }
+> +
+>  static inline bool uclamp_is_used(void)
+>  {
+>         return false;
+>  }
+>  #endif /* CONFIG_UCLAMP_TASK */
+>
+> -#ifdef arch_scale_freq_capacity
+> -# ifndef arch_scale_freq_invariant
+> -#  define arch_scale_freq_invariant()  true
+> -# endif
+> -#else
+> -# define arch_scale_freq_invariant()   false
+> -#endif
+> -
+> -#ifdef CONFIG_SMP
+> -static inline unsigned long capacity_orig_of(int cpu)
+> -{
+> -       return cpu_rq(cpu)->cpu_capacity_orig;
+> -}
+> -
+> -/**
+> - * enum cpu_util_type - CPU utilization type
+> - * @FREQUENCY_UTIL:    Utilization used to select frequency
+> - * @ENERGY_UTIL:       Utilization used during energy calculation
+> - *
+> - * The utilization signals of all scheduling classes (CFS/RT/DL) and IRQ time
+> - * need to be aggregated differently depending on the usage made of them. This
+> - * enum is used within effective_cpu_util() to differentiate the types of
+> - * utilization expected by the callers, and adjust the aggregation accordingly.
+> - */
+> -enum cpu_util_type {
+> -       FREQUENCY_UTIL,
+> -       ENERGY_UTIL,
+> -};
+> -
+> -unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+> -                                unsigned long max, enum cpu_util_type type,
+> -                                struct task_struct *p);
+> -
+> -static inline unsigned long cpu_bw_dl(struct rq *rq)
+> -{
+> -       return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;
+> -}
+> -
+> -static inline unsigned long cpu_util_dl(struct rq *rq)
+> -{
+> -       return READ_ONCE(rq->avg_dl.util_avg);
+> -}
+> -
+> -static inline unsigned long cpu_util_cfs(struct rq *rq)
+> -{
+> -       unsigned long util = READ_ONCE(rq->cfs.avg.util_avg);
+> -
+> -       if (sched_feat(UTIL_EST)) {
+> -               util = max_t(unsigned long, util,
+> -                            READ_ONCE(rq->cfs.avg.util_est.enqueued));
+> -       }
+> -
+> -       return util;
+> -}
+> -
+> -static inline unsigned long cpu_util_rt(struct rq *rq)
+> -{
+> -       return READ_ONCE(rq->avg_rt.util_avg);
+> -}
+> -#endif
+> -
+>  #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
+>  static inline unsigned long cpu_util_irq(struct rq *rq)
+>  {
+> --
+> 2.25.1
+>

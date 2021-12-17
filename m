@@ -2,98 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56ABE478113
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1299478117
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhLQAHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:07:25 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:56889 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLQAHY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:07:24 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFTnP3GSkz4xdH;
-        Fri, 17 Dec 2021 11:07:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639699642;
-        bh=SXpDAUuTPz/50alIAYRDF3NrWV0acgZ4F6yu/uAsW4s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JOwyf2+EIfLp2NWEmZmAbdZEZ5zwMk7EHkCgydtQFOo0cARmaXHMbIor5ISYoN0bl
-         FVyeXP0junobNVRHUkBhVOk3uxJVCghkJS9PVJe1SzrJRf6M/FgMOuVyNMKOoRhKpi
-         oP/OtEmdVs8QnCLGnqOOESzo1Jknm0hpuMn2i/+BA2vO2VUp9egifzzfd6BLtIy34+
-         7HoFKKn0PRGC5L9CYgRXqZUfpuh3wEe8eJjK14Ln3ACU2RLFPpknE02euMEYWSuXEW
-         wVqgzSMMlpKcqSiZ9jertfJbj1NRffqUKVWvLdUJApCRYztsACAzdpmRAl9yytElAr
-         8fznpSe+z10RA==
-Date:   Fri, 17 Dec 2021 11:07:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the fscache tree with the asm-generic
- tree
-Message-ID: <20211217110720.21e8020b@canb.auug.org.au>
+        id S229664AbhLQAIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:08:35 -0500
+Received: from mx4.wp.pl ([212.77.101.12]:55521 "EHLO mx4.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229436AbhLQAIe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 19:08:34 -0500
+Received: (wp-smtpd smtp.wp.pl 6874 invoked from network); 17 Dec 2021 01:08:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1639699710; bh=z87+zKOvNkETmRkuO/mzBu/FQqdESHMB5S8NqdVjEy4=;
+          h=From:To:Subject;
+          b=ZGxmhbRmEaxh8xlghkfHt5Zv4tikoMy1u/tHGLaku3Zm/iaII3KtZ19Nut19zMZcE
+           ekTPcQxlbVWY6DxbPgabN8yVeG2icc56gXCm+77kYVyOR0x838as/TK3BPSzolMDbA
+           rZecNjU8pc+/Z80xPSbEYFnqX0CLYoMgs4PnABOg=
+Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hauke@hauke-m.de>; 17 Dec 2021 01:08:30 +0100
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
+        olek2@wp.pl, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] net: lantiq_xrx200: increase buffer reservation
+Date:   Fri, 17 Dec 2021 01:07:39 +0100
+Message-Id: <20211217000740.683089-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cqtiIWZmudd0HzqPAb6Me5T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 6cd76d0e47cdbff75baa8b6cc1d154b3
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [8cMU]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/cqtiIWZmudd0HzqPAb6Me5T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Changes in v3:
+ - Removed -1 from the buffer size calculation
+ - Removed ETH_FCS_LEN from the buffer size calculation
+ - Writing rounded buffer size to descriptor 
 
-Hi all,
+Changes in v2:
+ - Removed the inline keyword
 
-Today's linux-next merge of the fscache tree got a conflict in:
+Aleksander Jan Bajkowski (1):
+  net: lantiq_xrx200: increase buffer reservation
 
-  Documentation/filesystems/caching/fscache.rst
+ drivers/net/ethernet/lantiq_xrx200.c | 34 ++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-between commits:
+-- 
+2.30.2
 
-  d881c06e0890 ("Documentation, arch: Remove leftovers from fscache/cachefi=
-les histograms")
-  5c61c384095a ("Documentation, arch, fs: Remove leftovers from fscache obj=
-ect list")
-
-from the asm-generic tree and commit:
-
-  ac1c0f96f4c0 ("fscache: Rewrite documentation")
-
-from the fscache tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/cqtiIWZmudd0HzqPAb6Me5T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG71LgACgkQAVBC80lX
-0GyBNgf7BWBZI4SWWBdxvr7kPL/ST0YPWBNlmHj8w5+HjrI+J/GX0EfNFL6hutDl
-N/t3qYPZ7kYcgRbYeWoOeDohHzSYlTT4NDT2JtVoqoi2TRLEmZ78cToUbYZXxTzB
-PwNSn3+n7DVQq516qZBkfDeGAUyHxcY5/zzIKNRGqXpuEU4HVW9pUlYojpRXOJRM
-7U4i5MVJAjt1TpgrHhCmLc7gCwdPL+q65qDpv8Dj/7XvoBcl9xorHiqUpFxqpKMP
-NLagJO3fd96f8gOfNrx/fGf/bnB5g53wmS5Su8kH+hTN65Y6jpVl4cJnSwfhUHG9
-FVDCmX63co+IDIibygZVVUXz4Hy38g==
-=j/CT
------END PGP SIGNATURE-----
-
---Sig_/cqtiIWZmudd0HzqPAb6Me5T--

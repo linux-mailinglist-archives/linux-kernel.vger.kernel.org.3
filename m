@@ -2,95 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F59B478ECA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C20478ECD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbhLQPAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:00:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:58430 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237743AbhLQPAV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:00:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 572B11435;
-        Fri, 17 Dec 2021 07:00:21 -0800 (PST)
-Received: from [10.57.83.65] (unknown [10.57.83.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 156CF3F774;
-        Fri, 17 Dec 2021 07:00:19 -0800 (PST)
-Message-ID: <5c509114-f383-2876-36ae-8648d886a09e@arm.com>
-Date:   Fri, 17 Dec 2021 15:00:18 +0000
+        id S237765AbhLQPA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:00:28 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:42779 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237753AbhLQPA1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 10:00:27 -0500
+Received: by mail-oi1-f180.google.com with SMTP id p4so3945102oia.9;
+        Fri, 17 Dec 2021 07:00:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gj1+YCrvjagMZfZ2hlaDMtS0ue6pd0IPHkIateaFnXc=;
+        b=egc+oviAkzUDvTjH0Ct1s0LwZEBGlc0blg8ebSb05V7fgKZK2UWLhL9RIN6lCLfxtE
+         lQu5/5qphWxmAEW9gt5rikhH0KT53EVwy+SfUR/iEBXPQNyoQ0mxMZOIu5EmIUHaBBwj
+         aON7LGvcOpDIk0bnRoQtHWDnGQ4KFAJr70SBkI8UltnbSUW7DBlwziRsuYNeT1AQFeMj
+         fJIQc4Gn9M+o2WXBlu1JPdQiUiH89oc3DIvXR8uD4WwRRc4WF0y1quuWJA82s7xuiP3v
+         bCFuHcODpC2C46K38j3DX8AclQM+zGfuw91eFJHobhFPnIFsE+muSSPXuUtUatMd7+49
+         w0uA==
+X-Gm-Message-State: AOAM532DhsaSgn35SnJJYOZpXto9D96tsL9+pKUd2TZxrQJGUohRV18t
+        EGOmWh0q3WJBGTgreiadL123W4uDOA==
+X-Google-Smtp-Source: ABdhPJyxF8MIKKhouuSw5bmg2S1qo4tkS+gWPoAwkO1+xjcuIa5GdJGlMJFOkzd07KICvV56iZ4jNg==
+X-Received: by 2002:aca:230b:: with SMTP id e11mr8164558oie.22.1639753226553;
+        Fri, 17 Dec 2021 07:00:26 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be12sm1797328oib.50.2021.12.17.07.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 07:00:26 -0800 (PST)
+Received: (nullmailer pid 2882466 invoked by uid 1000);
+        Fri, 17 Dec 2021 15:00:25 -0000
+Date:   Fri, 17 Dec 2021 09:00:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Al Cooper <alcooperx@gmail.com>,
+        linux-ide@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v4 4/6] dt-bindings: ata: Convert Broadcom SATA to YAML
+Message-ID: <YbymCeT0zYH+OiH2@robh.at.kernel.org>
+References: <20211217042001.479577-1-f.fainelli@gmail.com>
+ <20211217042001.479577-5-f.fainelli@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH 02/12] perf test: Shell - only run .sh shell files to skip
- other files
-To:     carsten.haitzler@foss.arm.com, linux-kernel@vger.kernel.org
-Cc:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        inux-perf-users@vger.kernel.org, acme@kernel.org
-References: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
- <20211215160403.69264-2-carsten.haitzler@foss.arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20211215160403.69264-2-carsten.haitzler@foss.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217042001.479577-5-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2021 16:03, carsten.haitzler@foss.arm.com wrote:
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
+On Thu, 16 Dec 2021 20:19:59 -0800, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
 > 
-> You edit your scripts in the tests and end up with your usual shell
-> backup files with ~ or .bak or something else at the end, but then your
-> next perf test run wants to run the backups too. You might also have perf
-> .data files in the directory or something else undesireable as well. You end
-> up chasing which test is the one you edited and the backup and have to keep
-> removing all the backup files, so automatically skip any files that are
-> not plain *.sh scripts to limit the time wasted in chasing ghosts.
-> 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->   tools/perf/tests/builtin-test.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ----------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 90 +++++++++++++++++++
+>  2 files changed, 90 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
 > 
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index ece272b55587..849737ead9fd 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -297,7 +297,20 @@ static const char *shell_test__description(char *description, size_t size,
->   	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
->   		if (!is_directory(base, ent) && \
->   			is_executable_file(base, ent) && \
-> -			ent->d_name[0] != '.')
-> +			ent->d_name[0] != '.' && \
-> +			(shell_file_is_sh(ent->d_name) == 0))
-> +
-> +static int shell_file_is_sh(const char *file)
 
-nit: In line with the other "helpers", could this be:
-
-is_shell_file_sh() or even is_shell_script() ?
-
-Also, for consistency, could this be bool, like the other helpers ?
-
-i.e., returns true when the condition matches ?
-
-Suzuki
-
-> +{
-> +	const char *ext;
-> +
-> +	ext = strchr(file, '.');
-> +	if (!ext)
-> +		return -1;
-> +	if (!strcmp(ext, ".sh"))
-> +		return 0;
-> +	return -1;
-> +}
-
-
->   
->   static const char *shell_tests__dir(char *path, size_t size)
->   {
-
+Applied, thanks!

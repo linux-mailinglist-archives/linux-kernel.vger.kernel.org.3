@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF834781AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340C34781B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbhLQAjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:39:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32537 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231276AbhLQAig (ORCPT
+        id S231735AbhLQAjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:39:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54050 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231897AbhLQAj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:38:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639701516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mtq9hJy4L+ZVvskxJioJNZiL+dpEFQcWZvYjYc3YgGo=;
-        b=ZRy5qQCpxQtX8Z7kPWIhNaMmFYQO10EjCZcFxF2TJAmd1RTR2rAxX7CC3vySi/8R0vcZSe
-        8NzLSgHk5TeEmUz6wYE5cE6C2Ps5CYPHz735ePN55bGXPNzblQ8/bvcFGtJuX2RNE8bygF
-        yTQAHWC5H9kENCFKSH4viYp3dLDFjbs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-vXH-RGarP5mG2_xvzzJkWg-1; Thu, 16 Dec 2021 19:38:35 -0500
-X-MC-Unique: vXH-RGarP5mG2_xvzzJkWg-1
-Received: by mail-wm1-f72.google.com with SMTP id 144-20020a1c0496000000b003305ac0e03aso2066044wme.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:38:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Mtq9hJy4L+ZVvskxJioJNZiL+dpEFQcWZvYjYc3YgGo=;
-        b=4nDGJQTbjs74hrhQMTrRrA5IChiIBId7WiTLzEG+wHsYGIFUKZjVAYlkBxFv29ZjKJ
-         +NW9NgzM63xhbkV32fd6ZKWafrPzYNvUXz7Xn5P17zXJdaytttnskNTQLEe1e2kmcz9m
-         n6IWTj8EHj+rWDjXLOJE/OBrO1S904cclG4QRytyQPDzEncKXzn4h41X4Fhhn1tqJ63K
-         oeBTkrwxTNBbyOcww5Yopx+Ocd2KFkYcpt6JHEpBBTLq1b4dZ/SdOwufkIUXwA50ZyBy
-         +hgRAA64jtayiAFwCpg0y0T2veyep5yqxVa8yapTvK0zObZ8nWsJhOWPdz4gkhlw4VxG
-         xxsA==
-X-Gm-Message-State: AOAM5316umqqy4D7ZugR+P2T8aiXy6Y+iNmrpGHx32i9Hkl67KnTkpsM
-        60YhICL8O4dB3WwywFB0DE7GN+iavyG66VlZM6gENnqY3InJUk35B7mKzKwykFRwhk9lRSLbA5n
-        EdEq9N9prBlM6XzPlOkBypAp61vsu2GZTlnWEkO/dbl5kCh9lZgMnTLfTeV0hSpgy+k4SjXRXXp
-        A=
-X-Received: by 2002:a5d:4d06:: with SMTP id z6mr376753wrt.117.1639701513729;
-        Thu, 16 Dec 2021 16:38:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxZtlDEMwB4C73UbqOCIrjZQR5w2AX4DwoBRjCTOcB54Y0M6HuUoIkYjDPgo1wzkOWj15okeg==
-X-Received: by 2002:a5d:4d06:: with SMTP id z6mr376740wrt.117.1639701513444;
-        Thu, 16 Dec 2021 16:38:33 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg12sm7368433wmb.5.2021.12.16.16.38.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 16:38:33 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
-Subject: [PATCH v2 37/37] drm/xen: Add support for the nomodeset kernel parameter
-Date:   Fri, 17 Dec 2021 01:37:52 +0100
-Message-Id: <20211217003752.3946210-38-javierm@redhat.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211217003752.3946210-1-javierm@redhat.com>
-References: <20211217003752.3946210-1-javierm@redhat.com>
+        Thu, 16 Dec 2021 19:39:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCB9961FDE;
+        Fri, 17 Dec 2021 00:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DAEAC36AF9;
+        Fri, 17 Dec 2021 00:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639701566;
+        bh=75TZSoCMHP9oRCfE0m+T4/+QO5utCgszrUM5wKG5cwQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mZyfyMzL/elcJDR0irvrGMfdhr/2ltDYW972gtQWrb7cw3hZYXTHjsxupZQ1D9YLL
+         8wmRFAEk450/cS1Vx0ySWq/gVzrlPxbueGdopBr2vn3Ft+CjiaoYshxmRQ0o8zXwci
+         PXdaSfEqgolrE36rJe5q5RquIsN8ZNdqYdpgD/Sc8zBPr4eyKXral6ZCAXABAf62xh
+         biUJ2A69tcnng4iK79leN3NzfOvZS7GwzYS2R2baceXxQtwtk/c88Ij9K+GjsLFsAi
+         6Bwvx6dY5mLsqkLFgJ3SvIS2f8UnQirFKY+feoLts4dw4vHnQUvNXfdaL8zM9g3NMf
+         4IettCaLbWCDA==
+Received: by mail-ed1-f41.google.com with SMTP id y22so1773140edq.2;
+        Thu, 16 Dec 2021 16:39:26 -0800 (PST)
+X-Gm-Message-State: AOAM5331YybD9FWv6W/W8Vizs6bKTl36abeJtgKMs8jwKETr+yz3DWNi
+        IdzHsewGW9sdzO0b8vfBiRMlXA9aRABfwGZLmw==
+X-Google-Smtp-Source: ABdhPJyRTG/8JNTAhLNq0O/FQ8QnwEpuHFO7fkkcyl10+duI5Vhu10MpqAJ5TkeaLA5s5zndkwWHdgqHiN9w9F8ztEI=
+X-Received: by 2002:a17:907:94c2:: with SMTP id dn2mr457207ejc.325.1639701564480;
+ Thu, 16 Dec 2021 16:39:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211217001238.16298-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211217001238.16298-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 16 Dec 2021 18:39:13 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLf0FHYt-+4hEG3FkecrBJOwd=ub_yeEKWZ1DKPUycgkQ@mail.gmail.com>
+Message-ID: <CAL_JsqLf0FHYt-+4hEG3FkecrBJOwd=ub_yeEKWZ1DKPUycgkQ@mail.gmail.com>
+Subject: Re: [PATCH] ata: pata_of_platform: Use of_irq_to_resource() to
+ populate IRQ resource
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to disable Documentation/admin-guide/kernel-parameters.txt, this
-parameter can be used to disable kernel modesetting.
+On Thu, Dec 16, 2021 at 6:12 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use of_irq_to_resource().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+>
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+>
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/ata/pata_of_platform.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/ata/pata_of_platform.c b/drivers/ata/pata_of_platform.c
+> index 35aa158fc976..557f349eb533 100644
+> --- a/drivers/ata/pata_of_platform.c
+> +++ b/drivers/ata/pata_of_platform.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/ata_platform.h>
+>  #include <linux/libata.h>
+> @@ -25,11 +26,12 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
+>         struct device_node *dn = ofdev->dev.of_node;
+>         struct resource io_res;
+>         struct resource ctl_res;
+> -       struct resource *irq_res;
+> +       struct resource irq_res;
+>         unsigned int reg_shift = 0;
+>         int pio_mode = 0;
+>         int pio_mask;
+>         bool use16bit;
+> +       int irq;
+>
+>         ret = of_address_to_resource(dn, 0, &io_res);
+>         if (ret) {
+> @@ -45,7 +47,9 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
+>                 return -EINVAL;
+>         }
+>
+> -       irq_res = platform_get_resource(ofdev, IORESOURCE_IRQ, 0);
+> +       irq = of_irq_to_resource(dn, 0, &irq_res);
 
-DRM drivers will not perform display-mode changes or accelerated rendering
-and only the system framebuffer will be available if it was set-up.
+No, platform_get_irq() please. I really want to get rid of the 4 users
+of of_irq_to_resource() in the tree, not add more.
 
-But only a few DRM drivers currently check for nomodeset, make this driver
-to also support the command line parameter.
+Yeah, that means __pata_platform_probe() needs to change, but it's all
+of 2 callers. Really, I think pata_platform.c and pata_of_platform.c
+should be merged. I'm guessing the separation traces back to DT using
+a different bus type.
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
----
-
-(no changes since v1)
-
- drivers/gpu/drm/xen/xen_drm_front.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/gpu/drm/xen/xen_drm_front.c b/drivers/gpu/drm/xen/xen_drm_front.c
-index e63088c2121d..0d8e6bd1ccbf 100644
---- a/drivers/gpu/drm/xen/xen_drm_front.c
-+++ b/drivers/gpu/drm/xen/xen_drm_front.c
-@@ -495,6 +495,9 @@ static int xen_drm_drv_init(struct xen_drm_front_info *front_info)
- 	struct drm_device *drm_dev;
- 	int ret;
- 
-+	if (drm_firmware_drivers_only())
-+		return -ENODEV;
-+
- 	DRM_INFO("Creating %s\n", xen_drm_driver.desc);
- 
- 	drm_info = kzalloc(sizeof(*drm_info), GFP_KERNEL);
--- 
-2.33.1
-
+Rob

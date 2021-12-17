@@ -2,133 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 294584792FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA47F479300
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238371AbhLQRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:42:48 -0500
-Received: from mail-am6eur05on2062.outbound.protection.outlook.com ([40.107.22.62]:6476
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229694AbhLQRmr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:42:47 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DIOly2OTJ/9CUFJQWANcKGoXmiOtVWE/SK1F3AEAg2WjykJhDHNQvv7bAp98+NgPClMAdPPJ37/UePRyGlJQPs36Sblgg9KnCNw/3vMk8962vb0ljIOFOTRKonrQZuEvIqUCAcQsPhKhexCOAzYr/tbDmHbcqewofUOEeXYH+73rUoioHkwMBJfo5o9T8xJbPlvwzlhjGSFYS0taBlBYeiKCYSo5swi7mX8HGpcsFKVBrrzrTLx7NSMY833NnZ+/OArMIbVbpFhuyt5yEEom/mS+qqQlJbAJfuxXNBsSFMJtx/eO3zB9ZHt8xba05D0bc2VA5xvXmsyHTaLj3/lIwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6A7cQN2tFBrg5zmhnNVaYTKH25VoZFa2CclqdWmOU5U=;
- b=MMYWwkuJw2t1k8b0Glk7ueGxFXTEjs7MaOodUXvdgNqo60PyoUM0u5s0Zbau9/O2OZUkQ+odzPadbpZmqEnc/8ctxcq+bPJ8hmqalQQ2YoVBRrLkH8nVVYQsj7oDG7eoLJy8fHAX8QxYbo40hrIGFeXfV3b3TFfEcmHTboRiSpPaIuxdvLrTr2imsjL4N5Gmp3yVR9hw1ESu3WKp6g14MQ03e/Nyzoq2WYDeRrYu2Bz6RU+B+aTdXwLvc/LTyF/2AzxUBDcjC/dlwHOkJalpAu9R6a916SWu11t05ybwtDMoyDNdl/uXgnYezx6PuqUzoUZKnpvJJRDXCk8AYCzHYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=secospa.onmicrosoft.com; s=selector2-secospa-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6A7cQN2tFBrg5zmhnNVaYTKH25VoZFa2CclqdWmOU5U=;
- b=Dz+25KQ9JOY5G11vRWexQz/r8cmiLpRU3svkzvu3nBSzNdS2P+7idFOBWuytzGwqCjR9aYzwa4yO2EWcHW8H3FbAuH1N/BP0FLwAdlYmslA6t6YGESVeMVbk5p1G6Y8xf/NEPnNjnNhDsCkxemkh0yW9D/vGmxMGdO2i9JzXxeI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
- by DB6PR0302MB2630.eurprd03.prod.outlook.com (2603:10a6:4:ac::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Fri, 17 Dec
- 2021 17:42:44 +0000
-Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::9093:a60b:46b7:32ee]) by DB7PR03MB4523.eurprd03.prod.outlook.com
- ([fe80::9093:a60b:46b7:32ee%4]) with mapi id 15.20.4778.019; Fri, 17 Dec 2021
- 17:42:44 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Stuart Yoder <stuyoder@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH] docs: networking: dpaa2: Fix DPNI header
-Date:   Fri, 17 Dec 2021 12:42:31 -0500
-Message-Id: <20211217174231.36419-1-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR01CA0057.prod.exchangelabs.com (2603:10b6:208:23f::26)
- To DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+        id S239216AbhLQRnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:43:01 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15822 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238518AbhLQRm7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 12:42:59 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHHLvKi024132;
+        Fri, 17 Dec 2021 17:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xqxP4WBcDQzakO2WKSxBM/qT0CRp0SAYV75Dpsw0VNs=;
+ b=Oc6sF1ZLEfrNG3vXNOX92WRRUEhDYZ/IeuTDeLjqLQYia2TRUPPRcAPqOxrNPjK+3YNY
+ aShSDLfrkv0IHXOMcvEVbV4zuIwVBZ/seRhz/jN2/GhxEcXA54jDaAJWSEeoyp6bz1os
+ lue8eij6gO6n+O84CvYhb0429gzPbQxyB6rAf9d74meJSNcYeuvj0cmFUt8U7oyy614U
+ 57eQRFeyVyWbniYD+CP2AEKwizhCL2d78f3Dh8pUWKF9k98eYGneYejUA0HPNRKFQ3Cw
+ zEthVfOgqqj+e9TnLIjdAB9b5uKbf1RKA0weVoN2FcVJbBUwiJz9pTJR0BvEcl5nHAbS hA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbjyq90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:42:58 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHHNIf1031311;
+        Fri, 17 Dec 2021 17:42:58 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbjyq8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:42:58 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHHBfmB012876;
+        Fri, 17 Dec 2021 17:42:57 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01dal.us.ibm.com with ESMTP id 3cy7e55xeb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 17:42:57 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHHgtlv36110826
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 17:42:56 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD06B12405A;
+        Fri, 17 Dec 2021 17:42:55 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4113C124058;
+        Fri, 17 Dec 2021 17:42:52 +0000 (GMT)
+Received: from [9.211.79.24] (unknown [9.211.79.24])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Dec 2021 17:42:52 +0000 (GMT)
+Message-ID: <abc2bcc9-f5bd-e32a-6561-286c3a508408@linux.ibm.com>
+Date:   Fri, 17 Dec 2021 12:42:51 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c4962dae-d3e7-431d-f87a-08d9c184a1c2
-X-MS-TrafficTypeDiagnostic: DB6PR0302MB2630:EE_
-X-Microsoft-Antispam-PRVS: <DB6PR0302MB2630769BF2554B681516C80B96789@DB6PR0302MB2630.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 81UJgzcU3xtSTA0J5f7CDUokqsaZ5QmzDZCh71/fWeSBVwnMk2tKK2q8kFIyJ5u+2EghO8FdlogSNPEi1nikx3b6qxdawxhS5WWevTLj070w900yrJu2XVdbKXc7ljPsepKcCsTVdEvlX3Ocb37ngIVz0dkz4yKYH8ebBQpG5k7wZzaW6n5eu10jAZqTtu7LVar2c4cPNs5XGZl9eUqBM/HEezVYLbsD10J36I3+qJRysxGS1KzcjWGTIkO1OO76UhWBMRoP8Wi46QXfcY0BiwE2JIfaxMlBfhWIjBv2L5jjksP2gi3IoqVmoYdg6DA9cjL8YKyozWhl1b4SdoIClzYkdgnLazXJNNNswXgKoZ7mFg5sNChA07qEfAWaQaqhOxJgwgh8HoVqN+9fraPfdDUQ6GoSAElaamUR4PxztHxWzpxda+BOD1ul8qeiJLHM4Q6JQXGp8bvzrZ/RLz+nR3tHZlXMbfrF3VY4eCNj9nZ880V/+MGOr8+EUeAMndSQ/+LHFZFAV3vYAeLM8J0ut0mt1YxvYUreNJ0/Ny2uRFyXTfmhxJf0XaQLbB75/CPkewZ7ISy+Nokmc1R8vTfA/Ro5DUnEmOjylocpeURuWDnd/T/LAN8sJHZ5zw3ZrH2fYEDhTuv+LW7vx5SI5Do8f8nQ4+HT95wgx8ia+AhGgWKu/0q0u8YsDx+7DZPcIuV69ocUGKvtDx/qLEv2YsZd2A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(54906003)(6512007)(38100700002)(2906002)(2616005)(38350700002)(44832011)(8936002)(316002)(66476007)(6486002)(1076003)(6506007)(5660300002)(36756003)(6666004)(52116002)(508600001)(86362001)(66556008)(66946007)(26005)(4326008)(186003)(107886003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BP98w6wN9c5H88/iZPSp32dCQ1ihq+DpHwmoFAxqptgB3uUGBO/jlPxPI8vY?=
- =?us-ascii?Q?BteTlQ3HVx3DiyFTiSxNZzOROb+sePKgawMoZKffOtGwhX+7H8TdnJi+qP0q?=
- =?us-ascii?Q?KE5lEn7vh0iywCd0ed4WrdM49hr9aEg+tvxMovguY8zye5C7WBCyvy+O493I?=
- =?us-ascii?Q?lWSrva8iKLvyyPe0gXD2RPKnPSWhJHhytkPe0tN2UZxF4hLiXZyYfQdCuZRW?=
- =?us-ascii?Q?aMKqWuxtpkbdO2wpdZ7W/y15u02mBzIbZir9OcDNdkJfiMZUeazMLOsV/oBM?=
- =?us-ascii?Q?h6keDIdu3l73KGk71TwGRBCJEGMrByzF1F0NyeHTU1Xxj+sKPw2DBS9UmfZH?=
- =?us-ascii?Q?J9Dqsxsd6OBsR8rjM+Tr1zj3llGAmlvESSe6FX9HHQ9dsJKUEvdcbEzhcWph?=
- =?us-ascii?Q?pThmbBtFhhO2TFB6TL7oiNFTk9yW40nUKPmHHqcmeGe/MbAKoAykAA9FjjWP?=
- =?us-ascii?Q?y1oGZGl1y1w352xyoJcXFzDOkSO5FocBpe9czx1+ehCEhvm1U554XpI6gMGg?=
- =?us-ascii?Q?K5lcnwNzi+pqot32jIScQl7lkA3Fm+3hyKUvcXGcm2+T2V3i5l121sHs+YUD?=
- =?us-ascii?Q?kaf5MehJTcV8oqrqer006CGavQI6NFTWfpDKc0bwDHgyxKhGJDuA6fYjlETe?=
- =?us-ascii?Q?QxdduAvy85N2NOwer1jvNrsZ895jqg3ukk6V0dxulM1ibE4hQihAIraygfic?=
- =?us-ascii?Q?NDGuEZ433P+XirBgNDGgctaWjEI9cIz6OPyjbvy10bF2MnX9Do8ZKIEMsbLm?=
- =?us-ascii?Q?Eb3pFrTJJKYdge9Im6OY94EC+tJGtq/a6Z61Nq7ZFqpmWWazLWD+bPWTXCo4?=
- =?us-ascii?Q?nDm0EiEowzcqa6cYJZXxhG503zV1E3YXBhJzvmzo4Y1N8PQjAplP6hpC/BI9?=
- =?us-ascii?Q?UH6aVphZ/f8gOVfsWrHMnsG9ELB+xHsUtUnTP6OT/rgfMPPAdUHLA7gtoMof?=
- =?us-ascii?Q?MrLSxdnRIbFynHTF3OcCyYCqHnrZ+KHFpVroUK/h+gVf2MIUBoxoEFiuyJoZ?=
- =?us-ascii?Q?Ms/ukKPgfXS17mPyTip09s//hJs3BO3CeNkPfcE8OUYTCU1fS/NmlXGw/hBU?=
- =?us-ascii?Q?7vH+p8RoHFAL2dAywiLmYglKl3ZH+CsMTDHSnKjC2E3eYXckbkp6lm+ZUW25?=
- =?us-ascii?Q?5+tuAnICxmIkmunHTjiGl+DuJ4tddJp7uuDNT/RDTg97AaaEXTmsJKU6a/T9?=
- =?us-ascii?Q?4xi8pdj0Vtxnr9bj7RrD17AsunhFN1B86BHKGy69FsbpKyftRgSqn9GmD5tw?=
- =?us-ascii?Q?uqkKSYo0uY2BAbyB8v3N3UHsV9/BIEHk37XkBzoSMjYBmEVCCjSmRTKtEC/b?=
- =?us-ascii?Q?hNl15mBo8e/ohEDWv8k5kd1kslVoDtu/IZLCZ3G19wBOACb6yCcGsmUkdn/l?=
- =?us-ascii?Q?SR6H19xXzwAJK4xNlQkcNZBj4IEga8kANcz/0rrg+Owr4qvRpGxwFVmDVW6F?=
- =?us-ascii?Q?XpflhAvAOTXl942fGBtYyU2xrxlXOwus9KO9tzCZRDaW0wKTUu463ycpodwq?=
- =?us-ascii?Q?gVzwYm53dEl1wc+YHs+xZP+887iae6L24GS/P9F+14XPpfxnSs3hhonUIlws?=
- =?us-ascii?Q?jm/73O0ScgDzQGkfwpX0K843IK3V9zP81kZvQ36mUO5beO4GyR3YMYFbFYMX?=
- =?us-ascii?Q?insddazUPL3l2iJst2EFLAg=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4962dae-d3e7-431d-f87a-08d9c184a1c2
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 17:42:44.5637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: itjkDoBSUnw68LkKnC0Ax6/prjkMkOfJAcgD2zsZe0ZgIWjZuTWm/HBlTyQ3t1omfKfDFZIE6V63euybTD0yag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0302MB2630
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 15/32] KVM: s390: pci: enable host forwarding of Adapter
+ Event Notifications
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-16-mjrosato@linux.ibm.com>
+ <8fdf9da0-8213-f116-5e2f-5767e1d9b80e@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <8fdf9da0-8213-f116-5e2f-5767e1d9b80e@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 99mPdl16XJNvCoqPHhILdhOpWd8NVRGF
+X-Proofpoint-ORIG-GUID: p5OVMoIjX3pJtdLk4eBmFHTKVqpPxEm1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_07,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112170100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DPNI object should get its own header, like the rest of the objects.
+On 12/17/21 11:56 AM, Christian Borntraeger wrote:
+> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+>> In cases where interrupts are not forwarded to the guest via firmware,
+>> KVM is responsible for ensuring delivery.  When an interrupt presents
+>> with the forwarding bit, we must process the forwarding tables until
+>> all interrupts are delivered.
+>>
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+> [...]
+> 
+>> +static void aen_host_forward(struct zpci_aift *aift, unsigned long si)
+>> +{
+>> +    struct kvm_s390_gisa_interrupt *gi;
+>> +    struct zpci_gaite *gaite;
+>> +    struct kvm *kvm;
+>> +
+>> +    gaite = (struct zpci_gaite *)aift->gait +
+>> +        (si * sizeof(struct zpci_gaite));
+>> +    if (gaite->count == 0)
+>> +        return;
+>> +    if (gaite->aisb != 0)
+>> +        set_bit_inv(gaite->aisbo, (unsigned long *)gaite->aisb);
+>> +
+>> +    kvm = kvm_s390_pci_si_to_kvm(aift, si);
+>> +    if (kvm == 0)
+>> +        return;
+>> +    gi = &kvm->arch.gisa_int;
+>> +
+>> +    if (!(gi->origin->g1.simm & AIS_MODE_MASK(gaite->gisc)) ||
+>> +        !(gi->origin->g1.nimm & AIS_MODE_MASK(gaite->gisc))) {
+>> +        gisa_set_ipm_gisc(gi->origin, gaite->gisc);
+>> +        if (hrtimer_active(&gi->timer))
+>> +            hrtimer_cancel(&gi->timer);
+>> +        hrtimer_start(&gi->timer, 0, HRTIMER_MODE_REL);
+>> +        kvm->stat.aen_forward++;
+>> +    }
+>> +}
+>> +
+>> +static void aen_process_gait(u8 isc)
+>> +{
+>> +    bool found = false, first = true;
+>> +    union zpci_sic_iib iib = {{0}};
+>> +    unsigned long si, flags;
+>> +    struct zpci_aift *aift;
+>> +
+>> +    aift = kvm_s390_pci_get_aift();
+>> +    spin_lock_irqsave(&aift->gait_lock, flags);
+>> +
+>> +    if (!aift->gait) {
+>> +        spin_unlock_irqrestore(&aift->gait_lock, flags);
+>> +        return;
+>> +    }
+>> +
+>> +    for (si = 0;;) {
+>> +        /* Scan adapter summary indicator bit vector */
+>> +        si = airq_iv_scan(aift->sbv, si, airq_iv_end(aift->sbv));
+>> +        if (si == -1UL) {
+>> +            if (first || found) {
+>> +                /* Reenable interrupts. */
+>> +                if (zpci_set_irq_ctrl(SIC_IRQ_MODE_SINGLE, isc,
+>> +                              &iib))
+>> +                    break;
+>> +                first = found = false;
+>> +            } else {
+>> +                /* Interrupts on and all bits processed */
+>> +                break;
+>> +            }
+>> +            found = false;
+>> +            si = 0;
+>> +            continue;
+>> +        }
+>> +        found = true;
+>> +        aen_host_forward(aift, si);
+>> +    }
+>> +
+>> +    spin_unlock_irqrestore(&aift->gait_lock, flags);
+>> +}
+>> +
+>>   static void gib_alert_irq_handler(struct airq_struct *airq,
+>>                     struct tpi_info *tpi_info)
+>>   {
+>> +    struct tpi_adapter_info *info = (struct tpi_adapter_info *)tpi_info;
+>> +
+>>       inc_irq_stat(IRQIO_GAL);
+>> -    process_gib_alert_list();
+>> +
+>> +    if (info->forward || info->error)
+>> +        aen_process_gait(info->isc);
+>> +    else
+>> +        process_gib_alert_list();
+>>   }
+> 
+> Not sure, would it make sense to actually do both after an alert 
+> interrupt or do we always get a separate interrupt for event vs. irq?
+> [..]
 
-Fixes: 60b91319a349 ("staging: fsl-mc: Convert documentation to rst format")
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
+Good point - I thought this was an either/or scenario but I went back 
+and doubled checked -- looks like it is indeed possible to get a single 
+interrupt that indicates processing of both AEN events and the alert 
+list is required.  (It is also possible to get interrupts that indicate 
+processing of only one or the other is required).  So, my code above is 
+wrong.
 
- .../device_drivers/ethernet/freescale/dpaa2/overview.rst         | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/networking/device_drivers/ethernet/freescale/dpaa2/overview.rst b/Documentation/networking/device_drivers/ethernet/freescale/dpaa2/overview.rst
-index d638b5a8aadd..199647729251 100644
---- a/Documentation/networking/device_drivers/ethernet/freescale/dpaa2/overview.rst
-+++ b/Documentation/networking/device_drivers/ethernet/freescale/dpaa2/overview.rst
-@@ -183,6 +183,7 @@ PHY and allows physical transmission and reception of Ethernet frames.
-   IRQ config, enable, reset
- 
- DPNI (Datapath Network Interface)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Contains TX/RX queues, network interface configuration, and RX buffer pool
- configuration mechanisms.  The TX/RX queues are in memory and are identified
- by queue number.
--- 
-2.25.1
-
+However, we also don't need to call process_gib_alert_list() 
+unconditionally after handling AEN -- there is more information we can 
+check in tpi_adapter_info to decide whether that is necessary (aism);  I 
+will add this.

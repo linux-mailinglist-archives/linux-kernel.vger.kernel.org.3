@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EACB47891B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F9247895E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbhLQKmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:42:35 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44702
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232014AbhLQKme (ORCPT
+        id S235211AbhLQLAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:00:47 -0500
+Received: from esa6.hc1455-7.c3s2.iphmx.com ([68.232.139.139]:14971 "EHLO
+        esa6.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233151AbhLQLAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:42:34 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3D1493FFD0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639737750;
-        bh=Cch2YRuTHpQOb264zUOrMD/m+Xgx+o5ASl1QOhMgcdU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=g+/1IoatiKhPLDuO+Ml1DTYIcRH7o+dmuLSkkmuYEnQ1mRWhqaeMlfqgaD2tCDC/w
-         2zNhuN4/h4ejTqzYCohQKIaWtSyLMfJq+l70OTkAQU1QdGrkEOuJxI4Zaxed9c0wIb
-         GTCyvkSAL51PcLTWPGEI0bOl1jAYYTLmWlqvyUQjteauXjIUS68+rlO6KK8LR86VcY
-         3ifKPU00Wu+PzI0lDatcI9hd763RdnouXkecyxtsDV8TjOzz/jEWu+NQBtE58mX7/r
-         ATHJeiYH78nSp7K2PlOzKgtBJW/ZHtUAdGlWR+Xd9d5A/S0UH0x0Y1xf0Vz5CzsUbi
-         9lIQ2LDV/txlw==
-Received: by mail-wm1-f69.google.com with SMTP id z200-20020a1c7ed1000000b0034574ef8356so862640wmc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 02:42:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Cch2YRuTHpQOb264zUOrMD/m+Xgx+o5ASl1QOhMgcdU=;
-        b=Uw6fXBh/plb5KxaOUYSJoGy36YG8wpCKCAA/8Lm9SKGBEiaa8ugyCC50E/D5s7FNtz
-         sxQlSzYU0EC8hJPljVb0a66HlevMJ4bCL5sLkZmJsUVTProNGgPufm3aveTp45WnG975
-         HgHVE1Wf6hDFcOit/jBJf0z0AaQRIq9IQkzXXH7VEHjZVn284xLjHO+mIjL4zmsIqFJp
-         4r0SvtXm75T6QrJXdnNt0Viu6gwy40rfrim3L0Or2VNpDF5MCB2pevVmQPDHBoHXoxn8
-         Kzd+2A9YNmG7Ya6tAlXGTPT4dZgrC7/AoxiKjP00PMklc3vZNX3O6UpgaO9gmVHFZe/q
-         u4XQ==
-X-Gm-Message-State: AOAM531Cj4VEm6dRekLknxEJSuHZG4TuTaygcb8pwNE+FCAmIeNhPbmQ
-        yAws9XMNgbxiPg9YBSbhVKiJZqHc+dWH71AagqwBUAOOW7FK+6HzBe4+TSrJok/A5El0xVod7Vy
-        47s6N2aEcDZo9/mGdWLWhk0yzBo3v6JiqMh9WmaCIEA==
-X-Received: by 2002:a5d:64c8:: with SMTP id f8mr2199902wri.158.1639737748955;
-        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5yYBNvNIR6wOPIyl83PueKllFASZM93qe3PncXh68LjxD9RvBVSXqlHNHsv81WWLN5bSd4g==
-X-Received: by 2002:a5d:64c8:: with SMTP id f8mr2199882wri.158.1639737748768;
-        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
-Received: from [192.168.123.35] (ip-88-152-144-157.hsi03.unitymediagroup.de. [88.152.144.157])
-        by smtp.gmail.com with ESMTPSA id b19sm11536525wmb.38.2021.12.17.02.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 02:42:28 -0800 (PST)
-Message-ID: <611d4055-c50c-55c1-0e02-43ffda66dbce@canonical.com>
-Date:   Fri, 17 Dec 2021 11:42:27 +0100
+        Fri, 17 Dec 2021 06:00:46 -0500
+IronPort-SDR: 54QwO7DawNjhoRXQodut2MRed/NWO6FPWuLwjr1NqxVejAzv4gSpgK2nOia1eLk0dHl9fYExGU
+ +ZZS2EdmO//WwMWndSV4AzswKeW9XEuD2N1XC0gqsC0MCSS/esm3yXavRBo5iE1iHjQ9Fo9Rm7
+ 3SwmN8kAVlrBs6l2I3gjCO6mbLSKgexfoyoaHXrK/XV+nxmtqUGxZoprd+BaAbaNSDSCIk0F6r
+ 6R0RTIr3hxwPizFAV9kVx76s/XIKulIMDFnw1XUkMVARXzMUQz/Zfv6sulJyYR7EEfBOpMlHrU
+ zAcM91ZTs+BxY2CjjcIXVqV1
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="56954851"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635174000"; 
+   d="scan'208";a="56954851"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 17 Dec 2021 20:00:44 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 9DCE3E0407
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:00:43 +0900 (JST)
+Received: from m3050.s.css.fujitsu.com (msm.b.css.fujitsu.com [10.134.21.208])
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id E6216D99A3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:00:42 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.125.5.220])
+        by m3050.s.css.fujitsu.com (Postfix) with ESMTP id 96221A8;
+        Fri, 17 Dec 2021 20:00:42 +0900 (JST)
+From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+To:     tglx@linutronix.de
+Cc:     hch@lst.de, kbusch@kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, ming.lei@redhat.com, yamamoto.rei@jp.fujitsu.com
+Subject: [PATCH v2] irq: consider cpus on nodes are unbalanced
+Date:   Fri, 17 Dec 2021 19:44:07 +0900
+Message-Id: <20211217104407.2156-1-yamamoto.rei@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
-Content-Language: en-US
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
- <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
- <fd40010f-f2ec-b32a-6850-1e054af43725@canonical.com>
- <150C4E84-2C69-45DB-AF27-1E0C223D8D7A@jrtc27.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <150C4E84-2C69-45DB-AF27-1E0C223D8D7A@jrtc27.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If cpus on a node are offline at boot time, there are
+difference in the number of nodes between when building affinity
+masks for present cpus and when building affinity masks for possible
+cpus. This patch fixes a problem caused by the difference of the
+number of nodes:
 
+ - The routine of "numvecs <= nodes" condition can overwrite bits of
+   masks for present cpus in building masks for possible cpus. Fix this
+   problem by making CPU bits, which is not target, not changing.
 
-On 12/16/21 17:51, Jessica Clarke wrote:
-> On 16 Dec 2021, at 14:17, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
->>
->> On 12/16/21 14:49, Jessica Clarke wrote:
->>> On 16 Dec 2021, at 12:35, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
->>>>
->>>> The SBI 0.1 specification is obsolete. The current version is 0.3.
->>>> Hence we should not rely by default on SBI 0.1 being implemented.
->>> It’s what BBL implements, and some people are still using it,
->>> especially given early hardware shipped before OpenSBI grew in
->>> popularity.
->>> Jess
->>
->> Do you mean BBL is not developed anymore?
->>
->> Some people may still be using a 0.1 SBI. But that minority stuck on an outdated software stack does not justify defaulting to deprecated settings in future Linux releases.
-> 
-> BBL is still actively maintained; its most recent commit was 24 days
-> ago. Also, the amount of code CONFIG_RISCV_SBI_V01 affects is tiny, so
-> I see no tangible benefit from making this change, just unnecessary
-> breakage of perfectly functional systems.
+Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+---
+ kernel/irq/affinity.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Only the default is changed. How could this break any existing system?
-You can still compile with the deprecated setting.
-
-I can not see why we should keep a default that will cause issues on 
-systems complying to the current SBI specification.
-
-Best regards
-
-Heinrich
+diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
+index f7ff8919dc9b..d2d01565d2ec 100644
+--- a/kernel/irq/affinity.c
++++ b/kernel/irq/affinity.c
+@@ -269,8 +269,9 @@ static int __irq_build_affinity_masks(unsigned int startvec,
+ 	 */
+ 	if (numvecs <= nodes) {
+ 		for_each_node_mask(n, nodemsk) {
++			cpumask_and(nmsk, cpu_mask, node_to_cpumask[n]);
+ 			cpumask_or(&masks[curvec].mask, &masks[curvec].mask,
+-				   node_to_cpumask[n]);
++				   nmsk);
+ 			if (++curvec == last_affv)
+ 				curvec = firstvec;
+ 		}
+-- 
+2.27.0
 

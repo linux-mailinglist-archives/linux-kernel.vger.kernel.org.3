@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B97C847916A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36937479171
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239096AbhLQQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:25:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58750 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238005AbhLQQZa (ORCPT
+        id S239108AbhLQQ03 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Dec 2021 11:26:29 -0500
+Received: from mail-4018.proton.ch ([185.70.40.18]:15777 "EHLO
+        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238005AbhLQQ02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:25:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C886A622F0;
-        Fri, 17 Dec 2021 16:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E51AEC36AE8;
-        Fri, 17 Dec 2021 16:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639758329;
-        bh=K2+x1WBF60nqGDXE3hSHxTF/9S7av35S8BbzdwS/bII=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=l8hwWpJtkqVosVL1Kl9DrJR9eNeTjGsOabJ1jmqTyRBnOdLlGFscPuQAyytPGUMMW
-         2fmAkkhuPt4g5lEQJlqW/8B+8zyfLPpzInlCtXQ0SV2ZNwCV9FoHzgVPXRmJfv6x9A
-         BdxclGi+welPPl4Y+1Ns2caPVXlnfbmURx8QDbMThG/ant8ydu07RMYr9REQFpIHMd
-         C+vf0gZGuJ07uEnz6Bi2jkwNLhbE7b/clp/fVKVjOhADCpHEaUyLhPni4D++wWGFX7
-         8VUiu/sYaWCWz2N8UeGQR0bhxbm6eRP4WHy2nti+di5Z91/eJnIy4XjbSNO5e0342r
-         05TvmL0xbe+Lw==
-Date:   Fri, 17 Dec 2021 10:25:27 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, john@phrozen.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v7 10/14] PCI: mediatek: Allow selecting controller
- driver for airoha arch
-Message-ID: <20211217162527.GA895301@bhelgaas>
+        Fri, 17 Dec 2021 11:26:28 -0500
+Date:   Fri, 17 Dec 2021 16:26:24 +0000
+Authentication-Results: mail-4018.proton.ch; dkim=none
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From:   conor dooley <mail@conchuod.ie>
+Cc:     Conor.Dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, atish.patra@wdc.com
+Reply-To: conor dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v2 06/17] dt-bindings: rng: add bindings for microchip mpfs rng
+Message-ID: <r3tVOER8Xt_7UX5NRWualG_an6bcx-_uljhXh9_GUny45ZcO_G-dpv98jWXwKpuvSp-uTvNFSdqsLHFbYGl0Qdv_q7ZqegBHWWcgnAZUA5A=@conchuod.ie>
+In-Reply-To: <2e7588e5-9dc5-571f-d7e9-0ee5c89ab39e@canonical.com>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-7-conor.dooley@microchip.com> <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com> <19cbe2ba-7df5-7c7c-289f-6dc419d9f477@canonical.com> <422126ac-ce26-2940-5b4d-fe79a1fa89c5@microchip.com> <2e7588e5-9dc5-571f-d7e9-0ee5c89ab39e@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217112345.14029-11-nbd@nbd.name>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:23:40PM +0100, Felix Fietkau wrote:
-> This patch allows selecting the pcie-mediatek driver if ARCH_AIROHA is set,
-> because the Airoha EN7523 SoC uses the same controller as MT7622.
-> The driver itself is not modified. The PCIe controller DT node should use
-> mediatek,mt7622-pcie after airoha,en7523-pcie.
+‐‐‐‐‐‐‐ Original Message ‐‐‐‐‐‐‐
 
-s/This patch allows/Allow/ ("This patch" is redundant)
+On Friday, December 17th, 2021 at 15:47, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
 
-For the subject:
-
-  PCI: mediatek: Allow building for ARCH_AIROHA
-
-since "controller driver" is similarly redundant and this earlier patch
-does essentially the same for a different case:
-
-  70060ee313be ("PCI: brcmstb: Allow building for BMIPS_GENERIC")
-
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> ---
->  drivers/pci/controller/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 93b141110537..f1342059c2a3 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -233,7 +233,7 @@ config PCIE_ROCKCHIP_EP
->  
->  config PCIE_MEDIATEK
->  	tristate "MediaTek PCIe controller"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
->  	depends on OF
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	help
-> -- 
-> 2.34.1
-> 
+> On 17/12/2021 16:22, Conor.Dooley@microchip.com wrote:
+>
+> > On 17/12/2021 15:07, Krzysztof Kozlowski wrote:
+> >
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > >
+> > > On 17/12/2021 15:53, Krzysztof Kozlowski wrote:
+> > >
+> > > > On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+> > > >
+> > > > > From: Conor Dooley conor.dooley@microchip.com
+> > > > >
+> > > > > Add device tree bindings for the hardware rng device accessed via
+> > > > >
+> > > > > the system services on the Microchip PolarFire SoC.
+> > > > >
+> > > > > Signed-off-by: Conor Dooley conor.dooley@microchip.com
+> > > > > ------------------------------------------------------
+> > > >
+> > > > Three topics:
+> > > >
+> > > > 1.  Node name (as most of others are using): rng
+> > > > 2.  skip the label, not helping in example.
+> > > > 3.  This looks very simple, so I wonder if the bindings are complete. No
+> > > >
+> > > >     IO space/address... How is it going to be instantiated?
+> > > OK, now I saw the usage in DTS. I have doubts this makes sense as
+> > > separate bindings. It looks like integrated part of syscontroller, so
+> > > maybe make it part of that binding? Or at least add ref to syscontroller
+> > > bindings that such child is expected.
+> > Acking the rest of this, re: adding the ref: is what is being done in
+> > patch 03/17 insufficient?
+> Ops, I missed the 03/17. Yeah, it looks it is sufficient and in such
+> case I think you do not need this patch. The compatible is documented in
+> 03/17. The same for sysserv.
+Grand, that makes things easier.
+Conor.
+>
+> Best regards,
+>
+> Krzysztof
+>
+> linux-riscv mailing list
+>
+> linux-riscv@lists.infradead.org
+>
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

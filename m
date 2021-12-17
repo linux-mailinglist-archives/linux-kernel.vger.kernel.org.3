@@ -2,56 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444D747961C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7220F479620
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241029AbhLQVSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:18:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59840 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbhLQVSv (ORCPT
+        id S229491AbhLQVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:19:50 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57680 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLQVTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:18:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9F64B828A4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15C1C36AE2;
-        Fri, 17 Dec 2021 21:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639775928;
-        bh=vpQebGd5cJDOS77X2e4vbeX3xmNGzw5+mevdRl3POx8=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=n0/d9hx50GfFc4af82eyneKI3cAdS3fJXqhdT5wR51PbtN0kXD3Si3gB3++ETmh/F
-         Oj1cpMIyTpv76sZoO/hbyrxK79L2IRPdVnSdY1+2NL80Za+Cxxsi5J/F+iFLtO79lw
-         SGRNh6dYCOCxOru0BuLNuXgl1JuxOr8+G5EG3hnMBZOv61/8TySniZ+LDCU9i4Vpjh
-         jYtT/t5XGWqEn1YuTd5MU7WUe4BYvOOW7uzB2Gzgz+3b4BUz6mNUrXYBGdzahThTyg
-         U7N3TNn37VcN36p2l6Z6W3gRns5J1Ky4ZwXd0kyXhrkR3O1mudO7ISxiomOoFYutw3
-         Vd5pDjWbFhDRw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 494585C0610; Fri, 17 Dec 2021 13:18:48 -0800 (PST)
-Date:   Fri, 17 Dec 2021 13:18:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     tglx@linutronix.de, urezki@gmail.com, john.ogness@linutronix.de,
-        alexei.starovoitov@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: Another forward-port of the PREEMPT_COUNT removal series
-Message-ID: <20211217211848.GA636786@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Fri, 17 Dec 2021 16:19:49 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0CA761F394;
+        Fri, 17 Dec 2021 21:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639775988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=AKWJYbPYNpbWTxZMffWahj22ArP1wNrhDJN3ZuIxhhE=;
+        b=poboJ8hawWCy8WFXDLhVxVC3LfXCfNVGYz1FpY9+8cIeZWlZbs5/thFPxNd2H2Pl/zzoQe
+        s+DtdiIOVRTUBnKeZSbCkxh2g/3KIhDrtMQJgxMaZFWELG00Us8R6V4HGtAvaThbzdALFs
+        qc1qjH2kWh84KRrjBLhVLItKflIwKuo=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 0523EA3B81;
+        Fri, 17 Dec 2021 21:19:48 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 1C848DA781; Fri, 17 Dec 2021 22:19:27 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.16-rc6
+Date:   Fri, 17 Dec 2021 22:19:27 +0100
+Message-Id: <cover.1639775076.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi,
 
-In case there is interest, I have forward-ported the PREEMPT_COUNT series
-to v5.16-rc1.  It may be found at the tglx-pc.2021.12.17a branch in the
--rcu tree.
+still there are a few more fixes, almost all error handling one-liners
+and for stable.  Please pull, thanks.
 
-Because you never know!  ;-)
+* regression fix in directory logging items
 
-							Thanx, Paul
+* regression fix of extent buffer status bits handling after an error
+
+* fix memory leak in error handling path in tree-log
+
+* fix freeing invalid anon device number when handling errors during
+  subvolume creation
+
+* fix warning when freeing leaf after subvolume creation failure
+
+* fix missing blkdev put in device scan error handling
+
+* fix invalid delayed ref after subvolume creation failure
+
+----------------------------------------------------------------
+The following changes since commit 8289ed9f93bef2762f9184e136d994734b16d997:
+
+  btrfs: replace the BUG_ON in btrfs_del_root_ref with proper error handling (2021-12-08 15:45:27 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.16-rc5-tag
+
+for you to fetch changes up to 4989d4a0aed3fb30f5b48787a689d7090de6f86d:
+
+  btrfs: fix missing blkdev_put() call in btrfs_scan_one_device() (2021-12-15 17:07:34 +0100)
+
+----------------------------------------------------------------
+Filipe Manana (4):
+      btrfs: fix double free of anon_dev after failure to create subvolume
+      btrfs: fix missing last dir item offset update when logging directory
+      btrfs: fix invalid delayed ref after subvolume creation failure
+      btrfs: fix warning when freeing leaf after subvolume creation failure
+
+Jianglei Nie (1):
+      btrfs: fix memory leak in __add_inode_ref()
+
+Josef Bacik (1):
+      btrfs: check WRITE_ERR when trying to read an extent buffer
+
+Shin'ichiro Kawasaki (1):
+      btrfs: fix missing blkdev_put() call in btrfs_scan_one_device()
+
+ fs/btrfs/ctree.c           | 17 +++++++++--------
+ fs/btrfs/ctree.h           |  7 ++++++-
+ fs/btrfs/disk-io.c         |  8 ++++++++
+ fs/btrfs/extent-tree.c     | 13 +++++++------
+ fs/btrfs/extent_io.c       |  8 ++++++++
+ fs/btrfs/free-space-tree.c |  4 ++--
+ fs/btrfs/ioctl.c           | 10 ++++++----
+ fs/btrfs/qgroup.c          |  3 ++-
+ fs/btrfs/tree-log.c        |  2 ++
+ fs/btrfs/volumes.c         |  6 ++++--
+ 10 files changed, 54 insertions(+), 24 deletions(-)

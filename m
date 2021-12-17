@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C5F4785D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12C44785DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbhLQICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:02:40 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:60699 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbhLQICj (ORCPT
+        id S233262AbhLQICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:02:52 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:34486 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233035AbhLQICt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:02:39 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MSLlu-1n4hnR3TGi-00Sf1C; Fri, 17 Dec 2021 09:02:37 +0100
-Received: by mail-wr1-f51.google.com with SMTP id q16so2438034wrg.7;
-        Fri, 17 Dec 2021 00:02:37 -0800 (PST)
-X-Gm-Message-State: AOAM532GNI3eMLc5igCo7uLR4reDcAEsBUTezFMXnsOzI8oxrv1BP5ol
-        sOMy77166X7HwC8ZCn0bv4eEwbdJgrsste1HwG8=
-X-Google-Smtp-Source: ABdhPJzJeZFelU3godOJegozbjx0Hr/mKwWf6NtOOet6yAUN3rA9EeAB8H/WKKVCvEXO51VDSBIZnrbM6ODS+aiK/Ic=
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr1465626wry.407.1639728157042;
- Fri, 17 Dec 2021 00:02:37 -0800 (PST)
+        Fri, 17 Dec 2021 03:02:49 -0500
+Received: by mail-ua1-f43.google.com with SMTP id u40so2907049uad.1;
+        Fri, 17 Dec 2021 00:02:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fx7tWOtL8mG5j0QcSY4U9yZmw2gjvIvwXDDbEmQGZfE=;
+        b=wCw2olc/3lBVZX8EqyIwtgfycnwlJT2vP7NboX19ujIfJS3eXMkvY7BZMl/ww95FfR
+         rdZEpGnzIKN9M1BNbAhAWnmLj81YI2XjkiroDMwyU1Mwr+84TeXjg9/bbmB1IpBamsR1
+         jGVwnvZZhD3SumStcYxgJXq50tHOgkBvznMhFeeYZ3SYCF2OPO2IXCbYzRRQCrueW4j0
+         /bSv9tILxLu6DzRRKvDokuo9836Egz3DboOJW7oVHz5p/2+LhPwOzptR1tNPuoTh6hnc
+         2uNU4Em7ltuDkarlXMErn8ZF1+JLE0TnPzNheKt3c8PbJf9Af0WVKcdl5Vtst9YBW9cK
+         087Q==
+X-Gm-Message-State: AOAM530x6Em6d8RmvuDFsHOO5XOwHAuvr5asTdrO7qUbMWFczUvIz+yB
+        BnavcFpQ6ZYanTOTOf4HTXh789RfpUOevA==
+X-Google-Smtp-Source: ABdhPJyh8LAq1kHetPvpEzCnxPiEcI/zKnsI6RG7L7sufUOeUjVDhjYKax6uy9iRAJu9GXipbXo9Kg==
+X-Received: by 2002:a05:6102:38ce:: with SMTP id k14mr575905vst.70.1639728168380;
+        Fri, 17 Dec 2021 00:02:48 -0800 (PST)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id j145sm1642578vke.47.2021.12.17.00.02.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 00:02:47 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id 30so2770112uag.13;
+        Fri, 17 Dec 2021 00:02:47 -0800 (PST)
+X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr552893vst.68.1639728167350;
+ Fri, 17 Dec 2021 00:02:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217172931.01c24d4b@canb.auug.org.au>
-In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Dec 2021 09:02:21 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Kiran Kumar S <kiran.kumar1.s@intel.com>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+References: <cover.1639661878.git.geert@linux-m68k.org> <Ybuvg3h+VLCMji4J@robh.at.kernel.org>
+In-Reply-To: <Ybuvg3h+VLCMji4J@robh.at.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Dec 2021 09:02:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVzknbzS6wL2=e1RGHB69fGDZM_C8R61aDz29PNmr5bAg@mail.gmail.com>
+Message-ID: <CAMuHMdVzknbzS6wL2=e1RGHB69fGDZM_C8R61aDz29PNmr5bAg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] dt-bindings: interrupt-controller: sifive,plic:
+ Miscellaneous improvements
+To:     Rob Herring <robh@kernel.org>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:4oUBFFqlwiSIa1ypbolba4zFKzclW88FiKDg2eLl5NRvMDDGSlb
- nbJkyG17yY6UDdldCaKCnM4zdJ2xYvBv7oNhaSrbSCz9DBkEygA3KhmFuXKy7ZzLISMjjEV
- lg2Rd78UyiqMzYiI4TlIVDZdJ2aLNkXKjrM95LXvmUUYl6nkBNkgZK61F1iSAiQQLIjMvNi
- ZQJC4DgQ2Cat53Nk/1lDg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Q9jytcTBbI=:V9WLnEGijd5AFXRjIl1keG
- LS7fjWG9wsPhe0wI/fgzjgOHCFzfBodwhzAMDJM7E4xjan04GZjT77nRFHG+fj303dgwcShRz
- Y2k5vEdxIhCeqCYt+HtfLiEJjYFGsC4JyaNBqakVhPP1Yjh+s/a05WPUWKeTaQnxxx9REaK/+
- eTSTNpuxxvLmHKeRUL+S6Iuly18d6bw/NxfgueUS1y66la1RB5FAMj/Goh4Rcm0ukVPnTuJI7
- vyW1U+Z80pcJ/0IZZypw54p0BQEeh2e1PyVVUicbRrOs4jJPxaxrCbxlaLbIMnlT8lwhqNjnX
- valVUsW20Q0XlyMC8id60gD508I3ZCUODV0Ppx4GdSBemdKwN+2El90NAA6LaMTD0X0qAY7Lz
- snVDsh76AwO2XJm86HlG6i6T/lh3e8RKJ70x/atzB5CD4dEJ3H7posIKu2rXoeACTeh1k52U/
- AqvOAMbgWiH6ZUiE78agCL0K85YGV0kAKCxA1Tjjq4KHoFD44MYEPVBo0qCpGpkyH8YMgSBLm
- QjmmAqne+jw+tode5M8XHSP+dkL/QQL3X58rKStTWTjMKBPomW4mWmmBIfrorZ1VQPr4X3+kt
- gSe8TxCeDjTQ/d/donj8RhzBVlKPxQ6/Cc/qp9aCUUmXxATlf/XSjXRap+7vAtbnWanJYVf0k
- LwMmrFkKntD241/niPrZnKyOjX0zY6jAD+P8V0SWdSqZfnE89GVl6QSko0jWZV92dko24eyhh
- 4NheJIF5AbZataeYRF/jBEyqxGlWQ4AsDKWusgE1KEqoOyt5PSX6/q9Q7vc1NXkGMyX7aYIio
- rtmxGVfaf260Rm4ealCe9PwUBSqIIWoBxLebJ+VKOJEg/eFGn8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pinctrl tree got conflicts in:
->
->   drivers/pinctrl/Kconfig
->   drivers/pinctrl/Makefile
->
-> between commit:
->
->   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
->
-> from the arm-soc tree and commits:
->
->   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
->   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
->
-> from the pinctrl tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hi Rob,
 
-Thanks, looks good. There are potentially three or four new SoC families
-in the arm/newsoc branch (this is the first one I merged), so I expect to see
-a few additional conflicts like this against pinctrl/clk/irqchip, but
-they should
-all be trivial.
+On Thu, Dec 16, 2021 at 10:28 PM Rob Herring <robh@kernel.org> wrote:
+> On Thu, Dec 16, 2021 at 02:41:20PM +0100, Geert Uytterhoeven wrote:
+> > This patch series contains two improvements for the SiFive PLIC DT
+> > bindings.
+>
+> Lore is thoroughly confused with this and several other series. It seems
+> to be doing subject matching and pretty loosely.
 
-        Arnd
+My apologies, that's purely due to a silly mistake on my side.
+I sent out 3 patch series without noticing I still had two cover
+letters from previous "b4 am" sessions in my working dir, so they
+were mailed out as part of the series, too :-(
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

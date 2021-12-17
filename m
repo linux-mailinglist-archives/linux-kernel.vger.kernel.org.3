@@ -2,181 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B5B478FE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B50478FC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238323AbhLQPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:31:19 -0500
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:52595 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238370AbhLQPa2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:30:28 -0500
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 1BHFUBk8029936;
-        Sat, 18 Dec 2021 00:30:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BHFUBk8029936
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639755012;
-        bh=hfJ9d6RpLXYl1jyObvt01PJ7w1ZoBGGznIL6GNi0520=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=euSZ4KV+8fpKo6vTTCHfPF4zDTqAoaHBV6PVBnhN5vCJK54eZXgvL7cCv8gCnW5CW
-         /yJSjy5vVGih2Q7BtAoowDVl+FnXV0l0KsIHyoJ6QpUSkOKnTSpLU4J7aad7Bl+q8O
-         b4C3mnGnA06F7PaMNPFW5j68/4i2xWrlqjW9k9iRqbKvzpA+Ck9TUgcMoSeMKKwjES
-         Jn2rI+5AWiKofAYaThytWBALM67aAE3uppi9bn/yMyNDeHj9okbPUcVo1kx5k178E4
-         eKv+lwNYcFGEz5qXorH4H5auY/U3A7fFn+v7wOroWASBRMvXLNvQ8khLqSd2qcraro
-         oaOIIJtY29Htg==
-X-Nifty-SrcIP: [209.85.216.44]
-Received: by mail-pj1-f44.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso6051009pjf.3;
-        Fri, 17 Dec 2021 07:30:11 -0800 (PST)
-X-Gm-Message-State: AOAM5311hZ3J+PbuIZq1QIhJrB9sEsV17yUhMerCBTbCMSQW9AOn9oZa
-        yUpg50DeZfELNr4fWHRfzi/sxcmsp/nUByIeR1M=
-X-Google-Smtp-Source: ABdhPJwBR2raGXd1CdAgEc+Td0HN46gw2ZosAuDc2E7I7jyQyIJ9tF49dA8Cx/t4TbGG/77DdyYytMwdtJEDnr+GNoQ=
-X-Received: by 2002:a17:902:bb0f:b0:148:b895:4995 with SMTP id
- im15-20020a170902bb0f00b00148b8954995mr3841419plb.99.1639755010875; Fri, 17
- Dec 2021 07:30:10 -0800 (PST)
+        id S238208AbhLQPaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:30:05 -0500
+Received: from mga03.intel.com ([134.134.136.65]:10842 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238192AbhLQPaE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 10:30:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639755004; x=1671291004;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QL+7wsgNUGYwY3UuKaLgFQmzsPPaQwlpEX/XmJ6aQ/0=;
+  b=jrsDnhpo8nahQ8kT0q7beojLHIbn4tCDqXejdlSv/Xh3Gxu80p7J0VGs
+   hWnhnlxuvziFTA0AFuXc4ZNxg3lw3zvVnnCdSAD1MKX9uxvOX4TQI4VEP
+   dx/RI6RvxIYlE5uUitl/C9zWBylcfHzlaPfvNcpM9aEcBEYkjNwmondSm
+   LC05UNaHwX37iweA04IDFF/CuMYc1w+FK2alaN4EXD59xt5+sfNMWOSrs
+   NqdknCCZZLEXTGur5JOcckNkpQE5qMQW0VIiWvndFpoVPzdPcEuLMXB0Z
+   Hoa53ryzfC4oJj430wtqQ0YYrEvZvLe0exyS5aR5Z2s9QDhs3Hnm9j0Kj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239723422"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="239723422"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 07:30:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="615588380"
+Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
+  by orsmga004.jf.intel.com with ESMTP; 17 Dec 2021 07:30:03 -0800
+From:   Jing Liu <jing2.liu@intel.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: [PATCH v2 00/23] AMX Support in KVM
+Date:   Fri, 17 Dec 2021 07:29:40 -0800
+Message-Id: <20211217153003.1719189-1-jing2.liu@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20211013200536.1851070-1-willy@infradead.org> <CAMj1kXEJ+RThJ83H2VNAmOKkVdhTAUCUF61u9JTv6ccc9uVTDw@mail.gmail.com>
- <CAK7LNASfr4pxmXWO8WLPM4j1NiJ6+dAO_QyUmRREzJUXJNozFw@mail.gmail.com> <Ybu30C6Nc7Mbo8MQ@casper.infradead.org>
-In-Reply-To: <Ybu30C6Nc7Mbo8MQ@casper.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 18 Dec 2021 00:29:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARugXVnFq+yZ_+s2S_m95WfOke-LObxUTuxgvm6a4j0CA@mail.gmail.com>
-Message-ID: <CAK7LNARugXVnFq+yZ_+s2S_m95WfOke-LObxUTuxgvm6a4j0CA@mail.gmail.com>
-Subject: Re: [PATCH] builddeb: Support signing kernels with a Machine Owner Key
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        efi@lists.einval.com,
-        debian-kernel <debian-kernel@lists.debian.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:04 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Thu, Nov 04, 2021 at 06:28:40PM +0900, Masahiro Yamada wrote:
-> > On Thu, Oct 14, 2021 at 6:47 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >
-> > > On Wed, 13 Oct 2021 at 22:07, Matthew Wilcox (Oracle)
-> > > <willy@infradead.org> wrote:
-> > > >
-> > > > If the config file specifies a signing key, use it to sign
-> > > > the kernel so that machines with SecureBoot enabled can boot.
-> > > > See https://wiki.debian.org/SecureBoot
-> > > >
-> > > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > >
-> > > For the change itself
-> > >
-> > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > although I'd suggest to fix the subject not to refer to Machine Owner
-> > > Keys, as I don't see anything shim related here (i.e., if you sign
-> > > using a key that is listed in db, it should also work)
-> > >
-> > >
-> > > > ---
-> > > >  scripts/package/builddeb | 10 +++++++++-
-> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-> > > > index 91a502bb97e8..4fa6ff2b5cac 100755
-> > > > --- a/scripts/package/builddeb
-> > > > +++ b/scripts/package/builddeb
-> > > > @@ -147,7 +147,15 @@ else
-> > > >         cp System.map "$tmpdir/boot/System.map-$version"
-> > > >         cp $KCONFIG_CONFIG "$tmpdir/boot/config-$version"
-> > > >  fi
-> > > > -cp "$($MAKE -s -f $srctree/Makefile image_name)" "$tmpdir/$installed_image_path"
-> > > > +
-> > > > +vmlinux=$($MAKE -s -f $srctree/Makefile image_name)
-> > > > +if is_enabled CONFIG_MODULE_SIG; then
-> > > > +       cert=$srctree/$(grep ^CONFIG_MODULE_SIG_KEY= include/config/auto.conf | cut -d\" -f2)
-> > > > +       key=${cert%pem}priv
-> > > > +       sbsign --key $key --cert $cert "$vmlinux" --output "$tmpdir/$installed_image_path"
-> > > > +else
-> > > > +       cp "$vmlinux" "$tmpdir/$installed_image_path"
-> > > > +fi
-> > > >
-> > > >  if is_enabled CONFIG_OF_EARLY_FLATTREE; then
-> > > >         # Only some architectures with OF support have this target
-> > > > --
-> > > > 2.32.0
-> > > >
-> >
-> > How to compile this patch?
-> >
-> > "make  bindeb-pkg" fails with
-> > Can't load key from file './certs/signing_key.priv'
->
-> I'm sorry; I missed this email.
->
-> I don't know why you're seeing this error, exactly.  I'm just trying to
-> automate the step here:
+This version is not intended for acceptance. But giving many moving
+pieces in v1 review it might be good to have an alignment on what 
+we have improved now.
 
-[1] Apply your patch
-[2] Enable CONFIG_MODULE_SIG
-[3] make bindeb-pkg
+It's highly appreciated if you can help take a quick look and let
+us know any new issue before your holiday. We will continue working 
+on closing remaining TODOs and try to have a complete version ready 
+when you are back. :)
 
-That's all.
+TODOs:
 
+  - selftest for XCR0, XFD and new AMX state is still in progress;
+  - Investigate whether trapping #NM can be delayed until the 
+    1st WRMSR(IA32_XFD) with a non-zero value;
+  - We are confirming with hardware team whether state 18 can be
+    frozen to 8k;
 
-> https://wiki.debian.org/SecureBoot#Using_your_key_to_sign_your_kernel
->
-> Have you followed the other steps on that page; ie do you have:
-> signing_key.priv, signing_key.der and signing_key.pem files?
+----
+v1->v2:
+  - Live migration supported and verified with a selftest
+  - Rebase to Thomas's new series for guest fpstate reallocation [1]
+  - Expand fpstate at KVM_SET_CPUID2 instead of when emulating XCR0
+    and IA32_XFD (Thomas/Paolo)
+  - Accordingly remove all exit-to-userspace stuff
+  - Intercept #NM to save guest XFD_ERR and restore host/guest value
+    at preemption on/off boundary (Thomas)
+  - Accordingly remove all xfd_err logic in preemption callback and
+    fpu_swap_kvm_fpstate()
+  - Reuse KVM_SET_XSAVE to handle both legacy and expanded buffer (Paolo)
+  - Don't return dynamic bits w/o prctl() in KVM_GET_SUPPORTED_CPUID (Paolo)
+  - Check guest permissions for dynamic features in CPUID[0xD] instead
+    of only for AMX at KVM_SET_CPUID (Paolo)
+  - Remove dynamic bit check for 32-bit guest in __kvm_set_xcr() (Paolo)
+  - Fix CPUID emulation for 0x1d and 0x1e (Paolo)
+  - Move "disable interception" to the end of the series (Paolo)
 
+This series brings AMX (Advanced Matrix eXtensions) virtualization
+support to KVM. The preparatory series from Thomas [1] is also included. 
 
+A large portion of the changes in this series is to deal with eXtended
+Feature Disable (XFD) which allows resizing of the fpstate buffer to 
+support dynamically-enabled XSTATE features with large state component
+(e.g. 8K for AMX).
 
-certs/signing_key.pem is automatically generated by Kbuild.
+There are a lot of simplications when comparing v2 to the original 
+proposal [2] and the first version [3]. Thanks to Thomas and Paolo for
+many good suggestions. 
 
-There is no such file as signing_key.priv
+The support is based on following key changes:
 
+  - Guest permissions for dynamically-enabled XSAVE features
 
-You can see the content of certs/signing_key.pem
-This file contains both certificate and private key.
+    Native tasks have to request permission via prctl() before touching
+    a dynamic-resized XSTATE compoenent. Introduce guest permissions 
+    for the similar purpose. Userspace VMM is expected to request guest
+    permission only once when the first vCPU is created.
 
+    KVM checks guest permission in KVM_SET_CPUID2. Setting XFD in guest
+    cpuid w/o proper permissions fails this operation. In the meantime,
+    unpermitted features are also excluded in KVM_GET_SUPPORTED_CPUID.
 
+  - Extend fpstate reallocation mechanism to cover guest fpu
 
+    Unlike native tasks which have reallocation triggered from #NM 
+    handler, guest fpstate reallocation is requested by KVM when it
+    identifies the intention on using dynamically-enabled XSAVE
+    features inside guest.
 
+    Extend fpu core to allow KVM request fpstate buffer expansion
+    for a guest fpu containter.
 
+  - Trigger fpstate reallocation in KVM
 
->
-> >
-> > Also, sbsign emits "Invalid DOS header magic" error
-> > if CONFIG_EFI_STUB is not set.
-> >
-> > The CONFIG name might depend on arch.
-> > CONFIG_EFI for ARCH=arm64, but CONFIG_EFI_STUB for ARCH=x86.
-> >
-> >
-> > If you require sbsign, you need to update Build-Depends ?
->
-> It looks like we should add a few extra checks before running sbsign ...
->
-> > sh ./scripts/package/builddeb
-> > Can't load key from file './certs/signing_key.priv'
-> > 139999825022720:error:02001002:system library:fopen:No such file or
-> > directory:../crypto/bio/bss_file.c:69:fopen('./certs/signing_key.priv','r')
-> > 139999825022720:error:2006D080:BIO routines:BIO_new_file:no such
-> > file:../crypto/bio/bss_file.c:76:
-> > make[4]: *** [scripts/Makefile.package:87: intdeb-pkg] Error 1
-> > make[3]: *** [Makefile:1539: intdeb-pkg] Error 2
-> > make[2]: *** [debian/rules:13: binary-arch] Error 2
-> > dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
-> > make[1]: *** [scripts/Makefile.package:83: bindeb-pkg] Error 2
-> > make: *** [Makefile:1539: bindeb-pkg] Error 2
->
->
+    This could be done either statically (before guest runs) or
+    dynamically (in the emulation path). According to discussion [1]
+    we decide to statically enable all xfeatures allowed by guest perm
+    in KVM_SET_CPUID2, with fpstate buffer sized accordingly. This spares
+    a lot of code and also avoid imposing an ordered restore sequence
+    (XCR0, XFD and XSTATE) to userspace VMM.
 
+  - RDMSR/WRMSR emulation for IA32_XFD
+
+    Because fpstate expansion is completed in KVM_SET_CPUID2, emulating
+    r/w access to IA32_XFD simply involves the xfd field in the guest 
+    fpu container. If write and guest fpu is currently active, the 
+    software state (guest_fpstate::xfd and per-cpu xfd cache) is also
+    updated.
+
+  - RDMSR/WRMSR emulation for XFD_ERR
+
+    When XFD causes an instruction to generate #NM, XFD_ERR contains
+    information about which disabled state components are being accessed.
+    It'd be problematic if the XFD_ERR value generated in guest is 
+    consumed/clobbered by the host before the guest itself doing so. 
+
+    Intercept #NM exception to save the guest XFD_ERR value if
+    guest CPUID includes dynamic xfeature bits. There is at most one
+    interception per guest task given a dynamic feature.
+
+    RDMSR/WRMSR emulation uses the saved value. The host value (always
+    ZERO outside of the host #NM handler) is restored before enabling
+    preemption. The saved guest value is restored right before entering
+    the guest (with preemption disabled).
+
+  - Get/set dynamic xfeature state for migration
+
+    Introduce new capability (KVM_CAP_XSAVE2) to deal with >4KB fpstate
+    buffer. Reading this capability returns the size of the current 
+    guest fpstate (e.g. after expansion). Userspace VMM uses a new ioctl
+    (KVM_GET_XSAVE2) to read guest fpstate from the kernel and reuses
+    the existing ioctl (KVM_SET_XSAVE) to update guest fpsate to the
+    kernel. KVM_SET_XSAVE is extended to do properly_sized memdup_user()
+    based on the guest fpstate.
+
+  - Expose related cpuid bits to guest
+
+    The last step is to allow exposing XFD, AMX_TILE, AMX_INT8 and
+    AMX_BF16 in guest cpuid. Adding those bits into kvm_cpu_caps finally
+    activates all previous logics in this series
+
+  - Optimization: disable interception for IA32_XFD
+
+    IA32_XFD can be frequently updated by the guest, as it is part of
+    the task state and swapped in context switch when prev and next have
+    different XFD setting. Always intercepting WRMSR can easily cause
+    non-negligible overhead.
+
+    Disable r/w emulation for IA32_XFD after intercepting the first
+    WRMSR(IA32_XFD) with a non-zero value. However MSR passthrough 
+    implies the software state (guest_fpstate::xfd and per-cpu xfd
+    cache) might be out of sync with MSR. This suggests KVM needs to
+    re-sync them at VM-exit before preemption is enabled.
+
+    Also disable read emulation for IA32_XFD_ERR at the same point.
+
+To verify AMX virtualization overhead on non-AMX usages, we run the
+Phoronix kernel build test in the guest w/ and w/o AMX in cpuid. The 
+result shows no observable difference between two configurations.
+
+Thanks Jun Nakajima and Kevin Tian for the design suggestions when
+this version is being internally worked on.
+
+[1] https://lore.kernel.org/all/20211214022825.563892248@linutronix.de/
+[2] https://www.spinics.net/lists/kvm/msg259015.html
+[3] https://lore.kernel.org/lkml/20211208000359.2853257-1-yang.zhong@intel.com/
+
+Thanks,
+Jing
+
+---
+Guang Zeng (1):
+  kvm: x86: AMX live migration support
+
+Jing Liu (13):
+  kvm: x86: Fix xstate_required_size() to follow XSTATE alignment rule
+  kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID
+  kvm: x86: Check permitted dynamic xfeatures at KVM_SET_CPUID2
+  x86/fpu: Make XFD initialization in __fpstate_reset() a function
+    argument
+  kvm: x86: Enable dynamic XSAVE features at KVM_SET_CPUID2
+  kvm: x86: Add emulation for IA32_XFD
+  x86/fpu: Prepare xfd_err in struct fpu_guest
+  kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+  kvm: x86: Emulate IA32_XFD_ERR for guest
+  kvm: x86: Add XCR0 support for Intel AMX
+  kvm: x86: Add CPUID support for Intel AMX
+  kvm: x86: Disable interception for IA32_XFD on demand
+  kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
+
+Kevin Tian (2):
+  x86/fpu: Provide fpu_update_guest_perm_features() for guest
+  x86/fpu: Provide fpu_update_guest_xfd() for IA32_XFD emulation
+
+Thomas Gleixner (5):
+  x86/fpu: Extend fpu_xstate_prctl() with guest permissions
+  x86/fpu: Prepare guest FPU for dynamically enabled FPU features
+  x86/fpu: Add guest support to xfd_enable_feature()
+  x86/fpu: add uabi_size to guest_fpu
+  x86/fpu: Provide fpu_sync_guest_vmexit_xfd_state()
+
+Wei Wang (2):
+  kvm: selftests: Add support for KVM_CAP_XSAVE2
+  docs: kvm: Add KVM_GET_XSAVE2
+
+ Documentation/virt/kvm/api.rst                |  33 +++-
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/fpu/api.h                |  11 ++
+ arch/x86/include/asm/fpu/types.h              |  32 ++++
+ arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/include/uapi/asm/kvm.h               |  12 +-
+ arch/x86/include/uapi/asm/prctl.h             |  26 ++--
+ arch/x86/kernel/fpu/core.c                    | 104 ++++++++++++-
+ arch/x86/kernel/fpu/xstate.c                  | 145 +++++++++++-------
+ arch/x86/kernel/fpu/xstate.h                  |  15 +-
+ arch/x86/kernel/process.c                     |   2 +
+ arch/x86/kvm/cpuid.c                          |  93 ++++++++---
+ arch/x86/kvm/vmx/vmcs.h                       |   5 +
+ arch/x86/kvm/vmx/vmx.c                        |  27 +++-
+ arch/x86/kvm/vmx/vmx.h                        |   2 +-
+ arch/x86/kvm/x86.c                            | 103 ++++++++++++-
+ include/uapi/linux/kvm.h                      |   4 +
+ tools/arch/x86/include/uapi/asm/kvm.h         |  12 +-
+ tools/include/uapi/linux/kvm.h                |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   2 +
+ .../selftests/kvm/include/x86_64/processor.h  |  12 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  31 ++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  45 +++++-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |   2 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |   2 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |   2 +-
+ 28 files changed, 624 insertions(+), 108 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.27.0
+

@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD20A47915C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90555479162
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239067AbhLQQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:22:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57834 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239062AbhLQQWf (ORCPT
+        id S239080AbhLQQXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238463AbhLQQXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:22:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0910622DD;
-        Fri, 17 Dec 2021 16:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1454C36AE1;
-        Fri, 17 Dec 2021 16:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639758154;
-        bh=zDKOA3xfyePxWIFvNh9DTwQIsyV3ekI3atL+Efr3sEk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rpMCbsdnqmVNs33nSCHT7BnZGqnYxG0QzS5ylgnKs3RkL3A7og9bvmkmUs6t+HMBs
-         ztZlziMazw/I305rYW8L/nT8Zm+ERrJu8HSMlpXdfIjqpVj5ieo1yygVrPkskxG276
-         +qMxK8UT+iLLcmoc4K8+OEWboDQL0LaOGwGP3Rq0=
-Date:   Fri, 17 Dec 2021 17:22:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-Message-ID: <Yby5Rwr0jgAcK4th@kroah.com>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-14-glider@google.com>
- <YbjHerrHit/ZqXYs@kroah.com>
- <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+        Fri, 17 Dec 2021 11:23:01 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A7C061574;
+        Fri, 17 Dec 2021 08:23:01 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id w15-20020a4a354f000000b002d85ef0533dso858281oog.7;
+        Fri, 17 Dec 2021 08:23:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=SWouGLhvvViiSRQIcz77xxUNZKE9YIw+jCvyIogx2qo=;
+        b=gVXZk6lefkDrmA1JgBaEyfz91cHaOp7MBXAqVt5Ffjh38o6ttNZL/KDAnryVeYENHB
+         B7stdvNm6neYJuz7OzZeve3PMO5Ia7UHSmCJqrmHmbcp3CfBZzli2xoOPKQsRAFBi5Zz
+         vOyBJ3Y6ojXoQk2yuTDzZawBq6VVjwHZ3s/cBcBrhIIJF0uwl9P95H+79ixRV6aDai+y
+         j8xVBy57g2x63/ifjMLajZKADUnu+3rFWBREg4SxMiqib/ywSNO3XyaQg8Y2+JuHDrRt
+         vfWOU2EymBZmU/H8xoJSnEDHmU9gQLii5ybzuha/0uyLcRzZZ2SdVEHItRGD5IWvZYay
+         lX9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SWouGLhvvViiSRQIcz77xxUNZKE9YIw+jCvyIogx2qo=;
+        b=F/1DIM/XBuduW2VBnP8SNLB84xyAlbeW8uE3Rzo7w8AnaNcJBA6wN36ctYhC+G5r5H
+         UiKU4ab0BdRiNtKvJI/WZa83KgI9UsDRNgv6v0/Nqv84vDFWH4L/PeGBZtb0BYdRFugV
+         IKOGw9cLww2v0+LmWPXIesKydDMnhaAtHzUQ8IWSfSEJTHX3EgGNJB8BQIHm9AHjQR1O
+         AJggK9LQr7D3rVPY+kHV5zdp6FVM21aPraYhbPQaahEKU46TSOkctta4jF4vbcaa5YW6
+         WFrFfPqAqZBGpLFXEFFed+YWnvP0XkApTPTPQahpX1yMMQMjIWsXr6T5TfLutSJwOTBv
+         FtKA==
+X-Gm-Message-State: AOAM533+V9BblT9yVjMImT57VzFTdm35P/9WBzUeisijd3QPAFFIKOus
+        3BT5bzwWMC6zUekTKfI3uZonNWu4k+M=
+X-Google-Smtp-Source: ABdhPJzsKt3QzsUMKg8VRd8GOtk1w/RP311+v9SHCny7qC3j+JN/+H5GM1sNlds0P4UkllfajW6o0Q==
+X-Received: by 2002:a4a:d284:: with SMTP id h4mr2429603oos.31.1639758180843;
+        Fri, 17 Dec 2021 08:23:00 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n23sm1675549oig.4.2021.12.17.08.22.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 08:23:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211128184549.9161-1-pauk.denis@gmail.com>
+ <20211217002223.63b1e0a7@netbook-debian>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
+Message-ID: <c6bf6ce9-8b45-e4a2-7167-83bdc8437fca@roeck-us.net>
+Date:   Fri, 17 Dec 2021 08:22:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+In-Reply-To: <20211217002223.63b1e0a7@netbook-debian>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:33:56AM +0100, Alexander Potapenko wrote:
-> On Tue, Dec 14, 2021 at 5:34 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
-> > > This patch adds the core parts of KMSAN runtime and associated files:
-> > >
-> > >   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
-> > >     the kernel memory;
-> > >   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
-> > >     outside of KMSAN runtime;
-> > >   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
-> > >   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code;
-> > >   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT();
-> > >   - mm/kmsan/core.c: core functions that operate with shadow and origin
-> > >     memory and perform checks, utility functions;
-> > >   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
-> > >   - mm/kmsan/init.c: KMSAN initialization routines;
-> > >   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentation;
-> > >   - mm/kmsan/kmsan.h: internal KMSAN declarations;
-> > >   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
-> > >     addressing;
-> > >   - scripts/Makefile.kmsan: CFLAGS_KMSAN
-> > >   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
-> >
-> >
-> > That's an odd way to write a changelog, don't you think?
+On 12/16/21 2:22 PM, Denis Pauk wrote:
+> Hi,
 > 
-> Agreed. I'll try to concentrate on the functionality instead. Sorry about that.
+> Could you please provide a some feedback about such idea?
 > 
-> > You need to describe what you are doing here and why you are doing it.
-> > Not a list of file names, we can see that in the diffstat.
-> >
-> > Also, you don't mention you are doing USB stuff here at all.  And why
-> > are you doing it here?  That should be added in a later patch.
+> I have bigger list of supported boards that requires ACPI mutex lock,
+> but I prefer to have some feedback before send next version of patch.
 > 
-> You are right, USB is a good example of a stand-alone feature that can
-> be moved to a separate patch.
+> I have created separate patch[1] with only boards where WMI methods is
+> enough. And if work on patch takes some time/additional patch
+> versions(for sure it will), I prefer to have that patch merged and
+> rebase current patch over resulted list of boards.
 > 
-> > Break this up into smaller, logical, pieces that add the infrastructure
-> > and build on it.  Don't just chop your patches up on a logical-file
-> > boundry, as you are adding stuff in this patch that you do not need for
-> > many more later on, which means it was not needed here.
-> 
-> Just to make sure I don't misunderstand - for example for "kmsan: mm:
-> call KMSAN hooks from SLUB code", would it be better to pull the code
-> in mm/kmsan/core.c implementing kmsan_slab_alloc() and
-> kmsan_slab_free() into that patch?
 
-Yes.
+Looking through the code, I am absolutely not happy with it. It makes
+the driver even more unreadable than it already is, and on top of that
+makes it vulnerable to problems in the ACPI code. Example: If ACPI fails
+to unlock the mutex, the driver will end up being non-functional.
 
-> I thought maintainers would prefer to have patches to their code
-> separated from KMSAN code, but if it's not true, I can surely fix
-> that.
+At some point, we have to face it: ASUS doesn't support Linux, and they
+make it hard to access chips like this. I think the chip should be
+accessed through "official" channels only if provided (ie WMI/ACPI),
+or not at all.
 
-As a maintainer, I want to know what the function call that you just
-added to my subsystem to call does.  Wouldn't you?  Put it all in the
-same patch.
-
-Think about submitting a patch series as telling a story.  You need to
-show the progression forward of the feature so that everyone can
-understand what is going on.  To just throw tiny snippets at us is
-impossible to follow along with what your goal is.
-
-You want reviewers to be able to easily see if the things you describe
-being done in the changelog actually are implemented in the diff.
-Dividing stuff up by files does not show that at all.
-
-thanks,
-
-greg k-h
+Guenter

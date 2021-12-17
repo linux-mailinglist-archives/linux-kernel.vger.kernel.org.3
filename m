@@ -2,92 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 425C9478678
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18633478681
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbhLQIsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbhLQIse (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:48:34 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FAFC061574;
-        Fri, 17 Dec 2021 00:48:34 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id j17so1924364qtx.2;
-        Fri, 17 Dec 2021 00:48:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bE4XJY/cU2Uh/WZZUlAnTe6lzAEixS41+9wWGwhPPdk=;
-        b=W3/FPdDwOzjE8v7k+4CL/FftB7fwSq4WjG0gv4QScV3wtw34nalrf2d/YS9y3A9Gmf
-         +v8DBhQ5qSHwRFJYng938g5I8R+dgseLrzMTfx3ksAP2W0omrp43RfLFUGBU8EpIB2Rt
-         iKKPWkiMtEbuYRfzTmqaLXRt1Hhhs4pWt3w+vGp5rgdQI6VkDIbuKkc9lx3RJfQu2LQl
-         I0lRMmcfBxDKmNSN3FeE9G4FKODORVNeJ6UP37u9AduNpXYu2tQ1kEX3KSL/m8h0gGnQ
-         8o3jjceIPyhtgS8/89wp9TWjMyU1AKsU/n8EVJ3uMMB0qOJSG+GZw1uKT2i7HYVT5KVj
-         s/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bE4XJY/cU2Uh/WZZUlAnTe6lzAEixS41+9wWGwhPPdk=;
-        b=tgz2JcJuaSYeszSow/DdEaICJ0BayGI1iRuiTmNx0TNnJMSK6fxRfae236+vqacZRm
-         7ihlEn2oJ6wDx9m9YG6MTp+7RuAVsO/mSagnP4k1c36XD4YMyy3RfaL/RUVG7Gz/Ehww
-         98EMxdEUgNhYkd2dhf0VXKOi8wfk2btz38DBqtPwxgjsgS1tBpWWlYXhVhtGeqgHA5N0
-         D+/l41Kk7jT8sw4rSetod7QYCnizm4P5I0e1KTaCippFCfr6bnaWQflLzADTrqFQ75LP
-         OQPDoCn7glHKDKzbSmHf0OFB8SMImiV9jV+wvWZI41L/qtBok73p1sAqU9k4g8QEg4uk
-         MQzQ==
-X-Gm-Message-State: AOAM530hsiq0eB4Qmx4wFlXS3zzdtgy+dxzmV90c58BTsxcoopD+r4of
-        +m1HSu2SwR6DQt28VSH3bqs=
-X-Google-Smtp-Source: ABdhPJw7hmMXJr0e0KGODaJWd6bBR02VJK7qw3qlxzcjNZisFF1+RuYKbaqlK57uJZX5zZTiujrsoQ==
-X-Received: by 2002:a05:622a:1828:: with SMTP id t40mr1472840qtc.0.1639730913667;
-        Fri, 17 Dec 2021 00:48:33 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i11sm4214021qko.116.2021.12.17.00.48.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 00:48:33 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, deng.changcheng@zte.com.cn,
-        stefan.wahren@i2se.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: vertexcom: Remove unneeded semicolon
-Date:   Fri, 17 Dec 2021 08:48:27 +0000
-Message-Id: <20211217084827.452729-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S232544AbhLQIwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:52:07 -0500
+Received: from mga11.intel.com ([192.55.52.93]:6659 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229893AbhLQIwG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 03:52:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639731125; x=1671267125;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x+I5rE7VNY12BhYU+2TspOP4sX4P36nu1hjhpz7qMZc=;
+  b=Ooj/0FrQe9+mT/XJyQTKHKcBfx7UxZ+xDBWtrR8ek1szgI4gdaSU+jg/
+   miLUB0WxJo4VBt+s53u7LhMYk/YI68kXLrnPOVxHvIIV3Xn4BVs7PmVH1
+   qbFR8BEZZBJ/exthrrS7OPVVr/7Z9nBZz3fmSwL4WKlpSOyso6fYwoR9C
+   tRDysKTEpD0hNwMIKuW1wJX28mrkQv6eCa2c0QNP25H1kc8NoVc/HJZs3
+   W7+sWIXWOqmz+T3I1oALkNNTrmQmMnTRg/tz2i8g58dWr0Q/9v/TFHc87
+   nFx5fFDH6sBAf023Xii6sSF6l8v5USRJ9litWj/hMJFRE/QnYitFPNKW+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237253469"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="237253469"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 00:52:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="662788992"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 00:52:00 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my8y8-0004VB-1I; Fri, 17 Dec 2021 08:52:00 +0000
+Date:   Fri, 17 Dec 2021 16:51:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/18] MM: reclaim mustn't enter FS for SWP_FS_OPS
+ swap-space
+Message-ID: <202112171635.JUIRMzHQ-lkp@intel.com>
+References: <163969850295.20885.4255989535187500085.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163969850295.20885.4255989535187500085.stgit@noble.brown>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Hi NeilBrown,
 
-Fix the following coccicheck review:
-./drivers/net/ethernet/vertexcom/mse102x.c: 414: 2-3: Unneeded semicolon
+Thank you for the patch! Yet something to improve:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+[auto build test ERROR on cifs/for-next]
+[also build test ERROR on axboe-block/for-next rostedt-trace/for-next linus/master v5.16-rc5]
+[cannot apply to trondmy-nfs/linux-next hnaz-mm/master mszeredi-vfs/overlayfs-next next-20211216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+config: arm-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171635.JUIRMzHQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/a8e1b1ffec6ade1545df519d254eae0400b7ec37
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
+        git checkout a8e1b1ffec6ade1545df519d254eae0400b7ec37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ^
+   mm/vmscan.c:1480:20: note: did you mean 'swp_swap_info'?
+   include/linux/swap.h:487:40: note: 'swp_swap_info' declared here
+   static inline struct swap_info_struct *swp_swap_info(swp_entry_t entry)
+                                          ^
+>> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ~~~~~~~~~~~~~~~~~~~~  ^
+   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
+           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
+                                     ^~~~
+   include/linux/compiler_types.h:291:13: note: expanded from macro '__unqual_scalar_typeof'
+                   _Generic((x),                                           \
+                             ^
+>> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ^
+>> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ~~~~~~~~~~~~~~~~~~~~  ^
+   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
+           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
+                                     ^~~~
+   include/linux/compiler_types.h:298:15: note: expanded from macro '__unqual_scalar_typeof'
+                            default: (x)))
+                                      ^
+>> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ^
+>> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                             ~~~~~~~~~~~~~~~~~~~~  ^
+   include/linux/compiler.h:218:3: note: expanded from macro 'data_race'
+                   expr;                                                   \
+                   ^~~~
+>> mm/vmscan.c:1480:9: error: invalid argument type 'void' to unary expression
+           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 errors generated.
+
+
+vim +/page_swap_info +1480 mm/vmscan.c
+
+  1467	
+  1468	static bool test_may_enter_fs(struct page *page, gfp_t gfp_mask)
+  1469	{
+  1470		if (gfp_mask & __GFP_FS)
+  1471			return true;
+  1472		if (!PageSwapCache(page) || !(gfp_mask & __GFP_IO))
+  1473			return false;
+  1474		/* We can "enter_fs" for swap-cache with only __GFP_IO
+  1475		 * providing this isn't SWP_FS_OPS.
+  1476		 * ->flags can be updated non-atomicially (scan_swap_map_slots),
+  1477		 * but that will never affect SWP_FS_OPS, so the data_race
+  1478		 * is safe.
+  1479		 */
+> 1480		return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
+  1481	}
+  1482	
+
 ---
- drivers/net/ethernet/vertexcom/mse102x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/vertexcom/mse102x.c b/drivers/net/ethernet/vertexcom/mse102x.c
-index a3c2426e5597..89a31783fbb4 100644
---- a/drivers/net/ethernet/vertexcom/mse102x.c
-+++ b/drivers/net/ethernet/vertexcom/mse102x.c
-@@ -411,7 +411,7 @@ static int mse102x_tx_pkt_spi(struct mse102x_net *mse, struct sk_buff *txb,
- 		} else {
- 			msleep(20);
- 		}
--	};
-+	}
- 
- 	ret = mse102x_tx_frame_spi(mse, txb, pad);
- 	if (ret)
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

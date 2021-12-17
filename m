@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40948478711
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AF3478715
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbhLQJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:30:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:53814 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230497AbhLQJal (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:30:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 61FCF1435;
-        Fri, 17 Dec 2021 01:30:41 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.66.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E79DC3F774;
-        Fri, 17 Dec 2021 01:30:38 -0800 (PST)
-Date:   Fri, 17 Dec 2021 09:30:32 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Jianyong Wu <jianyong.wu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        anshuman.khandual@arm.com, akpm@linux-foundation.org,
-        david@redhat.com, quic_qiancai@quicinc.com, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        gshan@redhat.com, justin.he@arm.com, nd@arm.com
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Message-ID: <YbxYuETndF9LmJz4@FVFF77S0Q05N>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
+        id S234112AbhLQJb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:31:29 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:41526 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232622AbhLQJb2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 04:31:28 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AGuB+5a+thdXOz+H1qMPzDrUDDHyTJUtcMsCJ2f8?=
+ =?us-ascii?q?bfWQNrUok1GZWzDYZDWHUPv+MazOhLtskaYq+pkNV6sCGzNE3TFdlrnsFo1Bi8?=
+ =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/jRHOOjULe?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
+ =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfoe6ffCfm4JD7I0ruNiGEL+9VJEo2J4wD5ud+B0l?=
+ =?us-ascii?q?E7/UFLj0XKBGE78qyw6qTS+9wi8BlJ87uVKsHunBkzCmfCfcOQJbfTqGM7thdt?=
+ =?us-ascii?q?B8rht1HHd7datAfZD4paw7PCzVLO1EKGNc9kf2ui33XbTJVshSWqLAx7myVyxZ?=
+ =?us-ascii?q?+uJDpMdzIapmJXshRkFqVvX7u4Wv0GFcZOcaZxD7D9Wij7tIjNwuTtJk6TeX+r?=
+ =?us-ascii?q?6A1xgbIgDF7NfHfbnPjydHRt6J0c4k3x5QoxxcT?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AasQOnaMyx+bo88BcTv2jsMiBIKoaSvp037BL?=
+ =?us-ascii?q?7TEUdfUxSKGlfq+V8sjzqiWftN98YhAdcLO7Scy9qBHnhP1ICOAqVN/MYOCMgh?=
+ =?us-ascii?q?rLEGgN1+vf6gylMyj/28oY7q14bpV5YeeaMXFKyer8/ym0euxN/OW6?=
+X-IronPort-AV: E=Sophos;i="5.88,213,1635177600"; 
+   d="scan'208";a="119057194"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 17 Dec 2021 17:31:25 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 328484D13BDD;
+        Fri, 17 Dec 2021 17:31:21 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 17 Dec 2021 17:31:22 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 17 Dec 2021 17:31:21 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <christian@brauner.io>, <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        "Li Zhijian" <lizhijian@cn.fujitsu.com>,
+        Philip Li <philip.li@intel.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: [PATCH v2] ksefltest: pidfd: Fix wait_states: Test terminated by timeout
+Date:   Fri, 17 Dec 2021 17:30:40 +0800
+Message-ID: <20211217093040.9530-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216082812.165387-1-jianyong.wu@arm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 328484D13BDD.AD311
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 04:28:12PM +0800, Jianyong Wu wrote:
-> The 'fixmap' is a global resource and is used recursively by
-> create pud mapping(), leading to a potential race condition in the
-> presence of a concurrent call to alloc_init_pud():
-> 
-> kernel_init thread                          virtio-mem workqueue thread
-> ==================                          ===========================
-> 
->   alloc_init_pud(...)                       alloc_init_pud(...)
->   pudp = pud_set_fixmap_offset(...)         pudp = pud_set_fixmap_offset(...)
->   READ_ONCE(*pudp)
->   pud_clear_fixmap(...)
->                                             READ_ONCE(*pudp) // CRASH!
-> 
-> As kernel may sleep during creating pud mapping, introduce a mutex lock to
-> serialise use of the fixmap entries by alloc_init_pud().
-> 
-> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+0Day/LKP observed that the kselftest blocks foever since one of the
+pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
+the source, we found that it blocks at:
+ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
 
-Since there were deadlock issues with the last version, it would be very nice
-if we could check this with at least:
+we can reproduce it by:
+$ while true; do make run_tests -C pidfd; done
 
-* CONFIG_DEBUG_ATOMIC_SLEEP
-* CONFIG_PROVE_LOCKING
+Introduce a blocking read in child process to make sure the parent can
+check its WCONTINUED.
 
-... so that we can be reasonably certain that we're not introducing some
-livelock/deadlock scenario.
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+V2: rewrite with pipe to avoid usleep
+---
+ tools/testing/selftests/pidfd/pidfd_wait.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Are you able to reproduce the problem for testing, or was this found by
-inspection? Do you have any instructions for reproducing the problem? e.g. can
-this easily be tested with QEMU?
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index be2943f072f6..d5c0ffa26c32 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -96,21 +96,26 @@ TEST(wait_states)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
++	int ret, pfd[2];
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
+ 	};
+-
++	ASSERT_EQ(pipe(pfd), 0);
+ 	pid = sys_clone3(&args);
+ 	ASSERT_GE(pid, 0);
+ 
+ 	if (pid == 0) {
++		char buf[2];
++		close(pfd[1]);
+ 		kill(getpid(), SIGSTOP);
++		ASSERT_EQ(read(pfd[0], buf, 1), 1);
++		close(pfd[0]);
+ 		kill(getpid(), SIGSTOP);
+ 		exit(EXIT_SUCCESS);
+ 	}
+ 
++	close(pfd[0]);
+ 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
+ 	ASSERT_EQ(info.si_signo, SIGCHLD);
+ 	ASSERT_EQ(info.si_code, CLD_STOPPED);
+@@ -119,6 +124,8 @@ TEST(wait_states)
+ 	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
+ 
+ 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
++	ASSERT_EQ(write(pfd[1], "C", 1), 1);
++	close(pfd[1]);
+ 	ASSERT_EQ(info.si_signo, SIGCHLD);
+ 	ASSERT_EQ(info.si_code, CLD_CONTINUED);
+ 	ASSERT_EQ(info.si_pid, parent_tid);
+-- 
+2.33.0
 
-If you're able to reproduce the issue, it would be nice to have an example
-backtrace of when this goes wrong.
 
-Thanks,
-Mark.
 
-> ---
-> 
-> Change log:
-> 
-> from v2 to v3:
->      change spin lock to mutex lock as kernel may sleep when create pud
-> map.
-> 
->  arch/arm64/mm/mmu.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index acfae9b41cc8..e680a6a8ca40 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
->  static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
->  
->  static DEFINE_SPINLOCK(swapper_pgdir_lock);
-> +static DEFINE_MUTEX(fixmap_lock);
->  
->  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
->  {
-> @@ -329,6 +330,11 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
->  	}
->  	BUG_ON(p4d_bad(p4d));
->  
-> +	/*
-> +	 * We only have one fixmap entry per page-table level, so take
-> +	 * the fixmap lock until we're done.
-> +	 */
-> +	mutex_lock(&fixmap_lock);
->  	pudp = pud_set_fixmap_offset(p4dp, addr);
->  	do {
->  		pud_t old_pud = READ_ONCE(*pudp);
-> @@ -359,6 +365,7 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
->  	} while (pudp++, addr = next, addr != end);
->  
->  	pud_clear_fixmap();
-> +	mutex_unlock(&fixmap_lock);
->  }
->  
->  static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
-> -- 
-> 2.17.1
-> 

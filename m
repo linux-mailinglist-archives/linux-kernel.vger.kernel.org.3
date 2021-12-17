@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21EE4790B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BDC4790BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238599AbhLQP4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S238626AbhLQP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238592AbhLQP4P (ORCPT
+        with ESMTP id S238539AbhLQP4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:56:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD96DC061574;
-        Fri, 17 Dec 2021 07:56:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4606229D;
-        Fri, 17 Dec 2021 15:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13FAC36AE1;
-        Fri, 17 Dec 2021 15:56:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639756574;
-        bh=aJGSLOLDVZQ4jsbHaydJnZJEiQHbT56U8N8TFU09vpM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=masnrHG+L03rpmbA+aizifZZ7NBeotxg2pGAudbMiSrZI95ppAePqshrrCbG5xJ4t
-         BKM3jU6UoEiJbBeaEXNWQrXYuzIQokYiAQoQeokV3xJjoXfvwYKLQ3lbIyYMxgte1D
-         lu6YPHYeBcsitoFH0CpT1kbmAM7NBZAiGtq7uKdsTPG7HxADYEH53i8wS3T6q8/bxn
-         xfgdTP6l0cyPr5PoAV3ZSOesRrBYEz5u//kuVHq9dzDy1FASepwOVipH6oT+/SeWhw
-         rgKL1X4Xx8sZKFQzfcT8K0I2hn65uvqUI8F9LlCmhdo4rjrswDTF1cXK+BSNJyPOHU
-         0PU5xQtZ6O2cg==
-Received: by mail-wr1-f46.google.com with SMTP id v11so4867947wrw.10;
-        Fri, 17 Dec 2021 07:56:14 -0800 (PST)
-X-Gm-Message-State: AOAM532b1ZN+SUeC5II5+ijdEdSbLeEYr+JzQH1XK6inh3FR74smJZFT
-        NgZPHs5zqYhXRPh/1y0epSsXHqIVEdOMS98ndu0=
-X-Google-Smtp-Source: ABdhPJzcVwEAILjoidpzItkyOHn+6QWhp7hZttF+ca01hCIVaSRmevaz8Fi541ZypirYAk0kDkqtzlmA+kdeyY9H0gI=
-X-Received: by 2002:adf:f051:: with SMTP id t17mr3088681wro.192.1639756572995;
- Fri, 17 Dec 2021 07:56:12 -0800 (PST)
+        Fri, 17 Dec 2021 10:56:37 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59CC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:56:36 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id w23so5176896uao.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ElflHpQkLuzl8P2eAKJJkdqkTvJ6AItQbXCMpCRS8yg=;
+        b=eIonsckjRxmhvgvt6jfEqbEqWnigVC/86CAxpO3iaqgtNloYFFgMbJo+PkICrcB/92
+         XeSY5tlCEGsfQXjAI1PEJNm54M7adwN222B9Q8c/B1bPYcMaPP/dy1c8Bebyc0gsAG98
+         YYkhcAz7hiza9paN+MluRgPMZse3uRvR2D8Ic2CT1/fKGE7GNzb7emkDp+xozCKEGwcY
+         7RCq4zQTk2YaQ6uWAU7ucDw9PS2uQU1MK9Mx45uss4TPIefm2+Ay7ixorICNNC2cwx7c
+         M3NtS4JZfssTg2rFjYrLGKnqoQNUXwUcUIwGmkIaGiK4MzdHj1NI9+V5EQkFBFerPPth
+         8Bsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ElflHpQkLuzl8P2eAKJJkdqkTvJ6AItQbXCMpCRS8yg=;
+        b=pSeQAkfra/NlVFNCy72mUyT7+uccnJPIdpBTct3Er+1RoGFiaN2feBmox3DhB3uSjg
+         WBb8GC3UYJQP/yeLvsRO1OgCqlEuW4X0uAyZz49YQ07DYIZjbOFql1hLY9VioXEAu+8o
+         rjdwCPUoi6Pwm+4zjhfokc2nNQ94tYTCumJVI1eKRa2j3oO2K0DDF96pdog8KiUY6U0v
+         cfKGVbY4uZrV5CwnU2dmB5d8fEgvO+/da4hRq4Y0g8P+vWL/QjlX1qLHrphxZmiNsTs3
+         AAOGRD5VEsHJzCeIe7M7SrDNi+vQ+7ACSuiCtl95iIralIjcwd9iYOsuzQuMdPfD//o8
+         X89A==
+X-Gm-Message-State: AOAM531+wTMkgxR796ZuxqSEBL52s9iUeJMqwxGfk5PNJ8ZmZFnWt3xx
+        1dcSozheJdvQrWNY1RSgXs9dlgOqzldMCG8ip4ukeg==
+X-Google-Smtp-Source: ABdhPJxreb5JlA/rQW3pI2rH7hhfpaWxc1ic4KV6Svi8Wq8H7Y90V8E8MrdFIqB90JJDjHgtHAOwoEmxNeheS6A3Lrs=
+X-Received: by 2002:a05:6102:512:: with SMTP id l18mr1034560vsa.57.1639756595998;
+ Fri, 17 Dec 2021 07:56:35 -0800 (PST)
 MIME-Version: 1.0
-References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
- <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
- <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com> <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
- <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com> <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
- <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com> <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
- <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com> <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
- <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
- <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
- <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
- <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com> <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
- <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
-In-Reply-To: <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 17 Dec 2021 16:55:56 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
-Message-ID: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
-Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
-To:     John Garry <john.garry@huawei.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+ <20211215160906.17451-7-semen.protsenko@linaro.org> <8c1dbcda-ce01-81c9-b34a-f64b6f61c868@canonical.com>
+ <CAPLW+4ndeokx3WiYaK_3ooe0J+BQe8Dx7QCecA7Deowk0AdxnA@mail.gmail.com> <73c5a527-2d5d-8524-b067-f9128055ff10@canonical.com>
+In-Reply-To: <73c5a527-2d5d-8524-b067-f9128055ff10@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 17 Dec 2021 17:56:24 +0200
+Message-ID: <CAPLW+4n+iVwhVB06vwBKxesaeuRo0kgXEZvqPQo6RbOiZO3Vbw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] arm64: dts: exynos: Add initial Exynos850 SoC support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 4:27 PM John Garry <john.garry@huawei.com> wrote:
-> On 17/12/2021 14:32, Arnd Bergmann wrote:
->  From looking at the patch Niklas directed us at, as I understand,
-> HAS_IOPORT is to decide whether the arch/platform may support PIO
-> accessors - inb et al. And on that basis I am confused why it is not
-> selected for arm64. And further compounded by:
+On Fri, 17 Dec 2021 at 10:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 >
->   config INDIRECT_PIO
->                 bool "Access I/O in non-MMIO mode"
->                 depends on ARM64
->         +       depends on HAS_IOPORT
+> On 16/12/2021 20:40, Sam Protsenko wrote:
+> > On Wed, 15 Dec 2021 at 18:47, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >>
 >
-> If arm64 does not select, then why depend on it?
-
-Right, both arm32 and arm64 need to select HAS_IOPORT.
-
->  > If you have a better way of finding the affected drivers,
->  > that would be great.
+> (...)
 >
-> Assuming arm64 should select HAS_IOPORT, I am talking about f71805f as
-> an example. According to that patch, this driver additionally depends on
-> HAS_IOPORT; however I would rather arm64, like powerpc, should not allow
-> that driver to be built at all.
+> >>> +             serial0 = &serial_0;
+> >>> +             serial1 = &serial_1;
+> >>> +             serial2 = &serial_2;
+> >>> +             i2c0 = &i2c_0;
+> >>> +             i2c1 = &i2c_1;
+> >>> +             i2c2 = &i2c_2;
+> >>> +             i2c3 = &i2c_3;
+> >>> +             i2c4 = &i2c_4;
+> >>> +             i2c5 = &i2c_5;
+> >>> +             i2c6 = &i2c_6;
+> >>> +             i2c7 = &hsi2c_0;
+> >>> +             i2c8 = &hsi2c_1;
+> >>> +             i2c9 = &hsi2c_2;
+> >>> +             i2c10 = &hsi2c_3;
+> >>> +             i2c11 = &hsi2c_4;
+> >>> +     };
+> >>> +
+> >>> +     arm-pmu {
+> >>> +             compatible = "arm,cortex-a55-pmu";
+> >>> +             interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+> >>> +             interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
+> >>> +                                  <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
+> >>> +     };
+> >>> +
+> >>> +     /* Main system clock (XTCXO); external, must be 26 MHz */
+> >>> +     oscclk: clock-oscclk {
+> >>> +             compatible = "fixed-clock";
+> >>> +             clock-output-names = "oscclk";
+> >>> +             #clock-cells = <0>;
+> >>> +     };
+> >>> +
+> >>> +     /* RTC clock (XrtcXTI); external, must be 32.768 kHz */
+> >>
+> >> This clock is usually provided by PMIC, so instead I expect updating
+> >> s2mps11-clk driver. It's not correct to mock it with fixed-clock, but in
+> >> some cases might be needed. Then I would need an explanation and maybe a
+> >> TODO note.
+> >>
+> >> I wonder if we already discussed this...
+> >>
+> >
+> > Don't really remember discussing that. That's actually something new
+> > for me :) I was planning to add PMIC support as a part of separate
+> > activity later, it might not be so easy: S2MPU12 uses I3C connection.
+> > And RTC clock is not handled even in downstream kernel. So I'll have
+> > to implement that by PMIC datasheet. I'll keep some TODO comment for
+> > now, hope it's ok with you?
+>
+> Assuming it is really coming from the PMIC (should be visible in the
+> board schematics), it should be using s2mps11-clk. I am fine with
+> keeping fixed-clock now + TODO note, but please move it to the board
+> DTS. It's not the property of the SoC.
+>
 
-Agreed, I missed these when I looked through the HAS_IOPORT users,
-that's why I suggested to split up that part of the patch per subsystem
-so they can be inspected more carefully.
+Yes, I checked, RTC clock is coming from PMIC. Moved "rtcclk" clock to
+board file, and corresponding clock properties for "rtc" and "cmu_hsi"
+nodes as well. Will send v4 soon.
 
-My feeling is that in this case we want some other dependency, e.g. a
-new CONFIG_LPC. It should actually be possible to use this driver on
-any machine with an LPC bus, which would by definition be the primary
-I/O space, so it should be possible to load it on Arm64.
-
-         Arnd
+> >
+> >>> +     rtcclk: clock-rtcclk {> +               compatible = "fixed-clock";
+> >>> +             clock-output-names = "rtcclk";
+> >>> +             #clock-cells = <0>;
+> >>> +     };
+> >>> +
+>
+>
+> Best regards,
+> Krzysztof

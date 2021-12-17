@@ -2,149 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DA94782FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3064782FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 03:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhLQCGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 21:06:08 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:49286 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231334AbhLQCGH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:06:07 -0500
-X-UUID: bfd9d48296cc4064aa069d17e1140ff2-20211217
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=oKLXoDnvb+4kT3LFl2tU05cJqVSai2RXcpGwEw0iC4E=;
-        b=ELpxMOegMLNzSaITGX1OAu2PibuUls4egKInPifVqYzhfRGPKCOWfdaCc4YLTdeeho8vykxt8KD12j7uaSWzDnXs2MQHRay5lh6MraoZdqazNYZv35/0/hAinInn5Q/f2Mtmm6ACUL4Ik8LdyQ2lKZkV94DrEF+b+5qVbNFS3Go=;
-X-UUID: bfd9d48296cc4064aa069d17e1140ff2-20211217
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1188725979; Fri, 17 Dec 2021 10:06:02 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 17 Dec 2021 10:06:01 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Dec 2021 10:05:58 +0800
-Message-ID: <be023f9d2fb2a8f947bd0075e8732ba07cfd7b89.camel@mediatek.com>
-Subject: Re: [PATCH net-next v10 6/6] net: dt-bindings: dwmac: add support
- for mt8195
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>, <davem@davemloft.net>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mediatek@lists.infradead.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, <netdev@vger.kernel.org>,
-        <dkirjanov@suse.de>, <linux-kernel@vger.kernel.org>,
-        <macpaul.lin@mediatek.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 17 Dec 2021 10:05:58 +0800
-In-Reply-To: <1639662782.987227.4004875.nullmailer@robh.at.kernel.org>
-References: <20211216055328.15953-1-biao.huang@mediatek.com>
-         <20211216055328.15953-7-biao.huang@mediatek.com>
-         <1639662782.987227.4004875.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S229713AbhLQCLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 21:11:37 -0500
+Received: from mga02.intel.com ([134.134.136.20]:16722 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229449AbhLQCLg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:11:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639707096; x=1671243096;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yAjiwUaIEdzf9SApDqxL8mfZBxrBi9Lf0q22oUAsn3o=;
+  b=McEoWApoDBlMJKB26LaHLQ05+ttbO4c0pOBd05qas3cYSDTnq6tlI1dm
+   3bG5uyYI0g+nEFl8VsfRlbE/lIKDaFoMXxx3M/2925n3X9tPSXEAeB7pf
+   X60aVsofH9ue9INnkQBhMp/Ui1m8R97/Mko6qG5mvDwPaVzr3rayZQ29C
+   yiohlu9PuBkuzetg/mLT2R5HenB14axa8vWojc1piJ0XeaYvnRhk8Pbwv
+   U20O08KGckHj/Vk0qHLq5WC0IioLWVOgmgJZR1nYpwVlK8OjBF0iSVMkC
+   oOD2dFAszvpR/PPYmg2BvmW0D/p6AwkhVoCtvSCQeeKUEEmxGpIC+tYVg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226945614"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="226945614"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:11:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="756326021"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2021 18:11:33 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my2ib-00045e-4r; Fri, 17 Dec 2021 02:11:33 +0000
+Date:   Fri, 17 Dec 2021 10:11:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, tytso@mit.edu
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] ext4: use min() to make code cleaner
+Message-ID: <202112171003.SXtQAHHE-lkp@intel.com>
+References: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBSb2IsDQogIFRoYW5rcyBmb3IgeW91ciBjb21tZW50c34NCg0KICBGb3IgbXQ4MTk1LCB0
-aGUgZXRoIGRldmljZSBub2RlIHdpbGwgbG9vayBsaWtlOg0KICBldGg6IGV0aGVybmV0QDExMDIx
-MDAwIHsNCiAgICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5NS1nbWFjIiwgInNucHMsZHdt
-YWMtNS4xMGEiOw0KICAgIC4uLg0KICAgIGNsb2NrLW5hbWVzID0gImF4aSIsDQogICAgICAgICAg
-ICAgICAgICAiYXBiIiwNCiAgICAgICAgICAgICAgICAgICJtYWNfY2ciLA0KICAgICAgICAgICAg
-ICAgICAgIm1hY19tYWluIiwNCiAgICAgICAgICAgICAgICAgICJwdHBfcmVmIiwNCiAgICAgICAg
-ICAgICAgICAgICJybWlpX2ludGVybmFsIjsNCiAgICBjbG9ja3MgPSA8JnBlcmljZmdfYW8gQ0xL
-X1BFUklfQU9fRVRIRVJORVQ+LA0KICAgICAgICAgICAgIDwmcGVyaWNmZ19hbyBDTEtfUEVSSV9B
-T19FVEhFUk5FVF9CVVM+LA0KICAgICAgICAgICAgIDwmcGVyaWNmZ19hbyBDTEtfUEVSSV9BT19F
-VEhFUk5FVF9NQUM+LA0KICAgICAgICAgICAgIDwmdG9wY2tnZW4gQ0xLX1RPUF9TTlBTX0VUSF8y
-NTBNPiwNCiAgICAgICAgICAgICA8JnRvcGNrZ2VuIENMS19UT1BfU05QU19FVEhfNjJQNE1fUFRQ
-PiwNCiAgICAgICAgICAgICA8JnRvcGNrZ2VuIENMS19UT1BfU05QU19FVEhfNTBNX1JNSUk+Ow0K
-ICAgIC4uLg0KICB9DQoNCjEuICJybWlpX2ludGVybmFsIiBpcyBhIHNwZWNpYWwgY2xvY2sgb25s
-eSByZXF1aXJlZCBmb3INCiAgIFJNSUkgcGh5IGludGVyZmFjZSwgZHdtYWMtbWVkaWF0ZWsuYyB3
-aWxsIGVuYWJsZSBjbG9ja3MNCiAgIGludm9raW5nIGNsa19idWxrX3ByZXBhcmVfZW5hYmxlKHh4
-LCA2KSBmb3IgUk1JSSwNCiAgIGFuZCBjbGtfYnVsa19wcmVwYXJlX2VuYWJsZSh4eCwgNSkgZm9y
-IG90aGVyIHBoeSBpbnRlcmZhY2VzLg0KICAgc28sIG10MjcxMi9tdDgxOTUgYWxsIHB1dCAicm1p
-aV9pbnRlcm5hbCIgY2xvY2sgdG8gdGhlDQogICBlbmQgb2YgY2xvY2sgbGlzdCB0byBzaW1wbGlm
-eSBjbG9jayBoYW5kbGluZy4NCg0KICAgSWYgSSBwdXQgbWFjX2NnIGFzIGRlc2NyaWJlZCBhYm92
-ZSwgYSBpZiBjb25kaXRpb24gaXMgcmVxdWlyZWQNCmZvciBjbG9ja3MgZGVzY3JpcHRpb24gaW4g
-ZHQtYmluZGluZywganVzdCBsaWtlIHdoYXQgSSBkbyBpbiB2NyBzZW5kOg0KICAtIGlmOg0KICAg
-ICAgcHJvcGVydGllczoNCiAgICAgICAgY29tcGF0aWJsZToNCiAgICAgICAgICBjb250YWluczoN
-CiAgICAgICAgICAgIGVudW06DQogICAgICAgICAgICAgIC0gbWVkaWF0ZWssbXQyNzEyLWdtYWMN
-Cg0KICAgIHRoZW46DQogICAgICBwcm9wZXJ0aWVzOg0KICAgICAgICBjbG9ja3M6DQogICAgICAg
-ICAgbWluSXRlbXM6IDUNCiAgICAgICAgICBpdGVtczoNCiAgICAgICAgICAgIC0gZGVzY3JpcHRp
-b246IEFYSSBjbG9jaw0KICAgICAgICAgICAgLSBkZXNjcmlwdGlvbjogQVBCIGNsb2NrDQogICAg
-ICAgICAgICAtIGRlc2NyaXB0aW9uOiBNQUMgTWFpbiBjbG9jaw0KICAgICAgICAgICAgLSBkZXNj
-cmlwdGlvbjogUFRQIGNsb2NrDQogICAgICAgICAgICAtIGRlc2NyaXB0aW9uOiBSTUlJIHJlZmVy
-ZW5jZSBjbG9jayBwcm92aWRlZCBieSBNQUMNCg0KICAgICAgICBjbG9jay1uYW1lczoNCiAgICAg
-ICAgICBtaW5JdGVtczogNQ0KICAgICAgICAgIGl0ZW1zOg0KICAgICAgICAgICAgLSBjb25zdDog
-YXhpDQogICAgICAgICAgICAtIGNvbnN0OiBhcGINCiAgICAgICAgICAgIC0gY29uc3Q6IG1hY19t
-YWluDQogICAgICAgICAgICAtIGNvbnN0OiBwdHBfcmVmDQogICAgICAgICAgICAtIGNvbnN0OiBy
-bWlpX2ludGVybmFsDQoNCiAgLSBpZjoNCiAgICAgIHByb3BlcnRpZXM6DQogICAgICAgIGNvbXBh
-dGlibGU6DQogICAgICAgICAgY29udGFpbnM6DQogICAgICAgICAgICBlbnVtOg0KICAgICAgICAg
-ICAgICAtIG1lZGlhdGVrLG10ODE5NS1nbWFjDQoNCiAgICB0aGVuOg0KICAgICAgcHJvcGVydGll
-czoNCiAgICAgICAgY2xvY2tzOg0KICAgICAgICAgIG1pbkl0ZW1zOiA2DQogICAgICAgICAgaXRl
-bXM6DQogICAgICAgICAgICAtIGRlc2NyaXB0aW9uOiBBWEkgY2xvY2sNCiAgICAgICAgICAgIC0g
-ZGVzY3JpcHRpb246IEFQQiBjbG9jaw0KICAgICAgICAgICAgLSBkZXNjcmlwdGlvbjogTUFDIGNs
-b2NrIGdhdGUNCiAgICAgICAgICAgIC0gZGVzY3JpcHRpb246IE1BQyBNYWluIGNsb2NrDQogICAg
-ICAgICAgICAtIGRlc2NyaXB0aW9uOiBQVFAgY2xvY2sNCiAgICAgICAgICAgIC0gZGVzY3JpcHRp
-b246IFJNSUkgcmVmZXJlbmNlIGNsb2NrIHByb3ZpZGVkIGJ5IE1BQw0KDQogICBUaGlzIGludHJv
-ZHVjZXMgc29tZSBkdXBsaWNhdGVkIGRlc2NyaXB0aW9uLg0KDQoyLiBJZiBJIHB1dCAibWFjX2Nn
-IiB0byB0aGUgZW5kIG9mIGNsb2NrIGxpc3QsDQogICB0aGUgZHQtYmluZGluZyBmaWxlIGNhbiBi
-ZSBzaW1wbGUganVzdCBsaWtlDQogICB3aGF0IHdlIGRvIGluIHRoaXMgdjEwIHBhdGNoKG5lZWQg
-Zml4IHdhcm5pbmdzIHJlcG9ydGVkIGJ5ICJtYWtlDQpEVF9DSEVDS0VSX0ZMQUdTPS1tIGR0X2Jp
-bmRpbmdfY2hlY2siKS4NCg0KICAgQnV0IGZvciBtdDgxOTU6DQogICAgIHRoZSBldGggbm9kZSBp
-biBkdHMgc2hvdWxkIGJlIG1vZGlmaWVkLA0KICAgICBhbmQgZXRoIGRyaXZlciBjbG9jayBoYW5k
-bGluZyB3aWxsIGJlIGNvbXBsZXg7DQoNCldlIHByZWZlciAxKGR1cGxpY2F0ZWQgZGVzY3JpcHRp
-b24gb25lKS4NCkNhbiB3ZSBqdXN0IGRlc2NpcmJlIGNsb2Nrcy9jbG9ja3MtbmFtZXMgZm9yIG10
-MjcxMi9tdDgxOTUgc2VwZXJhdGVseT8NClBsZWFzZSBraW5kbHkgY29tbWVudCBhYm91dCB0aGlz
-IGlzc3VlLg0KVGhhbmtzIGluIGFkdmFuY2UuDQoNCk9uIFRodSwgMjAyMS0xMi0xNiBhdCAwNzo1
-MyAtMDYwMCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIFRodSwgMTYgRGVjIDIwMjEgMTM6NTM6
-MjggKzA4MDAsIEJpYW8gSHVhbmcgd3JvdGU6DQo+ID4gQWRkIGJpbmRpbmcgZG9jdW1lbnQgZm9y
-IHRoZSBldGhlcm5ldCBvbiBtdDgxOTUuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQmlhbyBI
-dWFuZyA8Ymlhby5odWFuZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5n
-cy9uZXQvbWVkaWF0ZWstZHdtYWMueWFtbCAgICAgICAgICB8IDI5DQo+ID4gKysrKysrKysrKysr
-KysrKy0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMjUgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlv
-bnMoLSkNCj4gPiANCj4gDQo+IE15IGJvdCBmb3VuZCBlcnJvcnMgcnVubmluZyAnbWFrZSBEVF9D
-SEVDS0VSX0ZMQUdTPS1tDQo+IGR0X2JpbmRpbmdfY2hlY2snDQo+IG9uIHlvdXIgcGF0Y2ggKERU
-X0NIRUNLRVJfRkxBR1MgaXMgbmV3IGluIHY1LjEzKToNCj4gDQo+IHlhbWxsaW50IHdhcm5pbmdz
-L2Vycm9yczoNCj4gDQo+IGR0c2NoZW1hL2R0YyB3YXJuaW5ncy9lcnJvcnM6DQo+IC9idWlsZHMv
-cm9iaGVycmluZy9saW51eC1kdC0NCj4gcmV2aWV3L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9uZXQvbWVkaWF0ZWstZHdtYWMueWFtbDoNCj4gcHJvcGVydGllczpjbG9jay1uYW1l
-czogeydtaW5JdGVtcyc6IDUsICdtYXhJdGVtcyc6IDYsICdpdGVtcyc6DQo+IFt7J2NvbnN0Jzog
-J2F4aSd9LCB7J2NvbnN0JzogJ2FwYid9LCB7J2NvbnN0JzogJ21hY19tYWluJ30sIHsnY29uc3Qn
-Og0KPiAncHRwX3JlZid9LCB7J2NvbnN0JzogJ3JtaWlfaW50ZXJuYWwnfSwgeydjb25zdCc6ICdt
-YWNfY2cnfV19IHNob3VsZA0KPiBub3QgYmUgdmFsaWQgdW5kZXIgeydyZXF1aXJlZCc6IFsnbWF4
-SXRlbXMnXX0NCj4gCWhpbnQ6ICJtYXhJdGVtcyIgaXMgbm90IG5lZWRlZCB3aXRoIGFuICJpdGVt
-cyIgbGlzdA0KPiAJZnJvbSBzY2hlbWEgJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1z
-Y2hlbWFzL2l0ZW1zLnlhbWwjDQo+IC9idWlsZHMvcm9iaGVycmluZy9saW51eC1kdC0NCj4gcmV2
-aWV3L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVkaWF0ZWstZHdtYWMu
-eWFtbDoNCj4gaWdub3JpbmcsIGVycm9yIGluIHNjaGVtYTogcHJvcGVydGllczogY2xvY2stbmFt
-ZXMNCj4gd2FybmluZzogbm8gc2NoZW1hIGZvdW5kIGluIGZpbGU6DQo+IC4vRG9jdW1lbnRhdGlv
-bi9kZXZpY2V0cmVlL2JpbmRpbmdzL25ldC9tZWRpYXRlay1kd21hYy55YW1sDQo+IERvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVkaWF0ZWstDQo+IGR3bWFjLmV4YW1wbGUu
-ZHQueWFtbDowOjA6IC9leGFtcGxlLTAvZXRoZXJuZXRAMTEwMWMwMDA6IGZhaWxlZCB0bw0KPiBt
-YXRjaCBhbnkgc2NoZW1hIHdpdGggY29tcGF0aWJsZTogWydtZWRpYXRlayxtdDI3MTItZ21hYycs
-DQo+ICdzbnBzLGR3bWFjLTQuMjBhJ10NCj4gDQo+IGRvYyByZWZlcmVuY2UgZXJyb3JzIChtYWtl
-IHJlZmNoZWNrZG9jcyk6DQo+IA0KPiBTZWUgaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9w
-YXRjaC8xNTY4OTAyDQo+IA0KPiBUaGlzIGNoZWNrIGNhbiBmYWlsIGlmIHRoZXJlIGFyZSBhbnkg
-ZGVwZW5kZW5jaWVzLiBUaGUgYmFzZSBmb3IgYQ0KPiBwYXRjaA0KPiBzZXJpZXMgaXMgZ2VuZXJh
-bGx5IHRoZSBtb3N0IHJlY2VudCByYzEuDQo+IA0KPiBJZiB5b3UgYWxyZWFkeSByYW4gJ21ha2Ug
-ZHRfYmluZGluZ19jaGVjaycgYW5kIGRpZG4ndCBzZWUgdGhlIGFib3ZlDQo+IGVycm9yKHMpLCB0
-aGVuIG1ha2Ugc3VyZSAneWFtbGxpbnQnIGlzIGluc3RhbGxlZCBhbmQgZHQtc2NoZW1hIGlzIHVw
-DQo+IHRvDQo+IGRhdGU6DQo+IA0KPiBwaXAzIGluc3RhbGwgZHRzY2hlbWEgLS11cGdyYWRlDQo+
-IA0KPiBQbGVhc2UgY2hlY2sgYW5kIHJlLXN1Ym1pdC4NCj4gDQo=
+Hi,
 
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on v5.16-rc5 next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+config: hexagon-randconfig-r026-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171003.SXtQAHHE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/ext4-use-min-to-make-code-cleaner/20211216-171213
+        git checkout ff519f2d7d41c154cb0d31a9aebe16ce1f6af7ed
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/super.c:6926:12: warning: comparison of distinct pointer types ('typeof (sb->s_blocksize - offset) *' (aka 'unsigned long *') and 'typeof (toread) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   tocopy = min(sb->s_blocksize - offset, toread);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/ext4/super.c:2173:1: warning: unused function 'ctx_test_flags' [-Wunused-function]
+   EXT4_SET_CTX(flags);
+   ^
+   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:148:1: note: expanded from here
+   ctx_test_flags
+   ^
+   fs/ext4/super.c:2176:1: warning: unused function 'ctx_clear_mount_flags' [-Wunused-function]
+   EXT4_SET_CTX(mount_flags);
+   ^
+   fs/ext4/super.c:2163:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline void ctx_clear_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:169:1: note: expanded from here
+   ctx_clear_mount_flags
+   ^
+   fs/ext4/super.c:2176:1: warning: unused function 'ctx_test_mount_flags' [-Wunused-function]
+   fs/ext4/super.c:2168:20: note: expanded from macro 'EXT4_SET_CTX'
+   static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
+                      ^
+   <scratch space>:172:1: note: expanded from here
+   ctx_test_mount_flags
+   ^
+   4 warnings generated.
+
+
+vim +6926 fs/ext4/super.c
+
+  6904	
+  6905	/* Read data from quotafile - avoid pagecache and such because we cannot afford
+  6906	 * acquiring the locks... As quota files are never truncated and quota code
+  6907	 * itself serializes the operations (and no one else should touch the files)
+  6908	 * we don't have to be afraid of races */
+  6909	static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
+  6910				       size_t len, loff_t off)
+  6911	{
+  6912		struct inode *inode = sb_dqopt(sb)->files[type];
+  6913		ext4_lblk_t blk = off >> EXT4_BLOCK_SIZE_BITS(sb);
+  6914		int offset = off & (sb->s_blocksize - 1);
+  6915		int tocopy;
+  6916		size_t toread;
+  6917		struct buffer_head *bh;
+  6918		loff_t i_size = i_size_read(inode);
+  6919	
+  6920		if (off > i_size)
+  6921			return 0;
+  6922		if (off+len > i_size)
+  6923			len = i_size-off;
+  6924		toread = len;
+  6925		while (toread > 0) {
+> 6926			tocopy = min(sb->s_blocksize - offset, toread);
+  6927			bh = ext4_bread(NULL, inode, blk, 0);
+  6928			if (IS_ERR(bh))
+  6929				return PTR_ERR(bh);
+  6930			if (!bh)	/* A hole? */
+  6931				memset(data, 0, tocopy);
+  6932			else
+  6933				memcpy(data, bh->b_data+offset, tocopy);
+  6934			brelse(bh);
+  6935			offset = 0;
+  6936			toread -= tocopy;
+  6937			data += tocopy;
+  6938			blk++;
+  6939		}
+  6940		return len;
+  6941	}
+  6942	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

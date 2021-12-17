@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FFF4783C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 04:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC544783C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 04:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbhLQDrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 22:47:36 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:41842 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbhLQDrg (ORCPT
+        id S232507AbhLQDst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 22:48:49 -0500
+Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:37923 "EHLO
+        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230426AbhLQDst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 22:47:36 -0500
-Received: by mail-ot1-f47.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so1312486otl.8;
-        Thu, 16 Dec 2021 19:47:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=IjN1lQ8TMy6cozBFxz44Wo6W8rmof9sCHtnvpj2Bo38=;
-        b=uAGH3B6sc+JS3vMNEzOZb41oxZ1e2DuebanCRayHkCw3WnfJ40SipX0IoGdoJ4X+oe
-         FMMl7X5Zs3+pKsptPlvMd9eTs+U35uUoFtGM+41zaTui2NB7C/ikqQ47gtsEFvNLUaB/
-         K77L3ddR3ZdAAHQNv4eWbmggnf2XjjcPSun8W/n/a6MFIj740/aEYtTmmxm3yvygciAY
-         qmzI7K61tPKVUKzXSaTeXnpg0ta6Y4TvbwxChi/HpdNkqmzd64/QQl4CCXN1rbcB9gUb
-         dhAxnBLax0oG7Eq1jUiAJS0YXSCQBHCYmZBuf+bkZigarAsWuGI4wpDUQfUnZBgVynsI
-         uhEg==
-X-Gm-Message-State: AOAM531EBGbNyleBfwQa8RJxB5CdyH1b7NV10+mHL+QH7Ht/MzM5ydB1
-        Xk0U5g4tee9UPem8If22wR6KmtKUeQ==
-X-Google-Smtp-Source: ABdhPJy/kY6Z89M12GyVScc3+lNAcRyL5J+2ADa1Hgwv/kSmIaRfly5bpkzE/qTvRVurygXzGDxbLA==
-X-Received: by 2002:a9d:73d7:: with SMTP id m23mr877918otk.380.1639712855192;
-        Thu, 16 Dec 2021 19:47:35 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id p14sm1386195oou.31.2021.12.16.19.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 19:47:34 -0800 (PST)
-Received: (nullmailer pid 1677946 invoked by uid 1000);
-        Fri, 17 Dec 2021 03:47:33 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
-References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com> <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
-Date:   Thu, 16 Dec 2021 21:47:33 -0600
-Message-Id: <1639712853.383823.1677945.nullmailer@robh.at.kernel.org>
+        Thu, 16 Dec 2021 22:48:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639712921;
+        bh=Y5C1Oy7HePuCeUWI/JcEuK7VYUM29jY2xRbaqqIBPm0=;
+        h=From:To:Cc:Subject:Date;
+        b=GoB/Gu/jSWukhlJKFg390TLJaLxzX9OGj2qHKjV2Sa7nJNtb6iniCjpBJK4E7zxQ1
+         Kma0dF7x+JDvSxbhc1zIi8vLlHw4KUhb7kEUixzAeUgONN5aSVrgTYDf2YfKjX/U6U
+         Jb6tZ4mEe7T9eh2AHiDLq2VDRExRthfQMAWQjmck=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
+        id C2620A0F; Fri, 17 Dec 2021 11:48:38 +0800
+X-QQ-mid: xmsmtpt1639712918ta5cvz6iy
+Message-ID: <tencent_E14226FC5CC9EF3F18C480D9249783C39B05@qq.com>
+X-QQ-XMAILINFO: NzOHSugmTg7X+KikSiSMQqO7lq77jNkYNHD4glxE9ZdxJfaHwTrT7x8UGlDw2u
+         znYh3oj/QzagAtLkxeIVwiiMJDb8Uy3DnBTHDuE1xirEQkIi0161weBNJN2UMELvNeXEskDK0CGK
+         lbcktlrSHwNpb0AK/NccjSu0m4KFV6+0sWIlFlgWYz5MOHqhA+XRQYP+yEFsCKNviIb/rjGhUx6A
+         t644z5attidOmdqBaH4HxXqRRMoXT04/8jVTMJONStMVPkpdkanztoInAGO7ipsXYMBpm14SSwEh
+         SQEFXJlb/5aga632co2mO2W34c9aJQOWzG+d6/ag/3k7zMWaI8csbclY25coPFO+eqK2H+8M6emT
+         3S0JLbXQX6HIu7sT3zTeqFN2udPdlZzWA47R9aJY+1zWRhu81oFcmtbD2NPjfvqvZuR9EroSd1t1
+         AJsEmGhrlFwPImY226Um96MBIRdR/7ckkfX0TbTNTdgvD3tLK7pfK7aaYjuZtLlxJNC5kZi7EoUr
+         H5YtylfajZYJ1qlpXUSyiFTJU1J1jD43poR3t2L8fPj5m9RDSidVRe7AOj7KJ0NqFUnccd4yF2a1
+         CbN4tM28XBrPJ1kZUHsYy9jnDL8ah44/bgyqLUHZZINO1TBYbNeHknBxEy7FAeEMX+R2DMYEOAML
+         pZ/6WWB8OSDmPv2Eqt54WGfsO/hmbKlterP9v13QuFCia5Jp6cz2x2bnbMAlGNo+X2m7MCoTuMWk
+         41KWQFBmpOY1HnguKoBjqzLIbq1Iqiou9OnPxWd/+4Kb2DWQ9HHrpCOkCAGMM/uJw8AnOmc87yXw
+         UZVUS7/KzyZOnUX3+ScoI5nIBh/pRD8j9iJQHatluPp5cqmUaSJVZjvsinD3g6QNNQIjD0283QuY
+         V63WMlOa4AZz9wj6WwZ/c=
+From:   xkernel.wang@foxmail.com
+To:     jic23@kernel.org, jic23@jic23.retrosnub.co.uk
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v2] iio: dummy: iio_simple_dummy: check the return value of kstrdup()
+Date:   Fri, 17 Dec 2021 11:48:28 +0800
+X-OQ-MSGID: <20211217034828.494-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 17:40:37 +0100, Alexandre Ghiti wrote:
-> DA9063 devices bindings used text format, so migrate those bindings to YAML
-> format before adding any new bindings.
-> 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
-> 
-> Changes in v2:
-> - Fix all errors detected with make dt_binding_checks
-> 
->  .../bindings/input/da9063-onkey.yaml          |  39 ++++++
->  .../devicetree/bindings/mfd/da9063.txt        | 111 ------------------
->  .../devicetree/bindings/mfd/da9063.yaml       | 105 +++++++++++++++++
->  .../bindings/regulator/da9063-regulator.yaml  |  51 ++++++++
->  .../devicetree/bindings/rtc/da9063-rtc.yaml   |  31 +++++
->  .../bindings/watchdog/da9063-watchdog.yaml    |  31 +++++
->  6 files changed, 257 insertions(+), 111 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/input/da9063-onkey.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
->  create mode 100644 Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
-> 
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+kstrdup() is also a memory allocation-related function, it return NULL
+when some memory errors happen. So it is better to check the return
+value of it so to catch the memory error in time. Besides, there should
+have a kfree() to clear up the allocation if we get a failure later in
+this function to prevent memory leak.
 
-yamllint warnings/errors:
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+Changelog:
+1. Clean up some error labels(error_ret & error_kzalloc), directly make
+them reflect what they are clearing up and return.
+2. Clear up indio_dev->name on error path. I put that under label 
+`error_free_device`, as kfree(NULL) is safe. Or I may need to add an
+another label as the traget of `goto`.
+Note: Suggestions are from Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+---
+ drivers/iio/dummy/iio_simple_dummy.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: 'interrupt-controller', 'onkey', 'regulators', 'rtc', 'wdt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/trivial-devices.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: regulators: 'compatible' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: regulators: 'bcore1', 'ldo11' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: 'wdt' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
-
-doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/input/da9062-onkey.txt: Documentation/devicetree/bindings/mfd/da9063.txt
-
-See https://patchwork.ozlabs.org/patch/1569315
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
+index c0b7ef9..430c12a 100644
+--- a/drivers/iio/dummy/iio_simple_dummy.c
++++ b/drivers/iio/dummy/iio_simple_dummy.c
+@@ -577,7 +577,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	swd = kzalloc(sizeof(*swd), GFP_KERNEL);
+ 	if (!swd) {
+ 		ret = -ENOMEM;
+-		goto error_kzalloc;
++		return ERR_PTR(ret);
+ 	}
+ 	/*
+ 	 * Allocate an IIO device.
+@@ -589,8 +589,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 */
+ 	indio_dev = iio_device_alloc(parent, sizeof(*st));
+ 	if (!indio_dev) {
++		kfree(swd);
+ 		ret = -ENOMEM;
+-		goto error_ret;
++		return ERR_PTR(ret);
+ 	}
+ 
+ 	st = iio_priv(indio_dev);
+@@ -616,6 +617,10 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 *    indio_dev->name = spi_get_device_id(spi)->name;
+ 	 */
+ 	indio_dev->name = kstrdup(name, GFP_KERNEL);
++	if (!indio_dev->name) {
++		ret = -ENOMEM;
++		goto error_free_device;
++	}
+ 
+ 	/* Provide description of available channels */
+ 	indio_dev->channels = iio_dummy_channels;
+@@ -650,10 +655,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ error_unregister_events:
+ 	iio_simple_dummy_events_unregister(indio_dev);
+ error_free_device:
++	kfree(indio_dev->name);
+ 	iio_device_free(indio_dev);
+-error_ret:
+ 	kfree(swd);
+-error_kzalloc:
+ 	return ERR_PTR(ret);
+ }
+ 
+-- 

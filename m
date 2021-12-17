@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F99479262
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5416D479264
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239623AbhLQRF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S239638AbhLQRFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239613AbhLQRFY (ORCPT
+        with ESMTP id S239620AbhLQRFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Dec 2021 12:05:24 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE7CC061748;
-        Fri, 17 Dec 2021 09:05:21 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso3581310wmc.1;
-        Fri, 17 Dec 2021 09:05:21 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D669AC061574;
+        Fri, 17 Dec 2021 09:05:23 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso4493453wmc.4;
+        Fri, 17 Dec 2021 09:05:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=N9hIAHZe2nNZJ5Axu76isAk7I5KUQauC+n1Gzmxr3O4=;
-        b=aTT5yMmSmXGPKfZyAo3I8QxPQaP25o7io12t2HNDJwrX2HPAyNYg+WG9Z48ioid0GC
-         VY0FKEtb/NdmGBMkLBt37Spa9Y2lTUEr3dB1CavUIJB6ETzIPq1vEhrm+42ta2q4CGtK
-         AlvCzJPqlglDTynkYwrHXT0cVo/1GxaNjC0cIzlWYAxXcWVSlDJlM+yLUK3ZsqunpF4a
-         /Q9EQQ3aB4cYtz5zWDptYw27kmiIhGLCatvi7JoB0js2gLC+y4OS+h0EpGJDnPjR7U8t
-         2j6llNfGKrrj9I5g3733o9GNyW4fEnmjGvx7LHapHRT1g/I3MP1bfJdNqGkVUmmPqJty
-         0RsA==
+        bh=SuPdYf/cmtPVxurcR1CFKYTteopIuixXBqin4u9JEls=;
+        b=QLlhC5eYHXXhX55YgqGn6X3Dp556n+X90hfaVMTrxTCFk6CLRptHWtjFuWWw0JXFdZ
+         KcZyQUq0ttw8Snz2dhdoBktZW6Fix8Py1F9YVCfJgMRWChLyYrGJbr7dqtxvg+NLuUD9
+         MOCjdSNNe/ifapyiNu7RFpHT0SHuZ/ddm3tdCv7tcdbdlPuwZ+es8tnKX13GIpJqxzmQ
+         1HyBAvda3g6Ns29KGY+L5s95d+IfW0Jo22zqatm/9+MlzzoBP8mOkIibigneU5QAsXLh
+         /pYc5BNOWEoFMTVZ/hKVby8APCt5Vda11QKvZdv4e0e6dPsL6wJPac19zzwMYJIzTRpw
+         iOYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=N9hIAHZe2nNZJ5Axu76isAk7I5KUQauC+n1Gzmxr3O4=;
-        b=xi6WFHbu1we6hJHv4lw1anunm67gtbzI6+6Z80plY5S4EbW3dz1rg6l1LwoXDv1UFh
-         tYDkSzkDN/zFrL6b2ajVXMXdjstsuiQVmu8fYfUwnyoMhkG88BsRZo9uPfgY69GlG9sB
-         vWRVDmtNDJjBGE8CX+FaDMCTSNhQ5DUm+e1apasROj+GPEdPG90R3bvEjReq4fNc+vwi
-         62dum0FNDj8/JdC7+0Tkmz50h4Zo3VK536/kE3PbxWtNZMoUx3lw1QwO3CGndeo1qx+D
-         J08OB0mzsBrq/Orx4iN1xYY3dbuIaeKGoHF5v2fFeAxBcN0qpOq5mhNw4Cy8AS3behwp
-         1gzA==
-X-Gm-Message-State: AOAM532z4sTJnnBQTtPD2A0DX9TQA8EFNQWklVBGLuYyLg23Qdf9YZZ0
-        pcoH9a4C8hYK5hhH7QGCNIc3798+WMZiHw==
-X-Google-Smtp-Source: ABdhPJw+iD2WUNc1BT49CzoxR659kkkboodHMlBQSfw8cUlXvzpoeRr0Mq+92v6acf/EVtxKQV3EOQ==
-X-Received: by 2002:a7b:c10a:: with SMTP id w10mr10224535wmi.183.1639760719852;
-        Fri, 17 Dec 2021 09:05:19 -0800 (PST)
+        bh=SuPdYf/cmtPVxurcR1CFKYTteopIuixXBqin4u9JEls=;
+        b=hpkKhqVXw9bqK7GlJhQ0/VCrUizA5mJm9U+LtjylxkNBv428ozVUyvB9UQ9KdPnd6l
+         DjoxcPww3DAi8L/xOJYY7Gljgzssiv4HBOYTePUFFhutW55k49XW6ySBX34Vb5WHuEQg
+         SJtf7uIsp9jkeOiwI9CC/NWQsURM8lDKYm13VbDBZBFAlAt46N9Tz52eCO63CAVcGguD
+         Q5+QPVmjSMOMGPDU0c7obbNmh90xBX+l1YTssVXugfLmlhOQtCvbSlb9fP0vrvDwHcF9
+         do923frSAnsUltaWhoACqKKd1nNpt6wEa6W3VrvXBAYmBSU5q/9Y6zYGP+3V0UZEns3G
+         GQGw==
+X-Gm-Message-State: AOAM53282BNhulvxz8Gr6Inx/4K40HXo6sbGJDXSTedLq1JSBsOfcXgY
+        pqyEZzzEx6qLsCMBmlNMVcU=
+X-Google-Smtp-Source: ABdhPJwea3Gn85IDSVhrdO142v/vM8dLI3qEOm2gSkJ2DdCjEc1Mw0ZAhkmZ0Jk1iHx8XHPhvW+6DQ==
+X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr10495704wmq.53.1639760722317;
+        Fri, 17 Dec 2021 09:05:22 -0800 (PST)
 Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id b6sm13488018wmq.45.2021.12.17.09.05.18
+        by smtp.gmail.com with ESMTPSA id t17sm11878853wmq.15.2021.12.17.09.05.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 09:05:19 -0800 (PST)
+        Fri, 17 Dec 2021 09:05:21 -0800 (PST)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] dt-bindings: regulator: tps6586x: Convert to json-schema
-Date:   Fri, 17 Dec 2021 18:05:06 +0100
-Message-Id: <20211217170507.2843568-5-thierry.reding@gmail.com>
+Subject: [PATCH 6/6] dt-bindings: regulator: tps65090: Convert to json-schema
+Date:   Fri, 17 Dec 2021 18:05:07 +0100
+Message-Id: <20211217170507.2843568-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211217170507.2843568-1-thierry.reding@gmail.com>
 References: <20211217170507.2843568-1-thierry.reding@gmail.com>
@@ -65,37 +65,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-Convert the Texas Instruments TPS6586x bindings from the free-form text
+Convert the Texas Instruments TPS65090 bindings from the free-form text
 format to json-schema.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- .../bindings/regulator/ti,tps6586x.yaml       | 184 ++++++++++++++++++
- .../bindings/regulator/tps6586x.txt           | 135 -------------
- 2 files changed, 184 insertions(+), 135 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps6586x.yaml
- delete mode 100644 Documentation/devicetree/bindings/regulator/tps6586x.txt
+ .../bindings/regulator/ti,tps65090.yaml       | 199 ++++++++++++++++++
+ .../bindings/regulator/tps65090.txt           | 126 -----------
+ 2 files changed, 199 insertions(+), 126 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65090.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/tps65090.txt
 
-diff --git a/Documentation/devicetree/bindings/regulator/ti,tps6586x.yaml b/Documentation/devicetree/bindings/regulator/ti,tps6586x.yaml
+diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65090.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65090.yaml
 new file mode 100644
-index 000000000000..c5ea7012c653
+index 000000000000..9743746475a8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/ti,tps6586x.yaml
-@@ -0,0 +1,184 @@
++++ b/Documentation/devicetree/bindings/regulator/ti,tps65090.yaml
+@@ -0,0 +1,199 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/regulator/ti,tps6586x.yaml#
++$id: http://devicetree.org/schemas/regulator/ti,tps65090.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Texas Instruments TPS6586x family of voltage regulator
++title: Texas Instruments TPS65090 voltage regulator
 +
 +maintainers:
 +  - Mark Brown <broonie@kernel.org>
 +
 +properties:
 +  compatible:
-+    const: ti,tps6586x
++    const: ti,tps65090
 +
 +  reg:
 +    maxItems: 1
@@ -103,61 +103,82 @@ index 000000000000..c5ea7012c653
 +  interrupts:
 +    maxItems: 1
 +
-+  sys-supply:
-+    description: input supply for SYS
++  vsys1-supply:
++    description: input supply for DCDC1
 +
-+  vin-sm0-supply:
-+    description: input supply for SM0
++  vsys2-supply:
++    description: input supply for DCDC2
 +
-+  vin-sm1-supply:
-+    description: input supply for SM1
++  vsys3-supply:
++    description: input supply for DCDC3
 +
-+  vin-sm2-supply:
-+    description: input supply for SM2
++  infet1-supply:
++    description: input supply for FET1
 +
-+  vinldo01-supply:
-+    description: input supply for LDO0 and LDO1
++  infet2-supply:
++    description: input supply for FET2
 +
-+  vinldo23-supply:
-+    description: input supply for LDO2 and LDO3
++  infet3-supply:
++    description: input supply for FET3
 +
-+  vinldo4-supply:
-+    description: input supply for LDO4
++  infet4-supply:
++    description: input supply for FET4
 +
-+  vinldo678-supply:
-+    description: input supply for LDO6, LDO7 and LDO8
++  infet5-supply:
++    description: input supply for FET5
 +
-+  vinldo9-supply:
-+    description: input supply for LDO9
++  infet6-supply:
++    description: input supply for FET6
 +
-+  ti,system-power-controller:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: If this property exists, it specifies that this PMIC controls the system power.
++  infet7-supply:
++    description: input supply for FET7
++
++  vsys-l1-supply:
++    description: input supply for LDO1
++
++  vsys-l2-supply:
++    description: input supply for LDO2
++
++  charger:
++    $ref: ../power/supply/tps65090-charger.yaml
 +
 +  regulators:
 +    type: object
-+    description: |
-+      A node that houses a sub-node for each regulator within the device. Each sub-node is
-+      identified using the node's name (or the deprecated regulator-compatible property if
-+      present), with valid values listed below. The content of each sub-node is defined by the
-+      standard binding for regulators; see regulator.yaml.
-+
-+      Note: LDO5 and LDO_RTC is supplied by SYS regulator internally and the operating system
-+        needs to take care of establishing the proper parent child relationships.
++    description: A node that houses a sub-node for each regulator within the device. Each sub-node
++      is identified using the node's name, with valid values listed below. The content of each
++      sub-node is defined by the standard binding for regulators; see regulator.txt.
 +
 +    patternProperties:
-+      "^sys|sm[0-2]|ldo[0-9]|ldo_rtc$":
++      "^dcdc[1-3]|fet[1-7]|ldo[1-2]$":
 +        $ref: regulator.yaml
++        properties:
++          ti,enable-ext-control:
++            $ref: /schemas/types.yaml#/definitions/flag
++            description: This is applicable for DCDC1, DCDC2 and DCDC3. If DCDCs are externally
++              controlled then this property should be there.
 +
-+allOf:
-+  - $ref: /schemas/gpio/gpio.yaml
++          dcdc-ext-control-gpios:
++            $ref: /schemas/types.yaml#/definitions/phandle-array
++            description: This is applicable for DCDC1, DCDC2 and DCDC3. If DCDCs are externally
++              controlled and if it is from GPIO then GPIO number should be provided. If it is
++              externally controlled and no GPIO entry then driver will just configure this rails
++              as external control and will not provide any enable/disable APIs.
 +
-+unevaluatedProperties: false
++          ti,overcurrent-wait:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description: This is applicable to FET registers, which have a poorly defined
++              "overcurrent wait" field.  If this property is present it should be between 0 - 3.
++              If this property isn't present we won't touch the "overcurrent wait" field and we'll
++              leave it to the BIOS/EC to deal with.
++            enum: [ 0, 1, 2, 3 ]
++
++additionalProperties: false
 +
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
++  - regulators
 +
 +examples:
 +  - |
@@ -165,245 +186,230 @@ index 000000000000..c5ea7012c653
 +      #address-cells = <1>;
 +      #size-cells = <0>;
 +
-+      pmic@34 {
-+        compatible = "ti,tps6586x";
-+        reg = <0x34>;
++      pmic@48 {
++        compatible = "ti,tps65090";
++        reg = <0x48>;
 +        interrupts = <0 88 0x4>;
 +
-+        #gpio-cells = <2>;
-+        gpio-controller;
-+
-+        ti,system-power-controller;
-+
-+        sys-supply = <&dummy>;
-+        vin-sm0-supply = <&dummy>;
-+        vin-sm1-supply = <&dummy>;
-+        vin-sm2-supply = <&dummy>;
-+        vinldo01-supply = <&dummy>;
-+        vinldo23-supply = <&dummy>;
-+        vinldo4-supply = <&dummy>;
-+        vinldo678-supply = <&dummy>;
-+        vinldo9-supply = <&dummy>;
++        vsys1-supply = <&some_reg>;
++        vsys2-supply = <&some_reg>;
++        vsys3-supply = <&some_reg>;
++        infet1-supply = <&some_reg>;
++        infet2-supply = <&some_reg>;
++        infet3-supply = <&some_reg>;
++        infet4-supply = <&some_reg>;
++        infet5-supply = <&some_reg>;
++        infet6-supply = <&some_reg>;
++        infet7-supply = <&some_reg>;
++        vsys-l1-supply = <&some_reg>;
++        vsys-l2-supply = <&some_reg>;
 +
 +        regulators {
-+          sys {
-+            regulator-name = "vdd_sys";
++          dcdc1 {
++            regulator-name = "dcdc1";
++            regulator-boot-on;
++            regulator-always-on;
++            ti,enable-ext-control;
++            dcdc-ext-control-gpios = <&gpio 10 0>;
++          };
++
++          dcdc2 {
++            regulator-name = "dcdc2";
 +            regulator-boot-on;
 +            regulator-always-on;
 +          };
 +
-+          sm0 {
-+            regulator-min-microvolt = < 725000>;
-+            regulator-max-microvolt = <1500000>;
++          dcdc3 {
++            regulator-name = "dcdc3";
 +            regulator-boot-on;
 +            regulator-always-on;
 +          };
 +
-+          sm1 {
-+            regulator-min-microvolt = < 725000>;
-+            regulator-max-microvolt = <1500000>;
++          fet1 {
++            regulator-name = "fet1";
 +            regulator-boot-on;
 +            regulator-always-on;
 +          };
 +
-+          sm2 {
-+            regulator-min-microvolt = <3000000>;
-+            regulator-max-microvolt = <4550000>;
++          fet2 {
++            regulator-name = "fet2";
 +            regulator-boot-on;
 +            regulator-always-on;
 +          };
 +
-+          ldo0 {
-+            regulator-name = "PCIE CLK";
-+            regulator-min-microvolt = <3300000>;
-+            regulator-max-microvolt = <3300000>;
++          fet3 {
++            regulator-name = "fet3";
++            regulator-boot-on;
++            regulator-always-on;
++          };
++
++          fet4 {
++            regulator-name = "fet4";
++            regulator-boot-on;
++            regulator-always-on;
++          };
++
++          fet5 {
++            regulator-name = "fet5";
++            regulator-boot-on;
++            regulator-always-on;
++          };
++
++          fet6 {
++            regulator-name = "fet6";
++            regulator-boot-on;
++            regulator-always-on;
++          };
++
++          fet7 {
++            regulator-name = "fet7";
++            regulator-boot-on;
++            regulator-always-on;
 +          };
 +
 +          ldo1 {
-+            regulator-min-microvolt = < 725000>;
-+            regulator-max-microvolt = <1500000>;
++            regulator-name = "ldo1";
++            regulator-boot-on;
++            regulator-always-on;
 +          };
 +
 +          ldo2 {
-+            regulator-min-microvolt = < 725000>;
-+            regulator-max-microvolt = <1500000>;
-+          };
-+
-+          ldo3 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo4 {
-+            regulator-min-microvolt = <1700000>;
-+            regulator-max-microvolt = <2475000>;
-+          };
-+
-+          ldo5 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo6 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo7 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo8 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo9 {
-+            regulator-min-microvolt = <1250000>;
-+            regulator-max-microvolt = <3300000>;
++            regulator-name = "ldo2";
++            regulator-boot-on;
++            regulator-always-on;
 +          };
 +        };
 +      };
 +    };
-diff --git a/Documentation/devicetree/bindings/regulator/tps6586x.txt b/Documentation/devicetree/bindings/regulator/tps6586x.txt
+diff --git a/Documentation/devicetree/bindings/regulator/tps65090.txt b/Documentation/devicetree/bindings/regulator/tps65090.txt
 deleted file mode 100644
-index 8b40cac24d93..000000000000
---- a/Documentation/devicetree/bindings/regulator/tps6586x.txt
+index ae326f263597..000000000000
+--- a/Documentation/devicetree/bindings/regulator/tps65090.txt
 +++ /dev/null
-@@ -1,135 +0,0 @@
--TPS6586x family of regulators
+@@ -1,126 +0,0 @@
+-TPS65090 regulators
 -
 -Required properties:
--- compatible: "ti,tps6586x"
+-- compatible: "ti,tps65090"
 -- reg: I2C slave address
 -- interrupts: the interrupt outputs of the controller
--- #gpio-cells: number of cells to describe a GPIO
--- gpio-controller: mark the device as a GPIO controller
 -- regulators: A node that houses a sub-node for each regulator within the
--  device. Each sub-node is identified using the node's name (or the deprecated
--  regulator-compatible property if present), with valid values listed below.
--  The content of each sub-node is defined by the standard binding for
--  regulators; see regulator.txt.
--  sys, sm[0-2], ldo[0-9] and ldo_rtc
--- sys-supply: The input supply for SYS.
--- vin-sm0-supply: The input supply for the SM0.
--- vin-sm1-supply: The input supply for the SM1.
--- vin-sm2-supply: The input supply for the SM2.
--- vinldo01-supply: The input supply for the LDO1 and LDO2
--- vinldo23-supply: The input supply for the LDO2 and LDO3
--- vinldo4-supply: The input supply for the LDO4
--- vinldo678-supply: The input supply for the LDO6, LDO7 and LDO8
--- vinldo9-supply: The input supply for the LDO9
+-  device. Each sub-node is identified using the node's name, with valid
+-  values listed below. The content of each sub-node is defined by the
+-  standard binding for regulators; see regulator.txt.
+-  dcdc[1-3], fet[1-7] and ldo[1-2] respectively.
+-- vsys[1-3]-supply: The input supply for DCDC[1-3] respectively.
+-- infet[1-7]-supply: The input supply for FET[1-7] respectively.
+-- vsys-l[1-2]-supply: The input supply for LDO[1-2] respectively.
 -
 -Optional properties:
--- ti,system-power-controller: Telling whether or not this pmic is controlling
--  the system power.
+-- ti,enable-ext-control: This is applicable for DCDC1, DCDC2 and DCDC3.
+-  If DCDCs are externally controlled then this property should be there.
+-- dcdc-ext-control-gpios: This is applicable for DCDC1, DCDC2 and DCDC3.
+-  If DCDCs are externally controlled and if it is from GPIO then GPIO
+-  number should be provided. If it is externally controlled and no GPIO
+-  entry then driver will just configure this rails as external control
+-  and will not provide any enable/disable APIs.
+-- ti,overcurrent-wait: This is applicable to FET registers, which have a
+-  poorly defined "overcurrent wait" field.  If this property is present it
+-  should be between 0 - 3.  If this property isn't present we won't touch the
+-  "overcurrent wait" field and we'll leave it to the BIOS/EC to deal with.
 -
 -Each regulator is defined using the standard binding for regulators.
 -
--Note: LDO5 and LDO_RTC is supplied by SYS regulator internally and driver
--      take care of making proper parent child relationship.
--
 -Example:
 -
--	pmu: tps6586x@34 {
--		compatible = "ti,tps6586x";
--		reg = <0x34>;
+-	tps65090@48 {
+-		compatible = "ti,tps65090";
+-		reg = <0x48>;
 -		interrupts = <0 88 0x4>;
 -
--		#gpio-cells = <2>;
--		gpio-controller;
--
--		ti,system-power-controller;
--
--		sys-supply = <&some_reg>;
--		vin-sm0-supply = <&some_reg>;
--		vin-sm1-supply = <&some_reg>;
--		vin-sm2-supply = <&some_reg>;
--		vinldo01-supply = <...>;
--		vinldo23-supply = <...>;
--		vinldo4-supply = <...>;
--		vinldo678-supply = <...>;
--		vinldo9-supply = <...>;
+-		vsys1-supply = <&some_reg>;
+-		vsys2-supply = <&some_reg>;
+-		vsys3-supply = <&some_reg>;
+-		infet1-supply = <&some_reg>;
+-		infet2-supply = <&some_reg>;
+-		infet3-supply = <&some_reg>;
+-		infet4-supply = <&some_reg>;
+-		infet5-supply = <&some_reg>;
+-		infet6-supply = <&some_reg>;
+-		infet7-supply = <&some_reg>;
+-		vsys-l1-supply = <&some_reg>;
+-		vsys-l2-supply = <&some_reg>;
 -
 -		regulators {
--			sys_reg: sys {
--				regulator-name = "vdd_sys";
+-			dcdc1 {
+-				regulator-name = "dcdc1";
+-				regulator-boot-on;
+-				regulator-always-on;
+-				ti,enable-ext-control;
+-				dcdc-ext-control-gpios = <&gpio 10 0>;
+-			};
+-
+-			dcdc2 {
+-				regulator-name = "dcdc2";
 -				regulator-boot-on;
 -				regulator-always-on;
 -			};
 -
--			sm0_reg: sm0 {
--				regulator-min-microvolt = < 725000>;
--				regulator-max-microvolt = <1500000>;
+-			dcdc3 {
+-				regulator-name = "dcdc3";
 -				regulator-boot-on;
 -				regulator-always-on;
 -			};
 -
--			sm1_reg: sm1 {
--				regulator-min-microvolt = < 725000>;
--				regulator-max-microvolt = <1500000>;
+-			fet1 {
+-				regulator-name = "fet1";
 -				regulator-boot-on;
 -				regulator-always-on;
 -			};
 -
--			sm2_reg: sm2 {
--				regulator-min-microvolt = <3000000>;
--				regulator-max-microvolt = <4550000>;
+-			fet2 {
+-				regulator-name = "fet2";
 -				regulator-boot-on;
 -				regulator-always-on;
 -			};
 -
--			ldo0_reg: ldo0 {
--				regulator-name = "PCIE CLK";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
+-			fet3 {
+-				regulator-name = "fet3";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo1_reg: ldo1 {
--				regulator-min-microvolt = < 725000>;
--				regulator-max-microvolt = <1500000>;
+-			fet4 {
+-				regulator-name = "fet4";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo2_reg: ldo2 {
--				regulator-min-microvolt = < 725000>;
--				regulator-max-microvolt = <1500000>;
+-			fet5 {
+-				regulator-name = "fet5";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo3_reg: ldo3 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
+-			fet6 {
+-				regulator-name = "fet6";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo4_reg: ldo4 {
--				regulator-min-microvolt = <1700000>;
--				regulator-max-microvolt = <2475000>;
+-			fet7 {
+-				regulator-name = "fet7";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo5_reg: ldo5 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
+-			ldo1 {
+-				regulator-name = "ldo1";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -
--			ldo6_reg: ldo6 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
--			};
--
--			ldo7_reg: ldo7 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
--			};
--
--			ldo8_reg: ldo8 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
--			};
--
--			ldo9_reg: ldo9 {
--				regulator-min-microvolt = <1250000>;
--				regulator-max-microvolt = <3300000>;
+-			ldo2 {
+-				regulator-name = "ldo2";
+-				regulator-boot-on;
+-				regulator-always-on;
 -			};
 -		};
 -	};

@@ -2,76 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 266E847907E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBF6479061
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbhLQPxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238504AbhLQPxT (ORCPT
+        id S238238AbhLQPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:52:57 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:62769 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235584AbhLQPwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:53:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A02C061763;
-        Fri, 17 Dec 2021 07:53:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F2E262287;
-        Fri, 17 Dec 2021 15:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766A3C36AEA;
-        Fri, 17 Dec 2021 15:53:16 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 15:53:13 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] arm64: efi-rt-wrapper.S:8: Error: unknown mnemonic `bti'
- -- `bti c'
-Message-ID: <YbyyaX/7S+1PqRYq@arm.com>
-References: <CA+G9fYt-k1daHarGoXKz7uYvsAcDMNM2bk7jRcYBNf0sRE=+LQ@mail.gmail.com>
- <YbyX+I2PBwio0MYk@arm.com>
- <YbyjerZen9CwYKSV@sirena.org.uk>
+        Fri, 17 Dec 2021 10:52:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639756375; x=1671292375;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=InU10E24+lGshKELizpD7YZkcfzwyzNUREpTdfkRygg=;
+  b=zuj3pnXJ0Xpkp8UkY0UfAmdVc2M4glJE0vgQvgh4xJucubMO+AjdDc1f
+   XjnuSmB4sPjmz67vvdB/8zOh9YifGpr+JPRzCFGIFSkp8OHYtLUw8/uKm
+   pttmu+Kt4ItrOSrUaRh23a5LPXBMc6gvFBh3R1q+VdPEo7nB5tFCr/k53
+   3a22kIKPadxeiceiD+wOuAfw5hJ9vpB/FA/dzkeXbntkxzUM4DJQmT8BI
+   y9TejouG/yTPBCp9CclU8FXVpLQ+kkpSJubmOtOADFN9qdxSCdPiVxzXc
+   8gOjPcJcv9BZ4n99ekHglS696QNDj1+4+0ocYOpkRc9JjKq+hoIv/Cd3J
+   w==;
+IronPort-SDR: qrAZB3ZA8/zhRFxvvwOG9TmHV+RVblXAE+ObKMYeagjQeUjzIY/QkenKEN5TB2dYFDM6pCmDch
+ mCzA/6VSMIwW70d565ATNsgBJ8c110+7qhXpCb/YZmvfBNH3gfyKMc7IYZ5TpKbeW36+CqpL0u
+ pDZcR8whuE6jP9rLt1TStI58Eym+1SJW8dP1B1FL8ztZ3Nk9fSPbHnNzLghl0S631/mp/a1OM4
+ WGst0P2M1WLOTNM5pWhcAgIIdodiqj9G5DW8am7hympNPOj74kFJXRx1vWJ5ZDRivqp9Vr+jj9
+ lyOMNWsJCVvEHk6erIm6Zx6S
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="147607499"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 08:52:54 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 08:52:54 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 17 Dec 2021 08:52:52 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
+        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
+        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v7 0/9] net: lan966x: Add switchdev and vlan support
+Date:   Fri, 17 Dec 2021 16:53:44 +0100
+Message-ID: <20211217155353.460594-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbyjerZen9CwYKSV@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:49:30PM +0000, Mark Brown wrote:
-> On Fri, Dec 17, 2021 at 02:00:24PM +0000, Catalin Marinas wrote:
-> > We defined the bti macro in assembler.h but that's not included by
-> > linkage.h and not all asm files seem to include the former. At a quick
-> > grep we need the diff below, not sure it's the best solution:
-> 
-> That seems sensible to me, especially given the small number of files
-> affected.  The other thing would be to decide that all assembly files
-> should have the header included by default but that seems like it's
-> invasive and probably disproportionate.
+This patch series extends lan966x with switchdev and vlan support.
+The first patches just adds new registers and extend the MAC table to
+handle the interrupts when a new address is learn/forget.
 
-There's also this:
+v6->v7:
+- fix build issues when compiling as a module
 
-diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
-index 9065e4749b42..b77e9b3f5371 100644
---- a/arch/arm64/include/asm/linkage.h
-+++ b/arch/arm64/include/asm/linkage.h
-@@ -1,6 +1,10 @@
- #ifndef __ASM_LINKAGE_H
- #define __ASM_LINKAGE_H
+v5->v6:
+- fix issues with the singletones, they were not really singletons
+- simplify the case where lan966x ports are added to bridges with foreign
+  ports
+- drop the cases NETDEV_PRE_UP and NETDEV_DOWN
+- fix the change of MAC address
+- drop the callbacks .ndo_set_features, .ndo_vlan_rx_add_vid,
+  .ndo_vlan_rx_kill_vid
+- remove duplicate code when port was added in a vlan, the MAC entries
+  will be added by the fdb
 
-+#ifdef __ASSEMBLY__
-+#include <asm/assembler.h>
-+#endif
-+
- #define __ALIGN		.align 2
- #define __ALIGN_STR	".align 2"
+v4->v5:
+- make the notifier_block from lan966x to be singletones
+- use switchdev_handle_port_obj_add and switchdev_handle_fdb_event_to_device
+  when getting callbacks in the lan966x
+- merge the two vlan patches in a single one
+
+v3->v4:
+- split the last patch in multiple patches
+- replace spin_lock_irqsave/restore with spin_lock/spin_unlock
+- remove lan966x_port_change_rx_flags because it was copying all the frames to
+  the CPU instead of removing all RX filters.
+- implement SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
+- remove calls to __dev_mc_unsync/sync as they are not needed
+- replace 0/1 with false/true
+- make sure that the lan966x ports are not added to bridges that have other
+  interfaces except lan966x
+- and allow the lan966x ports to be part of only the same bridge.
+
+v2->v3:
+- separate the PVID used when the port is in host mode or vlan unaware
+- fix issue when the port was leaving the bridge
+
+v1->v2:
+- when allocating entries for the mac table use kzalloc instead of
+  devm_kzalloc
+- also use GFP_KERNEL instead of GFP_ATOMIC, because is never called
+  in atomic context
+- when deleting an mac table entry, the order of operations was wrong
+- if ana irq is enabled make sure it gets disabled when the driver is
+  removed
+
+
+Horatiu Vultur (9):
+  net: lan966x: Add registers that are used for switch and vlan
+    functionality
+  dt-bindings: net: lan966x: Extend with the analyzer interrupt
+  net: lan966x: add support for interrupts from analyzer
+  net: lan966x: More MAC table functionality
+  net: lan966x: Remove .ndo_change_rx_flags
+  net: lan966x: Add support to offload the forwarding.
+  net: lan966x: Add vlan support.
+  net: lan966x: Extend switchdev bridge flags
+  net: lan966x: Extend switchdev with fdb support
+
+ .../net/microchip,lan966x-switch.yaml         |   2 +
+ .../net/ethernet/microchip/lan966x/Kconfig    |   1 +
+ .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
+ .../ethernet/microchip/lan966x/lan966x_fdb.c  | 244 +++++++++
+ .../ethernet/microchip/lan966x/lan966x_mac.c  | 342 +++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_main.c | 103 +++-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  64 ++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h | 129 +++++
+ .../microchip/lan966x/lan966x_switchdev.c     | 468 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_vlan.c | 312 ++++++++++++
+ 10 files changed, 1639 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_fdb.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
 
 -- 
-Catalin
+2.33.0
+

@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE81478C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B81478CE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbhLQNfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 08:35:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51840 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231836AbhLQNfx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 08:35:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639748153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ZE5+T9FIA/LsIMrDz4C7mJhlzQ37jyiywuLPjaXdaE=;
-        b=QTQgowyvDaEZ/yKgJU8BC5pWHSZfVQANmkaDCODEmCDV6FMmidSrIxxxchyYmJrC20wDy3
-        NXyoqy92LoP7/+ptMww0824hXCOVnthq6H1tz6Jak0VaYYQn0Bv9v2VkjyVjCqiwJGCi/c
-        MZ+HqfqHU27ml1WXVEeILOFvzDhJJV8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-sHf3MHJbP42MjH8esE7_rQ-1; Fri, 17 Dec 2021 08:35:52 -0500
-X-MC-Unique: sHf3MHJbP42MjH8esE7_rQ-1
-Received: by mail-ed1-f72.google.com with SMTP id t2-20020a056402524200b003f7ed6cf4f1so1905062edd.21
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 05:35:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8ZE5+T9FIA/LsIMrDz4C7mJhlzQ37jyiywuLPjaXdaE=;
-        b=2GiayrGbHF1aOaNKrYbUMzpShVLzpowe7FWrzNk4Q5K5dMcNmuV5s7Re1xjzByYUgh
-         Bk34nW5YtTGklAeQg5adVVMYizuHcWJvYDZqrEhZjPTzxfrVetH31mh28hi6YRmPHeYi
-         BC7FJJVHU9axI9bJ6QX7diHIPZU+lUrxfgtKOkhvuorUSFOLsIEctHrmA74eraAXkcXj
-         IGzNOowrAjsOtolLPJ0QW5tqMNrOts5+vuMlPRwpFsbxH2B0UfIIF2LqaELkcmiLJolR
-         EKVC/0pw6MtPQR49wuvYowvYbY2ytNf+VsFzc5PlaHFaFnyrdwdsYAqNyfbXaSbPbAtj
-         sWIQ==
-X-Gm-Message-State: AOAM533QTXeKukRvM/Ajq6ukORNZEwixbsMNnu2M2X0NJ/aax4yaimE4
-        +IlfSFqlA9WJEfBSUGgNpD25cw2eym2lQv+URvUUEFgJ84kTmPf4yGIsJHaeP6mCMWgYClf2ef9
-        lScE6d21l3PxkQzKwmEM2KK8UPwR+aBd9DhJ3Vqan
-X-Received: by 2002:a17:906:58d5:: with SMTP id e21mr2721160ejs.540.1639748150915;
-        Fri, 17 Dec 2021 05:35:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxoiXFGOR4vgjI+ETFq9+5QOetUKZgoPnG9oL5+z8WVRV0/CPuIW6GrT+M51W3JOyXloa+NW5h0jgzKL/ll9Ps=
-X-Received: by 2002:a17:906:58d5:: with SMTP id e21mr2721144ejs.540.1639748150663;
- Fri, 17 Dec 2021 05:35:50 -0800 (PST)
-MIME-Version: 1.0
-References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
- <163967182112.1823006.7791504655391213379.stgit@warthog.procyon.org.uk>
- <CALF+zOkvC7kZ9LFQyjsRduQq+-gmaD4bLWc7H=AtVi6=NuC_dA@mail.gmail.com> <1958026.1639747261@warthog.procyon.org.uk>
-In-Reply-To: <1958026.1639747261@warthog.procyon.org.uk>
-From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Fri, 17 Dec 2021 08:35:14 -0500
-Message-ID: <CALF+zOnerPWd7wYD0sC_v8rTeN0KHgP2abkDWWVGLr4QVrbSzg@mail.gmail.com>
-Subject: Re: [PATCH v3 63/68] nfs: Convert to new fscache volume/cookie API
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs <linux-cachefs@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Jeff Layton <jlayton@kernel.org>,
+        id S236887AbhLQNyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 08:54:22 -0500
+Received: from gate.crashing.org ([63.228.1.57]:60104 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231667AbhLQNyV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 08:54:21 -0500
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1BHDZQmf021580;
+        Fri, 17 Dec 2021 07:35:26 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 1BHDZJZQ021573;
+        Fri, 17 Dec 2021 07:35:19 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 17 Dec 2021 07:35:18 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Rich Felker <dalias@libc.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
+        X86 ML <x86@kernel.org>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-m68k <linux-m68k@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>, Stafford Horne <shorne@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Russell King <linux@armlinux.org.uk>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-ntfs-dev@lists.sourceforge.net" 
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>
+Subject: Re: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
+Message-ID: <20211217133518.GR614@gate.crashing.org>
+References: <20210514100106.3404011-1-arnd@kernel.org> <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com> <20211216185620.GP614@gate.crashing.org> <698cfc52a0d441f7b9f29424be82b2e8@AcuMS.aculab.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <698cfc52a0d441f7b9f29424be82b2e8@AcuMS.aculab.com>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 8:21 AM David Howells <dhowells@redhat.com> wrote:
->
-> David Wysochanski <dwysocha@redhat.com> wrote:
->
-> > >
-> > >  (4) fscache_enable/disable_cookie() have been removed.
-> > >
-> > >      Call fscache_use_cookie() and fscache_unuse_cookie() when a file is
-> > >      opened or closed to prevent a cache file from being culled and to keep
-> > >      resources to hand that are needed to do I/O.
-> > >
-> > >      Unuse the cookie when a file is opened for writing.  This is gated by
-> > >      the NFS_INO_FSCACHE flag on the nfs_inode.
-> > >
-> > >      A better way might be to invalidate it with FSCACHE_INVAL_DIO_WRITE
-> > >      which will keep it unused until all open files are closed.
-> > >
-> >
-> > Comment still out of date here, reference
-> > https://marc.info/?l=linux-nfs&m=163922984027745&w=4
->
-> Okay, how about:
->
->  (4) fscache_enable/disable_cookie() have been removed.
->
->      Call fscache_use_cookie() and fscache_unuse_cookie() when a file is
->      opened or closed to prevent a cache file from being culled and to keep
->      resources to hand that are needed to do I/O.
->
->      If a file is opened for writing, we invalidate it with
->      FSCACHE_INVAL_DIO_WRITE in lieu of doing writeback to the cache,
->      thereby making it cease caching until all currently open files are
->      closed.  This should give the same behaviour as the uptream code.
->      Making the cache store local modifications isn't straightforward for
->      NFS, so that's left for future patches.
->
+On Fri, Dec 17, 2021 at 12:34:53PM +0000, David Laight wrote:
+> From: Segher Boessenkool
+> > Sent: 16 December 2021 18:56
+> ...
+> > > The only remaining problem here is reinterpreting a char* pointer to a
+> > > u32*, e.g., for accessing the IP address in an Ethernet frame when
+> > > NET_IP_ALIGN == 2, which could suffer from the same UB problem again,
+> > > as I understand it.
+> > 
+> > The problem is never casting a pointer to pointer to character type, and
+> > then later back to an appriopriate pointer type.
+> > These things are both required to work.
+> 
+> I think that is true of 'void *', not 'char *'.
 
-Yes, that is more accurate.
+No, see 6.3.2.3/7.  Both are allowed (and behave the same in fact).
 
+> 'char' is special in that 'strict aliasing' doesn't apply to it.
+> (Which is actually a pain sometimes.)
+
+That has nothing to do with it.  Yes, you can validly access any memory
+as a character type, but that has nothing to do with what pointer casts
+are allowed and which are not.
+
+> > The problem always is accessing something as if it
+> > was something of another type, which is not valid C.  This however is
+> > exactly what -fno-strict-aliasing allows, so that works as well.
+> 
+> IIRC the C language only allows you to have pointers to valid data items.
+> (Since they can only be generated by the & operator on a valid item.)
+
+Not so.  For example you are explicitly allowed to have pointers one
+past the last element of an array (and do arithmetic on that!), and of
+course null pointers are a thing.
+
+C allows you to make up pointers from integers as well.  This is
+perfectly fine to do.  Accessing anything via such pointers might well
+be not standard C, of course.
+
+> Indirecting any other pointer is probably UB!
+
+If a pointer points to an object, indirecting it gives an lvalue of that
+object.  It does not matter how you got that pointer, all that matters
+is that it points at a valid object.
+
+> This (sort of) allows the compiler to 'look through' casts to find
+> what the actual type is (or might be).
+> It can then use that information to make optimisation choices.
+> This has caused grief with memcpy() calls that are trying to copy
+> a structure that the coder knows is misaligned to an aligned buffer.
+
+This is 6.5/7.
+
+Alignment is 6.2.8 but it doesn't actually come into play at all here.
+
+> So while *(unaligned_ptr *)char_ptr probably has to work.
+
+Only if the original pointer points to an object that is correct
+(including correctly aligned) for such an lvalue.
+
+> If the compiler can see *(unaligned_ptr *)(char *)int_ptr it can
+> assume the alignment of the 'int_ptr' and do a single aligned access.
+
+It is undefined behaviour to have an address in int_ptr that is not
+correctly aligned for whatever type it points to.
+
+
+Segher

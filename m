@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0084785CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C5F4785D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbhLQH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 02:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLQH67 (ORCPT
+        id S233137AbhLQICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:02:40 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:60699 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233035AbhLQICj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 02:58:59 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB0C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 23:58:59 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id c6so1198240plg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 23:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eefAs3uL+WsP/rtSEU8dzklWrmIu4i6QjwBqLTZ/hfY=;
-        b=QO3SKqr3s85NIH6folKr6ARjtdn0FpcSWxAjYQ8Kf1ArQ9TkSxAnPeIJ7krpgXH2T3
-         BKDPoIyntL67rtMaKjxle/N47TRbO8CqZmNRgIncJ0MWqfgm7lFSYl17Du/cczt2GIRL
-         BQylFmGXml80PFh3D54WALi1dRHYdIjI6v12GzeZvvkOPNlrMVHA03AfDreIPLzSuUOL
-         hqyZNLmMOeDrcP1fOfJ/PgLRP/tpqUWNZ9haCKNd/w1JFcoYCdtsPl3OjT+a3ENT7YXG
-         foY3G/Z4T2lOUmOg80dXjexkbVim7u1HvMRXHrHBhmOpMknudR31X4dvYoAbPo4USPys
-         akpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eefAs3uL+WsP/rtSEU8dzklWrmIu4i6QjwBqLTZ/hfY=;
-        b=AiXrXTVl1GtZYRhdtdbJBRWXOhx1CBAuhBLdzU27hmGdmJw9DnROF1kbh2uyorGWiB
-         670gNzqFlyxz9oM1Vs6zaM//6rYbBdjPRweD4rWXKxH5LHs6lCmBqBqu5nd2nZxWrifm
-         M8Z7j6y9qliOcnu1Sbb1qlCaQPqSkttjakffgg8U4Aq1/Eo6nwq1dj3HYzFZdNlBmckq
-         XY5yuyImV3eKHqtisEqMrHHVNc0YzkQsVfh363R10FHMv46GE/saMAHQ4sV87DVOw2JZ
-         stkV+aiBcFtkMb2gtW5RVbxuw/ykyQQPgKTTcbk3+Z59S4pI3IMLTyhbmbp3RNR1jeHs
-         8Ubw==
-X-Gm-Message-State: AOAM530423A9X4gWbG93D7dPr5xEfa9BnjYQVF+acEA/d1MfiFw1tMKj
-        GZWQ9uU7uTcbe58Ze+qRMFmGdA==
-X-Google-Smtp-Source: ABdhPJxrzU37n52OwF5xrWjQsktvMG10nV6vo8UF0tY2+s1bHeuacDCJcm1DJJtgW2C8aC2i8PoCvA==
-X-Received: by 2002:a17:902:8346:b0:148:b843:751a with SMTP id z6-20020a170902834600b00148b843751amr1887639pln.141.1639727939034;
-        Thu, 16 Dec 2021 23:58:59 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([204.124.181.134])
-        by smtp.gmail.com with ESMTPSA id w16sm7674003pgh.81.2021.12.16.23.58.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 23:58:58 -0800 (PST)
-Date:   Fri, 17 Dec 2021 15:58:50 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
- contextidr
-Message-ID: <20211217075850.GC371207@leoy-ThinkPad-X240s>
-References: <20211021134530.206216-1-leo.yan@linaro.org>
- <20211021134530.206216-5-leo.yan@linaro.org>
- <202110210848.35971643C6@keescook>
- <20211101152835.GB375622@leoy-ThinkPad-X240s>
- <YapEUlcyDZ6TuE6n@arm.com>
- <20211205135103.GA42658@leoy-ThinkPad-X240s>
- <Ya9J8HnMWxBy3MJv@arm.com>
- <20211207123118.GA255238@leoy-ThinkPad-X240s>
- <YbDrhQLeBdn0wqKT@arm.com>
- <20211210075918.GD622826@leoy-ThinkPad-X240s>
+        Fri, 17 Dec 2021 03:02:39 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MSLlu-1n4hnR3TGi-00Sf1C; Fri, 17 Dec 2021 09:02:37 +0100
+Received: by mail-wr1-f51.google.com with SMTP id q16so2438034wrg.7;
+        Fri, 17 Dec 2021 00:02:37 -0800 (PST)
+X-Gm-Message-State: AOAM532GNI3eMLc5igCo7uLR4reDcAEsBUTezFMXnsOzI8oxrv1BP5ol
+        sOMy77166X7HwC8ZCn0bv4eEwbdJgrsste1HwG8=
+X-Google-Smtp-Source: ABdhPJzJeZFelU3godOJegozbjx0Hr/mKwWf6NtOOet6yAUN3rA9EeAB8H/WKKVCvEXO51VDSBIZnrbM6ODS+aiK/Ic=
+X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr1465626wry.407.1639728157042;
+ Fri, 17 Dec 2021 00:02:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210075918.GD622826@leoy-ThinkPad-X240s>
+References: <20211217172931.01c24d4b@canb.auug.org.au>
+In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 17 Dec 2021 09:02:21 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
+Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Kiran Kumar S <kiran.kumar1.s@intel.com>,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:4oUBFFqlwiSIa1ypbolba4zFKzclW88FiKDg2eLl5NRvMDDGSlb
+ nbJkyG17yY6UDdldCaKCnM4zdJ2xYvBv7oNhaSrbSCz9DBkEygA3KhmFuXKy7ZzLISMjjEV
+ lg2Rd78UyiqMzYiI4TlIVDZdJ2aLNkXKjrM95LXvmUUYl6nkBNkgZK61F1iSAiQQLIjMvNi
+ ZQJC4DgQ2Cat53Nk/1lDg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4Q9jytcTBbI=:V9WLnEGijd5AFXRjIl1keG
+ LS7fjWG9wsPhe0wI/fgzjgOHCFzfBodwhzAMDJM7E4xjan04GZjT77nRFHG+fj303dgwcShRz
+ Y2k5vEdxIhCeqCYt+HtfLiEJjYFGsC4JyaNBqakVhPP1Yjh+s/a05WPUWKeTaQnxxx9REaK/+
+ eTSTNpuxxvLmHKeRUL+S6Iuly18d6bw/NxfgueUS1y66la1RB5FAMj/Goh4Rcm0ukVPnTuJI7
+ vyW1U+Z80pcJ/0IZZypw54p0BQEeh2e1PyVVUicbRrOs4jJPxaxrCbxlaLbIMnlT8lwhqNjnX
+ valVUsW20Q0XlyMC8id60gD508I3ZCUODV0Ppx4GdSBemdKwN+2El90NAA6LaMTD0X0qAY7Lz
+ snVDsh76AwO2XJm86HlG6i6T/lh3e8RKJ70x/atzB5CD4dEJ3H7posIKu2rXoeACTeh1k52U/
+ AqvOAMbgWiH6ZUiE78agCL0K85YGV0kAKCxA1Tjjq4KHoFD44MYEPVBo0qCpGpkyH8YMgSBLm
+ QjmmAqne+jw+tode5M8XHSP+dkL/QQL3X58rKStTWTjMKBPomW4mWmmBIfrorZ1VQPr4X3+kt
+ gSe8TxCeDjTQ/d/donj8RhzBVlKPxQ6/Cc/qp9aCUUmXxATlf/XSjXRap+7vAtbnWanJYVf0k
+ LwMmrFkKntD241/niPrZnKyOjX0zY6jAD+P8V0SWdSqZfnE89GVl6QSko0jWZV92dko24eyhh
+ 4NheJIF5AbZataeYRF/jBEyqxGlWQ4AsDKWusgE1KEqoOyt5PSX6/q9Q7vc1NXkGMyX7aYIio
+ rtmxGVfaf260Rm4ealCe9PwUBSqIIWoBxLebJ+VKOJEg/eFGn8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 03:59:18PM +0800, Leo Yan wrote:
+On Fri, Dec 17, 2021 at 7:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the pinctrl tree got conflicts in:
+>
+>   drivers/pinctrl/Kconfig
+>   drivers/pinctrl/Makefile
+>
+> between commit:
+>
+>   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
+>
+> from the arm-soc tree and commits:
+>
+>   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
+>   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
+>
+> from the pinctrl tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-[...]
+Thanks, looks good. There are potentially three or four new SoC families
+in the arm/newsoc branch (this is the first one I merged), so I expect to see
+a few additional conflicts like this against pinctrl/clk/irqchip, but
+they should
+all be trivial.
 
-> > You could also check there if the PID is in the root
-> > namespace and avoid setting CONTEXTIDR (or write 0).
-> 
-> This could introduce mess.  Writing 0 can lead the decoder to take it
-> as idle thread; if skip setting CONTEXTIDR, the tracer might use a
-> stale stale PID number (the previous one ID number).
-> 
-> Alternatively, if you accept to always set PID to CONTEXTIDR in
-> contextidr_thread_switch(), it would be fine for me and we can only
-> need to control PID packets in SPE and CoreSight drivers.
-> 
-> Please let me know your opinion, thanks!
-
-Gentle ping, Catalin.  If anything is blur and you want me to clarify,
-please let me know.  Sorry if you are in holiday and if so we can
-delay after holiday.
-
-Thanks,
-Leo
+        Arnd

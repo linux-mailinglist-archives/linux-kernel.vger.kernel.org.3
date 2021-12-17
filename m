@@ -2,154 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DCD479761
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856E047976D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 00:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbhLQW7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbhLQW7R (ORCPT
+        id S231151AbhLQXJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 18:09:30 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58114
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230082AbhLQXJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:59:17 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3400C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:16 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z7so13303400edc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
-        b=WSqIxUtqn5jcmA6NC9BVpsfsO/6YYpI4P+quaDiBpik06F329fj372+mpAs6nkU6hi
-         UgKtVq/JNx9O5+tUI1FaDEc9lAWL66/z1RpLwMtAJZ086ni6cHm+R02sIgHA08fo/qlY
-         ertG4Ei0o7WJ3lUoVgGOz1iW744OYt4w3zD7E=
+        Fri, 17 Dec 2021 18:09:29 -0500
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C3E963F1A9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 23:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639782567;
+        bh=ys1YmTbxI/0qMuoKgusLiKRMBeOqTdLDNhDUoLhs2AQ=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=Y/j8fZVAuGv3nPZfRhKVryft83tRmb8gcaPWKw0Rt0iNfWuyoKWxgBMpakkcbIIAk
+         WHcfLF+pKM5yF02Q1cxWjBt8q/5PXWr6f/wLKGYLNqXO3wVV04yr2NgTiMXbgwbbOc
+         9bMwlqrGWFvvTKD4c23CvVX7bHCralanHYHseNm5XWDk5o4wgsdSnZZsBlYEDbdzTo
+         sV6BrC1KJGl3LCEeujeSCGfFeTk4nEo07+Xbp9RXsV0lY3K6HFNhNNza9c2ipK/kKz
+         dWHLQB8ra4TzH6+q7uaaWVl4MKsgG6TA/LM0jUSO8XbvBePKLJApCD+KJKVvXb+Yh1
+         dIx937Nlday6A==
+Received: by mail-pl1-f198.google.com with SMTP id o19-20020a170902779300b00148da6a1f86so1588424pll.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:09:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
-        b=X/LwqGhdVkCHrekthijCnB31nijQ/mwaWWYdEV6DVH4tWdUGj5woDi38oHv6spZqqx
-         2oEYsLpz5gJx54iW9U0852NgdRy4CP8ntY8OIEio47tCmcf+WB1R8am2vxLYiJt/BUmZ
-         XNwIGVw0DeQYLo/sfuqaMe031MMj6F2EZq3ivM6dEIlKfqDez5DHArjevlCy2O26icmw
-         dCXWe4PzeslxBgdTBBPU1+KBYMqbVb/wMiNbCD9i+yHHbsVLH9CljRiaTaN27NGkZZKP
-         1leIQ9pcxWS1IO0UdI4Oaj+q80mu5PYzcGzCjhSglV0gSoXygoNs0Y2c2nMLO3yI4UAa
-         IokA==
-X-Gm-Message-State: AOAM530oWJMLmRiBXDV1bTiAqZabYGz2ydkPkoRzZVH7p5HmD9VVkNPZ
-        AmLR/nG0M49zZIzbB/GcCjfrG+t+Bnv79Bq6Tk0=
-X-Google-Smtp-Source: ABdhPJyF5JPJskv4DAKcUQGOFhVddwY0rl+EJjRz6gGqbhRi8vVuNL11J6wfri+lp0zlH9cJkVH1eg==
-X-Received: by 2002:a17:907:2da1:: with SMTP id gt33mr4303290ejc.378.1639781954759;
-        Fri, 17 Dec 2021 14:59:14 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id y17sm4285928edd.31.2021.12.17.14.59.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 14:59:13 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id i22so6662495wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:59:13 -0800 (PST)
-X-Received: by 2002:adf:f54e:: with SMTP id j14mr4140437wrp.442.1639781952748;
- Fri, 17 Dec 2021 14:59:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=ys1YmTbxI/0qMuoKgusLiKRMBeOqTdLDNhDUoLhs2AQ=;
+        b=5++ugBKco2DPvQ9nsQiqyKUpjqeH7MDKe+GmOOiv1MsSRbPCERMSDhMt32faf86kZS
+         JgYHt/k3VhVX0tyL1ItItDpBKgXKNK+kHTjiEohag6zvErHZCwu9JHjIkWpuTOhKXKzs
+         knvjAksFjBkuP8KG8CsyE1CGjKWicT541aPvMYy0N+IJaCZuEb7YSMkh8NYPNC7go66q
+         LABP6f7WcDISI5pWlgG329/QHAw+tp604jjWYS5Lk+a7JCSyxJp+nMrNyrnUxqZ3yHZT
+         pf41XpQLyF7l3K24qCD4ban1JzJyPOZDLngC0yvGkosTDGsV/37Hfmy0Pd9t7qyzsDiN
+         6r9g==
+X-Gm-Message-State: AOAM530VDPkxpY5Ij6wvjL0ZnbHi1YiqZ40UeYfBLXOJR9Ff0ZAhWbbw
+        zVXSw8ET02VwJHhHhsNanFcPYwsiQokU50V4SXSZmfG3bhQIH7wKrBuqSJ+u9SRYjt4aP9nQrSv
+        M5Ce+k6KnKgr25iUO99OKBce8ct0s8eOEgLTZ95mM9A==
+X-Received: by 2002:a65:6717:: with SMTP id u23mr4791543pgf.547.1639782566243;
+        Fri, 17 Dec 2021 15:09:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxk++2lSSOix2GM5XmHtqJPzeNGH5KGfD+pMIcg++duLGKrm4NUYpJzgGIdvlEOTvtkTxOXHQ==
+X-Received: by 2002:a65:6717:: with SMTP id u23mr4791529pgf.547.1639782565975;
+        Fri, 17 Dec 2021 15:09:25 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id lr3sm13433279pjb.34.2021.12.17.15.09.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Dec 2021 15:09:25 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 1E9FF60DD1; Fri, 17 Dec 2021 15:09:25 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 193EFA0B22;
+        Fri, 17 Dec 2021 15:09:25 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v3] net: bonding: Add support for IPV6 ns/na
+In-reply-to: <20211217164829.31388-1-sunshouxin@chinatelecom.cn>
+References: <20211217164829.31388-1-sunshouxin@chinatelecom.cn>
+Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
+   message dated "Fri, 17 Dec 2021 11:48:29 -0500."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
- <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
- <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
- <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
-In-Reply-To: <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 14:58:56 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
-Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <15943.1639782565.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 17 Dec 2021 15:09:25 -0800
+Message-ID: <15944.1639782565@famine>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:29 PM David Hildenbrand <david@redhat.com> wrote:
+	For clarity, please add "to balance-alb mode" to the Subject.
+
+Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
+
+>Since ipv6 neighbor solicitation and advertisement messages
+>isn't handled gracefully in bonding6 driver, we can see packet
+>drop due to inconsistency bewteen mac address in the option
+>message and source MAC .
 >
-> While I do care about future use cases, I cannot possibly see fork() not
-> requiring the mmap_lock in the foreseeable future. Just so much depends
-> on it as of now.
+>Another examples is ipv6 neighbor solicitation and advertisement
+>messages from VM via tap attached to host brighe, the src mac
+>mighe be changed through balance-alb mode, but it is not synced
+>with Link-layer address in the option message.
+>
+>The patch implements bond6's tx handle for ipv6 neighbor
+>solicitation and advertisement messages.
+>
+>                        Border-Leaf
+>                        /        \
+>                       /          \
+>                    Tunnel1    Tunnel2
+>                     /              \
+>                    /                \
+>                  Leaf-1--Tunnel3--Leaf-2
+>                    \                /
+>                     \              /
+>                      \            /
+>                       \          /
+>                       NIC1    NIC2
+>                        \      /
+>                        server
+>
+>We can see in our lab the Border-Leaf receives occasionally
+>a NA packet which is assigned to NIC1 mac in ND/NS option
+>message, but actaully send out via NIC2 mac due to tx-alb,
+>as a result, it will cause inconsistency between MAC table
+>and ND Table in Border-Leaf, i.e, NIC1 =3D Tunnel2 in ND table
+>and  NIC1 =3D Tunnel1 in mac table.
+>
+>And then, Border-Leaf starts to forward packet destinated
+>to the Server, it will only check the ND table entry in some
+>switch to encapsulate the destination MAC of the message as
+>NIC1 MAC, and then send it out from Tunnel2 by ND table.
+>Then, Leaf-2 receives the packet, it notices the destination
+>MAC of message is NIC1 MAC and should forword it to Tunne1
+>by Tunnel3.
+>
+>However, this traffic forward will be failure due to split
+>horizon of VxLAN tunnels.
 
-It's not that *fork()* depends on it.
+	I believe I understand what problem you're trying to solve here,
+but the solution seems to be incomplete, as (from our prior discussion)
+a rebalance event for balance-alb will apparently induce the same
+problem.  Granted, those do not occur frequently (only when interfaces
+are added to the bond, or an interface link state changes), but have you
+tested what happens if NIC1 or NIC2 (or in a situation with more than
+two interfaces) undergoes a link state change?
 
-Of course fork() takes the mmap_sem.
+>Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>Reviewed-by: Jay Vosburgh<jay.vosburgh@canonical.com>
 
-It's that fast-gup really really doesn't want it, and can't take it.
+	I did not include this signoff tag in my prior message.  Please
+do not include such tags unless explicitly provided by the relevant
+person.  Discussion on the mailing list is not equivalent to providing
+the tag; please review Documentation/process/submitting-patches.rst.
 
-So any fast-gup user fundamentally cannot look at mapcount(), because
-that would be fundamentally wrong and racy, and could race with fork.
+>Reviewed-by: Eric Dumazet<eric.dumazet@gmail.com>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>---
+> drivers/net/bonding/bond_alb.c | 131 +++++++++++++++++++++++++++++++++
+> 1 file changed, 131 insertions(+)
+>
+>diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
+b.c
+>index 533e476988f2..b14017364594 100644
+>--- a/drivers/net/bonding/bond_alb.c
+>+++ b/drivers/net/bonding/bond_alb.c
+>@@ -22,6 +22,7 @@
+> #include <asm/byteorder.h>
+> #include <net/bonding.h>
+> #include <net/bond_alb.h>
+>+#include <net/ndisc.h>
+> =
 
-And yet, as far as I can tell, that's *exactly* what your gup patches
-do, with gup_pte_range() adding
+> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned =3D {
+> 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+>@@ -1269,6 +1270,119 @@ static int alb_set_mac_address(struct bonding *bo=
+nd, void *addr)
+> 	return res;
+> }
+> =
 
-+               if (!pte_write(pte) && gup_must_unshare(flags, page, false)) {
-+                       put_compound_head(head, 1, flags);
-+                       goto pte_unmap;
-+               }
+>+/*determine if the packet is NA or NS*/
+>+static bool alb_determine_nd(struct icmp6hdr *hdr)
+>+{
+>+	if (hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>+	    hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_SOLICITATION) {
+>+		return true;
+>+	}
+>+
+>+	return false;
+>+}
+>+
+>+static void alb_change_nd_option(struct sk_buff *skb, void *data)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	struct icmp6hdr *icmp6h =3D icmp6_hdr(skb);
+>+	struct ipv6hdr *ip6hdr =3D ipv6_hdr(skb);
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+		lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+		break;
+>+
+>+		default:
+>+		lladdr =3D NULL;
+>+		break;
+>+		}
 
-which looks at the page mapcount without holding the mmap sem at all.
+	The above block is indented incorrectly (the "lladdr" and
+"break" lines should be further in).
 
-And see my other email - I think there are other examples of your
-patches looking at data that isn't stable because you don't hold the
-right locks.
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return;
+>+
+>+		if (lladdr) {
+>+			memcpy(lladdr, data, dev->addr_len);
+>+			icmp6h->icmp6_cksum =3D 0;
+>+
+>+			icmp6h->icmp6_cksum =3D csum_ipv6_magic(&ip6hdr->saddr,
+>+							      &ip6hdr->daddr,
+>+						ntohs(ip6hdr->payload_len),
+>+						IPPROTO_ICMPV6,
+>+						csum_partial(icmp6h,
+>+							     ntohs(ip6hdr->payload_len), 0));
+>+		}
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
 
-And you can't even do the optimistic case without taking the lock,
-because in your world, a COW that optimistically copies in the case of
-a race condition is fundamentally *wrong* and buggy. Because in your
-world-view, GUP and COW are very different and have different rules,
-but you need things to be *exact*, and they aren't.
+	If I'm reading RFC 4861 section 4.4 correctly, a Neighbor
+Advertisement will only have ND_OPT_TARGET_LL_ADDR, and a Neighbor
+Solicitation will only have ND_OPT_SOURCE_LL_ADDR.  Assuming that's a
+correct reading, can the above break out of the loop after processing
+the first TARGET or SOURCE option seen?
 
-And none of this is anything at least I can think about, because I
-don't see what the "design" is.
+>+	}
+>+}
+>+
+>+static u8 *alb_get_lladdr(struct sk_buff *skb)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+			break;
+>+
+>+		default:
+>+			break;
+>+		}
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return NULL;
+>+
+>+		if (lladdr)
+>+			return lladdr;
+>+
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
+>+	}
+>+
+>+	return lladdr;
+>+}
+>+
+>+static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
+>+			      struct slave *tx_slave)
+>+{
+>+	struct ipv6hdr *ip6hdr;
+>+	struct icmp6hdr *hdr =3D NULL;
 
-I really have a hard time following what the rules actually are. You
-seem to think that "page_mapcount()" is a really simple rule, and I
-fundamentally disagree. It's a _very_ complicated thing indeed, with
-locking issues, AND YOU ACTIVELY VIOLATE THE LOCKING RULES!
+	hdr does not need to be initialized, as it's always assigned to
+before being inspected.
 
-See why I'm so unhappy?
+>+
+>+	if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
+>+		if (tx_slave && tx_slave !=3D
+>+		    rcu_access_pointer(bond->curr_active_slave)) {
+>+			ip6hdr =3D ipv6_hdr(skb);
+>+			if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+				hdr =3D icmp6_hdr(skb);
+>+				if (alb_determine_nd(hdr))
+>+					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
+>+			}
+>+		}
+>+	}
+>+}
+>+
+> /************************ exported alb functions ***********************=
+*/
+> =
 
-We *did* do the page_mapcount() thing. It was bad. It forced COW to
-always take the page lock. There's a very real reason why I'm pushing
-my "let's have a _design_ here", instead of your "let's look at
-page_mapcount without even doing the locking".
+> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>@@ -1415,6 +1529,7 @@ struct slave *bond_xmit_alb_slave_get(struct bondin=
+g *bond,
+> 	}
+> 	case ETH_P_IPV6: {
+> 		const struct ipv6hdr *ip6hdr;
+>+		struct icmp6hdr *hdr =3D NULL;
 
-And yes, I *know* that fork() takes the mmap_sem, and likely always
-will. That really isn't the problem here. The problem is that your
-page_mapcount() paths DO NOT take that lock.
+	As above, hdr does not need to be initialized.
 
-Btw, maybe I'm misreading things. I looked at the individual patches,
-I didn't apply them, maybe I missed something. But I don't think I am.
+	-J
 
-             Linus
+> 		/* IPv6 doesn't really use broadcast mac address, but leave
+> 		 * that here just in case.
+>@@ -1446,6 +1561,21 @@ struct slave *bond_xmit_alb_slave_get(struct bondi=
+ng *bond,
+> 			break;
+> 		}
+> =
+
+>+		if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+			hdr =3D icmp6_hdr(skb);
+>+			if (alb_determine_nd(hdr)) {
+>+				u8 *lladdr =3D NULL;
+>+
+>+				lladdr =3D alb_get_lladdr(skb);
+>+				if (lladdr) {
+>+					if (!bond_slave_has_mac_rx(bond, lladdr)) {
+>+						do_tx_balance =3D false;
+>+						break;
+>+					}
+>+				}
+>+			}
+>+		}
+>+
+> 		hash_start =3D (char *)&ip6hdr->daddr;
+> 		hash_size =3D sizeof(ip6hdr->daddr);
+> 		break;
+>@@ -1489,6 +1619,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, stru=
+ct net_device *bond_dev)
+> 	struct slave *tx_slave =3D NULL;
+> =
+
+> 	tx_slave =3D bond_xmit_alb_slave_get(bond, skb);
+>+	alb_set_nd_option(skb, bond, tx_slave);
+> 	return bond_do_alb_xmit(skb, bond, tx_slave);
+> }
+> =
+
+>
+>base-commit: 6441998e2e37131b0a4c310af9156d79d3351c16
+>-- =
+
+>2.34.1
+>
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

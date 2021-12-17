@@ -2,122 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 688B5478B57
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D07478B5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236294AbhLQM0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:26:47 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55171 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbhLQM0q (ORCPT
+        id S236316AbhLQM1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:27:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54871 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233904AbhLQM1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:26:46 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpBX16Thz4xgr;
-        Fri, 17 Dec 2021 23:26:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639744004;
-        bh=n55WYm3Kkk9VniZa6wLs4zNFMLAVbXlaOc9QQH8RsQs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AVW1cRbFtBC8Odoj0imrt7/ZDDtE/WBes5TFAJdUYtc9DzN1dCWYrNR38mbvEQqtY
-         LMJ6pElQx/NyMTVKgUadbKyrCrP9D+JBWAOyOSDMJN8fCNKCol+kkM0vW1pxY6hs0Q
-         hOW70BL2Ij+v+Tzpx3rXsw5vfKLCn2GM6EUrz/B6C6VSnsSTh14nWRFj8LQ5yZMUaB
-         LzNZma2ie0vX1PkfEljNmRyqoo7IvS95CIVqOO8Q/k0tQDmLMjVFbXCdwfxlXnGl5O
-         dDIMguLnj3EBqcdjmMrlB4Y2UMOsIeVToOI/NUI7OMYyygb3raFPj0/NSbBEqCNjFd
-         WHBR/WI7ayljw==
-Date:   Fri, 17 Dec 2021 23:26:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20211217232641.0148710c@canb.auug.org.au>
+        Fri, 17 Dec 2021 07:27:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639744034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQn9QnfrMJ42qGC926SQJqMG9+yUqctk6joXXXUXODU=;
+        b=acO6m8+2o/aaSiX9Bw06uKn/LRzuqYGLFd7Olaz62H0OYEqy+0o8zTgBREYpKiXlx9JA2B
+        yh0/8l1/YEV166okOz2U3sU5uItPiUak4ZJOzgbx+Q2ubvKMH6fa+73CbXEXd/FBTJsbTT
+        QPDwWo9zQzThN9x/kUdLZ+gWC/g5m6I=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-goxnbnEgON6Az_SBSkz0Fg-1; Fri, 17 Dec 2021 07:27:12 -0500
+X-MC-Unique: goxnbnEgON6Az_SBSkz0Fg-1
+Received: by mail-wr1-f72.google.com with SMTP id s23-20020adf9797000000b001a24674f0f7so569777wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:27:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=PQn9QnfrMJ42qGC926SQJqMG9+yUqctk6joXXXUXODU=;
+        b=s7Tk+77mHNfzbmShePb8Dn56tpV7MletC5S15g8gpAmf3NgQ7OHvp/fpiouBXSdxqI
+         x/rJM/r8YFD/VMglzyI3vWMOeIhkukJ3mTVWVkbF1Th3XPTBPg2IGPquOkOsL+tpAswm
+         iLcREIRISWHOiXMHZ/trTLNv2cvbeSI5jCcY5zXERhbh12Q0n5fd4XHllBYWCePmKnWt
+         wPabmTl0kBH3HSB0PDrdA3JJ+S3Qcpr8YTWVj5tbP5mkpmRPhqjK/5fXd/xOOQF4FzHJ
+         0JxJ3jrxsDVDDWfXWxxCJRB3Pa1H+NGppymKHgzDZL3e4bt70Cw3NXwJ3XaALtCp7YSi
+         oRig==
+X-Gm-Message-State: AOAM5333wAo+S73Bd3q188KecnB8CMObsCDV7YSnXs2wLLZhBan3IRbU
+        HDXHYjXV8r1WXEXHw4ta+o0Cjyn96Zw+lStzko1bkAUu3ueB/BrDfJGWzs4Y+RcAaTa2SI71n0D
+        ctDcWLj9ZgtYgYSH4A6kXs2PY
+X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2380613wrd.420.1639744030910;
+        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyMU9oSbjos1l9GF9keeS6GGCVXwXiTHkH7R/bDnn/YWsy42XudUx//GCm2ssgumBD4iCJuwA==
+X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2380595wrd.420.1639744030687;
+        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id d2sm7152790wra.61.2021.12.17.04.27.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 04:27:10 -0800 (PST)
+Message-ID: <88ce4f53-587b-c18a-9694-a3e173e6e030@redhat.com>
+Date:   Fri, 17 Dec 2021 13:27:09 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.d4b.TwFU=_K8EIepP8oTuV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/2] mm: cma: fix allocation may fail sometimes
+Content-Language: en-US
+To:     Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dongas86@gmail.com" <dongas86@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Jason Liu <jason.hui.liu@nxp.com>, Leo Li <leoyang.li@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "lecopzer.chen@mediatek.com" <lecopzer.chen@mediatek.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>
+References: <20211215080242.3034856-1-aisheng.dong@nxp.com>
+ <20211215080242.3034856-2-aisheng.dong@nxp.com>
+ <783f64f5-3a55-6c42-a740-19a12c2c7321@redhat.com>
+ <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
+ <7d9b7e5f-a6c0-2079-90e7-c02aaeb1f4c0@redhat.com>
+ <DB9PR04MB8477037EE173D98F844DCAE680789@DB9PR04MB8477.eurprd04.prod.outlook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <DB9PR04MB8477037EE173D98F844DCAE680789@DB9PR04MB8477.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.d4b.TwFU=_K8EIepP8oTuV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 17.12.21 04:44, Aisheng Dong wrote:
+>> From: David Hildenbrand <david@redhat.com>
+>> Sent: Thursday, December 16, 2021 6:57 PM
+>>
+>> On 16.12.21 03:54, Aisheng Dong wrote:
+>>>> From: David Hildenbrand <david@redhat.com>
+>>>> Sent: Wednesday, December 15, 2021 8:31 PM
+>>>>
+>>>> On 15.12.21 09:02, Dong Aisheng wrote:
+>>>>> We met dma_alloc_coherent() fail sometimes when doing 8 VPU decoder
+>>>>> test in parallel on a MX6Q SDB board.
+>>>>>
+>>>>> Error log:
+>>>>> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret:
+>>>>> -16
+>>>>> cma: number of available pages:
+>>>>>
+>>>>
+>> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@3607
+>>>> 6+99@40477+108
+>>>>> @40852+44@41108+20@41196+108@41364+108@41620+
+>>>>>
+>>>>
+>> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49
+>>>> 324+20@49388+
+>>>>> 5076@49452+2304@55040+35@58141+20@58220+20@58284+
+>>>>> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=>
+>>>> 33161 free of
+>>>>> 81920 total pages
+>>>>>
+>>>>> When issue happened, we saw there were still 33161 pages (129M) free
+>>>>> CMA memory and a lot available free slots for 148 pages in CMA
+>>>>> bitmap that we want to allocate.
+>>>>>
+>>>>> If dumping memory info, we found that there was also ~342M normal
+>>>>> memory, but only 1352K CMA memory left in buddy system while a lot
+>>>>> of pageblocks were isolated.
+>>>>>
+>>>>> Memory info log:
+>>>>> Normal free:351096kB min:30000kB low:37500kB high:45000kB
+>>>> reserved_highatomic:0KB
+>>>>> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB
+>>>> inactive_file:31776kB
+>>>>> 	    unevictable:0kB writepending:0kB present:1048576kB
+>>>> managed:1018328kB mlocked:0kB
+>>>>> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB
+>>>>> lowmem_reserve[]: 0 0 0
+>>>>> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB
+>>>> (UMECI) 65*64kB (UMCI)
+>>>>> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI)
+>>>> 4*2048kB (MI) 8*4096kB (EI)
+>>>>> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+>>>>>
+>>>>> The root cause of this issue is that since commit a4efc174b382
+>>>>> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports
+>>>> concurrent
+>>>>> memory allocation. It's possible that the pageblock process A try to
+>>>>> alloc has already been isolated by the allocation of process B
+>>>>> during memory migration.
+>>>>>
+>>>>> When there're multi process allocating CMA memory in parallel, it's
+>>>>> likely that other the remain pageblocks may have also been isolated,
+>>>>> then CMA alloc fail finally during the first round of scanning of
+>>>>> the whole available CMA bitmap.
+>>>>
+>>>> I already raised in different context that we should most probably
+>>>> convert that -EBUSY to -EAGAIN --  to differentiate an actual
+>>>> migration problem from a simple "concurrent allocations that target the
+>> same MAX_ORDER -1 range".
+>>>>
+>>>
+>>> Thanks for the info. Is there a patch under review?
+>>
+>> No, and I was too busy for now to send it out.
+>>
+>>> BTW i wonder that probably makes no much difference for my patch since
+>>> we may prefer retry the next pageblock rather than busy waiting on the
+>> same isolated pageblock.
+>>
+>> Makes sense. BUT as of now we isolate not only a pageblock but a
+>> MAX_ORDER -1 page (e.g., 2 pageblocks on x86-64 (!) ). So you'll have the
+>> same issue in that case.
+> 
+> Yes, should I change to try next MAX_ORDER_NR_PAGES or keep as it is
+> and let the core to improve it later?
+> 
+> I saw there's a patchset under review which is going to remove the
+> MAX_ORDER - 1 alignment requirement for CMA.
+> https://patchwork.kernel.org/project/linux-mm/cover/20211209230414.2766515-1-zi.yan@sent.com/
+> 
+> Once it's merged, I guess we can back to align with pageblock rather
+> than MAX_ORDER-1.
 
-Hi all,
+While the goal is to get rid of the alignment requirement, we might
+still have to isolate all applicable MAX_ORDER-1 pageblocks. Depends on
+what we can or cannot achieve easily :)
 
-After merging the akpm-current tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
 
-mm/vmalloc.c: In function '__vmalloc_area_node':
-mm/vmalloc.c:2983:11: error: implicit declaration of function 'memalloc_nof=
-s_save' [-Werror=3Dimplicit-function-declaration]
- 2983 |   flags =3D memalloc_nofs_save();
-      |           ^~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2985:11: error: implicit declaration of function 'memalloc_noi=
-o_save' [-Werror=3Dimplicit-function-declaration]
- 2985 |   flags =3D memalloc_noio_save();
-      |           ^~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2995:3: error: implicit declaration of function 'memalloc_nofs=
-_restore' [-Werror=3Dimplicit-function-declaration]
- 2995 |   memalloc_nofs_restore(flags);
-      |   ^~~~~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2997:3: error: implicit declaration of function 'memalloc_noio=
-_restore' [-Werror=3Dimplicit-function-declaration]
- 2997 |   memalloc_noio_restore(flags);
-      |   ^~~~~~~~~~~~~~~~~~~~~
+-- 
+Thanks,
 
-Caused by commit
+David / dhildenb
 
-  0256fe4b2ffb ("mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc")
-
-I have applied the following fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Dec 2021 23:15:05 +1100
-Subject: [PATCH] mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc fix
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/vmalloc.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 01eabaf5417b..eb6e527a6b77 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -38,6 +38,7 @@
- #include <linux/pgtable.h>
- #include <linux/uaccess.h>
- #include <linux/hugetlb.h>
-+#include <linux/sched/mm.h>
- #include <asm/tlbflush.h>
- #include <asm/shmparam.h>
-=20
---=20
-2.33.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.d4b.TwFU=_K8EIepP8oTuV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8ggEACgkQAVBC80lX
-0GyuTAgAjAd3s2Ua8CLXkTCJFPpMOesE0CSKDbq0oEEcIbMCBBVhO5gYiz+n8M6l
-PoKYPnaPVOrjwKKklE5WwRNSG9vPzg0R0aytWje5Q4nwa8zeqMjmWMkRJd8vzozG
-Vs5jeUvjQ83vFx3T54g/1ByuTjuTOqvjB/kJypzdqEYgxz3susAwSuIdrDOveREw
-frQN6RqbtcZjgp5oKg9IDs8xYLs4da1AXS7sq5WrYoXZRoAwtH9eGsPJmhLiCGxr
-3es6XoUyK2tShuN56VUIFG5rDssm26P5NLDy74PPLak3+42hNnl8Z048HUxF2rtB
-hEM+6PQylkQMMxRvvW7kbMHlDhrFqQ==
-=Wxc3
------END PGP SIGNATURE-----
-
---Sig_/.d4b.TwFU=_K8EIepP8oTuV--

@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D70A478BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B9D478BE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236493AbhLQM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:58:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49794 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236047AbhLQM6F (ORCPT
+        id S236513AbhLQM6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236047AbhLQM6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:58:05 -0500
+        Fri, 17 Dec 2021 07:58:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94042C061574;
+        Fri, 17 Dec 2021 04:58:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E504262166;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 350C6621BF;
+        Fri, 17 Dec 2021 12:58:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D72C36AEB;
         Fri, 17 Dec 2021 12:58:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CC9C36AEA;
-        Fri, 17 Dec 2021 12:58:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639745884;
-        bh=pHMtGWbLEqRF6ha7t9sW06OfJiHkfnSAuviVUpxCnQo=;
+        s=k20201202; t=1639745886;
+        bh=7a2LLhsMgBkLVjnpVVJb8rT8xwIF+4J8sKcfHuqjfYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ndn/LzTipdID0YRiTnukiAQqIdGwTsx3GZszJBE+OfTCuuLEPL0/iSG7bK/Vpw/e8
-         Zugl7kH5Uf+NYVwQp/HxleW3Dj+krJBSmMQwGY8cgHt3s9HbFgFq1q31EDbXPazFvA
-         tZ/biGHE8eptN+cDjL6/jAt8lR3Lq0rLmb/u/5PjYGIwL8oFn5SYQgN2RPZboteu8t
-         sJ9f6jpoyHb4AuiTOcR2WpVBXx0d4WtjdRIGkX2kp7EZFMACpdMxURorFlwa93myZS
-         cX4BCTKxQlsSaqiZ+ZzZdpbjuyDgAuGPr2e9Ir9tNAQ6/zj0y0C3rF3kCF9jSOwSXw
-         JwY+c6A/n1s8A==
+        b=SMbsXWEmO50mfG9ws7uel4rR1sQK06gi/4s+YW6gSYttt06ADSmQ0aGBdBq6B+pdf
+         jHPIrM9V84BqzgSqS1Ju0yGo42UzbzL4EUXaTWkuvjSBC5W2fHU+T2FdJgUoGvTIwu
+         cgnZCOZHfssc5Ov6VXLzOAv/ypfULG8vkWbYoFNvf0idfiaMxWtrrjzpoXINYFFtcu
+         uhnSho/rJYcB7RbSGuuWIu3NSXo/Mku1Jj0GrXGOFbl5Jd7Oa1SmDIuR/sn/KRq8o4
+         t8AsYQXKTmLsymY+fxxxssXDsjaHMC9kP8d+SxTCEV6oaOHyTPn063U94LQDaCeO9a
+         Aa36jiCXchQtQ==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -36,9 +39,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Felipe Balbi <felipe.balbi@microsoft.com>
-Subject: [RFC/patch 1/2] arm64: boot: dts: qcom: sm8150: add a label for reserved-memory
-Date:   Fri, 17 Dec 2021 14:57:56 +0200
-Message-Id: <20211217125757.1193256-2-balbi@kernel.org>
+Subject: [RFC/patch 2/2] arm64: boot: dts: qcom: surface duo: add minimal framebuffer
+Date:   Fri, 17 Dec 2021 14:57:57 +0200
+Message-Id: <20211217125757.1193256-3-balbi@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211217125757.1193256-1-balbi@kernel.org>
 References: <20211217125757.1193256-1-balbi@kernel.org>
@@ -50,27 +53,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Felipe Balbi <felipe.balbi@microsoft.com>
 
-With this label, we can let boards append board-specific memory
-regions which should not be mapped.
+Add a minimal framebuffer device so we can use the display on the
+Surface Duo device.
 
 Signed-off-by: Felipe Balbi <felipe.balbi@microsoft.com>
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../dts/qcom/sm8150-microsoft-surface-duo.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 15348512cf9e..26f9eb8e9b42 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -660,7 +660,7 @@ CLUSTER_PD: cpu-cluster0 {
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+index a73317e1a824..c629ec115fec 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
++++ b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+@@ -25,6 +25,17 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
  	};
  
--	reserved-memory {
-+	reserved_memory: reserved-memory {
- 		#address-cells = <2>;
- 		#size-cells = <2>;
- 		ranges;
++	framebuffer0: framebuffer@9c000000 {
++		compatible = "simple-framebuffer";
++		reg = <0 0x9c000000 0 0x02400000>;
++		status = "okay";
++
++		height = <1800>;
++		width = <1350>;
++		stride = <(1350 * 4)>;
++		format = "a8r8g8b8";
++	};
++
+ 	vph_pwr: vph-pwr-regulator {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vph_pwr";
+@@ -472,6 +483,14 @@ &pon_resin {
+ 	linux,code = <KEY_VOLUMEDOWN>;
+ };
+ 
++&reserved_memory {
++	splash_region: splash_region@9c000000 {
++		/* We expect the bootloader to fill in the size */
++		reg = <0x0 0x9c000000 0x0 0x0>;
++		no-map;
++	};
++};
++
+ &tlmm {
+ 	gpio-reserved-ranges = <126 4>;
+ 
 -- 
 2.34.1
 

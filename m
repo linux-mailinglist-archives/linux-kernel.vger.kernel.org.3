@@ -2,88 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 801AA479752
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26A6479757
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbhLQWp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:45:59 -0500
-Received: from www62.your-server.de ([213.133.104.62]:37644 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbhLQWp7 (ORCPT
+        id S231305AbhLQWsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230506AbhLQWsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:45:59 -0500
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1myLz7-0002Xb-L4; Fri, 17 Dec 2021 23:45:53 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1myLz7-000Hsd-Eb; Fri, 17 Dec 2021 23:45:53 +0100
-Subject: Re: [PATCH] bpf: check size before calling kvmalloc
-To:     George Kennedy <george.kennedy@oracle.com>, sdf@google.com,
-        ast@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1639766884-1210-1-git-send-email-george.kennedy@oracle.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <395e51ca-2274-26ea-baf5-6353b0247214@iogearbox.net>
-Date:   Fri, 17 Dec 2021 23:45:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 17 Dec 2021 17:48:36 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072CCC061574;
+        Fri, 17 Dec 2021 14:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lWBXNtMn+fnetC+GQQJ1BicA7CaNfZQwX3afKTQCWuw=; b=YwTnLaRSrmXZerctD1iyb2OJa0
+        y/zsflA6qUIFXmYKyoQCFAe/D/Ihk1wJgy21U77bhkiXi4E2lkuGyGS0cZqh+TxbrM3pWBQbydY/A
+        EEZmAHUlv2o4wse+liyEIs6OOZ8CvyHpb+yd+dCejzbJX+ucKwmOgFrDSEWXMJ7O7EZHiF2QGrco5
+        Ihwefry8c2GuN332kLY+vTBKUfmj+hbdf0VKj7FPWyk2EyHKqj90uq4+355sZj4xUaw5iLbAzR3IJ
+        UcBCttu3QkM9Ih3yEPVZHZ5GvI78ckCP76Fp6RhHHHACZ6kWtBaomMetUDlq2tT2gL6s+VvjV5blO
+        VL1FONzQ==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1myM1R-00CdXh-Gh; Fri, 17 Dec 2021 22:48:17 +0000
+Message-ID: <1e68760ba5452ec23f89485b20f8aa3bf9f9b039.camel@infradead.org>
+Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
+        "luolongjun@huawei.com" <luolongjun@huawei.com>,
+        "hejingxian@huawei.com" <hejingxian@huawei.com>
+Date:   Fri, 17 Dec 2021 22:48:12 +0000
+In-Reply-To: <c3dbd3b9-accf-bc28-f808-1d842d642309@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+         <ca0751c864570015ffe4d8cccdc94e0a5ef3086d.camel@infradead.org>
+         <b13eac6c-ea87-aef9-437f-7266be2e2031@amd.com>
+         <721484e0fa719e99f9b8f13e67de05033dd7cc86.camel@infradead.org>
+         <1401c5a1-c8a2-cca1-e548-cab143f59d8f@amd.com>
+         <2bfb13ed5d565ab09bd794f69a6ef2b1b75e507a.camel@infradead.org>
+         <b798bcef-d750-ce42-986c-0d11d0bb47b0@amd.com>
+         <41e63d89f1b2debc0280f243d7c8c3212e9499ee.camel@infradead.org>
+         <c3dbd3b9-accf-bc28-f808-1d842d642309@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-MXhw661q7sB5Ph09VW1m"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <1639766884-1210-1-git-send-email-george.kennedy@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26390/Fri Dec 17 10:20:34 2021)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 7:48 PM, George Kennedy wrote:
-> ZERO_SIZE_PTR ((void *)16) is returned by kvmalloc() instead of NULL
-> if size is zero. Currently, return values from kvmalloc() are only
-> checked for NULL. Before calling kvmalloc() check for size of zero
-> and return error if size is zero to avoid the following crash.
-> 
-> BUG: kernel NULL pointer dereference, address: 0000000000000000
-> PGD 1030bd067 P4D 1030bd067 PUD 103497067 PMD 0
-> Oops: 0010 [#1] PREEMPT SMP KASAN NOPTI
-> CPU: 1 PID: 15094 Comm: syz-executor344 Not tainted 5.16.0-rc1-syzk #1
-> Hardware name: Red Hat KVM, BIOS
-> RIP: 0010:0x0
-> Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> RSP: 0018:ffff888017627b78 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffff8880215d0780 RCX: ffffffff81b63c60
-> RDX: 0000000000000010 RSI: 0000000000000000 RDI: ffff8881035db400
-> RBP: ffff888017627f08 R08: ffffed1003697209 R09: ffffed1003697209
-> R10: ffff88801b4b9043 R11: ffffed1003697208 R12: ffffffff8f15d580
-> R13: 1ffff11002ec4f77 R14: ffff8881035db400 R15: 0000000000000000
-> FS:  00007f62bca78740(0000) GS:ffff888107880000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffd6 CR3: 000000002282a000 CR4: 00000000000006e0
-> Call Trace:
->   <TASK>
->   map_get_next_key kernel/bpf/syscall.c:1279 [inline]
->   __sys_bpf+0x384d/0x5b30 kernel/bpf/syscall.c:4612
->   __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
->   __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
->   __x64_sys_bpf+0x7a/0xc0 kernel/bpf/syscall.c:4720
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
 
-Could you provide some more details, e.g. which map type is this where we
-have to assume zero-sized keys everywhere?
+--=-MXhw661q7sB5Ph09VW1m
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-(Or link to syzkaller report could also work alternatively if public.)
+On Fri, 2021-12-17 at 14:55 -0600, Tom Lendacky wrote:
+> On 12/17/21 2:13 PM, David Woodhouse wrote:
+> > On Fri, 2021-12-17 at 13:46 -0600, Tom Lendacky wrote:
+> > > There's no WARN or PANIC, just a reset. I can look to try and capture=
+ some
+> > > KVM trace data if that would help. If so, let me know what events you=
+'d
+> > > like captured.
+> >=20
+> >=20
+> > Could start with just kvm_run_exit?
+> >=20
+> > Reason 8 would be KVM_EXIT_SHUTDOWN and would potentially indicate a
+> > triple fault.
+>=20
+> qemu-system-x86-24093   [005] .....  1601.759486: kvm_exit: vcpu 112 reas=
+on shutdown rip 0xffffffff81070574 info1 0x0000000000000000 info2 0x0000000=
+000000000 intr_info 0x80000b08 error_code 0x00000000
+>=20
+> # addr2line -e woodhouse-build-x86_64/vmlinux 0xffffffff81070574
+> /root/kernels/woodhouse-build-x86_64/./arch/x86/include/asm/desc.h:272
+>=20
+> Which is: asm volatile("ltr %w0"::"q" (GDT_ENTRY_TSS*8));
 
-Thanks,
-Daniel
+OK, that seems like enough of a smoking gun; I'll stare at that harder. Tha=
+nks.
+
+/*
+ * The LTR instruction marks the TSS GDT entry as busy. On 64-bit, the GDT =
+is
+ * a read-only remapping. To prevent a page fault, the GDT is switched to t=
+he
+ * original writeable version when needed.
+ */
+#ifdef CONFIG_X86_64
+static inline void native_load_tr_desc(void)
+{
+        struct desc_ptr gdt;
+        int cpu =3D raw_smp_processor_id();
+        bool restore =3D 0;
+        struct desc_struct *fixmap_gdt;
+
+        native_store_gdt(&gdt);
+        fixmap_gdt =3D get_cpu_gdt_ro(cpu);
+
+        /*
+         * If the current GDT is the read-only fixmap, swap to the original
+         * writeable version. Swap back at the end.
+         */
+        if (gdt.address =3D=3D (unsigned long)fixmap_gdt) {
+                load_direct_gdt(cpu);
+                restore =3D 1;
+        }
+        asm volatile("ltr %w0"::"q" (GDT_ENTRY_TSS*8));
+        if (restore)
+                load_fixmap_gdt(cpu);
+}
+
+--=-MXhw661q7sB5Ph09VW1m
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjE3MjI0ODEyWjAvBgkqhkiG9w0BCQQxIgQgsawwSn4yORJ/WFGklmbYio67eo5b4KzDZ89piWcf
+05Ywgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBAEl88DimwTbrwP6mFSVlxSdEU/uusPhrH3CSiT3RNT/bZAAblNAwSqc9dYzL/Nbm
+t+/KfIhVYkaIDi49T/sK65IsPBDJbqSg6XLbX2+VvSBnbNF+RFq8/B2AcAIIsW1uyxaMcFth4B2q
+vulzlFKfHEnlXA4C5PsRdmkRU6UrDFsOy5/4PhEn6RWSEzIdUfKx6MZ6jXqF936nFVorQjBMzf+v
+LDhGfN5U3XHs+l4KSOVdaMchqbsS0zrwAwBRn+bXtSRYBMeeMPt4yU7d7tU/EF75Tyr3MxY5Ljem
+QhQhNxGwd4s21MBba0aujIlFxspX9tBQSJmrxCvpxGx89aohpDYAAAAAAAA=
+
+
+--=-MXhw661q7sB5Ph09VW1m--
+

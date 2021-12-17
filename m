@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4E9479239
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E16479236
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239540AbhLQQ7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S239555AbhLQQ7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbhLQQ7d (ORCPT
+        with ESMTP id S239499AbhLQQ7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:59:33 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FB5C061746;
-        Fri, 17 Dec 2021 08:59:32 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o29so2065512wms.2;
-        Fri, 17 Dec 2021 08:59:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dFHoQPOrbV6E0S61sp0iENhRWxLWfzEEYHIRAwtb27w=;
-        b=LTRIldyNB62poDhP4+555c0Gp8yEd3nIJemwakeK+eB1hYwlAey3xvYAej6umEpWlY
-         /2rhUFYfz6uXMOEKxC0R67Khu+1qYbsK/JThPIu9blSmwI07Kd6nWPH5ZCSp6xvNcCKX
-         npoV3oBxrWhYT7lV3C7UwRV0EaNayGnp89H000YhFfZu++9dn7h3VKjgzFSes5OYMOu6
-         BWHobu1/VuzCyvwMxcsshtg4ivfNGQGrG276SJUelvfYclajV64YBdsOtdBd67ds9dc3
-         6cJUev8j7uq8r9jofX2q+FJf8v7X1+fwUKB7pDmdKkyYCa6/4mD9DDFu2juhhkjTSdec
-         rqbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dFHoQPOrbV6E0S61sp0iENhRWxLWfzEEYHIRAwtb27w=;
-        b=VhwndRUNr9yfQqxQ0USToTLCFNMiuD/snXfcIgvoXEdYGI7Kz/QPMTztBOeEp4IWWD
-         zDzqSvaSADRMmEAinfRnYKbbxF5jdpf9XIdxXobNzit4JNUoB2BdGXQf84VSzpWGab1s
-         xI9WnOKyO+BRQPEloXA4in2th7UEecWRzSnkjjdf0vvO9rhQLHlIY3sd2bHsV8RQ93Do
-         Bqw3e3OVvWefuOpu7eieJ6QsDSQXh87bwcYYh3kfN1AuY6G2FS/eiE17vUY0hxjh2eUe
-         DtXM/5MXxQ/n4+kX2r/oq01JCsg1uF97M+F3vTH5zV/COH2bQC8R8mXMCbshiMCpTcsX
-         LgGw==
-X-Gm-Message-State: AOAM532mHoMmJBFkdFyPqWQ0tvcsXPeteNBHc2qmqBeOF32JOLXW38v0
-        dUyAJfp3HiixiEnIywCP09w=
-X-Google-Smtp-Source: ABdhPJzXXneTut0iRLJDi7+nLqEKV8Tl49rdcNwK7q3KKgYJK3L0zJ2sXWk7DiolnQr+N/9dh2DV1A==
-X-Received: by 2002:a05:600c:19d0:: with SMTP id u16mr3457837wmq.111.1639760371336;
+        Fri, 17 Dec 2021 11:59:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4598CC061401;
         Fri, 17 Dec 2021 08:59:31 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id t11sm7543851wrz.97.2021.12.17.08.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 08:59:30 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] dt-bindings: memory: tegra210: Mark EMC as cooling device
-Date:   Fri, 17 Dec 2021 17:59:19 +0100
-Message-Id: <20211217165919.2700920-5-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217165919.2700920-1-thierry.reding@gmail.com>
-References: <20211217165919.2700920-1-thierry.reding@gmail.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 100C0B828D4;
+        Fri, 17 Dec 2021 16:59:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5371CC36AE7;
+        Fri, 17 Dec 2021 16:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639760368;
+        bh=cePM4fZOqSweG5iqCi/Kt1W2jaOm1RFO9qvsPI2XcWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VdZLuFsU9lyrlY2yPcKsrCzQOkO3cluzqCdatXRPcVQvtZGafITBtMUxliJiU8Gqo
+         Lf5VrpbIkhBHvetwzqccD+La9h6uoEj06/aYzXqUDTlcLCTxRMu/3Sg73FpaFikqFt
+         LRgdgZUIXp6faqaTVM67qeGT8+M2E9cjZZY8QG+E=
+Date:   Fri, 17 Dec 2021 17:59:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [RESEND v4 10/10] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
+ compatible
+Message-ID: <YbzB7mspRBonT9jJ@kroah.com>
+References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
+ <1639680494-23183-11-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639680494-23183-11-git-send-email-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Thu, Dec 16, 2021 at 08:48:14PM +0200, Abel Vesa wrote:
+> Add i.MX8DXL lpuart compatible to the bindings documentation.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> index fa23c60a01d0..ee37aa125c86 100644
+> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> @@ -29,6 +29,10 @@ properties:
+>        - items:
+>            - const: fsl,imx8qm-lpuart
+>            - const: fsl,imx8qxp-lpuart
+> +      - items:
+> +          - const: fsl,imx8dxl-lpuart
+> +          - const: fsl,imx8qxp-lpuart
+> +          - const: fsl,imx7ulp-lpuart
 
-The external memory controller found on Tegra210 can use throttling of
-the EMC frequency in order to reduce the memory chip temperature. Mark
-the memory controller as a cooling device to take advantage of this
-functionality.
+Why is "- items:" listed twice here?
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../bindings/memory-controllers/nvidia,tegra210-emc.yaml  | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-index bc8477e7ab19..95c14deb8941 100644
---- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra210-emc.yaml
-@@ -44,6 +44,11 @@ properties:
-     description:
-       phandle of the memory controller node
- 
-+allOf:
-+  - $ref: ../thermal/thermal-cooling-devices.yaml
-+
-+unevaluatedProperties: false
-+
- required:
-   - compatible
-   - reg
-@@ -51,8 +56,6 @@ required:
-   - clock-names
-   - nvidia,memory-controller
- 
--additionalProperties: false
--
- examples:
-   - |
-     #include <dt-bindings/clock/tegra210-car.h>
-@@ -79,4 +82,5 @@ examples:
-         interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-         memory-region = <&emc_table>;
-         nvidia,memory-controller = <&mc>;
-+        #cooling-cells = <2>;
-     };
--- 
-2.34.1
-
+greg k-h

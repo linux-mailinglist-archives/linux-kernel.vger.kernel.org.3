@@ -2,169 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB5E478619
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27552478620
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbhLQIV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:21:56 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:38282
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230445AbhLQIVx (ORCPT
+        id S233684AbhLQIYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:24:17 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54417 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231287AbhLQIYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:21:53 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        Fri, 17 Dec 2021 03:24:15 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0992F3F1F0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639729312;
-        bh=xfmZvtdVL4Nqs/cnkKhKrTzxRXy+hfPyDSZiWdGZz7I=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=O+2Fh4pgg1abeEQgpbwX+1/oXVJOXGZPzxQd5YZgvhXca3SKQ1TKZG4i2Um17Smga
-         ZC9w9FrQpL975u3/wCHtHfd0+cyUvsKDYPfpCj8YqFIhSESlRzZ07Wr3sBtQ4M43PS
-         1fioe8V7sFeHcSFp25mIyO5MeELG9KtbRFvCPbCYSSL3sqFk6z30sOW/cPfkI7j2ys
-         8a9UfRiDl8L1h2rgH59yAhnqmajhG4LYiRPYWrYMAsWXhDFjJ48Ae8kx/BEFtFIFb9
-         gBeRkPW7xPWabYvMUXa2lCwGNqRvCesf6+SXvOM6+FXXljXOUAaBnz5/8LcJe8+5x9
-         lxQj4+0JBBpHA==
-Received: by mail-lj1-f197.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso343180ljf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 00:21:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xfmZvtdVL4Nqs/cnkKhKrTzxRXy+hfPyDSZiWdGZz7I=;
-        b=zwY4zcxOUCuUvz/1MmcGjJQb/e/3EoZhZ/Rw9fzRejmOjJU9+Pb5u4MRwcW7XnitLS
-         AwZHgbhWJh9etuAxywWXEOiA3cGe0y0BKDxz1aMo6upQmYTdPwOT0Ug3u1y9acKaDKen
-         SQzkRDq1m15ST8lE4DePx73i3P53G9ofL4BM3YHmzklqxf2+WBuYpG9TZ/TnutPByjOC
-         Q8u5McO6ESrkLHQaHoJ7UN0MzNM0+HxxSgVlyOveRV5SUeFJs1FLxCobpjKL2ODxTOgE
-         kvV6fMDmRo9T/wgG0xEVOMVVA926NkHWV1MgW28YUpiH1k3YKLbmoCMpQ67+QgWRIiIS
-         y6GQ==
-X-Gm-Message-State: AOAM531Stzkj+YEobTDuhXiQhUpFr5XI13XuYsGml6mQaJsFhjXr+s4W
-        H2ni88olrlhU8MWkxvH4ZzBOBIjmyRpk5U10Xw4gCP9jPJF7K+KMzgA88w4x9nmf41BzbzP1HNW
-        BERlh9eMjTnLhwyn/EchuAHurjkAZS3CNCgCTTim43g==
-X-Received: by 2002:a05:6512:3c9e:: with SMTP id h30mr1919897lfv.212.1639729311038;
-        Fri, 17 Dec 2021 00:21:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwfMYzlQckD0Wb0EtQqx2AZ0wkcSDj7w3Z/nn8EeyMb/BCnVstW2Dbq/zvfD5jISNkS6mUEQA==
-X-Received: by 2002:a05:6512:3c9e:: with SMTP id h30mr1919870lfv.212.1639729310766;
-        Fri, 17 Dec 2021 00:21:50 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id a24sm119818lff.207.2021.12.17.00.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 00:21:49 -0800 (PST)
-Message-ID: <73c5a527-2d5d-8524-b067-f9128055ff10@canonical.com>
-Date:   Fri, 17 Dec 2021 09:21:48 +0100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFhph45M0z4xd4;
+        Fri, 17 Dec 2021 19:24:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639729453;
+        bh=Soc6Js56cJBQ+ScAW2BGXXHcvZWzV4TJj3H9B52peOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PFWlLq1dI2UzQBoGHpJriT2df2OY1Ai014vhJhbZ/WDrn1ndXhTibb9tlGB5iU/gn
+         ru+zJj7EvVODGZ1JTq+Iyu3FDHRigw9FvKg5Y1RaIAp48lAX9LoIQDwalpHIlqqXSe
+         Igj3TVQ9kD7UJlp68ApGbU6Ac7pU5yI7RZzmUA/hawKKRXHIDXWAdHhl4UhMqujeEv
+         rEVzKuacxrn/bxUq0UZ377DMCfityzcV3GyaSCgbHCEqN0+GH40+Wrsf5kXRmjK6hJ
+         IwGQW4PFPAMSrHIFx7T+fjXscj3JLB02jo0Lq+gwTRNTctO9Jh+kC8EvPVz/9cLO6l
+         olSGd0sl36DdA==
+Date:   Fri, 17 Dec 2021 19:24:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     broonie@kernel.org, Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: linux-next: manual merge of the nvdimm tree with the ext4 tree
+Message-ID: <20211217192410.3fedc457@canb.auug.org.au>
+In-Reply-To: <20211216082833.GA24677@lst.de>
+References: <20211210174740.2695216-1-broonie@kernel.org>
+        <20211216082833.GA24677@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 6/7] arm64: dts: exynos: Add initial Exynos850 SoC support
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20211215160906.17451-1-semen.protsenko@linaro.org>
- <20211215160906.17451-7-semen.protsenko@linaro.org>
- <8c1dbcda-ce01-81c9-b34a-f64b6f61c868@canonical.com>
- <CAPLW+4ndeokx3WiYaK_3ooe0J+BQe8Dx7QCecA7Deowk0AdxnA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4ndeokx3WiYaK_3ooe0J+BQe8Dx7QCecA7Deowk0AdxnA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/GCGqd/odkevrb4E1C/O0vcx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/12/2021 20:40, Sam Protsenko wrote:
-> On Wed, 15 Dec 2021 at 18:47, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
+--Sig_/GCGqd/odkevrb4E1C/O0vcx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-(...)
+Hi all,
 
->>> +             serial0 = &serial_0;
->>> +             serial1 = &serial_1;
->>> +             serial2 = &serial_2;
->>> +             i2c0 = &i2c_0;
->>> +             i2c1 = &i2c_1;
->>> +             i2c2 = &i2c_2;
->>> +             i2c3 = &i2c_3;
->>> +             i2c4 = &i2c_4;
->>> +             i2c5 = &i2c_5;
->>> +             i2c6 = &i2c_6;
->>> +             i2c7 = &hsi2c_0;
->>> +             i2c8 = &hsi2c_1;
->>> +             i2c9 = &hsi2c_2;
->>> +             i2c10 = &hsi2c_3;
->>> +             i2c11 = &hsi2c_4;
->>> +     };
->>> +
->>> +     arm-pmu {
->>> +             compatible = "arm,cortex-a55-pmu";
->>> +             interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
->>> +                          <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
->>> +             interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
->>> +                                  <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
->>> +     };
->>> +
->>> +     /* Main system clock (XTCXO); external, must be 26 MHz */
->>> +     oscclk: clock-oscclk {
->>> +             compatible = "fixed-clock";
->>> +             clock-output-names = "oscclk";
->>> +             #clock-cells = <0>;
->>> +     };
->>> +
->>> +     /* RTC clock (XrtcXTI); external, must be 32.768 kHz */
->>
->> This clock is usually provided by PMIC, so instead I expect updating
->> s2mps11-clk driver. It's not correct to mock it with fixed-clock, but in
->> some cases might be needed. Then I would need an explanation and maybe a
->> TODO note.
->>
->> I wonder if we already discussed this...
->>
-> 
-> Don't really remember discussing that. That's actually something new
-> for me :) I was planning to add PMIC support as a part of separate
-> activity later, it might not be so easy: S2MPU12 uses I3C connection.
-> And RTC clock is not handled even in downstream kernel. So I'll have
-> to implement that by PMIC datasheet. I'll keep some TODO comment for
-> now, hope it's ok with you?
+On Thu, 16 Dec 2021 09:28:33 +0100 Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Fri, Dec 10, 2021 at 05:47:40PM +0000, broonie@kernel.org wrote:
+> > I'm not comfortable with resolving this in something as critical as ext4
+> > at this point on a Friday evening with the code motion that's going on
+> > so I've dropped the nvdimm tree for today, I'll look again on Monday. =
+=20
+>=20
+> Given that it is Thursday now I've done the (pretty simple) merge
+> myself, it can be found here:
+>=20
+> http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/ext4-dax-=
+merge
 
-Assuming it is really coming from the PMIC (should be visible in the
-board schematics), it should be using s2mps11-clk. I am fine with
-keeping fixed-clock now + TODO note, but please move it to the board
-DTS. It's not the property of the SoC.
+I have used that today.
 
-> 
->>> +     rtcclk: clock-rtcclk {> +               compatible = "fixed-clock";
->>> +             clock-output-names = "rtcclk";
->>> +             #clock-cells = <0>;
->>> +     };
->>> +
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/GCGqd/odkevrb4E1C/O0vcx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8SSsACgkQAVBC80lX
+0GzABwf9Fusht9zCn9RLMB9k2bDxql4i9K4ITeTsFRmzey00go58OejVck4hH1R0
+/MAChqjIWeHzihIsKEOT87BZpJY2hS9azbu8DXYuyXOvU5RfZcjEagJE5TtRhxe+
+5/EUbPjRFOimPxFJBIDMSdjYZ/HhE/rf9TTjDNXmkFvGn6DvGd1W5uLInLBm7cf4
+T3hMjZ6k7PjLvMHnSxeBQByHkYwFrsHNB9AbaFQmqsIUdpfGc8MQsPsEU4sIfXE6
+WQsXuhLz858xA3F37P0aLHBgLYM0mx0FL2M1HctiNQhUsuXmY2IZ1BxN4ZTIjZ+s
+fjP5BZTDIo1CDRzOwTaSjxRTRL3qJA==
+=LpzG
+-----END PGP SIGNATURE-----
+
+--Sig_/GCGqd/odkevrb4E1C/O0vcx--

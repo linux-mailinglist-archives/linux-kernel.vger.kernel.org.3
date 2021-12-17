@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CC847950E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F42479514
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240721AbhLQTrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 14:47:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50469 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236529AbhLQTrR (ORCPT
+        id S240362AbhLQTsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 14:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236454AbhLQTsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:47:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639770437;
+        Fri, 17 Dec 2021 14:48:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABDCC061574;
+        Fri, 17 Dec 2021 11:48:51 -0800 (PST)
+Date:   Fri, 17 Dec 2021 20:48:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639770528;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lZtC7sKetzLAlHd0oWhOPRrSKs6/cTgcJrwypq2TYeE=;
-        b=OfkRjgo9GNr0SNa1cXLaj2+GDFK8kFIcDOrS/JwfvDw9MviiSkZGSPfx5TpX4p9Owa/MUR
-        vGsXeH/PeuI/yPFgNdObL9DjqGswLiGRebQTNuzbAdnta0dm7oLmoB7vDr0c5c9iXnFGa3
-        zzy+EnrbNo11B7n8HyNAUPAjdb9lKek=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-yYcKRRAOPjSQpKqeACnZUw-1; Fri, 17 Dec 2021 14:47:13 -0500
-X-MC-Unique: yYcKRRAOPjSQpKqeACnZUw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6E42181CCB5;
-        Fri, 17 Dec 2021 19:47:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F1E165DF21;
-        Fri, 17 Dec 2021 19:47:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAH2r5muO9aTksvqD9v+sOQ2z-Xp3Rzbi9mPtfc0ad57jZG5aFw@mail.gmail.com>
-References: <CAH2r5muO9aTksvqD9v+sOQ2z-Xp3Rzbi9mPtfc0ad57jZG5aFw@mail.gmail.com> <20211216124317.4143405-1-broonie@kernel.org>
-To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, broonie@kernel.org,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: Re: linux-next: manual merge of the cifs tree with the fscache tree
+        bh=MOhtWEVpE/nHvAfkcQxgjTO8DE1E/CE1cP2TvinWtt8=;
+        b=usmzDClfjRh8F0bmnhmCivgUEzP3w2hcvpAvIrtYeBpsuLRJn+4DKo6fxqVSJatueqh/bL
+        y1U2c4vzTmXRimDg8GVoBZvKtFqEsvVdMgGej6G+EsDFhT6W1diHNgOIC0KfMfDjz5E2FR
+        LWiq5pgDeVvuMmhGNiV9JI4DhVFmCJsTUFwyFHUab0bBZlhSSIZ2p4TXkp81D4DCO0Q8/D
+        EuJEQqKeReqTl4+hXBoQ8YifN5FDSYOaMWrWNq9b2jedjnGk4vLa7oJhW6jbL2Ajeycnmm
+        xF2VpEjm7wkrWwBTi+0oC4IPzUPaxG3GIo2P4qGbXGEE7KUOGmmWiY2Hg7lQqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639770528;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MOhtWEVpE/nHvAfkcQxgjTO8DE1E/CE1cP2TvinWtt8=;
+        b=/FtWHAeSunsf+hn8FNtZSk94a8f3FndZKtc38HIXjF5iIq4qp6jb4YV269837n+ncw/jYU
+        wuiXPn983+tX6xDQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH-next v3] mm/memcg: Properly handle memcg_stock access for
+ PREEMPT_RT
+Message-ID: <Ybzpn59+ecDCnULt@linutronix.de>
+References: <20211214144412.447035-1-longman@redhat.com>
+ <Ybx3ubNFfGpCqhn0@linutronix.de>
+ <b82efbad-1eb2-9441-ab0b-cbb3d2b5eac6@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2038158.1639770430.1@warthog.procyon.org.uk>
-Date:   Fri, 17 Dec 2021 19:47:10 +0000
-Message-ID: <2038159.1639770430@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b82efbad-1eb2-9441-ab0b-cbb3d2b5eac6@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steve French <smfrench@gmail.com> wrote:
+On 2021-12-17 13:46:53 [-0500], Waiman Long wrote:
+> > annotation. Looking at the history, I'm also impressed by that fact that
+> > disabling/ enabling interrupts is *so* expensive that all this is
+> > actually worth it.
+> 
+> For !RT with voluntary or no preemption, preempt_disable() is just a
+> compiler barrier. So it is definitely cheaper than disabling interrupt. The
+> performance benefit is less with preemptible but !RT kernel. Microbenchmark
+> testing shows a performance improvement of a few percents depending on the
+> exact benchmark.
 
-> This cifs fscache fix should be upstream soon, so you should be able
-> to update the fscache series ontop of updated kernel soon
+Thanks for confirming. I got the feeling that this optimisation is for
+!CONFIG_PREEMPTION. So I instead of depending on CONFIG_PREEMPT_RT I'm
+leaning towards CONFIG_PREEMPT instead.
 
-Thanks.
+> Cheers,
+> Longman
 
-David
-
+Sebastian

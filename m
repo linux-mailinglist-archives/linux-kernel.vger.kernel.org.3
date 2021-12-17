@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62794479451
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C851479456
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240487AbhLQSu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:50:27 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:34860 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbhLQSu0 (ORCPT
+        id S240498AbhLQSwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:52:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:40898 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234036AbhLQSwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:50:26 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639767025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XnCokuYZlFZCdB/L6abEHXrXzdEnC82APeZO2mVfjS8=;
-        b=1cQYM3GthMvCC48wW2px5ZsAnnNECUHXHYYNPnC/ZuEasgYWIAAYU+NgPrBsSdsfvqwlUP
-        TcYa4q/86a5YfnXAiD/XAWhgqeHl9P6B2hnUc/RwSDCGKygJPMJRKU+nTkkmGY/oVMrVvo
-        G0DFQ1ommEZK2nGSVhcG5Z6ETEHuTSeiEpCt8O7oMGSrizzKs2sEDPJFXc1J13fo2RHajZ
-        HhgxbxFO6uo8zoZRTRJsjSjlpM0aITcAK85s46KTgPvnfSEcfbj0O536c76puOKX0ui6pg
-        ApfSMGxAz/97haaKYzAfKz9BaPGadbTWPi0RpRUP/6HxvHAkN7ux4qYtdBOucg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639767025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XnCokuYZlFZCdB/L6abEHXrXzdEnC82APeZO2mVfjS8=;
-        b=CsNvWsrz+YRY9QTb/lqzRwOg02xPnEPpAoWX3j2zynEChsHy96cvda9atB0VWdZXTFBebL
-        B1ag7y1tI+CHyTDA==
-To:     Jing Liu <jing2.liu@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        pbonzini@redhat.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v2 08/23] x86/fpu: Provide
- fpu_update_guest_perm_features() for guest
-In-Reply-To: <20211217153003.1719189-9-jing2.liu@intel.com>
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-9-jing2.liu@intel.com>
-Date:   Fri, 17 Dec 2021 19:50:24 +0100
-Message-ID: <87wnk3awwf.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Fri, 17 Dec 2021 13:52:15 -0500
+Received: by linux.microsoft.com (Postfix, from userid 1109)
+        id 07FCF20B7179; Fri, 17 Dec 2021 10:52:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 07FCF20B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639767135;
+        bh=RBOkv7wQTIl6ac3AEfZEmjbWpKBxDTlhs/7EhRmR9t0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cur3jrEW8sb+u2BR/0F5EN9f89MS3OnGFBbej7BveC6/Uho6LbE+usNM1bZ6+7hhB
+         4JgH4H0NNIigPITd2icllq3Pue/WFesUXnlnJLSTdbPTS4x5j/vy7oX+FR4aIkeCcA
+         yUFDU+VB23CYdfq01ZzRXVJwEaPaxQhN+vvvazGI=
+From:   Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, maz@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: [PATCH v7 0/2] PCI: hv: Hyper-V vPCI for arm64
+Date:   Fri, 17 Dec 2021 10:51:59 -0800
+Message-Id: <1639767121-22007-1-git-send-email-sunilmut@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eviewed-by: Thomas Gleixner <tglx@linutronix.de>
-On Fri, Dec 17 2021 at 07:29, Jing Liu wrote:
-> +/*
-> + * fpu_update_guest_perm_features - Enable xfeatures according to guest perm
-> + * @guest_fpu:		Pointer to the guest FPU container
-> + *
-> + * Enable all dynamic xfeatures according to guest perm. Invoked if the
-> + * caller wants to conservatively expand fpstate buffer instead of waiting
-> + * until XCR0 or XFD MSR is written.
-> + *
-> + * Return: 0 on success, error code otherwise
-> + */
-> +int fpu_update_guest_perm_features(struct fpu_guest *guest_fpu)
-> +{
-> +	u64 expand;
-> +
-> +	lockdep_assert_preemption_enabled();
-> +
-> +	if (!IS_ENABLED(CONFIG_X86_64))
-> +		return 0;
-> +
-> +	expand = guest_fpu->perm & ~guest_fpu->xfeatures;
-> +	if (!expand)
-> +		return 0;
-> +
-> +	return __xfd_enable_feature(expand, guest_fpu);
-> +}
-> +EXPORT_SYMBOL_GPL(fpu_update_guest_perm_features);
+From: Sunil Muthuswamy <sunilmut@microsoft.com>
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Current Hyper-V vPCI code only compiles and works for x86. There are some
+hardcoded assumptions about the architectural IRQ chip and other arch
+defines.
+
+Add support for Hyper-V vPCI for arm64 by first breaking the current hard
+coded dependency using a set of new interfaces and implementing those for
+x86 first. That is in the first patch. The second patch adds support for
+Hyper-V vPCI for arm64 by implementing the above mentioned interfaces. That
+is done by introducing a Hyper-V vPCI specific MSI IRQ domain & chip for
+allocating SPI vectors.
+
+changes in v1 -> v2:
+ - Moved the irqchip implementation to drivers/pci as suggested
+   by Marc Zyngier
+ - Addressed Multi-MSI handling issues identified by Marc Zyngier
+ - Addressed lock/synchronization primitive as suggested by Marc
+   Zyngier
+ - Addressed other code feedback from Marc Zyngier
+
+changes in v2 -> v3:
+ - Addressed comments from Bjorn Helgaas about patch formatting and
+   verbiage
+ - Using 'git send-email' to ensure that the patch series is correctly
+   threaded. Feedback by Bjorn Helgaas
+ - Fixed Hyper-V vPCI build break for module build, reported by Boqun Feng
+
+changes in v3 -> v4:
+ - Removed the separate file for IRQ chip that was there in previous
+   iterations and moved the IRQ chip implementation to pci-hyperv.c.
+   Feedback by Michael Kelley and Marc Zyngier.
+ - Addressed various comments from Marc Zyngier about structuring and
+   layout.
+ - Addressed comment from Marc Zyngier about IRQ affinity and other
+   miscellaneous comments.
+
+changes in v4 -> v5:
+ - Fixed an issue with picking the right cpu for irq affinity, identified
+   by Marc Zyngier.
+
+changes in v5 -> v6:
+ - Minor comment updates suggested by Michael Kelley.
+
+changes in v6 -> v7:
+ - Addressed feedback from Marc Zyngier about IRQ cleanup in the error path
+   and explicitly setting the IRQ trigger type.
+ - Address feedback from Bjorn Helgaas about subject line format.
+
+Sunil Muthuswamy (2):
+  PCI: hv: Make the code arch neutral by adding arch specific interfaces
+  PCI: hv: Add arm64 Hyper-V vPCI support
+
+ arch/arm64/include/asm/hyperv-tlfs.h |   9 +
+ arch/x86/include/asm/hyperv-tlfs.h   |  33 +++
+ arch/x86/include/asm/mshyperv.h      |   7 -
+ drivers/pci/Kconfig                  |   2 +-
+ drivers/pci/controller/Kconfig       |   2 +-
+ drivers/pci/controller/pci-hyperv.c  | 318 ++++++++++++++++++++++++---
+ include/asm-generic/hyperv-tlfs.h    |  33 ---
+ 7 files changed, 337 insertions(+), 67 deletions(-)
+
+
+base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+-- 
+2.25.1
+
+

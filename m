@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018CA4786DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C32F4787C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbhLQJQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:16:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:53702 "EHLO foss.arm.com"
+        id S231277AbhLQJfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:35:11 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:42494 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234081AbhLQJQW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:16:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBD491435;
-        Fri, 17 Dec 2021 01:16:21 -0800 (PST)
-Received: from [10.57.6.245] (unknown [10.57.6.245])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 760A93F774;
-        Fri, 17 Dec 2021 01:16:20 -0800 (PST)
-Subject: Re: [PATCH] drm/panfrost: Avoid user size passed to kvmalloc()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Rob Herring <robh@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211216161603.983711-1-steven.price@arm.com>
- <CAL_JsqKZBsJxy8h5EQf0wwfioWS-Kx9i=0cQ7p4FHckEXstGiw@mail.gmail.com>
- <4c564c0d-7702-9dfe-910f-969fe130aba8@arm.com> <20211217091046.GG1978@kadam>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <4e56a7a8-c48c-49dc-6535-730ad871d1e1@arm.com>
-Date:   Fri, 17 Dec 2021 09:16:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211217091046.GG1978@kadam>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+        id S230308AbhLQJfK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 04:35:10 -0500
+X-Greylist: delayed 603 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Dec 2021 04:35:10 EST
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 05EB621340;
+        Fri, 17 Dec 2021 10:25:06 +0100 (CET)
+Received: from sakura (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id E08FA2061E;
+        Fri, 17 Dec 2021 10:25:05 +0100 (CET)
+Message-ID: <526e92dfc491b34d20a66e1432d7cd58e97700e9.camel@freebox.fr>
+Subject: Re: [PATCH v2 1/2] powerpc/set_memory: Avoid spinlock recursion in
+ change_page_attr()
+From:   Maxime Bizon <mbizon@freebox.fr>
+Reply-To: mbizon@freebox.fr
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Russell Currey <ruscur@russell.cc>
+Date:   Fri, 17 Dec 2021 10:25:05 +0100
+In-Reply-To: <112b55c5fe019fefc284e3361772b00345fa0967.1639676816.git.christophe.leroy@csgroup.eu>
+References: <112b55c5fe019fefc284e3361772b00345fa0967.1639676816.git.christophe.leroy@csgroup.eu>
+Organization: Freebox
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Fri Dec 17 10:25:06 2021 +0100 (CET)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/12/2021 09:10, Dan Carpenter wrote:
-> On Fri, Dec 17, 2021 at 08:55:50AM +0000, Steven Price wrote:
->> However this one is harder to fix without setting an arbitrary cap on
->> the number of BOs during a sumbit. I'm not sure how other drivers handle
->> this - the ones I've looked at so far all have the same issue. There's
->> obviously the list that Dan already sent, but e.g. msm has the same bug
->> in msm_gem_submit.c:submit_create() with an amusing bug where the check
->> for (sz > SIZE_MAX) will never hit, although the call is to kzalloc() so
->> large allocations are going to fail anyway.
-> 
-> sz is u64 and SIZE_MAX is ULONG_MAX so the (sz > SIZE_MAX) condition
-> does work to prevent an integer overflow on 32bit systems.  But it's not
-> beautiful.
 
-sz is the result of struct_size() which returns a size_t, and SIZE_MAX
-in case of an overflow. However the check is *greater than* SIZE_MAX
-which will never occur even on 32 bit systems.
+On Thu, 2021-12-16 at 17:47 +0000, Christophe Leroy wrote:
 
-However the chances of kzalloc() allocating SIZE_MAX are 0 so I don't
-see it's an exploitable bug.
+Tested-by: Maxime Bizon <mbizon@freebox.fr>
 
-Steve
+Now running fine with every CONFIG_DEBUG_xxx enabled, thanks!
+
+-- 
+Maxime
+
+
+

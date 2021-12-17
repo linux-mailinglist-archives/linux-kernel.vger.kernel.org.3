@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F00478176
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751D247817C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbhLQAiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:38:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58843 "EHLO
+        id S230519AbhLQAiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:38:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24527 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231184AbhLQAiL (ORCPT
+        by vger.kernel.org with ESMTP id S231151AbhLQAiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:38:11 -0500
+        Thu, 16 Dec 2021 19:38:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639701490;
+        s=mimecast20190719; t=1639701491;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2i+a0Hx2N4MuSgyTPRig6ZtnqKsO/4+K9evEKBHNXQ4=;
-        b=QbzSPk2Ew4x0bbpye4y8S3p8oBtF7NI3diEXFEfAgH6yIerTstVJhxzyjmfbeu6rRGdU+F
-        SsW5CoPTaKEa4GIFoWh+dHJ3y11fS4CKUugI8yum7I7SpKaQnNpm7d5hVwlvxZsRWsYFg7
-        FeIaHAacQitoWdoRh8Ic7DLZCjLsbkc=
+        bh=Y/GvonJ2NqZfXSQGClXdvnbTmZF4yYJy2D12acQMdHo=;
+        b=d9XN2woGJU/b3qmXohS5cM0Zed7rMmmDyezQpj0uiFiGP/0Ah+ioUCPl9akC4tlPQQLGxm
+        XY182hetycv1XdcbuVSAAM+bo5Oxu/x1fzqifIJvVZ4NFyHiEPlJhdl1E0QBtRIrGgb2XP
+        7caXvSXwYreCFUFARF1NhYbz473YoLw=
 Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
  [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-NMY5-HASPreTWmaj9fvj4Q-1; Thu, 16 Dec 2021 19:38:09 -0500
-X-MC-Unique: NMY5-HASPreTWmaj9fvj4Q-1
-Received: by mail-wr1-f70.google.com with SMTP id v18-20020a5d5912000000b001815910d2c0so153703wrd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:38:09 -0800 (PST)
+ us-mta-341-6t9jgURBNJCUdmAzCsN-8A-1; Thu, 16 Dec 2021 19:38:10 -0500
+X-MC-Unique: 6t9jgURBNJCUdmAzCsN-8A-1
+Received: by mail-wr1-f70.google.com with SMTP id l9-20020adfa389000000b001a23bd1c661so146810wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:38:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2i+a0Hx2N4MuSgyTPRig6ZtnqKsO/4+K9evEKBHNXQ4=;
-        b=r1xV9kmiXAATLwgMG40NszqgH787ZZQUoiphnapjkRlVivQ86QlXCtMiSswLXB/eU5
-         oUvqS2ATJRwfqWqyfp5u8qgFOBIrHBitsGIGTtezXaKfasejExkv9YsyT3QUxZVmsGgM
-         /1tg4Yc+1hGS1IFy3i4ep4W/d+6rKSLWQA6h3kUxDRygK6CH+y5iCcwzrChr8DNPkFb6
-         brAjutRfgpO7A7Dstub1LVy9sFymNcPbiTftio5fWZ0QvfBXEpQvIKl1SxtIcrTSQUar
-         L+RcUxBwXsE5JUD2rfNGV8U8I/AeU0puOv7IdFdm8IPS8o/84pgR+CnFW85sW8qkCjgr
-         K1CQ==
-X-Gm-Message-State: AOAM533g/ZmV7iwEk2lp24zHKXkGAO5UHhx48i/LjrqPChMKJwKPQ5Ao
-        9NsXep2UmN8zxVVPm4RR5itb1sjF9k/8a1NZ42zd7sGIlutlLUO0usTvtk/ZIhXKfNN99v0Cul8
-        Gw+/pm1jaoW6p/HOZJTmAC9D4FHM0wPzJqOLBxI39pRUL+CKJMq9n0JoYn0iiqg5vb7NKzgA8Jl
-        A=
-X-Received: by 2002:adf:ee47:: with SMTP id w7mr385092wro.368.1639701488405;
-        Thu, 16 Dec 2021 16:38:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwYVfZs5fU18IrDElvj2aJ/BiUWFslqZecT53FQv/BKzpw1z6c0hElAqSLMPto0t2VKeJh+zg==
-X-Received: by 2002:adf:ee47:: with SMTP id w7mr385080wro.368.1639701488193;
-        Thu, 16 Dec 2021 16:38:08 -0800 (PST)
+        bh=Y/GvonJ2NqZfXSQGClXdvnbTmZF4yYJy2D12acQMdHo=;
+        b=7lFi1/k44/k3Xggp8TKmpN2sf/hGnaLAhhMwfBgftooFPVDGf3LL+o9ZcxEtQe+q6n
+         l8uyMTzOzA8uWj6j8jrZfEo1F+K6FuEqS+PCQu5JLmXe03Rx0B0vTRnRPY/tkp5eKHmk
+         Tgy2LK7fiOWVwLjA+g0NaR8VnrkD7S2yxJem7yjqGKqd+MWWqIG3kzGAgf03gvYFxKvp
+         sCDznPyMipH0v/tLfFA7dL2rNIRgeq9YdIA7pj64on8WpRAovlJE8vN709UNuyOOjzw7
+         8wLQ6EgCQMicNc6duiMp2VktVrCLM4ROlZrU2x2/iixSSWbqVkG47l2Hcgekyv/HqirO
+         8npA==
+X-Gm-Message-State: AOAM532ATQvXBY99JbNxlgCMIO0643SLit0azkd5+KvT4BFhf5YPFcIs
+        962EDLEUSm4iXEi+2qtwJxooMQ0+1/COZAR6/0HzvL05wC1wKETGipEYoMjDlmRnZATaNgOBypx
+        VZN59xSGWtE7YbixfGq44WuIfxPlyHY7dk3N+Di4b06Aismr/KiFzzZHX74cyf3mDzjEi5IKldo
+        4=
+X-Received: by 2002:a5d:6d88:: with SMTP id l8mr402267wrs.270.1639701489244;
+        Thu, 16 Dec 2021 16:38:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfLsvA2QaVHBD6DAMzBCXtLFy/U3iM87lNHcw8gWbPySLfAC8QpFJ3Cyc324OOY+OgCJZKxw==
+X-Received: by 2002:a5d:6d88:: with SMTP id l8mr402251wrs.270.1639701489002;
+        Thu, 16 Dec 2021 16:38:09 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg12sm7368433wmb.5.2021.12.16.16.38.07
+        by smtp.gmail.com with ESMTPSA id bg12sm7368433wmb.5.2021.12.16.16.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 16:38:07 -0800 (PST)
+        Thu, 16 Dec 2021 16:38:08 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Subject: [PATCH v2 10/37] drm/imx/dcss: Use drm_module_platform_driver() to register the driver
-Date:   Fri, 17 Dec 2021 01:37:25 +0100
-Message-Id: <20211217003752.3946210-11-javierm@redhat.com>
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Edmund Dea <edmund.j.dea@intel.com>
+Subject: [PATCH v2 11/37] drm/kmb: Use drm_module_platform_driver() to register the driver
+Date:   Fri, 17 Dec 2021 01:37:26 +0100
+Message-Id: <20211217003752.3946210-12-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211217003752.3946210-1-javierm@redhat.com>
 References: <20211217003752.3946210-1-javierm@redhat.com>
@@ -74,27 +74,26 @@ The macro calls to a DRM specific platform driver init handler that checks
 whether the driver is allowed to be registered or not.
 
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 ---
 
 (no changes since v1)
 
- drivers/gpu/drm/imx/dcss/dcss-drv.c | 2 +-
+ drivers/gpu/drm/kmb/kmb_drv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/imx/dcss/dcss-drv.c b/drivers/gpu/drm/imx/dcss/dcss-drv.c
-index 8dc2f85c514b..f3d2bb07facb 100644
---- a/drivers/gpu/drm/imx/dcss/dcss-drv.c
-+++ b/drivers/gpu/drm/imx/dcss/dcss-drv.c
-@@ -131,7 +131,7 @@ static struct platform_driver dcss_platform_driver = {
+diff --git a/drivers/gpu/drm/kmb/kmb_drv.c b/drivers/gpu/drm/kmb/kmb_drv.c
+index ed2424350773..4a835f90fe3a 100644
+--- a/drivers/gpu/drm/kmb/kmb_drv.c
++++ b/drivers/gpu/drm/kmb/kmb_drv.c
+@@ -628,7 +628,7 @@ static struct platform_driver kmb_platform_driver = {
  	},
  };
  
--module_platform_driver(dcss_platform_driver);
-+drm_module_platform_driver(dcss_platform_driver);
+-module_platform_driver(kmb_platform_driver);
++drm_module_platform_driver(kmb_platform_driver);
  
- MODULE_AUTHOR("Laurentiu Palcu <laurentiu.palcu@nxp.com>");
- MODULE_DESCRIPTION("DCSS driver for i.MX8MQ");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_DESCRIPTION("Keembay Display driver");
 -- 
 2.33.1
 

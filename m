@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6574795F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7E04795F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240956AbhLQVCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S240962AbhLQVDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240890AbhLQVCG (ORCPT
+        with ESMTP id S229461AbhLQVD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:02:06 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B11C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:02:06 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id q17so2868543plr.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:02:06 -0800 (PST)
+        Fri, 17 Dec 2021 16:03:29 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA459C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:03:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v16so3330869pjn.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zb80lUtz8TIrMwIl8Mq7TS3TuTjpivrPThPX+10XdfI=;
-        b=H7dQafYYV6AiiOtbuD+6XV6BxfKK9UXz1nH2YDo5PmPeXuQmIVNeFhyBMz7dXDSf8S
-         ai2UWX8rWnkEKgnyzjbNnY3ttEWquajMdfZTnvHHG7ufmASztW7QpiLgDlQvbcZH4wyi
-         bJX6+eJBgRRIUQPvAsDNYc0GA2eyEksOHVmQDv60AYcVRW4qdmZpyEIT3YN9rB/ehrwt
-         zYQg7CYSSUegjuJyBpDGhbXPyaW7XpEmKIzHnzduT4xNfjjfTjlxygyICxLP3Q4UaoRd
-         Rv9X3KYShDAsqEnpl2c+mFOkMD9gK4ILBrmk7NQXhSmBJXklc34vhpxJJmV2n/5Dya1J
-         RCxA==
+        bh=6GodjcWAF3mYu9woL8hOan7NZaP/rSFrCXq8dZE0pbw=;
+        b=IjRe+4C5VR/6st8qatG2AWz5ro7Na79jF+aQrTP5APsV9BCC3QGy8M7cXhCgRrQlEl
+         xyLKSr+EwODHgQ/yOswEqvOirZrLob31qDDprPVn6V56LMzPPySqj4YSt2epEnkC+77W
+         LkWDEvd0MTD8fSNni7bGq4vtPzmqtpnz1zdBl0BPW4FiIXVixVmAqh6eNkeShIBig0Jc
+         hoMysvZqugoXUae5TPFhJcj1+8grdb1VZ7dbtpz0hf2y7va7ift/o9qZMTYRJQR1XFQ5
+         84gt78r1K41pWxPPRwWA5DmMsvJLpsNDbzf/4BBkEhcNMSi0XtUPc4mAa8FX2R+hxM3d
+         jVIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zb80lUtz8TIrMwIl8Mq7TS3TuTjpivrPThPX+10XdfI=;
-        b=lpetwoK4Gvc7oiK8af9qBDx2zJY8n6eRAJ79XClaH5gBGkbi5Bttf7QCqMkQKBAExD
-         IAl6TXYIqWpXfUjns7u5S+vrwu0277fpS54wCn/y+xMkSqhMQ5ZE+bWLA6J+IkRDkWEo
-         E/8Smi7W8W1hhL2P5HZqdo87EF4Bu+MhMiTBK0K3JDLygoJvzB9OmQXBBJdsrDvn+bt9
-         5eJtVMi5LbjE/QzznXTcb6OK7Rj05ksX6B+LAKS2CqTfcLznIXukLBEgXQKCZwS2m5ux
-         JuPPBMmaCTI4SNpgbyPm03qdmcSAZTuZjZ8eVBaBrO6I8pLtLikDHA4MiV3LU0qIQNwp
-         h0pA==
-X-Gm-Message-State: AOAM533DRx4Mw1IR/75fUDrxMHN6Z7Lar937hEBUuIPj0yu6qn9JjMHU
-        7jHc8u92lUUPIpmXis9EM8OEOIwi6wqqTQ==
-X-Google-Smtp-Source: ABdhPJx3vvWuEHUqFG5EEydz2bNM2b6Br0aLcEErjqjr1tQXxas8MSJ7fFt0mGEBewXigJzS4qn1Ug==
-X-Received: by 2002:a17:902:9a43:b0:148:9d8b:bead with SMTP id x3-20020a1709029a4300b001489d8bbeadmr4952878plv.76.1639774926165;
-        Fri, 17 Dec 2021 13:02:06 -0800 (PST)
+        bh=6GodjcWAF3mYu9woL8hOan7NZaP/rSFrCXq8dZE0pbw=;
+        b=EeWddEbWC+6BMJdfILdFAER+uUBTocCvZJSEdk4FbgT9Pno2RD1dHI3rvWF0rmmvoB
+         Flaq4ujdP32CydxBOza9SMxi2eAC0Dp1/YkftgROHbSWNhdtimqp5L4gy3RRDi/gXrYI
+         B4+GEY5Y9pUv8RTitlLYgHSDxqPkQPaxQjwPbSVlWg4EW9BnKd6AONeFgv0k5JnvIh0c
+         v2W3d4boqOwua59ooOm/K6B/Qu2hZCJNDkmcUm7e4xP6amLKPLyaRvgt1FAvp0HSL6QO
+         AS5aXuQRrCl2VMLF9Kuit/gvWy9/5CGScJ94p6FCeG3qzJAzs6HuAyjvOmCyVGbH9Jhp
+         Bhuw==
+X-Gm-Message-State: AOAM532d38cI6URW+ke63vxB72tnYEkVPXTD2Vu1FlMmVD+5Sq8JJ3Po
+        VRpul8kZFivGHp3qFz0JkYT73A==
+X-Google-Smtp-Source: ABdhPJwtxXLNgSU0Fr8EsRIJMgqrR6xSikrxpNpz6MQ9mlpbLz5wFWFuIoe74UXzqn+KVLpy8Iq9BQ==
+X-Received: by 2002:a17:90a:5d8e:: with SMTP id t14mr14156989pji.95.1639775008335;
+        Fri, 17 Dec 2021 13:03:28 -0800 (PST)
 Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id c7sm5314519pjs.17.2021.12.17.13.02.05
+        by smtp.gmail.com with ESMTPSA id r21sm9234622pfh.128.2021.12.17.13.03.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 13:02:05 -0800 (PST)
-Date:   Fri, 17 Dec 2021 13:02:03 -0800
+        Fri, 17 Dec 2021 13:03:28 -0800 (PST)
+Date:   Fri, 17 Dec 2021 13:03:25 -0800
 From:   Stephen Hemminger <stephen@networkplumber.org>
 To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
 Cc:     netdev@vger.kernel.org,
@@ -60,12 +60,12 @@ Cc:     netdev@vger.kernel.org,
         Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 5/6] net: marvell: prestera: Register inetaddr
- stub notifiers
-Message-ID: <20211217130203.537f6dc9@hermes.local>
-In-Reply-To: <20211217195440.29838-6-yevhen.orlov@plvision.eu>
+Subject: Re: [PATCH net-next 6/6] net: marvell: prestera: Implement initial
+ inetaddr notifiers
+Message-ID: <20211217130325.305961eb@hermes.local>
+In-Reply-To: <20211217195440.29838-7-yevhen.orlov@plvision.eu>
 References: <20211217195440.29838-1-yevhen.orlov@plvision.eu>
-        <20211217195440.29838-6-yevhen.orlov@plvision.eu>
+        <20211217195440.29838-7-yevhen.orlov@plvision.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -73,37 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 21:54:37 +0200
+On Fri, 17 Dec 2021 21:54:38 +0200
 Yevhen Orlov <yevhen.orlov@plvision.eu> wrote:
 
-> +
-> +static int __prestera_inetaddr_valid_cb(struct notifier_block *nb,
-> +					unsigned long event, void *ptr)
-> +{
-> +	struct in_validator_info *ivi = (struct in_validator_info *)ptr;
-> +	struct net_device *dev = ivi->ivi_dev->dev;
-> +	struct prestera_router *router = container_of(nb,
-> +						      struct prestera_router,
-> +						      inetaddr_valid_nb);
-> +	struct in_device *idev;
-> +	int err = 0;
-> +
-> +	if (event != NETDEV_UP)
-> +		goto out;
-> +
-> +	/* Ignore if this is not first address */
-> +	idev = __in_dev_get_rtnl(dev);
-> +	if (idev && idev->ifa_list)
-> +		goto out;
-> +
-> +	if (ipv4_is_multicast(ivi->ivi_addr)) {
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	err = __prestera_inetaddr_event(router->sw, dev, event, ivi->extack);
-> +out:
-> +	return notifier_from_errno(err);
-> +}
+>  	switch (event) {
+>  	case NETDEV_UP:
+> +		if (re) {
+> +			NL_SET_ERR_MSG_MOD(extack, "rif_entry already exist");
+> +			return -EEXIST;
+> +		}
+> +		re = prestera_rif_entry_create(port->sw, &re_key,
+> +					       prestera_fix_tb_id(kern_tb_id),
+> +					       port_dev->dev_addr);
+> +		if (!re) {
+> +			NL_SET_ERR_MSG_MOD(extack, "Can't create rif_entry");
+> +			return -EINVAL;
+> +		}
+> +		dev_hold(port_dev);
 
-Your router is quite limited if it only can handle a single unicast address.
+How are these device references cleaned up on module removal?

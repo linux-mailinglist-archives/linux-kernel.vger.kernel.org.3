@@ -2,107 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AFF47970D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B132479710
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhLQWZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:25:13 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:40601 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbhLQWZM (ORCPT
+        id S230173AbhLQW0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229743AbhLQW0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:25:12 -0500
-Received: by mail-oi1-f181.google.com with SMTP id bk14so5700210oib.7;
-        Fri, 17 Dec 2021 14:25:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=U9aFf023EtS7bYXuPYeb5jcWZtC9rXcMEmjg022T/GI=;
-        b=st01DachqKh06PMLpYVqq1ksp5D/FZnrI/7UWro1F0pB7KxMOp9yGkX3WNrTU9Yait
-         9QPQ8UCPVIKDtvuyYvLHcqHl1lhtVScocPvHfdD+VXXq4TrRVKA4A9MaMBAZ7vHuw87t
-         Xp5xE7niL5Qf2FnnEhTYBr/Fcg21tZOPT+MuEArFnLgS7/tK1SMub4c3b+i7IQBf/N9J
-         LGSaceKv3/sUL13j5eq0QgEUjIs2l2Lx2ip/8IH9ec5WsE1dDteZyh/5xDSC39ayrduR
-         h9Bhk9zNjinKBcgGk7vuUTzcPw8BUU5PC9AG0ArpP4q80EFa0yWKGOuzyGxd0N5WzBtL
-         w4nA==
-X-Gm-Message-State: AOAM53101E9xSAChkF5q+dpJVPptPAvJii4beS1UqMT5i0wL219GI4L9
-        YnX2xYt4JtjCqJh97dCo5Q==
-X-Google-Smtp-Source: ABdhPJwLzRcCLzNUvJFhPi5MNnKwuPTUbgZzGPSNDn7nPA1/EtvNX7X/MV8AtNV28hgMlRxOVmyVvA==
-X-Received: by 2002:a05:6808:124d:: with SMTP id o13mr3929342oiv.91.1639779911700;
-        Fri, 17 Dec 2021 14:25:11 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e4sm1897343oiy.12.2021.12.17.14.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 14:25:10 -0800 (PST)
-Received: (nullmailer pid 3686969 invoked by uid 1000);
-        Fri, 17 Dec 2021 22:25:06 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        CK Hu <ck.hu@mediatek.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jitao shi <jitao.shi@mediatek.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>
-In-Reply-To: <20211217150854.2081-3-granquet@baylibre.com>
-References: <20211217150854.2081-1-granquet@baylibre.com> <20211217150854.2081-3-granquet@baylibre.com>
-Subject: Re: [PATCH v7 2/8] dt-bindings: mediatek,dp: Add Display Port binding
-Date:   Fri, 17 Dec 2021 16:25:06 -0600
-Message-Id: <1639779906.584489.3686968.nullmailer@robh.at.kernel.org>
+        Fri, 17 Dec 2021 17:26:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D19C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:26:54 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639780012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PzA8WIuH5rPUQsEYiubWUhj4erHsZPJ9zZik+RRJhBU=;
+        b=fz4FQoKNEIL2CyXMcLTj2I2C1SyVYpNQ29UjNNodrp7fLOK4BJihFxGmDTsDhYgE3+GOon
+        hbZ8K6hWtiFKIZoiDHczoEz1oXw0+280SuEefhDJj8NBKRdYsYjgthLRBEFCQECnz5EsRs
+        0ADxRlsdeNTQzUa3QbIdoPg1/ABPtugBoxchrIu5ijeWRdSNFjTjibyG58Xeed0eAGP7hu
+        343/WICXzefchW7PjVudbMQ7m+R3tz20YOV7PKtqBJx+FEloxqPc3Y3/WzFvQhAcgPH57d
+        6r5Kc/Dv5G4GsLPxwQTlkBX50PpEpSTrUdH0sehh9CXCqCbQxQ+1AmFwRzWTOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639780012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PzA8WIuH5rPUQsEYiubWUhj4erHsZPJ9zZik+RRJhBU=;
+        b=8To9cski3Fh9yGLae+nMYB84ZKfxRLPriQjBdaQZq3QzG2S1g5vAeVe3xaNmRSV1Vumjpe
+        Kw0v4bMFE2xxPdAA==
+To:     Xiang wangx <wangxiang@cdjrlc.com>, john.stultz@linaro.org
+Cc:     sboyd@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] time/timekeeping: Fix syntax errors in comments
+In-Reply-To: <20211212143225.13727-1-wangxiang@cdjrlc.com>
+References: <20211212143225.13727-1-wangxiang@cdjrlc.com>
+Date:   Fri, 17 Dec 2021 23:26:52 +0100
+Message-ID: <875yrmc1g3.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 16:08:48 +0100, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This controller is present on several mediatek hardware. Currently
-> mt8195 and mt8395 have this controller without a functional difference,
-> so only one compatible field is added.
-> 
-> The controller can have two forms, as a normal display port and as an
-> embedded display port.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Sun, Dec 12 2021 at 22:32, Xiang wangx wrote:
+> Delete the redundant word 'time'.
+>
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 > ---
->  .../display/mediatek/mediatek,dp.yaml         | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
-> 
+>  kernel/time/timekeeping.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+> index b348749a9fc6..b1fbedd35300 100644
+> --- a/kernel/time/timekeeping.c
+> +++ b/kernel/time/timekeeping.c
+> @@ -1148,7 +1148,7 @@ static int adjust_historical_crosststamp(struct system_time_snapshot *history,
+>  			return ret;
+>  	}
+>  
+> -	/* Fixup monotonic raw and real time time values */
+> +	/* Fixup monotonic raw and real time values */
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+It's not redundant because it talks about 'time values'. The 'time
+values' which are fixed up are 'monotonic raw' and 'real time'.
 
-yamllint warnings/errors:
+So yes, the comment _is_ awkward and hard to read, but removing time
+does not make it any better. Something like this;
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.dts:20:18: fatal error: dt-bindings/power/mt8195-power.h: No such file or directory
-   20 |         #include <dt-bindings/power/mt8195-power.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/display/mediatek/mediatek,dp.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
+     /* Fixup the MONOTONIC_RAW and REAL_TIME time values */
 
-doc reference errors (make refcheckdocs):
+Hmm?
 
-See https://patchwork.ozlabs.org/patch/1570103
+Thanks,
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+        tglx
+ 

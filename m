@@ -2,188 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EACC44787EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1524787EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbhLQJlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:41:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:53978 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234472AbhLQJk7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:40:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E33331435;
-        Fri, 17 Dec 2021 01:40:58 -0800 (PST)
-Received: from [10.57.8.4] (unknown [10.57.8.4])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08D623F774;
-        Fri, 17 Dec 2021 01:40:56 -0800 (PST)
-Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
- are unavailable
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20211208160907.749482-1-james.clark@arm.com>
- <20211208160907.749482-2-james.clark@arm.com>
- <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
- <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
- <20211210172220.GA1238770@p14s>
- <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <d884f96c-1d4c-119e-5e83-3674260a9694@arm.com>
-Date:   Fri, 17 Dec 2021 09:40:55 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234469AbhLQJkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:40:37 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:40858 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234441AbhLQJkf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 04:40:35 -0500
+X-UUID: 020b9ac459d449dc900c6f6b79a1619c-20211217
+X-UUID: 020b9ac459d449dc900c6f6b79a1619c-20211217
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2014456999; Fri, 17 Dec 2021 17:40:31 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 17 Dec 2021 17:40:29 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Fri, 17 Dec 2021 17:40:28 +0800
+From:   <guangming.cao@mediatek.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        "Laura Abbott" <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        "John Stultz" <john.stultz@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:DMA-BUF HEAPS FRAMEWORK" <linux-media@vger.kernel.org>,
+        "open list:DMA-BUF HEAPS FRAMEWORK" <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA-BUF HEAPS FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Bo Song <bo.song@mediatek.com>,
+        Libo Kang <libo.kang@mediatek.com>,
+        jianjiao zeng <jianjiao.zeng@mediatek.com>,
+        mingyuan ma <mingyuan.ma@mediatek.com>,
+        Yunfei Wang <yf.wang@mediatek.com>,
+        Guangming <Guangming.Cao@mediatek.com>
+Subject: [PATCH] dma-buf: dma-heap: Add a size limitation for allocation
+Date:   Fri, 17 Dec 2021 17:41:04 +0800
+Message-ID: <20211217094104.24977-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Guangming <Guangming.Cao@mediatek.com>
 
+Currently, there is no size check for allocation.
 
-On 13/12/2021 09:48, Mike Leach wrote:
-> Hi James,
-> 
-> A couple of points - relating mainly to docs:
-> 
+If the alloc size is larger than DRAM, it will cause OOM issue.
+Besides, if it runs on a process that won't be killed by OOM flow, it will
+cause a kernel exception finally,  and we couldn't find the correct
+memory usage by dma-buf dump api such as "dma_buf_debug_show" since the
+allocation is still on going and the corresponding dmabuf is not exported.
 
-Hi Mike,
+However, it sounds not simple enough to adding a count to count how many
+pages has been allocated before allocating done.
+So adding a size limitation here to prevent this case.
 
-Thanks for the feedback. I was in the process of adding some docs and
-ran into this https://lkml.org/lkml/2021/12/16/1087 so I went to fix
-that first. Now I will add some more details and resubmit.
+Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+---
+ drivers/dma-buf/dma-heap.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> 1. Activating branch broadcast overrides any setting of return stack.
-> As a minimum there needs to be a documentation update to reflect this
-> -Setting both options is not prohibited in hardware - and in the case
-> where we can use branch broadcast over a range both are then relevant.
-> 
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 56bf5ad01ad5..8b75998a106c 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -107,6 +107,9 @@ static long dma_heap_ioctl_allocate(struct file *file, void *data)
+ 	if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
+ 		return -EINVAL;
+ 
++	if (heap_allocation->len / PAGE_SIZE > totalram_pages() / 2)
++		return -EINVAL;
++
+ 	fd = dma_heap_buffer_alloc(heap, heap_allocation->len,
+ 				   heap_allocation->fd_flags,
+ 				   heap_allocation->heap_flags);
+-- 
+2.17.1
 
-Do you mean that if branch broadcast and return stacks are both requested,
-but branch broadcast is limited to a range, return stacks will only be
-available outside that branch broadcast range? But if branch broadcast is
-enabled for all ranges there will be no return stacks at all?
-
-> 2. A documented note to reflect that choosing this option will result
-> in a significant increase in the amount of trace generated - possible
-> danger of overflows, or less actual instructions covered. In addition
-> perhaps documents could reflect the intended use-case for this option,
-> given the disadvantages.
-> 
-
-Will do.
-
-> 3. Has this been tested in a situation where it will be of use?
-> Testing against static code images will show the same decoded trace
-> output as not using branch broadcast. (although the packet dumps will
-> show additional output)> 
-> Given a primary use is for situations where code is patched or
-> dynamically altered at runtime - then this can affect the full decode
-> output. If the code is being patched to only alter the branch
-> addresses then decode should work against static images.
-> If, however, we are tracing code that adds in new branches, on top of
-> NOPs for example, then the decoding against the original static image
-> will be wrong, as the image will have the NOPs, rather than the branch
-> instructions so the apparent location of E atoms will be in a
-> different position to the actual code. Is there anything in perf that
-> will ensure that the patched code is presented to the decoder?
-> 
-> If there are potential decode issues - these too need documenting.
-> 
-
-I'm not sure this should be a blocking issue for this set. Branch broadcast
-could already be enabled by setting the mode via sysfs. And the perf decode
-part isn't necessarily a step in the workflow, maybe someone wants to gather
-data for another tool.
-
-I will do some testing after this change though, but I imagine we would have
-had issues reported it it wasn't working already which lowers the priority.
-
-James
-
-> Other than the documents and testing,  I cannot see any issues with
-> this patch set in terms of setting and enabling the option.
-> 
-> Regards
-> 
-> Mike
-> 
-> 
-> On Fri, 10 Dec 2021 at 17:22, Mathieu Poirier
-> <mathieu.poirier@linaro.org> wrote:
->>
->> Hi James,
->>
->> On Thu, Dec 09, 2021 at 11:13:55AM +0000, James Clark wrote:
->>>
->>>
->>> On 09/12/2021 11:00, Suzuki K Poulose wrote:
->>>> On 08/12/2021 16:09, James Clark wrote:
->>>>> Maintain consistency with the other options by failing to open when they
->>>>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
->>>>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
->>>>> requested but not supported by hardware.
->>>>>
->>>>> The consequence of not doing this is that the user may not be
->>>>> aware that they are not enabling the feature as it is silently disabled.
->>>>>
->>>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>>> ---
->>>>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
->>>>>   1 file changed, 9 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>> index d2bafb50c66a..0a9bb943a5e5 100644
->>>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
->>>>>       }
->>>>>         /* return stack - enable if selected and supported */
->>>>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
->>>>> -        /* bit[12], Return stack enable bit */
->>>>> -        config->cfg |= BIT(12);
->>>>> -
->>>>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
->>>>> +        if (!drvdata->retstack) {
->>>>> +            ret = -EINVAL;
->>>>> +            goto out;
->>>>> +        } else {
->>>>> +            /* bit[12], Return stack enable bit */
->>>>> +            config->cfg |= BIT(12);
->>>>> +        }
->>>>
->>>> nit: While at this, please could you change the hard coded value
->>>> to ETM4_CFG_BIT_RETSTK ?
->>>>
->>> I started changing them all because I had trouble searching for bits by name but then
->>> I thought it would snowball into a bigger change so I undid it.
->>>
->>> I think I'll just go and do it now if it's an issue here.
->>
->> I can apply this set right away and you send another patch to fix all hard coded
->> bitfields or you can send another revision with all 4 patches included in it
->> (bitfields fix plus these 3).  Just let me know what you want to do.  And next
->> time please add a cover letter.
->>
->> Thanks,
->> Mathieu
->>
->>>
->>>> Otherwise, looks good to me
->>>>
->>>> Suzuki
-> 
-> 
-> 

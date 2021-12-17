@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47973478F93
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D6E478F9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbhLQPYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:24:23 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:37415 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbhLQPYW (ORCPT
+        id S238162AbhLQP1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:27:42 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4304 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhLQP1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:24:22 -0500
-Received: by mail-oo1-f45.google.com with SMTP id v19-20020a4a2453000000b002bb88bfb594so805452oov.4;
-        Fri, 17 Dec 2021 07:24:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q+w5h1M93UWtmY9hH7My0tyNbNOCAQZkDwC3Gd8hvRg=;
-        b=yhrSNxJMoqp8YzTjzs17PwzJWHycxpfE8u4WCvDQdnbtky8rLwpICdwr++MNAe0FCC
-         2umMYyUxJxOIxzzm+YVph6qeMs7KVHjZxpk1jY6gy1I8Np8FigW4jeKmsWbZwoI9t67W
-         h4jkrDgoRux7S5D/SXo0u1FYrSVOk3aYEcfuW55fO/jC1wVUtoRc9RXk5hK67FNFyut4
-         ZJr1ZlLviCZP3gCpsBK1At2ox/Be0hy4KuMTmb+YHA/ka2ljX8v7XtL3DFwpledbfYFZ
-         BtXRcReGMwu4Ap3z9j6jBzLEZUn7Y9UU34D2Pa2XCVMhh5VIShEY/wh/7e4h5tCkV82L
-         diAA==
-X-Gm-Message-State: AOAM53154IMj5St9ZK2bf7obLBzTqbDu6tl/GOHb7+4W5NRkghn2T90g
-        cWXRR5wL/T5hQfxVWL94b2SvI9rRDXF5creoBUk=
-X-Google-Smtp-Source: ABdhPJzYKvhAnol5dXY2Qa5x2UfoxOGV83oQ+9AGm8OpSH5QZWsH9hpuzhk0WN3g8QATytJ+EMmhFIIbuU97Xm7FQw8=
-X-Received: by 2002:a4a:1d82:: with SMTP id 124mr2202848oog.91.1639754660604;
- Fri, 17 Dec 2021 07:24:20 -0800 (PST)
+        Fri, 17 Dec 2021 10:27:41 -0500
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JFt6764x3z67HV7;
+        Fri, 17 Dec 2021 23:23:11 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 16:27:38 +0100
+Received: from [10.47.26.158] (10.47.26.158) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 17 Dec
+ 2021 15:27:37 +0000
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
+ <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
+ <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+ <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+ <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+ <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+Date:   Fri, 17 Dec 2021 15:27:09 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20211210042849.79924-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20211210042849.79924-1-yang.lee@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 16:24:09 +0100
-Message-ID: <CAJZ5v0hM41gPb2epxtSRN=cseBrtf1DLtp8eExdJoa_ZwXXoww@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] cpuidle: Fix kernel-doc
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.26.158]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 5:29 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Fix function name in sysfs.c kernel-doc comment
-> to remove a warning found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
->
-> drivers/cpuidle/sysfs.c:512: warning: expecting prototype for
-> cpuidle_remove_driver_sysfs(). Prototype was for
-> cpuidle_remove_state_sysfs() instead
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/cpuidle/sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-> index 469e18547d06..e708e593db88 100644
-> --- a/drivers/cpuidle/sysfs.c
-> +++ b/drivers/cpuidle/sysfs.c
-> @@ -505,7 +505,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
->  }
->
->  /**
-> - * cpuidle_remove_driver_sysfs - removes the cpuidle states sysfs attributes
-> + * cpuidle_remove_state_sysfs - removes the cpuidle states sysfs attributes
->   * @device: the target device
->   */
->  static void cpuidle_remove_state_sysfs(struct cpuidle_device *device)
-> --
+On 17/12/2021 14:32, Arnd Bergmann wrote:
+>> I was interesting in the IOPORT_NATIVE flag (or whatever we call it) as
+>> it solves the problem of drivers which "unconditionally do inb()/outb()
+>> without checking the validity of the address using firmware or other
+>> methods first" being built for (and loaded on and crashing) unsuitable
+>> systems. Such a problem is in [0]
+>>
+>> So if we want to support that later, then it seems that someone would
+>> need to go back and re-edit many same driver Kconfigs – like hwmon, for
+>> example. I think it's better to avoid that and do it now.
+>>
+>> Arnd, any opinion on that?
+>>
+>> I'm happy to help with that effort.
+> I looked at the options the other day and couldn't really find any that
+> fell into this category, so I suggested that Niklas would skip that for the
+> moment. 
 
-Applied as 5.17 under a more precise subject ("cpuidle: Fix
-cpuidle_remove_state_sysfs() kerneldoc comment").
+ From looking at the patch Niklas directed us at, as I understand, 
+HAS_IOPORT is to decide whether the arch/platform may support PIO 
+accessors - inb et al. And on that basis I am confused why it is not 
+selected for arm64. And further compounded by:
 
-When you submit changes like this in the future, please always make
-the subject precise enough to allow the given change to be easily
-distinguished from other changes in the same category.
+  config INDIRECT_PIO
+	 	bool "Access I/O in non-MMIO mode"
+	 	depends on ARM64
+	+	depends on HAS_IOPORT
 
-Thanks!
+If arm64 does not select, then why depend on it?
+
+ > If you have a better way of finding the affected drivers,
+ > that would be great.
+
+Assuming arm64 should select HAS_IOPORT, I am talking about f71805f as 
+an example. According to that patch, this driver additionally depends on 
+HAS_IOPORT; however I would rather arm64, like powerpc, should not allow 
+that driver to be built at all.
+
+Thanks,
+John

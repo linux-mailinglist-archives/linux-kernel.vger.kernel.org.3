@@ -2,152 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E535478F0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBE6478F21
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbhLQPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:08:02 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57440
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237830AbhLQPIC (ORCPT
+        id S237951AbhLQPJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237941AbhLQPJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:08:02 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AA0D23FFD6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639753680;
-        bh=EscRM3zeuMe4QRAvQ51JRRs9n/Wn3urOySWDrMNRXHw=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=nC1a72Ms5+ElnHuPdN2ha9ZL/KcHJN7abHUw5eGA9yHhJXSXeduX+uT0/LnauQMQR
-         XRjaTBbUXi0Y/SJ23iOtKjrzxlC/ZP9G0scxhK80k3k+nL77IGB1z9u2rPvWqwySpT
-         got5nni0oO8da/9WPPAx8sS+RvxtuTLOWTMkOvIw9O1sDE10XcXDBknV59gGWOLbdt
-         2+EvuyxcaG2j16KeD/HVFGHOVdOQEZfwaY9PsjT/tF94MT2z3rIncHvEFY6a31+ihm
-         2500XL0o8Lh/xcHBf0AcZU92hO8V5mpilE7Ql2BuRUVQHa1PHXc/WGl/4KSU+fAnVX
-         AFhp8TjGMYrOw==
-Received: by mail-lj1-f198.google.com with SMTP id z18-20020a2e8e92000000b00218e583aff1so781994ljk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:08:00 -0800 (PST)
+        Fri, 17 Dec 2021 10:09:21 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA011C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:09:20 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id t26so4655474wrb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R0zmm5Uwifws1MjnZkoUoDiCdMAMP2gTWa9ThB/Ce5w=;
+        b=HiI6Pzls1JZKv4QmjjgDV0dP59e7eML5Uxrijbu7h94/E6mIBwXfsvMDg/0qDsS/40
+         LQ6IaIMyUkNrczWzL3lRvSWZJEjUPaaTesF8oi0tzguCd+hloRw+9tj7+nQ12eqgozsh
+         XTtP75hHNxb8vbVPWp0m52ZoQFpl8RjTJnMIhuMAbhMBMQrin6mFYaW6JRGnxoMcX7xj
+         LIal1DRnVz6dKP/zniJdPQCjiT7aLJt3f0GG30ccY/w2qPiaJPgA5m7PxwBBVmpNGbVx
+         /pf0qcU07yC+xQWkI8l6EfwQBE+kbp7V/jj/x7NZzq0VXECNDhNuN0VxvEm/iU6lx84c
+         RsxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=EscRM3zeuMe4QRAvQ51JRRs9n/Wn3urOySWDrMNRXHw=;
-        b=V3kvkRsiUgyvXnwJsYKahkCKlrW+aBdTORlGvhGThiTYRxmuazfqWwBNv4dbW5rfQb
-         bdGZbZYAl6UNthdNU1CObnKEluzAAQXMrx5QdHPzmH48cB9JvlQIFBY4Y++sN9FGfkFg
-         6I2w4dcDWKuS39Xzo4cP6Zoti9Shn2JoTfhI5brUWwKndiiWsjRS/HpBbflqHAEfARtv
-         24/YrfcmLjNsw0vj/6515zec8NMfuMqFAggM38mSUPVMthQc4JIbP/kCIwxwWQcBZXm6
-         DzzIcUKXHMJ9cRTkx7Mq8orIMHAvhapRvWynvLgILUY9oET+52jPcoEg5iuXqN77t3mY
-         UD3A==
-X-Gm-Message-State: AOAM5301Nmz/G9TxOOG6g+VD12sdpdekFkZk6oaC9UOAMwAx03VtWfUC
-        X7rt86pz6qTA/X+oNCyLm/Qg5sCotO9WMJobKU2VcwtbYgfdmQx/F43WREpBo9r8TUaDr8m/HM5
-        dSenZBbukwmBfoJij3SrITpP1EceNEn3Ba1oqxYnZfQ==
-X-Received: by 2002:a05:6512:368a:: with SMTP id d10mr3057513lfs.476.1639753678786;
-        Fri, 17 Dec 2021 07:07:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjit/KxYQojMyrYyqg3tppu8lupjtyMuTl3o4zZeCjXmcoayEWshoXqKAPpfREvzZOsoCa7Q==
-X-Received: by 2002:a05:6512:368a:: with SMTP id d10mr3057453lfs.476.1639753678217;
-        Fri, 17 Dec 2021 07:07:58 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id 18sm1764464ljr.17.2021.12.17.07.07.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 07:07:57 -0800 (PST)
-Message-ID: <19cbe2ba-7df5-7c7c-289f-6dc419d9f477@canonical.com>
-Date:   Fri, 17 Dec 2021 16:07:51 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R0zmm5Uwifws1MjnZkoUoDiCdMAMP2gTWa9ThB/Ce5w=;
+        b=E1iYiqFnPaszktKP9/CPS58VDXk7eq/D3wNQ58InDNkmPF4468WTVMPGBYgKQpxF7g
+         UIoUrBWYPtVtkgUnul06kL9CjV+L86O2llhVoMAqVG3kUaTjobYkud+ld5j6uSHbQc/Z
+         EBigIBA/Lr2xy355NaZjqatmAex8XW8YCUxpVCen2x/jMoa6DVpbNxhDRqDHL8ZO33wj
+         bSx+tIf6Pn7cNzGZXIdikTKcUXaZAtSFuyaJUpAi/vyCBdUr7aPNxQnxGZvURoW5qff/
+         a87OlgNOvpI00fYA4WCYG8tIQo9a4jFfCM6C+T7zIVgJ/C/ZlENwnHHsCvFibfG+jkBd
+         bOUA==
+X-Gm-Message-State: AOAM533ZYu7O04w3Use6VKQzpCx3TU2bjQyOgxPTpkAwIJBr0J8C8swC
+        3l+4HA7gDPpuZVsIVpIGZ0OfLQ==
+X-Google-Smtp-Source: ABdhPJx5/1BsBGu53I1FtcJbP7X+IDnOXTCM7flbne+QScrb5fAv3VQF1KMorpUVilt/7lV7ZP4BVw==
+X-Received: by 2002:a05:6000:15c7:: with SMTP id y7mr2935396wry.424.1639753759334;
+        Fri, 17 Dec 2021 07:09:19 -0800 (PST)
+Received: from localhost.localdomain (2a02-8440-6441-43a4-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6441:43a4:3074:96af:9642:3])
+        by smtp.gmail.com with ESMTPSA id g18sm12655132wmq.4.2021.12.17.07.09.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 07:09:18 -0800 (PST)
+From:   Guillaume Ranquet <granquet@baylibre.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v7 1/8] dt-bindings: mediatek,dpi: Add DP_INTF compatible
+Date:   Fri, 17 Dec 2021 16:08:47 +0100
+Message-Id: <20211217150854.2081-2-granquet@baylibre.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211217150854.2081-1-granquet@baylibre.com>
+References: <20211217150854.2081-1-granquet@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 06/17] dt-bindings: rng: add bindings for microchip
- mpfs rng
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atish.patra@wdc.com
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-7-conor.dooley@microchip.com>
- <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
-In-Reply-To: <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/12/2021 15:53, Krzysztof Kozlowski wrote:
-> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> Add device tree bindings for the hardware rng device accessed via
->> the system services on the Microchip PolarFire SoC.
->>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
->>  .../bindings/rng/microchip,mpfs-rng.yaml      | 29 +++++++++++++++++++
->>  1 file changed, 29 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
->> new file mode 100644
->> index 000000000000..32cbc37c9292
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
->> @@ -0,0 +1,29 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Microchip MPFS random number generator
->> +
->> +maintainers:
->> +  - Conor Dooley <conor.dooley@microchip.com>
->> +
->> +description: |
->> +  The hardware random number generator on the Polarfire SoC is
->> +  accessed via the mailbox interface provided by the system controller
->> +
->> +properties:
->> +  compatible:
->> +    const: microchip,mpfs-rng
->> +
->> +required:
->> +  - compatible
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    hwrandom: hwrandom {
-> 
-> Three topics:
-> 1. Node name (as most of others are using): rng
-> 2. skip the label, not helping in example.
-> 3. This looks very simple, so I wonder if the bindings are complete. No
-> IO space/address... How is it going to be instantiated?
-> 
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-OK, now I saw the usage in DTS. I have doubts this makes sense as
-separate bindings. It looks like integrated part of syscontroller, so
-maybe make it part of that binding? Or at least add ref to syscontroller
-bindings that such child is expected.
+DP_INTF is similar to DPI but does not have the exact same feature set
+or register layouts.
 
+DP_INTF is the sink of the display pipeline that is connected to the
+DisplayPort controller and encoder unit. It takes the same clocks as
+DPI.
 
-Best regards,
-Krzysztof
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+index dd2896a40ff08..53acf9a84f7fb 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: mediatek DPI Controller Device Tree Bindings
++title: mediatek DPI/DP_INTF Controller Device Tree Bindings
+ 
+ maintainers:
+   - CK Hu <ck.hu@mediatek.com>
+   - Jitao shi <jitao.shi@mediatek.com>
+ 
+ description: |
+-  The Mediatek DPI function block is a sink of the display subsystem and
+-  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parallel
+-  output bus.
++  The Mediatek DPI and DP_INTF function blocks are a sink of the display
++  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
++  parallel output bus.
+ 
+ properties:
+   compatible:
+@@ -23,6 +23,7 @@ properties:
+       - mediatek,mt8173-dpi
+       - mediatek,mt8183-dpi
+       - mediatek,mt8192-dpi
++      - mediatek,mt8195-dpintf
+ 
+   reg:
+     maxItems: 1
+@@ -54,7 +55,7 @@ properties:
+     $ref: /schemas/graph.yaml#/properties/port
+     description:
+       Output port node. This port should be connected to the input port of an
+-      attached HDMI or LVDS encoder chip.
++      attached HDMI, LVDS or DisplayPort encoder chip.
+ 
+ required:
+   - compatible
+-- 
+2.32.0
+

@@ -2,81 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD3A478BFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F96478C05
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 14:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbhLQNJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 08:09:51 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:37793 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbhLQNJt (ORCPT
+        id S236572AbhLQNKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 08:10:22 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56144 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234043AbhLQNKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 08:09:49 -0500
-Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MKt3r-1nCq863kJJ-00LH3c; Fri, 17 Dec 2021 14:09:47 +0100
-Received: by mail-wm1-f51.google.com with SMTP id p18so1549578wmq.5;
-        Fri, 17 Dec 2021 05:09:47 -0800 (PST)
-X-Gm-Message-State: AOAM532Q3TgVP8Hm9bfs7rnlBao8UUC8lgXgmRMhg68dB30Ki/qLf9Mx
-        Dgc7Z8pvhsD4uGq1A9LByYyxf4hAdEi+f0mqlso=
-X-Google-Smtp-Source: ABdhPJz7G1Jphi5B+WPZUUBROjJfTQT5bMgaRQTtBbW6svcijGRnk/NTqL4833WgkZbH4dijpWWNsIR992CZFrm3sB8=
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr2709166wmn.98.1639746587350;
- Fri, 17 Dec 2021 05:09:47 -0800 (PST)
+        Fri, 17 Dec 2021 08:10:20 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6B7261F38B;
+        Fri, 17 Dec 2021 13:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639746619; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gvrw1JzGIY+F9u/2nVJ84UxXgKYo/5jNLHymVmDINqY=;
+        b=pepWBIaaFYuxswkaNq/H/QgOeh9t4baOnVp+L+qbk7MTs4mMI1iMA0IFTEv+6M0SFpo+MI
+        8EP7mmAHu8jqHRaQgSbea+MX7PiWYcJr01aq2kslSJPrjTPKbomqW7lQTUzmg5gfpWapOb
+        d2/JrQ2opXOwoquhiImBKrc2wkuQDX8=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 1AED6A3B8B;
+        Fri, 17 Dec 2021 13:10:19 +0000 (UTC)
+Date:   Fri, 17 Dec 2021 14:10:18 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Vernet <void@manifault.com>, Miroslav Benes <mbenes@suse.cz>,
+        linux-doc@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
+        jikos@kernel.org, joe.lawrence@redhat.com, corbet@lwn.net,
+        yhs@fb.com, songliubraving@fb.com, Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
+Message-ID: <YbyMOvBEj9Oj3hkf@alley>
+References: <20211213191734.3238783-1-void@manifault.com>
+ <YbhZwVocHDX9ZBAc@alley>
+ <alpine.LSU.2.21.2112141012090.20187@pobox.suse.cz>
+ <Ybi3qcA5ySDYpyib@dev0025.ash9.facebook.com>
+ <Ybi9NzbvWU7ka8m1@kroah.com>
+ <YbmlL0ZyfSuek9OB@alley>
+ <YboLPAmOc8/6khu2@kroah.com>
+ <YbtJzonSJjcUaUwh@alley>
+ <YbtOvpMswhIJ8a3s@kroah.com>
 MIME-Version: 1.0
-References: <20211216094426.2083802-1-alexandre.ghiti@canonical.com>
- <20211216094426.2083802-6-alexandre.ghiti@canonical.com> <1956456.1639746081@warthog.procyon.org.uk>
-In-Reply-To: <1956456.1639746081@warthog.procyon.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Dec 2021 14:09:31 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1M-kDqe0uwzyfUiErOavoEi3bVpy4m4BPbBXQr6JrHdw@mail.gmail.com>
-Message-ID: <CAK8P3a1M-kDqe0uwzyfUiErOavoEi3bVpy4m4BPbBXQr6JrHdw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] Documentation, arch, fs: Remove leftovers from
- fscache object list
-To:     David Howells <dhowells@redhat.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Steve French <sfrench@samba.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jeff Layton <jlayton@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hLxcLGJobju1Hy8o/4lalmO21mxrA/gxXSLx1+T+8tRx09fRKR2
- kZSLHoQ7vwqmWXkWZUtGybzIbvtXcwWRK7RfmkdE7bS3c0OTJh+iJUF7P05+9KfxMasilqv
- BCTj0ePnXc4M/3VDcHI3ZwM5ccl7OgKjUkULNuC0g5dkDmTOX0+ZgBT/CKj8oUgBBaJj2e4
- 1g9zSlYYH7DpvM2iXdpsQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2PZaWxpMsa4=:A3gCyZo3oFOL7En6B4sCju
- jyk7WAOL88OO5k13jwzXV+bAh1Oya0qRARReutgSW/6dWu/3lKqc/pwYIUBuAgPqErM0GAfMO
- z/FG0fiqLUe+3hTm2Fi5d1HXkByYl866t0ByFKB2EdxhWj+CAyqgw8U+OBMv0TaKt5QhMSThX
- OObETgmklFI+6AZgio+onY2v7SmJhbR7h56RfT49Ne5QT8po75XQ80U3JEWZk/p7ihs/t7nvz
- CtvvEvXRHq6ttwG+Hb2lmdy2i0ur7idobdid+Vk9gBIjHoajw+t4BC5UnZFOQ69WfXx18dJcg
- J2/shj55SgNMz5yWlcGC2MFw8PawgXuB4QWJSH4DEI5TJvgs8Hlrx9HvYbVFE4v9ifiNE7Ta+
- aI/pLqyocw2vn5XP1ieLZnHFBwzjsyGvmYAQ/Yc2mzF7mLxGEjFuOT6IG+qYLSAioPZblqeNc
- qlMypxs+6tUJH2u+8WzlnnkcavtKeNfJ456Kyla0swuAeb9hfBPXa3q++9ambCLIX0NwoTLw4
- 5tBREScyY2C97z2LJx1DKQ9mbCkBXVyKOZocdnHtRlhDK3ah6l5DLiFRUJeY5JYOFrI+BLogP
- BdnWPLk3OFI08oVsmH1MdJPOetN1DOCEnFxUkiGyoaaHN4swQktM0hZWuSpdvxjK2V8PL/+/T
- HJOqxGP+DWNEjL4Mh/E/n+p2YE3pSBbyaIRLmlnecrTKH9J5fYrby2kNHQA5izEKB6Xo23poD
- 41DN2pzbQ4Pk1fL/O13wCxKgTDALpl6Nv0yc5TwQCuJQbalgyEtmoWVHzmA12p2j3AchHjGRE
- Fn+nHLnTEgjor+3Txt8DMZlXUJtk3lgRvXIETt6JuBKjlzF+kg=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbtOvpMswhIJ8a3s@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:01 PM David Howells <dhowells@redhat.com> wrote:
->
-> Hi Alexandre,
->
-> >  Documentation/filesystems/caching/fscache.rst | 89 -------------------
-> > ...
-> >  fs/fscache/object.c                           |  3 -
-> >  fs/fscache/proc.c                             | 12 ---
->
-> Can you please drop all of the fscache bits?  They're dealt with by my
-> fscache-rewrite patchset that I'm proposing for the next merge window[1].
+On Thu 2021-12-16 15:35:42, Greg Kroah-Hartman wrote:
+> On Thu, Dec 16, 2021 at 03:14:38PM +0100, Petr Mladek wrote:
+> > There is the problem with kobject lifetime and module removal.
+> > module is removed after mod->exit() callback finishes. But some
+> > kobject release() callbacks might be delayed, especillay when
+> > CONFIG_DEBUG_KOBJECT_RELEASE is enabled.
+> 
+> Ick, modules and kobjects, just say no :)
 
-I've dropped them both from the asm-generic tree.
+I will try to persuade you that it is not that uncommon scenario,
+see below.
 
-       Arnd
+
+> > I have proposed there a solution where kobject_add_internal() takes reference
+> > on the module. It would make sure that the module will stay in the
+> > memory until the release callbacks is called, see
+> > https://lore.kernel.org/all/Ya84O2%2FnYCyNb%2Ffp@alley/
+> 
+> I don't want to add module pointers to kobjects.
+> 
+> kobjects are data.  modules are code.  Module references control code
+> lifespans.  Kobject references control data lifespans.  They are
+> different, so let us never mix the two please.
+
+I do not undestand this argument. The data are useless without the
+code. The code is needed to remove the data. Therefore the code should
+stay until the data are released.
+
+I am talking about data using statically defined kobj_type in modules.
+
+
+> Yes, release callbacks are code, but if you really need to worry about
+> your release callback being unloaded, then just refuse to unload your
+> module until your data is all released!
+
+This is exactly what I am proposing. If the kobject release callbacks
+are defined in the module then the module should stay as long as
+they are needed.
+
+
+> The huge majority of kobject users never touch them directly, they use
+> the driver model, which should not have this issue.  Only code that
+> wants to touch kobjects in the "raw" have problems like this, and if you
+> want to mess with them at that level, you can handle the release data
+> issue.
+
+There seems to be 14 simple modules that define static strcut
+kobj_type:
+
+$> for file in `git grep "static struct kobj_type" | cut -d : -f1 | sort -u` ; \
+       do grep -q "module_init" $file && echo $file ; \
+   done
+arch/sh/kernel/cpu/sh4/sq.c
+drivers/block/pktcdvd.c
+drivers/firmware/dmi-sysfs.c
+drivers/firmware/efi/efivars.c
+drivers/firmware/qemu_fw_cfg.c
+drivers/net/bonding/bond_main.c
+drivers/net/ethernet/ibm/ibmveth.c
+drivers/parisc/pdc_stable.c
+drivers/platform/x86/dell/dell-wmi-sysman/sysman.c
+drivers/platform/x86/intel/uncore-frequency.c
+drivers/platform/x86/uv_sysfs.c
+drivers/uio/uio.c
+kernel/livepatch/core.c
+samples/kobject/kset-example.c
+
+
+The other struct kobj_type are fined in 81 source files:
+
+$> for file in `git grep "static struct kobj_type" | cut -d : -f1 | sort -u` ;  \
+      do grep -q "module_init" $file || echo $file ; \
+   done | wc -l
+81
+
+
+I believe that most of them might be compiled as modules as well.
+There are many non-trivial drivers and file systes. From just a quick
+look:
+
+drivers/infiniband/hw/mlx4/sysfs.c
+fs/btrfs/sysfs.c
+fs/ext4/sysfs.c
+
+
+Well, we should probably discuss this in the original thread
+https://lore.kernel.org/r/20211129034509.2646872-3-ming.lei@redhat.com
+
+Best Regards,
+Petr

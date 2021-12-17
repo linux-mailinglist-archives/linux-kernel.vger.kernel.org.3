@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F046478587
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAE0478588
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 08:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbhLQHTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 02:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbhLQHTR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 02:19:17 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0E8C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 23:19:17 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so2405785pjj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 23:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
-        b=ppYoRuf5BYRYFtUCHIVp26O//D69jUq1cHIG13PDdpnFlOB+zdUo1T6YuLQTWtdjlR
-         t07nzKSzRqg50GJK4aJV521wnvr43DkRcR7ruw0EOeYcuOI/ZL7M4rGWZso1y+kigEW/
-         fzkHeHUupnt5k0II5iNH7HEQsEUj7GiaQZKCl3AgW0eIoILhTuvWXZ8W65QUov9c/VOm
-         rHGgb0uLyEJ4kvk02uMtVwIns7uEQDt4NcaCGVDQtfMWMIVETwQ5Jw5czrkEtRJfmivp
-         6AdVfBiaGs2zab4SLwqlSKAy9bOuM4+FBTyo9lPb/Inhv9yJulDdEDLV15TvbNHswDyH
-         BL+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
-        b=R0wCJXvtcAv430V7qMhtWFA6mx7QNxj5KR+6fSXlh5PR7MgBWarqDkiobW4CMDQiKF
-         29eefw9jroe15xkQCQG3bihH2PJyuGjFawr5rkf8yqJNHRi1DwK0d66dPbNAXsrUV9pc
-         1QXH1PtnlyZJeWs1MJ05DYVLKgMlf+rfK802b4iPKOe3WwQR8bAEdwbXaPMSwJXlqqVc
-         QE0appOGYAZuu2eHW4QfZAao5VVEIV1I2eJHSKvFhDW0IpSHmzdXhueY0t6XvhpuhSmq
-         kOyc0A2pTwZX42xtlYoJCaegXzhfQwTif9V5sXa/HzHAWqEIPIPdxxJcOKw0xtIPDNuR
-         ARWQ==
-X-Gm-Message-State: AOAM5307LLGE//VVmfAaCdjhNEejN0Ktax5hWMRNJYWG0dcHmV/oS626
-        JkEeRVhgOmt205xRxY2iuAxHaOcNmr3ybtDMnKg=
-X-Google-Smtp-Source: ABdhPJzJG7AVGcv/a5/lwvAhCAmEHlMp2lgdFdk/qpsVteivHpuVk6tYIxdxxFy34L8YGHusl2qLJ6UsSkKjz6DUalo=
-X-Received: by 2002:a17:902:9b8f:b0:142:7999:67fb with SMTP id
- y15-20020a1709029b8f00b00142799967fbmr1769570plp.24.1639725556731; Thu, 16
- Dec 2021 23:19:16 -0800 (PST)
+        id S233651AbhLQHUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 02:20:00 -0500
+Received: from mga07.intel.com ([134.134.136.100]:43256 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231258AbhLQHUA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 02:20:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639725600; x=1671261600;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UdJ0ib078EerhAGCS65Pb++4+rQUrLAfrqwJGNNXclQ=;
+  b=dhBtYXUEZXdoF2Sfbz9zZO5TXNsS0ygmisJgQTxhoGf/lHs3448pF4ja
+   h1oepVQFnTmzg5n8Io9kTpIPVTboMtOXr3BWbk5+uD6eC3hcRw8FLfIHn
+   cJyucoj0BK5dQQAcyghC8ovEJfqBHeZhmkKA14b+d0k3dnhwLgqAmJN5J
+   cNvOlcNYRba/8I+KIVGa0FoGhtS55tgf9lHPSIhwMmnlHgvfqUVzm7Ij9
+   RRW4UTNIKoXBOu4twsIo570O7v56gYvZAFlx9FFDWS2Ebc+rFG64Pll0M
+   RcL6saS7NMTaEsndwqHQoZo6Vjkq8ugR2SBWYyqLk5feErlCVGn/r8728
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="303075263"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="303075263"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 23:19:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="465031695"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 Dec 2021 23:19:58 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my7X3-0004PJ-Mh; Fri, 17 Dec 2021 07:19:57 +0000
+Date:   Fri, 17 Dec 2021 15:19:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [pinchartl-media:gmsl/max9286/bindings 2/45]
+ drivers/media/v4l2-core/v4l2-subdev.c:951:17: error: implicit declaration of
+ function '__v4l2_subdev_state_alloc'
+Message-ID: <202112171508.QfPJWLAu-lkp@intel.com>
 MIME-Version: 1.0
-Reply-To: mrselodieantonie778@yahoo.com
-Sender: pastorjohn1991@gmail.com
-Received: by 2002:a17:90a:e7cb:0:0:0:0 with HTTP; Thu, 16 Dec 2021 23:19:15
- -0800 (PST)
-From:   Mrs Elodie Antoine <mrselodieantoinea@gmail.com>
-Date:   Thu, 16 Dec 2021 23:19:15 -0800
-X-Google-Sender-Auth: yNBF-YzLC_vRMj0WCKzw3vAqAeo
-Message-ID: <CABk23+ns0_izap0AZnJhADdP8Bvh8KuFUSUbiTCa+oHjdsa0XQ@mail.gmail.com>
-Subject: COMPLIMENT OF THE SEASON
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CAN I TRUST YOU WITH  THIS (US$4.5 Million Dollars) FOR CHARITY WORKS,
+tree:   git://linuxtv.org/pinchartl/media.git gmsl/max9286/bindings
+head:   b551a93fb443867f1a950d6063910639bd303daf
+commit: 3e5486c9f448f3d9067b1050ed189db7d062fdf4 [2/45] media: subdev: add active state to struct v4l2_subdev
+config: sparc64-randconfig-r014-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171508.QfPJWLAu-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add pinchartl-media git://linuxtv.org/pinchartl/media.git
+        git fetch --no-tags pinchartl-media gmsl/max9286/bindings
+        git checkout 3e5486c9f448f3d9067b1050ed189db7d062fdf4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/media/v4l2-core/
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day,i know this letter will
-definitely come to you as a huge surprise, but I implore you to take
-the time to go through it carefully as the decision you make will go
-off a long way to determine my future and continued existence. I am
-Mrs Elodie Antoine
-aging widow of 59 years old suffering from long time illness. I have
-some funds I inherited from my late husband,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The sum of (US$4.5 Million Dollars) and I needed a very honest and God
-fearing  who can withdraw this money then use the funds for Charity
-works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
-your email address from the internet after honest prayers  to the LORD
-to bring me a helper and i decided to contact you if you may be
-willing and interested to handle these trust funds in good faith
-before anything happens to me.
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the  COMPANY issued to me as
-next of kin for immediate transfer of the money to your account in
-your country, to start the good work of God, I want you to use the
-15/percent of the total amount to help yourself in doing the project.
+All error/warnings (new ones prefixed by >>):
 
-
-I am desperately in keen need of assistance and I have summoned up
-courage to contact you for this task, you must not fail me and the
-millions of the poor people in our todays WORLD. This is no stolen
-money and there are no dangers involved,100% RISK FREE with full legal
-proof. Please if you would be able to use the funds for the Charity
-works kindly let me know immediately.I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish. I
-want you to take 15 percent of the total money for your personal use
-while 85% of the money will go to charity.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_init_finalize':
+>> drivers/media/v4l2-core/v4l2-subdev.c:951:17: error: implicit declaration of function '__v4l2_subdev_state_alloc' [-Werror=implicit-function-declaration]
+     951 |         state = __v4l2_subdev_state_alloc(sd);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-subdev.c:951:15: warning: assignment to 'struct v4l2_subdev_state *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     951 |         state = __v4l2_subdev_state_alloc(sd);
+         |               ^
+   drivers/media/v4l2-core/v4l2-subdev.c: In function 'v4l2_subdev_cleanup':
+>> drivers/media/v4l2-core/v4l2-subdev.c:963:9: error: implicit declaration of function '__v4l2_subdev_state_free' [-Werror=implicit-function-declaration]
+     963 |         __v4l2_subdev_state_free(sd->active_state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-Kindly reply me
+vim +/__v4l2_subdev_state_alloc +951 drivers/media/v4l2-core/v4l2-subdev.c
 
-Thanks and God bless you,
+   946	
+   947	int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
+   948	{
+   949		struct v4l2_subdev_state *state;
+   950	
+ > 951		state = __v4l2_subdev_state_alloc(sd);
+   952		if (IS_ERR(state))
+   953			return PTR_ERR(state);
+   954	
+   955		sd->active_state = state;
+   956	
+   957		return 0;
+   958	}
+   959	EXPORT_SYMBOL_GPL(v4l2_subdev_init_finalize);
+   960	
+   961	void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+   962	{
+ > 963		__v4l2_subdev_state_free(sd->active_state);
 
-Mrs Elodie Antoine
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

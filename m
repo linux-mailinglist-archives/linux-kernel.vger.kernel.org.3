@@ -2,96 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237514787E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACC44787EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbhLQJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:40:18 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52142 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231424AbhLQJkR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:40:17 -0500
-X-UUID: 739e4f17ed6344d8b57e2ec7e346b916-20211217
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=LFuvPDvVS7YXcoMdMdzOjSmOP3E+q15kLCf4Y2V8vIc=;
-        b=lJ/qNDefG158NJQf/f+jeyZEKB5aSq8cpoZp2DZReS47XgS+St4mbcqMEH19a312jzSPdILwyyyKhpnoj3m6Zbq394Y6ldalfCYE0E4IMaP7bbixgsYGF++2jn67dYJdT+TVUheFT8w6HfwxjXH4nSNc02RqeqfG6G1N1FVgJj4=;
-X-UUID: 739e4f17ed6344d8b57e2ec7e346b916-20211217
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1906484326; Fri, 17 Dec 2021 17:40:15 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 17 Dec 2021 17:40:14 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Dec 2021 17:40:13 +0800
-Message-ID: <609eb0eea02b2304f427d4f2e9c26de9f2149f06.camel@mediatek.com>
-Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if
- hibernated
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Jun Li <lijun.kernel@gmail.com>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Yun-Chien Yu <yun-chien.yu@mediatek.com>
-Date:   Fri, 17 Dec 2021 17:40:15 +0800
-In-Reply-To: <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
-References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
-         <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com>
-         <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
-         <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S234484AbhLQJlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:41:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:53978 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234472AbhLQJk7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 04:40:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E33331435;
+        Fri, 17 Dec 2021 01:40:58 -0800 (PST)
+Received: from [10.57.8.4] (unknown [10.57.8.4])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 08D623F774;
+        Fri, 17 Dec 2021 01:40:56 -0800 (PST)
+Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
+ are unavailable
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+References: <20211208160907.749482-1-james.clark@arm.com>
+ <20211208160907.749482-2-james.clark@arm.com>
+ <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
+ <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
+ <20211210172220.GA1238770@p14s>
+ <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <d884f96c-1d4c-119e-5e83-3674260a9694@arm.com>
+Date:   Fri, 17 Dec 2021 09:40:55 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTEyLTE0IGF0IDEyOjA1ICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
-PiBPbiAxNC4xMi4yMDIxIDEwLjAwLCBKdW4gTGkgd3JvdGU6DQo+ID4gTWF0aGlhcyBOeW1hbiA8
-bWF0aGlhcy5ueW1hbkBsaW51eC5pbnRlbC5jb20+IOS6jjIwMjHlubQxMuaciDEx5pel5ZGo5YWt
-DQo+ID4gMDE6NTblhpnpgZPvvJoNCj4gPiA+IA0KPiA+ID4gT24gOS4xMi4yMDIxIDkuMjIsIENo
-dW5mZW5nIFl1biB3cm90ZToNCj4gPiA+ID4gV2hlbiB4SENJIGNvbnRyb2xsZXIgaGliZXJuYXRl
-ZCwgdGhlIHJvb3QgaHViIGxvc3QgcG93ZXIsIGlmDQo+ID4gPiA+IGNvbnRyb2xsZXINCj4gPiA+
-ID4gc3VwcG9ydCBQb3J0IFBvd2VyIENvbnRyb2wgKFBQQyksIFBQIGlzIG5vdCBzZXQgYXQNCj4g
-PiA+ID4geGhjaV9yZXN1bWUoKSBhbmQNCj4gPiA+ID4gc2V0IGJ5IGh1Yl9yZXNldF9yZXN1bWUo
-KSBsYXRlciwgc28gbm8gbmVlZCBjaGVjayBwZW5kaW5nIHBvcnQNCj4gPiA+ID4gZXZlbnQuDQo+
-ID4gPiA+IElmIFBQQyBpcyBub3Qgc3VwcG9ydGVkLCBkZXZpY2UgaXMgZGlzY29ubmVjZWQsIHNl
-ZW1zIGRvIG5vdA0KPiA+ID4gPiBzZW5kIG91dA0KPiA+ID4gPiBVMyBMRlBTIHdha2Ugc2lnbmFs
-LCBubyBuZWVkIHJlLWNoZWNrIGFnYWluIGFuZCBkcm9wIDEyMG1zDQo+ID4gPiA+IGRlbGF5IHRv
-DQo+ID4gPiA+IHNhdmUgcmVzdW1lIHRpbWUuDQo+ID4gPiA+IA0KPiA+ID4gPiBSZXBvcnRlZC1i
-eTogWXVuLUNoaWVuIFl1IDx5dW4tY2hpZW4ueXVAbWVkaWF0ZWsuY29tPg0KPiA+ID4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4g
-PiA+IC0tLQ0KPiA+ID4gDQo+ID4gPiBUaGFua3MsIGFkZGluZw0KPiA+IA0KPiA+IEhpIE1hdGhp
-YXMsIENodW5mZW5nDQo+ID4gDQo+ID4gSSBoYXZlIGEgcXVlc3Rpb24gb24gdGhpcywgaWYgdGhl
-cmUgaXMgbm8gYW55IHVzYiBkZXZpY2VzIGNvbm5lY3RlZA0KPiA+IGJlZm9yZSBzdXNwZW5kLCBk
-byB3ZSBuZWVkIHRoaXMgMTIwbXMgZGVsYXkgdG8gY2hlY2sgYWdhaW4/DQo+ID4gU28gZG8gd2Ug
-bmVlZCBvbmUgbW9yZSBjb25kaXRpb24gdG8gbGltaXQgdGhpcyBsaWtlPw0KPiA+IGlmICghcGVu
-ZGluZ19wb3J0ZXZlbnQgJiYgIWhpYmVybmF0ZWQgJiYgeGhjaV9oYXNfY2hpbGRfZGV2aWNlKCkp
-DQo+IA0KPiBUaGUgMTIwbXMgZGVsYXkgd2FzIGFkZGVkIHRvIG1ha2Ugc3VyZSB3ZSBjYXRjaCB0
-aGUgc2Vjb25kIHdha2UNCj4gc2lnbmFsDQo+IGZyb20gYSBkZXZpY2UgaW4gY2FzZSBob3N0IG1p
-c3NlZCB0aGUgZmlyc3QgVTMgZXhpdCBMRlBTIHdha2V1cA0KPiBzaWduYWwuDQo+IA0KPiBFdmVu
-IGlmIG5vIGRldmljZXMgYXJlIGNvbm5lY3RlZCB0aGlzIG1pZ2h0IGJlIGhlbHBmdWwgaWYgYSBk
-ZXZpY2UgaXMNCj4gY29ubmVjdGVkIHdoaWxlIGhvc3QgaXMgc3VzcGVuZGVkLg0KPiBJIGhhdmVu
-J3QgY2hlY2tlZCBhbnkgdGltaW5nIGZvciB0aGUgbGluayB0cmFpbmluZyBkdXJpbmcNCj4gZW51
-bWVyYXRpb24sDQo+IGJ1dCBpdCBhbHNvIHVzZXMgTEZQUyBzaWduYWxsaW5nLCBhbmQgY29ubmVj
-dGVkIGRldmljZSBpc24ndCB2aXNpYmxlDQo+IHRvDQo+IGRyaXZlciB1bnRpbCBsaW5rIGlzIHN1
-Y2Nlc3NmdWxseSB0cmFpbmVkLg0KRm9yIHhoY2ktbXRrLCByb290aHViIGNhbid0IGRldGVjdCBk
-ZXZpY2UgdW50aWwgcm9vdCBodWIgc2V0IFBvcnRQb3dlciwNCnNlZW1zIGFsc28gdGhlIHNhbWUg
-Zm9yIG90aGVyIHhoY2kgY29udHJvbGxlcnMgdGhhdCBzdXBwb3J0IFBvcnQgUG93ZXINCkNvbnRy
-b2wuDQo+IA0KPiBTbyB0aGUgb3JpZ2luYWwgMTIwbXMgZGVsYXkgcGF0Y2ggbWlnaHQgYXMgYSBw
-b3NpdGl2ZSBzaWRlIGVmZmVjdA0KPiBlbnN1cmUNCj4gZHJpdmVyIGRvZXNuJ3Qgc3VzcGVuZCBo
-b3N0IG1pZCBkZXZpY2UgZW51bWVyYXRpb24uDQp0aGlzIGlzIGluIHJlc3VtZT8NCg0KPiANCj4g
-Q291bGQgYmUgbG9va2VkIGludG8gbW9yZSwgYnV0IEkgZG9uJ3QgdGhpbmsgd2Ugc2hvdWxkIHRo
-aXMgcGF0Y2ggYnkNCj4gQ2h1bmZlbmcNCj4gDQo+IFRoYW5rcw0KPiBNYXRoaWFzDQo=
 
+
+On 13/12/2021 09:48, Mike Leach wrote:
+> Hi James,
+> 
+> A couple of points - relating mainly to docs:
+> 
+
+Hi Mike,
+
+Thanks for the feedback. I was in the process of adding some docs and
+ran into this https://lkml.org/lkml/2021/12/16/1087 so I went to fix
+that first. Now I will add some more details and resubmit.
+
+> 1. Activating branch broadcast overrides any setting of return stack.
+> As a minimum there needs to be a documentation update to reflect this
+> -Setting both options is not prohibited in hardware - and in the case
+> where we can use branch broadcast over a range both are then relevant.
+> 
+
+Do you mean that if branch broadcast and return stacks are both requested,
+but branch broadcast is limited to a range, return stacks will only be
+available outside that branch broadcast range? But if branch broadcast is
+enabled for all ranges there will be no return stacks at all?
+
+> 2. A documented note to reflect that choosing this option will result
+> in a significant increase in the amount of trace generated - possible
+> danger of overflows, or less actual instructions covered. In addition
+> perhaps documents could reflect the intended use-case for this option,
+> given the disadvantages.
+> 
+
+Will do.
+
+> 3. Has this been tested in a situation where it will be of use?
+> Testing against static code images will show the same decoded trace
+> output as not using branch broadcast. (although the packet dumps will
+> show additional output)> 
+> Given a primary use is for situations where code is patched or
+> dynamically altered at runtime - then this can affect the full decode
+> output. If the code is being patched to only alter the branch
+> addresses then decode should work against static images.
+> If, however, we are tracing code that adds in new branches, on top of
+> NOPs for example, then the decoding against the original static image
+> will be wrong, as the image will have the NOPs, rather than the branch
+> instructions so the apparent location of E atoms will be in a
+> different position to the actual code. Is there anything in perf that
+> will ensure that the patched code is presented to the decoder?
+> 
+> If there are potential decode issues - these too need documenting.
+> 
+
+I'm not sure this should be a blocking issue for this set. Branch broadcast
+could already be enabled by setting the mode via sysfs. And the perf decode
+part isn't necessarily a step in the workflow, maybe someone wants to gather
+data for another tool.
+
+I will do some testing after this change though, but I imagine we would have
+had issues reported it it wasn't working already which lowers the priority.
+
+James
+
+> Other than the documents and testing,  I cannot see any issues with
+> this patch set in terms of setting and enabling the option.
+> 
+> Regards
+> 
+> Mike
+> 
+> 
+> On Fri, 10 Dec 2021 at 17:22, Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+>>
+>> Hi James,
+>>
+>> On Thu, Dec 09, 2021 at 11:13:55AM +0000, James Clark wrote:
+>>>
+>>>
+>>> On 09/12/2021 11:00, Suzuki K Poulose wrote:
+>>>> On 08/12/2021 16:09, James Clark wrote:
+>>>>> Maintain consistency with the other options by failing to open when they
+>>>>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
+>>>>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
+>>>>> requested but not supported by hardware.
+>>>>>
+>>>>> The consequence of not doing this is that the user may not be
+>>>>> aware that they are not enabling the feature as it is silently disabled.
+>>>>>
+>>>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>>>> ---
+>>>>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
+>>>>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>>>>> index d2bafb50c66a..0a9bb943a5e5 100644
+>>>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>>>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>>>>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>>>>>       }
+>>>>>         /* return stack - enable if selected and supported */
+>>>>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
+>>>>> -        /* bit[12], Return stack enable bit */
+>>>>> -        config->cfg |= BIT(12);
+>>>>> -
+>>>>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
+>>>>> +        if (!drvdata->retstack) {
+>>>>> +            ret = -EINVAL;
+>>>>> +            goto out;
+>>>>> +        } else {
+>>>>> +            /* bit[12], Return stack enable bit */
+>>>>> +            config->cfg |= BIT(12);
+>>>>> +        }
+>>>>
+>>>> nit: While at this, please could you change the hard coded value
+>>>> to ETM4_CFG_BIT_RETSTK ?
+>>>>
+>>> I started changing them all because I had trouble searching for bits by name but then
+>>> I thought it would snowball into a bigger change so I undid it.
+>>>
+>>> I think I'll just go and do it now if it's an issue here.
+>>
+>> I can apply this set right away and you send another patch to fix all hard coded
+>> bitfields or you can send another revision with all 4 patches included in it
+>> (bitfields fix plus these 3).  Just let me know what you want to do.  And next
+>> time please add a cover letter.
+>>
+>> Thanks,
+>> Mathieu
+>>
+>>>
+>>>> Otherwise, looks good to me
+>>>>
+>>>> Suzuki
+> 
+> 
+> 

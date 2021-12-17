@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DA4479564
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205C547956D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbhLQUWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:22:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:34292 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231205AbhLQUWx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:22:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A332912FC;
-        Fri, 17 Dec 2021 12:22:52 -0800 (PST)
-Received: from [192.168.122.166] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 338BC3F5A1;
-        Fri, 17 Dec 2021 12:22:52 -0800 (PST)
-Message-ID: <54582d01-6da1-cc2f-f318-e42b9c473daf@arm.com>
-Date:   Fri, 17 Dec 2021 14:22:51 -0600
+        id S239552AbhLQU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:27:03 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19212 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231205AbhLQU0y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 15:26:54 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHJdw2Z023548;
+        Fri, 17 Dec 2021 20:26:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NT8db8cmKoNvU/LxztBiVOpOTYslDCSznAhdQdxmHqo=;
+ b=HA0csOhPpzoDkWPmTGiMLqbSU4ICpW/mW0yhEtTCF/gv2TQ6HlAxh1AGbkFYbhOjx5Sm
+ ACR+WonPxG1s2C5CVW1vsHzQ8GVnHO9qUflpvR4Oy+0aPq0edw3+iV4qiXlG2L8rEFw4
+ 5vonU5sfQ/C2E2lS3LrZnrdBlQBLvB1wpGF1/xLs39JtudljHPuSs4nldLbAizDL4OEI
+ jRSgdctF9MW547K2KDUGWR/5iQoBSDYWexJ/UcIeEqCsuJgKF50/Vn6FVdp+8cg25xlm
+ l+daYXMpfj6akteG5f9N61Verg0j+QIMnqHW6XUZIQde+cIUSyTiwgbP47mDZbP2vpip /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d08snyn3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 20:26:53 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHKQ6pf024095;
+        Fri, 17 Dec 2021 20:26:53 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d08snyn3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 20:26:53 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHK9mjl026992;
+        Fri, 17 Dec 2021 20:26:52 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01dal.us.ibm.com with ESMTP id 3cy7e593s7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 20:26:52 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHKQpa831392092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 20:26:51 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1CC88124058;
+        Fri, 17 Dec 2021 20:26:51 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEAB1124054;
+        Fri, 17 Dec 2021 20:26:46 +0000 (GMT)
+Received: from [9.211.79.24] (unknown [9.211.79.24])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Dec 2021 20:26:46 +0000 (GMT)
+Message-ID: <37b5de48-adef-225e-fafc-f918b64e7736@linux.ibm.com>
+Date:   Fri, 17 Dec 2021 15:26:45 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
+Subject: Re: [PATCH 13/32] KVM: s390: pci: add basic kvm_zdev structure
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
-        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
-References: <20211216233125.1130793-1-robh@kernel.org>
- <20211216233125.1130793-3-robh@kernel.org>
- <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
- <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
- <836fd983-463c-040d-beb3-fee3faf215d6@arm.com>
- <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <CAL_JsqJM=dDxqEnnwbRLiemLS0XUqEe6RBZViLem8qoiDbPPjw@mail.gmail.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-14-mjrosato@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-14-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ry33nit8jVfWMuT3yOTY4xszTU6h-RWu
+X-Proofpoint-GUID: 1EemLL_KH73qOu0sqW9anHsGLX51NoaG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_08,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170112
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/17/21 13:35, Rob Herring wrote:
-> On Fri, Dec 17, 2021 at 1:08 PM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2021-12-17 18:14, Rob Herring wrote:
->>> On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>>>
->>>> Hi Rob,
->>>>
->>>> On 2021-12-16 23:31, Rob Herring wrote:
->>>>> Use the minimum CPU h/w id of the CPUs associated with the cache for the
->>>>> cache 'id'. This will provide a stable id value for a given system. As
->>>>> we need to check all possible CPUs, we can't use the shared_cpu_map
->>>>> which is just online CPUs. There's not a cache to CPUs mapping in DT, so
->>>>> we have to walk all CPU nodes and then walk cache levels.
->>>>
->>>> I believe another expected use of the cache ID exposed in sysfs is to
->>>> program steering tags for cache stashing (typically in VFIO-based
->>>> userspace drivers like DPDK so we can't realistically mediate it any
->>>> other way). There were plans afoot last year to ensure that ACPI PPTT
->>>> could provide the necessary ID values for arm64 systems which will
->>>> typically be fairly arbitrary (but unique) due to reflecting underlying
->>>> interconnect routing IDs. Assuming that there will eventually be some
->>>> interest in cache stashing on DT-based systems too, we probably want to
->>>> allow for an explicit ID property on DT cache nodes in a similar manner.
->>>
->>> If you have a suggestion for ID values that correspond to the h/w,
->>> then we can add them. I'd like a bit more than just trusting that ID
->>> is something real.
->>>
->>> While the ACPI folks may be willing to take an arbitrary index, it's
->>> something we (mostly) avoid for DT.
->>
->> Not really. On the CHI side there are two fields - StashNID, which could
->> be any node ID value depending on the interconnect layout, plus
->> (optionally) StashLPID to address a specific cache within that node if
->> it's something like a CPU cluster. However, how a PCIe TLP steering tag
->> translates to those fields in the resulting CHI flit is largely up to
->> the root complex.
+On 12/7/21 3:57 PM, Matthew Rosato wrote:
+> This structure will be used to carry kvm passthrough information related to
+> zPCI devices.
 > 
-> Knowing next to nothing about CHI, this means pretty much nothing to me. :(
-> 
-> I would guess there is a bit more to supporting CHI in DT systems than
-> just a cache ID.
-> 
->> I think it's going to be more like a "reg" property than a nice
->> validatable index.
->>
->>>> That said, I think it does make sense to have some kind of
->>>> auto-generated fallback scheme *as well*, since I'm sure there will be
->>>> plenty systems which care about MPAM but don't support stashing, and
->>>> therefore wouldn't have a meaningful set of IDs to populate their DT
->>>> with. Conversely I think that might also matter for ACPI too - one point
->>>> I remember from previous discussions is that PPTT may use a compact
->>>> representation where a single entry represents all equivalent caches at
->>>> that level, so I'm not sure we can necessarily rely on IDs out of that
->>>> path being unique either.
->>>
->>> AIUI, cache ids break the compact representation.
->>
->> Right, firmware authors can't use it if they do want to specify IDs, but
->> that also means that if we find we *are* consuming a compact PPTT, then
->> chances are we're not getting meaningful IDs out of it for MPAM to rely on.
-> 
-> Sounds like broken firmware is in our future. ;) Or ACPI can default
-> to the same id scheme.
-> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+...
+>   static inline bool zdev_enabled(struct zpci_dev *zdev)
+> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
+> index b3aaadc60ead..95ea865e5d29 100644
+> --- a/arch/s390/kvm/Makefile
+> +++ b/arch/s390/kvm/Makefile
+> @@ -10,6 +10,6 @@ common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
+>   ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
+>   
+>   kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o sigp.o
+> -kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
+> +kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o pci.o
 
-Yah, that is a problem. The ID's provided by the ACPI cache ID field are 
-as officially meaningless as the ones we can generate from the existing 
-fw_token mechanism. Given that, they don't really add anything beyond 
-what we can achieve simply by encoding the level somewhere in the 
-fw_token currently in use if we want something that is globally unique 
-rather than just unique for a given cache level+I/D. Their one advantage 
-though is that they can be more human readable at the cost of 2-3X the 
-size of the table, with the additional problem of having to worry about 
-them being populated in all the cache structures in the table. Its 
-almost easier to revisit some of the earlier discussion and generate a 
-uniq id, and then renumber them at the end.
+This should instead be
 
+kvm-objs-$(CONFIG_PCI) += pci.o
 
-If you want to encode some kind of routing ID in them, then that will 
-have to be standardized, and I would guess it might be easier to add the 
-routing ID's to the structure than retroactively add meaning to the ID 
-field if anyone is actually using it. Or just create yet another lookup 
-table to translate the id to something meaningful.
+I think this makes sense as we aren't about to do PCI passthrough 
+support anyway if the host kernel doesn't support PCI (no vfio-pci, 
+etc).   This will quiet the kernel test robot complaints about 
+CONFIG_PCI_NR_FUNCTIONS seen on the next patch in this series.
 
-
-
-
-
-
-
+>   
+>   obj-$(CONFIG_KVM) += kvm.o

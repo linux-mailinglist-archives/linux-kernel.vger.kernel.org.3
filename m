@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61139478B67
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4000478B6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236303AbhLQMdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:33:09 -0500
-Received: from mga04.intel.com ([192.55.52.120]:2609 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236284AbhLQMdI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:33:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238488180"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="238488180"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:33:08 -0800
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="465108799"
-Received: from jvowlesx-mobl.amr.corp.intel.com ([10.212.181.65])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 04:33:07 -0800
-Message-ID: <4d8308f4a3249b662536371e14e6cd6ef723f5a9.camel@linux.intel.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: ipc: Specify no cache snooping on
- TGL and ADL
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Ye Xiang <xiang.ye@intel.com>, jikos@kernel.org, jic23@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 17 Dec 2021 04:33:07 -0800
-In-Reply-To: <20211217074541.4705-1-xiang.ye@intel.com>
-References: <20211217074541.4705-1-xiang.ye@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        id S236328AbhLQMeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233802AbhLQMeO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 07:34:14 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE082C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 04:34:13 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
+        by andre.telenet-ops.be with bizsmtp
+        id XQaB2600T250X3001QaBJ6; Fri, 17 Dec 2021 13:34:11 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1myCR9-005Yog-49; Fri, 17 Dec 2021 13:34:11 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1myCR8-00ASKe-MS; Fri, 17 Dec 2021 13:34:10 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v3 0/2] dt-bindings: interrupt-controller: sifive,plic: Miscellaneous improvements
+Date:   Fri, 17 Dec 2021 13:34:02 +0100
+Message-Id: <cover.1639744106.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-17 at 15:45 +0800, Ye Xiang wrote:
-> Specify that both TGL and ADL don't support DMA cache snooping.
-> 
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+	Hi all,
 
-> ---
->  drivers/hid/intel-ish-hid/ipc/ipc.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/intel-ish-hid/ipc/ipc.c b/drivers/hid/intel-
-> ish-hid/ipc/ipc.c
-> index 45e0c7b1c9ec..8ccb246b0114 100644
-> --- a/drivers/hid/intel-ish-hid/ipc/ipc.c
-> +++ b/drivers/hid/intel-ish-hid/ipc/ipc.c
-> @@ -909,7 +909,11 @@ static uint32_t ish_ipc_get_header(struct
-> ishtp_device *dev, int length,
->   */
->  static bool _dma_no_cache_snooping(struct ishtp_device *dev)
->  {
-> -       return dev->pdev->device == EHL_Ax_DEVICE_ID;
-> +       return (dev->pdev->device == EHL_Ax_DEVICE_ID ||
-> +               dev->pdev->device == TGL_LP_DEVICE_ID ||
-> +               dev->pdev->device == TGL_H_DEVICE_ID ||
-> +               dev->pdev->device == ADL_S_DEVICE_ID ||
-> +               dev->pdev->device == ADL_P_DEVICE_ID);
->  }
->  
->  static const struct ishtp_hw_ops ish_hw_ops = {
+This patch series contains two improvements for the SiFive PLIC DT
+bindings.
 
+Changes compared to v2[1]:
+  - Add Acked-by, Reviewed-by.
 
+Changes compared to v1[2]:
+  - Split in two patches,
+  - Improve patch description and document limit rationale.
+
+Thanks!
+
+[1] https://lore.kernel.org/r/cover.1639661878.git.geert@linux-m68k.org
+[2] https://lore.kernel.org/r/20211125152233.162868-1-geert@linux-m68k.org
+
+Geert Uytterhoeven (2):
+  dt-bindings: interrupt-controller: sifive,plic: Fix number of
+    interrupts
+  dt-bindings: interrupt-controller: sifive,plic: Group interrupt tuples
+
+ .../interrupt-controller/sifive,plic-1.0.0.yaml      | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

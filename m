@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580924791E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810854791E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239363AbhLQQwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbhLQQvx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:51:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00C5C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 08:51:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F767B828FF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 16:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB3CC36AE1;
-        Fri, 17 Dec 2021 16:51:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639759911;
-        bh=tuQrVEIodDfTP/WIeUxfIZy0X9WpU5zJkldM4Fk5eCQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+6n4O1OOPNczcbNWZxVZ3pF37qVcJ2KwXhaxcVrDGJkpQ6GF/Yhs68GXX8lzQF0e
-         UPywYr8tXGnjwMN7F7kDxF3A4j4/fROKAYwV3KblL01gCtAMmGVZZ+cmVjkOL02NGt
-         muAgEU/Fcu4oSmzZClLFzvfP3WeR85wqfqJm/VisMCkRyzxzpsodrz5KdFUq4GxH0w
-         f3vT8EW+Tvzyeb9dAbwSlQvJzgNr7UeMKV8/JsJeeusXRMwMVpizR2Ki92GSArZ19D
-         Pzo2e5fe1J3OR03v9y7e6/VtE+C/7cwecasJa+KHybXFoa87zuOZTPdjFeB5N1Z6lO
-         AZTV1n6Pnz+Xg==
-Date:   Fri, 17 Dec 2021 08:51:49 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     "Yang.Lee" <yang.lee@linux.alibaba.com>
-Cc:     chao <chao@kernel.org>,
-        linux-f2fs-devel <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: =?utf-8?B?5Zue5aSN77yaW1BBVEM=?= =?utf-8?Q?H?= -next] f2fs:
- Simplify bool conversion
-Message-ID: <YbzAJWlnSHrnR4/X@google.com>
-References: <20211215023858.33303-1-yang.lee@linux.alibaba.com>
- <YbuTLr/HJO3IMI6u@google.com>
- <fc89c7e6-ced2-40e1-9d01-496a3b60b268.yang.lee@linux.alibaba.com>
+        id S239369AbhLQQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:52:47 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:48858 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239352AbhLQQwq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:52:46 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowACnrVlKwLxhCKpqAw--.17695S2;
+        Sat, 18 Dec 2021 00:52:26 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] isoc: mediatek: Fix dereference of null pointer while alloc fail
+Date:   Sat, 18 Dec 2021 00:52:20 +0800
+Message-Id: <20211217165220.675485-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fc89c7e6-ced2-40e1-9d01-496a3b60b268.yang.lee@linux.alibaba.com>
+X-CM-TRANSID: rQCowACnrVlKwLxhCKpqAw--.17695S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3tFy7ZrW8XFyDKFy3Arb_yoW8tr43pF
+        48tay2yrWrGrW7Wr1vkrWDuFyS934Iya47K34Ygw1av3s8Jrn5JFyFya4jyF4kCFykKa13
+        tr42qrWxCF1UZF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_JwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUj_-PUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17, Yang.Lee wrote:
-> "Why not this?
->   sbi->gc_urgent_high_limited = t;"
-> 
-> Since 't' is an unsigned long type and 'gc_urgent_high_limited' is a bool type, the assignment operation will cause a new warning.
+Sorry, maybe I do not fully understand the meaning of your review
+comments and I really fail to behave polite.
+This time I carefully check all the comments and believe I have already
+obey all the request.
+The message as follow is my new comments.
+If there are also problems, please let me know and I will correct in
+time.
 
-Huh, that doesn't allow auto casting as well.
+Because devm_clk_get() will not always success.
+It should be better to check the return value in order to
+avoid use of error pointer in case of the failure.
+Therefore, we should use the IS_ERR() to check the error pointer and
+return -ENOMEM if it is and 0 if not.
+Also, we deal with the return value in init_scp.
 
-> 
-> 
-> ------------------------------------------------------------------
-> 发件人：Jaegeuk Kim <jaegeuk@kernel.org>
-> 发送时间：2021年12月17日(星期五) 03:27
-> 收件人：Yang Li <yang.lee@linux.alibaba.com>
-> 抄　送：chao <chao@kernel.org>; linux-f2fs-devel <linux-f2fs-devel@lists.sourceforge.net>; linux-kernel <linux-kernel@vger.kernel.org>; Abaci Robot <abaci@linux.alibaba.com>
-> 主　题：Re: [PATCH -next] f2fs: Simplify bool conversion
-> 
-> On 12/15, Yang Li wrote:
-> > Fix the following coccicheck warning:
-> > ./fs/f2fs/sysfs.c:491:41-46: WARNING: conversion to bool not needed here
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> > ---
-> >  fs/f2fs/sysfs.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > index 9e1cf44642ae..530c36b89bf1 100644
-> > --- a/fs/f2fs/sysfs.c
-> > +++ b/fs/f2fs/sysfs.c
-> > @@ -488,7 +488,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
-> >  
-> >   if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
-> >    spin_lock(&sbi->gc_urgent_high_lock);
-> > -  sbi->gc_urgent_high_limited = t == 0 ? false : true;
-> > +  sbi->gc_urgent_high_limited = t != 0;
-> 
-> Why not this?
->   sbi->gc_urgent_high_limited = t;
-> 
-> >    sbi->gc_urgent_high_remaining = t;
-> >    spin_unlock(&sbi->gc_urgent_high_lock);
-> >  
-> > -- 
-> > 2.20.1.7.g153144c
-> 
+Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple platform")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
+
+v1 -> v2
+
+*Change 1. Correct the commit message.
+---
+ drivers/soc/mediatek/mtk-scpsys.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
+index ca75b14931ec..778d6ffc42b8 100644
+--- a/drivers/soc/mediatek/mtk-scpsys.c
++++ b/drivers/soc/mediatek/mtk-scpsys.c
+@@ -411,12 +411,16 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+ 	return ret;
+ }
+ 
+-static void init_clks(struct platform_device *pdev, struct clk **clk)
++static int init_clks(struct platform_device *pdev, struct clk **clk)
+ {
+ 	int i;
+ 
+-	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
++	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
+ 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
++		if (IS_ERR(clk[i]))
++			return -ENOMEM;
++	}
++	return 0;
+ }
+ 
+ static struct scp *init_scp(struct platform_device *pdev,
+@@ -426,7 +430,7 @@ static struct scp *init_scp(struct platform_device *pdev,
+ {
+ 	struct genpd_onecell_data *pd_data;
+ 	struct resource *res;
+-	int i, j;
++	int i, j, ret;
+ 	struct scp *scp;
+ 	struct clk *clk[CLK_MAX];
+ 
+@@ -481,7 +485,9 @@ static struct scp *init_scp(struct platform_device *pdev,
+ 
+ 	pd_data->num_domains = num;
+ 
+-	init_clks(pdev, clk);
++	ret = init_clks(pdev, clk);
++	if (ret)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	for (i = 0; i < num; i++) {
+ 		struct scp_domain *scpd = &scp->domains[i];
+-- 
+2.25.1
+

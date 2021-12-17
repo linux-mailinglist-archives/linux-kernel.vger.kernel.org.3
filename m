@@ -2,173 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 371EB479623
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5BE47963E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbhLQVUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:20:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32258 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229436AbhLQVUe (ORCPT
+        id S229590AbhLQVZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLQVZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:20:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639776033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
-        b=ApO3o05P6MqO26v8j8WB3M6RGAzbCRgLobY6g7jDdqUVDfAWFH7yaRlmexJmH4E8fMkwcS
-        jAvXcwNga9DOdXVhVrdURF5fT7SG1IUmVrA+OAr1mEydM00tP5uyvP9z4Gi19AkvMn7mDp
-        b2GFnC9RvS6poGkBaDrcQN/pNT1d1EE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-JPIg0WnOP82lNA3z_0H4YA-1; Fri, 17 Dec 2021 16:20:32 -0500
-X-MC-Unique: JPIg0WnOP82lNA3z_0H4YA-1
-Received: by mail-wm1-f71.google.com with SMTP id 69-20020a1c0148000000b0033214e5b021so1255991wmb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:20:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
-        b=ShZ2Z7pD+YlGbdh/FibgnGe0Epwhh9UL+e0qa0XHEINtYCTMp2IR0gcg/MSe0bMQ5E
-         zLfDQtH1WN63q3wVoXmQ6v0jzEOw9ma21qrpSyexbKUIjtd3SvktWebwBA5xPJKSrWIF
-         a3Wcpwonu4strkjAIr+2wC2DziIIB0XPe6fJPkWoSHaWyjTp7i8dJw7agVGeJttROwwf
-         Mvu7QBXqJJIuKab4I19SbaW7ym1rcc2Z7y7AVnL+y+chUzKVFabA3Vx3FI24QZBNBQdw
-         YQM3NixPJCe/s2iSIixi7dXdnLw3ATB/aZExFws/FW7TEb71/bzI3gY2qRA2+kvk5hdJ
-         Auig==
-X-Gm-Message-State: AOAM530d8m+mxEMvtpisokF10IFAQBU3O1wWdn4khmrPOytiJ3gA4sre
-        jlwAC9qKpIwsRLe2y7Zj43AZ4udAN3Tw8WezIVPNbQ/Pq74iiftc7Rqgl7ucAO1kAY0Md3qnFSO
-        8gbWne3z2Hwy/fplWbvj9Fk4y
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927165wrb.148.1639776031462;
-        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJynyrJqHzLIVQ/5dOHLdUALTS3GVx082kmC3nUnoCPPI43f3cBoGLl7cQzviQKhtACK6Zxaeg==
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927144wrb.148.1639776031272;
-        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id b13sm8544391wrh.32.2021.12.17.13.20.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 13:20:30 -0800 (PST)
-Message-ID: <0d96835d-bcf4-1192-536c-0af314405880@redhat.com>
-Date:   Fri, 17 Dec 2021 22:20:29 +0100
+        Fri, 17 Dec 2021 16:25:40 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B248C061574;
+        Fri, 17 Dec 2021 13:25:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=S7LXRSQEkoRerRyKuK4DAJnCEMjCVJDDgaO1V4T78uY=; b=P1roXXq4nnOui4pnY9nhlOZbvU
+        uIrx2mlyHxL/qh/pgwAlIk7O0jQxKJ/K/k9W1RxNTLJAvO4zyBM8T1hScoULtK0A9GnoVFS443HGh
+        2+RXvZI2TlJ7YwbzWzDeVxSocZNQR+P2nqiw3vJs0xrBqkBZjDkfqpQU3i4IW6MOT4sHJvtjk3NY7
+        zF6YUKAnN/6usrtpfP+/Xp3L+D+va08D99w2cbdxCzd3tpCwxSlYDcSTqNP5Nb5M9g+s5s3HnMe8L
+        fcvHBm8g+GvdV4apyn3hsZDcMJtU/id40K/hNUXWWpFOFYR3EYTZANCtYNKYOHqfIL2JAhp4XMjzN
+        k7q3viyw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1myKjP-001xcR-Hw; Fri, 17 Dec 2021 21:25:35 +0000
+Message-ID: <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
+Date:   Fri, 17 Dec 2021 13:25:30 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
+ Thunderbird/91.4.0
+Subject: Re: linux-next: Tree for Dec 17
+ (drivers/reset/reset-starfive-jh7100.c)
 Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20211218003339.0061dcb4@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211218003339.0061dcb4@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.21 22:15, Nadav Amit wrote:
+
+
+On 12/17/21 05:33, Stephen Rothwell wrote:
+> Hi all,
 > 
-> 
->> On Dec 17, 2021, at 12:47 PM, Jason Gunthorpe <jgg@nvidia.com> wrote:
->>
->> On Fri, Dec 17, 2021 at 12:36:43PM -0800, Linus Torvalds wrote:
->>
->>>> 5. Take a R/O pin (RDMA, VFIO, ...)
->>>> -> refcount > 1
->>>>
->>>> 6. memset(mem, 0xff, pagesize);
->>>> -> Write fault -> COW
->>>
->>> I do not believe this is actually a bug.
->>>
->>> You asked for a R/O pin, and you got one.
->>>
->>> Then somebody else modified that page, and you got exactly what you
->>> asked for - a COW event. The original R/O pin has the original page
->>> that it asked for, and can read it just fine.
->>
->> To remind all, the GUP users, like RDMA, VFIO use
->> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
->> COW breaking the coherence. In these case 'r/o pin' does not mean
->> "snapshot the data", but its only a promise not to write to the pages
->> and still desires coherence with the memory map.
->>
->> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
->> then filling that something with data finally doing the actual
->> DMA. Breaking COW after pin breaks those apps.
->>
->> The above #5 can occur for O_DIRECT read and in that case the
->> 'snapshot the data' is perfectly fine as racing the COW with the
->> O_DIRECT read just resolves the race toward the read() direction.
->>
->> IIRC there is some other scenario that motivated this patch?
-> 
-> I think that there is an assumption that once a page is COW-broken,
-> it would never have another write-fault that might lead to COW
-> breaking later.
-> 
-> AFAIK at least after userfaultfd-WP followed by
-> userfaultfd-write-unprotect a page might be write-protected and
-> go through do_wp_page() a second time to be COW-broken again. In
-> such case, I think the FOLL_FORCE|FOLL_WRITE would not help.
-> 
-> I suspect (not sure) that this might even happen with mprotect()
-> since I do not see all code-paths preserving whether the page
-> was writable.
+> Changes since 20211216:
 > 
 
-uffd-wp and mprotect() are broken as well, yes. But the easiest example
-is just swap + read fault.
+on i386:
 
-Section 2 and 3 in [1], along with reproducers.
+../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
+../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
+  value = readq(reg_assert);
+          ^~~~~
+../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
+  writeq(value, reg_assert);
+  ^~~~~~
 
-Note that I didn't mention uffd-wp and mprotect(), because these require
-"manual intervention". With swap, it's not your application doing
-something "special".
-
-[1]
-https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
 
 -- 
-Thanks,
-
-David / dhildenb
-
+~Randy

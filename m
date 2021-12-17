@@ -2,80 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D79E47968F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E36F479691
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbhLQVvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhLQVvu (ORCPT
+        id S230435AbhLQVwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:52:04 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35916 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230244AbhLQVv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:51:50 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0797C061574;
-        Fri, 17 Dec 2021 13:51:50 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id y22so6908774uap.2;
-        Fri, 17 Dec 2021 13:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r2n81BHcQENwCQ3YEUE98CV3ubhZaf5BOJMeyRLoCPw=;
-        b=EPeAGhC7PjnOwghy82y4jkT8FX7habfMPn71bNpD7uEB0aAh831KSuXLues+XWrm9r
-         0O7uGakXxVIwRuRK9937fb8zm6Yj+y3GkUS3P3OlDYUDRC7Jz4/hxaEbgJAKCby6y0P6
-         FyAs3CXV8WLcHwufpg5ftaH4zd7avsc0E7IOP5+OFmO26eEWeBH6v0d4zsiMrvvHuVM5
-         qIa6bDx2TWmR7s8w/w3tzj2xtfYwDfWlzTgegdnwqUwihp8B/9mjzm314/kcDzZowrZy
-         2IMm7L2wpfGb0PmuYfFFz27eQOnpaUHEWjqoEKaRm4QzsjEl6wpnhDljjzWDKajR3sVF
-         jI7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r2n81BHcQENwCQ3YEUE98CV3ubhZaf5BOJMeyRLoCPw=;
-        b=aF13JvBbcw1w0Y4yDVGJWFljjGk9wSqyojwMoPk0I6fVVDzERQ99ILcEPEb9OqDeh6
-         MGC8cGSGC4VVw+LVkunrLxe5ubTSPSCZhv3DS6QtCLZmqZiIWcYjkkKwaSdRlIZ4S3Bq
-         inQypu4raVwBHKtUiidLsVQmOYUes8G50TRpKOtfB43+MsCmMiV2vQLR/MQWb49hcS2v
-         VhiWQYh9kkbb6hBExaOBgkytknIJ9MmNvzZ2DN2CEklTOHel7ULX1jJBIR6aRUt5kNKQ
-         2WXBpXzXPx4nU1oDgC+a/WKZQ2pPYWX9FjI+1qMtQLiKeem+NMwPrPTjbeAb01fXSgWO
-         RVaw==
-X-Gm-Message-State: AOAM5308fm3Og3GsSYn5UX2x74hTmhVyS9cV6nc5nAIfomHj3oFRQyzO
-        rcEgkALyP0MBz7jrP4IuwVYLObAoaoInsLqti002Nk5YpiA=
-X-Google-Smtp-Source: ABdhPJxJDQQzndQl4PQEsT6k0Z0vfJU1hu/u0NuoyuW8h8PbSpwF8KKS5BJu4z1xK667tv61DFz7OPncbF1llp165eA=
-X-Received: by 2002:ab0:2545:: with SMTP id l5mr1976547uan.103.1639777909847;
- Fri, 17 Dec 2021 13:51:49 -0800 (PST)
+        Fri, 17 Dec 2021 16:51:59 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639777918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AT2D4l2B7gM1XeRgIpRAp9+Ku96ZpvKzPu5JSMbwNS0=;
+        b=ZKVZHy79OUfLqeNlY9BPm+IvQJe2D/rq0NPmuXGTrAdH2NuBVX3cp0XeXpgNjpAhLFtf1Q
+        azRrW/FLt5o8aRZhLfVTVcXhk+OYYTSpWP6MO6LLiEQ5eYlq/ZoMcPZ4/njjSgv/ihUALI
+        XK0Tv4HliXC9VVuGFg9ouO7bjtA8ty63t5A/Owsq2rrigd/zwmMfRinDtX8fsyk1AzqEBk
+        hFVkeoqDJEbDjygS8i97ohoTbxMn/PKKngPeHYLo8B1wbrrjDrVT4mlKD9niijSkc1pkT+
+        2VRtsefqu+Lpk3i/9dWUorDuihvUE2+AjE3hQR7rDoTxz0xU8QjbV7UelGD/+Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639777918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AT2D4l2B7gM1XeRgIpRAp9+Ku96ZpvKzPu5JSMbwNS0=;
+        b=h6Nbh3aDlpBkkO5FE3mZMJIvZzB5kYR0sUKQn8VSX+/j1dQO8KrxZq3IrXhnx140ZkPHM8
+        1FKGLyqknjKHxpAg==
+To:     Alexander Potapenko <glider@google.com>, glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 39/43] x86: kmsan: handle register passing from
+ uninstrumented code
+In-Reply-To: <20211214162050.660953-40-glider@google.com>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-40-glider@google.com>
+Date:   Fri, 17 Dec 2021 22:51:57 +0100
+Message-ID: <87bl1ec32a.ffs@tglx>
 MIME-Version: 1.0
-References: <20211214031553.16435-1-yajun.deng@linux.dev> <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
- <0d07e13a5454dfb03b22e5223d101a1b@linux.dev> <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
- <3ed867e06f7f9bb9d89beaafc50905c8@linux.dev> <CAPhsuW63KawpM0vBPo9gXjgELKMtUtsL0M4DkbwWZTkub2ZDSw@mail.gmail.com>
-In-Reply-To: <CAPhsuW63KawpM0vBPo9gXjgELKMtUtsL0M4DkbwWZTkub2ZDSw@mail.gmail.com>
-From:   Daniel Vacek <neelx.g@gmail.com>
-Date:   Fri, 17 Dec 2021 22:51:38 +0100
-Message-ID: <CAA7rmPGOL0vGg_6xxyTx5fNHP75ZYYXukF737ycqyLgmYpqoVA@mail.gmail.com>
-Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
-To:     Song Liu <song@kernel.org>
-Cc:     Yajun Deng <yajun.deng@linux.dev>, stockhausen@collogia.de,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>, masahiroy@kernel.org,
-        williams@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 1:19 PM Song Liu <song@kernel.org> wrote:
-> I think allowing preempt may still affect the speed comparison. But
-> such discrepancy
-> should be acceptable. I will apply this to md-next.
+Alexander,
 
-No, please. This could eventually result with people starting to
-report 'sometimes the storage does not perform' or 'random high CPU
-usage on some boots' kind of issues.
+On Tue, Dec 14 2021 at 17:20, Alexander Potapenko wrote:
+> When calling KMSAN-instrumented functions from non-instrumented
+> functions, function parameters may not be initialized properly, leading
+> to false positive reports. In particular, this happens all the time when
+> calling interrupt handlers from `noinstr` IDT entries.
+>
+> Fortunately, x86 code has instrumentation_begin() and
 
-We should not touch this. See my other email with detailed explanation.
+It's not only x86 code:
+>  kernel/entry/common.c           | 3 +++
 
---nX
+> @@ -76,6 +77,7 @@ __visible noinstr void do_syscall_64(struct pt_regs *regs, int nr)
+>  	nr = syscall_enter_from_user_mode(regs, nr);
+>  
+>  	instrumentation_begin();
+> +	kmsan_instrumentation_begin(regs);
 
-> Thanks,
-> Song
+Can we please make this something like:
+
+       instrumentation_begin_at_entry(regs);
+
+or some other sensible name which hides that kmsan gunk and avoids to
+touch all of this again when KFOOSAN comes around?
+
+Thanks,
+
+        tglx
+
+
+

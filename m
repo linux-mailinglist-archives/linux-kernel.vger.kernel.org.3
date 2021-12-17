@@ -2,145 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F6747964E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AA9479669
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbhLQVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:33:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37166 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbhLQVdO (ORCPT
+        id S229888AbhLQVm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhLQVm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:33:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5226B82AE0;
-        Fri, 17 Dec 2021 21:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44082C36AE2;
-        Fri, 17 Dec 2021 21:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639776792;
-        bh=rhDnjeMzVYpu9f7uhwp02RFYSwBirm1uAXGX5FvyMtA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=bxCFhkmoygmiGemAVSIw3IEF22iB0KXDKzqIK7AhLiPoPjGmkSAZicrvTMD4vk74q
-         40XIVrSQPwXiEfpg7xGt90/pkCDJTzEw8zGOgTZW98J/P5YWDQaQI+wDA84Gcrjw/X
-         0DXL6j1siOokfCrLrXSoXXfYsdd/Whk/ly/OCP80sBTJIOJFWvz55K83rz0dsEp+gN
-         ZkK7e/zuNqTJDAw0sYCAGANgffIl8LRrqVD1AZaoP/QBqWrKgzo2AYaqW2xdh2EPvW
-         Jq1VEFgfYVcE92qk/tUC2jzUHPtN8eTKoz7EZo6r/h1LVBI3tImVJBnwZJF150Vi/u
-         X8pYmLgrxDHJg==
-Subject: Re: [PATCH v3 3/4] memory: omap-gpmc: Use a compatible match table
- when checking for NAND controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        tony@atomide.com
-Cc:     robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211217102945.17432-1-rogerq@kernel.org>
- <20211217102945.17432-4-rogerq@kernel.org>
- <88ff0e3e-6709-68fc-88cb-f915dfddbe86@canonical.com>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <81b30647-5ae3-76b6-0317-e6fc16e788ca@kernel.org>
-Date:   Fri, 17 Dec 2021 23:33:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 17 Dec 2021 16:42:58 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73B1C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:57 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id e3so12940342edu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C9IysSCKwmnVf0clSv3vqtB9fmhRZmRL64GBWJwRw/Y=;
+        b=NsoM3bp5z1ViaGMsoT3rdJ0GTTkM2nxbtO1rOArzSMsTMLZJNzIeeDbkuFjfjllNC8
+         xn6hGkr0DopwV/8Eu5djljv17PjTjMOTC8v7g/t2TyO7f8rn0uZpLJ8UcnwQTupGApwJ
+         t6+Rs305ThbmGf+HCSQiO/fTN2vHb+5yfsROE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C9IysSCKwmnVf0clSv3vqtB9fmhRZmRL64GBWJwRw/Y=;
+        b=eQ/W7WY7+lb00qPe8xj5eGQQtOzD26PDVTFhf8N2DDNhWU96Bcx/AM65AWmoZmpdZk
+         T1oAEsu5xEMrnmf7rULNVpIZ8Nz6UM4hFI9Pwkzs4Mudaq2sB2hWVhRB1z51Fk5btSIu
+         OAunLAWGoenR0r7P1oMJITAYh14weLpoRU6o02JbpENIRMYaDb/hTMWOe2y9nofr4VL/
+         LQbnScJOg5eNfFsunxbnh7eGqoUNZKOTn7IIMYTRmFiDkHHNzwHvKYKliTGZePE1Qg63
+         SoEfzVvfWO+fjrR+wOHD6X2ZQTKdVI+AZnshKlQRtBdfcZNeC/eMy28qrTrmLW5NemAz
+         GTwA==
+X-Gm-Message-State: AOAM530gXNQsUeEF0qPZUw5mdhMO9MV5QEZc8RUwv1ULIvkQ9hcAkKRi
+        VWSYxpHIR2qBNztH5K+jXwKQPHbhbFvmx1Y4p/c=
+X-Google-Smtp-Source: ABdhPJwsIzDjrjKvSWU/a4Q35aj2v7UBHjgVWGJkek/yC7gIh+8KcJpZocDS6VCOSBZORs+4TZ4Juw==
+X-Received: by 2002:a17:906:278d:: with SMTP id j13mr4262685ejc.230.1639777376170;
+        Fri, 17 Dec 2021 13:42:56 -0800 (PST)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id e19sm3938392edu.47.2021.12.17.13.42.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 13:42:56 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2347483wmc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:42:56 -0800 (PST)
+X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr2170336wmb.152.1639777018053;
+ Fri, 17 Dec 2021 13:36:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <88ff0e3e-6709-68fc-88cb-f915dfddbe86@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
+In-Reply-To: <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 13:36:41 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+Message-ID: <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 17, 2021 at 12:55 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> If we have a shared anonymous page we cannot have GUP references, not
+> even R/O ones. Because GUP would have unshared and copied the page,
+> resulting in a R/O mapped anonymous page.
 
+Doing a GUP on an actual shared page is wrong to begin with.
 
-On 17/12/2021 17:21, Krzysztof Kozlowski wrote:
-> On 17/12/2021 11:29, Roger Quadros wrote:
->> As more compatibles can be added to the GPMC NAND controller driver
->> use a compatible match table.
->>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  drivers/memory/omap-gpmc.c                   | 8 +++++++-
->>  drivers/mtd/nand/raw/omap2.c                 | 2 +-
->>  include/linux/platform_data/mtd-nand-omap2.h | 5 +++++
->>  3 files changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
->> index 624153048182..814ddb45c13d 100644
->> --- a/drivers/memory/omap-gpmc.c
->> +++ b/drivers/memory/omap-gpmc.c
->> @@ -2091,6 +2091,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
->>  	u32 val;
->>  	struct gpio_desc *waitpin_desc = NULL;
->>  	struct gpmc_device *gpmc = platform_get_drvdata(pdev);
->> +	bool is_nand = false;
->>  
->>  	if (of_property_read_u32(child, "reg", &cs) < 0) {
->>  		dev_err(&pdev->dev, "%pOF has no 'reg' property\n",
->> @@ -2183,7 +2184,12 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
->>  		}
->>  	}
->>  
->> -	if (of_device_is_compatible(child, "ti,omap2-nand")) {
->> +#if defined(CONFIG_MTD_NAND_OMAP2)
-> 
-> if (IS_ENABLED()) is preferred. If needed, you could make omap_nand_ids
-> symbol visible always (so without ifdef around it), because extern
-> structure should not have impact when not defined (if I recall
-> correctly...).
+You even know that, you try to use "page_mapcount() > 1" to disallow it.
 
-OK.
+My point is that it's wrong regardless, and that "mapcount" is
+dubious, and that COW cannot - and must not - use mapcount, and that I
+think your shared case should strive to avoid it for the exact same
+reason.
 
-> 
->> +	if (of_match_node(omap_nand_ids, child))
->> +		is_nand = true;
->> +#endif
->> +
->> +	if (is_nand) {
->>  		/* NAND specific setup */
->>  		val = 8;
->>  		of_property_read_u32(child, "nand-bus-width", &val);
->> diff --git a/drivers/mtd/nand/raw/omap2.c b/drivers/mtd/nand/raw/omap2.c
->> index b26d4947af02..fff834ee726f 100644
->> --- a/drivers/mtd/nand/raw/omap2.c
->> +++ b/drivers/mtd/nand/raw/omap2.c
->> @@ -2352,7 +2352,7 @@ static int omap_nand_remove(struct platform_device *pdev)
->>  	return ret;
->>  }
->>  
->> -static const struct of_device_id omap_nand_ids[] = {
->> +const struct of_device_id omap_nand_ids[] = {
->>  	{ .compatible = "ti,omap2-nand", },
->>  	{},
->>  };
-> 
-> I think OMAP2 NAND driver can be a module, so this should have
-> EXPORT_SYMBOL.
+So, what I think should happen is:
 
-Indeed. Good catch!
-> 
->> diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
->> index de6ada739121..e1bb90a8db03 100644
->> --- a/include/linux/platform_data/mtd-nand-omap2.h
->> +++ b/include/linux/platform_data/mtd-nand-omap2.h
->> @@ -61,4 +61,9 @@ struct gpmc_nand_regs {
->>  	void __iomem	*gpmc_bch_result5[GPMC_BCH_NUM_REMAINDER];
->>  	void __iomem	*gpmc_bch_result6[GPMC_BCH_NUM_REMAINDER];
->>  };
->> +
->> +#if defined(CONFIG_MTD_NAND_OMAP2)
->> +extern const struct of_device_id omap_nand_ids[];
->> +#endif
->> +
->>  #endif
->>
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+ (a) GUP makes sure that it only ever looks up pages that can be
+shared with this VM. This may in involve breaking COW early with any
+past fork().
 
-cheers,
--roger
+ (b) it marks such pages so that any future work will not cause them
+to COW either
+
+Note that (a) is not necessarily "always COW and have to allocate and
+copy new page". In particular, if the page is already writable, you
+know you already have exclusive access to it and don't need to COW.
+
+And if it isn't writable, then the other common case is "the cow has
+only one user, and it's us" - that's the "refcount == 1" case.
+
+And (b) is what we do with that page_maybe_dma_pinned() logic for
+fork(), but also for things like swap cache creation (eg see commit
+feb889fb40fa: "mm: don't put pinned pages into the swap cache").
+
+Note that this code all already exists, and already works - even
+without getting the (very expensive) mmap_sem. So it works with
+fast-GUP and it can race with concurrent forking by another thread,
+which is why we also have that seqcount thing.
+
+As far as I can tell, your "mapcount" logic fundamentally requires
+mmap_sem for the fork() race avoidance, for example.
+
+So this is why I don't like the mapcount games - I think they are very
+fragile, and not at all as logical as the two simple rules a/b above.
+
+I believe you can make mapcount games _work_ - we used to have
+something like that. It was incredibly fragile, and it had its own set
+of bugs, but with enough care it's doable.
+
+But my argument really is that I think it's the wrong approach, and
+that we should simply strive to follow the two simple conceptual rules
+above.
+
+            Linus

@@ -2,83 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414DC478207
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586A1478211
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 02:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbhLQB0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 20:26:13 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:45624 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230033AbhLQB0M (ORCPT
+        id S231792AbhLQBaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 20:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231774AbhLQBaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:26:12 -0500
-X-UUID: 58ee2375bc88455bbc7c539db82efa5e-20211217
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cMKFGO50Nijrd/zf0SyWIymRa4cZ18pTctDEuNU+t50=;
-        b=BQbQE8dhegxrx5xWHmhb4uiWxRp+otcMVObhgnwrTi15c7IaB9LU/SCee18HMcslmoyw79Hj9FiVmW1L4hrnnr599qX4gKjyliKeRWASQOFh7mXfP7GRNKYp7BYyTYoqzCF1zl5j6dnZ+MhpM+U+5XRXAyR7nUQqalJMKjwHCsw=;
-X-UUID: 58ee2375bc88455bbc7c539db82efa5e-20211217
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 804381100; Fri, 17 Dec 2021 09:26:07 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 17 Dec 2021 09:26:06 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 17 Dec 2021 09:26:05 +0800
-Message-ID: <c231ad91abe639a200b9a18835280c9ca28c771a.camel@mediatek.com>
-Subject: Re: [PATCH net-next v10 4/6] net: dt-bindings: dwmac: Convert
- mediatek-dwmac to DT schema
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Date:   Fri, 17 Dec 2021 09:26:07 +0800
-In-Reply-To: <Ybti2mNfEVNWQWgM@robh.at.kernel.org>
-References: <20211216055328.15953-1-biao.huang@mediatek.com>
-         <20211216055328.15953-5-biao.huang@mediatek.com>
-         <Ybti2mNfEVNWQWgM@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 16 Dec 2021 20:30:09 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEDC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:30:08 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id u22so886915lju.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 17:30:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ugQenULSknE3I1itQCSZf3NnOOSTayqXrmSZAjd+2lM=;
+        b=YJu1YwewKoo4mxIhVEaVuSXJtNF6GzbJRmGg8kwO1pYmsvPg2bI2xPJAUwU+IOvwTP
+         6w5FCk8758irUEWJllrPS6+M2WVBmi8CrWSe3qI58E34m/fKJlnHz5QU2sLOdFHXqtah
+         8vj7L5Fg8jmMHZ6VegiXRNFwstnkBw0TrYgDz9EZnkOFNKBezLdBQtl/vxwaIDyDB20H
+         /pOeRV+IpviHrsK3xAOEVRLblJzsP2HncOzXUW8EP75dVqJDHdqgrN9VpSt7TzITifRM
+         1Fr8cMH/c2sKeAaRAR3N58R3/dx3IFSuFNmhpg5bE6vLKmx31n9+Xhm8355wx5BsnC+C
+         zh4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ugQenULSknE3I1itQCSZf3NnOOSTayqXrmSZAjd+2lM=;
+        b=HHLFMAO+3sS40Qa3UJ32xxGwHAibKe+CHF69NC3FAInoeANJB3EiBuShWk+eSLdQE2
+         ORHuy6+IOnCgxtwZe/7E4g5PwTmSQ3Wwv+8PcnpbGCbIkWt7mP728Nqi6qTtGTFJ16gD
+         Qn65/Oe8yOy+DfucGojWvdJ3f1Vq6L8lCc8wA0sVGsnSGEZJseJIjanp5j1KfLzqp2si
+         11cY7MLfyZby1aO0B/qwTPMEKzXxahf9mlPhSPiSOturWRZDqSVRTq0cSn+EyXwyHsWm
+         ccULmfrvxJ46aTuiFYN/64dkNouCnQxznHAoUGnlNz06UZI6ReuJGpWBCxvgrBcb1AjC
+         ZWKQ==
+X-Gm-Message-State: AOAM533AgVFS5iAzrGgSujEjK8LPDBNXJdq0DqomWzEEPx0JKy1VMO6Y
+        56d+FLBz090O1kRE4LbsD8OV3Q==
+X-Google-Smtp-Source: ABdhPJzAthwZi8eNhhSb8f5t3uDYry1NmtxVvyfS1RspHZO4E4pl8uJoG28LZ1K+8XJ6Bk7SYYqqMQ==
+X-Received: by 2002:a2e:3c0c:: with SMTP id j12mr691142lja.402.1639704606871;
+        Thu, 16 Dec 2021 17:30:06 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id y36sm280788lfa.75.2021.12.16.17.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 17:30:06 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v2 0/7] arm64: dts: exynos: Add E850-96 board support
+Date:   Fri, 17 Dec 2021 03:29:58 +0200
+Message-Id: <20211217013005.16646-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBSb2IsDQoJVGhhbmtzIGZvciB5b3VyIGNvbW1lbnRzLg0KT24gVGh1LCAyMDIxLTEyLTE2
-IGF0IDEwOjAxIC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4gT24gVGh1LCBEZWMgMTYsIDIw
-MjEgYXQgMDE6NTM6MjZQTSArMDgwMCwgQmlhbyBIdWFuZyB3cm90ZToNCj4gPiBDb252ZXJ0IG1l
-ZGlhdGVrLWR3bWFjIHRvIERUIHNjaGVtYSwgYW5kIGRlbGV0ZSBvbGQgbWVkaWF0ZWstDQo+ID4g
-ZHdtYWMudHh0Lg0KPiA+IEFuZCB0aGVyZSBhcmUgc29tZSBjaGFuZ2VzIGluIC55YW1sIHRoYW4g
-LnR4dCwgb3RoZXJzIGFsbW9zdCBrZWVwDQo+ID4gdGhlIHNhbWU6DQo+ID4gICAxLiBjb21wYXRp
-YmxlICJjb25zdDogc25wcyxkd21hYy00LjIwIi4NCj4gPiAgIDIuIGRlbGV0ZSAic25wcyxyZXNl
-dC1hY3RpdmUtbG93OyIgaW4gZXhhbXBsZSwgc2luY2UgZHJpdmVyDQo+ID4gcmVtb3ZlIHRoaXMN
-Cj4gPiAgICAgIHByb3BlcnR5IGxvbmcgYWdvLg0KPiA+ICAgMy4gYWRkICJzbnBzLHJlc2V0LWRl
-bGF5LXVzID0gPDAgMTAwMDAgMTAwMDA+IiBpbiBleGFtcGxlLg0KPiA+ICAgNC4gdGhlIGV4YW1w
-bGUgaXMgZm9yIHJnbWlpIGludGVyZmFjZSwga2VlcCByZWxhdGVkIHByb3BlcnRpZXMNCj4gPiBv
-bmx5Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEJpYW8gSHVhbmcgPGJpYW8uaHVhbmdAbWVk
-aWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vYmluZGluZ3MvbmV0L21lZGlhdGVrLWR3bWFj
-LnR4dCAgICAgICAgICAgfCAgOTEgLS0tLS0tLS0tLQ0KPiA+ICAuLi4vYmluZGluZ3MvbmV0L21l
-ZGlhdGVrLWR3bWFjLnlhbWwgICAgICAgICAgfCAxNTUNCj4gPiArKysrKysrKysrKysrKysrKysN
-Cj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCAxNTUgaW5zZXJ0aW9ucygrKSwgOTEgZGVsZXRpb25zKC0p
-DQo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvbmV0L21lZGlhdGVrLQ0KPiA+IGR3bWFjLnR4dA0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL25ldC9tZWRpYXRlay0NCj4gPiBkd21h
-Yy55YW1sDQo+IA0KPiBSZXZpZXdlZC1ieTogUm9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4N
-CkknbGwgYWRkIHJldmlld2VkLWJ5IGluIG5leHQgc2VuZC4NClJlZ2FyZHMhDQo=
+WinLink's E850-96 is a dev board based on Exynos850 SoC [1]. The board's
+design follows 96boards specifications, hence it's compatible with
+96boards mezzanines [2].
+
+This patch series adds the initial support for E850-96 board and
+Exynos850 SoC, along with corresponding bindings. Only basic platform
+components are enabled at the moment (like serial, I2C, eMMC, RTC, WDT,
+clock driver, etc). Right now with this patch series it's possible to
+run the kernel with BusyBox rootfs as a RAM disk. More features are
+coming soon.
+
+[1] https://www.samsung.com/semiconductor/minisite/exynos/products/mobileprocessor/exynos-850/
+[2] https://www.96boards.org/products/mezzanine/
+
+Changes in v2:
+  - Rebased on krzk/linux.git (for-next), to account for Exynos7885
+    changes
+  - Added missing and new tags (R-b and Ack)
+  - Addressed all comments for v1
+
+Sam Protsenko (7):
+  dt-bindings: clock: exynos850: Add bindings for Exynos850 sysreg
+    clocks
+  clk: samsung: exynos850: Add missing sysreg clocks
+  dt-bindings: Add vendor prefix for WinLink
+  dt-bindings: arm: samsung: Document E850-96 board binding
+  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850
+  arm64: dts: exynos: Add initial Exynos850 SoC support
+  arm64: dts: exynos: Add initial E850-96 board support
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/exynos/Makefile           |   1 +
+ .../boot/dts/exynos/exynos850-e850-96.dts     | 175 ++++
+ .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 713 +++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynos850.dtsi     | 753 ++++++++++++++++++
+ drivers/clk/samsung/clk-exynos850.c           |  29 +
+ include/dt-bindings/clock/exynos850.h         |  12 +-
+ include/dt-bindings/pinctrl/samsung.h         |  13 +-
+ 9 files changed, 1700 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
+
+-- 
+2.30.2
 

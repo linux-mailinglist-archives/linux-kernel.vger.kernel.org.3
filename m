@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 380A24794B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1534794B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 20:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbhLQTUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 14:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S240353AbhLQTXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 14:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhLQTUD (ORCPT
+        with ESMTP id S230037AbhLQTXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:20:03 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2692AC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:20:03 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id 207so4867527ljf.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:20:03 -0800 (PST)
+        Fri, 17 Dec 2021 14:23:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A38C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:23:07 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so11777967edu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:23:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=avniy9qb4J011EGRN+LaM7W8paozVJQP0KxTT2YMfaI=;
-        b=MmZZ46PcYUUcsjmI/6xOuddxmuVgQ6bMgQ0ASaTyyLNeKGdg9ol6X343+95usrqR75
-         H4KcFPS2cQArCZfqlpcoIOIV3uhcxJa2ClF8JD61FYZjPxF+HMsg6+8y/3e4mye3hgkW
-         oD25yg67te8Tr2gjxgmNiAOND35jg195cag2g103GmdxE73fC9AUDaaBEEehYiWWvL0E
-         /FFHnTk5Qt3WL7s24klLc2g5qpcHEvOfz1XEHcC2PCufm47sgIjZG1Fw/Mat7Bs8sd9v
-         9bf2N6AzMn4fP9DoS8aH0zsi1xRARwwqm0Jj+K0Dpp9llPi2H61rgYWfPAoaaDnCrjxy
-         +62w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wsxPP4x55S3xHdetgetRuLFyO1pK7A4RVTBxuMZfoqY=;
+        b=LN01Ax5zkrMJ36hMWyzfEwjvgOa05trYbyjDx9OvqN5hVC5jgm8DAsreT8ZC9IIalh
+         FdsStvpmEXelZNEqxx+tiW5zfa1gTjPnHrDtMyQU36PnWl7IppVmVyKP51KznO6W4vcH
+         OrJ7ICe+DK/A6cO51E7sHzoyw84upkUlBNY1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=avniy9qb4J011EGRN+LaM7W8paozVJQP0KxTT2YMfaI=;
-        b=jbS9kRY1/zdYl0VtqFxcFJHiTJ3/LWr7KDDpQld+j7/18NlO4NZTQhaQJ51nu32GY0
-         zYa10eIzpEIc2qLOFSxX5LxWNOKnkRK5uEJu97PWo8lfN183SBML3yN/CY+XKJlfXx24
-         k5SGalafZIzJLlZjQZbk0PSWwm97//ADANw23nZwJForCINUevi7Io+ZZRStWoSO5SqC
-         5/RezVNf6iZv5/m96mT8yUN6Fe9qlvl150FV3Rz5FCsm2gBNwhPzVFY1B2fLXktVkHCk
-         QUSiBNhETZ7kobTw7RFCMQsGIqGkSyFHNuMn5j7AcK2tqqyLPx5ePKhstKnYnxRjarHJ
-         spCg==
-X-Gm-Message-State: AOAM530UOcgnBufDbLs4R3YH71adI3lN40BkkWkLlKv4mjjJj4d1eMvH
-        /OQ4P/Q8Wlmixauu30fMOMo=
-X-Google-Smtp-Source: ABdhPJy7CxY1qWp/EPeAjEl66DV9k+C/gmL7Ac9Rt9DdSeaIt1InGxFiQfFj9ED1FOvrVTa+NN711Q==
-X-Received: by 2002:a2e:b169:: with SMTP id a9mr4031507ljm.369.1639768801238;
-        Fri, 17 Dec 2021 11:20:01 -0800 (PST)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id a24sm339941lff.207.2021.12.17.11.20.00
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wsxPP4x55S3xHdetgetRuLFyO1pK7A4RVTBxuMZfoqY=;
+        b=qxOe6aO+vtb6nVm7uMEWp/584E18TkmYW8gO0eT5f72XZXOQ1Gcna6N8jSqEMEQ+iP
+         RCnXQmzAdf0bHYgu5KZ1PkkaOwBi/y63eqInZWADfbJYA8ZxrrQh+prZfS7hO+DwvGnK
+         lBfopiHWa24oLcaiuuJ7AUcM8eyvvAVLBLDRn3pHF2fYVwMbblXH5F1PWoIOKmwfQbm3
+         VHPFgP+5A8WlMyfNtEeb7rwI9fCJdqueD3pvUwnBJykDYCCukPJJbBxRoFjA6+YU5TTM
+         nZuq06+4V3XquqXP5667GcEdElZiKUM7nB8iel+u6PcO0tmqNnKU6VXmTETbdF/ogdul
+         W+5g==
+X-Gm-Message-State: AOAM533eyyGKPfmRsCgBHDxCOIm6MZnAHo6tVqyMYgOHlV1WJByEDROl
+        cTGbQ3wGtUqO5fbu/MCDzlUYuSiQe8qMPVkYtGE=
+X-Google-Smtp-Source: ABdhPJzuwz9BTFVzep3QY0kpVjAot644s6glYSK8zH4B68TTToaww8VJ6i6pz5SbeVk6jwmKL4qcWg==
+X-Received: by 2002:a17:907:6095:: with SMTP id ht21mr924155ejc.667.1639768985576;
+        Fri, 17 Dec 2021 11:23:05 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id d10sm3158499eja.4.2021.12.17.11.23.03
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 11:20:01 -0800 (PST)
-Subject: Re: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges)
- on Arm
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>
-References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
- <1428a0be-b80c-f996-1f72-6545dd66c1bf@gmail.com>
- <81c97e6a-f5e3-3f5d-c9ae-a35933cf4e61@oracle.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <4cc296cc-c7d5-1bce-4074-b708a18d9304@gmail.com>
-Date:   Fri, 17 Dec 2021 21:19:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 17 Dec 2021 11:23:04 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id z206so2301349wmc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 11:23:03 -0800 (PST)
+X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr3854552wms.144.1639768983510;
+ Fri, 17 Dec 2021 11:23:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <81c97e6a-f5e3-3f5d-c9ae-a35933cf4e61@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+In-Reply-To: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 11:22:47 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+Message-ID: <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 17.12.21 21:13, Boris Ostrovsky wrote:
-
-Hi Boris
-
+On Fri, Dec 17, 2021 at 11:04 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On 12/16/21 5:02 PM, Oleksandr wrote:
->>
->> On 09.12.21 22:05, Oleksandr Tyshchenko wrote:
->>
->>
->> Hello Juergen, Boris
->>
->>
->> May I please ask, are you happy (or otherwise) with current patch 
->> series (I assume, especially with commits #3-4)?
+> If we are doing a COW, we need an *exclusive* access to the page. That
+> is not mapcount, that is the page ref.
 >
->
-> I think I mentioned last time, in patch 4:
->
->
-> +    if (target_resource != &iomem_resource) {
-> +        tmp_res = kzalloc(sizeof(*tmp_res), GFP_KERNEL);
-> +        if (!res) {
+> mapcount is insane, and I think this is making this worse again.
 
-Yes, this is already fixed in V4 of patch [1]
+Maybe I'm misreading this, but afaik
 
+ - get a "readonly" copy of a local private page using FAULT_FLAG_UNSHARE.
 
+   This just increments the page count, because mapcount == 1.
 
->
->
-> Other than that --- LGTM.
-Thank you!
+ - fork()
 
+ - unmap in the original
 
-[1] 
-https://lore.kernel.org/xen-devel/1639080336-26573-5-git-send-email-olekstysh@gmail.com/
+ - child now has "mapcount == 1" on a page again, but refcount is
+elevated, and child HAS TO COW before writing.
 
+Notice? "mapcount" is complete BS. The number of times a page is
+mapped is irrelevant for COW. All that matters is that we get an
+exclusive access to the page before we can write to it.
 
->
->
-> -boris
->
--- 
-Regards,
+Anybody who takes mapcount into account at COW time is broken, and it
+worries me how this is all mixing up with the COW logic.
 
-Oleksandr Tyshchenko
+Now, maybe this "unshare" case is sufficiently different from COW that
+it's ok to look at mapcount for FAULT_FLAG_UNSHARE, as long as it
+doesn't happen for a real COW.
 
+But honestly, for "unshare", I still don't see that the mapcount
+matters. What does "mapcount == 1" mean? Why is it meaningful?
+
+Because if COW does things right, and always breaks a COW based on
+refcount, then what's the problem with taking a read-only ref to the
+page whether it is mapped multiple times or mapped just once? Anybody
+who already had write access to the page can write to it regardless,
+and any new writers go through COW and get a new page.
+
+I must be missing something realyl fundamental here, but to me it
+really reads like "mapcount can fundamentally never be relevant for
+COW, and if it's not relevant for COW, how can it be relevant for a
+read-only copy?"
+
+             Linus

@@ -2,133 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E1F479594
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B21479599
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239912AbhLQUmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbhLQUmP (ORCPT
+        id S240825AbhLQUmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:42:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54256 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229464AbhLQUmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:42:15 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFEFC061574;
-        Fri, 17 Dec 2021 12:42:14 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id d2so3351441qki.12;
-        Fri, 17 Dec 2021 12:42:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jJPFhgIsvKzJn7UezO2bKrdTlyTH555tbP3K3YvX9GE=;
-        b=JuQ/zWsn8JI4BkEcnxXppvSHavTvBWZxUAvS+FCWeXmm34+KaZY1SAdmvIFl2FmtiB
-         rdIybrj64k+eGnbkM3Q2VRygmkj0U3zAoEdJa2jY5hAYmIf9CgpdZbtouUEf1g7xK+s2
-         eFsgSmy3PkDh5wCjmxdgeu90GQ+ZSWwdsskUk6w1qi66Vr3s9INqn1cN5uXLZKs/zbnf
-         SAKb376W0Gtb2t/P4e2vQNp02jniuXO8uVq31yAlh0aL/kHNRpoC0oxl8umeNW9EwemH
-         NJic5Y9QARCciXI/8z5S7ZRzRHM6X5x+3oeCeVmWBnL9Thi1J9D1Zigd1fnHN1x7PKt3
-         TkUg==
+        Fri, 17 Dec 2021 15:42:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639773764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yoQ5b3tWSR/7M0GXEFtZ51EVC0Or2dbhzeqMAw0VG5s=;
+        b=OM2gUlWQmBiaJ5ecbZ7DQZsfKkCbkZGH+dGPUwLIy4ysLLvKfZT+r8KsS/BQfn2Gz2l4Va
+        /27/tKa8tU3jbLhRPbcKOBuqH38TOfHBd4LI+i024nBRtpjuB52k+3hLjlZ11ZPTMeGMJG
+        FhqFwCvHL9J/N8Dx864+Y3MrrtHo0oQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-AovaN9lRNDaF3uptpcoUFg-1; Fri, 17 Dec 2021 15:42:43 -0500
+X-MC-Unique: AovaN9lRNDaF3uptpcoUFg-1
+Received: by mail-wm1-f72.google.com with SMTP id m14-20020a05600c3b0e00b0033308dcc933so1544709wms.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:42:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=jJPFhgIsvKzJn7UezO2bKrdTlyTH555tbP3K3YvX9GE=;
-        b=c2e8vsV6YFxqmeIuU+I//tUAhhyVkRQjnGt8qdRs+xN+DyLPBooHT2pnuAArZcSIwP
-         QGs/kIT3pLNl7dM6drYyjqVfhSyc62fGZqctuP+Wqtrq276IMhix7xDZhFIEcRzHxc6q
-         F8S9PWMC/A7S05NVWBtZOwB9OrBBWKrM7PHvmfPTnZ9WQFSYG8w88IVptyQghLgMEvaJ
-         3kAT/QdMKpMrU/PtfvynouiN9NdDpH1rO9D9X9UxzG9eOwa1noCEnuJi+8/UxkA3T6Yp
-         AuWV8H0cmbRNK97HomAcwltv003uvXvsMUx1Afoy8mtfK8NIay93axf2KShXVrTQZ4kk
-         AiOw==
-X-Gm-Message-State: AOAM530PB9vGipaKAkxKC7fwEXrVi+ng2ZSlWRW0OzLIF9BD2tYmyRoX
-        0L0lFg/SzfoXoeRqKc1bhWAzLt1YYg==
-X-Google-Smtp-Source: ABdhPJy8y0iM3Dge4lk7oYr/9Zcp7gvHlcJBP5wa9uZNFnBKBidFpbOUWDt0GTq/RyOhD5PovJ4RUA==
-X-Received: by 2002:a05:620a:4244:: with SMTP id w4mr3100606qko.215.1639773733766;
-        Fri, 17 Dec 2021 12:42:13 -0800 (PST)
-Received: from serve.minyard.net ([47.184.156.158])
-        by smtp.gmail.com with ESMTPSA id bs16sm5474114qkb.45.2021.12.17.12.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 12:42:13 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:253a:bfb0:ae5b:40ba])
-        by serve.minyard.net (Postfix) with ESMTPSA id 6571E181061;
-        Fri, 17 Dec 2021 20:42:12 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 14:42:11 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        ioanna-maria.alifieraki@canonical.com, minyard@mvista.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] ipmi: fix initialization when workqueue allocation
- fails
-Message-ID: <20211217204211.GM14936@minyard.net>
-Reply-To: minyard@acm.org
-References: <20211217154410.1228673-1-cascardo@canonical.com>
- <20211217154410.1228673-2-cascardo@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=yoQ5b3tWSR/7M0GXEFtZ51EVC0Or2dbhzeqMAw0VG5s=;
+        b=IKcDaRL5xJ7KSuOTPynoYYclKoD9J8HdHqe6aFXt4cdzCQ77UMKZYEulVW7ttXW3kk
+         N/bl62MTJENZUV87Ed2g4KYSELFfWRUffKz1gy8y/IWSMfM/9tlE97NEaebyza4S4TVx
+         BKFLF9M3qLpa/yiZLyyLryZwZGt+M6x7NyFc54hw9ZTzv55vYcLMPEkSU08AyDpxNSMa
+         M52v4bIw/I+vDAzISiJrf0wvI4XBTrL5oRhPSaXdKlrI9W7fFlYl0wsXG2HtYIF2d469
+         GfNwJxQw9Xmgq+CNjqJFIcFuKbclz7GBx5xgFcXJHxJ0tq5/LknrNK7FDWrrh0YcCFQd
+         kuBw==
+X-Gm-Message-State: AOAM530Bnj6zkMyQ3UZ9lXj7Q+idBq2T2tUbQAka9l+iLVq+ZMvz0/+u
+        Pi2rYVSrSDnRCyPKle0PmwcIgqmdVFtZnYftvqsOYFapFrDwh9/aRZaCgV0ASmzwY6fOIYmNydB
+        QYDB8nfvNPYCWazUanUeqyiEG
+X-Received: by 2002:adf:dbc3:: with SMTP id e3mr2099507wrj.150.1639773762408;
+        Fri, 17 Dec 2021 12:42:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyfwYR63RH/Y39rstTmOD+1KVKrDQCtQl5Ge3r/m8m87GTGG69yqtvC3dttx2+h33K6gRe9sQ==
+X-Received: by 2002:adf:dbc3:: with SMTP id e3mr2099488wrj.150.1639773762223;
+        Fri, 17 Dec 2021 12:42:42 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id c187sm9480848wme.33.2021.12.17.12.42.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 12:42:41 -0800 (PST)
+Message-ID: <17bfb2fd-da51-1264-513f-f9e928ec36c6@redhat.com>
+Date:   Fri, 17 Dec 2021 21:42:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217154410.1228673-2-cascardo@canonical.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for this, I need to be more careful about looking at code and not
-just looking at patches.  Both in my queue, I'll try to get them in to
-5.16.
+On 17.12.21 21:36, Linus Torvalds wrote:
+> On Fri, Dec 17, 2021 at 12:18 PM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 17.12.21 20:22, Linus Torvalds wrote:
+>>> On Fri, Dec 17, 2021 at 11:04 AM Linus Torvalds
+>>> <torvalds@linux-foundation.org> wrote:
+>>>>
+>>>  - get a "readonly" copy of a local private page using FAULT_FLAG_UNSHARE.
+>>>
+>>>    This just increments the page count, because mapcount == 1.
+>>>
+>>>  - fork()
+>>>
+>>>  - unmap in the original
+>>>
+>>>  - child now has "mapcount == 1" on a page again, but refcount is
+>>> elevated, and child HAS TO COW before writing.
+>>
+>> Hi Linus,
+>>
+>> This is just GUP before fork(), which is in general
+>> problematic/incompatible with sharing.
+> 
+> Note that my example was not meant to be an example of a problem per
+> se, but purely as an example of how meaningless 'mapcount' is, and how
+> 'mapcount==1' isn't really a very meaningful test.
+> 
+> So it wasn't mean to show "look, GUP before fork is problematic".  We
+> have that problem already solved at least for regular pages.
+> 
+> It was purely meant to show how "mapcount==1" isn't a meaningful thing
+> to test, and my worry about how you're adding that nonsensical test to
+> the new code.
+> 
+>> Let's just take a look at what refcount does *wrong*. Let's use an
+>> adjusted version of your example above, because it's a perfect fit:
+>>
+>> 1. mem = mmap(pagesize, MAP_PRIVATE)
+>> -> refcount == 1
+>>
+>> 2. memset(mem, 0, pagesize); /* Page is mapped R/W */
+>>
+>> 3. fork() /* Page gets mapped R/O */
+>> -> refcount > 1
+>>
+>> 4. child quits
+>> -> refcount == 1
+>>
+>> 5. Take a R/O pin (RDMA, VFIO, ...)
+>> -> refcount > 1
+>>
+>> 6. memset(mem, 0xff, pagesize);
+>> -> Write fault -> COW
+> 
+> I do not believe this is actually a bug.
 
--corey
+It's debatable if it's a BUG or not (I think it is one). It's for sure
+inconsistent.
 
-On Fri, Dec 17, 2021 at 12:44:10PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> If the workqueue allocation fails, the driver is marked as not initialized,
-> and timer and panic_notifier will be left registered.
 > 
-> Instead of removing those when workqueue allocation fails, do the workqueue
-> initialization before doing it, and cleanup srcu_struct if it fails.
+> You asked for a R/O pin, and you got one.
 > 
-> Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Cc: Corey Minyard <cminyard@mvista.com>
-> Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/char/ipmi/ipmi_msghandler.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-> index 84975b21fff2..266c7bc58dda 100644
-> --- a/drivers/char/ipmi/ipmi_msghandler.c
-> +++ b/drivers/char/ipmi/ipmi_msghandler.c
-> @@ -5396,20 +5396,23 @@ static int ipmi_init_msghandler(void)
->  	if (rv)
->  		goto out;
->  
-> -	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-> -	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
-> -
-> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-> -
->  	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
->  	if (!remove_work_wq) {
->  		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
->  		rv = -ENOMEM;
-> -		goto out;
-> +		goto out_wq;
->  	}
->  
-> +	timer_setup(&ipmi_timer, ipmi_timeout, 0);
-> +	mod_timer(&ipmi_timer, jiffies + IPMI_TIMEOUT_JIFFIES);
-> +
-> +	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
-> +
->  	initialized = true;
->  
-> +out_wq:
-> +	if (rv)
-> +		cleanup_srcu_struct(&ipmi_interfaces_srcu);
->  out:
->  	mutex_unlock(&ipmi_interfaces_mutex);
->  	return rv;
-> -- 
-> 2.32.0
-> 
+> Then somebody else modified that page, and you got exactly what you
+> asked for - a COW event. The original R/O pin has the original page
+> that it asked for, and can read it just fine.
+
+Where in the code did I ask for a COW event? I asked for a R/O pin, not
+any kind of memory protection.
+
+-- 
+Thanks,
+
+David / dhildenb
+

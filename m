@@ -2,157 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0524792D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A3E4792D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 18:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239911AbhLQR2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 12:28:47 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:53932 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239897AbhLQR2q (ORCPT
+        id S239922AbhLQR3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 12:29:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51498 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239914AbhLQR3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:28:46 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHHSbXr074651;
-        Fri, 17 Dec 2021 11:28:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639762117;
-        bh=RbHCEK8mCjW5Pm8yz76jfET1YGxxHey+QfmYZXEPjsk=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ycpBociEFayGx9hj1tFLjYpYy1yyKvQsa1xYqjWzMvd3D4nl5UtKNPv5vuMCjz17w
-         1OpyRlGK3YLIKJglLsfIw044TiCyReMn7ytIuuPpqmlNgz5YGadHFpTOj7jRndglZm
-         zB5R/MJUQKJSRNuxz8QmqVo6sSO7y8OG38Hah2fA=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHHSb9l075653
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Dec 2021 11:28:37 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Dec 2021 11:28:36 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Dec 2021 11:28:37 -0600
-Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHHSVcF076735;
-        Fri, 17 Dec 2021 11:28:34 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, SoC <soc@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, <arm@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL 2/2] arm64: dts: TI K3 updates for v5.17
-Date:   Fri, 17 Dec 2021 22:58:06 +0530
-Message-ID: <20211217172806.10023-2-vigneshr@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217172806.10023-1-vigneshr@ti.com>
-References: <20211217172806.10023-1-vigneshr@ti.com>
+        Fri, 17 Dec 2021 12:29:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639762148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QgM5OKxy2ebbpOfrvZEWcaXxpBQFY0BBq/cx7UULpgE=;
+        b=Vp+PWHIUVog1/fIIigU0WWJbosJRe9kgqsMpQXK3bX7tppJuG1ZJ5FzFCWMFKSjwi2eCqH
+        JUdn5ZOoucjTn++BfVUlapf8J/CwthDx3jq0LnxJ93etvKe7cRH4y0vYonN4gNnKyH+Xus
+        I1HirD+mpz1BHukiywJcx66qRtIT20Q=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-i00G16QTNNiVYlb_b7_fHw-1; Fri, 17 Dec 2021 12:29:07 -0500
+X-MC-Unique: i00G16QTNNiVYlb_b7_fHw-1
+Received: by mail-wm1-f69.google.com with SMTP id o18-20020a05600c511200b00332fa17a02eso1357479wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 09:29:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=QgM5OKxy2ebbpOfrvZEWcaXxpBQFY0BBq/cx7UULpgE=;
+        b=rE9OPaf1CFTAXwmJaUv8JH+eE+2O9SYEsMAwh+EV+4uPs5Ev8LvuDqr0XhKJ4BlUCf
+         c1UGSod5+40t00y4uT0F/eBBDtSC00d3EdoOkH47FDKT16YRtV6f/XlE0/zajNhvTH89
+         RtgYNmuydva5OMl6R1PKmKKcHxawFnVpKEiWkfeKdkUG5huoNu6YPr5rwZEHQwU/ggdL
+         6aa7ZdEFf1J7LQipiBOU0GOKGICzZHVH6aMvk/SBfgv4yzeHERAtZRXtTULPH8BTJ7Et
+         mNbaB0vdvR9N9jiO0LVhcZYNXV6yT85b+kJXv2EsxelPgF4HwjuecOTvLgdzO57MvCqR
+         T7YQ==
+X-Gm-Message-State: AOAM531ChrJ/BUCdfv6SaOXXQHvu0pTK3l0qHrCa68ukVCoOiCaTtDUA
+        liS1sjScTUccnDi/Oh4PUGyUgXQh9ulKxex9qE+/GvKP1/skVmt776pIZf9JR/q5mfOEz1D+gn+
+        W58lo5rzji14c4RabazAD+Fr0
+X-Received: by 2002:a05:600c:154f:: with SMTP id f15mr10430305wmg.86.1639762145878;
+        Fri, 17 Dec 2021 09:29:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7gC5YUCkIZUZCWG8Ebu8/gjKEd1bTxSMHmYM6ftIz/BMjlPy8ZbBH4hQzbwEvNufDCZ3BZw==
+X-Received: by 2002:a05:600c:154f:: with SMTP id f15mr10430292wmg.86.1639762145666;
+        Fri, 17 Dec 2021 09:29:05 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id k7sm7910833wri.110.2021.12.17.09.29.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 09:29:05 -0800 (PST)
+Message-ID: <058e97eb-1489-3d59-c6ee-94175dc13134@redhat.com>
+Date:   Fri, 17 Dec 2021 18:29:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-2-david@redhat.com>
+ <38BCB153-7E7C-4AAD-8657-E5C6F9E1EF9B@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
+ variant
+In-Reply-To: <38BCB153-7E7C-4AAD-8657-E5C6F9E1EF9B@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 17.12.21 18:02, Nadav Amit wrote:
+> 
+> 
+>> On Dec 17, 2021, at 3:30 AM, David Hildenbrand <david@redhat.com> wrote:
+>>
+>> Sometimes it is required to have a seqcount implementation that uses
+>> a structure with a fixed and minimal size -- just a bare unsigned int --
+>> independent of the kernel configuration. This is especially valuable, when
+>> the raw_ variants of the seqlock function will be used and the additional
+>> lockdep part of the seqcount_t structure remains essentially unused.
+>>
+>> Let's provide a lockdep-free raw_seqcount_t variant that can be used via
+>> the raw functions to have a basic seqlock.
+>>
+>> The target use case is embedding a raw_seqcount_t in the "struct page",
+>> where we really want a minimal size and cannot tolerate a sudden grow of
+>> the seqcount_t structure resulting in a significant "struct page"
+>> increase or even a layout change.
+>>
+>> Provide raw_read_seqcount_retry(), to make it easy to match to
+>> raw_read_seqcount_begin() in the code.
+>>
+>> Let's add a short documentation as well.
+>>
+>> Note: There might be other possible users for raw_seqcount_t where the
+>>      lockdep part might be completely unused and just wastes memory --
+>>      essentially any users that only use the raw_ function variants.
+>>
+> 
+> Is it possible to force some policy when raw_seqcount_t is used to
+> prevent its abuse? For instance not to allow to acquire other (certain?)
+> locks when it is held?
+> 
 
-Please pull the device tree changes for TI K3 platforms for v5.17.
+Good question ... in this series we won't be taking additional locks on
+the reader or the writer side. Something like lockdep_forbid() /
+lockdep_allow() to disallow any kind of locking. I haven't heard of
+anything like that, maybe someone reading along has a clue?
 
-Please note:
-This adds a dtbs_check warning due to missing YAML binding for pinctrl-single compatible.
-There also a checkpatch error for complex macro usage in dt-bindings
-header defining pinmux marco which is harmless.
+The writer side might be easy to handle, but some seqcount operations
+that don't do the full read()->retry() cycle are problematic
+(->raw_read_seqcount).
+
+> [ snip ]
+> 
+>> +/**
+>> + * raw_seqcount_init() - runtime initializer for raw_seqcount_t
+>> + * @s: Pointer to the raw_seqcount_t instance
+>> + */
+>> +# define raw_seqcount_init(s) __raw_seqcount_init(s)
+>> +
+>> #ifdef CONFIG_DEBUG_LOCK_ALLOC
+>>
+>> # define SEQCOUNT_DEP_MAP_INIT(lockname)				\
+>> @@ -111,11 +129,16 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
+>> # define seqcount_lockdep_reader_access(x)
+>> #endif
+>>
+>> +/**
+>> + * RAW_SEQCNT_ZERO() - static initializer for raw_seqcount_t
+>> + */
+>> +#define RAW_SEQCNT_ZERO() 0
+> 
+> I am not sure why RAW_SWQCNT_ZERO() should be a function-like macro.
+> 
+
+I think I just went for consistency with SEQCNT_ZERO() -- but I agree,
+that can just be simplified!
+
+Thanks!
 
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+-- 
+Thanks,
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+David / dhildenb
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v5.17
-
-for you to fetch changes up to effb32e931dd4feb8aa3cee7b5b4ddda43c8b701:
-
-  arch: arm64: ti: Add support J721S2 Common Processor Board (2021-12-13 23:21:22 +0530)
-
-----------------------------------------------------------------
-Devicetree changes for TI K3 platforms for v5.17 merge window:
-
-* New Platforms:
-  - J721s2 SoC, SoM and Common Processor Board support
-* New features:
-  - CAN support on AM64 EVM and SK
-  - TimeSync Router on AM64
-* Fixes:
-  - Correct d-cache-sets info on J7200
-  - Fix L2 cache-sets value for J721e/J7200/AM64
-  - Fixes for dtbs_check warnings wrt serdes_ln_ctrl node on J721e/J7200
-  - Disable McASP on IoT2050 board to fix dtbs_check warnings
-
-----------------------------------------------------------------
-Aswath Govindraju (8):
-      arm64: dts: ti: am654-base-board/am65-iot2050-common: Disable mcan nodes
-      arm64: dts: ti: k3-am64-main: Add support for MCAN
-      arm64: dts: ti: k3-am642-evm/sk: Add support for main domain mcan nodes in EVM and disable them on SK
-      dt-bindings: arm: ti: Add bindings for J721s2 SoC
-      dt-bindings: pinctrl: k3: Introduce pinmux definitions for J721S2
-      arm64: dts: ti: Add initial support for J721S2 SoC
-      arm64: dts: ti: Add initial support for J721S2 System on Module
-      arch: arm64: ti: Add support J721S2 Common Processor Board
-
-Christian Gmeiner (1):
-      arm64: dts: ti: k3-am64-main: add timesync router node
-
-Faiz Abbas (3):
-      arm64: dts: ti: k3-am65-mcu: Add Support for MCAN
-      arm64: dts: ti: k3-j721e: Add support for MCAN nodes
-      arm64: dts: ti: k3-j721e-common-proc-board: Add support for mcu and main mcan nodes
-
-Jayesh Choudhary (1):
-      arm64: dts: ti: iot2050: Disable mcasp nodes at dtsi level
-
-Kishon Vijay Abraham I (2):
-      arm64: dts: ti: j7200-main: Fix 'dtbs_check' serdes_ln_ctrl node
-      arm64: dts: ti: j721e-main: Fix 'dtbs_check' in serdes_ln_ctrl node
-
-Nishanth Menon (4):
-      arm64: dts: ti: k3-am642: Fix the L2 cache sets
-      arm64: dts: ti: k3-j7200: Fix the L2 cache sets
-      arm64: dts: ti: k3-j721e: Fix the L2 cache sets
-      arm64: dts: ti: k3-j7200: Correct the d-cache-sets info
-
-Peng Fan (1):
-      arm64: dts: ti: k3-j721e: correct cache-sets info
-
- Documentation/devicetree/bindings/arm/ti/k3.yaml       |   6 +
- arch/arm64/boot/dts/ti/Makefile                        |   2 +
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi               |  36 +
- arch/arm64/boot/dts/ti/k3-am642-evm.dts                |  40 +
- arch/arm64/boot/dts/ti/k3-am642-sk.dts                 |   8 +
- arch/arm64/boot/dts/ti/k3-am642.dtsi                   |   2 +-
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi     |  20 +
- arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi                |  30 +
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts         |   8 +
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi              |   2 +-
- arch/arm64/boot/dts/ti/k3-j7200.dtsi                   |   6 +-
- arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts  | 155 ++
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi              | 198 +-
- arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi        |  28 +
- arch/arm64/boot/dts/ti/k3-j721e.dtsi                   |   6 +-
- arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts | 421 +++++
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi             | 937 ++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi       | 302 +++
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi           | 175 ++
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi                  | 189 ++
- include/dt-bindings/pinctrl/k3.h                       |   3 +
- 21 files changed, 2565 insertions(+), 9 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2.dtsi

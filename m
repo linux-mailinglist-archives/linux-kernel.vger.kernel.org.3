@@ -2,185 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EDF478B9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD44C478BA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 13:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbhLQMj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 07:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhLQMj5 (ORCPT
+        id S236404AbhLQMpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 07:45:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44766 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhLQMpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 07:39:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30EAC061574;
-        Fri, 17 Dec 2021 04:39:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 17 Dec 2021 07:45:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpTk0jjTz4xbr;
-        Fri, 17 Dec 2021 23:39:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639744795;
-        bh=nsJIk8BV4J9cx49eUDdaldIhENhHvqO2ucZI2RNmU6Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=czenW1I+e5ejS2wybZTdTiabdQozsunHn6tCOabXRJMW/AwwYEd9OjQpRvQgeFOV2
-         NhaLYIDZY/RKrkfiwkzBTfywU54KdxOUm9krxBt0egsDWZN05LWhzOeVn20eL6eKKp
-         MWLp3KI9PB2XJT8/4cUGVupmVg20A/F6gmB7uOcnsws4foYLVGf9R9csJFrxSV/kvY
-         820S7Of9ZJChg/iFu8nt3we39wttn2ff1pE01D574SnMy4uHOl94Wfre3XZzLxjof3
-         gYwhb2/zPxCPe/4P+h+ZSwuaLl9sve9ZbC1R0Kn1q6mWn2OsSKD9lAQYvqGPIDESKX
-         nSh/wa9AQVVew==
-Date:   Fri, 17 Dec 2021 23:39:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the slab
- tree
-Message-ID: <20211217233953.28062c5b@canb.auug.org.au>
-In-Reply-To: <20211203181951.79618878@canb.auug.org.au>
-References: <20211203181951.79618878@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B91E762160;
+        Fri, 17 Dec 2021 12:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F23DC36AE1;
+        Fri, 17 Dec 2021 12:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639745152;
+        bh=l+SCwxc+wY2dm/Ieek4EKeWRjkBv6W7lUhT0BytkOFY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IZclTaJhFvX6WWdIGYNjuhJK/EFDAYpToJk0lEYEVtbzL2EP3vJ5brG7BnM4dFdUG
+         t4o99TmUzZiGw0RZ9kWD2a8IBcWyAdXdw1K9I7ZjD8gs/cAqsBgCKTuJphFrj2575g
+         MDpVsT0TR2WTpODVxh+RpWiWjBXfgAcSB/7S++6Oou6fLYTZmprGWFYrnq3D2hq9fP
+         293/BdCkH4LS9PMIlpBbQH02p65fOtcC4JLjhX4imQZdqwAN6Cf05j++SfUWPjdEBw
+         hyFFbtuQnMTfPDmUko2BF7UmcbO2i6puJ4qQgXqfx0LN2oTpuHsU1q0Z/ekPOMBqHz
+         LBWL83wI1U+fg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@microsoft.com>
+Subject: [PATCH] arm64: boot: dts: sm8150: simplify references to pwrkey and resin
+Date:   Fri, 17 Dec 2021 14:45:46 +0200
+Message-Id: <20211217124546.1192281-1-balbi@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ott/_LIrJC2ztXbfGcPesLO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ott/_LIrJC2ztXbfGcPesLO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Felipe Balbi <felipe.balbi@microsoft.com>
 
-Hi all,
+Since commit d0a6ce59ea4e ("arm64: dts: qcom: sm8150: Add support for
+SONY Xperia 1 / 5 (Kumano platform)"), we can directly refer to pwrkey
+and resin by their new labels, respectively pon_pwrkey and pon_resin.
 
-On Fri, 3 Dec 2021 18:19:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the akpm-current tree got a conflict in:
->=20
->   mm/memcontrol.c
->=20
-> between commit:
->=20
->   eefa12e18a92 ("mm/memcg: Convert slab objcgs from struct page to struct=
- slab")
->=20
-> from the slab tree and commit:
->=20
->   93e959c235eb ("mm/memcg: relocate mod_objcg_mlstate(), get_obj_stock() =
-and put_obj_stock()")
->=20
-> from the akpm-current tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc mm/memcontrol.c
-> index 522fff11d6d1,69d4fdafbb80..000000000000
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@@ -2816,10 -2769,63 +2769,63 @@@ retry
->    */
->   #define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUN=
-T)
->  =20
-> + /*
-> +  * Most kmem_cache_alloc() calls are from user context. The irq disable=
-/enable
-> +  * sequence used in this case to access content from object stock is sl=
-ow.
-> +  * To optimize for user context access, there are now two object stocks=
- for
-> +  * task context and interrupt context access respectively.
-> +  *
-> +  * The task context object stock can be accessed by disabling preemptio=
-n only
-> +  * which is cheap in non-preempt kernel. The interrupt context object s=
-tock
-> +  * can only be accessed after disabling interrupt. User context code can
-> +  * access interrupt object stock, but not vice versa.
-> +  */
-> + static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
-> + {
-> + 	struct memcg_stock_pcp *stock;
-> +=20
-> + 	if (likely(in_task())) {
-> + 		*pflags =3D 0UL;
-> + 		preempt_disable();
-> + 		stock =3D this_cpu_ptr(&memcg_stock);
-> + 		return &stock->task_obj;
-> + 	}
-> +=20
-> + 	local_irq_save(*pflags);
-> + 	stock =3D this_cpu_ptr(&memcg_stock);
-> + 	return &stock->irq_obj;
-> + }
-> +=20
-> + static inline void put_obj_stock(unsigned long flags)
-> + {
-> + 	if (likely(in_task()))
-> + 		preempt_enable();
-> + 	else
-> + 		local_irq_restore(flags);
-> + }
-> +=20
-> + /*
-> +  * mod_objcg_mlstate() may be called with irq enabled, so
-> +  * mod_memcg_lruvec_state() should be used.
-> +  */
-> + static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
-> + 				     struct pglist_data *pgdat,
-> + 				     enum node_stat_item idx, int nr)
-> + {
-> + 	struct mem_cgroup *memcg;
-> + 	struct lruvec *lruvec;
-> +=20
-> + 	rcu_read_lock();
-> + 	memcg =3D obj_cgroup_memcg(objcg);
-> + 	lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
-> + 	mod_memcg_lruvec_state(lruvec, idx, nr);
-> + 	rcu_read_unlock();
-> + }
-> +=20
->  -int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *=
-s,
->  -				 gfp_t gfp, bool new_page)
->  +int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
->  +				 gfp_t gfp, bool new_slab)
->   {
->  -	unsigned int objects =3D objs_per_slab_page(s, page);
->  +	unsigned int objects =3D objs_per_slab(s, slab);
->   	unsigned long memcg_data;
->   	void *vec;
->  =20
+Simplify microsof surface duo DTS by utilizing the new labels.
 
-This is now a conflict between the slab tree and Linus' tree.
+Signed-off-by: Felipe Balbi <felipe.balbi@microsoft.com>
+---
+ .../dts/qcom/sm8150-microsoft-surface-duo.dts | 20 ++++++++-----------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+index 5901c28e6696..a73317e1a824 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
++++ b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+@@ -430,18 +430,8 @@ &i2c19 {
+ 	/* MAX34417 @ 0x1e */
+ };
+ 
+-&pon {
+-	pwrkey {
+-		status = "okay";
+-	};
+-
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <0x0 0x8 0x1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pon_pwrkey {
++	status = "okay";
+ };
+ 
+ &qupv3_id_0 {
+@@ -476,6 +466,12 @@ &remoteproc_slpi {
+ 	firmware-name = "qcom/sm8150/microsoft/slpi.mdt";
+ };
+ 
++&pon_resin {
++	status = "okay";
++
++	linux,code = <KEY_VOLUMEDOWN>;
++};
++
+ &tlmm {
+ 	gpio-reserved-ranges = <126 4>;
+ 
+-- 
+2.34.1
 
---Sig_/ott/_LIrJC2ztXbfGcPesLO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8hRkACgkQAVBC80lX
-0Gzbqwf/Zb+TF7hmPvSyL6VuEMvxGp+ytUa0OwTS7gT0FjfDjhWTJJXY/eAD1Xe/
-cAEEuPAeHEGLHMEKFI/Yq1rms8TQhgx907ZoFJycZ/61+noxhvYgYQ6YAlfnpPjQ
-RkMoHsnNdAIc7jPVyZysPJQxk54W3ZfNYERlMn+bKGQQre/Myow7ApnJYQCgUELF
-/QNkB75wleo+ZccqlDc3ed8NhzoPiqkS6AZEV3U/Syg7vQfJZTlBpGdAE9HbulLO
-stwrUy5o3HS7NRmnCzV3nyUFwEXlmTUhlEk8O7GRFcbjGQOvgndq8F2B4jUVTF1p
-5hCTivtYggppTWSqaTi448Fa+KYh0Q==
-=FavT
------END PGP SIGNATURE-----
-
---Sig_/ott/_LIrJC2ztXbfGcPesLO--

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA4B4795A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E4D4795A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240890AbhLQUnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:43:12 -0500
-Received: from whuk3.redbackinternet.net ([109.203.107.222]:55096 "EHLO
+        id S240857AbhLQUnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:43:17 -0500
+Received: from whuk3.redbackinternet.net ([109.203.107.222]:55112 "EHLO
         whuk3.redbackinternet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240847AbhLQUnF (ORCPT
+        with ESMTP id S240874AbhLQUnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:43:05 -0500
+        Fri, 17 Dec 2021 15:43:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=fbautosys.co.uk; s=default; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wsCbn90N00GHQNLplGa73NpyFdsxX5Yt4vRl8aFrK2Q=; b=avhwJWw9v6o7PjLxzPWePzYX++
-        /pnz0kMT0nTGQRsG7yurv8iRGzZdVqLa097WRrmdso2SL2DRf9LHWNqV4SQLho+GQNT9GjNfpgbeU
-        K+76AxXeQyMx4hJUCabdILdmChM4fwu6QWSygROs4Xx2u6fGXR1ne4SAC71CgV1pen+fwWtrhsd1H
-        RrzVI+RdwNwyAAkOahgwY9hFCxSH1n+4yI6PcGOLm0gpBUHNakQaJeg269wLGzW+rNdm2DRU/Y5qa
-        NBvmloHWGbvH8NVyAT1r0KaplwFyDlTJ3Gl4IHJ63/UhWwEhG8BE/lCTCGpBPaaUzDoJ8XO2IujsI
-        mFodwAQA==;
+        bh=BdcbMVXQBTRDzwZvUDSH+xArL+v5gRK64otFW/vciqo=; b=EeRU/lVTAgCCPPDfJrCUDjbo1C
+        Tk7M+zQNYRoYyHH2XGo6Yv8LbC6LmKZk3cYB/YsDVK+JEkwjI1clVCLoP51aGy/LtI7O2I8LfPlMr
+        e1GX3R0z4YIntu3jvtonEjOS+1CMhAxTAJLVB9vQ64abLKB8bSj90psLc2q2RwMbaRi1Fyt1TSrnF
+        L2ozEIClwpwYoAvcltqNCGioetKU3YKR7Vp+xiO/CJc0GeHdl11FtoT7uOKvNOy1hBcU1KKVSY3SM
+        sx6LjQTLsTsWbYVNV09QBaI1S3xqqac6hHlevrrxSwjKiwTi7hRk5Rf2sTDYF94OsjePc3mnaZvr0
+        0JMOp3Qg==;
 Received: from 24.54.187.81.in-addr.arpa ([81.187.54.24]:28253 helo=kernelcomp.corp.firebladeautomationsystems.co.uk)
         by whuk3.redbackinternet.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <linuxkernel@fbautosys.co.uk>)
-        id 1myJgL-0001AJ-9v; Fri, 17 Dec 2021 20:18:22 +0000
+        id 1myJgM-0001AJ-E1; Fri, 17 Dec 2021 20:18:23 +0000
 From:   linuxkernel@fbautosys.co.uk
 To:     linux-kernel@vger.kernel.org
 Cc:     broonie@kernel.org
-Subject: [RFC PATCH 1/5] Add Parity bit Calculation to regmaps
-Date:   Fri, 17 Dec 2021 20:17:54 +0000
-Message-Id: <20211217201758.1743750-2-linuxkernel@fbautosys.co.uk>
+Subject: [RFC PATCH 2/5] Altered regmap_X_X_write functions to account for padding bits
+Date:   Fri, 17 Dec 2021 20:17:55 +0000
+Message-Id: <20211217201758.1743750-3-linuxkernel@fbautosys.co.uk>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211217201758.1743750-1-linuxkernel@fbautosys.co.uk>
 References: <20211217201758.1743750-1-linuxkernel@fbautosys.co.uk>
@@ -56,337 +56,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christopher Tyerman <c.tyerman@firebladeautomationsystems.co.uk>
 
-regmap.h
-
-Added parity_read_mask to regmap_config
-Added parity_write_mask to regmap_config
-Added (*parity_calc)() to regmap_config
-
-Added regmap_parity_calc_even() Added regmap_parity_calc_odd()
-
-internal.h
-
-Added parity_read_mask to regmap
-Added parity_write_mask to regmap
-Added (*parity_calc) to regmap
-
-regmap.c
-Altered _regmap_raw_write_impl() to calculate parity
-Altered _regmap_raw_read() to calculate parity
-Added regmap_set_work_buf_parity_mask()
-Added regmap_parity_calc_even()
-Added regmap_parity_calc_odd()
-Added parity_even()
-Added parity16_even(u16 v)
-Added parity32_even(u32 v)
-Added parity64_even(u64 v)
+	modified:   drivers/base/regmap/regmap.c
 
 Signed-off-by: Christopher Tyerman <c.tyerman@firebladeautomationsystems.co.uk>
 ---
- drivers/base/regmap/internal.h |   6 ++
- drivers/base/regmap/regmap.c   | 168 ++++++++++++++++++++++++++++++++-
- include/linux/regmap.h         |  32 +++++++
- 3 files changed, 204 insertions(+), 2 deletions(-)
+ drivers/base/regmap/regmap.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/base/regmap/internal.h b/drivers/base/regmap/internal.h
-index b1905916f7af..78df50694cf4 100644
---- a/drivers/base/regmap/internal.h
-+++ b/drivers/base/regmap/internal.h
-@@ -168,6 +168,12 @@ struct regmap {
- 
- 	/* if set, the regmap core can sleep */
- 	bool can_sleep;
-+
-+	unsigned long parity_write_mask;
-+	unsigned long parity_read_mask;
-+
-+	bool (*parity_calc)(unsigned long rwmask, unsigned int reg,
-+						const void *val, size_t val_len);
- };
- 
- struct regcache_ops {
 diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 2d74f9f82aa9..05c104659381 100644
+index 05c104659381..07d6d804c4b9 100644
 --- a/drivers/base/regmap/regmap.c
 +++ b/drivers/base/regmap/regmap.c
-@@ -57,6 +57,13 @@ static int _regmap_bus_reg_write(void *context, unsigned int reg,
- static int _regmap_bus_raw_write(void *context, unsigned int reg,
- 				 unsigned int val);
- 
-+static bool parity_even(uint v);
-+
-+static bool parity8_even(u8 v);
-+static bool parity16_even(u16 v);
-+static bool parity32_even(u32 v);
-+static bool parity64_even(u64 v);
-+
- bool regmap_reg_in_ranges(unsigned int reg,
- 			  const struct regmap_range *ranges,
- 			  unsigned int nranges)
-@@ -892,6 +899,14 @@ struct regmap *__regmap_init(struct device *dev,
- 		map->reg_update_bits = bus->reg_update_bits;
- 	}
- 
-+	map->parity_write_mask = config->parity_write_mask;
-+	map->parity_read_mask = config->parity_read_mask;
-+
-+	if (config->parity_calc)
-+		map->parity_calc = config->parity_calc;
-+	else
-+		map->parity_calc = regmap_parity_calc_even;
-+
- 	reg_endian = regmap_get_reg_endian(bus, config);
- 	val_endian = regmap_get_val_endian(dev, bus, config);
- 
-@@ -1655,6 +1670,31 @@ static void regmap_set_work_buf_flag_mask(struct regmap *map, int max_bytes,
- 		buf[i] |= (mask >> (8 * i)) & 0xff;
- }
- 
-+static void regmap_set_work_buf_parity_mask(struct regmap *map, int max_bytes,
-+					  unsigned long mask, unsigned long rwmask,
-+					  unsigned int reg, const void *val, size_t val_len)
-+{
-+
-+	bool paritybit;
-+	u8 *buf;
-+	int i;
-+
-+	if (!mask || !map->work_buf)
-+		return;
-+
-+	paritybit = map->parity_calc(rwmask, reg, val, val_len);
-+
-+
-+	if (paritybit) {
-+		buf = map->work_buf;
-+
-+		for (i = 0; i < max_bytes; i++)
-+			buf[i] |= (mask >> (8 * i)) & 0xff;
-+	}
-+}
-+
-+
-+
- static int _regmap_raw_write_impl(struct regmap *map, unsigned int reg,
- 				  const void *val, size_t val_len, bool noinc)
+@@ -232,42 +232,52 @@ static void regmap_format_2_6_write(struct regmap *map,
+ 				     unsigned int reg, unsigned int val)
  {
-@@ -1736,7 +1776,12 @@ static int _regmap_raw_write_impl(struct regmap *map, unsigned int reg,
+ 	u8 *out = map->work_buf;
++	u8 shift = map->reg_shift;
  
- 	map->format.format_reg(map->work_buf, reg, map->reg_shift);
- 	regmap_set_work_buf_flag_mask(map, map->format.reg_bytes,
--				      map->write_flag_mask);
-+								  map->write_flag_mask);
-+
-+
-+	regmap_set_work_buf_parity_mask(map, map->format.reg_bytes,
-+				map->parity_write_mask, map->write_flag_mask, reg, val, val_len);
-+
- 
- 	/*
- 	 * Essentially all I/O mechanisms will be faster with a single
-@@ -1748,6 +1793,9 @@ static int _regmap_raw_write_impl(struct regmap *map, unsigned int reg,
- 		val = work_val;
- 	}
- 
-+
-+
-+
- 	if (map->async && map->bus->async_write) {
- 		struct regmap_async *async;
- 
-@@ -2674,7 +2722,12 @@ static int _regmap_raw_read(struct regmap *map, unsigned int reg, void *val,
- 
- 	map->format.format_reg(map->work_buf, reg, map->reg_shift);
- 	regmap_set_work_buf_flag_mask(map, map->format.reg_bytes,
--				      map->read_flag_mask);
-+						map->read_flag_mask);
-+
-+	regmap_set_work_buf_parity_mask(map, map->format.reg_bytes,
-+						map->parity_read_mask, map->read_flag_mask, reg,
-+						val, val_len);
-+
- 	trace_regmap_hw_read_start(map, reg, val_len / map->format.val_bytes);
- 
- 	ret = map->bus->read(map->bus_context, map->work_buf,
-@@ -3340,3 +3393,114 @@ static int __init regmap_initcall(void)
- 	return 0;
- }
- postcore_initcall(regmap_initcall);
-+
-+
-+/**
-+ * regmap_parity_calc_even() - calculates Value of parity bit for even parity
-+ *
-+ * @rwmask: value of the read/write mask
-+ * @reg: value of register
-+ * @val: pointer to value of data
-+ * @val_len: size of val
-+ *
-+ * Calculate the value of the parity bit for even parity
-+ */
-+bool regmap_parity_calc_even(unsigned long rwmask, unsigned int reg,
-+							 const void *val, size_t val_len)
-+{
-+	bool paritybuf = 0;
-+	uint count = 0;
-+
-+	while (count < val_len) {
-+		if (val_len - count >= 8) {
-+			paritybuf ^= parity64_even(*(u64 *)val+count);
-+			count += 8;
-+		} else if (val_len - count >= 4) {
-+			paritybuf ^= parity32_even(*(u32 *)val+count);
-+			count += 4;
-+		} else if (val_len - count >= 2) {
-+			paritybuf ^= parity16_even(*(u16 *)val+count);
-+			count += 2;
-+		} else if (val_len - count >= 1) {
-+			paritybuf ^= parity8_even(*(u8 *)val+count);
-+			count += 1;
-+		}
-+	}
-+
-+	return (parity_even(rwmask) ^ parity_even(reg) ^ paritybuf);
-+}
-+EXPORT_SYMBOL_GPL(regmap_parity_calc_even);
-+
-+/**
-+ * regmap_parity_calc_odd() - calculates Value of parity bit for odd parity
-+ *
-+ * @rwmask: value of the read/write mask
-+ * @reg: value of register
-+ * @val: pointer to value of data
-+ * @val_len: size of val
-+ *
-+ * Calculate the value of the parity bit for odd parity
-+ */
-+
-+bool regmap_parity_calc_odd(unsigned long rwmask, unsigned int reg,
-+							const void *val, size_t val_len)
-+{
-+	return !(regmap_parity_calc_even(rwmask, reg, val, val_len));
-+
-+
-+}
-+EXPORT_SYMBOL_GPL(regmap_parity_calc_odd);
-+
-+static bool parity_even(uint v)
-+{
-+	switch (sizeof(v)) {
-+	case 1:
-+		return parity8_even((u8)v);
-+	case 2:
-+		return parity16_even((u16)v);
-+	case 4:
-+		return parity32_even((u32)v);
-+	case 8:
-+	default:
-+		return parity64_even((u64)v);
-+
-+	}
-+}
-+static bool parity8_even(u8 v)
-+{
-+	v ^= v >> 4;
-+	v ^= v >> 2;
-+	v ^= v >> 1;
-+	return v & 1;
-+}
-+
-+
-+static bool parity16_even(u16 v)
-+{
-+	v ^= v >> 8;
-+	v ^= v >> 4;
-+	v ^= v >> 2;
-+	v ^= v >> 1;
-+	return v & 1;
-+}
-+
-+static bool parity32_even(u32 v)
-+{
-+	v ^= v >> 16;
-+	v ^= v >> 8;
-+	v ^= v >> 4;
-+	v ^= v >> 2;
-+	v ^= v >> 1;
-+	return v & 1;
-+}
-+
-+static bool parity64_even(u64 v)
-+{
-+	v ^= v >> 32;
-+	v ^= v >> 16;
-+	v ^= v >> 8;
-+	v ^= v >> 4;
-+	v ^= v >> 2;
-+	v ^= v >> 1;
-+	return v & 1;
-+}
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index 22652e5fbc38..511fc9228e1d 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -354,6 +354,10 @@ typedef void (*regmap_unlock)(void *);
-  * @hwlock_mode: The hardware spinlock mode, should be HWLOCK_IRQSTATE,
-  *		 HWLOCK_IRQ or 0.
-  * @can_sleep: Optional, specifies whether regmap operations can sleep.
-+ *
-+ * @parity_read_mask: bit mask of location of parity bit for reads
-+ * @parity_write_mask: bit mask of location of parity bit for writes
-+ * @parity_calc: Optional callback to calculate parity, defaults to even parity
-  */
- struct regmap_config {
- 	const char *name;
-@@ -416,6 +420,12 @@ struct regmap_config {
- 	unsigned int hwlock_mode;
- 
- 	bool can_sleep;
-+
-+	unsigned long parity_read_mask;
-+	unsigned long parity_write_mask;
-+	bool (*parity_calc)(unsigned long rwmask, unsigned int reg,
-+						const void *val, size_t val_len);
-+
- };
- 
- /**
-@@ -1237,6 +1247,11 @@ static inline int regmap_clear_bits(struct regmap *map,
- 
- int regmap_test_bits(struct regmap *map, unsigned int reg, unsigned int bits);
- 
-+bool regmap_parity_calc_even(unsigned long rwmask, unsigned int reg,
-+								const void *val, size_t val_len);
-+bool regmap_parity_calc_odd(unsigned long rwmask, unsigned int reg,
-+								const void *val, size_t val_len);
-+
- /**
-  * struct reg_field - Description of an register field
-  *
-@@ -1866,6 +1881,23 @@ static inline struct device *regmap_get_device(struct regmap *map)
- 	return NULL;
+-	*out = (reg << 6) | val;
++	*out = (reg << (6 + shift) | val);
  }
  
-+static inline bool regmap_parity_calc_even(unsigned long rwmask, unsigned int reg,
-+						const void *val, size_t val_len)
-+{
-+	WARN_ONCE(1, "regmap API is disabled");
-+	return NULL;
-+}
+ static void regmap_format_4_12_write(struct regmap *map,
+ 				     unsigned int reg, unsigned int val)
+ {
++	u8 shift = map->reg_shift;
+ 	__be16 *out = map->work_buf;
+-	*out = cpu_to_be16((reg << 12) | val);
 +
-+static inline bool regmap_parity_calc_odd(unsigned long rwmask, unsigned int reg,
-+						const void *val, size_t val_len)
-+{
-+	WARN_ONCE(1, "regmap API is disabled");
-+	return NULL;
-+}
-+
-+
- #endif
++	*out = cpu_to_be16((reg << (12 + shift)) | val);
+ }
  
+ static void regmap_format_7_9_write(struct regmap *map,
+ 				    unsigned int reg, unsigned int val)
+ {
++	u8 shift = map->reg_shift;
+ 	__be16 *out = map->work_buf;
+-	*out = cpu_to_be16((reg << 9) | val);
 +
-+
- #endif
++	*out = cpu_to_be16((reg << (9 + shift)) | val);
+ }
+ 
+ static void regmap_format_7_17_write(struct regmap *map,
+ 				    unsigned int reg, unsigned int val)
+ {
++	u8 shift = map->reg_shift;
+ 	u8 *out = map->work_buf;
+ 
+ 	out[2] = val;
+ 	out[1] = val >> 8;
+-	out[0] = (val >> 16) | (reg << 1);
++	out[0] = (val >> 16) | (reg << (1 + shift));
+ }
+ 
+ static void regmap_format_10_14_write(struct regmap *map,
+ 				    unsigned int reg, unsigned int val)
+ {
++	u8 shift = map->reg_shift;
+ 	u8 *out = map->work_buf;
+ 
+ 	out[2] = val;
+-	out[1] = (val >> 8) | (reg << 6);
+-	out[0] = reg >> 2;
++	out[1] = (val >> 8) | (reg << (6 + shift));
++	if (shift <= 2)
++		out[0] = reg >> (2 - shift);
++	else
++		out[0] = reg << shift;
+ }
+ 
+ static void regmap_format_8(void *buf, unsigned int val, unsigned int shift)
 -- 
 2.25.1
 

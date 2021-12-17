@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205C547956D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA5147957C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239552AbhLQU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:27:03 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19212 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231205AbhLQU0y (ORCPT
+        id S240830AbhLQU3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240819AbhLQU3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:26:54 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHJdw2Z023548;
-        Fri, 17 Dec 2021 20:26:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=NT8db8cmKoNvU/LxztBiVOpOTYslDCSznAhdQdxmHqo=;
- b=HA0csOhPpzoDkWPmTGiMLqbSU4ICpW/mW0yhEtTCF/gv2TQ6HlAxh1AGbkFYbhOjx5Sm
- ACR+WonPxG1s2C5CVW1vsHzQ8GVnHO9qUflpvR4Oy+0aPq0edw3+iV4qiXlG2L8rEFw4
- 5vonU5sfQ/C2E2lS3LrZnrdBlQBLvB1wpGF1/xLs39JtudljHPuSs4nldLbAizDL4OEI
- jRSgdctF9MW547K2KDUGWR/5iQoBSDYWexJ/UcIeEqCsuJgKF50/Vn6FVdp+8cg25xlm
- l+daYXMpfj6akteG5f9N61Verg0j+QIMnqHW6XUZIQde+cIUSyTiwgbP47mDZbP2vpip /Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d08snyn3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 20:26:53 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHKQ6pf024095;
-        Fri, 17 Dec 2021 20:26:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d08snyn3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 20:26:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHK9mjl026992;
-        Fri, 17 Dec 2021 20:26:52 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01dal.us.ibm.com with ESMTP id 3cy7e593s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Dec 2021 20:26:52 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHKQpa831392092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 20:26:51 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CC88124058;
-        Fri, 17 Dec 2021 20:26:51 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CEAB1124054;
-        Fri, 17 Dec 2021 20:26:46 +0000 (GMT)
-Received: from [9.211.79.24] (unknown [9.211.79.24])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Dec 2021 20:26:46 +0000 (GMT)
-Message-ID: <37b5de48-adef-225e-fafc-f918b64e7736@linux.ibm.com>
-Date:   Fri, 17 Dec 2021 15:26:45 -0500
+        Fri, 17 Dec 2021 15:29:04 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C5AC06173F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:29:04 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so12513214edd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FaFNELIHWLkYtxS9FFKaGccYxYikTbeuDKRkMvnLyI8=;
+        b=QrR95jjjA5DtmjUr6mFxmIKgd/mtTLy/CxzdjUM08QWAD2GpaBBjiPP/+aK8nw4vLp
+         R9K2jq6+gZXkk+m+/FkrT1sl4t+C7VQ1JiYlWxLtxwAZ+ZQm20oFc+linFWeEI6n4O1T
+         oS2ZXHcs7KFJNvk5V0KAQtcQGVF+8ts+0xYrQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FaFNELIHWLkYtxS9FFKaGccYxYikTbeuDKRkMvnLyI8=;
+        b=yo5XnT2qwah75Xa75SuGlDh3GaJKlYyJzI1/KMWsgK5zj0JbG19w/jyp8r6o+66kpd
+         UD9YVRxgKFBg8bha8MNJo5ZrUNtDdRB4tiZYLLr27zu83e73h7bemnQPefahsXQG6vnt
+         7mrlM+nvGO7aZhwIiE17WIa2QsXi5isMuOpjjZsqLoaW1iRoHrbitwt+ZomWioLr+ODl
+         5ytVoUy2QNFJLppLIVYIyakjJAo8ukFLcBCx+SBi5FSZqg4yE5JFwF352tvyNT62yCgm
+         U0kkZItBWFA+aTCTnm8r+pf/n9AePkV8Z1qim8F9k09pxpm3R3q9RmfCDy7SyCZr+h87
+         DaaA==
+X-Gm-Message-State: AOAM532DuslFc/qCWSmBLhZncOuGoqbgS2PYtAe02FfpUalv7O4sfAwy
+        KJu+eh+gjeuQAlYRJH8htTQbhlB9X3hknEty
+X-Google-Smtp-Source: ABdhPJw7x+BT5TH3wi89Iv0Yxs9rsk8uHnS5miCP5ZZArgrDDkHt9vCkuXhGr9AfSgsPO/BPivgqJw==
+X-Received: by 2002:a05:6402:34cf:: with SMTP id w15mr4302782edc.63.1639772942667;
+        Fri, 17 Dec 2021 12:29:02 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id x16sm2551705ejs.92.2021.12.17.12.29.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 12:29:02 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so2271859wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:29:02 -0800 (PST)
+X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr11004673wmq.8.1639772941784;
+ Fri, 17 Dec 2021 12:29:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 13/32] KVM: s390: pci: add basic kvm_zdev structure
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-14-mjrosato@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-14-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ry33nit8jVfWMuT3yOTY4xszTU6h-RWu
-X-Proofpoint-GUID: 1EemLL_KH73qOu0sqW9anHsGLX51NoaG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-17_08,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112170112
+References: <CAHC9VhS=WgqJgqpQq9J+0Pec9u8e1VnvGwqOimR54wm6TRptVA@mail.gmail.com>
+In-Reply-To: <CAHC9VhS=WgqJgqpQq9J+0Pec9u8e1VnvGwqOimR54wm6TRptVA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 12:28:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiiqvcA3noHDqJt2=ik5ikQbycdFQ7s=uq70FcGxWgXvg@mail.gmail.com>
+Message-ID: <CAHk-=wiiqvcA3noHDqJt2=ik5ikQbycdFQ7s=uq70FcGxWgXvg@mail.gmail.com>
+Subject: Re: [GIT PULL] SELinux fixes for v5.16 (#3)
+To:     Paul Moore <paul@paul-moore.com>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        Scott Mayhew <smayhew@redhat.com>
+Cc:     SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 3:57 PM, Matthew Rosato wrote:
-> This structure will be used to carry kvm passthrough information related to
-> zPCI devices.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
-...
->   static inline bool zdev_enabled(struct zpci_dev *zdev)
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index b3aaadc60ead..95ea865e5d29 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -10,6 +10,6 @@ common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
->   ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->   
->   kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o sigp.o
-> -kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
-> +kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o pci.o
+On Fri, Dec 17, 2021 at 12:02 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> Another small SELinux fix for v5.16 to ensure that we don't block on
+> memory allocations while holding a spinlock.  This passes all our
+> tests without problem, please merge this for the next v5.16-rcX
+> release.
 
-This should instead be
+Ugh, pulled.
 
-kvm-objs-$(CONFIG_PCI) += pci.o
+GFP_NOWAIT can very easily fail, so I'm not convinced your tests would
+catch any of the interesting cases.
 
-I think this makes sense as we aren't about to do PCI passthrough 
-support anyway if the host kernel doesn't support PCI (no vfio-pci, 
-etc).   This will quiet the kernel test robot complaints about 
-CONFIG_PCI_NR_FUNCTIONS seen on the next patch in this series.
+There is only one single caller of the new
+security_sb_mnt_opts_compat() callback, and I get the feeling that
+maybe we could parse the options first - into a temporary new
+superblock, and then at "test" time (when we're under that sb_lock) it
+could compare that temporary sb with pre-existing ones?
 
->   
->   obj-$(CONFIG_KVM) += kvm.o
+That would also avoid the need for doing that mount option parsing
+over and over and over again for each sb on the 'fs_supers' lists.
+
+I've pulled this, bit it does smell bad to me, and I think that
+original commit 69c4a42d72eb ("lsm,selinux: add new hook to compare
+new mount to an existing mount") and ec1ade6a0448 ("nfs: account for
+selinux security context when deciding to share superblock") may not
+have been fully thought out.
+
+It may have *looked* like just adding that check  to
+'nfs_compare_super' was a simple and good idea, but it really doesn't
+look great.
+
+Adding a few more people to the cc.
+
+                 Linus

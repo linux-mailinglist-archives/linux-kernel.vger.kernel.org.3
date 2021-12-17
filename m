@@ -2,115 +2,420 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 639444796E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D3C4796E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbhLQWM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:12:27 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:45319 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229500AbhLQWM0 (ORCPT
+        id S229809AbhLQWNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:13:45 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:42760 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhLQWNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:12:26 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 7744032007E8;
-        Fri, 17 Dec 2021 17:12:25 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 17 Dec 2021 17:12:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=i
-        72pxYgch0GKQxi1KRFw6/YrWp6fxCA2wazXup0+w90=; b=z3BYrw/kt8/7LtG9g
-        Ms3+py9cW/VFt51s0Yonj+1GcesHcdlmt6SB97xzHOupjiHvp5wn1g40pQnPaMBk
-        gEiiAhlMczahh9fTVi3h8ploSRB+Fw96H+UdYOYQ2NVaTyGol049nTQsfPToHL5Z
-        CgNCxwDGP9UvZSZL9b+RryvOGiUAQCkZADrpGU88bDFeyrRBDnAf4cjeF8IUTdj6
-        g0WOLKH/dpxLxtMujmnHEoK+CULLsprBMtVrHe3GObCkRMQdfgK8+2i5c3mxmZC7
-        FXdSfCNTqa4VB9VoPCM2KbVNizAQRSO6wNQTbLzxW3fNkRE7nnl4s5zGF5T+dujG
-        n4UVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=i72pxYgch0GKQxi1KRFw6/YrWp6fxCA2wazXup0+w
-        90=; b=US0RSgjfJtR6lsT2/y2vlVaeLhoN6QLqep6K5e9D2TBM3bOxiomZ4fsoX
-        83eO3XC7/2q7csm42NAXlFq1ZJeI6dv7Y8U5P7GXqodyCE4BcYbqGKTChNvQPrkY
-        kmG/tVBgy1ZWUvxHKMDvRK1pRAZ4tGUkQvU/VZVaEsWSDVldkHhlFbHPfTfm4Vhc
-        Ip57zP8W/2AGphj9I6WIBL3gKApkMP6z1djeUX6VIwGoSuLFSpEKhh5558LRaFpA
-        zo4F/VMAast2R/3u+LGHWBy8I4onUm1+9bDxmWPaUTCN0GV0w5ZGRgwjWUFbnkW+
-        8vlzbuE2i8JXfImcsXunroM0mVS7Q==
-X-ME-Sender: <xms:SAu9YRWX4ecn-6ykZPWp4OvHe39vUnoYnI3d5Wvw9weK5GGYxsv1Wg>
-    <xme:SAu9YRlOHC6GG3dqKz8u4fjKUOMOQUQruagLGvByV_OqsFmGKLy5T5zAMV3xp1mot
-    Dp8YZTvcf54zEy4pT4>
-X-ME-Received: <xmr:SAu9YdYOpLSaxHSHRCjgb4YLF8S6PzjhyrMRYiGrDRBS_hVIrkzUxAtHY9JyKDc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeigdduheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
-    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:SAu9YUUBWtUdcFIlf8lpWdbi_mBJIvhmanLG2OsFwmnP3DzyPA9ckA>
-    <xmx:SAu9YblMVvK6c2pLSeYvCBCci3hj2I3i9wezCWDfeNB0lP_fcY-4hQ>
-    <xmx:SAu9YRd9H2Hc40zg11l5oSjELedTd7oH6K928iNp9JkH6-PM1znP_A>
-    <xmx:SAu9YUAmR8YVcOP62Uf9LhtJL_SSjXUOCHMtySQKZJDxFF-8q6FnBw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Dec 2021 17:12:23 -0500 (EST)
-Message-ID: <dbff4beb-1982-1568-ab7e-2b12ad956a06@flygoat.com>
-Date:   Fri, 17 Dec 2021 22:12:23 +0000
+        Fri, 17 Dec 2021 17:13:45 -0500
+Received: by mail-ot1-f43.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so4556168otv.9;
+        Fri, 17 Dec 2021 14:13:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CMrqK/IlPB+iUu0Ygp/wwMOeNRUFbhIC/CWr2Oha75Y=;
+        b=AcPhDTpQkyqorSEEmzjttP/9UsrZ1fJFFEhhAImliBgv/Z0L7z9wBE7Jt7T9AZ/EPT
+         Ud2MUSgOu7jyHg4GpTv0zadvf0VrTg4VIYExuvFEYGBf2g7JqHrfUy9zUUt1UJDPmZG2
+         c/lHZyFnzg05h8EHbjJ2oE2b/otjr905hjqp9mXIkEgMEZe2nWnO8So3kbsmxtjWeb+s
+         YQoTkmXzd4LLTNpPnrmMRiKxdIhXwgmumI5V3w78ibTx7Xt1KMQnzVUVKAiNfdK/vpAX
+         apwsLHN9rLPLUt4IFl5/dmwdQXNWx2xCZOY7vKqNn9sgaSolBHVxlwXDwXDpdLT3gMnP
+         uqpQ==
+X-Gm-Message-State: AOAM532/rwfZMdrdux2leUmc+njnLFP+uOrm/L8mbwajuybETAAO+L6P
+        OlRurJjFkwTGdB3vPevYmA==
+X-Google-Smtp-Source: ABdhPJx1g0ij25OB5JYaf+W+qP1xBG5CXQi6+5TSDia8WKRC2Z8HezJJq63adSWNuD7SoHd61+UgWg==
+X-Received: by 2002:a9d:6107:: with SMTP id i7mr3604833otj.165.1639779224352;
+        Fri, 17 Dec 2021 14:13:44 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id n23sm1848481oig.4.2021.12.17.14.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 14:13:43 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     soc@kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH] ARM: dts: Remove "spidev" nodes
+Date:   Fri, 17 Dec 2021 16:12:32 -0600
+Message-Id: <20211217221232.3664417-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] MIPS: generic: enable SMP on SMVP systems
-To:     Sander Vanheule <sander@svanheule.net>, linux-mips@vger.kernel.org
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        INAGAKI Hiroshi <musashino.open@gmail.com>
-References: <20211217183930.16192-1-sander@svanheule.net>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20211217183930.16192-1-sander@svanheule.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+"spidev" is not a real device, but a Linux implementation detail. It has
+never been documented either. The kernel has WARNed on the use of it for
+over 6 years. Time to remove its usage from the tree.
 
+Cc: Mark Brown <broonie@kernel.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Arnd, Olof, Can you please apply this directly.
 
-在 2021/12/17 18:39, Sander Vanheule 写道:
-> In addition to CPS SMP setups, also try to initialise MT SMP setups with
-> multiple VPEs per CPU core. CMP SMP support is not provided as it is
-> considered deprecated.
->
-> Additionally, rework the code by dropping the err variable and make it
-> similar to how other platforms perform this initialisation.
-Hi,
+ arch/arm/boot/dts/at91-q5xr5.dts              | 18 ----------
+ arch/arm/boot/dts/at91-wb50n.dts              |  6 ----
+ arch/arm/boot/dts/imx28-tx28.dts              | 36 -------------------
+ arch/arm/boot/dts/imx53-tx53.dtsi             | 11 ------
+ arch/arm/boot/dts/imx6qdl-tx6.dtsi            | 12 -------
+ .../boot/dts/imx6ul-imx6ull-opos6uldev.dtsi   | 12 -------
+ arch/arm/boot/dts/imx6ul-prti6g.dts           |  6 ----
+ arch/arm/boot/dts/imx6ul-tx6ul.dtsi           | 24 -------------
+ arch/arm/boot/dts/omap3-tao3530.dtsi          | 14 --------
+ .../dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  2 +-
+ arch/arm/boot/dts/spear1310-evb.dts           | 16 ---------
+ arch/arm/boot/dts/spear1340-evb.dts           | 16 ---------
+ 12 files changed, 1 insertion(+), 172 deletions(-)
 
-Thanks for your patch :-)
+diff --git a/arch/arm/boot/dts/at91-q5xr5.dts b/arch/arm/boot/dts/at91-q5xr5.dts
+index 5827383b181b..47a00062f01f 100644
+--- a/arch/arm/boot/dts/at91-q5xr5.dts
++++ b/arch/arm/boot/dts/at91-q5xr5.dts
+@@ -147,12 +147,6 @@ uboot@8000 {
+ 			reg = <0x8000 0x3E000>;
+ 		};
+ 	};
+-
+-	spidev@1 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <1>;
+-	};
+ };
+ 
+ &spi1 {
+@@ -160,18 +154,6 @@ &spi1 {
+ 	pinctrl-0 = <&pinctrl_spi1 &pinctrl_spi1_npcs0 &pinctrl_spi1_npcs1>;
+ 	cs-gpios = <&pioB 3 GPIO_ACTIVE_HIGH>, <&pioC 5 GPIO_ACTIVE_LOW>, <0>, <0>;
+ 	status = "okay";
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <0>;
+-	};
+-
+-	spidev@1 {
+-		compatible = "spidev";
+-		spi-max-frequency = <2000000>;
+-		reg = <1>;
+-	};
+ };
+ 
+ &usart0 {
+diff --git a/arch/arm/boot/dts/at91-wb50n.dts b/arch/arm/boot/dts/at91-wb50n.dts
+index a5e45bb95c04..89f0f717f7ed 100644
+--- a/arch/arm/boot/dts/at91-wb50n.dts
++++ b/arch/arm/boot/dts/at91-wb50n.dts
+@@ -90,12 +90,6 @@ &i2c0 {
+ 
+ &spi1 {
+ 	status = "okay";
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <8000000>;
+-	};
+ };
+ 
+ &usb0 {
+diff --git a/arch/arm/boot/dts/imx28-tx28.dts b/arch/arm/boot/dts/imx28-tx28.dts
+index 164254c28f8e..9e5651c7ea6b 100644
+--- a/arch/arm/boot/dts/imx28-tx28.dts
++++ b/arch/arm/boot/dts/imx28-tx28.dts
+@@ -239,24 +239,6 @@ &gpio3 9 GPIO_ACTIVE_LOW
+ 		>;
+ 		/* enable this and disable ssp3 below, if you need full duplex SPI transfer */
+ 		status = "disabled";
+-
+-		spi@0 {
+-			compatible = "spidev";
+-			reg = <0>;
+-			spi-max-frequency = <57600000>;
+-		};
+-
+-		spi@1 {
+-			compatible = "spidev";
+-			reg = <1>;
+-			spi-max-frequency = <57600000>;
+-		};
+-
+-		spi@2 {
+-			compatible = "spidev";
+-			reg = <2>;
+-			spi-max-frequency = <57600000>;
+-		};
+ 	};
+ };
+ 
+@@ -700,24 +682,6 @@ &ssp3 {
+ 	pinctrl-0 = <&spi3_pins_a>;
+ 	clock-frequency = <57600000>;
+ 	status = "okay";
+-
+-	spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <57600000>;
+-	};
+-
+-	spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <57600000>;
+-	};
+-
+-	spi@2 {
+-		compatible = "spidev";
+-		reg = <2>;
+-		spi-max-frequency = <57600000>;
+-	};
+ };
+ 
+ &usb0 {
+diff --git a/arch/arm/boot/dts/imx53-tx53.dtsi b/arch/arm/boot/dts/imx53-tx53.dtsi
+index 7c9730f3f820..81c2726a328a 100644
+--- a/arch/arm/boot/dts/imx53-tx53.dtsi
++++ b/arch/arm/boot/dts/imx53-tx53.dtsi
+@@ -192,17 +192,6 @@ &gpio2 30 GPIO_ACTIVE_HIGH
+ 		&gpio3 19 GPIO_ACTIVE_HIGH
+ 	>;
+ 
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <54000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <54000000>;
+-	};
+ };
+ 
+ &esdhc1 {
+diff --git a/arch/arm/boot/dts/imx6qdl-tx6.dtsi b/arch/arm/boot/dts/imx6qdl-tx6.dtsi
+index 362e65ccaa78..bcc5bbcce769 100644
+--- a/arch/arm/boot/dts/imx6qdl-tx6.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-tx6.dtsi
+@@ -259,18 +259,6 @@ &gpio2 30 GPIO_ACTIVE_HIGH
+ 		&gpio3 19 GPIO_ACTIVE_HIGH
+ 	>;
+ 	status = "disabled";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <54000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <54000000>;
+-	};
+ };
+ 
+ &fec {
+diff --git a/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi b/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
+index 935a77d717a6..18cac19aa9b0 100644
+--- a/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
++++ b/arch/arm/boot/dts/imx6ul-imx6ull-opos6uldev.dtsi
+@@ -114,18 +114,6 @@ &ecspi4 {
+ 	pinctrl-0 = <&pinctrl_ecspi4>;
+ 	cs-gpios = <&gpio4 9 GPIO_ACTIVE_LOW>, <&gpio4 3 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <5000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <5000000>;
+-	};
+ };
+ 
+ &i2c1 {
+diff --git a/arch/arm/boot/dts/imx6ul-prti6g.dts b/arch/arm/boot/dts/imx6ul-prti6g.dts
+index d62015701d0a..c18390f238e1 100644
+--- a/arch/arm/boot/dts/imx6ul-prti6g.dts
++++ b/arch/arm/boot/dts/imx6ul-prti6g.dts
+@@ -78,12 +78,6 @@ &ecspi2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_ecspi2>;
+ 	status = "okay";
+-
+-	spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <1000000>;
+-	};
+ };
+ 
+ &fec1 {
+diff --git a/arch/arm/boot/dts/imx6ul-tx6ul.dtsi b/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
+index 938a32ced88d..c485d058e079 100644
+--- a/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul-tx6ul.dtsi
+@@ -227,18 +227,6 @@ &gpio1 29 GPIO_ACTIVE_HIGH
+ 			&gpio1 10 GPIO_ACTIVE_HIGH
+ 		>;
+ 		status = "disabled";
+-
+-		spi@0 {
+-			compatible = "spidev";
+-			reg = <0>;
+-			spi-max-frequency = <660000>;
+-		};
+-
+-		spi@1 {
+-			compatible = "spidev";
+-			reg = <1>;
+-			spi-max-frequency = <660000>;
+-		};
+ 	};
+ 
+ 	sound {
+@@ -290,18 +278,6 @@ &gpio1 29 GPIO_ACTIVE_HIGH
+ 		&gpio1 10 GPIO_ACTIVE_HIGH
+ 	>;
+ 	status = "disabled";
+-
+-	spidev0: spi@0 {
+-		compatible = "spidev";
+-		reg = <0>;
+-		spi-max-frequency = <60000000>;
+-	};
+-
+-	spidev1: spi@1 {
+-		compatible = "spidev";
+-		reg = <1>;
+-		spi-max-frequency = <60000000>;
+-	};
+ };
+ 
+ &fec1 {
+diff --git a/arch/arm/boot/dts/omap3-tao3530.dtsi b/arch/arm/boot/dts/omap3-tao3530.dtsi
+index 580bfa1931c8..7f440d11f7e7 100644
+--- a/arch/arm/boot/dts/omap3-tao3530.dtsi
++++ b/arch/arm/boot/dts/omap3-tao3530.dtsi
+@@ -197,25 +197,11 @@ &i2c3 {
+ &mcspi1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mcspi1_pins>;
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <48000000>;
+-		reg = <0>;
+-		spi-cpha;
+-	};
+ };
+ 
+ &mcspi3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mcspi3_pins>;
+-
+-	spidev@0 {
+-		compatible = "spidev";
+-		spi-max-frequency = <48000000>;
+-		reg = <0>;
+-		spi-cpha;
+-	};
+ };
+ 
+ #include "twl4030.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+index 942e3a2cac35..0827de5426c1 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
++++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+@@ -103,7 +103,7 @@ pins {
+ 
+ &gsbi3_spi {
+ 	spi@0 {
+-		compatible = "swir,mangoh-iotport-spi", "spidev";
++		compatible = "swir,mangoh-iotport-spi";
+ 		spi-max-frequency = <24000000>;
+ 		reg = <0>;
+ 	};
+diff --git a/arch/arm/boot/dts/spear1310-evb.dts b/arch/arm/boot/dts/spear1310-evb.dts
+index 8fcb6be6e7c7..4cbadcb41084 100644
+--- a/arch/arm/boot/dts/spear1310-evb.dts
++++ b/arch/arm/boot/dts/spear1310-evb.dts
+@@ -395,22 +395,6 @@ m25p80@1 {
+ 					pl022,wait-state = <0>;
+ 					pl022,duplex = <0>;
+ 				};
+-
+-				spidev@2 {
+-					compatible = "spidev";
+-					reg = <2>;
+-					spi-max-frequency = <25000000>;
+-					spi-cpha;
+-					pl022,hierarchy = <0>;
+-					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+-					pl022,com-mode = <0x2>;
+-					pl022,rx-level-trig = <0>;
+-					pl022,tx-level-trig = <0>;
+-					pl022,ctrl-len = <0x11>;
+-					pl022,wait-state = <0>;
+-					pl022,duplex = <0>;
+-				};
+ 			};
+ 
+ 			wdt@ec800620 {
+diff --git a/arch/arm/boot/dts/spear1340-evb.dts b/arch/arm/boot/dts/spear1340-evb.dts
+index f70ff56d4542..fd194ebeedc9 100644
+--- a/arch/arm/boot/dts/spear1340-evb.dts
++++ b/arch/arm/boot/dts/spear1340-evb.dts
+@@ -489,22 +489,6 @@ stmpe_touchscreen {
+ 						ts,i-drive = <1>;
+ 					};
+ 				};
+-
+-				spidev@2 {
+-					compatible = "spidev";
+-					reg = <2>;
+-					spi-max-frequency = <25000000>;
+-					spi-cpha;
+-					pl022,hierarchy = <0>;
+-					pl022,interface = <0>;
+-					pl022,slave-tx-disable;
+-					pl022,com-mode = <0x2>;
+-					pl022,rx-level-trig = <0>;
+-					pl022,tx-level-trig = <0>;
+-					pl022,ctrl-len = <0x11>;
+-					pl022,wait-state = <0>;
+-					pl022,duplex = <0>;
+-				};
+ 			};
+ 
+ 			timer@ec800600 {
+-- 
+2.32.0
 
-However there is a probem that register_vsmp_smp_ops never returns error
-if CONFIG_MIPS_MT_SMP is enabled. But generic kernel is supposed to
-run on systems with & without MT.
-
-So probably you need:
-
-diff --git a/arch/mips/include/asm/smp-ops.h 
-b/arch/mips/include/asm/smp-ops.h
-index 65618ff1280c..864aea803984 100644
---- a/arch/mips/include/asm/smp-ops.h
-+++ b/arch/mips/include/asm/smp-ops.h
-@@ -101,6 +101,9 @@ static inline int register_vsmp_smp_ops(void)
-  #ifdef CONFIG_MIPS_MT_SMP
-         extern const struct plat_smp_ops vsmp_smp_ops;
-
-+       if (!cpu_has_mipsmt)
-+               return -ENODEV;
-+
-         register_smp_ops(&vsmp_smp_ops);
-
-         return 0;
-
-Thanks.
-
-- Jiaxun

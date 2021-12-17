@@ -2,313 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD59478974
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFB0478985
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 12:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbhLQLHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 06:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S235259AbhLQLKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 06:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbhLQLHJ (ORCPT
+        with ESMTP id S233227AbhLQLK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:07:09 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF4C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 03:07:09 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id e136so5323089ybc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 03:07:09 -0800 (PST)
+        Fri, 17 Dec 2021 06:10:29 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912CBC061574;
+        Fri, 17 Dec 2021 03:10:29 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id o17so2199932qtk.1;
+        Fri, 17 Dec 2021 03:10:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pGxFunjSSbQIX4n2VPQoV9S4bG7+Tn9hFYOqtNEG5WA=;
-        b=bNYCiYPbg86x7QnuM6VklnGCmMy0QpEx5drJvu3AJUxrSVvXYvqPRdX8YipB3vyCBz
-         PUoQ5pddH9CvZ8vvCGBp3RAOoNBqzhP839VHogHJl+v9myFV7+MBZm7lFh+u1Be9D6Hj
-         IdbAcPtbjBSNbKU8n2XGf0oMv4hIh9LoHB8pYBqPERluP+S8fAmkRoqb0fsfkDtiJrCS
-         bsnCCamk25oW+jw0t1qOgiVBPhSI8gaCe5o0ehr6NwLYu8ixrMdV57BrSCcYiB9HVqMi
-         c7kZYi66o/4msJG721Lsw0oqmjFbqb/IillkxdNn1JvRvyFdnh376htNB92emeFlvPmf
-         BgVQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pDyfTSH1efSZfDvPOs/4NwMG0xFq4708hQD2eV23YQs=;
+        b=DyP9IqJhRDnwNLEysfHixKNa+aHFxymYUFZziDSjYPwLynB372764OHJnoiU+Yq9Wo
+         PGC9Ug28y/dOzGmbH0XgsMIpcJVuQydnNPQH9QLAj2Q16zcC5bN4Op6oW+3tMIaN+e1P
+         shC0eNlIBKOjkG8iRyu1VpWV4EU4Ka43eW2oS9y20tO3wjTDUlSKSTr1WUK4ivr01cXf
+         oxczJ3YtKzuujq0rioR8jwEBX34rxOt/jAbPeN9z9XIULAiRTlMjtCfM4Xgcu+bEckie
+         vAzPYl5b3/QEokXorhiUdTgAzWm36Jez3eWaXUqRpNZKZyCKda8q/It9OZyEHbMJ1H7I
+         +GIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pGxFunjSSbQIX4n2VPQoV9S4bG7+Tn9hFYOqtNEG5WA=;
-        b=wuJTDYT3Is79TYbWU0BsPTD58D1ecl7t1tRyx3x6bqLg2OQoCxPllUgrRRI+Y2cY6D
-         iMj93SSGZtLxgGSUgh0/WuIOp2fLDS95JbpwM9B5mhTBtlFJCPxHxiJXj4oFFEWf/KgJ
-         6dZG24rS0VjTNsW+AYcS4uKGHMTw0xo1DifuC9KOBxDmUaWidTJ/9LWf1M5eCyE3LCtP
-         RBSJkmK9wVs9t7ZNx5S7FtYksCgu80uX788TY0KqKxUzcYgbzw1g2+QV3DIQioPGUDSA
-         hxim3xkiKjH0QMvShu+jT/OeWxYWkgwnGFPprjO8iPJ8082C0dh7TxI1f77o9x36bA6l
-         /wXA==
-X-Gm-Message-State: AOAM532LSAGR17PvHA8M3OMwKkSSj3SQu4EcLEHKhKOhldC2DAleJPCe
-        u7LmVzg4mpg/1kTOzSaiZNimovzqQLksTiEtFWo7nQ==
-X-Google-Smtp-Source: ABdhPJx4NTGZvUe8hWX+aN+Lq7IRgZQGjfVd0FXNcWb7Bxg+vtPEn188Ah/ydVdqscyiGZuM2o2I6WG3mo7i+XWp1Dg=
-X-Received: by 2002:a25:aa51:: with SMTP id s75mr3495196ybi.485.1639739228287;
- Fri, 17 Dec 2021 03:07:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pDyfTSH1efSZfDvPOs/4NwMG0xFq4708hQD2eV23YQs=;
+        b=JvZYjPkshE9LSglebd32MbxULNBWYQM/M/pF+Y6e4qLblmpfNzKdyiLmCvhLXMYwof
+         OJF11gHnwCO806G4H65X1PpHSrwFj8FjPe3ZlO3BjP/OV2spiy+b8YGvQztpK7JokWmZ
+         P9pUXXpeh5y3ng85NsnzOFsa9q0y9SAQ59z9WFh1GxGoY4zgP0z6vhRqcjkw140ir4+v
+         CvZ5IbLu5/yMsSGtbslFvwNd4YyDumFiplRIXVcSfi2QLJYg8l1v4ur+q4F3dplCySV3
+         2e7gD8Y2dz3GzIIXMVrvlPKWoCc80EqID/3VzUQyaqtyUhmZSlJ6j/1Sm6qE0xTSTaPn
+         4FwQ==
+X-Gm-Message-State: AOAM532cwOaisHyaw09r5T6LjUtc2gSR1vVyLviVKP0zb6v+T7by17Fd
+        1FIHOTa/I86X15QoQfkpBBA=
+X-Google-Smtp-Source: ABdhPJy9es42kS1v95G8dheZ0wFtI1qMAQyX5PdTiEmErsKdSm1InTdqmubgW/WsiCIKcMMuixlLZQ==
+X-Received: by 2002:a05:622a:1898:: with SMTP id v24mr1811547qtc.508.1639739428670;
+        Fri, 17 Dec 2021 03:10:28 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x15sm4478381qko.82.2021.12.17.03.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 03:10:28 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     alexs@kernel.org, corbet@lwn.net, siyanteng@loongson.cn,
+        seakeel@gmail.com
+Cc:     yang.yang29@zte.com.cn, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] docs/zh_CN: Add zh_CN/accounting/delay-accounting.rst
+Date:   Fri, 17 Dec 2021 11:09:50 +0000
+Message-Id: <20211217110949.453361-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211213165342.74704-1-songmuchun@bytedance.com> <745ddcd6-77e3-22e0-1f8e-e6b05c644eb4@gmail.com>
-In-Reply-To: <745ddcd6-77e3-22e0-1f8e-e6b05c644eb4@gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 17 Dec 2021 19:06:31 +0800
-Message-ID: <CAMZfGtUq846PFom0CK9Ybxgorv8hfV+wj6FD-wxbBKFDVoxHtg@mail.gmail.com>
-Subject: Re: [PATCH v4 00/17] Optimize list lru memory consumption
-To:     xiaoqiang zhao <zhaoxiaoqiang007@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 6:05 PM xiaoqiang zhao
-<zhaoxiaoqiang007@gmail.com> wrote:
->
->
->
-> =E5=9C=A8 2021/12/14 0:53, Muchun Song =E5=86=99=E9=81=93:
-> > This series is based on Linux 5.16-rc3.
-> >
-> > In our server, we found a suspected memory leak problem. The kmalloc-32
-> > consumes more than 6GB of memory. Other kmem_caches consume less than 2=
-GB
-> > memory.
-> >
-> > After our in-depth analysis, the memory consumption of kmalloc-32 slab
-> > cache is the cause of list_lru_one allocation.
->
-> IIUC, you mean: "the memory consumption of kmalloc-32 slab cache is
-> caused by list_lru_one allocation"
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-Right.
+Add translation zh_CN/accounting/delay-accounting.rst and links it
+to zh_CN/accounting/index.rst while clean its todo entry.
 
->
-> >
-> >   crash> p memcg_nr_cache_ids
-> >   memcg_nr_cache_ids =3D $2 =3D 24574
-> >
-> > memcg_nr_cache_ids is very large and memory consumption of each list_lr=
-u
-> > can be calculated with the following formula.
-> >
-> >   num_numa_node * memcg_nr_cache_ids * 32 (kmalloc-32)
-> >
-> > There are 4 numa nodes in our system, so each list_lru consumes ~3MB.
-> >
-> >   crash> list super_blocks | wc -l
-> >   952
-> >
-> > Every mount will register 2 list lrus, one is for inode, another is for
-> > dentry. There are 952 super_blocks. So the total memory is 952 * 2 * 3
-> > MB (~5.6GB). But now the number of memory cgroups is less than 500. So =
-I
-> > guess more than 12286 memory cgroups have been created on this machine =
-(I
-> > do not know why there are so many cgroups, it may be a user's bug or
-> > the user really want to do that). Because memcg_nr_cache_ids has not be=
-en
-> > reduced to a suitable value. It leads to waste a lot of memory. If we w=
-ant
-> > to reduce memcg_nr_cache_ids, we have to *reboot* the server. This is n=
-ot
-> > what we want.
-> >
-> > In order to reduce memcg_nr_cache_ids, I had posted a patchset [1] to d=
-o
-> > this. But this did not fundamentally solve the problem.
-> >
-> > We currently allocate scope for every memcg to be able to tracked on ev=
-ery
-> > superblock instantiated in the system, regardless of whether that super=
-block
-> > is even accessible to that memcg.
-> >
-> > These huge memcg counts come from container hosts where memcgs are conf=
-ined
-> > to just a small subset of the total number of superblocks that instanti=
-ated
-> > at any given point in time.
-> >
-> > For these systems with huge container counts, list_lru does not need th=
-e
-> > capability of tracking every memcg on every superblock.
-> >
-> > What it comes down to is that the list_lru is only needed for a given m=
-emcg
-> > if that memcg is instatiating and freeing objects on a given list_lru.
-> >
-> > As Dave said, "Which makes me think we should be moving more towards 'a=
-dd the
-> > memcg to the list_lru at the first insert' model rather than 'instantia=
-te
-> > all at memcg init time just in case'."
-> >
-> > This patchset aims to optimize the list lru memory consumption from dif=
-ferent
-> > aspects.
-> >
-> > I had done a easy test to show the optimization. I create 10k memory cg=
-roups
-> > and mount 10k filesystems in the systems. We use free command to show h=
-ow many
-> > memory does the systems comsumes after this operation (There are 2 numa=
- nodes
-> > in the system).
-> >
-> >         +-----------------------+------------------------+
-> >         |      condition        |   memory consumption   |
-> >         +-----------------------+------------------------+
-> >         | without this patchset |        24464 MB        |
-> >         +-----------------------+------------------------+
-> >         |     after patch 1     |        21957 MB        | <--------+
-> >         +-----------------------+------------------------+          |
-> >         |     after patch 11    |         6895 MB        |          |
-> >         +-----------------------+------------------------+          |
-> >         |     after patch 13    |         4367 MB        |          |
-> >         +-----------------------+------------------------+          |
-> >                                                                     |
-> >         The more the number of nodes, the more obvious the effect---+
-> >
-> > BTW, there was a recent discussion [2] on the same issue.
-> >
-> > [1] https://lore.kernel.org/linux-fsdevel/20210428094949.43579-1-songmu=
-chun@bytedance.com/
-> > [2] https://lore.kernel.org/linux-fsdevel/20210405054848.GA1077931@in.i=
-bm.com/
-> >
-> > This series not only optimizes the memory usage of list_lru but also
-> > simplifies the code.
-> >
-> > Changelog in v4:
-> >   - Remove some code cleanup patches since they are already merged.
-> >   - Collect Acked-by from Theodore.
-> >   - Fix ntfs3 (Thanks Argillander).
-> >
-> > Changelog in v3:
-> >   - Fix mixing advanced and normal XArray concepts (Thanks to Matthew).
-> >   - Split one patch into per-filesystem patches.
-> >
-> > Changelog in v2:
-> >   - Update Documentation/filesystems/porting.rst suggested by Dave.
-> >   - Add a comment above alloc_inode_sb() suggested by Dave.
-> >   - Rework some patch's commit log.
-> >   - Add patch 18-21.
-> >
-> >   Thanks Dave.
-> >
-> > Muchun Song (17):
-> >   mm: list_lru: optimize memory consumption of arrays of per cgroup
-> >     lists
-> >   mm: introduce kmem_cache_alloc_lru
-> >   fs: introduce alloc_inode_sb() to allocate filesystems specific inode
-> >   fs: allocate inode by using alloc_inode_sb()
-> >   f2fs: allocate inode by using alloc_inode_sb()
-> >   nfs42: use a specific kmem_cache to allocate nfs4_xattr_entry
-> >   mm: dcache: use kmem_cache_alloc_lru() to allocate dentry
-> >   xarray: use kmem_cache_alloc_lru to allocate xa_node
-> >   mm: workingset: use xas_set_lru() to pass shadow_nodes
-> >   mm: memcontrol: move memcg_online_kmem() to mem_cgroup_css_online()
-> >   mm: list_lru: allocate list_lru_one only when needed
-> >   mm: list_lru: rename memcg_drain_all_list_lrus to
-> >     memcg_reparent_list_lrus
-> >   mm: list_lru: replace linear array with xarray
-> >   mm: memcontrol: reuse memory cgroup ID for kmem ID
-> >   mm: memcontrol: fix cannot alloc the maximum memcg ID
-> >   mm: list_lru: rename list_lru_per_memcg to list_lru_memcg
-> >   mm: memcontrol: rename memcg_cache_id to memcg_kmem_id
-> >
-> >  Documentation/filesystems/porting.rst |   5 +
-> >  block/bdev.c                          |   2 +-
-> >  drivers/dax/super.c                   |   2 +-
-> >  fs/9p/vfs_inode.c                     |   2 +-
-> >  fs/adfs/super.c                       |   2 +-
-> >  fs/affs/super.c                       |   2 +-
-> >  fs/afs/super.c                        |   2 +-
-> >  fs/befs/linuxvfs.c                    |   2 +-
-> >  fs/bfs/inode.c                        |   2 +-
-> >  fs/btrfs/inode.c                      |   2 +-
-> >  fs/ceph/inode.c                       |   2 +-
-> >  fs/cifs/cifsfs.c                      |   2 +-
-> >  fs/coda/inode.c                       |   2 +-
-> >  fs/dcache.c                           |   3 +-
-> >  fs/ecryptfs/super.c                   |   2 +-
-> >  fs/efs/super.c                        |   2 +-
-> >  fs/erofs/super.c                      |   2 +-
-> >  fs/exfat/super.c                      |   2 +-
-> >  fs/ext2/super.c                       |   2 +-
-> >  fs/ext4/super.c                       |   2 +-
-> >  fs/f2fs/super.c                       |   8 +-
-> >  fs/fat/inode.c                        |   2 +-
-> >  fs/freevxfs/vxfs_super.c              |   2 +-
-> >  fs/fuse/inode.c                       |   2 +-
-> >  fs/gfs2/super.c                       |   2 +-
-> >  fs/hfs/super.c                        |   2 +-
-> >  fs/hfsplus/super.c                    |   2 +-
-> >  fs/hostfs/hostfs_kern.c               |   2 +-
-> >  fs/hpfs/super.c                       |   2 +-
-> >  fs/hugetlbfs/inode.c                  |   2 +-
-> >  fs/inode.c                            |   2 +-
-> >  fs/isofs/inode.c                      |   2 +-
-> >  fs/jffs2/super.c                      |   2 +-
-> >  fs/jfs/super.c                        |   2 +-
-> >  fs/minix/inode.c                      |   2 +-
-> >  fs/nfs/inode.c                        |   2 +-
-> >  fs/nfs/nfs42xattr.c                   |  95 ++++----
-> >  fs/nilfs2/super.c                     |   2 +-
-> >  fs/ntfs/inode.c                       |   2 +-
-> >  fs/ntfs3/super.c                      |   2 +-
-> >  fs/ocfs2/dlmfs/dlmfs.c                |   2 +-
-> >  fs/ocfs2/super.c                      |   2 +-
-> >  fs/openpromfs/inode.c                 |   2 +-
-> >  fs/orangefs/super.c                   |   2 +-
-> >  fs/overlayfs/super.c                  |   2 +-
-> >  fs/proc/inode.c                       |   2 +-
-> >  fs/qnx4/inode.c                       |   2 +-
-> >  fs/qnx6/inode.c                       |   2 +-
-> >  fs/reiserfs/super.c                   |   2 +-
-> >  fs/romfs/super.c                      |   2 +-
-> >  fs/squashfs/super.c                   |   2 +-
-> >  fs/sysv/inode.c                       |   2 +-
-> >  fs/ubifs/super.c                      |   2 +-
-> >  fs/udf/super.c                        |   2 +-
-> >  fs/ufs/super.c                        |   2 +-
-> >  fs/vboxsf/super.c                     |   2 +-
-> >  fs/xfs/xfs_icache.c                   |   2 +-
-> >  fs/zonefs/super.c                     |   2 +-
-> >  include/linux/fs.h                    |  11 +
-> >  include/linux/list_lru.h              |  17 +-
-> >  include/linux/memcontrol.h            |  42 ++--
-> >  include/linux/slab.h                  |   3 +
-> >  include/linux/swap.h                  |   5 +-
-> >  include/linux/xarray.h                |   9 +-
-> >  ipc/mqueue.c                          |   2 +-
-> >  lib/xarray.c                          |  10 +-
-> >  mm/list_lru.c                         | 423 ++++++++++++++++----------=
---------
-> >  mm/memcontrol.c                       | 164 +++----------
-> >  mm/shmem.c                            |   2 +-
-> >  mm/slab.c                             |  39 +++-
-> >  mm/slab.h                             |  25 +-
-> >  mm/slob.c                             |   6 +
-> >  mm/slub.c                             |  42 ++--
-> >  mm/workingset.c                       |   2 +-
-> >  net/socket.c                          |   2 +-
-> >  net/sunrpc/rpc_pipe.c                 |   2 +-
-> >  76 files changed, 486 insertions(+), 539 deletions(-)
-> >
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: Alex Shi <alexs@kernel.org>
+Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+---
+v4:
+- removed excess RST label.
+v3:
+- add missing period.
+v2:
+- delete useless blackline.
+---
+ .../zh_CN/accounting/delay-accounting.rst     | 111 ++++++++++++++++++
+ .../translations/zh_CN/accounting/index.rst   |   2 +-
+ 2 files changed, 112 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/accounting/delay-accounting.rst
+
+diff --git a/Documentation/translations/zh_CN/accounting/delay-accounting.rst b/Documentation/translations/zh_CN/accounting/delay-accounting.rst
+new file mode 100644
+index 000000000000..67d5606e5401
+--- /dev/null
++++ b/Documentation/translations/zh_CN/accounting/delay-accounting.rst
+@@ -0,0 +1,111 @@
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/accounting/delay-accounting.rst
++
++:Translator: Yang Yang <yang.yang29@zte.com.cn>
++
++========
++延时计数
++========
++
++任务在等待某些内核资源可用时，会造成延时。例如一个可运行的任务可能会等待
++一个空闲CPU来运行。
++
++基于每任务的延时计数功能度量由以下情况造成的任务延时：
++
++a) 等待一个CPU（任务为可运行）
++b) 完成由该任务发起的块I/O同步请求
++c) 页面交换
++d) 内存回收
++
++并将这些统计信息通过taskstats接口提供给用户空间。
++
++这些延时信息为适当的调整任务CPU优先级、io优先级、rss限制提供反馈。重要任务
++长期延时，表示可能需要提高其相关优先级。
++
++通过使用taskstats接口，本功能还可提供一个线程组（对应传统Unix进程）所有任务
++（或线程）的总延时统计信息。此类汇总往往是需要的，由内核来完成更加高效。
++
++用户空间的实体，特别是资源管理程序，可将延时统计信息汇总到任意组中。为实现
++这一点，任务的延时统计信息在其生命周期内和退出时皆可获取，从而确保可进行
++连续、完整的监控。
++
++接口
++----
++
++延时计数使用taskstats接口，该接口由本目录另一个单独的文档详细描述。Taskstats
++向用户态返回一个通用数据结构，对应每pid或每tgid的统计信息。延时计数功能填写
++该数据结构的特定字段。见
++
++     include/linux/taskstats.h
++
++其描述了延时计数相关字段。系统通常以计数器形式返回 CPU、同步块 I/O、交换、内存
++回收等的累积延时。
++
++取任务某计数器两个连续读数的差值，将得到任务在该时间间隔内等待对应资源的总延时。
++
++当任务退出时，内核会将包含每任务的统计信息发送给用户空间，而无需额外的命令。
++若其为线程组最后一个退出的任务，内核还会发送每tgid的统计信息。更多详细信息见
++taskstats接口的描述。
++
++tools/accounting目录中的用户空间程序getdelays.c提供了一些简单的命令，用以显示
++延时统计信息。其也是使用taskstats接口的示例。
++
++用法
++----
++
++使用以下配置编译内核::
++
++	CONFIG_TASK_DELAY_ACCT=y
++	CONFIG_TASKSTATS=y
++
++延时计数在启动时默认关闭。
++若需开启，在启动参数中增加::
++
++   delayacct
++
++本文后续的说明基于延时计数已开启。也可在系统运行时，使用sysctl的
++kernel.task_delayacct进行开关。注意，只有在启用延时计数后启动的
++任务才会有相关信息。
++
++系统启动后，使用类似getdelays.c的工具获取任务或线程组（tgid）的延时信息。
++
++getdelays命令的一般格式::
++
++	getdelays [-t tgid] [-p pid] [-c cmd...]
++
++获取pid为10的任务从系统启动后的延时信息::
++
++	# ./getdelays -p 10
++	（输出信息和下例相似）
++
++获取所有tgid为5的任务从系统启动后的总延时信息::
++
++	# ./getdelays -t 5
++
++
++	CPU	count	real total	virtual total	delay total
++		7876	92005750	100000000	24001500
++	IO	count	delay total
++		0	0
++	SWAP	count	delay total
++		0	0
++	RECLAIM	count	delay total
++		0	0
++
++获取指定简单命令运行时的延时信息::
++
++  # ./getdelays -c ls /
++
++  bin   data1  data3  data5  dev  home  media  opt   root  srv        sys  usr
++  boot  data2  data4  data6  etc  lib   mnt    proc  sbin  subdomain  tmp  var
++
++
++  CPU	count	real total	virtual total	delay total
++	6	4000250		4000000		0
++  IO	count	delay total
++	0	0
++  SWAP	count	delay total
++	0	0
++  RECLAIM	count	delay total
++	0	0
+diff --git a/Documentation/translations/zh_CN/accounting/index.rst b/Documentation/translations/zh_CN/accounting/index.rst
+index 124b590fb01b..a34952e12a27 100644
+--- a/Documentation/translations/zh_CN/accounting/index.rst
++++ b/Documentation/translations/zh_CN/accounting/index.rst
+@@ -15,11 +15,11 @@
+ .. toctree::
+    :maxdepth: 1
+ 
++   delay-accounting
+    psi
+    taskstats
+ 
+ Todolist:
+ 
+    cgroupstats
+-   delay-accounting
+    taskstats-struct
+-- 
+2.25.1

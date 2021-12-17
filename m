@@ -2,68 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A408E479406
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B124747940E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240134AbhLQSXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:23:42 -0500
-Received: from mga17.intel.com ([192.55.52.151]:62494 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhLQSXl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:23:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="220488045"
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="220488045"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:23:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="519842546"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:23:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1myHsS-007Yq1-9J;
-        Fri, 17 Dec 2021 20:22:44 +0200
-Date:   Fri, 17 Dec 2021 20:22:44 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/3] gpio: Get rid of duplicate of_node assignment in
- the drivers
-Message-ID: <YbzVdH6nLgcoUMWV@smile.fi.intel.com>
-References: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=Mct9FuYvT-0gFrpUuNBnCVdmCp_cNESkL5NSgVVP6vezQ@mail.gmail.com>
- <YbzUJkCsmkz5jraQ@smile.fi.intel.com>
+        id S240344AbhLQSYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:24:09 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:39532 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbhLQSYI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:24:08 -0500
+Received: by mail-oi1-f181.google.com with SMTP id bf8so4870710oib.6;
+        Fri, 17 Dec 2021 10:24:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PqESVUEXiGE9fUPPJtSvg45ZiqTaR8hZjs1IUaZRb/w=;
+        b=7FUOwY/X/hY/5Ugi3lvK3tM5q0DOAdiHxO6sk+QJLTiktBD+zhnQnv3ciXQIVd8GJS
+         bDr2LaWAfKI1emtieJYcuGzdfQrKQl0BAcQh7PytESAwcx2XpmYaBjlHGMwYVOUQ5o2L
+         KO0OVn0Vv971AJTc5ICUjMyCI15lA21DEcwS0/TBBrMeLdik4qRLY6XgG8sgI+wmCelB
+         RwTKcUrN2ngUBkNaAjG/R8g1le45A0EaYrmhcAm20u39BdGsa7A0IGbAuMgRje/TwztN
+         WWYpyh37/jgIvETKfN+SCmqDFl6sr4NfgJaeaTvtMJp4luCZh6U3sSe9OqrVaScaDdv6
+         Qedg==
+X-Gm-Message-State: AOAM533s3U3SXgb34blyW3nLY7cUj7RlmcoOJZKXy3NvtLMiSvoAipSM
+        a7klZo5MSlofmk6vYcNBbg5C1nKHpUte8M1cpbIYHvdd
+X-Google-Smtp-Source: ABdhPJzSHIE9NiA8wrnjx5swIQTDaNO47Eh/jPY6u0cKl22eGvZUG+q9gVUcR2YDpTUkejMwRaoJ5/335VboacRU31E=
+X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr3139061oiv.166.1639765448173;
+ Fri, 17 Dec 2021 10:24:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbzUJkCsmkz5jraQ@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211212180527.1641362-1-AjitKumar.Pandey@amd.com>
+ <20211212180527.1641362-3-AjitKumar.Pandey@amd.com> <CAJZ5v0i=LVsz2ZRBB5HzLpw8eR-zLAKtJyc3PFWu_kKCzjzZWw@mail.gmail.com>
+ <SA0PR12MB45101C5839BC373C083B19FEE2789@SA0PR12MB4510.namprd12.prod.outlook.com>
+In-Reply-To: <SA0PR12MB45101C5839BC373C083B19FEE2789@SA0PR12MB4510.namprd12.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Dec 2021 19:23:57 +0100
+Message-ID: <CAJZ5v0i0csL=w8cmLkpY7NNrKFy2bMymFGO51CrmDD+DAxJ-hw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] drivers: acpi: acpi_apd: Remove unused device
+ property "is-rv"
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Pandey, Ajit Kumar" <AjitKumar.Pandey@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
+        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 08:17:10PM +0200, Andy Shevchenko wrote:
-> On Fri, Dec 17, 2021 at 05:54:00PM +0100, Bartosz Golaszewski wrote:
-> > On Thu, Dec 2, 2021 at 10:17 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> ...
-> 
-> > Queued the series for next, thanks!
-> 
-> Thanks!
-> 
-> I hope that v2 is actually queued. There is a tag from Matti and addressed
-> comment from Linus.
+On Fri, Dec 17, 2021 at 7:19 PM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [Public]
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Friday, December 17, 2021 12:07
+> > To: Pandey, Ajit Kumar <AjitKumar.Pandey@amd.com>
+> > Cc: Stephen Boyd <sboyd@kernel.org>; linux-clk <linux-clk@vger.kernel.org>;
+> > Mukunda, Vijendar <Vijendar.Mukunda@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Hiregoudar, Basavaraj
+> > <Basavaraj.Hiregoudar@amd.com>; Dommati, Sunil-kumar <Sunil-
+> > kumar.Dommati@amd.com>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; Rafael J. Wysocki <rafael@kernel.org>; Len
+> > Brown <lenb@kernel.org>; open list:ACPI <linux-acpi@vger.kernel.org>; open
+> > list <linux-kernel@vger.kernel.org>
+> > Subject: Re: [PATCH v5 2/5] drivers: acpi: acpi_apd: Remove unused device
+> > property "is-rv"
+> >
+> > On Sun, Dec 12, 2021 at 7:06 PM Ajit Kumar Pandey
+> > <AjitKumar.Pandey@amd.com> wrote:
+> > >
+> > > Initially "is-rv" device property is added for 48MHz fixed clock
+> > > support on Raven or RV architecture. It's unused now as we moved
+> > > to pci device_id based selection to extend such support on other
+> > > architectures. This change removed unused code from acpi driver.
+> > >
+> > > Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+> > > Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> >
+> > Does this or the next patch depend on the rest of the series, or can I
+> > simply apply them both?
+>
+> There are (intentional) dependencies within this series on the order.  It
+> would be better for the whole series to come through one tree.
 
-Yes, it seems the case, thanks!
+So please route these two along with the rest of the series and I
+don't think you need my ACKs for this.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+> >
+> > > ---
+> > >  drivers/acpi/acpi_apd.c               | 3 ---
+> > >  include/linux/platform_data/clk-fch.h | 1 -
+> > >  2 files changed, 4 deletions(-)
+> > >
+> > > diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> > > index 6e02448d15d9..6913e9712852 100644
+> > > --- a/drivers/acpi/acpi_apd.c
+> > > +++ b/drivers/acpi/acpi_apd.c
+> > > @@ -87,9 +87,6 @@ static int fch_misc_setup(struct apd_private_data
+> > *pdata)
+> > >         if (ret < 0)
+> > >                 return -ENOENT;
+> > >
+> > > -       if (!acpi_dev_get_property(adev, "is-rv", ACPI_TYPE_INTEGER, &obj))
+> > > -               clk_data->is_rv = obj->integer.value;
+> > > -
+> > >         list_for_each_entry(rentry, &resource_list, node) {
+> > >                 clk_data->base = devm_ioremap(&adev->dev, rentry->res->start,
+> > >                                               resource_size(rentry->res));
+> > > diff --git a/include/linux/platform_data/clk-fch.h
+> > b/include/linux/platform_data/clk-fch.h
+> > > index b9f682459f08..850ca776156d 100644
+> > > --- a/include/linux/platform_data/clk-fch.h
+> > > +++ b/include/linux/platform_data/clk-fch.h
+> > > @@ -12,7 +12,6 @@
+> > >
+> > >  struct fch_clk_data {
+> > >         void __iomem *base;
+> > > -       u32 is_rv;
+> > >  };
+> > >
+> > >  #endif /* __CLK_FCH_H */
+> > > --
+> > > 2.25.1
+> > >

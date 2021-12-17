@@ -2,128 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC8479053
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918D3479058
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236008AbhLQPte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:49:34 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:36064 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbhLQPtd (ORCPT
+        id S238164AbhLQPuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:50:25 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60998
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235840AbhLQPuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:49:33 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnM6s029708;
-        Fri, 17 Dec 2021 09:49:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639756162;
-        bh=4pYxJxhBHMq/73kWjs9EjhmqLVPAy3cyIv6wEjlp744=;
-        h=Date:From:To:CC:Subject;
-        b=Sv5NrtQb4FX5qBsZa0K2D3VS4o8TGOOg1iFOZEhqrKHN75IpDnWzvpLf3yq64zkba
-         xgUdH70C+qNgR+oyPW3rmNLkaXCXazPgNf/gCmGlPhKejZ8z/N4ijQz8Aq3hXtUOof
-         HmwLfUvWf54baKk2ctDJA+AwUPL8eavObuyAmn4U=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHFnMqv104578
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Dec 2021 09:49:22 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Dec 2021 09:49:21 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Dec 2021 09:49:21 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHFnLjX056068;
-        Fri, 17 Dec 2021 09:49:21 -0600
-Date:   Fri, 17 Dec 2021 09:49:21 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [GIT PULL] soc: Keystone driver update for v5.17
-Message-ID: <20211217154921.cagzppcensxx6wm4@pension>
+        Fri, 17 Dec 2021 10:50:23 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9D97D3F1F0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639756222;
+        bh=Vz0WaZn+QjmviDVVOxxI0VKa9jS9jnpYSLlaJ+1iHt4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=o1gg2t2PWWZYaGrKTITfajwqnoGYNcR9VWFFkNaBAgleNCT3GPxq6h4i5acAaKFwq
+         uGeicY7o4K0wTFilno8/chcSqkXh+oJxP+9IYGsxE74KUfe3L/561VJEv+HUvE4LJ6
+         k+XKR+r9P5J815uWLAfEXiv74M7BthzoD4t/1fKzgN4CqyqEUS5/vD/e4qI0IP9UCv
+         /3BtBKeWtV0tQVpCwyZyGOfArdF7jxA4YpxUYX7YGeGWzu2Awu6iqWtrZERO5w7Wlh
+         NDbTTjxAr4WnupT5/Uh/aMraLVGG9NRAuOoW8clsqkOCj+GNu76DVjsR6M9CUVmIkf
+         u94MtSQLbQtkQ==
+Received: by mail-lf1-f72.google.com with SMTP id w21-20020a197b15000000b00422b0797fa3so1073339lfc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:50:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vz0WaZn+QjmviDVVOxxI0VKa9jS9jnpYSLlaJ+1iHt4=;
+        b=1mq1rIaGXkZEmvtdkBYjR3IvjXd3ii8a1Ij5aQQs40ApjL92QO9EzfjYOBtifd8CMm
+         UaE6VNTYJ20b9sxhf4g0erKmTyGD+AqgXcqgCueNR/EvS0Fc2KcHXRXThr44FvuY7LTI
+         g230sLxRahoIUlTWxYPfU50RdnPDVADUxPvdCPGj2ZBqFaDsw/JiEruDClDk4aR6B5OJ
+         31uiTO35MyIEsO0oU9W2SvF7BGHC8uUIbLYECdY6sZWMMcYPM/bW6TStnCQj0jzpAnGL
+         CJInJLo1a5foR4aRun25f+zpoMBIvcxoQPVKr4ffwp9T7QSo07nULjKEbiZFr6NJMuZy
+         Omyw==
+X-Gm-Message-State: AOAM531tMdi222/VNs+yhKOrNk2urOy4rx64HLUE5XumZ7r4kEEll0dh
+        g0n4bXrBn8nVCZfhEepQYJGs9S9ZXeV3rmdl5oNonOP0Y1BemZfALDUy2oUydC7x06oUH6myZ3J
+        T1f4znpL3oy4zx4Ac636gtQOS8dUCJw6rVKI3RRD0sA==
+X-Received: by 2002:a05:6512:3b13:: with SMTP id f19mr3294912lfv.321.1639756221691;
+        Fri, 17 Dec 2021 07:50:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxWVVHP8AIicFtgzT6t5zbqk3uLn5LaifrLCAR18ukQnW+gJGIDSWfttbU1Fp4zH33SsPnLLA==
+X-Received: by 2002:a05:6512:3b13:: with SMTP id f19mr3294897lfv.321.1639756221533;
+        Fri, 17 Dec 2021 07:50:21 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id p20sm1443796lfu.151.2021.12.17.07.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 07:50:21 -0800 (PST)
+Message-ID: <f5588a26-1a48-2513-a36a-13bec58e5003@canonical.com>
+Date:   Fri, 17 Dec 2021 16:50:20 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z3i67kzdfkksd6bv"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 4/4] arm64: arch_k3: Select GPMC device driver
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, tony@atomide.com
+Cc:     robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211217102945.17432-1-rogerq@kernel.org>
+ <20211217102945.17432-5-rogerq@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211217102945.17432-5-rogerq@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---z3i67kzdfkksd6bv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 17/12/2021 11:29, Roger Quadros wrote:
+> The GPMC controller is present on some K3 SoCs.
+> It provides access to NOR/NAND flashes and asynchronous
+> SRAM-like memories and ASICs.
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  arch/arm64/Kconfig.platforms | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+FWIW:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Other option would be to make it "default ARCH_K3" in OMAP_GPMC, but
+this is fine for me.
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
--soc-fixes-for-v5.17
-
-for you to fetch changes up to 1bb0b8b195d821d009bae61248da14f2b17bd44a:
-
-  soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init (2021-12-16 =
-06:34:07 -0600)
-
-----------------------------------------------------------------
-SoC: Keystone driver update for v5.17
-
-* k3-socinfo: Add entry for J721S2 SoC family
-* Misc fixups for tisci, pruss, knav_dma
-
-----------------------------------------------------------------
-Aswath Govindraju (1):
-      soc: ti: k3-socinfo: Add entry for J721S2 SoC family
-
-Jan Kiszka (1):
-      soc: ti: pruss: fix referenced node in error message
-
-Jason Wang (1):
-      firmware: ti_sci: rm: remove unneeded semicolon
-
-Miaoqian Lin (1):
-      soc: ti: knav_dma: Fix NULL vs IS_ERR() checking in dma_init
-
- drivers/firmware/ti_sci.c   |  2 +-
- drivers/soc/ti/k3-socinfo.c |  3 ++-
- drivers/soc/ti/knav_dma.c   | 20 ++++++++++----------
- drivers/soc/ti/pruss.c      |  2 +-
- 4 files changed, 14 insertions(+), 13 deletions(-)
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
-49D 1736 249D
-
---z3i67kzdfkksd6bv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmG8sXkACgkQ3bWEnRc2
-JJ2WIA//aPoshbTaIgUcszTmDDShJVZeJRWRQFPPdDPM/KoHCXlvm+ZvMpvyVQVN
-Lf6fM3r4AwJlp35VXTLCPoJdgfGO3MFhD5HcVgXQRzFZt6YSJF5Bg/9PSyK5pUEG
-r/V4T6xRSbbOgpxrLXtxKPfevPiM0lV36XEO/ay/a1OveCiCT6G0oXnkeKWfI+VT
-85hBOi7YKTsKHzH79Rm7MIfNknAuRpfroZH0qwOXiWpgeQejOB+gjD8li64le1ZG
-4hFpuKdZlzRRk6wzCv9rb+uAX+0LcSSFmhw1eNIvIG1Xz0TVIqsDcKUy4ALtsTwO
-cNabW5YWrdvS8vFRmc0beb5PQqYxyhUAsCxeR7bl0HIqrMlmvWL4JKedf2wSj7rY
-pWTBuOUPaldxyuMfEcIGWrYaO3RvQwkWBkOnakQ428nGjllP5vQWr1GvrCHlnNrO
-ayxBn97KYvIgZZJ9PcNh+yw/LHBVfSX9ycrxGY45Af501RHSbNs4qPPQ847Z2qF/
-C95bOeyP+R6NjDHxcQ1rg8hRpjXhO2zzg5fAQQZKXJqjzHnQHtOJtbPcLxFqzLIz
-ATpJ6ZCGGQ5X+KYfHmGtl68N1jJoPU/j4FP/IuOnUlkhGSOpV0QramRQ0AizFFOJ
-oJG7pVmvNBNBftZFW0k83PoqIBhBn35s9MJoqDKbutzzMfoOoZo=
-=V2TL
------END PGP SIGNATURE-----
-
---z3i67kzdfkksd6bv--
+Best regards,
+Krzysztof

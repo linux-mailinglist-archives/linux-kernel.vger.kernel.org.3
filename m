@@ -2,162 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18633478681
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B380A478683
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbhLQIwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:52:07 -0500
-Received: from mga11.intel.com ([192.55.52.93]:6659 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229893AbhLQIwG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:52:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639731125; x=1671267125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x+I5rE7VNY12BhYU+2TspOP4sX4P36nu1hjhpz7qMZc=;
-  b=Ooj/0FrQe9+mT/XJyQTKHKcBfx7UxZ+xDBWtrR8ek1szgI4gdaSU+jg/
-   miLUB0WxJo4VBt+s53u7LhMYk/YI68kXLrnPOVxHvIIV3Xn4BVs7PmVH1
-   qbFR8BEZZBJ/exthrrS7OPVVr/7Z9nBZz3fmSwL4WKlpSOyso6fYwoR9C
-   tRDysKTEpD0hNwMIKuW1wJX28mrkQv6eCa2c0QNP25H1kc8NoVc/HJZs3
-   W7+sWIXWOqmz+T3I1oALkNNTrmQmMnTRg/tz2i8g58dWr0Q/9v/TFHc87
-   nFx5fFDH6sBAf023Xii6sSF6l8v5USRJ9litWj/hMJFRE/QnYitFPNKW+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237253469"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="237253469"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 00:52:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="662788992"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Dec 2021 00:52:00 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1my8y8-0004VB-1I; Fri, 17 Dec 2021 08:52:00 +0000
-Date:   Fri, 17 Dec 2021 16:51:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/18] MM: reclaim mustn't enter FS for SWP_FS_OPS
- swap-space
-Message-ID: <202112171635.JUIRMzHQ-lkp@intel.com>
-References: <163969850295.20885.4255989535187500085.stgit@noble.brown>
+        id S232548AbhLQIwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 03:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233897AbhLQIwO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 03:52:14 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89B4C061746;
+        Fri, 17 Dec 2021 00:52:13 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id m9so2023898iop.0;
+        Fri, 17 Dec 2021 00:52:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=6H38uGu9oxzNmbHpInukzrA1bB8JViq3OxCgrYvQ+q8=;
+        b=c5mUaFxuA3v3wQSuX/Y9Vj6wug2seSdy8IrJ/XtUCevIu7fN1npr+1EmOxqVxVkmjO
+         YwC4b8Zk2LPD5OXLcBx9+Cy/TouT/SJXr1nCc5hrPdXoXo7u+EV2/7+f6L0sBONIuP3j
+         bbWd7uBzIqsXFuABnyu18H54j1Ml45nqpf8wizllo+WORJJzRJ9hD6E3wIzdr6/6Faxe
+         0NJqccOGpVXQMw5rkvHG+TtSK81w5JyPu8KgxD90JG8gpYmOE1EgVwmDQm0dFVjspSmi
+         dXIo4Pm6sSo7+PCuMV5d9h/R/ANh0TuNDovLFonS799bMBCtcIT2zmZERXG98uByl7CS
+         wwxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=6H38uGu9oxzNmbHpInukzrA1bB8JViq3OxCgrYvQ+q8=;
+        b=6nQ1KPRFCOjT2dfzl7/yFtbvCzAdc6adgiDqXTHh6f5iz3U9tODWdJikpmVvravGLZ
+         BOLxMM8KGCSlfJ1gA0dolI9+IBW/JjT4vpE374GgUlwToXR3iSkJAVN/n+bOKsk0dUUl
+         BP0yE008HXjwkx4Uv9I0CZVEQrYcYstD9vu6LvzaGTLymgpQbUMZ+oBvGJSGhNp2HvFj
+         pT7ftitSWRz5913reUkyunMqb44UDBo4ia7HKvEKOHgLxH85MzC7iOpa1/UTMKarzAdL
+         Wi7/M21+BHtRU3WN0udpCZq3ApnfjHsZdY6m6IDEIKZk0MIweFN2/yptZsPs7mPdeiGf
+         ejBQ==
+X-Gm-Message-State: AOAM532d03iXIuzxHSycmEuSCwT/mZ48y2xRuri060vzAgnrVZdKMz0f
+        GukbE7VPHOU9+pOsTZeyazSEa6Zr5I8guqqZ73A=
+X-Google-Smtp-Source: ABdhPJzD3xzZ28BUDmkVh4LKRUS0V2gfVPmeLFXT+fv/Dtx2Up7oF4eysOQeKXy+7O/0A6+jw8B9D8RLxiGpdmszHJc=
+X-Received: by 2002:a05:6638:1346:: with SMTP id u6mr1184173jad.126.1639731133009;
+ Fri, 17 Dec 2021 00:52:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163969850295.20885.4255989535187500085.stgit@noble.brown>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211124153105.155739-1-alex_y_xu@yahoo.ca> <20211124153105.155739-2-alex_y_xu@yahoo.ca>
+In-Reply-To: <20211124153105.155739-2-alex_y_xu@yahoo.ca>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 17 Dec 2021 09:51:36 +0100
+Message-ID: <CA+icZUUZwGG-mJg26DOmadZksm4fMCE5QUmnX4ZghWxXzAy9HQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kbuild: pass --stream-size --no-content-size to zstd
+To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Nick Terrell <terrelln@fb.com>
+Cc:     Michael Forney <forney@google.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi NeilBrown,
+On Wed, Nov 24, 2021 at 4:30 PM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
+>
+> Otherwise, it allocates 2 GB of memory at once. Even though the majority
+> of this memory is never touched, the default heuristic overcommit
+> refuses this request if less than 2 GB of RAM+swap is currently
+> available. This results in "zstd: error 11 : Allocation error : not
+> enough memory" and the kernel failing to build.
+>
+> When the size is specified, zstd will reduce the memory request
+> appropriately. For typical kernel sizes of ~32 MB, the largest mmap
+> request will be reduced to 512 MB, which will succeed on all but the
+> smallest devices.
+>
+> For inputs around this size, --stream-size --no-content-size may
+> slightly decrease the compressed size, or slightly increase it:
+> https://github.com/facebook/zstd/issues/2848.
+>
 
-Thank you for the patch! Yet something to improve:
+Hi Alex and Nick T.,
 
-[auto build test ERROR on cifs/for-next]
-[also build test ERROR on axboe-block/for-next rostedt-trace/for-next linus/master v5.16-rc5]
-[cannot apply to trondmy-nfs/linux-next hnaz-mm/master mszeredi-vfs/overlayfs-next next-20211216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+some questions:
 
-url:    https://github.com/0day-ci/linux/commits/NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-config: arm-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171635.JUIRMzHQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/a8e1b1ffec6ade1545df519d254eae0400b7ec37
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review NeilBrown/Repair-SWAP-over-NFS/20211217-075659
-        git checkout a8e1b1ffec6ade1545df519d254eae0400b7ec37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Can I apply this patch as a single patch - without patch 1/2?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Is there an impact also on the kernel's ZRAM/ZSWAP support plus using
+ZSTD as (de)comp-algo?
 
-All errors (new ones prefixed by >>):
+Here I have:
 
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
-   mm/vmscan.c:1480:20: note: did you mean 'swp_swap_info'?
-   include/linux/swap.h:487:40: note: 'swp_swap_info' declared here
-   static inline struct swap_info_struct *swp_swap_info(swp_entry_t entry)
-                                          ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
-           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
-                                     ^~~~
-   include/linux/compiler_types.h:291:13: note: expanded from macro '__unqual_scalar_typeof'
-                   _Generic((x),                                           \
-                             ^
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:216:28: note: expanded from macro 'data_race'
-           __unqual_scalar_typeof(({ expr; })) __v = ({                    \
-                                     ^~~~
-   include/linux/compiler_types.h:298:15: note: expanded from macro '__unqual_scalar_typeof'
-                            default: (x)))
-                                      ^
->> mm/vmscan.c:1480:20: error: implicit declaration of function 'page_swap_info' [-Werror,-Wimplicit-function-declaration]
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ^
->> mm/vmscan.c:1480:42: error: member reference type 'int' is not a pointer
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                             ~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/compiler.h:218:3: note: expanded from macro 'data_race'
-                   expr;                                                   \
-                   ^~~~
->> mm/vmscan.c:1480:9: error: invalid argument type 'void' to unary expression
-           return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 errors generated.
+$ grep -i zstd /boot/config-5.15.7-1-amd64-clang13-lto | egrep -i 'zram|zswap'
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD=y
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT="zstd"
+CONFIG_ZRAM_DEF_COMP_ZSTD=y
+CONFIG_ZRAM_DEF_COMP="zstd"
 
+Thanks.
 
-vim +/page_swap_info +1480 mm/vmscan.c
+Regards,
+- Sedat -
 
-  1467	
-  1468	static bool test_may_enter_fs(struct page *page, gfp_t gfp_mask)
-  1469	{
-  1470		if (gfp_mask & __GFP_FS)
-  1471			return true;
-  1472		if (!PageSwapCache(page) || !(gfp_mask & __GFP_IO))
-  1473			return false;
-  1474		/* We can "enter_fs" for swap-cache with only __GFP_IO
-  1475		 * providing this isn't SWP_FS_OPS.
-  1476		 * ->flags can be updated non-atomicially (scan_swap_map_slots),
-  1477		 * but that will never affect SWP_FS_OPS, so the data_race
-  1478		 * is safe.
-  1479		 */
-> 1480		return !data_race(page_swap_info(page)->flags & SWP_FS_OPS);
-  1481	}
-  1482	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+> ---
+>  scripts/Makefile.lib | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index ca901814986a..c98a82ca38e6 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -466,12 +466,20 @@ quiet_cmd_xzmisc = XZMISC  $@
+>  # single pass, so zstd doesn't need to allocate a window buffer. When streaming
+>  # decompression is used, like initramfs decompression, zstd22 should likely not
+>  # be used because it would require zstd to allocate a 128 MB buffer.
+> +#
+> +# --stream-size to reduce zstd memory usage (otherwise zstd -22 --ultra
+> +# allocates, but does not use, 2 GB) and potentially improve compression.
+> +#
+> +# --no-content-size to save three bytes which we do not use (we use size_append).
+> +
+> +# zstd --stream-size is only supported since 1.4.4
+> +zstd_stream_size = $(shell $(ZSTD) -1c --stream-size=0 --no-content-size </dev/null >/dev/null 2>&1 && printf '%s' '--stream-size=$(total_size) --no-content-size')
+>
+>  quiet_cmd_zstd = ZSTD    $@
+> -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
+> +      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -19; $(size_append); } > $@
+>
+>  quiet_cmd_zstd22 = ZSTD22  $@
+> -      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
+> +      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -22 --ultra; $(size_append); } > $@
+>
+>  # ASM offsets
+>  # ---------------------------------------------------------------------------
+> --
+> 2.34.0
+>

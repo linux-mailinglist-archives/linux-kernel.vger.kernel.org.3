@@ -2,115 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056B6479684
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE2D479688
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 22:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhLQVu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 16:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhLQVu1 (ORCPT
+        id S230178AbhLQVuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 16:50:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58022 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230111AbhLQVus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:50:27 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA380C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:50:26 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id t5so13130566edd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IT7bJL8Gu3iIVMeGRya6tlK3726EWsW9mIrP6+6lFJY=;
-        b=LTaR9/gIjpCzf1TLq5JMGe8O7dKzXi7YBEwxczaRl0c/qzlwPqOVjlWw6RBOSfzGNy
-         vBpCOKVyBNGR4ugV+/s3OcXRdGoG8mfqRX/0dF2KitumiMFGg2kTpkPIb3AHUPaU2CYw
-         uHD7GGhkBfrspD+Gwcu5o3JrqoCKFHFYxm4f0=
+        Fri, 17 Dec 2021 16:50:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639777848;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rbmljmkDitEoJlRWFUe7q5wX8e3otCTyZPrRHuEzmKc=;
+        b=O5KjmGIPIoMb3P6X6ZBacptn1AqfW6oVjsknAIxA1mfj0J+N0ZAuA8mroT42Q7KjmzQKmA
+        +r/l75guY7Cx6tEzX/81k46ltZ6ptw7BeIJ4CyyUx2bf5mGG6OAlxc0YJMUFzFuGCt9KbW
+        5d3eUTMcPRWN7yPs54xvbM97HojMPzI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-232--WVNl07vPSOCUtK_lOMugQ-1; Fri, 17 Dec 2021 16:50:47 -0500
+X-MC-Unique: -WVNl07vPSOCUtK_lOMugQ-1
+Received: by mail-qv1-f69.google.com with SMTP id kd7-20020a056214400700b003b54713452cso3855557qvb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:50:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IT7bJL8Gu3iIVMeGRya6tlK3726EWsW9mIrP6+6lFJY=;
-        b=gvB4SnYzJwFKeKN9KMXo3xF0Zd9HlUZ+te+KHuYwrD0relC0Hjjq1Lg0yVqEIxYavf
-         cbm2j6m1YclgEmPb43bpxw7B7Hq0nx4mkZwfBUlW4SEUdzMpLEonGPJr7RVz2x4KZDcj
-         5IBMedXLQM4upBMUgpm1HsPanEAhDnq9p40sZuHUJpZ/qb5mWnnKJZyF3mJK3Q+ORcJK
-         dvsk3dXj5nxk3+Cod4Af1h5zS4mL1FwE2ZLccY3DCTZQ+PcMoy7omFTbeDdgyHrDUi8j
-         eb6F8g21dYRFDErfQiYccsdE1HJGJkamk948om/z3q0tyDE7mZ4NXF2MfsOAjDnJWTd4
-         iaig==
-X-Gm-Message-State: AOAM533WLK4Puo5tYogQuqKm0scMRHwpJY6+TJgynSNViVqnvGdvR/7v
-        lN01LFMBNM/wTyTcNJzzVlpO5/ihSCHiIly03f8=
-X-Google-Smtp-Source: ABdhPJya22kVME9auDG5vXQxlqsj8fBRfiICMARWjBcY4ooneJUNMjY5PImoj6K6rxP4BHKrnG+udg==
-X-Received: by 2002:a05:6402:40d2:: with SMTP id z18mr4531765edb.395.1639777825003;
-        Fri, 17 Dec 2021 13:50:25 -0800 (PST)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id y15sm4273354eda.13.2021.12.17.13.50.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 13:50:24 -0800 (PST)
-Received: by mail-wm1-f48.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso4950512wmc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:50:24 -0800 (PST)
-X-Received: by 2002:a7b:cb17:: with SMTP id u23mr11341018wmj.155.1639777824159;
- Fri, 17 Dec 2021 13:50:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rbmljmkDitEoJlRWFUe7q5wX8e3otCTyZPrRHuEzmKc=;
+        b=pqtDKsGLI1isyKJBqKgBua8Dd1wNCYCuLuGNE9oo2rNu/TJmaz3AmHli45Ic/erZAa
+         L+EG2Sc6Ufn2mlCA689jr46zsnboBsffv9B+legfpqGmXznGUOuNdoSa7kOKYC3WgYS8
+         TD2/c6ruS5bOnQUrLn+uaovf72WQ7fMAhEuvzuROj9XWj6G7bE4zRZ30qiiyE3KJ2S0q
+         jRiUksMH2+br4oVhPovfSl/MZQP+3n0Tkfc+iY4Y2hOw99cf+E4hHVUBzas41jU23KST
+         PAnfAIcpn4ME6VIs0mMGA6Axw6KOHz4OYqE1rdl2+bs/Ws4oiSDEI5dUNrU9h5hIfheT
+         Um/g==
+X-Gm-Message-State: AOAM5317lFpv1GDkpo1ut4yjalKkpegeEJJE6VfD8lk1fq/tzBT7WfYb
+        9hR8ApFRLOF7Mk9nXql5RjRLa6j+Rc9mUsjqN8wObP6gBips4kaCa6OC9xwxArykqzGx323mQr9
+        rDlabQvmlZzfwFjdD/5Lzs8ee
+X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr3225263qkp.270.1639777846782;
+        Fri, 17 Dec 2021 13:50:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx3jLcgYHEzsebMSk9tVxU2ahYLfPrYelvOzO6K5TPcHFZb+5pTnbauFLDR9slrasqJ/kdXXQ==
+X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr3225241qkp.270.1639777846461;
+        Fri, 17 Dec 2021 13:50:46 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id bk39sm5577802qkb.35.2021.12.17.13.50.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 13:50:45 -0800 (PST)
+Date:   Fri, 17 Dec 2021 13:50:42 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, corbet@lwn.net, songliubraving@fb.com,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] livepatch: Fix leak on klp_init_patch_early failure
+ path
+Message-ID: <20211217215042.76m5qn5e63ptgrjq@treble>
+References: <20211214220124.2911264-1-void@manifault.com>
+ <20211214235128.ckaozqsvcr6iqcnu@treble>
+ <Ybm+FyhLnuH4JThq@alley>
+ <YboHpHmu3D+0hxKp@dev0025.ash9.facebook.com>
+ <YbyV7nsLXbQ6/44S@alley>
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
- <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
- <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
-In-Reply-To: <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 13:50:08 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
-Message-ID: <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbyV7nsLXbQ6/44S@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 1:47 PM David Hildenbrand <david@redhat.com> wrote:
->
-> For now I have not heard a compelling argument why the mapcount is
-> dubious, I repeat:
->
-> * mapcount can only increase due to fork()
-> * mapcount can decrease due to unmap / zap
->
-> We can protect from the transtition == 1 -> >1 using the mmap_lock.
->
-> For COW the mapcount is the only thing that matters *if we take GUP* out
-> of the equation. And that's exactly what we
+On Fri, Dec 17, 2021 at 02:51:42PM +0100, Petr Mladek wrote:
+> On Wed 2021-12-15 07:20:04, David Vernet wrote:
+> > Petr Mladek <pmladek@suse.com> wrote on Wed [2021-Dec-15 11:06:15 +0100]:
+> > > Well, I still believe that this is just a cargo cult. And I would prefer
+> > > to finish the discussion about it, first, see
+> > > https://lore.kernel.org/all/YbmlL0ZyfSuek9OB@alley/
+> > 
+> > No problem, I won't send out v3 until we've finished the discussion and
+> > have consensus. I'll assume that the discussion on whether or not there is
+> > a leak will continue on the thread you linked to above, so I won't comment
+> > on it here.
+> > 
+> > > Note that klp_init_*_early() functions iterate through the arrays
+> > > using klp_for_each_*_static. While klp_free_*() functions iterate
+> > > via the lists using klp_for_each_*_safe().
+> > 
+> > Correct, as I've understood it, klp_for_each_*_safe() should only iterate
+> > over the objects that have been added to the patch and klp_object's lists,
+> > and thus for which kobject_init() has been invoked. So if we fail a check
+> > on 'struct klp_object' N, then we'll only iterate over the first N - 1
+> > objects in klp_for_each_*_safe().
+> > 
+> > > We should not need the pre-early-init check when the lists include only
+> > > structures with initialized kobjects.
+> > 
+> > Not sure I quite follow. We have to do NULL checks for obj->funcs at some
+> > point, and per Josh's suggestion it seems cleaner to do it outside the
+> > critical section, and before we actually invoke kobject_init(). Apologies
+> > if I've misunderstood your point.
+> 
+> The original purpose of klp_init_*_early() was to allow calling
+> klp_free_patch_*() when klp_init_*() fails. The idea was to
+> initialize all fields properly so that free functions would
+> do the right thing.
+> 
+> Josh's proposal adds pre-early-init() to allow calling
+> klp_free_patch_*() already when klp_init_*_early() fails.
+> The purpose is to make sure that klp_init_*_early()
+> will actually never fail.
+> 
+> This might make things somehow complicated. Any future change
+> in klp_init_*_early() might require change in pre-early-init()
+> to catch eventual problems earlier.
 
-What do you have against just doing what we already do in other parts,
-that a/b thing?
+I'm not sure why that would be a problem.  If we can separate out the
+things which fail from the things which don't, it simplifies things.
 
-Which avoids the whole mmap_sem issue. That was a big issue for the
-rdma people, afaik.
+And if klp_init_object_early() returns void then it would make sense for
+klp_init_patch_early() to also return void.
 
-                Linus
+> Also I am not sure what to do with the existing checks
+> in klp_init_patch_early(). I am uneasy with removing them
+> and hoping that pre-early-init() did the right job.
+
+klp_init_patch_early() already depends on some of the other checks in
+klp_enable_patch() anyway.  I don't see that as much of a problem since
+it only has one caller.
+
+The benefit of moving the rest of the checks out is that it simplifies
+the error handling, with no possibility of half-baked structures.
+
+> But if we keep the checks then klp_init_patch_early() then it
+> might fail and the code will not be ready for this.
+> 
+> 
+> My proposal is to use simple trick. klp_free_patch_*() iterate
+> using the dynamic list (list_for_each_entry) while klp_init_*_early()
+> iterate using the arrays.
+> 
+> Now, we just need to make sure that klp_init_*_early() will only add
+> fully initialized structures into the dynamic list. As a result,
+> klp_free_patch() will see only the fully initialized structures
+> and could release them. It will not see that not-yet-initialized
+> structures but it is fine. They are not initialized and they do not
+> need to be freed.
+> 
+> In fact, I think that klp_init_*_early() functions already do
+> the right thing. IMHO, if you move the module_get() then you
+> could safely do:
+> 
+> int klp_enable_patch(struct klp_patch *patch)
+> {
+> [...]
+> 	if (!try_module_get(patch->mod)) {
+> 		mutex_unlock(&klp_mutex);
+> 		return -ENODEV;
+> 	}
+> 
+> 	ret = klp_init_patch_early(patch);
+> 	if (ret)
+> 		goto err;
+> 
+> 
+> Note that it would need to get tested.
+> 
+> Anyway, does it make sense now?
+
+It would work, but it's too clever/non-obvious.  If we rely on tricks
+then we may eventually forget about them and accidentally break
+assumptions later.
+
+-- 
+Josh
+

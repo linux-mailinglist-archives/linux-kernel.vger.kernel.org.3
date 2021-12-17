@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 962E7478670
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 09:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860B547869E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbhLQIqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 03:46:13 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29138 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbhLQIqM (ORCPT
+        id S233965AbhLQJAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233949AbhLQJAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:46:12 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JFjDX20kvz1DJjH;
-        Fri, 17 Dec 2021 16:43:08 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 17 Dec 2021 16:46:10 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 17 Dec 2021 16:46:09 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <will@kernel.org>, <catalin.marinas@arm.com>,
-        <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <moyufeng@huawei.com>,
-        <wangxiongfeng2@huawei.com>, <linux-arch@vger.kernel.org>
-Subject: [PATCH] asm-generic: introduce io_stop_wc() and add implementation for ARM64
-Date:   Fri, 17 Dec 2021 16:56:11 +0800
-Message-ID: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 17 Dec 2021 04:00:12 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663E3C06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:00:12 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id w23so3082089uao.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 01:00:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1IH63Q90oG2/sG9LVJYEHCd1u9C2HmHeMsRBX0qtkUo=;
+        b=qIE8qNdqXPTUkGC9i0YDDZP2+Z4Mb1MUWzSefMskqX5QKqkuhfmvD+G2br+RJjGAkb
+         pwQV/bFp+oXMsVJz7aJ2VZZKZc56eqRznRccK/sPEaCf3N7vtXruXVAfTjRM9T6KS93f
+         ArrgpUzKYZNiH+O8EQTXEsW6LyZUpPZXPsZCA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1IH63Q90oG2/sG9LVJYEHCd1u9C2HmHeMsRBX0qtkUo=;
+        b=B2lvhQoDRfIC4UKuWLVs5DPgebCFwfgCHfGYY8CSfdJOmqTbRUL4kul86RVJ9aNE3n
+         amUTlOZtj/bTb1uGhGN9K4TQ2U6h5eN5VIPHNo5bZTmXgT0wwIdOdnuXOAcfrdY1/A9Y
+         923QzinKM7kIR/zBdqwaeIIYj4BPiXThwx6grr1mG39/QCFRaSjZUAlY2uB7hRYJaD7g
+         kpagqejvzxlCc5tiTD4DgdBUzOFzTyP8Lxkq06qqcOCn+1fcIhCXbgOzLl4t1sHZXkAt
+         3lWV8D7W7WjocWXS0odOuBA1DVavR1D/pUXzyvpDM/lPx2B1hSqhDKA8qCDOBd5T7PmJ
+         BB9w==
+X-Gm-Message-State: AOAM531QQVbUMzzWAEliY+P/ZqaL/WFpapG63mDFBr9vJ7k6RTz/ZDxt
+        HWhTU2z9SK5qauHyMFLY9wUD3ADJj+PMG76YMDivjg==
+X-Google-Smtp-Source: ABdhPJzBtMbh27J6qJpt+5sIKjlVPbdSyfevk8+JF4+f8w0xH2iu5rDghZD+yfHmIAyZww+PpPzT4a+7O3u35rmyL2U=
+X-Received: by 2002:a67:17c6:: with SMTP id 189mr629048vsx.71.1639731611453;
+ Fri, 17 Dec 2021 01:00:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+References: <20211212181906.94062-1-romain.perier@gmail.com>
+ <20211212181906.94062-3-romain.perier@gmail.com> <CAFr9PXki8LVdjQC_4eDSuB1dmEmv2K00bWOy92cOXENEoEyeqw@mail.gmail.com>
+ <CABgxDoLtD6fAj-c_+gcjJBoe9HLQYxrhSZZdjEC0YJqDssP6SA@mail.gmail.com>
+In-Reply-To: <CABgxDoLtD6fAj-c_+gcjJBoe9HLQYxrhSZZdjEC0YJqDssP6SA@mail.gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Fri, 17 Dec 2021 18:00:00 +0900
+Message-ID: <CAFr9PXkvJzpFU5x=syR8dXwOuLXPurQoTnDEvmJ-+FrWn5F+ZA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] clocksource: msc313e: Add support for
+ ssd20xd-based platforms
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For memory accesses with Normal-Non Cacheable attributes, the CPU may do
-write combining. But in some situation, this is bad for the performance
-because the prior access may wait too long just to be merged.
+Hi Romain,
 
-We introduce io_stop_wc() to prevent the Normal-NC memory accesses before
-this instruction to be merged with memory accesses after this
-instruction.
+On Fri, 17 Dec 2021 at 03:18, Romain Perier <romain.perier@gmail.com> wrote:
+>
+> Hi Daniel,
+>
+> What do you think about the following description ?  :  "
+>     clocksource: msc313e: Add support for ssd20xd-based platforms
+>
 
-We add implementation for ARM64 using DGH instruction and provide NOP
-implementation for other architectures.
+>
+>     Signed-off-by: Romain Perier <romain.perier@gmail.com>
 
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
----
- Documentation/memory-barriers.txt |  9 +++++++++
- arch/arm64/include/asm/barrier.h  |  9 +++++++++
- include/asm-generic/barrier.h     | 11 +++++++++++
- 3 files changed, 29 insertions(+)
+I looked at the disassembly of the bootrom again and it doesn't look
+like it's set there.
+I think it's the hardware default for the register.
 
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index 7367ada13208..b868b51b1801 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -1950,6 +1950,15 @@ There are some more advanced barrier functions:
-      For load from persistent memory, existing read memory barriers are sufficient
-      to ensure read ordering.
- 
-+ (*) io_stop_wc();
-+
-+     For memory accesses with Normal-Non Cacheable attributes (e.g. those
-+     returned by ioremap_wc()), the CPU may do write combining. But in some
-+     situation, this is bad for the performance because the prior access may
-+     wait too long just to be merged. io_stop_wc() can be used to prevent
-+     merging memory accesses with Normal-Non Cacheable attributes before this
-+     instruction with any memory accesses appearing after this instruction.
-+
- ===============================
- IMPLICIT KERNEL MEMORY BARRIERS
- ===============================
-diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-index 1c5a00598458..62217be36217 100644
---- a/arch/arm64/include/asm/barrier.h
-+++ b/arch/arm64/include/asm/barrier.h
-@@ -26,6 +26,14 @@
- #define __tsb_csync()	asm volatile("hint #18" : : : "memory")
- #define csdb()		asm volatile("hint #20" : : : "memory")
- 
-+/*
-+ * Data Gathering Hint:
-+ * This instruction prevents merging memory accesses with Normal-NC or
-+ * Device-GRE attributes before the hint instruction with any memory accesses
-+ * appearing after the hint instruction.
-+ */
-+#define dgh()		asm volatile("hint #6" : : : "memory")
-+
- #ifdef CONFIG_ARM64_PSEUDO_NMI
- #define pmr_sync()						\
- 	do {							\
-@@ -46,6 +54,7 @@
- #define dma_rmb()	dmb(oshld)
- #define dma_wmb()	dmb(oshst)
- 
-+#define io_stop_wc()	dgh()
- 
- #define tsb_csync()								\
- 	do {									\
-diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-index 640f09479bdf..083be6d34cb9 100644
---- a/include/asm-generic/barrier.h
-+++ b/include/asm-generic/barrier.h
-@@ -251,5 +251,16 @@ do {									\
- #define pmem_wmb()	wmb()
- #endif
- 
-+/*
-+ * ioremap_wc() maps I/O memory as memory with Normal-Non Cacheable attributes.
-+ * The CPU may do write combining for this kind of memory access. io_stop_wc()
-+ * prevents merging memory accesses with Normal-Non Cacheable attributes
-+ * before this instruction with any memory accesses appearing after this
-+ * instruction.
-+ */
-+#ifndef io_stop_wc
-+#define io_stop_wc do { } while (0)
-+#endif
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* __ASM_GENERIC_BARRIER_H */
--- 
-2.20.1
+I'm thinking something like this:
 
+On SSD20X family SoCs the timers are connected to a 432MHz clock
+instead of 12MHz that all the previous chips used.
+There is no way to reduce or divide these clocks in the clktree yet as
+we don't know exactly where the 432MHz clock comes from but it's
+enabled at boot.
+
+The SSD20X timers have an input clock divider within the timer itself
+to configure the frequency.
+timer0 is preconfigured at power up to run at 12MHz so it is backwards
+compatible and doesn't need special handling right now.
+timer1 and timer2 run at 432Mhz at power up so are not backward compatible.
+
+This commit adds support for the input clock divider register and sets
+timer1 and timer2 to run at 48Mhz for clockevents.
+
+Cheers,
+
+Daniel

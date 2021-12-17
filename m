@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A5147941E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242C647941F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240362AbhLQSaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S239838AbhLQSfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbhLQSaF (ORCPT
+        with ESMTP id S236643AbhLQSfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:30:05 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FE9C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:30:04 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id l22so6403031lfg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:30:04 -0800 (PST)
+        Fri, 17 Dec 2021 13:35:53 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02791C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:35:52 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id t123so1607438pfc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:35:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wxXVzxqOXHO0GTZOA2F1N2zm7EwxOGpKK5L0bY+lCw4=;
-        b=pv5OwX8mx+aYyldb68pjQaQhirbixvjs0iMtR/nhjscND/EtX+K8O83urDWzSxv5AK
-         sptuTexsonESZEeBXHb68tzX9vGtydkr7WeEZmkDZH9oa9Csyj0rHF1zZLi/VivQv37V
-         bdkO8D+M/zSaaeOwKpVb1wHe3QPLRP9gOrTDC5tQDOaf4WQFmp74nLG0Aaccknb1K69C
-         u8EBq1mVmRiKZvYC/9MmS97LQNhJ5rJKy9yurgBEW1MWYD6QSEqH3M9BMJXkGNjnSUkq
-         +XVlZlVyKqN53EIRhe6KNgtHr0qYQ0iGwn4NDo/biilJjEPNYbuOl7fDOVQiLafD7QZy
-         0yTA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=YaNxns1s+TGyCVBsFW30ZbL2hW+Yb5XnvuO0hRitp/o=;
+        b=DyPBpxf4wGnF7oC2LDeND0KeUEx99zwWf2C204q18+fYZZpsAwENdGXuwz0c1Yo4cV
+         pQFUp1Ld7r7lqO0ggydhW5a8jQ1lQXnu/HKD9fVGnS7a83PT7pFTELipkxN0misTegGC
+         eKzY2GtxnGOaXfABt3OgLrcGnDljdyl6ygr78lUExq+MjXWuCYroOiu7kUHjJt3hGNTq
+         Oz2Q7Cesptbxfe4sTVqP6ZpHrjc/By95VJhoRYuvARM2DU7N0f7Pzm3Ks9OPc+7jyrG+
+         2c8ksBOwsBPCnXAo1ShNfFxyIygHCWayj+DgudzOpcmXrPrKyEs5v0CzlHiKcgMt8D6d
+         FQWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wxXVzxqOXHO0GTZOA2F1N2zm7EwxOGpKK5L0bY+lCw4=;
-        b=T+IcBCakGjq01XikM45UejxVNXTgr7SC1BINZYCQTldrTLkV/ODB49BfWwrFIBI4ew
-         uJEUu6h4ilOyN4glutRatcI7nB3UrYR6r2GlzKkDnu4tuPW09HdN5XZ2Kro7a9L7VZVS
-         RW3GzbbS0ep76VJf/0L+baYgU6vsmNQenvOqPS6hmjBComkd4V18I8ZENwIzp9tH8p76
-         iENKMPDaqDzxmcGW++MkzDNyTc3HUvw8K0eB4lZ0IPx3HhHLKyxgsqeVtVMJsC9ImWEm
-         i1f5ApckFnlKn29pFcT2hdo2yIEAaXQFseVqIj/+7ljBSgroYLDm8zZmokPSIGfSxCgw
-         VwXg==
-X-Gm-Message-State: AOAM533+4gpaE826n38DwHbQNgjX9s9v4IeAQ31ohRXMT2C8iABalO7H
-        DaNV66qPsmugPr5qGMtRnzD2kVRQxH4=
-X-Google-Smtp-Source: ABdhPJzbGU8crklOmLnrxvq1KCEJ4OuBOfBC3sKTdYT4Mhmq8ooiz0BWn/2Ley+qvOsLVy1ssS3+aA==
-X-Received: by 2002:a05:6512:12c9:: with SMTP id p9mr3968091lfg.43.1639765802914;
-        Fri, 17 Dec 2021 10:30:02 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id bq36sm1175931lfb.42.2021.12.17.10.30.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 10:30:02 -0800 (PST)
-Subject: Re: [PATCH v2] mfd: rk808: add reboot support to rk808.c
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211217145544.341617-1-pgwipeout@gmail.com>
- <2bebe0ae-27df-f75d-97d6-2e4d2dd032b0@gmail.com>
- <CAMdYzYq=2G1bvu9M_DR0vdQDtcvVBhQFRPTNKo1ySFrMZOk=jg@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4d24cb08-0475-3a9d-1b73-24e465f34701@gmail.com>
-Date:   Fri, 17 Dec 2021 21:30:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAMdYzYq=2G1bvu9M_DR0vdQDtcvVBhQFRPTNKo1ySFrMZOk=jg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=YaNxns1s+TGyCVBsFW30ZbL2hW+Yb5XnvuO0hRitp/o=;
+        b=O+KfDC16n4t+6caNBRdb6N7j3EN8a/IPpXsFLE6Q62BNXmd57a0g85ESoWsnBFkg9b
+         XJc9BU9OQQqJcEGfENGq7KZhGLloyFV0QJDi7ed5/02HPGCJ8k4sdkXSwgRaefuqNj0R
+         dx99P/IX+5DzV1pn1ZE2e6LVYI78T0OXew/U2CML3lBZTTknfK5EYwaTTZkN37z3RHAw
+         wVBYWQuZPIP2C7UM70+tb1KuhztNrW9oS9zQ4b17Qhy5khfWgJBxLDzkWmMVaXG+iJAj
+         XjbuoVTcdADmUwN3/ii+4C2Q5Zi/BWJ3oImeZBZ2qsWvkIDkPmKTCb66ijrnZgfWu8n1
+         R1Rw==
+X-Gm-Message-State: AOAM5311X9Zl3e1kXHQpHqQLcxROpaDh8kyWGVk18q9j0RyMN+fRJ6Xl
+        ixBpRJFBGCbK2QVe4yRv7agtROlKTIfpLw==
+X-Google-Smtp-Source: ABdhPJyjYm/Bau5+PTPtAe1IyAqGABNPgFtGfulvfHKU2dMaHXAmglvAUAPrF+XB5onIgHMvNLPTBw==
+X-Received: by 2002:aa7:8545:0:b0:4ba:7163:7dfd with SMTP id y5-20020aa78545000000b004ba71637dfdmr4204093pfn.61.1639766152335;
+        Fri, 17 Dec 2021 10:35:52 -0800 (PST)
+Received: from localhost ([12.163.77.120])
+        by smtp.gmail.com with ESMTPSA id gf4sm8877475pjb.56.2021.12.17.10.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 10:35:51 -0800 (PST)
+Date:   Fri, 17 Dec 2021 10:35:51 -0800 (PST)
+X-Google-Original-Date: Fri, 17 Dec 2021 10:18:21 PST (-0800)
+Subject: [GIT PULL] RISC-V Fixes for 5.16-rc6
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-e635e7d2-fa3c-4c47-8a6b-989873263b30@palmer-ri-x1c9>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-17.12.2021 21:16, Peter Geis пишет:
->>> +                     break;
->>> +             default:
->>> +                     dev_info(&client->dev, "pmic controlled board reset not supported\n");
+The following changes since commit 5a19c7e06236a9c55dfc001bb4d1a8f1950d23e7:
 
-I'd change this dev_info to dev_dbg to not clutter KMSG.
+  riscv: fix building external modules (2021-11-18 23:06:23 -0800)
 
->> I'd set ret=0 explicitly here. Later on somebody may change the code and
->> ret won't be zero anymore, this is not an uncommon trouble in kernel.
-> It took me a moment to see the logic here, but I understand it now.
-> 
+are available in the Git repository at:
 
-Could be even better to place the error message simply right after the
-register_restart_handler().
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.16-rc6
+
+for you to fetch changes up to f6f7fbb89bf8dc9132fde55cfe67483138eea880:
+
+  riscv: dts: sifive unmatched: Link the tmp451 with its power supply (2021-12-16 21:27:45 -0800)
+
+----------------------------------------------------------------
+RISC-V Fixes for 5.16-rc6
+
+* A handful of DT updates for the SiFive HiFive Unmatched, that fix the
+  regulator handling.  These should stop some warning spew.
+* A pair of fixes for both the SiFive Hifive Unleashed and Unmatched,
+  that correctly hook up the MMC card detect signal.
+
+----------------------------------------------------------------
+Bin Meng (2):
+      riscv: dts: unleashed: Add gpio card detect to mmc-spi-slot
+      riscv: dts: unmatched: Add gpio card detect to mmc-spi-slot
+
+Vincent Pelletier (5):
+      riscv: dts: sifive unmatched: Name gpio lines
+      riscv: dts: sifive unmatched: Expose the board ID eeprom
+      riscv: dts: sifive unmatched: Expose the PMIC sub-functions
+      riscv: dts: sifive unmatched: Fix regulator for board rev3
+      riscv: dts: sifive unmatched: Link the tmp451 with its power supply
+
+ .../riscv/boot/dts/sifive/hifive-unleashed-a00.dts |   1 +
+ .../riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 113 ++++++++++-----------
+ 2 files changed, 54 insertions(+), 60 deletions(-)

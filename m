@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D57C4790CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E74E4790D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbhLQP7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:59:24 -0500
-Received: from mga07.intel.com ([134.134.136.100]:48699 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233490AbhLQP7X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:59:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639756763; x=1671292763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=spt2TZS4capHt+wzFhSAQnCBn7Fh2qkwHcRnr0zaM0U=;
-  b=nHAuO9fMSoZRruuA/Dcrsbhm4YUKQlYym/wVi/Dqu+NtPeyhfGeyA8bb
-   TnlS+9UnW1DRiboCxOMWgyPmd215JCoHSS4ilMVY1BLh+XKogh+4BC9WQ
-   a+9hyjBJ3WzBDOeHJuozHY/wNEVVgE4ycUUP9Z4N5wuuop0fDf1kSPAEF
-   cdvBghOpFgSmdhCqJ1goZ3xIKxHthCKB5G2CZq6rrfPXzcsCTkWGUKkwk
-   oE7GyxU1zCFMvJWx6drog5t19yAAprh/cQIlrN+H1rZlXXMMtO2xn5nAM
-   tWHM6SNrjPXMJTaAUxLNgKKXdlMntDs2cCPD850TU/pWwax727x3daqly
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303152276"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="303152276"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 07:59:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="465158376"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2021 07:59:18 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myFdd-0004tT-Gh; Fri, 17 Dec 2021 15:59:17 +0000
-Date:   Fri, 17 Dec 2021 23:58:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     kbuild-all@lists.01.org,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH v2 10/37] drm/imx/dcss: Use drm_module_platform_driver()
- to register the driver
-Message-ID: <202112172338.SdP9K7tX-lkp@intel.com>
-References: <20211217003752.3946210-11-javierm@redhat.com>
+        id S238719AbhLQQAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:00:38 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:43300 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238265AbhLQQAg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:00:36 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07fH050996;
+        Fri, 17 Dec 2021 10:00:07 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639756807;
+        bh=o5FZZyggvdui1CUzq3pJk4FxP/aLklXa6J5Z54yqBDI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=cxGjYcsyyWWl8cRp4hi4RvvI9IPyl9TiOu2hgpw99b6K+y69rnesv6KglLhz3hKem
+         vii1YKQzR0PPoAG0HtiwfvegB+pMYkfWNZ3T8CYJbB/8kvRX7gv/zbhtGNdyh7WT/2
+         TezQp/ztI7ivfqKL+utM0uOSUI5pMVaWz543B2OY=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BHG07BB034596
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Dec 2021 10:00:07 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Dec 2021 10:00:07 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Dec 2021 10:00:07 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BHG07BW075506;
+        Fri, 17 Dec 2021 10:00:07 -0600
+Date:   Fri, 17 Dec 2021 10:00:07 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC:     <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [GIT PULL] soc: Keystone driver update for v5.17
+Message-ID: <20211217160007.etfr5urg76j2n5sf@reissue>
+References: <20211217154921.cagzppcensxx6wm4@pension>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211217003752.3946210-11-javierm@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211217154921.cagzppcensxx6wm4@pension>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on next-20211215]
-[also build test ERROR on v5.16-rc5]
-[cannot apply to drm/drm-next shawnguo/for-next pinchartl-media/drm/du/next drm-exynos/exynos-drm-next v5.16-rc5 v5.16-rc4 v5.16-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Javier-Martinez-Canillas/drm-Make-drivers-to-honour-the-nomodeset-parameter/20211217-084031
-base:    93bf6eee76c0e716f6b32de690b1c52991547bb4
-config: arm64-randconfig-r034-20211216 (https://download.01.org/0day-ci/archive/20211217/202112172338.SdP9K7tX-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c7b8e02dcec35660bbc9101ae0c1db11e5f7d1ab
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-Make-drivers-to-honour-the-nomodeset-parameter/20211217-084031
-        git checkout c7b8e02dcec35660bbc9101ae0c1db11e5f7d1ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/imx/dcss/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/imx/dcss/dcss-drv.c:134:1: warning: data definition has no type or storage class
-     134 | drm_module_platform_driver(dcss_platform_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/imx/dcss/dcss-drv.c:134:1: error: type defaults to 'int' in declaration of 'drm_module_platform_driver' [-Werror=implicit-int]
->> drivers/gpu/drm/imx/dcss/dcss-drv.c:134:1: warning: parameter names (without types) in function declaration
-   drivers/gpu/drm/imx/dcss/dcss-drv.c:124:31: warning: 'dcss_platform_driver' defined but not used [-Wunused-variable]
-     124 | static struct platform_driver dcss_platform_driver = {
-         |                               ^~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+On 09:49-20211217, Nishanth Menon wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver-soc-fixes-for-v5.17
 
 
-vim +134 drivers/gpu/drm/imx/dcss/dcss-drv.c
+uggh.. Could have been tags/ti-driver-soc-for-v5.17 mostly fixes threw
+my thought off a bit there.. - Do let me know if you folks prefer it
+as ti-driver-soc-for-v5.17 instead of ti-driver-soc-fixes-for-v5.17
+and I can retag and respin the PR..
 
-   133	
- > 134	drm_module_platform_driver(dcss_platform_driver);
-   135	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

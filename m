@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB3B47953A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F3D4795AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbhLQUCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbhLQUCr (ORCPT
+        id S240911AbhLQUoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:44:07 -0500
+Received: from gateway22.websitewelcome.com ([192.185.46.234]:23456 "EHLO
+        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237062AbhLQUoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:02:47 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853D5C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:02:46 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id e3so12141212edu.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:02:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=m1TN1vSbPdjQ1kBpJQ5Rf4PvO87o3O/21wRtoQilZgQ=;
-        b=gYNhCu1O0aMAZRG4asiGAf3e55Wf0o8FiVDtuR4GK67gevvc+S23mgtPgBOUk9MQ+p
-         AwjGB/D1aX5GSxz3Kzx3lznRpbrAY6BylqKKHX0JfjztBu2Lnz+hG//gA7wXdYfBSMno
-         7SzlhlRIC4jfjeFMXxHEjJ0inehsh9ZLVlNZb3eo6HM/jQMabMIzvzRw4Z8qGTnJ2TgV
-         DRlc5TnGJEjSz41zhLExjgBuqbQeXOL6KDxwZgTYzsxqARsZYJkVbxiPmiWgwzsXZwKn
-         ca3hVEzZY3pMcHME24WzHqBgkdwJ8WIlANkm9zQ+eWexkhmpsp8U5wmPc3ZApG/lrrih
-         PIjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=m1TN1vSbPdjQ1kBpJQ5Rf4PvO87o3O/21wRtoQilZgQ=;
-        b=3KTqP/ju7vt5JYjuQCUITEZoM2UBts6Wf5C3itZqS4b7E0FAClmA1uTMJiLsctNqdz
-         hDkQou4R4wc7KE0CemrJObeRaSK9YleO3eE09Wpr60OcjHJBczEzZmqmHoRDO4PFii2c
-         gKTuaxOGZCVfM/wdfiqsFbU4yMJ3weYv4cRkBdcPK7O9SfRMUv2ISCU2DIqgqw3PwWmS
-         +3cViojuqIRrDwjoSynSMYtZN+QffXSnh8wXv52+ypkbhlCjl43FwQbpJDWeZIKBQ9Uc
-         RFfQeNshEo0vD2AqnDbAJRL+nGzLAJ/jBU0E+aeuw/iMIRvg264DEfMDnyuMxZgZ7A6p
-         GZkg==
-X-Gm-Message-State: AOAM530HyUAAV8E1vMSLdonJjTt/C41nvCCaCEWwIAbd2AsgM9BxYqj1
-        9VCpMYHKojxBOp5lq7OUddQPzDY5e0bPhEu6FPSB
-X-Google-Smtp-Source: ABdhPJz47oCNv1M/lwln/9SrzEuMxNVfX8UYIa8EV2amYt65ZLYqQOF9wuRoDLTDVWlFZC9gBnfE8kBxAUhsOvNsy10=
-X-Received: by 2002:a17:906:3a8c:: with SMTP id y12mr3541460ejd.517.1639771364930;
- Fri, 17 Dec 2021 12:02:44 -0800 (PST)
+        Fri, 17 Dec 2021 15:44:06 -0500
+X-Greylist: delayed 1501 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Dec 2021 15:44:05 EST
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 93090609C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 13:58:18 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id yJMwmZ6yBRnrryJMwmvLw6; Fri, 17 Dec 2021 13:58:18 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tLR3kyhWl3dztSJoHk8l7h6ld5ktjTJasCdXXqFHwvU=; b=GjYhP9o+MePPqsNBFdJu1fFK+i
+        ZvfSlhdgknRwVgIJ/uM5b70OEAfhUN208IEUhRktj/EvVQ5siJPrGpv2bn6OEqula+OHItrjsm9hb
+        0DuQWYVXVedyYUmv5MThgmBJTU1P220HjbWf7A4U+C8A/1oRl/WWp+UTGSf5yMs0us8YWeLvp6Ui5
+        97wYgK51abPSGZ3E65J4B9HlduPY9zyPb6cBfjkH1mL9Mo4K3UE1L2bcIDmw4c7Ss76jXwWDb3M+L
+        10q+zrDg+pDUFTuO6VIJxJ2JGEjhFxINoVKXRG5GuurtcB6S0UEwTYEQRz1h5UEe46z2iwwEmu3ws
+        vcNKIAMg==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:35662 helo=[192.168.15.9])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <garsilva@embeddedor.com>)
+        id 1myJMv-0023aa-88; Fri, 17 Dec 2021 13:58:17 -0600
+Subject: Re: Coverity Scan model file, license, public access
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Kees Cook <keescook@chromium.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dave Jones <davej@codemonkey.org.uk>
+Cc:     Kroah-Hartman <greg@kroah.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "foersleo@amazon.de" <foersleo@amazon.de>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-hardening@vger.kernel.org,
+        Norbert Manthey <nmanthey@amazon.de>
+References: <d7f096ee-7a9b-684e-433a-f8f3f0e6288d@amazon.de>
+ <YOSKuEcPoy/dw0st@kroah.com> <a41221c8-86e5-494d-68fd-0a0b87c99e83@amazon.de>
+ <202107151111.23BA48F99@keescook>
+ <1bce95f4-ddf8-2081-57c8-67cd9d4dd3d4@collabora.com>
+From:   "Gustavo A. R. Silva" <garsilva@embeddedor.com>
+Message-ID: <c5c02c09-e210-fd81-2c95-74ba6e05e153@embeddedor.com>
+Date:   Fri, 17 Dec 2021 14:03:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 17 Dec 2021 15:02:34 -0500
-Message-ID: <CAHC9VhS=WgqJgqpQq9J+0Pec9u8e1VnvGwqOimR54wm6TRptVA@mail.gmail.com>
-Subject: [GIT PULL] SELinux fixes for v5.16 (#3)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1bce95f4-ddf8-2081-57c8-67cd9d4dd3d4@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1myJMv-0023aa-88
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.9]) [187.162.31.110]:35662
+X-Source-Auth: garsilva@embeddedor.com
+X-Email-Count: 6
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Muhammad,
 
-Another small SELinux fix for v5.16 to ensure that we don't block on
-memory allocations while holding a spinlock.  This passes all our
-tests without problem, please merge this for the next v5.16-rcX
-release.
+On 12/17/21 13:32, Muhammad Usama Anjum wrote:
+>> As far as I know, the model was written originally by Dave Jones, with
+>> further changes from myself and, I think, Colin Ian King.
+>>
+>> I thought it was visible through the Coverity dashboard, once you're
+>> logged in:
+>> https://scan.coverity.com/projects/linux-next-weekly-scan?tab=analysis_settings
+>> (See 'Modeling file loaded [View]')
+>>
+> I've sent the request to join the dashboard. Who is the maintainer of
+> this free Coverity dashboard? Can anyone use these results to fix the
+> bugs without the permission of anyone?
+> 
 
-Thanks,
--Paul
+Your request has been approved now.
 
+Thanks
 --
-The following changes since commit dc27f3c5d10c58069672215787a96b4fae01818b:
-
- selinux: fix NULL-pointer dereference when hashtab allocation fails
-   (2021-11-19 16:11:39 -0500)
-
-are available in the Git repository at:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20211217
-
-for you to fetch changes up to cc274ae7763d9700a56659f3228641d7069e7a3f:
-
- selinux: fix sleeping function called from invalid context
-   (2021-12-16 17:47:39 -0500)
-
-----------------------------------------------------------------
-selinux/stable-5.16 PR 20211217
-
-----------------------------------------------------------------
-Scott Mayhew (1):
-     selinux: fix sleeping function called from invalid context
-
-security/selinux/hooks.c | 33 +++++++++++++++++++--------------
-1 file changed, 19 insertions(+), 14 deletions(-)
-
--- 
-paul moore
-www.paul-moore.com
+Gustavo

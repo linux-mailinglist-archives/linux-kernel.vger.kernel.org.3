@@ -2,97 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC537478886
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7A7478889
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 11:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbhLQKNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 05:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbhLQKM6 (ORCPT
+        id S234827AbhLQKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 05:13:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38992 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234756AbhLQKM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Dec 2021 05:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12DCC061574;
-        Fri, 17 Dec 2021 02:12:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96E48B82787;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D6D8B82785;
         Fri, 17 Dec 2021 10:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4747BC36AE1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52939C36AE5;
         Fri, 17 Dec 2021 10:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639735975;
-        bh=Vj3Lsqq1DMV8v0b3cbSCA7WL/NE5Wa/pI0kYsoHgxrY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sik4rgSqEFFom+xJPuVwcQLCuGPlL1e8xemVbEA6+U85WXcwzqrR8I4nH07JPkQ4G
-         RkE9J51Imxu3jjP/rZXF+Ono79/ZxNYteOcDg6gK7tlBopCvmR63MnbV4exYhpWPpK
-         6sVLjRwcoov+iHTg2jCuvLSwzbiFXwNAOz1Y8A5OMYApFC085PMCZS/XkuomRpoumD
-         DtrlIz/cfJMwWdWNzIndkgzZlKr1t+Coe2f7VVv/lrj8f1i60YLwKc3n5kXy8VBxFN
-         s0fHwdTO8m4uFNaiJwp6vNkRXX+F7MvLzjSAIeRi4NBzb7mmQcW/0dy5PsHiKLVza4
-         5tR2DH2m662yQ==
+        bh=tz94hJXS5Lpe+Fmm8yoGm62o/DyyDUvvDdbkBBkCTs4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W9wCq+gNxoW4yfF52ncTtYtgUBB0HB9mFooO+4nt++v5Yplh21tZg/buirz313GKV
+         bkpLtScq4KjYI/UqACl9OTEyBCZsFHvzkgBbbMYfJfUyvo4IUe6I3X0t6K45KVUD4U
+         AxrRg05NP/D+/IDTMKDP/52MmzPFeLUiFS1vyauxgx6FjGC+xEpZckDxD8QnlUwpIo
+         fwfbHToV42ViH5ROS5iEiavXEEyjUz6nj6vHpLayuSq+5ZwiaH/RMPR8dYPKAh8kva
+         lEbq4osu+XmoUb630GM0dWiXQVw5K7BrL9Xuin0tjXEnI1BJk+nXk+FlDA3cXfwFyu
+         UiOsjpMimR59A==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1myAEP-000g65-4M; Fri, 17 Dec 2021 11:12:53 +0100
+        id 1myAEP-000g68-5P; Fri, 17 Dec 2021 11:12:53 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Wei Xu <xuwei5@hisilicon.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Yu Chen <chenyu56@huawei.com>,
         John Stultz <john.stultz@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2 0/7] DT bindings for Hikey960/970 USB/PCI
-Date:   Fri, 17 Dec 2021 11:12:44 +0100
-Message-Id: <cover.1639735742.git.mchehab@kernel.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v2 1/7] dt-bindings: misc: add schema for USB hub on Kirin devices
+Date:   Fri, 17 Dec 2021 11:12:45 +0100
+Message-Id: <4533bc1f2287641c11069a6dab2800a3b0e74b22.1639735742.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1639735742.git.mchehab@kernel.org>
+References: <cover.1639735742.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thosre are the only missing parts for PCI to work on HiKey970 and
-for USB on HiKey960 and HiKey 970 boards.
+From: Yu Chen <chenyu56@huawei.com>
 
--
+This patch adds binding documentation to support USB HUB and
+USB data role switch of HiSilicon HiKey960 and HiKey970 boards.
 
-v2:
-  - patch 1: fixed port description for the USB hub;
-  - patch 2: added an ack;
-  - patch 3: is now dual-licensed, and had some renames;
-  - patch 4: changed accordingly.
+[mchehab: updated OF schema and added HiKey970 example]
+Signed-off-by: Yu Chen <chenyu56@huawei.com>
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-John Stultz (1):
-  arm64: dts: hisilicon: Add usb mux hub for hikey960
+See [PATCH v2 0/7] at: https://lore.kernel.org/all/cover.1639735742.git.mchehab@kernel.org/
 
-Manivannan Sadhasivam (1):
-  arm64: dts: HiSilicon: Add support for HiKey 970 PCIe controller
-    hardware
-
-Mauro Carvalho Chehab (4):
-  dt-bindings: clock: hi3670-clock.txt: add pmctrl compatible
-  dt-bindings: usb: hisilicon,hi3670-dwc3: add binding for Kirin970
-  arm64: dts: hisilicon: Add support for Hikey 970 USB3 PHY
-  arm64: dts: hisilicon: Add usb mux hub for hikey970
-
-Yu Chen (1):
-  dt-bindings: misc: add schema for USB hub on Kirin devices
-
- .../bindings/clock/hi3670-clock.txt           |   1 +
- .../bindings/misc/hisilicon,hikey-usb.yaml    |  84 +++++++++
- .../bindings/usb/hisilicon,hi3670-dwc3.yaml   | 105 +++++++++++
- .../boot/dts/hisilicon/hi3660-hikey960.dts    |  35 +++-
- .../boot/dts/hisilicon/hi3670-hikey970.dts    | 106 ++++++++++++
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi     | 163 ++++++++++++++++++
- 6 files changed, 492 insertions(+), 2 deletions(-)
+ .../bindings/misc/hisilicon,hikey-usb.yaml    | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/hisilicon,hi3670-dwc3.yaml
 
+diff --git a/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml b/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
+new file mode 100644
+index 000000000000..208c49478f1f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019 Linaro Ltd.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/misc/hisilicon,hikey-usb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: HiKey960/970 onboard USB GPIO Hub
++
++maintainers:
++  - John Stultz <john.stultz@linaro.org>
++
++description: |
++  Supports the onboard USB GPIO hubs found on HiKey960/970.
++  Such hubs require a power supply for the USB I/O. Depending on the
++  exact hub model, after USB I/O is powered up, a reset should be needed.
++
++  It also acts as a role-switch intermediary to detect the state of
++  the USB-C port, to switch the hub into dual-role USB-C or host mode,
++  which enables and powers up the onboard USB-A host ports.
++
++  Schematics about such hubs can be found here:
++    https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
++    https://www.96boards.org/documentation/consumer/hikey/hikey970/hardware-docs/files/hikey970-schematics.pdf
++
++properties:
++  compatible:
++    enum:
++      - hisilicon,usbhub
++
++  typec-vbus-gpios:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: phandle to the typec-vbus gpio
++
++  otg-switch-gpios:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: phandle to the otg-switch gpio
++
++  hub-reset-en-gpios:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: phandle to the hub reset gpio
++
++  usb-role-switch:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Support role switch.
++
++  hub-vdd-supply:
++    description: regulator for hub power
++
++  port:
++    description: |
++      describe a USB port and its endpoints.
++
++required:
++  - compatible
++  - hub-vdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    usb-hub {
++        compatible = "hisilicon,usbhub";
++        typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
++        otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
++        hub-reset-en-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
++        hub-vdd-supply = <&usb_hub_vdd>;
++        usb-role-switch;
++        port {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            usb_ep0: endpoint@0 {
++                reg = <0>;
++                remote-endpoint = <&dwc3_role_switch>;
++            };
++            usb_ep1: endpoint@1 {
++                reg = <1>;
++                remote-endpoint = <&rt1711h_ep>;
++            };
++        };
++    };
 -- 
 2.33.1
-
 

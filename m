@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 808C8479425
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B405047942B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 19:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240401AbhLQShO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 13:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbhLQShN (ORCPT
+        id S231750AbhLQSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 13:40:14 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:46084 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230063AbhLQSkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:37:13 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F1C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:37:13 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id y7so2623644plp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 10:37:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jw3+o9tkTtZaFXuWp2piyMoDxF7elmFPwWeoUWpMXV8=;
-        b=xEH1wEdUSk1xmiYH6ttaReiH5aeghdNG1EYWe4VzJd8UpXsRJ0qf7fKQwfbfjoAiMD
-         qQRbrVQCNbFP0y2sBr7RPCzh8bk/vDdf0kLIHuaWJMfnressCyvgbEr13bk0uidFYB1a
-         y+GFFrk8YicAA8/KS/HEyqWKedlu8bBssZnMXN4NsSQLE7bdKAtIx/Uvv6xlyOl8L++d
-         h+OG2Bp2vB8zvWT3vgkPV+T12CqmDvx3XMFHkJfcmayOhbBsfP34YK166mx/VJxoh3Fa
-         djf3lk2phSoFObMeS7U8K9L+drSJlVtE8fO1KWvC1O3/XXgr4e04060KG0B0r2R8MaPo
-         beYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jw3+o9tkTtZaFXuWp2piyMoDxF7elmFPwWeoUWpMXV8=;
-        b=WhK3VQY+QMfzJEwoGwODQPTPDA8ip8BlOmJKp0yVBVDSMA4bNni/YkIiFpliVuZYRb
-         Czov/QE9NywQC6VeRIf6j8nuu5PAswCkZYD6cFF7AfmR0xxGFgzl1C3+LvP7lFDT7pzU
-         v7V32AUySqhlk1OwqtWmZaXQNQ649oJS4sy5yCDuplEx1c5cIvzuzQzkzqzDzwl829Hr
-         82w3zq7/SIgr62LsmEydIQZP2sivW0MD5zZysf1LAIP2PtPgAdA82Mbqau+sd2BQKpD6
-         LQENbA34oKPLLmtEGcxjhMTTY+gJarqCSnIZrgDloO8vSp5YObIZUNJ6H2lWmc1ngZxH
-         efEA==
-X-Gm-Message-State: AOAM533RG43ExYF9XCmdFp/4M1tocIW0g/WK/5ioGWatI4RyybzJE6Zp
-        Q3uoUeQcuupsAqvupm5UAI6I7SrHvHa4zph4tI5JPBrepTA=
-X-Google-Smtp-Source: ABdhPJxDBkvgS9A026yO5Rs99/u8nNKM0OcQsqOSN3zAuOrNgAwJTO5XzM/AR0gZffNPUZNSYWtxvjhGqJ6Iy+HwKgw=
-X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr5150038pjb.93.1639766232605;
- Fri, 17 Dec 2021 10:37:12 -0800 (PST)
+        Fri, 17 Dec 2021 13:40:12 -0500
+Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:ee0b:2663:4dc2:6747])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 0C311282A4F;
+        Fri, 17 Dec 2021 19:40:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1639766411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=H2SKZv6WDFCLBPFkqaOhYWcJOAHmG0CfGPXMaenmT9I=;
+        b=4fjx/eTmy5rFM6PibdCaLrRa9ZnGxxHVkTiqfercqe1MCdGEOS7BQw0/Va81YvDn7j1qVh
+        4N0gKPutRwhP+VS1Fwnm7su68c5jXEFeO7T2bJzZUVCNVJSwQLOIRDQJHMQMA46mmGI/hv
+        vZa7Np1VCvvFQofCY0//HU3uX+FcEy7U8cm3dglTrW9nx/OV9nEy0L0rJ4Cq/mru66e2ot
+        HnThUgPI1FLs+q1VR8Ljp/mfzFU5aBGdzJoO/C94AkREOq3ltbBxWlwY9w71uZQElZx+jz
+        E4LM3r9TK/LTf8Oru/dl6bNoV/NNKmDFwTzM5h3hRIPlslPq3EQLDvkG/acp8g==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-mips@vger.kernel.org
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>,
+        INAGAKI Hiroshi <musashino.open@gmail.com>
+Subject: [PATCH] MIPS: generic: enable SMP on SMVP systems
+Date:   Fri, 17 Dec 2021 19:39:30 +0100
+Message-Id: <20211217183930.16192-1-sander@svanheule.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211213204632.56735-1-andriy.shevchenko@linux.intel.com> <CAJZ5v0jq=XdH+xeHs5=wMGsu28i+r3nzZbhCNMJkfdOi65N0Gg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jq=XdH+xeHs5=wMGsu28i+r3nzZbhCNMJkfdOi65N0Gg@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 17 Dec 2021 10:37:02 -0800
-Message-ID: <CAPcyv4hA41u=RvNfvukrcRDjmw6i7t4Vg3u1cXReQGKi6MHwJA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] ACPI: NFIT: Import GUID before use
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:10 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Dec 13, 2021 at 9:46 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Strictly speaking the comparison between guid_t and raw buffer
-> > is not correct. Import GUID to variable of guid_t type and then
-> > compare.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Dan, are you going to take care of this or should I?
+In addition to CPS SMP setups, also try to initialise MT SMP setups with
+multiple VPEs per CPU core. CMP SMP support is not provided as it is
+considered deprecated.
 
-I'll take it.
+Additionally, rework the code by dropping the err variable and make it
+similar to how other platforms perform this initialisation.
 
-Apologies for the delay in responding. I am still catching up on some
-patch merging backlog.
+Co-developed-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+---
+ arch/mips/generic/init.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/arch/mips/generic/init.c b/arch/mips/generic/init.c
+index 1842cddd8356..1d712eac1617 100644
+--- a/arch/mips/generic/init.c
++++ b/arch/mips/generic/init.c
+@@ -110,14 +110,15 @@ void __init plat_mem_setup(void)
+ 
+ void __init device_tree_init(void)
+ {
+-	int err;
+-
+ 	unflatten_and_copy_device_tree();
+ 	mips_cpc_probe();
+ 
+-	err = register_cps_smp_ops();
+-	if (err)
+-		err = register_up_smp_ops();
++	if (!register_cps_smp_ops())
++		return;
++	if (!register_vsmp_smp_ops())
++		return;
++
++	register_up_smp_ops();
+ }
+ 
+ int __init apply_mips_fdt_fixups(void *fdt_out, size_t fdt_out_size,
+-- 
+2.33.1
+

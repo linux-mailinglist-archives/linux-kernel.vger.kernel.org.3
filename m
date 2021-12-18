@@ -2,108 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6EC479C48
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CEB479C4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbhLRTRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S233971AbhLRTVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbhLRTRr (ORCPT
+        with ESMTP id S230024AbhLRTVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:17:47 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4305EC061574;
-        Sat, 18 Dec 2021 11:17:47 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id b19so8777457ljr.12;
-        Sat, 18 Dec 2021 11:17:47 -0800 (PST)
+        Sat, 18 Dec 2021 14:21:54 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E95C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:21:53 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j6so630669edw.12
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EBPWLDrmWt8WxfoZz3IAG8qTJNa/i7zgdvu9LHgBwvc=;
-        b=ObZa0ts8sMBh5R9GvS2jVda0J1X/Pv40mMDRbJwcWTyVKNi8yk67OLtBsI5aSxBsik
-         VjsGpUhnNh2cMfuO4P+k9tgCfRVF8Gdw8k/ltvzjqSzuwlNole1yvfaacmN+lpsZ1Sle
-         6RMbwW3XE4qxRjZXQa5Jeq2pZrO3itwpoiuJuhwBYNFS0pWbHPRdM6h5W1sPxy+oOx8u
-         52gldMGFcEqFvW3U+OCjMEa7WogKSCZlMM6iBWesYA3f0zEe9ODyfw/cyERGjhlvLzcj
-         xZ0FsMRJtLjU9SRf/GLI3MALh/712qzv7iw6qIzywyh1vNAMCSBh68plxWhIPEX3l6Yb
-         itDQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jjtEsM+c2EyxYgM67CZlqAl9WiDlSVGEZ5HgXw8/krU=;
+        b=TI7a4DuiAgA8wrGTjTNe4IJqA5QCDWzlI/ak2Au56EB89uo5bkXaUTBrXIKMz7aV//
+         TsHYsaOsVaAeodq3kc4PNAhvLQuCaG+UhiFV2j6pk8NZFPurH0DqDTd5nSDxKgH+44wi
+         r9a0hJm40ZzKEAraB5mo+A0uKuHHt+djZOfLo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EBPWLDrmWt8WxfoZz3IAG8qTJNa/i7zgdvu9LHgBwvc=;
-        b=UZCVERIKK6Ilk3fJpc0goH8jmuDR1xiE08gYpI6u/+Ns785pg/GjI9o7I3mHqL/tUK
-         q6RnE79TziiQkgxs69kvneX6r0t0vKnoW46ZCmi6eZ9kbajciDMrr0Z/cVB8wSdeCz9a
-         5puzk9q2ChmO11iBkYGIo5JN8pc9acyG83WgX9TNJ1tfLn1MyC6PdbRSWuKDRp71DgsJ
-         qrCm95SHIfUlzdEA3AUn6dppIRejXUnZR8D3hjjt/hbESe1dheGQDkt2LLUakYIXtzWx
-         57AITDYexc//ZDYOfB6ffWU8FeG+hoAWD0yN7t1p79v1fNgT9ZfB+i6dD1LTnMFwL2it
-         9ZIQ==
-X-Gm-Message-State: AOAM533w+HIPM8fAMQSsSQsb7n0pPT9G/CE1TJbAO9JtfDKUdt1+8VwH
-        hga3iEsDYH40bFCNCT4DFlM=
-X-Google-Smtp-Source: ABdhPJymHqcvjUwHO2Xn31VAgBsb12T2rDXqwYGoX56MiGburf52u26FBME7bH2ParFR9s09Oxyg+A==
-X-Received: by 2002:a2e:a54d:: with SMTP id e13mr7735109ljn.319.1639855065325;
-        Sat, 18 Dec 2021 11:17:45 -0800 (PST)
-Received: from netbook-debian ([94.179.28.1])
-        by smtp.gmail.com with ESMTPSA id p20sm1796504lfu.151.2021.12.18.11.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 11:17:45 -0800 (PST)
-Date:   Sat, 18 Dec 2021 21:17:41 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
-Message-ID: <20211218211741.5eb0c608@netbook-debian>
-In-Reply-To: <CAB95QARN=iYNW5cUK+gsBj7NUdZG2pFXbqWsXsdjE-hqNiSXSQ@mail.gmail.com>
-References: <20211128184549.9161-1-pauk.denis@gmail.com>
-        <20211217002223.63b1e0a7@netbook-debian>
-        <c6bf6ce9-8b45-e4a2-7167-83bdc8437fca@roeck-us.net>
-        <CAB95QARN=iYNW5cUK+gsBj7NUdZG2pFXbqWsXsdjE-hqNiSXSQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jjtEsM+c2EyxYgM67CZlqAl9WiDlSVGEZ5HgXw8/krU=;
+        b=7fKXt3KaBl2L/J1iG0e0v1CXTmd7Nc9bb8A7YwboiNBDiXNiNqCMMFJYxNLDd7q/ZV
+         IEkfnec2IG1Mz7iDAiQ8u6HsG8Y+MerUyg/XzNctukaxF4e9S0jT6voIdn6kBSZDIsWZ
+         Dt0OnXwVkLD24Qa9RbhmIEVDn+aMjjStXjej/EbhWV1uSgMN8TNbByl1hWOzvMCjZBTX
+         hshBdS2zBc21h3N0LU55gIySMOxhhkquuMSuA4ALM345B/wMpB6y4nvIa9y2186lSPzS
+         JGitJI3R69d8m3VSYqLw0a1jePyp6wKVhkvABj8Zff4ynEh7J9ZWyB8qRsgxX4gsg9jL
+         XlUA==
+X-Gm-Message-State: AOAM531Jbm+rxIRLbpgPB9m2pD4qkZI5hj1n9KogDDlMCedpZQlHH4L0
+        ZUdonJAIAE5wpyZVriH5kTDZA2cEJD5cwYiQigA=
+X-Google-Smtp-Source: ABdhPJwnBU6yzKBbBEA1RMHejblT/bIsg7JvkITY/sfme8EyY5NmHkGf5LU57LMQ2dr8lXLAgBUeCw==
+X-Received: by 2002:a17:907:3fa3:: with SMTP id hr35mr6992511ejc.397.1639855311977;
+        Sat, 18 Dec 2021 11:21:51 -0800 (PST)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id i22sm1127319ejw.75.2021.12.18.11.21.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Dec 2021 11:21:51 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso5521356wmc.1
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:21:50 -0800 (PST)
+X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr14586823wmq.8.1639855310502;
+ Sat, 18 Dec 2021 11:21:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+ <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com> <CAHk-=wjvoTRSb87R-D50yOXqX4mshjiiAyurAKCsdW0_J+sf7A@mail.gmail.com>
+ <40e7e0ab-0828-b2e7-339f-35f68a228b3d@redhat.com>
+In-Reply-To: <40e7e0ab-0828-b2e7-339f-35f68a228b3d@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 18 Dec 2021 11:21:34 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg95CiyT45ZOxtnWQ7cdKmejXcOydEyJcTTNnp5-nd+xg@mail.gmail.com>
+Message-ID: <CAHk-=wg95CiyT45ZOxtnWQ7cdKmejXcOydEyJcTTNnp5-nd+xg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 18:14:19 +0100
-Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+[ Cutting down ruthlessly to the core of the issue ]
 
-> On Fri, 17 Dec 2021 at 17:23, Guenter Roeck <linux@roeck-us.net>
-> wrote:
-> 
-> > At some point, we have to face it: ASUS doesn't support Linux, and
-> > they make it hard to access chips like this. I think the chip
-> > should be accessed through "official" channels only if provided (ie
-> > WMI/ACPI), or not at all.  
-> 
-> My two cents, if you please. Unfortunately, ASUS doesn't support
-> Windows as well, they only support their own shitty software, and they
-> change the WMI methods (both names and logic). For example, just
-> recently they packed a full hardware monitoring solution in X470
-> boards in WMI, then removed it in X570 and changed hardware access
-> function names. In order to add support for their next WMI
-> implementation, one needs to thoroughly read the decompiled DSDT code,
-> find functions, learn their logic and test. This is hard to do
-> remotely, without the hardware, obviously. On the other hand it is
-> much easier to find the required mutex name from the DSDT code and
-> access the chip normally.
-> 
-> Best regards,
-> Eugene
+On Sat, Dec 18, 2021 at 1:58 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> 1) Missed COW
+>
+> 2) Unnecessary COW
+>
+> 3) Wrong COW
 
-I will try to continue to support patch as part of
-https://bugzilla.kernel.org/show_bug.cgi?id=204807. 
+> Does that make sense? If we agree on the above, then here is how the
+> currently discussed approaches differ:
+>
+> page_count != 1:
+> * 1) cannot happen
+> * 2) can happen easily (speculative references due to pagecache,
+>      migration, daemon, pagevec, ...)
+> * 3) can happen in the current code
 
-And If we will have some better solution or ideas, I will send updated
-patch. 
+I claim that (1) "cannot happen" is a huge mother of a deal. It's
+*LITERALLY* the bug you are chasing, and it's the security issue, so
+on a bug scale, it's about the worst there is.
 
-Thank you!
+I further then claim that (2) "happen easily" is you just making
+things up. Yes, it can happen. But no, it's not actually that common,
+and since (2) is harmless from a correctness standpoint, it is purely
+about performance.
 
-Best regards,
-             Denis.
+And as mentioned, not using the mapcount actually makes *common*
+operations much simpler and faster. You don't need the page lock to
+serialize the mapcount.
+
+So (2) is a performance argument, and you haven't actually shown it to
+be a problem.
+
+Which really only leaves (3). Which I've already explained what the
+fix is: don't ever mark pages that shouldn't be COW'ed as being COW
+pages.
+
+(3) is really that simple, although it ended up depending on Jason and
+John Hubbard and others doing that FOLL_PIN logic to distinguish "I
+just want to see a random page, and I don't care about COW" from "I
+want to get a page, and that page needs to be coherent with this VM
+and not be COW'ed away"
+
+So I'm not claiming (3) is "trivial", but at the same time it's
+certainly not some fundamentally complicated thing, and it's easy to
+explain what is going on.
+
+> mapcount > 1:
+> * 1) your concern is that this can happen due to concurrent swapin
+> * 2) cannot happen.
+> * 3) your concern is that this can happen due to concurrent swapin
+
+No, my concern about (1) is that IT IS WRONG.
+
+"mapcount" means nothing for COW. I even gave you an example of
+exactly where it means nothing. It's crazy. It's illogical. And it's
+complicated as hell.
+
+The fact that only one user maps a page is simply not meaningful. That
+page can have other users that you don't know anything about, and that
+don't show up in the mapcount.
+
+That page can be swapcached, in which case mapcount can change
+radically in ways that you earlier indicated cannot happen. You were
+wrong.
+
+But even if you fix that - by taking the page lock in every single
+place - there are still *other* users that for all you know may want
+the old contents. You don't know.
+
+The only thing that says "no other users" is the page count. Not the mapcount.
+
+In other words, I claim that
+
+ (a) mapcount is fundamentally the wrong thing to test. You can be the
+only mapper, without being the "owner" of the page.
+
+ (b) it's *LITERALLY* the direct and present source of that bug in the
+testcase you added, where a page with a mapcount of 1 has other
+concurrent users and needs to be COW'ed but isn't.
+
+ (c) it's complicated and expensive to calculate (where one big part
+of the expense is the page lock synchronization requirements, but
+there are others)
+
+And this all happens for that "case (1)", which is the worst adn
+scariest of them all.
+
+In contrast to that, your argument that "(2) cannot happen" is a total
+non-argument. (2) isn't the problem.
+
+And I claim that (3) can happen because you're testing the wrong
+counter, so who knows if the COW is wrong or not?
+
+> I am completely missing how 2) or 3) could *ever* be handled properly
+> for page_count != 1. 3) is obviously more important and gives me nightmares.
+
+Ok, so if I tell you how (2) and (3) are handled properly, you will
+just admit you were wrong?
+
+Here's how they are handled properly with page counts. I have told you
+this before, but I'll summarize:
+
+ (2) is handled semantically properly by definition - it may be
+"unnecessary", but it has no semantic meaning
+
+This is an IMPORTANT thing to realize. The fact is, (2) is not in the
+same class as (1) or (3).
+
+And honestly - we've been doing this for all the common cases already
+since at least 5.9, and your performance argument simply has not
+really reared its head.  Which makes the whole argument moot. I claim
+that it simplifies lots of common operations and avoids having to
+serialize on a lock that has been a real and major problem. You claim
+it's extra overhead and can cause extra COW events. Neither of has any
+numbers worth anything, but at least I can point to the fact that all
+the *normal* VM paths have been doing the thing I advocate for many
+releases now, and the sky most definitely is NOT falling.
+
+So that only leaves (3).
+
+Handling (3) really is so conceptually simple that I feel silly for
+repeating it: if you don't want a COW to happen, then you mark the
+page as being not-COW.
+
+That sounds so simple as to be stupid. But it really is the solution.
+It's what that pinning logic does, and keeps that "page may be pinned"
+state around, and then operations like fork() that would otherwise
+create a COW mapping of it will just not do it.
+
+So that incredibly simple approach does require actual code: it
+requires that explicit "fork() needs to copy instead of COW" code, it
+requires that "if it's pinned, we don't make a new swapcache entry out
+of it". So it's real code, and it's a real issue, but it's
+conceptually absolutely trivial, and the code is usualyl really simple
+to understand too.
+
+So you have a *trivial* concept, and you have simple code that could
+be described to a slightly developmentally challenged waterfowl.  If
+you're one of the programmers doing the "explain your code to a rubber
+ducky", you can look at code like this:
+
+                /*
+                 * Anonymous process memory has backing store?
+                 * Try to allocate it some swap space here.
+                 * Lazyfree page could be freed directly
+                 */
+                if (PageAnon(page) && PageSwapBacked(page)) {
+                        if (!PageSwapCache(page)) {
+                                if (!(sc->gfp_mask & __GFP_IO))
+                                        goto keep_locked;
+                                if (page_maybe_dma_pinned(page))
+                                        goto keep_locked;
+
+and you can explain that page_maybe_dma_pinned() test to your rubber
+ducky, and that rubber ducky will literally nod its head. It gets it.
+
+To recap:
+ (1) is important, and page_count() is the only thing that guarantees
+"you get full access to a page only when it's *obviously* exclusively
+yours".
+ (2) is NOT important, but could be a performance issue, but we have
+real data from the past year that it isn't.
+ (3) is important, and has a really spectacularly simple conceptual
+fix with quite simple code too.
+
+In contrast, with the "mapcount" games you can't even explain why they
+should work, and the patches I see are actively buggy because
+everything is so subtle.
+
+                  Linus

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D440479812
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF9479814
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbhLRByd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 20:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S231628AbhLRB5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 20:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbhLRByb (ORCPT
+        with ESMTP id S229709AbhLRB5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 20:54:31 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E94EC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 17:54:30 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id n16so2560050plc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 17:54:30 -0800 (PST)
+        Fri, 17 Dec 2021 20:57:11 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED62C061574;
+        Fri, 17 Dec 2021 17:57:11 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id w24so3295745ply.12;
+        Fri, 17 Dec 2021 17:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=95hYg702ByWDI8LkkZz4UDtSUdCMXCKIYGEc2f0cgdA=;
-        b=bluQr4/piV76nQMAZSaoWQ/u9EsSNhtGOAbweNHbfXKqtj4ttANy6hGwAIhwdfXKMw
-         RJE9BZ9O+iXZUMoh6FPeftdrTrAgTZaRB9ZG0xV/Itx1++jvqg8mEU60A6BGIBLLV6nR
-         aipz55HM6nMfzKHuAng+i6DMKLU4ZUogP97x9nkxaSsatL6EiNfwApDKG0BsBlXJj48n
-         F85epyvN731F/N+fAjXQ/e5l2EfdiYImHgcKxsP28bSE7DE+IJvX007NprgGV9+NnJsM
-         8KoYBuVAL45vS/E67Xu2d+wygKrmoztkT/kkURnJPVQEJ8EKHbc9qpNbCT2JD2sVYle7
-         0e0g==
+        bh=FWqKFfL0KnIRZ7fFC42ZHJVI9If0P8ietPAL2PVfcNk=;
+        b=iiObPEgrWKUc39gyldEFVpjAyEhD6GkJAxtS2exyvywdMY4A846TPrlUZ8VepXlTX8
+         NDOGavwbnTJ2S7RBImH3zv/+PVOjR8zr3Z+BTy/QPnev8Csp6WfrQkKZ2EyjIFZyeoKB
+         nxHMfcaCFTrBxMjbY5OYJKSAsVC2mIKAD3zjBjZ20SX7yNG4gP8jlUxs8O4aHkGzJCUP
+         rxcC1fPYkyiluPqaHgyCv2KMe2ScC/hxADyr7WAORa42Dbfo+Zo0RT1LdeUMHussiHbJ
+         8qGSQjB2ju57tvkUOibqoY/Bgpq5XjSg3UCpYVlTgHiI2BnaPqoHX67at1/8vebAqaok
+         PxrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=95hYg702ByWDI8LkkZz4UDtSUdCMXCKIYGEc2f0cgdA=;
-        b=aNBum0GQi8ryrPMZPK30CbAnRiuIuyRLHjg27R8KGX5Wi30seEDB6vZViCOzSaX1AK
-         J1a+X1EeVP0EcxFSgxXktUgCR7cyWKH3FZUl1ewZZR4FRztSVAb2PRPKhMSSagATRy4D
-         KSyj32Qig+FuHkQLF4xiP4842ChrgIdC6/4UKlr52otpX2CxXgnKl09bBT8GSgPR2STL
-         SrhlkA5L1bsOZND8Tz6Lm+QPprd/JQ8PZAWPlbVYX7CmJdPo3XQ8OrvPJuG0pyob9+9f
-         AetSq58CDixjnrEWAor7443/YvE8nuiu6Gw1NziI622A7C2ZuDFXGTzzKZxHsTQ1FGgI
-         A+eA==
-X-Gm-Message-State: AOAM532JQbbxw3GojenhKBt4igmZZj4fvcxxYY5KWH7BlysAf6J3nYR9
-        Aw35mzREpvr9bwlf2QAbQUJWEsiHG/Y=
-X-Google-Smtp-Source: ABdhPJwJOliNXPO1x9DNdsq48RgUbA+0/qjklDveAVkCF2EV+8muYhOpcrW050cGMBg8ZTXUyuB95A==
-X-Received: by 2002:a17:90b:3545:: with SMTP id lt5mr6892591pjb.14.1639792470050;
-        Fri, 17 Dec 2021 17:54:30 -0800 (PST)
+        bh=FWqKFfL0KnIRZ7fFC42ZHJVI9If0P8ietPAL2PVfcNk=;
+        b=vIfW6XWF6GtObbwt2pd5ySYz2XIrdIH6UayB87PhZa15w62AihX6ROaQOT0VqZvrar
+         ZT1WWJqgkSGsKDfPASkpt6mOfhZpH9wJUi9d/8m1ftb8U/l0fefhIp+jC7K+P8n037Vc
+         ih9gs0xsS2nAtfo/74LpnaUSu+3QfyBSqEetE/Kpg9c8wULpbiVWQ1LC5skWREy9XolK
+         U+oWYeUWNdGM1NhV3D3Ij6KVrvE+6RDp3sHjHdQnQQu16YXOs+3vvzs7Zhjfy4ZYRXxD
+         5KKq80rUwjz9Y81GPfI2MogvDunRBZFT7FrnfAXhUeuPdbyjyLXyLapR5RounCY19ItL
+         6Nmw==
+X-Gm-Message-State: AOAM530tnl1h2Ah0S5ez9fiVyMCWLWVx6cWFGT/gs5bPGdxhC1hIiKZB
+        0P/IitWydHhNu/YkS0PTJyw=
+X-Google-Smtp-Source: ABdhPJxp0drx+e0V2hp8dhYxC09S94TpbG+m+EAN7fjKrBkCzuJ20GTwyN6MAdNpAiCrpKPmptN1kA==
+X-Received: by 2002:a17:902:bcc4:b0:141:bfc4:ada with SMTP id o4-20020a170902bcc400b00141bfc40adamr5847673pls.20.1639792630688;
+        Fri, 17 Dec 2021 17:57:10 -0800 (PST)
 Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id h6sm11277520pfh.82.2021.12.17.17.54.25
+        by smtp.gmail.com with ESMTPSA id v63sm9434593pgv.71.2021.12.17.17.57.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 17:54:29 -0800 (PST)
+        Fri, 17 Dec 2021 17:57:10 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     perex@perex.cz
-Cc:     davidcomponentone@gmail.com, tiwai@suse.com, broonie@kernel.org,
-        joe@perches.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+To:     thomas@winischhofer.net
+Cc:     davidcomponentone@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ALSA: hda: use swap() to make code cleaner
-Date:   Sat, 18 Dec 2021 09:54:16 +0800
-Message-Id: <ebc9db44b802dfc88e1538629b517e000acb27b3.1639790796.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] video: fbdev: use swap() to make code cleaner
+Date:   Sat, 18 Dec 2021 09:56:59 +0800
+Message-Id: <81d101e615dcd8cc661272965a6a3a51d77aa491.1639791676.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,29 +73,22 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 ---
- sound/pci/hda/hda_auto_parser.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/video/fbdev/sis/sis_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/hda_auto_parser.c b/sound/pci/hda/hda_auto_parser.c
-index 4a854475a0e6..82c492b05667 100644
---- a/sound/pci/hda/hda_auto_parser.c
-+++ b/sound/pci/hda/hda_auto_parser.c
-@@ -92,14 +92,10 @@ static int compare_input_type(const void *ap, const void *bp)
-  */
- static void reorder_outputs(unsigned int nums, hda_nid_t *pins)
- {
--	hda_nid_t nid;
--
- 	switch (nums) {
- 	case 3:
- 	case 4:
--		nid = pins[1];
--		pins[1] = pins[2];
--		pins[2] = nid;
-+		swap(pins[1], pins[2]);
- 		break;
- 	}
- }
+diff --git a/drivers/video/fbdev/sis/sis_main.c b/drivers/video/fbdev/sis/sis_main.c
+index 266a5582f94d..742f62986b80 100644
+--- a/drivers/video/fbdev/sis/sis_main.c
++++ b/drivers/video/fbdev/sis/sis_main.c
+@@ -213,7 +213,7 @@ static void sisfb_search_mode(char *name, bool quiet)
+ 		/* This does some fuzzy mode naming detection */
+ 		if(sscanf(strbuf1, "%u %u %u %u", &xres, &yres, &depth, &rate) == 4) {
+ 			if((rate <= 32) || (depth > 32)) {
+-				j = rate; rate = depth; depth = j;
++				swap(rate, depth);
+ 			}
+ 			sprintf(strbuf, "%ux%ux%u", xres, yres, depth);
+ 			nameptr = strbuf;
 -- 
 2.30.2
 

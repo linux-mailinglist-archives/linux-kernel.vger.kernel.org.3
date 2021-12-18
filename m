@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F05479A4D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABCE479A51
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbhLRK0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 05:26:42 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:38605 "EHLO mx1.molgen.mpg.de"
+        id S231617AbhLRKaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 05:30:12 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:57477 "EHLO mx1.molgen.mpg.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229536AbhLRK0k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 05:26:40 -0500
+        id S229536AbhLRKaF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 05:30:05 -0500
 Received: from [192.168.0.3] (ip5f5aecf3.dynamic.kabel-deutschland.de [95.90.236.243])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
         (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id DA4BE61E5FE00;
-        Sat, 18 Dec 2021 11:26:38 +0100 (CET)
-Message-ID: <67f062f9-293b-78aa-6474-f018d4bd269c@molgen.mpg.de>
-Date:   Sat, 18 Dec 2021 11:26:38 +0100
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6A60661E5FE00;
+        Sat, 18 Dec 2021 11:30:03 +0100 (CET)
+Message-ID: <638a2506-c410-d98c-b704-6f16f72e0bc6@molgen.mpg.de>
+Date:   Sat, 18 Dec 2021 11:30:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH RESEND 1/3] Bluetooth: btmtksdio: add the support of wake
- on bluetooth
+Subject: Re: [PATCH 2/3] Bluetooth: btmtksdio: Enable SCO over I2S function
 Content-Language: en-US
 To:     Sean Wang <sean.wang@mediatek.com>,
-        Mark Chen <Mark-YW.Chen@mediatek.com>
+        Mark Chen <mark-yw.chen@mediatek.com>
 Cc:     Marcel Holtmann <marcel@holtmann.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
         Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
@@ -42,10 +41,11 @@ Cc:     Marcel Holtmann <marcel@holtmann.org>,
         linux-bluetooth@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <632534014b9b8a38e81dfb5749dcd75e2088adb1.1639787634.git.objelf@gmail.com>
+ <e17b4b3aec942828ef017592df155e554a3d766b.1639787634.git.objelf@gmail.com>
 From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <632534014b9b8a38e81dfb5749dcd75e2088adb1.1639787634.git.objelf@gmail.com>
+In-Reply-To: <e17b4b3aec942828ef017592df155e554a3d766b.1639787634.git.objelf@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -55,107 +55,167 @@ Dear Sean, dear Mark,
 
 Am 18.12.21 um 02:08 schrieb sean.wang@mediatek.com:
 > From: Mark Chen <mark-yw.chen@mediatek.com>
+> 
+> For MediaTek chipset, the driver has to issue the specific command to
+> enable Bluetooth SCO support over the I2S/PCM interface.
 
-Shorter summary: Bluetooth: btmtksdio: Support wake on bluetooth
+Please document the datasheet name, revision and section, where this is 
+described.
 
-> Add the support to enable wake on bluetooth
-
-Can you please list the datasheet name and revision used for the 
-implementation.
-
-Please document how you tested this.
+Please add how SCO support can be tested. Are all Mediatek chipsets 
+supported?
 
 > Co-developed-by: Sean Wang <sean.wang@mediatek.com>
 > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 > Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
 > ---
->   drivers/bluetooth/btmtk.h     |  8 ++++++++
->   drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
->   2 files changed, 38 insertions(+), 1 deletion(-)
+>   drivers/bluetooth/btmtk.h     | 20 +++++++++
+>   drivers/bluetooth/btmtksdio.c | 76 +++++++++++++++++++++++++++++++++++
+>   2 files changed, 96 insertions(+)
 > 
 > diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6e7b0c7567c0..2be1d2680ad8 100644
+> index 2be1d2680ad8..fc57ef09d132 100644
 > --- a/drivers/bluetooth/btmtk.h
 > +++ b/drivers/bluetooth/btmtk.h
-> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
->   	u8 time_compensation;
+> @@ -7,8 +7,12 @@
+>   
+>   #define HCI_WMT_MAX_EVENT_SIZE		64
+>   
+> +#define BTMTK_WMT_REG_WRITE 0x1
+>   #define BTMTK_WMT_REG_READ 0x2
+>   
+> +#define MT7921_PINMUX_0 0x70005050
+> +#define MT7921_PINMUX_1 0x70005054
+> +
+>   enum {
+>   	BTMTK_WMT_PATCH_DWNLD = 0x1,
+>   	BTMTK_WMT_TEST = 0x2,
+> @@ -76,6 +80,22 @@ struct btmtk_wakeon {
+>   	__le16 wakeup_delay;
 >   } __packed;
 >   
-> +struct btmtk_wakeon {
-> +	u8 mode;
-> +	u8 gpo;
-> +	u8 active_high;
-> +	__le16 enable_delay;
-> +	__le16 wakeup_delay;
+> +struct btmtk_sco {
+> +	u8 clock_config;
+> +	u8 transmit_format_config;
+> +	u8 channel_format_config;
+> +	u8 channel_select_config;
+> +} __packed;
+> +
+> +struct reg_write_cmd {
+> +	u8 type;
+> +	u8 rsv;
+> +	u8 num;
+> +	__le32 addr;
+> +	__le32 data;
+> +	__le32 mask;
 > +} __packed;
 > +
 >   struct btmtk_hci_wmt_params {
 >   	u8 op;
 >   	u8 flag;
 > diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index b5ea8d3bffaa..771733ce362b 100644
+> index 771733ce362b..8e4d8c2da824 100644
 > --- a/drivers/bluetooth/btmtksdio.c
 > +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -958,6 +958,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
->   	return 0;
+> @@ -830,6 +830,74 @@ static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
+>   	return err;
 >   }
 >   
-> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
+> +static int btsdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32 val, u32 mask)
 > +{
-> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-> +	bool may_wakeup = device_may_wakeup(bdev->dev);
-> +	struct btmtk_wakeon bt_awake = {
-> +		.mode = 0x1,
-> +		.gpo = 0,
-> +		.active_high = 0x1,
-> +		.enable_delay = cpu_to_le16(0xc80),
-> +		.wakeup_delay = cpu_to_le16(0x20)
+> +	struct btmtk_hci_wmt_params wmt_params;
+> +	struct reg_write_cmd reg_write = {
+> +		.type = 1,
+> +		.num = 1,
+> +		.addr = cpu_to_le32(reg),
+> +		.data = cpu_to_le32(val),
+> +		.mask = cpu_to_le32(mask),
 > +	};
-> +	struct sk_buff *skb;
+> +	int err, status;
 > +
-> +	if (may_wakeup &&
-> +	    bdev->data->chipid == 0x7921) {
-
-Why the check for 0x7921? Is that device only supported? The commit 
-message does not say anything about it.
-
-> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
-> +				      &bt_awake, HCI_CMD_TIMEOUT);
-> +		if (IS_ERR(skb))
-> +			may_wakeup = false;
-> +	}
+> +	wmt_params.op = BTMTK_WMT_REGISTER;
+> +	wmt_params.flag = BTMTK_WMT_REG_WRITE;
+> +	wmt_params.dlen = sizeof(reg_write);
+> +	wmt_params.data = &reg_write;
+> +	wmt_params.status = &status;
 > +
-> +	return may_wakeup;
-> +}
-> +
->   static int btmtksdio_probe(struct sdio_func *func,
->   			   const struct sdio_device_id *id)
->   {
-> @@ -998,6 +1022,7 @@ static int btmtksdio_probe(struct sdio_func *func,
->   	hdev->shutdown = btmtksdio_shutdown;
->   	hdev->send     = btmtksdio_send_frame;
->   	hdev->set_bdaddr = btmtk_set_bdaddr;
-> +	hdev->wakeup = btmtk_sdio_wakeup;
->   
->   	SET_HCIDEV_DEV(hdev, &func->dev);
->   
-> @@ -1032,7 +1057,11 @@ static int btmtksdio_probe(struct sdio_func *func,
->   	 */
->   	pm_runtime_put_noidle(bdev->dev);
->   
-> -	return 0;
-> +	err = device_init_wakeup(bdev->dev, true);
-> +	if (err)
-> +		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
-
-Could the error message be extended, so normal users know what to do? 
-Currently it’s only useful for developers.
-
+> +	err = mtk_hci_wmt_sync(hdev, &wmt_params);
+> +	if (err < 0)
+> +		bt_dev_err(hdev, "Failed to write reg(%d)", err);
 > +
 > +	return err;
->   }
->   
->   static void btmtksdio_remove(struct sdio_func *func)
+> +}
+> +
+> +static int btsdio_mtk_sco_setting(struct hci_dev *hdev)
+> +{
+> +	struct btmtk_sco sco_setting = {
+> +		.clock_config = 0x49,
+> +		.channel_format_config = 0x80,
+> +	};
+> +	struct sk_buff *skb;
+> +	u32 val;
+> +	int err;
+> +
+> +	/* Enable SCO over i2s/pcm for Mediatek Chipset */
+
+s/Chipset/chipset/
+
+> +	skb =  __hci_cmd_sync(hdev, 0xfc72, sizeof(sco_setting),
+> +			      &sco_setting, HCI_CMD_TIMEOUT);
+> +	if (IS_ERR(skb))
+> +		return PTR_ERR(skb);
+> +
+> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_0, &val);
+> +	if (err < 0) {
+> +		bt_dev_err(hdev, "Failed to read register (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	val |= 0x11000000;
+> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_0, val, ~0);
+> +	if (err < 0) {
+> +		bt_dev_err(hdev, "Failed to write register (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_1, &val);
+> +	if (err < 0) {
+> +		bt_dev_err(hdev, "Failed to read register (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	val |= 0x00000101;
+> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
+> +	if (err < 0)
+> +		bt_dev_err(hdev, "Failed to write register (%d)", err);
+> +
+> +	return err;
+> +}
+> +
+>   static int btmtksdio_setup(struct hci_dev *hdev)
+>   {
+>   	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+> @@ -862,6 +930,14 @@ static int btmtksdio_setup(struct hci_dev *hdev)
+>   		err = mt79xx_setup(hdev, fwname);
+>   		if (err < 0)
+>   			return err;
+> +
+> +		/* Enable sco over i2s/pcm */
+
+s/sco/SCO/
+
+> +		err = btsdio_mtk_sco_setting(hdev);
+> +		if (err < 0) {
+> +			bt_dev_err(hdev, "Failed to enable sco setting (%d)", err);
+
+s/sco/SCO/
+
+> +			return err;
+> +		}
+> +
+>   		break;
+>   	case 0x7663:
+>   	case 0x7668:
 
 
 Kind regards,

@@ -2,171 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FB7479C6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25301479C7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 21:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbhLRTxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbhLRTxB (ORCPT
+        id S234078AbhLRT7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:59:21 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:55197 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234057AbhLRT7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:53:01 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E7BC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:53:00 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j21so16980975edt.9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FwDKq6c1mQYLU0p0J66kK9b9U2JQzk1+tCZIkkXvJ6I=;
-        b=U5uC3Kaqj3Jyz9ClVkVNdaCklm+oiz2jhIexhCBthnjLmX3U7Wkoqfro6mIgIQYih1
-         fYnIl74HxHVmm4oN5qZYu46cLpq/0a9MM0L7iLgtvdvWn7S16gUCjgjGv0WBg5JYcwY8
-         2t/4p+6P3qYm2phM4iAacdJb1uzh4Bb51ORJI=
+        Sat, 18 Dec 2021 14:59:18 -0500
+Received: by mail-io1-f71.google.com with SMTP id s8-20020a056602168800b005e96bba1363so3993594iow.21
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:59:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FwDKq6c1mQYLU0p0J66kK9b9U2JQzk1+tCZIkkXvJ6I=;
-        b=pEE7H6pjrTDP2qTZhajTFhNNiwSik+V5SVi6MknBfeoTfHbUJwoR8FsQK36xC4o7ZJ
-         o6phbABOXG+aKO332v6CVy6X/7xtu9UlA92Zydv3fsLFo15vG5sCHaJ8hez6Y7KDcqPe
-         vNDaP/bYt8BdZNKmi43U/AmkftZXf0gKeP1yLVQdZtn6Hrc3Kby6KAAhD4cXNDX2TaG5
-         6zvH51DPE6J0SJAAcM1gkkCTqd3NEwBS+gq45zv4SIda9GhIempZfVxomt/cA++JmR1T
-         mG5wzP/APgNrcXXtt4AR46FrDu9vysajJf4V9IlbMgv+W3dLH1Vq/j+rZROlO6bOJDlR
-         bIYw==
-X-Gm-Message-State: AOAM531B1TT05ZROH6hkfSwZcfvguPZZ9XuyZbujn2fqpwOjhOZTXcKg
-        AZ5OBg/atQU9pJzhDUr2Q0NZ0w+ph06tc3CGJp0=
-X-Google-Smtp-Source: ABdhPJxJZLGI3zXGaPdxAnGq7GIDcgFTWVLd+cel6NNRm6GJpfPlH7HRygCT6zcHFC1MrOUhmBqCiA==
-X-Received: by 2002:a17:906:c12:: with SMTP id s18mr7508706ejf.723.1639857179142;
-        Sat, 18 Dec 2021 11:52:59 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id p7sm4868966edu.84.2021.12.18.11.52.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 11:52:58 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id v11so10937178wrw.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:52:57 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr6423478wrx.193.1639857177671;
- Sat, 18 Dec 2021 11:52:57 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=BYwp39HfkoKA0spS5iKDdSyw2i3LvTwEYaoIQ1fJH/I=;
+        b=5t4bAQnc0iUKHpgxkMmBaFO5q4NUEStY2aOH3MLu7DqQVFuZVE+FIrJhO5zlfUOzLb
+         YKB20yGVIq0RxLLo4nQ3IJRoC3uRhl2eVkytgtzzV+cHKyzEFHpqTSank7WmcRClPX/v
+         HHXlyjypmIngYGUlTM7TkY2XWPSajY/wnUJp384ZS0rVDk4WOqRt9ViChmJ+aHRjults
+         9Bhbk0rc8WnqVOxf2k6OhshlA/2CNCb+FTvSusfwAk1vhASlhkMjbGjMLyxLrm311TIv
+         U0etd7VfNFLUvT4cLwaH50uKgGOfNn7mtFJtDpNLGI3dpYRaVDt/13DwWO62fAq8dwq6
+         m3XQ==
+X-Gm-Message-State: AOAM5326s8qK+/GvHc3lsZkYHSNx/TM/rsnv278GDbVo9gaJtGOZbbMo
+        DoknHbieIosaxKvWS6cYr7Ys4x3/flaTby7JOGDBz1SLkWQO
+X-Google-Smtp-Source: ABdhPJwtphcEpn94Y+GKY1ddbM7fL8AeKAWU5U3uy2A6xfXQnyUUGDnIRf4rsD452Bl9zZ3dM0mMHaUf7yhLWL7TBRJjz46LGT0b
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
- <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
- <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
- <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com> <CAHk-=wjvoTRSb87R-D50yOXqX4mshjiiAyurAKCsdW0_J+sf7A@mail.gmail.com>
- <40e7e0ab-0828-b2e7-339f-35f68a228b3d@redhat.com> <CAHk-=wg95CiyT45ZOxtnWQ7cdKmejXcOydEyJcTTNnp5-nd+xg@mail.gmail.com>
-In-Reply-To: <CAHk-=wg95CiyT45ZOxtnWQ7cdKmejXcOydEyJcTTNnp5-nd+xg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 18 Dec 2021 11:52:41 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjevjeL44qafYd8=cJHZgNUOUuWVJ28vkS4U4v_Af-xaQ@mail.gmail.com>
-Message-ID: <CAHk-=wjevjeL44qafYd8=cJHZgNUOUuWVJ28vkS4U4v_Af-xaQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+X-Received: by 2002:a05:6638:140d:: with SMTP id k13mr5342747jad.37.1639857558522;
+ Sat, 18 Dec 2021 11:59:18 -0800 (PST)
+Date:   Sat, 18 Dec 2021 11:59:18 -0800
+In-Reply-To: <00000000000021bb9b05d14bf0c7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000420dda05d37117f9@google.com>
+Subject: Re: [syzbot] WARNING in page_counter_cancel (3)
+From:   syzbot <syzbot+bc9e2d2dbcb347dd215a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, davem@davemloft.net, jiri@nvidia.com,
+        kuba@kernel.org, leonro@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 11:21 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> To recap:
->  (1) is important, and page_count() is the only thing that guarantees
-> "you get full access to a page only when it's *obviously* exclusively
-> yours".
->  (2) is NOT important, but could be a performance issue, but we have
-> real data from the past year that it isn't.
->  (3) is important, and has a really spectacularly simple conceptual
-> fix with quite simple code too.
->
-> In contrast, with the "mapcount" games you can't even explain why they
-> should work, and the patches I see are actively buggy because
-> everything is so subtle.
+syzbot has bisected this issue to:
 
-So to challenge you, please explain exactly how mapcount works to
-solve (1) and (3), and how it incidentally guarantees that (2) doesn't
-happen.
+commit 22849b5ea5952d853547cc5e0651f34a246b2a4f
+Author: Leon Romanovsky <leonro@nvidia.com>
+Date:   Thu Oct 21 14:16:14 2021 +0000
 
-And that really involves explaining the actual code too. I can explain
-the high-level concepts in literally a couple of sentences.
+    devlink: Remove not-executed trap policer notifications
 
-For (1), "the page_count()==1 guarantees you are the only owner, so a
-COW event can re-use the page" really explains it. And the code is
-pretty simple too. There's nothing subtle about "goto copy" when
-pagecount is not 1. And even the locking is simple: "we hold the page
-table lock, we found a page, it has only one ref to it, we own it"
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16464095b00000
+start commit:   158b515f703e tun: avoid double free in tun_free_netdev
+git tree:       net
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15464095b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11464095b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=bc9e2d2dbcb347dd215a
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ff127eb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11bedb6db00000
 
-Our VM is *incredibly* complicated. There really are serious
-advantages to having simple rules in place.
+Reported-by: syzbot+bc9e2d2dbcb347dd215a@syzkaller.appspotmail.com
+Fixes: 22849b5ea595 ("devlink: Remove not-executed trap policer notifications")
 
-And for (2), the simple rule is "yeah, we can cause spurious cow
-events". That's not only simple to explain, it's simple to code for.
-Suddenly you don't need to worry. "Copying the page is always safe".
-That's a really really powerful statement.
-
-Now, admittedly (3) is the one that ends up being more complicated,
-but the *concept* sure is simple. "If you don't want to COW this page,
-then don't mark it for COW".
-
-The *code* for (3) is admittedly a bit more complicated. The "don't
-mark it for COW" is simple to say, but we do have that fairly odd
-locking thing with fork() doing a seqcount_write_begin/end, and then
-GIP does the read-seqcount thing with retry. So it's a bit unusual,
-and I don't think we have that particular pattern anywhere else, but
-it's one well-defined lock and while unusual it's not *complicated* as
-far as kernel locking rules go. It's unusual and perhaps not trivial,
-but in the end those seqcount code sequences are maybe 10 lines total,
-and they don't interact with anything else.
-
-And yes, the "don't mark it for COW" means that write-protecting
-something is special, mainly because we sadly do not have extra bits
-in the page tables. It would be *really* easy if we could just hide
-this "don't COW this page" in the page table. Truly trivial. We don't,
-because of portability across different architectures ;(
-
-So I'll freely give you that my (3) is somewhat painful, but it's
-painful with a really simple concept.
-
-And the places that get (3) wrong are generally places that nobody has
-been able to care about. I didn't realize the problem with creating a
-swap page after the fact for a while, so that commit feb889fb40fa
-("mm: don't put pinned pages into the swap cache") came later, but
-it's literally a very simple two-liner.
-
-The commit message for commit feb889fb40fa may be worth reading. It
-very much explains the spirit of the thing, and is much longer than
-the trivial patch itself.
-
-Simple and clear concepts matter. Code gets complicated even then, but
-complex code with complex concepts is a bad combination.
-
-              Linus
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

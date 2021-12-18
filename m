@@ -2,146 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6C0479B29
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1DE479B42
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbhLROIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 09:08:14 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:48259 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230185AbhLROIN (ORCPT
+        id S233376AbhLROSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 09:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233368AbhLROSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 09:08:13 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id EB4CE5C00B5;
-        Sat, 18 Dec 2021 09:08:12 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 18 Dec 2021 09:08:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=y
-        G8E8NafU5nFfy3ppS+9sVq5TWWnS/0M4pY+VrrpzF4=; b=VcsMVtoFnsKXCdUFu
-        VOgN0gHbj8AYPRWn68vBjW6RFnhTHUoyy1jNboHZE3vN4zZmoZicF3JVPoZpHI6h
-        KSZTqFZSXaBK6WF1J/hfVPwAqMs6kW9F34Suf9YRBjcHCsx2RoEcwcex/9cno1If
-        ZTG4kvtAhH+jFmqMWTEqypK4fmDXFZXKHnHENNXsb/Jhc6Z8bzdciTF7Ml3pu9f8
-        rAvX7mqChwQMyCRlytjfkU0neTewIIjqvdAEAt92xX5SagJzSpsij+jnWwtnxq0T
-        k4CBAw5dnICPtirpHApqWslrkvPwH2Dr/CXBFH48ROHUMDO3F/dlDYDR8BDBExSd
-        gJb5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=yG8E8NafU5nFfy3ppS+9sVq5TWWnS/0M4pY+Vrrpz
-        F4=; b=CjD+CcfCEWvNzE6BIrdPXXqh/OLjKPyT4gKX3KC6S9V79FyURipl1yDLe
-        nnzBi5TkhtRnRZ7iVXyLqmNC1c1UrFvQjGEp+20aCEUFAnb33sSn9cq0MLoRVSE7
-        Z1ybnUfFAs5w4arKa+XzcTHkLKpD19tn5zCvTxd267075XKQl2rH6ThTjhjYPjm3
-        duZEDzUbMpGu/ncbmKKYFon/Bn9d8FeSh1ZHGspendA+xL58GqgiKmPzCsfyZcvY
-        LO9Ik/xjHPgVyvXpSuT3XjZdszAlH3oCy81MIyIUulmSkPMRWq6eJ5wA9d4ppzkb
-        derCRkdcW0anVcfACVt3GrefiwItA==
-X-ME-Sender: <xms:TOu9YVkEtO-lifxOCEQmSR5yBdYFnROU3OGNvnztWaQcC8TUnNWzQw>
-    <xme:TOu9YQ3sj0OcisxVGEqfZL_PWP5dlQmM_2vG4zEu6jP0cqnge-Rmr3McsWVjkJjVl
-    5GBKVZZGdQRUtZiqJQ>
-X-ME-Received: <xmr:TOu9YbqHt-t_RtqfvWH4MhbZwZjs1C2phvLydLROMRChw5SmniNcDNUQcd2FfPk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleekgdehlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
-    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:TOu9YVlScfH0jXOfjDh1HVPROtenM-Nlkkzl4K9L_Ypt3xdPSzXwtw>
-    <xmx:TOu9YT3Ki_GDwrnQF4HkGivb_pFtMUsw45YmOBBBEPTcaOCcLxb8yg>
-    <xmx:TOu9YUuGWkfe_0SUBF0T68PxS_E3iuwSLfQEQSx39-at5ah6DAy0zA>
-    <xmx:TOu9YUxKk09vpYgG3JX6t1vzZAKns-GoD0Gc544tHLt-chgbw5Sp4A>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Dec 2021 09:08:11 -0500 (EST)
-Message-ID: <a04357b6-c762-ebbe-e983-ee2890b97be9@flygoat.com>
-Date:   Sat, 18 Dec 2021 14:08:10 +0000
+        Sat, 18 Dec 2021 09:18:06 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A09C06173F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:18:06 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id v15so8017882ljc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:18:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9pY2l7uQu8pMBGj266/5fVFZvNlg4PBkcYZxPNpbcEQ=;
+        b=T4Dtl78EicbwrSZW/jwbKuWJqU4w9JBPYf/fP/YZot0TgQAPRc7O77VtIOfAb3Btd7
+         qQYdES6snn+TlMkqPJDwmbfu91sZpz52W/zn0DBzhiub2CbuLl5s+jystTGhsdUezaNG
+         yVkL81uP4Lf1tgYFvzGNjIu+HvASuJyZWgQVQEotAsuoR7d0AOLf53MPCu2COFoiOYUY
+         1ii3BmmCmsiJNoVyLwNHgqlLNMzkl3edelq/7ThwB2OPVt69CZchDx3+AS0ZI7Jroy4x
+         HENyWcbLq0vQK9sdc40Rn5gWRjS58eSi+Eelw8QxnYKNlWa1fWrjfuD1q7gRXxUch/1W
+         jo1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9pY2l7uQu8pMBGj266/5fVFZvNlg4PBkcYZxPNpbcEQ=;
+        b=0/Bbl+++r8vzbq/mXxKjVADku0O3YMDiy7WMqnYbMZtcd+Ihys6r9UgA5shZMgRCuj
+         AxtAtSVFQ3Sae2dqWY5Stig3595qnFo8SAkDkRERixemkMHriw10x5jUFGZBxNY25Qs2
+         ivuPMKsGVSRpkbDhuvSz88YQyWRDGvctUJ8tLBS3c/zcz3yd9L3f8xTAs6lvy+JsFXT/
+         UGeD6pHL2f9xHPvII3zxA6oGl+dcx+ef+p3e+SJL3xvXDBSNe2S6vzHc1wDWtS66nCu2
+         yWvl1srNhaGnSnu0+XkIIkoAuoDQF2EWAoYax2Yuyxz4T4FsvQuJZel1QUbIUVtYvT3t
+         kx1g==
+X-Gm-Message-State: AOAM530CYY6f7tM22AoyCzutxkWbPeZlKZ6K/0ktDc5KrWxU0v1itfAb
+        TWAI9Ea7CffOwNv/UP5LhrJVZaX4y7IBkLY7
+X-Google-Smtp-Source: ABdhPJzR8CwEfjHh6blBrM6bGE0jaeF32fOh+fOzWqg1U8jDh7UyE9Apb2NCOMGlgdU86P8Ddhd8Ig==
+X-Received: by 2002:a2e:548:: with SMTP id 69mr6809049ljf.225.1639837084443;
+        Sat, 18 Dec 2021 06:18:04 -0800 (PST)
+Received: from eriador.lan ([2001:470:dd84:abc0::8a5])
+        by smtp.gmail.com with ESMTPSA id o11sm1952040ljc.100.2021.12.18.06.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 06:18:03 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/2] phy: qcom-qmp: Add SM8450 PCIe1 PHY support
+Date:   Sat, 18 Dec 2021 17:17:53 +0300
+Message-Id: <20211218141754.503661-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 2/3] MIPS: signal: Return immediately if call fails
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
- <1639797789-3001-3-git-send-email-yangtiezhu@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <1639797789-3001-3-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are two different PCIe PHYs on SM8450, one having one lane (v5)
+and another with two lanes (v5.20). This series adds support for the
+second PCIe phy.
 
+Prerequisites: SM8450 PCIe0 PHY support (accepted by Vinod)
 
-在 2021/12/18 3:23, Tiezhu Yang 写道:
-> When debug sigaltstack(), copy_siginfo_to_user() fails first in
-> setup_rt_frame() if the alternate signal stack is too small, so
-> it should return immediately if call fails, no need to call the
-> following functions.
+----------------------------------------------------------------
+Dmitry Baryshkov (2):
+      dt-bindings: phy: qcom,qmp: Add SM8450 PCIe PHY bindings
+      phy: qcom-qmp: Add SM8450 PCIe1 PHY support
 
-Hi Tiezhu,
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml      |   2 +
+ drivers/phy/qualcomm/phy-qcom-qmp.c                | 153 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h                |  70 ++++++++++
+ 3 files changed, 225 insertions(+)
 
-Thanks for your patch.
-If we are doing so I see no reason for keeping the err variable.
-Just
-
-if (copy_siginfo_to_user(&frame->rs_info, &ksig->info))
-     return -EFAULT;
-
-seems much more clear.
-
-Thanks.
-
-- Jiaxun
-
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->   arch/mips/kernel/signal.c | 25 +++++++++++++++++++------
->   1 file changed, 19 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-> index c1632e8..4cd3969 100644
-> --- a/arch/mips/kernel/signal.c
-> +++ b/arch/mips/kernel/signal.c
-> @@ -761,15 +761,28 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
->   		return -EFAULT;
->   
->   	/* Create siginfo.  */
-> -	err |= copy_siginfo_to_user(&frame->rs_info, &ksig->info);
-> +	err = copy_siginfo_to_user(&frame->rs_info, &ksig->info);
-> +	if (err)
-> +		return -EFAULT;
->   
->   	/* Create the ucontext.	 */
-> -	err |= __put_user(0, &frame->rs_uc.uc_flags);
-> -	err |= __put_user(NULL, &frame->rs_uc.uc_link);
-> -	err |= __save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
-> -	err |= setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
-> -	err |= __copy_to_user(&frame->rs_uc.uc_sigmask, set, sizeof(*set));
-> +	err = __put_user(0, &frame->rs_uc.uc_flags);
-> +	if (err)
-> +		return -EFAULT;
-> +
-> +	err = __put_user(NULL, &frame->rs_uc.uc_link);
-> +	if (err)
-> +		return -EFAULT;
-> +
-> +	err = __save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
-> +	if (err)
-> +		return -EFAULT;
-> +
-> +	err = setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
-> +	if (err)
-> +		return -EFAULT;
->   
-> +	err = __copy_to_user(&frame->rs_uc.uc_sigmask, set, sizeof(*set));
->   	if (err)
->   		return -EFAULT;
->   
 

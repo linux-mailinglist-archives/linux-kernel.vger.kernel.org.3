@@ -2,166 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6403479917
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 07:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B607479918
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 07:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbhLRGCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 01:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S232146AbhLRGD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 01:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbhLRGCa (ORCPT
+        with ESMTP id S229845AbhLRGDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 01:02:30 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE5C06173E;
-        Fri, 17 Dec 2021 22:02:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 4F1C241E2F;
-        Sat, 18 Dec 2021 06:02:26 +0000 (UTC)
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211209043249.65474-1-marcan@marcan.st>
- <20211209043249.65474-7-marcan@marcan.st> <87o85lu0ck.wl-maz@kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 6/6] irqchip/apple-aic: Add support for AICv2
-Message-ID: <4a83dfb1-3188-8b09-fc60-d3083230fb54@marcan.st>
-Date:   Sat, 18 Dec 2021 15:02:24 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sat, 18 Dec 2021 01:03:25 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005C0C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 22:03:24 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id g28so4344558qkk.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 22:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=JkH82Y5mSBqKmWXWre7SqOOoFhR5WDoFjJYNZaqCJjU=;
+        b=fnQATQtlokIbwbZKwvBtTPl5gtKIDf8rgl9Trcy/HIt7VimXJ5mF38W3tEevaz1blq
+         ljFS3dom7VzkvhwXD+IYMY1AmSJcEkMlRWbo/SZQFSw4lhNtaVipD7HPK+8ENctRukiC
+         DAJg+sunC05JDUakBNmyD+8z0j5UZKw53sZanj40UBhVmeP1eX5EBOHlDsuISr/XM+ip
+         B0SzKcedT8EiDIA0gyMvYWAzO+O+0nc19SPKOPigso9A06uZIe/axbgU0DkuR2l3r+w3
+         gqyV5qfdX3kejorASSArarsw/BMxP/IwT72NsXngUKeBI9n5Z+V03Enutp2VOH+b3SBc
+         ihBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=JkH82Y5mSBqKmWXWre7SqOOoFhR5WDoFjJYNZaqCJjU=;
+        b=dwnztEMPhVrPqOB0l67Q5lOugEF4h26dIM2LCoqmNTJr2LwZh9zXLuHXHH8VbRN2Ys
+         U0B1HbR59ASZc0kMGva+uDRxReOTa6NBuvhdmIXuW7xXj9cUS04QnLrIWOodsSoCL5SF
+         x1EtKefArcGTsI6EbUCBloYv4qf7P36Vxk+E7IcmVrmoslumaYIvLQTuIRbEouOJfgpm
+         9c8peXVPgnihLF8F6KqIIKFhycUlTRemcTatRRXABmzR37ZBKVaxm/v7q4CyQew9Pgvg
+         koocc6pCvRUjXw6Ktz/TVYuuJl3A9ibl3jtKwIpnpxJcs1ITi+4RRBuqmY1eHqF4UvY5
+         4CfQ==
+X-Gm-Message-State: AOAM533VBU2sm/tMvTXN22dluPTKpuAArzhQ43NknGE3hdzufG86IXpr
+        lCwaEFt0lmct+jaZwwTIh8ssu2Y0yqSfIlotCUs=
+X-Google-Smtp-Source: ABdhPJy8j3DUO3jo5bHvJpMUrHYMHtyKfmCM/5grz4jgJPYMfHOBkhofwLTSJu/WUbetOaml8FyrTVOXEOUut8ztlLg=
+X-Received: by 2002:a05:620a:1713:: with SMTP id az19mr3939566qkb.297.1639807404165;
+ Fri, 17 Dec 2021 22:03:24 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87o85lu0ck.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+References: <1639721264-12294-1-git-send-email-huangzhaoyang@gmail.com>
+In-Reply-To: <1639721264-12294-1-git-send-email-huangzhaoyang@gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Sat, 18 Dec 2021 14:03:04 +0800
+Message-ID: <CAGWkznGdvLobshPvg2KY+D71Zh0625+V=WsAS9uExRspRFFjVQ@mail.gmail.com>
+Subject: Re: [PATCH] psi: fix possible trigger missing in the window
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2021 03.47, Marc Zyngier wrote:
->> + * This is followed by a set of event registers, each 16K page aligned.
->> + * The first one is the AP event register we will use. Unfortunately,
->> + * the actual implemented die count is not specified anywhere in the
->> + * capability registers, so we have to explcitly specify the event
-> 
-> explicitly
+loop Suren
 
-Thanks, fixed!
-
-> 
->> + * register offset in the device tree to remain forward-compatible.
-> 
-> Do the current machines actually have more than a single die?
-
-Not the current ones, but there are loud rumors everywhere of multi-die
-products... might as well try to support them ahead of time. The current
-machines *do* have two register sets, implying support for 2-die
-configurations, and although no IRQs are ever asserted from hardware,
-SW_GEN mode works and you can trigger die-ID 1 events.
-
-The interpretation of the capability registers comes from what the macOS
-driver does (that's the only part I looked at it for, since it's kind of
-hard to divine with only a single data point from the hardware). Their
-driver is definitely designed for multi die machines already. The
-register layout I worked out by probing the hardware; it was blatantly
-obvious that there was a second set of IRQ mask arrays after the first,
-that macOS didn't use (yet)...
-
->> +static struct irq_chip aic2_chip = {
->> +	.name = "AIC2",
->> +	.irq_mask = aic_irq_mask,
->> +	.irq_unmask = aic_irq_unmask,
->> +	.irq_eoi = aic_irq_eoi,
->> +	.irq_set_type = aic_irq_set_type,
->> +};
-> 
-> How is the affinity managed if you don't have a callback? A number of
-> things are bound to break if you don't have one. And a description of
-> how an interrupt gets routed wouldn't go amiss!
-
-It isn't... we don't know all the details yet, but it seems to be Some
-Kind Of Magic™.
-
-There definitely is no way of individually mapping IRQs to specific
-CPUs; there just aren't enough implemented register bits to allow that.
-
-What we do have is a per-IRQ config consisting of:
-
-- Target CPU, 4 bits. This seems to be for pointing IRQs at coprocessors
-(there's actually an init dance to map a few IRQs to specific
-coprocessors; m1n1 takes care of that right now*). Only 0 sends IRQs to
-the AP here, so this is not useful to us.
-
-- IRQ config group, 3 bits. This selects one of 8 IRQ config registers.
-These do indirectly control how the IRQ is delivered; at least they have
-some kind of delay value (coalescing?) and I suspect may do some kind of
-priority control, though the details of that aren't clear yet. I don't
-recall seeing macOS do anything interesting with these groups, I think
-it always uses group 0.
-
-Then each CPU has an IMP-DEF sysreg that allows it to opt-in or opt-out
-of receiving IRQs (!). It actually has two bits, so there may be some
-kind of priority/subset control here too. By default all other CPUs are
-opted out, which isn't great... so m1n1 initializes it to opt in all
-CPUs to IRQ delivery.
-
-The actual delivery flow here seems to be something like AIC/something
-picks a CPU (using some kind of heuristic/CPU state? I noticed WFI seems
-to have an effect here) for initial delivery, and if the IRQ isn't acked
-in a timely manner, it punts and broadcasts the IRQ to all CPUs. The IRQ
-ack register is shared by all CPUs; I don't know if there is some kind
-of per-CPU difference in what it can return, but I haven't observed that
-yet, so I guess whatever CPU gets the IRQ gets to handle anything that
-is pending.
-
-There are also some extra features; e.g. there is definitely a set of
-registers for measuring IRQ latency (tells you how long it took from IRQ
-assertion to the CPU acking it). There's also some kind of global
-control over which CPU *cluster* is tried first for delivery (defaults
-to e-cluster, but you can change it to either p-cluster). We don't use
-those right now.
-
-So there is definitely room for further research here, but the current
-state of affairs is the driver doesn't do affinity at all, and IRQs are
-handled by "some" CPU. In practice, I see a decent (but not completely
-uniform) spread of which CPU handles any given IRQ. I assume it's
-something like it prefers a busy CPU, to avoid waking up a core just to
-handle an IRQ.
-
-* I don't know how masks are supposed to be managed for those IRQs used
-by copros; I guess we'll find out when we get there and notice something
-is broken if we don't unmask them... but I guess given the IRQ handling
-flow here, that copro should be doing the masking/unmasking itself.
-
->> +		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
->> +		if (!aic_irqc->info.fast_ipi) {
->> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
->> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
->> +		} else {
->> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
->> +		}
-> 
-> Why is this specific to v1 and not affecting v2? I'm sure there is a
-> good reason, but documenting these differences would certainly help
-> reviewing (which version implement which registers, for example).
-
-Only v1 has legacy IPIs (which is why we had to implement Fast IPIs for
-this one). AIC_IPI_* registers are for AICv1 specifically; other than
-the event register fields which are the same (but not the register
-offset itself), and the general concept of the mask/sw_gen/hw_status
-register arrays, there aren't really any shared registers between AICv1
-and AICv2.
-
-I'll add a comment to clarify this.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+On Fri, Dec 17, 2021 at 2:08 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> There could be missing wake up if the rest of the window remain the
+> same stall states as the polling_total updates for every polling_min_period.
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  include/linux/psi_types.h |  2 ++
+>  kernel/sched/psi.c        | 30 ++++++++++++++++++------------
+>  2 files changed, 20 insertions(+), 12 deletions(-)
+>
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index 0a23300..9533d2e 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -132,6 +132,8 @@ struct psi_trigger {
+>
+>         /* Refcounting to prevent premature destruction */
+>         struct kref refcount;
+> +
+> +       bool new_stall;
+>  };
+>
+>  struct psi_group {
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 1652f2b..402718c 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -458,9 +458,12 @@ static void psi_avgs_work(struct work_struct *work)
+>  static void window_reset(struct psi_window *win, u64 now, u64 value,
+>                          u64 prev_growth)
+>  {
+> +       struct psi_trigger *t = container_of(win, struct psi_trigger, win);
+> +
+>         win->start_time = now;
+>         win->start_value = value;
+>         win->prev_growth = prev_growth;
+> +       t->new_stall = false;
+>  }
+>
+>  /*
+> @@ -515,7 +518,6 @@ static void init_triggers(struct psi_group *group, u64 now)
+>  static u64 update_triggers(struct psi_group *group, u64 now)
+>  {
+>         struct psi_trigger *t;
+> -       bool new_stall = false;
+>         u64 *total = group->total[PSI_POLL];
+>
+>         /*
+> @@ -523,19 +525,26 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>          * watchers know when their specified thresholds are exceeded.
+>          */
+>         list_for_each_entry(t, &group->triggers, node) {
+> -               u64 growth;
+> -
+>                 /* Check for stall activity */
+>                 if (group->polling_total[t->state] == total[t->state])
+>                         continue;
+>
+>                 /*
+> -                * Multiple triggers might be looking at the same state,
+> -                * remember to update group->polling_total[] once we've
+> -                * been through all of them. Also remember to extend the
+> -                * polling time if we see new stall activity.
+> +                * update the trigger if there is new stall which will be
+> +                * reset when run out of the window
+>                  */
+> -               new_stall = true;
+> +               t->new_stall = true;
+> +
+> +               memcpy(&group->polling_total[t->state], &total[t->state],
+> +                               sizeof(group->polling_total[t->state]));
+> +       }
+> +
+> +       list_for_each_entry(t, &group->triggers, node) {
+> +               u64 growth;
+> +
+> +               /* check if new stall happened during this window*/
+> +               if (!t->new_stall)
+> +                       continue;
+>
+>                 /* Calculate growth since last update */
+>                 growth = window_update(&t->win, now, total[t->state]);
+> @@ -552,10 +561,6 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>                 t->last_event_time = now;
+>         }
+>
+> -       if (new_stall)
+> -               memcpy(group->polling_total, total,
+> -                               sizeof(group->polling_total));
+> -
+>         return now + group->poll_min_period;
+>  }
+>
+> @@ -1152,6 +1157,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+>         t->last_event_time = 0;
+>         init_waitqueue_head(&t->event_wait);
+>         kref_init(&t->refcount);
+> +       t->new_stall = false;
+>
+>         mutex_lock(&group->trigger_lock);
+>
+> --
+> 1.9.1
+>

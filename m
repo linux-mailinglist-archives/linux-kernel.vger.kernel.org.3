@@ -2,190 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73042479AEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 14:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB45479ADD
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbhLRNAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 08:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbhLRNAq (ORCPT
+        id S233223AbhLRM6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 07:58:40 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:17148 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231748AbhLRM6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 08:00:46 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E829C061747
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 05:00:44 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t26so9382113wrb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 05:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p5i8bAyKNCVvvWULTiQQCBvHxMUgvB2ssJ2ppV6n34w=;
-        b=ydyFnsfD0j+C/gkrXEBeottbW99utAA/sHLtcRwhIV96kBnR+kfAxiD804powfEdk3
-         ESRlm07ZyRHgcy0GXsdDDVTyepYfgM4cCrHVqBhN18vLwSeyaZijRkkEOFLjsQQDDgDw
-         O4315YNQUfUL6GBHqaQ15dOHXQfp11u/HitiBLwoBJJePbDScrP3vxTwX4NN4G/Y/2d2
-         q6tcBpa4zVIA7S8P1OBo6XEY6miO366xOg/sy15cmckMSzPPquYfS+dJL7srkMI/yfE5
-         0+KH7frWDAr1SY8W7TUeEIcewXYTz8ezpcU31B3rAA3LcMf3tIEevPZqrZv6nXNiEKFw
-         f83w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p5i8bAyKNCVvvWULTiQQCBvHxMUgvB2ssJ2ppV6n34w=;
-        b=XDjg9RR5XNJr7i7bRffQQcnbzvAC+TWEnDFpqYlkGuQBGVB1jC8dA/ObPkV3pcmbBp
-         CmWmIaVV7uQfMIHzRYZCIN+RMhJjGCl0j2c4OSwWVf153ftkYzqCBaw2jJ9i5nv3+9PP
-         E+OiBVkBaWqJxe7QfjxSa5B6l50U0VAHPGeri2B1jM57f27k/0RpV+91nDHMNchQ1snl
-         TwNU/WuIDY2t/ph0I5axJRJA9YsdqMDKbn/CjjHuqRRKyKz1dUmJNjzU3F8HJmqMcuHU
-         qZib/HTimBwR3K0SE5XjjN9YsXC79g17RNZVK7+qIxfpSZlVyUBIS7XaXSwu3eakf0gR
-         CEUQ==
-X-Gm-Message-State: AOAM531RFWCRmwFJcFImkcWdJ4YQ1H083Svfi7iggG32GD3AHr0cNXZQ
-        Nf46VYjh6Z/Da+YYW+o5rbgSWw==
-X-Google-Smtp-Source: ABdhPJys+xI4SwBaTi9xDAxJhmT8aMjKzm6rvNQgmGmf6cpusjutiCLuPZdAGACX4Zk4RK0Me0NI6Q==
-X-Received: by 2002:a5d:42d2:: with SMTP id t18mr1281979wrr.271.1639832442739;
-        Sat, 18 Dec 2021 05:00:42 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:1f0f:c9b8:ee5c:5c2f])
-        by smtp.gmail.com with ESMTPSA id j16sm1465785wms.12.2021.12.18.05.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 05:00:42 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
-Cc:     lukasz.luba@arm.com, robh@kernel.org, heiko@sntech.de,
-        arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT)
-Subject: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
-Date:   Sat, 18 Dec 2021 14:00:14 +0100
-Message-Id: <20211218130014.4037640-7-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+        Sat, 18 Dec 2021 07:58:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639832319; x=1671368319;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k8rUJHLOFqptEjRq5e0B1yL89lUJ1IVO33IrB6HwBuA=;
+  b=1pF+DFt2VFOTt38XQkCVmuSFXzZQ0ckiB4J/EZcNtRFJki2gGoHX3X4x
+   DUx6Mczyo+5g5UN0eeif/ZIM98mwoK+w4j+aOx7ZeVACvwAJzCY/JaSRR
+   77Me9VdJx2QdNLiCSz1rSOHs/GYFjzEZDMNQSJ+HOozk1gAgq85BbfjJx
+   d7zcRmC+wFPFAj8Pm+Dx1p8nyTw21zGjFgx3ZmMd0gi4VW3KTMaGPh0UH
+   zLQfvUI5i8c6uFsQ1PnQBi+cve6FzTI5Bif+k2X4CGHRpcbIKxZKMrYdC
+   +T3I1bL/Yb03Drih2hf+1dbNHzePf+WzbSD3FFZYC4Yv2w6/BBVujUKFg
+   g==;
+IronPort-SDR: rbLK/0/d2KyIkGCghYDqok6XLDgi72O6r6f/ixWK9g4Uzn4ZPsLHEpvQKO6tbJ95LG1vj0JNEI
+ lZIvFRL2cB5G+EkLwP+2jTE4ZFYW7jux73eCHwCE5Ulo7kHaKKdabREXTcQElwoNdeCcUKRzXU
+ zXAwG5rVTEAzMaua5Fqd9jbIwsCKz5WhIj+ffj0Af/P+TXCSXF/colyXatBTOpsOKFknY/nCOT
+ Adr4sj4BTiHUvM0ohw4nftgXn9jy3XtzRFWNuznPQfp6EdMNsYQdC1PAVRdAOr/uEnFQOy0FxR
+ u7xxThMCqshzod5eXiHqERbb
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="147682204"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Dec 2021 05:58:38 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sat, 18 Dec 2021 05:58:37 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Sat, 18 Dec 2021 05:58:37 -0700
+Date:   Sat, 18 Dec 2021 14:00:42 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v7 7/9] net: lan966x: Add vlan support.
+Message-ID: <20211218130042.77ebu7otpqfpqq7x@soft-dev3-1.localhost>
+References: <20211217155353.460594-1-horatiu.vultur@microchip.com>
+ <20211217155353.460594-8-horatiu.vultur@microchip.com>
+ <20211217181434.mfnur3nucfiykgto@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20211217181434.mfnur3nucfiykgto@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DTPM framework does support now the hierarchy description.
+The 12/17/2021 18:14, Vladimir Oltean wrote:
+> 
+> On Fri, Dec 17, 2021 at 04:53:51PM +0100, Horatiu Vultur wrote:
+> > @@ -120,7 +124,12 @@ static void lan966x_port_bridge_leave(struct lan966x_port *port,
+> >       if (!lan966x->bridge_mask)
+> >               lan966x->bridge = NULL;
+> >
+> > -     lan966x_mac_cpu_learn(lan966x, port->dev->dev_addr, PORT_PVID);
+> > +     /* Set the port back to host mode */
+> > +     lan966x_vlan_port_set_vlan_aware(port, false);
+> > +     lan966x_vlan_port_set_vid(port, HOST_PVID, false, false);
+> > +     lan966x_vlan_port_apply(port);
+> > +
+> > +     lan966x_mac_cpu_learn(lan966x, port->dev->dev_addr, HOST_PVID);
+> 
+> Do you still need to re-learn the port MAC address?
 
-The platform specific code can call the hierarchy creation function
-with an array of struct dtpm_node pointing to their parents.
+It is not needed. I will remove this in the next version.
 
-This patch provides a description of the big and Little CPUs and the
-GPU and tie them together under a virtual package name. Only sdm845 is
-described.
+> 
+> >  }
 
-The description could be extended in the future with the memory
-controller with devfreq if it has the energy information.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/soc/qcom/Kconfig  |  9 ++++++
- drivers/soc/qcom/Makefile |  1 +
- drivers/soc/qcom/dtpm.c   | 65 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 75 insertions(+)
- create mode 100644 drivers/soc/qcom/dtpm.c
-
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index e718b8735444..f21c1df2f2f9 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -228,4 +228,13 @@ config QCOM_APR
- 	  application processor and QDSP6. APR is
- 	  used by audio driver to configure QDSP6
- 	  ASM, ADM and AFE modules.
-+
-+config QCOM_DTPM
-+	tristate "Qualcomm DTPM hierarchy"
-+	depends on DTPM
-+	help
-+	 Describe the hierarchy for the Dynamic Thermal Power
-+	 Management tree on this platform. That will create all the
-+	 power capping capable devices.
-+
- endmenu
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 70d5de69fd7b..cf38496c3f61 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
- obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
- obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
- obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
-+obj-$(CONFIG_QCOM_DTPM) += dtpm.o
-diff --git a/drivers/soc/qcom/dtpm.c b/drivers/soc/qcom/dtpm.c
-new file mode 100644
-index 000000000000..c15283f59494
---- /dev/null
-+++ b/drivers/soc/qcom/dtpm.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright 2021 Linaro Limited
-+ *
-+ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ *
-+ * DTPM hierarchy description
-+ */
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/dtpm.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+static struct dtpm_node __initdata sdm845_hierarchy[] = {
-+	[0]{ .name = "sdm845" },
-+	[1]{ .name = "package",
-+	     .parent = &sdm845_hierarchy[0] },
-+	[2]{ .name = "/cpus/cpu@0",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[3]{ .name = "/cpus/cpu@100",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[4]{ .name = "/cpus/cpu@200",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[5]{ .name = "/cpus/cpu@300",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[6]{ .name = "/cpus/cpu@400",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[7]{ .name = "/cpus/cpu@500",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[8]{ .name = "/cpus/cpu@600",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[9]{ .name = "/cpus/cpu@700",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[10]{ .name = "/soc@0/gpu@5000000",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &sdm845_hierarchy[1] },
-+	[11]{ },
-+};
-+
-+static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
-+        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
-+        {},
-+};
-+
-+static int __init sdm845_dtpm_init(void)
-+{
-+	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
-+}
-+late_initcall(sdm845_dtpm_init);
-+
-+MODULE_DESCRIPTION("Qualcomm DTPM driver");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:dtpm");
-+MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-+
 -- 
-2.25.1
-
+/Horatiu

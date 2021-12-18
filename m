@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 549C2479C06
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4A8479C0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbhLRS13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 13:27:29 -0500
-Received: from ixit.cz ([94.230.151.217]:41988 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232110AbhLRS12 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 13:27:28 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id AFB602243C;
-        Sat, 18 Dec 2021 19:27:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1639852044;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=c6BTVEMFSRiexd1tcA2S/X57hpqnpmSt7hRLfzTx7VQ=;
-        b=u7PWyZ2ilVYbQQQAiquojc6yCb1Ay84zm4+bHvsuxRzw6F/kXUPvIyGYG+ZqE00DNxihAP
-        0B333UmDEfx6HmngIv2gE49T8dHS2XzVvVnSAsjPxZTdAX9vyojU+R00uIXjtcEMuvmWUF
-        ZdLdDpEYO2FFbPZvbK2lIjcL/8lfMOs=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Caleb Connolly <caleb@connolly.tech>,
-        David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-binding: soc: qcom: convert rmtfs documentation to yaml
-Date:   Sat, 18 Dec 2021 19:27:17 +0100
-Message-Id: <20211218182717.16928-1-david@ixit.cz>
+        id S233796AbhLRS24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 13:28:56 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:49882 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232110AbhLRS2y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 13:28:54 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BIHkXCg006115;
+        Sat, 18 Dec 2021 19:28:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=GljNz8SkdRMIPtXOeeLR4thwjr9SnWsELYQJQuX0dtQ=;
+ b=WX3tnHlBYvfz4t24dhg662/05NEUMOW5ui4i0UndQgDQTJV0f3weBtT+Tsc+ghBmi0yn
+ 3AfA/BYDj7OyOGhXJiE2Co7O3XYNlkJs1Uu5Vb8AhKnnQxHUPTNvyXI7V3X8Mu9VP0oK
+ ARMdugN5CJw/AeNK/fWLG2ZPxamyOlmml77i859pv3Ua8xdI0NHiBXyo6blxU1ID3Ntc
+ y0bs3fNRiMQLVfrxC8AOp5bXS6KAwe4dNHfXlytABeUS7RJ7LTvVU6R5SJm0BAdsIa8B
+ LYpQOpgnj3baIrQU9kIzQN9SAfNQFcG3inHrk96ynabVUPRKikaREhgffbyPD/BvDv0r eQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d15natqcx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 18 Dec 2021 19:28:29 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EF5D910002A;
+        Sat, 18 Dec 2021 19:28:25 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D7B4B241DCD;
+        Sat, 18 Dec 2021 19:28:25 +0100 (CET)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Sat, 18 Dec 2021 19:28:25
+ +0100
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        <dri-devel@lists.freedesktop.org>
+CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH] drm: adv7511: override i2c address of cec before accessing it
+Date:   Sat, 18 Dec 2021 19:28:04 +0100
+Message-ID: <20211218182804.208906-1-antonio.borneo@foss.st.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-18_08,2021-12-16_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm Remote File System Memory binding to the yaml format.
+Commit 680532c50bca ("drm: adv7511: Add support for
+i2c_new_secondary_device") allows a device tree node to override
+the default addresses of the secondary i2c devices. This is useful
+for solving address conflicts on the i2c bus.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
+In adv7511_init_cec_regmap() the new i2c address of cec device is
+read from device tree and immediately accessed, well before it is
+written in the proper register to override the default address.
+This can cause an i2c error during probe and a consequent probe
+failure.
+
+Once the new i2c address is read from the device tree, override
+the default address before any attempt to access the cec.
+
+Tested with adv7533 and stm32mp157f.
+
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Fixes: 680532c50bca ("drm: adv7511: Add support for i2c_new_secondary_device")
 ---
- .../reserved-memory/qcom,rmtfs-mem.yaml       | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+To: Andrzej Hajda <a.hajda@samsung.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
+To: Robert Foss <robert.foss@linaro.org>
+To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+To: Jonas Karlman <jonas@kwiboo.se>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+To: dri-devel@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+---
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-new file mode 100644
-index 000000000000..2998f1c8f0db
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/reserved-memory/qcom,rmtfs-mem.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 76555ae64e9c..629e05286fd9 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct adv7511 *adv)
+ 						ADV7511_CEC_I2C_ADDR_DEFAULT);
+ 	if (IS_ERR(adv->i2c_cec))
+ 		return PTR_ERR(adv->i2c_cec);
 +
-+title: Qualcomm Remote File System Memory
++	regmap_write(adv->regmap, ADV7511_REG_CEC_I2C_ADDR,
++		     adv->i2c_cec->addr << 1);
 +
-+description: |
-+  This binding describes the Qualcomm remote filesystem memory, which serves the
-+  purpose of describing the shared memory region used for remote processors to
-+  access block device data using the Remote Filesystem protocol.
-+
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+allOf:
-+  - $ref: "reserved-memory.yaml"
-+
-+properties:
-+  compatible:
-+    const: qcom,rmtfs-mem
-+
-+  qcom,client-id:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: >
-+      identifier of the client to use this region for buffers
-+
-+  qcom,vmid:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: >
-+      vmid of the remote processor, to set up memory protection
-+
-+required:
-+  - qcom,client-id
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    reserved-memory {
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
-+
-+        rmtfs@86700000 {
-+            compatible = "qcom,rmtfs-mem";
-+            reg = <0x86700000 0xe0000>;
-+            no-map;
-+
-+            qcom,client-id = <1>;
-+        };
-+    };
+ 	i2c_set_clientdata(adv->i2c_cec, adv);
+ 
+ 	adv->regmap_cec = devm_regmap_init_i2c(adv->i2c_cec,
+@@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ 	if (ret)
+ 		goto err_i2c_unregister_packet;
+ 
+-	regmap_write(adv7511->regmap, ADV7511_REG_CEC_I2C_ADDR,
+-		     adv7511->i2c_cec->addr << 1);
+-
+ 	INIT_WORK(&adv7511->hpd_work, adv7511_hpd_work);
+ 
+ 	if (i2c->irq) {
+
+base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
 -- 
 2.34.1
 

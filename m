@@ -2,205 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9EC47999F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 09:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25F24799A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 09:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbhLRIP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 03:15:26 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54134 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232344AbhLRIPW (ORCPT
+        id S232376AbhLRIP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 03:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229569AbhLRIP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 03:15:22 -0500
-X-UUID: 6a87e71251f1422f9eed529400b1979b-20211218
-X-UUID: 6a87e71251f1422f9eed529400b1979b-20211218
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 573248602; Sat, 18 Dec 2021 16:15:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 18 Dec 2021 16:15:15 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Sat, 18 Dec 2021 16:15:15 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH next v2] dt-bindings: nvmem: convert mtk-efuse.txt to YAML schema
-Date:   Sat, 18 Dec 2021 16:15:15 +0800
-Message-ID: <20211218081515.4971-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 18 Dec 2021 03:15:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829ABC061574;
+        Sat, 18 Dec 2021 00:15:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37606B80176;
+        Sat, 18 Dec 2021 08:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECE3C36AE1;
+        Sat, 18 Dec 2021 08:15:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639815355;
+        bh=HYrFoZHYUYlXc44YFnFqBufY+oh5rcfMio9k12chSNs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hL1oDTStOuDAPwSDvcF+ZbWPQ8xRrjRWonifZ5GZXS+AQafEAEwc3LHXj21hmWt14
+         JNEScmKR0C336CcCPxqnKZ9xdYToKhLFntRm1MI67Z8utYfDGnNwX+0idRKmFiPqBr
+         hOTwGqZ+JgVPmyZxM5j730jJp/Ad53GtXgxUdwxadTFyrXzyc3dUhQXW2zG5kG7gVb
+         U2COcORHFXw/NtqwSzhX0YUBykYy+oJF/+Umk0XiBPCjQV0hlCftWGSmpNlz/itKaj
+         p+MHSxSATmxQKIrCmS66o2HySVacfjlNaH0xTCrosBMzmS+rN8aQb7KHoFrWejKv9B
+         c3MjD9nbZHCag==
+From:   matthias.bgg@kernel.org
+To:     lee.jones@linaro.org, robh+dt@kernel.org, bleung@chromium.org,
+        groeck@chromium.org
+Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: [PATCH] mfd: google,cros-ec: fix property name for MediaTek rpmsg
+Date:   Sat, 18 Dec 2021 09:15:43 +0100
+Message-Id: <20211218081543.3851-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert mtk-efuse.txt to YAML schema mediatek,efuse.yaml
+From: Matthias Brugger <mbrugger@suse.com>
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+The MediaTek rpmsg-name is defined as mediatek,rpmsg-name in
+mtk,scp.yaml. Fix the binding documentation to match the new property
+
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 ---
-v2:
-  1. remove description of subnodes which is covered by nvmem.yaml suggested by Rob
-  2. change the example which is commoner than mt8173's
+ Documentation/devicetree/bindings/mfd/google,cros-ec.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
- .../bindings/nvmem/mediatek,efuse.yaml        | 86 +++++++++++++++++++
- .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ----------
- 2 files changed, 86 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
- delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-new file mode 100644
-index 000000000000..0f592c36431c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -0,0 +1,86 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/mediatek,efuse.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek efuse device tree bindings
-+
-+description: |
-+  MediaTek's efuse is used for storing calibration data, it can be accessed
-+  on ARM devices usiong I/O mapped memory.
-+
-+maintainers:
-+  - Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  $nodename:
-+    pattern: "^efuse@[0-9a-f]+$"
-+
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - mediatek,mt7622-efuse
-+              - mediatek,mt7623-efuse
-+              - mediatek,mt8173-efuse
-+              - mediatek,mt8192-efuse
-+              - mediatek,mt8195-efuse
-+              - mediatek,mt8516-efuse
-+          - const: mediatek,efuse
-+      - const: mediatek,mt8173-efuse
-+        deprecated: true
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    efuse@11c10000 {
-+        compatible = "mediatek,mt8195-efuse", "mediatek,efuse";
-+        reg = <0x11c10000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        u3_tx_imp_p0: usb3-tx-imp@184 {
-+            reg = <0x184 0x1>;
-+            bits = <0 5>;
-+        };
-+        u3_rx_imp_p0: usb3-rx-imp@184 {
-+            reg = <0x184 0x2>;
-+            bits = <5 5>;
-+        };
-+        u3_intr_p0: usb3-intr@185 {
-+            reg = <0x185 0x1>;
-+            bits = <2 6>;
-+        };
-+        comb_tx_imp_p1: usb3-tx-imp@186 {
-+            reg = <0x186 0x1>;
-+            bits = <0 5>;
-+        };
-+        comb_rx_imp_p1: usb3-rx-imp@186 {
-+            reg = <0x186 0x2>;
-+            bits = <5 5>;
-+        };
-+        comb_intr_p1: usb3-intr@187 {
-+            reg = <0x187 0x1>;
-+            bits = <2 6>;
-+        };
-+        u2_intr_p0: usb2-intr-p0@188 {
-+            reg = <0x188 0x1>;
-+            bits = <0 5>;
-+        };
-+        u2_intr_p1: usb2-intr-p1@188 {
-+            reg = <0x188 0x2>;
-+            bits = <5 5>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-deleted file mode 100644
-index 39d529599444..000000000000
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--= Mediatek MTK-EFUSE device tree bindings =
--
--This binding is intended to represent MTK-EFUSE which is found in most Mediatek SOCs.
--
--Required properties:
--- compatible: should be
--	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
--	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
--	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
--	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
--	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
--	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
--- reg: Should contain registers location and length
--- bits: contain the bits range by offset and size
--
--= Data cells =
--Are child nodes of MTK-EFUSE, bindings of which as described in
--bindings/nvmem/nvmem.txt
--
--Example:
--
--	efuse: efuse@10206000 {
--		compatible = "mediatek,mt8173-efuse";
--		reg	   = <0 0x10206000 0 0x1000>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--
--		/* Data cells */
--		thermal_calibration: calib@528 {
--			reg = <0x528 0xc>;
--		};
--	};
--
--= Data consumers =
--Are device nodes which consume nvmem data cells.
--
--For example:
--
--	thermal {
--		...
--		nvmem-cells = <&thermal_calibration>;
--		nvmem-cell-names = "calibration";
--	};
+diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+index d793dd0316b7..0faa4da6c7c8 100644
+--- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
++++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
+@@ -59,7 +59,7 @@ properties:
+       whether this nvram is present or not.
+     type: boolean
+ 
+-  mtk,rpmsg-name:
++  mediatek,rpmsg-name:
+     description:
+       Must be defined if the cros-ec is a rpmsg device for a Mediatek
+       ARM Cortex M4 Co-processor. Contains the name pf the rpmsg
 -- 
-2.18.0
+2.33.1
 

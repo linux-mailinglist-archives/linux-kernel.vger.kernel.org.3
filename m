@@ -2,117 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CB5479C58
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F13F479C5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbhLRTja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:39:30 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:40070 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbhLRTj3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:39:29 -0500
-Date:   Sat, 18 Dec 2021 19:39:26 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639856368;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ildVUdGHtkDCq6TzbTw3Bge/LUgZu9LlUiguTv9Ha5c=;
-        b=FWtUjUPZIR+QsPkNjLhGnvF3/7ZY/cBGfWONbIb5csByMwKGKi5qKhcMwTVNepFEr2KKMh
-        p+MXLG3RZdHsW7Ix7eG+n2azODS6vPiXa/TfvvQFT+w9QylsFHWhiOs7KM4unhFDY2wHw2
-        C2ND1OJOSKMPqmtgZckALDiDnJ4ff3u8Pc9HIBVgfOTN8g1TbkyB1dy4dNynBr8Z7hQCEN
-        ccqkCsYSz/SrF5n1oeBpTWrIfI2vCATpeXXBNCwEoby6VfOl+LznP3R1c+3q3DviZBjVPz
-        j8hYMaxyLNRzKf1VFEdUTrVL36ulli1eq6kOBHRup8qzYjJx60ElmFTXZDrRPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639856368;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ildVUdGHtkDCq6TzbTw3Bge/LUgZu9LlUiguTv9Ha5c=;
-        b=9ylNR5bl43pLfVz/c66HZ/jVLLTm43iicZ7i/Yr5SvBzFj0pfL9xbyfn3sUPQRC8qVJwzH
-        2sSvqu8lLaL3UtCg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] PCI/MSI: Unbreak pci_irq_get_affinity()
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        id S234020AbhLRTkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:40:46 -0500
+Received: from ixit.cz ([94.230.151.217]:42074 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230209AbhLRTkq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 14:40:46 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 7FE252243C;
+        Sat, 18 Dec 2021 20:40:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639856443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+zgMDT7Rh2+ghvyZRtD81AJIH6xYk3s1MTub8cbCqso=;
+        b=jduf5YbHHb0z4dNj4w4boAb8x3so/QmfPOFsN/3/LCBHtnrnD3SAFpwiUlVMIuN9p5ZzVY
+        2wbxf0nTy6m4HCrj/pmbfQBc1NUj+J4wLojA3SlBSOPzPfQ7sEuCnWrhIkvGHclhsvfkSh
+        /fVgL6hFeixzcI/C9ZER9hwQm/VJF/k=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        Andy Gross <andy.gross@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <87v8zm9pmd.ffs@tglx>
-References: <87v8zm9pmd.ffs@tglx>
+Subject: [PATCH] dt-bindings: firmware: convert Qualcomm SCM binding to the yaml
+Date:   Sat, 18 Dec 2021 20:40:37 +0100
+Message-Id: <20211218194038.26913-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <163985636689.23020.17674623774839628047.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/msi branch of tip:
+Convert Qualcomm SCM firmware binding to the yaml format.
 
-Commit-ID:     d558285413ea2f934ab90223ba908c30c5113aee
-Gitweb:        https://git.kernel.org/tip/d558285413ea2f934ab90223ba908c30c5113aee
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Sat, 18 Dec 2021 11:25:14 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sat, 18 Dec 2021 20:33:21 +01:00
-
-PCI/MSI: Unbreak pci_irq_get_affinity()
-
-The recent cleanup of pci_irq_get_affinity() broke the function for
-PCI/MSI-X and indices > 0. Only the MSI descriptor for PCI/MSI has more
-than one affinity mask which can be retrieved via the MSI index.
-
-PCI/MSI-X has one descriptor per vector and each has a single affinity
-mask.
-
-Use index 0 when accessing the affinity mask in the MSI descriptor when
-MSI-X is enabled.
-
-Fixes: f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/87v8zm9pmd.ffs@tglx
-
-
+Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- drivers/pci/msi/msi.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+This patch comes with followup question -> since not all definitions
+follow `"qcom,scm-*chipset*", "qcom,scm"`, should I change them or adjust this
+binding to cover all cases?
 
-diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-index 7180241..c19c7ca 100644
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -1100,7 +1100,7 @@ EXPORT_SYMBOL(pci_irq_vector);
-  */
- const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
- {
--	int irq = pci_irq_vector(dev, nr);
-+	int idx, irq = pci_irq_vector(dev, nr);
- 	struct msi_desc *desc;
- 
- 	if (WARN_ON_ONCE(irq <= 0))
-@@ -1113,7 +1113,13 @@ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
- 
- 	if (WARN_ON_ONCE(!desc->affinity))
- 		return NULL;
--	return &desc->affinity[nr].mask;
+ .../devicetree/bindings/firmware/qcom,scm.txt |  54 ---------
+ .../bindings/firmware/qcom,scm.yaml           | 112 ++++++++++++++++++
+ 2 files changed, 112 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
+ create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+deleted file mode 100644
+index d7e3cda8924e..000000000000
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
++++ /dev/null
+@@ -1,54 +0,0 @@
+-QCOM Secure Channel Manager (SCM)
+-
+-Qualcomm processors include an interface to communicate to the secure firmware.
+-This interface allows for clients to request different types of actions.  These
+-can include CPU power up/down, HDCP requests, loading of firmware, and other
+-assorted actions.
+-
+-Required properties:
+-- compatible: must contain one of the following:
+- * "qcom,scm-apq8064"
+- * "qcom,scm-apq8084"
+- * "qcom,scm-ipq4019"
+- * "qcom,scm-ipq806x"
+- * "qcom,scm-ipq8074"
+- * "qcom,scm-mdm9607"
+- * "qcom,scm-msm8226"
+- * "qcom,scm-msm8660"
+- * "qcom,scm-msm8916"
+- * "qcom,scm-msm8953"
+- * "qcom,scm-msm8960"
+- * "qcom,scm-msm8974"
+- * "qcom,scm-msm8994"
+- * "qcom,scm-msm8996"
+- * "qcom,scm-msm8998"
+- * "qcom,scm-sc7180"
+- * "qcom,scm-sc7280"
+- * "qcom,scm-sdm845"
+- * "qcom,scm-sdx55"
+- * "qcom,scm-sm8150"
+- * "qcom,scm-sm8250"
+- * "qcom,scm-sm8350"
+- and:
+- * "qcom,scm"
+-- clocks: Specifies clocks needed by the SCM interface, if any:
+- * core clock required for "qcom,scm-apq8064", "qcom,scm-msm8660" and
+-   "qcom,scm-msm8960"
+- * core, iface and bus clocks required for "qcom,scm-apq8084",
+-   "qcom,scm-msm8916", "qcom,scm-msm8953" and "qcom,scm-msm8974"
+-- clock-names: Must contain "core" for the core clock, "iface" for the interface
+-  clock and "bus" for the bus clock per the requirements of the compatible.
+-- qcom,dload-mode: phandle to the TCSR hardware block and offset of the
+-		   download mode control register (optional)
+-
+-Example for MSM8916:
+-
+-	firmware {
+-		scm {
+-			compatible = "qcom,msm8916", "qcom,scm";
+-			clocks = <&gcc GCC_CRYPTO_CLK> ,
+-				 <&gcc GCC_CRYPTO_AXI_CLK>,
+-				 <&gcc GCC_CRYPTO_AHB_CLK>;
+-			clock-names = "core", "bus", "iface";
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+new file mode 100644
+index 000000000000..3a7261734fad
+--- /dev/null
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/firmware/qcom,scm.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+	/*
-+	 * MSI has a mask array in the descriptor.
-+	 * MSI-X has a single mask.
-+	 */
-+	idx = dev->msi_enabled ? nr : 0;
-+	return &desc->affinity[idx].mask;
- }
- EXPORT_SYMBOL(pci_irq_get_affinity);
- 
++title: QCOM Secure Channel Manager (SCM)
++
++description: |
++  Qualcomm processors include an interface to communicate to the secure firmware.
++  This interface allows for clients to request different types of actions.  These
++  can include CPU power up/down, HDCP requests, loading of firmware, and other
++  assorted actions.
++
++maintainers:
++  - Andy Gross <andy.gross@linaro.org>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,scm-apq8064
++          - qcom,scm-apq8084
++          - qcom,scm-ipq4019
++          - qcom,scm-ipq806x
++          - qcom,scm-ipq8074
++          - qcom,scm-mdm9607
++          - qcom,scm-msm8226
++          - qcom,scm-msm8660
++          - qcom,scm-msm8916
++          - qcom,scm-msm8953
++          - qcom,scm-msm8960
++          - qcom,scm-msm8974
++          - qcom,scm-msm8994
++          - qcom,scm-msm8996
++          - qcom,scm-msm8998
++          - qcom,scm-sc7180
++          - qcom,scm-sc7280
++          - qcom,scm-sdm845
++          - qcom,scm-sdx55
++          - qcom,scm-sm8150
++          - qcom,scm-sm8250
++          - qcom,scm-sm8350
++      - const: qcom,scm
++
++  clocks:
++    minItems: 1
++    maxItems: 3
++
++  clock-names: true
++
++  qcom,dload-mode:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: >
++      TCSR hardware block and offset of the download mode control register
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,scm-apq8064
++              - qcom,scm-msm8660
++              - qcom,scm-msm8960
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: core
++
++      required:
++        - clocks
++        - clock-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,scm-apq8084
++              - qcom,scm-msm8916
++              - qcom,scm-msm8953
++              - qcom,scm-msm8974
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: core
++            - const: iface
++            - const: bus
++
++      required:
++        - clocks
++        - clock-names
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    firmware {
++        scm {
++            compatible = "qcom,msm8916", "qcom,scm";
++            clocks = <&gcc 104>,
++                     <&gcc 77>,
++                     <&gcc 86>;
++            clock-names = "core", "bus", "iface";
++        };
++    };
+-- 
+2.34.1
+

@@ -2,122 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A86AB479AD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C94479AD4
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbhLRMxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 07:53:17 -0500
-Received: from 113.196.136.146.ll.static.sparqnet.net ([113.196.136.146]:51350
-        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231748AbhLRMxQ (ORCPT
+        id S233147AbhLRMxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 07:53:40 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:40723 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231748AbhLRMxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 07:53:16 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg02.sunplus.com with MailGates ESMTP Server V5.0(9379:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Sat, 18 Dec 2021 20:53:10 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Sat, 18 Dec 2021 20:53:09 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Sat, 18 Dec 2021 20:53:09 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     gregkh <gregkh@linuxfoundation.org>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v3 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Topic: [PATCH v3 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Index: AQHX7Nr0VlQujKq+xkKIOnlLCZbqnqwpZLYAgA1h0BD//4/vAIABgUbA
-Date:   Sat, 18 Dec 2021 12:53:08 +0000
-Message-ID: <6257a7c929064569aa46826d1bba9a2f@sphcmbx02.sunplus.com.tw>
-References: <cover.1639039163.git.tonyhuang.sunplus@gmail.com>
- <bc15d5e8d7a5ec96582799fe513de4ace6fd4b8b.1639039163.git.tonyhuang.sunplus@gmail.com>
- <CAK8P3a2UGr6ZbHk6G=wh5XG_EGdJxGf6SfyN1sTb4aaUgiK8Lw@mail.gmail.com>
- <5c01390c485a44b6913dcb42e3677ed1@sphcmbx02.sunplus.com.tw>
- <YbytSBN+4M2JKAuJ@kroah.com>
-In-Reply-To: <YbytSBN+4M2JKAuJ@kroah.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 18 Dec 2021 07:53:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639832019; x=1671368019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fh/aoEvgoHYBFD2qQbz4oegNPmzp5XJ49otKKVSzSHE=;
+  b=BjhT1Rukl7tw9Ym7sviR9/5iUookujPFXStVUDD5IQl2OGWERjD6+Wd5
+   GeuHZnyMurdMUnKylUonkDg9p0fcu7vr6cdyBLT4l+UwANA/kY7a7IWk/
+   FrPpG13WdBcAS9XACY6oRXfGkzMUSx7rhRNoN3lwtKg3rgEOalSqPfK+y
+   yYuZzrv1OTWKCwblgzpNHkNq3SKEMdmvFyqsyir8cQJz4IedHalQLKj6A
+   D1HYwmYRxVAmyI9wThOss88/zE6idcqXP0SZkBwQ/2juBoKPHFTVGWcRq
+   Pw3SBTgll2RUHAzYFheY9efJuRUEhT5O9148nI6a2ndTiI+klexH16oJR
+   Q==;
+IronPort-SDR: 0hxB7X/glAqiPC0PqSd5lGewiS6g2OXJRy70wPhaDLB6O47RA2EWJcqIbxEmzaf7WUSF1s6deo
+ kItIfd5TNHsteZ77snbry6wTUqywq9h9XG2vUA7YJuJrU58IhRxLOQf+CXW4o+TZ/+q2vv8Yko
+ kKhtfreauNBiN378BBKjhApTWVnpoJ6ioBPt36d/WNmmtsJ50X9m1Ck1dCfbOmOXVtB701hYYN
+ ZPoMP5Pva8FjmAHpIS6rpfaxqFp+bLZ6ZtSigjc3O19mRHoU4DDXSauFn1WyuFzxM978YbrGpC
+ BprzJp+7o/gqKOce3q6WHMh9
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="155970807"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Dec 2021 05:53:38 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sat, 18 Dec 2021 05:53:38 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Sat, 18 Dec 2021 05:53:38 -0700
+Date:   Sat, 18 Dec 2021 13:55:43 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v7 8/9] net: lan966x: Extend switchdev bridge
+ flags
+Message-ID: <20211218125543.anb7fapwpywwsryx@soft-dev3-1.localhost>
+References: <20211217155353.460594-1-horatiu.vultur@microchip.com>
+ <20211217155353.460594-9-horatiu.vultur@microchip.com>
+ <20211217174000.febeewxdio6dbmb6@skbuf>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20211217174000.febeewxdio6dbmb6@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBncmVna2gsIGFybmQ6DQoNCj4gPiA+IHdyb3RlOg0KPiA+ID4gPg0KPiA+ID4gPiBJT1Ag
-KElPIFByb2Nlc3NvcikgZW1iZWRkZWQgaW5zaWRlIFNQNzAyMSB3aGljaCBpcyB1c2VkIGFzDQo+
-ID4gPiA+IFByb2Nlc3NvciBmb3IgSS9PIGNvbnRyb2wsIFJUQyB3YWtlLXVwIGFuZCBjb29wZXJh
-dGlvbiB3aXRoIENQVSAmDQo+ID4gPiA+IFBNQyBpbiBwb3dlciBtYW5hZ2VtZW50IHB1cnBvc2Uu
-DQo+ID4gPiA+IFRoZSBJT1AgY29yZSBpcyBEUTgwNTEsIHNvIGFsc28gbmFtZWQgSU9QODA1MSwg
-aXQgc3VwcG9ydHMNCj4gPiA+ID4gZGVkaWNhdGVkIEpUQUcgZGVidWcgcGlucyB3aGljaCBzaGFy
-ZSB3aXRoIFNQNzAyMS4NCj4gPiA+ID4gSW4gc3RhbmRieSBtb2RlIG9wZXJhdGlvbiwgdGhlIHBv
-d2VyIHNwZWMgcmVhY2ggNDAwdUEuDQo+ID4gPiA+DQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6IFRv
-bnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4NCj4gPiA+DQo+ID4gPiBUaGFu
-a3MgZm9yIHRoZSBpbXByb3ZlbWVudHMsIHRoaXMgYWdhaW4gbG9va3MgYmV0dGVyIHRoYW4gdGhl
-IHByZXZpb3VzDQo+IHZlcnNpb24uDQo+ID4gPiBJIHN0aWxsIGhhdmUgc29tZSBtaW5vciBjb21t
-ZW50cywgYW5kIHRoZXJlIGFyZSBhIGNvdXBsZSBvZiBkZXRhaWxzDQo+ID4gPiBJIGhhdmUgY29t
-bWVudGVkIG9uIGJlZm9yZSB0aGF0IHdvdWxkIG5lZWQgdG8gYmUgYWRkcmVzc2VkLCBidXQNCj4g
-PiA+IGxldCdzIGZvY3VzIG9uIHRoZSBvbmUgbWFpbiBpc3N1ZSBmb3Igbm93Og0KPiA+ID4NCj4g
-PiA+IFRoZSBkcml2ZXIgc3RpbGwgZG9lc24ndCBhY3R1YWxseSAvZG8vIGFueXRoaW5nOiB5b3Ug
-bG9hZCB0aGUNCj4gPiA+IGZpcm13YXJlIHdoZW4gdGhlIGRyaXZlciBpcyBsb2FkZWQsIGFuZCB5
-b3Ugc2h1dCBpdCBkb3duIHdoZW4gdGhlDQo+ID4gPiBkcml2ZXIgaXMgcmVtb3ZlZCwgYnV0IG90
-aGVyd2lzZSB0aGVyZSBpcyBubyB3YXkgdG8gaW50ZXJhY3Qgd2l0aA0KPiA+ID4gdGhlIGlvcC4g
-WW91IGhhZCB0aGUgbWlzY2RldmljZSBlYXJsaWVyLCBhbmQgeW91IHN0aWxsIHJlZ2lzdGVyDQo+
-ID4gPiB0aGF0LCBidXQgdGhlcmUgYXJlIG5vIGZpbGVfb3BlcmF0aW9ucyBhc3NvY2lhdGVkIHdp
-dGggaXQsIHNvIGl0IHN0aWxsIGRvZXNuJ3QNCj4gaGF2ZSBhbnkgZWZmZWN0Lg0KPiA+ID4NCj4g
-PiA+IEluIHRoZSBvcmlnaW5hbCB2ZXJzaW9uIHlvdSBoYWQgYSBjb3VwbGUgb2YgdXNlci1zaWRl
-IGludGVyZmFjZXMsDQo+ID4gPiBmb3Igd2hpY2ggR3JlZyBhbmQgSSBjb21tZW50ZWQgdGhhdCB0
-aGV5IHdlcmUgbm90IHVzaW5nIHRoZSBjb3JyZWN0DQo+ID4gPiBhYnN0cmFjdGlvbnMsIGFuZCB5
-b3Ugc3RpbGwgbGlzdCB0aGVtIGluIHRoZSBjaGFuZ2Vsb2cgdGV4dCBhcyAiSS9PDQo+ID4gPiBj
-b250cm9sLCBSVEMgd2FrZS11cCBhbmQgY29vcGVyYXRpb24gd2l0aCBDUFUgJiBQTUMgaW4gcG93
-ZXINCj4gbWFuYWdlbWVudCIuDQo+ID4gPg0KPiA+ID4gSWYgeW91IHdhbnQgdG8gbWFrZSBhbnkg
-cHJvZ3Jlc3Mgd2l0aCBhZGRpbmcgdGhlIGRyaXZlciwgSSdkIHNheSB5b3UNCj4gPiA+IHNob3Vs
-ZCBpbXBsZW1lbnQgYXQgbGVhc3QgdHdvIG9mIHRob3NlIGhpZ2gtbGV2ZWwgaW50ZXJmYWNlcyB0
-aGF0DQo+ID4gPiBpbnRlcmFjdCB3aXRoIHRoZSByZXNwZWN0aXZlIGtlcm5lbCBzdWJzeXN0ZW1z
-IGluIG9yZGVyIHRvIHNob3cgdGhhdCB0aGUNCj4gYWJzdHJhY3Rpb24gd29ya3MuDQo+ID4gPg0K
-PiA+DQo+ID4gUToid2l0aCByZXNwZWN0aXZlIGtlcm5lbCBzdWJzeXN0ZW1zIGluIG9yZGVyIHRv
-IHNob3cgdGhhdCB0aGUgYWJzdHJhY3Rpb24NCj4gd29ya3MuIg0KPiA+IE1heSBJIGFzayB5b3Ug
-YWJvdXQgcmVwZWN0aXZlIGtlcm5lbCBzdWJzeXN0ZW0uDQo+ID4gSWYgSSB1c2UgdGhlIGZpbGVf
-b3BlcmF0aW9uIG1ldGhvZA0KPiA+IFByb3ZpZGUgdXNlciBjYW4gcmVhZCBhbmQgd3JpdGUgSU9Q
-KDgwNTEpJ3MgcmVnaXN0ZXIuDQo+ID4gSXMgdGhpcyBhIHJlcGVjdGl2ZSBrZXJuZWwgc3Vic3lz
-dGVtPw0KPiA+IGlmIG5vdA0KPiA+IFRoZXJlIGFyZSBvdGhlciBkcml2ZXIgY29kZSBjYW4gZ2l2
-ZSBtZSByZWZlcmVuY2UNCj4gPg0KPiANCj4gSSBzdGlsbCBkbyBub3QgdW5kZXJzdGFuZCB3aGF0
-IHRoZSBnb2FsIG9mIHRoaXMgZHJpdmVyIGlzLg0KPiANCg0KV2hlbiB0aGUgcG93ZXJvZmYgY29t
-bWFuZCBpcyBleGVjdXRlZC4NCjEuVGhlIDgwNTEgaGFzIGEgcmVnaXN0ZXIgdG8gY29udHJvbCB0
-aGUgcG93ZXItb24gYW5kIHBvd2VyLW9mZiBvZiB0aGUgc3lzdGVtKExpbnV4IGtlcm5lbCkuDQog
-SWYgeW91IHR1cm4gb2ZmIHRoZSBwb3dlciB0aHJvdWdoIHRoZSA4MDUxIHJlZ2lzdGVyKERFRl9Q
-V1JfRU5fMD0wKSwNCiBUaGUgY3VycmVudCBtZWFzdXJlZCBieSB0aGUgY2lyY3VpdCBib2FyZCBp
-cyAwLjRtQSBvbmx5LiBJbiBvcmRlciB0byBzYXZlIHBvd2VyLg0KMi5UaGUgcG93ZXIgaXMgbm90
-IHR1cm5lZCBvZmYgdGhyb3VnaCB0aGUgODA1MSByZWdpc3Rlci4NCiBUaGUgY3VycmVudCBtZWFz
-dXJlZCBvbiB0aGUgY2lyY3VpdCBib2FyZCBpcyAzM21BDQozLldoZW4gdGhlIHN5c3RlbSBsaW51
-eCBrZXJlbmwgaXMgcG93ZXJlZCBvZmYuIC9kcml2ZXIvcnRjLCAvZHJpdmVyL2dwaW8gY2Fubm90
-IG9wZXJhdGUuDQogIDgwNTEgaXMgc3RpbGwgYWxpdmUgYW5kIG9wZXJhdGlvbmFsDQogIDgwNTEg
-aGFzIFJUQyByZWdpc3Rlci4gV2hlbiB0aGUgdGltZSBpcyB1cCwgODA1MSBwb3dlcnMgb24gdGhl
-IHN5c3RlbQ0KICBUaGUgODA1MSBjYW4gZGV0ZWN0IEdQSU8wfjcgcGlucywgYW5kIEdQSU8gcGlu
-IGhpZ2gvbG93IGNhbiBiZSB1c2VkIGFzIGEgcG93ZXItb24ganVkZ21lbnQgbWVjaGFuaXNtIGZv
-ciB0aGUgc3lzdGVtLg0KDQo+IFdoYXQgaXMgdGhlIHByb2JsZW0gdGhhdCB5b3UgYXJlIG5lZWRp
-bmcgdG8gc29sdmU/ICBXaGF0IG5lZWRzIHRvIGFjY2Vzcw0KPiB0aGlzIGhhcmR3YXJlLCBhbmQg
-d2hhdCBleGFjdGx5IHdhcyB0aGlzIGhhcmR3YXJlIGRlc2lnbmVkIHRvIGRvPw0KPiANCg0KZm9y
-IGV4YW1wbGU6CQ0KU1A3MDIxIDgwNTEgaGFzIHRocmVlIHBvd2VyIHN0YXRlczpTMCwgUzEgYW5k
-IFMzLgkNClMwOkRlZmF1bHQgZG9tYWluKGxpbnV4IGtlcm5lbCkgaXMgb24uIElPUCBkb21haW4g
-b2YgODA1MSBpcyBvbi4gQU8gZG9tYWluIG9mIDgwNTEgaXMgb24uCQ0KUzE6RGVmYXVsdCBkb21h
-aW4obGludXgga2VybmVsKSBpcyBvZmYuIElPUCBkb21haW4gb2YgODA1MSBpcyBvbi4gQU8gZG9t
-YWluIG9mIDgwNTEgaXMgb24uCQ0KUzM6RGVmYXVsdCBkb21haW4obGludXgga2VybmVsKSBpcyBv
-ZmYuIElPUCBkb21haW4gb2YgODA1MSBpcyBvZmYuIEFPIGRvbWFpbiBvZiA4MDUxIGlzIG9uLgkN
-ClRoZSB1c2VyIGNhbiB1c2UgdGhlIDEyYnl0ZXMgbWFpbGJveCByZWdpc3RlciB0byBub3RpZnkg
-ODA1MS44MDUxIG5lZWRzIHRvIHR1cm4gb2ZmIHdoaWNoIGRvbWFpbi4JDQpJIG5lZWQgY3VzdG9t
-IG1pc2NkZXZpY2UuDQpVc2VyPC0tLT5taXNjL3N1bnBsdXNfaW9wPC0tLT5IYXJkd2FyZSg4MDUx
-KQ0K
+The 12/17/2021 17:40, Vladimir Oltean wrote:
+> 
+> On Fri, Dec 17, 2021 at 04:53:52PM +0100, Horatiu Vultur wrote:
+> > Currently allow a port to be part or not of the multicast flooding mask.
+> > By implementing the switchdev calls SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS
+> > and SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../microchip/lan966x/lan966x_switchdev.c     | 34 +++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+> > index cef9e690fb82..af227b33cb3f 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+> > @@ -9,6 +9,34 @@ static struct notifier_block lan966x_netdevice_nb __read_mostly;
+> >  static struct notifier_block lan966x_switchdev_nb __read_mostly;
+> >  static struct notifier_block lan966x_switchdev_blocking_nb __read_mostly;
+> >
+> > +static void lan966x_port_bridge_flags(struct lan966x_port *port,
+> > +                                   struct switchdev_brport_flags flags)
+> > +{
+> > +     u32 val = lan_rd(port->lan966x, ANA_PGID(PGID_MC));
+> > +
+> > +     val = ANA_PGID_PGID_GET(val);
+> 
+> Ideally you'd want to read PGID_MC only if you know that BR_MCAST_FLOOD
+> is the flag getting changed. Otherwise you'd have to refactor this when
+> you add support for more brport flags.
+
+I can see your point. I will refactor this now, such that when new flags
+are added this should not be changed.
+
+> 
+> > +
+> > +     if (flags.mask & BR_MCAST_FLOOD) {
+> > +             if (flags.val & BR_MCAST_FLOOD)
+> > +                     val |= BIT(port->chip_port);
+> > +             else
+> > +                     val &= ~BIT(port->chip_port);
+> > +     }
+> > +
+> > +     lan_rmw(ANA_PGID_PGID_SET(val),
+> > +             ANA_PGID_PGID,
+> > +             port->lan966x, ANA_PGID(PGID_MC));
+> > +}
+> > +
+> > +static int lan966x_port_pre_bridge_flags(struct lan966x_port *port,
+> > +                                      struct switchdev_brport_flags flags)
+> > +{
+> > +     if (flags.mask & ~BR_MCAST_FLOOD)
+> > +             return -EINVAL;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static void lan966x_update_fwd_mask(struct lan966x *lan966x)
+> >  {
+> >       int i;
+> > @@ -67,6 +95,12 @@ static int lan966x_port_attr_set(struct net_device *dev, const void *ctx,
+> >               return 0;
+> >
+> >       switch (attr->id) {
+> > +     case SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS:
+> > +             lan966x_port_bridge_flags(port, attr->u.brport_flags);
+> > +             break;
+> > +     case SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS:
+> > +             err = lan966x_port_pre_bridge_flags(port, attr->u.brport_flags);
+> > +             break;
+> >       case SWITCHDEV_ATTR_ID_PORT_STP_STATE:
+> >               lan966x_port_stp_state_set(port, attr->u.stp_state);
+> >               break;
+> > --
+> > 2.33.0
+> >
+
+-- 
+/Horatiu

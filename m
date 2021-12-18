@@ -2,119 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4FA4797F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F934797F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhLRBDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 20:03:14 -0500
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:27350 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhLRBDL (ORCPT
+        id S231570AbhLRBJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 20:09:02 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51858 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229502AbhLRBJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 20:03:11 -0500
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 1BI12mhi002928;
-        Sat, 18 Dec 2021 10:02:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BI12mhi002928
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639789369;
-        bh=g8kubEqzXtZebCqaSj9BAbqYgVkf91ju4F7inIn8m3A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HQhqD+YdFOz/Ik3CiDJJHisluY+hIeooMONVi2AArR7U/FX/HzVd8IQPGdAODydCU
-         FNjE9bOyfEOSwSifeecA3gLKsW1OeiMGuTRF4p7WiSmz9gLip48gyo3Dy3GDQrKS4D
-         LOZWV0SE6kKGk+CyfUOud5w7gK9r4yLdvr811KXpFX7oy6mbjVFL3kgDnJv4ek0O1B
-         kQAUP+umUawzx50N10vOdSECmnsLS3QGSgkM/6vjyLN77LAuEYxZDE7IpH2xlhb0bB
-         9yAFWDIo5vxC6MS8Bu/iDnJNyUao+sOksgnxRbTJAtVpytt3LcNZDWHSl3inv/OaeH
-         wQVzPFOAI2/lg==
-X-Nifty-SrcIP: [209.85.210.173]
-Received: by mail-pf1-f173.google.com with SMTP id k64so3555716pfd.11;
-        Fri, 17 Dec 2021 17:02:48 -0800 (PST)
-X-Gm-Message-State: AOAM533XZVhXvQpb233pLg2ZOVwCaA41kqestkwg1nF0Ea10zRhz11H3
-        j+vhuor31e9rGKj8HLWNVL9ibSCrD2Zv4ppeujw=
-X-Google-Smtp-Source: ABdhPJzGjAbGv+I/bTwhfwziv7WOMTBsph6E+WB3YL1WNppfKcKxQIdMdXPcqqda5/GSDFyziRC3MBP9P76MWkCI0SA=
-X-Received: by 2002:a05:6a00:2d1:b0:4af:437c:5f50 with SMTP id
- b17-20020a056a0002d100b004af437c5f50mr5577166pft.32.1639789367863; Fri, 17
- Dec 2021 17:02:47 -0800 (PST)
+        Fri, 17 Dec 2021 20:09:01 -0500
+X-UUID: 2fba30643d9b42038d85dc155144beb5-20211218
+X-UUID: 2fba30643d9b42038d85dc155144beb5-20211218
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 43957100; Sat, 18 Dec 2021 09:08:57 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 18 Dec 2021 09:08:55 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 18 Dec
+ 2021 09:08:55 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 18 Dec 2021 09:08:54 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
+        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
+        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
+        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
+        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
+        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
+        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <jemele@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mark Chen <mark-yw.chen@mediatek.com>
+Subject: [PATCH RESEND 1/3] Bluetooth: btmtksdio: add the support of wake on bluetooth
+Date:   Sat, 18 Dec 2021 09:08:51 +0800
+Message-ID: <632534014b9b8a38e81dfb5749dcd75e2088adb1.1639787634.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-References: <20211207140334.10461-1-semen.protsenko@linaro.org> <CAPLW+4n-BjSHK4gdP=cGvAE+pZDfvYTO4yy09yNRJgSXt2VArg@mail.gmail.com>
-In-Reply-To: <CAPLW+4n-BjSHK4gdP=cGvAE+pZDfvYTO4yy09yNRJgSXt2VArg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 18 Dec 2021 10:02:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQdPMjZozjuwp5Z=_pXi-7JMXXcG0CMW+dWWX4GxJX-qg@mail.gmail.com>
-Message-ID: <CAK7LNAQdPMjZozjuwp5Z=_pXi-7JMXXcG0CMW+dWWX4GxJX-qg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Report enabled nodes with duplicated address
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 1:11 AM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
->
-> On Tue, 7 Dec 2021 at 16:03, Sam Protsenko <semen.protsenko@linaro.org> wrote:
-> >
-> > Duplicated unit address is a normal case, as long as no more than one
-> > node using that address is enabled. Having duplicated addresses is
-> > already allowed by '-Wno-unique_unit_address' in DTC_FLAGS. But two
-> > simultaneously enabled nodes sharing the same address is usually
-> > incorrect. Add '-Wunique_unit_address_if_enabled' flag to report
-> > warnings for such case when doing "make dtbs_check".
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Reported-by: Rob Herring <robh@kernel.org>
-> > Suggested-by: Rob Herring <robh@kernel.org>
-> > ---
-> > NOTE: After applying this patch, a lot of warnings appear on "make
-> > dtbs_check". I'm not completely sure if it's ok, so feel free to Nack.
-> >
->
-> Hi Rob,
->
-> Do you think this patch is feasible? You asked me to send it before,
-> though I now see it leads to a lot of errors being revealed when doing
-> "make dtbs" and "make dtbs_check". Please let me know if it's Ack or
-> Nack -- I'm fine with any resolution, just want to know if I should
-> continue to carry it in my local branch or drop it.
->
-> Thanks!
+From: Mark Chen <mark-yw.chen@mediatek.com>
 
+Add the support to enable wake on bluetooth
 
-This is up to Rob.
-I do not mind either way.
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
+---
+ drivers/bluetooth/btmtk.h     |  8 ++++++++
+ drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
->
-> >  scripts/Makefile.lib | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index ce6142238835..2f00c996d2e3 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -315,7 +315,8 @@ DTC_FLAGS += -Wno-unit_address_vs_reg \
-> >         -Wno-alias_paths \
-> >         -Wno-graph_child_address \
-> >         -Wno-simple_bus_reg \
-> > -       -Wno-unique_unit_address
-> > +       -Wno-unique_unit_address \
-> > +       -Wunique_unit_address_if_enabled
-> >  endif
-> >
-> >  ifneq ($(findstring 2,$(KBUILD_EXTRA_WARN)),)
-> > --
-> > 2.30.2
-> >
-
-
-
+diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
+index 6e7b0c7567c0..2be1d2680ad8 100644
+--- a/drivers/bluetooth/btmtk.h
++++ b/drivers/bluetooth/btmtk.h
+@@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
+ 	u8 time_compensation;
+ } __packed;
+ 
++struct btmtk_wakeon {
++	u8 mode;
++	u8 gpo;
++	u8 active_high;
++	__le16 enable_delay;
++	__le16 wakeup_delay;
++} __packed;
++
+ struct btmtk_hci_wmt_params {
+ 	u8 op;
+ 	u8 flag;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index b5ea8d3bffaa..771733ce362b 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -958,6 +958,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+ 	return 0;
+ }
+ 
++static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
++{
++	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
++	bool may_wakeup = device_may_wakeup(bdev->dev);
++	struct btmtk_wakeon bt_awake = {
++		.mode = 0x1,
++		.gpo = 0,
++		.active_high = 0x1,
++		.enable_delay = cpu_to_le16(0xc80),
++		.wakeup_delay = cpu_to_le16(0x20)
++	};
++	struct sk_buff *skb;
++
++	if (may_wakeup &&
++	    bdev->data->chipid == 0x7921) {
++		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
++				      &bt_awake, HCI_CMD_TIMEOUT);
++		if (IS_ERR(skb))
++			may_wakeup = false;
++	}
++
++	return may_wakeup;
++}
++
+ static int btmtksdio_probe(struct sdio_func *func,
+ 			   const struct sdio_device_id *id)
+ {
+@@ -998,6 +1022,7 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	hdev->shutdown = btmtksdio_shutdown;
+ 	hdev->send     = btmtksdio_send_frame;
+ 	hdev->set_bdaddr = btmtk_set_bdaddr;
++	hdev->wakeup = btmtk_sdio_wakeup;
+ 
+ 	SET_HCIDEV_DEV(hdev, &func->dev);
+ 
+@@ -1032,7 +1057,11 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	 */
+ 	pm_runtime_put_noidle(bdev->dev);
+ 
+-	return 0;
++	err = device_init_wakeup(bdev->dev, true);
++	if (err)
++		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
++
++	return err;
+ }
+ 
+ static void btmtksdio_remove(struct sdio_func *func)
 -- 
-Best Regards
-Masahiro Yamada
+2.25.1
+

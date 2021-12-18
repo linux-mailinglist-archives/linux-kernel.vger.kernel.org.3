@@ -2,170 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04274479DD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F4D479DDA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbhLRVup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:50:45 -0500
-Received: from mail-mw2nam10on2096.outbound.protection.outlook.com ([40.107.94.96]:43520
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234670AbhLRVuS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:50:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oVPfVFKxH/PNQwH2xDLzVWcbNVqp+YuM0Kmr1Fb5bLowRkox5NCQD6IsHIKwoAoSjFyiig9P7Rs8d+n4ZmKw2KO8dC/X2udVmE7YMyBDBx1NTpkF77ofxfbNnTOBWQ3HhqpCBt/8LC88GfPvVyAroLYIEKxA5g9+Y/pg7oyK2g/NpNow0lioYb5mD0YGkAhWg+3rqy8BfNx9Huca61tG28JGfcaCddWcV6+aNEL6D9HRRV6wGwdaKcytNOpS3Hp2JqJlr01VMhpr4mxlp5+3hTO55yQqN/AJAnw5DdwXOrVaNftoXqn4gV16fL77ljJ5tpwsF/Juyb8JMkmKyjFcMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4CfnaYeUYuUx7UDcFfzImjqT+OGRjX5JarYlmVy9yik=;
- b=ABLmnqKR+t4fplYKR64JXckdtnvSpSRMnh5bAOvO+bjvATL6M5DyyalyA3z77HCq4Kkkq0klwGohnspY1JvqDjdzF9Jlo/vA8cRKB3hUl/5NtT62M1kPqNiWwBbSPbtGhhxdn8S2/+wcPs5d8ITWHewghhKWVx6JZCbEWzZJE/5eKiBUiex96mrXr98+VTJnWgsTzywb7Dk0bTOH7otakEWXL9KeYjym9twW4cWZvAs6nuVUjUjvlxO0ipQOf6kQqAA57Q1x7S+LblmY1FGLX3r/gfm4I5pfXPsKfCgGocoNj1kwJ+msqbtHLxXIs6rD4TD9ilsKhpxZLCua7Ju3Eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4CfnaYeUYuUx7UDcFfzImjqT+OGRjX5JarYlmVy9yik=;
- b=KWgZjo+VQEPZneMaZHFsXbfJdfpt3gegQ9SyBxT4Udcg7ZLSlc0B/UO5rpOSulrT+6D1Uei7Wz1zViVOYGdU7XCiPwJ/6s9JvUV8uxtZtFWV+jqXJtzXclR7X/MfDvuKyHOHyGYjbUFRcqN+R1Um4+cXK1f6Q7vEwQ4pq1mnXrw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CO6PR10MB5633.namprd10.prod.outlook.com
- (2603:10b6:303:148::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Sat, 18 Dec
- 2021 21:50:15 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
- 21:50:15 +0000
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [RFC v5 net-next 13/13] mfd: ocelot: add ocelot-pinctrl as a supported child interface
-Date:   Sat, 18 Dec 2021 13:49:54 -0800
-Message-Id: <20211218214954.109755-14-colin.foster@in-advantage.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211218214954.109755-1-colin.foster@in-advantage.com>
-References: <20211218214954.109755-1-colin.foster@in-advantage.com>
+        id S234587AbhLRVw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:52:57 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36366 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234948AbhLRVvz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 16:51:55 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BILJjLJ029088;
+        Sat, 18 Dec 2021 22:51:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=AGQhVrufT/qOBHcyJMs9MvSX9bAivaHoR3YLt0V3MKo=;
+ b=KC3C6CiBwNUQx3BiVQ+t/10c4oVEaN2TlOCNb+nV+MYWsB22srJKb1IPB+0uATwUbG4A
+ hOBrrHpc2f8lUGQl0rA3Eyt4zY0yB4t+m1ICkcLSAFdckVyjJl+sN3g+i0WdeaJlZuV1
+ mVTDSrOTEMrma1++ifTw0C1LLJQWGAD90XYvKvJE/Bh80zWtzL+YWQ6T5xE0yZrCpKVI
+ egvhr0XZToTBGpUmhMA+GfJjmtfJB2smA/WuMmFXJUolFXUYktRCSucKlCDSvPCEqe2n
+ /FvCPVR20ttP5s+TFWkg4VRb4nFCE5GfwMTIG7ynSqqvQapj2pcCJ9UEgYj/7SKAC9if Jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d17v3te3e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 18 Dec 2021 22:51:19 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 554F610002A;
+        Sat, 18 Dec 2021 22:51:15 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 46A0C209F50;
+        Sat, 18 Dec 2021 22:51:15 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Sat, 18 Dec 2021 22:51:14
+ +0100
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] drm/stm: dsi: move lane capability detection in probe()
+Date:   Sat, 18 Dec 2021 22:50:52 +0100
+Message-ID: <20211218215055.212421-1-antonio.borneo@foss.st.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MWHPR02CA0011.namprd02.prod.outlook.com
- (2603:10b6:300:4b::21) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fc6294ba-e5bc-4d8a-32d6-08d9c270601a
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5633:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR10MB56336A2C9C207FC1E9B74F96A4799@CO6PR10MB5633.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:663;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mTynI8wa6R+WG4cUimEBDf3iBoPw2bk4NzzZObBXk349u4eDQtIt8xavVIEne4DomotfNUK1hCLVDtYE5poLWYszrobo5hpto91Mx8S4Yr/7gb94MHdj/M/pVqwfenwCAKqDD8SKyBiPJbIym8xyju72sE/dyACBMn5biVbnDKTlu2gfFueFRXoXEHSYSrfUQVWymTLu69DJ7iEMnLT2/MASIPsVrgFBiB/y9+y6pSran6ls15wB3lr25nGf82hihq/tuuwkGjkjkTHceqlLXyJB6tiNc9sRdxRosuY8x5HbmXXlbsXXj/NkuHC8H0gWl157j2TUPXuMqKKCPtmpj4qZ8UuWEeJPqNWBbwyF6Txb78pamONKOy3hPkkD/TPcGYYSceLyNiwrQ55qFqpntgu9p0Ufvx2t/2srw5tAE+E0HaQ9fcCBUwdsjBSU/KYAtq5JNHska9qriOMmCGKOYOpXi9zU6x+PFqRKBk3CrEhpEdR7mE95D8f7rPbNEDPwz9v1EEzGYVaCCqt5phRgTpBYvKI7Vg6gSYeTyWM6f1iQ47pVIKc4HD5BqQij81oWrg+ogHWewUNUAH2hiCOlxcctxeG3mUWmjfCBYVcXMGSWfPzZXgxusHz35tKIygVddNmdpBvBh2DItCbpvqtHPZtr4p0yagNkScQWwY3SU11l9SZz6uy/48q37RYJvfhHxvtL+ZyBM+s/LEUF4cTO/A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(396003)(366004)(346002)(376002)(136003)(6486002)(6506007)(7416002)(2906002)(36756003)(6512007)(26005)(86362001)(66556008)(66476007)(186003)(1076003)(6666004)(4326008)(66946007)(2616005)(44832011)(8936002)(8676002)(316002)(54906003)(38100700002)(5660300002)(508600001)(52116002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vxbVbJ2cDePuS7+ML4qL6JlmteSU/+yVKVLnnIdezk9050tOfRi78E8gOLCe?=
- =?us-ascii?Q?pcMwIg55+NCnAM02lU0jVFwDQthxB0AZ3tiUZjc+omh2Bgvu61D8dgA4HUH1?=
- =?us-ascii?Q?wWBrwC69dft2NrbG9/P8vrhIFJIPOflD2bkkkM4GSnoAFXRZn4w/JBxOBu2F?=
- =?us-ascii?Q?ZiP6FzUGsedera2QvLoACSHE2yS94qa/VcchZrIuEDCyIcs4c56ayptjm0MG?=
- =?us-ascii?Q?5felnf0dtXEQAD8HRfk8ypcs9jj83cMWxtjMRV0YtoFYbtHEj4NPHhTDWsql?=
- =?us-ascii?Q?b0k7uKPF2y8mkKoZUVJU1hxUKVFI59L1NDErnoY4IiBm/LzaJ1gUlasLquTA?=
- =?us-ascii?Q?gfYTXmztjndM9MLrdVpWMcN4+AiZylINQwV8liiGn39v8UB4cgwsyosLiPRO?=
- =?us-ascii?Q?AQg8dYCm1S/6WlE2O20kGSKTy6dPqJKr6mDpSwose+73eZrUB/Xs5RfLaL1z?=
- =?us-ascii?Q?VJKd8rv6WwV0DEoDpk72LlbRBaG2shiuVtq2vP7qqE4+wDCntKSeWBrHf/i2?=
- =?us-ascii?Q?tcpnE/YpBnzHiZ/+iLfN3UW7qgYAV7d9C0gn+g+BsQhuOPCKYcaUKZRLOzdV?=
- =?us-ascii?Q?rrFcfrjQtlPgZRwz95ccEgkS8s0pbVdHjQNLzqcbtdd5/DzNmg+V27v/1daz?=
- =?us-ascii?Q?rsOUlmb4k2tfdDR806jf4rGSfX2K+HnMsivp+lagMdK3efyjmuJMpHatYJpE?=
- =?us-ascii?Q?vE78gvrR2M/UuHTPuEKaa8q/3Hdb6J+a7O/p1pWdJdl8oirGITHZ+Z+S2ABJ?=
- =?us-ascii?Q?HVmIK5u56dOeps0qK99S2ga1bMmwHkphTzMGcCDyT3mfUIcsaIPe09Ip9LLL?=
- =?us-ascii?Q?3qJhHrg/cLS9To/WQMybzFfJmcHoGdfpnQJSENMxyOtcQHx2VWMLeAOETScX?=
- =?us-ascii?Q?MCFsMvqHA2Fq2o0DghWYOp2pLr+pHx4G46yXBvxiEQqezjec94+wJZBrkXoo?=
- =?us-ascii?Q?Bzk5nEr42I8yKfIVEHqzrU24buQl33laRIBd1EY68F9bF24UacopJ66mh7eB?=
- =?us-ascii?Q?Pr5p//X4EGDs8AIhWj9xwYLs9zQnHSvUE4R1LwFkyIR89c+HwRS4DX0TV/CP?=
- =?us-ascii?Q?X+amEd5DSw3/Ftt2yrLj0sMaQ3HlAh8Q5Mqa90hjA8n70Gkx8kXqX3ks6J23?=
- =?us-ascii?Q?aU9ymGGq2RzQxXUqwOoWiO/u7Iy30eaOZR7Ox0+cPDQo5kpnyRINcyeQxfIz?=
- =?us-ascii?Q?gjMf89IFZtupsx2LT7JrjIbQ5lfKQm+h+3lfRGejJgW3LWg8pi/Mt5HsWLrj?=
- =?us-ascii?Q?XpKL/OZ10rsUIPi5/zcdn6U/YleITZgUzpEzYNuVFCZsK9bh8ehZfLHFC8cg?=
- =?us-ascii?Q?659W3VjUZ1qXCg/9GkJZVJWmqYpwUj9xSGBEnQfUqEKY/O989Wo6OEDspm6d?=
- =?us-ascii?Q?3I4eW5idk0bE6S0IH0GbiUbKn+ZR72CSA/UWS+a4CMZprDjAUrfGhDiTI5NU?=
- =?us-ascii?Q?S8EYGUD7ZxRMrnl6kybM6bf+Y+IGOMwEjfgLW8j/KGTyLFx0rlQ2FpS+GlIy?=
- =?us-ascii?Q?qBctESVxEPeN7iCtSMnalIOM10b0je+5Wbp30NzLLSdYZHKr4M7GFuD1pW+W?=
- =?us-ascii?Q?LamqPAK4sVnDgv8M/BW0w0x6swdeylVqaa30pfr6m3gEkiAaCSF/7CMNYa5O?=
- =?us-ascii?Q?ODsbgOllNeFLXEWrM7AudhSP1S8yUo4JKUV3uLZS+tzFJFddp2Qpudbumaxu?=
- =?us-ascii?Q?PXcfnOOp7lBTJFtEPFEyLvcAEJI=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc6294ba-e5bc-4d8a-32d6-08d9c270601a
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 21:50:15.5809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MxJ9YxZfSRcz2TkpUp+A7edsWuMvOnIoDYClRA13JiPkC9lRRxX7rw4ZQ1xB3Hf8TiJ9W/87KefJc6pFnn16VN1qlvQ29mjo1C+cdh/9Q6Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5633
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-18_08,2021-12-16_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ocelot-pinctrl device is able to be utilized by ocelot_mfd. This simply
-enables that child driver.
+There is no need to re-compute the dsi lane capability because it
+only depends on dsi hw version.
+Since dsi hw version is detected at probe(), move there also the
+assignment of dsi lane capability.
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
 ---
- drivers/mfd/ocelot-core.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Andrzej Hajda <a.hajda@samsung.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
+To: Robert Foss <robert.foss@linaro.org>
+To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+To: Jonas Karlman <jonas@kwiboo.se>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: Yannick Fertre <yannick.fertre@foss.st.com>
+To: Philippe Cornu <philippe.cornu@foss.st.com>
+To: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+To: dri-devel@lists.freedesktop.org
+To: linux-stm32@st-md-mailman.stormreply.com
+To: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-index c67e433f467c..71e062934812 100644
---- a/drivers/mfd/ocelot-core.c
-+++ b/drivers/mfd/ocelot-core.c
-@@ -113,7 +113,22 @@ static const struct resource vsc7512_miim1_resources[] = {
- 	},
- };
+diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+index 32cb41b2202f..480fdf256f01 100644
+--- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
++++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+@@ -247,14 +247,6 @@ dw_mipi_dsi_get_lane_mbps(void *priv_data, const struct drm_display_mode *mode,
+ 	int ret, bpp;
+ 	u32 val;
  
-+static const struct resource vsc7512_pinctrl_resources[] = {
-+	{
-+		.start = 0x71070034,
-+		.end = 0x7107009f,
-+		.name = "gcb_gpio",
-+		.flags = IORESOURCE_MEM,
-+	},
-+};
-+
- static const struct mfd_cell vsc7512_devs[] = {
-+	{
-+		.name = "pinctrl-ocelot",
-+		.of_compatible = "mscc,ocelot-pinctrl",
-+		.num_resources = ARRAY_SIZE(vsc7512_pinctrl_resources),
-+		.resources = vsc7512_pinctrl_resources,
-+	},
- 	{
- 		.name = "ocelot-miim1",
- 		.of_compatible = "mscc,ocelot-miim",
-@@ -164,6 +179,10 @@ int ocelot_mfd_init(struct ocelot_mfd_config *config)
+-	/* Update lane capabilities according to hw version */
+-	dsi->lane_min_kbps = LANE_MIN_KBPS;
+-	dsi->lane_max_kbps = LANE_MAX_KBPS;
+-	if (dsi->hw_version == HWVER_131) {
+-		dsi->lane_min_kbps *= 2;
+-		dsi->lane_max_kbps *= 2;
+-	}
+-
+ 	pll_in_khz = (unsigned int)(clk_get_rate(dsi->pllref_clk) / 1000);
  
- 	ret = mfd_add_devices(dev, PLATFORM_DEVID_NONE, vsc7512_devs,
- 			      ARRAY_SIZE(vsc7512_devs), NULL, 0, NULL);
-+	if (ret) {
-+		dev_err(dev, "error adding mfd devices\n");
-+		return ret;
+ 	/* Compute requested pll out */
+@@ -417,6 +409,14 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+ 		goto err_dsi_probe;
+ 	}
+ 
++	/* set lane capabilities according to hw version */
++	dsi->lane_min_kbps = LANE_MIN_KBPS;
++	dsi->lane_max_kbps = LANE_MAX_KBPS;
++	if (dsi->hw_version == HWVER_131) {
++		dsi->lane_min_kbps *= 2;
++		dsi->lane_max_kbps *= 2;
 +	}
++
+ 	dw_mipi_dsi_stm_plat_data.base = dsi->base;
+ 	dw_mipi_dsi_stm_plat_data.priv_data = dsi;
  
- 	dev_info(dev, "ocelot mfd core setup complete\n");
- 
+
+base-commit: 70704fbf67ddc07ffc81073a3af1f7b2171697eb
 -- 
-2.25.1
+2.34.1
 

@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D64479905
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0052479904
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbhLRFwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 00:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbhLRFwm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232095AbhLRFwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 18 Dec 2021 00:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229729AbhLRFwl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 00:52:41 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98120C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:52:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C86C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:52:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
         In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
         :Reply-To:Content-ID:Content-Description;
-        bh=r2cPolnJMtn1KOUKK74IyKZjSIHAcFPC13gYJVgzIGw=; b=pRPSf5EGTUk45wZhhwrBA7zPrE
-        S/MMGkYWLuhYHM6diyoq2oCZgFXoIM1Gu/E1O6IdFjci9nreDJiXEQVdZJBCajhs7gpK/iDCOrPj9
-        2wZkBRTP2nMM3Zf06t5m21K6gAwACXyjVi1MJ2g6JbXIlPFZmgFdg/t6TfW/aga1lR9PhdjZNPWpg
-        o1kKg2BmPITQzs7vwto8Ls84Gi7/0fj0CgoTfrCFp1G+HHz+VuFpBliQKKvExO83JvIdiyLXIngmk
-        qbsLDINz5KTNFkJNZnuizR3p9dcaQQPkZjYFeHUc93OXZcGbWQ3w53fgNEXcnMv6byA7IDTh4Zqm4
-        0KglzxNw==;
+        bh=cKU03KYBKZ/frK30NHK1mSkQn1wFp0/FFi7JyuH6wxk=; b=HxpGuiZZjkleWF4zKb/wKx51hK
+        jf4WgsfEKCGfGmggcX7XscMjliQonEegE+5xJC9j3Z6mFbLlK5iFAsjcmFZ9IG6XX/F4ZO20tbYAU
+        sDezZcdRupLPxPTjYmU2cHJiVxXYAlbQErpw6nbNpeRPethDKr/+eoZjZuiauoix+t/imma6N479J
+        tIJHlxkmFs88PWZ331YjuY/jkmn43haZ1HsGvxXlKcm40waJpHwpocjQ5CLA4y77BMOEUkXfBK1Ns
+        dipqbyemZdt9NHVxCahftcSeZ9MckS/Rcn5TRtM3Cl15uSXzjdJqkAVDWXEaavLmTOFisgEnnTd33
+        rstjh+8g==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mySdz-00HLY3-TG; Sat, 18 Dec 2021 05:52:33 +0000
-Message-ID: <2bd4c519-1f96-583b-0b05-4091a171db4a@infradead.org>
-Date:   Fri, 17 Dec 2021 21:52:25 -0800
+        id 1mySe0-00HLY7-Pa; Sat, 18 Dec 2021 05:52:33 +0000
+Message-ID: <be5756b5-6658-6e13-b1e0-5a24c5f94569@infradead.org>
+Date:   Fri, 17 Dec 2021 21:52:28 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v4 2/2] smp: Fix kernel-doc related mistakes
+Subject: Re: [PATCH v4 1/2] smp: Fix the comments of smp_call_function_many()
 Content-Language: en-US
 To:     Zhen Lei <thunder.leizhen@huawei.com>,
         Ingo Molnar <mingo@kernel.org>,
@@ -42,9 +42,9 @@ To:     Zhen Lei <thunder.leizhen@huawei.com>,
 Cc:     Nadav Amit <namit@vmware.com>,
         Dave Hansen <dave.hansen@linux.intel.com>
 References: <20211216144053.229-1-thunder.leizhen@huawei.com>
- <20211216144053.229-3-thunder.leizhen@huawei.com>
+ <20211216144053.229-2-thunder.leizhen@huawei.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211216144053.229-3-thunder.leizhen@huawei.com>
+In-Reply-To: <20211216144053.229-2-thunder.leizhen@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -54,10 +54,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/16/21 06:40, Zhen Lei wrote:
-> 1. Change "function-name:" to "function-name -".
-> 2. The kernel-doc comments should start with "/**".
-> 3. Add descriptions for the missing parameters.
-> 4. Fix a mismatched function name in the comment.
+> As commit a32a4d8a815c ("smp: Run functions concurrently in
+> smp_call_function_many_cond()") itself says:
+>                   "Keep other smp_call_function_many() semantic as it is
+> today for backward compatibility: the called function is not executed in
+> this case locally."
+> 
+> It's clear that, the function header comments of smp_call_function_many()
+> does not need to be changed.
+> 
+> So move the comment about 'scf_flags' to smp_call_function_many_cond(),
+> and restore the original comments of smp_call_function_many(). The
+> comments have been simplified slightly to avoid duplication. And the
+> description of other parameters of smp_call_function_many_cond() is added.
 > 
 > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
@@ -65,63 +74,61 @@ Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
 thanks.
 
-
 > ---
->  kernel/smp.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+>  kernel/smp.c | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
 > 
 > diff --git a/kernel/smp.c b/kernel/smp.c
-> index 1e5221fe200296a..d00cc8e0e5d8b16 100644
+> index 01a7c1706a58b1d..1e5221fe200296a 100644
 > --- a/kernel/smp.c
 > +++ b/kernel/smp.c
-> @@ -698,8 +698,9 @@ void flush_smp_call_function_from_idle(void)
->  	local_irq_restore(flags);
->  }
+> @@ -853,14 +853,26 @@ int smp_call_function_any(const struct cpumask *mask,
+>  EXPORT_SYMBOL_GPL(smp_call_function_any);
 >  
-> -/*
-> +/**
->   * smp_call_function_single - Run a function on a specific CPU
-> + * @cpu:  The CPU to run on.
->   * @func: The function to run. This must be fast and non-blocking.
->   * @info: An arbitrary pointer to pass to the function.
->   * @wait: If true, wait until function has completed on other CPUs.
-> @@ -809,7 +810,7 @@ int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
->  }
->  EXPORT_SYMBOL_GPL(smp_call_function_single_async);
+>  /*
+> - * Flags to be used as scf_flags argument of smp_call_function_many_cond().
+> - *
+>   * %SCF_WAIT:		Wait until function execution is completed
+>   * %SCF_RUN_LOCAL:	Run also locally if local cpu is set in cpumask
+>   */
+>  #define SCF_WAIT	(1U << 0)
+>  #define SCF_RUN_LOCAL	(1U << 1)
 >  
-> -/*
 > +/**
->   * smp_call_function_any - Run a function on any of the given cpus
->   * @mask: The mask of cpus it can run on.
->   * @func: The function to run. This must be fast and non-blocking.
-> @@ -1005,7 +1006,7 @@ void smp_call_function_many(const struct cpumask *mask,
->  EXPORT_SYMBOL(smp_call_function_many);
+> + * smp_call_function_many_cond() - Run a function on a set of CPUs.
+> + * @mask:	The set of cpus to run on (only runs on online subset).
+> + *		Whether to allow execution on the local CPU is also controlled
+> + *		by @scf_flags.
+> + * @func:	The function to run on all applicable CPUs.
+> + * @info:	An arbitrary pointer to pass to @func.
+> + * @scf_flags:	Bitmask that controls the operation. Such as SCF_WAIT,
+> + *		SCF_RUN_LOCAL.
+> + * @cond_func:	A callback function that is passed a cpu id and the info
+> + *		parameter. The function should return a blooean value
+> + *		indicating whether @func will be executed on the specified CPU.
+> + *		If @cond_func is NULL, that means unconditional, always true.
+> + */
+>  static void smp_call_function_many_cond(const struct cpumask *mask,
+>  					smp_call_func_t func, void *info,
+>  					unsigned int scf_flags,
+> @@ -972,14 +984,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+>  }
 >  
 >  /**
-> - * smp_call_function(): Run a function on all other CPUs.
-> + * smp_call_function() - Run a function on all other CPUs.
+> - * smp_call_function_many(): Run a function on a set of CPUs.
+> + * smp_call_function_many() - Run a function on a set of other CPUs.
+>   * @mask: The set of cpus to run on (only runs on online subset).
 >   * @func: The function to run. This must be fast and non-blocking.
 >   * @info: An arbitrary pointer to pass to the function.
->   * @wait: If true, wait (atomically) until function has completed
-> @@ -1111,8 +1112,8 @@ void __init smp_init(void)
->  	smp_cpus_done(setup_max_cpus);
->  }
->  
-> -/*
-> - * on_each_cpu_cond(): Call a function on each processor for which
-> +/**
-> + * on_each_cpu_cond_mask() - Call a function on each processor for which
->   * the supplied function cond_func returns true, optionally waiting
->   * for all the required CPUs to finish. This may include the local
->   * processor.
-> @@ -1126,6 +1127,7 @@ void __init smp_init(void)
->   * @info:	An arbitrary pointer to pass to both functions.
->   * @wait:	If true, wait (atomically) until function has
->   *		completed on other CPUs.
-> + * @mask:	The set of cpus to run on (only runs on online subset).
+> - * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
+> - *        (atomically) until function has completed on other CPUs. If
+> - *        %SCF_RUN_LOCAL is set, the function will also be run locally
+> - *        if the local CPU is set in the @cpumask.
+> + * @wait: If true, wait (atomically) until function has completed
+> + *        on other CPUs.
 >   *
->   * Preemption is disabled to protect against CPUs going offline but not online.
->   * CPUs going online during the call will not be seen or sent an IPI.
+>   * If @wait is true, then returns once @func has returned.
+>   *
 
 -- 
 ~Randy

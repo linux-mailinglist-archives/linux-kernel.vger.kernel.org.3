@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4FF47987D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A6E47987F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbhLRDm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 22:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S230495AbhLRDpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 22:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbhLRDmY (ORCPT
+        with ESMTP id S230052AbhLRDpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 22:42:24 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BE4C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:42:24 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x15so15168654edv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:42:24 -0800 (PST)
+        Fri, 17 Dec 2021 22:45:52 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413FDC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:52 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z5so15131096edd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=83Xcfaye/oCagrVxR06HPkUeHOAm9jlfZc3XXOxBSxE=;
-        b=UdhXhGrxIVVjBAhE1tG5QDFxd3MjLEl7IW9JiZFv7x4Sm08/pVCTGJCS5oxsGwTVhs
-         J+q/QYg7ZosglyichPV1OkhqfIehNaxoT9AxjmfFlWg7zRETdmafmJ2RG4JR7WmHxLRm
-         3SWT3EfiBhyiEtHJlFUtafpYS3HvFcUAb6VXY=
+        bh=BxFK+093IJRQnbXW5Og88SuGPphlDPFlB6O2bfY/1Ws=;
+        b=AAZ+me/h1XGaSaNRrJXizPg0Km/qG0INBdJS0TmFPdkE5f9PsFTYB6Txr2Gz38XLIX
+         zPP/iYefPweJa/M91dvLwmoT3+O9qR+Qjw0z2ZxHVcC+2bWTEslsEbGndeCEoqoGaoON
+         TWmidbo8qai3FAIzAu88GdctoyASGDe47Cq0Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=83Xcfaye/oCagrVxR06HPkUeHOAm9jlfZc3XXOxBSxE=;
-        b=cYbDeZ6tBvpPenonHNsAxic5CnTVIHJTaZ9jGNCxK4LFJgpC6K21kiru0y23Q85b0f
-         k//ZD2gil1aTmNCEElCfcn/a486e4zNCkCJsiJyPWkQ4yYXND0WjpyFfRp1/ad9CsSe/
-         xIUr5QzeQEoRWrKJq4i98KN9Yr6mpwCR5m8OJOFGFOQbu7SvLrM867LFXtJIC8YA33MS
-         DUo/BonbeyX2Fri3ORdtwxBgxhVCe6sRDhyOrP/xcVL+shBCjU0KC6bF7SdBUJo00cVp
-         svqscVKMRRTyDMSKNytaxdfKNX8qVtTPZIXePSDAEwOZ4lQvbinfU1s/lLjN78ZoKbQB
-         CrVg==
-X-Gm-Message-State: AOAM5311G0o/2PR1uad2+iLHRwDdrK6r1PwQxV5IUpZFB1jv1pnaxAbJ
-        vXhUsvSrle45F3i5X+Axdi2/bllZ1xaPX2r37Rs=
-X-Google-Smtp-Source: ABdhPJzjwp0G5huml1IIVjTYlIg0Bu+I2j3S+ZB8O6yhU3w4uPjPRwueQ+gGni1TjuP+iku1RX3w6w==
-X-Received: by 2002:a17:906:4904:: with SMTP id b4mr5006258ejq.174.1639798942925;
-        Fri, 17 Dec 2021 19:42:22 -0800 (PST)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id 23sm3343064ejg.213.2021.12.17.19.42.22
+        bh=BxFK+093IJRQnbXW5Og88SuGPphlDPFlB6O2bfY/1Ws=;
+        b=1PHL40Lti+KpiAPDlwRCO5Hz5CL/jzQwQSClS0AKP5J3gU4J7P8BGmN4OSlm5pBtd6
+         h6/q9k9gGMOB+CC/7RIOJR+fPuGYVkYpt/TqGluv4spQzcZbwbZoLsdWlnKiuYjCeU6r
+         GeRIr2HLfl1A4sN4BVnUPtoH8R5R+ppDxY3aYu2ESPZ1BoMaAaC99M8k7eYnkVJmXrjB
+         1psuvEbd+ZyEI4hI8Bx10eoYeRCfvt4fRrxm1NjrQSywHrbTGHd/JptRpkaqXchO0/vt
+         iVaN2sjYiJDqPch5dWGvaCchCvAtjnt4YZmtOk8ZGmj82WNDkfDsKlznfGLq96A7KdT6
+         PkHw==
+X-Gm-Message-State: AOAM531nF5+bRWhmcN2woj6mCliEh4bGbUJtgvKRpAheXdMpg/pWYRu/
+        ZT9MQToihF8ZJTaO+UTaB1W8RjphOgHY1Usqayo=
+X-Google-Smtp-Source: ABdhPJyFblkaztMcgoSbyiodj2FbJXfNMzxssLTnsxnt+9nGKozR1NWDZCOWvGO0xvzzZShqgopeHQ==
+X-Received: by 2002:a17:906:5d01:: with SMTP id g1mr4828755ejt.219.1639799150637;
+        Fri, 17 Dec 2021 19:45:50 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id hq9sm3492062ejc.119.2021.12.17.19.45.50
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 19:42:22 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so2691685wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:42:22 -0800 (PST)
-X-Received: by 2002:a05:600c:1914:: with SMTP id j20mr12004454wmq.26.1639798623645;
- Fri, 17 Dec 2021 19:37:03 -0800 (PST)
+        Fri, 17 Dec 2021 19:45:50 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id b7so15072472edd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:50 -0800 (PST)
+X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr3943603wrx.193.1639798735711;
+ Fri, 17 Dec 2021 19:38:55 -0800 (PST)
 MIME-Version: 1.0
 References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
  <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
@@ -57,12 +57,12 @@ References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-da
  <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
  <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
  <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <CAHk-=wjjNx2Ch2j7P+7vDceK39PpmrOqby3gXuTY4aj62dowFw@mail.gmail.com> <CAHk-=wj+VpgJ3RfRQNxYS3xN9O01rwWnSBX7mztxFaE6BTLzFw@mail.gmail.com>
-In-Reply-To: <CAHk-=wj+VpgJ3RfRQNxYS3xN9O01rwWnSBX7mztxFaE6BTLzFw@mail.gmail.com>
+ <20211218030509.GA1432915@nvidia.com> <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
+In-Reply-To: <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 19:36:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgnR6F9vbA0B474J80nYWGbtnHncqPiSiuPCGWf5kbfQA@mail.gmail.com>
-Message-ID: <CAHk-=wgnR6F9vbA0B474J80nYWGbtnHncqPiSiuPCGWf5kbfQA@mail.gmail.com>
+Date:   Fri, 17 Dec 2021 19:38:39 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+Message-ID: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
 Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
  FAULT_FLAG_UNSHARE (!hugetlb)
 To:     Nadav Amit <namit@vmware.com>
@@ -97,31 +97,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 6:42 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, Dec 17, 2021 at 7:30 PM Nadav Amit <namit@vmware.com> wrote:
 >
-> IOW, I think that this stupid (AND UNTESTED) patch should likely just
-> fix David's test-case with the hugepage and splice thing..
+> In such a case, I do think it makes sense to fail uffd-wp (when
+> page_count() > 1), and in a prototype I am working on I do something
+> like that.
 
-Looking at that patch, the page lock is entirely pointless.
+Ack. If uddf-wp finds a page that is pinned, just skip it as not
+write-protectable.
 
-It existed because of that broken reuse_swap_page() that tried to
-count page mappings etc, but once you get rid of that - like we got
-rid of it for the regular pages - it's not even needed.
+Because some of the pinners might be writing to it, of course - just
+not through the page tables.
 
-So as we hold the page table lock, and see a page_count() of 1, we
-could be done without any page lock at all. So that whole
-trylock/unlock is actually unnecessary.
+So that sounds like the right thing to do. I _think_ we discussed this
+the last time this came up. I have some dim memory of that. Jason,
+ring a bell?
 
-That said, it's possibly woth re-using any swap cache pages at this
-point, and that would want the page lock. So some complexity in this
-area is likely worth it. Similar to how we did it in commit
-f4c4a3f48480 ("mm: free idle swap cache page after COW") for regular
-pages.
-
-So that patch is not great, but I think it works as a guiding one.
-
-And notice how *simple* it is. It doesn't require careful counting of
-swap entries that depend on page locking.
-
-                Linus
+             Linus

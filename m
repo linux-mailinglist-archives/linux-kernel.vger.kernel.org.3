@@ -2,95 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF62479BEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DC8479BEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbhLRSEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 13:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbhLRSEe (ORCPT
+        id S233742AbhLRSFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 13:05:34 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:60419 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233731AbhLRSFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 13:04:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A277DC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 10:04:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4555F60BCB
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 18:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09046C36AE0;
-        Sat, 18 Dec 2021 18:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639850672;
-        bh=NmSe5QZRGiOBIbU3dJneyDvlbqXLcBIxOxNopx5DF24=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=D9euVgWARUZI5Vdf72bwXbLtY/KvRUUhJE4ZmI1UlpX5ToplX9TyQKZ6Z0tMchLxK
-         ZDvrwAfO2pVA9g6bVOjHfb5wwUCqXmZRrPPl2j/PU9M+wyU47L1mz8fCLYZhvwpt+A
-         oF2n/StLcLmBL1VD/OTrNQqze08RqnsbnIp/1TMFVzVspcv9pbiIMtaVHkcooKH2Ba
-         p25e0qs+RbwHmjaIzJKJTL16oJVhyJxPMOdW/0D3KIpHbO49MuPCegn/9UWNNEjstw
-         RBCadt/WvRQ7ij+oJfsNflKv0NY5Bl+Gr5vs57A1kbbw3qGLtxhtpzovo+mBnOfSAX
-         rB43NCT3Pq+rA==
-Message-ID: <bbfb9c184aaf75536fb7bb8acf7ae35fe3c77545.camel@kernel.org>
-Subject: Re: [GIT PULL 2/3] bcm2835-dt-fixes-2021-12-13
-From:   nicolas saenz julienne <nsaenz@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Sat, 18 Dec 2021 19:04:27 +0100
-In-Reply-To: <20211213123040.184359-2-nsaenzju@redhat.com>
-References: <20211213123040.184359-1-nsaenzju@redhat.com>
-         <20211213123040.184359-2-nsaenzju@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Sat, 18 Dec 2021 13:05:33 -0500
+Received: (qmail 878313 invoked by uid 1000); 18 Dec 2021 13:05:32 -0500
+Date:   Sat, 18 Dec 2021 13:05:32 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Julio Faracco <jcfaracco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk, tglx@linutronix.de,
+        damien.lemoal@wdc.com, dkadashev@gmail.com,
+        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
+        niklas.cassel@wdc.com, penguin-kernel@i-love.sakura.ne.jp,
+        macro@orcam.me.uk, caihuoqing@baidu.com
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Message-ID: <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218042420.28466-1-jcfaracco@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-13 at 13:30 +0100, Nicolas Saenz Julienne wrote:
-> Hi Florian,
+On Sat, Dec 18, 2021 at 01:24:20AM -0300, Julio Faracco wrote:
+> Clang is reporting some issues related variable values not used and
+> other issues inside some USB host drivers. This commit removes some
+> trashes and adds some strategies to mitigate those warnings.
 > 
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> The most important is the maxpacket not checking for zeros inside both
+> functions qtd_fill(). Even if this variable is always higher than zero,
+> it should be checked to avoid this kind of verbosity.
 > 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+> ---
+>  drivers/usb/host/ehci-dbg.c     | 1 -
+>  drivers/usb/host/ehci-q.c       | 2 +-
+>  drivers/usb/host/ohci-dbg.c     | 1 -
+>  drivers/usb/host/oxu210hp-hcd.c | 2 +-
+>  4 files changed, 2 insertions(+), 4 deletions(-)
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-dt-fixes-2021-12-13
-> 
-> for you to fetch changes up to 6a56599b5a6b19adb21f8f0d9f2d33511426fb20:
-> 
->   ARM: dts: gpio-ranges property is now required (2021-12-13 13:06:25 +0100)
-> 
-> ----------------------------------------------------------------
-> A series of devicetree fixes aimed at the Raspberry Pi family of boards:
-> 
-> - Phil Elwell adds gpio-ranges to RPi's main GPIO/PINCTRL driver
-> - Phil Elwell and Stefan Wahren correct RPi400's GPIO expander's
->   labels
-> - Stefan Wahren drops fallback compatible from RPi2's vchiq devicetree
->   node
-> 
-> ----------------------------------------------------------------
-> Phil Elwell (2):
->       ARM: dts: bcm2711-rpi-400: Fix GPIO expander labels
+> diff --git a/drivers/usb/host/ehci-dbg.c b/drivers/usb/host/ehci-dbg.c
+> index 0b7f1edd9eec..70b4ff65295a 100644
+> --- a/drivers/usb/host/ehci-dbg.c
+> +++ b/drivers/usb/host/ehci-dbg.c
+> @@ -903,7 +903,6 @@ static ssize_t fill_registers_buffer(struct debug_buffer *buf)
+>  	temp = scnprintf(next, size, "complete %ld unlink %ld\n",
+>  		ehci->stats.complete, ehci->stats.unlink);
+>  	size -= temp;
+> -	next += temp;
 
+Like Joe said, this is a standard pattern (an idiom) and I don't think 
+it should be changed.  Besides, the compiler ought to remove the 
+unnecessary store automatically.
 
-Hi Florian,
-I know you're in the loop, but just to be safe. Both patches below are no
-longer needed: the gpio-ranges change was applied by linusw alongside its
-pinctrl counterpart, vchiq's fallback will remain as is.
+> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> index 2cbf4f85bff3..98cb44414e78 100644
+> --- a/drivers/usb/host/ehci-q.c
+> +++ b/drivers/usb/host/ehci-q.c
+> @@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
+>  		}
+>  
+>  		/* short packets may only terminate transfers */
+> -		if (count != len)
+> +		if (count != len && maxpacket > 0)
+>  			count -= (count % maxpacket);
 
->       ARM: dts: gpio-ranges property is now required
->       ARM: dts: bcm283x: Drop fallback compatible for vchiq
+This is different.  But again, I do not think the extra check should be 
+added.  If maxpacket is 0, we _want_ the code to fail in a highly 
+visible manner -- it would mean there is a bug somewhere else in the 
+kernel.
 
-If it makes your life simpler I can send a second 'dt-fixes' pull request.
+> diff --git a/drivers/usb/host/ohci-dbg.c b/drivers/usb/host/ohci-dbg.c
+> index 4f267dc93882..6fc9c46ffe3c 100644
+> --- a/drivers/usb/host/ohci-dbg.c
+> +++ b/drivers/usb/host/ohci-dbg.c
+> @@ -561,7 +561,6 @@ static ssize_t fill_periodic_buffer(struct debug_buffer *buf)
+>  
+>  			} else {
+>  				/* we've seen it and what's after */
+> -				temp = 0;
+>  				ed = NULL;
+>  			}
 
-Regards,
-Nicolas
+This one is a good subject for removal.  If you separate this out into 
+its own patch, I will Ack it.
+
+> diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+> index e82ff2a49672..8a20d9d3c377 100644
+> --- a/drivers/usb/host/oxu210hp-hcd.c
+> +++ b/drivers/usb/host/oxu210hp-hcd.c
+> @@ -1232,7 +1232,7 @@ static int qtd_fill(struct ehci_qtd *qtd, dma_addr_t buf, size_t len,
+>  		}
+>  
+>  		/* short packets may only terminate transfers */
+> -		if (count != len)
+> +		if (count != len && maxpacket > 0)
+>  			count -= (count % maxpacket);
+
+This is essentially the same as the change to ehci-q.c.
+
+In short, if the compiler produces warnings that are inappropriate, it's 
+an indication that the warnings need to be disabled -- not that the 
+code needs to be changed.
+
+Alan Stern

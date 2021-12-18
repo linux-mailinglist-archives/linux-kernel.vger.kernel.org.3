@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF96479B97
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93009479B9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbhLRP1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 10:27:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42707 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233481AbhLRP1T (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 10:27:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639841238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
-        b=ZrVUHF6HLgZ7wh7/OiE+1vo0xPtBD+rUQ/6kkd5ZX6wnTzyAbohjAVnkDFMBWAuLFYHN8S
-        iCSc5En6mKkzVMhqO9E3zD88rNvmp+kYVW+YbGM/l9wuzuRhiUK7w8NWJiKe5vEWXvfunM
-        DQsdmmHKYK26gDIiWTBU/xYBgDJBhww=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-u_e7fBjpPACsir16y2n7HA-1; Sat, 18 Dec 2021 10:27:17 -0500
-X-MC-Unique: u_e7fBjpPACsir16y2n7HA-1
-Received: by mail-oo1-f69.google.com with SMTP id t199-20020a4a3ed0000000b002c296d691c4so3452335oot.8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 07:27:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
-        b=U/YFn5rS+shqfp6YrbMh/g+M4xoyt4pWzOHvhsTby/f2lHiIhSW/GhAg9mXy7HNy3Y
-         0EES7NQ6KkqPyILX+gJgg9tR+zsIjWEREXJl4ZiMiJiRZZm0cvDDXYGOgKi0LTaHoRcZ
-         /wKEOvzmIUIk3z1Jq1wTXmsIgpokBm2XDyIKqUJ6/t2ALe4Ul0TcD7drJGLSUcS/v/yH
-         SX6e23Khwry3AefAA5Z9x/uLS+tc/vloXt4mXWRr+oDwdpWnU42dBDDW+YZwXq/jEFJq
-         BcuUaXkDU62cYOgg9aIdJv4ynJm9lKdz+SAc8tadSswpTDoXUGKrKXOXV9A1cvE5bIxJ
-         CwJg==
-X-Gm-Message-State: AOAM531S6HTZt9hvOEELzTSDu/q9O4Inxo7g7/e9Tn6RX0mnoh1qJlVI
-        GVc4xCj9xIOMG5K3bs+pzptPUfVRF+heRWCI+kUOQ+4sCdAONr+PBulGz4M+y/fCEoxMvAE0gWB
-        mRA19+obn3N+GGfDjTOHM1q8F
-X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798782otp.226.1639841236961;
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQXs8/YlLAB/Dah8N/DouTHOvgWlTfYorr/QdF2xSDDW13RsfjVj/NVWwFUZ/bdOydpAXgVQ==
-X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798767otp.226.1639841236770;
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id z12sm2161206oor.45.2021.12.18.07.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
-From:   trix@redhat.com
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] gpio: sim: fix uninitialized ret variable
-Date:   Sat, 18 Dec 2021 07:27:12 -0800
-Message-Id: <20211218152712.2832502-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S233496AbhLRPjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 10:39:07 -0500
+Received: from mout.gmx.net ([212.227.15.19]:50385 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233478AbhLRPjG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 10:39:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639841945;
+        bh=MRyFDIwwAfIPkkcyDVDGrNn3Seh++39CRJKoEQM13Do=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hxqkAfdcsryX7ITENmrwy5AFO5z8XeFJ34subuAAK2iJiczKdxqzblbk7TZF9MO7i
+         U+BI2XvOWNaPCG3NMFoqmMreF0bZA1CStsCWK+caJe4VWvL3MRQ3OfXKB5z97+wsNG
+         9UT4ZDgI79fmTYfqX7pqy2Rtm7OsA7962JBh+S7M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Ma24s-1n228K3Kwm-00VzCG; Sat, 18
+ Dec 2021 16:39:04 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     Joel Stanley <joel@jms.id.au>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: ARM/WPCM450: Add 'W:' line with wiki
+Date:   Sat, 18 Dec 2021 16:38:48 +0100
+Message-Id: <20211218153848.750547-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:vagE4hLBPDZwE8fYlJP2cALU9IV/bKr3GmSeIK85Z2G9Zeiz9R3
+ Hocb2R8fI2og1N8TzR+0haTR0ffOJQCurktImQ2IrjEiIjHwHMAoU8m2I8xGOWDjcQEKBB0
+ hu3Ewf8D3xptpeb5Ca0Q1Hn1GIUcHLkxZYoanRPnP8ruAK35N3S+AVlNehLVWFEBdcYs/OC
+ 51UEAuzvTDI/HWch1FODw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pSeuRBInons=:Ulr1FJeoFn+j4E4uEoiLkA
+ TvVmMt1gqc3qy0cnAM+1cN9jRYrvNNHRTLp3QHVfzAs8JWAu7TuUAd+iMKss09fP56JXd4cbY
+ lizO6Fi/caMpfqTG7TGpGorBzTPQF7o5xdbp3A+NjDtxLtcxSnYz1B2Hbj3XZvgLbvCd5xN+l
+ tf6YkVGSDWFg6S0XfkfsmscRULekj4JO2KppvpFhjvlWTPLPjF18CpQc/4sX6trhw6K60d2ou
+ iU62l7G/K+3sKYgm1QGbqxMl4XVqYZlLUaaUavYlUf62C7O5fwfLq/InJRYxgZiHZt58yD8vx
+ udOVoSrynbKBiKD8v4wx4q3VeTN5U0DixQef24w3mXuppma1Hj+hd2admb0JRmhPNL2QvuxnZ
+ ITD9VgwUXvk8Ui58LqJrapmfbDJs5+V/tPN+yLMz27TjKm9cpgaV2lSy3IvSS2GqkMkfbCbEL
+ 8m2KDeNqnbLkIDFPbDBNtZBM9PoTLjlXHyb7y82xsfnx0Gn4cwwp2uVImqRuhgkTQKeFsrYHx
+ H/3h/ZQJedYeVSbZBiSgYC6IsZNqMZurHJnYv0jYhlTr7Sp2DQ5MdOYKDBG2eNXnM3jx4TSDs
+ Hl1Gil107BGI2Hcj5cxgaFw2+h1tRLzcV0JUrcGOvXIPGzUFE5Nx+YOvxshLYU1y5S3FBvsCp
+ mOv3p0TX/8sIgsH9tiGHLRroiamyL04h4ACoYmzl2wEbkFmMphytVhWWRyStQ3owRBUU8aZXD
+ 151QGtzJBMn8HPWOOtK97DKKDMWu6MVyigwj1TGBIS4R8jI79jc8M5ee7BWW8qW9bptbxW/tu
+ ifISIApyiPcQF9u9gBVsYhHEesYMbI4iVeVhj/QHSrtIB4dl+4aJFlXQ7WW9KWGxugVb7BpS9
+ l6Fh4XJz16tuQWoeA1vOmq1vVfmmKNDHrwZi41UbjMl97K5N0csS/y34tCi+gqrY+c4t1ekfD
+ Evp6E98JgetmIkKhlmnzZqx0xBqyh6gDkl66jRZZBidzNu2tfIkZ55iA0rvxdIFzuzyb6RTqF
+ TF0xesUK4Y55hWuyQ8rMZ8DgrAya9xlarvcpg0sJ8qmsXkzHkhwl7CHoMrBnE8p5yYtGlVE3O
+ Upq8Wf5EHX8Kuw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+The wiki is a useful source of 3rd-party information about the SoC,
+mostly hardware documentation.
 
-Building with clang returns this error:
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-gpio-sim.c:889:7: error: variable 'ret' is uninitialized
-  when used here
-
-ret should be the status of the call to
-gpio_sim_make_bank_swnode stored in bank->swnode.
-
-Fixes: 83960fcf4818 ("gpio: sim: new testing module")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpio/gpio-sim.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index ef6145f51c8ae..bef00dcc4dc8f 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -886,7 +886,8 @@ static int gpio_sim_device_activate_unlocked(struct gpio_sim_device *dev)
- 
- 	list_for_each_entry(bank, &dev->bank_list, siblings) {
- 		bank->swnode = gpio_sim_make_bank_swnode(bank, swnode);
--		if (ret) {
-+		if (IS_ERR(bank->swnode)) {
-+			ret = PTR_ERR(bank->swnode);
- 			gpio_sim_remove_swnode_recursive(swnode);
- 			return ret;
- 		}
--- 
-2.26.3
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1fbbd9fa88d86..39d9e2c6f94ac 100644
+=2D-- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2350,6 +2350,7 @@ ARM/NUVOTON WPCM450 ARCHITECTURE
+ M:	Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
++W:	https://github.com/neuschaefer/wpcm450/wiki
+ F:	Documentation/devicetree/bindings/*/*wpcm*
+ F:	arch/arm/boot/dts/nuvoton-wpcm450*
+ F:	arch/arm/mach-npcm/wpcm450.c
+=2D-
+2.30.2
 

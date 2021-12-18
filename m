@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78159479A8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C732479A91
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbhLRLXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 06:23:47 -0500
-Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17247 "EHLO
-        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230098AbhLRLXq (ORCPT
+        id S232848AbhLRL0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 06:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230098AbhLRL0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 06:23:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1639826617; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=Vco2WXhTpp1NubYorLtakbTZxn1Ivlz/cOeWCNaDeG7Gvhm4OS/VnyUFLU4zsOoQa5lF34IRbTMpXzUi01yQL1ru0ZAyxx+3XxtkAQb7paeeGFcne4oxXcXzpgn/U3mmblLtDUdStDS6cRF+nfRxyuTEMMqvzWVbsc0fd8YJgec=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1639826617; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=k7qH+Tr0HDmvBzMd8Ppv4ahMM5S5EO7ndCeJo+FfBPg=; 
-        b=dfCljeIJe9KR0Wqhkdhd0iF/moRZcYZd7lLfJFA+MavWwgtPuh7q3bAGtr6RwNaI0WmXLF+sRvvkus6TEYaoHtDDFVb8hE8FyNkGihZbp1npQnLevynq3nMKg9fuoNSB52ta9adXV55Q8xGhXNu4IMxAM7cV5OLZbSg2KnSRLmc=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=mykernel.net;
-        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
-        dmarc=pass header.from=<cgxu519@mykernel.net>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1639826617;
-        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
-        h=From:To:Cc:Message-ID:Subject:Date:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        bh=k7qH+Tr0HDmvBzMd8Ppv4ahMM5S5EO7ndCeJo+FfBPg=;
-        b=Mkpm46qCgf7r+0u2/Fx7haPBefpK8kveJexlqFim/Eb4icH53nZXfxu8psrylKGL
-        fsXO8LrTGC9Mu8TA3drCjOUSP3XQyxCmUEoZBM3lyimKfkyApU+DxayCvCHpJGW1aof
-        +m9D6I5J7xnfTqc05Ep2dTGs8YPgEaQWRwCZtitU=
-Received: from localhost.localdomain (81.71.33.115 [81.71.33.115]) by mx.zoho.com.cn
-        with SMTPS id 1639826614316722.9621173199579; Sat, 18 Dec 2021 19:23:34 +0800 (CST)
-From:   Chengguang Xu <cgxu519@mykernel.net>
-To:     zyjzyj2000@gmail.com, jgg@ziepe.ca
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chengguang Xu <cgxu519@mykernel.net>
-Message-ID: <20211218112320.3558770-1-cgxu519@mykernel.net>
-Subject: [PATCH] RDMA/rxe: fix a typo in opcode name
-Date:   Sat, 18 Dec 2021 19:23:20 +0800
-X-Mailer: git-send-email 2.27.0
+        Sat, 18 Dec 2021 06:26:53 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5BBC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 03:26:52 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t26so9035737wrb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 03:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
+        b=FRpimAx7Q+Rxj9nx50MfJ7GHDgM/vnbcPLMYpPo/kBZE07mDPqIzntmOFgtokxGp9/
+         rcas2TtdcXyPIIGMgejN23srTlpiEAixbyHM/gVA5ijQr+VOLlqbnPNNiL6gn2d2oOGb
+         l96eEmfLJ7JGpqtDWWBN0bZxER301m8Xz2io0pU09Cdo1ml5/5VdHzp24yk6sIotsBfZ
+         G44xfRjgloJ7BSy3vR9BVhwIB+ftGv4rzsjDqgSYyFyQ5o8L0ADcLyqtjF6tQOk42Ub0
+         Y8/bpRUpJXNtxEuUU/X9R7p+asortXHqWckioRVGUrjRVn+iRGmqT5sK6QD6rNiWYmcU
+         r3YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
+        b=Jol7B/sA4AgMyb0ER4VsQwjKJ2RK8n5SXawtgf9jjutqh8RZ/kHRvabesEu8hqjYQJ
+         kyirgBEaMh3zGlzgLjjuZjBWhbL1sZvLGJbyWZEyX3yjBWy3HHUbUYEYdVj3DtHsIJsw
+         OClU7iRU4kGwGd1FaTboYBUui94QODXvqv4zaQQ3csK5qPV0vIYqr1sspRZNNxPjjgMV
+         QztPR1rZdItIYkYNG6lDgbwDINA+xIKg+StHC+9W0we5B51Nrb+/iu6xLKHl8OHuXW1I
+         xPKXiveGWOQYrZ2Bdf9/Mzz5w/0zyv1QOSpYuh9iuJ38EPv7lSCNggy9MluJQhrOsZtw
+         Uiww==
+X-Gm-Message-State: AOAM531g+RQjVTiz8RQ0xSejwVIBtKfa0MWEdo/m5U5i6PNzbfhRcDQD
+        BKd9VIkaplh1YQmNgSJ554nZQwb4yx95VN+51uslXgGO9vEv1WlG
+X-Google-Smtp-Source: ABdhPJwSZJyP+QciOy/LN5IAsDo30j2azyNnikziARstKIlueV/eyzf9riWPBBpDfhtIhea3j7wG6DF3Tesar/IggEI=
+X-Received: by 2002:a17:906:f43:: with SMTP id h3mr5656202ejj.414.1639826800623;
+ Sat, 18 Dec 2021 03:26:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
-Content-Type: text/plain; charset=utf8
+Sender: alimahazem02@gmail.com
+Received: by 2002:ab4:a64f:0:0:0:0:0 with HTTP; Sat, 18 Dec 2021 03:26:39
+ -0800 (PST)
+From:   Anderson Theresa <ndersontheresa.24@gmail.com>
+Date:   Sat, 18 Dec 2021 03:26:39 -0800
+X-Google-Sender-Auth: f8zxg4ww-vO0eebLp2jI42ExKa0
+Message-ID: <CABBDEbjK6WLqi2-ZLNmOiM+MY81u0fcELOeQSMdorDm7YL+ZoQ@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
-so just fix it.
+Greetings,
 
-Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
----
- drivers/infiniband/sw/rxe/rxe_opcode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night without knowing if I may be alive to see the next day. I am
+Mrs.Theresa Anderson, a widow suffering from a long time illness. I
+have some funds I inherited from my late husband, the sum of
+($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
+that I have serious sickness which is a cancer problem. What disturbs
+me most is my stroke sickness. Having known my condition, I decided to
+donate this fund to a good person that will utilize it the way I am
+going to instruct herein. I need a very honest God.
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw=
-/rxe/rxe_opcode.c
-index 3ef5a10a6efd..47ebaac8f475 100644
---- a/drivers/infiniband/sw/rxe/rxe_opcode.c
-+++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
-@@ -117,7 +117,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] =3D {
- =09=09}
- =09},
- =09[IB_OPCODE_RC_SEND_MIDDLE]=09=09=3D {
--=09=09.name=09=3D "IB_OPCODE_RC_SEND_MIDDLE]",
-+=09=09.name=09=3D "IB_OPCODE_RC_SEND_MIDDLE",
- =09=09.mask=09=3D RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
- =09=09=09=09| RXE_MIDDLE_MASK,
- =09=09.length =3D RXE_BTH_BYTES,
---=20
-2.27.0
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your
+reply.
 
-
+May God Bless you,
+Mrs.Theresa Anderson,

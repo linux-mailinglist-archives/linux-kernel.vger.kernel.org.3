@@ -2,113 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C779F479AA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6F9479AA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbhLRL4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 06:56:48 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:51630 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbhLRL4r (ORCPT
+        id S233028AbhLRMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 07:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232991AbhLRMEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 06:56:47 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 669CD20F12C6
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <e852a63f-cb84-2683-f102-2f8572b1799d@omp.ru>
-Date:   Sat, 18 Dec 2021 14:56:40 +0300
+        Sat, 18 Dec 2021 07:04:39 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591C1C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:04:39 -0800 (PST)
+Received: from dslb-178-004-169-039.178.004.pools.vodafone-ip.de ([178.4.169.39] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1myYS1-0008I6-F3; Sat, 18 Dec 2021 13:04:33 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/9] staging: r8188: another round a cleanups
+Date:   Sat, 18 Dec 2021 13:04:14 +0100
+Message-Id: <20211218120423.29906-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] ata: pata_platform: Merge pata_of_platform into
- pata_platform
-Content-Language: en-US
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-CC:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20211217141715.29747-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211217141715.29747-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <b94e0a92-1995-926c-95df-17365f03eed0@omp.ru>
- <CA+V-a8tU6XCYw2B32obgOkezd_YMqBkpWA_EuJzK=nCmkuWtQw@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <CA+V-a8tU6XCYw2B32obgOkezd_YMqBkpWA_EuJzK=nCmkuWtQw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.12.2021 13:51, Lad, Prabhakar wrote:
+Here's another set with minor cleanups in several parts of the driver.
 
-[...]
->>> Merge the OF pata_of_platform driver into pata_platform.
->>>
->>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-[...]
->>> diff --git a/drivers/ata/pata_platform.c b/drivers/ata/pata_platform.c
->>> index cb3134bf88eb..b8d8d51bc562 100644
->>> --- a/drivers/ata/pata_platform.c
->>> +++ b/drivers/ata/pata_platform.c
-[...]
->>> @@ -168,23 +180,83 @@ int __pata_platform_probe(struct device *dev, struct resource *io_res,
->> [...]
->>>
->>> -static int pata_platform_probe(struct platform_device *pdev)
->>> +static int pata_of_platform_get_pdata(struct platform_device *ofdev,
->>> +                                   struct pata_platform_priv *priv)
->>>   {
->>> -     struct resource *io_res;
->>> +     struct device_node *dn = ofdev->dev.of_node;
->>>        struct resource *ctl_res;
->>>        struct resource *irq_res;
->>> +     struct resource *io_res;
->>
->>     Should be declared before ctl_res...
->>
-> Any reason why?
+As usual, this was tested with an Edimax V2 on an arm32 embedded system.
 
-    Well, it's a natural order, following from the driver logic, no?
+Martin Kaiser (9):
+  staging: r8188: make rx signal strength function static
+  staging: r8188: remove the dummy ioctl handler
+  staging: r8188: antAveRSSI is set but not used
+  staging: r8188: antRSSIcnt is set but not used
+  staging: r8188: antSumRSSI is set but not used
+  staging: r8188: Bssid in struct fast_ant_train is set but not used
+  staging: r8188: remove unused odm capabilities
+  staging: r8188: ODM_BB_DIG is always set
+  staging: r8188: ODM_BB_RA_MASK is always set
 
->>> +     int pio_mode = 0;
->>> +     int irq;
->>> +     int ret;
->>> +
->>> +     ctl_res = devm_kzalloc(&ofdev->dev, sizeof(*ctl_res), GFP_KERNEL);
->>> +     io_res = devm_kzalloc(&ofdev->dev, sizeof(*io_res), GFP_KERNEL);
->>> +     irq_res = devm_kzalloc(&ofdev->dev, sizeof(*irq_res), GFP_KERNEL);
->>> +     if (!ctl_res || !io_res || !irq_res)
->>> +             return -ENOMEM;
->>
->>     Can't we get away from these allocated resources? Or at least irq_res?
->>
-> Do you have any suggestions?
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c  |  5 ++---
+ drivers/staging/r8188eu/hal/odm.c            |  5 +----
+ drivers/staging/r8188eu/hal/odm_HWConfig.c   |  2 --
+ drivers/staging/r8188eu/hal/odm_RTL8188E.c   |  8 +-------
+ drivers/staging/r8188eu/hal/rtl8188e_dm.c    |  6 +-----
+ drivers/staging/r8188eu/include/odm.h        | 14 --------------
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 17 -----------------
+ 7 files changed, 5 insertions(+), 52 deletions(-)
 
-    Let me look deeper...
+-- 
+2.20.1
 
-[...]
->>> @@ -198,32 +270,63 @@ static int pata_platform_probe(struct platform_device *pdev)
-[...]
->>> +     if (ret)
->>> +             return ret;
->>> +
->>> +     priv->sht = &pata_platform_sht;
->>
->>     Aren't those structures identical between the formerly separate drivers?
->>
-> Yes so are you suggesting to drop sht from priv and use it directly?
-
-    Yep.
-
-> Cheers,
-> Prabhakar
-
-MBR, Sergey

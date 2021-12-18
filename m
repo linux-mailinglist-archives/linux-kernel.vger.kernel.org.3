@@ -2,150 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CED479A43
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46F5479A58
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbhLRKYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 05:24:02 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15939 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbhLRKXp (ORCPT
+        id S231592AbhLRKgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 05:36:02 -0500
+Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:64265 "EHLO
+        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbhLRKgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 05:23:45 -0500
-Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JGMLc1lpszZdLq;
-        Sat, 18 Dec 2021 18:20:40 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 18 Dec 2021 18:23:43 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Sat, 18 Dec
- 2021 18:23:43 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
-        <Artem.Bityutskiy@nokia.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>
-Subject: [PATCH v4 13/13] ubifs: ubifs_writepage: Mark page dirty after writing inode failed
-Date:   Sat, 18 Dec 2021 18:35:12 +0800
-Message-ID: <20211218103512.370420-14-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211218103512.370420-1-chengzhihao1@huawei.com>
-References: <20211218103512.370420-1-chengzhihao1@huawei.com>
+        Sat, 18 Dec 2021 05:36:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1639823761; x=1671359761;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/rNukEk/AKgue/4kHvkeqzceFYvg0qcH59Ha0VvFu6A=;
+  b=dH1o88zsSAUlKLiD1wAnNE88xq/50+hMM6ux4MAXRAcMZrVAoty7FTug
+   WJ3vk0yEsea17Ob8G3UiH9eCSsyJKZWC4m6cXZFNWmON01fEjTDNVsQun
+   rgN0jQZaPBAdi3Uc3NxLPdSMIs74ULwuPgWgGRzfqs0pD9GziHlQJ9PlA
+   k=;
+X-IronPort-AV: E=Sophos;i="5.88,216,1635206400"; 
+   d="scan'208";a="49408652"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 18 Dec 2021 10:35:47 +0000
+Received: from EX13D16EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com (Postfix) with ESMTPS id 3BF629F674;
+        Sat, 18 Dec 2021 10:35:41 +0000 (UTC)
+Received: from dev-dsk-andraprs-1c-9ffe7195.eu-west-1.amazon.com
+ (10.43.162.55) by EX13D16EUB003.ant.amazon.com (10.43.166.99) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.26; Sat, 18 Dec 2021 10:35:35 +0000
+From:   Andra Paraschiv <andraprs@amazon.com>
+To:     linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Alexandru Ciobotaru <alcioa@amazon.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alexandru Vasile <lexnv@amazon.com>,
+        "Marcelo Cerri" <marcelo.cerri@canonical.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Tim Gardner <tim.gardner@canonical.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        kvm <kvm@vger.kernel.org>,
+        ne-devel-upstream <ne-devel-upstream@amazon.com>,
+        stable <stable@vger.kernel.org>,
+        "Andra Paraschiv" <andraprs@amazon.com>
+Subject: =?UTF-8?q?=5BPATCH=20v1=C2=A0=5D=20nitro=5Fenclaves=3A=20Add=20mmap=5Fread=5Flock=28=29=20for=20the=20get=5Fuser=5Fpages=28=29=20call?=
+Date:   Sat, 18 Dec 2021 10:35:25 +0000
+Message-ID: <20211218103525.26739-1-andraprs@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
+X-Originating-IP: [10.43.162.55]
+X-ClientProxiedBy: EX13D02UWB002.ant.amazon.com (10.43.161.160) To
+ EX13D16EUB003.ant.amazon.com (10.43.166.99)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two states for ubifs writing pages:
-1. Dirty, Private
-2. Not Dirty, Not Private
-
-There is a third possibility which maybe related to [1] that page is
-private but not dirty caused by following process:
-
-          PA
-lock(page)
-ubifs_write_end
-  attach_page_private		// set Private
-    __set_page_dirty_nobuffers	// set Dirty
-unlock(page)
-
-write_cache_pages
-  lock(page)
-  clear_page_dirty_for_io(page)	// clear Dirty
-  ubifs_writepage
-    write_inode
-    // fail, goto out, following codes are not executed
-    // do_writepage
-    //   set_page_writeback 	// set Writeback
-    //   detach_page_private	// clear Private
-    //   end_page_writeback 	// clear Writeback
-    out:
-    unlock(page)		// Private, Not Dirty
-
-                                       PB
-				ksys_fadvise64_64
-				  generic_fadvise
-				     invalidate_inode_page
-				     // page is neither Dirty nor Writeback
-				       invalidate_complete_page
-				       // page_has_private is true
-					 try_to_release_page
-					   ubifs_releasepage
-					     ubifs_assert(c, 0) !!!
-
-Then we may get following assertion failed:
-  UBIFS error (ubi0:0 pid 1492): ubifs_assert_failed [ubifs]:
-  UBIFS assert failed: 0, in fs/ubifs/file.c:1499
-  UBIFS warning (ubi0:0 pid 1492): ubifs_ro_mode [ubifs]:
-  switched to read-only mode, error -22
-  CPU: 2 PID: 1492 Comm: aa Not tainted 5.16.0-rc2-00012-g7bb767dee0ba-dirty
-  Call Trace:
-    dump_stack+0x13/0x1b
-    ubifs_ro_mode+0x54/0x60 [ubifs]
-    ubifs_assert_failed+0x4b/0x80 [ubifs]
-    ubifs_releasepage+0x7e/0x1e0 [ubifs]
-    try_to_release_page+0x57/0xe0
-    invalidate_inode_page+0xfb/0x130
-    invalidate_mapping_pagevec+0x12/0x20
-    generic_fadvise+0x303/0x3c0
-    vfs_fadvise+0x35/0x40
-    ksys_fadvise64_64+0x4c/0xb0
-
-Jump [2] to find a reproducer.
-
-[1] https://linux-mtd.infradead.narkive.com/NQoBeT1u/patch-rfc-ubifs-fix-assert-failed-in-ubifs-set-page-dirty
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=215357
-
-Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/ubifs/file.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/fs/ubifs/file.c b/fs/ubifs/file.c
-index 6b45a037a047..7cc2abcb70ae 100644
---- a/fs/ubifs/file.c
-+++ b/fs/ubifs/file.c
-@@ -1031,7 +1031,7 @@ static int ubifs_writepage(struct page *page, struct writeback_control *wbc)
- 		if (page->index >= synced_i_size >> PAGE_SHIFT) {
- 			err = inode->i_sb->s_op->write_inode(inode, NULL);
- 			if (err)
--				goto out_unlock;
-+				goto out_redirty;
- 			/*
- 			 * The inode has been written, but the write-buffer has
- 			 * not been synchronized, so in case of an unclean
-@@ -1059,11 +1059,17 @@ static int ubifs_writepage(struct page *page, struct writeback_control *wbc)
- 	if (i_size > synced_i_size) {
- 		err = inode->i_sb->s_op->write_inode(inode, NULL);
- 		if (err)
--			goto out_unlock;
-+			goto out_redirty;
- 	}
- 
- 	return do_writepage(page, len);
--
-+out_redirty:
-+	/*
-+	 * redirty_page_for_writepage() won't call ubifs_dirty_inode() because
-+	 * it passes I_DIRTY_PAGES flag while calling __mark_inode_dirty(), so
-+	 * there is no need to do space budget for dirty inode.
-+	 */
-+	redirty_page_for_writepage(wbc, page);
- out_unlock:
- 	unlock_page(page);
- 	return err;
--- 
-2.31.1
+QWZ0ZXIgY29tbWl0IDViNzhlZDI0ZThlYyAobW0vcGFnZW1hcDogYWRkIG1tYXBfYXNzZXJ0X2xv
+Y2tlZCgpCmFubm90YXRpb25zIHRvIGZpbmRfdm1hKigpKSwgdGhlIGNhbGwgdG8gZ2V0X3VzZXJf
+cGFnZXMoKSB3aWxsIHRyaWdnZXIKdGhlIG1tYXAgYXNzZXJ0LgoKc3RhdGljIGlubGluZSB2b2lk
+IG1tYXBfYXNzZXJ0X2xvY2tlZChzdHJ1Y3QgbW1fc3RydWN0ICptbSkKewoJbG9ja2RlcF9hc3Nl
+cnRfaGVsZCgmbW0tPm1tYXBfbG9jayk7CglWTV9CVUdfT05fTU0oIXJ3c2VtX2lzX2xvY2tlZCgm
+bW0tPm1tYXBfbG9jayksIG1tKTsKfQoKWyAgIDYyLjUyMTQxMF0ga2VybmVsIEJVRyBhdCBpbmNs
+dWRlL2xpbnV4L21tYXBfbG9jay5oOjE1NiEKLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4KWyAgIDYyLjUzODkzOF0gUklQOiAwMDEwOmZp
+bmRfdm1hKzB4MzIvMHg4MAouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLgpbICAgNjIuNjA1ODg5XSBDYWxsIFRyYWNlOgpbICAgNjIuNjA4
+NTAyXSAgPFRBU0s+ClsgICA2Mi42MTA5NTZdICA/IGxvY2tfdGltZXJfYmFzZSsweDYxLzB4ODAK
+WyAgIDYyLjYxNDEwNl0gIGZpbmRfZXh0ZW5kX3ZtYSsweDE5LzB4ODAKWyAgIDYyLjYxNzE5NV0g
+IF9fZ2V0X3VzZXJfcGFnZXMrMHg5Yi8weDZhMApbICAgNjIuNjIwMzU2XSAgX19ndXBfbG9uZ3Rl
+cm1fbG9ja2VkKzB4NDJkLzB4NDUwClsgICA2Mi42MjM3MjFdICA/IGZpbmlzaF93YWl0KzB4NDEv
+MHg4MApbICAgNjIuNjI2NzQ4XSAgPyBfX2ttYWxsb2MrMHgxNzgvMHgyZjAKWyAgIDYyLjYyOTc2
+OF0gIG5lX3NldF91c2VyX21lbW9yeV9yZWdpb25faW9jdGwuaXNyYS4wKzB4MjI1LzB4NmEwIFtu
+aXRyb19lbmNsYXZlc10KWyAgIDYyLjYzNTc3Nl0gIG5lX2VuY2xhdmVfaW9jdGwrMHgxY2YvMHg2
+ZDcgW25pdHJvX2VuY2xhdmVzXQpbICAgNjIuNjM5NTQxXSAgX194NjRfc3lzX2lvY3RsKzB4ODIv
+MHhiMApbICAgNjIuNjQyNjIwXSAgZG9fc3lzY2FsbF82NCsweDNiLzB4OTAKWyAgIDYyLjY0NTY0
+Ml0gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ0LzB4YWUKCkFkZCBtbWFwX3Jl
+YWRfbG9jaygpIGZvciB0aGUgZ2V0X3VzZXJfcGFnZXMoKSBjYWxsIHdoZW4gc2V0dGluZyB0aGUK
+ZW5jbGF2ZSBtZW1vcnkgcmVnaW9ucy4KClNpZ25lZC1vZmYtYnk6IEFuZHJhIFBhcmFzY2hpdiA8
+YW5kcmFwcnNAYW1hem9uLmNvbT4KQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKLS0tCiBkcml2
+ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXYuYyB8IDUgKysrKysKIDEgZmlsZSBj
+aGFuZ2VkLCA1IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpcnQvbml0cm9f
+ZW5jbGF2ZXMvbmVfbWlzY19kZXYuYyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9t
+aXNjX2Rldi5jCmluZGV4IDg5Mzk2MTJlZTBlMC4uNmM1MWZmMDI0MDM2IDEwMDY0NAotLS0gYS9k
+cml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXYuYworKysgYi9kcml2ZXJzL3Zp
+cnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXYuYwpAQCAtODg2LDggKzg4NiwxMyBAQCBzdGF0
+aWMgaW50IG5lX3NldF91c2VyX21lbW9yeV9yZWdpb25faW9jdGwoc3RydWN0IG5lX2VuY2xhdmUg
+Km5lX2VuY2xhdmUsCiAJCQlnb3RvIHB1dF9wYWdlczsKIAkJfQogCisJCW1tYXBfcmVhZF9sb2Nr
+KGN1cnJlbnQtPm1tKTsKKwogCQlndXBfcmMgPSBnZXRfdXNlcl9wYWdlcyhtZW1fcmVnaW9uLnVz
+ZXJzcGFjZV9hZGRyICsgbWVtb3J5X3NpemUsIDEsIEZPTExfR0VULAogCQkJCQluZV9tZW1fcmVn
+aW9uLT5wYWdlcyArIGksIE5VTEwpOworCisJCW1tYXBfcmVhZF91bmxvY2soY3VycmVudC0+bW0p
+OworCiAJCWlmIChndXBfcmMgPCAwKSB7CiAJCQlyYyA9IGd1cF9yYzsKIAotLSAKMi4zMi4wCgoK
+CgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIChSb21hbmlhKSBTLlIuTC4gcmVnaXN0ZXJlZCBv
+ZmZpY2U6IDI3QSBTZi4gTGF6YXIgU3RyZWV0LCBVQkM1LCBmbG9vciAyLCBJYXNpLCBJYXNpIENv
+dW50eSwgNzAwMDQ1LCBSb21hbmlhLiBSZWdpc3RlcmVkIGluIFJvbWFuaWEuIFJlZ2lzdHJhdGlv
+biBudW1iZXIgSjIyLzI2MjEvMjAwNS4K
 

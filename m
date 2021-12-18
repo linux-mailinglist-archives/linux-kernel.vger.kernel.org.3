@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5828479E51
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 00:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F17479E7B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 00:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbhLRXyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 18:54:23 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:25222 "EHLO
+        id S235668AbhLRXzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 18:55:35 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:25476 "EHLO
         o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbhLRXyR (ORCPT
+        with ESMTP id S234930AbhLRXyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 18:54:17 -0500
+        Sat, 18 Dec 2021 18:54:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:mime-version:to:cc:content-transfer-encoding:
-        content-type;
-        s=sgd; bh=wzP9DgYMpXKgYWsfuD1dK/4zmX3SgTAGErInexoo/KQ=;
-        b=gDPysHXYB/iATmWtUO1Ybe9qnHorO8Mpvalz5DHQBs8vb/+sCcgwIUw5xfITPmcfAFT2
-        J2z9y6k1Y6qeahSmmU7jXfPd+338+8ZTP79cXhV7GrbxD9Ei+HwYZ1ePnsJHO0WjDNwJJc
-        7XEt2yswC09ewvicROZtZ68GdPMMckOMpRgg8vwNp7bLgsTFZSpTtqDDqrk88dq9xwZMsK
-        GgI4/TzckUxdwlC12ICjNWeuvXJdr27JGzmTbhD1aA/SQve585Bsja7uPSFqJZ3dTx8X3P
-        8bKDNFev5vLD8Nm0aplNR8lDMZddhkuLGucgbPjDa6BGDyMYRZ1oekTLtAx83pfw==
-Received: by filterdrecv-64fcb979b9-x2652 with SMTP id filterdrecv-64fcb979b9-x2652-1-61BE74A8-19
-        2021-12-18 23:54:16.475973623 +0000 UTC m=+8294249.160301187
+        h=from:subject:in-reply-to:references:mime-version:to:cc:
+        content-transfer-encoding:content-type;
+        s=sgd; bh=RT9YbsVtdR4GzUV4QohWzyGBC/fSE3abgungjw0gKpI=;
+        b=DI2HiQJ/zFWwPLhZv+3T3Rl+KuFLuimYbfKdO+q6+UnCb3EfqWCEZoGGKbAowvAnB4bi
+        GRCDd0FRQl5EkyFRKcAQZbdGeXQHhoMYZng524VREnBd7U/zyCFWzxusrnM5j/C0lRjqz2
+        m/rMxD3xza4bl0bYTByPnfU5z+zT2HOmW9eGNDiVkZrOMXeMbYU84okzxmVUYUSigLVKRS
+        dRCTLS5Ma2rZcdk3YVoRHdIya2pzWZrqilQOcakp0/Khmerpw7g1dMCO/wYcdna7H/7VAc
+        WPyb0LSSUoeogwdKMexKnR+i3mt9TrQF0pIx6W30QZLVt09eLDB+n2sCsCe76lUg==
+Received: by filterdrecv-7bf5c69d5-p7gjg with SMTP id filterdrecv-7bf5c69d5-p7gjg-1-61BE74A8-19
+        2021-12-18 23:54:16.810393089 +0000 UTC m=+1581803.434338992
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-4-1 (SG)
+        by geopod-ismtpd-3-0 (SG)
         with ESMTP
-        id r_NccQJDT_mpwXRgch3XiA
-        Sat, 18 Dec 2021 23:54:16.296 +0000 (UTC)
+        id Zo3TXZV0SyWEp2hsODIFTg
+        Sat, 18 Dec 2021 23:54:16.680 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 825627003AE; Sat, 18 Dec 2021 16:54:15 -0700 (MST)
+        id 96FCC700F5D; Sat, 18 Dec 2021 16:54:15 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH 00/23] wilc1000: rework tx path to use sk_buffs throughout
+Subject: [PATCH 07/23] wilc1000: increment tx_dropped stat counter on tx
+ packet drop
 Date:   Sat, 18 Dec 2021 23:54:16 +0000 (UTC)
-Message-Id: <20211218235404.3963475-1-davidm@egauge.net>
+Message-Id: <20211218235404.3963475-8-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211218235404.3963475-1-davidm@egauge.net>
+References: <20211218235404.3963475-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvOFHE9PCYzQvZsVwd?=
- =?us-ascii?Q?WSSZ+IiAKcuygXdhofy425Aqh2rrAOH9u05cT8w?=
- =?us-ascii?Q?bhPNda82cAwYGzOSH4wb8=2FQsvubpKoL3NjZ98j2?=
- =?us-ascii?Q?9D4OgyCLqyPJeRV=2F9LkGymCyY2kdqi3OnTGYXT2?=
- =?us-ascii?Q?=2FNWZZKCnEz1KrBep3f9ed2WoCbNTF58og4+++WS?=
- =?us-ascii?Q?5zdLklXJEakZ4VAS7Wszw=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvED=2FzcavR1sH7nYvL?=
+ =?us-ascii?Q?46KWWXmyIJ8qnkI45lXgEPjy7Xft66PMj7o6uG1?=
+ =?us-ascii?Q?hrNLoSTcAe0=2F27A0i6YO161kES7Da+stnPYX1Kh?=
+ =?us-ascii?Q?dA+Y85tTlETM=2FSLRuhMr5U3AwEzf0ExenogFPNa?=
+ =?us-ascii?Q?Qovs7EyBiC15qWIkbhuB8pjZCUyuYCs0+4Z1L4c?=
+ =?us-ascii?Q?6Xaw2RGF8BEcZjCoPI63g=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Kalle Valo <kvalo@codeaurora.org>,
@@ -58,65 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on the earlier discussion (RFC: wilc1000: refactor TX path to
-use sk_buff queue), here is the full patch series to clean up and
-simplify the TX path.
+Packet drops are important events so we should remember to count them.
 
-The biggest patch is 0016, which is the one actually switching the
-queue data type, but I worked hard to minimize it to only direct
-changes due to the type changes.
+Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+---
+ drivers/net/wireless/microchip/wilc1000/wlan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-There is no significant performance difference due to this patch.  I'd
-expect the new code to be slightly faster, but my WLAN
-test-environment is not sufficiently controlled to be sure of that.
-
-original iperf3 performance (duration 120 seconds):
-
-                TX [Mbps]	RX [Mbps]
-  PSM off:	14.8		18.9
-  PSM  on:	10.5		17.1
-
-iperf3 performance with this patch-series applied:
-
-		TX [Mbps]	RX [Mbps]
-  PSM off:	15.6		19.5
-  PSM  on:	11.2		17.7
-
-(PSM == power-save-mode; controlled by iw dev wlan0 set power_save on/off)
-
-David Mosberger-Tang (23):
-  wilc1000: don't hold txq_spinlock while initializing AC queue limits
-  wilc1000: switch txq_event from completion to waitqueue
-  wilc1000: move receive-queue stats from txq to wilc structure
-  wilc1000: factor common code in wilc_wlan_cfg_set() and wilc_wlan_cfg_get()
-  wilc1000: add wilc_wlan_tx_packet_done() function
-  wilc1000: move tx packet drop code into its own function
-  wilc1000: increment tx_dropped stat counter on tx packet drop
-  wilc1000: fix management packet type inconsistency
-  wilc1000: prepare wilc_wlan_tx_packet_done() for sk_buff changes
-  wilc1000: factor initialization of tx queue-specific packet fields
-  wilc1000: convert tqx_entries from "int" to "atomic_t"
-  wilc1000: refactor wilc_wlan_cfg_commit() a bit
-  wilc1000: sanitize config packet sequence number management a bit
-  wilc1000: if there is no tx packet, don't increment packets-sent counter
-  wilc1000: Add struct wilc_skb_tx_cb as an alias of struct txq_entry_t
-  wilc1000: switch tx queue to normal sk_buff entries
-  wilc1000: remove no longer used "vif" argument from init_txq_entry()
-  wilc1000: split huge tx handler into subfunctions
-  wilc1000: don't tell the chip to go to sleep while copying tx packets
-  wilc1000: eliminate "max_size_over" variable in fill_vmm_table
-  wilc1000: declare read-only ac_preserve_ratio as static and const
-  wilc1000: minor syntax cleanup
-  wilc1000: introduce symbolic names for two tx-related control bits
-
- .../wireless/microchip/wilc1000/cfg80211.c    |  37 +-
- drivers/net/wireless/microchip/wilc1000/mon.c |  36 +-
- .../net/wireless/microchip/wilc1000/netdev.c  |  40 +-
- .../net/wireless/microchip/wilc1000/netdev.h  |  13 +-
- .../net/wireless/microchip/wilc1000/wlan.c    | 755 +++++++++---------
- .../net/wireless/microchip/wilc1000/wlan.h    |  52 +-
- 6 files changed, 442 insertions(+), 491 deletions(-)
-
+diff --git a/drivers/net/wireless/microchip/wilc1000/wlan.c b/drivers/net/wireless/microchip/wilc1000/wlan.c
+index a9bfd71b0e667..b85ceda8409e6 100644
+--- a/drivers/net/wireless/microchip/wilc1000/wlan.c
++++ b/drivers/net/wireless/microchip/wilc1000/wlan.c
+@@ -202,7 +202,10 @@ static void wilc_wlan_tx_packet_done(struct txq_entry_t *tqe, int status)
+ 
+ static void wilc_wlan_txq_drop_net_pkt(struct txq_entry_t *tqe)
+ {
+-	struct wilc *wilc = tqe->vif->wilc;
++	struct wilc_vif *vif = tqe->vif;
++	struct wilc *wilc = vif->wilc;
++
++	vif->ndev->stats.tx_dropped++;
+ 
+ 	wilc_wlan_txq_remove(wilc, tqe->q_num, tqe);
+ 	wilc_wlan_tx_packet_done(tqe, 1);
 -- 
 2.25.1
 

@@ -2,198 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFBA479826
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 03:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB8D47982B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 03:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbhLRCSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 21:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhLRCSr (ORCPT
+        id S231712AbhLRC1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 21:27:40 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:57138 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230037AbhLRC1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 21:18:47 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2191C061574;
-        Fri, 17 Dec 2021 18:18:46 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id l6so1666066pfu.0;
-        Fri, 17 Dec 2021 18:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQbYOaNOGsOWo3uhKpDPTCV/GN+BYcoAoahcmgVbBUs=;
-        b=BYhDj7XiiWX8v19wSaQcKAc+exmCAz73zH3QINDGhFyA9aKag/D9NKjoV2xPj16ZHt
-         ywY7LqKEd8xf3bdw2zYKqrDCFYQaidey/eULdw+m2Be7p91saF0Ui6hW8bau2JiNAAeY
-         g7u6bUJkzcvAZ4DmAle6cGx6XRMb4QTrd/YZeZK0Pb2o4P/aZ5GragKLhHhhvdfFbw6y
-         zZ16BAibkVEw4bca1Wbh6uPnuATq/RjMrWLf4UjQ/TOJbkgFPMMH2Jj0K3m8Apz6kJCw
-         wiE2TTVmTZjFE33HEZBW9ITj1Pps9TvS1vGUi1BWSptwv9C/CDXlSMV6W8mqHgUOPRob
-         7Ntw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQbYOaNOGsOWo3uhKpDPTCV/GN+BYcoAoahcmgVbBUs=;
-        b=lnc97LGxE5WU+GCGlEje3UJNfWsWcGOfea57CzL3u0Cwwh7QYNrSsV9Q5xjh4XoibB
-         btZT8BtTbAVlKu8+wu2KZgCh2MbjLgR1oFIQqBVAuWtkNX1jXAo9qoi/C5cU4OZxy/zM
-         FKRrCbQXmkoj/6oe3UyhQUWLsiTZyCjaPApkaBIBCYVlmGugvB3e2XK14vRqQ8htRRDe
-         VYzZjNi8Q7JLoU4rEIGVr+CPgczStgcZOxoxI2LwW02lCOKViou8QjvokfatVaKyAr/V
-         zQQY5aeYC/FjSMJju7zLQriSM763LdJDpYhZYk/J60Mb0yBfwxi4vgjCajXYVKKfF7Bb
-         i9CA==
-X-Gm-Message-State: AOAM530D/csxmgr/3q5j05rPzwbtMwnuOHD2h7KkoIzR6nWyMD+W2LDM
-        XqFotphKkAbsT87wA9zrmoI=
-X-Google-Smtp-Source: ABdhPJycJooP2uxit88PfsqLWlu7qYUZZx3nltAeWNCehVT4/8WUDu13bWVGIn8JwTH3W8z6x+L3Pw==
-X-Received: by 2002:a05:6a00:1308:b0:4a2:75cd:883a with SMTP id j8-20020a056a00130800b004a275cd883amr5820048pfu.84.1639793925932;
-        Fri, 17 Dec 2021 18:18:45 -0800 (PST)
-Received: from localhost.lan ([2400:4070:175b:7500::7a7])
-        by smtp.gmail.com with ESMTPSA id n3sm9765126pgc.76.2021.12.17.18.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 18:18:45 -0800 (PST)
-Received: from x2.lan (localhost [127.0.0.1])
-        by localhost.lan (Postfix) with ESMTPSA id 0A668900908;
-        Sat, 18 Dec 2021 02:18:43 +0000 (GMT)
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Salah Triki <salah.triki@gmail.com>,
-        Dean Anderson <dean@sensoray.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
-Date:   Sat, 18 Dec 2021 02:18:40 +0000
-Message-Id: <f79eeea29f3f98de6782a064ec0f7351ad2f598f.1639793920.git.plr.vincent@gmail.com>
-X-Mailer: git-send-email 2.34.0
+        Fri, 17 Dec 2021 21:27:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1639794456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G0+U/fL0R/UF7Sjy/Rfh0wLT91FUfkQboF5f5i2NKko=;
+        b=QKNzbmx3iA9bJrqMrzt4AbDEM8UOJn4mCpvD8X88S4KLAAcAI/S7oOxTIRFnM/3PlnzTSA
+        meYf1vtLfQaftmd81sJVztNtHL83wDcc72N7nn5gF7L8Bs2A6ro+D3iqfvaiiLxaqATpm/
+        ce6BVbrj16Fua0HhUB//kEyeNR0gnJQ=
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur01lp2058.outbound.protection.outlook.com [104.47.2.58]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-15-fDVnKHv3N8yc8vC4NjcBzQ-1; Sat, 18 Dec 2021 03:27:35 +0100
+X-MC-Unique: fDVnKHv3N8yc8vC4NjcBzQ-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cpp4bXQJdoCu/cpgR7T4Gmr7KmCJDEaAMAbc/ND8LSUBqUxSTyTZnaUfeyYH/qgbxc7ftNByxw2sLc/mMhxQRH+p7Jvt3zEJXJazISgM0DxGKJdyGwvMeiL7CNAHvpTtjodHAGXxT7TAigO6f7uOXnmbLxlow2xIU9nLtTEcnDdPGYcwTnfeM0IGSv0iQ2paPDdL1Vc8zhi4H1+DTaR6JgDacGDO+eBfsnzdWA+t1PspwwfQnS0YzuKKeKbjZYFdAc9L2iTInr03GziudTrQFvCPSSx1aAnYS4gqCTEIlv1IysmmYpBxadeZkBEjNffHxNhm7JXi/x/mXJ/4PsSvbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G0+U/fL0R/UF7Sjy/Rfh0wLT91FUfkQboF5f5i2NKko=;
+ b=c5vTIaH0/EEoXXZTrKjkmdIZnOqivFIAiMrHukixsBqxpHjov/tqTgbniF3i12RwOJaobAWfnsKDeLZrdsZKsvHSuLHn5WOTKIdTval8PBy2OVlNjEYatvH8wom68X8FiRmN+CFWx4lAblV3e/TfspohvbIjEf1qDG2UX4lBT+5JAG52+WeqpkuRP82fOLSCYSWNfJv+2F8baTFePPTCB3rmYr9/j86nr2aUm9DOHY3tqJIXFrtn6QOXXh/n9kHwPmKN6YLORR4xaOiJ1vAkyFExhQU7TXQ5JlhbHb0/6o/kBUsqkNvc+MYEzE7cfgaStRJp2RUmO2hAakEi0LXUhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7102.eurprd04.prod.outlook.com (2603:10a6:800:124::12)
+ by VI1PR04MB5245.eurprd04.prod.outlook.com (2603:10a6:803:5a::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Sat, 18 Dec
+ 2021 02:27:33 +0000
+Received: from VI1PR04MB7102.eurprd04.prod.outlook.com
+ ([fe80::ed2c:83e2:fbe4:c891]) by VI1PR04MB7102.eurprd04.prod.outlook.com
+ ([fe80::ed2c:83e2:fbe4:c891%9]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
+ 02:27:32 +0000
+Date:   Sat, 18 Dec 2021 10:27:20 +0800
+From:   joeyli <jlee@suse.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+Message-ID: <20211218022720.GP3786@linux-l9pv.suse>
+References: <20211213161145.3447-1-tiwai@suse.de>
+ <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
+ <s5hpmpz9o08.wl-tiwai@suse.de>
+ <20211215160345.GF3786@linux-l9pv.suse>
+ <a54f7de463853f9c3b7404739793d2f690aa317e.camel@linux.ibm.com>
+ <20211216043212.GG3786@linux-l9pv.suse>
+ <72b57e7f22a593ea7fe38e340ba11de944658554.camel@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72b57e7f22a593ea7fe38e340ba11de944658554.camel@linux.ibm.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-ClientProxiedBy: HK2PR02CA0193.apcprd02.prod.outlook.com
+ (2603:1096:201:21::29) To VI1PR04MB7102.eurprd04.prod.outlook.com
+ (2603:10a6:800:124::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d7a8a07-eea9-44a6-136e-08d9c1cdf100
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5245:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB52450A3AC63E22AD9201997CA3799@VI1PR04MB5245.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: juFALcnEfHINgQ8qvhaukcteWaQbDSELj0vf4gVRPhY3av4WCSJ/rU+mEj1SFiyHZdP3sGVFHGzWfjtnEY3jBXmdUeUZbQZszgOj4D5e+NMe0DkkEOSRP7XRmUIk5e8c9up2aV/XW12+PPE0/M/WPr0L5y/Wr1fjWIAwzNorNxMw6TVDG8500aOKOfk0RkYtT+UnLPYEA6L/DCEao4r4rWxaLjYN9jYo98R3HP0m8Il4K5qK1puBfQyo3Yf0QoUE5RsX98PtxYwVDDTPoR1Zg8HRAsGhmphijK9gqYJjopwC2plHcVjJmBPac+EwgrWd6Sfid9E3GfDFTDb5xa9HsQ8UR4+mStemmK9LPSRp9VIDtN2A4Pf3EtSrWC6SLdxFUc3yTElTxyhodFPn7JedmlpL0NZ9MhQ/7NUP7LIz/nZMpQWyfBDPhsBfztB9UOkzNupkFE3k7kId/6AccW6c3JXv5ZmME7uLGDjOFynZX9bMLkJGMh5RAw5RTGqhnVbcT7uLmrkWLFpWk0Aumxd3G8GwMqdcb6NFZCfYOSVAWU6FwB4cU6k3Sa9WPuZzmFPOx3Y5m+S9vGJIk/CiJLeV8It7ZpPsiS6c39nK07pJOzi56JveraOfO/9jeJUKOFPP/BA1Yog1VZErl+ldgwJiYdHTtYdHO8fROA95O18oJf7lNDCq12qkhLNy9IedJO3ID1sjdyEceBxdV9WzxAJ2aw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7102.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(66946007)(66556008)(54906003)(508600001)(33656002)(1076003)(86362001)(66476007)(36756003)(8936002)(5660300002)(6486002)(2906002)(186003)(6506007)(26005)(8676002)(316002)(6512007)(9686003)(6666004)(4001150100001)(4326008)(6916009)(38100700002)(43062005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s2B9p0ZQB68E3NWl4Ee15O2kPl4VzWxCKbU2gbWX3mw6qWOhHiQnbspRwpHS?=
+ =?us-ascii?Q?Pccx8v5qsrvm7JETYTXRNrqlAqF4lXMjuBe59bXDZ6xxr2K9VaV727+HEDNZ?=
+ =?us-ascii?Q?FTF0g9U7pZFd+B3vI1pInFbSWZSGXnma8RgVzTBkQwkM28/6SoUu5T5LVj9V?=
+ =?us-ascii?Q?N2Psh5nZXL+DOYz7SWL5msy8KArWIet8+4F4xFDHySvgonsfSIxRkLb+58cf?=
+ =?us-ascii?Q?oMa5wjDw06XSwNFpRr3Y7Q+SOuqrGhg5SIpRF1uzQf/uKqFlHMYjHLEYMbd2?=
+ =?us-ascii?Q?9U1VAxi6slqJjFQHLLTf/wVkCIl8M+BnfdMoSd/8EKqeCw7pV3Rk34VGbTMJ?=
+ =?us-ascii?Q?DWLN8gWvzsq+J626RKSXuD990wCi3+ojc7BipGiUbgBTHiMpOgBeew/mf39D?=
+ =?us-ascii?Q?7QstBJ1hjzkSR9yNgziCwG74nVtWEgR1GIfw2R0fKegppK8IHm2wDzAp7u6S?=
+ =?us-ascii?Q?Hl/3JKY6JkpLus2U4F7k6fOKndQjJvjwlLFB2OSskG1d4oHBca6PsajjXCH5?=
+ =?us-ascii?Q?7yQcgeqGlzUoyx6OyA46EBDr62YgZO3sie2ZQELatH72cdDDCt3jRQwvPn5Y?=
+ =?us-ascii?Q?pvjIt0KZ/OffrK+BwTGF5O4aGavYL/gCz4OmUZkL8kHC6P4kiptX5QrPV67V?=
+ =?us-ascii?Q?ErQzUVow6M81Nn77hpXTfBziGTJ+eBVDEVbF2AaWcJavnYPOhG4XYgE2fdlw?=
+ =?us-ascii?Q?PEBIuOF0FM019/ANQxL9ISD/zw2O2UKhJNaCLI44yr+qTejmeEbJCueaaqBw?=
+ =?us-ascii?Q?DqbPZwSXghsZQbIwGi4q2Eq0HYtmJlupsq0G4yZDXc/LXTW+Qqz5FBHmM0g0?=
+ =?us-ascii?Q?EtujoKuMeCEV6roZhNQaCMTtt89yf2o05IdOiv4DC0Gz+rYIuU8AKywfnslx?=
+ =?us-ascii?Q?e9et3PjjQeEYSyZgTvoc9yW6jFVxF5JwNiVVKZ6uD8AFxR0QPNpWXUQC3jIo?=
+ =?us-ascii?Q?tvnSVfxLKoog8B3q6mV99JhBRCQ4mM4QGigI5cZ087/1w7AndXxfqqkI35zb?=
+ =?us-ascii?Q?umi2AKAdsNKmsPOpQFZSZFoksigWeg1hOWBQx9G+IqbKr3c+NmjHczYl7vTq?=
+ =?us-ascii?Q?p7mAlLWEkP5wxeaHulmvROmq0g6BWKwooqL1nFtyE/GxKga+ucwYPW0zWGhA?=
+ =?us-ascii?Q?wRQQMC/Pwif/npoxo7TUTfiKPH6ZEKiEd7WWa6bgh2B14ha7m1ZF4wEXHlQF?=
+ =?us-ascii?Q?BvS2a9DT+9J+jte1hxdrSWXcwo9acq4hY7cIxh2y1km0qIbjMXzXrzNIFNEu?=
+ =?us-ascii?Q?d0YyvNaSoqO1AbBGM2cPhXAOPIdzwSbxHyJc1z/ziYGrKo4F9ftivXIYJLA1?=
+ =?us-ascii?Q?sJMFKYNXXkWUnEcas5mTKgMz93zpt8yZaV2BYr3hulexPHFd/GG/Doxoy4Mf?=
+ =?us-ascii?Q?UzMBweUtnDi9ao5dVUCtpbmoJrGcDgWQ9QUpBShGlxjJU66Fq+tPr6rHzET+?=
+ =?us-ascii?Q?eQBZ4SdoC8NiYf05/P6v4Nvsy3isRHU58ttqqXQNJxxgVSYIx3rOUn59uTsl?=
+ =?us-ascii?Q?1rUMxrPQYO3PvUC6ea9H931f7HObXGlRqHjYk7M/4K4oysc6eTy488ShAGXu?=
+ =?us-ascii?Q?GtuxQxbi7NOI0EXJDAc=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d7a8a07-eea9-44a6-136e-08d9c1cdf100
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7102.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 02:27:32.5856
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 97A+3Iz3j8W0caqFhC2jpKWrxRj3PtO28crQoLwzSkSLfud/vW5Pd9LjawowjXAX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5245
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ffs_data_clear is indirectly called from both ffs_fs_kill_sb and
-ffs_ep0_release, so it ends up being called twice when userland closes ep0
-and then unmounts f_fs.
-If userland provided an eventfd along with function's USB descriptors, it
-ends up calling eventfd_ctx_put as many times, causing a refcount
-underflow.
-NULL-ify ffs_eventfd to prevent these extraneous eventfd_ctx_put calls.
+On Thu, Dec 16, 2021 at 08:22:56AM -0500, Mimi Zohar wrote:
+> On Thu, 2021-12-16 at 12:32 +0800, joeyli wrote:
+> > On Wed, Dec 15, 2021 at 01:16:48PM -0500, Mimi Zohar wrote:
+> > > [Cc'ing Eric Snowberg, Jarkko]
+> > > 
+> > > Hi Joey,
+> > > 
+> > > On Thu, 2021-12-16 at 00:03 +0800, joeyli wrote:
+> > > > Hi Takashi, Mimi,
+> > > > 
+> > > > On Tue, Dec 14, 2021 at 04:58:47PM +0100, Takashi Iwai wrote:
+> > > > > On Tue, 14 Dec 2021 16:31:21 +0100,
+> > > > > Mimi Zohar wrote:
+> > > > > > 
+> > > > > > Hi Takashi,
+> > > > > > 
+> > > > > > On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> > > > > > > Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> > > > > > > defined only when CONFIG_IMA is set, and this makes the code calling
+> > > > > > > those functions without CONFIG_IMA failing.  Although there is no such
+> > > > > > > in-tree users, but the out-of-tree users already hit it.
+> > > > > > > 
+> > > > > > > Move the declaration and the dummy definition of those functions
+> > > > > > > outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> > > > > > > 
+> > > > > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > > > > 
+> > > > > > Before lockdown was upstreamed, we made sure that IMA and lockdown
+> > > > > > could co-exist.  This patch makes the stub functions available even
+> > > > > > when IMA is not configured.  Do the remaining downstream patches
+> > > > > > require IMA to be disabled or can IMA co-exist?
+> > > > > 
+> > > > > I guess Joey (Cc'ed) can explain this better.  AFAIK, currently it's
+> > > > > used in a part of MODSIGN stuff in SUSE kernels, and it's calling
+> > > > > unconditionally this function for checking whether the system is with
+> > > > > the Secure Boot or not.
+> > > > >
+> > > > 
+> > > > Actually in downstream code, I used arch_ima_get_secureboot() in
+> > > > load_uefi_certs() to prevent the mok be loaded when secure boot is
+> > > > disabled. Because the security of MOK relies on secure boot.
+> > > > 
+> > > > The downstream code likes this:
+> > > > 
+> > > > /* the MOK and MOKx can not be trusted when secure boot is disabled */
+> > > > -      if (!efi_enabled(EFI_SECURE_BOOT))
+> > > > +      if (!arch_ima_get_secureboot())
+> > > > 		return 0;
+> > > > 
+> > > > The old EFI_SECURE_BOOT bit can only be available on x86_64, so I switch
+> > > > the code to to arch_ima_get_secureboot() for cross-architectures and sync
+> > > > with upstream api.
+> > > > 
+> > > > The load_uefi.c depends on CONFIG_INTEGRITY but not CONFIG_IMA. So
+> > > > load_uefi.c still be built when CONFIG_INTEGRITY=y and CONFIG_IMA=n.
+> > > > Then "implicit declaration of function 'arch_ima_get_secureboot'" is
+> > > > happened.
+> > > 
+> > > The existing upstream code doesn't require secureboot to load the
+> > > MOK/MOKx keys.  Why is your change being made downstream?
+> > >
+> > Because the security of MOK relies on secure boot. When secure boot is
+> > disabled, EFI firmware will not verify binary code. So arbitrary efi
+> > binary code can modify MOK when rebooting.
+> > 
+> > When user disabled secure boot, a hacker can just replace shim.efi then
+> > reboot for enrolling new MOK without any interactive. Or hacker can just
+> > replace shim.efi and wait user to reboot their machine. A hacker's MOK can
+> > also be enrolled by hacked shim. User can't perceive. 
+> >  
+> > > Are you aware of Eric Snowberg's "Enroll kernel keys thru MOK" patch
+> > > set?  When INTEGRITY_MACHINE_KEYRING is enabled and new UEFI variables
+> > > are enabled,  instead of loading the MOK keys onto the .platform
+> > > keyring, they're loaded onto a new keyring name ".machine", which is
+> > > linked to the secondary keyring.
+> > > 
+> > > Eric's patchset doesn't add a new check either to make sure secure boot
+> > > is enabled before loading the MOK/MOKx keys.
+> > >
+> > 
+> > Kernel doesn't know how was a MOK enrolled. Kernel can only detect the
+> > state of secure boot. If kernel doesn't want to check the state of secure
+> > boot before loading MOK, then user should understands that they can not disable
+> > secure boot when using MOK. 
+> 
+> Thanks, Joey, for the detailed explained.  I was agreeing with you that
+> MOK/MOKx keys should only be loaded when secure boot is enabled.  A
+> better way for me to have phrased the questions would have been, why
+> are you making this change downstream and not upstream?
+>
 
-Also, set epfiles to NULL right after de-allocating it, for readability.
+I just sent patch. The patch may changes behavior of kernel functions who
+used MOK/MOKx. We can discuss in that patch.
 
-For completeness, ffs_data_clear actually ends up being called thrice, the
-last call being before the whole ffs structure gets freed, so when this
-specific sequence happens there is a second underflow happening (but not
-being reported):
-
-/sys/kernel/debug/tracing# modprobe usb_f_fs
-/sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
-/sys/kernel/debug/tracing# echo function > current_tracer
-/sys/kernel/debug/tracing# echo 1 > tracing_on
-(setup gadget, run and kill function userland process, teardown gadget)
-/sys/kernel/debug/tracing# echo 0 > tracing_on
-/sys/kernel/debug/tracing# cat trace
-# tracer: function
-#
-# entries-in-buffer/entries-written: 3/3   #P:1
-#
-#                                _-----=> irqs-off
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
- smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs_data_closed
- smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs_data_closed
- smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs_data_put
-
-Warning output corresponding to above trace:
-[ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15c
-[ 1946.293094] refcount_t: underflow; use-after-free.
-[ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) hci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobuf2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha512_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcmfmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillrect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) fb_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E) rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
-[ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G         C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
-[ 1946.417950] Hardware name: BCM2835
-[ 1946.425442] Backtrace:
-[ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_stack+0x20/0x24)
-[ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
-[ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+0x28/0x30)
-[ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8/0x154)
-[ 1946.482067]  r5:c04a948c r4:c0a71dc8
-[ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_fmt+0xa0/0xe4)
-[ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
-[ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refcount_warn_saturate+0x110/0x15c)
-[ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a17c0
-[ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] (eventfd_ctx_put+0x48/0x74)
-[ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_data_clear+0xd0/0x118 [usb_f_fs])
-[ 1946.582664]  r5:c3b84c00 r4:c2695b00
-[ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0>] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
-[ 1946.609608]  r5:bf54d014 r4:c2695b00
-[ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
-[ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
-[ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50>] (deactivate_locked_super+0x54/0x9c)
-[ 1946.664893]  r5:bf54d014 r4:c229f000
-[ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>] (deactivate_super+0x60/0x64)
-[ 1946.690722]  r5:c2a09000 r4:c229f000
-[ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (cleanup_mnt+0xe4/0x14c)
-[ 1946.715553]  r5:c2a09000 r4:00000000
-[ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_mnt+0x1c/0x20)
-[ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
-[ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_work_run+0x84/0xb8)
-[ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_pending+0x470/0x56c)
-[ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
-[ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_work_pending+0xc/0x20)
-[ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
-[ 1946.820129] bfa0:                                     00000000 00000000 000000aa b5e21430
-[ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86790 bef86794 bef867a0
-[ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23760
-[ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef86840 r5:00000001
-[ 1946.881914]  r4:bef867a0
-[ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
-
-Fixes: 5e33f6fdf735 ("usb: gadget: ffs: add eventfd notification about ffs events")
-Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
-
----
-Changes since v1:
-- moved assignment from ffs_data_reset to ffs_data_clear
-- moved epfiles assignment from ffs_data_reset to ffs_data_clear
-- added "Fixes", but did not CC Robert Baldyga as their email address
-  bounces
----
- drivers/usb/gadget/function/f_fs.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index e20c19a0f106..a7e069b18544 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1773,11 +1773,15 @@ static void ffs_data_clear(struct ffs_data *ffs)
- 
- 	BUG_ON(ffs->gadget);
- 
--	if (ffs->epfiles)
-+	if (ffs->epfiles) {
- 		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
-+		ffs->epfiles = NULL;
-+	}
- 
--	if (ffs->ffs_eventfd)
-+	if (ffs->ffs_eventfd) {
- 		eventfd_ctx_put(ffs->ffs_eventfd);
-+		ffs->ffs_eventfd = NULL;
-+	}
- 
- 	kfree(ffs->raw_descs_data);
- 	kfree(ffs->raw_strings);
-@@ -1790,7 +1794,6 @@ static void ffs_data_reset(struct ffs_data *ffs)
- 
- 	ffs_data_clear(ffs);
- 
--	ffs->epfiles = NULL;
- 	ffs->raw_descs_data = NULL;
- 	ffs->raw_descs = NULL;
- 	ffs->raw_strings = NULL;
--- 
-2.34.0
+Thanks
+Joey Lee
 

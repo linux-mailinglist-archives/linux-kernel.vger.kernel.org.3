@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C503A479CAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 21:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBF6479CB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 21:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbhLRUzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 15:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S234212AbhLRU6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 15:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbhLRUzO (ORCPT
+        with ESMTP id S231240AbhLRU6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 15:55:14 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A05DC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 12:55:14 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id b40so12288582lfv.10
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 12:55:14 -0800 (PST)
+        Sat, 18 Dec 2021 15:58:53 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8549C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 12:58:52 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id l7so9111712lja.2
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 12:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=auxuvnZ7svhFSb9Rzfvb/JIfRxgci9V2UAifzlMOcTM=;
-        b=ECYyBf96vaAHbThdqPJPqvy55VCW5ptYXqjca/Iny5gNxCMMRjjalHGlc/ey3bsDhw
-         XNgYbcMmGR1jI+/nSaKJv+7FhD1ysd2X025a/k57GFrdC5g3o7fgjMY4SU/Ev/CBK8ub
-         NOIkSiTXNtW93m6zN3RSeUk+cnW9XaRKkvFBwFAKyU0ShourbZ/vzvq14hQ8XngAh0uN
-         zLZpyT7L1gL8gRe7SuhBvHllWUQFQeTt3SWXBB9wJHuwxsDDPAXhD0nyZpscrWy3OimC
-         xWY6DuMw8w7w7BJmS+yXBBHCFfYtIw3grPCveJYkTOfiwqOPXch7GcK1MpwQ9q49B2z6
-         pArw==
+        bh=Gn8LJv7JTpUL1v6yuZFpAmH+5yz/07bstJ00rIQdQV0=;
+        b=AIynQEuZX6hK4iCa+QOvii2tCyfq3a+MdGHfY3np4HyjvAZkeNCGwocKB6A6HFp0rr
+         0hECi8fT11+me1vtchODQNYlJjcJBPM+Cv6QysfCLFDXW+Sf7eoCIy34MDR61vhk2nXN
+         VOCM4sqq0SO5sKzeA8RPeFK3NTNIy4O4GycuBxloKy4Wj7KBCxsOiZNjhW9RTKFhvD8G
+         +UVYAHwJJ5XfQBYG2c0JLZlrsBhnmzx9yYTK7/9FBrmsNR3UCHKpZTKcvtB2M36DpxIa
+         Pym3AxELoVwxcOySUezCUVv3/4sJmfjH8/v2zuB6MviVed+sjsHc9+96jdi+kKfDWmKx
+         o23g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=auxuvnZ7svhFSb9Rzfvb/JIfRxgci9V2UAifzlMOcTM=;
-        b=EnVMfzJe9iOo9HJ1WRJCKQZYUgj3hCGf1gvcQscvCdgZwmtEs2cmysWoXc2bcuZcBD
-         f2QnNYAimfME7bDuVdfB736m1IXH5fL8VaviTCL/jZr/8bKiD4Ro4RUD5aaQwlU41DIG
-         HByvoRT/3cSKZod3QcwuB54uCM04P5yAwCB1gYSg60wy25ak2hAscyUuuDrt/SzFGkw6
-         g4OWhEMRHr0MNwz1BFJrM9zsczV3CkA/r0p/OVzNVlo0Jr635MjD9SCEy3hPntLVKoQU
-         W5VPRFawgYfW1F3TgjAkt3dqdSObL7eJyiK2/B85IGBiVABcjUxCLGSK2INx5M8+TcZT
-         dp0g==
-X-Gm-Message-State: AOAM533OCX9pZATpAl0UnK5hrCfaLY58QqM8ZRyZzjehYZTShIdjZk3S
-        E1FOFKzyBseKyD45JPWRtaevWs0kPaZTNw==
-X-Google-Smtp-Source: ABdhPJwf5tLCYkS2sGY7VDb8SZxpGfIppK2DwajY7sfHp3THVu5O4SLuPJGD0ZAEshdlNhzdr5Ft7w==
-X-Received: by 2002:ac2:4113:: with SMTP id b19mr8853709lfi.449.1639860912390;
-        Sat, 18 Dec 2021 12:55:12 -0800 (PST)
+        bh=Gn8LJv7JTpUL1v6yuZFpAmH+5yz/07bstJ00rIQdQV0=;
+        b=ZItMqkNl63XVOuPCsNsrHvMjB7sqRNXMPhOAc1FgsqoaWBJWu5t0apFy2ytI/iPNA6
+         BfYn2UD4KH13ngGteUGk7N5DNfK+kwINCLLbUFPTxvumD1MYDlMRdJ89OoPZcldaLKdQ
+         Z/RS5RBkbvEHcc2mOG0PVnE+NlGyq+waUzDLswcDe3C4RRDoT6fioEP9FO1IS76qZ6p5
+         CIjxkxP6ApFIFigHZEdrjIsDGbQ+zhxeUCIiaxJMt+dJBqD06iOfwo2KU73UmWEWh2y6
+         ZrsI0DRadxvKT5P++uuLXyGRuvE94w8Uqa9LhnuKNJwJvcTVgbD1jBryFm4c08vUmkHK
+         0fLA==
+X-Gm-Message-State: AOAM533HjDDSFIxU85qhphjIPwS+1F7TXnJaBA5ALfQOMXqhu/LNDekT
+        cA7tVf8D/eFzWgeMvZsbhf5/svDgp4x8Sg==
+X-Google-Smtp-Source: ABdhPJz35ebU5vl/+epVPzIj4/sQdll1xVOINZIHBMz07xkug1F8dOcgVZ8yUVfOMhpKFwdubTW7bw==
+X-Received: by 2002:a05:651c:54d:: with SMTP id q13mr8245383ljp.498.1639861131085;
+        Sat, 18 Dec 2021 12:58:51 -0800 (PST)
 Received: from [192.168.1.11] ([94.103.229.239])
-        by smtp.gmail.com with ESMTPSA id j15sm1816002lfe.157.2021.12.18.12.55.11
+        by smtp.gmail.com with ESMTPSA id m9sm2113358ljg.80.2021.12.18.12.58.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 12:55:12 -0800 (PST)
-Message-ID: <63ff3ff8-e428-f0f6-eafc-3c517f34cb6c@gmail.com>
-Date:   Sat, 18 Dec 2021 23:55:11 +0300
+        Sat, 18 Dec 2021 12:58:50 -0800 (PST)
+Message-ID: <f4c7b099-2b9b-46d3-112b-c7c2ffd3ef80@gmail.com>
+Date:   Sat, 18 Dec 2021 23:58:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [PATCH] staging: rtl8723bs: Fix styling issues
+Subject: Re: [PATCH] staging: rtl8712: Fix alignment checks with flipped
+ condition
 Content-Language: en-US
 To:     Ismayil Mirzali <ismayilmirzeli@gmail.com>,
         gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, simon.fodin@gmail.com
-References: <20211218203647.24486-1-ismayilmirzeli@gmail.com>
+        linux-staging@lists.linux.dev, simon.fodin@gmail.com,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20211218202847.23086-1-ismayilmirzeli@gmail.com>
 From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20211218203647.24486-1-ismayilmirzeli@gmail.com>
+In-Reply-To: <20211218202847.23086-1-ismayilmirzeli@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/21 23:36, Ismayil Mirzali wrote:
-> Removed extra whitespaces and brackets for oneline if statements
+On 12/18/21 23:28, Ismayil Mirzali wrote:
+> From: Ngo Tak Fong <simon.fodin@gmail.com>
 > 
-> Signed-off-by: Ismayil Mirzali <ismayilmirzeli@gmail.com>
+> Fixed two CHECKs of Alignment should match open parenthesis and flipped
+> a condition to pull the code in one tab.
+> 
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Ngo Tak Fong <simon.fodin@gmail.com>
+> Link: https://lore.kernel.org/r/20211207212223.GA70594@simon-desktop
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->   .../staging/rtl8723bs/hal/rtl8723bs_xmit.c    | 20 ++++++++-----------
->   1 file changed, 8 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> index 7fe3df863fe1..7807b2a6cdc5 100644
-> --- a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> +++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> @@ -32,7 +32,7 @@ static u8 rtw_sdio_wait_enough_TxOQT_space(struct adapter *padapter, u8 agg_num)
->   	pHalData->SdioTxOQTFreeSpace -= agg_num;
->   
->   	/* if (n > 1) */
-> -	/* 	++priv->pshare->nr_out_of_txoqt_space; */
-> +	/*	++priv->pshare->nr_out_of_txoqt_space; */
->   
 
-I believe, commented code should be just removed
+This one is already applied to staging-testing.
+See commit d0df53d36cd51154463796bc6abdd11abdbc67c1
 
->   	return true;
->   }
+Looks like you have sent it by accident
 
-[...]
-
->   	rtw_unregister_tx_alive(padapter);
-> @@ -311,7 +310,7 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
->   					pxmitframe->pg_num = (txlen + 127) / 128;
->   					pxmitbuf->pg_num += (txlen + 127) / 128;
->   				    /* if (k != 1) */
-> -					/* 	((struct xmit_frame*)pxmitbuf->priv_data)->pg_num += pxmitframe->pg_num; */
-> +					/*	((struct xmit_frame*)pxmitbuf->priv_data)->pg_num += pxmitframe->pg_num; */
-> 
-
-Same here
 
 
 With regards,

@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512B34799C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 09:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136F64799CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 09:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhLRIqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 03:46:08 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:49990 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbhLRIqH (ORCPT
+        id S232413AbhLRI5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 03:57:47 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15936 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232081AbhLRI5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 03:46:07 -0500
-Received: by mail-io1-f71.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso3035409iov.16
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 00:46:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=XVqEkA8WZDlDVVYlT+qQd4IsUmoT02f/Z2qlP0bG9gs=;
-        b=KC/KyJPTWfWpgl7j+k+O+3fddeNdlWxFOgFEjFVAhbPNPPkwvQ9l0PbFyRY3xk4eQc
-         af+ugtwb5JHnZSBA4s0rpaDG2AGgSJYE77Ws2M507p0RBZAZ86IFAXP+XkURYK9K5zMv
-         wuhy5/2dE5PDByUMgbNJH+xWo3DisOCcm2k9dNVQ7IMYPTvT5jPG50CChaftDhecUS47
-         aNeanfH7uev2ZsT4flU9maAbVnSdfaAoiAgx7B8sfJNoh3msggYweCMeB2OzdAksw64x
-         V1LP7iMSmTUk0poaR3RDLaTVrRM/WbkTx21RP9TkUT3Kd2jHYWKWqo7CVxLGMpvLmvO/
-         wndQ==
-X-Gm-Message-State: AOAM530JB/Jdpl79IyAkFxpPFzeUxbgwN9mSCkDcYRNvnol3SR0g2iR/
-        9Gb/A1FfZzoliydPLqW0UYMQ78t9TL9H2aMVOlKhKcozZdq9
-X-Google-Smtp-Source: ABdhPJyuro0eRzCQRI0a07S5Fkm0NFBfzp5SGa8KoLpOL6oXDEfke4RSYwNg/MHcMlwLlcVDHcciurr9HDKnp4Wrp26MUekUa6GR
+        Sat, 18 Dec 2021 03:57:46 -0500
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JGKRN5P1CzZcWc;
+        Sat, 18 Dec 2021 16:54:40 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.44) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Sat, 18 Dec 2021 16:57:44 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <linux@armlinux.org.uk>, <krzysztof.kozlowski@canonical.com>,
+        <andrew@lunn.ch>, <gregory.clement@bootlin.com>,
+        <sebastian.hesselbarth@gmail.com>, <vireshk@kernel.org>,
+        <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>,
+        <linus.walleij@linaro.org>, <ardb@kernel.org>,
+        <cuigaosheng1@huawei.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
+        <wangweiyang2@huawei.com>
+Subject: [PATCH -next 0/3] replace open coded VA->PA calculation
+Date:   Sat, 18 Dec 2021 16:58:40 +0800
+Message-ID: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1541:: with SMTP id j1mr3595398ilu.100.1639817166880;
- Sat, 18 Dec 2021 00:46:06 -0800 (PST)
-Date:   Sat, 18 Dec 2021 00:46:06 -0800
-In-Reply-To: <0000000000000a337b05bb76ff8b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ba831905d367af3e@google.com>
-Subject: Re: [syzbot] INFO: task hung in disconnect_work
-From:   syzbot <syzbot+060f9ce2b428f88a288f@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johannes.berg@intel.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, phind.uet@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.44]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+These patches replace an open coded calculation to obtain the physical
+address of a far symbol with a call to the new ldr_l etc macro, and they
+belong to the kaslr patch set of arm32.
 
-commit 563fbefed46ae4c1f70cffb8eb54c02df480b2c2
-Author: Nguyen Dinh Phi <phind.uet@gmail.com>
-Date:   Wed Oct 27 17:37:22 2021 +0000
+Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
 
-    cfg80211: call cfg80211_stop_ap when switch from P2P_GO type
+Ard Biesheuvel (3):
+  arm-soc: exynos: replace open coded VA->PA conversions
+  arm-soc: mvebu: replace open coded VA->PA conversion
+  arm-soc: various: replace open coded VA->PA calculation
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13ad179db00000
-start commit:   f40ddce88593 Linux 5.11
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=51ab7ccaffffc30c
-dashboard link: https://syzkaller.appspot.com/bug?extid=060f9ce2b428f88a288f
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1217953cd00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13baa822d00000
+ arch/arm/mach-exynos/headsmp.S     |  9 +--------
+ arch/arm/mach-exynos/sleep.S       | 26 +++++---------------------
+ arch/arm/mach-mvebu/coherency_ll.S |  8 +-------
+ arch/arm/mach-spear/headsmp.S      | 11 +++--------
+ arch/arm/plat-versatile/headsmp.S  |  9 +--------
+ 5 files changed, 11 insertions(+), 52 deletions(-)
 
-If the result looks correct, please mark the issue as fixed by replying with:
+-- 
+2.30.0
 
-#syz fix: cfg80211: call cfg80211_stop_ap when switch from P2P_GO type
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

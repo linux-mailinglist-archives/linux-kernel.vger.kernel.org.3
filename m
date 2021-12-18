@@ -2,101 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA308479854
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C391247985F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbhLRDL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 22:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbhLRDL0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 22:11:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22455C061574;
-        Fri, 17 Dec 2021 19:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=62FmL4o33C3xs2kZTlQ+wejDM0H9nh66m1ctzivTtUE=; b=eSd7P83jhUrAuGbLQ+RoODXHa/
-        tkFjCFGCbqE/QQFwGyGlvF17x5YSM5C0KeN8bGVREpPNi3ygOpelT1xV0dRsVqmhaQLdeTgUOzizL
-        ARfxFWsBWexrtfCYYDqtFV2wvRHtGUY+aG8XGchB6OVhkH37yOUVOGgnZiATfq2yGPyiFXYspiK3w
-        R/fv148vOxnpav2l2deLRI73kDVSTJ5IGyFBspdXLB2kIRGGgOdqzDpUBKZI4tBGCwz+4RnRQnnP5
-        EIPtXYisfxkseY4ZUXbqcfWN5anaKje7sK+Xc6aYC+Q2hlDHWSS7AR51oGH2iNuDD/8MCo+87FykI
-        +ULYqqiw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myQ83-00HHCH-MC; Sat, 18 Dec 2021 03:11:23 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, efi@lists.einval.com,
-        debian-kernel@lists.debian.org, linux-efi@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2] builddeb: Support signing kernels with the module signing key
-Date:   Sat, 18 Dec 2021 03:11:22 +0000
-Message-Id: <20211218031122.4117631-1-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S231839AbhLRDXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 22:23:21 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50022 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231789AbhLRDXS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 22:23:18 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxnN0eVL1hYvUBAA--.8171S2;
+        Sat, 18 Dec 2021 11:23:11 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] MIPS: signal: Modify some code
+Date:   Sat, 18 Dec 2021 11:23:06 +0800
+Message-Id: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9BxnN0eVL1hYvUBAA--.8171S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
+        uYvjfU84SoDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the config file specifies a signing key, use it to sign
-the kernel so that machines with SecureBoot enabled can boot.
-See https://wiki.debian.org/SecureBoot
+Tiezhu Yang (3):
+  MIPS: signal: Protect against sigaltstack wraparound
+  MIPS: signal: Return immediately if call fails
+  MIPS: signal: Remove unnecessary DEBUG_SIG related code
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
-v2:
- - Handle private keys stored in the pem file as well as adjacent to the
-   certificate
- - Handle certificate paths specified relative to both dsttree and srctree
-   (as well as absolute)
- - Only try to sign the executable if EFI_STUB is enabled
- - Only try to execute sbsign if it's in $PATH
+ arch/mips/kernel/signal-common.h |  8 --------
+ arch/mips/kernel/signal.c        | 39 ++++++++++++++++++++++++++-------------
+ arch/mips/kernel/signal_n32.c    |  4 ----
+ arch/mips/kernel/signal_o32.c    |  8 --------
+ 4 files changed, 26 insertions(+), 33 deletions(-)
 
- scripts/package/builddeb | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-index 91a502bb97e8..9dd92fd02b12 100755
---- a/scripts/package/builddeb
-+++ b/scripts/package/builddeb
-@@ -147,7 +147,30 @@ else
- 	cp System.map "$tmpdir/boot/System.map-$version"
- 	cp $KCONFIG_CONFIG "$tmpdir/boot/config-$version"
- fi
--cp "$($MAKE -s -f $srctree/Makefile image_name)" "$tmpdir/$installed_image_path"
-+
-+vmlinux=$($MAKE -s -f $srctree/Makefile image_name)
-+key=
-+if is_enabled CONFIG_EFI_STUB && is_enabled CONFIG_MODULE_SIG; then
-+	cert=$(grep ^CONFIG_MODULE_SIG_KEY= include/config/auto.conf | cut -d\" -f2)
-+	if [ ! -f $cert ]; then
-+		cert=$srctree/$cert
-+	fi
-+
-+	key=${cert%pem}priv
-+	if [ ! -f $key ]; then
-+		key=$cert
-+	fi
-+
-+	if ! command -v sbsign >/dev/null; then
-+		key=
-+	fi
-+fi
-+
-+if [ -n "$key" ]; then
-+	sbsign --key $key --cert $cert "$vmlinux" --output "$tmpdir/$installed_image_path"
-+else
-+	cp "$vmlinux" "$tmpdir/$installed_image_path"
-+fi
- 
- if is_enabled CONFIG_OF_EARLY_FLATTREE; then
- 	# Only some architectures with OF support have this target
 -- 
-2.33.0
+2.1.0
 

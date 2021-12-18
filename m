@@ -2,95 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C40B7479AAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C13EF479AAE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbhLRMFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 07:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S231823AbhLRMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 07:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbhLRMEy (ORCPT
+        with ESMTP id S233135AbhLRMFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 07:04:54 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9245C06173E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:04:53 -0800 (PST)
-Received: from dslb-178-004-169-039.178.004.pools.vodafone-ip.de ([178.4.169.39] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1myYSI-0008I6-6T; Sat, 18 Dec 2021 13:04:50 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 9/9] staging: r8188: ODM_BB_RA_MASK is always set
-Date:   Sat, 18 Dec 2021 13:04:23 +0100
-Message-Id: <20211218120423.29906-10-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211218120423.29906-1-martin@kaiser.cx>
-References: <20211218120423.29906-1-martin@kaiser.cx>
+        Sat, 18 Dec 2021 07:05:17 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622ECC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:05:17 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v64so13961176ybi.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:05:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=+Y2CW3FU7Np6BiQVUMozXDENdMi4If2dH0S2b0JuT48=;
+        b=TRhdVPbcE1v4Uet2kvDbG9a1cqrIpk8rj+AFFeJaDX+Vy/u90pDr3trkiYrTHFhtQt
+         1aZuONonNTbphj6Oob0psqF3NFkfHLZ8ib5utsg2Tp4jPIMUYMwSG2I5QlmnIkkRYpE/
+         MWYIK6GWYRrJTYS3vqq24ars29b59PGArWuHsR76YcrR8hGXZH10/9c1G7Wk3mSRgPWC
+         Pue9loB7TvyZVSmtGfgeWVYc2s9BE05dWGRBuYptwLzJfCOXe+H0SdmY5B1eqTx7A27S
+         qDu1gbUC3ODlGu3Sm8tdgj9ihY+i8H2e3smTzycHfdQ/8EDiHekY6NlPxYeSzCe7edBE
+         dosA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=+Y2CW3FU7Np6BiQVUMozXDENdMi4If2dH0S2b0JuT48=;
+        b=qPZQGodxV9y6Vs3v4K0hYIhV7RGElGSOCl6T9Te2HNgA1yC/VZynrviuDXxKpI3ET2
+         phdjg8nHHEyZgMJTSQ1UJnQ3SEu66NUL8vb0IiSi6/n/mc3jhylHL3ANCkgEbb+ZHts1
+         hCaBNEZGpLB/J3OUVX4mUzfoysUsl12BGA4f5ZDHJsNPr5HH3anlYDBG9fGZwbjx9dKd
+         HuccHwcqwaveUWIPA7+fHxMGiwkBaxsnY7Nu8gakQHC9H7lb0nTHhr2uEo/bO3JGmjhX
+         PImt450WqffFeMhOf4tzFqqjT22BpAc9cIDQ4RadPRAyAIl7WnYBCYdyzvPCw03GTIYn
+         C99Q==
+X-Gm-Message-State: AOAM533axS37BZPSQtujnulK5T0wWj37khfhf63J8mK1DhQKjrz77uks
+        vPwyF5VK2ol8k4l6zJMiHRbMdaR+mRR42sFq3ZY=
+X-Google-Smtp-Source: ABdhPJxsXSKcE3PkdTpEk3KNtcMpHh1DCRJSx34wVHSf7RM5WP+0IK/ChcJEJQV2PdjEXs3avaDUPNQ82G4HtLPULcQ=
+X-Received: by 2002:a25:2c97:: with SMTP id s145mr9988262ybs.408.1639829116510;
+ Sat, 18 Dec 2021 04:05:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7000:8caa:0:0:0:0 with HTTP; Sat, 18 Dec 2021 04:05:16
+ -0800 (PST)
+Reply-To: cristinacampeell@outlook.com
+From:   "Mrs. Cristina Campbell" <john69345@gmail.com>
+Date:   Sat, 18 Dec 2021 12:05:16 +0000
+Message-ID: <CAFEch-B8EEnLFHp322buRpRNexjCghkwJWTM97u4LyXTUVAfpw@mail.gmail.com>
+Subject: =?UTF-8?B?0KLRiyDQvNC+0LbQtdGI0Ywg0LzQvdC1INC/0L7QvNC+0YfRjD8=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the ODM_BB_RA_MASK capability. It is always set for this driver.
+Lieber geliebter,
 
-Like for ODM_BB_DIG before, we can be sure that ODM_BB_RA_MASK was never
-checked before it was set.
+Bitte lesen Sie dies langsam und sorgf=C3=A4ltig durch, da es sich
+m=C3=B6glicherweise um eine der wichtigsten E-Mails handelt, die Sie jemals
+erhalten. Ich bin Mrs. Cristina Campbell, ich war mit dem verstorbenen
+Edward Campbell verheiratet. Er arbeitete fr=C3=BCher f=C3=BCr die Shell
+Petroleum Development Company London und war auch ein erfahrener
+Bauunternehmer in der Region Ostasien. Er starb am Montag, 31. Juli
+2003 in Paris. Wir waren sieben Jahre ohne Kind verheiratet.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/hal/odm.c         | 3 ---
- drivers/staging/r8188eu/hal/rtl8188e_dm.c | 3 +--
- drivers/staging/r8188eu/include/odm.h     | 1 -
- 3 files changed, 1 insertion(+), 6 deletions(-)
+W=C3=A4hrend Sie dies lesen, m=C3=B6chte ich nicht, dass Sie Mitleid mit mi=
+r
+haben, denn ich glaube, dass jeder eines Tages sterben wird. Bei mir
+wurde Speiser=C3=B6hrenkrebs diagnostiziert und mein Arzt sagte mir, dass
+ich aufgrund meiner komplizierten Gesundheitsprobleme nicht lange
+durchhalten w=C3=BCrde.
 
-diff --git a/drivers/staging/r8188eu/hal/odm.c b/drivers/staging/r8188eu/hal/odm.c
-index 70c83465a0a6..7a42687b3128 100644
---- a/drivers/staging/r8188eu/hal/odm.c
-+++ b/drivers/staging/r8188eu/hal/odm.c
-@@ -725,9 +725,6 @@ void odm_RefreshRateAdaptiveMask(struct odm_dm_struct *pDM_Odm)
- 	u8 i;
- 	struct adapter *pAdapter = pDM_Odm->Adapter;
- 
--	if (!(pDM_Odm->SupportAbility & ODM_BB_RA_MASK))
--		return;
--
- 	if (pAdapter->bDriverStopped)
- 		return;
- 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_dm.c b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-index 865e520a246d..685431034495 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-@@ -53,8 +53,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
- 	struct dm_priv	*pdmpriv = &hal_data->dmpriv;
- 	int i;
- 
--	pdmpriv->InitODMFlag = ODM_BB_RA_MASK |
--				ODM_BB_FA_CNT |
-+	pdmpriv->InitODMFlag = ODM_BB_FA_CNT |
- 				ODM_BB_RSSI_MONITOR |
- 				ODM_BB_CCK_PD |
- 				ODM_MAC_EDCA_TURBO |
-diff --git a/drivers/staging/r8188eu/include/odm.h b/drivers/staging/r8188eu/include/odm.h
-index 6199190e5426..19e859b989ad 100644
---- a/drivers/staging/r8188eu/include/odm.h
-+++ b/drivers/staging/r8188eu/include/odm.h
-@@ -240,7 +240,6 @@ enum odm_common_info_def {
- 
- enum odm_ability_def {
- 	/*  BB ODM section BIT 0-15 */
--	ODM_BB_RA_MASK			= BIT(1),
- 	ODM_BB_FA_CNT			= BIT(3),
- 	ODM_BB_RSSI_MONITOR		= BIT(4),
- 	ODM_BB_CCK_PD			= BIT(5),
--- 
-2.20.1
+Ich m=C3=B6chte, dass Gott mir gegen=C3=BCber barmherzig ist und meine Seel=
+e
+annimmt, deshalb habe ich beschlossen, Almosen an
+Wohlt=C3=A4tigkeitsorganisationen / Kirchen / buddhistische Tempel /
+Moscheen / mutterlose Babys / weniger Privilegierte und Witwen zu
+geben, da ich m=C3=B6chte, dass dies eine der letzten guten Taten ist Ich
+tue es auf der Erde, bevor ich sterbe. Bisher habe ich Geld an einige
+Wohlt=C3=A4tigkeitsorganisationen in Schottland, Wales, Panama, Finnland
+und Griechenland verteilt. Jetzt, wo sich mein Gesundheitszustand so
+stark verschlechtert hat, kann ich das nicht mehr selbst machen.
 
+Ich habe einmal Mitglieder meiner Familie gebeten, eines meiner Konten
+zu schlie=C3=9Fen und das Geld, das ich dort habe, an
+Wohlt=C3=A4tigkeitsorganisationen in =C3=96sterreich, Luxemburg, Deutschlan=
+d,
+Italien und der Schweiz zu verteilen, sie weigerten sich und behielten
+das Geld f=C3=BCr sich. Daher vertraue ich nicht sie nicht mehr, da sie
+anscheinend nicht mit dem zufrieden sind, was ich ihnen hinterlassen
+habe. Das letzte von meinem Geld, von dem niemand wei=C3=9F, ist die
+riesige Bareinzahlung von sechs Millionen US-Dollar $ 6.000.000,00,
+die ich bei einer Bank in Thailand habe, bei der ich den Fonds
+hinterlegt habe. Ich m=C3=B6chte, dass Sie diesen Fonds f=C3=BCr
+Wohlt=C3=A4tigkeitsprogramme verwenden und die Menschheit in Ihrem Land
+unterst=C3=BCtzen, wenn Sie nur aufrichtig sind.
+
+Ich habe diese Entscheidung getroffen, weil ich kein Kind habe, das
+dieses Geld erben wird. Ich habe keine Angst vor dem Tod, daher wei=C3=9F
+ich, wohin ich gehe. Ich wei=C3=9F, dass ich im Scho=C3=9F des Herrn sein w=
+erde.
+Sobald ich Ihre Antwort erhalten habe, werde ich Ihnen den Kontakt der
+Bank mitteilen und Ihnen eine Vollmacht ausstellen, die Sie als
+urspr=C3=BCnglichen Beg=C3=BCnstigten dieses Fonds erm=C3=A4chtigt, dieses
+Wohlt=C3=A4tigkeitsprogramm sofort in Ihrem Land zu beginnen.
+
+Nur ein Leben, das f=C3=BCr andere gelebt wird, ist ein lebenswertes Leben.
+Ich m=C3=B6chte, dass Sie immer f=C3=BCr mich beten. Jede Verz=C3=B6gerung =
+Ihrer
+Antwort wird mir Raum geben, eine andere Person zu diesem Zweck zu
+finden. Wenn Sie kein Interesse haben, bitte ich um Entschuldigung f=C3=BCr
+die Kontaktaufnahme. Du kannst mich mit meiner privaten E-Mail
+erreichen oder mir antworten: (cristinacampeell@outlook.com).
+
+Danke,
+Dein,
+Frau Cristina Campbell
+Email; cristinacampeell@outlook.com

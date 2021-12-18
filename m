@@ -2,118 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E411479CC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 426C3479CD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbhLRVOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S234280AbhLRVRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbhLRVOe (ORCPT
+        with ESMTP id S232276AbhLRVRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:14:34 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A403BC061574;
-        Sat, 18 Dec 2021 13:14:33 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id 207so9081806ljf.10;
-        Sat, 18 Dec 2021 13:14:33 -0800 (PST)
+        Sat, 18 Dec 2021 16:17:17 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F79DC061574;
+        Sat, 18 Dec 2021 13:17:17 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u17so4872793plg.9;
+        Sat, 18 Dec 2021 13:17:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to;
-        bh=hBfPEzdnBCIolTV0JC9Xy7BosUZffVOIatmUIf7muRk=;
-        b=mj8Y1qjGVeVNpGrpHrq+yiolEP5JKpS78Llfm6+6cOb4hddPJ41w8aUtuFI/BVcYVD
-         GMcOCh9EcozjknygR8Dxw5eL4Wont+Ljk5WngDI/xhSwx3A7B4V8wypQ7UYQpRoYG+AY
-         FvfHpDsXUrkkMvTW0l4mnr4a+yk+I2826vIl0dK/xO/8RKV3qXUKvpYrpVfJyzPT1EPT
-         uqcrkGx0yYj6gzgIYtOXXgAEj7MaEV5Yup/aGZ6wq+98EyB7Zm6H/QKuVvQI4Jhvog3w
-         Rc1jPp2VbgRLc6dSrFyPVdJoMNda9A3sLWJgJzokUbozgc7Pe3ndazyVgvQF6XdHyltZ
-         q1LA==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GTXZALPrULQFFohO+yn4hKDW5HSqM1ZL3ZeujC4578Q=;
+        b=claeeP6hpDrPXUF1P+DW1064XICLuC4tDMVCgrdkHAkWSRd2+zz+lqiVodfQYAAYxS
+         qEhhz2tEvSS0kDpNuPz/jGz6Sx+yl2FZfUuJJOWTNTEtKHmKswZq98ol/HFQBgWJgnFo
+         FItfyvk2yooWM5DvukP0a6c0TFqksVW/ryXcD3WibWQFIBkmN8Hcs54Svevzg//UZKmR
+         5ezGUKhufyVDXtTc0J8nB91Xutuol90iHN9zTrYTcVDIRt3U/XDR8+K9a4d4WBetgbtq
+         +vUFjFOVhGBMmnGtuEBH/useCRe3vB9hcVVCrIkgil+7FR8yp2Xqjrq/Frs9mQG5Tcx/
+         t2DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to;
-        bh=hBfPEzdnBCIolTV0JC9Xy7BosUZffVOIatmUIf7muRk=;
-        b=Hllv7YBpNguQGOPe1x6uRj7b2SHC9vCkpTCLwf+9F1CEQqfIaet1H164QLJ5HUTb9T
-         PkMFDjZjwDLIADOWh2yBjT8Cpf1XPfSKvW+3anxCvY+8MBVZsNOaozg786G/fiX7KMvH
-         8NeONCjRtTGIVD/JEvVOnsjuU978ekhC5IOxNfmaWYSeuoz+iDz3Wzfp6jYrXTgMRSqh
-         dSKMJ4SmuDYViDl5bu/u+ldqMCEL8KWJmbDAhu2u1bnJght92gev0IO4klXNcQKhUNdi
-         kJ63VI4KfEFqPdUJ798Wt2OGtgLwLPMncDq9dUjdWWjkpJdyxyA54PR9qsndSDngRYWC
-         YnUw==
-X-Gm-Message-State: AOAM532CPbrDNIjBjZLv1oqYFyiCfn4KSbp603sQbqwcsz3LdiQ6XIQO
-        xLN3sEWwCB372m7ig8yV6F4=
-X-Google-Smtp-Source: ABdhPJzucJDRxJwDLjAUbGDqu9YkGwYZijg/cBUrGwS6yu/rvwhOI8RwQi4Ibj7sq+pSubmUdTa7Jw==
-X-Received: by 2002:a05:651c:b23:: with SMTP id b35mr8488486ljr.286.1639862071960;
-        Sat, 18 Dec 2021 13:14:31 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.239])
-        by smtp.gmail.com with ESMTPSA id k15sm2092143ljg.123.2021.12.18.13.14.30
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GTXZALPrULQFFohO+yn4hKDW5HSqM1ZL3ZeujC4578Q=;
+        b=h5PznRnmXFvQpYnWI2Zmc021QzXAN3v0RcxZzemH0gHckS2tSUM0BKQdkGjL2S/B6P
+         4chYxpuWoJzbVqsSMsiAurxzZg3BVejbDlZIKTq8m9I38Vg0y/8sQuVWv1vi8T0WaIct
+         OlVqe3VTsXdExFwAqBD0qR4qw9nvGsiZE+7CVjYYINnOgnFAed0ipHOv/+1pp0G0b661
+         vcF12Lyi5UMT2nkSepUHFOhJEcT0+mz3DzrnogKhR/A2LIqog8kcKxsVwU3pRb9dP+on
+         s3gDMsWi935+3twFGWrua1mdspi5yGkYCY1yL8kgcRzGK/TbBK2qz+Z8sT5tL8bEK4vd
+         OgMg==
+X-Gm-Message-State: AOAM533CcIed4GiqCwCjS22Ml94MzFdXLkTXphWnYP/bR58dM9jbKP+I
+        1Iqzq2eKlqDGTU9p75VqPls=
+X-Google-Smtp-Source: ABdhPJzyBK3WWbHHo+VX9p2yHZLVkeAfYE/tCUCIbpHeawtBk1NfNjDO6g1jSdvVyXSM2qb0j1I8Bw==
+X-Received: by 2002:a17:902:8b8a:b0:148:bd36:94ed with SMTP id ay10-20020a1709028b8a00b00148bd3694edmr9766601plb.44.1639862236626;
+        Sat, 18 Dec 2021 13:17:16 -0800 (PST)
+Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
+        by smtp.gmail.com with ESMTPSA id oj9sm9458935pjb.0.2021.12.18.13.17.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 13:14:31 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------cAfV080rMMnQp8FfC7sfnDiX"
-Message-ID: <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
-Date:   Sun, 19 Dec 2021 00:14:30 +0300
+        Sat, 18 Dec 2021 13:17:15 -0800 (PST)
+Message-ID: <a02d76dc-52cc-3ecc-5ef7-825c3167431a@gmail.com>
+Date:   Sat, 18 Dec 2021 13:17:13 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (2)
+Subject: Re: [PATCH 1/3] i2c: bcm2835: Use platform_get_irq() to get the
+ interrupt
 Content-Language: en-US
-To:     syzbot <syzbot+f44badb06036334e867a@syzkaller.appspotmail.com>,
-        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000021160205d369a962@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <00000000000021160205d369a962@google.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------cAfV080rMMnQp8FfC7sfnDiX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 12/18/21 14:07, syzbot wrote:
-> Hello,
+
+On 12/18/2021 8:52 AM, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 > 
-> syzbot found the following issue on:
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
 > 
-> HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13a4d133b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f44badb06036334e867a
-> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149fddcbb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17baef25b00000
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Just one nit below:
+> ---
+>   drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
+>   1 file changed, 4 insertions(+), 7 deletions(-)
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
-> 
+> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+> index 37443edbf754..d63dec5f3cb1 100644
+> --- a/drivers/i2c/busses/i2c-bcm2835.c
+> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+> @@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
+>   static int bcm2835_i2c_probe(struct platform_device *pdev)
+>   {
+>   	struct bcm2835_i2c_dev *i2c_dev;
+> -	struct resource *mem, *irq;
+> +	struct resource *mem;
+>   	int ret;
+>   	struct i2c_adapter *adap;
+>   	struct clk *mclk;
+> @@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (!irq) {
+> -		dev_err(&pdev->dev, "No IRQ resource\n");
+> -		return -ENODEV;
+> -	}
+> -	i2c_dev->irq = irq->start;
+> +	i2c_dev->irq = platform_get_irq(pdev, 0);
+> +	if (i2c_dev->irq <= 0)
+> +		return i2c_dev->irq ? i2c_dev->irq : -ENXIO;
 
-The last unhanded case is asix_read_cmd() == 0. Let's handle it...
-
-#syz test: https://github.com/google/kmsan.git master
-
-
-
-With regards,
-Pavel Skripkin
-
-
---------------cAfV080rMMnQp8FfC7sfnDiX
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jIGIvZHJpdmVycy9u
-ZXQvdXNiL2FzaXhfY29tbW9uLmMKaW5kZXggNDJiYTRhZjY4MDkwLi5mYjRmNmNlOTQ2NmEg
-MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jCisrKyBiL2RyaXZl
-cnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jCkBAIC03Nyw3ICs3Nyw3IEBAIHN0YXRpYyBpbnQg
-YXNpeF9jaGVja19ob3N0X2VuYWJsZShzdHJ1Y3QgdXNibmV0ICpkZXYsIGludCBpbl9wbSkK
-IAkJCQkgICAgMCwgMCwgMSwgJnNtc3IsIGluX3BtKTsKIAkJaWYgKHJldCA9PSAtRU5PREVW
-KQogCQkJYnJlYWs7Ci0JCWVsc2UgaWYgKHJldCA8IDApCisJCWVsc2UgaWYgKHJldCA8PSAw
-KQogCQkJY29udGludWU7CiAJCWVsc2UgaWYgKHNtc3IgJiBBWF9IT1NUX0VOKQogCQkJYnJl
-YWs7Cg==
---------------cAfV080rMMnQp8FfC7sfnDiX--
-
+Why not just check for a negative return code and propagate it as is?
+-- 
+Florian

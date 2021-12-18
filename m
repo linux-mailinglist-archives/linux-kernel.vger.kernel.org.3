@@ -2,153 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D17479E0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 23:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C920479E12
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 00:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbhLRWx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 17:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhLRWx6 (ORCPT
+        id S231770AbhLRW7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 17:59:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35501 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231351AbhLRW7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 17:53:58 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4261C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 14:53:57 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id j21so17987719edt.9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 14:53:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mJf35OulebkWfKFhXCfv+327LAJ4W2k8OGIoJTIXfIo=;
-        b=dG1V9TzLGCecXWNdRV5Ieb7V7jx4XXm42+n2J/149xEOJE5Tg0NmZ+cfF1j3OVD1dv
-         4/abdSFzcm6W1ZofMPLzp3kY7w8JfzzYfQK7mjkdLbDcoe+KW25lfWOyG0w7OTq2no74
-         0E+b/2RDV5qKx9L2+ASDLVxYRIEppRhgOV7FQ=
+        Sat, 18 Dec 2021 17:59:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639868341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
+        b=Ff4xhhDg2UfSAd8H/7b9xBbZmESX0sYttmyH6oHBGmYD+h71lpOeBDz4cG8MwQvzVRUOD6
+        NtK9NNgSLk8PI85zNZiV5BnragApX0eiQl1AqLCrJuxk5w6YFsusv813i/EuqLWfLlfaFI
+        8ecNELfN/5a9ksFZLP0kEng4arZsQzs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-0kUZONihMz67mDFiCVlYRQ-1; Sat, 18 Dec 2021 17:59:00 -0500
+X-MC-Unique: 0kUZONihMz67mDFiCVlYRQ-1
+Received: by mail-wr1-f71.google.com with SMTP id k11-20020adfc70b000000b001a2333d9406so1820330wrg.3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 14:58:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mJf35OulebkWfKFhXCfv+327LAJ4W2k8OGIoJTIXfIo=;
-        b=2v3BDUfx/GCUopWqz76zbVELrAEaX1cs7pi6oLhCij6430isNiMaeBzGE9xdZsgWSJ
-         /uJ6DoBgnBPD6FqMiKBdefgtlkJT5+F32sAfzEne8eSMZpZt3UhqcLGsTL+dR0XXInJB
-         J6NZqaGlg6hSFWjnZmD2CpChLQ/5g4ZVZGEXxZ0YpMX8Q0nHgAoqBh4JGNPibPiqbjXr
-         BykdYETthgQyG/i4eMw5iWERYpAyYCzgQfB6Q49XIolwvBLZq7yrv9X1A5g/B+rIHc/0
-         Gt7p9rMytCSDIfLmCi+myqGSymAKcfCpeKVtSjmU3KzTGZVhxJt2LnnMXPJM/Kxa2mFn
-         jzqQ==
-X-Gm-Message-State: AOAM5334AgLPjksJRSq1pnY72yNNsPn8D18C/KIaWXa1ZVZ4Hh+OMYjV
-        Vx2NXwytKAEjEw6zTsxNjZvRG5Y3pQZY2/4X0eg=
-X-Google-Smtp-Source: ABdhPJxmSweA4UnJbbW0WpZCSJmilxLNu4uklpoODjD0WxE6Mhu0ON5eKvwgOjrRVOXMWf0sO4hXQw==
-X-Received: by 2002:a17:906:505:: with SMTP id j5mr7377522eja.764.1639868036111;
-        Sat, 18 Dec 2021 14:53:56 -0800 (PST)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id z16sm2340208edc.76.2021.12.18.14.53.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 14:53:55 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso3957142wme.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 14:53:55 -0800 (PST)
-X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr6056643wmb.152.1639868034874;
- Sat, 18 Dec 2021 14:53:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
+        b=QJSV5nx96HSkZLicy5MKBzNLR2q7zRUorkxWjae+/NAfMqdeRYhwBY8nJ+dr7xkn86
+         1o4W8JaNERH5lvdLShbceYcw3e815nkX8hoSyCVJ14kyxOqJdhRZI7illHFtNLdpqh5j
+         zsWrPEJyChwj10uLj6rnjyUe3SmWQWIDIseniW2qWoOwiR6SYL/o6sm/8BPgzBxIOnrq
+         3kklgNLDnpmSFELyz4n0nGmJkFaXEJ2SdTSbWqiLLpkcTjuclhWl1Q4j/5c9iqLCJ6Gw
+         NepFXPDh6w1/aI/gFvkz/laXGBqGC5i+NP2glywsLcQeZ8EI+85ese0tkh0Pr1ZkUWAn
+         jvkA==
+X-Gm-Message-State: AOAM5326g35mkP5XIVoVnjOFIIlYYxkXrt4mpB2RsgckNG8L25GgKfp1
+        wQIaOX4aqP9rJ34RCBUNZYJpNnv1FFq6gvbu7tfnn2/bHdwBkrEyNx0FvO8uZKlq+D5MoQFy7QS
+        LmPgCSnPeJtLK2yQDuWAKNaKL
+X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024791wmc.70.1639868338952;
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy6XNPwqC4x+1n7wbfAYLEDuEUUa0YRDFZDM3AZOesJw01Di5J81acMjEVtY8JI8qBixVlHEA==
+X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024788wmc.70.1639868338808;
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id u12sm11474338wrf.60.2021.12.18.14.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
+Date:   Sat, 18 Dec 2021 23:58:56 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no
+ previous prototype for function 'my_direct_func1'
+Message-ID: <Yb5nsJdwCl+8d8Fv@krava>
+References: <202112190117.RKPcHQjE-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com> <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
- <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
-In-Reply-To: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 18 Dec 2021 14:53:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
-Message-ID: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112190117.RKPcHQjE-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 1:49 PM Nadav Amit <namit@vmware.com> wrote:
->
-> Yes, I guess that you pin the pages early for RDMA registration, which
-> is also something you may do for IO-uring buffers. This would render
-> userfaultfd unusable.
+On Sun, Dec 19, 2021 at 01:57:29AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   9eaa88c7036eda3f6c215f87ca693594cf90559b
+> commit: e1067a07cfbc5a36abad3752fafe4c79e06db1bb ftrace/samples: Add module to test multi direct modify interface
+> date:   9 days ago
+> config: x86_64-randconfig-a001-20211219 (https://download.01.org/0day-ci/archive/20211219/202112190117.RKPcHQjE-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout e1067a07cfbc5a36abad3752fafe4c79e06db1bb
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/ftrace/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous prototype for function 'my_direct_func1' [-Wmissing-prototypes]
+>    void my_direct_func1(unsigned long ip)
+>         ^
+>    samples/ftrace/ftrace-direct-multi-modify.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void my_direct_func1(unsigned long ip)
+>    ^
+>    static 
+> >> samples/ftrace/ftrace-direct-multi-modify.c:12:6: warning: no previous prototype for function 'my_direct_func2' [-Wmissing-prototypes]
+>    void my_direct_func2(unsigned long ip)
+>         ^
+>    samples/ftrace/ftrace-direct-multi-modify.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void my_direct_func2(unsigned long ip)
+>    ^
+>    static 
+>    2 warnings generated.
 
-I think this is all on usefaultfd.
+ugh, not again.. of course :-\ will send the fix
 
-That code literally stole two of the bits from the page table layout -
-bits that we could have used for better things.
+thanks,
+jirka
 
-And guess what? Because it required those two bits in the page tables,
-and because that's non-portable, it turns out that UFFD_WP can only be
-enabled and only works on x86-64 in the first place.
+> 
+> 
+> vim +/my_direct_func1 +7 samples/ftrace/ftrace-direct-multi-modify.c
+> 
+>      6	
+>    > 7	void my_direct_func1(unsigned long ip)
+>      8	{
+>      9		trace_printk("my direct func1 ip %lx\n", ip);
+>     10	}
+>     11	
+>   > 12	void my_direct_func2(unsigned long ip)
+>     13	{
+>     14		trace_printk("my direct func2 ip %lx\n", ip);
+>     15	}
+>     16	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-So UFFS_WP is fundamentally non-portable. Don't use it.
-
-Anyway, the good news is that I think that exactly because uffd_wp
-stole two bits from the page table layout, it already has all the
-knowledge it needs to handle this entirely on its own. It's just too
-lazy to do so now.
-
-In particular, it has that special UFFD_WP bit that basically says
-"this page is actually writable, but I've made it read-only just to
-get the fault for soft-dirty".
-
-And the hint here is that if the page truly *was* writable, then COW
-just shouldn't happen, and all that the page fault code should do is
-set soft-dirty and return with the page set writable.
-
-And if the page was *not* writable, then UFFD_WP wasn't actually
-needed in the first place, but the uffd code just sets it blindly.
-
-Notice? It _should_ be just an operation based purely on the page
-table contents, never even looking at the page AT ALL. Not even the
-page count, much less some mapcount thing.
-
-Done right, that soft-dirty thing could work even with no page backing
-at all, I think.
-
-But as far as I know, we've actually never seen a workload that does
-all this, so.. Does anybody even have a test-case?
-
-Because I do think that UFFD_WP really should never really look at the
-page, and this issue is actually independent of the "page_count() vs
-page_mapcount()" discussion.
-
-(Somewhat related aside: Looking up the page is actually one of the
-more expensive operations of a page fault and a lot of other page
-table manipulation functions - it's where most of the cache misses
-happen. That's true on the page fault side, but it's also true for
-things like copy_page_range() etc)
-
-                 Linus

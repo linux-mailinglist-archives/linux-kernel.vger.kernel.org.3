@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EB9479A19
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88439479A1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbhLRKAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 05:00:43 -0500
-Received: from mga07.intel.com ([134.134.136.100]:21439 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229632AbhLRKAm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 05:00:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639821642; x=1671357642;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LuX2as4JMWdT21tsjom/hoLRUPwLC1tZPMkCGMK1WGE=;
-  b=S1RZcd4HRK1Zv+kxkOzh+wB3qJiQHHk/DxaW60MiSsHEx+9QGTlDAdeR
-   r8dwXHXX9w9Jagr2KKsP+ghmZdaTUQPY2oIFlY3vThVyzejj9sz7IYVps
-   rEtw64XXNxnIRwEFatKwlTHMOgrjXj6Wcw9Sr4BnMBKzuUSUNqyCtIFMN
-   GtxScbJhPvZ/PNNmwhHNMZfMJCj6sHY2ZUMIG9FtHx/df63tYse2S8/qU
-   0LBRlTwXkbzG/nFCTK0XTgHbW7EloNv91Vf8ZExdumGX7GC1a+CLdfaUd
-   WuIfIvtBNjj88fSZjGizDO+lGQmyDr2usA3Q5ypR4qzq3zkAo/flWcKe6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303283448"
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="303283448"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 02:00:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="466798383"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 18 Dec 2021 02:00:41 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myWW8-0005r8-Aj; Sat, 18 Dec 2021 10:00:40 +0000
-Date:   Sat, 18 Dec 2021 18:00:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [thomash:async_vma10 6/7]
- drivers/gpu/drm/i915/i915_vma_resource.c:379:39: error: format specifies
- type 'unsigned long' but the argument has type 'unsigned int'
-Message-ID: <202112181745.36r8RZEy-lkp@intel.com>
+        id S229934AbhLRKBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 05:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229632AbhLRKBN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 05:01:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFA5C061574;
+        Sat, 18 Dec 2021 02:01:12 -0800 (PST)
+Date:   Sat, 18 Dec 2021 10:01:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639821671;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0yCvEbsyrvJ6VKe6uQfIaWCsjbOQ79tyCCplqP0sFUs=;
+        b=tPTJSbgppy133SNzO2IRrhgr/eZ6X3jcEza/z+0b+OG7OoQpJk3Pb5HeZaBS30sYpaRunt
+        AKc7z+EmZ4Cebj5tOkU8aU28x9vzXE6I53BH4rt2Wd0tyYgIKcColJgF+JC/chnjAUMC7r
+        iMpH9KXHWUyQ8GhxDuMipyjtSpax40Qfvii6Vz9pATDU5U9HAf6h9bp2+s7JYyl7cOoKeJ
+        aslRxAWNXFEgfMxezpxi5atB2qmvVefik99mGt/uaE1zeb+wj6ZHam6TfDfSRQ98KbRfsD
+        2y9WnRndy8cFxdJj7KxBBcCHNCJWgyJIcCaqXaBlDMhCs/84tciFmDgkdbvo8A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639821671;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0yCvEbsyrvJ6VKe6uQfIaWCsjbOQ79tyCCplqP0sFUs=;
+        b=VcIJiAkQAjfiGFZuTn6PlHVsU96IAOfR9rtdBupwxM/0DJad3ADvkY8s08vqI5OxSf7pZt
+        +/B5ffMPq78EB8BQ==
+From:   "tip-bot2 for Zqiang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] locking/rtmutex: Fix incorrect condition in
+ rtmutex_spin_on_owner()
+Cc:     Zqiang <qiang1.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211217074207.77425-1-qiang1.zhang@intel.com>
+References: <20211217074207.77425-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-ID: <163982167017.23020.3158863463249807527.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://people.freedesktop.org/~thomash/linux async_vma10
-head:   597bad76cbd833089ad27552582b3a0ac942f8ba
-commit: 7a09f14a4d7a15d8b0568e527448617a72ee51e8 [6/7] drm/i915: Use vma resources for async unbinding
-config: i386-randconfig-r011-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181745.36r8RZEy-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add thomash git://people.freedesktop.org/~thomash/linux
-        git fetch --no-tags thomash async_vma10
-        git checkout 7a09f14a4d7a15d8b0568e527448617a72ee51e8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+The following commit has been merged into the locking/core branch of tip:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Commit-ID:     8f556a326c93213927e683fc32bbf5be1b62540a
+Gitweb:        https://git.kernel.org/tip/8f556a326c93213927e683fc32bbf5be1b62540a
+Author:        Zqiang <qiang1.zhang@intel.com>
+AuthorDate:    Fri, 17 Dec 2021 15:42:07 +08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sat, 18 Dec 2021 10:55:51 +01:00
 
-All errors (new ones prefixed by >>):
+locking/rtmutex: Fix incorrect condition in rtmutex_spin_on_owner()
 
->> drivers/gpu/drm/i915/i915_vma_resource.c:379:39: error: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Werror,-Wformat]
-           pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
-                                        ~~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                        %u
-   include/linux/printk.h:493:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 error generated.
+Optimistic spinning needs to be terminated when the spinning waiter is not
+longer the top waiter on the lock, but the condition is negated. It
+terminates if the waiter is the top waiter, which is defeating the whole
+purpose.
 
-
-vim +379 drivers/gpu/drm/i915/i915_vma_resource.c
-
-   376	
-   377	int __init i915_vma_resource_module_init(void)
-   378	{
- > 379		pr_err("vma resource size is %lu\n", sizeof(struct i915_vma_resource));
-
+Fixes: c3123c431447 ("locking/rtmutex: Dont dereference waiter lockless")
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211217074207.77425-1-qiang1.zhang@intel.com
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/locking/rtmutex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 0c6a48d..1f25a4d 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -1380,7 +1380,7 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+ 		 *  - the VCPU on which owner runs is preempted
+ 		 */
+ 		if (!owner->on_cpu || need_resched() ||
+-		    rt_mutex_waiter_is_top_waiter(lock, waiter) ||
++		    !rt_mutex_waiter_is_top_waiter(lock, waiter) ||
+ 		    vcpu_is_preempted(task_cpu(owner))) {
+ 			res = false;
+ 			break;

@@ -2,106 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218A64799E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 10:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FAF4799E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 10:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbhLRJJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 04:09:27 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33864 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbhLRJJZ (ORCPT
+        id S232435AbhLRJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 04:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230286AbhLRJNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 04:09:25 -0500
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JGKlz6h89zcbh0;
-        Sat, 18 Dec 2021 17:09:03 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 18 Dec 2021 17:09:23 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 18 Dec 2021 17:09:23 +0800
-Subject: Re: [PATCH RFC] block, bfq: update pos_root for idle bfq_queue in
- bfq_bfqq_move()
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>
-CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20211210081641.3025060-1-yukuai3@huawei.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <680073dc-cdaf-8634-e536-7f07997c5d93@huawei.com>
-Date:   Sat, 18 Dec 2021 17:09:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 18 Dec 2021 04:13:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87325C061574;
+        Sat, 18 Dec 2021 01:13:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36D71B8075D;
+        Sat, 18 Dec 2021 09:13:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC97C36AE5;
+        Sat, 18 Dec 2021 09:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639818817;
+        bh=3BlsJhspxE/hwfBLonMvlt6Kd4L0FO/CGFZVjahTx8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZjXp5jYSPp/Vu9yLhUAVhLC6stfS63C6Ictuka54OkkIswz7jJscX9sX3X/0pX7Q3
+         BNpm62AmkIfqGOdfva+1PkBh9tlPuM53cnGE49jnI1OE2VZqc5hu6oh7KZE9qOLRyV
+         rRW77Xo/djx6ipL4O+jLz7L+tUJcGhN+5EciyV+Q=
+Date:   Sat, 18 Dec 2021 10:13:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Julio Faracco <jcfaracco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stern@rowland.harvard.edu, axboe@kernel.dk, tglx@linutronix.de,
+        damien.lemoal@wdc.com, dkadashev@gmail.com,
+        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
+        niklas.cassel@wdc.com, penguin-kernel@i-love.sakura.ne.jp,
+        macro@orcam.me.uk, caihuoqing@baidu.com
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Message-ID: <Yb2mOUHSwE+iUrkm@kroah.com>
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211210081641.3025060-1-yukuai3@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218042420.28466-1-jcfaracco@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2021/12/10 16:16, Yu Kuai Ð´µÀ:
-> During code review, we found that if bfqq is not busy in
-> bfq_bfqq_move(), bfq_pos_tree_add_move() won't be called for the bfqq,
-> thus bfqq->pos_root still points to the old bfqg. However, the ref
-> that bfqq hold for the old bfqg will be released, so it's possible
-> that the old bfqg can be freed. This is problematic because the freed
-> bfqg can still be accessed by bfqq->pos_root.
+On Sat, Dec 18, 2021 at 01:24:20AM -0300, Julio Faracco wrote:
+> Clang is reporting some issues related variable values not used and
+> other issues inside some USB host drivers. This commit removes some
+> trashes and adds some strategies to mitigate those warnings.
 > 
-> Fix the problem by calling bfq_pos_tree_add_move() for idle bfqq
-> as well.
+> The most important is the maxpacket not checking for zeros inside both
+> functions qtd_fill(). Even if this variable is always higher than zero,
+> it should be checked to avoid this kind of verbosity.
 > 
-Friendly ping ...
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   block/bfq-cgroup.c | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 24a5c5329bcd..85f34c29b909 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -645,6 +645,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->   		   struct bfq_group *bfqg)
->   {
->   	struct bfq_entity *entity = &bfqq->entity;
-> +	struct bfq_group *old_parent = bfqq_group(bfqq);
->   
->   	/*
->   	 * Get extra reference to prevent bfqq from being freed in
-> @@ -666,7 +667,6 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->   		bfq_deactivate_bfqq(bfqd, bfqq, false, false);
->   	else if (entity->on_st_or_in_serv)
->   		bfq_put_idle_entity(bfq_entity_service_tree(entity), entity);
-> -	bfqg_and_blkg_put(bfqq_group(bfqq));
->   
->   	if (entity->parent &&
->   	    entity->parent->last_bfqq_created == bfqq)
-> @@ -679,11 +679,16 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->   	/* pin down bfqg and its associated blkg  */
->   	bfqg_and_blkg_get(bfqg);
->   
-> -	if (bfq_bfqq_busy(bfqq)) {
-> -		if (unlikely(!bfqd->nonrot_with_queueing))
-> -			bfq_pos_tree_add_move(bfqd, bfqq);
-> +	/*
-> +	 * Don't leave the pos_root to old bfqg, since the ref to old bfqg will
-> +	 * be released and the bfqg might be freed.
-> +	 */
-> +	if (unlikely(!bfqd->nonrot_with_queueing))
-> +		bfq_pos_tree_add_move(bfqd, bfqq);
-> +	bfqg_and_blkg_put(old_parent);
-> +
-> +	if (bfq_bfqq_busy(bfqq))
->   		bfq_activate_bfqq(bfqd, bfqq);
-> -	}
->   
->   	if (!bfqd->in_service_queue && !bfqd->rq_in_driver)
->   		bfq_schedule_dispatch(bfqd);
-> 
+> Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+
+Please break this up into "one patch per warning" and show the warning
+that is happening as well, as it is not obvious why you are changing
+these files in the way you are doing it.
+
+thanks,
+
+greg k-h

@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746F4479A88
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B13479A8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbhLRLRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 06:17:08 -0500
-Received: from nautica.notk.org ([91.121.71.147]:58874 "EHLO nautica.notk.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230112AbhLRLRH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 06:17:07 -0500
-X-Greylist: delayed 690 seconds by postgrey-1.27 at vger.kernel.org; Sat, 18 Dec 2021 06:17:07 EST
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 52700C01D; Sat, 18 Dec 2021 12:17:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1639826226; bh=8CSxbc5WL1k9ccoiWDDaGfsWN/iRL7BkpYTEy76X/4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZTqdmRywC9U7LQrM+zMrWByW5RkhT1tb4OXOzA/K9L0G5vMRwroDEOkAQRjSUlRhh
-         DplAlrczMjz9XMVo7t1sgXiXJhyCQ1+W++tCVrw39d0FMBKPBm+3+CN6w+j6petNJW
-         bYdq/ScRIyr0EL7aEYVUtq+Abj4bLmYK6X1/UqQnNTEHQ3bAxAS2YaEZcOgTGnYyQ1
-         qkGEFQzjlw6ExdAYWBxJXXnnDupd42t4BZtkGHUeuKXEtJ+QhYM4cH303fh9vwBAJA
-         2lMC8UQJ6svZj84nJYQvJmlqUC2VqYiv4VSnZ7GSegvyZAbg0hd2U7kFP29gwIHS11
-         GeLEQSqdTXWiw==
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on nautica.notk.org
-X-Spam-Level: 
-X-Spam-Status: No, score=0.0 required=5.0 tests=UNPARSEABLE_RELAY
-        autolearn=unavailable version=3.3.2
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 96C03C009;
-        Sat, 18 Dec 2021 12:17:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1639826224; bh=8CSxbc5WL1k9ccoiWDDaGfsWN/iRL7BkpYTEy76X/4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NIzjkSptoI6TTpfj/IR3eA52mZE8NyVvKXRyBr/V1b8ImSn5W7v5gBM3otX51jRIE
-         5p9kbrEjgWjHq1xQChET357PtxOdaftgV+izFJ0xXkf7kePu76HE1q+gE9ZyWfdxYP
-         90Pv7urwyRhfC5BrmYoX12CvzyaBciKc/Uf+1/1FLPsmZTpJOKzPrRpRXKJqslU4Xn
-         VKhw+45zL9Q1Z39cGxFPxfVfv9xot0BCGRImIuim5RQIvnoizyGrVEEa0t3zWSZ0jV
-         nfNKDZfH54g4+mSd4X/Ui7egDwlv3bXSw21FvuFTxQ+345GPBDD0WnigLEq3AHIHr2
-         RRAD7z+wgm9ng==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 6bbaf76b;
-        Sat, 18 Dec 2021 11:17:00 +0000 (UTC)
-Date:   Sat, 18 Dec 2021 20:16:44 +0900
-From:   asmadeus@codewreck.org
-To:     cgel.zte@gmail.com
-Cc:     ericvh@gmail.com, lucho@ionkov.net,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Zhang Mingyu <zhang.mingyu@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] 9p: Use BUG_ON instead of if condition followed by BUG.
-Message-ID: <Yb3DHNHjk0SwMJPU@codewreck.org>
-References: <20211112092547.9153-1-zhang.mingyu@zte.com.cn>
+        id S232948AbhLRLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 06:17:33 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48790 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230112AbhLRLRc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 06:17:32 -0500
+Received: by mail-io1-f69.google.com with SMTP id g23-20020a6be617000000b005e245747fb4so3270115ioh.15
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 03:17:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Nn4S/hdNFMK38bUgCV7tKgCyvOkQdqxyUF/70R2vv0Q=;
+        b=d2Vu2TA7ERlnUgZAIy2++XKWaEzbGSMt6nI03Mt3A2H9TqmYGdGqNGbTv49+wQD4CS
+         nTKzDIHVnMRZARNPv9Q66c4wabLGafKrq/Uo8frWkGto6mz2jxm7m6UO3DleJQE6PI1a
+         qKZfPhU1GPHz0HnxhpIG6Az5Wbh2pg4tl/KTL0K4o4R6boNm3nIIqg0m4IlKn+o2PeU3
+         4jKU7y2WSFCmskt514uwaMY/tKcRM9R5VzmWXReqgjTHcrBIXvUFthubujxGttcN99zp
+         ntKhfehyERqROTb05tPzZjsdoAHI5COrnlL5l1zUlAVfYhBxe7c/hsdcg26ivnfPbTh4
+         Fz/Q==
+X-Gm-Message-State: AOAM533QYOJxA32uEQisB55fL/J4sPBYczUTNPBbfexEl3d8ETvDyZJp
+        5wgqSdaGWpC/2MTloBR8Os6/XhXAE9wzKMWOtIvMHq5U1glY
+X-Google-Smtp-Source: ABdhPJxnkN/hhHZkSsIS1SQmfGm2nhYF4CMP2ghHGJyTCB0WN0FHzuNlp6PaYckqafM0YFGSvmQTqvXkzsi6Mr0EOXg0k52Cwjl+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211112092547.9153-1-zhang.mingyu@zte.com.cn>
+X-Received: by 2002:a05:6e02:1569:: with SMTP id k9mr3680193ilu.200.1639826252255;
+ Sat, 18 Dec 2021 03:17:32 -0800 (PST)
+Date:   Sat, 18 Dec 2021 03:17:32 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004255b405d369cd72@google.com>
+Subject: [syzbot] KMSAN: uninit-value in snd_rawmidi_ioctl
+From:   syzbot <syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, broonie@kernel.org, coding@diwic.se,
+        colin.king@intel.com, glider@google.com, joe@perches.com,
+        linux-kernel@vger.kernel.org, perex@perex.cz,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgel.zte@gmail.com wrote on Fri, Nov 12, 2021 at 09:25:47AM +0000:
-> From: Zhang Mingyu <zhang.mingyu@zte.com.cn>
-> 
-> This issue was detected with the help of Coccinelle.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Zhang Mingyu <zhang.mingyu@zte.com.cn>
+Hello,
 
-I realize I've never replied to this mail when applying old patches now,
-I've picked this up too.
+syzbot found the following issue on:
 
-> ---
->  fs/9p/vfs_file.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/9p/vfs_file.c b/fs/9p/vfs_file.c
-> index 4244d48398ef..f2375448cafc 100644
-> --- a/fs/9p/vfs_file.c
-> +++ b/fs/9p/vfs_file.c
-> @@ -139,8 +139,7 @@ static int v9fs_file_do_lock(struct file *filp, int cmd, struct file_lock *fl)
->  	fid = filp->private_data;
->  	BUG_ON(fid == NULL);
->  
-> -	if ((fl->fl_flags & FL_POSIX) != FL_POSIX)
-> -		BUG();
-> +	BUG_ON((fl->fl_flags & FL_POSIX) != FL_POSIX);
->  
->  	res = locks_lock_file_wait(filp, fl);
->  	if (res < 0)
+HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11791d89b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=88412ee8811832b00dbe
+compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a7abf9b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172410b9b00000
 
--- 
-Dominique
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
+ snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860
+ __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ slab_alloc mm/slub.c:3259 [inline]
+ kmem_cache_alloc_trace+0xaca/0x1140 mm/slub.c:3276
+ kmalloc include/linux/slab.h:590 [inline]
+ snd_rawmidi_open+0x70d/0x1390 sound/core/rawmidi.c:445
+ snd_open+0x702/0x890 sound/core/sound.c:169
+ chrdev_open+0xbc9/0xd80 fs/char_dev.c:414
+ do_dentry_open+0x1128/0x1bf0 fs/open.c:822
+ vfs_open+0xaf/0xe0 fs/open.c:957
+ do_open fs/namei.c:3426 [inline]
+ path_openat+0x52f1/0x5dd0 fs/namei.c:3559
+ do_filp_open+0x306/0x760 fs/namei.c:3586
+ do_sys_openat2+0x263/0x8f0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_sys_openat fs/open.c:1244 [inline]
+ __se_sys_openat fs/open.c:1239 [inline]
+ __x64_sys_openat+0x35f/0x3c0 fs/open.c:1239
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+CPU: 1 PID: 6368 Comm: syz-executor467 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,188 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03899479C28
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA83479C2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbhLRStE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 13:49:04 -0500
-Received: from ixit.cz ([94.230.151.217]:42040 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233871AbhLRStD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 13:49:03 -0500
-Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id A745F2243C;
-        Sat, 18 Dec 2021 19:49:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1639853341;
+        id S233907AbhLRStU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 13:49:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22554 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233896AbhLRStT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 13:49:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639853358;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fi1/ahYzUfgNf7k8qooILk/MXB0xNwBc1FbfH2vZ9HI=;
-        b=sONuUUkIxe5DdfeWO3FwNbAfaV6BI8qBPTJ92THZOI4tHXaMuNa2RQoFXCY65cdbVWeIAO
-        jXYBouBQZth9VFRnW3gE4XS2En7T/joc5LNGHvE+rbdEVgMGXHmicURv9xJ06km6HP4oZw
-        lyettBwpx7DzJpZLqrTGse/G/SxOEkI=
-Date:   Sat, 18 Dec 2021 19:48:54 +0100
-From:   David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH] dt-binding: soc: qcom: convert Qualcomm Command DB
- documentation to yaml
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <IXQB4R.TDKX07UI05SQ3@ixit.cz>
-In-Reply-To: <20211218184617.19923-1-david@ixit.cz>
-References: <20211218184617.19923-1-david@ixit.cz>
-X-Mailer: geary/40.0
+        bh=uhRiwrLblv6LrtKBUtcukWvIk/VX3NESiRZY2ifPa0E=;
+        b=PuCGx+yr/W+ENVR91wIpfdA/oBVOL0WN2cZaDCGPHoP7nObmu5UipjYHa9KojgD9lpGPiO
+        Ufzbwe9gr+yL0myobSv4mfyuusKP00/XQ+ciwRk/eI+P5mIZykPpC2sOJhTTGTkfy1x4Jw
+        EqImgqOmxmc9JAleA9AT70YBgntMHmU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-tw9NQyNVMS-mRbZjP0tetQ-1; Sat, 18 Dec 2021 13:49:16 -0500
+X-MC-Unique: tw9NQyNVMS-mRbZjP0tetQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1681692wrb.16
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 10:49:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=uhRiwrLblv6LrtKBUtcukWvIk/VX3NESiRZY2ifPa0E=;
+        b=AgetD29ZZTYz/E+k+DrizSln9Er9Y9DrLptUXkpLoyAabzbPxHNPNRZMIyn5TAlLQm
+         oVxpWGgynmKQ/vaUa9jgm6Q6n+FGdj3X6LjAkLZSwJgIfoJTxrkSMUpXbp3bDykJQZcg
+         DopnxStwnqu7MbLvWrANKFMlX8kzXNXeAPCPkxjTGZQpPm+1FgRY5565KfNDyqYqShP5
+         t4h9Hi6GXh2ZndinhvckF5VAM7m7rdNtD/06cJVdsKp/rNqGz2momb6hGvQOQ8JtXGp9
+         7Pa/lMroCnr7N6HeWLs/QI8cwwZV+85JOQX5jYk6g5Nh+5mYBZXapiDbRqwyMpi2XExC
+         V44w==
+X-Gm-Message-State: AOAM530BqJmmReEP48iDFApWdTh9dYXxjKMl0n2598q2nfrx1oQon6r8
+        ng2XFNv7s5aLZ/9zAK3L0UN3+X6QRy5R+vQMLXmnp68noDUo4lrCLwl5ov0sNl6o+GFI7Mvn6V3
+        mIcwAPpDqhQ/KVNxWbZf9um6t
+X-Received: by 2002:adf:ec09:: with SMTP id x9mr7147741wrn.111.1639853355587;
+        Sat, 18 Dec 2021 10:49:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDFt+1rFxfXccOI3RI6oyMbenaBedcvYZKSfxCuOqeF99P3goaUxXr5SX8S8gOs1yQJRRu9w==
+X-Received: by 2002:adf:ec09:: with SMTP id x9mr7147714wrn.111.1639853355380;
+        Sat, 18 Dec 2021 10:49:15 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c6703.dip0.t-ipconnect.de. [91.12.103.3])
+        by smtp.gmail.com with ESMTPSA id s189sm12480345wme.0.2021.12.18.10.49.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Dec 2021 10:49:14 -0800 (PST)
+Message-ID: <6c570757-018f-f6bb-a0fc-2c0d4a845201@redhat.com>
+Date:   Sat, 18 Dec 2021 19:49:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+ <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+ <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
+ <20211218030509.GA1432915@nvidia.com>
+ <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
+ <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20211218184233.GB1432915@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Mahesh Sivasubramanian <msivasub@codeaurora.org> email doesn't 
-exist anymore (returned with 550 User doesn't exist.), who should I 
-assign as maintainer for this document?
-Davi
+On 18.12.21 19:42, Jason Gunthorpe wrote:
+> On Fri, Dec 17, 2021 at 07:38:39PM -0800, Linus Torvalds wrote:
+>> On Fri, Dec 17, 2021 at 7:30 PM Nadav Amit <namit@vmware.com> wrote:
+>>>
+>>> In such a case, I do think it makes sense to fail uffd-wp (when
+>>> page_count() > 1), and in a prototype I am working on I do something
+>>> like that.
+>>
+>> Ack. If uddf-wp finds a page that is pinned, just skip it as not
+>> write-protectable.
+>>
+>> Because some of the pinners might be writing to it, of course - just
+>> not through the page tables.
+> 
+> That doesn't address the qemu use case though. The RDMA pin is the
+> 'coherent r/o pin' we discussed before, which requires that the pages
+> remain un-write-protected and the HW DMA is read only.
+> 
+> The VFIO pin will enable dirty page tracking in the system IOMMU so it
+> gets the same effect from qemu's perspective as the CPU WP is doing.
+> 
+> In these operations every single page of the guest will be pinned, so
+> skip it just means userfault fd wp doesn't work at all.
+> 
+> Qemu needs some solution to be able to dirty track the CPU memory for
+> migration..
+> 
+>> So that sounds like the right thing to do. I _think_ we discussed this
+>> the last time this came up. I have some dim memory of that. Jason,
+>> ring a bell?
+> 
+> We talked about clear_refs alot, but it was never really clear the use
+> case, I think. Plus that discussion never finialized to anything.
+> 
+> David's latest summary seems accurate, if I paraphrase at a high
+> level, Linus's approach always does enough COWs but might do extra and
+> David's approach tries to do exactly the right number of COWs.
+> 
+> It looks like to have the same functionality with Linus's approach we
+> need to have a way for userspace to opt out of COW and work in an
+> entirely deterministic non-COW world. WP&GUP can never work together
+> otherwise which leaves qemu stranded.
+> 
+> Or, we follow David's approach and make COW be precise and accept the
+> complexity..
 
-On Sat, Dec 18 2021 at 19:46:16 +0100, David Heidelberg <david@ixit.cz> 
-wrote:
-> Convert Qualcomm Command DB documentation into yaml format.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/reserved-memory/qcom,cmd-db.txt  | 37 ---------------
->  .../bindings/reserved-memory/qcom,cmd-db.yaml | 46 
-> +++++++++++++++++++
->  2 files changed, 46 insertions(+), 37 deletions(-)
->  delete mode 100644 
-> Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.txt
->  create mode 100644 
-> Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-> 
-> diff --git 
-> a/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.txt 
-> b/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.txt
-> deleted file mode 100644
-> index 68395530c0a5..000000000000
-> --- 
-> a/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.txt
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -Command DB
-> ----------
-> -
-> -Command DB is a database that provides a mapping between resource 
-> key and the
-> -resource address for a system resource managed by a remote 
-> processor. The data
-> -is stored in a shared memory region and is loaded by the remote 
-> processor.
-> -
-> -Some of the Qualcomm Technologies Inc SoC's have hardware 
-> accelerators for
-> -controlling shared resources. Depending on the board configuration 
-> the shared
-> -resource properties may change. These properties are dynamically 
-> probed by the
-> -remote processor and made available in the shared memory.
-> -
-> -The bindings for Command DB is specified in the reserved-memory 
-> section in
-> -devicetree. The devicetree representation of the command DB driver 
-> should be:
-> -
-> -Properties:
-> -- compatible:
-> -	Usage: required
-> -	Value type: <string>
-> -	Definition: Should be "qcom,cmd-db"
-> -
-> -- reg:
-> -	Usage: required
-> -	Value type: <prop encoded array>
-> -	Definition: The register address that points to the actual location 
-> of
-> -		    the Command DB in memory.
-> -
-> -Example:
-> -
-> -	reserved-memory {
-> -		[...]
-> -		reserved-memory@85fe0000 {
-> -			reg = <0x0 0x85fe0000 0x0 0x20000>;
-> -			compatible = "qcom,cmd-db";
-> -			no-map;
-> -		};
-> -	};
-> diff --git 
-> a/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml 
-> b/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-> new file mode 100644
-> index 000000000000..fa5cd6a77634
-> --- /dev/null
-> +++ 
-> b/Documentation/devicetree/bindings/reserved-memory/qcom,cmd-db.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: 
-> "http://devicetree.org/schemas/reserved-memory/qcom,cmd-db.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm Command DB
-> +
-> +description: |
-> +  Command DB is a database that provides a mapping between resource 
-> key and the
-> +  resource address for a system resource managed by a remote 
-> processor. The data
-> +  is stored in a shared memory region and is loaded by the remote 
-> processor.
-> +
-> +  Some of the Qualcomm Technologies Inc SoC's have hardware 
-> accelerators for
-> +  controlling shared resources. Depending on the board configuration 
-> the shared
-> +  resource properties may change. These properties are dynamically 
-> probed by the
-> +  remote processor and made available in the shared memory.
-> +
-> +maintainers:
-> +  - Mahesh Sivasubramanian <msivasub@codeaurora.org>
-> +
-> +allOf:
-> +  - $ref: "reserved-memory.yaml"
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,cmd-db
-> +
-> +required:
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        reserved-memory@85fe0000 {
-> +            reg = <0x85fe0000 0x20000>;
-> +            compatible = "qcom,cmd-db";
-> +            no-map;
-> +        };
-> +    };
-> --
-> 2.34.1
-> 
+Thanks Jason,
 
+I would really enjoy us discussion how we can eventually make it
+*precise* COW model work instead of living with a broken MM subsystem,
+as all the reproducers show. IMHO we should stop throwing more band-aids
+at it.
+
+Is my approach complete? Sounds like it's not because Linus raised a
+good point that the mapcount in the current state might not be stable
+for our use case. I'm very happy that he reviewed this series.
+
+I have some ideas to make the "_mapcount" of anonymous pages express
+exactly that: how many active (PTE mapped) users do we have and how many
+inactive (swap entries, migration entries) do we have. We can certainly
+discuss any such approaches, but first there should be the will to try
+getting it right ...
+
+-- 
+Thanks,
+
+David / dhildenb
 

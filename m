@@ -2,162 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA94479B10
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 14:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE615479B14
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 14:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbhLRNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 08:39:08 -0500
-Received: from mail-vi1eur05on2105.outbound.protection.outlook.com ([40.107.21.105]:25889
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229580AbhLRNjH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 08:39:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1lVIY6asmvj5cMnOFctaMv4SOyB7er9xjKV/BndwxEfY7hTW/A8K3sgFHQGNEQ5QnQ/os3iYk9TU3Dig2KuHdxplUAtvJDIMHgQ07s9XMFUW8DwugPjNGWmVWCOLOvimb1veD/uuJQ+zn1Aa+DN3R5NB+ILCTDzhBlI7ZTuezpJpBfxqkC4LSksxlhtQfnghb/a2XO8UymlUFhlsUmxP25zlCjLWDRxaFSNdvxur+jbpd6Hc6CflE7mUa3CxQ/R6CryX30j3hxpOQHp7mSWf/jEDtYW2DM/ea2XalhX0sZDFmKmrAHkTs/0UbBmOQEXlZm49OIc98sCY2QQEMVVBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1dz/dKKH3xho/NN9VVxdhDZBC/VLu1kaAe67EoD8P6k=;
- b=BIW8ztzOPb35qLl2loj0WAyjmx4QZsPPAOQjLULgDt8p1pn8NiZl0foywpOFGaWjo3QPPChw+QPkZLWXKZxNbGEAObfEB1YLPCBEMNmR8SqSD+7z4fKIa0az5uEjnWnK1L8ryKKedwrsO544ZNRe7qqXd0wPdr2we0XwlBp/xbBKaRih0e+rzVDcETxOu61AeYtpuGV66JfRlSIswgYUZBIDtgjq4zj3JfeckyZceTAFHFWKCHf8zzdquXxv+ja0izLzriN1rcii2ekzUwuJ53/co+WCldV9O9kn6N7lb/pJCR0+szlDNMWlmpcbhFJUXh+3QnULJaVoURAkrXuYIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1dz/dKKH3xho/NN9VVxdhDZBC/VLu1kaAe67EoD8P6k=;
- b=hYpWLcoFzYRyO0+HgabJp17qGj/myO290HkisvBTnsAyqNIu1ucyfSQtEjcTS+5YgGY6sEwJgVRvk09UsMrQY0jEdl+qqNjKZ0P8+Ddj7vg63hokGz1D0Iv+BRBq4Xeh/nTh5OrxMjDChx3wSnuNNNIu6Ml5Ah3vac2tbBoXH5I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VE1PR08MB5630.eurprd08.prod.outlook.com (2603:10a6:800:1ae::7)
- by VI1PR0802MB2573.eurprd08.prod.outlook.com (2603:10a6:800:b1::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Sat, 18 Dec
- 2021 13:39:03 +0000
-Received: from VE1PR08MB5630.eurprd08.prod.outlook.com
- ([fe80::5807:e24c:a173:3b71]) by VE1PR08MB5630.eurprd08.prod.outlook.com
- ([fe80::5807:e24c:a173:3b71%4]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
- 13:39:03 +0000
-Subject: Re: [PATCH/RFC] mm: add and use batched version of
- __tlb_remove_table()
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        kernel@openvz.org
-References: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
- <YbzZaFY+ht+bUtcz@ravnborg.org>
-From:   Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-Message-ID: <f955a1a8-eaac-0ab7-a48c-6237b3511312@virtuozzo.com>
-Date:   Sat, 18 Dec 2021 16:38:59 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <YbzZaFY+ht+bUtcz@ravnborg.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P194CA0094.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:8f::35) To VE1PR08MB5630.eurprd08.prod.outlook.com
- (2603:10a6:800:1ae::7)
+        id S233276AbhLRNkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 08:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229580AbhLRNkU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 08:40:20 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC28AC061574;
+        Sat, 18 Dec 2021 05:40:19 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g14so18709762edb.8;
+        Sat, 18 Dec 2021 05:40:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umich.edu; s=google-2016-06-03;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p/UqZ/upQjkHGa9bi+yKS/UZ7AQ0AqXRlMB4Am1SrGQ=;
+        b=e/IMQgAemgDsxjxrh8euApfhM10ZNYlxBo5XoHX1FVakKBP33qmVYSm0XAgcf+sGt9
+         N+pdVlpVrGCSvQ6RT36/A1wgbAhnh54CRAQM08W1Vf2qs4S6P8VVVlbE9KYzRp7suzKO
+         c9JC7HvfyY+C0c1s5kwo16zGXovSE+ExAWKOYpgvZI+Gs3989DGHwoOoC3Uyex5HCp9F
+         /2y/bxEriQgKzy2TxsZ5Wjgz1oV2iweJGNqEtDvHh4Uz8gdKEnblAHM9jxe0BKH3Fc5H
+         gP8Y3apJlIDw0YsD5JieWdxvbQUHp7M48cnMwVuLqZFs7jpZDRJdHCrNS3nLBASNBASK
+         FKlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p/UqZ/upQjkHGa9bi+yKS/UZ7AQ0AqXRlMB4Am1SrGQ=;
+        b=zKWBNNDbWP/5PLooBb+GmtddU4otKquugFExPAGWZ66AjMx4L/8WATo7NYI+vikPF6
+         k7YgaqSVhDtsq0dK5MAIAXAidslq6iBN/IiQtEWw6KlwgZJDCsYxOHKvoj31ke2vc4qn
+         yhPZLjuq9nsxLeKxC1atP0S1SINQbvp9Li3q+2f32raq5KHO/aVgoCRnS2KDyhBgpoHd
+         JfRAVJy6/sSv05oBfGMAvYwJO+gPZS6qYMEeTVK8IGZahUL7N8jIWss+MfkprPi0vUH+
+         ysR1vdnyJMB0U58ROlHON6cvpor7UIXnuEJByS9Sb2bXTfXH4R+7YO1rRVNWX7Jyh+b5
+         G8Bw==
+X-Gm-Message-State: AOAM530A+boLCvF4TzDCa4QYFb5b689pNhJreDfCux60jEPFOK415WFq
+        BddWZe4fHiCfCftTNMeo4WYO8ifhYtqmtrrQYdM=
+X-Google-Smtp-Source: ABdhPJz6mWnc12+sqhGlOiMgvbp8wGfd4d2dqfrf3Ls2jNpW+376Cl2K3k6X9RT/2x/qLIbTy2HMOHGzuqI6Z/rEm6Y=
+X-Received: by 2002:aa7:d593:: with SMTP id r19mr2727512edq.168.1639834818167;
+ Sat, 18 Dec 2021 05:40:18 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: db7c3c49-8eb6-4bb3-1afb-08d9c22bc170
-X-MS-TrafficTypeDiagnostic: VI1PR0802MB2573:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0802MB25735FD7D9E7A1475B86065AF4799@VI1PR0802MB2573.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0MBmv84COZQskTJfjqiT3nLWJCO0c6YTtghw7KxA0IHOO1kfgoNuV2N7Xl9+rZ4SlJD/KThJTm3OsEx+am8UKynAD9IVVbid+qjFBf4unuXy/atRQGpllEVBdvPvz5CM1+/7o8WtcmmAX+mpo7tNPsqZj85FcKA9Deef40gziWMddfUcLfLcPvR49YFikwGcjEgXEKwb/9OtsZLaTxrYZMTWvLYm767JmOFLGFl7hr1lEG5PlDs8q1gsa0ZVsecFgjY853jOF/7ikkN14WfO1E/Vvk0cvTxoxM7HhqnxjhsFKelMNuSjZ9SMbDvgbTFl+B80drh7AZuu5VkaVCsfN6n7cxj59wPRxrxJQFzJVZubEiiy004NItExzF/6yNVBU9DDu+zNLIb7NEWToIMGtfqCPDZk4x5ZzoddXXHqTZ3VnzCGkpzyrfmR5/p3jinkum0WZEmacyARD2qgs4dt95OKZJVMA0Q3xwAsVaVqA8JKAf+FvGbMgWWBL7RhFbVtvKT0gNGw7Tzh2IimMxdPEnNoSA/6n3SkqOO3ZylBBKNx8pd88G1HrLjYtLllHE1bwl1bbLx6LrCDyyEUV9pJ2xmfYPODgQK9kTgR/4zp8bVXoocrPdEfjucaxfuwZwBcF4P9AlHTs6EmYen6bfOeBaFX1s/i3g8CKpWlHBRsnKZZvNQ1iHwQ9Q+pswzSpPVeyPCm0symXATo1spjqo9nMgprKhFVkB9xbkltGzSfRts=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB5630.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(66476007)(107886003)(31686004)(186003)(4744005)(7416002)(6916009)(66556008)(8676002)(4326008)(6666004)(2906002)(6512007)(508600001)(36756003)(316002)(5660300002)(66946007)(2616005)(44832011)(6506007)(31696002)(38100700002)(54906003)(8936002)(86362001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWp5bDNhNzNqQ3I5SW03MFlmbWx6NmtmS0pDSkQ0SWovS09FcXBFWWQya0tn?=
- =?utf-8?B?NWxDWnU3NDVqOFJzcEtzVnlydzlEZ043dTFMcmxxNHRyV2dQajRkUFkvTDJ0?=
- =?utf-8?B?UGV5RjhUOWhwTlNKUXQzVTZWbFpGNm81QlIwb2R5NWRGbGc0SWJvNDk2TE0r?=
- =?utf-8?B?aisvcDM0SDVJSStEUUVpUjVLanI0aERXRW5JUWZqRi9PTHdzVTg0VU9FMjBX?=
- =?utf-8?B?UFdhbTR4ZmxQNUhHVnVLMUNRellseUpJWFB6VkRiYklLVHFvWG53YSs5WTlE?=
- =?utf-8?B?Q0x4ZFl4b09OMEVWQUdnT0hvOVA5K29BbEJMUGQ2d1NZdjIramdyWTdEUVJ3?=
- =?utf-8?B?K1UycEErZVFHU0J5S1kzU2hNMktZc0RtUS9Wa3kxTVRXT0RybUp4T0NOTGhi?=
- =?utf-8?B?RzI4bElYdC9hRFRRRnViZXoxREpldDdIa2puazJVMVpqdXNiNjZvSkdPd0ly?=
- =?utf-8?B?elRXK3h0L0hmR3YxTHhuQjdTcDdjOUZGUVNkNFVKeUU0c1U0WDRGTUVPVkZZ?=
- =?utf-8?B?UVU2TmhSSzgxUk5weE1TL3hFMVFsRTlHS3F4eXZkR0xHTXFiZWpabmpZZ3hV?=
- =?utf-8?B?OGlzMkgvRUdySTY1aEFobTdyWFdXdDA0S0JuODByc3JDTkQxTGh1cnM1a3Nl?=
- =?utf-8?B?eWx6K2hFV3lQRXVWZm8xSG9PeWNzYWU4WTh0VkJuUkNFRFhQTzlLcEtESnFG?=
- =?utf-8?B?dVVsU3FHLzBDV1lBTTA3eUJtcUtDL0ZlSVlZZi9ZZ1dNWmI0Ny9KdVNFdXJr?=
- =?utf-8?B?K3luQTlSbSsrVzlnZUtKUzJ2djJDRm5mM1RNTGFaUFdhRElQL3hNME9vd3p4?=
- =?utf-8?B?Y0NCbE9YR2FZa2l3NG5PZWZSY2p5R2V5VDVWNVkxVXg2bUxZTVR2OEVvZXV0?=
- =?utf-8?B?NTF1RVhiaDc0UUJXeUx6NHdpNDZqSVRWRHVUblh2NktXUEZEcGlyU2d0L2py?=
- =?utf-8?B?MU5jRVF1a0VadTdRcURyVDJudDRzbGFRZ29UZmJXWVVtRUp1UUtwMFJkWXFU?=
- =?utf-8?B?dGJhUzJ4TWJPQVh0N25KdVJhSmVtS3NRaUQyOHYxcVJFanVsNEpQU0lYSDZZ?=
- =?utf-8?B?SmtoQ0wzdmJrU2pyb1lSdzBzNzQvS3ZiWWZSZmp0K2xRMTFSd0F6ajhtUUVG?=
- =?utf-8?B?WGlDNlFwM3JQR1VVV1FGYTlaOTJSdnFpaEtJSVVjQWF4dVBmcTFhK2llVkgv?=
- =?utf-8?B?QmtwT21maXQwWGFReGlGUjFGblZ1V3hBcjJZMHpJKytrUFlKMklGNklMVEtZ?=
- =?utf-8?B?L1Z3R0ZyZ1E4cHBla2p5dEFhS3djTHpaQzcvS0x1S21yMUVzTWNzRXFoRWJD?=
- =?utf-8?B?dWhxUWNEck4zYWtPNmVXYlM0cm9PZ01SakIvbTM5WnFSVTFjblVZb0xPVjdL?=
- =?utf-8?B?ZzF1a1V5YlI3MG5uSVlaNktXNStoTEp5bHNQSDVmUlRzekhBUjcrOVBmTTVw?=
- =?utf-8?B?V2xJNEVYa3M1M0doRE5RUDArS3NHN1ZoYVhFcTU5NnhTTGxsNzNScGZ1V3JE?=
- =?utf-8?B?NGtNWFJIOWkvWlhuWnpzYStyc21sbWhsdGc4eVRIak53WFlvZ1hjTDQ5UEJp?=
- =?utf-8?B?dlcrZXhXNjkyb3lLTWxvVjNjUHU5N21Ed1dYeG92WjY0REhpVlR3a2VMR0Nm?=
- =?utf-8?B?T3Vnc3VRVVBpWGRUZE91c25hZU1DT1JlbDU3Q0JKd2YxcXlCU1lINFNSODJi?=
- =?utf-8?B?MWxuQmVwYnlSRUwxVjAxK0NlajA2bllYUzNkeURtWWJXY0x3SWlOWFZMcS82?=
- =?utf-8?B?UUJZd3k5VC9ta0oyZERSR1FYb1krNnB3MDYwaGJ1MWFOaXJDRllnMEkvaDVS?=
- =?utf-8?B?M1FEYmNQbUtEQ3Y4ZXNmTFB2YVdYaDhNRHZnekIzZkRBV1FzVUkycTNhUUhI?=
- =?utf-8?B?V2V5RnhPYS9xUFphano1VytHSXFSdWZzVGp3Q0UrWExtYWpKWTBlOW8vMFJh?=
- =?utf-8?B?TUliZU1penBkSmd6cXV0dDJzdGc2WmdFQm1SNk9QcWphcWpncVJDclRYM3dD?=
- =?utf-8?B?SGxJWHBHVDZ5VE53YTAxUTVxTlh6VHpPUndYYWtvaVkxUGM0bmVyQ0xxdVkx?=
- =?utf-8?B?M09JMTlTaHhTUjZzN2cvbVBlSU1iNkRWYUdQYTRyN1JNZUgxeXhlcU5NbFNL?=
- =?utf-8?B?MitMRWs4S1l1d1JWZXpSUGVYdWdPbkxqQkRlUWhYT2RJOUc1Yk1sMzh3UHVE?=
- =?utf-8?B?ZUZKZ0gxQXJ2SVZOdGVhb2Jwc3ovUHQvVDVaaGZxd2x0b2F0SjdFcTcwRW9a?=
- =?utf-8?B?Z2FoTGZvdkovL2hOU3ZWcS96Nk9RPT0=?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db7c3c49-8eb6-4bb3-1afb-08d9c22bc170
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB5630.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 13:39:03.6757
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KQkRBSv1MLpLzqTLy4SDb+LPVrLq6YWd26BWPiJ0/LQbpgz+IUWp0kOgg8TfABH53vuICG6QcVHbmfLeEckTI7ATuXHEHH7arme8W38UXp4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0802MB2573
+References: <CAHC9VhS=WgqJgqpQq9J+0Pec9u8e1VnvGwqOimR54wm6TRptVA@mail.gmail.com>
+ <CAHk-=wiiqvcA3noHDqJt2=ik5ikQbycdFQ7s=uq70FcGxWgXvg@mail.gmail.com>
+ <CAN-5tyEKGQu1Y=o8KfsX3q9NkP4XZRos5stwmrT=ZV1hr1fWrQ@mail.gmail.com> <CAHk-=wiDT0aZO6UFnb9sW4rfuxp4xfPTSydnifVgL6H8b5Rb4Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wiDT0aZO6UFnb9sW4rfuxp4xfPTSydnifVgL6H8b5Rb4Q@mail.gmail.com>
+From:   Olga Kornievskaia <aglo@umich.edu>
+Date:   Sat, 18 Dec 2021 08:40:06 -0500
+Message-ID: <CAN-5tyEfuh9zNUsmrNd6kVFuuwmhVdGXM4JboA4OzgQqiqCC_Q@mail.gmail.com>
+Subject: Re: [GIT PULL] SELinux fixes for v5.16 (#3)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        Scott Mayhew <smayhew@redhat.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-17.12.2021 21:39, Sam Ravnborg wrote:
-> Hi Nikita,
-> 
-> How about adding the following to tlb.h:
-> 
-> #ifndef __tlb_remove_tables
-> static void __tlb_remove_tables(...)
-> {
-> 	....
-> }
-> #endif
-> 
-> And then the few archs that want to override __tlb_remove_tables
-> needs to do a
-> #define __tlb_remove_tables __tlb_remove_tables
+On Fri, Dec 17, 2021 at 4:47 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Dec 17, 2021 at 1:08 PM Olga Kornievskaia <aglo@umich.edu> wrote:
+> >
+> > Can you please elaborate on what is problematic with the two patches
+> > you've highlighted.
+>
+> Commit ec1ade6a0448 ("nfs: account for selinux security context when
+> deciding to share superblock") adds the call to
+> security_sb_mnt_opts_compat() from the nfs_compare_mount_options()
+> function.
+>
+> But nfs_compare_mount_options() is called from nfs_compare_super(),
+> which is used as the the "test" callback function for the "sget_fc()"
+> call:
+>
+>         s = sget_fc(fc, compare_super, nfs_set_super);
+>
+> and sget_fc() traverses all the mounted filesystems of this type -
+> while holding the superblock lock that protects that list.
+>
+> So nfs_compare_super() may not sleep. It's called while holding a very
+> core low-level lock, and it really is supposed to only do a "test".
+> Not some complex operation that may do dynamic memory allocations and
+> sleep.
+>
+> Yet that is exactly what security_sb_mnt_opts_compat() does, as done
+> in 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an
+> existing mount").
+>
+> So those two patches are completely broken.
+>
+> Now, commit cc274ae7763d ("selinux: fix sleeping function called from
+> invalid context") that I just merged "fixes" this by making the
+> allocations in parse_sid() be GFP_NOWAIT.
+>
+> That is a *HORRIBLE* fix. It's a horrible fix because
+>
+>  (a) GFP_NOWAIT can fail very easily, causing the mount to randomly
+> fail for non-obvious reasons.
+>
+>  (b) even when it doesn't fail, you really shouldn't do things like
+> this under a very core spinlock.
+>
+> Also, the original place - nfs_compare_mount_options() is called over
+> and over for each mount, so you're parsing those same mount options
+> over and over again. So not only was this sequence buggy, it's really
+> not very smart to begin with.
+>
+> That's why I say that a much better approach would have been to parse
+> the mount options _once_ at the beginning, saving them off in some
+> temporary supoerblock (or whatever - anything that can hold those
+> pre-parsed mount options), and then have the "test" callback literally
+> just check those parsed options.
+>
+> That's not necessarily the only way to go about this - there are
+> probably other approaches too, I didn't really think too much about
+> this. But those two commits on their own are buggy, and the fix is
+> somewhat problematic too.
 
-Hi Sam.
+Thank you for the explanation. We will try to accomplish what you
+describe. We'll separate the ability to parse mount options without
+checking them and then add the ability to compare/check security
+contexts (if that's the right term). Then selinux parsing can allocate
+without setting GFP_NOWAIT but do it outside of the nfs_compare_super.
 
-Thanks for you suggestion.
-
-I think that what Peter suggested in the other reply is even better. I will follow that approach.
-
-Nikita
+>
+>                      Linus

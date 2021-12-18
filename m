@@ -2,179 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E61479D62
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDEE479D64
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbhLRVWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S232482AbhLRVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234774AbhLRVVv (ORCPT
+        with ESMTP id S234620AbhLRVXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:21:51 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF8C061373;
-        Sat, 18 Dec 2021 13:21:13 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so7470749otj.7;
-        Sat, 18 Dec 2021 13:21:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=V/7YV6PuikKJOpufvdQHaOC3eWjf6vds/A3UO3x9gwA=;
-        b=V57np8F0LXhPyF31xZ/98vOSICHl4KXHpMtxMolGaerv0QV2DnMVUnnCvDjQoXdDXo
-         rT1qtHlwGBuPWGVRNCqixnN8odHV5mxxXaYRnJZE3lAFoB3D1ap/tpQo+HN8ZXmqbSiD
-         QIlZkCxHBkKbHcBQjbMxdSmxYOFoc1qPow8X/5CwC8N9sD0V27gZ/pusORn/HCgYlKRO
-         4dCyLdZCSj6a6p1fhiCiQL21rXALTdc+Z1z5SDYBpicENwRWLWU4V7+P+Kd4ufK9GUr0
-         SoIEC6LNYiFJiLfuFOcDYhiwtUBtAniHb+XKeX3F11JHzTtbiZ9Muu5cZPVqR5GCdbZQ
-         WF1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V/7YV6PuikKJOpufvdQHaOC3eWjf6vds/A3UO3x9gwA=;
-        b=IKKWl8Io9rgEnnUQ9TiGrTKzNetDC9MtKrVqfXWhyp4EeBb49DuRWC2TMYSeLtD4pQ
-         1FJ0VVsyE3/ZQ1YdoWOVnuvQ5ADk8nqNdtoSKPiE9joJFE0rz/bLiuQZR4p7A+ZkYHpn
-         XvTNCbCOaFt+Vd2H/oMMFyFtzkHyv57FKwSstzW/Wh45P6fXdbd9Bd3i5F0vR9Owt+8T
-         rTjITePfG6Ljc3J//4LDSBRIq3/OeCJ99yJpkhSKx2i3WD7eqAvFd3gGjShb+63YGaCW
-         XQfvfn+v2NEPg4PasBrwBItRiqpRLmIWknziq4j1OOlCZ2RtPXFoBavzA5+MTBUKgKCL
-         E2SA==
-X-Gm-Message-State: AOAM531lkvbrisTKzn7hCG88BkosNHSWTZEFh0sQW/03WVWJxirqF/yp
-        LgI842JR1ItY6LJFjyMmCH5q0niBGxckeg==
-X-Google-Smtp-Source: ABdhPJzH5A9A4hW9z3Dre/oQXlQB84e2qfNXrrBIp4gUt5IENY4KKyoFB1Xtm1XffBrgUFoESNT5tw==
-X-Received: by 2002:a9d:6d11:: with SMTP id o17mr6686596otp.363.1639862472133;
-        Sat, 18 Dec 2021 13:21:12 -0800 (PST)
-Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id c3sm2614614oiw.8.2021.12.18.13.21.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 13:21:11 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
-        Mark Gross <markgross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 17/17] MAINTAINERS: add cpumask and nodemask files to BITMAP_API
-Date:   Sat, 18 Dec 2021 13:20:13 -0800
-Message-Id: <20211218212014.1315894-18-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211218212014.1315894-1-yury.norov@gmail.com>
-References: <20211218212014.1315894-1-yury.norov@gmail.com>
+        Sat, 18 Dec 2021 16:23:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD8C06175B;
+        Sat, 18 Dec 2021 13:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ruyqhDdpxWZhTNIsN5BRhnxESVnSGAzs4XjsiO4O2Ew=; b=hRZRszzbnC91ZvVwUkiw89mzyW
+        +6M8Weo1IaNMqUL+mxj64IlJ3kXGkF5/iexCfZK/NIgSC0hCcVahbOljv1bbzGMwElZf7RxqmnhqL
+        9iDCDgl9isFve8IR6uTNpmZEU6fiMrCQzEQl4Vdh9PLYESqK/D3KO7y8yk4phNQnItW6Gtke+diTn
+        w0vVDlvo1dqpDeeu+x14dfXeZMlgc85WM9wBOYjd2lWZs29yysRfriJpqiCOMKofMBf2V34Fg9BFi
+        ABWY8QzrZLA4odvWKbK1d1bF34fUfaoPT5BGhFi22itNMUFMQ8ufuVZ6mvxts1nW7LLuONwBenR0s
+        953ECk1g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1myhAP-000HQu-Vu; Sat, 18 Dec 2021 21:22:58 +0000
+Date:   Sat, 18 Dec 2021 21:22:57 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+Message-ID: <Yb5RMWRsJl5TMk8H@casper.infradead.org>
+References: <00000000000032992d05d370f75f@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000032992d05d370f75f@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpumask and nodemask APIs are thin wrappers around basic bitmap API, and
-corresponding files are not formally maintained. This patch adds them to
-BITMAP_API section, so that bitmap folks would have closer look at it.
+On Sat, Dec 18, 2021 at 11:50:20AM -0800, syzbot wrote:
+> INFO: task jbd2/sda1-8:2937 blocked for more than 143 seconds.
+>       Not tainted 5.16.0-rc5-syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+sched_setattr(0x0, &(0x7f0000000080)={0x38, 0x1, 0x0, 0x0, 0x1}, 0x0)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5964e047bc04..ecd41988c871 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3392,10 +3392,14 @@ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- R:	Rasmus Villemoes <linux@rasmusvillemoes.dk>
- S:	Maintained
- F:	include/linux/bitmap.h
-+F:	include/linux/cpumask.h
- F:	include/linux/find.h
-+F:	include/linux/nodemask.h
- F:	lib/bitmap.c
-+F:	lib/cpumask.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
-+F:	lib/nodemask.c
- F:	lib/test_bitmap.c
- F:	tools/include/linux/bitmap.h
- F:	tools/include/linux/find.h
--- 
-2.30.2
+so you've set a SCHED_FIFO priority and then are surprised that some
+tasks are getting starved?
 
+> task:jbd2/sda1-8     state:D stack:27112 pid: 2937 ppid:     2 flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:4972 [inline]
+>  __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
+>  schedule+0xd2/0x260 kernel/sched/core.c:6326
+>  io_schedule+0xee/0x170 kernel/sched/core.c:8371
+>  bit_wait_io+0x12/0xd0 kernel/sched/wait_bit.c:209
+>  __wait_on_bit+0x60/0x190 kernel/sched/wait_bit.c:49
+>  out_of_line_wait_on_bit+0xd5/0x110 kernel/sched/wait_bit.c:64
+>  wait_on_bit_io include/linux/wait_bit.h:101 [inline]
+>  __wait_on_buffer+0x7a/0x90 fs/buffer.c:122
+>  wait_on_buffer include/linux/buffer_head.h:356 [inline]
+>  journal_wait_on_commit_record fs/jbd2/commit.c:175 [inline]
+>  jbd2_journal_commit_transaction+0x4e3c/0x6be0 fs/jbd2/commit.c:931
+>  kjournald2+0x1d0/0x930 fs/jbd2/journal.c:213
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> 
+> Showing all locks held in the system:
+> 1 lock held by khungtaskd/27:
+>  #0: ffffffff8bb812e0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
+> 1 lock held by udevd/2974:
+> 2 locks held by getty/3287:
+>  #0: ffff88807ec56098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252
+>  #1: ffffc90002b8e2e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2113
+> 2 locks held by kworker/1:0/3663:
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
+>  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
+>  #1: ffffc90001b27db0 ((work_completion)(&rew.rew_work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
+> 2 locks held by syz-executor.2/13278:
+>  #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: account_event kernel/events/core.c:11445 [inline]
+>  #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: perf_event_alloc.part.0+0x31f9/0x3b10 kernel/events/core.c:11678
+>  #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:290 [inline]
+>  #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x4fa/0x620 kernel/rcu/tree_exp.h:836
+> 
+> =============================================
+> 
+> NMI backtrace for cpu 0
+> CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+>  nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
+>  trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+>  check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+>  watchdog+0xc1d/0xf50 kernel/hung_task.c:295
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> Sending NMI from CPU 0 to CPUs 1:
+> NMI backtrace for cpu 1
+> CPU: 1 PID: 10 Comm: kworker/u4:1 Not tainted 5.16.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events_unbound toggle_allocation_gate
+> RIP: 0010:__kasan_check_read+0x4/0x10 mm/kasan/shadow.c:31
+> Code: 44 07 48 85 db 0f 85 d0 9f 45 07 48 83 c4 60 5b 5d 41 5c 41 5d c3 c3 e9 d0 a0 45 07 cc cc cc cc cc cc cc cc cc cc 48 8b 0c 24 <89> f6 31 d2 e9 f3 f9 ff ff 0f 1f 00 48 8b 0c 24 89 f6 ba 01 00 00
+> RSP: 0018:ffffc90000f0f630 EFLAGS: 00000002
+> RAX: 0000000000000002 RBX: 1ffff920001e1ece RCX: ffffffff815b774f
+> RDX: 0000000000000092 RSI: 0000000000000008 RDI: ffffffff8ff77a10
+> RBP: 0000000000000100 R08: 0000000000000000 R09: ffffffff8ff77a17
+> R10: 0000000000000001 R11: 000000000000003f R12: 0000000000000008
+> R13: ffff888011c7eda8 R14: 0000000000000092 R15: ffff888011c7edc8
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00005555557b2708 CR3: 000000000b88e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  instrument_atomic_read include/linux/instrumented.h:71 [inline]
+>  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+>  hlock_class kernel/locking/lockdep.c:199 [inline]
+>  mark_lock+0xef/0x17b0 kernel/locking/lockdep.c:4583
+>  mark_usage kernel/locking/lockdep.c:4526 [inline]
+>  __lock_acquire+0x8a7/0x54a0 kernel/locking/lockdep.c:4981
+>  lock_acquire kernel/locking/lockdep.c:5637 [inline]
+>  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
+>  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+>  _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+>  spin_lock include/linux/spinlock.h:349 [inline]
+>  __get_locked_pte+0x2b6/0x4d0 mm/memory.c:1722
+>  get_locked_pte include/linux/mm.h:2160 [inline]
+>  __text_poke+0x1ae/0x8c0 arch/x86/kernel/alternative.c:1000
+>  text_poke_bp_batch+0x3d7/0x560 arch/x86/kernel/alternative.c:1361
+>  text_poke_flush arch/x86/kernel/alternative.c:1451 [inline]
+>  text_poke_flush arch/x86/kernel/alternative.c:1448 [inline]
+>  text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1458
+>  arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
+>  jump_label_update+0x1d5/0x430 kernel/jump_label.c:830
+>  static_key_enable_cpuslocked+0x1b1/0x260 kernel/jump_label.c:177
+>  static_key_enable+0x16/0x20 kernel/jump_label.c:190
+>  toggle_allocation_gate mm/kfence/core.c:732 [inline]
+>  toggle_allocation_gate+0x100/0x390 mm/kfence/core.c:724
+>  process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+>  worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> sd 0:0:1:0: tag#6693 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+> sd 0:0:1:0: tag#6693 CDB: opcode=0xe5 (vendor)
+> sd 0:0:1:0: tag#6693 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+> sd 0:0:1:0: tag#6693 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+> sd 0:0:1:0: tag#6693 CDB[20]: ba
+> ----------------
+> Code disassembly (best guess):
+>    0:	44 07                	rex.R (bad)
+>    2:	48 85 db             	test   %rbx,%rbx
+>    5:	0f 85 d0 9f 45 07    	jne    0x7459fdb
+>    b:	48 83 c4 60          	add    $0x60,%rsp
+>    f:	5b                   	pop    %rbx
+>   10:	5d                   	pop    %rbp
+>   11:	41 5c                	pop    %r12
+>   13:	41 5d                	pop    %r13
+>   15:	c3                   	retq
+>   16:	c3                   	retq
+>   17:	e9 d0 a0 45 07       	jmpq   0x745a0ec
+>   1c:	cc                   	int3
+>   1d:	cc                   	int3
+>   1e:	cc                   	int3
+>   1f:	cc                   	int3
+>   20:	cc                   	int3
+>   21:	cc                   	int3
+>   22:	cc                   	int3
+>   23:	cc                   	int3
+>   24:	cc                   	int3
+>   25:	cc                   	int3
+>   26:	48 8b 0c 24          	mov    (%rsp),%rcx
+> * 2a:	89 f6                	mov    %esi,%esi <-- trapping instruction
+>   2c:	31 d2                	xor    %edx,%edx
+>   2e:	e9 f3 f9 ff ff       	jmpq   0xfffffa26
+>   33:	0f 1f 00             	nopl   (%rax)
+>   36:	48 8b 0c 24          	mov    (%rsp),%rcx
+>   3a:	89 f6                	mov    %esi,%esi
+>   3c:	ba                   	.byte 0xba
+>   3d:	01 00                	add    %eax,(%rax)
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

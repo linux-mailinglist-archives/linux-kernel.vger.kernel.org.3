@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBA8479888
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 05:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE0D479890
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 05:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbhLREDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 23:03:35 -0500
-Received: from mga14.intel.com ([192.55.52.115]:54353 "EHLO mga14.intel.com"
+        id S231971AbhLREWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 23:22:48 -0500
+Received: from mx.ucr.edu ([138.23.62.71]:43619 "EHLO mx6.ucr.edu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231923AbhLREDe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 23:03:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639800214; x=1671336214;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fNIjOLezgG/Xb6Y2D8mX3U59KONJ+hT0cS36Qmd17o4=;
-  b=h2fUk4IKWMlb+DvjdE/kw9NRdv2aKMuBpRtlaKBZTvG0POR2/JlP7IoW
-   fvQ6DwxxPjF4vbK4SsJ5o7tZMmNPL7doXFbmg/UoNyLF098S09oKL1zw1
-   PBbBvoz61TpJIyoFsUIMt3KcycH9HAkVCEoM56HXNcxkV3m10SSoDxGa+
-   9CPHHvjOP3YKPGs6fLNStBlQ0HZ0sToL/WPa03XLsB+NpuH5oqavNfk+1
-   sZgkSbnaG75pFlLBkWakj7alkxCy/Z+uq2W3woGS3/ceTKyh2bR3EdPsa
-   ToEmJ2Ogw4R/L35s9WftHnZdg1AsEpDE0aPQp+v8eAh+S++qwIqg6gCxd
+        id S230053AbhLREWr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 23:22:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1639801369; x=1671337369;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HiC3hCK63Qa8Qb4loFRgdeRVld94u+OjjR3csxq5Wus=;
+  b=t1CYNVZ19RsyuR3XE5TL/kOtOt4k0vEiF4B0Ltu1TBHBMSi+S6TK0t8I
+   yTSXlcMSmsvUvfZx0tdj5fL+crfYAGJekgUyTy03K5LbUIR7uArMV/ye1
+   c1CRKMeIidF6HPAluOMtwkjthkCRzImJnHbwdJH2hM8Omk0uMSMWiU+Sa
+   TH/ShoE/1L5tAvBlgsud0nCrPZjwXUE2xgxTibKhctExmBw4qQZxRmy8D
+   RYn97awX/u5HjtNmE06pcu2CTFLwkzrShOz3+XSt+C135ZLnAVqalK13w
+   WBWlERispVd9WV32ZdTHQX6a3vU7lG7U10vNYQaOZpouDcGLoZoKzMZY3
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="240105918"
+IronPort-SDR: sfCja/5Et+X5cKx2ZcGFLKpZ1UGDsFgeOjMHRGVvd9Vi5QGdxjlNfUJF5D+OfvECkuTUtZGH/o
+ 6/X+oiXbAvn+7ha6qpUyQ2+5VcNM3SV4gQXv3RhjOEIEbkQs51QF5djMOL6qcO4qBm3fEJcyeC
+ wxDtUZlS6Uxb56Ytj9jVfHCmvfm+Vw2bMoitjV690YySp5lLHsSSFd66PFcaHTUGa1po5cwUtS
+ vugo0UPea9rF/f9txFXgDgSzrF1gQqxUkytzNwuMBUypqbSQMNx/AatGGczqPW8D0lTD76qKpZ
+ /3t1ZJhmJINxdLt04ALuhvEc
 X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="240105918"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 20:03:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="520031675"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Dec 2021 20:03:32 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myQwV-0005Zi-JT; Sat, 18 Dec 2021 04:03:31 +0000
-Date:   Sat, 18 Dec 2021 12:03:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianyu Lan <Tianyu.Lan@microsoft.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [hyperv:hyperv-next 1/5] kernel/dma/swiotlb.c:166:7: warning: no
- previous prototype for 'swiotlb_mem_remap'
-Message-ID: <202112181114.Vxt6EAJR-lkp@intel.com>
+   d="scan'208";a="267686071"
+Received: from mail-qk1-f197.google.com ([209.85.222.197])
+  by smtpmx6.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Dec 2021 20:22:34 -0800
+Received: by mail-qk1-f197.google.com with SMTP id bp17-20020a05620a459100b0045e893f2ed8so2347330qkb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:22:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ucr.edu; s=rmail;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uFquvFdIStXIJTsPn2k5rBU0qh7wG0l4oiCoU43pQg8=;
+        b=bXlm2lS0L1cyH2tSCF4kf3SQ17o+srdPcNuSX0IN5fdxXx90fPQz8j0OTE/DIoDyNG
+         NBLMGRGfhKW/vXeGz0RyOrwHJPODREbZxxtNpZqx1FHpckyz9EkMB+GVjII3tzO39jqR
+         54F6vn74a8bEU6PVKdMbAqjnZHWPkSh7B94io=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uFquvFdIStXIJTsPn2k5rBU0qh7wG0l4oiCoU43pQg8=;
+        b=3x1v3A7mEk6mFDxKXYap7USDM0cSSZnFk40K1HItJlE8Pr4uj7X09pKVrtliYyETqH
+         ZohM8ur1PT9QL+zfKhho19uEZ1WhLb4+aeyzy61wRScvv8ZY0JWISdb9qMH3THD8DNQy
+         jlDny+FuM8uSehlbhWiY8lvZnmlBdy8RzxmR4QiPYzGlS2lO42KMg6EDzcgH4jdeDZS4
+         P1vSP8OsBSpKLwBnG+zJJq4i3uSDB3TLpr+jZ7lOifP7uLQCSDPMIG+orL1CpOyO6TvM
+         0paSh5mz4yARBf2eYW62s/cjig9JMJB83dxl3kR4h8fN0pJhAz3gEnJ1HrKUqSVT+zdh
+         OzTw==
+X-Gm-Message-State: AOAM533v7MmsgyG8s6eaRcAnfj9c5PgTialE7v9I8UWQvMSsH9aCQy1O
+        akwZKkGVhCo0zjNlU4zZroeomE36Hs72FVoJS3+s3qrs1Mr7F+Efp9emHjyVtw9htyYsra+XVzj
+        W60zKkr8sXK7GomQDqCmI3mIoCw==
+X-Received: by 2002:a0c:edca:: with SMTP id i10mr5323756qvr.62.1639801351933;
+        Fri, 17 Dec 2021 20:22:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyE3Tagh5RgslGVJv/eRvjbgxu42RfzRLSIimsqstN4aB/aqSAgEsFtcF+iB7KjMXViNfFsrg==
+X-Received: by 2002:a0c:edca:: with SMTP id i10mr5323738qvr.62.1639801351765;
+        Fri, 17 Dec 2021 20:22:31 -0800 (PST)
+Received: from kq.cs.ucr.edu (kq.cs.ucr.edu. [169.235.27.223])
+        by smtp.googlemail.com with ESMTPSA id s20sm9081682qtc.75.2021.12.17.20.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 20:22:31 -0800 (PST)
+From:   Yizhuo Zhai <yzhai003@ucr.edu>
+Cc:     Yizhuo Zhai <yzhai003@ucr.edu>, stable@vger.kernel.org,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <jun.lei@amd.com>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
+        Mark Morra <MarkAlbert.Morra@amd.com>,
+        Agustin Gutierrez <agustin.gutierrez@amd.com>,
+        Robin Singh <robin.singh@amd.com>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        "Guo, Bing" <Bing.Guo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: Fix the uninitialized variable in enable_stream_features()
+Date:   Fri, 17 Dec 2021 20:22:23 -0800
+Message-Id: <20211218042226.2608212-1-yzhai003@ucr.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
-head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
-commit: 32be866293fe5355adbf91da1cd612f439fc71e5 [1/5] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
-config: x86_64-randconfig-r001-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181114.Vxt6EAJR-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=32be866293fe5355adbf91da1cd612f439fc71e5
-        git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
-        git fetch --no-tags hyperv hyperv-next
-        git checkout 32be866293fe5355adbf91da1cd612f439fc71e5
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
+In function enable_stream_features(), the variable "old_downspread.raw"
+could be uninitialized if core_link_read_dpcd() fails, however, it is
+used in the later if statement, and further, core_link_write_dpcd()
+may write random value, which is potentially unsafe.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/dma/swiotlb.c:166:7: warning: no previous prototype for 'swiotlb_mem_remap' [-Wmissing-prototypes]
-     166 | void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
-         |       ^~~~~~~~~~~~~~~~~
-
-
-vim +/swiotlb_mem_remap +166 kernel/dma/swiotlb.c
-
-   160	
-   161	/*
-   162	 * Remap swioltb memory in the unencrypted physical address space
-   163	 * when swiotlb_unencrypted_base is set. (e.g. for Hyper-V AMD SEV-SNP
-   164	 * Isolation VMs).
-   165	 */
- > 166	void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
-   167	{
-   168		void *vaddr = NULL;
-   169	
-   170		if (swiotlb_unencrypted_base) {
-   171			phys_addr_t paddr = mem->start + swiotlb_unencrypted_base;
-   172	
-   173			vaddr = memremap(paddr, bytes, MEMREMAP_WB);
-   174			if (!vaddr)
-   175				pr_err("Failed to map the unencrypted memory %llx size %lx.\n",
-   176				       paddr, bytes);
-   177		}
-   178	
-   179		return vaddr;
-   180	}
-   181	
-
+Fixes: 6016cd9dba0f ("drm/amd/display: add helper for enabling mst stream features")
+Cc: stable@vger.kernel.org
+Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link.c b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+index c8457babfdea..fd5a0e7eb029 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+@@ -1844,6 +1844,8 @@ static void enable_stream_features(struct pipe_ctx *pipe_ctx)
+ 		union down_spread_ctrl old_downspread;
+ 		union down_spread_ctrl new_downspread;
+ 
++		memset(&old_downspread, 0, sizeof(old_downspread));
++
+ 		core_link_read_dpcd(link, DP_DOWNSPREAD_CTRL,
+ 				&old_downspread.raw, sizeof(old_downspread));
+ 
+-- 
+2.25.1
+

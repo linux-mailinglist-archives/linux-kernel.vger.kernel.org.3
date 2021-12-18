@@ -2,88 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8230B4798CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7232E4798F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbhLRFYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 00:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S231869AbhLRFbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 00:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbhLRFYG (ORCPT
+        with ESMTP id S229473AbhLRFbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 00:24:06 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF98C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:24:06 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so7576029pja.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hmRa3xxlDMGbMdpV6GJl2z6pGqjd20HQRZ27k7XvX60=;
-        b=DH4sIec5YfqAWtc53fs+DSuMgTvv6tOo89/gvqVVZVOK313IkNr3CPOW2j3pe7teb6
-         YDy2ynWoE5Qw8hoPRWyd73kPfRzyrb5akZELQaIiENsGh6d804AjX5JT0wX+IBsvIHPz
-         OKK6ONkcKivdW8QwI4qjcjhdER7HhQkIzZAnnWmmeVOt2sq01GHgZdUwYD1nBAsrR/Ea
-         03Ldq0B6aMX1m8RlobpNG7yCxWO8hz244zJ11bZw0uupooXvjiCdtwXWzNXittREZ3uw
-         Ezc9J1X2Mlfr2xKbhsWF7Egl6qwIFU4IGWzoNw3i5ugRsR+yKcermkLHapTFi1Iljtdj
-         y9Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=hmRa3xxlDMGbMdpV6GJl2z6pGqjd20HQRZ27k7XvX60=;
-        b=3f/WSK8g/x5Rt1cl7V2mNk3DsT67sFGKV1nnTa1l2sJNmIQ0bWqzeeUXyMEieVSBvN
-         nMA5/aLx4nZ1Ui+Z39V/f6YzFJkxvbYyMFQQEUZ3IAAiFGNKl9w7qt9Ik+LVoHz8paa/
-         tTpgDrkM7mYtJVsZVpLdBjlE3Y3iwBDhsvO/KEZvJ6mKcfJMZzlaflpWSHUbwUP2L5oK
-         /ukNtKdI3HJG8+Mqzc6V46gSb6+uiPXjCB8iJ/i8Uqvm2Jki2HwpGv7dWNoS4YJocJMj
-         hMvbhytqhuQWDSr+IhnFCkLoAbQlWAGkrRBBXgPl4olif5q92R3qrsP7INJLiKfen0rB
-         HPAA==
-X-Gm-Message-State: AOAM533wq0UGD4J4qMuIVA+vzvMx7Ybg6INTDKUM/t3OI1mcFysbnuwT
-        2X3r/Ux5JhMmV1OVJ7QglQGoRcnXl2G/+/9Xg6c=
-X-Google-Smtp-Source: ABdhPJw/CPreywVw0XRuTUI8h9rzkMQa1Nai1RTZeonB7KDMp96pYCwurr9/+MeGZN8JaZjXYgS6iY4Af7oyya2rV5A=
-X-Received: by 2002:a17:90a:74f:: with SMTP id s15mr3112571pje.120.1639805044717;
- Fri, 17 Dec 2021 21:24:04 -0800 (PST)
+        Sat, 18 Dec 2021 00:31:35 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53956C061574;
+        Fri, 17 Dec 2021 21:31:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id E0A6E41F5F;
+        Sat, 18 Dec 2021 05:31:30 +0000 (UTC)
+Subject: Re: [PATCH 2/6] irqchip/apple-aic: Add Fast IPI support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211209043249.65474-1-marcan@marcan.st>
+ <20211209043249.65474-3-marcan@marcan.st> <87sfuyt3nh.wl-maz@kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <83631cf6-46c5-cd87-c3a7-6b619669a943@marcan.st>
+Date:   Sat, 18 Dec 2021 14:31:28 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: by 2002:a17:90a:8c8e:0:0:0:0 with HTTP; Fri, 17 Dec 2021 21:24:04
- -0800 (PST)
-Reply-To: daniekafando001@gmail.com
-From:   "Mr.Daniel kafando" <samukafando@gmail.com>
-Date:   Sat, 18 Dec 2021 05:24:04 +0000
-Message-ID: <CAPkmV4Ew=24yFbb-83AkeYZFi0srubGgB0YvGsh5Ebz2uhyKAA@mail.gmail.com>
-Subject: Dear friend, Goodday
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87sfuyt3nh.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Goodday Friend,
+On 12/12/2021 21.21, Marc Zyngier wrote:
+>> +/* MPIDR fields */
+>> +#define MPIDR_CPU			GENMASK(7, 0)
+>> +#define MPIDR_CLUSTER			GENMASK(15, 8)
+> 
+> This should be defined in terms of MPIDR_AFFINITY_LEVEL() and co.
 
-I know this email might come to you as a surprise as first coming from
-one you haven=E2=80=99t met with before.I am Mr.Daniel kafando. and I work
-with UNITED BANK OF AFRICA. Please Can you use ATM Visa card to
-withdraw money at ATM cash machine in your country? I want to transfer
-money to you from my country; it=E2=80=99s part of money taken by some old
-politician that was forced out of power.
+Yeah, I found out about that macro from your PMU driver... :)
 
-I will change the account details to yours, and apply for a visa card
-with your details in our bank, they will send the visa card to you and
-you will be withdrawing money with it and always send my own
-percentage of the money, and the money we are talking about is
-$4.2Million us dollars.
+>> +static const struct aic_info aic1_fipi_info = {
+>> +	.version	= 1,
+>> +
+>> +	.fast_ipi	= true,
+> 
+> Do you anticipate multiple feature flags like this? If so, maybe we
+> should consider biting the bullet and making this an unsigned long
+> populated with discrete flags.
+> 
+> Not something we need to decide now though.
 
-Whatever amount you withdraw daily, you will send 50% to me and you
-will take 50%, the visa card and the bank account will be on your
-name,I will be waiting for your information as soon as possible.
+Probably not, but who knows! It's easy to change it later, though.
 
-Your name...........
-Age.................
-Sex.................
-Country..............
-Occupation............
-Phone number...........
+>>  	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+>> -		pr_err_ratelimited("Fast IPI fired. Acking.\n");
+>> -		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+>> +		if (aic_irqc->info.fast_ipi) {
+> 
+> On the other hand, this is likely to hit on the fast path. Given that
+> we know at probe time whether we support SR-based IPIs, we can turn
+> this into a static key and save a few fetches on every IPI. It applies
+> everywhere you look at this flag at runtime.
 
-Best Regards.
-Mr.Daniel kafando.
+Good point, I'll see about refactoring this to use static keys.
+
+>> +static void aic_ipi_send_fast(int cpu)
+>> +{
+>> +	u64 mpidr = cpu_logical_map(cpu);
+>> +	u64 my_mpidr = cpu_logical_map(smp_processor_id());
+> 
+> This is the equivalent of reading MPIDR_EL1. My gut feeling is that it
+> is a bit faster to access the sysreg than a percpu lookup, a function
+> call and another memory access.
+
+Yeah, I saw other IRQ drivers doing this, but I wasn't sure it made
+sense over just reading MPIDR_EL1... I'll switch to that.
+
+>> +	u64 idx = FIELD_GET(MPIDR_CPU, mpidr);
+>> +
+>> +	if (FIELD_GET(MPIDR_CLUSTER, my_mpidr) == cluster)
+>> +		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx),
+>> +			       SYS_IMP_APL_IPI_RR_LOCAL_EL1);
+>> +	else
+>> +		write_sysreg_s(FIELD_PREP(IPI_RR_CPU, idx) | FIELD_PREP(IPI_RR_CLUSTER, cluster),
+>> +			       SYS_IMP_APL_IPI_RR_GLOBAL_EL1);
+> 
+> Don't you need an ISB, either here or in the two callers? At the
+> moment, I don't see what will force the execution of these writes, and
+> they could be arbitrarily delayed.
+
+Is there any requirement for timeliness sending IPIs? They're going to
+another CPU after all, they could be arbitrarily delayed because it has
+FIQs masked.
+
+>> -	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit)
+>> -		aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
+>> +	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
+>> +		if (ic->info.fast_ipi)
+>> +			aic_ipi_send_fast(smp_processor_id());
+> 
+> nit: if this is common enough, maybe having an aic_ipi_send_self_fast
+> could be better. Needs evaluation though.
+
+I'll do some printing to see how common self-IPIs are when running
+common workloads, let's see. If it's common enough it's easy enough to add.
+
+>> +	irqc->info = *(struct aic_info *)match->data;
+> 
+> Why the copy? All the data is const, and isn't going away.
+
+... for now, but later patches then start computing register offsets and
+putting them into this structure :)
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

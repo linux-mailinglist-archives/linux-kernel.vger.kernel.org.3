@@ -2,192 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4709D479929
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 07:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D6147993D
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 07:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbhLRGPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 01:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbhLRGPn (ORCPT
+        id S232216AbhLRGzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 01:55:32 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:57519 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232199AbhLRGzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 01:15:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5BDC061574;
-        Fri, 17 Dec 2021 22:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IUvLpcbLMTLdVpx8OKZS2CSElDMYG8QfQ2HS6Zh9h0A=; b=hReN4WRHMRS3A6xTSltAzFMk6S
-        uLGFPkPlOybxHZvJot6G2qVK6e1zcRHCztcRWz1L8KEYkAoKF1ZzhpNCuFxQN9X1GMDBrcwPBBnmz
-        wRPmPjBqc3HlVF7wTfKY6cuxDPWwwjytvnnOuBsBpsGBzRF0odlnSrDkJiuH4esox10+sY3YZ8tUt
-        QjbMdwJ+7hTcn453AY0418C6ynwgkYnx2umuCoaNrTcWiBt9lgvNYojVRTl/JqfGkfU80Wg3ghblP
-        HwBcNsZg8CH7yUbSebw3+mPFZpWnx+NGUsmrnhxwkKJnfyCkTDVxciEmSjH8NSDjLN/g8hw6Jos2x
-        U/E11q/Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myT03-00HMLc-PI; Sat, 18 Dec 2021 06:15:21 +0000
-Message-ID: <45835904-3e0f-59fd-3d3b-52d68be11a17@infradead.org>
-Date:   Fri, 17 Dec 2021 22:15:15 -0800
+        Sat, 18 Dec 2021 01:55:31 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id yTctmAwLisoWhyTctm8zt5; Sat, 18 Dec 2021 07:55:29 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 18 Dec 2021 07:55:29 +0100
+X-ME-IP: 86.243.171.122
+Subject: Re: [PATCH] iommu/vt-d: Use bitmap_zalloc() when applicable
+To:     Lu Baolu <baolu.lu@linux.intel.com>, dwmw2@infradead.org,
+        joro@8bytes.org, will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <367914663187b8fe043e31b352cd6ad836088f0a.1639778255.git.christophe.jaillet@wanadoo.fr>
+ <73bdc4a3-6028-2ab5-f9a6-dbad15effad4@linux.intel.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <935af038-1b75-2717-40fa-e2e7858ed09e@wanadoo.fr>
+Date:   Sat, 18 Dec 2021 07:55:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207190251.18426-1-davidgow@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211207190251.18426-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <73bdc4a3-6028-2ab5-f9a6-dbad15effad4@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-
-On 12/7/21 11:02, David Gow wrote:
-> From: Rae Moar <rmoar@google.com>
+Le 18/12/2021 à 06:56, Lu Baolu a écrit :
+> On 2021/12/18 5:58, Christophe JAILLET wrote:
+>> 'ommu->domain_ids' is a bitmap. So use 'bitmap_zalloc()' to simplify
+>> code and improve the semantic, instead of hand writing it.
+>>
+>> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+>> consistency.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   drivers/iommu/intel/iommu.c | 9 ++++-----
+>>   1 file changed, 4 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index b6a8f3282411..4acc97765209 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -1878,17 +1878,16 @@ static void iommu_disable_translation(struct 
+>> intel_iommu *iommu)
+>>   static int iommu_init_domains(struct intel_iommu *iommu)
+>>   {
+>> -    u32 ndomains, nlongs;
+>> +    u32 ndomains;
+>>       size_t size;
+>>       ndomains = cap_ndoms(iommu->cap);
+>>       pr_debug("%s: Number of Domains supported <%d>\n",
+>>            iommu->name, ndomains);
+>> -    nlongs = BITS_TO_LONGS(ndomains);
+>>       spin_lock_init(&iommu->lock);
+>> -    iommu->domain_ids = kcalloc(nlongs, sizeof(unsigned long), 
+>> GFP_KERNEL);
+>> +    iommu->domain_ids = bitmap_zalloc(ndomains, GFP_KERNEL);
+>>       if (!iommu->domain_ids)
+>>           return -ENOMEM;
+>> @@ -1903,7 +1902,7 @@ static int iommu_init_domains(struct intel_iommu 
+>> *iommu)
+>>       if (!iommu->domains || !iommu->domains[0]) {
+>>           pr_err("%s: Allocating domain array failed\n",
+>>                  iommu->name);
+>> -        kfree(iommu->domain_ids);
+>> +        bitmap_free(iommu->domain_ids);
+>>           kfree(iommu->domains);
+>>           iommu->domain_ids = NULL;
+>>           iommu->domains    = NULL;
+>> @@ -1964,7 +1963,7 @@ static void free_dmar_iommu(struct intel_iommu 
+>> *iommu)
+>>           for (i = 0; i < elems; i++)
+>>               kfree(iommu->domains[i]);
+>>           kfree(iommu->domains);
+>> -        kfree(iommu->domain_ids);
+>> +        bitmap_free(iommu->domain_ids);
+>>           iommu->domains = NULL;
+>>           iommu->domain_ids = NULL;
+>>       }
 > 
-> It does not make any significant additions or changes other than those
-> already in use in the kernel: additional features can be added as they
-> become necessary and used.
+> This patch has been merged to Joerg's tree through
 > 
-> [1]: https://testanything.org/tap-version-13-specification.html
+> https://lore.kernel.org/linux-iommu/20211217083817.1745419-2-baolu.lu@linux.intel.com/ 
 > 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Co-developed-by: David Gow <davidgow@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
 > 
-> Changes since RFC v1:
-> https://lore.kernel.org/linux-kselftest/20211203064840.2871751-1-davidgow@google.com/
-> - Add a "see also" section with some useful links.
-> - Remove the XPASS directive, which isn't used anywhere.
-> - Clear up / reorganise the discussion around differences between KTAP
->   and TAP14.
-> - Improve the wording around some directives.
-> - Fix a bunch of typos.
+> Are there any extra changes in this one?
+
+No, this is the same. Sorry for the duplicate.
+
+CJ
+
 > 
-> See prior discussion in the following RFC:
-> https://lore.kernel.org/linux-kselftest/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com/.
+> Best regards,
+> baolu
 > 
-> ---
-> 
->  Documentation/dev-tools/index.rst |   1 +
->  Documentation/dev-tools/ktap.rst  | 298 ++++++++++++++++++++++++++++++
->  2 files changed, 299 insertions(+)
->  create mode 100644 Documentation/dev-tools/ktap.rst
 
-I suppose that someone tested this. Maybe my version of Sphinx tools
-is older than other people's -- I dunno.  Anyway, I get this:
-
-
-
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:71: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:120: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        ok 1 test_case_name
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:126: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        not ok 1 test_case_name
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:132: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        ok 1 test # SKIP necessary dependency unavailable
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:139: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        not ok 1 test # TIMEOUT 30 seconds
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:145: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        ok 5 check return code # rcode=0
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:195: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        KTAP version 1
-        1..1
-          KTAP version 1
-          1..2
-          ok 1 test_1
-          not ok 2 test_2
-        # example failed
-        not ok 1 example
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:208: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        KTAP version 1
-        1..2
-          KTAP version 1
-          1..2
-            KTAP version 1
-            1..2
-            not ok 1 test_1
-            ok 2 test_2
-          not ok 1 test_3
-          ok 2 test_4 # SKIP
-        not ok 1 example_test_1
-        ok 2 example_test_2
-/work/lnx/next/linux-next-20211217/Documentation/dev-tools/ktap.rst:238: WARNING: Error in "code-block" directive:
-1 argument(s) required, 0 supplied.
-
-.. code-block::
-
-        KTAP version 1
-        1..1
-          KTAP version 1
-          1..3
-            KTAP version 1
-            1..1
-            # test_1: initializing test_1
-            ok 1 test_1
-          ok 1 example_test_1
-            KTAP version 1
-            1..2
-            ok 1 test_1 # SKIP test_1 skipped
-            ok 2 test_2
-          ok 2 example_test_2
-            KTAP version 1
-            1..3
-            ok 1 test_1
-            # test_2: FAIL
-            not ok 2 test_2
-            ok 3 test_3 # SKIP test_3 skipped
-          not ok 3 example_test_3
-        not ok 1 main_test
-
-
-thanks.
--- 
-~Randy

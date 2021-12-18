@@ -2,424 +2,557 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1112C479D86
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93929479DB3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbhLRVsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:48:19 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:61458 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhLRVsS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:48:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639864098; x=1671400098;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VUU+4GyCpyEgeHzmSHp3p6f+/VZRvOBHNDru078eO2o=;
-  b=LkX3p3mJ9N2wYe5odtvUf/v7GHXxBPWr3ldHKclnj1gAiAJC3C+PzgrW
-   xmbyQC14g3Yrjm+lkKY2IqOId31opr+g48RZ111iVW2upyo9l8zFAqTMl
-   Jmd1vZI0OpROsSAh6GKhFDvHLCO9VDXJw9S0TFPvDYTe09HVz+e8kjqso
-   9XpUpHdqE10InXBaX7t0dylIr1OXj/8UZK3EWEpluEhf6YME1NmEj9Zkg
-   8hXu/uSjt/44vtsmw3JEM5/MRwT43EscU0C5rdnONGPAGEJFOMsEbCJk+
-   Pn7MVJTb0zXUqM6ELmzUyimpiTu+i/ezZJihw5CQcCfNbekamv72Jk+uQ
-   g==;
-IronPort-SDR: vbrvL5cBmRe8UviRQzSLM2wER1Iat5acKoJsvSZoaUa1ZUl0Ejp4QSeZLIjFTOADnS4Undtr88
- DC7DR2DYhYUfGOPtjFGPjnCw2O9s6ypNfb7fVc7VnJ4Jb34EbNGIv6+Vih5/aBw93QFWHAcYsF
- LROLWY7bst7o4z5u2FgBIpkYcmMkVN9Mrl5GTa8kRkCqPtRJmgUnwSTWTkpU0wOCCHg7cfvUcP
- ICguQ6KPAOK38/+6U6jywX9VQDfhwG4+gCWwkfYZIUF0BM+Oodzb35lx8dJUNHDmso0pLzLJ7e
- lSgPGwudnpyzS8Ccuh2RhWRT
-X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
-   d="scan'208";a="140230226"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Dec 2021 14:48:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sat, 18 Dec 2021 14:48:17 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Sat, 18 Dec 2021 14:48:14 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
-        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
-        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v8 3/9] net: lan966x: add support for interrupts from analyzer
-Date:   Sat, 18 Dec 2021 22:49:40 +0100
-Message-ID: <20211218214946.531940-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211218214946.531940-1-horatiu.vultur@microchip.com>
-References: <20211218214946.531940-1-horatiu.vultur@microchip.com>
-MIME-Version: 1.0
+        id S234628AbhLRVuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:50:16 -0500
+Received: from mail-mw2nam10on2096.outbound.protection.outlook.com ([40.107.94.96]:43520
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232747AbhLRVuJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 16:50:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z9hWH9iQkJhee8NTQNPNAzsdU7HLsTLeAMdH8uhs2Tywt+WNgR78OilTR6VYNcXXQUJtE6yctGxrsiG4YhI5DKCbrKv3OZKRrx660DBAVygflSQl83Z+A1HDBaI+ihOJKnzLjKr2RrIDKMGfc2aYn2Z+KP7roTJNk7MiSbJoYbD/rmHGxpSddA7himcLNSUd75qJbt7fmdwmNUeHpUKaVbFlq1RE7utOnd3VUT6vpXISBpYpZJnBdeMt+fnUvVLJ1LrYI5oLCX6AUrkZCJkzZnWCGmaxC2J6kloxlIXva90wVVLX4r+APHb5vHT1c2MFwXozngxk8aBBJhW5NgAtnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4T2/Zwi7qvUvlg4E+wvgAWvB4arizCJxGL7NW2Z+8tg=;
+ b=HhpybB4VCGDEtFLMELT42sVtWERA4ssjCPVknYaPy65/OL7AO+DmqKkDU95Ye6b5MuRCQJWlU0ORBiUDqLcvHCL4Z7EXrjWJ77/jarw33LC82MaV1T0TLs4wQdExgblHczcxhZ2fG48nHkyALeQEOUQAQUXVdQLKyiVtkDCbVG+syBpgw4uBOoT/pa0pCBy3t3U7Qn+3CUZh9P4ZQYDUWspYs2D5/1FzXz6QhorU4vDsMpopaWG3UrgPDmmq9P1WtGghvTunPME4r9fNeW/a3aNJZt2bWNQISvE1lhfIb4djceqsi1EIQdc6P69lvDva+EGGRWQgkybz57KFwGxg5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4T2/Zwi7qvUvlg4E+wvgAWvB4arizCJxGL7NW2Z+8tg=;
+ b=MayQ+gtr0ZOeNCv07iCVZ1xymLFH5rPE0wxkaPfTTwHavdoIZuyGMHcBqbMeH9Ugxj6DzgNgRNUXPVEkjPNaVZKcvHTiHUuyCrUdLxwyVkkY8V7WRw0Nl8/FxrngRcyB+FcNoYMByfFOLmq7s5nACVF2WNyBf5PTK5oMwOUWfNw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CO6PR10MB5633.namprd10.prod.outlook.com
+ (2603:10b6:303:148::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Sat, 18 Dec
+ 2021 21:50:06 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
+ 21:50:05 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [RFC v5 net-next 00/13] add support for VSC75XX control over SPI
+Date:   Sat, 18 Dec 2021 13:49:41 -0800
+Message-Id: <20211218214954.109755-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+X-ClientProxiedBy: MWHPR02CA0011.namprd02.prod.outlook.com
+ (2603:10b6:300:4b::21) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5f27ccdf-bcab-4c18-234d-08d9c27059d8
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5633:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR10MB56330C817465752B35F04B37A4799@CO6PR10MB5633.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oiPACE+NvrjHCjSS2MVCVhouhj8BcmB1BOLJTjXIJ9tyskEwzZKaT6pq45XbzNFS6YNrPo6Lr8EK4LvSSo8vXdIuYWKLCMww/JAl3wTJ/7mw26/6reCnv2pbYdApKF2Ha7mLM2nQYz8NkN/VVfTe3rUWzpFhO6+xOdnkzO86JLIU3sHvAVhef63Mt7TQz28xrbpLStxrVlkCkWseyIsr+JwDk1IkO1kV1evOeaB76JPbj9HncfLyGB1RJ+YrPISG9ZvpIPmkqkpovacVC0FdEPGLlqa+ZD1euM80taVnF+a6kE6ATwRspDaqUvJo4djaf4uod7ynvFbtkd2/cH/faXm+bSs74xw5X6f5c3rgaxikpPJ5LyoE8yhRseLQ/VV6H5RzW19LAmjJVCiBhqYCHlidNkMsctn0nS/AZKDfbbeCJKjk6SPfZyFr9jeAHqeZi2Kr6oS8tBTcLgWejVOfCGh8uwsQo3uqKaa1mjnIELPXnzkFXvL477Oy70MNhO5ZgT8BozthP512J/rkEkZpck2aDLrctu8k5Ra2UWl9UG0RWHwtnUCQ63v6wRyHwfWqSSObqBo6FgGBngdST4q4VinhRktcuJLjJ0BLsDUoFRu7DGvS76QfpBVLn/OKxmHCKx909hvjrQV7KIKF8k8VNxxSc7/36xUeXAAF76X4irSZnVXn9ZhniUa67legFfUX4wevQMAX4cetjxcFii/lTg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(396003)(366004)(346002)(376002)(136003)(6486002)(6506007)(7416002)(2906002)(36756003)(6512007)(26005)(86362001)(66556008)(66476007)(186003)(1076003)(6666004)(4326008)(83380400001)(30864003)(66946007)(2616005)(44832011)(8936002)(8676002)(316002)(54906003)(38100700002)(5660300002)(508600001)(52116002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ix9hOPns3ZVpFcRc+frPFyTl/HCpXfQdAFZN0ijZgG8PjZqMyNaykDY7E67n?=
+ =?us-ascii?Q?OVLBfPPYd7D5mvJzjJsOOQp+hrQ4y2kQ/qy9af+ea3PgmfMb6MylmrbYgDiM?=
+ =?us-ascii?Q?0+L/7SWE9dkbKQ0gTR0LCpT9wKYF6RGdHLTWOq+Xsqr2FUCMfhZMAcBLSgDc?=
+ =?us-ascii?Q?t0jU1yMIZXXHHB63TWabZGoQvGofYMbGnk3kR/gmn/Avdupi67S09z6stFSj?=
+ =?us-ascii?Q?Ct8qBS+HzAvu/ugMxLMqbM/typwMvqQfX0wQZwU53T9He+q9APBhPiEv1cSt?=
+ =?us-ascii?Q?hH5V7DvsJn/IYJylZzQ68eCfjmdAJQObXEddtWBbyBg4SiD3FVPh4tgMeyLx?=
+ =?us-ascii?Q?YIOEvDeAX9l3DckC7mgL/ZDT1UYptczmItsbNXOYousOiHxlOtYnDe0NMomz?=
+ =?us-ascii?Q?eCEkRobDAH6XrCVmeXKn71/hsPuw5JtaSQD6Nz628qNXnnD6euUhdOLEc9tb?=
+ =?us-ascii?Q?XCbZBukxN/+8ofaoQ+yfLWruX4PpF1svBeYEPOAWCxBRz6G0iUPQOisqt2zs?=
+ =?us-ascii?Q?CaUeqEjbATMexB54/JqCl+U9xT78/5gIeUIbGc+kMOh3Su2AeLYwNgyKLxzW?=
+ =?us-ascii?Q?ZsnwK64BzuTpTvxCKOF8nd2mESjnzzPSCDDZSmVr0F7tfZcl4mQVXJ5X0i3j?=
+ =?us-ascii?Q?gUYTOesJ3brrZO88EgqhoXWUdOaQC2od86Kx7UVQGaVlhDeaCrUGEczKhW4s?=
+ =?us-ascii?Q?JJpRHJ9st9+qpu+igjVr4n5s9kGmAKZFivn56lENefcji9Sy2TpyWtOxx28D?=
+ =?us-ascii?Q?7nLse1qBVe5+AIdb5yA7FeBZDlm3vhQkRzu0qMMlvcCiGGoeT8zii0sFMRCd?=
+ =?us-ascii?Q?y/bwq1cCZgDbZ4d8RR/w6dlFMxi+mO/JQoS2A045o6tdNN0VytodQJJjXaQT?=
+ =?us-ascii?Q?LpgIOXp8oihP6gbZaKOlq1yqooGUH1UWC6fKp8kpEKfYpFVdoq1Ucg5Ivpyz?=
+ =?us-ascii?Q?4vJ8+J8r+bWKSTVw5V/bH4eznFT/xy3nzyQiN9ROi+4lCPqV3QyB/ku4Ulhv?=
+ =?us-ascii?Q?8dnmBv7UVyz8TZ193YjyydQ3xleTjIDhif23hcJF8dF32HtU8fLDH6a43X9l?=
+ =?us-ascii?Q?5DI8aaspH5hhgZZU/psq0hWqkrv457/Oto98xjRG0cNuJPoHHuVnrfB+aJiY?=
+ =?us-ascii?Q?a3ZYYRyIvlTNnWfSF/bSZy0zy2H7I9+yb/XOO0M+Swv169Yw1l+0cOUMhzxw?=
+ =?us-ascii?Q?8lOmp4XKsFiMEFUo5wABsgWTq8r+tsGoUugl/5ykIcdwKI4RUxtQXNXD53zn?=
+ =?us-ascii?Q?KwyDatWog6dUpzuvM3HF+zm5hh7JMyev+C7ATadNv2+shtbLTpA9X7va2nw5?=
+ =?us-ascii?Q?VlocM5vytBnq7b1pw3c338mlbUJxXD6itzK96oZ9pr6pLeyuS3gZb5ewCN4C?=
+ =?us-ascii?Q?u+PLIyfUZTvVX1isaFjBkpFSi5bEhEKO2MN9B9B7Ga5zXTZHMOY73CXh2KN8?=
+ =?us-ascii?Q?XuY+WnJlyTLr1inVLR9qlAsbzjuJs0C+04B98+p5AqyV94+EarAs0nwestKO?=
+ =?us-ascii?Q?ljangvrPmLBr5yFmo5dAOHB9Iv/TPHWJbPgBfH7x2vrPRjlvKsLQFLKKyUME?=
+ =?us-ascii?Q?5qVaaLF0/PJb1saaGDjFUd6IgHXnvB02mZ69S03S8hhMIfk2B3wQJt+cNHpP?=
+ =?us-ascii?Q?t0HdRUOF1Q94CjSem1ttBOqAHlPWgEV7SL2Ug2sskP9z369t+5fi1ufomPvq?=
+ =?us-ascii?Q?aNik6w=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f27ccdf-bcab-4c18-234d-08d9c27059d8
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 21:50:05.4723
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0gFXc+xLDBW/V5YilLtWrotGwHSonpD2oy8tqV7D/qaaYcIky+Nm4u2DhJEzbeGEk+99lolm82ezH2uWFD1K4O4LpoCICjKoc5Y27QnurE4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5633
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for handling the interrupts generated by the
-analyzer. Currently, only the MAC table generates these interrupts.
-The MAC table will generate an interrupt whenever it learns or forgets
-an entry in the table. It is the SW responsibility figure out which
-entries were added/removed.
+The patch set in general is to add support for the VSC7511, VSC7512,
+VSC7513 and VSC7514 devices controlled over SPI. The driver is
+believed to be fully functional for the internal phy ports (0-3) 
+on the VSC7512. As I'll discuss, it is not yet functional for other
+ports yet.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_mac.c  | 237 ++++++++++++++++++
- .../ethernet/microchip/lan966x/lan966x_main.c |  23 ++
- .../ethernet/microchip/lan966x/lan966x_main.h |   6 +
- 3 files changed, 266 insertions(+)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
-index f6878b9f57ef..855ea514f438 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- 
-+#include <net/switchdev.h>
- #include "lan966x_main.h"
- 
- #define LAN966X_MAC_COLUMNS		4
-@@ -13,6 +14,23 @@
- #define MACACCESS_CMD_WRITE		7
- #define MACACCESS_CMD_SYNC_GET_NEXT	8
- 
-+#define LAN966X_MAC_INVALID_ROW		-1
-+
-+struct lan966x_mac_entry {
-+	struct list_head list;
-+	unsigned char mac[ETH_ALEN] __aligned(2);
-+	u16 vid;
-+	u16 port_index;
-+	int row;
-+};
-+
-+struct lan966x_mac_raw_entry {
-+	u32 mach;
-+	u32 macl;
-+	u32 maca;
-+	bool processed;
-+};
-+
- static int lan966x_mac_get_status(struct lan966x *lan966x)
- {
- 	return lan_rd(lan966x, ANA_MACACCESS);
-@@ -98,4 +116,223 @@ void lan966x_mac_init(struct lan966x *lan966x)
- 	/* Clear the MAC table */
- 	lan_wr(MACACCESS_CMD_INIT, lan966x, ANA_MACACCESS);
- 	lan966x_mac_wait_for_completion(lan966x);
-+
-+	spin_lock_init(&lan966x->mac_lock);
-+	INIT_LIST_HEAD(&lan966x->mac_entries);
-+}
-+
-+static struct lan966x_mac_entry *lan966x_mac_alloc_entry(const unsigned char *mac,
-+							 u16 vid, u16 port_index)
-+{
-+	struct lan966x_mac_entry *mac_entry;
-+
-+	mac_entry = kzalloc(sizeof(*mac_entry), GFP_KERNEL);
-+	if (!mac_entry)
-+		return NULL;
-+
-+	memcpy(mac_entry->mac, mac, ETH_ALEN);
-+	mac_entry->vid = vid;
-+	mac_entry->port_index = port_index;
-+	mac_entry->row = LAN966X_MAC_INVALID_ROW;
-+	return mac_entry;
-+}
-+
-+static void lan966x_fdb_call_notifiers(enum switchdev_notifier_type type,
-+				       const char *mac, u16 vid,
-+				       struct net_device *dev)
-+{
-+	struct switchdev_notifier_fdb_info info = { 0 };
-+
-+	info.addr = mac;
-+	info.vid = vid;
-+	info.offloaded = true;
-+	call_switchdev_notifiers(type, dev, &info.info, NULL);
-+}
-+
-+void lan966x_mac_purge_entries(struct lan966x *lan966x)
-+{
-+	struct lan966x_mac_entry *mac_entry, *tmp;
-+
-+	spin_lock(&lan966x->mac_lock);
-+	list_for_each_entry_safe(mac_entry, tmp, &lan966x->mac_entries,
-+				 list) {
-+		lan966x_mac_forget(lan966x, mac_entry->mac, mac_entry->vid,
-+				   ENTRYTYPE_LOCKED);
-+
-+		list_del(&mac_entry->list);
-+		kfree(mac_entry);
-+	}
-+	spin_unlock(&lan966x->mac_lock);
-+}
-+
-+static void lan966x_mac_notifiers(enum switchdev_notifier_type type,
-+				  unsigned char *mac, u32 vid,
-+				  struct net_device *dev)
-+{
-+	rtnl_lock();
-+	lan966x_fdb_call_notifiers(type, mac, vid, dev);
-+	rtnl_unlock();
-+}
-+
-+static void lan966x_mac_process_raw_entry(struct lan966x_mac_raw_entry *raw_entry,
-+					  u8 *mac, u16 *vid, u32 *dest_idx)
-+{
-+	mac[0] = (raw_entry->mach >> 8)  & 0xff;
-+	mac[1] = (raw_entry->mach >> 0)  & 0xff;
-+	mac[2] = (raw_entry->macl >> 24) & 0xff;
-+	mac[3] = (raw_entry->macl >> 16) & 0xff;
-+	mac[4] = (raw_entry->macl >> 8)  & 0xff;
-+	mac[5] = (raw_entry->macl >> 0)  & 0xff;
-+
-+	*vid = (raw_entry->mach >> 16) & 0xfff;
-+	*dest_idx = ANA_MACACCESS_DEST_IDX_GET(raw_entry->maca);
-+}
-+
-+static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
-+				    struct lan966x_mac_raw_entry *raw_entries)
-+{
-+	struct lan966x_mac_entry *mac_entry, *tmp;
-+	unsigned char mac[ETH_ALEN] __aligned(2);
-+	u32 dest_idx;
-+	u32 column;
-+	u16 vid;
-+
-+	spin_lock(&lan966x->mac_lock);
-+	list_for_each_entry_safe(mac_entry, tmp, &lan966x->mac_entries, list) {
-+		bool found = false;
-+
-+		if (mac_entry->row != row)
-+			continue;
-+
-+		for (column = 0; column < LAN966X_MAC_COLUMNS; ++column) {
-+			/* All the valid entries are at the start of the row,
-+			 * so when get one invalid entry it can just skip the
-+			 * rest of the columns
-+			 */
-+			if (!ANA_MACACCESS_VALID_GET(raw_entries[column].maca))
-+				break;
-+
-+			lan966x_mac_process_raw_entry(&raw_entries[column],
-+						      mac, &vid, &dest_idx);
-+			WARN_ON(dest_idx > lan966x->num_phys_ports);
-+
-+			/* If the entry in SW is found, then there is nothing
-+			 * to do
-+			 */
-+			if (mac_entry->vid == vid &&
-+			    ether_addr_equal(mac_entry->mac, mac) &&
-+			    mac_entry->port_index == dest_idx) {
-+				raw_entries[column].processed = true;
-+				found = true;
-+				break;
-+			}
-+		}
-+
-+		if (!found) {
-+			/* Notify the bridge that the entry doesn't exist
-+			 * anymore in the HW and remove the entry from the SW
-+			 * list
-+			 */
-+			lan966x_mac_notifiers(SWITCHDEV_FDB_DEL_TO_BRIDGE,
-+					      mac_entry->mac, mac_entry->vid,
-+					      lan966x->ports[mac_entry->port_index]->dev);
-+
-+			list_del(&mac_entry->list);
-+			kfree(mac_entry);
-+		}
-+	}
-+	spin_unlock(&lan966x->mac_lock);
-+
-+	/* Now go to the list of columns and see if any entry was not in the SW
-+	 * list, then that means that the entry is new so it needs to notify the
-+	 * bridge.
-+	 */
-+	for (column = 0; column < LAN966X_MAC_COLUMNS; ++column) {
-+		/* All the valid entries are at the start of the row, so when
-+		 * get one invalid entry it can just skip the rest of the columns
-+		 */
-+		if (!ANA_MACACCESS_VALID_GET(raw_entries[column].maca))
-+			break;
-+
-+		/* If the entry already exists then don't do anything */
-+		if (raw_entries[column].processed)
-+			continue;
-+
-+		lan966x_mac_process_raw_entry(&raw_entries[column],
-+					      mac, &vid, &dest_idx);
-+		WARN_ON(dest_idx > lan966x->num_phys_ports);
-+
-+		mac_entry = lan966x_mac_alloc_entry(mac, vid, dest_idx);
-+		if (!mac_entry)
-+			return;
-+
-+		mac_entry->row = row;
-+
-+		spin_lock(&lan966x->mac_lock);
-+		list_add_tail(&mac_entry->list, &lan966x->mac_entries);
-+		spin_unlock(&lan966x->mac_lock);
-+
-+		lan966x_mac_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE,
-+				      mac, vid, lan966x->ports[dest_idx]->dev);
-+	}
-+}
-+
-+irqreturn_t lan966x_mac_irq_handler(struct lan966x *lan966x)
-+{
-+	struct lan966x_mac_raw_entry entry[LAN966X_MAC_COLUMNS] = { 0 };
-+	u32 index, column;
-+	bool stop = true;
-+	u32 val;
-+
-+	/* Start the scan from 0, 0 */
-+	lan_wr(ANA_MACTINDX_M_INDEX_SET(0) |
-+	       ANA_MACTINDX_BUCKET_SET(0),
-+	       lan966x, ANA_MACTINDX);
-+
-+	while (1) {
-+		lan_rmw(ANA_MACACCESS_MAC_TABLE_CMD_SET(MACACCESS_CMD_SYNC_GET_NEXT),
-+			ANA_MACACCESS_MAC_TABLE_CMD,
-+			lan966x, ANA_MACACCESS);
-+		lan966x_mac_wait_for_completion(lan966x);
-+
-+		val = lan_rd(lan966x, ANA_MACTINDX);
-+		index = ANA_MACTINDX_M_INDEX_GET(val);
-+		column = ANA_MACTINDX_BUCKET_GET(val);
-+
-+		/* The SYNC-GET-NEXT returns all the entries(4) in a row in
-+		 * which is suffered a change. By change it means that new entry
-+		 * was added or an entry was removed because of ageing.
-+		 * It would return all the columns for that row. And after that
-+		 * it would return the next row The stop conditions of the
-+		 * SYNC-GET-NEXT is when it reaches 'directly' to row 0
-+		 * column 3. So if SYNC-GET-NEXT returns row 0 and column 0
-+		 * then it is required to continue to read more even if it
-+		 * reaches row 0 and column 3.
-+		 */
-+		if (index == 0 && column == 0)
-+			stop = false;
-+
-+		if (column == LAN966X_MAC_COLUMNS - 1 &&
-+		    index == 0 && stop)
-+			break;
-+
-+		entry[column].mach = lan_rd(lan966x, ANA_MACHDATA);
-+		entry[column].macl = lan_rd(lan966x, ANA_MACLDATA);
-+		entry[column].maca = lan_rd(lan966x, ANA_MACACCESS);
-+
-+		/* Once all the columns are read process them */
-+		if (column == LAN966X_MAC_COLUMNS - 1) {
-+			lan966x_mac_irq_process(lan966x, index, entry);
-+			/* A row was processed so it is safe to assume that the
-+			 * next row/column can be the stop condition
-+			 */
-+			stop = true;
-+		}
-+	}
-+
-+	lan_rmw(ANA_ANAINTR_INTR_SET(0),
-+		ANA_ANAINTR_INTR,
-+		lan966x, ANA_ANAINTR);
-+
-+	return IRQ_HANDLED;
- }
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 101c1f005baf..7c6d6293611a 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -527,6 +527,13 @@ static irqreturn_t lan966x_xtr_irq_handler(int irq, void *args)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t lan966x_ana_irq_handler(int irq, void *args)
-+{
-+	struct lan966x *lan966x = args;
-+
-+	return lan966x_mac_irq_handler(lan966x);
-+}
-+
- static void lan966x_cleanup_ports(struct lan966x *lan966x)
- {
- 	struct lan966x_port *port;
-@@ -554,6 +561,11 @@ static void lan966x_cleanup_ports(struct lan966x *lan966x)
- 
- 	disable_irq(lan966x->xtr_irq);
- 	lan966x->xtr_irq = -ENXIO;
-+
-+	if (lan966x->ana_irq) {
-+		disable_irq(lan966x->ana_irq);
-+		lan966x->ana_irq = -ENXIO;
-+	}
- }
- 
- static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
-@@ -870,6 +882,15 @@ static int lan966x_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	lan966x->ana_irq = platform_get_irq_byname(pdev, "ana");
-+	if (lan966x->ana_irq) {
-+		err = devm_request_threaded_irq(&pdev->dev, lan966x->ana_irq, NULL,
-+						lan966x_ana_irq_handler, IRQF_ONESHOT,
-+						"ana irq", lan966x);
-+		if (err)
-+			return dev_err_probe(&pdev->dev, err, "Unable to use ana irq");
-+	}
-+
- 	/* init switch */
- 	lan966x_init(lan966x);
- 	lan966x_stats_init(lan966x);
-@@ -923,6 +944,8 @@ static int lan966x_remove(struct platform_device *pdev)
- 	destroy_workqueue(lan966x->stats_queue);
- 	mutex_destroy(&lan966x->stats_lock);
- 
-+	lan966x_mac_purge_entries(lan966x);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 7e5a3b6f168d..ba548d65b58a 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -75,6 +75,9 @@ struct lan966x {
- 
- 	u8 base_mac[ETH_ALEN];
- 
-+	struct list_head mac_entries;
-+	spinlock_t mac_lock; /* lock for mac_entries list */
-+
- 	/* stats */
- 	const struct lan966x_stat_layout *stats_layout;
- 	u32 num_stats;
-@@ -87,6 +90,7 @@ struct lan966x {
- 
- 	/* interrupts */
- 	int xtr_irq;
-+	int ana_irq;
- };
- 
- struct lan966x_port_config {
-@@ -141,6 +145,8 @@ int lan966x_mac_forget(struct lan966x *lan966x,
- int lan966x_mac_cpu_learn(struct lan966x *lan966x, const char *addr, u16 vid);
- int lan966x_mac_cpu_forget(struct lan966x *lan966x, const char *addr, u16 vid);
- void lan966x_mac_init(struct lan966x *lan966x);
-+void lan966x_mac_purge_entries(struct lan966x *lan966x);
-+irqreturn_t lan966x_mac_irq_handler(struct lan966x *lan966x);
- 
- static inline void __iomem *lan_addr(void __iomem *base[],
- 				     int id, int tinst, int tcnt,
+V5 is an overhaul of the framework. Instead of struct spi_device being
+called directly into drivers/net/dsa/ocelot/ocelot_spi.c, it is now done
+through drivers/net/mfd/ocelot-spi.c. The MFD layer is handled in
+drivers/net/mfd/ocelot-core.c. At the end of this patch set, three
+optional devices are supported: ocelot-pinctrl to control pins, 
+mdio-mscc-miim to communicate on the external MDIO bus, and
+ocelot-ext to manage the switch.
+
+This structure seems to really clean things up. "ocelot_ext" comes in
+around 650 lines now, down from 950 in v4. Much of that has moved to
+ocelot-spi.c. All references to SPI have been removed from ocelot_ext. I
+know lines of a file isn't a great metric of software design quality,
+but I think they are related in this case.
+
+My hope at the end of this RFC is to be able to split this into several
+smaller patch sets. One set would add MFD + pinctrl, and possibly MDIO.
+To the best of my current knowledge those drivers are functionally
+complete and possibly ready for full "PATCH" status instead of RFC. 
+
+Of note: the MFD uses hard-coded resources, while the MMIO version uses
+DTS resources. If nothing else, I'll update the relevant documentation
+accordingly.
+
+A separate patch set would be to add switch capabilities. Since the
+external phys are now functional, I can turn my focus to those
+additional ports. 
+
+That leads to a direct question: Is it acceptable to do switch
+capabilities in two patch sets? Set 1 would add internal phy
+functionality that currently works, set 2 would add PCS / SGMII support
+to ports 4-7? For full transparency: I don't have Fib{re,er} 
+hardware so I don't plan to develop that support. I simply won't be able
+to test it.
+
+As I mentioned in the last RFC:
+The hardware setup I'm using for development is a beaglebone black, with
+jumpers from SPI0 to the microchip VSC7512 dev board. The microchip dev 
+board has been modified to not boot from flash, but wait for SPI. An
+ethernet cable is connected from the beaglebone ethernet to port 0 of
+the dev board.
+
+
+The device tree I'm using for the VSC7512 is below, and has changed in
+architecture significantly since V4:
+
+&spi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	ocelot-chip@0 {
+		compatible = "mscc,vsc7512_mfd_spi";
+		spi-max-frequency = <250000>;
+		reg = <0>;
+
+		ethernet-switch@0 {
+			compatible = "mscc,vsc7512-ext-switch";
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+					label = "cpu";
+					status = "okay";
+					ethernet = <&mac_sw>;
+					phy-handle = <&sw_phy0>;
+					phy-mode = "internal";
+				};
+
+				port@1 {
+					reg = <1>;
+					label = "swp1";
+					status = "okay";
+					phy-handle = <&sw_phy1>;
+					phy-mode = "internal";
+				};
+
+				port@2 {
+					reg = <2>;
+					label = "swp2";
+					status = "okay";
+					phy-handle = <&sw_phy2>;
+					phy-mode = "internal";
+				};
+
+				port@3 {
+					reg = <3>;
+					label = "swp3";
+					status = "okay";
+					phy-handle = <&sw_phy3>;
+					phy-mode = "internal";
+				};
+
+				port@4 {
+					reg = <4>;
+					label = "swp4";
+					status = "okay";
+					phy-handle = <&sw_phy4>;
+					phy-mode = "sgmii";
+				};
+
+				port@5 {
+					reg = <5>;
+					label = "swp5";
+					status = "okay";
+					phy-handle = <&sw_phy5>;
+					phy-mode = "sgmii";
+				};
+
+				port@6 {
+					reg = <6>;
+					label = "swp6";
+					status = "okay";
+					phy-handle = <&sw_phy6>;
+					phy-mode = "sgmii";
+				};
+
+				port@7 {
+					reg = <7>;
+					label = "swp7";
+					status = "okay";
+					phy-handle = <&sw_phy7>;
+					phy-mode = "sgmii";
+				};
+			};
+
+
+			mdio {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				sw_phy0: ethernet-phy@0 {
+					reg = <0x0>;
+				};
+
+				sw_phy1: ethernet-phy@1 {
+					reg = <0x1>;
+				};
+
+				sw_phy2: ethernet-phy@2 {
+					reg = <0x2>;
+				};
+
+				sw_phy3: ethernet-phy@3 {
+					reg = <0x3>;
+				};
+			};
+		};
+
+		mdio1: mdio1 {
+			compatible = "mscc,ocelot-miim";
+			pinctrl-names = "default";
+			pinctrl-0 = <&miim1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			sw_phy4: ethernet-phy@4 {
+				reg = <0x4>;
+			};
+
+			sw_phy5: ethernet-phy@5 {
+				reg = <0x5>;
+			};
+
+			sw_phy6: ethernet-phy@6 {
+				reg = <0x6>;
+			};
+
+			sw_phy7: ethernet-phy@7 {
+				reg = <0x7>;
+			};
+		};
+
+		gpio: pinctrl@0 {
+			compatible = "mscc,ocelot-pinctrl";
+			gpio-controller;
+			#gpio_cells = <2>;
+			gpio-ranges = <&gpio 0 0 22>;
+
+			led_shift_reg_pins: led-shift-reg-pins {
+				pins = "GPIO_0", "GPIO_1", "GPIO_2", "GPIO_3";
+				function = "sg0";
+			};
+
+			miim1: miim1 {
+				pins = "GPIO_14", "GPIO_15";
+				function = "miim";
+			};
+		};
+
+        /* Non-functional at the moment */
+		sgpio: sgpio {
+			compatible = "mscc,ocelot-sgpio";
+			bus-frequency=<12500000>;
+			clocks = <&ocelot_clock>;
+			microchip,sgpio-port-ranges = <0 31>;
+
+			sgpio_in0: sgpio@0 {
+				compatible = "microchip,sparx5-sgpio-bank";
+				reg = <0>;
+				gpio-controller;
+				#gpio-cells = <3>;
+				ngpios = <32>;
+			};
+
+			sgpio_out1: sgpio@1 {
+				compatible = "microchip,sparx5-sgpio-bank";
+				reg = <1>;
+				gpio-controller;
+				gpio-cells = <3>;
+				ngpios = <32>;
+			};
+		};
+	};
+};
+
+
+
+The relevant boot log for the switch / MDIO bus is here. Of note: ports
+4-7 are now properly probed before the switch comes up.
+
+[    1.357533] SPI driver ocelot_mfd_spi has no spi_device_id for mscc,vsc7514_mfd_spi
+[    1.357561] SPI driver ocelot_mfd_spi has no spi_device_id for mscc,vsc7513_mfd_spi
+[    1.357571] SPI driver ocelot_mfd_spi has no spi_device_id for mscc,vsc7512_mfd_spi
+[    1.357581] SPI driver ocelot_mfd_spi has no spi_device_id for mscc,vsc7511_mfd_spi
+[    3.159000] ocelot_mfd_spi spi0.0: configured SPI bus for speed 250000, rx padding bytes 0
+[    3.167549] ocelot_mfd_spi spi0.0: initializing SPI interface for chip
+[    3.175088] ocelot_mfd_spi spi0.0: resetting ocelot chip
+[    3.301006] ocelot_mfd_spi spi0.0: initializing SPI interface for chip
+[    3.309537] pinctrl-ocelot pinctrl-ocelot: DMA mask not set
+[    3.315694] gpiochip_find_base: found new base at 2026
+[    3.315737] gpio gpiochip4: (ocelot-gpio): created GPIO range 0->21 ==> pinctrl-ocelot PIN 0->21
+[    3.321957] gpio gpiochip4: (ocelot-gpio): added GPIO chardev (254:4)
+[    3.322059] gpio gpiochip4: registered GPIOs 2026 to 2047 on ocelot-gpio
+[    3.322076] pinctrl-ocelot pinctrl-ocelot: driver registered
+[    3.331370] mscc-miim ocelot-miim1: DMA mask not set
+[    3.337044] mdio_bus ocelot-miim1-mii: GPIO lookup for consumer reset
+[    3.337065] mdio_bus ocelot-miim1-mii: using device tree for GPIO lookup
+[    3.337088] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/mdio1[0]'
+[    3.337141] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/mdio1[0]'
+[    3.337190] mdio_bus ocelot-miim1-mii: using lookup tables for GPIO lookup
+[    3.337202] mdio_bus ocelot-miim1-mii: No GPIO consumer reset found
+[    3.337215] libphy: mscc_miim: probed
+[    3.343764] mdio_bus ocelot-miim1-mii:04: GPIO lookup for consumer reset
+[    3.343788] mdio_bus ocelot-miim1-mii:04: using device tree for GPIO lookup
+[    3.343809] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/mdio1/ethernet-phy@4[0]'
+[    3.343873] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/mdio1/ethernet-phy@4[0]'
+[    3.343928] mdio_bus ocelot-miim1-mii:04: using lookup tables for GPIO lookup
+[    3.343939] mdio_bus ocelot-miim1-mii:04: No GPIO consumer reset found
+# Repeated for 5, 6 and 7
+[    3.355921] ocelot-ext-switch ocelot-ext-switch: DMA mask not set
+[    3.864119] mdio_bus ocelot-ext-switch-mii: GPIO lookup for consumer reset
+[    3.864151] mdio_bus ocelot-ext-switch-mii: using device tree for GPIO lookup
+[    3.864176] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio[0]'
+[    3.864236] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio[0]'
+[    3.864291] mdio_bus ocelot-ext-switch-mii: using lookup tables for GPIO lookup
+[    3.864303] mdio_bus ocelot-ext-switch-mii: No GPIO consumer reset found
+[    4.363826] libphy: ocelot_ext MDIO bus: probed
+[    4.371316] mdio_bus ocelot-ext-switch-mii:00: GPIO lookup for consumer reset
+[    4.371340] mdio_bus ocelot-ext-switch-mii:00: using device tree for GPIO lookup
+[    4.371360] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio/ethernet-phy@0[0]'
+[    4.371433] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio/ethernet-phy@0[0]'
+[    4.371495] mdio_bus ocelot-ext-switch-mii:00: using lookup tables for GPIO lookup
+[    4.371507] mdio_bus ocelot-ext-switch-mii:00: No GPIO consumer reset found
+[    4.374476] mdio_bus ocelot-ext-switch-mii:01: GPIO lookup for consumer reset
+[    4.374504] mdio_bus ocelot-ext-switch-mii:01: using device tree for GPIO lookup
+[    4.374524] of_get_named_gpiod_flags: can't parse 'reset-gpios' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio/ethernet-phy@1[0]'
+[    4.374597] of_get_named_gpiod_flags: can't parse 'reset-gpio' property of node '/ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/ocelot-chip@0/ethernet-switch@0/mdio/ethernet-phy@1[0]'
+[    4.374657] mdio_bus ocelot-ext-switch-mii:01: using lookup tables for GPIO lookup
+[    4.374669] mdio_bus ocelot-ext-switch-mii:01: No GPIO consumer reset found
+# Repeated for 2 and 3
+[    8.105647] ocelot-ext-switch ocelot-ext-switch: PHY [ocelot-ext-switch-mii:00] driver [Generic PHY] (irq=POLL)
+[    8.119027] ocelot-ext-switch ocelot-ext-switch: configuring for phy/internal link mode
+[    8.145065] ocelot-ext-switch ocelot-ext-switch swp1 (uninitialized): PHY [ocelot-ext-switch-mii:01] driver [Generic PHY] (irq=POLL)
+[    8.163599] ocelot-ext-switch ocelot-ext-switch swp2 (uninitialized): PHY [ocelot-ext-switch-mii:02] driver [Generic PHY] (irq=POLL)
+[    8.182016] ocelot-ext-switch ocelot-ext-switch swp3 (uninitialized): PHY [ocelot-ext-switch-mii:03] driver [Generic PHY] (irq=POLL)
+[    8.200313] ocelot-ext-switch ocelot-ext-switch swp4 (uninitialized): PHY [ocelot-miim1-mii:04] driver [Generic PHY] (irq=POLL)
+[    8.218238] ocelot-ext-switch ocelot-ext-switch swp5 (uninitialized): PHY [ocelot-miim1-mii:05] driver [Generic PHY] (irq=POLL)
+[    8.236204] ocelot-ext-switch ocelot-ext-switch swp6 (uninitialized): PHY [ocelot-miim1-mii:06] driver [Generic PHY] (irq=POLL)
+[    8.254153] ocelot-ext-switch ocelot-ext-switch swp7 (uninitialized): PHY [ocelot-miim1-mii:07] driver [Generic PHY] (irq=POLL)
+[    8.277362] device eth0 entered promiscuous mode
+[    8.282119] DSA: tree 0 setup
+[    8.285250] ocelot_mfd_spi spi0.0: ocelot mfd core setup complete
+[    8.297532] ocelot_mfd_spi spi0.0: ocelot spi mfd probed
+[   10.259154] ocelot-ext-switch ocelot-ext-switch: Link is Up - 100Mbps/Full - flow control off
+
+Then I enable ports 1-3 on a bridge with STP with an intentional loop of
+port 2 plugged directly into port 3:
+
+[   21.040578] cpsw-switch 4a100000.switch: starting ndev. mode: dual_mac
+[   21.133226] SMSC LAN8710/LAN8720 4a101000.mdio:00: attached PHY driver (mii_bus:phy_addr=4a101000.mdio:00, irq=POLL)
+[   21.150341] 8021q: adding VLAN 0 to HW filter on device eth0
+[   21.175435] ocelot-ext-switch ocelot-ext-switch swp1: configuring for phy/internal link mode
+[   21.210804] ocelot-ext-switch ocelot-ext-switch swp2: configuring for phy/internal link mode
+[   21.245110] ocelot-ext-switch ocelot-ext-switch swp3: configuring for phy/internal link mode
+[   21.310462] br0: port 1(swp1) entered blocking state
+[   21.315670] br0: port 1(swp1) entered disabled state
+[   21.334172] device swp1 entered promiscuous mode
+[   21.365554] br0: port 2(swp2) entered blocking state
+[   21.370594] br0: port 2(swp2) entered disabled state
+[   21.388041] device swp2 entered promiscuous mode
+[   21.410549] br0: port 3(swp3) entered blocking state
+[   21.415726] br0: port 3(swp3) entered disabled state
+[   21.432923] device swp3 entered promiscuous mode
+[   21.713724] ocelot-ext-switch ocelot-ext-switch: Link is Down
+[   22.741120] ocelot-ext-switch ocelot-ext-switch: Link is Up - 100Mbps/Full - flow control off
+[   23.382081] cpsw-switch 4a100000.switch eth0: Link is Up - 100Mbps/Full - flow control off
+[   23.392704] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+[   24.339517] ocelot-ext-switch ocelot-ext-switch swp2: Link is Up - 1Gbps/Full - flow control rx/tx
+[   24.348688] IPv6: ADDRCONF(NETDEV_CHANGE): swp2: link becomes ready
+[   24.355215] br0: port 2(swp2) entered blocking state
+[   24.360220] br0: port 2(swp2) entered listening state
+[   24.427317] ocelot-ext-switch ocelot-ext-switch swp3: Link is Up - 1Gbps/Full - flow control rx/tx
+[   24.436649] IPv6: ADDRCONF(NETDEV_CHANGE): swp3: link becomes ready
+[   24.443458] br0: port 3(swp3) entered blocking state
+[   24.448507] br0: port 3(swp3) entered listening state
+[   25.463130] ocelot-ext-switch ocelot-ext-switch swp1: Link is Up - 1Gbps/Full - flow control rx/tx
+[   25.472385] IPv6: ADDRCONF(NETDEV_CHANGE): swp1: link becomes ready
+[   25.479062] br0: port 1(swp1) entered blocking state
+[   25.484241] br0: port 1(swp1) entered listening state
+[   26.091585] br0: port 3(swp3) entered blocking state
+[   39.531066] br0: port 2(swp2) entered learning state
+[   40.811057] br0: port 1(swp1) entered learning state
+[   54.891054] br0: port 2(swp2) entered forwarding state
+[   54.896328] br0: topology change detected, propagating
+[   54.906787] IPv6: ADDRCONF(NETDEV_CHANGE): br0: link becomes ready
+[   55.531415] br0: received packet on swp2 with own address as source address (addr:*, vlan:0)
+[   56.171057] br0: port 1(swp1) entered forwarding state
+[   56.176312] br0: topology change detected, propagating
+[   90.091617] br0: received packet on swp2 with own address as source address (addr:*, vlan:0)
+
+(I'm curious about those swp2 packets that trickle through...)
+
+In order to make this work, I have modified the cpsw driver, and now the
+cpsw_new driver, to allow for frames over 1500 bytes. Otherwise the
+tagging protocol will not work between the beaglebone and the VSC7512. I
+plan to eventually try to get those changes in mainline, but I don't
+want to get distracted from my initial goal. I also had to change
+bonecommon.dtsi to avoid using VLAN 0.
+
+
+Lastly, this patch set relies on changes that have been merged in from
+linux-pinctrl/next. kernel-test-robot will complain that the last two
+patches won't compile and might not even apply. The path forward might
+be to get the MFD / pinctrl into linux-pinctrl before the next merge
+window. I doubt the ocelot-ext will be fully functional by then, though
+it does feel close!
+
+
+RFC history:
+v1 (accidentally named vN)
+	* Initial architecture. Not functional
+	* General concepts laid out
+
+v2
+	* Near functional. No CPU port communication, but control over all
+	external ports
+	* Cleaned up regmap implementation from v1
+
+v3
+	* Functional
+	* Shared MDIO transactions routed through mdio-mscc-miim
+	* CPU / NPI port enabled by way of vsc7512_enable_npi_port /
+	felix->info->enable_npi_port
+	* NPI port tagging functional - Requires a CPU port driver that supports
+	frames of 1520 bytes. Verified with a patch to the cpsw driver
+
+v4
+    * Functional
+    * Device tree fixes
+    * Add hooks for pinctrl-ocelot - some functionality by way of sysfs
+    * Add hooks for pinctrl-microsemi-sgpio - not yet fully functional
+    * Remove lynx_pcs interface for a generic phylink_pcs. The goal here
+    is to have an ocelot_pcs that will work for each configuration of
+    every port. 
+
+v5
+    * Restructured to MFD
+    * Several commits were split out, submitted, and accepted
+    * pinctrl-ocelot believed to be fully functional (requires commits
+    from the linux-pinctrl tree)
+    * External MDIO bus believed to be fully functional
+
+
+Colin Foster (13):
+  mfd: ocelot: add support for external mfd control over SPI for the
+    VSC7512
+  mfd: ocelot: offer an interface for MFD children to get regmaps
+  net: mscc: ocelot: expose ocelot wm functions
+  net: dsa: felix: add configurable device quirks
+  net: mdio: mscc-miim: add ability to externally register phy reset
+    control
+  net: dsa: ocelot: add external ocelot switch control
+  mfd: ocelot: enable the external switch interface
+  mfd: add interface to check whether a device is mfd
+  net: mdio: mscc-miim: add local dev variable to cleanup probe function
+  net: mdio: mscc-miim: add MFD functionality through ocelot-core
+  mfd: ocelot-core: add control for the external mdio interface
+  pinctrl: ocelot: add MFD functionality through ocelot-core
+  mfd: ocelot: add ocelot-pinctrl as a supported child interface
+
+ drivers/mfd/Kconfig                        |  15 +
+ drivers/mfd/Makefile                       |   3 +
+ drivers/mfd/mfd-core.c                     |   5 +
+ drivers/mfd/ocelot-core.c                  | 203 +++++++
+ drivers/mfd/ocelot-mfd.h                   |  19 +
+ drivers/mfd/ocelot-spi.c                   | 374 ++++++++++++
+ drivers/net/dsa/ocelot/Kconfig             |  15 +
+ drivers/net/dsa/ocelot/Makefile            |   5 +
+ drivers/net/dsa/ocelot/felix.c             |   7 +-
+ drivers/net/dsa/ocelot/felix.h             |   1 +
+ drivers/net/dsa/ocelot/felix_vsc9959.c     |   1 +
+ drivers/net/dsa/ocelot/ocelot_ext.c        | 644 +++++++++++++++++++++
+ drivers/net/dsa/ocelot/seville_vsc9953.c   |   4 +-
+ drivers/net/ethernet/mscc/ocelot_devlink.c |  31 +
+ drivers/net/ethernet/mscc/ocelot_vsc7514.c |  28 -
+ drivers/net/mdio/mdio-mscc-miim.c          |  50 +-
+ drivers/pinctrl/pinctrl-ocelot.c           |  30 +-
+ include/linux/mdio/mdio-mscc-miim.h        |   3 +-
+ include/linux/mfd/core.h                   |  10 +
+ include/soc/mscc/ocelot.h                  |  19 +
+ 20 files changed, 1410 insertions(+), 57 deletions(-)
+ create mode 100644 drivers/mfd/ocelot-core.c
+ create mode 100644 drivers/mfd/ocelot-mfd.h
+ create mode 100644 drivers/mfd/ocelot-spi.c
+ create mode 100644 drivers/net/dsa/ocelot/ocelot_ext.c
+
 -- 
-2.33.0
+2.25.1
 

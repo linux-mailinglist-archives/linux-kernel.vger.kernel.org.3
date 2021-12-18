@@ -2,183 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F74479883
+	by mail.lfdr.de (Postfix) with ESMTP id A1451479884
 	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 05:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbhLREBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 23:01:52 -0500
-Received: from mx.ucr.edu ([138.23.62.67]:44713 "EHLO mx5.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230052AbhLREBv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 23:01:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1639800111; x=1671336111;
-  h=mime-version:references:in-reply-to:from:date:message-id:
-   subject:to:cc;
-  bh=/VVCqZDQO03dzWiJK64rx87Z42N8S970ztCyWoWKxH0=;
-  b=rGVJbuGO89WDPYV8nGxcS2HIHA3G6LRkwUViyggMjjDlPsiaTWchjFMG
-   Uj2806nu9NRpxpJzJJvR5jkUl964V1ldRpZO+jBrCs738W3l9SsBbJzut
-   j3fQI+cD6h1AqKlmBB5146awIveblKzMutCBLwS5hU/tcn8HqF98sWLCI
-   yyPNsA3nAFP5GJM93HWQ1fMPZlh4OVczkDccq3Z00wswapqmCusAtPbx9
-   K0Ee6bnMSeC7CX65GYxMCqsD6tr9AUB2EdaQpWWocrjQAD1Y1Ga4LUNmZ
-   q9fTJLe39fpODG3FUVs2ciMfpIvUny2+S2+DHk7XPi2v9dJ8r8tg0cT/J
-   A==;
-IronPort-SDR: qu2oj2BWJwdu+kd+tfzSxk7iE+5y447D2lo6fbxmUm0dSdUPvyieNWmnT0EDqhUY6Q+fcgj69H
- ml7FS/NbONm+fatp9dmboWkHuSRL7ssBsMN0fO5O8bVFgyGiSGvedMnCShT+ygSVTAprTaVgpc
- 5unc8REH3ElgYYlk6i+oFdr1KoktVeOfv4J3G7sg+MVVWYKSVh6J06QPqdNEWG2clY1v9l0K+g
- qo7MgOwqAyIW815HKzL9UApyl4g4aPbnfLxl/ry+Ek0hEdOL8eOxPknHV9yAhZuxD2oHBm3tnw
- Oaez1QaIoxvGY4KphynhIwo/
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="263265803"
-Received: from mail-yb1-f198.google.com ([209.85.219.198])
-  by smtpmx5.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Dec 2021 20:01:51 -0800
-Received: by mail-yb1-f198.google.com with SMTP id i187-20020a2522c4000000b006093b616e65so7066201ybi.17
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:01:50 -0800 (PST)
+        id S231892AbhLREDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 23:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230052AbhLREDQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 23:03:16 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE8FC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:03:15 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z7so15067877edc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:03:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8lxy7tam3G965VJ+yVFHi/Lwb6UbeZwM4+7surRJM9Y=;
-        b=njHTQAfUCl+25gpnFfB2B2YAaly9Uab9QzuXaxwgaSIcyEY/GJitKzSJMTAn22UAmO
-         C7tZ7ebJpzcZUl8AdOcZpu7TrgqqYWdlnEVHpLLfNbL0Jzfmued1MoicQpLyZ2YMPGk8
-         RuS2dAgysaUVDknPGc/035cQzjaDpuyGCJo40=
+        bh=iDz9wbDMHn9MeIeMeVs1g93TcSMjFNt5KhDPV7GWmW8=;
+        b=JZWsZ9zzivWVUnONWc6WXUrfS9G5bbi5gt+peI0yOlau9BFB8rndAwtdKJ2qX2ZnUf
+         OQ+2eD5CGCh2TBG+PQVESOHPfQzWG7avZX5F/+5/9t4X10C604kFp0d+2CFTwOowQY+g
+         h1Hrnva1kIJXMOMq6KKMozGFUEUYAP+iMVhiU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8lxy7tam3G965VJ+yVFHi/Lwb6UbeZwM4+7surRJM9Y=;
-        b=JQOOSI2wn47nIiSnxTCJQUzvgZ26g7FX8seOF46ryOme+VmLxj/g1OLmCgqznbByRl
-         J4dFiWIISkX4UMLpt3ziOtvdEBLfc1qAYDfnO93A1LsTGfnsoGt/SxEP5daLTKtrtyuZ
-         Qlf4zpEMwqswJOQBQdAP2oRfsLS/toPgb4rNAnwIP5i5LcyPfQyYXAa0oFSmJ22/aCYS
-         Po4mIsNBHqEV235qhUdwwiCjUW/utrkcypJ0HU1M6uCjsKBBh0exRfS4wFFM69FngwKg
-         0oDBfM9cpDYBw3vFjY5liunc/Vgq4JglrCqoAbEJnMc8lrPZOKKeVup4hDByKlcLtCI5
-         i0eQ==
-X-Gm-Message-State: AOAM533skmKsd014SJZLzT7H5Da3+czA1YFGUXylvVUlsdGXlcC7ZuQH
-        Ape9OK9A1BSZgcmxbolpUHM1X2L4Ny4z2sp7/wlYgYvZspv0mYl0EUSXIQHRl7x8xAXQIlmIJFy
-        me6j0ilBApSW7dlt+Sie8PXv9Wd76OMLwANHcpW2j2A==
-X-Received: by 2002:a25:d188:: with SMTP id i130mr9136804ybg.475.1639800109230;
-        Fri, 17 Dec 2021 20:01:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyb7TYo+RtQKFAc8gUdrgaAtdVg+syE3D6jWsnLVF1eU8K2KyI+1hocLp5CTYT5pHGjaTzbwOyyPUBHKF3R56s=
-X-Received: by 2002:a25:d188:: with SMTP id i130mr9136784ybg.475.1639800109031;
- Fri, 17 Dec 2021 20:01:49 -0800 (PST)
+        bh=iDz9wbDMHn9MeIeMeVs1g93TcSMjFNt5KhDPV7GWmW8=;
+        b=cTGczQkST+vmN4oMkMGnyO5dRM/nOpWADbYcb7SA3X8mIWjrLsjEMZZHWTsx1csIpn
+         t+OhqbfYhBZ6SJ0C6hvRa6B/upNux3gMp/szqA3/Ihly9+CvdUIOtIbU9h4Qt5HQB3Cw
+         Gj7l7twatz2BQ8zckQA84/3WGSvpWEM/xaaq5H12PQ3femrR6SM7vBxIwDKgESdWl+GB
+         Sb4iCQs7wAj3xQV5MuPX+JYriBdjvaOTWwv6K370GneYukmnDh1lAHIOIi33qS5/+3js
+         Nxp7YewxYG/69rKX/LMWOmhfFhHh1O6MLpwEzVnXGEVaKahTzjkmdLKUQsgDhzMwy5bv
+         8yKA==
+X-Gm-Message-State: AOAM533Xq+04Bapgb6JKTJe9cfaZt82BoIJwLKxuoukoWV7v/EOko4jo
+        Tyg7dfj6pDyDnIXhWiEkSYv0BIhRYgCrf0rA1Ws=
+X-Google-Smtp-Source: ABdhPJwKTVDCqnlxC8NvhDVmljlJmi0dEHC1Xk0fFOZh9+Ai2XpmVRoPSyZw4K5qek9Ncp5ax0RqIQ==
+X-Received: by 2002:a17:906:9acd:: with SMTP id ah13mr4869180ejc.666.1639800193510;
+        Fri, 17 Dec 2021 20:03:13 -0800 (PST)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id m16sm4236282edd.61.2021.12.17.20.03.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 20:03:11 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so5334219wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 20:03:11 -0800 (PST)
+X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr12036558wmq.8.1639800191035;
+ Fri, 17 Dec 2021 20:03:11 -0800 (PST)
 MIME-Version: 1.0
-References: <CABvMjLSXpg00KKkqXH35C7Op0xC3mPaOAhj_xbAOEXL_4Ys_aw@mail.gmail.com>
- <52f808a3-7e2d-7ae2-ca62-400137a0b92f@amd.com>
-In-Reply-To: <52f808a3-7e2d-7ae2-ca62-400137a0b92f@amd.com>
-From:   Yizhuo Zhai <yzhai003@ucr.edu>
-Date:   Fri, 17 Dec 2021 20:01:38 -0800
-Message-ID: <CABvMjLRUy40yq76S3qggCmKNKvQ3+njNX5XqgsuGzgp4S=XoEg@mail.gmail.com>
-Subject: Re: Potential Bug in drm/amd/display/dc_link
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
+ <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com> <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
+ <0de1a3cb-8286-15bd-aec1-2b284bf8918a@redhat.com> <719D2770-97EF-4CF5-81E6-056B0B55A996@vmware.com>
+In-Reply-To: <719D2770-97EF-4CF5-81E6-056B0B55A996@vmware.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 20:02:54 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjnPt3H1JV=04iJQ6LjiF31RrM4Zg3QUKTr9MswUZk4xg@mail.gmail.com>
+Message-ID: <CAHk-=wjnPt3H1JV=04iJQ6LjiF31RrM4Zg3QUKTr9MswUZk4xg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Nadav Amit <namit@vmware.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harry:
-Thanks for your feedback, I will submit the patch for variable
-"old_downspread" in the function enable_stream_features().
-And I double checked the code in the mainline and found that the buggy
-function wait_for_training_aux_rd_interval() has been removed, and the
-corresponding bug has been fixed in v5.1-rc1 by a memset. Sorry for
-the confusion.
+On Fri, Dec 17, 2021 at 3:53 PM Nadav Amit <namit@vmware.com> wrote:
+>
+> I understand the discussion mainly revolves correctness, which is
+> obviously the most important property, but I would like to mention
+> that having transient get_page() calls causing unnecessary COWs can
+> cause hard-to-analyze and hard-to-avoid performance degradation.
 
-On Thu, Dec 9, 2021 at 2:30 PM Harry Wentland <harry.wentland@amd.com> wrote:
->
->
-> On 2021-12-09 03:02, Yizhuo Zhai wrote:
-> > Hi All:
-> > I just found a bug in the cramfs using the static analysis tool, but
-> > not sure if this could happen in reality, could you please advise me
-> > here? Thanks for your attention : ) And please ignore the last one
-> > with HTML format if you did not filter it out.
-> >
-> > In function enable_stream_features(), the variable
-> > "old_downspread.raw" could be uninitialized if core_link_read_dpcd
-> > fails(), however, it is used in the later if statement, and further,
-> > core_link_write_dpcd() may write random value, which is potentially
-> > unsafe. But this function does not return the error code to the up
-> > caller and I got stuck in drafting the patch, could you please advise
-> > me here?
-> >
->
-> Thanks for highlighting this.
->
-> Unfortunately we frequently ignore DPCD error codes.
->
-> In this case I would do a memset as shown below.
->
-> > The related code:
-> > static void enable_stream_features(struct pipe_ctx *pipe_ctx)
-> > {
-> >      union down_spread_ctrl old_downspread;
->
->         memset(&old_downspread, 0, sizeof(old_downspread));
->
-> >     core_link_read_dpcd(link, DP_DOWNSPREAD_CTRL,
-> >                          &old_downspread.raw, sizeof(old_downspread);
-> >
-> >         //old_downspread.raw used here
-> >         if (new_downspread.raw != old_downspread.raw) {
-> >                core_link_write_dpcd(link, DP_DOWNSPREAD_CTRL,
-> >                          &new_downspread.raw, sizeof(new_downspread));
-> >         }
-> > }
-> > enum dc_status core_link_read_dpcd(
-> >     struct dc_link *link,
-> >     uint32_t address,
-> >     uint8_t *data,
-> >     uint32_t size)
-> > {
-> >         //data could be uninitialized if the helpers fails and log
-> > some error info
-> >         if (!dm_helpers_dp_read_dpcd(link->ctx,
-> >                link,address, data, size))
-> >                       return DC_ERROR_UNEXPECTED;
-> >         return DC_OK;
-> > }
-> >
-> > The same issue in function wait_for_training_aux_rd_interval() in
-> > drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
->
-> I don't see this. Do you mean this one?
->
-> > void dp_wait_for_training_aux_rd_interval(
-> >       struct dc_link *link,
-> >       uint32_t wait_in_micro_secs)
-> > {
-> > #if defined(CONFIG_DRM_AMD_DC_DCN)
-> >       if (wait_in_micro_secs > 16000)
-> >               msleep(wait_in_micro_secs/1000);
-> >       else
-> >               udelay(wait_in_micro_secs);
-> > #else
-> >       udelay(wait_in_micro_secs);
-> > #endif
-> >
-> >       DC_LOG_HW_LINK_TRAINING("%s:\n wait = %d\n",
-> >               __func__,
-> >               wait_in_micro_secs);
-> > }
->
-> Thanks,
-> Harry
->
-> >
->
->
->
+Note that the COW itself is pretty cheap. Yes, there's the page
+allocation and copy, but it's mostly a local thing.
 
+So that falls under the "good to avoid" heading, but in the end it's
+not an immense deal.
 
--- 
-Kind Regards,
+In contrast, the page lock has been an actual big user-visible latency
+issue, to the point of correctness.
 
-Yizhuo Zhai
+A couple of years ago, we literally had NMI watchdog timeouts due to
+the page wait-queues growing basically boundlessly. This was some
+customer internal benchmark code that I never saw, so it wasn't
+*quite* clear exactly what was going on, but we ended up having to
+split up the page wait list traversal using bookmark entries, because
+it was such a huge latency issue.
 
-Computer Science, Graduate Student
-University of California, Riverside
+That was mostly NUMA balancing faults, I think, but the point I'm
+making is that avoiding the page lock can be a *much* bigger deal than
+avoiding some local allocation and copying of a page of data. There
+are real loads where the page-lock gets insanely bad, and I think it's
+because we use it much too much.
+
+See commit 2554db916586 ("sched/wait: Break up long wake list walk")
+for some of that saga.
+
+So I really think that having to serialize with the page lock in order
+to do some "exact page use counting" is a false economy. Yes, maybe
+you'd be able to avoid a COW or two, but at what locking cost?
+
+                Linus

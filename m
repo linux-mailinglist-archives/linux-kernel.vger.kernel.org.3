@@ -2,163 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2962479B83
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95162479B95
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbhLRPGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 10:06:33 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:45722 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231506AbhLRPGb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 10:06:31 -0500
-X-IronPort-AV: E=Sophos;i="5.88,216,1635174000"; 
-   d="scan'208";a="103925658"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 19 Dec 2021 00:06:29 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3B01F424CFEA;
-        Sun, 19 Dec 2021 00:06:28 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] crypto: ux500 - Use platform_get_irq() to get the interrupt
-Date:   Sat, 18 Dec 2021 15:06:25 +0000
-Message-Id: <20211218150625.15134-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S233477AbhLRP0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 10:26:12 -0500
+Received: from mout.gmx.net ([212.227.15.15]:35729 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232660AbhLRP0L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 10:26:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639841165;
+        bh=F0q+sD4JU+RQTxFCuOmDhjEnN8MILJC/UdK29G9BcoM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=RrwDHHy94iQLXMstvCklFcYHGGVfKEB5ZORyPwGrcxfgceDtxJXSH7+wrqCjEajQo
+         /xdJy2V87kO+yNIuLarEgaIRjrR0P9Ltq0O/7mxKFrL9V0K9YLVk+XciaBBRjuBCJ/
+         T8vJdV2eP3+AJtbTTzvLzqVyHFkXQRa9NVjsGoCs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNbkv-1n9mpK0KbL-00P97Z; Sat, 18
+ Dec 2021 16:26:05 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        kernel test robot <lkp@intel.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH] mfd: ntxec: Change return type of ntxec_reg8 from __be16 to u16
+Date:   Sat, 18 Dec 2021 16:25:53 +0100
+Message-Id: <20211218152553.744615-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ub6q/INK4e3odxUbe9IapS9Fiaq81l7ZAW9CF6emhwjnB/e6pQK
+ TFiaGkj/Ekad+Vf5eRVXVc8iuh1KZt7Mr59n2nAC/3OhrCxB0ZPEWytWbCcfCiv6Lxocy6j
+ R7ZBERJOA49Ttl+zfPTYkk8/Ze4pWX8d356tF4J+MQL6R1RftePKjXHgeYEct8zdqLNFp6m
+ CqPS0E3I5Kl0/23RzPvog==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gMHUHlUAMtA=:QjTjKkVef8lCNMLUzOYgNb
+ MFYgibKu8U2QYLwPVAd7G3OMspyXWOCxGtcHtXa7NYViCIG0Z1+A83bi/yMWokIjVTfy5D+WT
+ tYiBlzRhEoQL1CcwEHXgAAwPATy+89PXeiM2oUm7gIeFVxOUf8GQxggitfzJnMV3G5Q5+zaiM
+ tLFhQsubPSx8XPJ4hWXnq7HsfGi6Em9rbnwPtncRNGy6HvRqN2aWcyldYYfCAmzC/fYmt0263
+ A5H0NfEgNsm5DWXOFP2Tk+LQdQqg3QEAAc0KOvsDHITREKFeaXyyGx4YJ1VXqKeq2SFQRiHYD
+ YXVfMr4LyenT9+3qkbQ0Q4KhKXdIU5JRyiPQiYJ4rew7NhK8ggcUUlmq8Xv+Vsu0QXnq1azl/
+ vdVF8v/8YP+aj7GyIzDxP+US1/WCylrFPQe9UYm7sW26NivadzBpo452tQSds1xYB8e8UU15t
+ a9nKPlT/VYJgAUGGK5G5UtmJiOVRvS+x1PbiZL6rSUpleBtjxSPF5NFwxLWMZV1THv5RFXjyp
+ tiiZjyKSfGQaJOnPRg2iDQLPoOaWie0deMPqgqfBzA19zTa3d2FtAQQDN6dfBAyuxX1kOEToE
+ lkDzVTT9IgDcnQRFXcfnzrb+xQEFciv52UzseOReB77XXkY+kWmv/Sm1H9WyBnXg/o67IJOLv
+ ZBwbDcjyR5MKQSU7e/7CM4liOO0ntDor45tlRSzlLktOd34QSpRa+iZ8djgGw6migbRWn31Db
+ PXHfq5qO+DT4cvz7GId3MJO+OX23NfJjtOcgOjXevsLI4ThuniB3yc+p0imtn4n93Pn4Lj+4u
+ Tp2wkkkDgijbAXQO6UjccW7BI01CaLyMbMm448XtWoBjAcM+S2PWolgILjackgITNivjPv14h
+ GylwTZP3YtqnnIgDKvqW3fXUCCPK80mY6pds3LBAehhJYRnD0h6wR8QlZ0a+CalDKD/6RuI8N
+ piL/TVdgrJBEWVQxBGoKehMd1hfyiWtPT4tX20AEdUPjXfHpGvVfISSUWIR2ZZmmD+OzYaibs
+ KSZT5ba14jBMy+E35pF6Ab5CkBAzdxFdrw676iRmuPcEE6dD2W9QQW+EEeB5AkOTTZcxta/SF
+ a/Vr/Hsixg3MA4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+Register values in NTXEC are big-endian on the I2C bus, but the regmap
+subsystem handles the conversion between CPU-endian and big-endian data
+internally. ntxec_reg8 should thus return u16, not __be16.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq() so that interrupt mapping is created on demand.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ include/linux/mfd/ntxec.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-While at it also store the IRQ number in struct cryp_device_data so that
-we don't have to call platform_get_irq() frequently.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Hi,
-
-Dropping usage of platform_get_resource() was agreed based on
-the discussion [0].
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/
-patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Cheers,
-Prabhakar
----
- drivers/crypto/ux500/cryp/cryp.h      |  2 ++
- drivers/crypto/ux500/cryp/cryp_core.c | 26 +++++++-------------------
- 2 files changed, 9 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/crypto/ux500/cryp/cryp.h b/drivers/crypto/ux500/cryp/cryp.h
-index db5713d7c940..59e1557a620a 100644
---- a/drivers/crypto/ux500/cryp/cryp.h
-+++ b/drivers/crypto/ux500/cryp/cryp.h
-@@ -224,6 +224,7 @@ struct cryp_dma {
-  * @phybase: Pointer to physical memory location of the cryp device.
-  * @dev: Pointer to the devices dev structure.
-  * @clk: Pointer to the device's clock control.
-+ * @irq: IRQ number
-  * @pwr_regulator: Pointer to the device's power control.
-  * @power_status: Current status of the power.
-  * @ctx_lock: Lock for current_ctx.
-@@ -239,6 +240,7 @@ struct cryp_device_data {
- 	phys_addr_t phybase;
- 	struct device *dev;
- 	struct clk *clk;
-+	int irq;
- 	struct regulator *pwr_regulator;
- 	int power_status;
- 	spinlock_t ctx_lock;
-diff --git a/drivers/crypto/ux500/cryp/cryp_core.c b/drivers/crypto/ux500/cryp/cryp_core.c
-index 30cdd5253929..97277b7150cb 100644
---- a/drivers/crypto/ux500/cryp/cryp_core.c
-+++ b/drivers/crypto/ux500/cryp/cryp_core.c
-@@ -1257,7 +1257,6 @@ static int ux500_cryp_probe(struct platform_device *pdev)
+diff --git a/include/linux/mfd/ntxec.h b/include/linux/mfd/ntxec.h
+index 26ab3b8eb612f..cc6f07bfa2b34 100644
+=2D-- a/include/linux/mfd/ntxec.h
++++ b/include/linux/mfd/ntxec.h
+@@ -26,7 +26,7 @@ struct ntxec {
+  * This convenience function converts an 8-bit value to 16-bit for use in=
+ the
+  * second kind of register.
+  */
+-static inline __be16 ntxec_reg8(u8 value)
++static inline u16 ntxec_reg8(u8 value)
  {
- 	int ret;
- 	struct resource *res;
--	struct resource *res_irq;
- 	struct cryp_device_data *device_data;
- 	struct cryp_protection_config prot = {
- 		.privilege_access = CRYP_STATE_ENABLE
-@@ -1341,15 +1340,13 @@ static int ux500_cryp_probe(struct platform_device *pdev)
- 		goto out_power;
- 	}
- 
--	res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res_irq) {
--		dev_err(dev, "[%s]: IORESOURCE_IRQ unavailable",
--			__func__);
--		ret = -ENODEV;
-+	device_data->irq = platform_get_irq(pdev, 0);
-+	if (device_data->irq <= 0) {
-+		ret = device_data->irq ? device_data->irq : -ENXIO;
- 		goto out_power;
- 	}
- 
--	ret = devm_request_irq(&pdev->dev, res_irq->start,
-+	ret = devm_request_irq(&pdev->dev, device_data->irq,
- 			       cryp_interrupt_handler, 0, "cryp1", device_data);
- 	if (ret) {
- 		dev_err(dev, "[%s]: Unable to request IRQ", __func__);
-@@ -1489,7 +1486,6 @@ static int ux500_cryp_suspend(struct device *dev)
- 	int ret;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct cryp_device_data *device_data;
--	struct resource *res_irq;
- 	struct cryp_ctx *temp_ctx = NULL;
- 
- 	dev_dbg(dev, "[%s]", __func__);
-@@ -1501,11 +1497,7 @@ static int ux500_cryp_suspend(struct device *dev)
- 		return -ENOMEM;
- 	}
- 
--	res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res_irq)
--		dev_err(dev, "[%s]: IORESOURCE_IRQ, unavailable", __func__);
--	else
--		disable_irq(res_irq->start);
-+	disable_irq(device_data->irq);
- 
- 	spin_lock(&device_data->ctx_lock);
- 	if (!device_data->current_ctx)
-@@ -1532,7 +1524,6 @@ static int ux500_cryp_resume(struct device *dev)
- 	int ret = 0;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct cryp_device_data *device_data;
--	struct resource *res_irq;
- 	struct cryp_ctx *temp_ctx = NULL;
- 
- 	dev_dbg(dev, "[%s]", __func__);
-@@ -1556,11 +1547,8 @@ static int ux500_cryp_resume(struct device *dev)
- 
- 	if (ret)
- 		dev_err(dev, "[%s]: cryp_enable_power() failed!", __func__);
--	else {
--		res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--		if (res_irq)
--			enable_irq(res_irq->start);
--	}
-+	else
-+		enable_irq(device_data->irq);
- 
- 	return ret;
+ 	return value << 8;
  }
--- 
-2.17.1
+=2D-
+2.30.2
 

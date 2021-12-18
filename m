@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1F3479C55
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB5479C58
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbhLRTfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbhLRTfk (ORCPT
+        id S234004AbhLRTja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:39:30 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40070 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230209AbhLRTj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:35:40 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F20FC061574;
-        Sat, 18 Dec 2021 11:35:40 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso7273299ota.5;
-        Sat, 18 Dec 2021 11:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hcmmLIR+F0h0egoEbx+zZr0kOvK7O/jxEGio+V5xpTY=;
-        b=ODKNx2oQbL44hyrA4e9o3RNOqSLCFBk9FcvogZCM1cjKMrbfcqr9IPF6Moxs7HsD+H
-         GkV4/Yr9ec7ffDMPbvEBncC5NAWW7V7txJoZsXfmD7JIDpGaCWrXSmqHWN8VwQp7csnj
-         xzRuQcc9xZTTWQv/N65DZW0k4M5Il5hJuXrlb7WSfARwJalR6Yt/60S/U1wtTd6rXZaD
-         bPO0cg0OKFmQ47xn5KDCZrdk1M0nXMqKwwIIz66r68C8OMvWY0fwUt9wo+3pbANz2UVd
-         odW/MLT9+sfiVGLd+WVThyj5lzz4DDMgoW7Ui3Hf7O1NEsSS+5sSNYQL4EpNH0zFMJfI
-         483A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hcmmLIR+F0h0egoEbx+zZr0kOvK7O/jxEGio+V5xpTY=;
-        b=mbkFvBsuOIgJRy1hr2X4QHdvlj94NE8j2eu14Gv+ZW4PgcCH3CmmHALl1jXVUmzu1z
-         gydGzRiAtAlbYM1qb/guTbdxPgw7u2lVICpqjyZCNAJiILSfO4Ycbp7aZD806vP0Oirl
-         WXnau3aSxT5vDHkL3oYU8J/sYLLjsyq+bcWl3lyC+Ivb61ZVcWbIW8B8X2Xx1dp6JcLr
-         87o2AiFOhvybkCLIPTwPPkKHH4D88+4V11a/aQWdAIzZOSke4NOrJSNGAvhYSps2CtKJ
-         E63nUUJYzhARe3UM66wpQKuPPh2fCocBKZ4PiQj1ru7vv3GACkFnLEhmmk11UwQvWe1g
-         Xe4g==
-X-Gm-Message-State: AOAM530mCEmAwITwVRXvE0IMRzw/wcKO8JkTDZGSUGcQxRwHlspR0gSz
-        lF9pYIpobixyEXSLUkFCQ6YIzyyM52g=
-X-Google-Smtp-Source: ABdhPJxtfpqx1k6ybhCQiMs/ZcIcW7k9XC7pFl0ks2F+KbufHn6Jv3pXo66WY5xrIZG66tXPrYjBww==
-X-Received: by 2002:a9d:4b09:: with SMTP id q9mr6281522otf.140.1639856138568;
-        Sat, 18 Dec 2021 11:35:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p23sm2320474otf.37.2021.12.18.11.35.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 11:35:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/1] hwmon: (nct6775) Additional check for ChipID before
- ASUS WMI usage
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     andy.shevchenko@gmail.com, platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Sat, 18 Dec 2021 14:39:29 -0500
+Date:   Sat, 18 Dec 2021 19:39:26 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639856368;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ildVUdGHtkDCq6TzbTw3Bge/LUgZu9LlUiguTv9Ha5c=;
+        b=FWtUjUPZIR+QsPkNjLhGnvF3/7ZY/cBGfWONbIb5csByMwKGKi5qKhcMwTVNepFEr2KKMh
+        p+MXLG3RZdHsW7Ix7eG+n2azODS6vPiXa/TfvvQFT+w9QylsFHWhiOs7KM4unhFDY2wHw2
+        C2ND1OJOSKMPqmtgZckALDiDnJ4ff3u8Pc9HIBVgfOTN8g1TbkyB1dy4dNynBr8Z7hQCEN
+        ccqkCsYSz/SrF5n1oeBpTWrIfI2vCATpeXXBNCwEoby6VfOl+LznP3R1c+3q3DviZBjVPz
+        j8hYMaxyLNRzKf1VFEdUTrVL36ulli1eq6kOBHRup8qzYjJx60ElmFTXZDrRPw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639856368;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ildVUdGHtkDCq6TzbTw3Bge/LUgZu9LlUiguTv9Ha5c=;
+        b=9ylNR5bl43pLfVz/c66HZ/jVLLTm43iicZ7i/Yr5SvBzFj0pfL9xbyfn3sUPQRC8qVJwzH
+        2sSvqu8lLaL3UtCg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/msi] PCI/MSI: Unbreak pci_irq_get_affinity()
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20211218192616.611878-1-pauk.denis@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <3bcc4982-d496-6721-e40c-b0ed2da0ee83@roeck-us.net>
-Date:   Sat, 18 Dec 2021 11:35:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+In-Reply-To: <87v8zm9pmd.ffs@tglx>
+References: <87v8zm9pmd.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20211218192616.611878-1-pauk.denis@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Message-ID: <163985636689.23020.17674623774839628047.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/21 11:26 AM, Denis Pauk wrote:
-> WMI monitoring methods can be changed or removed in new ASUS boards
-> BIOS versions. Such versions return zero instead of a real one as
-> Chip ID.
-> 
-> Commit adds additional validation for the result of Chip ID call
-> before enabling access by ASUS WMI methods.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-> ---
->   drivers/hwmon/nct6775.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index 57ce8633a725..034347ed51c4 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -5038,7 +5038,8 @@ static int __init sensors_nct6775_init(void)
->   				   board_name);
->   		if (err >= 0) {
->   			/* if reading chip id via WMI succeeds, use WMI */
-> -			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp)) {
-> +			if (!nct6775_asuswmi_read(0, NCT6775_PORT_CHIPID, &tmp) &&
-> +			    tmp) {
+The following commit has been merged into the irq/msi branch of tip:
 
-Please drop the continuation line; the above hurts readability, and in that case
-up to 100 columns are allowed.
+Commit-ID:     d558285413ea2f934ab90223ba908c30c5113aee
+Gitweb:        https://git.kernel.org/tip/d558285413ea2f934ab90223ba908c30c5113aee
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Sat, 18 Dec 2021 11:25:14 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sat, 18 Dec 2021 20:33:21 +01:00
 
-Thanks,
-Guenter
+PCI/MSI: Unbreak pci_irq_get_affinity()
 
->   				pr_info("Using Asus WMI to access %#x chip.\n", tmp);
->   				access = access_asuswmi;
->   			} else {
-> 
-> base-commit: 2585cf9dfaaddf00b069673f27bb3f8530e2039c
-> 
+The recent cleanup of pci_irq_get_affinity() broke the function for
+PCI/MSI-X and indices > 0. Only the MSI descriptor for PCI/MSI has more
+than one affinity mask which can be retrieved via the MSI index.
 
+PCI/MSI-X has one descriptor per vector and each has a single affinity
+mask.
+
+Use index 0 when accessing the affinity mask in the MSI descriptor when
+MSI-X is enabled.
+
+Fixes: f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/87v8zm9pmd.ffs@tglx
+
+
+---
+ drivers/pci/msi/msi.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index 7180241..c19c7ca 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -1100,7 +1100,7 @@ EXPORT_SYMBOL(pci_irq_vector);
+  */
+ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+ {
+-	int irq = pci_irq_vector(dev, nr);
++	int idx, irq = pci_irq_vector(dev, nr);
+ 	struct msi_desc *desc;
+ 
+ 	if (WARN_ON_ONCE(irq <= 0))
+@@ -1113,7 +1113,13 @@ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+ 
+ 	if (WARN_ON_ONCE(!desc->affinity))
+ 		return NULL;
+-	return &desc->affinity[nr].mask;
++
++	/*
++	 * MSI has a mask array in the descriptor.
++	 * MSI-X has a single mask.
++	 */
++	idx = dev->msi_enabled ? nr : 0;
++	return &desc->affinity[idx].mask;
+ }
+ EXPORT_SYMBOL(pci_irq_get_affinity);
+ 

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9D5479A3F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E214479A41
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbhLRKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 05:23:53 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33869 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbhLRKXo (ORCPT
+        id S232732AbhLRKX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 05:23:58 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16827 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232740AbhLRKXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 05:23:44 -0500
-Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JGMPk3NDQzcbsj;
-        Sat, 18 Dec 2021 18:23:22 +0800 (CST)
+        Sat, 18 Dec 2021 05:23:45 -0500
+Received: from kwepemi100007.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JGMPD1xXDz91Pb;
+        Sat, 18 Dec 2021 18:22:56 +0800 (CST)
 Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
+ kwepemi100007.china.huawei.com (7.221.188.115) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 18 Dec 2021 18:23:42 +0800
+ 15.1.2308.20; Sat, 18 Dec 2021 18:23:43 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
  (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Sat, 18 Dec
- 2021 18:23:41 +0800
+ 2021 18:23:42 +0800
 From:   Zhihao Cheng <chengzhihao1@huawei.com>
 To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
         <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
         <Artem.Bityutskiy@nokia.com>
 CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <chengzhihao1@huawei.com>
-Subject: [PATCH v4 11/13] ubi: fastmap: Return error code if memory allocation fails in add_aeb()
-Date:   Sat, 18 Dec 2021 18:35:10 +0800
-Message-ID: <20211218103512.370420-12-chengzhihao1@huawei.com>
+Subject: [PATCH v4 12/13] ubi: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
+Date:   Sat, 18 Dec 2021 18:35:11 +0800
+Message-ID: <20211218103512.370420-13-chengzhihao1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211218103512.370420-1-chengzhihao1@huawei.com>
 References: <20211218103512.370420-1-chengzhihao1@huawei.com>
@@ -46,83 +46,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Abort fastmap scanning and return error code if memory allocation fails
-in add_aeb(). Otherwise ubi will get wrong peb statistics information
-after scanning.
+Fastmap pebs(pnum >= UBI_FM_MAX_START) won't be added into 'ai->fastmap'
+while attaching ubi device if 'fm->used_blocks' is greater than 2, which
+may cause warning from 'ubi_assert(ubi->good_peb_count == found_pebs)':
 
-Fixes: dbb7d2a88d2a7b ("UBI: Add fastmap core")
+  UBI assert failed in ubi_wl_init at 1878 (pid 2409)
+  Call Trace:
+    ubi_wl_init.cold+0xae/0x2af [ubi]
+    ubi_attach+0x1b0/0x780 [ubi]
+    ubi_init+0x23a/0x3ad [ubi]
+    load_module+0x22d2/0x2430
+
+Reproduce:
+  ID="0x20,0x33,0x00,0x00" # 16M 16KB PEB, 512 page
+  modprobe nandsim id_bytes=$ID
+  modprobe ubi mtd="0,0" fm_autoconvert  # Fastmap takes 2 pebs
+  rmmod ubi
+  modprobe ubi mtd="0,0" fm_autoconvert  # Attach by fastmap
+
+Add all used fastmap pebs into list 'ai->fastmap' to make sure they can
+be counted into 'found_pebs'.
+
+Fixes: fdf10ed710c0aa ("ubi: Rework Fastmap attach base code")
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 ---
- drivers/mtd/ubi/fastmap.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/mtd/ubi/fastmap.c | 35 +++++------------------------------
+ 1 file changed, 5 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/mtd/ubi/fastmap.c b/drivers/mtd/ubi/fastmap.c
-index 022af59906aa..6b5f1ffd961b 100644
+index 6b5f1ffd961b..01dcdd94c9d2 100644
 --- a/drivers/mtd/ubi/fastmap.c
 +++ b/drivers/mtd/ubi/fastmap.c
-@@ -468,7 +468,9 @@ static int scan_pool(struct ubi_device *ubi, struct ubi_attach_info *ai,
- 			if (err == UBI_IO_FF_BITFLIPS)
- 				scrub = 1;
+@@ -828,24 +828,6 @@ static int find_fm_anchor(struct ubi_attach_info *ai)
+ 	return ret;
+ }
  
--			add_aeb(ai, free, pnum, ec, scrub);
-+			ret = add_aeb(ai, free, pnum, ec, scrub);
-+			if (ret)
-+				goto out;
- 			continue;
- 		} else if (err == 0 || err == UBI_IO_BITFLIPS) {
- 			dbg_bld("Found non empty PEB:%i in pool", pnum);
-@@ -638,8 +640,10 @@ static int ubi_attach_fastmap(struct ubi_device *ubi,
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
+-static struct ubi_ainf_peb *clone_aeb(struct ubi_attach_info *ai,
+-				      struct ubi_ainf_peb *old)
+-{
+-	struct ubi_ainf_peb *new;
+-
+-	new = ubi_alloc_aeb(ai, old->pnum, old->ec);
+-	if (!new)
+-		return NULL;
+-
+-	new->vol_id = old->vol_id;
+-	new->sqnum = old->sqnum;
+-	new->lnum = old->lnum;
+-	new->scrub = old->scrub;
+-	new->copy_flag = old->copy_flag;
+-
+-	return new;
+-}
+-
+ /**
+  * ubi_scan_fastmap - scan the fastmap.
+  * @ubi: UBI device object
+@@ -865,7 +847,6 @@ int ubi_scan_fastmap(struct ubi_device *ubi, struct ubi_attach_info *ai,
+ 	struct ubi_vid_hdr *vh;
+ 	struct ubi_ec_hdr *ech;
+ 	struct ubi_fastmap_layout *fm;
+-	struct ubi_ainf_peb *aeb;
+ 	int i, used_blocks, pnum, fm_anchor, ret = 0;
+ 	size_t fm_size;
+ 	__be32 crc, tmp_crc;
+@@ -875,17 +856,6 @@ int ubi_scan_fastmap(struct ubi_device *ubi, struct ubi_attach_info *ai,
+ 	if (fm_anchor < 0)
+ 		return UBI_NO_FASTMAP;
  
--		add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 0);
-+		ret = add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 0);
+-	/* Copy all (possible) fastmap blocks into our new attach structure. */
+-	list_for_each_entry(aeb, &scan_ai->fastmap, u.list) {
+-		struct ubi_ainf_peb *new;
+-
+-		new = clone_aeb(ai, aeb);
+-		if (!new)
+-			return -ENOMEM;
+-
+-		list_add(&new->u.list, &ai->fastmap);
+-	}
+-
+ 	down_write(&ubi->fm_protect);
+ 	memset(ubi->fm_buf, 0, ubi->fm_size);
+ 
+@@ -1029,6 +999,11 @@ int ubi_scan_fastmap(struct ubi_device *ubi, struct ubi_attach_info *ai,
+ 				"err: %i)", i, pnum, ret);
+ 			goto free_hdr;
+ 		}
++
++		/* Add all fastmap blocks into attach structure. */
++		ret = add_aeb(ai, &ai->fastmap, pnum, be64_to_cpu(ech->ec), 0);
 +		if (ret)
-+			goto fail;
++			goto free_hdr;
  	}
  
- 	/* read EC values from used list */
-@@ -649,8 +653,10 @@ static int ubi_attach_fastmap(struct ubi_device *ubi,
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 0);
-+		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 0);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	/* read EC values from scrub list */
-@@ -660,8 +666,10 @@ static int ubi_attach_fastmap(struct ubi_device *ubi,
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 1);
-+		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 1);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	/* read EC values from erase list */
-@@ -671,8 +679,10 @@ static int ubi_attach_fastmap(struct ubi_device *ubi,
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 1);
-+		ret = add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 1);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	ai->mean_ec = div_u64(ai->ec_sum, ai->ec_count);
+ 	kfree(fmsb);
 -- 
 2.31.1
 

@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95162479B95
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF96479B97
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbhLRP0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 10:26:12 -0500
-Received: from mout.gmx.net ([212.227.15.15]:35729 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232660AbhLRP0L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 10:26:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639841165;
-        bh=F0q+sD4JU+RQTxFCuOmDhjEnN8MILJC/UdK29G9BcoM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=RrwDHHy94iQLXMstvCklFcYHGGVfKEB5ZORyPwGrcxfgceDtxJXSH7+wrqCjEajQo
-         /xdJy2V87kO+yNIuLarEgaIRjrR0P9Ltq0O/7mxKFrL9V0K9YLVk+XciaBBRjuBCJ/
-         T8vJdV2eP3+AJtbTTzvLzqVyHFkXQRa9NVjsGoCs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNbkv-1n9mpK0KbL-00P97Z; Sat, 18
- Dec 2021 16:26:05 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        kernel test robot <lkp@intel.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH] mfd: ntxec: Change return type of ntxec_reg8 from __be16 to u16
-Date:   Sat, 18 Dec 2021 16:25:53 +0100
-Message-Id: <20211218152553.744615-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.30.2
+        id S233490AbhLRP1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 10:27:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42707 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233481AbhLRP1T (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 10:27:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639841238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
+        b=ZrVUHF6HLgZ7wh7/OiE+1vo0xPtBD+rUQ/6kkd5ZX6wnTzyAbohjAVnkDFMBWAuLFYHN8S
+        iCSc5En6mKkzVMhqO9E3zD88rNvmp+kYVW+YbGM/l9wuzuRhiUK7w8NWJiKe5vEWXvfunM
+        DQsdmmHKYK26gDIiWTBU/xYBgDJBhww=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-u_e7fBjpPACsir16y2n7HA-1; Sat, 18 Dec 2021 10:27:17 -0500
+X-MC-Unique: u_e7fBjpPACsir16y2n7HA-1
+Received: by mail-oo1-f69.google.com with SMTP id t199-20020a4a3ed0000000b002c296d691c4so3452335oot.8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 07:27:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=86SiuzQkzNAn+schu4EkUzziC+m9VbK+PfQYtTZrNxs=;
+        b=U/YFn5rS+shqfp6YrbMh/g+M4xoyt4pWzOHvhsTby/f2lHiIhSW/GhAg9mXy7HNy3Y
+         0EES7NQ6KkqPyILX+gJgg9tR+zsIjWEREXJl4ZiMiJiRZZm0cvDDXYGOgKi0LTaHoRcZ
+         /wKEOvzmIUIk3z1Jq1wTXmsIgpokBm2XDyIKqUJ6/t2ALe4Ul0TcD7drJGLSUcS/v/yH
+         SX6e23Khwry3AefAA5Z9x/uLS+tc/vloXt4mXWRr+oDwdpWnU42dBDDW+YZwXq/jEFJq
+         BcuUaXkDU62cYOgg9aIdJv4ynJm9lKdz+SAc8tadSswpTDoXUGKrKXOXV9A1cvE5bIxJ
+         CwJg==
+X-Gm-Message-State: AOAM531S6HTZt9hvOEELzTSDu/q9O4Inxo7g7/e9Tn6RX0mnoh1qJlVI
+        GVc4xCj9xIOMG5K3bs+pzptPUfVRF+heRWCI+kUOQ+4sCdAONr+PBulGz4M+y/fCEoxMvAE0gWB
+        mRA19+obn3N+GGfDjTOHM1q8F
+X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798782otp.226.1639841236961;
+        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQXs8/YlLAB/Dah8N/DouTHOvgWlTfYorr/QdF2xSDDW13RsfjVj/NVWwFUZ/bdOydpAXgVQ==
+X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr5798767otp.226.1639841236770;
+        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id z12sm2161206oor.45.2021.12.18.07.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 07:27:16 -0800 (PST)
+From:   trix@redhat.com
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] gpio: sim: fix uninitialized ret variable
+Date:   Sat, 18 Dec 2021 07:27:12 -0800
+Message-Id: <20211218152712.2832502-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ub6q/INK4e3odxUbe9IapS9Fiaq81l7ZAW9CF6emhwjnB/e6pQK
- TFiaGkj/Ekad+Vf5eRVXVc8iuh1KZt7Mr59n2nAC/3OhrCxB0ZPEWytWbCcfCiv6Lxocy6j
- R7ZBERJOA49Ttl+zfPTYkk8/Ze4pWX8d356tF4J+MQL6R1RftePKjXHgeYEct8zdqLNFp6m
- CqPS0E3I5Kl0/23RzPvog==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gMHUHlUAMtA=:QjTjKkVef8lCNMLUzOYgNb
- MFYgibKu8U2QYLwPVAd7G3OMspyXWOCxGtcHtXa7NYViCIG0Z1+A83bi/yMWokIjVTfy5D+WT
- tYiBlzRhEoQL1CcwEHXgAAwPATy+89PXeiM2oUm7gIeFVxOUf8GQxggitfzJnMV3G5Q5+zaiM
- tLFhQsubPSx8XPJ4hWXnq7HsfGi6Em9rbnwPtncRNGy6HvRqN2aWcyldYYfCAmzC/fYmt0263
- A5H0NfEgNsm5DWXOFP2Tk+LQdQqg3QEAAc0KOvsDHITREKFeaXyyGx4YJ1VXqKeq2SFQRiHYD
- YXVfMr4LyenT9+3qkbQ0Q4KhKXdIU5JRyiPQiYJ4rew7NhK8ggcUUlmq8Xv+Vsu0QXnq1azl/
- vdVF8v/8YP+aj7GyIzDxP+US1/WCylrFPQe9UYm7sW26NivadzBpo452tQSds1xYB8e8UU15t
- a9nKPlT/VYJgAUGGK5G5UtmJiOVRvS+x1PbiZL6rSUpleBtjxSPF5NFwxLWMZV1THv5RFXjyp
- tiiZjyKSfGQaJOnPRg2iDQLPoOaWie0deMPqgqfBzA19zTa3d2FtAQQDN6dfBAyuxX1kOEToE
- lkDzVTT9IgDcnQRFXcfnzrb+xQEFciv52UzseOReB77XXkY+kWmv/Sm1H9WyBnXg/o67IJOLv
- ZBwbDcjyR5MKQSU7e/7CM4liOO0ntDor45tlRSzlLktOd34QSpRa+iZ8djgGw6migbRWn31Db
- PXHfq5qO+DT4cvz7GId3MJO+OX23NfJjtOcgOjXevsLI4ThuniB3yc+p0imtn4n93Pn4Lj+4u
- Tp2wkkkDgijbAXQO6UjccW7BI01CaLyMbMm448XtWoBjAcM+S2PWolgILjackgITNivjPv14h
- GylwTZP3YtqnnIgDKvqW3fXUCCPK80mY6pds3LBAehhJYRnD0h6wR8QlZ0a+CalDKD/6RuI8N
- piL/TVdgrJBEWVQxBGoKehMd1hfyiWtPT4tX20AEdUPjXfHpGvVfISSUWIR2ZZmmD+OzYaibs
- KSZT5ba14jBMy+E35pF6Ab5CkBAzdxFdrw676iRmuPcEE6dD2W9QQW+EEeB5AkOTTZcxta/SF
- a/Vr/Hsixg3MA4=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register values in NTXEC are big-endian on the I2C bus, but the regmap
-subsystem handles the conversion between CPU-endian and big-endian data
-internally. ntxec_reg8 should thus return u16, not __be16.
+From: Tom Rix <trix@redhat.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- include/linux/mfd/ntxec.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Building with clang returns this error:
 
-diff --git a/include/linux/mfd/ntxec.h b/include/linux/mfd/ntxec.h
-index 26ab3b8eb612f..cc6f07bfa2b34 100644
-=2D-- a/include/linux/mfd/ntxec.h
-+++ b/include/linux/mfd/ntxec.h
-@@ -26,7 +26,7 @@ struct ntxec {
-  * This convenience function converts an 8-bit value to 16-bit for use in=
- the
-  * second kind of register.
-  */
--static inline __be16 ntxec_reg8(u8 value)
-+static inline u16 ntxec_reg8(u8 value)
- {
- 	return value << 8;
- }
-=2D-
-2.30.2
+gpio-sim.c:889:7: error: variable 'ret' is uninitialized
+  when used here
+
+ret should be the status of the call to
+gpio_sim_make_bank_swnode stored in bank->swnode.
+
+Fixes: 83960fcf4818 ("gpio: sim: new testing module")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpio/gpio-sim.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index ef6145f51c8ae..bef00dcc4dc8f 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -886,7 +886,8 @@ static int gpio_sim_device_activate_unlocked(struct gpio_sim_device *dev)
+ 
+ 	list_for_each_entry(bank, &dev->bank_list, siblings) {
+ 		bank->swnode = gpio_sim_make_bank_swnode(bank, swnode);
+-		if (ret) {
++		if (IS_ERR(bank->swnode)) {
++			ret = PTR_ERR(bank->swnode);
+ 			gpio_sim_remove_swnode_recursive(swnode);
+ 			return ret;
+ 		}
+-- 
+2.26.3
 

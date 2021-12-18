@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 383F3479BA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 16:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065CB479BB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 17:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbhLRP5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 10:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S233533AbhLRQLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 11:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbhLRP5R (ORCPT
+        with ESMTP id S233477AbhLRQLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 10:57:17 -0500
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7D4C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 07:57:17 -0800 (PST)
-Received: by mail-ua1-x943.google.com with SMTP id n7so9828343uaq.12
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 07:57:16 -0800 (PST)
+        Sat, 18 Dec 2021 11:11:12 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6215AC06173F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 08:11:12 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id z7so19813089edc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 08:11:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
-        b=mWlaO7sETqFhhmADu/BCdSKeVR2m70dR6Zj2Pi2skNy1Vfb0MhRN9k8W+BNPIbhOEJ
-         E5n0u02JL3TxtDTztW9bimZoZl1na/ZF0Upqb+aLQAwMe7elerSuF5foh4HRQj6bcc2Y
-         +SlAXbYjqqA9mSJdDTGV6yHCbydG51zwjwu39Ulubv6xJgSvQ0YfhMNKuI8YgjwdksLq
-         3oEdpDRptZGkLmZC4QsW4GynbVsXb3j1FNZiDEKCcRPmqiO47g7LbKBevWmmttlDdPBs
-         a0Ggp9REIEBcAntXx609+MeAKCwzjCmsJFGuM/h9sKO0BREr5HYN+u7wBkFJYFomq7DI
-         eQMA==
+        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
+        b=TAe/0gdZQyVnOwFeWOpAxZqQsqsiWgyNYN0Ekwf+JhTgUjuNjbzGswPltILXIZldnO
+         piW8OTWQs3QfEJBMpm5bqqAMZtVsNDgLorKPNTkVuvMymt1E7p20aywUIY+F/0APXfyK
+         65WI3eCPsKnU51ryMiwGYBxqJwE5O/hGkdIda29CowkNsTUjYXf7Ie2c8BdmfECIwsw/
+         dl7Cy2AL9tlH8BH806Y8bN8+F024f4PojnoaaukswqpfjTqXGIlVq3VX2lCxsXpSduay
+         bUSjqtuQsL1RruhnmLvFlE1PpC8QW9qF8Uqo8Yt0tJciltwjKkMKZhiceegluJp191l6
+         cBrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
-        b=HnnmyAR8s2toBeeXNbEIwbXDKDDt6XvZGtjqHbVvuXpCUGl69ueIs8TKrEX0sSrnTl
-         +UBvtl4iq5/TYXLW/WcMEALLr6ypv4lBctdS2MDCnrBP/2XHM1vW80uLL2EL3qar96r2
-         TVhyhQ+KfeZ6jjdwsYp0BxR7wUiWr3TGOs/5TCJrv1OMNFRAordrYvO6WlboRB3LH32m
-         sqfe3k4xiuCnqI1KZrOwj6i/oXeANz/byv74j+L41SjZMXzLCRVueCdsbuQF3Hc64rmT
-         BfNAebuCzBDqtXQ3mWeNRvenXBN1FjtkxqgU+qDMvNaTT7gdfEVw9YhaLScFwLoW9rDp
-         SM+A==
-X-Gm-Message-State: AOAM532IXKOWXYVJngvkvECMRRdePJFfJ/PvV/zYDZ/C4Dcq3O97PiLz
-        ywi0ldDPOqfmEQPxqOhdRfYldM127dMD21/5J9w=
-X-Google-Smtp-Source: ABdhPJz//zh2z0VO3mn4kARwyLKzBPIxVvWNg99S+f1tApkVALETxNsfBvjfWXOfcCIL3dIrdy5NpdExYlxYjNOnJjc=
-X-Received: by 2002:a67:db05:: with SMTP id z5mr859927vsj.62.1639843035882;
- Sat, 18 Dec 2021 07:57:15 -0800 (PST)
+        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
+        b=iFdh0COUJSw8ya9MU8qlhUwWAltnMWCC+r3MTCYW8UhESjVrGujrT4JClptr0QEsKn
+         0XGCIA34baab+RBiEXBL4BqAwxN/0LKLryaPCoD48Pzerdg11d7FwV3Y3GEXvIafTl2c
+         5MwGdGJVBrc6NoDw0bk3PkLecUjobji9MLrcZ1SjHV4nTeDFY6RBNgAIn7LEUiTE2SUT
+         p6yY2GSPasTOfcUEiA96zUVSYrjKIilyjTnehBZhadsQb5MkjO8sIYrTiIIb8OfwY8lN
+         bdyrMEGKzn/I2uJfo9l4NV+0+UJwXdIHqcAFbt39R0VGwwM0XELcWB/ZsGAKKueowEOX
+         GjxQ==
+X-Gm-Message-State: AOAM5313F91jFYl1uX0yorh/rO3TP5YoYFWJxsTF6/TgJiSoXpjuGzUv
+        Zkyua+9UH1QJ1c+sRODNSXJqf82BPau4QPEeVmk=
+X-Google-Smtp-Source: ABdhPJxUqJuBZZbxdyzHNJvBwj8+SBg+01IxRf+Ji5do+t2XMEQqrm4NMq8dSBwzkG9/jDNm+HEaZgaPUg7zrcSHrqY=
+X-Received: by 2002:a17:906:9402:: with SMTP id q2mr6597785ejx.106.1639843870775;
+ Sat, 18 Dec 2021 08:11:10 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9f:22c7:0:0:0:0:0 with HTTP; Sat, 18 Dec 2021 07:57:15
+Received: by 2002:a17:906:c194:0:0:0:0 with HTTP; Sat, 18 Dec 2021 08:11:10
  -0800 (PST)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <robertanderson6016@gmail.com>
-Date:   Sat, 18 Dec 2021 07:57:15 -0800
-Message-ID: <CA+o7mw2dUUQ8i6hQohc993C_uS8FUPkSFVW1mgmk2rYHOUmNrg@mail.gmail.com>
-Subject: 
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <asiha7154@gmail.com>
+Date:   Sat, 18 Dec 2021 08:11:10 -0800
+Message-ID: <CAFsn1c6ExQQQCW0vsc_8P3+JkMKGQOk5h5kV47RF_=C51uX98w@mail.gmail.com>
+Subject: Dear Friend,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May the Almighty Lord be with you....
-Am A WIDOW TO LATE MR David HOLLAND,  I AM 59 .YEARS OLD. My name is
-Josephine HOLLAND.  I am married to Late Mr. David HOLLAND, who worked
-in the France Embassy a here in Lome -Togo West Africa for nine years
-before he died in the
-year 2019.
+Dear Friend,
 
-You are chosen to Receive A Donation Cash Grant of my late husband
-that funds $5.7,000,  000,00 (Five Million Seven Hundred Thousand
-United States Dollars) to help the poor and orphanages through your
-sincere help before my death. I am suffering from long time cancer of
-the Breast, from all indication my conditions is really deteriorating
-and it is quite obvious that I wouldn't live any more longer according
-to my doctor because the cancer has gotten to a very bad stage that no
-hope for me to be a living person again, All i need from you is your
-sincerity to use this funds to do this project as i desired and I need
-your information as where My Bank will be sending the funds,
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
 
-such as:
-Receiver's name:_ Address:_ Phone
-number:_ Country:_
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
-Please do not be offended by the way or manner I came to you as a
-stranger to do this, it is about the only way I could get to you after
-going through your contacts Id. I shall give you the contacts of the
-bank. For legitimacy with  a letter of authority that will establish
-you as my appointed beneficiary of this money.
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
 
-I am waiting for your reply.
-From Sister Josephine HOLLAND.
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
 
-You should contact me through my private email address:
+Your Urgent Reply Will Be Appreciated
 
-mrsjosephineoneholland@gmail.com
+Best Regards
+Mrs Aisha Al-Qaddafi

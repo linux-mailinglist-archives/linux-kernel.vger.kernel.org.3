@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0831479C3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA84B479C41
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbhLRTCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbhLRTCl (ORCPT
+        id S233949AbhLRTFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:05:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58580 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230024AbhLRTFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:02:41 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F38C06173E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:02:40 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id w1so4343031ilh.9
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:02:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=08t2DeUCHk4vtVzN7q3UXj6PnfGwfhaWK3U8ZxJwbZg=;
-        b=tJykmFQa77NckqkiTdtvEyp4YW1CbcuGMo16ti95h/40a2G79hSczfQiAuOEIYyN8c
-         6XVQDCTbvmGkI3+E4QiBItZYq4hEKJr3kGsOa/U7dAblfc30ZQnBNJeBt1r3OZChYLZr
-         FtSqn45kRgOgQNnHTv4qnBom73h5rcizxLxlG0f3P9KdrtnAv2yiS6VxSY2CRAtt3lax
-         RzBApUUc+DZ4wtPmP/2GOPI4Cb2l1EZXtY4R/sldPUDjk4LP5ZijGFISW6H+FH0i3n8v
-         Qydua+fKwtqh+5ELE2jyNHNWzQGNNCipL1jZ9L2EhFoWuzcKO7pS8RGB3QTXQyTbYKnY
-         zqNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=08t2DeUCHk4vtVzN7q3UXj6PnfGwfhaWK3U8ZxJwbZg=;
-        b=08RjkKqc66TyvorQf5atHJDwB3vu82zBmEdGCQdIRo8W96qpQCqdgnmeRcWUNKZIU1
-         2WcProZdC4rdwi8OISYpbmaRhbOOp9vSWSQSQgG/ph01SzbPextkK8zU1Y4/utbn3Wb/
-         sgKceknl8cwKqiCJTNTjLohMFv7lAqzVWP6WFex8Py+07RjStg+Z1TE+AqKGl5EO+YAZ
-         gZKxSRdB+dHT9kbaENg/WRXdScDJouSi7udurW7FEEbGOqeigzTcMVdNvl22kJ4wzJoR
-         vy80Gqp05bP2oVQChKbRNoymYDILO9m4Cj1jq3LReNYIV169hggNe7e5CiAFMrhETlBk
-         yYQA==
-X-Gm-Message-State: AOAM532VzkipQes9GG35q3cHF/w2Rlw03KNw/R81OOIr/K97E1joKBVk
-        HkPdOpn6K8mhug0XU+LaqwDsHOvgh1537w==
-X-Google-Smtp-Source: ABdhPJz/rgZ16dYOE3qD585NKK00+wsQqJkQU1fsPMbVXJtCrsuhJqGzXvyyqRxUulUSB4GFNfRCtA==
-X-Received: by 2002:a92:cd8b:: with SMTP id r11mr4579612ilb.39.1639854159725;
-        Sat, 18 Dec 2021 11:02:39 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id t12sm7373820ilu.12.2021.12.18.11.02.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 11:02:39 -0800 (PST)
-Subject: Re: very low IOPS due to "block: reduce kblockd_mod_delayed_work_on()
- CPU consumption"
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        linux-block@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        ming.lei@redhat.com, hch@lst.de, Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        linux-kernel@vger.kernel.org
-References: <1639853092.524jxfaem2.none.ref@localhost>
- <1639853092.524jxfaem2.none@localhost>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <7d1e4bb8-1a73-9529-3191-66df4ff2d5fe@kernel.dk>
-Date:   Sat, 18 Dec 2021 12:02:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sat, 18 Dec 2021 14:05:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6FC060C21;
+        Sat, 18 Dec 2021 19:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B24C36AE1;
+        Sat, 18 Dec 2021 19:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639854309;
+        bh=I6eVKACPJvnI+llvjluP6wdaS6TfkgpPNWmOCTJo2Tw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UMWo6BEBXL2vg9tHjb81KQokUbnD5ds+HV7ckML33awGfTpej3ik5Kh3h6cfpyyqb
+         iFD4s+bZZ21aukh38a1Cdxv3Q680qbPDCrFRz4IUjxJcGtElf80NOxI08WBU35o5KO
+         DNmZrv9Ka1wwC0RRN+bNzFNGCbR++Trade1JV0IXvYj4pEQ88pbWel1kl4y4dka9Vy
+         v30sM76UJThM+xQ2PiEuVOz+Jtb0pMSsUUbW+ySVU2WJmK0RZD3dGbXyS/PYo1GOwF
+         IJYYSA0Plrin3iwRee9bWx/w6bJtImnOGvLxXhdQqwr2xAa+xaDpfppDhnDsxbFplJ
+         vGcX7+wVGtViQ==
+Date:   Sat, 18 Dec 2021 12:04:59 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
+Message-ID: <Yb4w2wVvIwN7qaNy@archlinux-ax161>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221814.900929381@linutronix.de>
+ <Yb0PaCyo/6z3XOlf@archlinux-ax161>
+ <87v8zm9pmd.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <1639853092.524jxfaem2.none@localhost>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8zm9pmd.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/21 11:57 AM, Alex Xu (Hello71) wrote:
-> Hi,
+On Sat, Dec 18, 2021 at 11:25:14AM +0100, Thomas Gleixner wrote:
+> On Fri, Dec 17 2021 at 15:30, Nathan Chancellor wrote:
+> > On Fri, Dec 10, 2021 at 11:19:26PM +0100, Thomas Gleixner wrote:
+> > I just bisected a boot failure on my AMD test desktop to this patch as
+> > commit f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()") in
+> > -next. It looks like there is a problem with the NVMe drive after this
+> > change according to the logs. Given that the hard drive is not getting
+> > mounted for journald to write logs to, I am not really sure how to get
+> > them from the machine so I have at least taken a picture of what I see
+> > on my screen; open to ideas on that front!
 > 
-> I recently noticed that between 6441998e2e and 9eaa88c703, I/O became 
-> much slower on my machine using ext4 on dm-crypt on NVMe with bfq 
-> scheduler. Checking iostat during heavy usage (find / -xdev and fstrim 
-> -v /), maximum IOPS had fallen from ~10000 to ~100. Reverting cb2ac2912a 
-> ("block: reduce kblockd_mod_delayed_work_on() CPU consumption") resolves 
-> the issue.
+> Bah. Fix below.
 
-Hmm interesting. I'll try and see if I can reproduce this and come up
-with a fix.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
--- 
-Jens Axboe
-
+> Thanks,
+> 
+>         tglx
+> ---
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index 71802410e2ab..9b4910befeda 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -1100,7 +1100,7 @@ EXPORT_SYMBOL(pci_irq_vector);
+>   */
+>  const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+>  {
+> -	int irq = pci_irq_vector(dev, nr);
+> +	int idx, irq = pci_irq_vector(dev, nr);
+>  	struct msi_desc *desc;
+>  
+>  	if (WARN_ON_ONCE(irq <= 0))
+> @@ -1113,7 +1113,10 @@ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+>  
+>  	if (WARN_ON_ONCE(!desc->affinity))
+>  		return NULL;
+> -	return &desc->affinity[nr].mask;
+> +
+> +	/* MSI has a mask array in the descriptor. */
+> +	idx = dev->msi_enabled ? nr : 0;
+> +	return &desc->affinity[idx].mask;
+>  }
+>  EXPORT_SYMBOL(pci_irq_get_affinity);
+>  
+> 

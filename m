@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009CB479A2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031D0479A37
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 11:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbhLRKRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 05:17:05 -0500
-Received: from sauhun.de ([88.99.104.3]:35612 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229779AbhLRKRE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 05:17:04 -0500
-Received: from localhost (i5E860F57.versanet.de [94.134.15.87])
-        by pokefinder.org (Postfix) with ESMTPSA id 0C7152C0095;
-        Sat, 18 Dec 2021 11:17:01 +0100 (CET)
-Date:   Sat, 18 Dec 2021 11:17:00 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Kewei Xu <kewei.xu@mediatek.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com, qii.wang@mediatek.com,
-        liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
-        ot_daolong.zhu@mediatek.com, yuhan.wei@mediatek.com
-Subject: Re: [PATCH v7 6/7] i2c: mediatek: Isolate speed setting via dts for
- special devices
-Message-ID: <Yb21HBSm4VVjy1cr@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
-        qii.wang@mediatek.com, liguo.zhang@mediatek.com,
-        caiyu.chen@mediatek.com, ot_daolong.zhu@mediatek.com,
-        yuhan.wei@mediatek.com
-References: <20210917101416.20760-1-kewei.xu@mediatek.com>
- <20210917101416.20760-7-kewei.xu@mediatek.com>
- <YVf+83LdUEPjoLdI@kunai>
- <1891acec7f5c417f62081a8b10249b265df7ea62.camel@mediatek.com>
- <YWQYbaTIhud2QHNP@kunai>
- <YaTMQQhENmJAIUk4@kunai>
- <dfd50de5149a38ad1bc5faf9bb26a8a04be7d314.camel@mediatek.com>
+        id S232691AbhLRKWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 05:22:11 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33865 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229641AbhLRKWK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 05:22:10 -0500
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JGMMw319XzcbcT;
+        Sat, 18 Dec 2021 18:21:48 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 18 Dec 2021 18:22:08 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 18 Dec 2021 18:22:07 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
+Subject: [PATCH] crypto: hisilicon/qm - disable qm clock-gating
+Date:   Sat, 18 Dec 2021 18:17:20 +0800
+Message-ID: <20211218101720.18665-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yMbAyQku0qgAJOHf"
-Content-Disposition: inline
-In-Reply-To: <dfd50de5149a38ad1bc5faf9bb26a8a04be7d314.camel@mediatek.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For Kunpeng930, if qm clock-gating is enabled, rate limiter
+will be inaccurate. Therefore, disable clock-gating before doing task.
 
---yMbAyQku0qgAJOHf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+---
+ drivers/crypto/hisilicon/qm.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Hi Kewei!
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index b1fe9c7b8cc8..b731cb4ec294 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -126,6 +126,8 @@
+ #define QM_CQC_VFT			0x1
+ #define QM_VFT_CFG			0x100060
+ #define QM_VFT_CFG_OP_ENABLE		0x100054
++#define QM_PM_CTRL			0x100148
++#define QM_IDLE_DISABLE			BIT(9)
+ 
+ #define QM_VFT_CFG_DATA_L		0x100064
+ #define QM_VFT_CFG_DATA_H		0x100068
+@@ -800,6 +802,19 @@ static void qm_db(struct hisi_qm *qm, u16 qn, u8 cmd, u16 index, u8 priority)
+ 	qm->ops->qm_db(qm, qn, cmd, index, priority);
+ }
+ 
++static void qm_disable_clock_gate(struct hisi_qm *qm)
++{
++	u32 val;
++
++	/* if qm enables clock gating in Kunpeng930, qos will be inaccurate. */
++	if (qm->ver < QM_HW_V3)
++		return;
++
++	val = readl(qm->io_base + QM_PM_CTRL);
++	val |= QM_IDLE_DISABLE;
++	writel(val, qm->io_base +  QM_PM_CTRL);
++}
++
+ static int qm_dev_mem_reset(struct hisi_qm *qm)
+ {
+ 	u32 val;
+@@ -5935,6 +5950,7 @@ int hisi_qm_init(struct hisi_qm *qm)
+ 	}
+ 
+ 	if (qm->fun_type == QM_HW_PF) {
++		qm_disable_clock_gate(qm);
+ 		ret = qm_dev_mem_reset(qm);
+ 		if (ret) {
+ 			dev_err(dev, "failed to reset device memory\n");
+@@ -6099,6 +6115,7 @@ static int qm_rebuild_for_resume(struct hisi_qm *qm)
+ 
+ 	qm_cmd_init(qm);
+ 	hisi_qm_dev_err_init(qm);
++	qm_disable_clock_gate(qm);
+ 	ret = qm_dev_mem_reset(qm);
+ 	if (ret)
+ 		pci_err(pdev, "failed to reset device memory\n");
+-- 
+2.33.0
 
-> I'm very sorry that I didn't reply to your information in time due
-> to my many personal affairs.
-
-No worries, there is no pressure from my side. I hope you are all well
-now!
-
-> We found that when the ac-timing calculation formula is updated, the
-> new algorithm can make i2c ac-timing meet the spec and function
-> normally. So we plan to replace this patch with a patch that updates
-> the calculation formula.
-
-Cool! I'm glad this is possible.
-
-Looking forward to the new patch,
-
-   Wolfram
-
-
---yMbAyQku0qgAJOHf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG9tRgACgkQFA3kzBSg
-KbYLVg/+MYdXhcFoux7eY+v6Q/G7l/f9aprzW9913QcUcuTxfnR4LOB/Kc+ztvU2
-p3oZDNTa3yR90gF9TvSLrEVa3bBOGk5lYFWmmh1BCIkeveRBn9hQStPvQkJAVesS
-2xCF4rIsP6DaVoSnpoWSwSZl6DfmeJpXxpArf6XT1hu8FiSVbxD2ZqAezsjxeMNE
-0kjFQvIgKuKxdsZylV6HDCw0qscL2usHm7pG4Nz8+yoB4Z75uUqkcXoEz/cliOG6
-+RkWM0VnP3tX8UQhOlZTqnQZmLd5dep/gurBYnDood2p0/4urtlh8xAOczWbOXBl
-wt2cDF/X/vWmRR/kp7CN9avJS3RTShotNkhbdwiSbQ4s8FvS55v9vQZ3TVwhH1GY
-JGWwcAAqs3uLtxyuN5cea+RklEVVjAwcOftjWVSrdBVeUUSh3M+uAz6x8LyOyK9l
-++WJPYa/xuIYvCg+WdLCnuYD9F78bbkej7MKMGn0PDo2L4cJ8LihHX1ewvROXsuv
-oVUUc70IZ06el5nXWEVUd588JxKZjTe7EkO5n0d6EQhv8X6AwUZC4M6y5CaM6BHm
-68cwkGHirGfU79Gm6mZ5ck3d7SSLrj+pSmiGfVVB+dvanV206PH03NjCppNR+z1m
-85QVqu8ErV0T0OzaTZcg5ISHFyWIiuo3tN9DZOnQBsiWAbPoqcs=
-=HuU7
------END PGP SIGNATURE-----
-
---yMbAyQku0qgAJOHf--

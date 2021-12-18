@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64425479B72
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E905D479B73
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbhLROlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 09:41:46 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:21274 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230522AbhLROlp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 09:41:45 -0500
-X-IronPort-AV: E=Sophos;i="5.88,216,1635174000"; 
-   d="scan'208";a="104382932"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 18 Dec 2021 23:41:43 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 85B6D4006DEE;
-        Sat, 18 Dec 2021 23:41:41 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
-Date:   Sat, 18 Dec 2021 14:41:36 +0000
-Message-Id: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S233472AbhLROpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 09:45:51 -0500
+Received: from mga06.intel.com ([134.134.136.31]:6848 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230103AbhLROpu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 09:45:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639838750; x=1671374750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Wikn4a3PlHA25MqM2SHJEZ4eTxooJQogy5sKuMKZyG4=;
+  b=QPhUGEBE/jlZtz/PcMfqM2LTt494rzfUahktjBVrWEPRn1/A9jHm5SO+
+   yxqv4dVnNnVEBSBn+BbWagwufbX//AhaDdlaML2R0YLFxXkAcYtndppg8
+   d03btNT7tpjR+P03qJnh2CC5fKUKB6vzWr709tlCeB23r5fW88Vx3GjBZ
+   wm6drtMBy/+jtGosyCpcZgEvMUYdsCFfsYCtYH7xM1kIEOzl+H5BDroSh
+   TIqODG69lrG37Ffn43aGz2hZLk1z02W6uOgPLeTLTD7Xw4ci9MytcRETu
+   PgQ3oCDJFford+CgmcYwGMc0pPI2GK6PDsBXKC6/X5XhheU6qUYLsreO5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="300702072"
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="300702072"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 06:45:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
+   d="scan'208";a="483548943"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 18 Dec 2021 06:45:49 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myay4-00067t-E5; Sat, 18 Dec 2021 14:45:48 +0000
+Date:   Sat, 18 Dec 2021 22:45:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:locking/debug-refcount 1/3] ERROR: modpost:
+ "refcount_bad_magic" [fs/nfs/nfsv4.ko] undefined!
+Message-ID: <202112182225.KmqljjpD-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git locking/debug-refcount
+head:   fb4984c339109f2ee2dd0000e7744aab91b974f5
+commit: 488dd36233a4a0d80f516054ee894688fc8f447f [1/3] WIP: add DEBUG_REFCOUNT
+config: x86_64-randconfig-r034-20211218 (https://download.01.org/0day-ci/archive/20211218/202112182225.KmqljjpD-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=488dd36233a4a0d80f516054ee894688fc8f447f
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark locking/debug-refcount
+        git checkout 488dd36233a4a0d80f516054ee894688fc8f447f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "refcount_bad_magic" [fs/nfs/nfsv4.ko] undefined!
+
 ---
-Hi,
-
-Dropping usage of platform_get_resource() was agreed based on
-the discussion [0].
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/
-patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Cheers,
-Prabhakar
----
- drivers/thermal/rcar_thermal.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-index b49f04daaf47..e4c7bc1bf7ef 100644
---- a/drivers/thermal/rcar_thermal.c
-+++ b/drivers/thermal/rcar_thermal.c
-@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	struct rcar_thermal_common *common;
- 	struct rcar_thermal_priv *priv;
- 	struct device *dev = &pdev->dev;
--	struct resource *res, *irq;
-+	struct resource *res;
- 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
- 	int mres = 0;
- 	int i;
-@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	pm_runtime_get_sync(dev);
- 
- 	for (i = 0; i < chip->nirqs; i++) {
--		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
--		if (!irq)
-+		int irq;
-+
-+		irq = platform_get_irq_optional(pdev, i);
-+		if (irq <= 0 && irq != -ENXIO) {
-+			ret = irq ? irq : -ENXIO;
-+			goto error_unregister;
-+		}
-+		if (irq == -ENXIO)
- 			continue;
-+
- 		if (!common->base) {
- 			/*
- 			 * platform has IRQ support.
-@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 			idle = 0; /* polling delay is not needed */
- 		}
- 
--		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
-+		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
- 				       IRQF_SHARED, dev_name(dev), common);
- 		if (ret) {
- 			dev_err(dev, "irq request failed\n ");
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

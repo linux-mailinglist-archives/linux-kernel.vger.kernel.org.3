@@ -2,242 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8221E4797DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 01:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5594797E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 01:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbhLRAiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 19:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbhLRAiN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 19:38:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D16C061574;
-        Fri, 17 Dec 2021 16:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sCq6rslY7drSQhn+391lhYoVFDvXuHqn0QEvibUJ5GY=; b=kRLPRc3KYHA/rDKxe1vjh6sAJ1
-        ptZBfemd0PSCHTW9GaUoOLQXaxCf9lcb3uotP/L2xPEzpkt+i++L0n3kehN1+CnTRpagAHSLRyNZN
-        nxdOiJtfUmjzJzzggnjJbZHxJFYPJDDZNysr3wkoHfNfTtqZUs2W7JdRx7Je+oOZwjGbOaE7EUmFO
-        rtn6UXScKcPFCAiP/GT8qMDhFgMg9rAX38FagkzNmyG6EBSL+QAzys2mT3JKbRssqGCQ7Pt4Ph+MD
-        vNvhYARIA8YWF5acmxDPgl9db5lCWopjV73y4suQvd2vS2IpCjeD6im5AKuR34z4zKv5lKGEym71v
-        pdwLq93Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myNjL-00HCNI-2U; Sat, 18 Dec 2021 00:37:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D740B9862C4; Sat, 18 Dec 2021 01:37:42 +0100 (CET)
-Date:   Sat, 18 Dec 2021 01:37:42 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-Cc:     Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        id S231445AbhLRAue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 19:50:34 -0500
+Received: from mail-bn8nam11on2088.outbound.protection.outlook.com ([40.107.236.88]:27105
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231367AbhLRAuc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 19:50:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DXdPTse/dgp/8GiMNzi+IAnD1mHk0i42obTdiAd7hJjTxOjwiiqt2vLhRIe94OFoJaLtf4WjTB+XNqhSWalt4MlyLo/dDeSTfYFwTHQCwpEzG9if/Bcr+1oXe52E9cyIjAdTtTCOMmsWy4NKoOyfiU6YwrVLnoMEDg3U5/+CNZzmvIXRH5SjyIY4F/HzQ7uKIj3zMQNpbs+V/b3HRfPm2EWYgliY1gR13Vx5V3K6JhhWFRCSKGpxVuAUgdIBMXsNOUcnm2h6lVE0B4EGZi8aunmRVDusDh95ZI0sNS4GkfF8OISX5t2u8boyRn2px+G+BK9298V0/cEQ10hJlrpOfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+phq2UJa14TuN6+SS37sBZj7HVSVx0FotHNikOs0OEg=;
+ b=fe6oq2sUaxQct5FKp7Ee+7fv7HnYkXYbrTmhGLXqjmoKxo8HYpk3u2uipLkxeluouXg4L4kD7zn6DJT74ca0p+B4xTFBkvxewu7JD8C3VYI5GETaJTOENN6kjKD2VKxDVpuG2oRsNjzIppBd0cl5HpRiqodaGiFitEoA1uRCq4rGtcYFKs3vpQN86yVAWTMfqMkxmZe5hH4arZKzsZORSuPR1mDR1nsLtIRiqYuDyVMaRHIc4nAto8uX5KGv5mbBORoOdExY2TIP093o/3970U4SkT+rWnRzYVSW+gyXLVAb5Y1TeBbKO8Cs7YEAPZcEwVKKRzlJ0d0G6H1B5E4elQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+phq2UJa14TuN6+SS37sBZj7HVSVx0FotHNikOs0OEg=;
+ b=j3N5giXj8RVRTK6cn8KxeWdl850oNCz991Zuwzxl4g2fCN5R2Jit2ROWAbrK8Zl3MulyIhhjZvaXpBCihTf9ALkrJKMyLm9ceayjnKRrv2z0NTMYzPVSNVG56FAlkmuKQqHWuOhf1HzZSsP8odJ5HC11sNDxIFzlTlBPQNByfIq0Wl9kvTtgTAe4fG/NXBR4CSbUu3+S9fjeJxQ3OYyrzXDDn0gJmqD9QMwVK9lS7+VhnpM4seENrJyAwUBjXzGA0JZNmWxpzthW8Q0n5NTw4yZ7rOyNiRpItjVrgu9dzljXuov+dsYVNBjzlYFxg1Hi3MH5W29VlLapIo+Kp77a0Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5206.namprd12.prod.outlook.com (2603:10b6:208:31c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Sat, 18 Dec
+ 2021 00:50:30 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%8]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
+ 00:50:30 +0000
+Date:   Fri, 17 Dec 2021 20:50:29 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        kernel@openvz.org
-Subject: Re: [PATCH/RFC] mm: add and use batched version of
- __tlb_remove_table()
-Message-ID: <20211218003742.GL16608@worktop.programming.kicks-ass.net>
-References: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
-MIME-Version: 1.0
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211218005029.GG6385@nvidia.com>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+ <37dddd67-7e2d-8217-b1e2-31d79bb85693@redhat.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
+In-Reply-To: <37dddd67-7e2d-8217-b1e2-31d79bb85693@redhat.com>
+X-ClientProxiedBy: BLAPR03CA0047.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::22) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d99bc81-4c37-4de9-ae18-08d9c1c063d1
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5206:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5206079DCA43F15AFD086C5AC2799@BL1PR12MB5206.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7/0VLTjYF7VgD1zPzILAFNBT9U+hN9UiEHPHJFQq2g/K7HgO72RV5Z35/X48YZUqUetAySGuI1p6aDgt3VBabUapleN+FotXY+wObeA+fZ+sz7iJy1VC2I5kHLWGM3o7qjdTZa9e5XxObSTPpptO0rNi7p75eJ+S4hg+ncyDetrRV6oC2Im9WlJYmgnxcAIZWiw2iCuH+EU6V4aIQwYIReoeamYZf4UAbx0VucWwo+QxxXA3g/NPcJ5XR7wWyZt5g8As/vU2F0vUnhB+5bldknt95ASWdqwP3VFcAVYC28p2bxhxmfCRfSefKi7HcMmoue5H/52LJXam25chsNyhk95AgNrDEfdzSAciKws9imlaSocSNs0rKrHmtfokfZyLghlzSg5GhxAWi1uyZ3603zcjKmBvcvIbEjle9It0XTSTUqluffTQyjo7v3zAgBjIOHH8QpUowlT9Tw9tRsACFE11FQwV4/e/jx18UXQTpUEDedEPvqoXAsyduGX0wHKer1ZRNb+wYZMBUfaZcj7DlyGwcLTivLefKszbROAPCDdYgD1VZfQZh1Z8303tUvTzngi8dujhRoYREHT19/kCCPB8vz19+CJahLORgOw2kEntU7Jw9PuSmXBH+lGgxP6bkBUc9UA1WjlB138NfCDBwwxKAE1K0kmuT6l+kCpOUUprt7lzPRnTOt9ZFVLRLhkEZyczRgwhWZ+xjVMj2yfdHg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66476007)(86362001)(2906002)(508600001)(8936002)(7416002)(6916009)(38100700002)(54906003)(316002)(1076003)(83380400001)(36756003)(33656002)(66556008)(66946007)(186003)(26005)(6512007)(6506007)(4326008)(5660300002)(2616005)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lSZ0AomWEWCHKmrU8Dxuzasz93v4pq+UDzn+NbMZ8g2Rcv78qn14bYbj/ht9?=
+ =?us-ascii?Q?0nCmGShdl5ApyomvGTXQmOXGplLS/2ZoqIaAeB1cZmShOTRidTWgJYKWk9Jy?=
+ =?us-ascii?Q?98fg2rrV4Uek4M2p3UCmnSbIJlHIrh4mZ18oPgVgJNwVM+CxHi4E1LyTAgXX?=
+ =?us-ascii?Q?rDMQ+UnDY4ku74w8Ndor1ZS5OWJ1gPUCQtOZDJYI8B8iqsBFv+LX+FossRio?=
+ =?us-ascii?Q?n7J2X79yiYH+AmuBkxVM2PcBV/+VsdPoFNpLL8CBiTbf5BYwWIISmc7f55PB?=
+ =?us-ascii?Q?BR/hJ/2Ar0ZfZ0UAbj5q3jEHfZ/Uir29YchKN4R3q7UHWPWzf7jdCdQ6CfpJ?=
+ =?us-ascii?Q?hdKO6XySZuxiKdWdFgA2yc65b0LiPzUzBfpV5k2NIRd9qDmMuviiSlGffIqY?=
+ =?us-ascii?Q?wyMKfpQS2+E00tHUvGsUS5+yNZCWPSmZegU5mUpEuiJR4FuSSNuaL6iWqHNs?=
+ =?us-ascii?Q?Wl/DgbOZ5bc5D5a9e9PC7NKi4gJf9d9KhcZu7G4G8YvhaAFNFQ6PEEvdg1NW?=
+ =?us-ascii?Q?wu696sV0QLl5zK7jEOk4ihGbxcf0jNOpekcV1Pp78Ul0lbWD0xjDxBG4OTeV?=
+ =?us-ascii?Q?drwnHsCY6h0yZfsSnEjnTw66BTyO32CzD4fqhwkwVSp6s/l8KpTlFgnJX0lh?=
+ =?us-ascii?Q?qRoer7xMIp7zOJnR7fb2suXqG07qAHsVLWoIDSOASWy4qAJh8P+mfBz0O9sH?=
+ =?us-ascii?Q?oCd601068h/Nh0tUzrzizXd+FYtDAUx0mAQAruWUBdIbEAUE6NK473a9/WP4?=
+ =?us-ascii?Q?vSzvGr5OJfQ055YDCjWfAv9Q0dNd2QMlx00IL1rWiw5RuGizQjbgTk94kvJN?=
+ =?us-ascii?Q?n1gXrBRlKHNyUFS03FAbx9JeplEZHoUZO45s5xq8vRS+mMrYnhqL1PF4H9b4?=
+ =?us-ascii?Q?70RcA6qHrpJZHpKquVcyuQm7M+HdGWB8j09pdFjIM0nyHr0Y/53KNuw6jNn1?=
+ =?us-ascii?Q?Aaa49VppcwRrRuu6Fu1etndInB/M4juX9/ZzwtHP/V6yop4mJBeyD9ctCZkx?=
+ =?us-ascii?Q?S6haOh6h4U8SpWgKxNlwlQTQtbDNjQrccwDm7oMUuJMPcfWTuPVk9W3Mb4qw?=
+ =?us-ascii?Q?//TAChdEwyCSrP5YixSkRfjXdhO1L6+CZ7MzPBQNcc8YAT2nlD+zNQNlge1Q?=
+ =?us-ascii?Q?FyLU+Hg+Jt5t2BCG0n0wjXalmn3UN5YQ/XjkEgS6thiG+mh12pkigYOJPUxU?=
+ =?us-ascii?Q?EnAtKeTFocINvgwPIXGcOXBKcLnZKVKFYJ9uFD911WzfuiHOfxsLzHf4viIX?=
+ =?us-ascii?Q?Nnn+BupzmLoIy+vjp9L5GQFW6HglMzn0FAm1QATUK0uQPoCpccDVBakWWt39?=
+ =?us-ascii?Q?DYfpwLAaIpPC/74LziRRCJ9tSluUsQ+yrUBcof6c9c7/R1guAmVxsS+KHU1m?=
+ =?us-ascii?Q?pFYZhdq1dx6cYmfIaLL+ytKqmVbDWc2gmocJlnPsZ+pvj8Oo/KpnawaaIchZ?=
+ =?us-ascii?Q?ZO8CZPP80XTU/FV4+EoQ6CQqEXLmDoUC4+eDZJynpxeinDv1GpMOWR42nVcC?=
+ =?us-ascii?Q?vp/ue43IkyBf/GWfbM20FDGQ+gFsOBVf/PbtaOe4oTa282TfXtAmmS1sPF9z?=
+ =?us-ascii?Q?QOfRzsVxYDdH0uMPywk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d99bc81-4c37-4de9-ae18-08d9c1c063d1
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 00:50:30.3921
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /y5OMCAzSND2ZqiCkmdKu61pmQWycYsE2VzT9tstNUBjfp57CGdppGP8aRGz0h/B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5206
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 11:19:10AM +0300, Nikita Yushchenko wrote:
-> When batched page table freeing via struct mmu_table_batch is used, the
-> final freeing in __tlb_remove_table_free() executes a loop, calling
-> arch hook __tlb_remove_table() to free each table individually.
+On Fri, Dec 17, 2021 at 10:04:11PM +0100, David Hildenbrand wrote:
+
+> > To remind all, the GUP users, like RDMA, VFIO use
+> > FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
 > 
-> Shift that loop down to archs. This allows archs to optimize it, by
-> freeing multiple tables in a single release_pages() call. This is
-> faster than individual put_page() calls, especially with memcg
-> accounting enabled.
+> I heard that statement often. Can you point me at the code?
 > 
-> Signed-off-by: Andrey Ryabinin <aryabinin@virtuozzo.com>
-> Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-> ---
->  arch/arm/include/asm/tlb.h                   |  5 ++++
->  arch/arm64/include/asm/tlb.h                 |  5 ++++
->  arch/powerpc/include/asm/book3s/32/pgalloc.h |  8 +++++++
->  arch/powerpc/include/asm/book3s/64/pgalloc.h |  1 +
->  arch/powerpc/include/asm/nohash/pgalloc.h    |  8 +++++++
->  arch/powerpc/mm/book3s64/pgtable.c           |  8 +++++++
->  arch/s390/include/asm/tlb.h                  |  1 +
->  arch/s390/mm/pgalloc.c                       |  8 +++++++
->  arch/sparc/include/asm/pgalloc_64.h          |  8 +++++++
->  arch/x86/include/asm/tlb.h                   |  5 ++++
->  include/asm-generic/tlb.h                    |  2 +-
->  include/linux/swap.h                         |  5 +++-
->  mm/mmu_gather.c                              |  6 +----
->  mm/swap_state.c                              | 24 +++++++++++++++-----
->  14 files changed, 81 insertions(+), 13 deletions(-)
+> VFIO: drivers/vfio/vfio_iommu_type1.c
+> 
+> vaddr_get_pfns() will end up doing a 
+> pin_user_pages_remote(FOLL_LONGTERM) without 
+> FOLL_FORCE|FOLL_WRITE.
 
-Oh gawd, that's terrible. Never, ever duplicate code like that.
+> Is that added automatically internally?
 
-I'm thinking the below does the same? But yes, please do as Dave said,
-give us actual numbers that show this is worth it.
+No, it is just that VFIO is broken in this regard. AFAIK VFIO users
+rarely use the read-only mode and haven't noticed this bug yet.
 
----
- arch/Kconfig                 |  4 ++++
- arch/arm/Kconfig             |  1 +
- arch/arm/include/asm/tlb.h   |  5 -----
- arch/arm64/Kconfig           |  1 +
- arch/arm64/include/asm/tlb.h |  5 -----
- arch/x86/Kconfig             |  1 +
- arch/x86/include/asm/tlb.h   |  4 ----
- mm/mmu_gather.c              | 22 +++++++++++++++++++---
- 8 files changed, 26 insertions(+), 17 deletions(-)
+You can search for FOLL_FORCE and see the drivers that do it this way:
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 26b8ed11639d..f2bd3f5af2b1 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -415,6 +415,10 @@ config HAVE_ARCH_JUMP_LABEL_RELATIVE
- config MMU_GATHER_TABLE_FREE
- 	bool
- 
-+config MMU_GATHER_TABLE_PAGE
-+	bool
-+	depends on MMU_GATHER_TABLE_FREE
-+
- config MMU_GATHER_RCU_TABLE_FREE
- 	bool
- 	select MMU_GATHER_TABLE_FREE
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index f0f9e8bec83a..11baaa5719c2 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -110,6 +110,7 @@ config ARM
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select MMU_GATHER_RCU_TABLE_FREE if SMP && ARM_LPAE
-+	select MMU_GATHER_TABLE_PAGE if MMU
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
- 	select HAVE_STACKPROTECTOR
-diff --git a/arch/arm/include/asm/tlb.h b/arch/arm/include/asm/tlb.h
-index b8cbe03ad260..9d9b21649ca0 100644
---- a/arch/arm/include/asm/tlb.h
-+++ b/arch/arm/include/asm/tlb.h
-@@ -29,11 +29,6 @@
- #include <linux/swap.h>
- #include <asm/tlbflush.h>
- 
--static inline void __tlb_remove_table(void *_table)
--{
--	free_page_and_swap_cache((struct page *)_table);
--}
--
- #include <asm-generic/tlb.h>
- 
- static inline void
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c4207cf9bb17..4aa28fb03f4f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -196,6 +196,7 @@ config ARM64
- 	select HAVE_FUNCTION_ARG_ACCESS_API
- 	select HAVE_FUTEX_CMPXCHG if FUTEX
- 	select MMU_GATHER_RCU_TABLE_FREE
-+	select MMU_GATHER_TABLE_PAGE
- 	select HAVE_RSEQ
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
-index c995d1f4594f..401826260a5c 100644
---- a/arch/arm64/include/asm/tlb.h
-+++ b/arch/arm64/include/asm/tlb.h
-@@ -11,11 +11,6 @@
- #include <linux/pagemap.h>
- #include <linux/swap.h>
- 
--static inline void __tlb_remove_table(void *_table)
--{
--	free_page_and_swap_cache((struct page *)_table);
--}
--
- #define tlb_flush tlb_flush
- static void tlb_flush(struct mmu_gather *tlb);
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b9281fab4e3e..a22e653f4d0e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -235,6 +235,7 @@ config X86
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select MMU_GATHER_RCU_TABLE_FREE		if PARAVIRT
-+	select MMU_GATHER_TABLE_PAGE
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE		if X86_64 && (UNWINDER_FRAME_POINTER || UNWINDER_ORC) && STACK_VALIDATION
-diff --git a/arch/x86/include/asm/tlb.h b/arch/x86/include/asm/tlb.h
-index 1bfe979bb9bc..dec5ffa3042a 100644
---- a/arch/x86/include/asm/tlb.h
-+++ b/arch/x86/include/asm/tlb.h
-@@ -32,9 +32,5 @@ static inline void tlb_flush(struct mmu_gather *tlb)
-  * below 'ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE' in include/asm-generic/tlb.h
-  * for more details.
-  */
--static inline void __tlb_remove_table(void *table)
--{
--	free_page_and_swap_cache(table);
--}
- 
- #endif /* _ASM_X86_TLB_H */
-diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 1b9837419bf9..0195d0f13ed3 100644
---- a/mm/mmu_gather.c
-+++ b/mm/mmu_gather.c
-@@ -93,13 +93,29 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_
- 
- #ifdef CONFIG_MMU_GATHER_TABLE_FREE
- 
--static void __tlb_remove_table_free(struct mmu_table_batch *batch)
-+#ifdef CONFIG_MMU_GATHER_TABLE_PAGE
-+static inline void __tlb_remove_table(void *table)
-+{
-+	free_page_and_swap_cache(table);
-+}
-+
-+static inline void __tlb_remove_tables(void **tables, int nr)
-+{
-+	free_pages_and_swap_cache_nolru((struct page **)tables, nr);
-+}
-+#else
-+static inline void __tlb_remove_tables(void **tables, int nr)
- {
- 	int i;
- 
--	for (i = 0; i < batch->nr; i++)
--		__tlb_remove_table(batch->tables[i]);
-+	for (i = 0; i < nr; i++)
-+		__tlb_remove_table(tables[i]);
-+}
-+#endif
- 
-+static void __tlb_remove_table_free(struct mmu_table_batch *batch)
-+{
-+	__tlb_remove_tables(batch->tables, batch->nr);
- 	free_page((unsigned long)batch);
- }
- 
+drivers/misc/habanalabs/common/memory.c:                                 FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+drivers/infiniband/core/umem.c:         gup_flags |= FOLL_FORCE;
+drivers/media/v4l2-core/videobuf-dma-sg.c:      unsigned int flags = FOLL_FORCE;
+drivers/media/common/videobuf2/frame_vector.c:                            FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+
+[etc]
+
+No doubt there are others that do it right and wrong, this is badly
+documented and misunderstood.
+
+> But this series really just wants to fix the security issue as "part 1".
+> Without any more breakages.
+
+Sure, I'm just trying to understand why this example was brought up.
+
+Jason

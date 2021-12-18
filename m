@@ -2,285 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB08479A00
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 10:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4FA479A04
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 10:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbhLRJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 04:41:42 -0500
-Received: from mga07.intel.com ([134.134.136.100]:36376 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232538AbhLRJlm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 04:41:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639820502; x=1671356502;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2U6HujGz5zASRG+ANSHEawy7lWuz2WagLFLW0KbIulU=;
-  b=QjNMJoXd1ZF9TbKUTGQCAE4lViIU5UPKSajAkVmUJC5Nxh/SQVO50FIB
-   qcHNavNp4g0a/qt+QL+2ye92iFRiyVDAdfbNzY1bhGGP0mscUF/BLmzo0
-   03wXvM8B30pjv3oxGweqhwa5qR8Ne/XAUyaL4yRUEIpdSX/kgAmbg1Tq6
-   LxBnHbIRQmU263PeHKdjZZv5fq/jMelRj7V6oms0yRCGcPTqqftEs2yid
-   WMAoJ9GsiBOHZnqPvkNPBc6dC1N11l9PbH9AhA0UaJZ4eFLWuZnKTbhfT
-   TxnqR8IvKsFvOw5DqVdC+gUTZIVn05aIDIcyShWRZixgVg/jLoDCjgzGk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="303282289"
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="303282289"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 01:41:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="507075584"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2021 01:41:40 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myWDj-0005q1-Vu; Sat, 18 Dec 2021 09:41:39 +0000
-Date:   Sat, 18 Dec 2021 17:40:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/msi] BUILD SUCCESS
- cd6cf06590b9792340dceaa285138777f3cc4d90
-Message-ID: <61bdaca1.i0+DahMbWtSNvLb0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232565AbhLRJop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 04:44:45 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55512 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231405AbhLRJoo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 04:44:44 -0500
+X-UUID: 5bdb8e4c8b2a4ca1a2b7de8acd8cc534-20211218
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:To:From:Subject:Message-ID; bh=BX/xr60YeEGkR5WPd8bZnIzzW27Ue8psX+ZM7ID81Ws=;
+        b=IuS8ogSNs/5R2cHUpRZt1ZUhNsHJtgyOUdXWB3KKcb2gy1lbK2G0vswC97Kjt1A7JczB/nzKwnvK77PRIhX/eImjQV2qPwkXbMKbydit1WHb/wT2jLCmTIx1jEXcUj28dt5pVkl6kXEHotIU53/zxidkIkP8WLWqx/8QiWXbQQY=;
+X-UUID: 5bdb8e4c8b2a4ca1a2b7de8acd8cc534-20211218
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 297468601; Sat, 18 Dec 2021 17:44:39 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 18 Dec 2021 17:44:38 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 18 Dec 2021 17:44:31 +0800
+Message-ID: <dfd50de5149a38ad1bc5faf9bb26a8a04be7d314.camel@mediatek.com>
+Subject: Re: [PATCH v7 6/7] i2c: mediatek: Isolate speed setting via dts for
+ special devices
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     Wolfram Sang <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <ot_daolong.zhu@mediatek.com>,
+        <yuhan.wei@mediatek.com>
+Date:   Sat, 18 Dec 2021 17:44:32 +0800
+In-Reply-To: <YaTMQQhENmJAIUk4@kunai>
+References: <20210917101416.20760-1-kewei.xu@mediatek.com>
+         <20210917101416.20760-7-kewei.xu@mediatek.com> <YVf+83LdUEPjoLdI@kunai>
+         <1891acec7f5c417f62081a8b10249b265df7ea62.camel@mediatek.com>
+         <YWQYbaTIhud2QHNP@kunai> <YaTMQQhENmJAIUk4@kunai>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/msi
-branch HEAD: cd6cf06590b9792340dceaa285138777f3cc4d90  genirq/msi: Convert storage to xarray
+T24gTW9uLCAyMDIxLTExLTI5IGF0IDEzOjQ5ICswMTAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
+ID4gPiBzdHJldGNoaW5nLiBCdXQgaWYgdGhlIHNsYXZlIGRldmljZSBzdHJldGNoIHRoZSBTQ0wg
+bGluZSBmb3IgdG9vDQo+ID4gPiBsb25nDQo+ID4gPiB0aW1lLCBvdXIgZGVzaWduIHN0aWxsIGNh
+bm5vdCBtYWtlIHRTVSxTVEEvdEhELFNUQS90U1UsU1RPIG1lZXQNCj4gPiA+IHNwZWMuDQo+ID4g
+DQo+ID4gSXNuJ3QgdGhlIG5ldyBhbGdvcml0aG0gYnJva2VuIGlmIGl0IGNhbm5vdCBzdXBwb3J0
+IGNsb2NrDQo+ID4gc3RyZXRjaGluZz8NCj4gPiBXaGF0IHdhcyB0aGUgcHJvYmxlbSBvZiB0aGUg
+b2xkIGFsZ29yaXRobSBub3QgbWVldGluZyB0aGUgc3BlYz8NCj4gPiANCj4gPiA+IEhvd2V2ZXIg
+aW4gdGhlIG9sZCAoZGVmYXVsdCkgdGltaW5nIGFsZ29yaXRobSBiZWZvcmUgdGhlIGNvbW1pdA0K
+PiA+ID4gYmU1Y2UwZTk3Y2M3ICgiaTJjOiBtZWRpYXRlazogQWRkIGkyYyBhYy10aW1pbmcgYWRq
+dXN0IHN1cHBvcnQiKSwNCj4gPiA+IHRTVSxTVEEvdEhELFNUQS90U1UsU1RPIGNhbiBtZWV0IHNw
+ZWMuIFNvIHdlIHdhbnQgdG8gZGVmaW5lIGEgbmV3DQo+ID4gPiBzZXR0aW5nICJkZWZhdWx0LWFk
+anVzdC10aW1pbmciIGZvciB1c2luZyB0aGUgb2xkIChkZWZhdWx0KQ0KPiA+ID4gdGltaW5nDQo+
+ID4gPiBhbGdvcml0aG0uIg0KPiA+IA0KPiA+IFdoYXQgSSBzdGlsbCBkbyBub3QgZ2V0OiB0aGUg
+b2xkIGFsZ29yaXRobSB3YXMgYWJsZSB0byBoYW5kbGUgY2xvY2sNCj4gPiBzdHJldGNoaW5nLiBX
+aHkgY2FuJ3QgeW91IHVwZGF0ZSB0aGUgbmV3IG9uZSB0byBoYW5kbGUgY2xvY2sNCj4gPiBzdHJl
+dGNoaW5nDQo+ID4gYXMgd2VsbC4gSSBtaWdodCBiZSBtaXNzaW5nIHNvbWV0aGluZywgYnV0IHdo
+YXQgaXMgaXQ/DQo+IA0KPiBJIGFtIHN0aWxsIGludGVyZXN0ZWQuIEVzcGVjaWFsbHkgaW4gdGhl
+IGxhc3QgcXVlc3Rpb24uIElzIHRoZSBsYXN0DQo+IHF1ZXN0aW9uIGNsZWFyIHRvIHlvdT8gSSBj
+YW4gZXhwbGFpbiBzb21lIG1vcmUgb3RoZXJ3aXNlLg0KPiANCkhpLFdvbGZyYW0sDQoNCkknbSB2
+ZXJ5IHNvcnJ5IHRoYXQgSSBkaWRuJ3QgcmVwbHkgdG8geW91ciBpbmZvcm1hdGlvbiBpbiB0aW1l
+IGR1ZQ0KdG8gbXkgbWFueSBwZXJzb25hbCBhZmZhaXJzLg0KDQpUaGUgT2xkIGFsZ29yaXRobSB3
+YXMgZGVzaWduZWQgdG8gZm9jdXMgb25seSBvbiBub3JtYWwgZnVuY3Rpb25zLCBhbmQNCm5lZWQg
+dG8gYWRkIGFkZGl0aW9uYWwgY3VzdG9tIGNvZGUgdG8gYWRqdXN0IGFjLXRpbWluZyB3aGVuIHRo
+ZQ0KY29tbXVuaWNhdGlvbiB0aW1pbmcgZGlkIG5vdCBtZWV0IHRoZSBzcGVjaWZpY2F0aW9ucy4g
+c28gd2hlbiB0aGVyZSBpcw0Kbm8gY2xvY2sgc3RyZXRjaCwgYWMtdGltaW5nIGRvZXMgbm90IG1l
+ZXQgdGhlIHNwZWMsIGJ1dCB0aGUgZnVuY3Rpb24gaXMNCmFsd2F5cyBub3JtYWwuDQoNClRoZSBu
+ZXcgYWxnb3JpdGhtKFRoZSBjb21taXQgcGF0Y2g6IGJlNWNlMGU5N2NjNyAoImkyYzogbWVkaWF0
+ZWs6IEFkZA0KaTJjIGFjLXRpbWluZyBhZGp1c3Qgc3VwcG9ydCIpIGlzIGJhc2VkIG9uIHRoZSBy
+ZXF1aXJlbWVudHMgb2YgaTJjIHNwZWMNCnRvIGNhbGN1bGF0ZSB0aGUgaGFyZHdhcmUtcmVsYXRl
+ZCBzZXR0aW5ncyBzbyB0aGF0IHRoZSBmdW5jdGlvbiBhbmQgYWMtDQp0aW1pbmcgYXJlIG5vcm1h
+bCBXaGVuIHRoZXJlIGlzIG5vIGNsb2NrIHN0cmV0Y2ggb3IgdGhlIGNsb2NrIHN0cmV0Y2gNCnRp
+bWUgaXMgc2hvcnQuIFdoZW4gdGhlIHN0cmV0Y2hpbmcgdGltZSBpcyB2ZXJ5IGxvbmcgKD42MHVz
+KSwgaTJjIGFjLQ0KdGltaW5nIGRvZXMgbm90IG1lZXQgdGhlIHNwZWNpZmljYXRpb25zIGFuZCBj
+YXVzZXMgZnVuY3Rpb24gYWJub3JtYWwuDQoNCkluIG9yZGVyIHRvIG1ha2UgdGhlIGkyYyBmdW5j
+dGlvbiBub3JtYWwsIHRoaXMgcGF0Y2ggd2FzIHN1Ym1pdHRlZCwNCnRoYXQgaXMsIHdoZW4gdGhl
+IHN0cmV0Y2ggaXMgbG9uZywgdGhlIG9sZCBhbGdvcml0aG0gaXMgdXNlZCB0byBlbnN1cmUNCnRo
+ZSBmdW5jdGlvbiBpcyBub3JtYWwsIGFuZCB3aGVuIHRoZSBzdHJldGNoIGlzIHNob3J0LCB0aGUg
+bmV3DQphbGdvcml0aG0gaXMgdXNlZCB0byBlbnN1cmUgdGhhdCB0aGUgYWMtdGltaW5nIGFuZCBm
+dW5jdGlvbiBhcmUgbm9ybWFsLg0KDQpXZSBmb3VuZCB0aGF0IHdoZW4gdGhlIGFjLXRpbWluZyBj
+YWxjdWxhdGlvbiBmb3JtdWxhIGlzIHVwZGF0ZWQsIHRoZQ0KbmV3IGFsZ29yaXRobSBjYW4gbWFr
+ZSBpMmMgYWMtdGltaW5nIG1lZXQgdGhlIHNwZWMgYW5kIGZ1bmN0aW9uDQpub3JtYWxseS4gU28g
+d2UgcGxhbiB0byByZXBsYWNlIHRoaXMgcGF0Y2ggd2l0aCBhIHBhdGNoIHRoYXQgdXBkYXRlcw0K
+dGhlIGNhbGN1bGF0aW9uIGZvcm11bGEuDQoNClRoYW5rc34NCktld2VpDQo=
 
-elapsed time: 2039m
-
-configs tested: 214
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20211216
-m68k                       m5475evb_defconfig
-sh                           se7712_defconfig
-arm                         lubbock_defconfig
-arm                        magician_defconfig
-arm                         s3c2410_defconfig
-ia64                            zx1_defconfig
-mips                         rt305x_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                      bamboo_defconfig
-powerpc                     ppa8548_defconfig
-sh                           se7780_defconfig
-sh                          rsk7203_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-sh                            titan_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                      tqm8xx_defconfig
-mips                      bmips_stb_defconfig
-powerpc                     taishan_defconfig
-mips                          rb532_defconfig
-xtensa                         virt_defconfig
-powerpc                       ppc64_defconfig
-powerpc                      ppc6xx_defconfig
-microblaze                      mmu_defconfig
-arc                        nsimosci_defconfig
-sh                        edosk7760_defconfig
-mips                        maltaup_defconfig
-arm                         s5pv210_defconfig
-arm                          iop32x_defconfig
-powerpc                     kmeter1_defconfig
-mips                            ar7_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                              alldefconfig
-x86_64                           allyesconfig
-arm                           sama5_defconfig
-sh                   secureedge5410_defconfig
-h8300                    h8300h-sim_defconfig
-arm                          collie_defconfig
-m68k                          atari_defconfig
-sh                        dreamcast_defconfig
-arm                           sunxi_defconfig
-arc                                 defconfig
-sparc                               defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      cm5200_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                        multi_v7_defconfig
-powerpc                       maple_defconfig
-powerpc                 xes_mpc85xx_defconfig
-mips                        jmr3927_defconfig
-arm                  colibri_pxa270_defconfig
-mips                         tb0219_defconfig
-nds32                             allnoconfig
-mips                           rs90_defconfig
-arc                           tb10x_defconfig
-i386                             alldefconfig
-powerpc                     powernv_defconfig
-m68k                         apollo_defconfig
-m68k                        m5407c3_defconfig
-mips                       capcella_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                    maltaup_xpa_defconfig
-m68k                        stmark2_defconfig
-powerpc                      makalu_defconfig
-riscv                          rv32_defconfig
-arc                        vdk_hs38_defconfig
-arm                           stm32_defconfig
-arm                        neponset_defconfig
-powerpc                     tqm8540_defconfig
-mips                        bcm63xx_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      walnut_defconfig
-mips                        omega2p_defconfig
-sh                           se7721_defconfig
-arc                     haps_hs_smp_defconfig
-sh                           se7724_defconfig
-powerpc                 linkstation_defconfig
-powerpc                        cell_defconfig
-arm                         axm55xx_defconfig
-parisc                           alldefconfig
-m68k                          amiga_defconfig
-m68k                        mvme147_defconfig
-sh                        sh7757lcr_defconfig
-sparc                            allyesconfig
-ia64                        generic_defconfig
-mips                          malta_defconfig
-sh                     magicpanelr2_defconfig
-mips                        bcm47xx_defconfig
-h8300                            allyesconfig
-arm                       omap2plus_defconfig
-powerpc                    adder875_defconfig
-parisc                generic-32bit_defconfig
-arm                         s3c6400_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    mvme5100_defconfig
-arm                         vf610m4_defconfig
-arm                         assabet_defconfig
-powerpc                     skiroot_defconfig
-sparc                       sparc64_defconfig
-sparc64                          alldefconfig
-arm                  randconfig-c002-20211216
-arm                  randconfig-c002-20211218
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a004-20211216
-i386                 randconfig-a002-20211218
-i386                 randconfig-a005-20211218
-i386                 randconfig-a003-20211218
-i386                 randconfig-a006-20211218
-i386                 randconfig-a004-20211218
-i386                 randconfig-a001-20211216
-i386                 randconfig-a002-20211216
-i386                 randconfig-a005-20211216
-i386                 randconfig-a003-20211216
-i386                 randconfig-a006-20211216
-i386                 randconfig-a004-20211216
-x86_64               randconfig-a011-20211217
-x86_64               randconfig-a014-20211217
-x86_64               randconfig-a012-20211217
-x86_64               randconfig-a013-20211217
-x86_64               randconfig-a016-20211217
-x86_64               randconfig-a015-20211217
-i386                 randconfig-a013-20211217
-i386                 randconfig-a011-20211217
-i386                 randconfig-a016-20211217
-i386                 randconfig-a014-20211217
-i386                 randconfig-a015-20211217
-i386                 randconfig-a012-20211217
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20211217
-x86_64               randconfig-a005-20211217
-x86_64               randconfig-a001-20211217
-x86_64               randconfig-a002-20211217
-x86_64               randconfig-a003-20211217
-x86_64               randconfig-a004-20211217
-x86_64               randconfig-a011-20211216
-x86_64               randconfig-a014-20211216
-x86_64               randconfig-a012-20211216
-x86_64               randconfig-a013-20211216
-x86_64               randconfig-a016-20211216
-x86_64               randconfig-a015-20211216
-x86_64               randconfig-a011-20211214
-x86_64               randconfig-a014-20211214
-x86_64               randconfig-a012-20211214
-x86_64               randconfig-a013-20211214
-x86_64               randconfig-a016-20211214
-x86_64               randconfig-a015-20211214
-i386                 randconfig-a011-20211216
-i386                 randconfig-a014-20211216
-i386                 randconfig-a012-20211216
-i386                 randconfig-a013-20211216
-i386                 randconfig-a015-20211216
-i386                 randconfig-a016-20211216
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
-hexagon              randconfig-r045-20211217
-hexagon              randconfig-r041-20211217
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

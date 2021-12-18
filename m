@@ -2,161 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51518479903
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D64479905
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 06:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbhLRFri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 00:47:38 -0500
-Received: from mga04.intel.com ([192.55.52.120]:8908 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229729AbhLRFrh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 00:47:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639806457; x=1671342457;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pV4If9Dp3fmfJH3DO68XXwXakleAL4XBU5TecZ8OLOw=;
-  b=LcThwoOE9fN+vP9+NnzdCoTrlA9Jrnmqee5VS/MkmAJB7X4vWbvuB2Cp
-   7HcimLZf+DcJTLqxFBwTz6/F/2MehzIkI6Fyc0mcQrPmyNJL7XqrLXvIz
-   tJJjVUxuNzMJXtJD/X/HInF3iqR281dUsKuKbnMv1GCXuWQnX1WA4cgHA
-   /jBrDpZ2jgaRmMAvJaoqVIznGmErO1utOZ6z1uxj+v3Bd+R1dxzfp+Puv
-   gAgrKrWzHf+2Aln9IkYkscPi7HovLU+TH6iEdjZVc62YHeJmw8MeupkR4
-   AW8ELF8h3ROyzqwif6kfV+IgINCn1oY3hJLWZ0/L9Q1v+CZjtlp8WM40n
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="238634142"
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="238634142"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 21:47:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="546629419"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Dec 2021 21:47:34 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mySZC-0005fL-6S; Sat, 18 Dec 2021 05:47:34 +0000
-Date:   Sat, 18 Dec 2021 13:46:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream 81/152] arch/x86/kvm/vmx/tdx_stubs.c:16:72:
- error: use of undeclared identifier 'ENOPNOTSUPP'
-Message-ID: <202112181310.4ECj0YDS-lkp@intel.com>
+        id S232109AbhLRFwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 00:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232088AbhLRFwm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 00:52:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98120C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 21:52:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=r2cPolnJMtn1KOUKK74IyKZjSIHAcFPC13gYJVgzIGw=; b=pRPSf5EGTUk45wZhhwrBA7zPrE
+        S/MMGkYWLuhYHM6diyoq2oCZgFXoIM1Gu/E1O6IdFjci9nreDJiXEQVdZJBCajhs7gpK/iDCOrPj9
+        2wZkBRTP2nMM3Zf06t5m21K6gAwACXyjVi1MJ2g6JbXIlPFZmgFdg/t6TfW/aga1lR9PhdjZNPWpg
+        o1kKg2BmPITQzs7vwto8Ls84Gi7/0fj0CgoTfrCFp1G+HHz+VuFpBliQKKvExO83JvIdiyLXIngmk
+        qbsLDINz5KTNFkJNZnuizR3p9dcaQQPkZjYFeHUc93OXZcGbWQ3w53fgNEXcnMv6byA7IDTh4Zqm4
+        0KglzxNw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mySdz-00HLY3-TG; Sat, 18 Dec 2021 05:52:33 +0000
+Message-ID: <2bd4c519-1f96-583b-0b05-4091a171db4a@infradead.org>
+Date:   Fri, 17 Dec 2021 21:52:25 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 2/2] smp: Fix kernel-doc related mistakes
+Content-Language: en-US
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Nadav Amit <namit@vmware.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20211216144053.229-1-thunder.leizhen@huawei.com>
+ <20211216144053.229-3-thunder.leizhen@huawei.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211216144053.229-3-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
-commit: 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7 [81/152] KVM: TDX: Do TDX specific vcpu initialization
-config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181310.4ECj0YDS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout 2a1d7e9bae19b842ad5ac81f5e0b549066b58ff7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
-   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-               ^
-   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
-   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-              ^
-   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
-   void tdx_hardware_enable(void) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_hardware_enable(void) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
-   void tdx_hardware_disable(void) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_hardware_disable(void) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for function 'tdx_vcpu_create' [-Wmissing-prototypes]
-   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for function 'tdx_vcpu_free' [-Wmissing-prototypes]
-   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for function 'tdx_vcpu_reset' [-Wmissing-prototypes]
-   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-        ^
-   arch/x86/kvm/vmx/tdx_stubs.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:14:5: warning: no previous prototype for function 'tdx_dev_ioctl' [-Wmissing-prototypes]
-   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-   ^
-   static 
-   arch/x86/kvm/vmx/tdx_stubs.c:15:5: warning: no previous prototype for function 'tdx_vm_ioctl' [-Wmissing-prototypes]
-   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:15:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-   ^
-   static 
->> arch/x86/kvm/vmx/tdx_stubs.c:16:72: error: use of undeclared identifier 'ENOPNOTSUPP'
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-                                                                          ^
-   arch/x86/kvm/vmx/tdx_stubs.c:16:5: warning: no previous prototype for function 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-       ^
-   arch/x86/kvm/vmx/tdx_stubs.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-   ^
-   static 
-   10 warnings and 1 error generated.
 
 
-vim +/ENOPNOTSUPP +16 arch/x86/kvm/vmx/tdx_stubs.c
+On 12/16/21 06:40, Zhen Lei wrote:
+> 1. Change "function-name:" to "function-name -".
+> 2. The kernel-doc comments should start with "/**".
+> 3. Add descriptions for the missing parameters.
+> 4. Fix a mismatched function name in the comment.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-    13	
-    14	int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-    15	int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-  > 16	int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks.
+
+
+> ---
+>  kernel/smp.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/smp.c b/kernel/smp.c
+> index 1e5221fe200296a..d00cc8e0e5d8b16 100644
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -698,8 +698,9 @@ void flush_smp_call_function_from_idle(void)
+>  	local_irq_restore(flags);
+>  }
+>  
+> -/*
+> +/**
+>   * smp_call_function_single - Run a function on a specific CPU
+> + * @cpu:  The CPU to run on.
+>   * @func: The function to run. This must be fast and non-blocking.
+>   * @info: An arbitrary pointer to pass to the function.
+>   * @wait: If true, wait until function has completed on other CPUs.
+> @@ -809,7 +810,7 @@ int smp_call_function_single_async(int cpu, struct __call_single_data *csd)
+>  }
+>  EXPORT_SYMBOL_GPL(smp_call_function_single_async);
+>  
+> -/*
+> +/**
+>   * smp_call_function_any - Run a function on any of the given cpus
+>   * @mask: The mask of cpus it can run on.
+>   * @func: The function to run. This must be fast and non-blocking.
+> @@ -1005,7 +1006,7 @@ void smp_call_function_many(const struct cpumask *mask,
+>  EXPORT_SYMBOL(smp_call_function_many);
+>  
+>  /**
+> - * smp_call_function(): Run a function on all other CPUs.
+> + * smp_call_function() - Run a function on all other CPUs.
+>   * @func: The function to run. This must be fast and non-blocking.
+>   * @info: An arbitrary pointer to pass to the function.
+>   * @wait: If true, wait (atomically) until function has completed
+> @@ -1111,8 +1112,8 @@ void __init smp_init(void)
+>  	smp_cpus_done(setup_max_cpus);
+>  }
+>  
+> -/*
+> - * on_each_cpu_cond(): Call a function on each processor for which
+> +/**
+> + * on_each_cpu_cond_mask() - Call a function on each processor for which
+>   * the supplied function cond_func returns true, optionally waiting
+>   * for all the required CPUs to finish. This may include the local
+>   * processor.
+> @@ -1126,6 +1127,7 @@ void __init smp_init(void)
+>   * @info:	An arbitrary pointer to pass to both functions.
+>   * @wait:	If true, wait (atomically) until function has
+>   *		completed on other CPUs.
+> + * @mask:	The set of cpus to run on (only runs on online subset).
+>   *
+>   * Preemption is disabled to protect against CPUs going offline but not online.
+>   * CPUs going online during the call will not be seen or sent an IPI.
+
+-- 
+~Randy

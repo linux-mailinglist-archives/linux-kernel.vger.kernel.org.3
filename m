@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A5479CBF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E411479CC8
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbhLRVM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:12:56 -0500
-Received: from st43p00im-zteg10062001.me.com ([17.58.63.166]:45766 "EHLO
-        st43p00im-zteg10062001.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234245AbhLRVMz (ORCPT
+        id S234266AbhLRVOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232249AbhLRVOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:12:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1639861969; bh=v0/e1LR3GG6zYqcCoBHl7uIVUQ4dGVk6xV1W5S/bfJc=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=RF17Z9+pzbKvz0uZtf8HS8CPwLe3cazlZ0DIf8jVcvVr6bUEzA5IdZox8wjT1wZUJ
-         owcMoxR/zFzbakpqtZvYQI10zEVr5PcEoWczBt9fD1IAUtYDoIiCWLcS8oWL/2vMdZ
-         K6f2fd5Iaznic5iEwk1rROuMi6gWJxnmhfH4clOUYt8yc01ruN9hBiOcaGe7KKCuTV
-         Zfqkqw6NlHmFM/YcJ8Qv6KZmpzPYtR+o/NCAtPVSJcTN54TAKJ0UBnsIA8JFDcOzeF
-         xesu/yBMob4aQE3/1KpuOb9wfDyfJ4D2WlOx99m9iMRvVRZwsJhJc9hfI4r4f8aVK/
-         VYax2WosbHuBA==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-zteg10062001.me.com (Postfix) with ESMTPSA id 779D080077C;
-        Sat, 18 Dec 2021 21:12:48 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
-Subject: [PATCH v2 2/2] clk: st: clkgen-mux: search reg within node or parent
-Date:   Sat, 18 Dec 2021 22:11:57 +0100
-Message-Id: <20211218211157.188214-3-avolmat@me.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211218211157.188214-1-avolmat@me.com>
-References: <20211218211157.188214-1-avolmat@me.com>
+        Sat, 18 Dec 2021 16:14:34 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A403BC061574;
+        Sat, 18 Dec 2021 13:14:33 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 207so9081806ljf.10;
+        Sat, 18 Dec 2021 13:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=hBfPEzdnBCIolTV0JC9Xy7BosUZffVOIatmUIf7muRk=;
+        b=mj8Y1qjGVeVNpGrpHrq+yiolEP5JKpS78Llfm6+6cOb4hddPJ41w8aUtuFI/BVcYVD
+         GMcOCh9EcozjknygR8Dxw5eL4Wont+Ljk5WngDI/xhSwx3A7B4V8wypQ7UYQpRoYG+AY
+         FvfHpDsXUrkkMvTW0l4mnr4a+yk+I2826vIl0dK/xO/8RKV3qXUKvpYrpVfJyzPT1EPT
+         uqcrkGx0yYj6gzgIYtOXXgAEj7MaEV5Yup/aGZ6wq+98EyB7Zm6H/QKuVvQI4Jhvog3w
+         Rc1jPp2VbgRLc6dSrFyPVdJoMNda9A3sLWJgJzokUbozgc7Pe3ndazyVgvQF6XdHyltZ
+         q1LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=hBfPEzdnBCIolTV0JC9Xy7BosUZffVOIatmUIf7muRk=;
+        b=Hllv7YBpNguQGOPe1x6uRj7b2SHC9vCkpTCLwf+9F1CEQqfIaet1H164QLJ5HUTb9T
+         PkMFDjZjwDLIADOWh2yBjT8Cpf1XPfSKvW+3anxCvY+8MBVZsNOaozg786G/fiX7KMvH
+         8NeONCjRtTGIVD/JEvVOnsjuU978ekhC5IOxNfmaWYSeuoz+iDz3Wzfp6jYrXTgMRSqh
+         dSKMJ4SmuDYViDl5bu/u+ldqMCEL8KWJmbDAhu2u1bnJght92gev0IO4klXNcQKhUNdi
+         kJ63VI4KfEFqPdUJ798Wt2OGtgLwLPMncDq9dUjdWWjkpJdyxyA54PR9qsndSDngRYWC
+         YnUw==
+X-Gm-Message-State: AOAM532CPbrDNIjBjZLv1oqYFyiCfn4KSbp603sQbqwcsz3LdiQ6XIQO
+        xLN3sEWwCB372m7ig8yV6F4=
+X-Google-Smtp-Source: ABdhPJzucJDRxJwDLjAUbGDqu9YkGwYZijg/cBUrGwS6yu/rvwhOI8RwQi4Ibj7sq+pSubmUdTa7Jw==
+X-Received: by 2002:a05:651c:b23:: with SMTP id b35mr8488486ljr.286.1639862071960;
+        Sat, 18 Dec 2021 13:14:31 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.239])
+        by smtp.gmail.com with ESMTPSA id k15sm2092143ljg.123.2021.12.18.13.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Dec 2021 13:14:31 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------cAfV080rMMnQp8FfC7sfnDiX"
+Message-ID: <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
+Date:   Sun, 19 Dec 2021 00:14:30 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2021-12-18_08:2021-12-15,2021-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2009150000 definitions=main-2112180129
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (2)
+Content-Language: en-US
+To:     syzbot <syzbot+f44badb06036334e867a@syzkaller.appspotmail.com>,
+        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000021160205d369a962@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <00000000000021160205d369a962@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to avoid having duplicated addresses within the DT,
-only have one unit-address per clockgen and each driver within
-the clockgen should look at the parent node (overall clockgen)
-to figure out the reg property.  Such behavior is already in
-place in other STi platform clock drivers such as clk-flexgen
-and clkgen-pll.  Keep backward compatibility by first looking
-at reg within the node before looking into the parent node.
+This is a multi-part message in MIME format.
+--------------cAfV080rMMnQp8FfC7sfnDiX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
-v2: identical to v1
+On 12/18/21 14:07, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13a4d133b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f44badb06036334e867a
+> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149fddcbb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17baef25b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+> 
 
- drivers/clk/st/clkgen-mux.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+The last unhanded case is asix_read_cmd() == 0. Let's handle it...
 
-diff --git a/drivers/clk/st/clkgen-mux.c b/drivers/clk/st/clkgen-mux.c
-index ce583ded968a..ee39af7a0b72 100644
---- a/drivers/clk/st/clkgen-mux.c
-+++ b/drivers/clk/st/clkgen-mux.c
-@@ -57,10 +57,17 @@ static void __init st_of_clkgen_mux_setup(struct device_node *np,
- 	const char **parents;
- 	int num_parents = 0;
- 
-+	/*
-+	 * First check for reg property within the node to keep backward
-+	 * compatibility, then if reg doesn't exist look at the parent node
-+	 */
- 	reg = of_iomap(np, 0);
- 	if (!reg) {
--		pr_err("%s: Failed to get base address\n", __func__);
--		return;
-+		reg = of_iomap(of_get_parent(np), 0);
-+		if (!reg) {
-+			pr_err("%s: Failed to get base address\n", __func__);
-+			return;
-+		}
- 	}
- 
- 	parents = clkgen_mux_get_parents(np, &num_parents);
--- 
-2.25.1
+#syz test: https://github.com/google/kmsan.git master
+
+
+
+With regards,
+Pavel Skripkin
+
+
+--------------cAfV080rMMnQp8FfC7sfnDiX
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jIGIvZHJpdmVycy9u
+ZXQvdXNiL2FzaXhfY29tbW9uLmMKaW5kZXggNDJiYTRhZjY4MDkwLi5mYjRmNmNlOTQ2NmEg
+MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jCisrKyBiL2RyaXZl
+cnMvbmV0L3VzYi9hc2l4X2NvbW1vbi5jCkBAIC03Nyw3ICs3Nyw3IEBAIHN0YXRpYyBpbnQg
+YXNpeF9jaGVja19ob3N0X2VuYWJsZShzdHJ1Y3QgdXNibmV0ICpkZXYsIGludCBpbl9wbSkK
+IAkJCQkgICAgMCwgMCwgMSwgJnNtc3IsIGluX3BtKTsKIAkJaWYgKHJldCA9PSAtRU5PREVW
+KQogCQkJYnJlYWs7Ci0JCWVsc2UgaWYgKHJldCA8IDApCisJCWVsc2UgaWYgKHJldCA8PSAw
+KQogCQkJY29udGludWU7CiAJCWVsc2UgaWYgKHNtc3IgJiBBWF9IT1NUX0VOKQogCQkJYnJl
+YWs7Cg==
+--------------cAfV080rMMnQp8FfC7sfnDiX--
 

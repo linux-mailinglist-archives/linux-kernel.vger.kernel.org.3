@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D91FF479D6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354F4479D75
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbhLRVh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:37:59 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:54953 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229480AbhLRVh6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:37:58 -0500
-Received: (qmail 881331 invoked by uid 1000); 18 Dec 2021 16:37:57 -0500
-Date:   Sat, 18 Dec 2021 16:37:57 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: How to fix screen resolution detection?
-Message-ID: <Yb5UtbfhmCHx+snO@rowland.harvard.edu>
-References: <Yby4ooKl43NRm+5y@rowland.harvard.edu>
+        id S231545AbhLRVmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:42:33 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:33662 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229480AbhLRVmb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 16:42:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eLPtaZ6jc0qsf67b3YZgHOu1SauyK+DFYf2BGnq0Y/g=; b=FiUun95p5z52jWx54fo7WPoGhA
+        eX9iGH9ULGssd/3V/tllMMSrJevCBRia/bQk6xkTKbE6angpnXWrfl9rAcED/CIzHsV1KR9wAkO7j
+        aIg1dlQOptjtRkPrnd8X6HOsgqCbkoBQz5mJvPLJ2aKfDIhRLfTW7h48ioLjkIYSGPf0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1myhT9-00GvN8-Vc; Sat, 18 Dec 2021 22:42:19 +0100
+Date:   Sat, 18 Dec 2021 22:42:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     syzbot <syzbot+f44badb06036334e867a@syzkaller.appspotmail.com>,
+        davem@davemloft.net, glider@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux@rempel-privat.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (2)
+Message-ID: <Yb5Vu8+45wh5FiCQ@lunn.ch>
+References: <00000000000021160205d369a962@google.com>
+ <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yby4ooKl43NRm+5y@rowland.harvard.edu>
+In-Reply-To: <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The screen resolution on my laptop is not reported accurately.  Here's 
-an extract from the output of xdpyinfo:
+On Sun, Dec 19, 2021 at 12:14:30AM +0300, Pavel Skripkin wrote:
+> On 12/18/21 14:07, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+> > git tree:       https://github.com/google/kmsan.git master
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=13a4d133b00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f44badb06036334e867a
+> > compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149fddcbb00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17baef25b00000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+> > 
+> 
+> The last unhanded case is asix_read_cmd() == 0. Let's handle it...
 
-screen #0:
-  dimensions:    3200x1800 pixels (847x476 millimeters)
-  resolution:    96x96 dots per inch
+That does not look correct, i think.
 
-The number of pixels is correct, but the size and resolution values 
-smack of a bogus default.  The actual width of the screen (determined 
-with a tape measure) is about 11.5 inches (291 mm), which yields a 
-resolution of 280 dots per inch (11 dots per mm), approximately.  
-Most definitely _not_ 96 dpi.
+asix_read_cmd() == 0 means no error from the read itself. If there is
+no error, we should look at the value of smsr and test for bit
+AX_HOST_EN. Doing a continue means we just ignore the value returned
+by the good read.
 
-Presumably X gets the size/resolution information from Wayland, which 
-gets it from the kernel, which gets it from the firmware.  So the kernel 
-driver is the logical place to start in figuring where things are going 
-wrong.  The laptop uses i915; here are the relevant lines from the 
-kernel log:
+I think the correct fix is to look at the value of i. If we have
+exceeded 30, we should return -ETIMEDOUT.
 
-[    0.000000] Linux version 5.14.9-200.fc34.x86_64 (mockbuild@bkernel02.iad2.fedoraproject.org) (gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1), GNU ld version 2.35.2-5.fc34) #1 SMP Thu Sep 30 11:55:35 UTC 2021
-
-[    0.463895] efifb: probing for efifb
-[    0.463913] efifb: framebuffer at 0xe0000000, using 22500k, total 22500k
-[    0.463916] efifb: mode is 3200x1800x32, linelength=12800, pages=1
-[    0.463919] efifb: scrolling: redraw
-[    0.463920] efifb: Truecolor: size=8:8:8:8, shift=24:16:8:0
-[    0.464028] Console: switching to colour frame buffer device 400x112
-[    0.474894] fb0: EFI VGA frame buffer device
-
-[    2.888858] fb0: switching to inteldrmfb from EFI VGA
-[    2.891260] Console: switching to colour dummy device 80x25
-[    2.891318] i915 0000:00:02.0: vgaarb: deactivate vga console
-[    2.902665] i915 0000:00:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=io+mem
-[    2.904833] i915 0000:00:02.0: [drm] Finished loading DMC firmware i915/skl_dmc_ver1_27.bin (v1.27)
-[    2.947359] [drm] Initialized i915 1.6.0 20201103 for 0000:00:02.0 on minor 0
-[    2.949468] ACPI: video: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
-[    2.949803] input: Video Bus as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/LNXVIDEO:00/input/input9
-[    2.964371] fbcon: i915 (fb0) is primary device
-[    2.979854] Console: switching to colour frame buffer device 400x112
-[    3.012355] i915 0000:00:02.0: [drm] fb0: i915 frame buffer device
-
-Now, I know nothing about the kernel's graphics subsystems.  How can I 
-find out what size/resolution information i915 is getting and passing to 
-Wayland?  If it's wrong, how can I fix it?
-
-Thanks,
-
-Alan Stern
+	 Andrew

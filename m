@@ -2,228 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C22F1479C64
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FBF479C69
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 20:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbhLRTsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 14:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbhLRTsB (ORCPT
+        id S234039AbhLRTuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 14:50:21 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:33709 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233971AbhLRTuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 14:48:01 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDB5C06173F
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:48:00 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso7316890otr.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xZbl8kry1oh8fgr14gyBKadSkFkgf66pQ/lNWJRGpuk=;
-        b=isRS9OfoaM3RItUzEdCQE3X34KmLU5ljCl16w3NIyiU/3WJt5wuxVZei89oJeDuJYh
-         vOu8SG0HUynOXu8Nzc1wlCDtJlsa0tJnx65Xi7jdDtlgmPiOA/wQubBoNz0nd4FMNVgs
-         wmVOaReFvpemU3B9J3Yt+f+knLdwHUfHuMRCokcwVm59VxjJykW03cFfB2xsp6sz13wC
-         L6iOZX4bBTonpZiFiPKc71TZw0anucFmmI9oZOCmTN2B5jlbKCDNgWLOCEFw8+sdexVB
-         2uivFlf3yOtlXBvvx0HgsHG4GpSm7B7m2yjfd806zHrsMfiHYavX1p5COA0w4sf5OaiO
-         +Z+Q==
+        Sat, 18 Dec 2021 14:50:21 -0500
+Received: by mail-il1-f199.google.com with SMTP id w1-20020a056e021a6100b0029f42663adcso3400898ilv.0
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 11:50:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xZbl8kry1oh8fgr14gyBKadSkFkgf66pQ/lNWJRGpuk=;
-        b=QywSiSOy/3nLeowqIXQ/DmqCmpU8/NORaqflXRJ0/0Lg+sIUQo9t0ukR5n0oNvv7+P
-         WiGGhYDgYghgcECss/mR4xJjxjDvh7PbYdvZmMxVvM5DhRh9Hi+8tjfVUs5oXgluWqXF
-         R2VqdZB4qBYEQrLa9s2dLGAE4g34GYVL8KUZx1ECPgZ6lxl3xR3/7p/yOGYagu6ABZAO
-         woy/2+Hvl2EFkhPbWYD9GdirN0ZZn7qH2UpXXpznlbjIcHb/Ta5Sp7QhAARwnDpkDDIt
-         Xoy4UP/Un9oNEPkwo7rbvi/rE8JVvMNGOSQ6CXTiQdYC9SQg9zUcnZiQIMejFamR3CvI
-         nsAw==
-X-Gm-Message-State: AOAM530OVgN0dMfjmKjDKEIBcjgmgEgY6H1lqw3R4vCtC1g24OVuARFi
-        rN3UJ5LfnG/00fow6+RQAbaipg==
-X-Google-Smtp-Source: ABdhPJyottwvIBEpp4PIbHlt1JVvxo+WxfHaqMBh5Vo3p1am0yoxA1mDQMqnmk5UTbnVoRTK0+iSpw==
-X-Received: by 2002:a05:6830:4090:: with SMTP id x16mr6590388ott.281.1639856880137;
-        Sat, 18 Dec 2021 11:48:00 -0800 (PST)
-Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id j5sm2290053oou.23.2021.12.18.11.47.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 11:47:59 -0800 (PST)
-Message-ID: <aae49bcb-078f-f414-aede-0906c44c030b@kali.org>
-Date:   Sat, 18 Dec 2021 13:47:58 -0600
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=7C/TYsmHCje+Y9Ci09sL4rbdHe/+0BCYOqyNToLN6Nc=;
+        b=ZTPumED0OstobBLV3gkXCqR8PnmX0Z2IhoJ5xSS8CsIXeNMdtlZ/xktIu9dlG46zey
+         EvaoKtp29u2+BE5hm4HAe9Uut5h3x7ft2OAAGfdvZi0wxduF6M3haReR0rg3Fi6wuMvt
+         +fkq6/T8few7KVfuSqzjoCZTGsiBvrtW553aJoMW4aTrZcunUTSzIt/0Bz12EUioOYnM
+         1xq2Cl+XA/XOQIEg3m7LEKc4oLY9danouMjtA8YU8sFS2Uo8aw2qyHyM3X9WyW4u4tYN
+         hO2WADlPy5BUPfmPglYyG0bxeM7fPCNn/8YxKSrekEs6CawSRLyAEjNlt/roSxqeLxSH
+         YFNQ==
+X-Gm-Message-State: AOAM533Kr4RsqqdTO3FzL39DgbpfWVUPKyx51p3jnYJ9vu90lcglR1XN
+        9gSDEIvgeFUyyPfqc9bj8S9V9DugPa/LNuWX+OdJbz6172L3
+X-Google-Smtp-Source: ABdhPJw8/tV+aT7xauXXueKxaP2lYiNkq6WHyTs6x55CGpVVpAUu2FXPJewExJW9hiO6Q6Psw6GeD4P8EyilqfWavaBCUr4FflV4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net
-Cc:     lukasz.luba@arm.com, robh@kernel.org, heiko@sntech.de,
-        arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-7-daniel.lezcano@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20211218130014.4037640-7-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:12e6:: with SMTP id l6mr4624891iln.275.1639857020637;
+ Sat, 18 Dec 2021 11:50:20 -0800 (PST)
+Date:   Sat, 18 Dec 2021 11:50:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032992d05d370f75f@google.com>
+Subject: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+From:   syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hello,
 
-On 12/18/21 7:00 AM, Daniel Lezcano wrote:
-> The DTPM framework does support now the hierarchy description.
->
-> The platform specific code can call the hierarchy creation function
-> with an array of struct dtpm_node pointing to their parents.
->
-> This patch provides a description of the big and Little CPUs and the
-> GPU and tie them together under a virtual package name. Only sdm845 is
-> described.
->
-> The description could be extended in the future with the memory
-> controller with devfreq if it has the energy information.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->   drivers/soc/qcom/Kconfig  |  9 ++++++
->   drivers/soc/qcom/Makefile |  1 +
->   drivers/soc/qcom/dtpm.c   | 65 +++++++++++++++++++++++++++++++++++++++
->   3 files changed, 75 insertions(+)
->   create mode 100644 drivers/soc/qcom/dtpm.c
->
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index e718b8735444..f21c1df2f2f9 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -228,4 +228,13 @@ config QCOM_APR
->   	  application processor and QDSP6. APR is
->   	  used by audio driver to configure QDSP6
->   	  ASM, ADM and AFE modules.
-> +
-> +config QCOM_DTPM
-> +	tristate "Qualcomm DTPM hierarchy"
+syzbot found the following issue on:
 
-Testing this on a Lenovo Yoga C630 here and...
+HEAD commit:    5472f14a3742 Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11132113b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e3bdfd29b408d1b6
+dashboard link: https://syzkaller.appspot.com/bug?extid=9c3fb12e9128b6e1d7eb
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14559113b00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com
+
+INFO: task jbd2/sda1-8:2937 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc5-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:jbd2/sda1-8     state:D stack:27112 pid: 2937 ppid:     2 flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
+ schedule+0xd2/0x260 kernel/sched/core.c:6326
+ io_schedule+0xee/0x170 kernel/sched/core.c:8371
+ bit_wait_io+0x12/0xd0 kernel/sched/wait_bit.c:209
+ __wait_on_bit+0x60/0x190 kernel/sched/wait_bit.c:49
+ out_of_line_wait_on_bit+0xd5/0x110 kernel/sched/wait_bit.c:64
+ wait_on_bit_io include/linux/wait_bit.h:101 [inline]
+ __wait_on_buffer+0x7a/0x90 fs/buffer.c:122
+ wait_on_buffer include/linux/buffer_head.h:356 [inline]
+ journal_wait_on_commit_record fs/jbd2/commit.c:175 [inline]
+ jbd2_journal_commit_transaction+0x4e3c/0x6be0 fs/jbd2/commit.c:931
+ kjournald2+0x1d0/0x930 fs/jbd2/journal.c:213
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/27:
+ #0: ffffffff8bb812e0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
+1 lock held by udevd/2974:
+2 locks held by getty/3287:
+ #0: ffff88807ec56098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252
+ #1: ffffc90002b8e2e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2113
+2 locks held by kworker/1:0/3663:
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
+ #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
+ #1: ffffc90001b27db0 ((work_completion)(&rew.rew_work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
+2 locks held by syz-executor.2/13278:
+ #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: account_event kernel/events/core.c:11445 [inline]
+ #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: perf_event_alloc.part.0+0x31f9/0x3b10 kernel/events/core.c:11678
+ #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:290 [inline]
+ #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x4fa/0x620 kernel/rcu/tree_exp.h:836
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+ watchdog+0xc1d/0xf50 kernel/hung_task.c:295
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 10 Comm: kworker/u4:1 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:__kasan_check_read+0x4/0x10 mm/kasan/shadow.c:31
+Code: 44 07 48 85 db 0f 85 d0 9f 45 07 48 83 c4 60 5b 5d 41 5c 41 5d c3 c3 e9 d0 a0 45 07 cc cc cc cc cc cc cc cc cc cc 48 8b 0c 24 <89> f6 31 d2 e9 f3 f9 ff ff 0f 1f 00 48 8b 0c 24 89 f6 ba 01 00 00
+RSP: 0018:ffffc90000f0f630 EFLAGS: 00000002
+RAX: 0000000000000002 RBX: 1ffff920001e1ece RCX: ffffffff815b774f
+RDX: 0000000000000092 RSI: 0000000000000008 RDI: ffffffff8ff77a10
+RBP: 0000000000000100 R08: 0000000000000000 R09: ffffffff8ff77a17
+R10: 0000000000000001 R11: 000000000000003f R12: 0000000000000008
+R13: ffff888011c7eda8 R14: 0000000000000092 R15: ffff888011c7edc8
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005555557b2708 CR3: 000000000b88e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ hlock_class kernel/locking/lockdep.c:199 [inline]
+ mark_lock+0xef/0x17b0 kernel/locking/lockdep.c:4583
+ mark_usage kernel/locking/lockdep.c:4526 [inline]
+ __lock_acquire+0x8a7/0x54a0 kernel/locking/lockdep.c:4981
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ __get_locked_pte+0x2b6/0x4d0 mm/memory.c:1722
+ get_locked_pte include/linux/mm.h:2160 [inline]
+ __text_poke+0x1ae/0x8c0 arch/x86/kernel/alternative.c:1000
+ text_poke_bp_batch+0x3d7/0x560 arch/x86/kernel/alternative.c:1361
+ text_poke_flush arch/x86/kernel/alternative.c:1451 [inline]
+ text_poke_flush arch/x86/kernel/alternative.c:1448 [inline]
+ text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1458
+ arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
+ jump_label_update+0x1d5/0x430 kernel/jump_label.c:830
+ static_key_enable_cpuslocked+0x1b1/0x260 kernel/jump_label.c:177
+ static_key_enable+0x16/0x20 kernel/jump_label.c:190
+ toggle_allocation_gate mm/kfence/core.c:732 [inline]
+ toggle_allocation_gate+0x100/0x390 mm/kfence/core.c:724
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+sd 0:0:1:0: tag#6693 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
+sd 0:0:1:0: tag#6693 CDB: opcode=0xe5 (vendor)
+sd 0:0:1:0: tag#6693 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
+sd 0:0:1:0: tag#6693 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
+sd 0:0:1:0: tag#6693 CDB[20]: ba
+----------------
+Code disassembly (best guess):
+   0:	44 07                	rex.R (bad)
+   2:	48 85 db             	test   %rbx,%rbx
+   5:	0f 85 d0 9f 45 07    	jne    0x7459fdb
+   b:	48 83 c4 60          	add    $0x60,%rsp
+   f:	5b                   	pop    %rbx
+  10:	5d                   	pop    %rbp
+  11:	41 5c                	pop    %r12
+  13:	41 5d                	pop    %r13
+  15:	c3                   	retq
+  16:	c3                   	retq
+  17:	e9 d0 a0 45 07       	jmpq   0x745a0ec
+  1c:	cc                   	int3
+  1d:	cc                   	int3
+  1e:	cc                   	int3
+  1f:	cc                   	int3
+  20:	cc                   	int3
+  21:	cc                   	int3
+  22:	cc                   	int3
+  23:	cc                   	int3
+  24:	cc                   	int3
+  25:	cc                   	int3
+  26:	48 8b 0c 24          	mov    (%rsp),%rcx
+* 2a:	89 f6                	mov    %esi,%esi <-- trapping instruction
+  2c:	31 d2                	xor    %edx,%edx
+  2e:	e9 f3 f9 ff ff       	jmpq   0xfffffa26
+  33:	0f 1f 00             	nopl   (%rax)
+  36:	48 8b 0c 24          	mov    (%rsp),%rcx
+  3a:	89 f6                	mov    %esi,%esi
+  3c:	ba                   	.byte 0xba
+  3d:	01 00                	add    %eax,(%rax)
 
 
-Should this be tristate?  Is it actually possible to unload the module 
-once it's loaded?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Here I have DTPM=y, DTPM_CPU=y, DTPM_DEVFREQ=y, QCOM_DTPM=m
-
-But if I attempt to modprobe -r dtpm,
-
-modprobe: ERROR: ../libkmod/libkmod-module.c:799 
-kmod_module_remove_module() could not remove 'dtpm': Device or resource busy
-
-
-
-> +	depends on DTPM
-> +	help
-> +	 Describe the hierarchy for the Dynamic Thermal Power
-> +	 Management tree on this platform. That will create all the
-> +	 power capping capable devices.
-> +
->   endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 70d5de69fd7b..cf38496c3f61 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
->   obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->   obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
->   obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
-> +obj-$(CONFIG_QCOM_DTPM) += dtpm.o
-> diff --git a/drivers/soc/qcom/dtpm.c b/drivers/soc/qcom/dtpm.c
-> new file mode 100644
-> index 000000000000..c15283f59494
-> --- /dev/null
-> +++ b/drivers/soc/qcom/dtpm.c
-> @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2021 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * DTPM hierarchy description
-> + */
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/dtpm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
-> +	[0]{ .name = "sdm845" },
-> +	[1]{ .name = "package",
-> +	     .parent = &sdm845_hierarchy[0] },
-> +	[2]{ .name = "/cpus/cpu@0",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[3]{ .name = "/cpus/cpu@100",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[4]{ .name = "/cpus/cpu@200",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[5]{ .name = "/cpus/cpu@300",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[6]{ .name = "/cpus/cpu@400",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[7]{ .name = "/cpus/cpu@500",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[8]{ .name = "/cpus/cpu@600",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[9]{ .name = "/cpus/cpu@700",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[10]{ .name = "/soc@0/gpu@5000000",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[11]{ },
-> +};
-> +
-> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
-> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
-> +        {},
-> +};
-> +
-> +static int __init sdm845_dtpm_init(void)
-> +{
-> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
-> +}
-> +late_initcall(sdm845_dtpm_init);
-> +
-> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:dtpm");
-> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-> +
-
-It does seem to work aside from not being able to modprobe -r the 
-module. Although I do see
-
-[   35.849622] dtpm: Registered dtpm node 'sdm845' / 0-0 uW,
-[   35.849652] dtpm: Registered dtpm node 'package' / 0-0 uW,
-[   35.849676] dtpm: Registered dtpm node 'cpu0-cpufreq' / 40000-436000 uW,
-[   35.849702] dtpm: Registered dtpm node 'cpu4-cpufreq' / 
-520000-5828000 uW,
-[   35.849734] dtpm_devfreq: No energy model available for '5000000.gpu'
-[   35.849738] dtpm: Failed to setup '/soc@0/gpu@5000000': -22
-
-If the devfreq issue with the gpu isn't expected, are we missing 
-something for the c630?
-
--- Steev
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

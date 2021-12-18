@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B13479A8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78159479A8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 12:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbhLRLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 06:17:33 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:48790 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbhLRLRc (ORCPT
+        id S232966AbhLRLXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 06:23:47 -0500
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17247 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230098AbhLRLXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 06:17:32 -0500
-Received: by mail-io1-f69.google.com with SMTP id g23-20020a6be617000000b005e245747fb4so3270115ioh.15
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 03:17:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Nn4S/hdNFMK38bUgCV7tKgCyvOkQdqxyUF/70R2vv0Q=;
-        b=d2Vu2TA7ERlnUgZAIy2++XKWaEzbGSMt6nI03Mt3A2H9TqmYGdGqNGbTv49+wQD4CS
-         nTKzDIHVnMRZARNPv9Q66c4wabLGafKrq/Uo8frWkGto6mz2jxm7m6UO3DleJQE6PI1a
-         qKZfPhU1GPHz0HnxhpIG6Az5Wbh2pg4tl/KTL0K4o4R6boNm3nIIqg0m4IlKn+o2PeU3
-         4jKU7y2WSFCmskt514uwaMY/tKcRM9R5VzmWXReqgjTHcrBIXvUFthubujxGttcN99zp
-         ntKhfehyERqROTb05tPzZjsdoAHI5COrnlL5l1zUlAVfYhBxe7c/hsdcg26ivnfPbTh4
-         Fz/Q==
-X-Gm-Message-State: AOAM533QYOJxA32uEQisB55fL/J4sPBYczUTNPBbfexEl3d8ETvDyZJp
-        5wgqSdaGWpC/2MTloBR8Os6/XhXAE9wzKMWOtIvMHq5U1glY
-X-Google-Smtp-Source: ABdhPJxnkN/hhHZkSsIS1SQmfGm2nhYF4CMP2ghHGJyTCB0WN0FHzuNlp6PaYckqafM0YFGSvmQTqvXkzsi6Mr0EOXg0k52Cwjl+
+        Sat, 18 Dec 2021 06:23:46 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1639826617; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=Vco2WXhTpp1NubYorLtakbTZxn1Ivlz/cOeWCNaDeG7Gvhm4OS/VnyUFLU4zsOoQa5lF34IRbTMpXzUi01yQL1ru0ZAyxx+3XxtkAQb7paeeGFcne4oxXcXzpgn/U3mmblLtDUdStDS6cRF+nfRxyuTEMMqvzWVbsc0fd8YJgec=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1639826617; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=k7qH+Tr0HDmvBzMd8Ppv4ahMM5S5EO7ndCeJo+FfBPg=; 
+        b=dfCljeIJe9KR0Wqhkdhd0iF/moRZcYZd7lLfJFA+MavWwgtPuh7q3bAGtr6RwNaI0WmXLF+sRvvkus6TEYaoHtDDFVb8hE8FyNkGihZbp1npQnLevynq3nMKg9fuoNSB52ta9adXV55Q8xGhXNu4IMxAM7cV5OLZbSg2KnSRLmc=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=mykernel.net;
+        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
+        dmarc=pass header.from=<cgxu519@mykernel.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1639826617;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=From:To:Cc:Message-ID:Subject:Date:MIME-Version:Content-Transfer-Encoding:Content-Type;
+        bh=k7qH+Tr0HDmvBzMd8Ppv4ahMM5S5EO7ndCeJo+FfBPg=;
+        b=Mkpm46qCgf7r+0u2/Fx7haPBefpK8kveJexlqFim/Eb4icH53nZXfxu8psrylKGL
+        fsXO8LrTGC9Mu8TA3drCjOUSP3XQyxCmUEoZBM3lyimKfkyApU+DxayCvCHpJGW1aof
+        +m9D6I5J7xnfTqc05Ep2dTGs8YPgEaQWRwCZtitU=
+Received: from localhost.localdomain (81.71.33.115 [81.71.33.115]) by mx.zoho.com.cn
+        with SMTPS id 1639826614316722.9621173199579; Sat, 18 Dec 2021 19:23:34 +0800 (CST)
+From:   Chengguang Xu <cgxu519@mykernel.net>
+To:     zyjzyj2000@gmail.com, jgg@ziepe.ca
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chengguang Xu <cgxu519@mykernel.net>
+Message-ID: <20211218112320.3558770-1-cgxu519@mykernel.net>
+Subject: [PATCH] RDMA/rxe: fix a typo in opcode name
+Date:   Sat, 18 Dec 2021 19:23:20 +0800
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1569:: with SMTP id k9mr3680193ilu.200.1639826252255;
- Sat, 18 Dec 2021 03:17:32 -0800 (PST)
-Date:   Sat, 18 Dec 2021 03:17:32 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004255b405d369cd72@google.com>
-Subject: [syzbot] KMSAN: uninit-value in snd_rawmidi_ioctl
-From:   syzbot <syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com>
-To:     alsa-devel@alsa-project.org, broonie@kernel.org, coding@diwic.se,
-        colin.king@intel.com, glider@google.com, joe@perches.com,
-        linux-kernel@vger.kernel.org, perex@perex.cz,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
+so just fix it.
 
-syzbot found the following issue on:
-
-HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=11791d89b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=88412ee8811832b00dbe
-compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a7abf9b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172410b9b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
- snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860
- __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- slab_alloc mm/slub.c:3259 [inline]
- kmem_cache_alloc_trace+0xaca/0x1140 mm/slub.c:3276
- kmalloc include/linux/slab.h:590 [inline]
- snd_rawmidi_open+0x70d/0x1390 sound/core/rawmidi.c:445
- snd_open+0x702/0x890 sound/core/sound.c:169
- chrdev_open+0xbc9/0xd80 fs/char_dev.c:414
- do_dentry_open+0x1128/0x1bf0 fs/open.c:822
- vfs_open+0xaf/0xe0 fs/open.c:957
- do_open fs/namei.c:3426 [inline]
- path_openat+0x52f1/0x5dd0 fs/namei.c:3559
- do_filp_open+0x306/0x760 fs/namei.c:3586
- do_sys_openat2+0x263/0x8f0 fs/open.c:1212
- do_sys_open fs/open.c:1228 [inline]
- __do_sys_openat fs/open.c:1244 [inline]
- __se_sys_openat fs/open.c:1239 [inline]
- __x64_sys_openat+0x35f/0x3c0 fs/open.c:1239
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-CPU: 1 PID: 6368 Comm: syz-executor467 Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
-
-
+Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/infiniband/sw/rxe/rxe_opcode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw=
+/rxe/rxe_opcode.c
+index 3ef5a10a6efd..47ebaac8f475 100644
+--- a/drivers/infiniband/sw/rxe/rxe_opcode.c
++++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+@@ -117,7 +117,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] =3D {
+ =09=09}
+ =09},
+ =09[IB_OPCODE_RC_SEND_MIDDLE]=09=09=3D {
+-=09=09.name=09=3D "IB_OPCODE_RC_SEND_MIDDLE]",
++=09=09.name=09=3D "IB_OPCODE_RC_SEND_MIDDLE",
+ =09=09.mask=09=3D RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
+ =09=09=09=09| RXE_MIDDLE_MASK,
+ =09=09.length =3D RXE_BTH_BYTES,
+--=20
+2.27.0
+
+

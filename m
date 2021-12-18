@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE91F479816
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5CE479817
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 02:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbhLRB6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 20:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S231652AbhLRB65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 20:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhLRB6P (ORCPT
+        with ESMTP id S229709AbhLRB65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 20:58:15 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063E5C061574;
-        Fri, 17 Dec 2021 17:58:15 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id m24so3303670pls.10;
-        Fri, 17 Dec 2021 17:58:15 -0800 (PST)
+        Fri, 17 Dec 2021 20:58:57 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E616EC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 17:58:56 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id m15so3757334pgu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 17:58:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pFfNVSOltuNWp1wMtI3hg/qMObF7DQ/1Aun+IfAtVr8=;
-        b=Ku2yX3hNsH1XjBVY62B25nOIqkkNt+zmO+8g5n+lPfF75Uze5Tam4vlb1rWefeX0tQ
-         jGr/W02uNdbacnH0FuFZjctXsxa26d9e/0MzE9yJCNwSY88Q2g/300ORMOJQRuhGfxPf
-         ea84uiFj+ShaVJIP0LMO66MPHnSKDDfmQEZUxiH4lRUiyfAO9bN8WkrfmmTLWxmxV+ie
-         YK6C/Pn1QjfjCuChIUxzOs4MCsXRGzsrqjuul/dztx6ugdKnSbhCUYitwWTMKgeUd16V
-         jybCQzyUJ5NLbWMO324vcBmue+7HLvpi80Us5fk6TovQ2wQg+GyHkqIupQZbjs4N/quS
-         w/uw==
+        bh=vHq0eUZZjxDi4yxUE8e7N7cUvG7XfIEqIwuJ3JY1aqg=;
+        b=hriL3SqzyczX6i3GSDwG9hMjDVvEuWRYu+X5IaZZgHnpyMEEgay19AHeW0YY996lN2
+         0phyT6QA68QXkPKCSoJDoS19SF7fndVLJPyCUb9vTIuPPDisM6Eu1ksJC/LiypMG+/jj
+         iW4dT2H4gWM1n1pgAAg8P/Uzrx/lTQLkg+exjh2hgUkpVd5ICWKiex8s7yjm8fi0b+1T
+         CLtTTB/+YJSNcww47B599ADNmkIzN62LjPLONi6ebXiBLwz6mtMCRfEINN7ZSI2ozopS
+         s6+tGdSOxcX5wlkKNMYDl4oYFN3pq2Vl4lhnqvIhnTUuqWe5FtBRvMDCbyJ3cE9n2v6f
+         RfSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pFfNVSOltuNWp1wMtI3hg/qMObF7DQ/1Aun+IfAtVr8=;
-        b=0m427m2SFF37JWNjbj4g4kCYgDfPKdrEeRnvtKHwNA4ur79pdUz0NoMvyoJYGbrhtD
-         dUEr3mp9ubT54J2iwzeWmCW/xGwFb3WRanA6a2eIravFGfRP6hXe9mufNB0xEo3wRMbV
-         TR1oru/oL9dQUCZbxFMShli+BbFbop0MnO4Bcb/+F/aTptYUsIHnmGyb2wPqkgwfx2Zr
-         0YIlW6hJeh4H80ooFvQDCNcMDah/+mEMK/stwM0b7P+trNBVQo52/LJnLovYijEGJsS7
-         WFSZt+mHhGqNcjMtgQ6uyPpcIKu7rzczIBMhqKh0bEcEIhD7zZxApfR1mhq71WOWlr/+
-         KxRw==
-X-Gm-Message-State: AOAM530r5BO+ZuhnSxahaTJwGUFUsziwfzU3KJKW7E6W/u+2Th7Cxsw0
-        GC26SlVUQMRTZX9AodYBe14=
-X-Google-Smtp-Source: ABdhPJzB8JazEJhP+/mJKteVGLQBI8KNkSAxq2OHSWjU+1dJJCp9aBhu/oGvEjtTneUzIRrqMt7hLg==
-X-Received: by 2002:a17:902:bc41:b0:148:aef6:b5ad with SMTP id t1-20020a170902bc4100b00148aef6b5admr6073087plz.27.1639792694595;
-        Fri, 17 Dec 2021 17:58:14 -0800 (PST)
+        bh=vHq0eUZZjxDi4yxUE8e7N7cUvG7XfIEqIwuJ3JY1aqg=;
+        b=ZGpPgqGWIjt+AR9tHjtPLHAdqgXMSaX0bSA/8zPbKFWmsdvHpI7JK1uJlc3NT/rs3R
+         GH53oC35g37u0JUAafzBmqwZ25GoF8RoHfpKtEwbAxfsx83iGc+2hxRYprBRWSi2gJbZ
+         vhJI2RVP5BoIx+FQ1t9OY1RIo9lkLV4RZjLT0DgPV2NrOLOX+5PJ8gDIk7qcKpDXgYI+
+         BGkAd4LEpDplLwXoFU2pRIPqVtSqDbObc2Dj6vxBZMIA8h6WnKDr6DfzHzN1gnRF5typ
+         C0LBEUARnSyuH3+AH6P26pMhZLNyHuLCil71QNyj0t/hBRbXQs7bdQliAKg4WwCPMUPN
+         aQkg==
+X-Gm-Message-State: AOAM5302QtoNMZFs3sdp19tVOlNY2Qe6KbA4Cm1TW58PAIFIyeLLagrF
+        idYZzLjgKpLYe97sO9qFcd4=
+X-Google-Smtp-Source: ABdhPJxb8Q8ilCZLthpnqQOkD5zumCw07H/M81yB42/gd1Tf7qN3OflxpG3plj7pui1xImEYV1yamA==
+X-Received: by 2002:a63:205:: with SMTP id 5mr5372109pgc.57.1639792736447;
+        Fri, 17 Dec 2021 17:58:56 -0800 (PST)
 Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id n14sm404657pgd.80.2021.12.17.17.58.11
+        by smtp.gmail.com with ESMTPSA id o15sm4982195pfu.34.2021.12.17.17.58.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 17:58:14 -0800 (PST)
+        Fri, 17 Dec 2021 17:58:56 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     mchehab@kernel.org
-Cc:     davidcomponentone@gmail.com, arnd@arndb.de,
-        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
+To:     zbr@ioremap.net
+Cc:     davidcomponentone@gmail.com, gregkh@linuxfoundation.org,
+        yangyingliang@huawei.com, unixbhaskar@gmail.com,
+        dan.carpenter@oracle.com, ivan.zaentsev@wirenboard.ru,
+        yang.guang5@zte.com.cn, linux-kernel@vger.kernel.org,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] media: saa7134: use swap() to make code cleaner
-Date:   Sat, 18 Dec 2021 09:58:02 +0800
-Message-Id: <021c7dbfec45346672d1773bd322c00b62906e54.1639791971.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] w1: w1_therm: use swap() to make code cleaner
+Date:   Sat, 18 Dec 2021 09:58:44 +0800
+Message-Id: <91568d9c9ff18bb9c850687252cbc38389786229.1639792249.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,33 +74,31 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 ---
- drivers/media/pci/saa7134/saa7134-video.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/w1/slaves/w1_therm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
-index 374c8e1087de..6f4132058c35 100644
---- a/drivers/media/pci/saa7134/saa7134-video.c
-+++ b/drivers/media/pci/saa7134/saa7134-video.c
-@@ -823,7 +823,7 @@ static int buffer_activate(struct saa7134_dev *dev,
- {
- 	struct saa7134_dmaqueue *dmaq = buf->vb2.vb2_buf.vb2_queue->drv_priv;
- 	unsigned long base,control,bpl;
--	unsigned long bpl_uv,lines_uv,base2,base3,tmp; /* planar */
-+	unsigned long bpl_uv, lines_uv, base2, base3; /* planar */
+diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
+index ca70c5f03206..c743cb3d277a 100644
+--- a/drivers/w1/slaves/w1_therm.c
++++ b/drivers/w1/slaves/w1_therm.c
+@@ -1785,7 +1785,7 @@ static ssize_t alarms_store(struct device *device,
+ 	u8 new_config_register[3];	/* array of data to be written */
+ 	int temp, ret;
+ 	char *token = NULL;
+-	s8 tl, th, tt;	/* 1 byte per value + temp ring order */
++	s8 tl, th;	/* 1 byte per value + temp ring order */
+ 	char *p_args, *orig;
  
- 	video_dbg("buffer_activate buf=%p\n", buf);
- 	buf->top_seen = 0;
-@@ -869,9 +869,7 @@ static int buffer_activate(struct saa7134_dev *dev,
- 		base2    = base + bpl * dev->height;
- 		base3    = base2 + bpl_uv * lines_uv;
- 		if (dev->fmt->uvswap) {
--			tmp = base2;
--			base2 = base3;
--			base3 = tmp;
-+			swap(base2, base3);
- 		}
- 		video_dbg("uv: bpl=%ld lines=%ld base2/3=%ld/%ld\n",
- 			bpl_uv,lines_uv,base2,base3);
+ 	p_args = orig = kmalloc(size, GFP_KERNEL);
+@@ -1837,7 +1837,7 @@ static ssize_t alarms_store(struct device *device,
+ 
+ 	/* Reorder if required th and tl */
+ 	if (tl > th) {
+-		tt = tl; tl = th; th = tt;
++		swap(tl, th);
+ 	}
+ 
+ 	/*
 -- 
 2.30.2
 

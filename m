@@ -2,88 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB461479B69
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B05479B67
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbhLROfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 09:35:51 -0500
-Received: from mga01.intel.com ([192.55.52.88]:19477 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230522AbhLROfu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 09:35:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639838150; x=1671374150;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SCVDBzyKX6F1AI1mGQL5GjvCKYXu3dtpUA3OC8P2Dig=;
-  b=ThqVMb30b2IsDVVZZ4JXIcsl66Cg5V2hnLw02yM/+wQMEiwjQD009fuK
-   g3Fwvp9T9CfBZzEbIP6iIBG/Emg1BvNh5ZIWG6VULD2pqEUbHluy7Dj0Q
-   cUQrKBXkWGB63Wn0KnfOVuCTdczagu4e2WbifSDevL/uY1bCqlSI6mpBM
-   fc+GZoxF1fauZrOrSY5V53qq3kw+JvP/j4QQjaiFkv8t+gOG/k0gbZYny
-   aneFNM2e8tib7S8vH3mXKpXUy4+nU2hXOewbF4SxpM+QzDNNQMTF4FFHz
-   64wfAzjImEhbDuGRl0ZTP9/HbvKyUUwT4OwMAyOFiZtuUQwGN9sU+hOv3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="264107662"
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="264107662"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 06:35:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,216,1635231600"; 
-   d="scan'208";a="546716207"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Dec 2021 06:35:49 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myaoO-00067b-BJ; Sat, 18 Dec 2021 14:35:48 +0000
-Date:   Sat, 18 Dec 2021 22:34:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:asahi 30/63] apple-rtkit.c:undefined reference to
- `mbox_free_channel'
-Message-ID: <202112182234.4VC4iNXD-lkp@intel.com>
+        id S233277AbhLROfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 09:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230522AbhLROfH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 09:35:07 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77473C06173F
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:35:07 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d10so10894223lfg.6
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pYgC6UbioLpLUDdPygjohyGooIms1qIM+qPuyGqET70=;
+        b=rHhgE6Zlotk8HdSmidDY7wBJeHWSp00Vfo+Aqyou5BgyXPRyKu8LnPMUgXmkKkflzx
+         udb3hkJAw6YSaGTz2tvs0AUdbG9qxcputvPHcQJHMxINHngDuOsk5v1e2RDCfUnB1Ab8
+         Km2eL88kgKvUp1qHFQIF+u/2wiYm+aqXrJo5w5NWU3ewPCL+RZWQvfMM8aVSybzkQWv2
+         YznjW4G5pZEtM+9rqSNDOTSDoor1uxwRfciKnnPsd/l/oMeQiT+BBMLp7QmdgammQt4/
+         5yoUrYl7NRtmvNpp4QCxknwd6fmsh7MmHlYOIuMeHEPl2JNzg5WgzpB/pIaguDzdx6I4
+         IGyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pYgC6UbioLpLUDdPygjohyGooIms1qIM+qPuyGqET70=;
+        b=78gFZ45Zvn+M/N8zh//Xzs5lecBlRaDEwIHC4AVp1CcbtB2rlbXmArZEQN5GrpzheF
+         i/T+s08uvu7kvUhsyjQTLq/i5018sSnLs5YUqJV8wU0TgAXH5yNN2Hd6r0Mj15gPtkgR
+         RRzvqel7y9cGmt83pM2bIL9PcdVWinTaeYYXBvGbVvoWf0mIWHer1f1mbhxiIhdfTSFO
+         rY56tooNaGDZAbrpqpd1JBQeMZPG25A5DMMbMH0O8lHURx9IrgLj0LQunrZcIJ4jHJRX
+         7uOPMDeK1XJejjr5dHcNzDRUodwAeok+IHypmfnAcMiFwiuWmXxGGGp3xFkTEU5gX4FN
+         pwaA==
+X-Gm-Message-State: AOAM530Ac1Bu+ae29+ezHFELVXLKGiwbUZ3vMCmOe/aySReRw2g9JaQR
+        Y1kQI0R5+jSPOvErKVdO2/Bbog==
+X-Google-Smtp-Source: ABdhPJyJfweji7/uZmtDXAtvhhz48SwfdSecz//NO1/1kZj2ekmyONM2NijthLcvedNhQHMMoHkBbQ==
+X-Received: by 2002:a05:6512:ac9:: with SMTP id n9mr462354lfu.460.1639838105757;
+        Sat, 18 Dec 2021 06:35:05 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id s4sm1728641lfp.198.2021.12.18.06.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 06:35:05 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 98E2D103A58; Sat, 18 Dec 2021 17:35:12 +0300 (+03)
+Date:   Sat, 18 Dec 2021 17:35:12 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 04/11] mm: thp: simlify total_mapcount()
+Message-ID: <20211218143512.luh7jnd4y7it2yun@box.shutemov.name>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-5-david@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211217113049.23850-5-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   b63c1083b20eefa3b23180ae57e1919c723f7d86
-commit: 34c1be37ea53de482315de47fb1a82e02f7bf9f9 [30/63] WIP: soc: apple: rtkit: Add RTKit library
-config: arm64-randconfig-p002-20211218 (https://download.01.org/0day-ci/archive/20211218/202112182234.4VC4iNXD-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/34c1be37ea53de482315de47fb1a82e02f7bf9f9
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 34c1be37ea53de482315de47fb1a82e02f7bf9f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, Dec 17, 2021 at 12:30:42PM +0100, David Hildenbrand wrote:
+> Let's simplify a bit, returning for PageHuge() early and using
+> head_compound_page() as we are only getting called for HEAD pages.
+> 
+> Note the VM_BUG_ON_PAGE(PageTail(page), page) check at the beginning of
+> total_mapcount().
+> 
+> This is a preparation for further changes.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-All errors (new ones prefixed by >>):
-
->> aarch64-linux-ld: Unexpected GOT/PLT entries detected!
->> aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: Entry trampoline text too big
-   aarch64-linux-ld: drivers/soc/apple/apple-rtkit.o: in function `apple_rtkit_boot_abort':
->> apple-rtkit.c:(.text+0x28): undefined reference to `mbox_free_channel'
-   aarch64-linux-ld: drivers/soc/apple/apple-rtkit.o: in function `apple_rtkit_send_message':
->> apple-rtkit.c:(.text+0x164): undefined reference to `mbox_send_message'
-   aarch64-linux-ld: drivers/soc/apple/apple-rtkit.o: in function `apple_rtkit_init':
->> apple-rtkit.c:(.text+0xcec): undefined reference to `mbox_request_channel_byname'
->> aarch64-linux-ld: apple-rtkit.c:(.text+0xd70): undefined reference to `mbox_request_channel'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+ Kirill A. Shutemov

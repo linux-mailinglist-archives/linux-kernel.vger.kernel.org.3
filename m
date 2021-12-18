@@ -2,136 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C920479E12
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 00:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7543479E19
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 00:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbhLRW7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 17:59:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35501 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231351AbhLRW7C (ORCPT
+        id S231856AbhLRXMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 18:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231788AbhLRXMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 17:59:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639868341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
-        b=Ff4xhhDg2UfSAd8H/7b9xBbZmESX0sYttmyH6oHBGmYD+h71lpOeBDz4cG8MwQvzVRUOD6
-        NtK9NNgSLk8PI85zNZiV5BnragApX0eiQl1AqLCrJuxk5w6YFsusv813i/EuqLWfLlfaFI
-        8ecNELfN/5a9ksFZLP0kEng4arZsQzs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-0kUZONihMz67mDFiCVlYRQ-1; Sat, 18 Dec 2021 17:59:00 -0500
-X-MC-Unique: 0kUZONihMz67mDFiCVlYRQ-1
-Received: by mail-wr1-f71.google.com with SMTP id k11-20020adfc70b000000b001a2333d9406so1820330wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 14:58:59 -0800 (PST)
+        Sat, 18 Dec 2021 18:12:21 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF23C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 15:12:21 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id u22so9368117lju.7
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 15:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GyKRP/I6esBlhYrEjQLh8BM6N5zOayyRIq/pW8rIAMo=;
+        b=fsSA+hM1gQ3dj9V0r6PVdcqg8GIMnU0H2LArYw6UfIkmSDWA7xyVG7fNKpz/dEkoEQ
+         SxpEjrlIEqHKNjkl7T6pCX2g5eSPHmzbO0hZDxnUt0UDbVn1IlADDl8KoulkmMpTXprj
+         XC5VDGy1beoXsKOs8RdX7NwWeePSeaw8DuiSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zKL1YmqVKts3QxLJQjQFkJ4hNOoI+EzTUC/9eQmE1k4=;
-        b=QJSV5nx96HSkZLicy5MKBzNLR2q7zRUorkxWjae+/NAfMqdeRYhwBY8nJ+dr7xkn86
-         1o4W8JaNERH5lvdLShbceYcw3e815nkX8hoSyCVJ14kyxOqJdhRZI7illHFtNLdpqh5j
-         zsWrPEJyChwj10uLj6rnjyUe3SmWQWIDIseniW2qWoOwiR6SYL/o6sm/8BPgzBxIOnrq
-         3kklgNLDnpmSFELyz4n0nGmJkFaXEJ2SdTSbWqiLLpkcTjuclhWl1Q4j/5c9iqLCJ6Gw
-         NepFXPDh6w1/aI/gFvkz/laXGBqGC5i+NP2glywsLcQeZ8EI+85ese0tkh0Pr1ZkUWAn
-         jvkA==
-X-Gm-Message-State: AOAM5326g35mkP5XIVoVnjOFIIlYYxkXrt4mpB2RsgckNG8L25GgKfp1
-        wQIaOX4aqP9rJ34RCBUNZYJpNnv1FFq6gvbu7tfnn2/bHdwBkrEyNx0FvO8uZKlq+D5MoQFy7QS
-        LmPgCSnPeJtLK2yQDuWAKNaKL
-X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024791wmc.70.1639868338952;
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6XNPwqC4x+1n7wbfAYLEDuEUUa0YRDFZDM3AZOesJw01Di5J81acMjEVtY8JI8qBixVlHEA==
-X-Received: by 2002:a1c:f217:: with SMTP id s23mr15024788wmc.70.1639868338808;
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-Received: from krava ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id u12sm11474338wrf.60.2021.12.18.14.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 14:58:58 -0800 (PST)
-Date:   Sat, 18 Dec 2021 23:58:56 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no
- previous prototype for function 'my_direct_func1'
-Message-ID: <Yb5nsJdwCl+8d8Fv@krava>
-References: <202112190117.RKPcHQjE-lkp@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GyKRP/I6esBlhYrEjQLh8BM6N5zOayyRIq/pW8rIAMo=;
+        b=6y4O7lWCb6ncg+VIh/sQCmMCbYRvUJym2Po6gtZHcLbq+Z8tly66ufy+z88/qGKFR3
+         tI2QVeoofur/Q5VnKFb+NkBqdNzZs7qJWGwYivL6h2dBr0CJ7fL9B2xKTE5y+Nh3R+9D
+         VcgxeAm/DYAy/V/6LTtHJ3wEK0SFU0hJelQQkI/bQvpLuZ66MSbye/KsT/Jzwo6LKtBe
+         GnOXPp3iRDxSKpWSr0rLD2Y1r2Z8fcfVCMYvIcs3H7ERHU2HSa0w4UAqsXNQxESe0eql
+         G59LlAJdw4ZHhaH+WaYOot2ti4JtGZ5iSYGxd2iHDfVqjQkzp405QM1PD2W/yuvHkgij
+         iavw==
+X-Gm-Message-State: AOAM530M194yVarbc2lrUFTMMX8J8iMxsiYardF9XkfPS64Io6i8T779
+        zIG0g7o64VS7VLxO0kmTAoSH9ibvAzYtG/calns=
+X-Google-Smtp-Source: ABdhPJypsSw5f9MySOtYGMV+uzUkb4d6keTDaJghutYroRy2AaU9UhVWd7hDPS8fCy4V7ws847pocw==
+X-Received: by 2002:a2e:7c16:: with SMTP id x22mr8733683ljc.460.1639869139160;
+        Sat, 18 Dec 2021 15:12:19 -0800 (PST)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id g41sm1474700lfv.49.2021.12.18.15.12.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Dec 2021 15:12:19 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id d10so12752660lfg.6
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 15:12:18 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr7529281wrp.442.1639868771784;
+ Sat, 18 Dec 2021 15:06:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112190117.RKPcHQjE-lkp@intel.com>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <17bfb2fd-da51-1264-513f-f9e928ec36c6@redhat.com> <CAHk-=wir5fG_OGe_38nhJZegw0uL5+0oH3k48xWQLcAwc4W0Rg@mail.gmail.com>
+ <20211218225211.epa4u6mtjnvgkw4x@box.shutemov.name>
+In-Reply-To: <20211218225211.epa4u6mtjnvgkw4x@box.shutemov.name>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 18 Dec 2021 15:05:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whJWmj70d6yCzYPvrC-6V-6jwkJ4mrVc_p3toy4Lz_nhg@mail.gmail.com>
+Message-ID: <CAHk-=whJWmj70d6yCzYPvrC-6V-6jwkJ4mrVc_p3toy4Lz_nhg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 01:57:29AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9eaa88c7036eda3f6c215f87ca693594cf90559b
-> commit: e1067a07cfbc5a36abad3752fafe4c79e06db1bb ftrace/samples: Add module to test multi direct modify interface
-> date:   9 days ago
-> config: x86_64-randconfig-a001-20211219 (https://download.01.org/0day-ci/archive/20211219/202112190117.RKPcHQjE-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1067a07cfbc5a36abad3752fafe4c79e06db1bb
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e1067a07cfbc5a36abad3752fafe4c79e06db1bb
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash samples/ftrace/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous prototype for function 'my_direct_func1' [-Wmissing-prototypes]
->    void my_direct_func1(unsigned long ip)
->         ^
->    samples/ftrace/ftrace-direct-multi-modify.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void my_direct_func1(unsigned long ip)
->    ^
->    static 
-> >> samples/ftrace/ftrace-direct-multi-modify.c:12:6: warning: no previous prototype for function 'my_direct_func2' [-Wmissing-prototypes]
->    void my_direct_func2(unsigned long ip)
->         ^
->    samples/ftrace/ftrace-direct-multi-modify.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void my_direct_func2(unsigned long ip)
->    ^
->    static 
->    2 warnings generated.
+On Sat, Dec 18, 2021 at 2:52 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>
+> So you are saying that if a GUP user wants to see changes made by
+> userspace to the page after the GUP it must ask for FOLL_WRITE, even if it
+> doesn't have intend to write to the page?
 
-ugh, not again.. of course :-\ will send the fix
+Yup. Put the onus very clearly on GUP.
 
-thanks,
-jirka
+It's a very special operation, and it's one of the operations that
+cause a lot of problems for the VM code. It's by no means the _only_
+one - we've got a lot of other things that cause issues - but I think
+it's very clear that GUP is very very special, and nobody should say
+"I want GUP to do whatever".
 
-> 
-> 
-> vim +/my_direct_func1 +7 samples/ftrace/ftrace-direct-multi-modify.c
-> 
->      6	
->    > 7	void my_direct_func1(unsigned long ip)
->      8	{
->      9		trace_printk("my direct func1 ip %lx\n", ip);
->     10	}
->     11	
->   > 12	void my_direct_func2(unsigned long ip)
->     13	{
->     14		trace_printk("my direct func2 ip %lx\n", ip);
->     15	}
->     16	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+There are two cases for GUP:
 
+ - look up the page as it is *NOW*
+
+ - look up the page in order to see any future state on it (and
+possibly modify it)
+
+that "any future state" is a fundamentally much heavier operation.
+It's the one that really *has* to get rid of any sharing, and it has
+to make sure no sharing happens in the future either.
+
+So ii it is an anonymous page, it basically needs to act like a write.
+Even if that page is then used only for reading.
+
+Note that here that "if it's anonymous" is kind of a big deal. If it's
+a shared file-mapped page, at that point it's "just another
+reference". It's potentially problematic even in that case (think of
+"truncate()" that tries to force-unmap all pages from VM's), but for
+the shared case the answer is "if you truncate it and disassociate the
+page from the mapping, it's _your_ problem.
+
+And once it acts as a write, and once it does that COW and we have
+exclusive access to it, it might as well be just writable and dirty.
+You've done the expensive part already. You've forced it to be private
+to that VM.
+
+And this was all triggered by the user doing something very special,
+so no amount of "but POSIX" or whatever matters.
+
+GUP is not great. If you use GUP, you get to deal with the downsides.
+
+               Linus

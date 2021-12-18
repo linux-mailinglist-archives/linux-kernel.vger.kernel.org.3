@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A6E47987F
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B2047987E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 04:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhLRDpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 22:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbhLRDpw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 22:45:52 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413FDC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:52 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z5so15131096edd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BxFK+093IJRQnbXW5Og88SuGPphlDPFlB6O2bfY/1Ws=;
-        b=AAZ+me/h1XGaSaNRrJXizPg0Km/qG0INBdJS0TmFPdkE5f9PsFTYB6Txr2Gz38XLIX
-         zPP/iYefPweJa/M91dvLwmoT3+O9qR+Qjw0z2ZxHVcC+2bWTEslsEbGndeCEoqoGaoON
-         TWmidbo8qai3FAIzAu88GdctoyASGDe47Cq0Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BxFK+093IJRQnbXW5Og88SuGPphlDPFlB6O2bfY/1Ws=;
-        b=1PHL40Lti+KpiAPDlwRCO5Hz5CL/jzQwQSClS0AKP5J3gU4J7P8BGmN4OSlm5pBtd6
-         h6/q9k9gGMOB+CC/7RIOJR+fPuGYVkYpt/TqGluv4spQzcZbwbZoLsdWlnKiuYjCeU6r
-         GeRIr2HLfl1A4sN4BVnUPtoH8R5R+ppDxY3aYu2ESPZ1BoMaAaC99M8k7eYnkVJmXrjB
-         1psuvEbd+ZyEI4hI8Bx10eoYeRCfvt4fRrxm1NjrQSywHrbTGHd/JptRpkaqXchO0/vt
-         iVaN2sjYiJDqPch5dWGvaCchCvAtjnt4YZmtOk8ZGmj82WNDkfDsKlznfGLq96A7KdT6
-         PkHw==
-X-Gm-Message-State: AOAM531nF5+bRWhmcN2woj6mCliEh4bGbUJtgvKRpAheXdMpg/pWYRu/
-        ZT9MQToihF8ZJTaO+UTaB1W8RjphOgHY1Usqayo=
-X-Google-Smtp-Source: ABdhPJyFblkaztMcgoSbyiodj2FbJXfNMzxssLTnsxnt+9nGKozR1NWDZCOWvGO0xvzzZShqgopeHQ==
-X-Received: by 2002:a17:906:5d01:: with SMTP id g1mr4828755ejt.219.1639799150637;
-        Fri, 17 Dec 2021 19:45:50 -0800 (PST)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id hq9sm3492062ejc.119.2021.12.17.19.45.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 19:45:50 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id b7so15072472edd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 19:45:50 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr3943603wrx.193.1639798735711;
- Fri, 17 Dec 2021 19:38:55 -0800 (PST)
+        id S230475AbhLRDng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 22:43:36 -0500
+Received: from mga14.intel.com ([192.55.52.115]:1682 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230052AbhLRDnf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 22:43:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639799015; x=1671335015;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GXptn5xPUR40U4QhdwFu1hawOnMsfvW05PjXCMVS+a4=;
+  b=l/QyFrZbUur8RXZ7UQ8XgwoaND5CuRq+hCQg+FCusumvCsbd+7UQQjpr
+   zP14n33KyWhlybia5pr0tWxZpFWydMV5YPgqjZ/h5Url1HSqRl2/QInLb
+   2ul2Njn2Z2NZRr+lb/pHW+2OIYKj356CEYwnY6qajPDBjjNWhY8s/0iLY
+   5tFftgOOvbzwXpejWsLJ/Vw5CZPVsj9Yw7Un4ROfHZOuHS/XQ622HYMQX
+   MFL+JDt4Apcm/9F1lTuY8+hBTjkTnd+ITZSl301UK+VwOcMOnJU5HkJOt
+   aEn+xeT6SaMCBIW4E3g+eqViV4fNHBYHO816yL4KEj/R4nhPAo8j0Sq9g
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="240104258"
+X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
+   d="scan'208";a="240104258"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 19:43:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
+   d="scan'208";a="507009626"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2021 19:43:31 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myQd9-0005Yw-9y; Sat, 18 Dec 2021 03:43:31 +0000
+Date:   Sat, 18 Dec 2021 11:42:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianyu Lan <Tianyu.Lan@microsoft.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [hyperv:hyperv-next 1/5] kernel/dma/swiotlb.c:166:7: warning: no
+ previous prototype for function 'swiotlb_mem_remap'
+Message-ID: <202112181133.7Ki4aggA-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com> <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
-In-Reply-To: <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 19:38:39 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
-Message-ID: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:30 PM Nadav Amit <namit@vmware.com> wrote:
->
-> In such a case, I do think it makes sense to fail uffd-wp (when
-> page_count() > 1), and in a prototype I am working on I do something
-> like that.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
+commit: 32be866293fe5355adbf91da1cd612f439fc71e5 [1/5] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
+config: x86_64-randconfig-r025-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181133.7Ki4aggA-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 9043c3d65b11b442226015acfbf8167684586cfa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=32be866293fe5355adbf91da1cd612f439fc71e5
+        git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+        git fetch --no-tags hyperv hyperv-next
+        git checkout 32be866293fe5355adbf91da1cd612f439fc71e5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
 
-Ack. If uddf-wp finds a page that is pinned, just skip it as not
-write-protectable.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Because some of the pinners might be writing to it, of course - just
-not through the page tables.
+All warnings (new ones prefixed by >>):
 
-So that sounds like the right thing to do. I _think_ we discussed this
-the last time this came up. I have some dim memory of that. Jason,
-ring a bell?
+>> kernel/dma/swiotlb.c:166:7: warning: no previous prototype for function 'swiotlb_mem_remap' [-Wmissing-prototypes]
+   void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+         ^
+   kernel/dma/swiotlb.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+   ^
+   static 
+   1 warning generated.
 
-             Linus
+
+vim +/swiotlb_mem_remap +166 kernel/dma/swiotlb.c
+
+   160	
+   161	/*
+   162	 * Remap swioltb memory in the unencrypted physical address space
+   163	 * when swiotlb_unencrypted_base is set. (e.g. for Hyper-V AMD SEV-SNP
+   164	 * Isolation VMs).
+   165	 */
+ > 166	void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+   167	{
+   168		void *vaddr = NULL;
+   169	
+   170		if (swiotlb_unencrypted_base) {
+   171			phys_addr_t paddr = mem->start + swiotlb_unencrypted_base;
+   172	
+   173			vaddr = memremap(paddr, bytes, MEMREMAP_WB);
+   174			if (!vaddr)
+   175				pr_err("Failed to map the unencrypted memory %llx size %lx.\n",
+   176				       paddr, bytes);
+   177		}
+   178	
+   179		return vaddr;
+   180	}
+   181	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

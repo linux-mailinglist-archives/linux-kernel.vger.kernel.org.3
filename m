@@ -2,209 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDEE479D64
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A83A479D65
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhLRVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234620AbhLRVXA (ORCPT
+        id S229827AbhLRVZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:25:17 -0500
+Received: from st43p00im-zteg10063501.me.com ([17.58.63.176]:51761 "EHLO
+        st43p00im-zteg10063501.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229480AbhLRVZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:23:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD8C06175B;
-        Sat, 18 Dec 2021 13:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ruyqhDdpxWZhTNIsN5BRhnxESVnSGAzs4XjsiO4O2Ew=; b=hRZRszzbnC91ZvVwUkiw89mzyW
-        +6M8Weo1IaNMqUL+mxj64IlJ3kXGkF5/iexCfZK/NIgSC0hCcVahbOljv1bbzGMwElZf7RxqmnhqL
-        9iDCDgl9isFve8IR6uTNpmZEU6fiMrCQzEQl4Vdh9PLYESqK/D3KO7y8yk4phNQnItW6Gtke+diTn
-        w0vVDlvo1dqpDeeu+x14dfXeZMlgc85WM9wBOYjd2lWZs29yysRfriJpqiCOMKofMBf2V34Fg9BFi
-        ABWY8QzrZLA4odvWKbK1d1bF34fUfaoPT5BGhFi22itNMUFMQ8ufuVZ6mvxts1nW7LLuONwBenR0s
-        953ECk1g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myhAP-000HQu-Vu; Sat, 18 Dec 2021 21:22:58 +0000
-Date:   Sat, 18 Dec 2021 21:22:57 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
-Message-ID: <Yb5RMWRsJl5TMk8H@casper.infradead.org>
-References: <00000000000032992d05d370f75f@google.com>
+        Sat, 18 Dec 2021 16:25:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1639862716; bh=r2AqSVvsI4gnERwbd/GXYlwpPKfe4HPm19LsZqj9yhg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=TkczeVpF0AoPIlhZIFmYD3I/E09pjBj0l/a102MCLX+r0O4iR0/u7MqvRFsXkG7Xx
+         oz+mxYTCYRDgDj8GN3ULgfzNB5RcWU6j8kTB6iRs3kzfRpJ+/+enNjT4Hr7NclnPlP
+         lxAghN8/R8+/FxfYD+KVYZ93XLNomRvEu/ldEcuvZu8yrguxtNUxp4iKwHMics/siq
+         j9n0/KeQ7oG28uLToYx2xCVD57/+uMQRh3t8SMqnu1HYHwr+uTB1m5SKeA0yDUw2hY
+         4vHC+Sg6Duki78pLEKNiEWSM42MLyK2SN7rLUEXZOLsaHDpn12CdMQ244fTjNm86et
+         af3i2cSFUZ6uQ==
+Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-zteg10063501.me.com (Postfix) with ESMTPSA id 74AB5C80666;
+        Sat, 18 Dec 2021 21:25:15 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, avolmat@me.com
+Subject: [PATCH] pinctrl: st: fix comments compilation warnings
+Date:   Sat, 18 Dec 2021 22:25:12 +0100
+Message-Id: <20211218212512.196866-1-avolmat@me.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000032992d05d370f75f@google.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.790,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2021-12-18=5F07:2021-12-16=5F01,2021-12-18=5F07,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ clxscore=1011 phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=744
+ adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2112180129
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 11:50:20AM -0800, syzbot wrote:
-> INFO: task jbd2/sda1-8:2937 blocked for more than 143 seconds.
->       Not tainted 5.16.0-rc5-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+This commit fixes 2 compilation warnings due to comment starting with
+/** while not being kernel-doc comments.
 
-sched_setattr(0x0, &(0x7f0000000080)={0x38, 0x1, 0x0, 0x0, 0x1}, 0x0)
+drivers/pinctrl/pinctrl-st.c:59: warning: This comment starts with '/**',
+but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ *  Packed style retime configuration.
+drivers/pinctrl/pinctrl-st.c:73: warning: This comment starts with '/**',
+but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Dedicated style retime Configuration register
 
-so you've set a SCHED_FIFO priority and then are surprised that some
-tasks are getting starved?
+Signed-off-by: Alain Volmat <avolmat@me.com>
+---
+ drivers/pinctrl/pinctrl-st.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> task:jbd2/sda1-8     state:D stack:27112 pid: 2937 ppid:     2 flags:0x00004000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  io_schedule+0xee/0x170 kernel/sched/core.c:8371
->  bit_wait_io+0x12/0xd0 kernel/sched/wait_bit.c:209
->  __wait_on_bit+0x60/0x190 kernel/sched/wait_bit.c:49
->  out_of_line_wait_on_bit+0xd5/0x110 kernel/sched/wait_bit.c:64
->  wait_on_bit_io include/linux/wait_bit.h:101 [inline]
->  __wait_on_buffer+0x7a/0x90 fs/buffer.c:122
->  wait_on_buffer include/linux/buffer_head.h:356 [inline]
->  journal_wait_on_commit_record fs/jbd2/commit.c:175 [inline]
->  jbd2_journal_commit_transaction+0x4e3c/0x6be0 fs/jbd2/commit.c:931
->  kjournald2+0x1d0/0x930 fs/jbd2/journal.c:213
->  kthread+0x405/0x4f0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
->  </TASK>
-> 
-> Showing all locks held in the system:
-> 1 lock held by khungtaskd/27:
->  #0: ffffffff8bb812e0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
-> 1 lock held by udevd/2974:
-> 2 locks held by getty/3287:
->  #0: ffff88807ec56098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252
->  #1: ffffc90002b8e2e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2113
-> 2 locks held by kworker/1:0/3663:
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
->  #0: ffff888010c76538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
->  #1: ffffc90001b27db0 ((work_completion)(&rew.rew_work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
-> 2 locks held by syz-executor.2/13278:
->  #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: account_event kernel/events/core.c:11445 [inline]
->  #0: ffffffff8bc4c6c8 (perf_sched_mutex){+.+.}-{3:3}, at: perf_event_alloc.part.0+0x31f9/0x3b10 kernel/events/core.c:11678
->  #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:290 [inline]
->  #1: ffffffff8bb8a668 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x4fa/0x620 kernel/rcu/tree_exp.h:836
-> 
-> =============================================
-> 
-> NMI backtrace for cpu 0
-> CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
->  nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
->  trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
->  check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
->  watchdog+0xc1d/0xf50 kernel/hung_task.c:295
->  kthread+0x405/0x4f0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
->  </TASK>
-> Sending NMI from CPU 0 to CPUs 1:
-> NMI backtrace for cpu 1
-> CPU: 1 PID: 10 Comm: kworker/u4:1 Not tainted 5.16.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events_unbound toggle_allocation_gate
-> RIP: 0010:__kasan_check_read+0x4/0x10 mm/kasan/shadow.c:31
-> Code: 44 07 48 85 db 0f 85 d0 9f 45 07 48 83 c4 60 5b 5d 41 5c 41 5d c3 c3 e9 d0 a0 45 07 cc cc cc cc cc cc cc cc cc cc 48 8b 0c 24 <89> f6 31 d2 e9 f3 f9 ff ff 0f 1f 00 48 8b 0c 24 89 f6 ba 01 00 00
-> RSP: 0018:ffffc90000f0f630 EFLAGS: 00000002
-> RAX: 0000000000000002 RBX: 1ffff920001e1ece RCX: ffffffff815b774f
-> RDX: 0000000000000092 RSI: 0000000000000008 RDI: ffffffff8ff77a10
-> RBP: 0000000000000100 R08: 0000000000000000 R09: ffffffff8ff77a17
-> R10: 0000000000000001 R11: 000000000000003f R12: 0000000000000008
-> R13: ffff888011c7eda8 R14: 0000000000000092 R15: ffff888011c7edc8
-> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00005555557b2708 CR3: 000000000b88e000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
->  hlock_class kernel/locking/lockdep.c:199 [inline]
->  mark_lock+0xef/0x17b0 kernel/locking/lockdep.c:4583
->  mark_usage kernel/locking/lockdep.c:4526 [inline]
->  __lock_acquire+0x8a7/0x54a0 kernel/locking/lockdep.c:4981
->  lock_acquire kernel/locking/lockdep.c:5637 [inline]
->  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
->  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
->  _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
->  spin_lock include/linux/spinlock.h:349 [inline]
->  __get_locked_pte+0x2b6/0x4d0 mm/memory.c:1722
->  get_locked_pte include/linux/mm.h:2160 [inline]
->  __text_poke+0x1ae/0x8c0 arch/x86/kernel/alternative.c:1000
->  text_poke_bp_batch+0x3d7/0x560 arch/x86/kernel/alternative.c:1361
->  text_poke_flush arch/x86/kernel/alternative.c:1451 [inline]
->  text_poke_flush arch/x86/kernel/alternative.c:1448 [inline]
->  text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1458
->  arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
->  jump_label_update+0x1d5/0x430 kernel/jump_label.c:830
->  static_key_enable_cpuslocked+0x1b1/0x260 kernel/jump_label.c:177
->  static_key_enable+0x16/0x20 kernel/jump_label.c:190
->  toggle_allocation_gate mm/kfence/core.c:732 [inline]
->  toggle_allocation_gate+0x100/0x390 mm/kfence/core.c:724
->  process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
->  worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
->  kthread+0x405/0x4f0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
->  </TASK>
-> sd 0:0:1:0: tag#6693 FAILED Result: hostbyte=DID_ABORT driverbyte=DRIVER_OK cmd_age=0s
-> sd 0:0:1:0: tag#6693 CDB: opcode=0xe5 (vendor)
-> sd 0:0:1:0: tag#6693 CDB[00]: e5 f4 32 73 2f 4e 09 6d 26 e2 c7 35 d1 35 12 1c
-> sd 0:0:1:0: tag#6693 CDB[10]: 92 1b da 40 b8 58 5b a8 d4 7d 34 f3 90 4c f1 2d
-> sd 0:0:1:0: tag#6693 CDB[20]: ba
-> ----------------
-> Code disassembly (best guess):
->    0:	44 07                	rex.R (bad)
->    2:	48 85 db             	test   %rbx,%rbx
->    5:	0f 85 d0 9f 45 07    	jne    0x7459fdb
->    b:	48 83 c4 60          	add    $0x60,%rsp
->    f:	5b                   	pop    %rbx
->   10:	5d                   	pop    %rbp
->   11:	41 5c                	pop    %r12
->   13:	41 5d                	pop    %r13
->   15:	c3                   	retq
->   16:	c3                   	retq
->   17:	e9 d0 a0 45 07       	jmpq   0x745a0ec
->   1c:	cc                   	int3
->   1d:	cc                   	int3
->   1e:	cc                   	int3
->   1f:	cc                   	int3
->   20:	cc                   	int3
->   21:	cc                   	int3
->   22:	cc                   	int3
->   23:	cc                   	int3
->   24:	cc                   	int3
->   25:	cc                   	int3
->   26:	48 8b 0c 24          	mov    (%rsp),%rcx
-> * 2a:	89 f6                	mov    %esi,%esi <-- trapping instruction
->   2c:	31 d2                	xor    %edx,%edx
->   2e:	e9 f3 f9 ff ff       	jmpq   0xfffffa26
->   33:	0f 1f 00             	nopl   (%rax)
->   36:	48 8b 0c 24          	mov    (%rsp),%rcx
->   3a:	89 f6                	mov    %esi,%esi
->   3c:	ba                   	.byte 0xba
->   3d:	01 00                	add    %eax,(%rax)
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+index 1482a01dfec7..ae8783b34ed2 100644
+--- a/drivers/pinctrl/pinctrl-st.c
++++ b/drivers/pinctrl/pinctrl-st.c
+@@ -55,7 +55,7 @@
+ #define ST_GPIO_DIRECTION_OUT	0x2
+ #define ST_GPIO_DIRECTION_IN	0x4
+ 
+-/**
++/*
+  *  Packed style retime configuration.
+  *  There are two registers cfg0 and cfg1 in this style for each bank.
+  *  Each field in this register is 8 bit corresponding to 8 pins in the bank.
+@@ -69,7 +69,7 @@
+ #define RT_P_CFG1_CLKNOTDATA_FIELD(reg)		REG_FIELD(reg, 16, 23)
+ #define RT_P_CFG1_DOUBLE_EDGE_FIELD(reg)	REG_FIELD(reg, 24, 31)
+ 
+-/**
++/*
+  * Dedicated style retime Configuration register
+  * each register is dedicated per pin.
+  */
+-- 
+2.25.1
+

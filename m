@@ -2,188 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF288479DA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DE3479D83
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 22:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbhLRVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 16:49:11 -0500
-Received: from mail-bn8nam11lp2171.outbound.protection.outlook.com ([104.47.58.171]:18135
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231545AbhLRVtD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 16:49:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aisJzECP0zco9bMXMqzwlUOZBv+sYLbtcRNbIbNVrcgJoOkp7j6dlxtba+pVUo1UEPO1FNx/oPsigXR5QaA0WnBPgCTMsgUQbyVygj9Tb6BfJhjqmsrIwLpkzN+3/sWF6u2wwcP6shl+vwoL40QX5lVcqXt2qPQTqiy6KF1psnqBAd5ArKSJw1toD1U7frQg4lL8bBRumSr1F0Yljnv/u4D9iJCrwz2BnISj4lUCLhgKB32V6LR0O5CDVHj/4s+gtXpJDZKDO04WiLqnURCOd5Ns7mX8JmNshPKrFws+Xm/d9Ulur9m0Feqcr6iR74YiV+G6D3sFq3K6+znO7AavJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EIai4/V/zJYAl6FdO5mxpVybrB530IzKWWG6nZWmWwA=;
- b=IDBAN4Fu5GrtlmlIwgDVtncJRKsgRt6aOfdHB8MsbQ+tiLp/vN+cWF6Y0148e5Zyw+Abg94/QkX5Z459BXdyed3Gtvdanld/HkjqtOvmaOdjDw9LKLN45T8d3DyTNkN5EM7/Vol1IxXUfgCgu9JxBAyqRD2ZY9AgW3qd4bV34YWLbZCfmpwM17gUnCPdHcwOCegEDiXXCQaudTc59hIg9OI+UXzVxtsR5t+iRAFe2j31OaAckLpl9YwB5XVYKlvKABqE7PqivrNf/MwEnB5qM7RRLpvXNCaIZ0hwFcVNPULg0kH3wvRknqGOtMLzDnasdEJZNKniynV53gGfLxCg3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EIai4/V/zJYAl6FdO5mxpVybrB530IzKWWG6nZWmWwA=;
- b=JOiFbuBSlnOfa6c9J9Y4E4PPuP34s07oRVM5m7tlCIdqZRAMePoTLhZlT2/ZjTAEI1NPsMRFeiQhcDp0PZp0g65zUfqiA/As27bGC9q5Ltol9KUHV6XJ1osPj+5RQFHg9lboFx1SZTgZfkrD5Dndv1t+sHuOi7jrWY1hvN0m74I=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by DM6PR05MB4073.namprd05.prod.outlook.com (2603:10b6:5:86::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.7; Sat, 18 Dec
- 2021 21:48:59 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f4f8:9fc8:59d9:3345]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f4f8:9fc8:59d9:3345%3]) with mapi id 15.20.4823.013; Sat, 18 Dec 2021
- 21:48:59 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Thread-Topic: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Thread-Index: AQHX8zoAtPq2ZaVmhkCLrf0rndre56w3C3aAgAAFCICAAA9rAIAABT2AgAAC5YCAAAgCAIAATa2AgAAT84CAAAcTAIAAAkmAgAD8jICAADQXgA==
-Date:   Sat, 18 Dec 2021 21:48:59 +0000
-Message-ID: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
-References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com>
- <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
- <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
-In-Reply-To: <20211218184233.GB1432915@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.13)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 95b55ccf-1548-47fd-a42e-08d9c270331b
-x-ms-traffictypediagnostic: DM6PR05MB4073:EE_
-x-microsoft-antispam-prvs: <DM6PR05MB40737396696718378D700655D0799@DM6PR05MB4073.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: elLH+f8+9oJSlrOfS73QO0xtShZwb2BdTOu8B4c2GevdhbseZ9P6x4dYoLBStPdNvQ1LQSBRSeSsRQz4hPAI0zMnnJtFMKBGvDU0khIOODPyrarVpPJo1kBrcnPQ854v9IgNhxSb3NhZSW+7u9PcQ7FZWRUcTiiliUARqEgwffWXPXM8nIlWpgcqhqE5EmtKdU2dArIzxHrTu7b9xBD9NLe0rtFx88Eem56T9MSI8qq3YM4AGxRmZvu8cKCC1q4DOWQcccEMMOJmT8GsAmbPD7kpLNC2UosCc19b0jd/tfyuDk/aECTc8J+eghoOkFOi6q9WjES0V51nnzfDy7L/pHUW1ug4rxYlwJIys/3aoKSXLozR+JUQuWNEJhkNUjImmX6qTCfyF21omyu8Ed2kh8PIFfevQOEZoHv7w1PBKyCai9Tgbd6eU5zR45uldhhFdU3qVF9SuMD3qlaqtMQ7XHDowZEBHhcuGerRqa+6jQDOQUCDh0le81uS0AuIFNpfyrImTpMUW17qtuL7FMG3q1ydMNiTE6mw2T3TxH2UnlWOZiKl/RzcXewci292YTNfC6qp3Dybctkx9+eh8aNbECPzEj2no1v7Y7R9Pnk61n67X6X20SoAwmvqsAIw+dBHuNNFc/4GB5BTcDiBIY1E9WyBo57HznJONJOcd76Xr5JoKxFHU74svIsGw5PDKQNHcObgrnf/QurV96tz5/UIY4VZIDzFqMA79Zv1Iuza6ZiQWckO9ZanVGrzUuwR/mUL
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(7416002)(6512007)(66556008)(66476007)(38100700002)(4326008)(6506007)(53546011)(122000001)(6486002)(54906003)(6916009)(5660300002)(66946007)(76116006)(316002)(66446008)(8676002)(86362001)(64756008)(71200400001)(8936002)(38070700005)(36756003)(186003)(33656002)(26005)(2616005)(2906002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Lzc0cmoxeXJzZ2lQeEdtdTlMSTQ2bGhENmJUdUpxZ2FhMFRuRVF3NHhzVlM0?=
- =?utf-8?B?T04wS3oybmhjN0w3bmsrMytySXd5UzdHdWZ3SGFydHZQNE94c1ZSRVI4M3BI?=
- =?utf-8?B?UzJWaVIzeElTclFISGQ3UkwrcjYvamlxaDRKcjd5aVQ5RXlTOXZLeFVkRmFl?=
- =?utf-8?B?eFBCVWlTMm5mS2doZlRSUUkxYjAyaHVWbjVrcEhvcTNPc1p4V21seGFKVTJt?=
- =?utf-8?B?djVGWXBFYzlIaTU4TW5TN3FSYnpDYWR5a1BWN01Ydm9ZVUZmMzluWWJYUGhO?=
- =?utf-8?B?bnJIZXpvMmtXbURnQjkraUV4MzUzUU5aRWRTbHhjZWhKZkNJbFRKWi9vT3pK?=
- =?utf-8?B?QXB0eUxSTDNQam5HZHJlRjdMZm9aU3JyR2RMd09iemEvcVNOaFZaMnhvcDBl?=
- =?utf-8?B?WlRkUE5LUU9uQklxNGU3VVhuMTBjU3B2RkdGZmZaU3d5UFV3c1JaZU54Mm50?=
- =?utf-8?B?anEwU1k5VkZwNEgrVjljMEFZeFRYV25CVEZhV21UcmhLRXMreStwL3FPeVht?=
- =?utf-8?B?VnlNNjRkSmNlMWtId291WitCQ0RGMEZmaVN6akdnZkdqVHFvVEVVaWFVcW0w?=
- =?utf-8?B?aDdrRnRnajJnWDJ2QmZKSW9GaWxWeWpoRWNON2lxU2FDMDhsRSt3VENhdU1O?=
- =?utf-8?B?eHV2NGVYT0FRczZBc2FtWWdtYWhkdnJVaGw2dUVVd2ZLekprQXVOd2tYMGRJ?=
- =?utf-8?B?SElab1NzQ1JUSytWVFlKTEVvK3VZbUF1Mm5mUXBVSUdLVG8vNFF5MmdveGV4?=
- =?utf-8?B?MTloeVJ4TlBvbmRVZ0FSd2drRDBaWUl2TWhUMld3eWQyYkdxdnMxOTJGSlJR?=
- =?utf-8?B?K2xlM29IVUw3SUxGdWhUdVozYVRWdk9lekM2bkUrdmErbTIzVmFVVW9qSmlW?=
- =?utf-8?B?VXAzR1VkYlcxK3ZMaFZrTkZBeW9zbWg2dXhoR3JmbTZQTEllN1NzR1hWYUx3?=
- =?utf-8?B?b2MzelZSSWp6OFQxTzFqdEV0c2s0djBWeS96QnRtOVA3SDRlUjhTUmRDbTdu?=
- =?utf-8?B?NG1tWEJtQndYQlBKamxNRWticWpBUHNvb3FCYjFHVHN3aFFBS2Mwdmt4T0ZJ?=
- =?utf-8?B?OUdzZFFPRFpYai9xL2pRZllDWEtIZlh5cXVlME5mY3psSDRVVVZLL1dPZ3Iz?=
- =?utf-8?B?MFhrb3JTekQ2bk9kQ2tQYlUyVmJHdWFNNkFuaGR4TUFkT2w4RWFaMXpYcVFN?=
- =?utf-8?B?aS83Z2ZNRTRBT0c1cXhtdGJJWUU1WTFEN1QrVGs1MDdWVTB0UXlxRU5PQ2tW?=
- =?utf-8?B?Y2NQS2l0MU8vQks0Wjl6T2t1d2dMWFoxTzIwYm9VQnN5NEVtdldQOFR2ODhY?=
- =?utf-8?B?a2pFSHNHN3hrVktyM1F3RTRpNmxjL0RoNUJzaVFmYVZUUmtseHdMbW9sRFlR?=
- =?utf-8?B?ZmdORExqMUQ4ZE1tdmRQQTZ6akxRcWUzaEJQd1hLcG5uUG10L0s2OFpWeHov?=
- =?utf-8?B?NEJ3cnZERW8zYWxWTGVZd1JBV1dhSHl6OTlrdnhLRjJic1ljTTJxL2tOOCtR?=
- =?utf-8?B?dzVtbDBjQ0N0S1A2QkdUcG1Hajc2V1hNNFZxWHBDL3R6RTJVOEk2WW83bkli?=
- =?utf-8?B?U1ZPOVRCM0c5MlRVb29YWnBvWlRyeWdkb2pGUkQ4ZHNSeDB2MFZvQnVGOHcv?=
- =?utf-8?B?Ty9FbnVDZVoxWmUvdW9sTnRoRlJ6Vm9yRk1VWXpOZnhIL0l2MWd3WXhPVjNL?=
- =?utf-8?B?c1dzK2pDR0dGQURlMGQzeG1vTGdxZ1FRTCtOZWYvZ2tSK3E4REMveUFodzVM?=
- =?utf-8?B?SklsVHB0Vy9La1BIaVNLZmVKUXBNYTl1WXN6RkpZaFBrc2ZSUWtXeW5uN1lI?=
- =?utf-8?B?M0NReUU5TmpSaGNKOGhKWkN6VUFZWktTVW0ycmhiYU9kbml1REhjLzk3cGlU?=
- =?utf-8?B?clMvREZINXZ1WmMvZG8wT1VyZEFtejlWTkp6ZEJoL1FTcmdVWWk1dXhKUWRj?=
- =?utf-8?B?ZENSbUZZZ3lCZXo5LzExNXU1QnhUcDNPa1FSaERtMTAyYk9Db05XSHRDZmFz?=
- =?utf-8?B?SUFPL3Fsa2FveUYrQTBOTndneStqTlJKSldKTEJoNXlzcUkycWV2N3VMeXEv?=
- =?utf-8?B?Ym1qL3hzTjZRK05SVUhRZW8xQXBPdldpWEhrWjVEOTJiNlhXZ2lZNXpKV3da?=
- =?utf-8?B?N2labUtBSEM5dDlMaFdvQXQ2ekduNjhQc0VyYWYyU05PcTJVVnVnRDQ2NVBX?=
- =?utf-8?Q?vz+3PTw7NAofNLypzaVQ74Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <37EAF997986D8F4B84D3A1089D82E78D@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S232339AbhLRVsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 16:48:10 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:52717 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhLRVsJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 16:48:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639864090; x=1671400090;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Rs8loI9ghq4ptiU5VoEcOjqoY64u3XoCopT7hODJVKI=;
+  b=gBGzFYTzxdCh5tCyUUuLdYhj9yvlilQQGAc4g7B2X0GFySYXpiTMmuHR
+   6MbxxtNDpLSoCBa/00XSowvqZYZE+9p2wZzGuZjyMp5JnhsW4pFzUr2vm
+   u2O6exd0klvGQ3yJuVIjzONxTeqLKNrJTm5JQ7mJkNNiNEep9a5vzewzo
+   ktoIvruRv7QRZiBrFCC7Uln+eR6ciEbp8W2ydWgp+ME6Op9JJq8/KJyDg
+   E1pdohT0eFrUq3miTtW22BkVEi/IB0uRDcmT+GQr/dWZs74khiXrFpaZk
+   y/V+1lfnZiGDoxkX3BZ9ATrTjnw6nde0tTsYgHuF/YsWazyOUi/3zMOgG
+   w==;
+IronPort-SDR: +ypvsZPgOyTZk0+D9/yy7i7N5xQNImZHXyHzR8VK+uX83zgMsv4H9piqj410Mg27M3JGX8jfJe
+ vqxpkrG+eSiMv1bzjGmKrksoIJUrGFL++7Q/XGFIN8HGuqoFA27uiYyXsSiwJGGFuKRwBWz0XP
+ HHNzssU+zgoG2SqyqPkPibeg447qJnQuHeAelyTiBlEdev0YqvxxqVLdR8pb+WbWlbBY2uG2RQ
+ YlfIieN16VM8XCFNdp4J+LQh7XGJs6jCgvijqYoIb+ulP46LKEAfJb7h4mwsKzdlHBINhQgZCp
+ tZ13qMasLvWNHH2yNwK+g4B5
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="147699410"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Dec 2021 14:48:09 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sat, 18 Dec 2021 14:48:08 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Sat, 18 Dec 2021 14:48:06 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <linux@armlinux.org.uk>,
+        <f.fainelli@gmail.com>, <vivien.didelot@gmail.com>,
+        <vladimir.oltean@nxp.com>, <andrew@lunn.ch>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v8 0/9] net: lan966x: Add switchdev and vlan support
+Date:   Sat, 18 Dec 2021 22:49:37 +0100
+Message-ID: <20211218214946.531940-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95b55ccf-1548-47fd-a42e-08d9c270331b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2021 21:48:59.7336
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oF92iBiy2RTjHE5pSJtLkKMcbGzijUs+2J4LiJTj7LgIVJdz0xFLKsSluTgB8+S7AcXfwA1LESyMk6kpUpSPtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB4073
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gRGVjIDE4LCAyMDIxLCBhdCAxMDo0MiBBTSwgSmFzb24gR3VudGhvcnBlIDxqZ2dA
-bnZpZGlhLmNvbT4gd3JvdGU6DQo+IA0KPiBPbiBGcmksIERlYyAxNywgMjAyMSBhdCAwNzozODoz
-OVBNIC0wODAwLCBMaW51cyBUb3J2YWxkcyB3cm90ZToNCj4+IE9uIEZyaSwgRGVjIDE3LCAyMDIx
-IGF0IDc6MzAgUE0gTmFkYXYgQW1pdCA8bmFtaXRAdm13YXJlLmNvbT4gd3JvdGU6DQo+Pj4gDQo+
-Pj4gSW4gc3VjaCBhIGNhc2UsIEkgZG8gdGhpbmsgaXQgbWFrZXMgc2Vuc2UgdG8gZmFpbCB1ZmZk
-LXdwICh3aGVuDQo+Pj4gcGFnZV9jb3VudCgpID4gMSksIGFuZCBpbiBhIHByb3RvdHlwZSBJIGFt
-IHdvcmtpbmcgb24gSSBkbyBzb21ldGhpbmcNCj4+PiBsaWtlIHRoYXQuDQo+PiANCj4+IEFjay4g
-SWYgdWRkZi13cCBmaW5kcyBhIHBhZ2UgdGhhdCBpcyBwaW5uZWQsIGp1c3Qgc2tpcCBpdCBhcyBu
-b3QNCj4+IHdyaXRlLXByb3RlY3RhYmxlLg0KPj4gDQo+PiBCZWNhdXNlIHNvbWUgb2YgdGhlIHBp
-bm5lcnMgbWlnaHQgYmUgd3JpdGluZyB0byBpdCwgb2YgY291cnNlIC0ganVzdA0KPj4gbm90IHRo
-cm91Z2ggdGhlIHBhZ2UgdGFibGVzLg0KPiANCj4gVGhhdCBkb2Vzbid0IGFkZHJlc3MgdGhlIHFl
-bXUgdXNlIGNhc2UgdGhvdWdoLiBUaGUgUkRNQSBwaW4gaXMgdGhlDQo+ICdjb2hlcmVudCByL28g
-cGluJyB3ZSBkaXNjdXNzZWQgYmVmb3JlLCB3aGljaCByZXF1aXJlcyB0aGF0IHRoZSBwYWdlcw0K
-PiByZW1haW4gdW4td3JpdGUtcHJvdGVjdGVkIGFuZCB0aGUgSFcgRE1BIGlzIHJlYWQgb25seS4N
-Cj4gDQo+IFRoZSBWRklPIHBpbiB3aWxsIGVuYWJsZSBkaXJ0eSBwYWdlIHRyYWNraW5nIGluIHRo
-ZSBzeXN0ZW0gSU9NTVUgc28gaXQNCj4gZ2V0cyB0aGUgc2FtZSBlZmZlY3QgZnJvbSBxZW11J3Mg
-cGVyc3BlY3RpdmUgYXMgdGhlIENQVSBXUCBpcyBkb2luZy4NCj4gDQo+IEluIHRoZXNlIG9wZXJh
-dGlvbnMgZXZlcnkgc2luZ2xlIHBhZ2Ugb2YgdGhlIGd1ZXN0IHdpbGwgYmUgcGlubmVkLCBzbw0K
-PiBza2lwIGl0IGp1c3QgbWVhbnMgdXNlcmZhdWx0IGZkIHdwIGRvZXNuJ3Qgd29yayBhdCBhbGwu
-DQo+IA0KPiBRZW11IG5lZWRzIHNvbWUgc29sdXRpb24gdG8gYmUgYWJsZSB0byBkaXJ0eSB0cmFj
-ayB0aGUgQ1BVIG1lbW9yeSBmb3INCj4gbWlncmF0aW9uLi4NCg0KTXkgYmFkLiBJIG1pc3VuZGVy
-c3Rvb2QgdGhlIHNjZW5hcmlvLg0KDQpZZXMsIEkgZ3Vlc3MgdGhhdCB5b3UgcGluIHRoZSBwYWdl
-cyBlYXJseSBmb3IgUkRNQSByZWdpc3RyYXRpb24sIHdoaWNoDQppcyBhbHNvIHNvbWV0aGluZyB5
-b3UgbWF5IGRvIGZvciBJTy11cmluZyBidWZmZXJzLiBUaGlzIHdvdWxkIHJlbmRlcg0KdXNlcmZh
-dWx0ZmQgdW51c2FibGUuDQoNCkkgZG8gbm90IHNlZSBob3cgaXQgY2FuIGJlIHNvbHZlZCB3aXRo
-b3V0IGN1c3RvbSwgcG90ZW50aWFsbHkNCmNvbXBsaWNhdGVkIGxvZ2ljLCB3aGljaCB0aGUgcGFn
-ZV9jb3VudCgpIGFwcHJvYWNoIHdhbnRzIHRvIGF2b2lkLg0KDQpUaGUgb25seSB0aGluZyBJIGNh
-biB0aGluayBvZiBpcyByZXF1aXJpbmcgdGhlIHBpbm5lZCByZWdpb25zIHRvIGJlDQpmaXJzdCBt
-YWR2aXNl4oCZZCB3aXRoIE1BRFZfRE9OVEZPUksgYW5kIG5vdCBDT1figJlpbmcgaW4gc3VjaCBj
-YXNlLg0KQnV0IHRoaXMgd291bGQgYnJlYWsgZXhpc3RpbmcgY29kZSB0aG91Z2guDQoNCg==
+This patch series extends lan966x with switchdev and vlan support.
+The first patches just adds new registers and extend the MAC table to
+handle the interrupts when a new address is learn/forget.
+
+v7->v8:
+- remove extra mac learn when the port leaves the bridge
+- replace memcpy with ether_addr_copy
+- change the order of operations in lan966x_switch_driver_init/exit
+- refactor lan966x_port_bridge_flags
+
+v6->v7:
+- fix build issues when compiling as a module
+
+v5->v6:
+- fix issues with the singletones, they were not really singletons
+- simplify the case where lan966x ports are added to bridges with foreign
+  ports
+- drop the cases NETDEV_PRE_UP and NETDEV_DOWN
+- fix the change of MAC address
+- drop the callbacks .ndo_set_features, .ndo_vlan_rx_add_vid,
+  .ndo_vlan_rx_kill_vid
+- remove duplicate code when port was added in a vlan, the MAC entries
+  will be added by the fdb
+
+v4->v5:
+- make the notifier_block from lan966x to be singletones
+- use switchdev_handle_port_obj_add and switchdev_handle_fdb_event_to_device
+  when getting callbacks in the lan966x
+- merge the two vlan patches in a single one
+
+v3->v4:
+- split the last patch in multiple patches
+- replace spin_lock_irqsave/restore with spin_lock/spin_unlock
+- remove lan966x_port_change_rx_flags because it was copying all the frames to
+  the CPU instead of removing all RX filters.
+- implement SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS
+- remove calls to __dev_mc_unsync/sync as they are not needed
+- replace 0/1 with false/true
+- make sure that the lan966x ports are not added to bridges that have other
+  interfaces except lan966x
+- and allow the lan966x ports to be part of only the same bridge.
+
+v2->v3:
+- separate the PVID used when the port is in host mode or vlan unaware
+- fix issue when the port was leaving the bridge
+
+v1->v2:
+- when allocating entries for the mac table use kzalloc instead of
+  devm_kzalloc
+- also use GFP_KERNEL instead of GFP_ATOMIC, because is never called
+  in atomic context
+- when deleting an mac table entry, the order of operations was wrong
+- if ana irq is enabled make sure it gets disabled when the driver is
+  removed
+
+Horatiu Vultur (9):
+  net: lan966x: Add registers that are used for switch and vlan
+    functionality
+  dt-bindings: net: lan966x: Extend with the analyzer interrupt
+  net: lan966x: add support for interrupts from analyzer
+  net: lan966x: More MAC table functionality
+  net: lan966x: Remove .ndo_change_rx_flags
+  net: lan966x: Add support to offload the forwarding.
+  net: lan966x: Add vlan support.
+  net: lan966x: Extend switchdev bridge flags
+  net: lan966x: Extend switchdev with fdb support
+
+ .../net/microchip,lan966x-switch.yaml         |   2 +
+ .../net/ethernet/microchip/lan966x/Kconfig    |   1 +
+ .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
+ .../ethernet/microchip/lan966x/lan966x_fdb.c  | 244 +++++++++
+ .../ethernet/microchip/lan966x/lan966x_mac.c  | 342 +++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_main.c | 106 +++-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  64 ++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h | 129 +++++
+ .../microchip/lan966x/lan966x_switchdev.c     | 471 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_vlan.c | 312 ++++++++++++
+ 10 files changed, 1645 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_fdb.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
+
+-- 
+2.33.0
+

@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B05479B67
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64425479B72
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 15:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbhLROfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 09:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbhLROfH (ORCPT
+        id S233464AbhLROlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 09:41:46 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:21274 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230522AbhLROlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 09:35:07 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77473C06173F
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:35:07 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d10so10894223lfg.6
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 06:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pYgC6UbioLpLUDdPygjohyGooIms1qIM+qPuyGqET70=;
-        b=rHhgE6Zlotk8HdSmidDY7wBJeHWSp00Vfo+Aqyou5BgyXPRyKu8LnPMUgXmkKkflzx
-         udb3hkJAw6YSaGTz2tvs0AUdbG9qxcputvPHcQJHMxINHngDuOsk5v1e2RDCfUnB1Ab8
-         Km2eL88kgKvUp1qHFQIF+u/2wiYm+aqXrJo5w5NWU3ewPCL+RZWQvfMM8aVSybzkQWv2
-         YznjW4G5pZEtM+9rqSNDOTSDoor1uxwRfciKnnPsd/l/oMeQiT+BBMLp7QmdgammQt4/
-         5yoUrYl7NRtmvNpp4QCxknwd6fmsh7MmHlYOIuMeHEPl2JNzg5WgzpB/pIaguDzdx6I4
-         IGyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pYgC6UbioLpLUDdPygjohyGooIms1qIM+qPuyGqET70=;
-        b=78gFZ45Zvn+M/N8zh//Xzs5lecBlRaDEwIHC4AVp1CcbtB2rlbXmArZEQN5GrpzheF
-         i/T+s08uvu7kvUhsyjQTLq/i5018sSnLs5YUqJV8wU0TgAXH5yNN2Hd6r0Mj15gPtkgR
-         RRzvqel7y9cGmt83pM2bIL9PcdVWinTaeYYXBvGbVvoWf0mIWHer1f1mbhxiIhdfTSFO
-         rY56tooNaGDZAbrpqpd1JBQeMZPG25A5DMMbMH0O8lHURx9IrgLj0LQunrZcIJ4jHJRX
-         7uOPMDeK1XJejjr5dHcNzDRUodwAeok+IHypmfnAcMiFwiuWmXxGGGp3xFkTEU5gX4FN
-         pwaA==
-X-Gm-Message-State: AOAM530Ac1Bu+ae29+ezHFELVXLKGiwbUZ3vMCmOe/aySReRw2g9JaQR
-        Y1kQI0R5+jSPOvErKVdO2/Bbog==
-X-Google-Smtp-Source: ABdhPJyJfweji7/uZmtDXAtvhhz48SwfdSecz//NO1/1kZj2ekmyONM2NijthLcvedNhQHMMoHkBbQ==
-X-Received: by 2002:a05:6512:ac9:: with SMTP id n9mr462354lfu.460.1639838105757;
-        Sat, 18 Dec 2021 06:35:05 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id s4sm1728641lfp.198.2021.12.18.06.35.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 06:35:05 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 98E2D103A58; Sat, 18 Dec 2021 17:35:12 +0300 (+03)
-Date:   Sat, 18 Dec 2021 17:35:12 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 04/11] mm: thp: simlify total_mapcount()
-Message-ID: <20211218143512.luh7jnd4y7it2yun@box.shutemov.name>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-5-david@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217113049.23850-5-david@redhat.com>
+        Sat, 18 Dec 2021 09:41:45 -0500
+X-IronPort-AV: E=Sophos;i="5.88,216,1635174000"; 
+   d="scan'208";a="104382932"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 18 Dec 2021 23:41:43 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 85B6D4006DEE;
+        Sat, 18 Dec 2021 23:41:41 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
+Date:   Sat, 18 Dec 2021 14:41:36 +0000
+Message-Id: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:30:42PM +0100, David Hildenbrand wrote:
-> Let's simplify a bit, returning for PageHuge() early and using
-> head_compound_page() as we are only getting called for HEAD pages.
-> 
-> Note the VM_BUG_ON_PAGE(PageTail(page), page) check at the beginning of
-> total_mapcount().
-> 
-> This is a preparation for further changes.
-> 
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq_optional().
 
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Hi,
+
+Dropping usage of platform_get_resource() was agreed based on
+the discussion [0].
+
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+---
+ drivers/thermal/rcar_thermal.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index b49f04daaf47..e4c7bc1bf7ef 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	struct rcar_thermal_common *common;
+ 	struct rcar_thermal_priv *priv;
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res, *irq;
++	struct resource *res;
+ 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+ 	int mres = 0;
+ 	int i;
+@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	pm_runtime_get_sync(dev);
+ 
+ 	for (i = 0; i < chip->nirqs; i++) {
+-		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+-		if (!irq)
++		int irq;
++
++		irq = platform_get_irq_optional(pdev, i);
++		if (irq <= 0 && irq != -ENXIO) {
++			ret = irq ? irq : -ENXIO;
++			goto error_unregister;
++		}
++		if (irq == -ENXIO)
+ 			continue;
++
+ 		if (!common->base) {
+ 			/*
+ 			 * platform has IRQ support.
+@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 			idle = 0; /* polling delay is not needed */
+ 		}
+ 
+-		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
++		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+ 				       IRQF_SHARED, dev_name(dev), common);
+ 		if (ret) {
+ 			dev_err(dev, "irq request failed\n ");
 -- 
- Kirill A. Shutemov
+2.17.1
+

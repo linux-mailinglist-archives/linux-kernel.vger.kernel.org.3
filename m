@@ -2,177 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA83479C2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA7B479C33
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 19:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbhLRStU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 13:49:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22554 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233896AbhLRStT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 13:49:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639853358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhRiwrLblv6LrtKBUtcukWvIk/VX3NESiRZY2ifPa0E=;
-        b=PuCGx+yr/W+ENVR91wIpfdA/oBVOL0WN2cZaDCGPHoP7nObmu5UipjYHa9KojgD9lpGPiO
-        Ufzbwe9gr+yL0myobSv4mfyuusKP00/XQ+ciwRk/eI+P5mIZykPpC2sOJhTTGTkfy1x4Jw
-        EqImgqOmxmc9JAleA9AT70YBgntMHmU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-tw9NQyNVMS-mRbZjP0tetQ-1; Sat, 18 Dec 2021 13:49:16 -0500
-X-MC-Unique: tw9NQyNVMS-mRbZjP0tetQ-1
-Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1681692wrb.16
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 10:49:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=uhRiwrLblv6LrtKBUtcukWvIk/VX3NESiRZY2ifPa0E=;
-        b=AgetD29ZZTYz/E+k+DrizSln9Er9Y9DrLptUXkpLoyAabzbPxHNPNRZMIyn5TAlLQm
-         oVxpWGgynmKQ/vaUa9jgm6Q6n+FGdj3X6LjAkLZSwJgIfoJTxrkSMUpXbp3bDykJQZcg
-         DopnxStwnqu7MbLvWrANKFMlX8kzXNXeAPCPkxjTGZQpPm+1FgRY5565KfNDyqYqShP5
-         t4h9Hi6GXh2ZndinhvckF5VAM7m7rdNtD/06cJVdsKp/rNqGz2momb6hGvQOQ8JtXGp9
-         7Pa/lMroCnr7N6HeWLs/QI8cwwZV+85JOQX5jYk6g5Nh+5mYBZXapiDbRqwyMpi2XExC
-         V44w==
-X-Gm-Message-State: AOAM530BqJmmReEP48iDFApWdTh9dYXxjKMl0n2598q2nfrx1oQon6r8
-        ng2XFNv7s5aLZ/9zAK3L0UN3+X6QRy5R+vQMLXmnp68noDUo4lrCLwl5ov0sNl6o+GFI7Mvn6V3
-        mIcwAPpDqhQ/KVNxWbZf9um6t
-X-Received: by 2002:adf:ec09:: with SMTP id x9mr7147741wrn.111.1639853355587;
-        Sat, 18 Dec 2021 10:49:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDFt+1rFxfXccOI3RI6oyMbenaBedcvYZKSfxCuOqeF99P3goaUxXr5SX8S8gOs1yQJRRu9w==
-X-Received: by 2002:adf:ec09:: with SMTP id x9mr7147714wrn.111.1639853355380;
-        Sat, 18 Dec 2021 10:49:15 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c6703.dip0.t-ipconnect.de. [91.12.103.3])
-        by smtp.gmail.com with ESMTPSA id s189sm12480345wme.0.2021.12.18.10.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 10:49:14 -0800 (PST)
-Message-ID: <6c570757-018f-f6bb-a0fc-2c0d4a845201@redhat.com>
-Date:   Sat, 18 Dec 2021 19:49:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S233913AbhLRSx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 13:53:26 -0500
+Received: from relay.sw.ru ([185.231.240.75]:47182 "EHLO relay.sw.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231274AbhLRSxY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 13:53:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=virtuozzo.com; s=relay; h=MIME-Version:Message-Id:Date:Subject:From:
+        Content-Type; bh=YFo/8Hpib8VONfO7wmfYjOxhyZQ5UGqv8EgWQmc4i/A=; b=Gjg8iMb9BPLW
+        7UlzROKYWa58VdNyz2XLDFWTXIoD3uhlMsSclSMRoHvHFKbZfINpPVkaNPCiDIU4LA12fDFZtp6Ij
+        McvcMIjclTfx35VR5mCk7RMuzEgszspgGHPTBVrfIrhcUEe9M7XN6ErcJRM5jYmiz6i5rbVXXrlXS
+        M+GgI=;
+Received: from [192.168.15.79] (helo=cobook.home)
+        by relay.sw.ru with esmtp (Exim 4.94.2)
+        (envelope-from <nikita.yushchenko@virtuozzo.com>)
+        id 1myepD-003qf7-A6; Sat, 18 Dec 2021 21:52:55 +0300
+From:   Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+To:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com>
- <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
- <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211218184233.GB1432915@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, kernel@openvz.org
+Subject: [PATCH/RFC v2 0/3] tlb: mmu_gather: use batched table free if possible
+Date:   Sat, 18 Dec 2021 21:52:03 +0300
+Message-Id: <20211218185205.1744125-1-nikita.yushchenko@virtuozzo.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.12.21 19:42, Jason Gunthorpe wrote:
-> On Fri, Dec 17, 2021 at 07:38:39PM -0800, Linus Torvalds wrote:
->> On Fri, Dec 17, 2021 at 7:30 PM Nadav Amit <namit@vmware.com> wrote:
->>>
->>> In such a case, I do think it makes sense to fail uffd-wp (when
->>> page_count() > 1), and in a prototype I am working on I do something
->>> like that.
->>
->> Ack. If uddf-wp finds a page that is pinned, just skip it as not
->> write-protectable.
->>
->> Because some of the pinners might be writing to it, of course - just
->> not through the page tables.
-> 
-> That doesn't address the qemu use case though. The RDMA pin is the
-> 'coherent r/o pin' we discussed before, which requires that the pages
-> remain un-write-protected and the HW DMA is read only.
-> 
-> The VFIO pin will enable dirty page tracking in the system IOMMU so it
-> gets the same effect from qemu's perspective as the CPU WP is doing.
-> 
-> In these operations every single page of the guest will be pinned, so
-> skip it just means userfault fd wp doesn't work at all.
-> 
-> Qemu needs some solution to be able to dirty track the CPU memory for
-> migration..
-> 
->> So that sounds like the right thing to do. I _think_ we discussed this
->> the last time this came up. I have some dim memory of that. Jason,
->> ring a bell?
-> 
-> We talked about clear_refs alot, but it was never really clear the use
-> case, I think. Plus that discussion never finialized to anything.
-> 
-> David's latest summary seems accurate, if I paraphrase at a high
-> level, Linus's approach always does enough COWs but might do extra and
-> David's approach tries to do exactly the right number of COWs.
-> 
-> It looks like to have the same functionality with Linus's approach we
-> need to have a way for userspace to opt out of COW and work in an
-> entirely deterministic non-COW world. WP&GUP can never work together
-> otherwise which leaves qemu stranded.
-> 
-> Or, we follow David's approach and make COW be precise and accept the
-> complexity..
+In mmu_gather code, the final table free in __tlb_remove_table_free()
+executes a loop, calling arch hook __tlb_remove_table() to free each table
+individually.
 
-Thanks Jason,
+Several architectures use free_page_and_swap_cache() as their
+__tlb_remove_table() implementation. Calling that in loop results into
+individual calls to put_page() for each page being freed.
 
-I would really enjoy us discussion how we can eventually make it
-*precise* COW model work instead of living with a broken MM subsystem,
-as all the reproducers show. IMHO we should stop throwing more band-aids
-at it.
+This patchset refactors the code to issue a single release_pages() call
+in this case. This is expected to have better performance, especially when
+memcg accounting is enabled.
 
-Is my approach complete? Sounds like it's not because Linus raised a
-good point that the mapcount in the current state might not be stable
-for our use case. I'm very happy that he reviewed this series.
+Nikita Yushchenko (3):
+  tlb: mmu_gather: introduce CONFIG_MMU_GATHER_TABLE_FREE_COMMON
+  mm/swap: introduce free_pages_and_swap_cache_nolru()
+  tlb: mmu_gather: use batched table free if possible
 
-I have some ideas to make the "_mapcount" of anonymous pages express
-exactly that: how many active (PTE mapped) users do we have and how many
-inactive (swap entries, migration entries) do we have. We can certainly
-discuss any such approaches, but first there should be the will to try
-getting it right ...
+ arch/Kconfig                 |  3 +++
+ arch/arm/Kconfig             |  1 +
+ arch/arm/include/asm/tlb.h   |  5 -----
+ arch/arm64/Kconfig           |  1 +
+ arch/arm64/include/asm/tlb.h |  5 -----
+ arch/x86/Kconfig             |  1 +
+ arch/x86/include/asm/tlb.h   | 14 --------------
+ include/asm-generic/tlb.h    |  5 +++++
+ include/linux/swap.h         |  5 ++++-
+ mm/mmu_gather.c              | 25 ++++++++++++++++++++++---
+ mm/swap_state.c              | 29 ++++++++++++++++++++++-------
+ 11 files changed, 59 insertions(+), 35 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 

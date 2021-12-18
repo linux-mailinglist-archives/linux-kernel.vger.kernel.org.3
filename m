@@ -2,123 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C13EF479AAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF11F479ABA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Dec 2021 13:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbhLRMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 07:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbhLRMFR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 07:05:17 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622ECC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:05:17 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v64so13961176ybi.5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 04:05:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=+Y2CW3FU7Np6BiQVUMozXDENdMi4If2dH0S2b0JuT48=;
-        b=TRhdVPbcE1v4Uet2kvDbG9a1cqrIpk8rj+AFFeJaDX+Vy/u90pDr3trkiYrTHFhtQt
-         1aZuONonNTbphj6Oob0psqF3NFkfHLZ8ib5utsg2Tp4jPIMUYMwSG2I5QlmnIkkRYpE/
-         MWYIK6GWYRrJTYS3vqq24ars29b59PGArWuHsR76YcrR8hGXZH10/9c1G7Wk3mSRgPWC
-         Pue9loB7TvyZVSmtGfgeWVYc2s9BE05dWGRBuYptwLzJfCOXe+H0SdmY5B1eqTx7A27S
-         qDu1gbUC3ODlGu3Sm8tdgj9ihY+i8H2e3smTzycHfdQ/8EDiHekY6NlPxYeSzCe7edBE
-         dosA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=+Y2CW3FU7Np6BiQVUMozXDENdMi4If2dH0S2b0JuT48=;
-        b=qPZQGodxV9y6Vs3v4K0hYIhV7RGElGSOCl6T9Te2HNgA1yC/VZynrviuDXxKpI3ET2
-         phdjg8nHHEyZgMJTSQ1UJnQ3SEu66NUL8vb0IiSi6/n/mc3jhylHL3ANCkgEbb+ZHts1
-         hCaBNEZGpLB/J3OUVX4mUzfoysUsl12BGA4f5ZDHJsNPr5HH3anlYDBG9fGZwbjx9dKd
-         HuccHwcqwaveUWIPA7+fHxMGiwkBaxsnY7Nu8gakQHC9H7lb0nTHhr2uEo/bO3JGmjhX
-         PImt450WqffFeMhOf4tzFqqjT22BpAc9cIDQ4RadPRAyAIl7WnYBCYdyzvPCw03GTIYn
-         C99Q==
-X-Gm-Message-State: AOAM533axS37BZPSQtujnulK5T0wWj37khfhf63J8mK1DhQKjrz77uks
-        vPwyF5VK2ol8k4l6zJMiHRbMdaR+mRR42sFq3ZY=
-X-Google-Smtp-Source: ABdhPJxsXSKcE3PkdTpEk3KNtcMpHh1DCRJSx34wVHSf7RM5WP+0IK/ChcJEJQV2PdjEXs3avaDUPNQ82G4HtLPULcQ=
-X-Received: by 2002:a25:2c97:: with SMTP id s145mr9988262ybs.408.1639829116510;
- Sat, 18 Dec 2021 04:05:16 -0800 (PST)
+        id S231789AbhLRM35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 07:29:57 -0500
+Received: from mail1.perex.cz ([77.48.224.245]:40224 "EHLO mail1.perex.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230159AbhLRM34 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 07:29:56 -0500
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id DD70DA003F;
+        Sat, 18 Dec 2021 13:29:54 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz DD70DA003F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1639830594; bh=b6Fmz+wyxMl12NKeEZ4nicex/pDNEYbXV2fvvJpGl88=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=CtfIb210wnTBfmzIKu220oPA2XBRQZ9BKIS/KYiOqgxTVl5OgqgRYGtGhPQc8ZE+U
+         p+owvUTNewy49/G4hBmq3OekDhvHKgjCliNzzSyQ9ENkceUhjF1mYs88rShu84T5oD
+         LOSYO3C3F6nv+Gyz0nyij1hfzecCQzGTkSyZQ4zU=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Sat, 18 Dec 2021 13:29:43 +0100 (CET)
+Message-ID: <9603b40e-d038-1252-d613-8ece55029f07@perex.cz>
+Date:   Sat, 18 Dec 2021 13:29:43 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7000:8caa:0:0:0:0 with HTTP; Sat, 18 Dec 2021 04:05:16
- -0800 (PST)
-Reply-To: cristinacampeell@outlook.com
-From:   "Mrs. Cristina Campbell" <john69345@gmail.com>
-Date:   Sat, 18 Dec 2021 12:05:16 +0000
-Message-ID: <CAFEch-B8EEnLFHp322buRpRNexjCghkwJWTM97u4LyXTUVAfpw@mail.gmail.com>
-Subject: =?UTF-8?B?0KLRiyDQvNC+0LbQtdGI0Ywg0LzQvdC1INC/0L7QvNC+0YfRjD8=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [syzbot] KMSAN: uninit-value in snd_rawmidi_ioctl
+Content-Language: en-US
+To:     syzbot <syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com>,
+        alsa-devel@alsa-project.org, broonie@kernel.org, coding@diwic.se,
+        colin.king@intel.com, glider@google.com, joe@perches.com,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tiwai@suse.com
+References: <0000000000004255b405d369cd72@google.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <0000000000004255b405d369cd72@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lieber geliebter,
+On 18. 12. 21 12:17, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11791d89b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=88412ee8811832b00dbe
+> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a7abf9b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172410b9b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+88412ee8811832b00dbe@syzkaller.appspotmail.com
+> 
+> =====================================================
+> BUG: KMSAN: uninit-value in snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
+>   snd_rawmidi_ioctl+0xf1e/0x1330 sound/core/rawmidi.c:887
 
-Bitte lesen Sie dies langsam und sorgf=C3=A4ltig durch, da es sich
-m=C3=B6glicherweise um eine der wichtigsten E-Mails handelt, die Sie jemals
-erhalten. Ich bin Mrs. Cristina Campbell, ich war mit dem verstorbenen
-Edward Campbell verheiratet. Er arbeitete fr=C3=BCher f=C3=BCr die Shell
-Petroleum Development Company London und war auch ein erfahrener
-Bauunternehmer in der Region Ostasien. Er starb am Montag, 31. Juli
-2003 in Paris. Wir waren sieben Jahre ohne Kind verheiratet.
+Nice catch. I wonder why the problem was not detected by tests. The patch 
+bellow should initialize the user_pversion variable:
 
-W=C3=A4hrend Sie dies lesen, m=C3=B6chte ich nicht, dass Sie Mitleid mit mi=
-r
-haben, denn ich glaube, dass jeder eines Tages sterben wird. Bei mir
-wurde Speiser=C3=B6hrenkrebs diagnostiziert und mein Arzt sagte mir, dass
-ich aufgrund meiner komplizierten Gesundheitsprobleme nicht lange
-durchhalten w=C3=BCrde.
+diff --git a/sound/core/rawmidi.c b/sound/core/rawmidi.c
+index 6f30231bdb88..befa9809ff00 100644
+--- a/sound/core/rawmidi.c
++++ b/sound/core/rawmidi.c
+@@ -447,6 +447,7 @@ static int snd_rawmidi_open(struct inode *inode, struct 
+file *file)
+                 err = -ENOMEM;
+                 goto __error;
+         }
++       rawmidi_file->user_pversion = 0;
+         init_waitqueue_entry(&wait, current);
+         add_wait_queue(&rmidi->open_wait, &wait);
+         while (1) {
 
-Ich m=C3=B6chte, dass Gott mir gegen=C3=BCber barmherzig ist und meine Seel=
-e
-annimmt, deshalb habe ich beschlossen, Almosen an
-Wohlt=C3=A4tigkeitsorganisationen / Kirchen / buddhistische Tempel /
-Moscheen / mutterlose Babys / weniger Privilegierte und Witwen zu
-geben, da ich m=C3=B6chte, dass dies eine der letzten guten Taten ist Ich
-tue es auf der Erde, bevor ich sterbe. Bisher habe ich Geld an einige
-Wohlt=C3=A4tigkeitsorganisationen in Schottland, Wales, Panama, Finnland
-und Griechenland verteilt. Jetzt, wo sich mein Gesundheitszustand so
-stark verschlechtert hat, kann ich das nicht mehr selbst machen.
+I'll send the path in the proper format ASAP.
 
-Ich habe einmal Mitglieder meiner Familie gebeten, eines meiner Konten
-zu schlie=C3=9Fen und das Geld, das ich dort habe, an
-Wohlt=C3=A4tigkeitsorganisationen in =C3=96sterreich, Luxemburg, Deutschlan=
-d,
-Italien und der Schweiz zu verteilen, sie weigerten sich und behielten
-das Geld f=C3=BCr sich. Daher vertraue ich nicht sie nicht mehr, da sie
-anscheinend nicht mit dem zufrieden sind, was ich ihnen hinterlassen
-habe. Das letzte von meinem Geld, von dem niemand wei=C3=9F, ist die
-riesige Bareinzahlung von sechs Millionen US-Dollar $ 6.000.000,00,
-die ich bei einer Bank in Thailand habe, bei der ich den Fonds
-hinterlegt habe. Ich m=C3=B6chte, dass Sie diesen Fonds f=C3=BCr
-Wohlt=C3=A4tigkeitsprogramme verwenden und die Menschheit in Ihrem Land
-unterst=C3=BCtzen, wenn Sie nur aufrichtig sind.
+					Jaroslav
 
-Ich habe diese Entscheidung getroffen, weil ich kein Kind habe, das
-dieses Geld erben wird. Ich habe keine Angst vor dem Tod, daher wei=C3=9F
-ich, wohin ich gehe. Ich wei=C3=9F, dass ich im Scho=C3=9F des Herrn sein w=
-erde.
-Sobald ich Ihre Antwort erhalten habe, werde ich Ihnen den Kontakt der
-Bank mitteilen und Ihnen eine Vollmacht ausstellen, die Sie als
-urspr=C3=BCnglichen Beg=C3=BCnstigten dieses Fonds erm=C3=A4chtigt, dieses
-Wohlt=C3=A4tigkeitsprogramm sofort in Ihrem Land zu beginnen.
-
-Nur ein Leben, das f=C3=BCr andere gelebt wird, ist ein lebenswertes Leben.
-Ich m=C3=B6chte, dass Sie immer f=C3=BCr mich beten. Jede Verz=C3=B6gerung =
-Ihrer
-Antwort wird mir Raum geben, eine andere Person zu diesem Zweck zu
-finden. Wenn Sie kein Interesse haben, bitte ich um Entschuldigung f=C3=BCr
-die Kontaktaufnahme. Du kannst mich mit meiner privaten E-Mail
-erreichen oder mir antworten: (cristinacampeell@outlook.com).
-
-Danke,
-Dein,
-Frau Cristina Campbell
-Email; cristinacampeell@outlook.com
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.

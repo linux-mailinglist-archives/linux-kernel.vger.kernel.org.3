@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA5047A1EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 20:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2923947A1F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 20:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbhLSTYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 14:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S236465AbhLSTgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 14:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236385AbhLSTY3 (ORCPT
+        with ESMTP id S232361AbhLSTgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 14:24:29 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC87C061574;
-        Sun, 19 Dec 2021 11:24:28 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so1306039edd.8;
-        Sun, 19 Dec 2021 11:24:28 -0800 (PST)
+        Sun, 19 Dec 2021 14:36:47 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C87FC061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 11:36:47 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 196so3312043pfw.10
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 11:36:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pkPP4iGTlDRZ+kDc6mJgYTbPlXlrZEAvJ9YKfJfOh+c=;
-        b=SbWLQq+gvU7j0NgEfZ0+A7Ff48++o1ViPctGvPejpB5i+4v98uGraFgqIwcN7Wylh5
-         6CrNVfiJip39etYOgIOPXOj43qqsizMFGkvMVKSB0G1lQEvvBQ+VbEijR8LdiQMsSlKs
-         Iro83rS1xDPGPJPptqtTuswIxnP0dX/2m4a5y5g59BOFhJ3CKyR+0IPCbUEj7hOKT91W
-         tqDZCg9tlyynfHBHBzqmPHej1GMjcvfrNMSyNoRvwU4DJhvUxSKz4RR5mJaf+wEgeXfZ
-         X5l628OUPi5Y9QfMNP5E+2lXWUN80EHmUka0sfb9D7w/7/GZ7mgjBmFWedtNW/20Se5D
-         KtDg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cl6NxV+zATZ2semIbLlLmt5qBY8ZUZt/u+uJChmMDWw=;
+        b=Vt9GlxwdmkDhSp3duTLMNAGhxRWQqHFNDTmAXh4iiEs/+Df7bbFCNH7FNdRoLXHOXZ
+         vfJ2mZ7OpwLvdrUMP9EY50USDnY23hOsaJ66Wn9uYjTSb5DZNw4c3+bUPP5aWxncUo0u
+         tLDpzJAJZoNZzHnWbducJDTeFGrSGhH5R+bopvDuBRI8OhOWX5SpYMWSV9aGFsRAE9WY
+         RsCnnawQTkZUpCItjz6IL27r+qKiP3pPfzJi73cUvYe12G+XYfpelFRdCahfds4X3a2j
+         1iyg5eNUGt9LNaM/uyMoUBd+RbsqnC8UUdsJMErj3ARZVF9M1+8Q2p0YWQV7PFo5ipXm
+         DZIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=pkPP4iGTlDRZ+kDc6mJgYTbPlXlrZEAvJ9YKfJfOh+c=;
-        b=EFJ40pF2qLpZa8O+e+tcnA7Mo8953f9+iyEPs2Xgovmg5SUgPevmpem3JU4tt2yJIG
-         GTVM9Y+Tbd6qWojzWz8oOEc4t1G8kOumwyADuz+jiplCkT4rUpwdmgNem1ZmLjg0wCEF
-         L3WxpyE6tu7yc5nU8AG8aN5JgHfIzrAhCVeBpTQCF8+GIDWIvpt/41gWzIe5+VrIOPXd
-         3KFj5pu8xZErvXtIB5By6lCh5wrMntZCtOiYbHmr3jbHwdEAmVFz5xP1ZIOZOvNmW+9k
-         LlDKquMNz3L15AfV/poaa2hps7jU+5i7PJK+B9oliYZ45B7uYpWbgwurPuowANuxxxqV
-         eRUA==
-X-Gm-Message-State: AOAM530q4rnURnHxSFRcEi3tOWqTuQDldjBYTCkv/y5c55ZMdE5nW5Ot
-        UAHZrPTDR2HAH/Xwk9FYMcvKZiYBfRI=
-X-Google-Smtp-Source: ABdhPJxpBEqyMSRaAXBbgedrP8Kho8c5RRjOq3U0R1tLuCxnaVXBD3G3bGS0eeYkGTfWh4W5PWtwYQ==
-X-Received: by 2002:a05:6402:254b:: with SMTP id l11mr12812265edb.225.1639941867330;
-        Sun, 19 Dec 2021 11:24:27 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id c13sm4637209ejj.144.2021.12.19.11.24.25
+        bh=cl6NxV+zATZ2semIbLlLmt5qBY8ZUZt/u+uJChmMDWw=;
+        b=sMfFiQbfhv3hgflghFNDK/XP+HHRrGF28oWqYUuKBbhcVxhcaSS+/2PlmYLHHraSzQ
+         /xeWopYkD6BXpYj7pyydXzZWP1p6rXSpR5I/+YGw8w3HtpXGOsYcJNvte3gy79CBRe4I
+         hmAoTHFOwKl+83elTFhLifcwLsNuloK5fmK91Siz8Bq3tz3AotBBxu91IvBS6QOGRKJr
+         H46dmnjWbwufIs2rX/ngwdlNQVxtBcAGJfbb2Z5FcLoP0FQpjhkSGZO8/qp7ASEKrFgP
+         rOyiJQwEGJ39v62PwtKtV90bgAqxs23hMHXv7QJ+xIbVS+0kCrjHb91wp/XOlfpiyvtg
+         RzUg==
+X-Gm-Message-State: AOAM532esgYir1cLUBmIdYmjJpUr9Qd+K4FdKJE1bcMewl+MrNQt75Di
+        eXR2gSy7TiUSnOFE19N59TI=
+X-Google-Smtp-Source: ABdhPJzd21NbXmqUfW2XHrWROm2fxyILq6CZdCCvdtiStf4Y2M/KHTSAJ01oFeaMXd485QpNHVfiLg==
+X-Received: by 2002:a05:6a00:15c7:b0:49f:f48b:f96e with SMTP id o7-20020a056a0015c700b0049ff48bf96emr12907087pfu.65.1639942607031;
+        Sun, 19 Dec 2021 11:36:47 -0800 (PST)
+Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
+        by smtp.gmail.com with ESMTPSA id z3sm16762961pfe.174.2021.12.19.11.36.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 11:24:26 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <34c091cb-1eed-d15f-a61c-30518d322a65@redhat.com>
-Date:   Sun, 19 Dec 2021 20:24:25 +0100
+        Sun, 19 Dec 2021 11:36:46 -0800 (PST)
+Message-ID: <05f4ddfe-7f6d-86a7-b568-57bbcf2e4d22@gmail.com>
+Date:   Sun, 19 Dec 2021 11:36:44 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/2] KVM: x86: Fix MSR_IA32_PERF_CAPABILITIES writes
- check and vmx_pmu_msrs_test
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [GIT PULL v2 1/1] bcm2835-bindings-2021-12-18
 Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, oliver.sang@intel.com,
-        Like Xu <like.xu@linux.intel.com>, linux-kernel@vger.kernel.org
-References: <20211216165213.338923-1-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211216165213.338923-1-vkuznets@redhat.com>
+To:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211218181135.192699-1-nsaenz@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211218181135.192699-1-nsaenz@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/21 17:52, Vitaly Kuznetsov wrote:
-> This is a continuation of "KVM: selftests: Avoid KVM_SET_CPUID2 after
-> KVM_RUN in vmx_pmu_msrs_test" work. Instead of fixing the immediate issue,
-> drop incorrect check in KVM which was making the result of host initiated
-> writes to MSR_IA32_PERF_CAPABILITIES dependent on guest visible CPUIDs and
-> the corresponding tests in vmx_pmu_msrs_test, this will also make the issue
-> reported by kernel test robot to go away.
-> 
-> Vitaly Kuznetsov (2):
->    KVM: selftests: vmx_pmu_msrs_test: Drop tests mangling guest visible
->      CPUIDs
->    KVM: x86: Drop guest CPUID check for host initiated writes to
->      MSR_IA32_PERF_CAPABILITIES
-> 
->   arch/x86/kvm/x86.c                              |  2 +-
->   .../selftests/kvm/x86_64/vmx_pmu_msrs_test.c    | 17 -----------------
->   2 files changed, 1 insertion(+), 18 deletions(-)
-> 
 
-Queued, thanks,
 
-Paolo
+On 12/18/2021 10:11 AM, Nicolas Saenz Julienne wrote:
+> Hi Florian,
+> 
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>    Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-bindings-2021-12-18
+> 
+> for you to fetch changes up to eafba51c545a165b29777cde1fc8b04781a0a8db:
+> 
+>    dt-bindings: soc: bcm: Convert brcm,bcm2835-vchiq to json-schema (2021-12-18 18:54:57 +0100)
+> 
+> ----------------------------------------------------------------
+> Stefan Wahren converts VCHIQ's bindings to YAML format.
+> 
+> ----------------------------------------------------------------
+
+Applied to devicetree/next, thanks for the quick turnaround Nicolas!
+-- 
+Florian

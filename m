@@ -2,69 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF58047A0A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6ADE47A0A8
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbhLSNXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 08:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbhLSNXR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 08:23:17 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70A0C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:23:17 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p23so9865729iod.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:23:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
-        b=oAZdP48z7MaZ5EynPWqljltvTBepCYZ9CVYmgsCTyFS+nDQS1W8eyw+sBxT8G/0UWJ
-         fu4hFA/0S/upVBHsGt9NbGkxJ2vcNARgi7yTHAM5G3fQDM6TY5cf9cHCOr1vBTiFJBIa
-         qLKF3APmeRimGXr6kH90WZ5RfJHhpiLjZjmTlrJSmZyeEOcAps488e2fqtjgZDSIdinj
-         +xthKFAGrcp2JKaYLknESeCISy1KJh+r1dXlzIyVrGfTqkkBgdEm7tQxrQqResCSEKZs
-         C1+tUQk8BukgUgKPKGjmhsCGQlNYVuwL45rPyp3B/DcGBLtmHToaJ+L3jaNyxe3G8A27
-         xD9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
-        b=HDVl7pk6fvhCvvyYnj/A389FUxJexgGAS3HKTKExXKXNIfX5CXYFgRi6XSz0YHQG/X
-         4ehDf+QC1OZJyNKdT0sNTMOQROw47tBoRnZOZ20qd7GbLauWZg2qx56DPJFYv1D0vE3H
-         iJhn45AyHYZrG8BQbhN88MTknFBctobuAbifoSWLCpqs1auK8fb0xykZ5FX6qcAWa/jB
-         6GcBF1HvhZ14DSDal2HJP0o+H72jvOWmx6GW+lm5bnhnA3oY+hmVFQRrHx6owVO0MWQP
-         cu55OYPVmdsuOTrVkfWkFwHGIbxl2oeaFDLM42jRLThMD3nPbGFeOjxlNnx6m7q9fmCm
-         LeXQ==
-X-Gm-Message-State: AOAM533jMy82xNzOfOqdKpIsCYwZfKbpulLQJF8OnPbDhUsFtN66faKq
-        Mx6fTyoBY/hLXwwdzEP7ooVzQQH/XexleSqpcA4=
-X-Google-Smtp-Source: ABdhPJzo7rev6CXFlbzzwd0qjBkSU7W1kuXGGsUck+X5XhG0g69b65p/RMVjYBxwu0GUEcdRxszIu8HM7H+1Exh8hUA=
-X-Received: by 2002:a02:cf23:: with SMTP id s3mr3198943jar.201.1639920197079;
- Sun, 19 Dec 2021 05:23:17 -0800 (PST)
+        id S235775AbhLSNYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 08:24:51 -0500
+Received: from www.zeus03.de ([194.117.254.33]:35758 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233186AbhLSNYt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 08:24:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=6S9HQBL4r3odhkkECEIs/X8yzGW
+        X/KwaJV8Lve5KOFQ=; b=uSuPoT3dsjVyTzBWayEvF5QiHhgLqR9AwWu9wF5kqRJ
+        x/1E00VzMmJ0g364EDMKTRFOjeL4g+hRsCFYw6VtJANSAa2w7O3G5ONC6Z/4ipqw
+        o1T4PwDBW0GOXWIUiLkT8rvtELjbwewnIvmqz3I4M/PtPuH+4JWgdRm+uokIt62I
+        =
+Received: (qmail 612090 invoked from network); 19 Dec 2021 14:24:48 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Dec 2021 14:24:48 +0100
+X-UD-Smtp-Session: l3s3148p1@F9s4sn/T9sUgAQnoAHzOAHbG3MPk/2E5
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v6 0/1] gpio: add simple logic analyzer using polling
+Date:   Sun, 19 Dec 2021 14:24:41 +0100
+Message-Id: <20211219132442.4080-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a02:c4d9:0:0:0:0:0 with HTTP; Sun, 19 Dec 2021 05:23:16
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   LISA HUGH <mrssafi.kabore2@gmail.com>
-Date:   Sun, 19 Dec 2021 05:23:16 -0800
-Message-ID: <CACP6L_jxK_-EnbjSqmeQek7BvnMZ52TMGERrYYGv7nDip6ovLA@mail.gmail.com>
-Subject: YOU WILL HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+I'll start with the changes since v5, they are rather minimal:
 
-I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+* added introductory paragraph to RST docs
+  (mostly provided by Linus Walleij, thanks!)
+* fixed sorting order in Makefile
+  (thanks Geert!)
+* improved label name and errno, white space fixes to the script
+  (thanks Andy!)
 
-I need your co-operation for the  transferring of ($4,500,000,00
-,U.S.DOLLARS)to your bank account for both of us benefit.
+I'd really like to see this in 5.17. Given the review comments of the
+last two iterations, I'd think they could have been fixed incrementally
+as well. So, if no major issue comes up now, I hope we can merge this
+for next cycle. I will stil be around for incremental updates and
+bugfixes, of course. For completeness, here is the cover letter from the
+last version, it still applies. git branch name is updated, of course.
 
-Please send the follow below,
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-Thanks.
-Ms Lisa Hugh
+===
+
+The bravery continues with the next update of the in-kernel logic
+analyzer based on GPIO polling with local irqs disabled. It has been
+tested locally and remotely. It provided satisfactory results. Besides
+the driver, there is also a script which isolates a CPU to achieve the
+best possible result. I am aware of the latency limitations. However,
+the intention is for debugging only, not mass production. Especially for
+remote debugging and to get a first impression, this has already been
+useful. Documentation is within the patch, to get a better idea what
+this is all about.
+
+A branch is here:
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/gpio-logic-analyzer-v6
+
+And an eLinux-wiki page with a picture of a result is here:
+https://elinux.org/Kernel_GPIO_Logic_analyzer
+
+I've used the analyzer in a few more scenarios and on another SoC
+(Renesas R-Car M3-W) and was happy with the outcome. Looking forward to
+other tests and comments. From my side this is good to go.
+
+===
+
+Happy hacking,
+
+   Wolfram
+
+
+Wolfram Sang (1):
+  gpio: add sloppy logic analyzer using polling
+
+ .../dev-tools/gpio-sloppy-logic-analyzer.rst  |  86 +++++
+ Documentation/dev-tools/index.rst             |   1 +
+ drivers/gpio/Kconfig                          |  17 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sloppy-logic-analyzer.c     | 340 ++++++++++++++++++
+ tools/gpio/gpio-sloppy-logic-analyzer         | 221 ++++++++++++
+ 6 files changed, 666 insertions(+)
+ create mode 100644 Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
+ create mode 100644 drivers/gpio/gpio-sloppy-logic-analyzer.c
+ create mode 100755 tools/gpio/gpio-sloppy-logic-analyzer
+
+-- 
+2.30.2
+

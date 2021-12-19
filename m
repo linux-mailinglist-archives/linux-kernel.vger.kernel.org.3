@@ -2,120 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDA047A239
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EA647A23B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236636AbhLSVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S236640AbhLSVOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236159AbhLSVMQ (ORCPT
+        with ESMTP id S233500AbhLSVOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:12:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD0C061574;
-        Sun, 19 Dec 2021 13:12:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zqlFDBLHajnmW6mUIPthSeuQfJKdlQjNzAtsDu8MOeQ=; b=tzKRd0PdZDTg6wWSKsTKnQJ+sN
-        NuDm+zLpq0sHd09YzKzCFKNAn0pZHXnADRt4x7oNk+0wGxCZT4OSKCsXjzKtc1PCc3rPkJ7MJpKF1
-        65uWo3bUMXalRpgVUFGlSfITew3R6EBqH/kmYi4NSea+GVqPdref3E4884uQoTCrH2tpFtA/ihWNB
-        wvcVCg8yV38ut+cSqikjvSNUpJ1mRbjm7OKwodEMdAXoVtKwVLt1YtRMjwksMcNgh5EVDvDLNyRKX
-        cEnAKQAuHAqKkr1v6C9u+7zlLWafdjgNzMk54g7I/OxMDCN9g+ZEzqoNl35SgZu3LexTURLeoaZu7
-        8JJGApJg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mz3TN-0012HD-BR; Sun, 19 Dec 2021 21:12:01 +0000
-Date:   Sun, 19 Dec 2021 21:12:01 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        Sun, 19 Dec 2021 16:14:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB344C061574;
+        Sun, 19 Dec 2021 13:14:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHFpY4szPz4xQs;
+        Mon, 20 Dec 2021 08:14:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639948470;
+        bh=r8KMglx+mt9pY6AphFbd2XBqKx9sh635jVDAqyMQi18=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EMHqLRHnNq0PGOKmw/m3buIKEGr/9yeYPL6GfHCzJ/H3HiK+np0AjkwFwjILry5vf
+         QXdPaJ0HydAJUht4PUkr/KFvs8RuOdCMn+WA/q3ESnr4oQNImchNJk+uLxBLGL3DvF
+         ZSwCXSB3VieuIBPoEZiEVPa3I7X7EyRVjQQuanKvetk3FLdZ4Kg2lZVV4o4myuQcA+
+         yfdnMNMXkzbi1o8w9wjDhVtZRiCOf8F4qZA/1VLTKlJNTR/lylPOjD0jFHS4uYFJF9
+         w6/yMAdsRcBuom90pSMnjyHnlQpK3+uNJRbnc5tAhDk932Rft4nFwDMrWHdjan/X9y
+         E+870iRafsoDQ==
+Date:   Mon, 20 Dec 2021 08:14:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <Yb+gId/gXocrlJYD@casper.infradead.org>
-References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
- <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20211220081428.7184c271@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+Content-Type: multipart/signed; boundary="Sig_/lfxBHGztvBGhz0fduGzys_Z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 06:59:51PM +0100, David Hildenbrand wrote:
-> On 19.12.21 18:44, Linus Torvalds wrote:
-> > David, you said that you were working on some alternative model. Is it
-> > perhaps along these same lines below?
-> > 
-> > I was thinking that a bit in the page tables to say "this page is
-> > exclusive to this VM" would be a really simple thing to deal with for
-> > fork() and swapout and friends.
-> > 
-> > But we don't have such a bit in general, since many architectures have
-> > very limited sets of SW bits, and even when they exist we've spent
-> > them on things like UDDF_WP.,
-> > 
-> > But the more I think about the "bit doesn't even have to be in the
-> > page tables", the more I think maybe that's the solution.
-> > 
-> > A bit in the 'struct page' itself.
-> > 
-> 
-> Exactly what I am prototyping right now.
-> 
-> > For hugepages, you'd have to distribute said bit when  you split the hugepage.
-> 
-> Yes, that's one tricky part ...
+--Sig_/lfxBHGztvBGhz0fduGzys_Z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That part shouldn't be that tricky ...
+Hi all,
 
-Can we get rid of ->mapcount altogether?  Three states:
- - Not mapped
- - Mapped exactly once
- - Possibly mapped more than once
+Commit
 
-I appreciate "Not mapped" is not a state that anon pages can
-meaningfully have (maybe when they go into the swap cache?)
+  aa1701e20a84 ("x86/pkey: Fix undefined behaviour with PKRU_WD_BIT")
 
-And this information would only be present on the head page (ie stored
-per folio).  If one VMA has multiple PTEs that map the same folio,
-then hopefully that only counts as mapped once.
+is missing a Signed-off-by from its committer.
 
-I must admit about half this conversation is going over my head.  I need
-more time to understand all the constraints than exists between emails
-:-)
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lfxBHGztvBGhz0fduGzys_Z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG/oLQACgkQAVBC80lX
+0Gx1ogf9EfdO11z5AdU6IYQADwcM0Cs0+xNQPVu2AcQJ+HVHA4ZGGxeEa1YYAbro
+GCMbva9yEm9F5jAv0fB8VMDaBroknNkNMsED5B6bkzbSyCsxFuJBKuurxgVEtSu8
+9vuLVJZqrWK8hqc5fJ9dGzFFamKEmG6nFd9TLGD/rHhiGmUSYJi3Bez7V5GGA2ct
+5tqZ5pgYa8MkD4jKF85whbSMpIn7S2fRXSxmAlZJxO0hqXaH5JhgS4ereboO5Tbb
+IlzI31jRmcWh29GQ9EmIoIKwAXGSKRoRsc5S4sEyrvR8YBc1kQcGSdU4FC1+GI4Z
+pSLqSsW9g52E/0TtFkZWn7vX2meqYw==
+=zg2u
+-----END PGP SIGNATURE-----
+
+--Sig_/lfxBHGztvBGhz0fduGzys_Z--

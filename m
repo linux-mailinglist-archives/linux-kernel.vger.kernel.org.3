@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD7B47A22D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F0347A230
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbhLSVHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:07:24 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36836 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbhLSVHX (ORCPT
+        id S233220AbhLSVJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:09:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21872 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229810AbhLSVJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:07:23 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D3EF31F37B;
-        Sun, 19 Dec 2021 21:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639948041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Sun, 19 Dec 2021 16:09:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639948166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8WapFKtuHh8K6RAvrImTNVPitR7b6AKQIQukdhMeaVs=;
-        b=YLWwrGsA1QsycYJBqxAU8FDOQjrUIDIUXZFie5NdvdJ/64n49FQX531d7dsRBGnhYADXZg
-        iJZJpTRkVGupXRZCKVc+TQs9EKbFardaYeXohKU7mZHcELayDnMHerVuxvQNfcSq+h+feh
-        WgRlziIuIpMw6QKrhF7EUs/HBcPuQMM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639948041;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8WapFKtuHh8K6RAvrImTNVPitR7b6AKQIQukdhMeaVs=;
-        b=xuh4NuAHT4vtIGu/y5zsgNzD9WBK6ZqBQWnKwBalFLrjfSNwqSB8fHXMRsCysz8rVDqZ5D
-        tDwDRFwgnnZGxmAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=w8NVHh5KaHOjxDyMfVIdFJPd854oBlCBTaA4pOiH41I=;
+        b=SyOijWkrsV8hJorb3qvB4pao/dq7VZSGp2JfWp1mtHO7OUav7Gl3oDWWTdxEEIzRZhqy22
+        x6/3MDGLldP/F/sEhwhEtYZpV7Rx25Axg4t9eumh6zqRH4Svs1aD9xq34HqHC1WIT4Gcjh
+        jaslVwmbp9irjKIFPiM+KXG9Fp+wnYk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-2h4jEnqqOlWk9-DZfEywhg-1; Sun, 19 Dec 2021 16:09:25 -0500
+X-MC-Unique: 2h4jEnqqOlWk9-DZfEywhg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD141133A7;
-        Sun, 19 Dec 2021 21:07:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1AE5HQafv2G3MgAAMHmgww
-        (envelope-from <neilb@suse.de>); Sun, 19 Dec 2021 21:07:18 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F0BC918460E8;
+        Sun, 19 Dec 2021 21:09:23 +0000 (UTC)
+Received: from [10.22.8.127] (unknown [10.22.8.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AEABF5E26B;
+        Sun, 19 Dec 2021 21:09:20 +0000 (UTC)
+Message-ID: <71c5ca50-1bf9-4ef7-eea0-634f66838d4a@redhat.com>
+Date:   Sun, 19 Dec 2021 16:09:20 -0500
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Anna Schumaker" <anna.schumaker@netapp.com>
-Cc:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        linux-mm@kvack.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/18 V2] Repair SWAP-over-NFS
-In-reply-to: <CAFX2Jfn8jER-aV_ttiAe1tkh8f+m=5-whEBTWbHO1uVwf=B4bw@mail.gmail.com>
-References: <163969801519.20885.3977673503103544412.stgit@noble.brown>,
- <CAFX2Jfn8jER-aV_ttiAe1tkh8f+m=5-whEBTWbHO1uVwf=B4bw@mail.gmail.com>
-Date:   Mon, 20 Dec 2021 08:07:15 +1100
-Message-id: <163994803576.25899.6298619065481174544@noble.neil.brown.name>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2] locking/rtmutex: Fix incorrect spinning condition
+Content-Language: en-US
+To:     Zqiang <qiang1.zhang@intel.com>, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20211217074207.77425-1-qiang1.zhang@intel.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211217074207.77425-1-qiang1.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Dec 2021, Anna Schumaker wrote:
-> Hi Neil,
-> 
-> On Thu, Dec 16, 2021 at 7:07 PM NeilBrown <neilb@suse.de> wrote:
-> >
-> > swap-over-NFS currently has a variety of problems.
-> >
-> > swap writes call generic_write_checks(), which always fails on a swap
-> > file, so it completely fails.
-> > Even without this, various deadlocks are possible - largely due to
-> > improvements in NFS memory allocation (using NOFS instead of ATOMIC)
-> > which weren't tested against swap-out.
-> >
-> > NFS is the only filesystem that has supported fs-based swap IO, and it
-> > hasn't worked for several releases, so now is a convenient time to clean
-> > up the swap-via-filesystem interfaces - we cannot break anything !
-> >
-> > So the first few patches here clean up and improve various parts of the
-> > swap-via-filesystem code.  ->activate_swap() is given a cleaner
-> > interface, a new ->swap_rw is introduced instead of burdening
-> > ->direct_IO, etc.
-> >
-> > Current swap-to-filesystem code only ever submits single-page reads and
-> > writes.  These patches change that to allow multi-page IO when adjacent
-> > requests are submitted.  Writes are also changed to be async rather than
-> > sync.  This substantially speeds up write throughput for swap-over-NFS.
-> >
-> > Some of the NFS patches can land independently of the MM patches.  A few
-> > require the MM patches to land first.
-> 
-> Thanks for fixing swap-over-NFS! Looks like it passes all the
-> swap-related xfstests except for generic/357 on NFS v4.2. This test
-> checks that we get -EINVAL on a reflinked swapfile, but I'm not sure
-> if there is a way to check for that on the client side but if you have
-> any ideas it would be nice to get that test passing while you're at
-> it!
+On 12/17/21 02:42, Zqiang wrote:
+> When the lock owner is on CPU and not need resched, the current waiter
+> need to be checked, if it not longer top the waiter, stop spinning.
 
-Thanks for testing!.
-I think that testing that swap fails on a reflinked file is bogus.  This
-isn't an important part of the API, it is just an internal
-implementation detail.
-I certainly understand that it could be problematic implementing swap on
-a reflinked file within XFS and it is perfectly acceptable to fail such
-a request.  But if one day someone decided to implement it - should that
-be seen as a regression?
+Incorrect grammar, should be "if it is no longer the top waiter". There 
+is a similar typo in the existing code comment too.
 
-Certainly over NFS there is no reason at all not to swap to a file that
-happens to be reflinked on the server.
-I don't think it even makes sense to test if the file has holes as the
-current nfs_swap_activate() does.  I don't exactly object to the test,
-but I think it is misguided and pointless.
+You can modify the subject line to [PATCH-tip ...] to indicate that it 
+is supposed to be apply on top of the tip tree. Other than that, the 
+patch looks good.
 
-Thanks,
-NeilBrown
+Cheers,
+Longman
+
+>
+> Fixes: c3123c431447 ("locking/rtmutex: Dont dereference waiter lockless")
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>   v1->v2:
+>   Modify description information.
+>
+>   kernel/locking/rtmutex.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index 0c1f2e3f019a..8555c4efe97c 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -1383,7 +1383,7 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+>   		 *  - the VCPU on which owner runs is preempted
+>   		 */
+>   		if (!owner_on_cpu(owner) || need_resched() ||
+> -		    rt_mutex_waiter_is_top_waiter(lock, waiter)) {
+> +		    !rt_mutex_waiter_is_top_waiter(lock, waiter)) {
+>   			res = false;
+>   			break;
+>   		}
+

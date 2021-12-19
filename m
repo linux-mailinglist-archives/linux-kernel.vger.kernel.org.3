@@ -2,175 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E1147A185
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 18:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A897747A1A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 18:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbhLSR1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 12:27:20 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:52788 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbhLSR1T (ORCPT
+        id S236147AbhLSRoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 12:44:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34450 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233831AbhLSRoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 12:27:19 -0500
-Received: by mail-il1-f197.google.com with SMTP id u15-20020a056e02080f00b002b2d3206e35so970112ilm.19
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 09:27:19 -0800 (PST)
+        Sun, 19 Dec 2021 12:44:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639935856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gMlSMHa+DYdEjsx/Tqnpqm/9oL+HOai5WdGa5J7Lr38=;
+        b=YROacnvr5nugthbicOzqRHqUz8iNDJgKEQ372vysePVXTEAhwBdfLOHWXNAh3r7xjuN/gi
+        7sq32CqyCIexUQufyA/SE96SqMlztM/ObN4IePCX+amP3JppceXtTfE+aSoTM2KEMb5Axg
+        c4D4376sESvLAfjseY3p8geN5rMUzgM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-7LXxStj0OWmV_WPSRV3MgQ-1; Sun, 19 Dec 2021 12:44:14 -0500
+X-MC-Unique: 7LXxStj0OWmV_WPSRV3MgQ-1
+Received: by mail-wr1-f69.google.com with SMTP id c16-20020adfa310000000b001a2349890e1so2756799wrb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 09:44:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fobKgI55x5N/6ypkq6lMpwFjjU0O/kdcx+1Vs78g5RI=;
-        b=qWX5p5MYu+aN3Z5Jv9SEo4hxUZVUXX7mugYM63PRLbqgwIxcnz0yodhTmf0ms1Pol3
-         EfSFi5Z1DEUH4yARZHoX16RE+6V9Y6F/s7p55+3PiKdX71rJik5A14jDeXrfOZTkVJT8
-         bd3lFm6AwdYRFHnFII1MepTVO6NvMTrIe1/JwWWMf97DmakWuqbD/lu3+Qlx22K11PV+
-         dLi/6DTMfBzfTZC26wDy6Sig++wWsQT4Qju41BdSkz588fLm1elNcqlFToGqyP/drAgQ
-         3WmtT9t6XNP1wpaRbyHtwBWmAqNSbGwIGCzBX1rOUVoHQGklOw4YpYxN9hBAkig2nHRu
-         oVrg==
-X-Gm-Message-State: AOAM533plQ662spcTD+/sjtvvwVZFh78WXWPyoWy/Y/ZTRSLFQLVITIO
-        rfRxL9UYvtpO2YGw671fzmyHKbe9U6wAYSC8LTy9mFot60cn
-X-Google-Smtp-Source: ABdhPJx8ukqJttrY60nUmmJkBmok2nx2uPQw8npuxHWX3fONNQj2BsAWACqIiCL5M7QHmmTp3QaNi8sM6wRI/S0I9zjf1GRf6PLC
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=gMlSMHa+DYdEjsx/Tqnpqm/9oL+HOai5WdGa5J7Lr38=;
+        b=FyLkBz2tfUOChJr5/Zw/m6kanFNnS/6d+TqXxQqSyRyW/1pvdW3c+HQUVVxZ23hLbP
+         qkCmk66mqa18k9PaoY2KKz78UrHeQBcCTrhi08C2QtuIULg+vP5jeZETuKBzly4ym78m
+         A6ZkdV8UI+6ktDXJz16k/oexwc7Adz4O5z2NnY/1xrI19eZCLQ8TYQW4MXg6i0fuXOye
+         LjnlGopigb8q8kia+zZAM7prI8DZhePSWIgk8ZZdIRaXa//fkl2a2/Ax72fYS9RxUsDO
+         Lp7lFh+3ba/KWH3XIlIF9HKc6sRI5OXVf8WfTP0+/l3Lz17EMZc1wuyD5OfKyD90WMW8
+         Sgyg==
+X-Gm-Message-State: AOAM532blFibeDvTOranps9SanlZQoZbyFi5Nk411cKQmQtdyIVcj1X6
+        /5Nm7tku2WSvN8vz8pStDzpAqjZ6kBo7tYKUQXQb5oqUfc8R6vYXj8pOl05I6zpljcH1aaJwHOI
+        aYT73iDp+hIFc1sRXmKLrJlMJ
+X-Received: by 2002:adf:c843:: with SMTP id e3mr10159638wrh.38.1639935853358;
+        Sun, 19 Dec 2021 09:44:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzftaicr3msKZsAPs3YWjGN2P8Z93a+o3wUJJuYtn1GvRH19Tg88EXvIzb88+3OpQBuvo6e9g==
+X-Received: by 2002:adf:c843:: with SMTP id e3mr10159613wrh.38.1639935853012;
+        Sun, 19 Dec 2021 09:44:13 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23c6f.dip0.t-ipconnect.de. [79.242.60.111])
+        by smtp.gmail.com with ESMTPSA id k13sm13145587wri.6.2021.12.19.09.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 09:44:12 -0800 (PST)
+Message-ID: <cd1ef96f-20af-9e5a-c084-a1f357ddb674@redhat.com>
+Date:   Sun, 19 Dec 2021 18:44:03 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20ed:: with SMTP id q13mr2620758ilv.108.1639934839411;
- Sun, 19 Dec 2021 09:27:19 -0800 (PST)
-Date:   Sun, 19 Dec 2021 09:27:19 -0800
-In-Reply-To: <000000000000b0a1a605ce3ec5ad@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008ed93005d38315f5@google.com>
-Subject: Re: [syzbot] general protection fault in sg_alloc_append_table_from_pages
-From:   syzbot <syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com>
-To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        gurchetansingh@chromium.org, kraxel@redhat.com,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
+ <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+ <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+ <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
+ <20211218030509.GA1432915@nvidia.com>
+ <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
+ <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com>
+ <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+> 
+> Btw, the extra bit doesn't really have to be in the page tables. It
+> could be a bit in the page itself. We could add another page bit that
+> we just clear when we do the "add ref to page as you make a virtual
+> copy during fork() etc".
 
-HEAD commit:    3f667b5d4053 Merge tag 'tty-5.16-rc6' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=174324a3b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=2c56b725ec547fa9cb29
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14df5c71b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d67495b00000
+^ I'm playing with the idea if using a page bit to express: "This page
+is exclusive". On a CoW fault, if that bit is set, I can simply reuse
+the page.
 
-The issue was bisected to:
+The semantics under which semantics to set the bit are slightly
+different than what you describe, and I'm playing with additional
+unsharing (on GUP R/O) that avoids mapping the copied page similarly R/O
+and simply sets the bit.
 
-commit 284562e1f34874e267d4f499362c3816f8f6bc3f
-Author: Gurchetan Singh <gurchetansingh@chromium.org>
-Date:   Tue Dec 3 01:36:27 2019 +0000
+But the general idea could fly I think, devil's in the detail ...
 
-    udmabuf: implement begin_cpu_access/end_cpu_access hooks
+-- 
+Thanks,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12d68447300000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11d68447300000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16d68447300000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Fixes: 284562e1f348 ("udmabuf: implement begin_cpu_access/end_cpu_access hooks")
-
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 1 PID: 3595 Comm: syz-executor559 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:sg_alloc_append_table_from_pages+0x821/0xdb0 lib/scatterlist.c:525 lib/scatterlist.c:525
-Code: 0c 24 48 8b 4c 24 48 48 39 c8 48 0f 46 c8 89 f0 4c 8d 3c c7 48 89 4c 24 30 48 b9 00 00 00 00 00 fc ff df 4c 89 f8 48 c1 e8 03 <80> 3c 08 00 0f 85 24 05 00 00 4d 8b 3f 4c 89 e0 31 ff 83 e0 03 48
-RSP: 0018:ffffc90002d0fc48 EFLAGS: 00010212
-RAX: 0000000000000002 RBX: 0000000000000001 RCX: dffffc0000000000
-RDX: ffff888021fd5700 RSI: 0000000000000000 RDI: 0000000000000010
-RBP: 00000000fffff000 R08: fffffffffffff000 R09: ffff8880189ddb00
-R10: ffffffff83d88b30 R11: 0000000000000000 R12: 0000000000000002
-R13: ffff8880189ddb00 R14: 0000000000000000 R15: 0000000000000010
-FS:  000055555652c300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020005b4c CR3: 00000000176ae000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- sg_alloc_table_from_pages_segment+0xc9/0x260 lib/scatterlist.c:573 lib/scatterlist.c:573
- sg_alloc_table_from_pages include/linux/scatterlist.h:331 [inline]
- sg_alloc_table_from_pages include/linux/scatterlist.h:331 [inline] drivers/dma-buf/udmabuf.c:67
- get_sg_table.isra.0+0xbb/0x160 drivers/dma-buf/udmabuf.c:67 drivers/dma-buf/udmabuf.c:67
- begin_cpu_udmabuf+0x130/0x1d0 drivers/dma-buf/udmabuf.c:126 drivers/dma-buf/udmabuf.c:126
- dma_buf_begin_cpu_access+0xfd/0x1d0 drivers/dma-buf/dma-buf.c:1175 drivers/dma-buf/dma-buf.c:1175
- dma_buf_ioctl+0x29a/0x380 drivers/dma-buf/dma-buf.c:374 drivers/dma-buf/dma-buf.c:374
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- vfs_ioctl fs/ioctl.c:51 [inline] fs/ioctl.c:860
- __do_sys_ioctl fs/ioctl.c:874 [inline] fs/ioctl.c:860
- __se_sys_ioctl fs/ioctl.c:860 [inline] fs/ioctl.c:860
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f57966b60a9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffea34a0a78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f57966b60a9
-RDX: 0000000020000000 RSI: 0000000040086200 RDI: 0000000000000004
-RBP: 00007f579667a090 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f579667a120
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace ed55bd5e5ccee2ad ]---
-RIP: 0010:sg_alloc_append_table_from_pages+0x821/0xdb0 lib/scatterlist.c:525 lib/scatterlist.c:525
-Code: 0c 24 48 8b 4c 24 48 48 39 c8 48 0f 46 c8 89 f0 4c 8d 3c c7 48 89 4c 24 30 48 b9 00 00 00 00 00 fc ff df 4c 89 f8 48 c1 e8 03 <80> 3c 08 00 0f 85 24 05 00 00 4d 8b 3f 4c 89 e0 31 ff 83 e0 03 48
-RSP: 0018:ffffc90002d0fc48 EFLAGS: 00010212
-RAX: 0000000000000002 RBX: 0000000000000001 RCX: dffffc0000000000
-RDX: ffff888021fd5700 RSI: 0000000000000000 RDI: 0000000000000010
-RBP: 00000000fffff000 R08: fffffffffffff000 R09: ffff8880189ddb00
-R10: ffffffff83d88b30 R11: 0000000000000000 R12: 0000000000000002
-R13: ffff8880189ddb00 R14: 0000000000000000 R15: 0000000000000010
-FS:  000055555652c300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055c8ef357220 CR3: 00000000176ae000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	0c 24                	or     $0x24,%al
-   2:	48 8b 4c 24 48       	mov    0x48(%rsp),%rcx
-   7:	48 39 c8             	cmp    %rcx,%rax
-   a:	48 0f 46 c8          	cmovbe %rax,%rcx
-   e:	89 f0                	mov    %esi,%eax
-  10:	4c 8d 3c c7          	lea    (%rdi,%rax,8),%r15
-  14:	48 89 4c 24 30       	mov    %rcx,0x30(%rsp)
-  19:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  20:	fc ff df
-  23:	4c 89 f8             	mov    %r15,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
-  2e:	0f 85 24 05 00 00    	jne    0x558
-  34:	4d 8b 3f             	mov    (%r15),%r15
-  37:	4c 89 e0             	mov    %r12,%rax
-  3a:	31 ff                	xor    %edi,%edi
-  3c:	83 e0 03             	and    $0x3,%eax
-  3f:	48                   	rex.W
-----------------
-Code disassembly (best guess):
-   0:	0c 24                	or     $0x24,%al
-   2:	48 8b 4c 24 48       	mov    0x48(%rsp),%rcx
-   7:	48 39 c8             	cmp    %rcx,%rax
-   a:	48 0f 46 c8          	cmovbe %rax,%rcx
-   e:	89 f0                	mov    %esi,%eax
-  10:	4c 8d 3c c7          	lea    (%rdi,%rax,8),%r15
-  14:	48 89 4c 24 30       	mov    %rcx,0x30(%rsp)
-  19:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  20:	fc ff df
-  23:	4c 89 f8             	mov    %r15,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
-  2e:	0f 85 24 05 00 00    	jne    0x558
-  34:	4d 8b 3f             	mov    (%r15),%r15
-  37:	4c 89 e0             	mov    %r12,%rax
-  3a:	31 ff                	xor    %edi,%edi
-  3c:	83 e0 03             	and    $0x3,%eax
-  3f:	48                   	rex.W
+David / dhildenb
 

@@ -2,74 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C642547A139
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 16:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4B947A13D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 17:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236079AbhLSP5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 10:57:09 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:35567 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbhLSP5I (ORCPT
+        id S236092AbhLSQCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 11:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233204AbhLSQCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 10:57:08 -0500
-Received: by mail-il1-f198.google.com with SMTP id b3-20020a92c563000000b002aea8d2dfa7so3866758ilj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 07:57:08 -0800 (PST)
+        Sun, 19 Dec 2021 11:02:09 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9975C061574;
+        Sun, 19 Dec 2021 08:02:08 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id m12so11938202ljj.6;
+        Sun, 19 Dec 2021 08:02:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lOJVwY5jpStaCZAdlI9r7F578YcqW449P/YXre+J0tQ=;
+        b=pjA90ue/y2GqwI2z14nTc67a4m47280O/yxsM3rbaOR0jXnST/2OFTz7rnBTTlDTiD
+         yrSS6Y7Bxy5Uf9WLx+PToztObgQKrfnS007NXaKbF1DUQCVehT4AnS1J7HTmnU7awlAL
+         DXhtAkhd+90jcpkSK2sqOdfRMlJLZpli8dT1Wfmv7t9H3OW0hfWcIR8ZJ9CJdh9XdZuw
+         7icknWh9L06pnfWketuwEXCRVG8syJqoUQNyQPMz4ty1kgX9w/NGWOI7mKzhhWsPBcOX
+         4N/kDK7AWqIhtjAnv2ccV2MxIBxJs7xIUxRl6HdKTaaidslm/H9merf2IgHYxbdeB7zI
+         1UQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=J1Z0E8FYOyeGYmMCih47JGz9INwvVqcSBEE3r+oJjRA=;
-        b=Sj0kOicynoQXgF//kR//B2TBcOgsquhpSLbWEpY2z4dem6qwlAEnZczlRGFlr/WVKg
-         HCNWKvgIfFr2YUsjg6gNknu0H6VgSfI3Ol77JTgzL3gwCE5greHdHsvEZYp5TqXW1Zdl
-         4s39OjTTKgkaJANBlOipnXk+1vsVEpMe3C/wR+cGItpUCwXd22Wk922e+tIcdC/GeX9h
-         /2Pk8zyh/q6mzuGEI+yBg0ajoRBIjYaJDTz/2IdFwo8TxmsF/jbOkkFlVOpretMmKth3
-         NdVhwvnm/GJ5nTUMSBnfV3T6OQM7Z6QFBcFH8oP9X6OpKvdO2bsbFhX0ODJpqmhu/IBW
-         vmHQ==
-X-Gm-Message-State: AOAM531LShf3arxBfCdYjT7RuBl9BroXfwpUqtRz9JeHQePD/25zf8En
-        8K2k1VB1VkvhfOGRMF6eY+prtn5JeoqTPUzPyabNWSFX+T8o
-X-Google-Smtp-Source: ABdhPJzibjb8GU6GjM7AflOG1x8TLswRn7G6hxR5g2tBuxN6SrcEX/7NjUMQhAmD4CNcXRBnPUoAQBEM5E0iq4KRPSEZAzxtSFzJ
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lOJVwY5jpStaCZAdlI9r7F578YcqW449P/YXre+J0tQ=;
+        b=nukQnlIUETnHs3kLbiRm57Hj79FrCbLIwu11HG40CV4Pvo9zHUHN57o6+sAaCI5MiP
+         KKT7avgLsyBd4CIMOFH+3JxKPikcXgXevVMCrVv/TrvvvaUUkGGbcmINSq0TQljhQ7q7
+         kb0kHg3L5CRvl0tIaPZ4zGSxf1dOTbxhv8O3ijmxbS8Q/RznsxSQw4vob65sUxXGAiee
+         Xz7NWRtRnBpjQt/BFaLv8mcbg5/x0NvmMiQfXlveU7VgsjKsulrRjpFMjF/E98DmRjT+
+         0GXxOutKZM0wuuJBSBhs2Z+yDlwkBT/CxcoEcOMtRrYlzS3PNlIT2PUj3c90pAbNId8K
+         sjNA==
+X-Gm-Message-State: AOAM532S38ckN03fdm8G3TX+eYu1cWtUs9qFB63bKWNeb96bZepmlQn2
+        r+vdxVkblPkniLbsknlbpcI7QerGt3Q=
+X-Google-Smtp-Source: ABdhPJx1ZWsrVE8ULcM6usPQM1yX8t+9VcsmDxvcl3oZQN3xvGSoTr7yvW/BSd8mrcEdFyMmhUUbjw==
+X-Received: by 2002:a2e:b177:: with SMTP id a23mr11100264ljm.2.1639929726863;
+        Sun, 19 Dec 2021 08:02:06 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id 76sm2196162ljj.69.2021.12.19.08.02.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 08:02:06 -0800 (PST)
+Subject: Re: [PATCH v1 0/5] Improvements for TC358768 DSI bridge driver
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-tegra@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211002233447.1105-1-digetx@gmail.com>
+ <CAG3jFysa8G_fuGDfSLze-ovft3=gc5PXLaPtwTkC2_e0itQYNw@mail.gmail.com>
+ <c09bd552-767e-e783-3f9f-114b8cedb475@gmail.com>
+Message-ID: <a999b141-4b14-cdd0-f6fa-3d861c0f381f@gmail.com>
+Date:   Sun, 19 Dec 2021 19:02:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:2cc1:: with SMTP id s184mr6122309ios.63.1639929427727;
- Sun, 19 Dec 2021 07:57:07 -0800 (PST)
-Date:   Sun, 19 Dec 2021 07:57:07 -0800
-In-Reply-To: <000000000000685c4605d0e47dad@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ff1c4105d381d24f@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in drm_gem_object_release_handle
-From:   syzbot <syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        daniel.vetter@intel.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <c09bd552-767e-e783-3f9f-114b8cedb475@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+19.10.2021 23:37, Dmitry Osipenko пишет:
+> 19.10.2021 12:47, Robert Foss пишет:
+>> Applied to drm-misc-next
+>>
+>> On Sun, 3 Oct 2021 at 01:35, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>
+>>> This series adds couple improvements to the TC358768 DSI bridge driver,
+>>> enabling Panasonic VVX10F004B00 DSI panel support. This panel is used by
+>>> ASUS Transformer TF700T tablet, which is ready for upstream kernel and
+>>> display panel support is the biggest missing part.
+>>>
+>>> Dmitry Osipenko (5):
+>>>   drm/bridge: tc358768: Enable reference clock
+>>>   drm/bridge: tc358768: Support pulse mode
+>>>   drm/bridge: tc358768: Calculate video start delay
+>>>   drm/bridge: tc358768: Disable non-continuous clock mode
+>>>   drm/bridge: tc358768: Correct BTACNTRL1 programming
+>>>
+>>>  drivers/gpu/drm/bridge/tc358768.c | 94 +++++++++++++++++++++++--------
+>>>  1 file changed, 71 insertions(+), 23 deletions(-)
+>>>
+>>> --
+>>> 2.32.0
+>>>
+> 
+> Robert, thank you for taking care of these patches! Now nothing is
+> holding us from upstreaming the device-tree of the Transformer tablet.
+> 
 
-commit 45d9c8dde4cd8589f9180309ec60f0da2ce486e4
-Author: Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Thu Aug 12 13:14:12 2021 +0000
+Hello Robert,
 
-    drm/vgem: use shmem helpers
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=147953cbb00000
-start commit:   3f667b5d4053 Merge tag 'tty-5.16-rc6' of git://git.kernel...
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=167953cbb00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=127953cbb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=c8ae65286134dd1b800d
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fd41ebb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1483c7d5b00000
-
-Reported-by: syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
-Fixes: 45d9c8dde4cd ("drm/vgem: use shmem helpers")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+These patches spent 2 months in drm-misc-next, will they graduate into
+v5.17 or something special needs to be done for that?

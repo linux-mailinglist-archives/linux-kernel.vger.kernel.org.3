@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F71447A10A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1780C47A111
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbhLSOyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 09:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbhLSOyf (ORCPT
+        id S235953AbhLSO61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 09:58:27 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:55956 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233146AbhLSO6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 09:54:35 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDE1C061574;
-        Sun, 19 Dec 2021 06:54:35 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z5so28081974edd.3;
-        Sun, 19 Dec 2021 06:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=97q7sg0TD+CFNjCZu+yqt+zOFqMiYIbWb3t36ZIak30=;
-        b=pFN23c6IE7GHNyY1lrHvdR6qK+ws6rcviNC/bAeDyKxtjctrPyWsEBHD9px91B4TFU
-         XRqcKkBPN7TfDLY2hZ6TQMHtVESzgq0DShrU2vEuUTIVmA7GnDtqJ9GAaN8MaG+x0uKV
-         MAW2VTfa1ReT6Ie6NrgSfz/CWqljNEg4cHUUo/AxBlnanGPZN68m4q6x7AngWcOmo4gV
-         WjYYzn8izyiRudP6U2ttfthE7qA92G4TDzzCb8GX78/Ey7OJnDXIvNzD8Z+qysuSlb1a
-         ApnhaSH7v9iMJ7NpjQrIbZjVqUcIt2BrIW3AquJqVXaf82gxGr/VfPzmcmGQabu4rzrd
-         quCg==
+        Sun, 19 Dec 2021 09:58:25 -0500
+Received: by mail-il1-f200.google.com with SMTP id j6-20020a056e02218600b002b261165281so2193418ila.22
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 06:58:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=97q7sg0TD+CFNjCZu+yqt+zOFqMiYIbWb3t36ZIak30=;
-        b=pR1BSIHdXUv8x1Kp5tbPNXn82J3j/zGBHmKf3HbYe7JI1vE5rgK8dc6NBM1gP+sDtX
-         2R95yxbAnW7upIatD0tWLAxGRYVRMofaiT/u3ooqvbCu/Whc+8wBVCykl1tRzOk/YQoy
-         qxQ7S+8PkuNctzslh3FQivlAuuu3RN+/kB2fnbDxSAHDrWcqRzBqP/yfZXpXDDGa437f
-         5jLeuLXIZOIDYlQ1b4z6S/nt37mHAPfNTuToljyw5RgT7BqNnxH5WrpTFGlxnKTyyh0D
-         XRaeBlbshU7opkQNK5MBwaqfb8eal8kfZy3YsSqJ93Tn6OwBImDOz/gmXEKakB3LiUfI
-         r24g==
-X-Gm-Message-State: AOAM5315A1MAbSs14kHZJDrkGMve31fZmDzFCUOp3MYgHkdsPXHI1rRQ
-        r6DXI8pYeBKEg/Bz1OcBG6Q=
-X-Google-Smtp-Source: ABdhPJzondZ2Fr1IDbk1rclTZfI5kulmoCZ7vS+Z/X5MrLtC4IIs/5DFD7TnaBMwzKgs71VYe4iJhg==
-X-Received: by 2002:aa7:de86:: with SMTP id j6mr11678743edv.1.1639925673880;
-        Sun, 19 Dec 2021 06:54:33 -0800 (PST)
-Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
-        by smtp.gmail.com with ESMTPSA id dm7sm1505647edb.7.2021.12.19.06.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 06:54:33 -0800 (PST)
-Message-ID: <b244735f83010fe198ead3b818ee0718dc654879.camel@gmail.com>
-Subject: Re: (subset) [PATCH v4 3/7] dt-bindings: arm: samsung: document
- jackpotlte board binding
-From:   David Virag <virag.david003@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     devicetree@vger.kernel.org,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-clk@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Date:   Sun, 19 Dec 2021 15:53:36 +0100
-In-Reply-To: <163958527260.183299.17749602272220762675.b4-ty@canonical.com>
-References: <20211206153124.427102-1-virag.david003@gmail.com>
-         <20211206153124.427102-4-virag.david003@gmail.com>
-         <163958527260.183299.17749602272220762675.b4-ty@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=CY/9VdSz1ThPgCrPjZ1XFd+/699S54NLZB3w9+WFkH4=;
+        b=35MwLcRJiMrAZTSHeB7Q10aageo1uLK/MSDMPAIC8AcCIkIey1SVq6i9EJkAA+WKve
+         ZKTxhY18sRr/9qn/+J+xr26JjhQ5FYhlUnsn7clNKHxJ8fE09p0t+7tzs4cadOiw+dYn
+         X4VgShAx/nmPMOCewTz+AWYoHy4VxZoyP3QJayIgRZYy5FKLHqsWFitPdDTfvb4l8tsK
+         fuLItlM88twFFpZg8Uf0LtUrcJjGs+0OGRknt62RrwpgNNu8mVB3nWeWopJsFh8bKp2R
+         L9TyGuAPT2r8caTXmiLVDM3uDIwcrxo0RcbfjnKr7SYrzCMUZ+1dGS/+CaIG/w5xFUqP
+         9S1w==
+X-Gm-Message-State: AOAM532mY6QDdv08xNpwBRXzRKPl307EN9inJdZrzetRRUJnbPuyQtFS
+        VgHm5g2dTWVIpcknu5XOFYmOQ4ToqfVkkeQREPQ2B5e4j1Ct
+X-Google-Smtp-Source: ABdhPJwzNLsoeeAfdmwjWTnf9uSyo0WhvDuBeMw2KN9Mm6jfVFvRlaP/Wnf8+5Xjhj1th0EaajGUokTibZG78sb05v5gRQpVsF56
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1541:: with SMTP id j1mr6201080ilu.100.1639925904927;
+ Sun, 19 Dec 2021 06:58:24 -0800 (PST)
+Date:   Sun, 19 Dec 2021 06:58:24 -0800
+In-Reply-To: <00000000000062b41d05a2ea82b0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000005721f05d3810165@google.com>
+Subject: Re: [syzbot] kernel BUG at net/phonet/socket.c:LINE!
+From:   syzbot <syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com>
+To:     courmisch@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-15 at 17:21 +0100, Krzysztof Kozlowski wrote:
-> On Mon, 6 Dec 2021 16:31:17 +0100, David Virag wrote:
-> > Add binding for the jackpotlte board (Samsung Galaxy A8 (2018)).
-> > 
-> > 
-> 
-> Applied, thanks!
-> 
-> [3/7] dt-bindings: arm: samsung: document jackpotlte board binding
->       commit: c96ebc5fde274edcc02543dcfb6a1ee097f98070
-> 
-> Best regards,
+syzbot has found a reproducer for the following issue on:
 
-Hi Krzysztof!
+HEAD commit:    60ec7fcfe768 qlcnic: potential dereference null pointer of..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b3505db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=2dc91e7fc3dea88b1e8a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168791cdb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0cbcdb00000
 
-Thanks! As I'll be sending v5 of this series soon (only really adding
-r-by, acked-by tags and only real changes in dts/dtsi patch), should I
-omit this patch from it since it has been applied? Or should I really
-only send the dts/dtsi patch at this point? Sorry if this is obvious, I
-just haven't sent that many patches before to know this.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com
 
-Best regards,
-David
+netlink: 'syz-executor185': attribute type 2 has an invalid length.
+------------[ cut here ]------------
+kernel BUG at net/phonet/socket.c:213!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3620 Comm: syz-executor185 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:pn_socket_autobind net/phonet/socket.c:213 [inline]
+RIP: 0010:pn_socket_autobind net/phonet/socket.c:213 [inline] net/phonet/socket.c:202
+RIP: 0010:pn_socket_autobind+0x13c/0x160 net/phonet/socket.c:202 net/phonet/socket.c:202
+Code: 44 05 00 00 00 00 00 48 8b 44 24 58 65 48 2b 04 25 28 00 00 00 75 26 48 83 c4 60 44 89 e0 5b 5d 41 5c 41 5d c3 e8 64 60 1e f9 <0f> 0b e8 2d 25 65 f9 eb 9f e8 46 25 65 f9 e9 6d ff ff ff e8 8c 2b
+RSP: 0018:ffffc90001bafc40 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801c748000 RSI: ffffffff8859516c RDI: 0000000000000003
+RBP: 1ffff92000375f88 R08: 00000000ffffffea R09: 0000000000000000
+R10: ffffffff8859512c R11: 0000000000000000 R12: 0000000000000000
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88801c748000
+FS:  0000555556878300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000740 CR3: 0000000018a78000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ pn_socket_connect+0xfc/0x970 net/phonet/socket.c:227 net/phonet/socket.c:227
+ __sys_connect_file+0x155/0x1a0 net/socket.c:1896 net/socket.c:1896
+ __sys_connect+0x161/0x190 net/socket.c:1913 net/socket.c:1913
+ __do_sys_connect net/socket.c:1923 [inline]
+ __se_sys_connect net/socket.c:1920 [inline]
+ __do_sys_connect net/socket.c:1923 [inline] net/socket.c:1920
+ __se_sys_connect net/socket.c:1920 [inline] net/socket.c:1920
+ __x64_sys_connect+0x6f/0xb0 net/socket.c:1920 net/socket.c:1920
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f9bf1080159
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff1adca428 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f9bf1080159
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000013355
+R13: 00007fff1adca490 R14: 00007fff1adca480 R15: 00007fff1adca44c
+ </TASK>
+Modules linked in:
+---[ end trace 16a4e3e11e1ba5b9 ]---
+RIP: 0010:pn_socket_autobind net/phonet/socket.c:213 [inline]
+RIP: 0010:pn_socket_autobind net/phonet/socket.c:213 [inline] net/phonet/socket.c:202
+RIP: 0010:pn_socket_autobind+0x13c/0x160 net/phonet/socket.c:202 net/phonet/socket.c:202
+Code: 44 05 00 00 00 00 00 48 8b 44 24 58 65 48 2b 04 25 28 00 00 00 75 26 48 83 c4 60 44 89 e0 5b 5d 41 5c 41 5d c3 e8 64 60 1e f9 <0f> 0b e8 2d 25 65 f9 eb 9f e8 46 25 65 f9 e9 6d ff ff ff e8 8c 2b
+RSP: 0018:ffffc90001bafc40 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801c748000 RSI: ffffffff8859516c RDI: 0000000000000003
+RBP: 1ffff92000375f88 R08: 00000000ffffffea R09: 0000000000000000
+R10: ffffffff8859512c R11: 0000000000000000 R12: 0000000000000000
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88801c748000
+FS:  0000555556878300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000740 CR3: 0000000018a78000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+

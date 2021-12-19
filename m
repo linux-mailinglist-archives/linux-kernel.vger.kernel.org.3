@@ -2,156 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714E547A0BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5C547A0BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbhLSNxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 08:53:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24051 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233148AbhLSNxV (ORCPT
+        id S235839AbhLSNzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 08:55:42 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52138 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233148AbhLSNzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 08:53:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639922000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Sun, 19 Dec 2021 08:55:41 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9FABF218ED;
+        Sun, 19 Dec 2021 13:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639922140; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=wCpHDM0T3ASnKDBX4WnWQJhJeGDzWQ/mvsQaGLGKzRw=;
-        b=L74GplSQx9ZNcWQWvx6oEkDvv/WWwPPZICWwuH/yaQ/G3mxk/yrORPCZdCOQnLjuJYrKYw
-        +mGY/inKOdFDWtJgVl5hES0prpN8TCWfEwPHYFtit8zPKG9d0xWokGlvdUO+Qd2otW5h28
-        5y7Y4Pb3BzpF6+21sWmLZAtZuhEsoSI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-523-UnvQz1BmMeSsbP6LXfTeAQ-1; Sun, 19 Dec 2021 08:53:19 -0500
-X-MC-Unique: UnvQz1BmMeSsbP6LXfTeAQ-1
-Received: by mail-wm1-f70.google.com with SMTP id v190-20020a1cacc7000000b003456d598510so5137112wme.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:53:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wCpHDM0T3ASnKDBX4WnWQJhJeGDzWQ/mvsQaGLGKzRw=;
-        b=jOIanhr8bqFUkH1HeBWjPt+QGqIAh6rw0XYFacnmYvD8WjQX3H7Bj/cF32ZHaD2htU
-         MA466yy50YhiEaDMG9yfcvQhpR0AY8I1PI0JDBVug0fdJ8M/dDvnpCvpqyYEhy9/pma7
-         DTqQr+E3C8rTtnfWxDWm1HEbo4/Rt0Jig+bOtYSMWjE3WJHZtKQ+oMivl1xZCF0/5fdM
-         E9GCBadDKpLkETuZqeAY5V6xbPIu028KlHBZL+mecOxL3uCUcqpD1epRF8AdMKN+rZJ0
-         XqvBtuZEQPTKGepY/N+YNOjUwPaHs6AZU+Cg1lh4PlQuuOBK7aqBVTsQFG9d2xbNGi/S
-         fFbA==
-X-Gm-Message-State: AOAM533NiV71xVooTMqEqCjShEgF93JJyD/w37vQGcv6LWtB1Vkv5oeT
-        6bBqJa8UPeZ4mNszjz3BovSI57VaOOCRNeR8FnFLr12UKGHVUA3T6hZMwi3YFEH2MTFk4SN6Re3
-        1n1W+TMMyiVsh3PI0CL84CSzJ
-X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr1763569wri.45.1639921998409;
-        Sun, 19 Dec 2021 05:53:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyaCnxtEx4pWLffaP/Uf80mPpUrMzwH5wq7xAv3EAlLGO5n2FINCAK+yEnMt+ITPmbEuXH3hQ==
-X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr1763557wri.45.1639921998253;
-        Sun, 19 Dec 2021 05:53:18 -0800 (PST)
-Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id b6sm19660226wmq.45.2021.12.19.05.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 05:53:17 -0800 (PST)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH] ftrace/samples: Add missing prototypes direct functions
-Date:   Sun, 19 Dec 2021 14:53:17 +0100
-Message-Id: <20211219135317.212430-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        bh=7cqYdkVsOhr9ryCTL+eH+l4+vyqhXTF3ELAuoW5J6QE=;
+        b=iHZtmRwVNgBzlMVaVPT54Q9PfmR9lN9zVy22r3r3gynQUKbiV9cMD25sIH/Sl+QTgpsBiB
+        bBjj19eqkm2YUI1U1oENdxPy7QgfmU+eiyzxK+tWR/B9y+XPPaxQM48NwCIfZR9RO+BsUK
+        n0p+vMhBT2QG1Kl/hHDcMv0QWuiAxbY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639922140;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7cqYdkVsOhr9ryCTL+eH+l4+vyqhXTF3ELAuoW5J6QE=;
+        b=K95H6S3gEZm0K0pdtV4TTXNGT5rrB4VnHm3iC/dq/VfteqDEpl8SzLwyoYP7k8u0XMayVS
+        sKruqKkP8XKc77BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 89084133FE;
+        Sun, 19 Dec 2021 13:55:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iRvrH9w5v2EFRQAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 19 Dec 2021 13:55:40 +0000
+Date:   Sun, 19 Dec 2021 14:55:47 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] timers/urgent for v5.16-rc6
+Message-ID: <Yb8542TP03zYwspz@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's another compilation fail (first here [1]) reported by kernel
-test robot for W=1 clang build:
+Hi Linus,
 
-  >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous
-  prototype for function 'my_direct_func1' [-Wmissing-prototypes]
-     void my_direct_func1(unsigned long ip)
+aaand the next one: a single urgent timers fix for 5.16.
 
-Direct functions in ftrace direct sample modules need to have prototypes
-defined. They are already global in order to be visible for the inline
-assembly, so there's no problem.
+Please pull,
+thx.
 
-The kernel test robot reported just error for ftrace-direct-multi-modify,
-but I got same errors also for the rest of the modules touched by this patch.
-
-[1] 67d4f6e3bf5d ftrace/samples: Add missing prototype for my_direct_func
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e1067a07cfbc ("ftrace/samples: Add module to test multi direct modify interface")
-Fixes: ae0cc3b7e7f5 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
-Fixes: 156473a0ff4f ("ftrace: Add another example of register_ftrace_direct() use case")
-Fixes: b06457c83af6 ("ftrace: Add sample module that uses register_ftrace_direct()")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- samples/ftrace/ftrace-direct-modify.c       | 3 +++
- samples/ftrace/ftrace-direct-multi-modify.c | 3 +++
- samples/ftrace/ftrace-direct-too.c          | 3 +++
- samples/ftrace/ftrace-direct.c              | 2 ++
- 4 files changed, 11 insertions(+)
 
-diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-index 690e4a9ff333..2877cb053a82 100644
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -4,6 +4,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func1(void);
-+extern void my_direct_func2(void);
-+
- void my_direct_func1(void)
- {
- 	trace_printk("my direct func1\n");
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index 91bc42a7adb9..6f43a39decd0 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -4,6 +4,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func1(unsigned long ip);
-+extern void my_direct_func2(unsigned long ip);
-+
- void my_direct_func1(unsigned long ip)
- {
- 	trace_printk("my direct func1 ip %lx\n", ip);
-diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-index 6e0de725bf22..b97e5ed46233 100644
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -5,6 +5,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func(struct vm_area_struct *vma,
-+			   unsigned long address, unsigned int flags);
-+
- void my_direct_func(struct vm_area_struct *vma,
- 			unsigned long address, unsigned int flags)
- {
-diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-index a30aa42ec76a..c918b13edb49 100644
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -5,6 +5,8 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func(struct task_struct *p);
-+
- void my_direct_func(struct task_struct *p)
- {
- 	trace_printk("waking up %s-%d\n", p->comm, p->pid);
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/timers_urgent_for_v5.16_rc6
+
+for you to fetch changes up to 4e8c11b6b3f0b6a283e898344f154641eda94266:
+
+  timekeeping: Really make sure wall_to_monotonic isn't positive (2021-12-17 23:06:22 +0100)
+
+----------------------------------------------------------------
+- Make sure the CLOCK_REALTIME to CLOCK_MONOTONIC offset is never positive
+
+----------------------------------------------------------------
+Yu Liao (1):
+      timekeeping: Really make sure wall_to_monotonic isn't positive
+
+ kernel/time/timekeeping.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
 -- 
-2.33.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

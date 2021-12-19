@@ -2,140 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EF847A113
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8490947A116
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 16:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbhLSO6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 09:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbhLSO6f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 09:58:35 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA68C06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 06:58:35 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id e128so10168029iof.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 06:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:from:to:references:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=qKz+WAr6nEBLsYj+AcL5DWngB8lrLlnoDgVx0fw/U4M=;
-        b=HaiOYbTqzxLag60YV9E+lZgvoytr3V9F3lFwlTgtrIhgxyyUbo0h2YaRbtkGKwsaxQ
-         BQbtQL4LImkM0wbxCW1vhhA4LMbLb2IZfj5pS2f2sxwqtcLKOK3B31Xa1hNdv+oM+Gjh
-         KOYXoeZ0xGNkqv3bDUOeqKVoeHwgX6hkiaFnvQ87nunUyGJ1mczjFTXSa5SbQWe1BTOD
-         8RqsPgY8hzJ83fjcgpuBW8EpzdGkD0aMq6gZtbKYcb2BlMLuQ3BCHJ1pgjo5BvJGQQet
-         2gqRZElkltBv767sWaUobPB+AlbnsGsEseROo8qSz2cRi3oee5eV0QaoeYQmVOuLbe6l
-         PLeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qKz+WAr6nEBLsYj+AcL5DWngB8lrLlnoDgVx0fw/U4M=;
-        b=S+5gxX7yc2dj1iDlDyp9NLy/m23sPYgsnKoanjJWMlpU7NsZPPTA6YPapHaJGZ0yun
-         /VBrDy8ebdFfUEe+ywCAxnb4zjdxbpCMwWCntqq3dVsh4cixjesOJquuTBn/MkGm+tAK
-         MS9rp7euJnxV9NFZNwtf4vkTzDqKSjC7fmJEC1nk+1OLNz0XmgOUBuYiYQj9XPxMBrh8
-         N5RlyQWXR3AqEih5Z0zxWeDyIpGSMG7GJSVG++NGetubpOrQnPJBcVoqSDo+bsubCKZ/
-         q2pvqBOuC90H3jXl9dW36HzCUTOZdXE9SUgLr5HkIDWrJ76DQmlUCgEuitrZahbXaidy
-         6ebg==
-X-Gm-Message-State: AOAM530+34wn+oWFG1m8SvNEeZgxbfBVtPpZvZYyf1lThgDi99fmEeYx
-        10QutWpKtaiCzuE8mpgkjXW/QE21ofPYIQ==
-X-Google-Smtp-Source: ABdhPJwXhxG8IxWFGOqQzRmBqSTSLV4aRS0fpka63UV2gZBWhX6DelmsVshPL8ODFP5spTK0ukHfJQ==
-X-Received: by 2002:a05:6638:3053:: with SMTP id u19mr7730348jak.220.1639925914462;
-        Sun, 19 Dec 2021 06:58:34 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id m14sm2035189iow.54.2021.12.19.06.58.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 06:58:34 -0800 (PST)
-Subject: Re: very low IOPS due to "block: reduce kblockd_mod_delayed_work_on()
- CPU consumption"
-From:   Jens Axboe <axboe@kernel.dk>
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        linux-block@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        ming.lei@redhat.com, hch@lst.de, Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        linux-kernel@vger.kernel.org
-References: <1639853092.524jxfaem2.none.ref@localhost>
- <1639853092.524jxfaem2.none@localhost>
- <7d1e4bb8-1a73-9529-3191-66df4ff2d5fe@kernel.dk>
-Message-ID: <12f43a71-713b-a74f-a169-b6ac3d804e50@kernel.dk>
-Date:   Sun, 19 Dec 2021 07:58:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235974AbhLSPCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 10:02:37 -0500
+Received: from mga09.intel.com ([134.134.136.24]:45380 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233146AbhLSPCg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 10:02:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639926156; x=1671462156;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+XoqNGfgG9ZuaZa7jYM0wyWMe39EH0hVd3lU+dN1eHk=;
+  b=G8xN6hZZHMg0XecABLB9YfgwL5a8FD5e/IiVop4gZCn86CHXeN+Y31xo
+   pFcSMsa0K6sLUhyObb7Je720mzXbDi1b9zfbVPT15MhpQgmE45Q0UNBTE
+   jIGhmJv/L4TDG5BeTNawul5D6/gUnGI+/Gh27aD+HAeidamsO1gCqmavI
+   gEr6uXRcM6GoARAQOBEdgL5Ko2tgviDOd7sgwVdC1o/1SmZoRlIeYpzTl
+   7H+hbHcBQ25IExXwvXcvM3tdHZ0/CeM09bAqRYra5slOri+LefEwBGpgO
+   +zAOJwfebCbWGIg7b6FT7qMewDHbD0uEiVs3ER/RThkZ8iUdmTJQypJJ3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="239837560"
+X-IronPort-AV: E=Sophos;i="5.88,218,1635231600"; 
+   d="scan'208";a="239837560"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 07:02:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,218,1635231600"; 
+   d="scan'208";a="507379186"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 Dec 2021 07:02:34 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myxhp-00073T-Qa; Sun, 19 Dec 2021 15:02:33 +0000
+Date:   Sun, 19 Dec 2021 23:01:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [trondmy-nfs-2.6:testing 94/94] fs/nfs/nfs42proc.c:72:9: error:
+ implicit declaration of function 'nfs4_bitmask_set'
+Message-ID: <202112192225.W4qpFO6L-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <7d1e4bb8-1a73-9529-3191-66df4ff2d5fe@kernel.dk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/21 12:02 PM, Jens Axboe wrote:
-> On 12/18/21 11:57 AM, Alex Xu (Hello71) wrote:
->> Hi,
->>
->> I recently noticed that between 6441998e2e and 9eaa88c703, I/O became 
->> much slower on my machine using ext4 on dm-crypt on NVMe with bfq 
->> scheduler. Checking iostat during heavy usage (find / -xdev and fstrim 
->> -v /), maximum IOPS had fallen from ~10000 to ~100. Reverting cb2ac2912a 
->> ("block: reduce kblockd_mod_delayed_work_on() CPU consumption") resolves 
->> the issue.
-> 
-> Hmm interesting. I'll try and see if I can reproduce this and come up
-> with a fix.
+tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
+head:   357b7dbe0ee9811ba054d636d4ad55af1c698c6e
+commit: 357b7dbe0ee9811ba054d636d4ad55af1c698c6e [94/94] NFSv42: Fallocate and clone should also request 'blocks used'
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211219/202112192225.W4qpFO6L-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
+        git fetch --no-tags trondmy-nfs-2.6 testing
+        git checkout 357b7dbe0ee9811ba054d636d4ad55af1c698c6e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash fs/nfs/
 
-I can reproduce this. Alex, can you see if this one helps? Trying to see
-if we can hit a happy medium here that avoids hammering on that timer,
-but it really depends on what the mix is here of delay with pending,
-or no delay with no pending.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Dexuan, can you test this for your test case too? I'm going to queue
-up a revert for -rc6 just in case.
+All errors (new ones prefixed by >>):
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index c1833f95cb97..a3fbf4360ee9 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -1481,12 +1481,15 @@ int kblockd_schedule_work(struct work_struct *work)
- }
- EXPORT_SYMBOL(kblockd_schedule_work);
- 
--int kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork,
--				unsigned long delay)
--{
--	if (!delay)
--		return queue_work_on(cpu, kblockd_workqueue, &dwork->work);
--	return mod_delayed_work_on(cpu, kblockd_workqueue, dwork, delay);
-+void kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork,
-+				 unsigned long delay)
-+{
-+	if (!delay) {
-+		cancel_delayed_work(dwork);
-+		queue_work_on(cpu, kblockd_workqueue, &dwork->work);
-+	} else {
-+		mod_delayed_work_on(cpu, kblockd_workqueue, dwork, delay);
-+	}
- }
- EXPORT_SYMBOL(kblockd_mod_delayed_work_on);
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index bd4370baccca..1c7ba45e8463 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1159,7 +1159,7 @@ static inline unsigned int block_size(struct block_device *bdev)
- }
- 
- int kblockd_schedule_work(struct work_struct *work);
--int kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork, unsigned long delay);
-+void kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork, unsigned long delay);
- 
- #define MODULE_ALIAS_BLOCKDEV(major,minor) \
- 	MODULE_ALIAS("block-major-" __stringify(major) "-" __stringify(minor))
+   fs/nfs/nfs42proc.c: In function '_nfs42_proc_fallocate':
+>> fs/nfs/nfs42proc.c:72:9: error: implicit declaration of function 'nfs4_bitmask_set' [-Werror=implicit-function-declaration]
+      72 |         nfs4_bitmask_set(bitmask, server->cache_consistency_bitmask, inode,
+         |         ^~~~~~~~~~~~~~~~
+   fs/nfs/nfs42proc.c: In function '_nfs42_proc_clone':
+>> fs/nfs/nfs42proc.c:1046:27: error: 'NFS4_BITMASK_SZ' undeclared (first use in this function); did you mean 'NFS_BITMASK_SZ'?
+    1046 |         __u32 dst_bitmask[NFS4_BITMASK_SZ];
+         |                           ^~~~~~~~~~~~~~~
+         |                           NFS_BITMASK_SZ
+   fs/nfs/nfs42proc.c:1046:27: note: each undeclared identifier is reported only once for each function it appears in
+   fs/nfs/nfs42proc.c:1046:15: warning: unused variable 'dst_bitmask' [-Wunused-variable]
+    1046 |         __u32 dst_bitmask[NFS4_BITMASK_SZ];
+         |               ^~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_CORE
+   Depends on HAS_IOMEM
+   Selected by
+   - HI6421V600_IRQ && OF && SPMI
 
 
--- 
-Jens Axboe
+vim +/nfs4_bitmask_set +72 fs/nfs/nfs42proc.c
 
+    43	
+    44	static int _nfs42_proc_fallocate(struct rpc_message *msg, struct file *filep,
+    45			struct nfs_lock_context *lock, loff_t offset, loff_t len)
+    46	{
+    47		struct inode *inode = file_inode(filep);
+    48		struct nfs_server *server = NFS_SERVER(inode);
+    49		u32 bitmask[3];
+    50		struct nfs42_falloc_args args = {
+    51			.falloc_fh	= NFS_FH(inode),
+    52			.falloc_offset	= offset,
+    53			.falloc_length	= len,
+    54			.falloc_bitmask	= bitmask,
+    55		};
+    56		struct nfs42_falloc_res res = {
+    57			.falloc_server	= server,
+    58		};
+    59		int status;
+    60	
+    61		msg->rpc_argp = &args;
+    62		msg->rpc_resp = &res;
+    63	
+    64		status = nfs4_set_rw_stateid(&args.falloc_stateid, lock->open_context,
+    65				lock, FMODE_WRITE);
+    66		if (status) {
+    67			if (status == -EAGAIN)
+    68				status = -NFS4ERR_BAD_STATEID;
+    69			return status;
+    70		}
+    71	
+  > 72		nfs4_bitmask_set(bitmask, server->cache_consistency_bitmask, inode,
+    73				 NFS_INO_INVALID_BLOCKS);
+    74	
+    75		res.falloc_fattr = nfs_alloc_fattr();
+    76		if (!res.falloc_fattr)
+    77			return -ENOMEM;
+    78	
+    79		status = nfs4_call_sync(server->client, server, msg,
+    80					&args.seq_args, &res.seq_res, 0);
+    81		if (status == 0)
+    82			status = nfs_post_op_update_inode_force_wcc(inode,
+    83								    res.falloc_fattr);
+    84	
+    85		if (msg->rpc_proc == &nfs4_procedures[NFSPROC4_CLNT_ALLOCATE])
+    86			trace_nfs4_fallocate(inode, &args, status);
+    87		else
+    88			trace_nfs4_deallocate(inode, &args, status);
+    89		kfree(res.falloc_fattr);
+    90		return status;
+    91	}
+    92	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

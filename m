@@ -2,434 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9505747A1F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 20:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FB847A1F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 20:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbhLSTpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 14:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbhLSTpR (ORCPT
+        id S236479AbhLSTzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 14:55:21 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:59866 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232253AbhLSTzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 14:45:17 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B0DC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 11:45:17 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1mz27N-0004uw-Vv; Sun, 19 Dec 2021 20:45:14 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2021-12-19]
-Date:   Sun, 19 Dec 2021 19:45:13 +0000
-Message-Id: <163994301274.632569.11641612108460583135@leemhuis.info>
-X-Mailer: git-send-email 2.31.1
-Content-Type: text/plain; charset="utf-8"
+        Sun, 19 Dec 2021 14:55:20 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:58338)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mz2H8-000VSn-9P; Sun, 19 Dec 2021 12:55:18 -0700
+Received: from ip68-227-161-49.om.om.cox.net ([68.227.161.49]:44410 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mz2H6-00FYFI-0g; Sun, 19 Dec 2021 12:55:17 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>,
+        0day robot <lkp@intel.com>, lkp@lists.01.org,
+        kernel test robot <oliver.sang@intel.com>
+References: <87tufc1p2i.fsf@email.froward.int.ebiederm.org>
+        <73ea569042babda5cee2092423da85027ceb471f.1639752364.git.legion@kernel.org>
+Date:   Sun, 19 Dec 2021 13:54:40 -0600
+In-Reply-To: <73ea569042babda5cee2092423da85027ceb471f.1639752364.git.legion@kernel.org>
+        (Alexey Gladkov's message of "Fri, 17 Dec 2021 15:48:23 +0100")
+Message-ID: <87lf0g9xq7.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639943117;5224dfef;
-X-HE-SMSGID: 1mz27N-0004uw-Vv
+Content-Type: text/plain
+X-XM-SPF: eid=1mz2H6-00FYFI-0g;;;mid=<87lf0g9xq7.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.161.49;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1++s70avrnqQa/lC3NDg5pl+oR+zUYPTF4=
+X-SA-Exim-Connect-IP: 68.227.161.49
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,T_TM2_M_HEADER_IN_MSG,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.7 XMSubLong Long Subject
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Alexey Gladkov <legion@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 947 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 12 (1.2%), b_tie_ro: 10 (1.1%), parse: 1.54
+        (0.2%), extract_message_metadata: 17 (1.8%), get_uri_detail_list: 6
+        (0.6%), tests_pri_-1000: 5 (0.6%), tests_pri_-950: 1.40 (0.1%),
+        tests_pri_-900: 1.14 (0.1%), tests_pri_-90: 97 (10.3%), check_bayes:
+        93 (9.8%), b_tokenize: 33 (3.5%), b_tok_get_all: 14 (1.4%),
+        b_comp_prob: 4.3 (0.5%), b_tok_touch_all: 36 (3.8%), b_finish: 2.2
+        (0.2%), tests_pri_0: 792 (83.6%), check_dkim_signature: 1.19 (0.1%),
+        check_dkim_adsp: 3.9 (0.4%), poll_dns_idle: 0.03 (0.0%), tests_pri_10:
+        2.1 (0.2%), tests_pri_500: 13 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v3] ucounts: Split rlimit and ucount values and max values
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 24 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-========================================================
-current cycle (v5.15.. aka v5.16-rc), culprit identified
-========================================================
-
-
-fbdev/efifb: Monitors no longer sleep (amdgpu dual monitor setup)
------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
-https://lore.kernel.org/linux-fbdev/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
-
-By Brandon Nielsen, 12 days ago; 4 activities, latest 2 days ago.
-Introduced in 55285e21f045 (v5.16-rc1)
-
-Recent activities from: Thorsten Leemhuis (1), Imre Deak (1)
-
-Noteworthy links:
-* https://bugzilla.redhat.com/show_bug.cgi?id=2028613
-* https://bugzilla.kernel.org/show_bug.cgi?id=215203
-
-
-5-10% increase in IO latencies with nohz balance patch
-------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/YaUH5GFFoLiS4/3/@localhost.localdomain/
-https://lore.kernel.org/lkml/YaUH5GFFoLiS4%2F3%2F@localhost.localdomain/
-
-By Josef Bacik, 20 days ago; 10 activities, latest 10 days ago.
-Introduced in 7fd7a9e0caba (v5.16-rc1)
-
-
-====================================================
-current cycle (v5.15.. aka v5.16-rc), unkown culprit
-====================================================
-
-
-mm: reclaim_throttle leads to stall in near-OOM conditions
-----------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211124011954.7cab9bb4@mail.inbox.lv/
-https://lore.kernel.org/lkml/20211124011954.7cab9bb4@mail.inbox.lv/
-
-By Alexey Avramov, 26 days ago; 18 activities, latest 2 days ago.
-Introduced in v5.15..v5.16-rc1
-
-Fix incoming:
-* mm: vmscan: reduce throttling due to a failure to make progress
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=7c4f5f83acfdc4ff5e10afb807aa080a5776771f
-
-
-mm: LTP/memcg testcase regression induced by 8cd7c588decf..66ce520bb7c2 series
-------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de/
-https://lore.kernel.org/lkml/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de/
-
-By Mike Galbraith, 28 days ago; 31 activities, latest 2 days ago.
-Introduced in 8cd7c588decf..66ce520bb7c2 (v5.15..v5.16-rc1)
-
-Fix incoming:
-* mm: vmscan: reduce throttling due to a failure to make progress
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=7c4f5f83acfdc4ff5e10afb807aa080a5776771f
-
-
-[ *NEW* ] usb: ucsi_acpi: kernel NULL pointer dereference
----------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/bug-215117-208809@https.bugzilla.kernel.org//
-https://lore.kernel.org/linux-usb/bug-215117-208809@https.bugzilla.kernel.org%2F/
-
-By bugzilla-daemon@bugzilla.kernel.org, 26 days ago; 8 activities, latest 3 days ago.
-Introduced in v5.15..v5.16-rc1
-
-Recent activities from: bugzilla-daemon@bugzilla.kernel.org (5), Heikki
-  Krogerus (1), Thorsten Leemhuis (1)
-
-2 patch postings are associated with this regression, the latest is this:
-* [Bug 215117] ucsi_acpi: kernel NULL pointer dereference
-  https://lore.kernel.org/linux-usb/bug-215117-208809-yxKkRosnB2@https.bugzilla.kernel.org%2F/
-  3 days ago, by bugzilla-daemon@bugzilla.kernel.org
-
-
-[ *NEW* ] Unable to launch QEMU Linux guest VM - "Guest has not initialized the display (yet)"
-----------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/bug-215317-28872@https.bugzilla.kernel.org//
-https://lore.kernel.org/kvm/bug-215317-28872@https.bugzilla.kernel.org%2F/
-
-By bugzilla-daemon@bugzilla.kernel.org, 6 days ago; 2 activities, latest 5 days ago.
-Introduced in v5.16-rc3..v5.16-rc4
-
-Recent activities from: bugzilla-daemon@bugzilla.kernel.org (2)
-
-Noteworthy links:
-* https://bugzilla.kernel.org/show_bug.cgi?id=215317
-
-
-=========================================================================================
-previous cycle (v5.14..v5.15), culprit identified, with activity in the past three months
-=========================================================================================
-
-
-net: kernel hangs during power down
------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211124144505.31e15716@hermes.local/
-https://lore.kernel.org/netdev/20211124144505.31e15716@hermes.local/
-
-By Stephen Hemminger, 24 days ago; 15 activities, latest 0 days ago.
-Introduced in f32a21376573 (v5.15-rc1)
-
-Fix incoming:
-* https://lore.kernel.org/regressions/cb51a8cc-7c43-745e-e075-398eee47b071@leemhuis.info/
-
-
-drm: nouveau: annoying black flickering in some applications with KDE Plasma with Xorg
---------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/da142fb9-07d7-24fe-4533-0247b8d16cdd@sfritsch.de/
-https://lore.kernel.org/dri-devel/da142fb9-07d7-24fe-4533-0247b8d16cdd@sfritsch.de/
-
-By Stefan Fritsch, 15 days ago; 15 activities, latest 3 days ago.
-Introduced in 3e1ad79bf661 (v5.15-rc1)
-
-Recent activities from: Ben Skeggs (1), Christian König (1)
-
-2 patch postings are associated with this regression, the latest is this:
-* [PATCH] drm/nouveau: wait for the exclusive fence after the shared ones v2
-  https://lore.kernel.org/dri-devel/20211209102335.18321-1-christian.koenig@amd.com/
-  10 days ago, by Christian König; thread monitored.
-
-
-Kernel 5.15 reboots / freezes upon ifup/ifdown
-----------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/924175a188159f4e03bd69908a91e606b574139b.camel@gmx.de/
-https://lore.kernel.org/stable/924175a188159f4e03bd69908a91e606b574139b.camel@gmx.de/
-
-By Stefan Dietrich, 25 days ago; 25 activities, latest 5 days ago.
-Introduced in a90ec8483732 (v5.15-rc1)
-
-Recent activities from: Vinicius Costa Gomes (2), Stefan Dietrich (1),
-  Thorsten Leemhuis (1)
-
-2 patch postings are associated with this regression, the latest is this:
-* [PATCH net v1] igc: Do not enable crosstimestamping for i225-V models
-  https://lore.kernel.org/netdev/20211214003949.666642-1-vinicius.gomes@intel.com/
-  5 days ago, by Vinicius Costa Gomes
-
-
-[ *NEW* ] drm: amdgpu: NUC8i7HVKVA crashes during system suspend
-----------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/bug-215315-2300@https.bugzilla.kernel.org//
-https://lore.kernel.org/dri-devel/bug-215315-2300@https.bugzilla.kernel.org%2F/
-
-By bugzilla-daemon@bugzilla.kernel.org, 6 days ago; 1 activities, latest 6 days ago.
-Introduced in f7d6779df642 (v5.15-rc1)
-
-Recent activities from: bugzilla-daemon@bugzilla.kernel.org (1)
-
-Noteworthy links:
-* https://bugzilla.kernel.org/show_bug.cgi?id=215315
-
-
-Bluetooth not working on 5.15+ since "Bluetooth: Move shutdown callback before flushing tx and rx queue"
---------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com/
-https://lore.kernel.org/lkml/CAJvGw%2BAJ5dHSb50RtJHnjbhMVQa%2BrJgYznFV4t-iaO0qx%2BW-jw@mail.gmail.com/
-
-By coldolt, 9 days ago; 3 activities, latest 9 days ago.
-Introduced in 0ea53674d07f (v5.15-rc1)
-
-
-==================================================================================
-older cycles (..v5.14), culprit identified, with activity in the past three months
-==================================================================================
-
-
-[ *NEW* ] fbdev: matroxfb: display black ans warns "the current input timing is not supported by the monitor display"
----------------------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211218180035.200552-1-liuzx@knownsec.com/
-https://lore.kernel.org/lkml/20211218180035.200552-1-liuzx@knownsec.com/
-
-By Z. Liu, 1 days ago; 1 activities, latest 1 days ago.
-Introduced in 11be60bd66d5 (v5.7-rc1)
-
-Recent activities from: Z. Liu (1)
-
-Noteworthy links:
-* https://bugzilla.kernel.org/show_bug.cgi?id=215355
-
-
-[ *NEW* ] pci: the pci sysfs "rom" file has disappeared for VGA devices
------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/YbxqIyrkv3GhZVxx@intel.com/
-https://lore.kernel.org/linux-pci/YbxqIyrkv3GhZVxx@intel.com/
-
-By Ville Syrjälä, 2 days ago; 4 activities, latest 1 days ago.
-Introduced in 527139d738d7 (v5.13-rc1)
-
-Recent activities from: Ville Syrjälä (2), Krzysztof Wilczyński (1),
-  Bjorn Helgaas (1)
-
-
-btrfs: deadlocks in dedupe
---------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211210183456.GP17148@hungrycats.org/
-https://lore.kernel.org/linux-btrfs/20211210183456.GP17148@hungrycats.org/
-
-By Zygo Blaxell, 9 days ago; 11 activities, latest 1 days ago.
-Introduced in 3078d85c9a10 (v5.11-rc1)
-
-Recent activities from: Zygo Blaxell (5), Nikolay Borisov (4), Josef
-  Bacik (1)
-
-
-[ *NEW* ] gpio: some GPIO lines have stopped working
-----------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211217153555.9413-1-marcelo.jimenez@gmail.com/
-https://lore.kernel.org/stable/20211217153555.9413-1-marcelo.jimenez@gmail.com/
-
-By Marcelo Roberto Jimenez, 2 days ago; 1 activities, latest 2 days ago.
-Introduced in 2ab73c6d8323 (v5.7-rc1)
-
-Recent activities from: Marcelo Roberto Jimenez (1)
-
-
-Bug in Memory Layout of rx_desc for QCA6174
--------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
-https://lore.kernel.org/ath10k/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
-
-By Francesco Magliocca, 184 days ago; 6 activities, latest 3 days ago.
-Introduced in e3def6f7ddf8 (v4.16-rc1)
-
-Recent activities from: Francesco Magliocca (1)
-
-One patch associated with this regression:
-* [PATCH v2] ath10k: abstract htt_rx_desc structure
-  https://lore.kernel.org/linux-wireless/20211216151823.68878-1-franciman12@gmail.com/
-  3 days ago, by Francesco Magliocca; thread monitored.
-
-Noteworthy links:
-* Bug in Memory Layout of rx_desc for QCA6174
-  https://lore.kernel.org/ath10k/CAH4F6uvX=xtTnBDaj1BVHSx_FDSUbpc4TRC2DGTHBmGJSD2oEA@mail.gmail.com/
-  51 days ago, by Francesco Magliocca; thread monitored.
-
-
-[ *NEW* ] mtd: cfi_cmdset_0002: flash write accesses on the hardware fail on a PowerPC MPC8313 to a 8-bit-parallel S29GL064N flash
-----------------------------------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
-https://lore.kernel.org/lkml/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
-
-By Ahmad Fatoum, 6 days ago; 2 activities, latest 4 days ago.
-Introduced in dfeae1073583 (v4.18-rc1)
-
-Recent activities from: Tokunori Ikegami (1), Ahmad Fatoum (1)
-
-
-usb: gadget: atmel: ethernet over USB Gadget not recognized anymore after disconnect and reconnect
---------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211211183650.12183-1-marcelo.jimenez@gmail.com/
-https://lore.kernel.org/regressions/20211211183650.12183-1-marcelo.jimenez@gmail.com/
-
-By Marcelo Roberto Jimenez, 8 days ago; 5 activities, latest 4 days ago.
-Introduced in 70a7f8be8598 (v5.2-rc1)
-
-Recent activities from: Marcelo Roberto Jimenez (2),
-  Cristian.Birsan@microchip.com (1), Jonas Bonn (1)
-
-
-drm: amdgpu: apps that need amdgpu do not start after system is woken from suspend
-----------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1295184560.182511.1639075777725@mail.yahoo.com/
-https://lore.kernel.org/linux-i2c/1295184560.182511.1639075777725@mail.yahoo.com/
-
-By Tareque Md.Hanif, 10 days ago; 1 activities, latest 10 days ago.
-Introduced in 5a7b95fb993e (v5.14-rc1)
-
-
-bluetooth: "Query LE tx power on startup" broke Bluetooth on MacBookPro16,1
----------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
-https://lore.kernel.org/regressions/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
-
-By Orlando Chamberlain, 81 days ago; 86 activities, latest 11 days ago.
-Introduced in 7c395ea521e6 (v5.11-rc1)
-
-Fix incoming:
-* Bluetooth: btbcm: disable read tx power for some Macs with the T2 Security chip
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=801b4c027b44a185292007d3cf7513999d644723
-
-
-net: wireless: ath10k: 5GHz channels are marked as No-IR
---------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
-https://lore.kernel.org/ath10k/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
-
-By Sebastian Bachmann, 22 days ago; 20 activities, latest 13 days ago.
-Introduced in 2dc016599cfa (v5.6-rc1)
-
-Noteworthy links:
-* Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
-  https://lore.kernel.org/ath10k/5971a327-d11a-35e6-8295-8dfb8ae3a434@yandex.ru/
-  616 days ago, by svp; thread monitored.
-* Re: Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
-  https://lore.kernel.org/ath10k/CA+ASDXNNfG3-ra8C2ou457J=Vj5eE83VCXgGsFPQQOixTcu7YA@mail.gmail.com/
-  544 days ago, by Brian Norris
-* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/linux-wireless/20200730124923.271429-1-alsi@bang-olufsen.dk/
-  507 days ago, by Alvin Šipraga; thread monitored.
-* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/ath10k/20201022172113.GA1367233@capeo.gueux.org/
-  423 days ago, by Félix Sipma; thread monitored.
-* Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/ath10k/19e636c1-fdbe-7222-a055-d668e4617070@gmx.de/
-  363 days ago, by sparks71@gmx.de; thread monitored.
-* https://bugs.debian.org/959821
-* https://bbs.archlinux.org/viewtopic.php?id=254535
-
-
-usb: fsl_udc_core: corrupted request list leads to unrecoverable loop
----------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
-https://lore.kernel.org/linuxppc-dev/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
-
-By Eugene Bordenkircher, 51 days ago; 16 activities, latest 15 days ago.
-Introduced in f79a60b8785 (v3.4-rc4)
-
-Noteworthy links:
-* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
-  https://lore.kernel.org/all/CADRPPNSrhiwr8jmBb2h4cFYqHtuDKK8rL0i6Bkg7+xEyXJPATA@mail.gmail.com/
-  50 days ago, by Li Yang
-* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
-  https://lore.kernel.org/all/2c275adc278477e1e512ea6ecc0c1f4dcc46969d.camel@infinera.com/
-  50 days ago, by Joakim Tjernlund
-
-
-PCIe regression on APM Merlin (aarch64 dev platform) preventing NVME initialization
------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CA+enf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
-https://lore.kernel.org/linux-pci/CA%2Benf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
-
-By Stéphane Graber, 31 days ago; 9 activities, latest 17 days ago.
-Introduced in 6dce5aa59e0b (v5.5-rc1)
-
-Fix incoming:
-* PCI: xgene: Fix IB window setup
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=c7a75d07827a1f33d566e18e6098379cc2a0c2b2
-
-
-====================================================================
-all others with unkown culprit and activity in the past three months
-====================================================================
-
-
-idle power increased from ~20 to ~28 watts
-------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
-https://lore.kernel.org/lkml/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
-
-By Idzibear, 48 days ago; 3 activities, latest 48 days ago.
-Introduced in v5.14..v5.15
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/163933981285.486507.5806345036032364969@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+Alexey Gladkov <legion@kernel.org> writes:
+
+> Since the semantics of maximum rlimit values are different, it would be
+> better not to mix ucount and rlimit values. This will prevent the error
+> of using inc_count/dec_ucount for rlimit parameters.
+>
+> This patch also renames the functions to emphasize the lack of
+> connection between rlimit and ucount.
+>
+> v2:
+> - Fix the array-index-out-of-bounds that was found by the lkp project.
+
+At a quick read through this looks good.
+
+I will see about getting this into for-next so we can merge this for v5.17
+
+Eric
+
+>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>  fs/exec.c                      |  2 +-
+>  fs/proc/array.c                |  2 +-
+>  include/linux/user_namespace.h | 35 +++++++++++++++++++++-------------
+>  kernel/fork.c                  | 12 ++++++------
+>  kernel/sys.c                   |  2 +-
+>  kernel/ucount.c                | 24 ++++++++++-------------
+>  kernel/user_namespace.c        | 10 +++++-----
+>  7 files changed, 46 insertions(+), 41 deletions(-)
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 537d92c41105..d3f769837058 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1877,7 +1877,7 @@ static int do_execveat_common(int fd, struct filename *filename,
+>  	 * whether NPROC limit is still exceeded.
+>  	 */
+>  	if ((current->flags & PF_NPROC_EXCEEDED) &&
+> -	    is_ucounts_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+> +	    is_rlimit_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+>  		retval = -EAGAIN;
+>  		goto out_ret;
+>  	}
+> diff --git a/fs/proc/array.c b/fs/proc/array.c
+> index ff869a66b34e..d3fa539c755e 100644
+> --- a/fs/proc/array.c
+> +++ b/fs/proc/array.c
+> @@ -274,7 +274,7 @@ static inline void task_sig(struct seq_file *m, struct task_struct *p)
+>  		collect_sigign_sigcatch(p, &ignored, &caught);
+>  		num_threads = get_nr_threads(p);
+>  		rcu_read_lock();  /* FIXME: is this correct? */
+> -		qsize = get_ucounts_value(task_ucounts(p), UCOUNT_RLIMIT_SIGPENDING);
+> +		qsize = get_rlimit_value(task_ucounts(p), UCOUNT_RLIMIT_SIGPENDING);
+>  		rcu_read_unlock();
+>  		qlim = task_rlimit(p, RLIMIT_SIGPENDING);
+>  		unlock_task_sighand(p, &flags);
+> diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+> index 33a4240e6a6f..45f09bec02c4 100644
+> --- a/include/linux/user_namespace.h
+> +++ b/include/linux/user_namespace.h
+> @@ -54,15 +54,17 @@ enum ucount_type {
+>  	UCOUNT_FANOTIFY_GROUPS,
+>  	UCOUNT_FANOTIFY_MARKS,
+>  #endif
+> +	UCOUNT_COUNTS,
+> +};
+> +
+> +enum rlimit_type {
+>  	UCOUNT_RLIMIT_NPROC,
+>  	UCOUNT_RLIMIT_MSGQUEUE,
+>  	UCOUNT_RLIMIT_SIGPENDING,
+>  	UCOUNT_RLIMIT_MEMLOCK,
+> -	UCOUNT_COUNTS,
+> +	UCOUNT_RLIMIT_COUNTS,
+>  };
+>  
+> -#define MAX_PER_NAMESPACE_UCOUNTS UCOUNT_RLIMIT_NPROC
+> -
+>  struct user_namespace {
+>  	struct uid_gid_map	uid_map;
+>  	struct uid_gid_map	gid_map;
+> @@ -99,6 +101,7 @@ struct user_namespace {
+>  #endif
+>  	struct ucounts		*ucounts;
+>  	long ucount_max[UCOUNT_COUNTS];
+> +	long rlimit_max[UCOUNT_RLIMIT_COUNTS];
+>  } __randomize_layout;
+>  
+>  struct ucounts {
+> @@ -107,6 +110,7 @@ struct ucounts {
+>  	kuid_t uid;
+>  	atomic_t count;
+>  	atomic_long_t ucount[UCOUNT_COUNTS];
+> +	atomic_long_t rlimit[UCOUNT_RLIMIT_COUNTS];
+>  };
+>  
+>  extern struct user_namespace init_user_ns;
+> @@ -120,21 +124,26 @@ struct ucounts *alloc_ucounts(struct user_namespace *ns, kuid_t uid);
+>  struct ucounts * __must_check get_ucounts(struct ucounts *ucounts);
+>  void put_ucounts(struct ucounts *ucounts);
+>  
+> -static inline long get_ucounts_value(struct ucounts *ucounts, enum ucount_type type)
+> +static inline long get_rlimit_value(struct ucounts *ucounts, enum rlimit_type type)
+>  {
+> -	return atomic_long_read(&ucounts->ucount[type]);
+> +	return atomic_long_read(&ucounts->rlimit[type]);
+>  }
+>  
+> -long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v);
+> -bool dec_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v);
+> -long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type);
+> -void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum ucount_type type);
+> -bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long max);
+> +long inc_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v);
+> +bool dec_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v);
+> +long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum rlimit_type type);
+> +void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum rlimit_type type);
+> +bool is_rlimit_overlimit(struct ucounts *ucounts, enum rlimit_type type, unsigned long max);
+> +
+> +static inline long get_userns_rlimit_max(struct user_namespace *ns, enum rlimit_type type)
+> +{
+> +	return READ_ONCE(ns->rlimit_max[type]);
+> +}
+>  
+> -static inline void set_rlimit_ucount_max(struct user_namespace *ns,
+> -		enum ucount_type type, unsigned long max)
+> +static inline void set_userns_rlimit_max(struct user_namespace *ns,
+> +		enum rlimit_type type, unsigned long max)
+>  {
+> -	ns->ucount_max[type] = max <= LONG_MAX ? max : LONG_MAX;
+> +	ns->rlimit_max[type] = max <= LONG_MAX ? max : LONG_MAX;
+>  }
+>  
+>  #ifdef CONFIG_USER_NS
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 3244cc56b697..fb68d56bcd7e 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -836,13 +836,13 @@ void __init fork_init(void)
+>  	init_task.signal->rlim[RLIMIT_SIGPENDING] =
+>  		init_task.signal->rlim[RLIMIT_NPROC];
+>  
+> -	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++)
+> +	for (i = 0; i < UCOUNT_COUNTS; i++)
+>  		init_user_ns.ucount_max[i] = max_threads/2;
+>  
+> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_NPROC,      RLIM_INFINITY);
+> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE,   RLIM_INFINITY);
+> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_SIGPENDING, RLIM_INFINITY);
+> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MEMLOCK,    RLIM_INFINITY);
+> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_NPROC,      RLIM_INFINITY);
+> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE,   RLIM_INFINITY);
+> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_SIGPENDING, RLIM_INFINITY);
+> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_MEMLOCK,    RLIM_INFINITY);
+>  
+>  #ifdef CONFIG_VMAP_STACK
+>  	cpuhp_setup_state(CPUHP_BP_PREPARE_DYN, "fork:vm_stack_cache",
+> @@ -2053,7 +2053,7 @@ static __latent_entropy struct task_struct *copy_process(
+>  	DEBUG_LOCKS_WARN_ON(!p->softirqs_enabled);
+>  #endif
+>  	retval = -EAGAIN;
+> -	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+> +	if (is_rlimit_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+>  		if (p->real_cred->user != INIT_USER &&
+>  		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>  			goto bad_fork_free;
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index 8fdac0d90504..2c86d245acd6 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -479,7 +479,7 @@ static int set_user(struct cred *new)
+>  	 * for programs doing set*uid()+execve() by harmlessly deferring the
+>  	 * failure to the execve() stage.
+>  	 */
+> -	if (is_ucounts_overlimit(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
+> +	if (is_rlimit_overlimit(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
+>  			new_user != INIT_USER &&
+>  			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>  		current->flags |= PF_NPROC_EXCEEDED;
+> diff --git a/kernel/ucount.c b/kernel/ucount.c
+> index 7b32c356ebc5..22070f004e97 100644
+> --- a/kernel/ucount.c
+> +++ b/kernel/ucount.c
+> @@ -87,10 +87,6 @@ static struct ctl_table user_table[] = {
+>  	UCOUNT_ENTRY("max_fanotify_groups"),
+>  	UCOUNT_ENTRY("max_fanotify_marks"),
+>  #endif
+> -	{ },
+> -	{ },
+> -	{ },
+> -	{ },
+>  	{ }
+>  };
+>  #endif /* CONFIG_SYSCTL */
+> @@ -261,7 +257,7 @@ void dec_ucount(struct ucounts *ucounts, enum ucount_type type)
+>  	put_ucounts(ucounts);
+>  }
+>  
+> -long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
+> +long inc_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
+>  {
+>  	struct ucounts *iter;
+>  	long max = LONG_MAX;
+> @@ -273,12 +269,12 @@ long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
+>  			ret = LONG_MAX;
+>  		else if (iter == ucounts)
+>  			ret = new;
+> -		max = READ_ONCE(iter->ns->ucount_max[type]);
+> +		max = get_userns_rlimit_max(iter->ns, type);
+>  	}
+>  	return ret;
+>  }
+>  
+> -bool dec_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
+> +bool dec_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
+>  {
+>  	struct ucounts *iter;
+>  	long new = -1; /* Silence compiler warning */
+> @@ -292,7 +288,7 @@ bool dec_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
+>  }
+>  
+>  static void do_dec_rlimit_put_ucounts(struct ucounts *ucounts,
+> -				struct ucounts *last, enum ucount_type type)
+> +				struct ucounts *last, enum rlimit_type type)
+>  {
+>  	struct ucounts *iter, *next;
+>  	for (iter = ucounts; iter != last; iter = next) {
+> @@ -304,12 +300,12 @@ static void do_dec_rlimit_put_ucounts(struct ucounts *ucounts,
+>  	}
+>  }
+>  
+> -void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum ucount_type type)
+> +void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum rlimit_type type)
+>  {
+>  	do_dec_rlimit_put_ucounts(ucounts, NULL, type);
+>  }
+>  
+> -long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+> +long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum rlimit_type type)
+>  {
+>  	/* Caller must hold a reference to ucounts */
+>  	struct ucounts *iter;
+> @@ -322,7 +318,7 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+>  			goto unwind;
+>  		if (iter == ucounts)
+>  			ret = new;
+> -		max = READ_ONCE(iter->ns->ucount_max[type]);
+> +		max = get_userns_rlimit_max(iter->ns, type);
+>  		/*
+>  		 * Grab an extra ucount reference for the caller when
+>  		 * the rlimit count was previously 0.
+> @@ -341,16 +337,16 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+>  	return 0;
+>  }
+>  
+> -bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
+> +bool is_rlimit_overlimit(struct ucounts *ucounts, enum rlimit_type type, unsigned long rlimit)
+>  {
+>  	struct ucounts *iter;
+>  	long max = rlimit;
+>  	if (rlimit > LONG_MAX)
+>  		max = LONG_MAX;
+>  	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+> -		if (get_ucounts_value(iter, type) > max)
+> +		if (get_rlimit_value(iter, type) > max)
+>  			return true;
+> -		max = READ_ONCE(iter->ns->ucount_max[type]);
+> +		max = get_userns_rlimit_max(iter->ns, type);
+>  	}
+>  	return false;
+>  }
+> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> index 6b2e3ca7ee99..b9f6729b4e5f 100644
+> --- a/kernel/user_namespace.c
+> +++ b/kernel/user_namespace.c
+> @@ -119,13 +119,13 @@ int create_user_ns(struct cred *new)
+>  	ns->owner = owner;
+>  	ns->group = group;
+>  	INIT_WORK(&ns->work, free_user_ns);
+> -	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++) {
+> +	for (i = 0; i < UCOUNT_COUNTS; i++) {
+>  		ns->ucount_max[i] = INT_MAX;
+>  	}
+> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
+> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
+> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
+> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
+> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
+> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
+> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
+> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
+>  	ns->ucounts = ucounts;
+>  
+>  	/* Inherit USERNS_SETGROUPS_ALLOWED from our parent */

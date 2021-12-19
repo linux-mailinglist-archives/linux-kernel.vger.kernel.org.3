@@ -2,206 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7227B479FCA
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 07:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB345479FD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 08:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbhLSGzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 01:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235323AbhLSGzO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 01:55:14 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B187C061574;
-        Sat, 18 Dec 2021 22:55:14 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id t5so25194663edd.0;
-        Sat, 18 Dec 2021 22:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=imn0//z0neW5U8hyxa6HwFdhRTH0GBtIxspDrfE6Ot0=;
-        b=MLuewlbSp7mGvsCpgZmab7zE2hNYwyz7zAU+6HYhbjbblN+Ufy5ZwMQc/GBDMf7wKM
-         97SHDpv3aXwkDeMR7M1MIgx02GVFMvh7BV3LuKlex6EOdogwIjcZoxAceJ5QxWvkoypH
-         gjxADSsPP50fJxbENOqqhIlHxckbe9cwswH34stvpQACRrqbs4nPtKRGHIbHdaQL9wMO
-         yDn6gwvrqSiAz4lkVAC7pwCPwwZnpDVYHzmsb9VuLYXyAwiGtIqgP8IHy0DaStXMvjSy
-         CC66Qjwfq/nGfyJPEeqOlZ2t6XlYSySm3VzgZbd7F4GAqZzblWSKOGXwRLwcmVdh3Bj+
-         ND7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=imn0//z0neW5U8hyxa6HwFdhRTH0GBtIxspDrfE6Ot0=;
-        b=2qquLjiViaM/UKpjYJbH/GrUz/b4aoTgyI+diqrlCa2sNn7dXLTwwSgnr0d6rkT6lo
-         EZloP1Og7LysH2WRn6UB8xwjETWlTLSlm4LMX1YvVx9zHzO0/HIMuHo/cwDVFK3btr0M
-         PBZGvJziBFsyp5FlaoouMOC/5wEnTypDyGExD8HuDmli1rw+6CSUhu/tPam9K2PHYdtG
-         AY54Zoy1vSEX6WQOWvFmVPiEBhGExkOJ104SldpJzNpF+tsXn1cmdn/W1kNrfdfMrgq2
-         xiCu68V/AwhzVopQ1X0SvKz6FtHMmYMHhREblDxT0DBkPkNltdr4ZH6Av7aq/MWPunBc
-         xDDw==
-X-Gm-Message-State: AOAM531iC2CeJXq9024Y1/cbs62i8WsaGDM35IMh1XDzwN6Ii/e/p3WS
-        7GqOskNAdNDrGUysobRkE0ZRnErDAEbX18Ry7dC7+DrIdXTagA==
-X-Google-Smtp-Source: ABdhPJyJoJEygh1uTynsT0zFIyWGiogF+yFeGT8pGrB54qj5okoKoLFUhuCkWeuuf76vit6e/6jDJkWiOPJVQWHR7gM=
-X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr10381020edc.297.1639896912420;
- Sat, 18 Dec 2021 22:55:12 -0800 (PST)
+        id S232925AbhLSH4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 02:56:31 -0500
+Received: from mga04.intel.com ([192.55.52.120]:19246 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231314AbhLSH43 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 02:56:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639900588; x=1671436588;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dMyJ0xM4qP3sUbL2vjGGYlJGvIi73WG2IUTMjHZ14Zk=;
+  b=K/U2Z4Q0NdgiUg0fcmGFICNlhizc9+k/NMwxf6DFcAg5dXIpqNoDR5NE
+   inn7nJi1QjOUawLlXQhJVUFaM7h464QcS08oWE6lzPZIJobH994iCicRp
+   k6xkukDH699BAgT77lw2SaBMwoU+k/NmRSEcs51WYY7SFrfkbz7e+E5wx
+   WtpjIufzpfWv2OIBAegP/Axq09RABD8L5DRNuDrfVNeva9EYj3LKPdinh
+   aqO9Mb9kiV+zW7nZMNKJq1ViYwmlBLf+rNlx1/i6ItmW1R51NHKkBdxBR
+   GG9tcfivsff75wMhbU24yopsm9LrENYDYw9bnV8uQRhm2D+COyTCvRAVG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="238734958"
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="238734958"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 23:56:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="546860093"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 18 Dec 2021 23:56:26 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1myr3S-0006nl-83; Sun, 19 Dec 2021 07:56:26 +0000
+Date:   Sun, 19 Dec 2021 15:56:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/msi] BUILD SUCCESS
+ d558285413ea2f934ab90223ba908c30c5113aee
+Message-ID: <61bee59c.jpzrEsuSYMQ/Xw/7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <000000000000372da005d24efed8@google.com>
-In-Reply-To: <000000000000372da005d24efed8@google.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Sun, 19 Dec 2021 14:54:46 +0800
-Message-ID: <CAD-N9QXE+c3y6y14=OBXmFWSt74-vyFrgLo3FJVUoK1mt38iqA@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in virtio_gpu_array_put_free
-To:     syzbot <syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com>
-Cc:     airlied@linux.ie, christian.koenig@amd.com, daniel@ffwll.ch,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        kraxel@redhat.com, linaro-mm-sig@lists.linaro.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 5:53 PM syzbot
-<syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    d58071a8a76d Linux 5.16-rc3
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11f773f6b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=171728a464c05f2b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e9072e90624a31dfa85f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com
->
->  </TASK>
-> general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
-> CPU: 0 PID: 20114 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> RIP: 0010:virtio_gpu_array_put_free+0x2f/0x190 drivers/gpu/drm/virtio/virtgpu_gem.c:251
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/msi
+branch HEAD: d558285413ea2f934ab90223ba908c30c5113aee  PCI/MSI: Unbreak pci_irq_get_affinity()
 
-From the description of stack trace, the bug resides in the missing
-allocation of objs variable.
+elapsed time: 726m
 
-If fense is NULL, it will bypass the assignment of objs. And then in
-the error handling of virtio_gpu_object_shmem_init, objs will be used
-to dereference, leading to Null Pointer Dereference.
+configs tested: 141
+configs skipped: 3
 
-if (fence) {
-ret = -ENOMEM;
-objs = virtio_gpu_array_alloc(1);  // if fence is NULL, this
-assignment will be bypassed.
-if (!objs)
-goto err_put_id;
-virtio_gpu_array_add_obj(objs, &bo->base.base);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-ret = virtio_gpu_array_lock_resv(objs);
-if (ret != 0)
-goto err_put_objs;
-}
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+nios2                            alldefconfig
+powerpc                       ebony_defconfig
+mips                      malta_kvm_defconfig
+arm                           sama5_defconfig
+riscv                          rv32_defconfig
+powerpc                    sam440ep_defconfig
+arm                      pxa255-idp_defconfig
+h8300                            alldefconfig
+arm                       spear13xx_defconfig
+mips                         cobalt_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arc                 nsimosci_hs_smp_defconfig
+xtensa                       common_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                        omega2p_defconfig
+sparc64                             defconfig
+sh                     sh7710voipgw_defconfig
+arm                              alldefconfig
+nds32                            alldefconfig
+m68k                       m5208evb_defconfig
+m68k                        m5407c3_defconfig
+arm                            hisi_defconfig
+sh                   rts7751r2dplus_defconfig
+arm                         shannon_defconfig
+arm                        clps711x_defconfig
+sh                           se7724_defconfig
+m68k                       m5249evb_defconfig
+arm                            dove_defconfig
+powerpc                     powernv_defconfig
+um                           x86_64_defconfig
+mips                        jmr3927_defconfig
+powerpc                     stx_gp3_defconfig
+sh                  sh7785lcr_32bit_defconfig
+mips                     loongson1b_defconfig
+mips                         db1xxx_defconfig
+powerpc                      ppc6xx_defconfig
+sh                           sh2007_defconfig
+arm                           viper_defconfig
+powerpc64                        alldefconfig
+sh                   sh7770_generic_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     tqm8560_defconfig
+h8300                       h8s-sim_defconfig
+mips                     cu1830-neo_defconfig
+i386                             alldefconfig
+arm                           u8500_defconfig
+m68k                        mvme147_defconfig
+ia64                         bigsur_defconfig
+arc                     haps_hs_smp_defconfig
+powerpc                      arches_defconfig
+mips                          rb532_defconfig
+powerpc                 canyonlands_defconfig
+arm                        trizeps4_defconfig
+powerpc                   motionpro_defconfig
+powerpc                 linkstation_defconfig
+m68k                           sun3_defconfig
+openrisc                    or1ksim_defconfig
+h8300                            allyesconfig
+arm                  randconfig-c002-20211219
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                                defconfig
+i386                              debian-10.3
+sparc                               defconfig
+i386                             allyesconfig
+i386                   debian-10.3-kselftests
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a011-20211219
+x86_64               randconfig-a013-20211219
+x86_64               randconfig-a012-20211219
+x86_64               randconfig-a014-20211219
+x86_64               randconfig-a015-20211219
+x86_64               randconfig-a016-20211219
+i386                 randconfig-a011-20211219
+i386                 randconfig-a015-20211219
+i386                 randconfig-a012-20211219
+i386                 randconfig-a013-20211219
+i386                 randconfig-a016-20211219
+i386                 randconfig-a014-20211219
+arc                  randconfig-r043-20211219
+riscv                randconfig-r042-20211219
+s390                 randconfig-r044-20211219
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-ret = virtio_gpu_object_shmem_init(vgdev, bo, &ents, &nents);
-if (ret != 0) {
-virtio_gpu_array_put_free(objs);
-virtio_gpu_free_object(&shmem_obj->base);
-return ret;
-}
+clang tested configs:
+i386                 randconfig-a002-20211219
+i386                 randconfig-a001-20211219
+i386                 randconfig-a005-20211219
+i386                 randconfig-a003-20211219
+i386                 randconfig-a006-20211219
+i386                 randconfig-a004-20211219
+x86_64               randconfig-a006-20211219
+x86_64               randconfig-a005-20211219
+x86_64               randconfig-a001-20211219
+x86_64               randconfig-a003-20211219
+x86_64               randconfig-a002-20211219
+x86_64               randconfig-a004-20211219
+hexagon              randconfig-r045-20211219
+hexagon              randconfig-r041-20211219
 
-
-> Code: 55 49 89 fd 41 54 55 53 48 83 ec 08 e8 5a dd 09 fd 49 8d 45 70 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 21 01 00 00 41 8b 5d 70 31 ff
-> RSP: 0018:ffffc90005a9fa90 EFLAGS: 00010202
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc900262ce000
-> RDX: 000000000000000e RSI: ffffffff846cf6e6 RDI: 0000000000000000
-> RBP: ffff88801882b800 R08: 0000000000000000 R09: ffffc90005a9f9ef
-> R10: ffffffff846dcc29 R11: 0000000000000000 R12: ffffc90005a9fbd0
-> R13: 0000000000000000 R14: ffff888045f60000 R15: 00000000fffffff4
-> FS:  00007f4ad9393700(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f561e680558 CR3: 0000000050bde000 CR4: 0000000000150ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
-> Call Trace:
->  <TASK>
->  virtio_gpu_object_create+0x5c7/0xd90 drivers/gpu/drm/virtio/virtgpu_object.c:251
->  virtio_gpu_gem_create drivers/gpu/drm/virtio/virtgpu_gem.c:42 [inline]
->  virtio_gpu_mode_dumb_create+0x319/0x5c0 drivers/gpu/drm/virtio/virtgpu_gem.c:90
->  drm_mode_create_dumb+0x26c/0x2f0 drivers/gpu/drm/drm_dumb_buffers.c:96
->  drm_ioctl_kernel+0x27d/0x4e0 drivers/gpu/drm/drm_ioctl.c:782
->  drm_ioctl+0x51e/0x9d0 drivers/gpu/drm/drm_ioctl.c:885
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f4adbe1dae9
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f4ad9393188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007f4adbf30f60 RCX: 00007f4adbe1dae9
-> RDX: 0000000020000040 RSI: 00000000c02064b2 RDI: 0000000000000003
-> RBP: 00007f4ad93931d0 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-> R13: 00007ffccb96db4f R14: 00007f4ad9393300 R15: 0000000000022000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 8191b5e5ff4f69ef ]---
-> RIP: 0010:virtio_gpu_array_put_free+0x2f/0x190 drivers/gpu/drm/virtio/virtgpu_gem.c:251
-> Code: 55 49 89 fd 41 54 55 53 48 83 ec 08 e8 5a dd 09 fd 49 8d 45 70 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 21 01 00 00 41 8b 5d 70 31 ff
-> RSP: 0018:ffffc90005a9fa90 EFLAGS: 00010202
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc900262ce000
-> RDX: 000000000000000e RSI: ffffffff846cf6e6 RDI: 0000000000000000
-> RBP: ffff88801882b800 R08: 0000000000000000 R09: ffffc90005a9f9ef
-> R10: ffffffff846dcc29 R11: 0000000000000000 R12: ffffc90005a9fbd0
-> R13: 0000000000000000 R14: ffff888045f60000 R15: 00000000fffffff4
-> FS:  00007f4ad9393700(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000000065f4d7 CR3: 0000000050bde000 CR4: 0000000000150ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:   55                      push   %rbp
->    1:   49 89 fd                mov    %rdi,%r13
->    4:   41 54                   push   %r12
->    6:   55                      push   %rbp
->    7:   53                      push   %rbx
->    8:   48 83 ec 08             sub    $0x8,%rsp
->    c:   e8 5a dd 09 fd          callq  0xfd09dd6b
->   11:   49 8d 45 70             lea    0x70(%r13),%rax
->   15:   48 89 c2                mov    %rax,%rdx
->   18:   48 89 04 24             mov    %rax,(%rsp)
->   1c:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
->   23:   fc ff df
->   26:   48 c1 ea 03             shr    $0x3,%rdx
-> * 2a:   0f b6 04 02             movzbl (%rdx,%rax,1),%eax <-- trapping instruction
->   2e:   84 c0                   test   %al,%al
->   30:   74 08                   je     0x3a
->   32:   3c 03                   cmp    $0x3,%al
->   34:   0f 8e 21 01 00 00       jle    0x15b
->   3a:   41 8b 5d 70             mov    0x70(%r13),%ebx
->   3e:   31 ff                   xor    %edi,%edi
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000372da005d24efed8%40google.com.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

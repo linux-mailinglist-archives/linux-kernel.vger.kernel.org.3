@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED09747A235
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDA047A239
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbhLSVJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S236636AbhLSVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236159AbhLSVJv (ORCPT
+        with ESMTP id S236159AbhLSVMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:09:51 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1693AC061574;
-        Sun, 19 Dec 2021 13:09:51 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id k23so12797223lje.1;
-        Sun, 19 Dec 2021 13:09:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=/ODWiIFGBcYIvOfjZgM+N+Zmuylofd9rTC/IRS5c5Dg=;
-        b=CNJnTKoVrR+mwizs+Fk1R93lblNcNM4P27W7UK4hd4s27ASSOzb/5wDgppG9NcagXE
-         Qy60cY1bQvHLHQL7dCVp3zkiQ2nsriGwYA9hAAgDFeBIfHx29yp0n6Fq9xM/BhR/Vr9A
-         CIrTllNeGrazQCLEbz+bOscvL/no/U1lFSiR+5AYFd5ZXZvfJtgRLQe/4cf9wRlQSlZe
-         rx24LCf1j7eaEsRpedCvFeYYPeM3CdJi2MUQK42Fsr1sG2UHHymcs4himDf4VcWHenKH
-         2qRMV5yaFyW+hp2hXjRYQgT3AWdkGEwVO/Sv7g0LdQgfk77kwbW6OQ2xmdxbiPD+2ayX
-         egUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/ODWiIFGBcYIvOfjZgM+N+Zmuylofd9rTC/IRS5c5Dg=;
-        b=xILUm7rKOlhPbkeQZno1MZxuWRo9SND/aiH1GUM9CecsSUqQaUa74nyZVneokqb+/q
-         U+YamWlpCx4omnJATS1w9EsvQTNd7jyqoU0tkswXENm4vj3HqFjvORuxc58KSvOhPiwq
-         ZLCKt0C2v1ta+R6yX8QOOtK1l/MELF18j5XjzVMnXQRVoIBd573MJInzPzSk+KP0d/FM
-         u9KPVv8A49CbqA6mZbglIGxnc6lyG+PvN+JWztJ3ktXUQ39uaHV35sG+8nIbbr+Svmhh
-         PJBt0Gh4ZVAFkHhGZq+ZsF2769pf35dGyQquNKxZV4SMEZoX/nKwT/qcIqVRydNi7Dxe
-         hpcA==
-X-Gm-Message-State: AOAM531MzWwE61uNpnZMregfq4f+WKubiuLv5ZbonpRn1cn2MMmFnEU5
-        7rfzGC4e5fTp3kYgNwpB6Eg=
-X-Google-Smtp-Source: ABdhPJx3wPQ6HrbBYqzrVoNQwf8mAOx7GXoGOS7f1asn6BPTyEDxiSEYwlceB8H2wBV85PMZeh9NIA==
-X-Received: by 2002:a2e:7305:: with SMTP id o5mr12072132ljc.180.1639948189334;
-        Sun, 19 Dec 2021 13:09:49 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.239])
-        by smtp.gmail.com with ESMTPSA id q10sm2333370ljp.44.2021.12.19.13.09.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 13:09:48 -0800 (PST)
-Message-ID: <dac227fc-b0ce-79e1-c42f-eb03b4f5d699@gmail.com>
-Date:   Mon, 20 Dec 2021 00:09:47 +0300
+        Sun, 19 Dec 2021 16:12:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD0C061574;
+        Sun, 19 Dec 2021 13:12:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zqlFDBLHajnmW6mUIPthSeuQfJKdlQjNzAtsDu8MOeQ=; b=tzKRd0PdZDTg6wWSKsTKnQJ+sN
+        NuDm+zLpq0sHd09YzKzCFKNAn0pZHXnADRt4x7oNk+0wGxCZT4OSKCsXjzKtc1PCc3rPkJ7MJpKF1
+        65uWo3bUMXalRpgVUFGlSfITew3R6EBqH/kmYi4NSea+GVqPdref3E4884uQoTCrH2tpFtA/ihWNB
+        wvcVCg8yV38ut+cSqikjvSNUpJ1mRbjm7OKwodEMdAXoVtKwVLt1YtRMjwksMcNgh5EVDvDLNyRKX
+        cEnAKQAuHAqKkr1v6C9u+7zlLWafdjgNzMk54g7I/OxMDCN9g+ZEzqoNl35SgZu3LexTURLeoaZu7
+        8JJGApJg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mz3TN-0012HD-BR; Sun, 19 Dec 2021 21:12:01 +0000
+Date:   Sun, 19 Dec 2021 21:12:01 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <Yb+gId/gXocrlJYD@casper.infradead.org>
+References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com>
+ <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [syzbot] kernel BUG at net/phonet/socket.c:LINE!
-Content-Language: en-US
-To:     syzbot <syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com>,
-        courmisch@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <00000000000005721f05d3810165@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <00000000000005721f05d3810165@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19/21 17:58, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On Sun, Dec 19, 2021 at 06:59:51PM +0100, David Hildenbrand wrote:
+> On 19.12.21 18:44, Linus Torvalds wrote:
+> > David, you said that you were working on some alternative model. Is it
+> > perhaps along these same lines below?
+> > 
+> > I was thinking that a bit in the page tables to say "this page is
+> > exclusive to this VM" would be a really simple thing to deal with for
+> > fork() and swapout and friends.
+> > 
+> > But we don't have such a bit in general, since many architectures have
+> > very limited sets of SW bits, and even when they exist we've spent
+> > them on things like UDDF_WP.,
+> > 
+> > But the more I think about the "bit doesn't even have to be in the
+> > page tables", the more I think maybe that's the solution.
+> > 
+> > A bit in the 'struct page' itself.
+> > 
 > 
-> HEAD commit:    60ec7fcfe768 qlcnic: potential dereference null pointer of..
-> git tree:       net
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11b3505db00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2dc91e7fc3dea88b1e8a
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168791cdb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0cbcdb00000
+> Exactly what I am prototyping right now.
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com
+> > For hugepages, you'd have to distribute said bit when  you split the hugepage.
 > 
+> Yes, that's one tricky part ...
 
-This bug can be triggered via simple
+That part shouldn't be that tricky ...
 
-sk = socket(AF_PHONET)
-ioctl(sk, SIOCPNENABLEPIPE, 0)
-connect(sk);
+Can we get rid of ->mapcount altogether?  Three states:
+ - Not mapped
+ - Mapped exactly once
+ - Possibly mapped more than once
 
+I appreciate "Not mapped" is not a state that anon pages can
+meaningfully have (maybe when they go into the swap cache?)
 
-ioctl() sets sk->sk_state to TCP_SYN_SENT in pep_sock_enable() and then 
-there is following check in pn_socket_bind():
+And this information would only be present on the head page (ie stored
+per folio).  If one VMA has multiple PTEs that map the same folio,
+then hopefully that only counts as mapped once.
 
-	if (sk->sk_state != TCP_CLOSE || pn_port(pn->sobject)) {
-		err = -EINVAL; /* attempt to rebind */
-		goto out;
-	}
-
-Looks like "sk->sk_state != TCP_CLOSE" check is redundant and 
-pn_port(pn->sobject) is unique flag, that socket is already binded.
-
-
-
-
-With regards,
-Pavel Skripkin
+I must admit about half this conversation is going over my head.  I need
+more time to understand all the constraints than exists between emails
+:-)

@@ -2,100 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBE1479F07
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 05:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAC2479F11
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 05:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbhLSDyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 22:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbhLSDyJ (ORCPT
+        id S235195AbhLSEEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 23:04:44 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:52739 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235181AbhLSEEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 22:54:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C56C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 19:54:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JGpk33SVZz4xdH;
-        Sun, 19 Dec 2021 14:54:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639886044;
-        bh=pAkMD3y3xdyYad2d6OyF9TkGhGy0BlhiCG/o/UdESVY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ksR4Er10zc6tmvX+PoM3BeHAKGWC/Uji4/OcemntI3c276SZTvCDrAunLVpV/qUfl
-         fakO+jjt6bmrHZkFjX47PyDYAdUXnsCtnqFF0BZhGJuZp+EpWXsprd9HxMrJ+YHpjO
-         DoaCrpD3m/lPjl6v7TSmodIXAs6nR6iXK2+YVkqiBBV4edef1MVRfpFXImxgJwrsJM
-         3KErdytiC1U6T8+TzNJNelBvKfaTjjZ8LK8i3+HjgU73RFw5XnKfpfrxJpresvKdfq
-         mkBqv53RuLl1xceCxH8TS89G7DWXNUBrMn3saAnCPu+PwFrgnh/4TQyvddP6A2awFS
-         1rKHrkQ9YAE8w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        nixiaoming@huawei.com, ruscur@russell.cc
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.16-4 tag
-Date:   Sun, 19 Dec 2021 14:53:59 +1100
-Message-ID: <87lf0hl06g.fsf@mpe.ellerman.id.au>
+        Sat, 18 Dec 2021 23:04:43 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V.0OBJf_1639886679;
+Received: from 30.30.108.164(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V.0OBJf_1639886679)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 19 Dec 2021 12:04:40 +0800
+Message-ID: <91fb8cb3-71fa-e8d7-163f-f88c4ff3357f@linux.alibaba.com>
+Date:   Sun, 19 Dec 2021 12:04:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [RESEND PATCH v4] ACPI: Move sdei_init and ghes_init ahead to
+ handle platform errors earlier
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        luanshi <zhangliguang@linux.alibaba.com>,
+        zhuo.song@linux.alibaba.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+References: <20211126070422.73234-1-xueshuai@linux.alibaba.com>
+ <20211216133456.21002-1-xueshuai@linux.alibaba.com>
+ <CAJZ5v0jOnA90BX0ZisY4Gm4tKTjQMcxOqEOa2FVZsuec0e_mSw@mail.gmail.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0jOnA90BX0ZisY4Gm4tKTjQMcxOqEOa2FVZsuec0e_mSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Hi Rafeal,
 
-Hi Linus,
+Thank you for your reply.
 
-Please pull some more powerpc fixes for 5.16:
+On 2021/12/18 AM2:17, Rafael J. Wysocki wrote:
+> On Thu, Dec 16, 2021 at 2:35 PM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>>
+>> On an ACPI system, ACPI is initialised very early from a subsys_initcall(),
+>> while SDEI is not ready until a subsys_initcall_sync().
+>>
+>> The SDEI driver provides functions (e.g. apei_sdei_register_ghes,
+>> apei_sdei_unregister_ghes) to register or unregister event callback for
+>> dispatcher in firmware. When the GHES driver probing, it registers the
+>> corresponding callback according to the notification type specified by
+>> GHES. If the GHES notification type is SDEI, the GHES driver will call
+>> apei_sdei_register_ghes to register event call.
+>>
+>> When the firmware emits an event, it migrates the handling of the event
+>> into the kernel at the registered entry-point __sdei_asm_handler. And
+>> finally, the kernel will call the registered event callback and return
+>> status_code to indicate the status of event handling. SDEI_EV_FAILED
+>> indicates that the kernel failed to handle the event.
+>>
+>> Consequently, when an error occurs during kernel booting, the kernel is
+>> unable to handle and report errors until the GHES driver is initialized by
+>> device_initcall(), in which the event callback is registered. All errors
+>> that occurred before GHES initialization are missed and there is no chance
+>> to report and find them again.
+>>
+>> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+>> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+>> the estatus memory pool. On the other hand, ghes_init() relies on
+>> sdei_init() to detect the SDEI version and the framework for registering
+>> and unregistering events. By the way, I don't figure out why acpi_hest_init
+>> is called in acpi_pci_root_init, it don't rely on any other thing. May it
+>> could be moved further, following acpi_iort_init in acpi_init.
+>>
+>> sdei_init() relies on ACPI table which is initialized subsys_initcall():
+>> acpi_init(), acpi_bus_init(), acpi_load_tables(), acpi_tb_laod_namespace().
+>> May it should be also moved further, after acpi_load_tables.
+>>
+>> In this patch, move sdei_init and ghes_init as far ahead as possible, right
+>> after acpi_hest_init().
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> 
+> This needs ACKs from Bjorn and Boris/Tony/James/.
 
-The following changes since commit 5bb60ea611db1e04814426ed4bd1c95d1487678e:
+OK, I will keep an eye on their response.
+I am wondering that do you have any comments for revision?
 
-  powerpc/32: Fix hardlockup on vmap stack overflow (2021-11-24 21:00:51 +1100)
+Thank you.
 
-are available in the git repository at:
+Best Regrads,
+Shuai
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.16-4
-
-for you to fetch changes up to 8734b41b3efe0fc6082c1937b0e88556c396dc96:
-
-  powerpc/module_64: Fix livepatching for RO modules (2021-12-14 23:13:03 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 5.16 #4
-
-Fix a recently introduced oops at boot on 85xx in some configurations.
-
-Fix crashes when loading some livepatch modules with STRICT_MODULE_RWX.
-
-Thanks to: Joe Lawrence, Russell Currey, Xiaoming Ni.
-
-- ------------------------------------------------------------------
-Russell Currey (1):
-      powerpc/module_64: Fix livepatching for RO modules
-
-Xiaoming Ni (1):
-      powerpc/85xx: Fix oops when CONFIG_FSL_PMC=n
-
-
- arch/powerpc/kernel/module_64.c   | 42 ++++++++++++++++----
- arch/powerpc/platforms/85xx/smp.c |  4 +-
- 2 files changed, 36 insertions(+), 10 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmG+rMQACgkQUevqPMjh
-pYBLNQ/8DdqJFMgeVNV+RBinTdrtXl4RmMGvNE0ogmZ215GPiwjbjt2WYlMEg0Ol
-4WrWSZwThKJdDXvR05HTU9QncNEXi1KIISfppNkNJQkRzRzs7HjDgFMjinNBsLzg
-q3Q8LeGhj2eL3VNbavAr5UBsXgxJriGjrQQQj6NR2jyLZnITd+Wdn4/SWUgxdlmn
-+aSKvoOWAUM3/+SrrhDmCsCKhM24bwoQ339uOp81j63oP6UVtr4dFVvDcVZyL+ea
-tYSIQ5UeO8/zoaEMudZwFRifXmPk6+KiYzlzY+bx/6b5xXTv+B1oAT0RX+nvdv2g
-aQIRI0EKsEf2OLD8ttlGKkF8NyXQBJjsDZ6VBklXTcSlIxMtSAJxz80USHk2FyHx
-ojgi51Axdp031gA7bhq6jDvSO1izYR4S7si3Hqfzm4IxYMr5UnQSA5IJfsfMlASt
-3qZBFpkN3rwFOERMa9IiLarnLzMiionvw7Vf2nESx+Uv/0sYS38528Z2xjBgagdd
-OUA5h8XsC3NLUpbZtQy9R0+7jkDYXbe0r5BoPjmonkS90bR3/LhsO8eCWANqsaWO
-2Jtu6V33PgAKZbR02V2o76t0WSzf3z72kOq7vsvcmc4tD6Lv4ph3d2ynjQ9oHizu
-7FQqoFdHAA/Cbq/AiZqIVwE1pUpJIKesjr/JcNkagUsExLTnXQk=
-=Xy0P
------END PGP SIGNATURE-----
+>> ---
+>>  drivers/acpi/apei/ghes.c    | 18 ++++++++----------
+>>  drivers/acpi/pci_root.c     |  5 ++++-
+>>  drivers/firmware/arm_sdei.c | 13 ++-----------
+>>  include/acpi/apei.h         |  2 ++
+>>  include/linux/arm_sdei.h    |  2 ++
+>>  5 files changed, 18 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+>> index 0c8330ed1ffd..b11e46fb4b3d 100644
+>> --- a/drivers/acpi/apei/ghes.c
+>> +++ b/drivers/acpi/apei/ghes.c
+>> @@ -1457,27 +1457,26 @@ static struct platform_driver ghes_platform_driver = {
+>>         .remove         = ghes_remove,
+>>  };
+>>
+>> -static int __init ghes_init(void)
+>> +void __init ghes_init(void)
+>>  {
+>>         int rc;
+>>
+>>         if (acpi_disabled)
+>> -               return -ENODEV;
+>> +               return;
+>>
+>>         switch (hest_disable) {
+>>         case HEST_NOT_FOUND:
+>> -               return -ENODEV;
+>> +               pr_info(GHES_PFX "HEST is not found!\n");
+>> +               return;
+>>         case HEST_DISABLED:
+>>                 pr_info(GHES_PFX "HEST is not enabled!\n");
+>> -               return -EINVAL;
+>> +               return;
+>>         default:
+>>                 break;
+>>         }
+>>
+>> -       if (ghes_disable) {
+>> +       if (ghes_disable)
+>>                 pr_info(GHES_PFX "GHES is not enabled!\n");
+>> -               return -EINVAL;
+>> -       }
+>>
+>>         ghes_nmi_init_cxt();
+>>
+>> @@ -1495,8 +1494,7 @@ static int __init ghes_init(void)
+>>         else
+>>                 pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
+>>
+>> -       return 0;
+>> +       return;
+>>  err:
+>> -       return rc;
+>> +       ghes_disable = 1;
+>>  }
+>> -device_initcall(ghes_init);
+>> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+>> index ab2f7dfb0c44..1260bb556184 100644
+>> --- a/drivers/acpi/pci_root.c
+>> +++ b/drivers/acpi/pci_root.c
+>> @@ -23,7 +23,7 @@
+>>  #include <linux/dmi.h>
+>>  #include <linux/platform_data/x86/apple.h>
+>>  #include <acpi/apei.h> /* for acpi_hest_init() */
+>> -
+>> +#include <linux/arm_sdei.h> /* for sdei_init() */
+>>  #include "internal.h"
+>>
+>>  #define ACPI_PCI_ROOT_CLASS            "pci_bridge"
+>> @@ -946,6 +946,9 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
+>>  void __init acpi_pci_root_init(void)
+>>  {
+>>         acpi_hest_init();
+>> +       sdei_init();
+>> +       ghes_init();
+>> +
+>>         if (acpi_pci_disabled)
+>>                 return;
+>>
+>> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+>> index a7e762c352f9..1e1a51510e83 100644
+>> --- a/drivers/firmware/arm_sdei.c
+>> +++ b/drivers/firmware/arm_sdei.c
+>> @@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
+>>         return true;
+>>  }
+>>
+>> -static int __init sdei_init(void)
+>> +void __init sdei_init(void)
+>>  {
+>>         struct platform_device *pdev;
+>>         int ret;
+>>
+>>         ret = platform_driver_register(&sdei_driver);
+>>         if (ret || !sdei_present_acpi())
+>> -               return ret;
+>> +               return;
+>>
+>>         pdev = platform_device_register_simple(sdei_driver.driver.name,
+>>                                                0, NULL, 0);
+>> @@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
+>>                 pr_info("Failed to register ACPI:SDEI platform device %d\n",
+>>                         ret);
+>>         }
+>> -
+>> -       return ret;
+>>  }
+>>
+>> -/*
+>> - * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
+>> - * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
+>> - * by device_initcall(). We want to be called in the middle.
+>> - */
+>> -subsys_initcall_sync(sdei_init);
+>> -
+>>  int sdei_event_handler(struct pt_regs *regs,
+>>                        struct sdei_registered_event *arg)
+>>  {
+>> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+>> index ece0a8af2bae..7dbd6363fda7 100644
+>> --- a/include/acpi/apei.h
+>> +++ b/include/acpi/apei.h
+>> @@ -27,8 +27,10 @@ extern int hest_disable;
+>>  extern int erst_disable;
+>>  #ifdef CONFIG_ACPI_APEI_GHES
+>>  extern bool ghes_disable;
+>> +void __init ghes_init(void);
+>>  #else
+>>  #define ghes_disable 1
+>> +static inline void ghes_init(void) { return; }
+>>  #endif
+>>
+>>  #ifdef CONFIG_ACPI_APEI
+>> diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
+>> index 0a241c5c911d..9c987188b692 100644
+>> --- a/include/linux/arm_sdei.h
+>> +++ b/include/linux/arm_sdei.h
+>> @@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
+>>  /* For use by arch code when CPU hotplug notifiers are not appropriate. */
+>>  int sdei_mask_local_cpu(void);
+>>  int sdei_unmask_local_cpu(void);
+>> +void __init sdei_init(void);
+>>  #else
+>>  static inline int sdei_mask_local_cpu(void) { return 0; }
+>>  static inline int sdei_unmask_local_cpu(void) { return 0; }
+>> +static inline void sdei_init(void) { return ; }
+>>  #endif /* CONFIG_ARM_SDE_INTERFACE */
+>>
+>>
+>> --
+>> 2.20.1.12.g72788fdb
+>>

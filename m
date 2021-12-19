@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7EC47A270
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1264E47A271
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbhLSVwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:52:04 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44284 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbhLSVwC (ORCPT
+        id S236723AbhLSVx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231821AbhLSVxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:52:02 -0500
-Date:   Sun, 19 Dec 2021 21:51:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639950720;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kS5DQpA8phtBhbUduZG8Ao20a8ODo/sZsaA4W03+iQw=;
-        b=iXyi052YqjM9LOfmM/zl+aIlTmxy6vgy+JmoT4hHwnNDF8iPX+xhLJ8qp1MLAet5fcRjBX
-        3o4M6viGrdf5UWg9Iyts/4+rpoB0l8WfyP5UCf8PioY0bLaGAuI3eA5HDaQwmX8Xs+EGT2
-        0nq4vWNy2paMDJCkTEqIXIyHPPX10Xv4V+BZoHluko1I1Jou6Ev4iruNPVXWVkkneK4IOx
-        Q6vHxlayH17B32aPmZ6o0VEp/QDseR76tG7wvEX/8Y7uuhdf+ljb91FIILWUF/I91WAqTA
-        eqm3sAfzbc/iE4ZCGMk21E8GGhK6CX7XUJR9T7QRkYZtXG3EfxeTwTMK/UBCeA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639950720;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kS5DQpA8phtBhbUduZG8Ao20a8ODo/sZsaA4W03+iQw=;
-        b=dTjKlHRhSEAFtwc7e+F4M/VX+deNg356h0La7cv3Ju7QNSBhZi79o3llyOimFAAqBBzMOT
-        fx/AsravM/M7mvBg==
-From:   "tip-bot2 for Andrew Cooper" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211216000856.4480-1-andrew.cooper3@citrix.com>
-References: <20211216000856.4480-1-andrew.cooper3@citrix.com>
+        Sun, 19 Dec 2021 16:53:55 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C4C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 13:53:55 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id w16so2342110edc.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 13:53:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UAgesZZJa26Bm2+E00Dh9seobav1+GXMEZLymAQhgzU=;
+        b=gsjwrXj2w0PENdQQkCa2rD0AoN5eybLTDPVKaNWI3oveMnHkJeYULHxnPZR8jEPUXz
+         2VgREYiEmTj6XFUmXOdED+a6eiho5jBOe8M0znZs6ggvlED8KRyZLucTpAkJHWPI/fhJ
+         XA8WmKRbS/hpUl5G6RUMdFiiig2J33ddEVHpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UAgesZZJa26Bm2+E00Dh9seobav1+GXMEZLymAQhgzU=;
+        b=Y5b5CkM9uTWLMAH2o1E7v/qLC0wPYAZbuFu7sEVfWa/ewxewPFLPLFdIQ1XbQxHdSq
+         FGJKBSdi5her8kDOJsSthHS7mbJGVwhoUD16+521icvdJheTOrxjON7co6L6zckDwOj+
+         vjzHlLsooQAStt+XD4wOTMJV5/ZhflcZRTSXchHUy1rvDOOh5BVtrW5buXV2aqX58wUS
+         ZCjQ1M82Nzp/p+pheYR3nbxaZB3prK69O/LdYeTvbhGJ4Obcr/uqZXrBBb34bWcWbcuo
+         Jj/UvzIY2Y8iSAnHLIsWI5t9HvsIjPaSlYBkNR3M41jkesK+z64+xXtKWCKBeJ3dQHKs
+         Bafg==
+X-Gm-Message-State: AOAM530o3ruro9krN6kaqlcLqt75MHg7lNawV/Itm8ROw8QaT4fTtPW0
+        kdWw8QYwifF1+bLuQRB4ihBARfRQHe2T3HrF7Hg=
+X-Google-Smtp-Source: ABdhPJzMWSVDZUTRRrCMPsGmvmB7s0oAdX1/zpGX9R2UMGpHHs1cEa1GvNiZRryFqBWCp5xDni23Ww==
+X-Received: by 2002:a05:6402:40c3:: with SMTP id z3mr13210534edb.203.1639950833858;
+        Sun, 19 Dec 2021 13:53:53 -0800 (PST)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id hd14sm4623795ejc.195.2021.12.19.13.53.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 13:53:53 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso5452753wme.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 13:53:53 -0800 (PST)
+X-Received: by 2002:a1c:7312:: with SMTP id d18mr3505400wmb.8.1639950832965;
+ Sun, 19 Dec 2021 13:53:52 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163995071955.23020.16415039634514233755.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <CAHk-=wiAzmB-jiHvF+EZ1-b0X3ts4LAYHaVhzpzXEjmC0X95eg@mail.gmail.com> <Yb+oi8fg1dJe1uBm@casper.infradead.org>
+In-Reply-To: <Yb+oi8fg1dJe1uBm@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 19 Dec 2021 13:53:36 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
+Message-ID: <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Sun, Dec 19, 2021 at 1:48 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> Yes, agreed, I was thinking that we could use "not mapped at all"
+> as an optimisation to avoid doing rmap walks.  eg __unmap_and_move().
 
-Commit-ID:     57690554abe135fee81d6ac33cc94d75a7e224bb
-Gitweb:        https://git.kernel.org/tip/57690554abe135fee81d6ac33cc94d75a7e224bb
-Author:        Andrew Cooper <andrew.cooper3@citrix.com>
-AuthorDate:    Thu, 16 Dec 2021 00:08:56 
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Sun, 19 Dec 2021 22:44:34 +01:00
+So the thing is, it's a very dodgy optimization for a rather simple
+reason: what if somebody pages the page in?
 
-x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+So even "not mapped at all" is questionable.
 
-Both __pkru_allows_write() and arch_set_user_pkey_access() shift
-PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
-sign bit.
+You have to check that it's also not a swapcache page, and hold the
+page lock for that check, at the very least.
 
-Use unsigned constants instead.
+And by then, you're really in a very unusual situation - and my gut
+feel says not one worth optimizing for (because anon pages are
+_usually_ mapped at least once).
 
-Clearly pkey 15 has not been used in combination with UBSAN yet.
+But I dunno - it might depend on your load. Maybe you have some very
+special load that happens to trigger this case a lot?
 
-Noticed by code inspection only.  I can't actually provoke the
-compiler into generating incorrect logic as far as this shift is
-concerned.
-
-[
-  dhansen: add stable@ tag, plus minor changelog massaging,
-
-           For anyone doing backports, these #defines were in
-	   arch/x86/include/asm/pgtable.h before 784a46618f6.
-]
-
-Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
----
- arch/x86/include/asm/pkru.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/pkru.h b/arch/x86/include/asm/pkru.h
-index 4cd49af..74f0a2d 100644
---- a/arch/x86/include/asm/pkru.h
-+++ b/arch/x86/include/asm/pkru.h
-@@ -4,8 +4,8 @@
- 
- #include <asm/cpufeature.h>
- 
--#define PKRU_AD_BIT 0x1
--#define PKRU_WD_BIT 0x2
-+#define PKRU_AD_BIT 0x1u
-+#define PKRU_WD_BIT 0x2u
- #define PKRU_BITS_PER_PKEY 2
- 
- #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+              Linus

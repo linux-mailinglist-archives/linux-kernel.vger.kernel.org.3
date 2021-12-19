@@ -2,332 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA6047A00C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 10:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83D847A00E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 10:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbhLSJ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 04:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbhLSJ3x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 04:29:53 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9230C061574;
-        Sun, 19 Dec 2021 01:29:52 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so7341121wmj.5;
-        Sun, 19 Dec 2021 01:29:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Yw/oy985DZTS5RPQsnNUYd8xhhnbG9oDSgQT2uDbFng=;
-        b=FgAlyOEvI9GyY4/1XB1BcIDn6CrYqjnUrqISUECnHu2yFaGt2kdIJP9n6YSk0B2Bpf
-         xyjUZmjN0CYlfAXht9ZyEg9Rf+Ama6MxlB+wd1vA273PQSCYIlbGRPxw4/9DvjNWoYuL
-         hqHsquB3u13MfVrK/ZXupcNcrIr/EUszzBS3o4yqCZijAB/epc05iC0ePl5hGEH4O3zs
-         NEdLW7U4aPq5G+JacZ8wtwblkde7LWazjZFY4U7H0g4Q5z5gZ3IoBL2M6veJOBKa0dNN
-         8oPRq2hhTaYFO7RSJRllBmxtRs59OvKObCQFtjCZ+WUoiHbsHyEPlO0b/HypJCBrNVsw
-         GJiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=Yw/oy985DZTS5RPQsnNUYd8xhhnbG9oDSgQT2uDbFng=;
-        b=gt1twSoOSJhZNaLWcefbZuGZhAZyvjKd6UucIe5/9aOv7nzOXtHPCe8I3E8n6OqUDr
-         SeMpVbSoyI0FFygf4/vaZlxBgxewL837uXh+sqRtx0YQXK/qgWpKoRSqkiBuVeSQ3NPa
-         +GsDIu9UpmFInc5YS9SzkWnLbynqKNO6OLDXy2ynqmzIRZx+iHq8OgkCTAwq+PZM+7D9
-         KzBPerjGT/soOwodwrXOxoBepo2zZisfv7K92j1e5pvcxqiiR+exmSoteVLLCWZjYkgQ
-         3ffNdvB6ixN2b6/2HC0v+ZscSTYzq1EnqKRThEMQpafz4N+m5WFU7Iwu+d662I88X8+P
-         cD+A==
-X-Gm-Message-State: AOAM530mne0ivS6gYGKpks/DC8blpDlhhu3/GW8QfzE12+rkvRGa8QA3
-        7bT09KcieR4jDhAtXXEWK9Y=
-X-Google-Smtp-Source: ABdhPJxaN5swRB9TXkMi7UnUc3SVp1tm+dfcPKlYQBW8lm75L9tJus/7oe4jOzcigXh4SslQ054PPw==
-X-Received: by 2002:a1c:ed0a:: with SMTP id l10mr9949385wmh.104.1639906191228;
-        Sun, 19 Dec 2021 01:29:51 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id 138sm15474132wma.17.2021.12.19.01.29.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 19 Dec 2021 01:29:50 -0800 (PST)
-Date:   Sun, 19 Dec 2021 09:29:48 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        bhelgaas@google.com, hkallweit1@gmail.com, netdev@vger.kernel.org,
+        id S235497AbhLSJfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 04:35:01 -0500
+Received: from mail-am6eur05on2108.outbound.protection.outlook.com ([40.107.22.108]:7712
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229585AbhLSJfA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 04:35:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TVZ9r37AYf3l2YE59x1Qbl9ZWfsDn0Cyw8hGLa1Js41f/rcwqaf/O0669667gwQJb36xpz6HI0k1D33zPCr4JdINdf98Fci28ioqfDwcMYbwN9sOC66U/GeVYf4I6uCGR4AIFmyNbgLKB9EkRSNsQDOgLg5NVNHP/4MSXTMCKkLvsC5+FBkUDqGQnJtRaK5LXio+i5Voj0ORZUL6dCUGxzaa/d1S4EyjzJvck2FHnP5OeTLdewQItP2/aQr+k4VrKH/L/jNNDdUAxy2vJ+dXmUP7AOk3ou66InsWRy7Wq1A69UcNpn6BvIG+Uyg9nGaQmk1hs0qYCGLSUtv6s39Qtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YqosS6LVyNHWnlOWDQWJd/jT4o74AN19ou/E9pCa7KE=;
+ b=GV5McJrIuWcnpIqNgD0bMruHbM/hHYNmvTWRAqqChTw/iRfxZFVSIEGJBDzZ1UbZnSZald5sL5Rp1SiP0DA0Cz+VZI1AsCNxuIUfgK0mq2l4q4hIp/qTD0ZfojWSQzXH4vLjSJS5a/Ih8tX+eLlC7th8GwJ0XQkXY6VSWEjCsezm6hF5XnB3zPchzg0WzLH2Q+z98E3ec5bbujzOyWPjqdMNz3/PFeGRdHoiLKAMLfREwzejpNIyhy3qxFjlhLWF0hQ/niQfWGcZP3tLHaeFhpZI1Jvt3UV26fYNJbMr3zWLzTepRA980duQiyODKdu7m6/CB9K5sHCfCpPxLd/aBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YqosS6LVyNHWnlOWDQWJd/jT4o74AN19ou/E9pCa7KE=;
+ b=dAKycXxW56l00JIaYDz+F6CHM7qY4m5al/oa0671oS2JgrCBN3h9RwqeJpA9VfY9mny1ZPiWeE+BNoLBO6S9y32uVWVEDqaUSLgOnPNaze07Bke1nU9Ox+DkVRPReUjDU8i92beOYq4XC2GIXZ1ogAnfHhKFoEQhQ+ZV5FnoyF8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DB9PR08MB6619.eurprd08.prod.outlook.com (2603:10a6:10:257::21)
+ by DB6PR0801MB2022.eurprd08.prod.outlook.com (2603:10a6:4:76::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Sun, 19 Dec
+ 2021 09:34:56 +0000
+Received: from DB9PR08MB6619.eurprd08.prod.outlook.com
+ ([fe80::347f:d385:ec53:75aa]) by DB9PR08MB6619.eurprd08.prod.outlook.com
+ ([fe80::347f:d385:ec53:75aa%7]) with mapi id 15.20.4801.015; Sun, 19 Dec 2021
+ 09:34:56 +0000
+From:   Vasily Averin <vvs@virtuozzo.com>
+Subject: [PATCH] ksmbd: use F_SETLK to force vfs_file_lock() to return
+ asynchronously
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steve French <sfrench@samba.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>
+Cc:     kernel@openvz.org, linux-cifs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sfc: falcon: potential dereference null pointer of
- rx_queue->page_ring
-Message-ID: <20211219092948.t2iprptmyfrzgthb@gmail.com>
-Mail-Followup-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        bhelgaas@google.com, hkallweit1@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211217143308.675315-1-jiasheng@iscas.ac.cn>
+Message-ID: <e2aef4e7-a9b9-e44e-94a2-29ed6bc20091@virtuozzo.com>
+Date:   Sun, 19 Dec 2021 12:34:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6PR10CA0028.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:209:89::41) To DB9PR08MB6619.eurprd08.prod.outlook.com
+ (2603:10a6:10:257::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217143308.675315-1-jiasheng@iscas.ac.cn>
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c33f0c42-c840-49a9-53f4-08d9c2d2d14b
+X-MS-TrafficTypeDiagnostic: DB6PR0801MB2022:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR0801MB2022362B907E8E40236ABEBEAA7A9@DB6PR0801MB2022.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:663;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 06o7OHdi3V38FhNLyHfyTaTICw11C90AU841EUrLH133Y1VuZPFMAvmdetRiWqCi7qAuYUXEKd8t7QcnnuFhK8eH+7CvUiSYssjXx2aVVvDgwDSStriL012pjXo5HLo7PKTDugrCF0icrkaHO5NScj2xZA0soaZpRyHuVV2WrVjFoGMgGjFQZWCMwP4bHId/4KtRAqFYMU8gcDGQxcoFm4WDlEpuvA8qlP+ocdhu88dsb4hbvPb1/cWngz4K8KihdZPBwxs+aciQTysNBR3cd+2QboJJLsc2BZQGcHj/s1GlocGM4VvZbMwuUFu/0vgUZz8Ao9TEtBBPv8goPIaovvMQsmpZjkxJzC52hfDtbOPhR7zZnCk+vHYPQonYxw/BiBmvOEAy+q3IoyEECVH3uSU6abHZ9hCNDWgIUvOVAi+hpMBQikkrYgqMjNXsTXpPNQkHWl7oIJkWZQecN3KTLQUpzLutuA4mnhk9olyielvmhu7T39dImMaNFoaiy34ZOAwfZ9xZ8TX1gYMfTrEA3QE7i/RqxiLyFF8PIHypNE3tc/irf091YMCsGWJaBtO02EDss5AyNNmtzkaHOkGsyCWrWVM2qliTTzELUHgk4SLIA3KZlzvZvyrQz4Rt60Oqijsg+b8hIlc4BcsVYEyShnV5Lf8cQJErknyVpoLNlZMCpReFAuiitlFncW4wBXBRkO/Jsd2Ic30hI3kqxFiIqrrsBMS6G1RULFXHQRXaLpcgFilqNfaIp3kc/iCtifkQLGZg4JBn93iR/dA43E/cQg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6619.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(6486002)(316002)(110136005)(5660300002)(38350700002)(38100700002)(4744005)(31696002)(31686004)(86362001)(36756003)(66946007)(66556008)(4326008)(66476007)(508600001)(6512007)(8936002)(83380400001)(186003)(52116002)(26005)(6506007)(8676002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXpmend1WlFhdGx5cDVjZlorR20xRUliVWdQcGhrUW5jYS9PK1Nva0RPSGdF?=
+ =?utf-8?B?TE5PUEcyY3V4Rk9oSWlCRjM3TW5Jc2tXQXp0dG9zY1YyOVhNWDM3YlZRTmJM?=
+ =?utf-8?B?REZBcmhoc0R1VmwvU0M1aUFvUXdidzhuMkxmaHRrZUl2amw5R05hZEQ1VklP?=
+ =?utf-8?B?SzhNVUprNS9ZdkdpWmF6TElVV3ZCV25STGUva3FrclN4Sis2RmJyUTR3VlFV?=
+ =?utf-8?B?TzJOdGJpS3BWc3MySzFlL0t5TmQxL1YyWWhBNWZPa1NBVDIwQTBCMDhSbytL?=
+ =?utf-8?B?U0ZnWGRmeDcvbHBsNmpWYk03SllnQjQ4UUh0RCtrVW5HVlFIZmlINUlJQXhF?=
+ =?utf-8?B?dXRLUVQ1b0gxTmZTeTA3cHp0WEhhZnNpTE4wcUZ3enpNUDB5Wk1lY0pWUkVU?=
+ =?utf-8?B?Z0V6K3pWUmZCczZxQ1l3aldxWU9UTG1ETkRycjUzMTV4MnMrQi94ZFVDdFpG?=
+ =?utf-8?B?RXNneWVsRFQ5R1grV2dPd09VSWVSSTBGWG9pcGk0Nm5MdG1ESnkvN1dJeDhY?=
+ =?utf-8?B?aXdUa0gzQTlNK1JHWU9LbzVXeDBST3gzUmdqK2J4YTdpSDkwQko0S0hLVzR4?=
+ =?utf-8?B?RTN4NmFxNGYweXczYW54cXJFQ09WVXFNOG1vcmR6MjF4SFZFdWtuMzNDMEd0?=
+ =?utf-8?B?M0J6OURVOUVwd2VYNStDMWc3dlg1L1NmdXJPcFpHZkk3aEtrTWIwZlZHTGg2?=
+ =?utf-8?B?THF5ZVozcjNNYjRRL2owMW1MdG1xVUNkZ2sydGNiS2xmVytjKzZlQUJPS2xV?=
+ =?utf-8?B?WnR1TmhJR2lhWHlaQzZaTnBtWjZOaXZKNGFDTUJwTkNJaDgzSC9acGxSQmM1?=
+ =?utf-8?B?YlpVOXFOQS9sS3d3TEwrUWVGRk8wcjdZeEo0MldXd3YrMHBIdW5iTytlNjAz?=
+ =?utf-8?B?cWRwTXIwU0E5Nlg5ODMza2pmckdJaVhIZDA2WldyR010Q3ByUVUwVXkvTUk0?=
+ =?utf-8?B?QTNYOVpJUTFOSXRKWnJRcGMvS3E3ZUVUYVBkalhJc3NhdWRUb1J2cFo3eGRk?=
+ =?utf-8?B?NzB0MWptQWlHdDRUZlkrYTYzTkJCVmVBK1dWbS95SlhzWFVYeVZlUEZJUzJz?=
+ =?utf-8?B?N3ZhdU5oTzNJTDdLVTUzeEVobHI3bFU1YXcxV0lFM1NETVdURUFLMVgwTURQ?=
+ =?utf-8?B?cEpWcHNkWGhRbVZiaTdlRFVTbHFNQmZKVDN3dGhEMzh0NW9YZXZxb3JRN1V1?=
+ =?utf-8?B?UTRtbi9aS1REK2hWbUlwSHpYbUJHMFY5Tmw1RzFnWmlsV0t3NVc3emM2YmI0?=
+ =?utf-8?B?ZmdwRXhOQmwwVzdVSFozZzJybjFBaFF1dW5zdDZMaXBRQmwrajBEaWR3aVgx?=
+ =?utf-8?B?S3hkVzlNSE5RSGJBcnJMMU00Njdycm1iQmZDY2dqWjBpK2hlcGxCUFJGQ2lJ?=
+ =?utf-8?B?YWg5dVVubmtKNW41bEdvcDhyMHVkUEtGYkxseGtRdnYzNlFkZFhiVjVSSHJ5?=
+ =?utf-8?B?ZmZWY25ZTjFDdDJRZXJjTk5wc1VJZ2x3RkkyaTFEcU8vTm1RMG5VUVV4RlJQ?=
+ =?utf-8?B?bTJ2TnVES3ZUL2tkWVVnZGM0SEdqMEhlSkxCWVM2SXZPK0JzN3l6akR6NTUr?=
+ =?utf-8?B?eXA1WUhoRE9mQ0d2WkZRdFdwYm1MZDdPc1JpL21NQklld3B2NEdJamxEdG11?=
+ =?utf-8?B?MExWOWYwMGVqV1BrTVBGb1FhOWtVM0xLWGxxL3hXeWtBVklpOTQzTm4xR2Qw?=
+ =?utf-8?B?YXZHcXIrWGJkRmhCNDJjUzFjTzhZTGNrUjBoRkNESFlqQlhFeCtVdlFzaWR4?=
+ =?utf-8?B?a2JGVUllK3I2c2FkN0R3cnc2aHc5VjhCbmxVazlHbUpvd3c1WnhsWHpwbGxL?=
+ =?utf-8?B?Z2ZlRmZMV09qQUtoMkxaVXZCTzBvcUJ0RWV4NXZibGZrSE5Md1hOTjJMNUha?=
+ =?utf-8?B?VlE0dFNqRGVEV3dDb1NSbExrOW1XK3pDcGtsWEh5U1dJckw4blBPL2lleXdk?=
+ =?utf-8?B?b0VaQ21qRXExWUdnV1U5RWhrYmRnRDJlcHNhVzhIRFgyR3NxQXR6amxPekdh?=
+ =?utf-8?B?SVhadTRFNnJxVGlNTElCcXQ3Z01SQlU0UFQ5cmE3OGdTekRWQTRiRmJmd3Y2?=
+ =?utf-8?B?TERoOE9FQWxNbUZqYStRMXBEd0t4Y1RIZzdQZDVvcHFlV2Z1dldmaXRtSVhs?=
+ =?utf-8?B?c01MNEVsQVpNKzdhWE5oVmxSOHVld0ZLbzhUWWp3YWd2Z3ZtSzFXQWRLZ0RM?=
+ =?utf-8?Q?EBBv/TWAk3WrNSiSxHLu3BA=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c33f0c42-c840-49a9-53f4-08d9c2d2d14b
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR08MB6619.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2021 09:34:56.2549
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7RTnH1I7198+sSx0HF03UmnWbuf3BL3wCDZsFh7gpFE0S67h5P22EQxzlChmMBA8eBX1LUUP8m0HT3mKgrQ6HQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0801MB2022
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:33:08PM +0800, Jiasheng Jiang wrote:
-> The return value of kcalloc() needs to be checked.
+To avoid possible deadlock ksmbd should process locks asynchronously.
+Callers expecting vfs_file_locks() to return asynchronously should only
+use F_SETLK, not F_SETLKW.
 
-Your predicate is wrong. The code that uses rx_queue->page_ring
-can deal with it being NULL.
-The only thing you might want to do is set rx_queue->page_ptr_mask
-to 0.
+Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
+---
+ fs/ksmbd/smb2pdu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Martin
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 0c020deb76bb..34f333549767 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -6646,13 +6646,13 @@ static int smb2_set_flock_flags(struct file_lock *flock, int flags)
+ 	switch (flags) {
+ 	case SMB2_LOCKFLAG_SHARED:
+ 		ksmbd_debug(SMB, "received shared request\n");
+-		cmd = F_SETLKW;
++		cmd = F_SETLK;
+ 		flock->fl_type = F_RDLCK;
+ 		flock->fl_flags |= FL_SLEEP;
+ 		break;
+ 	case SMB2_LOCKFLAG_EXCLUSIVE:
+ 		ksmbd_debug(SMB, "received exclusive request\n");
+-		cmd = F_SETLKW;
++		cmd = F_SETLK;
+ 		flock->fl_type = F_WRLCK;
+ 		flock->fl_flags |= FL_SLEEP;
+ 		break;
+-- 
+2.25.1
 
-> To avoid dereference of null pointer in case of the failure of alloc.
-> Therefore, it might be better to change the return type of
-> ef4_init_rx_recycle_ring(), ef4_init_rx_queue(), ef4_start_datapath(),
-> ef4_start_all(), and return -ENOMEM when alloc fails and return 0 the
-> others.
-> Also, ef4_realloc_channels(), ef4_net_open(), ef4_change_mtu(),
-> ef4_reset_up() and ef4_pm_thaw() should deal with the return value of
-> ef4_start_all().
-> 
-> Fixes: 5a6681e22c14 ("sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
-> 
-> v1 -> v2
-> 
-> *Change 1. Alter the "ret" to 'rc' and cleanup the rx_queue and tx_queue
-> when alloc fails.
-> ---
->  drivers/net/ethernet/sfc/falcon/efx.c | 56 +++++++++++++++++++++------
->  drivers/net/ethernet/sfc/falcon/efx.h |  2 +-
->  drivers/net/ethernet/sfc/falcon/rx.c  | 18 +++++++--
->  3 files changed, 60 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/falcon/efx.c b/drivers/net/ethernet/sfc/falcon/efx.c
-> index 5e7a57b680ca..89b93ed08251 100644
-> --- a/drivers/net/ethernet/sfc/falcon/efx.c
-> +++ b/drivers/net/ethernet/sfc/falcon/efx.c
-> @@ -201,7 +201,7 @@ static void ef4_init_napi_channel(struct ef4_channel *channel);
->  static void ef4_fini_napi(struct ef4_nic *efx);
->  static void ef4_fini_napi_channel(struct ef4_channel *channel);
->  static void ef4_fini_struct(struct ef4_nic *efx);
-> -static void ef4_start_all(struct ef4_nic *efx);
-> +static int ef4_start_all(struct ef4_nic *efx);
->  static void ef4_stop_all(struct ef4_nic *efx);
->  
->  #define EF4_ASSERT_RESET_SERIALISED(efx)		\
-> @@ -590,7 +590,7 @@ static int ef4_probe_channels(struct ef4_nic *efx)
->   * to propagate configuration changes (mtu, checksum offload), or
->   * to clear hardware error conditions
->   */
-> -static void ef4_start_datapath(struct ef4_nic *efx)
-> +static int ef4_start_datapath(struct ef4_nic *efx)
->  {
->  	netdev_features_t old_features = efx->net_dev->features;
->  	bool old_rx_scatter = efx->rx_scatter;
-> @@ -598,6 +598,7 @@ static void ef4_start_datapath(struct ef4_nic *efx)
->  	struct ef4_rx_queue *rx_queue;
->  	struct ef4_channel *channel;
->  	size_t rx_buf_len;
-> +	int rc;
->  
->  	/* Calculate the rx buffer allocation parameters required to
->  	 * support the current MTU, including padding for header
-> @@ -668,7 +669,10 @@ static void ef4_start_datapath(struct ef4_nic *efx)
->  		}
->  
->  		ef4_for_each_channel_rx_queue(rx_queue, channel) {
-> -			ef4_init_rx_queue(rx_queue);
-> +			rc = ef4_init_rx_queue(rx_queue);
-> +			if (rc)
-> +				goto fail;
-> +
->  			atomic_inc(&efx->active_queues);
->  			ef4_stop_eventq(channel);
->  			ef4_fast_push_rx_descriptors(rx_queue, false);
-> @@ -680,6 +684,17 @@ static void ef4_start_datapath(struct ef4_nic *efx)
->  
->  	if (netif_device_present(efx->net_dev))
->  		netif_tx_wake_all_queues(efx->net_dev);
-> +
-> +	return 0;
-> +
-> +fail:
-> +	ef4_for_each_channel(channel, efx) {
-> +		ef4_for_each_channel_rx_queue(rx_queue, channel)
-> +			ef4_fini_rx_queue(rx_queue);
-> +		ef4_for_each_possible_channel_tx_queue(tx_queue, channel)
-> +			ef4_fini_tx_queue(tx_queue);
-> +	}
-> +	return rc;
->  }
->  
->  static void ef4_stop_datapath(struct ef4_nic *efx)
-> @@ -853,7 +868,10 @@ ef4_realloc_channels(struct ef4_nic *efx, u32 rxq_entries, u32 txq_entries)
->  			  "unable to restart interrupts on channel reallocation\n");
->  		ef4_schedule_reset(efx, RESET_TYPE_DISABLE);
->  	} else {
-> -		ef4_start_all(efx);
-> +		rc = ef4_start_all(efx);
-> +		if (rc)
-> +			return rc;
-> +
->  		netif_device_attach(efx->net_dev);
->  	}
->  	return rc;
-> @@ -1814,8 +1832,10 @@ static int ef4_probe_all(struct ef4_nic *efx)
->   * is safe to call multiple times, so long as the NIC is not disabled.
->   * Requires the RTNL lock.
->   */
-> -static void ef4_start_all(struct ef4_nic *efx)
-> +static int ef4_start_all(struct ef4_nic *efx)
->  {
-> +	int rc;
-> +
->  	EF4_ASSERT_RESET_SERIALISED(efx);
->  	BUG_ON(efx->state == STATE_DISABLED);
->  
-> @@ -1823,10 +1843,12 @@ static void ef4_start_all(struct ef4_nic *efx)
->  	 * of these flags are safe to read under just the rtnl lock */
->  	if (efx->port_enabled || !netif_running(efx->net_dev) ||
->  	    efx->reset_pending)
-> -		return;
-> +		return 0;
->  
->  	ef4_start_port(efx);
-> -	ef4_start_datapath(efx);
-> +	rc = ef4_start_datapath(efx);
-> +	if (rc)
-> +		return rc;
->  
->  	/* Start the hardware monitor if there is one */
->  	if (efx->type->monitor != NULL)
-> @@ -1838,6 +1860,8 @@ static void ef4_start_all(struct ef4_nic *efx)
->  	spin_lock_bh(&efx->stats_lock);
->  	efx->type->update_stats(efx, NULL, NULL);
->  	spin_unlock_bh(&efx->stats_lock);
-> +
-> +	return 0;
->  }
->  
->  /* Quiesce the hardware and software data path, and regular activity
-> @@ -2074,7 +2098,10 @@ int ef4_net_open(struct net_device *net_dev)
->  	 * before the monitor starts running */
->  	ef4_link_status_changed(efx);
->  
-> -	ef4_start_all(efx);
-> +	rc = ef4_start_all(efx);
-> +	if (rc)
-> +		return rc;
-> +
->  	ef4_selftest_async_start(efx);
->  	return 0;
->  }
-> @@ -2140,7 +2167,10 @@ static int ef4_change_mtu(struct net_device *net_dev, int new_mtu)
->  	ef4_mac_reconfigure(efx);
->  	mutex_unlock(&efx->mac_lock);
->  
-> -	ef4_start_all(efx);
-> +	rc = ef4_start_all(efx);
-> +	if (rc)
-> +		return rc;
-> +
->  	netif_device_attach(efx->net_dev);
->  	return 0;
->  }
-> @@ -2409,7 +2439,9 @@ int ef4_reset_up(struct ef4_nic *efx, enum reset_type method, bool ok)
->  
->  	mutex_unlock(&efx->mac_lock);
->  
-> -	ef4_start_all(efx);
-> +	rc = ef4_start_all(efx);
-> +	if (rc)
-> +		return rc;
->  
->  	return 0;
->  
-> @@ -3033,7 +3065,9 @@ static int ef4_pm_thaw(struct device *dev)
->  		efx->phy_op->reconfigure(efx);
->  		mutex_unlock(&efx->mac_lock);
->  
-> -		ef4_start_all(efx);
-> +		rc = ef4_start_all(efx);
-> +		if (rc)
-> +			goto fail;
->  
->  		netif_device_attach(efx->net_dev);
->  
-> diff --git a/drivers/net/ethernet/sfc/falcon/efx.h b/drivers/net/ethernet/sfc/falcon/efx.h
-> index d3b4646545fa..483501b42667 100644
-> --- a/drivers/net/ethernet/sfc/falcon/efx.h
-> +++ b/drivers/net/ethernet/sfc/falcon/efx.h
-> @@ -39,7 +39,7 @@ void ef4_set_default_rx_indir_table(struct ef4_nic *efx);
->  void ef4_rx_config_page_split(struct ef4_nic *efx);
->  int ef4_probe_rx_queue(struct ef4_rx_queue *rx_queue);
->  void ef4_remove_rx_queue(struct ef4_rx_queue *rx_queue);
-> -void ef4_init_rx_queue(struct ef4_rx_queue *rx_queue);
-> +int ef4_init_rx_queue(struct ef4_rx_queue *rx_queue);
->  void ef4_fini_rx_queue(struct ef4_rx_queue *rx_queue);
->  void ef4_fast_push_rx_descriptors(struct ef4_rx_queue *rx_queue, bool atomic);
->  void ef4_rx_slow_fill(struct timer_list *t);
-> diff --git a/drivers/net/ethernet/sfc/falcon/rx.c b/drivers/net/ethernet/sfc/falcon/rx.c
-> index 966f13e7475d..6042219ddb2f 100644
-> --- a/drivers/net/ethernet/sfc/falcon/rx.c
-> +++ b/drivers/net/ethernet/sfc/falcon/rx.c
-> @@ -709,8 +709,8 @@ int ef4_probe_rx_queue(struct ef4_rx_queue *rx_queue)
->  	return rc;
->  }
->  
-> -static void ef4_init_rx_recycle_ring(struct ef4_nic *efx,
-> -				     struct ef4_rx_queue *rx_queue)
-> +static int ef4_init_rx_recycle_ring(struct ef4_nic *efx,
-> +				    struct ef4_rx_queue *rx_queue)
->  {
->  	unsigned int bufs_in_recycle_ring, page_ring_size;
->  
-> @@ -728,13 +728,19 @@ static void ef4_init_rx_recycle_ring(struct ef4_nic *efx,
->  					    efx->rx_bufs_per_page);
->  	rx_queue->page_ring = kcalloc(page_ring_size,
->  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
-> +	if (!rx_queue->page_ring)
-> +		return -ENOMEM;
-> +
->  	rx_queue->page_ptr_mask = page_ring_size - 1;
-> +
-> +	return 0;
->  }
->  
-> -void ef4_init_rx_queue(struct ef4_rx_queue *rx_queue)
-> +int ef4_init_rx_queue(struct ef4_rx_queue *rx_queue)
->  {
->  	struct ef4_nic *efx = rx_queue->efx;
->  	unsigned int max_fill, trigger, max_trigger;
-> +	int rc;
->  
->  	netif_dbg(rx_queue->efx, drv, rx_queue->efx->net_dev,
->  		  "initialising RX queue %d\n", ef4_rx_queue_index(rx_queue));
-> @@ -744,7 +750,9 @@ void ef4_init_rx_queue(struct ef4_rx_queue *rx_queue)
->  	rx_queue->notified_count = 0;
->  	rx_queue->removed_count = 0;
->  	rx_queue->min_fill = -1U;
-> -	ef4_init_rx_recycle_ring(efx, rx_queue);
-> +	rc = ef4_init_rx_recycle_ring(efx, rx_queue);
-> +	if (rc)
-> +		return rc;
->  
->  	rx_queue->page_remove = 0;
->  	rx_queue->page_add = rx_queue->page_ptr_mask + 1;
-> @@ -770,6 +778,8 @@ void ef4_init_rx_queue(struct ef4_rx_queue *rx_queue)
->  
->  	/* Set up RX descriptor ring */
->  	ef4_nic_init_rx(rx_queue);
-> +
-> +	return 0;
->  }
->  
->  void ef4_fini_rx_queue(struct ef4_rx_queue *rx_queue)
-> -- 
-> 2.25.1

@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E3A47A2A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 23:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21C247A2A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 23:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbhLSW00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 17:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbhLSW0Z (ORCPT
+        id S236809AbhLSW35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 17:29:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57076 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236798AbhLSW34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 17:26:25 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F83BC061574;
-        Sun, 19 Dec 2021 14:26:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WrMo2FbvfTHE2R5AHHoM6zUbBYPY7DJveiU7/Kb21KM=; b=eiVsACMV9Ai87OPY8MkPsR+PEn
-        k8h/WwoF9VdHtxnfNWZdzV76qz/DNUUT/ZBihkD8ApttdV7ghAVkLsH6lPgmPqlQ3jZ0o5NRP04r7
-        u/e5kJ4TMPH71pJubK9zyxijsEaWKMlrhuGgUX+IBEJN+0Y3y40IOcLmPwoGtV6nT77ByOry+PGOs
-        87uWJ5piTe8lkdo5Oy/kUPieXahmcFVBao4EwxRfhttHqahlp7Ey8sK5Hs4Ip804LmGYjbbgkC3tj
-        5EFiSoKQUjd9swbgNj2FnCcMSQ8eWLmC40xHh26yMA/kTUxWkhlu06++c2LpsJVzrJDr3UGNyAMyB
-        90IEUvhw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mz4dB-0014v5-Pz; Sun, 19 Dec 2021 22:26:13 +0000
-Date:   Sun, 19 Dec 2021 22:26:13 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <Yb+xhZNp5RADRQ94@casper.infradead.org>
-References: <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <Yb+gId/gXocrlJYD@casper.infradead.org>
- <CAHk-=wiAzmB-jiHvF+EZ1-b0X3ts4LAYHaVhzpzXEjmC0X95eg@mail.gmail.com>
- <Yb+oi8fg1dJe1uBm@casper.infradead.org>
- <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
- <Yb+r2W6RCKhO5toC@casper.infradead.org>
- <CAHk-=wibQevWUPb4V67gs0FsUBKO+bSMvp9tpOU3PM4Mg_4i4Q@mail.gmail.com>
+        Sun, 19 Dec 2021 17:29:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DDCDB80D13;
+        Sun, 19 Dec 2021 22:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA2EC36AE0;
+        Sun, 19 Dec 2021 22:29:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639952993;
+        bh=WZHvYM1NaHiC+0EkPRsy6OrrEhMLzt7zU2cxnh2rPcM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=msm8uPWbIVFV1zp4KyQd5KTQPgh1DkMt34qrc+jB/9UOM+d7HSd8v7WFfNDG9p5GR
+         CNXYWcNYEQyOt5dME5KbNO1a3v0imrFe7pycama1lyrrlSPil87SPzU3HwW2y1wvAa
+         q69D6DTafHQPfXbIpxvhbUxCJPDfsBSqEGEDqf0Q2dMxeLY40x3fZXV3DEGQb4WZ5H
+         WuCei8RUY9kBziqG+zhk6tEHdZg5k8xehM0DE3sGQ4rUz/LxNfK1O6lwXcj+7kPQMT
+         h+i6yxIqcf0KRX5ISPNxRgBm3gu34oFmDQom/ZzPoAU01VAQZUnrIYrrim6LR7nX2B
+         COOvIJxXM9IBQ==
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211217161549.24836-1-semen.protsenko@linaro.org>
+ <20211217161549.24836-2-semen.protsenko@linaro.org>
+From:   Sylwester Nawrocki <snawrocki@kernel.org>
+Message-ID: <2fdc5c97-6c19-8e70-d717-28b29d86160c@kernel.org>
+Date:   Sun, 19 Dec 2021 23:29:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wibQevWUPb4V67gs0FsUBKO+bSMvp9tpOU3PM4Mg_4i4Q@mail.gmail.com>
+In-Reply-To: <20211217161549.24836-2-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 02:12:04PM -0800, Linus Torvalds wrote:
-> On Sun, Dec 19, 2021 at 2:02 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > I'd like to get rid of ->mapcount for file pages too.  And those are
-> > definitely never mapped in the majority of cases.
+On 17.12.2021 17:15, Sam Protsenko wrote:
+> System Register is used to configure system behavior, like USI protocol,
+> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+> make it possible to modify SYSREG registers.
 > 
-> Fair enough.
+> While at it, add also missing PMU and GPIO clocks, which looks necessary
+> and might be needed for corresponding Exynos850 features soon.
 > 
-> You'd probably be better off checking "is this mapping mapped" though.
-> Because otherwise you have to get the page lock to serialize each
-> page.
+> Reviewed-by: Krzysztof Kozlowski<krzysztof.kozlowski@canonical.com>
+> Acked-by: Rob Herring<robh@kernel.org>
+> Acked-by: Chanwoo Choi<cw00.choi@samsung.com>
+> Signed-off-by: Sam Protsenko<semen.protsenko@linaro.org>
 
-Truncate already has the page locked, eg
-truncate_inode_pages_range()
-  find_lock_entries()
-  truncate_cleanup_page()
-    if (page_mapped(page))
-      unmap_mapping_page(page)
-
-I think anyone calling unmap_mapping_page() really ought to have the
-page lock.  Oh, we actually have an assert already to that effect ;-)
-        VM_BUG_ON(!PageLocked(page));
-
+Apologies for late reply, this patch is applied now.

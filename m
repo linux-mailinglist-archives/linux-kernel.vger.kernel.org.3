@@ -2,175 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DFB47A1CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B672647A1D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbhLSSkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 13:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
+        id S236329AbhLSSlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 13:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbhLSSj7 (ORCPT
+        with ESMTP id S231975AbhLSSlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 13:39:59 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D41C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:39:59 -0800 (PST)
-Received: from dslb-188-097-041-189.188.097.pools.vodafone-ip.de ([188.97.41.189] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1mz16B-0000Iw-L7; Sun, 19 Dec 2021 19:39:55 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 9/9] staging: r8188: move the steps into Hal8188EPwrSeq.c
-Date:   Sun, 19 Dec 2021 19:39:26 +0100
-Message-Id: <20211219183926.4746-10-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211219183926.4746-1-martin@kaiser.cx>
-References: <20211219183926.4746-1-martin@kaiser.cx>
+        Sun, 19 Dec 2021 13:41:12 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCCFC061574;
+        Sun, 19 Dec 2021 10:41:12 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id b13so1036689edd.8;
+        Sun, 19 Dec 2021 10:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1FNf5UrcYVxutkZBZuhd7yu7j8GGoDvHt1ZSWYN6ub8=;
+        b=S8EpS08QJqcal4tHd0hc0RyOF4G9ieSYyRCzUQa3U04LzI0tIPjqO8/QaWh4XkNK1b
+         rOGUxZQ/7dxS8GwsPWKc1kl5h81miGpuZKZTffuTH5c6sxqwdxK6zNWsRWjrBWaHkdQp
+         /I0r/hxZLQmeCkkzpf40ZRY/9X+ew8YwHdO4jW/uPwQZ/kpTHdlJpTEy/Gy9aun77e54
+         2L05QRVSloIXRzvvk/rlb26p2PtbcCi57BSs+9UqO+qH5O7Te9EJ/wpSoFDT15UbHNvO
+         YoMeNljH42Pj37EuvocPPsQzpDJ3RUA3P5WnO/erWezUVE3KKIV5uD/uNf75VDa14EXN
+         0/qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1FNf5UrcYVxutkZBZuhd7yu7j8GGoDvHt1ZSWYN6ub8=;
+        b=fPS49lIfPpi66R1/3ZWRaaMKJHTloflXMhUIddsMPGZItkSGImKC36ACHpVJoVZNC2
+         Ph04QuQPhr/uePCvXbwzoee8LEe4sUjobjRTzf0eAL+G4zkwXuj3lI4Fq7SGQu1t29z9
+         x1fexM0K5jnRPCVWM9wPd3K9zL0xnapmeZWZCWOlZZye+5YrnoMOyP7w9fh0PM5nss4/
+         EMYtGdDt6nPJH7OXQEAtcPlC1hmaUSbDvEJsox6KApBSLQ3XgEVTPbWIIUyl8bs1nVDz
+         KRwjJemfb0JDeNfLc/gCc/q95PFHccAJRIwH8ubOJRbuBTw9P58I9trjpAaIe2JKveYW
+         A7Yg==
+X-Gm-Message-State: AOAM5326Vhz8q9O/cV8y4gA73ujdqLEmbEs4OpFCBSeRr42vzTjHRuxX
+        m/PiZ67FaWw5EVd1i/IdjRwlECZ21fs=
+X-Google-Smtp-Source: ABdhPJwJej9sc9JaUkMxRJnyTjaUV+2E81x8DMq008oSE7tyQJCcB3WX2KdHGflw14jJQws8/NCICA==
+X-Received: by 2002:a17:906:9402:: with SMTP id q2mr10315106ejx.106.1639939270981;
+        Sun, 19 Dec 2021 10:41:10 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id sd39sm1352297ejc.14.2021.12.19.10.41.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 10:41:10 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <8b294ccb-28c2-57fb-3e1e-6ec8c55e410c@redhat.com>
+Date:   Sun, 19 Dec 2021 19:41:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
+ and root has no sp
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20211209060552.2956723-1-seanjc@google.com>
+ <20211209060552.2956723-2-seanjc@google.com>
+ <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
+ <YbN58FS67bEBOZZu@google.com>
+ <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
+ <YbOLRLEdfpl51QLS@google.com> <Ybo5nOu7/bVPhzCK@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ybo5nOu7/bVPhzCK@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the power transition steps into Hal8188EPwrSeq.c where the arrays
-are defined.
+On 12/15/21 19:53, Sean Christopherson wrote:
+>>
+>>> 2) a case that has been handled in the inefficient way forever.
+>> I don't care about inefficiency, I'm worried about correctness.  It's extremely
+>> unlikely this fixes a true bug in the legacy MMU, but there's also no real
+>> downside to adding the check.
+>>
+>> Anyways, either way is fine.
+> Ping, in case this dropped off your radar.  Regardless of how we fix this goof,
+> it needs to get fixed in 5.16.
 
-There's no point in having defines for sequences of steps in the include
-file. All of these sequences are used only once (apart from the end
-sequence).
+Something has happened to my home directory in the middle of tests 
+running for this rc, and I can't really do anything about it until 
+someone sees my ticket. :/  This is the Linux maintainer version of a 
+dog eating my homework, I suppose.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c  | 50 ++++++++++++-------
- .../staging/r8188eu/include/Hal8188EPwrSeq.h  | 41 ---------------
- 2 files changed, 33 insertions(+), 58 deletions(-)
+Since there was another report of this, I'll just queue up this version 
+and send it out.
 
-diff --git a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c b/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
-index 0332286c1fa9..566a1701302c 100644
---- a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
-+++ b/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
-@@ -1,29 +1,45 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright(c) 2007 - 2011 Realtek Corporation. */
- 
--#include "../include/Hal8188EPwrSeq.h"
-+#include "../include/HalPwrSeqCmd.h"
- #include "../include/rtl8188e_hal.h"
- 
--/*
--    drivers should parse below arrays and do the corresponding actions
--*/
--/* 3 Power on  Array */
- struct wl_pwr_cfg rtl8188E_power_on_flow[] = {
--	RTL8188E_TRANS_CARDEMU_TO_ACT
--	RTL8188E_TRANS_END
-+	{ 0x0006, PWR_CMD_POLLING, BIT(1), BIT(1) },
-+	{ 0x0002, PWR_CMD_WRITE, BIT(0) | BIT(1), 0 }, /* reset BB */
-+	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(7), 0 }, /* disable HWPDN (control by DRV)*/
-+	{ 0x0005, PWR_CMD_WRITE, BIT(4) | BIT(3), 0 }, /* disable WL suspend*/
-+	{ 0x0005, PWR_CMD_WRITE, BIT(0), BIT(0) },
-+	{ 0x0005, PWR_CMD_POLLING, BIT(0), 0 },
-+	{ 0x0023, PWR_CMD_WRITE, BIT(4), 0 },
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
- };
- 
--/* 3Card Disable Array */
--struct wl_pwr_cfg
--rtl8188E_card_disable_flow[] = {
--	RTL8188E_TRANS_ACT_TO_CARDEMU
--	RTL8188E_TRANS_CARDEMU_TO_CARDDIS
--	RTL8188E_TRANS_END
-+struct wl_pwr_cfg rtl8188E_card_disable_flow[] = {
-+	{ 0x001F, PWR_CMD_WRITE, 0xFF, 0 }, /* turn off RF */
-+	{ 0x0023, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* LDO Sleep mode */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(1), BIT(1) }, /* turn off MAC by HW state machine */
-+	{ 0x0005, PWR_CMD_POLLING, BIT(1), 0 },
-+	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(3) | BIT(4), BIT(3) }, /* enable WL suspend */
-+	{ 0x0007, PWR_CMD_WRITE, 0xFF, 0 }, /* enable bandgap mbias in suspend */
-+	{ 0x0041, PWR_CMD_WRITE, BIT(4), 0 }, /* Clear SIC_EN register */
-+	{ 0xfe10, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* Set USB suspend enable local register */
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
- };
- 
--/* 3 Enter LPS */
-+/* This is used by driver for LPSRadioOff Procedure, not for FW LPS Step */
- struct wl_pwr_cfg rtl8188E_enter_lps_flow[] = {
--	/* FW behavior */
--	RTL8188E_TRANS_ACT_TO_LPS
--	RTL8188E_TRANS_END
-+	{ 0x0522, PWR_CMD_WRITE, 0xFF, 0x7F },/* Tx Pause */
-+	{ 0x05F8, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05F9, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05FA, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05FB, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x0002, PWR_CMD_WRITE, BIT(0), 0 }, /* CCK and OFDM are disabled, clocks are gated */
-+	{ 0x0002, PWR_CMD_DELAY, 0, PWRSEQ_DELAY_US },
-+	{ 0x0100, PWR_CMD_WRITE, 0xFF, 0x3F }, /* Reset MAC TRX */
-+	{ 0x0101, PWR_CMD_WRITE, BIT(1), 0 }, /* check if removed later */
-+	{ 0x0553, PWR_CMD_WRITE, BIT(5), BIT(5) }, /* Respond TxOK to scheduler */
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
- };
-diff --git a/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h b/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
-index 19cc5d627893..e4c5b5d23cb4 100644
---- a/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
-+++ b/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
-@@ -6,47 +6,6 @@
- 
- #include "HalPwrSeqCmd.h"
- 
--/* The format of all power transition steps is: { offset, cmd, msk, value } */
--
--#define RTL8188E_TRANS_CARDEMU_TO_ACT	\
--	{ 0x0006, PWR_CMD_POLLING, BIT(1), BIT(1) },	\
--	{ 0x0002, PWR_CMD_WRITE, BIT(0) | BIT(1), 0 }, /* reset BB */	\
--	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */	\
--	{ 0x0005, PWR_CMD_WRITE, BIT(7), 0 }, /* disable HWPDN (control by DRV)*/	\
--	{ 0x0005, PWR_CMD_WRITE, BIT(4) | BIT(3), 0 }, /* disable WL suspend*/	\
--	{ 0x0005, PWR_CMD_WRITE, BIT(0), BIT(0) },	\
--	{ 0x0005, PWR_CMD_POLLING, BIT(0), 0 },	\
--	{ 0x0023, PWR_CMD_WRITE, BIT(4), 0 }, /* LDO normal mode */
--
--#define RTL8188E_TRANS_ACT_TO_CARDEMU	\
--	{ 0x001F, PWR_CMD_WRITE, 0xFF, 0 },/* turn off RF */	\
--	{ 0x0023, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* LDO Sleep mode */	\
--	{ 0x0005, PWR_CMD_WRITE, BIT(1), BIT(1) }, /* turn off MAC by HW state machine */	\
--	{ 0x0005, PWR_CMD_POLLING, BIT(1), 0 },
--
--#define RTL8188E_TRANS_CARDEMU_TO_CARDDIS	\
--	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */	\
--	{ 0x0005, PWR_CMD_WRITE, BIT(3) | BIT(4), BIT(3) }, /* enable WL suspend */	\
--	{ 0x0007, PWR_CMD_WRITE, 0xFF, 0 }, /* enable bandgap mbias in suspend */	\
--	{ 0x0041, PWR_CMD_WRITE, BIT(4), 0 }, /* Clear SIC_EN register */	\
--	{ 0xfe10, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* Set USB suspend enable local register */
--
--/* This is used by driver for LPSRadioOff Procedure, not for FW LPS Step */
--#define RTL8188E_TRANS_ACT_TO_LPS	\
--	{ 0x0522, PWR_CMD_WRITE, 0xFF, 0x7F },/* Tx Pause */	\
--	{ 0x05F8, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */	\
--	{ 0x05F9, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */	\
--	{ 0x05FA, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */	\
--	{ 0x05FB, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */	\
--	{ 0x0002, PWR_CMD_WRITE, BIT(0), 0 }, /* CCK and OFDM are disabled, clocks are gated */	\
--	{ 0x0002, PWR_CMD_DELAY, 0, PWRSEQ_DELAY_US },	\
--	{ 0x0100, PWR_CMD_WRITE, 0xFF, 0x3F }, /* Reset MAC TRX */	\
--	{ 0x0101, PWR_CMD_WRITE, BIT(1), 0 }, /* check if removed later */	\
--	{ 0x0553, PWR_CMD_WRITE, BIT(5), BIT(5) }, /* Respond TxOK to scheduler */
--
--#define RTL8188E_TRANS_END	\
--	{ 0xFFFF, PWR_CMD_END, 0, 0 },
--
- extern struct wl_pwr_cfg rtl8188E_power_on_flow[];
- extern struct wl_pwr_cfg rtl8188E_card_disable_flow[];
- extern struct wl_pwr_cfg rtl8188E_enter_lps_flow[];
--- 
-2.20.1
-
+Paolo

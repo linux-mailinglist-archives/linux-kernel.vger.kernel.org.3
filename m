@@ -2,94 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F0347A230
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE1247A233
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbhLSVJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:09:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21872 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229810AbhLSVJ0 (ORCPT
+        id S236429AbhLSVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233494AbhLSVJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:09:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639948166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w8NVHh5KaHOjxDyMfVIdFJPd854oBlCBTaA4pOiH41I=;
-        b=SyOijWkrsV8hJorb3qvB4pao/dq7VZSGp2JfWp1mtHO7OUav7Gl3oDWWTdxEEIzRZhqy22
-        x6/3MDGLldP/F/sEhwhEtYZpV7Rx25Axg4t9eumh6zqRH4Svs1aD9xq34HqHC1WIT4Gcjh
-        jaslVwmbp9irjKIFPiM+KXG9Fp+wnYk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-340-2h4jEnqqOlWk9-DZfEywhg-1; Sun, 19 Dec 2021 16:09:25 -0500
-X-MC-Unique: 2h4jEnqqOlWk9-DZfEywhg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 19 Dec 2021 16:09:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CADDC061574;
+        Sun, 19 Dec 2021 13:09:50 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F0BC918460E8;
-        Sun, 19 Dec 2021 21:09:23 +0000 (UTC)
-Received: from [10.22.8.127] (unknown [10.22.8.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AEABF5E26B;
-        Sun, 19 Dec 2021 21:09:20 +0000 (UTC)
-Message-ID: <71c5ca50-1bf9-4ef7-eea0-634f66838d4a@redhat.com>
-Date:   Sun, 19 Dec 2021 16:09:20 -0500
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHFj52HGfz4xdH;
+        Mon, 20 Dec 2021 08:09:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639948185;
+        bh=FssGIj1LwRP3+G663Zfjwz+rySdBA0uHSttyY5d25vI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=di3BI0qbqNscDngHI8m1/iTUVcLqAo48YPM6b2RU/Pgk2/ZRUyYeosywH7CoAKiMe
+         /bp/sSJxdDJcxT98lQmgOsWusERHqE0CZSOQfUEgHYnpSFLrPrOLtS48M3RPkoL/2G
+         Mv0MIMD5tdrIKkIQf5QiqsZ4EoT9quje7xJ6Ea54WCo3QluG2hIe5bsneWmMDHHyNF
+         6V5lhjxkjNCBr5bWwsM+Jz60zXl2Jq985EBGj7Okc2Sftc0zVVhJuYiUYq479lnm8n
+         tUlXnHni8vCXdu+JYdSlrotC8il6R9x8p3htZLolhdFzqoO/qujPWb+nifCY9wMvSL
+         y4TO2arBekSOQ==
+Date:   Mon, 20 Dec 2021 08:09:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the nfs-anna tree
+Message-ID: <20211220080942.3419e1b0@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2] locking/rtmutex: Fix incorrect spinning condition
-Content-Language: en-US
-To:     Zqiang <qiang1.zhang@intel.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20211217074207.77425-1-qiang1.zhang@intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211217074207.77425-1-qiang1.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: multipart/signed; boundary="Sig_/apw/DhuIpO69.FCc/8b_al2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 02:42, Zqiang wrote:
-> When the lock owner is on CPU and not need resched, the current waiter
-> need to be checked, if it not longer top the waiter, stop spinning.
+--Sig_/apw/DhuIpO69.FCc/8b_al2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Incorrect grammar, should be "if it is no longer the top waiter". There 
-is a similar typo in the existing code comment too.
+Hi all,
 
-You can modify the subject line to [PATCH-tip ...] to indicate that it 
-is supposed to be apply on top of the tip tree. Other than that, the 
-patch looks good.
+Commits
 
+  9db96eaaf44a ("vdpa: Consider device id larger than 31")
+  7cb22b50d812 ("virtio/vsock: fix the transport to work with VMADDR_CID_AN=
+Y")
+  d0d9066f1daa ("virtio_ring: Fix querying of maximum DMA mapping size for =
+virtio device")
+  856f8e666474 ("virtio: always enter drivers/virtio/")
+  6b7982ff16ae ("vduse: check that offset is within bounds in get_config()")
+  ba5a66b197f9 ("vdpa: check that offsets are within bounds")
+  085c1e990ab6 ("vduse: fix memory corruption in vduse_dev_ioctl()")
+
+are missing a Signed-off-by from their committer.
+
+--=20
 Cheers,
-Longman
+Stephen Rothwell
 
->
-> Fixes: c3123c431447 ("locking/rtmutex: Dont dereference waiter lockless")
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->   v1->v2:
->   Modify description information.
->
->   kernel/locking/rtmutex.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> index 0c1f2e3f019a..8555c4efe97c 100644
-> --- a/kernel/locking/rtmutex.c
-> +++ b/kernel/locking/rtmutex.c
-> @@ -1383,7 +1383,7 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
->   		 *  - the VCPU on which owner runs is preempted
->   		 */
->   		if (!owner_on_cpu(owner) || need_resched() ||
-> -		    rt_mutex_waiter_is_top_waiter(lock, waiter)) {
-> +		    !rt_mutex_waiter_is_top_waiter(lock, waiter)) {
->   			res = false;
->   			break;
->   		}
+--Sig_/apw/DhuIpO69.FCc/8b_al2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG/n5YACgkQAVBC80lX
+0GxNJgf/c9QQtdTtoiU/waMAxcuYOUJ3amaxGAfKDKUuu83ZHlQyK0lfjCBcwYlP
+WOEz7e+lfh3orfl2l2KSztvWe2WhjKNrosQ4+euIUb1GJb4DKA1pXdtAEdNi3QWY
+MGsPbFW/Iebvf2YiYe/Cq7TAWR5AWm3UHPW4HdEs8m2ZRsPJDWao5jjfbPYlm/Jg
+Iue2+cUBUTuZ+K2a/leLOYmCEGgTmATDGpZyPK3cJVdQ+ibu+rAVQ8HcjW9XLa22
+lNRnuFarL40hLVR34D3ZzV6Nsl3hzlzk6ofOMr7kfSYxUa4nL3R2tBLYzOyyhTKd
+M/iaqBRPltxkxofWnQsaFDlbtN0uSA==
+=sRbo
+-----END PGP SIGNATURE-----
+
+--Sig_/apw/DhuIpO69.FCc/8b_al2--

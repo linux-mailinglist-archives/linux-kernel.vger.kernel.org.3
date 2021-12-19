@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4B947A13D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 17:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E54947A144
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 17:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236092AbhLSQCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 11:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbhLSQCJ (ORCPT
+        id S235951AbhLSQMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 11:12:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42174 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232688AbhLSQMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 11:02:09 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9975C061574;
-        Sun, 19 Dec 2021 08:02:08 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id m12so11938202ljj.6;
-        Sun, 19 Dec 2021 08:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lOJVwY5jpStaCZAdlI9r7F578YcqW449P/YXre+J0tQ=;
-        b=pjA90ue/y2GqwI2z14nTc67a4m47280O/yxsM3rbaOR0jXnST/2OFTz7rnBTTlDTiD
-         yrSS6Y7Bxy5Uf9WLx+PToztObgQKrfnS007NXaKbF1DUQCVehT4AnS1J7HTmnU7awlAL
-         DXhtAkhd+90jcpkSK2sqOdfRMlJLZpli8dT1Wfmv7t9H3OW0hfWcIR8ZJ9CJdh9XdZuw
-         7icknWh9L06pnfWketuwEXCRVG8syJqoUQNyQPMz4ty1kgX9w/NGWOI7mKzhhWsPBcOX
-         4N/kDK7AWqIhtjAnv2ccV2MxIBxJs7xIUxRl6HdKTaaidslm/H9merf2IgHYxbdeB7zI
-         1UQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lOJVwY5jpStaCZAdlI9r7F578YcqW449P/YXre+J0tQ=;
-        b=nukQnlIUETnHs3kLbiRm57Hj79FrCbLIwu11HG40CV4Pvo9zHUHN57o6+sAaCI5MiP
-         KKT7avgLsyBd4CIMOFH+3JxKPikcXgXevVMCrVv/TrvvvaUUkGGbcmINSq0TQljhQ7q7
-         kb0kHg3L5CRvl0tIaPZ4zGSxf1dOTbxhv8O3ijmxbS8Q/RznsxSQw4vob65sUxXGAiee
-         Xz7NWRtRnBpjQt/BFaLv8mcbg5/x0NvmMiQfXlveU7VgsjKsulrRjpFMjF/E98DmRjT+
-         0GXxOutKZM0wuuJBSBhs2Z+yDlwkBT/CxcoEcOMtRrYlzS3PNlIT2PUj3c90pAbNId8K
-         sjNA==
-X-Gm-Message-State: AOAM532S38ckN03fdm8G3TX+eYu1cWtUs9qFB63bKWNeb96bZepmlQn2
-        r+vdxVkblPkniLbsknlbpcI7QerGt3Q=
-X-Google-Smtp-Source: ABdhPJx1ZWsrVE8ULcM6usPQM1yX8t+9VcsmDxvcl3oZQN3xvGSoTr7yvW/BSd8mrcEdFyMmhUUbjw==
-X-Received: by 2002:a2e:b177:: with SMTP id a23mr11100264ljm.2.1639929726863;
-        Sun, 19 Dec 2021 08:02:06 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id 76sm2196162ljj.69.2021.12.19.08.02.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 08:02:06 -0800 (PST)
-Subject: Re: [PATCH v1 0/5] Improvements for TC358768 DSI bridge driver
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-tegra@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20211002233447.1105-1-digetx@gmail.com>
- <CAG3jFysa8G_fuGDfSLze-ovft3=gc5PXLaPtwTkC2_e0itQYNw@mail.gmail.com>
- <c09bd552-767e-e783-3f9f-114b8cedb475@gmail.com>
-Message-ID: <a999b141-4b14-cdd0-f6fa-3d861c0f381f@gmail.com>
-Date:   Sun, 19 Dec 2021 19:02:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 19 Dec 2021 11:12:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43514B80C99
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF36C36AE7;
+        Sun, 19 Dec 2021 16:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639930355;
+        bh=UMovWI4dCc2XVcWwE0TxAIku7SlyPjncbxMxOuEyBPo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BbrSpgRiNHXTIbf6KXVMKe58TV0q3Qvt6kgy2ORfH2neGNDmb3WdJu05R+HBac710
+         5rF5nezX4urITaWIyUxZupMLEshpHwxAYfUxcJTYBdQeuvbf6x5BOZSwrLR1TUQXrI
+         KlfliHtLiPVNJqcIgOfrQi6e/fxRL8GRsWURKbLJyCzJi/mNNNPmPAQIDddoQeUp3p
+         V8pivWrqwIsqCsNT/crgb1zjb3tWHu8rnKLfrM05r1tfjW6SurVmeR8zGmsgdn5XkK
+         XBDXQNTLACtR/J6BcaMnvWm3QxUgy9WSa3zQC8vI8JGA0f+FRNOjEFVukY4mbpYvU/
+         UMPhGx1D7WxDA==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 1/2] habanalabs: fix comments according to kernel-doc
+Date:   Sun, 19 Dec 2021 18:12:29 +0200
+Message-Id: <20211219161230.2674012-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <c09bd552-767e-e783-3f9f-114b8cedb475@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-19.10.2021 23:37, Dmitry Osipenko пишет:
-> 19.10.2021 12:47, Robert Foss пишет:
->> Applied to drm-misc-next
->>
->> On Sun, 3 Oct 2021 at 01:35, Dmitry Osipenko <digetx@gmail.com> wrote:
->>>
->>> This series adds couple improvements to the TC358768 DSI bridge driver,
->>> enabling Panasonic VVX10F004B00 DSI panel support. This panel is used by
->>> ASUS Transformer TF700T tablet, which is ready for upstream kernel and
->>> display panel support is the biggest missing part.
->>>
->>> Dmitry Osipenko (5):
->>>   drm/bridge: tc358768: Enable reference clock
->>>   drm/bridge: tc358768: Support pulse mode
->>>   drm/bridge: tc358768: Calculate video start delay
->>>   drm/bridge: tc358768: Disable non-continuous clock mode
->>>   drm/bridge: tc358768: Correct BTACNTRL1 programming
->>>
->>>  drivers/gpu/drm/bridge/tc358768.c | 94 +++++++++++++++++++++++--------
->>>  1 file changed, 71 insertions(+), 23 deletions(-)
->>>
->>> --
->>> 2.32.0
->>>
-> 
-> Robert, thank you for taking care of these patches! Now nothing is
-> holding us from upstreaming the device-tree of the Transformer tablet.
-> 
+From: Ofir Bitton <obitton@habana.ai>
 
-Hello Robert,
+Fix missing fields, descriptions not according to kernel-doc style.
 
-These patches spent 2 months in drm-misc-next, will they graduate into
-v5.17 or something special needs to be done for that?
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/memory.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 315594e96dcd..e5f7b23cbf94 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -518,7 +518,7 @@ static int add_va_block_locked(struct hl_device *hdev,
+ /**
+  * add_va_block() - wrapper for add_va_block_locked.
+  * @hdev: pointer to the habanalabs device structure.
+- * @va_list: pointer to the virtual addresses block list.
++ * @va_range: pointer to the virtual addresses range object.
+  * @start: start virtual address.
+  * @end: end virtual address.
+  *
+@@ -538,8 +538,11 @@ static inline int add_va_block(struct hl_device *hdev,
+ }
+ 
+ /**
+- * is_hint_crossing_range() - check if hint address crossing specified reserved
+- * range.
++ * is_hint_crossing_range() - check if hint address crossing specified reserved.
++ * @range_type: virtual space range type.
++ * @start_addr: start virtual address.
++ * @size: block size.
++ * @prop: asic properties structure to retrieve reserved ranges from.
+  */
+ static inline bool is_hint_crossing_range(enum hl_va_range_type range_type,
+ 		u64 start_addr, u32 size, struct asic_fixed_properties *prop) {
+@@ -749,6 +752,7 @@ u64 hl_reserve_va_block(struct hl_device *hdev, struct hl_ctx *ctx,
+ 
+ /**
+  * hl_get_va_range_type() - get va_range type for the given address and size.
++ * @ctx: context to fetch va_range from.
+  * @address: the start address of the area we want to validate.
+  * @size: the size in bytes of the area we want to validate.
+  * @type: returned va_range type.
+@@ -776,8 +780,8 @@ static int hl_get_va_range_type(struct hl_ctx *ctx, u64 address, u64 size,
+  * hl_unreserve_va_block() - wrapper for add_va_block to unreserve a va block.
+  * @hdev: pointer to the habanalabs device structure
+  * @ctx: pointer to the context structure.
+- * @start: start virtual address.
+- * @end: end virtual address.
++ * @start_addr: start virtual address.
++ * @size: number of bytes to unreserve.
+  *
+  * This function does the following:
+  * - Takes the list lock and calls add_va_block_locked.
+@@ -2329,6 +2333,8 @@ void hl_userptr_delete_list(struct hl_device *hdev,
+ /**
+  * hl_userptr_is_pinned() - returns whether the given userptr is pinned.
+  * @hdev: pointer to the habanalabs device structure.
++ * @addr: user address to check.
++ * @size: user block size to check.
+  * @userptr_list: pointer to the list to clear.
+  * @userptr: pointer to userptr to check.
+  *
+@@ -2351,9 +2357,10 @@ bool hl_userptr_is_pinned(struct hl_device *hdev, u64 addr,
+ /**
+  * va_range_init() - initialize virtual addresses range.
+  * @hdev: pointer to the habanalabs device structure.
+- * @va_range: pointer to the range to initialize.
++ * @va_ranges: pointer to va_ranges array.
+  * @start: range start address.
+  * @end: range end address.
++ * @page_size: page size for this va_range.
+  *
+  * This function does the following:
+  * - Initializes the virtual addresses list of the given range with the given
+@@ -2410,7 +2417,7 @@ static int va_range_init(struct hl_device *hdev, struct hl_va_range *va_range,
+ /**
+  * va_range_fini() - clear a virtual addresses range.
+  * @hdev: pointer to the habanalabs structure.
+- * va_range: pointer to virtual addresses rang.e
++ * @va_range: pointer to virtual addresses range.
+  *
+  * This function does the following:
+  * - Frees the virtual addresses block list and its lock.
+@@ -2430,12 +2437,15 @@ static void va_range_fini(struct hl_device *hdev, struct hl_va_range *va_range)
+  * @ctx: pointer to the habanalabs context structure.
+  * @host_range_start: host virtual addresses range start.
+  * @host_range_end: host virtual addresses range end.
++ * @host_page_size: host page size.
+  * @host_huge_range_start: host virtual addresses range start for memory
+  *                         allocated with huge pages.
+  * @host_huge_range_end: host virtual addresses range end for memory allocated
+  *                        with huge pages.
++ * @host_huge_page_size: host huge page size.
+  * @dram_range_start: dram virtual addresses range start.
+  * @dram_range_end: dram virtual addresses range end.
++ * @dram_page_size: dram page size.
+  *
+  * This function initializes the following:
+  * - MMU for context.
+-- 
+2.25.1
+

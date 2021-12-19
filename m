@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835DF47A01A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 10:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCE247A01E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 10:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbhLSJxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 04:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S235551AbhLSJ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 04:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbhLSJxJ (ORCPT
+        with ESMTP id S229585AbhLSJ7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 04:53:09 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBAEC061574;
-        Sun, 19 Dec 2021 01:53:09 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id v203so19670673ybe.6;
-        Sun, 19 Dec 2021 01:53:09 -0800 (PST)
+        Sun, 19 Dec 2021 04:59:08 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9932C061574;
+        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id gj24so6507308pjb.0;
+        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rQy98157VCXxailMB3OKe9xQTqZtJID4MSHHuD+ZMVE=;
-        b=k8ttBwJ2ch3L2ku9kNpnsqC0Q7NVHZkdCSDqx5MBe8p1PYZK4kZzrWzDBj8H3QM0ds
-         cdXWEH5/8o7OSWBkek22dihzqEraLEdZ+D35IYe4p/tu2IVrJu5YdHtS1EBdBfSscoJt
-         +BcxXnXFhkEBedL5IZGJ1aYAWhVkn24OoqGSEox6rPUDgh8fcspsk0AT+qhMIX/wljG6
-         njKvaY/jdMsmvjE3gTf79QjdaXXzdmHFD4Z2rMnx48V0n95gl6j0lLubsWisxJkPlRT/
-         d1ETb3UpMBsV9tprKzXFyxmosTeO9qqKKrfA8AFcRQ4Fl6cktId6JeqUmqRr+3usFZ+r
-         F4nQ==
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=dG68qbbN9Wct+UUNDOZqFZ/544NhXHzV1/15tPR+FZQ=;
+        b=qxHxo7P4Hmn3Co0lx+drz0KAQB5rS9kl7ZYFcZdRRbb7g8xE1kzNS9GNUyxxCrMfQT
+         RfAJN7vWYS9skka5kzDB1Rk7Gqe+jr7H7ZR4rCq/iR+ldQ+zl0mhhqv5TJNPGxfrRFup
+         VJIghQje4LiOG7OwXFupSwLFgvyJcmRjHr5QJnyogq9MtAhlEcNzqC+YKsVkw7lirTfN
+         sryZgZcqIQjPiWa+p0CLYu3O/jGddC88jYvKOATqcgJMdsv/mwwY1LpZIPhNB1OWkZh6
+         f1tP3fFcrEzCu8G/Id+li3Q7c0//Ank/PSro7DjAkv/7Er1Q8IW0Oc7NlqTRQoC9YKL6
+         bA+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rQy98157VCXxailMB3OKe9xQTqZtJID4MSHHuD+ZMVE=;
-        b=zz2ReTUSqFch8y9oiDOnbkdcRwh2Lm0vveA3jSlPrDcnOK0F73jnNvK5nApeZ7xuzF
-         F92TbCE8RGMuml/6wrkIbYmA93bPy7pIUfE6zvAmQd+8vSjult2MvHDQQPRGiFgWXvPK
-         ACKdPsFsggmNxFba640GlkQpuCb4yZuPXFT/luOpWLZiMeXb3KAFIteVE6jEnbYss1Sp
-         DMNtlS0S/+28Tvgc2pM3xdY8ptO3r+NLVQchgnSIPyGgAq7hNU9aiNMNRj/MbXGMGVPp
-         Q9dszMTeBOSxc9GPRzj2PnPD6ewK8cVxtLvZHJRXAwfmRJFm74LZawv8oMrHf+MkoWo2
-         F4tQ==
-X-Gm-Message-State: AOAM530nX9lCZn7D6FtUKSAAl43HtNIIGuTFEB+v2uXxqaU0l0EEU/bM
-        WjF4v5HAsCnVLPkCVJpVQXODbkkJqRc/tdtYZjo=
-X-Google-Smtp-Source: ABdhPJwwUMaZimLMR3lbhPwW2EQ9i0quXz8lr7P5fHsQ8RE+4mqp6h3fkS59sK3CJW40LYkyT0rzyyh3Mf/Asodxpr0=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr15202812ybe.422.1639907588560;
- Sun, 19 Dec 2021 01:53:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <a02d76dc-52cc-3ecc-5ef7-825c3167431a@gmail.com> <CA+V-a8ug-7i7H=pc4j+WtL8ARC6UVhxaeJ1Db23s_yEFTSu8pw@mail.gmail.com>
-In-Reply-To: <CA+V-a8ug-7i7H=pc4j+WtL8ARC6UVhxaeJ1Db23s_yEFTSu8pw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sun, 19 Dec 2021 09:52:42 +0000
-Message-ID: <CA+V-a8v8RLCEphjyNxCn+BRaqudwoLxJibjp1ZG5GEv4htNK9g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: bcm2835: Use platform_get_irq() to get the interrupt
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=dG68qbbN9Wct+UUNDOZqFZ/544NhXHzV1/15tPR+FZQ=;
+        b=QVUYrwd9bvSQ63Ke2hmBcTPBAKII75ghBMYb2a/mfo4Qt3gAJd9TlSZLGwfYUalIkb
+         81zH7YvS3896f5Di0KfCg37lazSxO217WfLyGsEZXtDVzMPxxhPXHkzGlOt5xrn7ejyk
+         T9AjsmVqIfQhC76YbShYVWSuj/dHtZu2OFjb+JbEjExjQe7fZRCZmBZalI2zb7syhN5N
+         oBuvC6+7oQ3pzbxN1NMnv4wR24kaZyqk7eDGVoEGGjmV+HZqiUksQhrW0tJ5AYsCZsHp
+         V/fvs4S0v8kZe7rarAu0jr7BNQultJrcqklrwycb+u6iWxHuETQcttawpmLvTot8BbBV
+         L9fQ==
+X-Gm-Message-State: AOAM532YTl0Ula1wzvw7VzaNV5rl3J9r7ggC5WuLCDAijcvml1UGLl31
+        y1SUOn4Ig4NHt0R/u1e178c=
+X-Google-Smtp-Source: ABdhPJwzUCgNcdoLqJpWlON/LozZCUZMCGAOfGDxUBk0PHq7KdOUOS95eg7rsJ8IVKUG17BiUM2tnQ==
+X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr13879309pjb.190.1639907947026;
+        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
+Received: from smtpclient.apple ([123.114.22.133])
+        by smtp.gmail.com with ESMTPSA id lb12sm1924537pjb.27.2021.12.19.01.59.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Dec 2021 01:59:06 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v4 00/17] Optimize list lru memory consumption
+From:   xiaoqiang zhao <zhaoxiaoqiang007@gmail.com>
+In-Reply-To: <YbyM17OMHlEmLfhH@casper.infradead.org>
+Date:   Sun, 19 Dec 2021 17:58:55 +0800
+Cc:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
+        shakeelb@google.com, guro@fb.com, shy828301@gmail.com,
+        alexs@kernel.org, richard.weiyang@gmail.com, david@fromorbit.com,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
+        fam.zheng@bytedance.com, smuchun@gmail.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0AF1C950-FA7A-4D70-9E92-72C7BE32293A@gmail.com>
+References: <20211213165342.74704-1-songmuchun@bytedance.com>
+ <745ddcd6-77e3-22e0-1f8e-e6b05c644eb4@gmail.com>
+ <YbyM17OMHlEmLfhH@casper.infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
 
-On Sat, Dec 18, 2021 at 10:44 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Florian,
->
-> Thank you for the review.
->
-> On Sat, Dec 18, 2021 at 9:17 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> >
-> >
-> > On 12/18/2021 8:52 AM, Lad Prabhakar wrote:
-> > > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > > allocation of IRQ resources in DT core code, this causes an issue
-> > > when using hierarchical interrupt domains using "interrupts" property
-> > > in the node as this bypasses the hierarchical setup and messes up the
-> > > irq chaining.
-> > >
-> > > In preparation for removal of static setup of IRQ resource from DT core
-> > > code use platform_get_irq().
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Just one nit below:
-> > > ---
-> > >   drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
-> > >   1 file changed, 4 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-> > > index 37443edbf754..d63dec5f3cb1 100644
-> > > --- a/drivers/i2c/busses/i2c-bcm2835.c
-> > > +++ b/drivers/i2c/busses/i2c-bcm2835.c
-> > > @@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
-> > >   static int bcm2835_i2c_probe(struct platform_device *pdev)
-> > >   {
-> > >       struct bcm2835_i2c_dev *i2c_dev;
-> > > -     struct resource *mem, *irq;
-> > > +     struct resource *mem;
-> > >       int ret;
-> > >       struct i2c_adapter *adap;
-> > >       struct clk *mclk;
-> > > @@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
-> > >               return ret;
-> > >       }
-> > >
-> > > -     irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> > > -     if (!irq) {
-> > > -             dev_err(&pdev->dev, "No IRQ resource\n");
-> > > -             return -ENODEV;
-> > > -     }
-> > > -     i2c_dev->irq = irq->start;
-> > > +     i2c_dev->irq = platform_get_irq(pdev, 0);
-> > > +     if (i2c_dev->irq <= 0)
-> > > +             return i2c_dev->irq ? i2c_dev->irq : -ENXIO;
-> >
-> > Why not just check for a negative return code and propagate it as is?
-> >
-> platform_get_irq() may return 0 said that we do get a splat in this
-> case and further request_irq() will fail so instead check it here.
->
-My bad, just the negative check should suffice.
 
-Cheers,
-Prabhakar
+> 2021=E5=B9=B412=E6=9C=8817=E6=97=A5 =E4=B8=8B=E5=8D=889:12=EF=BC=8CMatth=
+ew Wilcox <willy@infradead.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, Dec 17, 2021 at 06:05:00PM +0800, xiaoqiang zhao wrote:
+>>=20
+>>=20
+>> =E5=9C=A8 2021/12/14 0:53, Muchun Song =E5=86=99=E9=81=93:
+>>> This series is based on Linux 5.16-rc3.
+>>>=20
+>>> In our server, we found a suspected memory leak problem. The =
+kmalloc-32
+>>> consumes more than 6GB of memory. Other kmem_caches consume less =
+than 2GB
+>>> memory.
+>>>=20
+>>> After our in-depth analysis, the memory consumption of kmalloc-32 =
+slab
+>>> cache is the cause of list_lru_one allocation.
+>>=20
+>> IIUC, you mean: "the memory consumption of kmalloc-32 slab cache is
+>> caused by list_lru_one allocation"
+>>=20
+>=20
+> Please trim the unnecessary parts.  You quoted almost 200 extra lines
+> after this that I (and everybody else reading) have to look through
+> to see if you said anything else.
+
+Sorry for the inconvenience, WILL do next time ;-)=

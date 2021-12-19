@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCE247A01E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 10:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C7847A023
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 11:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbhLSJ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 04:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S235560AbhLSKOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 05:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbhLSJ7I (ORCPT
+        with ESMTP id S229585AbhLSKOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 04:59:08 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9932C061574;
-        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id gj24so6507308pjb.0;
-        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
+        Sun, 19 Dec 2021 05:14:33 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F81C061574;
+        Sun, 19 Dec 2021 02:14:33 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id p8so10938448ljo.5;
+        Sun, 19 Dec 2021 02:14:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=dG68qbbN9Wct+UUNDOZqFZ/544NhXHzV1/15tPR+FZQ=;
-        b=qxHxo7P4Hmn3Co0lx+drz0KAQB5rS9kl7ZYFcZdRRbb7g8xE1kzNS9GNUyxxCrMfQT
-         RfAJN7vWYS9skka5kzDB1Rk7Gqe+jr7H7ZR4rCq/iR+ldQ+zl0mhhqv5TJNPGxfrRFup
-         VJIghQje4LiOG7OwXFupSwLFgvyJcmRjHr5QJnyogq9MtAhlEcNzqC+YKsVkw7lirTfN
-         sryZgZcqIQjPiWa+p0CLYu3O/jGddC88jYvKOATqcgJMdsv/mwwY1LpZIPhNB1OWkZh6
-         f1tP3fFcrEzCu8G/Id+li3Q7c0//Ank/PSro7DjAkv/7Er1Q8IW0Oc7NlqTRQoC9YKL6
-         bA+w==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=hKGb9w8KG5b73eiq1K1JTU4pcyHL51jKG9VctVhGJnk=;
+        b=f+V0CkkhnztRfIT54g00ZqQAvSLl+KO47996Tdp/Xbuyp/BONbEN3cUVfOPuFaJ7KZ
+         A/fPHKlM3X6cBGT84cxhGyZzyiUqF8HEnlsJf1zX+kfG/mwF1pU72FFqtMTt6+pWaHEX
+         gPEhgcmuPqwrusKFv7FErNaiV6tv8Z++YdmFP0zbJBHFr7Ym6/hJFcNzRPc0zfkDpP1h
+         yLC6rvgTLv+1qNnFCckatJavDMIa6+WWz6JAaYUUKMf9m9bp+s315BlSd0lSb0rn0MH9
+         bA/QqiOLzIR+MvBhwijqjcQy9n/05vmG11m3WknjOxBTALlcZCKMzb+0EzI+iFGdQf6p
+         V8PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=dG68qbbN9Wct+UUNDOZqFZ/544NhXHzV1/15tPR+FZQ=;
-        b=QVUYrwd9bvSQ63Ke2hmBcTPBAKII75ghBMYb2a/mfo4Qt3gAJd9TlSZLGwfYUalIkb
-         81zH7YvS3896f5Di0KfCg37lazSxO217WfLyGsEZXtDVzMPxxhPXHkzGlOt5xrn7ejyk
-         T9AjsmVqIfQhC76YbShYVWSuj/dHtZu2OFjb+JbEjExjQe7fZRCZmBZalI2zb7syhN5N
-         oBuvC6+7oQ3pzbxN1NMnv4wR24kaZyqk7eDGVoEGGjmV+HZqiUksQhrW0tJ5AYsCZsHp
-         V/fvs4S0v8kZe7rarAu0jr7BNQultJrcqklrwycb+u6iWxHuETQcttawpmLvTot8BbBV
-         L9fQ==
-X-Gm-Message-State: AOAM532YTl0Ula1wzvw7VzaNV5rl3J9r7ggC5WuLCDAijcvml1UGLl31
-        y1SUOn4Ig4NHt0R/u1e178c=
-X-Google-Smtp-Source: ABdhPJwzUCgNcdoLqJpWlON/LozZCUZMCGAOfGDxUBk0PHq7KdOUOS95eg7rsJ8IVKUG17BiUM2tnQ==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr13879309pjb.190.1639907947026;
-        Sun, 19 Dec 2021 01:59:07 -0800 (PST)
-Received: from smtpclient.apple ([123.114.22.133])
-        by smtp.gmail.com with ESMTPSA id lb12sm1924537pjb.27.2021.12.19.01.59.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 Dec 2021 01:59:06 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v4 00/17] Optimize list lru memory consumption
-From:   xiaoqiang zhao <zhaoxiaoqiang007@gmail.com>
-In-Reply-To: <YbyM17OMHlEmLfhH@casper.infradead.org>
-Date:   Sun, 19 Dec 2021 17:58:55 +0800
-Cc:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
-        shakeelb@google.com, guro@fb.com, shy828301@gmail.com,
-        alexs@kernel.org, richard.weiyang@gmail.com, david@fromorbit.com,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0AF1C950-FA7A-4D70-9E92-72C7BE32293A@gmail.com>
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <745ddcd6-77e3-22e0-1f8e-e6b05c644eb4@gmail.com>
- <YbyM17OMHlEmLfhH@casper.infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=hKGb9w8KG5b73eiq1K1JTU4pcyHL51jKG9VctVhGJnk=;
+        b=Q6IhtulleN11VrasbH7BYsEiF1+0WKItceR3MqV1SvWJStL+HHqkVWIvnl3sMOO6o2
+         09A6aAFSR9P2hR3U/Si6tL3g2dCVYSIjwbRrKqDhlmvNUJHO+jRBE+WuzZ5gdWMjly53
+         hhLpr+TrZ8//NAT8bs/VAR9inZqS1EcD/SXrftvib9AELaWpa7iSEFHSs8DNPXBDID/u
+         R0Z22zgHUzq7IOJQvTAUKh29gOUPhM2XU42khn0yLrgGCDmz+CLhNsBAhNAR99COz8qb
+         mn//L3BdPEtziL7bzHo5KXI+TQ/3vdtmSKD1qtPUiSZuRAIWHWZ7DNClqr7F9t+1VHLC
+         Wz/g==
+X-Gm-Message-State: AOAM530RnNUtiDM07t3rgiMkkWPvVOtxitRaKKBoQZ3M4JpQFJbFFltP
+        TiCzCubfkJBP2wvgOXCeTpU=
+X-Google-Smtp-Source: ABdhPJw2YSsSu09c3sO8K26eMzGbJwXH2EBNbCGZHGfeNhI3hKtXngb2r9yWYq4379t6U+LBk27HEQ==
+X-Received: by 2002:a2e:9703:: with SMTP id r3mr9953312lji.422.1639908870993;
+        Sun, 19 Dec 2021 02:14:30 -0800 (PST)
+Received: from [192.168.1.100] ([178.176.77.193])
+        by smtp.gmail.com with ESMTPSA id h17sm2009168lfv.62.2021.12.19.02.14.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 02:14:30 -0800 (PST)
+Message-ID: <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com>
+Date:   Sun, 19 Dec 2021 13:14:25 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>, stable@vger.kernel.org,
+        Yuwen Ng <yuwen.ng@mediatek.com>
+References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
+ <20211218095749.6250-3-chunfeng.yun@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+In-Reply-To: <20211218095749.6250-3-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18.12.2021 12:57, Chunfeng Yun wrote:
 
+> This is caused by uninitialization of list_head.
 
-> 2021=E5=B9=B412=E6=9C=8817=E6=97=A5 =E4=B8=8B=E5=8D=889:12=EF=BC=8CMatth=
-ew Wilcox <willy@infradead.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, Dec 17, 2021 at 06:05:00PM +0800, xiaoqiang zhao wrote:
->>=20
->>=20
->> =E5=9C=A8 2021/12/14 0:53, Muchun Song =E5=86=99=E9=81=93:
->>> This series is based on Linux 5.16-rc3.
->>>=20
->>> In our server, we found a suspected memory leak problem. The =
-kmalloc-32
->>> consumes more than 6GB of memory. Other kmem_caches consume less =
-than 2GB
->>> memory.
->>>=20
->>> After our in-depth analysis, the memory consumption of kmalloc-32 =
-slab
->>> cache is the cause of list_lru_one allocation.
->>=20
->> IIUC, you mean: "the memory consumption of kmalloc-32 slab cache is
->> caused by list_lru_one allocation"
->>=20
->=20
-> Please trim the unnecessary parts.  You quoted almost 200 extra lines
-> after this that I (and everybody else reading) have to look through
-> to see if you said anything else.
+    Again, there's no such word as "uninitialization" (even if it existed, it 
+wouldn't mean what you wanted to say); please replace by "not initializing".
 
-Sorry for the inconvenience, WILL do next time ;-)=
+> BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
+> 
+> Call trace:
+> dump_backtrace+0x0/0x298
+> show_stack+0x24/0x34
+> dump_stack+0x130/0x1a8
+> print_address_description+0x88/0x56c
+> __kasan_report+0x1b8/0x2a0
+> kasan_report+0x14/0x20
+> __asan_load8+0x9c/0xa0
+> __list_del_entry_valid+0x34/0xe4
+> mtu3_req_complete+0x4c/0x300 [mtu3]
+> mtu3_gadget_stop+0x168/0x448 [mtu3]
+> usb_gadget_unregister_driver+0x204/0x3a0
+> unregister_gadget_item+0x44/0xa4
+> 
+> Fixes: 83374e035b62 ("usb: mtu3: add tracepoints to help debug")
+> Cc: stable@vger.kernel.org
+> Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+[...]
+
+MBR, Sergey

@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189E247A058
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 12:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B5847A069
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 12:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbhLSLS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 06:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S235669AbhLSLag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 06:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbhLSLSZ (ORCPT
+        with ESMTP id S235650AbhLSLaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 06:18:25 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE07C061574;
-        Sun, 19 Dec 2021 03:18:24 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id c3so9572898iob.6;
-        Sun, 19 Dec 2021 03:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SaqxcOL4Lplrqp4ydrgNsbAAystgqbZByphef5IAeVk=;
-        b=WimBmUTpSol2/yjNRgufQXKLeAW5g4J0U3g+BX8HdSLHuK+bwqF069Z950xZFp2uo0
-         wjJxjGXLPE3uA2ZaX533nhv4v6m4FtgJbGi9W3Tr8pCQSujr7CXyoouT05+NJWYilZvX
-         ZuQU42CmjlHsPa87yrgA9EHgq8xaKfMNMitw06iPUDmGjQZwIqV5WF/aT81wfT89xTte
-         N9RhhLmY8nuDsC5SVkUesgZusmw8IscJruHBnXfDfzR/hoef3Co+nNT7qS+Dc6eVsvrb
-         tbG/tFaRIR5qU410QZtbpIiN9gf2j09aGII5jyRvkLXlusR8g/nQKudfbXekIPS2aT9z
-         1BiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SaqxcOL4Lplrqp4ydrgNsbAAystgqbZByphef5IAeVk=;
-        b=xNhvgc/F6TeonNSaqTwXG6b2yNwqLtpOVQbU6oqLBa+4AkeB7JQgr8kaP/7g+1dETd
-         FQOPiCVdoiXy8PpqI5/jXlgKgvn5ZkV4mzHN/okpGF1CMZsa/qhYfWxP4+IEvq7yVxrM
-         fi7gUeUzMZJwO0zF5ZulT1Kp8MZXa8sek5NzBDGhmfdqnVTTEdhP3FYA2udh/q/UJCzr
-         q24YbzlMsazbeTan3sybrzZ94v6IrQxrRb3rxBz4qJE0byDRKyMJ76G4k+FyxGTwNN+u
-         PXlqHiTTsncdKdmmh5Lu5ZOoNu+WFn/wZUSv/+PAaO5A3oFdPrPm5fI34STBQPYkP8VC
-         nQ4Q==
-X-Gm-Message-State: AOAM531bRZr08auUNBoS/E6tNrBWov9cNp3Zd68zawCQ/D7SoKsz3kEl
-        2jmMVMEFSg30MwcCm2jcpvMZGm3Zn0IqQvauInA=
-X-Google-Smtp-Source: ABdhPJxaLugeQ30fi+U6ruTyYEcXUrrjpSQdpWG/8MJ1Vs3FcxjB5GlNshM9fBY+w2yB5WCx2wjTN+YuGR1rMVeUCZs=
-X-Received: by 2002:a5d:9d92:: with SMTP id ay18mr5874393iob.130.1639912703839;
- Sun, 19 Dec 2021 03:18:23 -0800 (PST)
+        Sun, 19 Dec 2021 06:30:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3AAC061574;
+        Sun, 19 Dec 2021 03:30:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=+xLGuwkGLHj6F7qVwSYYRQuCk2pKTFB8i/Od87i7OI4=; b=gRcXsixJbfh9FauWZ461228HXj
+        eiOUlnI/kN8lAHWcRfPWIUUcbKLX9gTpfvnLUaEH547R3d7CTdwspdKQIy578WckdditrK3ydgd7E
+        wiCwBRF9jdFOnsULc3pUf6lu7RDGR4hyve5eS5DrjWqQ7gqRJk7diGoIjV69tHlPqEJClfZt0M9cX
+        5zyzzcUCqzi9qmvXMcwBIJv/6fqkvbXqPdRPE7cvff0aILtksT5/gtjBegOXuz1BYlUEbFCQDPBWV
+        m03FUkC2RC6un46QqBCrJhN4SIxSCcIXD9QIs5i5qkPNUxKMBH1E+y1Zv7iAaBkPfS4BT82RAv9Qq
+        ilFAdGrA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1myuOT-000hbL-AB; Sun, 19 Dec 2021 11:30:21 +0000
+Date:   Sun, 19 Dec 2021 11:30:21 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Nadav Amit <namit@vmware.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <Yb8XzTRX8TZOYIQ/@casper.infradead.org>
+References: <20211218030509.GA1432915@nvidia.com>
+ <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
+ <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com>
+ <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <341cf567-468e-b5cf-6813-b26c49e851b5@nvidia.com>
 MIME-Version: 1.0
-References: <20211126203641.24005-1-semen.protsenko@linaro.org>
-In-Reply-To: <20211126203641.24005-1-semen.protsenko@linaro.org>
-From:   Alim Akhtar <alim.akhtar@gmail.com>
-Date:   Sun, 19 Dec 2021 16:47:47 +0530
-Message-ID: <CAGOxZ51nmoiiWdr3FYLBpg+WSyfnK3wsK+aDi_Q7NAxVVBQWHQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
- Exynos850 sysreg clocks
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        David Virag <virag.david003@gmail.com>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <341cf567-468e-b5cf-6813-b26c49e851b5@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 7:08 PM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
+On Sun, Dec 19, 2021 at 12:01:59AM -0800, John Hubbard wrote:
+> On 12/18/21 22:02, Nadav Amit wrote:
+> > I found my old messy code for the software-PTE thing.
+> > 
+> > I see that eventually I decided to hold a pointer to the “extra PTEs”
+> > of each page in the PMD-page-struct. [ I also implemented the 2-adjacent
+> > pages approach but this code is long gone. ]
 >
-> System Register is used to configure system behavior, like USI protocol,
-> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> make it possible to modify SYSREG registers.
->
-> While at it, add also missing PMU and GPIO clocks, which looks necessary
-> and might be needed for corresponding Exynos850 features soon.
->
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-Looks good, feel free to add
+> a) The PMD-page-struct approach won't help as much, because (assuming
+> that we're using it in an attempt to get a true, perfect pin count), you
+> are combining the pin counts of a PMD's worth of pages. OTOH...maybe
+> that actually *is* OK, assuming you don't overflow--except that you can
+> only answer the "is it dma-pinned?" question at a PMD level. That's a
+> contradiction of your stated desire above to have very granular control.
+> 
+> Also, because of not having bit 0 available in page._pt_pad_1, I think
+> the count would have to be implemented as adding and subtracting 2,
+> instead of 1 (in order to keep the value even), further reducing the
+> counter range.
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
-
-
-> diff --git a/include/dt-bindings/clock/exynos850.h b/include/dt-bindings/clock/exynos850.h
-> index 8aa5e82af0d3..0b6a3c6a7c90 100644
-> --- a/include/dt-bindings/clock/exynos850.h
-> +++ b/include/dt-bindings/clock/exynos850.h
-> @@ -82,7 +82,10 @@
->  #define CLK_GOUT_I3C_PCLK              19
->  #define CLK_GOUT_I3C_SCLK              20
->  #define CLK_GOUT_SPEEDY_PCLK           21
-> -#define APM_NR_CLK                     22
-> +#define CLK_GOUT_GPIO_ALIVE_PCLK       22
-> +#define CLK_GOUT_PMU_ALIVE_PCLK                23
-> +#define CLK_GOUT_SYSREG_APM_PCLK       24
-> +#define APM_NR_CLK                     25
->
->  /* CMU_CMGP */
->  #define CLK_RCO_CMGP                   1
-> @@ -99,7 +102,8 @@
->  #define CLK_GOUT_CMGP_USI0_PCLK                12
->  #define CLK_GOUT_CMGP_USI1_IPCLK       13
->  #define CLK_GOUT_CMGP_USI1_PCLK                14
-> -#define CMGP_NR_CLK                    15
-> +#define CLK_GOUT_SYSREG_CMGP_PCLK      15
-> +#define CMGP_NR_CLK                    16
->
->  /* CMU_HSI */
->  #define CLK_MOUT_HSI_BUS_USER          1
-> @@ -167,7 +171,9 @@
->  #define CLK_GOUT_MMC_EMBD_SDCLKIN      10
->  #define CLK_GOUT_SSS_ACLK              11
->  #define CLK_GOUT_SSS_PCLK              12
-> -#define CORE_NR_CLK                    13
-> +#define CLK_GOUT_GPIO_CORE_PCLK                13
-> +#define CLK_GOUT_SYSREG_CORE_PCLK      14
-> +#define CORE_NR_CLK                    15
->
->  /* CMU_DPU */
->  #define CLK_MOUT_DPU_USER              1
-> --
-> 2.30.2
->
-
-
--- 
-Regards,
-Alim
+I think you misunderstood Nadav's approach.  He's talking about making
+an extra side-allocation per PMD if you're using uffd, and storing
+extra information in it.  I think it's a worthwile approach.

@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE1247A233
+	by mail.lfdr.de (Postfix) with ESMTP id ED09747A235
 	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbhLSVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S236615AbhLSVJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbhLSVJu (ORCPT
+        with ESMTP id S236159AbhLSVJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:09:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CADDC061574;
+        Sun, 19 Dec 2021 16:09:51 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1693AC061574;
+        Sun, 19 Dec 2021 13:09:51 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id k23so12797223lje.1;
         Sun, 19 Dec 2021 13:09:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHFj52HGfz4xdH;
-        Mon, 20 Dec 2021 08:09:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639948185;
-        bh=FssGIj1LwRP3+G663Zfjwz+rySdBA0uHSttyY5d25vI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=di3BI0qbqNscDngHI8m1/iTUVcLqAo48YPM6b2RU/Pgk2/ZRUyYeosywH7CoAKiMe
-         /bp/sSJxdDJcxT98lQmgOsWusERHqE0CZSOQfUEgHYnpSFLrPrOLtS48M3RPkoL/2G
-         Mv0MIMD5tdrIKkIQf5QiqsZ4EoT9quje7xJ6Ea54WCo3QluG2hIe5bsneWmMDHHyNF
-         6V5lhjxkjNCBr5bWwsM+Jz60zXl2Jq985EBGj7Okc2Sftc0zVVhJuYiUYq479lnm8n
-         tUlXnHni8vCXdu+JYdSlrotC8il6R9x8p3htZLolhdFzqoO/qujPWb+nifCY9wMvSL
-         y4TO2arBekSOQ==
-Date:   Mon, 20 Dec 2021 08:09:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the nfs-anna tree
-Message-ID: <20211220080942.3419e1b0@canb.auug.org.au>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=/ODWiIFGBcYIvOfjZgM+N+Zmuylofd9rTC/IRS5c5Dg=;
+        b=CNJnTKoVrR+mwizs+Fk1R93lblNcNM4P27W7UK4hd4s27ASSOzb/5wDgppG9NcagXE
+         Qy60cY1bQvHLHQL7dCVp3zkiQ2nsriGwYA9hAAgDFeBIfHx29yp0n6Fq9xM/BhR/Vr9A
+         CIrTllNeGrazQCLEbz+bOscvL/no/U1lFSiR+5AYFd5ZXZvfJtgRLQe/4cf9wRlQSlZe
+         rx24LCf1j7eaEsRpedCvFeYYPeM3CdJi2MUQK42Fsr1sG2UHHymcs4himDf4VcWHenKH
+         2qRMV5yaFyW+hp2hXjRYQgT3AWdkGEwVO/Sv7g0LdQgfk77kwbW6OQ2xmdxbiPD+2ayX
+         egUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/ODWiIFGBcYIvOfjZgM+N+Zmuylofd9rTC/IRS5c5Dg=;
+        b=xILUm7rKOlhPbkeQZno1MZxuWRo9SND/aiH1GUM9CecsSUqQaUa74nyZVneokqb+/q
+         U+YamWlpCx4omnJATS1w9EsvQTNd7jyqoU0tkswXENm4vj3HqFjvORuxc58KSvOhPiwq
+         ZLCKt0C2v1ta+R6yX8QOOtK1l/MELF18j5XjzVMnXQRVoIBd573MJInzPzSk+KP0d/FM
+         u9KPVv8A49CbqA6mZbglIGxnc6lyG+PvN+JWztJ3ktXUQ39uaHV35sG+8nIbbr+Svmhh
+         PJBt0Gh4ZVAFkHhGZq+ZsF2769pf35dGyQquNKxZV4SMEZoX/nKwT/qcIqVRydNi7Dxe
+         hpcA==
+X-Gm-Message-State: AOAM531MzWwE61uNpnZMregfq4f+WKubiuLv5ZbonpRn1cn2MMmFnEU5
+        7rfzGC4e5fTp3kYgNwpB6Eg=
+X-Google-Smtp-Source: ABdhPJx3wPQ6HrbBYqzrVoNQwf8mAOx7GXoGOS7f1asn6BPTyEDxiSEYwlceB8H2wBV85PMZeh9NIA==
+X-Received: by 2002:a2e:7305:: with SMTP id o5mr12072132ljc.180.1639948189334;
+        Sun, 19 Dec 2021 13:09:49 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.239])
+        by smtp.gmail.com with ESMTPSA id q10sm2333370ljp.44.2021.12.19.13.09.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 13:09:48 -0800 (PST)
+Message-ID: <dac227fc-b0ce-79e1-c42f-eb03b4f5d699@gmail.com>
+Date:   Mon, 20 Dec 2021 00:09:47 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/apw/DhuIpO69.FCc/8b_al2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [syzbot] kernel BUG at net/phonet/socket.c:LINE!
+Content-Language: en-US
+To:     syzbot <syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com>,
+        courmisch@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000005721f05d3810165@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <00000000000005721f05d3810165@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/apw/DhuIpO69.FCc/8b_al2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/19/21 17:58, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    60ec7fcfe768 qlcnic: potential dereference null pointer of..
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11b3505db00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2dc91e7fc3dea88b1e8a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168791cdb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0cbcdb00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2dc91e7fc3dea88b1e8a@syzkaller.appspotmail.com
+> 
 
-Hi all,
+This bug can be triggered via simple
 
-Commits
+sk = socket(AF_PHONET)
+ioctl(sk, SIOCPNENABLEPIPE, 0)
+connect(sk);
 
-  9db96eaaf44a ("vdpa: Consider device id larger than 31")
-  7cb22b50d812 ("virtio/vsock: fix the transport to work with VMADDR_CID_AN=
-Y")
-  d0d9066f1daa ("virtio_ring: Fix querying of maximum DMA mapping size for =
-virtio device")
-  856f8e666474 ("virtio: always enter drivers/virtio/")
-  6b7982ff16ae ("vduse: check that offset is within bounds in get_config()")
-  ba5a66b197f9 ("vdpa: check that offsets are within bounds")
-  085c1e990ab6 ("vduse: fix memory corruption in vduse_dev_ioctl()")
 
-are missing a Signed-off-by from their committer.
+ioctl() sets sk->sk_state to TCP_SYN_SENT in pep_sock_enable() and then 
+there is following check in pn_socket_bind():
 
---=20
-Cheers,
-Stephen Rothwell
+	if (sk->sk_state != TCP_CLOSE || pn_port(pn->sobject)) {
+		err = -EINVAL; /* attempt to rebind */
+		goto out;
+	}
 
---Sig_/apw/DhuIpO69.FCc/8b_al2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Looks like "sk->sk_state != TCP_CLOSE" check is redundant and 
+pn_port(pn->sobject) is unique flag, that socket is already binded.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG/n5YACgkQAVBC80lX
-0GxNJgf/c9QQtdTtoiU/waMAxcuYOUJ3amaxGAfKDKUuu83ZHlQyK0lfjCBcwYlP
-WOEz7e+lfh3orfl2l2KSztvWe2WhjKNrosQ4+euIUb1GJb4DKA1pXdtAEdNi3QWY
-MGsPbFW/Iebvf2YiYe/Cq7TAWR5AWm3UHPW4HdEs8m2ZRsPJDWao5jjfbPYlm/Jg
-Iue2+cUBUTuZ+K2a/leLOYmCEGgTmATDGpZyPK3cJVdQ+ibu+rAVQ8HcjW9XLa22
-lNRnuFarL40hLVR34D3ZzV6Nsl3hzlzk6ofOMr7kfSYxUa4nL3R2tBLYzOyyhTKd
-M/iaqBRPltxkxofWnQsaFDlbtN0uSA==
-=sRbo
------END PGP SIGNATURE-----
 
---Sig_/apw/DhuIpO69.FCc/8b_al2--
+
+With regards,
+Pavel Skripkin

@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8847047A26C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7EC47A270
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbhLSVtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:49:47 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:34618 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbhLSVtq (ORCPT
+        id S236718AbhLSVwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:52:04 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44284 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231821AbhLSVwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:49:46 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B202212B5;
-        Sun, 19 Dec 2021 21:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639950585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Sun, 19 Dec 2021 16:52:02 -0500
+Date:   Sun, 19 Dec 2021 21:51:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639950720;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zvDmaVjQ80d5brzVbw8eRo/ezcVk8K0qcbYiKum8ias=;
-        b=eFdfOUkgoOtNT+BNZOHnIpkUKc5fBWIXYZTP3Hxm91Ij0xv7BcoUuY/BeCDs7ZQfDKGc61
-        60FZ/6SoBBNDPA7I/uIbuZoVVsbTTKF5CJP2RWqkQ48a66pK3RfceIKnDFX76U7KL/AlLI
-        goLpuVWpXmyGsfpytIgOk/p8wNvzmj0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639950585;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=kS5DQpA8phtBhbUduZG8Ao20a8ODo/sZsaA4W03+iQw=;
+        b=iXyi052YqjM9LOfmM/zl+aIlTmxy6vgy+JmoT4hHwnNDF8iPX+xhLJ8qp1MLAet5fcRjBX
+        3o4M6viGrdf5UWg9Iyts/4+rpoB0l8WfyP5UCf8PioY0bLaGAuI3eA5HDaQwmX8Xs+EGT2
+        0nq4vWNy2paMDJCkTEqIXIyHPPX10Xv4V+BZoHluko1I1Jou6Ev4iruNPVXWVkkneK4IOx
+        Q6vHxlayH17B32aPmZ6o0VEp/QDseR76tG7wvEX/8Y7uuhdf+ljb91FIILWUF/I91WAqTA
+        eqm3sAfzbc/iE4ZCGMk21E8GGhK6CX7XUJR9T7QRkYZtXG3EfxeTwTMK/UBCeA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639950720;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zvDmaVjQ80d5brzVbw8eRo/ezcVk8K0qcbYiKum8ias=;
-        b=iQwLBE28iUe8IyS074Jk7BGMM+uQDFLjIaQtQyDehMC5pg/c14RGvjCgPdV95N2AI/5aAH
-        1hdYTt1EPVWuiJAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 602221377F;
-        Sun, 19 Dec 2021 21:49:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lJwIF/mov2GsPgAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 19 Dec 2021 21:49:45 +0000
-Date:   Sun, 19 Dec 2021 22:49:47 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
-Message-ID: <Yb+o+3nq5LswWUdU@zn.tnic>
-References: <20211220081428.7184c271@canb.auug.org.au>
+        bh=kS5DQpA8phtBhbUduZG8Ao20a8ODo/sZsaA4W03+iQw=;
+        b=dTjKlHRhSEAFtwc7e+F4M/VX+deNg356h0La7cv3Ju7QNSBhZi79o3llyOimFAAqBBzMOT
+        fx/AsravM/M7mvBg==
+From:   "tip-bot2 for Andrew Cooper" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211216000856.4480-1-andrew.cooper3@citrix.com>
+References: <20211216000856.4480-1-andrew.cooper3@citrix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211220081428.7184c271@canb.auug.org.au>
+Message-ID: <163995071955.23020.16415039634514233755.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 08:14:28AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   aa1701e20a84 ("x86/pkey: Fix undefined behaviour with PKRU_WD_BIT")
-> 
-> is missing a Signed-off-by from its committer.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Thanks, I keep forgetting that but I've fixed my "git cherry-pick" alias
-to add --signoff from now on.
+Commit-ID:     57690554abe135fee81d6ac33cc94d75a7e224bb
+Gitweb:        https://git.kernel.org/tip/57690554abe135fee81d6ac33cc94d75a7e224bb
+Author:        Andrew Cooper <andrew.cooper3@citrix.com>
+AuthorDate:    Thu, 16 Dec 2021 00:08:56 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Sun, 19 Dec 2021 22:44:34 +01:00
 
--- 
-Regards/Gruss,
-    Boris.
+x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the
+sign bit.
+
+Use unsigned constants instead.
+
+Clearly pkey 15 has not been used in combination with UBSAN yet.
+
+Noticed by code inspection only.  I can't actually provoke the
+compiler into generating incorrect logic as far as this shift is
+concerned.
+
+[
+  dhansen: add stable@ tag, plus minor changelog massaging,
+
+           For anyone doing backports, these #defines were in
+	   arch/x86/include/asm/pgtable.h before 784a46618f6.
+]
+
+Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20211216000856.4480-1-andrew.cooper3@citrix.com
+---
+ arch/x86/include/asm/pkru.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/pkru.h b/arch/x86/include/asm/pkru.h
+index 4cd49af..74f0a2d 100644
+--- a/arch/x86/include/asm/pkru.h
++++ b/arch/x86/include/asm/pkru.h
+@@ -4,8 +4,8 @@
+ 
+ #include <asm/cpufeature.h>
+ 
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
+ 
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS

@@ -2,102 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD2F47A0B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714E547A0BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbhLSNsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 08:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbhLSNsv (ORCPT
+        id S235844AbhLSNxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 08:53:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24051 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233148AbhLSNxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 08:48:51 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4D2C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:48:50 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id bm14so14734026edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:48:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BDw8C0oiQt8krM7GPl59F/SHmEkDcuvz/QP/KiGHzGc=;
-        b=tDq3jJ0Jfjv8roeqADo2cS65CRt1dPQigjxyfk9BrR4WFccgqyTkjbJ0da4Z9Mdtb6
-         wEyiQETEG6qJ3wGHzbXQcQtsp/CSVWGm2Jj8w+v8lIUZ1TGJZUiSYSbWzzct6R/vdaKS
-         h3bLapiirIA8xg2x/QLX5ubCks0y0f2maBRgbwDxR0aVyNBG2zoqkirJ1G8pG4UXdgqi
-         fAn9CBg1kVz/zGMYu/xt6JUxJJ0dA9VFdPrBQRwRbanuKgN2fkjXaLcwwgzrTvvvS1uj
-         Y4DeI0Z8G+3KnVQBQWzvdcUVhdOtAD/2bZe1qu+SU23LeTv1aATkay4zQhEFRykw4Mi5
-         X0Iw==
+        Sun, 19 Dec 2021 08:53:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639922000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wCpHDM0T3ASnKDBX4WnWQJhJeGDzWQ/mvsQaGLGKzRw=;
+        b=L74GplSQx9ZNcWQWvx6oEkDvv/WWwPPZICWwuH/yaQ/G3mxk/yrORPCZdCOQnLjuJYrKYw
+        +mGY/inKOdFDWtJgVl5hES0prpN8TCWfEwPHYFtit8zPKG9d0xWokGlvdUO+Qd2otW5h28
+        5y7Y4Pb3BzpF6+21sWmLZAtZuhEsoSI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-523-UnvQz1BmMeSsbP6LXfTeAQ-1; Sun, 19 Dec 2021 08:53:19 -0500
+X-MC-Unique: UnvQz1BmMeSsbP6LXfTeAQ-1
+Received: by mail-wm1-f70.google.com with SMTP id v190-20020a1cacc7000000b003456d598510so5137112wme.6
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 05:53:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BDw8C0oiQt8krM7GPl59F/SHmEkDcuvz/QP/KiGHzGc=;
-        b=PlnBeCYti+VQMkeyf0aZ9W26u0rl4alHBI3YMRCjMzh65InX2FkKA/xGd/y6RuLEcC
-         PAsuaUk1cGNlIO29ahy9AUEzhELlQqq/TeDormb7KwggF8oP3GQzebvvGlpb7bjuFiGi
-         EtVAqvala4G9XG/9XFRmZ1ZKFgwABsggmGuJrx0wXOxUhivL0RbICnuzZvVnWAlZN2IP
-         8ycWjqTJpn3Ik/V1waF4wxRr5SbQS+P+inGmlci6I6kh+DipEiC9amSy+uzhiqCDHJjZ
-         fOFnLgsJJVMzp4HZNvZivxyaA7aMeYEr/LZQZwO7H9qbWM3iSIJhMQKX6Vx05WE7w0Ma
-         hr5w==
-X-Gm-Message-State: AOAM533ZCeFMDsoM9w3KLquMtcq6UXMV/UKiHub37Yw+SSCZHIT033u9
-        XMnMtDJe0xYcFzL8zmK5AzdEDO9+79U1vz20DQ9M+XGrgOQ=
-X-Google-Smtp-Source: ABdhPJzRohxotF39Bs+wpTjUL/P/dXK8VIR3E96T8ZEEXKcZ19/PnOSHQCC5M5ao7RmwWjnw+f+CBnuXdx+VvzpqGKc=
-X-Received: by 2002:a05:6402:51c6:: with SMTP id r6mr11474208edd.365.1639921729252;
- Sun, 19 Dec 2021 05:48:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wCpHDM0T3ASnKDBX4WnWQJhJeGDzWQ/mvsQaGLGKzRw=;
+        b=jOIanhr8bqFUkH1HeBWjPt+QGqIAh6rw0XYFacnmYvD8WjQX3H7Bj/cF32ZHaD2htU
+         MA466yy50YhiEaDMG9yfcvQhpR0AY8I1PI0JDBVug0fdJ8M/dDvnpCvpqyYEhy9/pma7
+         DTqQr+E3C8rTtnfWxDWm1HEbo4/Rt0Jig+bOtYSMWjE3WJHZtKQ+oMivl1xZCF0/5fdM
+         E9GCBadDKpLkETuZqeAY5V6xbPIu028KlHBZL+mecOxL3uCUcqpD1epRF8AdMKN+rZJ0
+         XqvBtuZEQPTKGepY/N+YNOjUwPaHs6AZU+Cg1lh4PlQuuOBK7aqBVTsQFG9d2xbNGi/S
+         fFbA==
+X-Gm-Message-State: AOAM533NiV71xVooTMqEqCjShEgF93JJyD/w37vQGcv6LWtB1Vkv5oeT
+        6bBqJa8UPeZ4mNszjz3BovSI57VaOOCRNeR8FnFLr12UKGHVUA3T6hZMwi3YFEH2MTFk4SN6Re3
+        1n1W+TMMyiVsh3PI0CL84CSzJ
+X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr1763569wri.45.1639921998409;
+        Sun, 19 Dec 2021 05:53:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyaCnxtEx4pWLffaP/Uf80mPpUrMzwH5wq7xAv3EAlLGO5n2FINCAK+yEnMt+ITPmbEuXH3hQ==
+X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr1763557wri.45.1639921998253;
+        Sun, 19 Dec 2021 05:53:18 -0800 (PST)
+Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id b6sm19660226wmq.45.2021.12.19.05.53.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 05:53:17 -0800 (PST)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH] ftrace/samples: Add missing prototypes direct functions
+Date:   Sun, 19 Dec 2021 14:53:17 +0100
+Message-Id: <20211219135317.212430-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211218152712.2832502-1-trix@redhat.com>
-In-Reply-To: <20211218152712.2832502-1-trix@redhat.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sun, 19 Dec 2021 14:48:38 +0100
-Message-ID: <CAMRc=Md5xqpu1vkipN+boN-=SnC4MOkHz=Cj3UnGnvr_Qv+21g@mail.gmail.com>
-Subject: Re: [PATCH] gpio: sim: fix uninitialized ret variable
-To:     trix@redhat.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>, nathan@kernel.org,
-        ndesaulniers@google.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 4:27 PM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> Building with clang returns this error:
->
-> gpio-sim.c:889:7: error: variable 'ret' is uninitialized
->   when used here
->
-> ret should be the status of the call to
-> gpio_sim_make_bank_swnode stored in bank->swnode.
->
-> Fixes: 83960fcf4818 ("gpio: sim: new testing module")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpio/gpio-sim.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index ef6145f51c8ae..bef00dcc4dc8f 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -886,7 +886,8 @@ static int gpio_sim_device_activate_unlocked(struct gpio_sim_device *dev)
->
->         list_for_each_entry(bank, &dev->bank_list, siblings) {
->                 bank->swnode = gpio_sim_make_bank_swnode(bank, swnode);
-> -               if (ret) {
-> +               if (IS_ERR(bank->swnode)) {
-> +                       ret = PTR_ERR(bank->swnode);
->                         gpio_sim_remove_swnode_recursive(swnode);
->                         return ret;
->                 }
-> --
-> 2.26.3
->
+There's another compilation fail (first here [1]) reported by kernel
+test robot for W=1 clang build:
 
-Applied, thanks!
+  >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous
+  prototype for function 'my_direct_func1' [-Wmissing-prototypes]
+     void my_direct_func1(unsigned long ip)
 
-Bart
+Direct functions in ftrace direct sample modules need to have prototypes
+defined. They are already global in order to be visible for the inline
+assembly, so there's no problem.
+
+The kernel test robot reported just error for ftrace-direct-multi-modify,
+but I got same errors also for the rest of the modules touched by this patch.
+
+[1] 67d4f6e3bf5d ftrace/samples: Add missing prototype for my_direct_func
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e1067a07cfbc ("ftrace/samples: Add module to test multi direct modify interface")
+Fixes: ae0cc3b7e7f5 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
+Fixes: 156473a0ff4f ("ftrace: Add another example of register_ftrace_direct() use case")
+Fixes: b06457c83af6 ("ftrace: Add sample module that uses register_ftrace_direct()")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ samples/ftrace/ftrace-direct-modify.c       | 3 +++
+ samples/ftrace/ftrace-direct-multi-modify.c | 3 +++
+ samples/ftrace/ftrace-direct-too.c          | 3 +++
+ samples/ftrace/ftrace-direct.c              | 2 ++
+ 4 files changed, 11 insertions(+)
+
+diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+index 690e4a9ff333..2877cb053a82 100644
+--- a/samples/ftrace/ftrace-direct-modify.c
++++ b/samples/ftrace/ftrace-direct-modify.c
+@@ -4,6 +4,9 @@
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+ 
++extern void my_direct_func1(void);
++extern void my_direct_func2(void);
++
+ void my_direct_func1(void)
+ {
+ 	trace_printk("my direct func1\n");
+diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+index 91bc42a7adb9..6f43a39decd0 100644
+--- a/samples/ftrace/ftrace-direct-multi-modify.c
++++ b/samples/ftrace/ftrace-direct-multi-modify.c
+@@ -4,6 +4,9 @@
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+ 
++extern void my_direct_func1(unsigned long ip);
++extern void my_direct_func2(unsigned long ip);
++
+ void my_direct_func1(unsigned long ip)
+ {
+ 	trace_printk("my direct func1 ip %lx\n", ip);
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index 6e0de725bf22..b97e5ed46233 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -5,6 +5,9 @@
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+ 
++extern void my_direct_func(struct vm_area_struct *vma,
++			   unsigned long address, unsigned int flags);
++
+ void my_direct_func(struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags)
+ {
+diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+index a30aa42ec76a..c918b13edb49 100644
+--- a/samples/ftrace/ftrace-direct.c
++++ b/samples/ftrace/ftrace-direct.c
+@@ -5,6 +5,8 @@
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+ 
++extern void my_direct_func(struct task_struct *p);
++
+ void my_direct_func(struct task_struct *p)
+ {
+ 	trace_printk("waking up %s-%d\n", p->comm, p->pid);
+-- 
+2.33.1
+

@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E69247A0B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C70847A0B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 14:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbhLSNiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 08:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhLSNiv (ORCPT
+        id S235813AbhLSNkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 08:40:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:51480 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234475AbhLSNkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 08:38:51 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ACFC061574;
-        Sun, 19 Dec 2021 05:38:51 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id p2so13010183uad.11;
-        Sun, 19 Dec 2021 05:38:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bI280telFaJwUWnCTGOVucNdMzF/wNLC2jH94KdWJvI=;
-        b=JpNScKqHuNhoreNPYO3wb82lyjROJo4t2vTiX77Jix5VbXKk0rOpa7GTo9alx/+85T
-         WA1IgEQA3CQKXvwAasmtRDiLJeygPacKT8cCXg5gjcyl1k5SxWBARyUFHKTi3boJTYz/
-         c7lliYvdxYtqn9jpPRLp/av4cMGOy3uxVtcF9uwwHMAYSu9wAmysBXiA3DjowJ4EkacG
-         4r3Zeiil9KnLoRtiKkaC850p9Ho14wq6V+n4pTmyBs9SMzh/df/NrgQCxSEeHFm3St7W
-         ANpiQQXQBck31bgUfHTQjdIbP0ZGCNUKi6kRUfidBGCH54gyLpOpWousev/gx3I18Hfj
-         +ovA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bI280telFaJwUWnCTGOVucNdMzF/wNLC2jH94KdWJvI=;
-        b=TAO48BqEBd3+1DTnHO8YFVC6QGrsOaYHJDaE11ok6HXsrq48pSK1//qPdVEQHPXXQD
-         WEKerrNlI1+B5Lpnj0Vbd0BLu7EX5McY0N8ltYaK9vn1wuYBHIhjPBoweTuzVg4R98dE
-         cFhoqa/EcpAs6t3wLJVPpIp2obwfgsZDUTBVGy0+25BJm3KEKM6RjrRRyoJCB0ldGFh9
-         ftfgSwl11rTATqTw0o8GCORkafCa57ivq47ApFWI4aS7wXyPzevEpfQBC+fN5h34r8PK
-         DqZ3aRNH4UptL9hgY2NRi10PywfIx9MxGmyo66m1yFvQTjzFzEGsSuPrqefYlZ/FLgKh
-         HmQQ==
-X-Gm-Message-State: AOAM533ge+wg2uzuCvQB55+HS0UZjDOyNEuPQ32SautiymSair7Vp5iE
-        dSNYDipS7c1tqcvsAUD8bIhsukzb3PIPi6EiZkQ=
-X-Google-Smtp-Source: ABdhPJy9Ga6BKjziaeH527tlGnmVQhnHJH5VjPeSXHOyfvXjirVq8zXYRKZ1l3kq7oXqglnplsiwqyIMYNfuA9h9eSI=
-X-Received: by 2002:a05:6102:1613:: with SMTP id cu19mr3426842vsb.25.1639921130249;
- Sun, 19 Dec 2021 05:38:50 -0800 (PST)
+        Sun, 19 Dec 2021 08:40:10 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A9357218ED;
+        Sun, 19 Dec 2021 13:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639921209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A9aSsP0RCai00ICYAFj3y5E2iYTuC6RB6ZVhj4Emlos=;
+        b=HI9MiF10tKifzkxzFt9MUq8NylmL3OjAUpzR64TesKi9EyDanuKIkR2+VBxXJUsKXm6AK/
+        wOXoK0lvIa7pCMkmeN2MkvAlmEoCM8NMels2scr/gfRrPI7+CikcUflGMhTghfo1MvxqGx
+        y/UE/+9I/+NCETZCEFow1ApAsznekLg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639921209;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A9aSsP0RCai00ICYAFj3y5E2iYTuC6RB6ZVhj4Emlos=;
+        b=BYnSDQcG9/XnuZMoAuREQGQtZ/+jmiO0MqAOJJf194jPOKin7p0pz4XqDNlFMPZNXu6R9+
+        uyUYmMxBbMvsoYAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D0D51377F;
+        Sun, 19 Dec 2021 13:40:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y00HIjk2v2HTQAAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 19 Dec 2021 13:40:09 +0000
+Date:   Sun, 19 Dec 2021 14:40:11 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] core/urgent for v5.16-rc6
+Message-ID: <Yb82O5i2DVcK9nAJ@zn.tnic>
 MIME-Version: 1.0
-References: <163969801519.20885.3977673503103544412.stgit@noble.brown> <163969850302.20885.17124747377211907111.stgit@noble.brown>
-In-Reply-To: <163969850302.20885.17124747377211907111.stgit@noble.brown>
-From:   Mark Hemment <markhemm@googlemail.com>
-Date:   Sun, 19 Dec 2021 13:38:39 +0000
-Message-ID: <CANe_+Uj0ooR2QzNQLXihuoaWMCJMpo3yJNhP_9DyPaCzeO7v7w@mail.gmail.com>
-Subject: Re: [PATCH 08/18] MM: Add AS_CAN_DIO mapping flag
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 at 23:57, NeilBrown <neilb@suse.de> wrote:
->
-> Currently various places test if direct IO is possible on a file by
-> checking for the existence of the direct_IO address space operation.
-> This is a poor choice, as the direct_IO operation may not be used - it is
-> only used if the generic_file_*_iter functions are called for direct IO
-> and some filesystems - particularly NFS - don't do this.
->
-> Instead, introduce a new mapping flag: AS_CAN_DIO and change the various
-> places to check this (avoiding a pointer dereference).
-> unlock_new_inode() will set this flag if ->direct_IO is present, so
-> filesystems do not need to be changed.
-...
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 6b80a51129d5..bae65ccecdb1 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -1008,6 +1008,9 @@ EXPORT_SYMBOL(lockdep_annotate_inode_mutex_key);
->  void unlock_new_inode(struct inode *inode)
->  {
->         lockdep_annotate_inode_mutex_key(inode);
-> +       if (inode->i_mapping->a_ops &&
-> +           inode->i_mapping->a_ops->direct_IO)
-> +               set_bit(AS_CAN_DIO, &inode->i_mapping->flags);
->         spin_lock(&inode->i_lock);
->         WARN_ON(!(inode->i_state & I_NEW));
->         inode->i_state &= ~I_NEW & ~I_CREATING;
+Hi Linus,
 
-Does d_instantiate_new() also need to set AS_CAN_DIO?
+please pull a single core/urgent fix for 5.16.
 
-Mark
+Thx.
+
+---
+
+The following changes since commit cabdc3a8475b918e55744f43719b26a82dc8fa6b:
+
+  sched,x86: Don't use cluster topology for x86 hybrid CPUs (2021-12-08 22:15:37 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/core_urgent_for_v5.16_rc6
+
+for you to fetch changes up to 6c3118c32129b4197999a8928ba776bcabd0f5c4:
+
+  signal: Skip the altstack update when not needed (2021-12-14 13:08:36 -0800)
+
+----------------------------------------------------------------
+- Prevent lock contention on the new sigaltstack lock on the common-case
+path, when no changes have been made to the alternative signal stack.
+
+----------------------------------------------------------------
+Chang S. Bae (1):
+      signal: Skip the altstack update when not needed
+
+ kernel/signal.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

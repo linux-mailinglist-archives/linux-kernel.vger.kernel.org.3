@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19429479EB4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 02:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28427479EB6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 02:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbhLSBg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 20:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbhLSBg4 (ORCPT
+        id S233914AbhLSBlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 20:41:50 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:55232 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231693AbhLSBlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 20:36:56 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4288C061574;
-        Sat, 18 Dec 2021 17:36:55 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b22so13132299lfb.9;
-        Sat, 18 Dec 2021 17:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=3Ry7SmKoKguXUT7bfZoG81QGnb2TSFmPGW+FtRu9lR8=;
-        b=HcMT+QLgPD3c2c3ukmrnzBf25KH4KNzX1qWoi/HMD9K0kX91ZC56fubVw3+VflS1NR
-         Tb4XY140RJyjbFxoI6Ovv0BLYJ1PBUBLvouEvZbVRTCut7LMNoPkdAuizjXfcaNGd5fx
-         eAALKX0mzObtmEqmWtQYY9zx4KVWXs6Sy/FUFSuqTDW2q0/FePPCT09TGkSZyXAGqtwU
-         zirKA3KeQmrjuJXt2jH8IdXHBYPEGIU2FQitgcxAqKXfGKyXH7TEMNVZMMfWlhWInSTm
-         qs0oppJgTCMnn3gxEVvUZjJhU7+ZcAeYWcAVvH5gR5AU6KwzB4CD6U8wIbfX36FdmH8o
-         VGQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=3Ry7SmKoKguXUT7bfZoG81QGnb2TSFmPGW+FtRu9lR8=;
-        b=db0oIvAzbaPlry9gOC1WhYkCaEvJyoCgRxwZR/AL9E/FYRxU+lKyH/LLX4jI/ZKqiw
-         QZ83yNjLKCS2Tair3HHozrvhcZXMKEUQ0GyP3Ruzbd1W1spnD2J8Zsunp+dIAv6iLf/K
-         CjostMU6XfOI99rvYg8Tx65u6HaAwsDkYHntBiF8U2BReIFKy+Fs5Cnm7hqM2Aon2ZYa
-         Rp3/FHfq3tFUrE5DhwB03vKyFsd4/jbrtYCiGDQt7rnBoKFX/rllz+/rjBdC5/j79YiP
-         kDgbo6ok5Jlk9+4R1sZztb1y/kwR9sWGNignfyHxosEeUOUiCxx1AM9tU5NC5XaYLp0/
-         Zp+w==
-X-Gm-Message-State: AOAM5300TkonDb4uFtdOc83yKyrRa6lPWoCe9HdbmZzu9s6BQm8gjWBS
-        1J5nayg8xS7OoGxfW4//myLbSqkyv6qMuS8fDG3x+eHCFi4=
-X-Google-Smtp-Source: ABdhPJz8W5QgyUjwjp6CbmmtDTHu60euntNCJoBE0l6Tk7S/1XlRgrH2MlQnLejesQzpdhkh3RMKgwbH1Wj76lujZjE=
-X-Received: by 2002:a05:6512:11e5:: with SMTP id p5mr9389707lfs.537.1639877813927;
- Sat, 18 Dec 2021 17:36:53 -0800 (PST)
+        Sat, 18 Dec 2021 20:41:50 -0500
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BJ1f62r060317;
+        Sun, 19 Dec 2021 10:41:06 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Sun, 19 Dec 2021 10:41:06 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BJ1f5N7060314
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 19 Dec 2021 10:41:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-ID: <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
+Date:   Sun, 19 Dec 2021 10:41:02 +0900
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 18 Dec 2021 19:36:43 -0600
-Message-ID: <CAH2r5mtRV8WbGZZcgNRJ4MEnaLWP08JRWJQRftFkkvjieW6Q+A@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Julio Faracco <jcfaracco@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk, tglx@linutronix.de,
+        damien.lemoal@wdc.com, dkadashev@gmail.com,
+        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
+        niklas.cassel@wdc.com, macro@orcam.me.uk, caihuoqing@baidu.com
+References: <20211218042420.28466-1-jcfaracco@gmail.com>
+ <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+In-Reply-To: <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+On 2021/12/19 3:05, Alan Stern wrote:
+>> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+>> index 2cbf4f85bff3..98cb44414e78 100644
+>> --- a/drivers/usb/host/ehci-q.c
+>> +++ b/drivers/usb/host/ehci-q.c
+>> @@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
+>>  		}
+>>  
+>>  		/* short packets may only terminate transfers */
+>> -		if (count != len)
+>> +		if (count != len && maxpacket > 0)
+>>  			count -= (count % maxpacket);
+> 
+> This is different.  But again, I do not think the extra check should be 
+> added.  If maxpacket is 0, we _want_ the code to fail in a highly 
+> visible manner -- it would mean there is a bug somewhere else in the 
+> kernel.
 
-  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+Some of the callers are passing the return value from usb_maxpacket(), and
+usb_maxpacket() can return 0. But division by 0 bug here becomes visible
+only when len < count in
 
-are available in the Git repository at:
+	count = 0x1000 - (buf & 0x0fff);	/* rest of that page */
+	if (likely (len < count))		/* ... iff needed */
+		count = len;
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.16-rc5-smb3-client-fixes
+is false and count != len in
 
-for you to fetch changes up to a31080899d5fdafcccf7f39dd214a814a2c82626:
+		if (count != len)
+			count -= (count % maxpacket);
 
-  cifs: sanitize multiple delimiters in prepath (2021-12-17 19:16:49 -0600)
+is true, which may be quite difficult to trigger.
 
-----------------------------------------------------------------
-Two cifs/smb3 fixes, one fscache related, and one mount path parsing
-related (for stable)
+Maybe we should make sure that maxpacket > 0 on the caller side, for e.g.
 
-(Does not include the recent kernel DNS caching fix, which is still
-being tested and reviewed)
+	/* qh makes control packets use qtd toggle; maybe switch it */
+	if ((maxpacket & (this_qtd_len + (maxpacket - 1))) == 0)
+		token ^= QTD_TOGGLE;
 
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/856
-----------------------------------------------------------------
-Shyam Prasad N (1):
-      cifs: ignore resource_id while getting fscache super cookie
+and
 
-Thiago Rafael Becker (1):
-      cifs: sanitize multiple delimiters in prepath
+	if (usb_pipecontrol (urb->pipe)) {
+		one_more = 1;
+		token ^= 0x0100;	/* "in" <--> "out"  */
+		token |= QTD_TOGGLE;	/* force DATA1 */
+	} else if (usb_pipeout(urb->pipe)
+			&& (urb->transfer_flags & URB_ZERO_PACKET)
+			&& !(urb->transfer_buffer_length % maxpacket)) {
+		one_more = 1;
+	}
 
- fs/cifs/connect.c    |  7 +++++++
- fs/cifs/fs_context.c | 38 +++++++++++++++++++++++++++++++++++++-
- fs/cifs/inode.c      | 13 -------------
- 3 files changed, 44 insertions(+), 14 deletions(-)
+are expecting that maxpacket > 0 ?
 
-
---
-Thanks,
-
-Steve

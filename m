@@ -2,90 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D4847A25E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A41947A25F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbhLSVbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:31:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56047 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235403AbhLSVbS (ORCPT
+        id S236680AbhLSVdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 16:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235403AbhLSVdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:31:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639949478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=oeuOfy7w1Bn2/9PN+4DSmhs+A21q2OJr3897xOXYyUg=;
-        b=HWyJMmBvfuDy9cIwkJDwGFqXnE93kLK0aOdxpMuPhztMB2gFtTrqTPCTTGjnAYtZU53G0K
-        IsVJxJ364guGxu+Q694CjmhdYL3QEH/YWJL6S+bhkde3S4ditxg5iAYeYvEKSapZUsgbXV
-        +p2/KAmc7yD5XXcOUB8fpsLPvIJJnSQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-Xl6F9W9rOeiuOL9f1naMkw-1; Sun, 19 Dec 2021 16:31:14 -0500
-X-MC-Unique: Xl6F9W9rOeiuOL9f1naMkw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2D1C4100C611;
-        Sun, 19 Dec 2021 21:31:12 +0000 (UTC)
-Received: from localhost (unknown [10.22.8.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E50B5BE1F;
-        Sun, 19 Dec 2021 21:31:10 +0000 (UTC)
-Date:   Sun, 19 Dec 2021 18:31:09 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.87-rt59
-Message-ID: <Yb+knVcplj4DC6HP@uudg.org>
+        Sun, 19 Dec 2021 16:33:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C24C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 13:33:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xAFGlmLNuslYD0bVcZZJndq1PW70WwzhN6gshG9X/f8=; b=oWeV7NgBCs1q6TagMNg+vrYcUt
+        cQsrtqc4g9iRMwbVMDotaLcf9PePnVONQtgyrp0Qw9WUjN13I4Cs1e+u2AAF/+J59JwErc1T7hKta
+        2y/nlTe05ruKMqLgVKujGMde+7ocKIr/FGO1igx1ODgN5hCrrXuTC8BC0ffHoB0DhyLFa+3vwK8Ka
+        icMHNEEZWEsFte5e56Iv65RFLRwnKvXR6oah3LdU6xtCjqLpMamqIVGWbz2NhRDfvfTIVHnx85lCB
+        nlfqOWnWv5TXV+4+Rp5Q1A9p1X9Z/BEDiHXMd5OOzpUlgpEoiGTGzUl5MtHBlmjZLxPIfxknxicIT
+        xm1fKA/A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mz3nd-00H5iS-RG; Sun, 19 Dec 2021 21:32:57 +0000
+Date:   Sun, 19 Dec 2021 13:32:57 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Xiaoming Ni <nixiaoming@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, keescook@chromium.org, jlayton@kernel.org,
+        bfields@fieldses.org, yzaikin@google.com, apw@canonical.com,
+        joe@perches.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        julia.lawall@inria.fr, akpm@linux-foundation.org,
+        wangle6@huawei.com
+Subject: Re: [PATCH v3] sysctl: Add a group of macro functions to initcall
+ the sysctl table of each feature
+Message-ID: <Yb+lCVrP3eGfKjE+@bombadil.infradead.org>
+References: <20211210085849.66169-1-nixiaoming@huawei.com>
+ <20211213033119.51263-1-nixiaoming@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <20211213033119.51263-1-nixiaoming@huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Mon, Dec 13, 2021 at 11:31:19AM +0800, Xiaoming Ni wrote:
+> To avoid duplicated code, add a set of macro functions to initialize the
+> sysctl table for each feature.
+> 
+> The system initialization process is as follows:
 
-I'm pleased to announce the 5.10.87-rt59 stable release.
+See Eric's comments, we don't need to take care here on order as if the
+path does not exist, it will be created. So please updates the commit to
+to instead reflect that reality as I was just lazy and assumed the worst
+and was just being cautious. If you get to add a few tests on
+lib/test_sysctl.c and tools/testing/selftests/sysctl/sysctl.sh  to
+verify it would be great too.
 
-This release is just an update to the new stable 5.10.87
-version and no RT specific changes have been performed.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.10-rt
-  Head SHA1: 1da83851f3be599ed45a029eab03838f21c76656
-
-Or to build 5.10.87-rt59 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.87.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.87-rt59.patch.xz
-
-
-All keys used for the uploads can be found on the following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-
-Enjoy!
-Luis
-
+  Luis

@@ -2,117 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AD47A145
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 17:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF4D47A149
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 17:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbhLSQMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 11:12:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42186 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbhLSQMj (ORCPT
+        id S236114AbhLSQde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 11:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233228AbhLSQdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 11:12:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43BECB80D33
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:12:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DE2C36AE8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:12:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639930357;
-        bh=0XUEXga0QjpLC3Qez3+e7Vr/cfe724y1IwvOj5kc70Y=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=tlte6GGCDuFKmvhvkCNO+3u3TTmAll0JO99BBW3h/LD/mo2xc6Rp3Q7WQeK+LB16w
-         qkckoge1G3iEZ8UySjWFPjRdJgLsG+vtjtuOaUmrHgc/OK/1YRrkjR1K4+ZUWvQ83P
-         ExnDhJdg9I3nT3CJCdY2vxGxsspDLFQRcU2fB3CmeZNdkedT8BNKCukabTi1x56DRk
-         /zuBPYxhxkr9tJA1oZzZ+S56OFUjG97RRcm4LJARiR1uE9+qnlZG+Pkb/gE0lkPdeV
-         6xQS5LgCOGmPGV/auCEXwXhTy2PjDHtnY53TWCFBUFFirJBMx9pVkb6gQ2D9i0YqjK
-         BRVz+h8gMRAoQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
+        Sun, 19 Dec 2021 11:33:33 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8492C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 08:33:32 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id w16so371969edc.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 08:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KS9Gjd8Tu5fx7nRz0KTvLEQ46TtRhkZSv2L1vjuz2w4=;
+        b=FbnewEpGikucovyolpVKuGyC1GLL5WvgWftcd1Hr4zCtk0ZPp/n/wSygXiGNLc45s0
+         xGqDTM37WSCRZrv+VthqlUhRizJuDg2yuOXNXEBBoGNuoHXBU6950iiFhgS0F8Z6Rn1S
+         xNZG7H0C6DOMw8dbPkK3TGDa5xAZCONWimwActK2WNOFv5vtjByQuHDL3Msl+h39mfsK
+         5P1yY1Ue46/LndSFGJUUOKPTesSHBj4bn+WjFKrrHiGU4g/jhTyYeL+ydYj6XwUBoek6
+         HmKZ5wn4pd/ACGIGRBwUTS9gocbk6gv8/VKhXJ+KuDMnqdOl7N+BhtkEiniMmDSvC/eF
+         STEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KS9Gjd8Tu5fx7nRz0KTvLEQ46TtRhkZSv2L1vjuz2w4=;
+        b=CDDP8c4tG/N2yCSYOjmgxyR0X07iZewpLzC+wh+qEy5342sRLJK+DGErNtOrW7srdQ
+         ZhZnGGdc1wBeJHDhPpVqS9D2Lcmi2eAwxCfuC/p6ehH6WnYCtnS/HhWq94gmtscTCmYM
+         gkXi9eYLv2VTKdyL1Az6hH112xnKMji8XONUcw1Ih+wSRZwttbO3RX+n0EX7p+NuW3zj
+         M1H2GxaqFWyi6Sh8zuuXoWn+RugmXe3SsEbo/wR+wtdM1GSvOc3UaI+w2tBu8PrnUrBu
+         94ayTOeHBa+TOTW0+iX6ha6/limr68LyBiYeGjo45Z3qI7WmHwAX6FkEges9jfBYuBjT
+         1Dmw==
+X-Gm-Message-State: AOAM533IydHGMExNppogoU69bC+4VvyZkAHvUBocujZThqkwvBn6W5rW
+        kZmHDcuh52Pw39z2YyQYYNZndXY7nPJ8NtNw
+X-Google-Smtp-Source: ABdhPJxNM8jq0/Xk0YssSIMtzCBrWtiDU+f542N0mZaQ9CQ05MKtfUzudM5oWAf9va+MXitJnOIVlw==
+X-Received: by 2002:a05:6402:27cd:: with SMTP id c13mr12073433ede.57.1639931611088;
+        Sun, 19 Dec 2021 08:33:31 -0800 (PST)
+Received: from localhost.localdomain ([83.143.250.232])
+        by smtp.gmail.com with ESMTPSA id cq19sm1069714edb.27.2021.12.19.08.33.30
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 19 Dec 2021 08:33:30 -0800 (PST)
+From:   Ismayil Mirzali <ismayilmirzeli@gmail.com>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] habanalabs: replace some -ENOTTY with -EINVAL
-Date:   Sun, 19 Dec 2021 18:12:30 +0200
-Message-Id: <20211219161230.2674012-2-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211219161230.2674012-1-ogabbay@kernel.org>
-References: <20211219161230.2674012-1-ogabbay@kernel.org>
+Cc:     linux-staging@lists.linux.dev, fabioaiuto83@gmail.com,
+        gregkh@linuxfoundation.org, paskripkin@gmail.com,
+        linux@roeck-us.net
+Subject: [PATCH v2] staging: rtl8723bs: Fix styling issues
+Date:   Sun, 19 Dec 2021 18:33:18 +0200
+Message-Id: <20211219163318.84300-1-ismayilmirzeli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--ENOTTY is returned in case of error in the ioctl arguments themselves,
-such as function that doesn't exists.
+Removed extra whitespaces and brackets for oneline if statements
 
-In all other cases, where the error is in the arguments of the custom
-data structures that we define that are passed in the various ioctls,
-we need to return -EINVAL.
+Removed commented code as suggested per reviewer.
+Added blank line after declarations according to styling guide.
 
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Ismayil Mirzali <ismayilmirzeli@gmail.com>
 ---
- drivers/misc/habanalabs/common/command_buffer.c   | 2 +-
- drivers/misc/habanalabs/common/habanalabs_ioctl.c | 4 ++--
- drivers/misc/habanalabs/common/memory.c           | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../staging/rtl8723bs/hal/rtl8723bs_xmit.c    | 23 +++++++------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/command_buffer.c b/drivers/misc/habanalabs/common/command_buffer.c
-index d4eb9fb9ea12..e7534b5129fa 100644
---- a/drivers/misc/habanalabs/common/command_buffer.c
-+++ b/drivers/misc/habanalabs/common/command_buffer.c
-@@ -475,7 +475,7 @@ int hl_cb_ioctl(struct hl_fpriv *hpriv, void *data)
- 		break;
+diff --git a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
+index 7fe3df863fe1..fdefb72047f0 100644
+--- a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
++++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
+@@ -31,9 +31,6 @@ static u8 rtw_sdio_wait_enough_TxOQT_space(struct adapter *padapter, u8 agg_num)
  
- 	default:
--		rc = -ENOTTY;
-+		rc = -EINVAL;
- 		break;
- 	}
+ 	pHalData->SdioTxOQTFreeSpace -= agg_num;
  
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index f571641c19ae..7ddf70a0ca8a 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -693,7 +693,7 @@ static int _hl_info_ioctl(struct hl_fpriv *hpriv, void *data,
+-	/* if (n > 1) */
+-	/* 	++priv->pshare->nr_out_of_txoqt_space; */
+-
+ 	return true;
+ }
  
- 	default:
- 		dev_err(dev, "Invalid request %d\n", args->op);
--		rc = -ENOTTY;
-+		rc = -EINVAL;
- 		break;
- 	}
+@@ -147,13 +144,12 @@ s32 rtl8723bs_xmit_buf_handler(struct adapter *padapter)
+ 		return _SUCCESS;
  
-@@ -748,7 +748,7 @@ static int hl_debug_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	ret = rtw_register_tx_alive(padapter);
+-	if (ret != _SUCCESS) {
++	if (ret != _SUCCESS)
+ 		return _SUCCESS;
+-	}
  
- 	default:
- 		dev_err(hdev->dev, "Invalid request %d\n", args->op);
--		rc = -ENOTTY;
-+		rc = -EINVAL;
- 		break;
- 	}
+ 	do {
+ 		queue_empty = rtl8723_dequeue_writeport(padapter);
+-/* 	dump secondary adapter xmitbuf */
++		/*	dump secondary adapter xmitbuf */
+ 	} while (!queue_empty);
  
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index e5f7b23cbf94..b8596846f3dc 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -2031,7 +2031,7 @@ static int mem_ioctl_no_mmu(struct hl_fpriv *hpriv, union hl_mem_args *args)
+ 	rtw_unregister_tx_alive(padapter);
+@@ -247,6 +243,7 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
+ 						if (pxmitbuf->len > 0 &&
+ 						    pxmitbuf->priv_data) {
+ 							struct xmit_frame *pframe;
++
+ 							pframe = (struct xmit_frame *)pxmitbuf->priv_data;
+ 							pframe->agg_num = k;
+ 							pxmitbuf->agg_num = k;
+@@ -310,8 +307,6 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
+ 					txlen = txdesc_size + pxmitframe->attrib.last_txcmdsz;
+ 					pxmitframe->pg_num = (txlen + 127) / 128;
+ 					pxmitbuf->pg_num += (txlen + 127) / 128;
+-				    /* if (k != 1) */
+-					/* 	((struct xmit_frame*)pxmitbuf->priv_data)->pg_num += pxmitframe->pg_num; */
+ 					pxmitbuf->ptail += _RND(txlen, 8); /*  round to 8 bytes alignment */
+ 					pxmitbuf->len = _RND(pxmitbuf->len, 8) + txlen;
+ 				}
+@@ -333,6 +328,7 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
+ 		if (pxmitbuf) {
+ 			if (pxmitbuf->len > 0) {
+ 				struct xmit_frame *pframe;
++
+ 				pframe = (struct xmit_frame *)pxmitbuf->priv_data;
+ 				pframe->agg_num = k;
+ 				pxmitbuf->agg_num = k;
+@@ -385,9 +381,8 @@ static s32 rtl8723bs_xmit_handler(struct adapter *padapter)
+ 	spin_lock_bh(&pxmitpriv->lock);
+ 	ret = rtw_txframes_pending(padapter);
+ 	spin_unlock_bh(&pxmitpriv->lock);
+-	if (ret == 0) {
++	if (ret == 0)
+ 		return _SUCCESS;
+-	}
  
- 	default:
- 		dev_err(hdev->dev, "Unknown opcode for memory IOCTL\n");
--		rc = -ENOTTY;
-+		rc = -EINVAL;
- 		break;
- 	}
+ 	/*  dequeue frame and write to hardware */
  
-@@ -2156,7 +2156,7 @@ int hl_mem_ioctl(struct hl_fpriv *hpriv, void *data)
+@@ -405,9 +400,8 @@ static s32 rtl8723bs_xmit_handler(struct adapter *padapter)
+ 	spin_lock_bh(&pxmitpriv->lock);
+ 	ret = rtw_txframes_pending(padapter);
+ 	spin_unlock_bh(&pxmitpriv->lock);
+-	if (ret == 1) {
++	if (ret == 1)
+ 		goto next;
+-	}
  
- 	default:
- 		dev_err(hdev->dev, "Unknown opcode for memory IOCTL\n");
--		rc = -ENOTTY;
-+		rc = -EINVAL;
- 		break;
- 	}
+ 	return _SUCCESS;
+ }
+@@ -428,10 +422,9 @@ int rtl8723bs_xmit_thread(void *context)
+ 
+ 	do {
+ 		ret = rtl8723bs_xmit_handler(padapter);
+-		if (signal_pending(current)) {
++		if (signal_pending(current))
+ 			flush_signals(current);
+-		}
+-	} while (_SUCCESS == ret);
++	} while (ret == _SUCCESS);
+ 
+ 	complete(&pxmitpriv->SdioXmitTerminate);
  
 -- 
 2.25.1

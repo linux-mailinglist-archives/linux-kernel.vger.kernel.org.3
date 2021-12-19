@@ -2,164 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C8B479EA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 02:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE9B479EB1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 02:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbhLSBZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 20:25:10 -0500
-Received: from mga04.intel.com ([192.55.52.120]:37465 "EHLO mga04.intel.com"
+        id S232971AbhLSBeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 20:34:18 -0500
+Received: from mga17.intel.com ([192.55.52.151]:14836 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232124AbhLSBZK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 20:25:10 -0500
+        id S232124AbhLSBeQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 20:34:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639877110; x=1671413110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=0M9MC4Ak8GfscacBHhzDCXtNrQbm72iDPkzmNwlSN0M=;
-  b=ZKlPfKBV3PxR9SS56z54p+diXQr6i/mUsxEsMvjq/kql25kn+eo+Et+H
-   7v1mooxbEuMJFq9Dq0m2ws3IArTntLrBDoVqLBL6NZqcTF8wejZbch/+D
-   SVSERycliIc6pUBICKQ3s8UInlUX/wY7lICKdeqxAhdSeOfcP1gVvUL4n
-   4UHSraccZuxgOOENlfFpaLvRowIU4mY31w/tyiP1fqvgTuH6XIx11BOfX
-   HnUKVZzIwBtE+B8SxIm2d+TtT11LJgZMgb5pgZ2Spy+YEwbTwmYGJJNuZ
-   K46ztukHovReD+KrgOH8jpq4OTF+hTEf6i7F5bbXQxwj+qmh/QEkpLheA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="238710105"
+  t=1639877656; x=1671413656;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=cv74yQu4yaEw55arUJxxiaDLp4QaHtBmtA1P6ilYt3E=;
+  b=O5/OTkRYebyQw7PZ59bM+NBnbptArQN9zkRzP8WcX69LInZC20Y9p/8G
+   bhf3mNgRUskOU+YOR0UkPdUH4GIVV7OZstVTrPfJ53lgmPRTLSlRK9Jjx
+   bPgf5+HgvGqruqXuUE57ZsyC3tnE1oAvSosLrCSWetNE+/r10agMBp7BH
+   yeEd1at2ww/gjYN0RpNCjTGzqsbXjKm+eeEGvIY6PANB5vlX9nBhSQ71b
+   2kfizmIFHrI2PkzBoQleEEZM+0ZOSwuKlLwBsdpPpXtcd1jNCF8DXoYol
+   3YEr4Pp4BUcw5qzjuBmsRoIA3rLY6CAW4/HDEIEpug01wqjhEGRacZoJ0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="220645226"
 X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
-   d="scan'208";a="238710105"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 17:25:09 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="220645226"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 17:34:16 -0800
 X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
-   d="scan'208";a="466945944"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 18 Dec 2021 17:25:07 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mykwk-0006bS-NV; Sun, 19 Dec 2021 01:25:06 +0000
-Date:   Sun, 19 Dec 2021 09:24:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, robh+dt@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] clocksource: Ingenic: Add SMP/SMT support for
- sysost driver.
-Message-ID: <202112190917.6yxHlgI2-lkp@intel.com>
-References: <1639756624-46435-4-git-send-email-zhouyanjie@wanyeetech.com>
+   d="scan'208";a="683817902"
+Received: from dravipat-mobl.amr.corp.intel.com (HELO [10.209.5.57]) ([10.209.5.57])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 17:34:15 -0800
+Subject: Re: [PATCH/RFC] mm: add and use batched version of
+ __tlb_remove_table()
+To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
+        Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, kernel@openvz.org
+References: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
+ <fcbb726d-fe6a-8fe4-20fd-6a10cdef007a@intel.com>
+ <d6094dc4-3976-e06f-696b-c55f696fe287@virtuozzo.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <290cfe1c-564f-9779-0757-5ca281055e77@intel.com>
+Date:   Sat, 18 Dec 2021 17:34:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <d6094dc4-3976-e06f-696b-c55f696fe287@virtuozzo.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1639756624-46435-4-git-send-email-zhouyanjie@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "周琰杰,
+On 12/18/21 6:31 AM, Nikita Yushchenko wrote:
+>>> This allows archs to optimize it, by
+>>> freeing multiple tables in a single release_pages() call. This is
+>>> faster than individual put_page() calls, especially with memcg
+>>> accounting enabled.
+>>
+>> Could we quantify "faster"?  There's a non-trivial amount of code being
+>> added here and it would be nice to back it up with some cold-hard
+>> numbers.
+> 
+> I currently don't have numbers for this patch taken alone. This patch
+> originates from work done some years ago to reduce cost of memory
+> accounting, and x86-only version of this patch was in virtuozzo/openvz
+> kernel since then. Other patches from that work have been upstreamed,
+> but this one was missed.
+> 
+> Still it's obvious that release_pages() shall be faster that a loop
+> calling put_page() - isn't that exactly the reason why release_pages()
+> exists and is different from a loop calling put_page()?
 
-Thank you for the patch! Perhaps something to improve:
+Yep, but this patch does a bunch of stuff to some really hot paths.  It
+would be greatly appreciated if you could put in the effort to actually
+put some numbers behind this.  Plenty of weird stuff happens on
+computers that we suck at predicting.
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on robh/for-next v5.16-rc5 next-20211217]
-[cannot apply to daniel-lezcano/clockevents/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I'd be happy with even a quick little micro.  My favorite is:
 
-url:    https://github.com/0day-ci/linux/commits/Zhou-Yanjie/Add-SMP-SMT-support-for-Ingenic-sysost-driver/20211217-235813
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a8da61cee95e627ed3d4274861428013aa9604ea
-config: sparc-randconfig-s031-20211218 (https://download.01.org/0day-ci/archive/20211219/202112190917.6yxHlgI2-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/3cd1f50718078825e6411751f137406442bb84c0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zhou-Yanjie/Add-SMP-SMT-support-for-Ingenic-sysost-driver/20211217-235813
-        git checkout 3cd1f50718078825e6411751f137406442bb84c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash drivers/clocksource/
+	https://github.com/antonblanchard/will-it-scale
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Although, I do wonder if anything will even be measurable.  Please at
+least try.
 
+...
+>> But, even more than that, do all the architectures even need the
+>> free_swap_cache()?
+> 
+> I was under impression that process page tables are a valid target for
+> swapping out. Although I can be wrong here.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/clocksource/ingenic-sysost.c:702:65: sparse: sparse: incorrect type in argument 5 (different address spaces) @@     expected void *dev @@     got struct ingenic_ost_timer [noderef] __percpu *timers @@
-   drivers/clocksource/ingenic-sysost.c:702:65: sparse:     expected void *dev
-   drivers/clocksource/ingenic-sysost.c:702:65: sparse:     got struct ingenic_ost_timer [noderef] __percpu *timers
-
-vim +702 drivers/clocksource/ingenic-sysost.c
-
-   677	
-   678	static int __init ingenic_ost_init(struct device_node *np)
-   679	{
-   680		struct ingenic_ost *ost;
-   681		unsigned long rate;
-   682		int ret;
-   683	
-   684		ret = ingenic_ost_probe(np);
-   685		if (ret) {
-   686			pr_crit("%s: Failed to initialize OST clocks: %d\n", __func__, ret);
-   687			return ret;
-   688		}
-   689	
-   690		of_node_clear_flag(np, OF_POPULATED);
-   691	
-   692		ost = ingenic_ost;
-   693		if (IS_ERR(ost))
-   694			return PTR_ERR(ost);
-   695	
-   696		if (ost->soc_info->has_event_timer) {
-   697			if (ost->soc_info->version >= ID_X2000)
-   698				ret = request_percpu_irq(ost->irq, ingenic_ost_cevt_cb,
-   699						  "OST event timer", ost->timers);
-   700			else
-   701				ret = request_irq(ost->irq, ingenic_ost_cevt_cb, IRQF_TIMER,
- > 702						  "OST event timer", ost->timers);
-   703	
-   704			if (ret) {
-   705				pr_crit("%s: Unable to request IRQ: %d\n", __func__, ret);
-   706				goto err_free_ingenic_ost;
-   707			}
-   708	
-   709			/* Setup clock events on each CPU core */
-   710			ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic XBurst: online",
-   711						ingenic_ost_setup_cevt, NULL);
-   712			if (ret < 0) {
-   713				pr_crit("%s: Unable to init event timers: %d\n", __func__, ret);
-   714				goto err_free_ingenic_ost;
-   715			}
-   716		}
-   717	
-   718		if (ost->soc_info->has_global_timer) {
-   719			ret = ingenic_ost_global_timer_init(np, ost);
-   720			if (ret) {
-   721				pr_crit("%s: Unable to init global timer: %d\n", __func__, ret);
-   722	
-   723				if (!ost->soc_info->has_event_timer)
-   724					goto err_free_ingenic_ost;
-   725			}
-   726	
-   727			/* Register the sched_clock at the end as there's no way to undo it */
-   728			rate = clk_get_rate(ost->global_timer_clk);
-   729			sched_clock_register(ingenic_ost_global_timer_read_cntl, 32, rate);
-   730		}
-   731	
-   732		return 0;
-   733	
-   734	err_free_ingenic_ost:
-   735		kfree(ost);
-   736		return ret;
-   737	}
-   738	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It's not out of the realm of possibilities.  But, last I checked, the
+only path we free page tables in was when VMAs are being torn down.  I
+have a longstanding TODO item to reclaim them if they're empty (all
+zeros) or to zero them out if they're mapping page cache.

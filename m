@@ -2,98 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FEB47A048
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 12:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC9A47A04D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 12:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235515AbhLSLAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 06:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
+        id S235597AbhLSLFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 06:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbhLSLAR (ORCPT
+        with ESMTP id S229801AbhLSLFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 06:00:17 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C543C061574;
-        Sun, 19 Dec 2021 03:00:16 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id v15so11140708ljc.0;
-        Sun, 19 Dec 2021 03:00:16 -0800 (PST)
+        Sun, 19 Dec 2021 06:05:37 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935B5C061574;
+        Sun, 19 Dec 2021 03:05:36 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j21so22096008edt.9;
+        Sun, 19 Dec 2021 03:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=28WUq9Jt90oxX2or2ReiiYs2kHyyTZ89Ut+mmcfXAPQ=;
-        b=MvA2FRT3P60D5yjezwKIFYMSfSHRZp5IRVxMk0BdJWl2zzxHNVkQuwPx184OZ/VIL4
-         inJUvjLQNSa9mu40ePpg2Af/dAMNsQ2LYQ5kgf036j3CgQw65Bd3hBhudnTrSx/xr1AX
-         7heIbvMCVnuesRNta2lfAUhZP80ZRAcoH7wvnixxNPaOOE47xOw5d0pYM3K8RKb5hHJW
-         Q6JdH2vvV6T4bHIJQiGlGqlukSiOlhjDwiLY6TS0SxgIBoE6gIjsB9LMrTerZ0c6yjIG
-         5IWDPvcwnqizBNACYxB67R81bv+3MusJOwhmbciukFs/ZqAwpA3Vo2TibijgUG1fKfgK
-         oj2Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=D8Wo6P86udUrMcKv2I4dmw18ULaeqRo28Xqqp2K2xN0=;
+        b=UbUFPVYlx4sX12Mpz7R3BTcxi8qfwUVrtgG2pa6S7a0iYfvD+3b/RFNoVAWwxKpdqb
+         4+9fOPDR64/1sBC/boM/uoKGV5eSpWcJEt0xMunv7u7OEsB5tBxGcQL2Kacf5A9S/S86
+         3bugRgCbL69cGzIr0Q75FfT4l93kG4sicmN6MKKMe/YtyVBi9lJf6JZ4e4LE1jVEdm1d
+         kwZYc++x+3VCVUV8+oQ+txgs75Q8ur1ZByX/sgS0On+52NRt4lMtIovDtvjrhl2qpLMe
+         4X2xXBDPgCUdM2X7SrTBqJC5moRaXohtGKgKkfNU/J2rNTB3eqQY/jd1wTZe5C+8bqGw
+         ETWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=28WUq9Jt90oxX2or2ReiiYs2kHyyTZ89Ut+mmcfXAPQ=;
-        b=si8MFF8rYo9RdD97yi/a9wSAJ+a9xwLGp25WQqUTxe4lmcWdodhrIExEjnfWlSnjP6
-         axHTvGgtuuZfYQJlR77Y2t40jYJpcuEU6EPRpooUH7KKL6+ABV12FlDNtWO2JIpf1JI0
-         fYzRwZ5zRKAdsDizJDA8JzGQuzP9yExxN+JWSkrHyxHp4YOnuDI4fZZ5OnMDo8XcLESc
-         kE/GaeVKAc+Ixnn97wCAPE5bTsgx8U0hm2jYEHJU3if/hoyoxBiM4remcAemPKW2mXvM
-         zUXIzEpE/yPcdorvtDPUFs23v6TCcvoDJnAFr+v/SOPLdH+Q8FvZO0MsAZhymsTbqJ+f
-         4SEQ==
-X-Gm-Message-State: AOAM532R64gKIrIM+Csr0HcQFWxi7g3JC1PbtTgwySpcYA27HSurKIhw
-        WXRDhUj0EWQjwmInROUM7e82Uj7mNd4=
-X-Google-Smtp-Source: ABdhPJy4q1W3IfUk3iv7+OV74YqxVPB6VWyBubwKM1rhmCigLlyhq+AHZfeU8BKn2WNBeKFGCEbnBw==
-X-Received: by 2002:a2e:5c86:: with SMTP id q128mr9866205ljb.245.1639911613992;
-        Sun, 19 Dec 2021 03:00:13 -0800 (PST)
-Received: from [192.168.1.100] ([31.173.85.16])
-        by smtp.gmail.com with ESMTPSA id z28sm2223309ljn.77.2021.12.19.03.00.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 03:00:13 -0800 (PST)
-Message-ID: <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
-Date:   Sun, 19 Dec 2021 14:00:09 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=D8Wo6P86udUrMcKv2I4dmw18ULaeqRo28Xqqp2K2xN0=;
+        b=3QEINs0TSfMS76FFggpFo3AnuIbsgJO5AwcvL8eyUU+fwjS3FdhpoF5pNQlRGPq1yY
+         bjcS6X4PoAtS5GQhmFwz6R1fC08AYNHmPBtkqZht5KEX7NXUjNHc//iwfSxsJaqW+Bnc
+         P3EYJC7+kIO17qW8P0EcdjB/Da3KriYLavF2Qt7ht1fzjeIT0ysdA1kfafPSBOFKdVOj
+         2cMYLItZay8JK9iYfJnosQyqaHgxCatWrEqwsbsBnThW0kJtP3y9LgtvKi+91K4l4yBS
+         MSkEtzf1Fo0eV1QgB8yWH2yE/FjZQdRXJkHnUaUYKapuxOW/GRXDAHRCi/miuDMdapOD
+         RZsg==
+X-Gm-Message-State: AOAM533Fr8UvHiDE3CkehsnOkdqbdIywacgkZpWIaoAicS1gT7NXAJtU
+        WhpSrEdw/dHd9DqqFMdgAGJuj63NsSIx6b7c2rQ=
+X-Google-Smtp-Source: ABdhPJx9pEwuEYJwjhPEdlK1QpzutFYKqEf7NqNjE91fZEuIRc6qKv49xVb9XAff9cZCIcaa6n3KHTRbRBnYu2qnQDg=
+X-Received: by 2002:a05:6402:270c:: with SMTP id y12mr11047178edd.258.1639911934984;
+ Sun, 19 Dec 2021 03:05:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>, stable@vger.kernel.org,
-        Yuwen Ng <yuwen.ng@mediatek.com>
-References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
- <20211218095749.6250-3-chunfeng.yun@mediatek.com>
- <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com> <Yb8MM2zL2Ecfzv1/@kroah.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-In-Reply-To: <Yb8MM2zL2Ecfzv1/@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211123164902.35370-1-wsa+renesas@sang-engineering.com>
+ <20211123164902.35370-2-wsa+renesas@sang-engineering.com> <YZ024q/r7Hc3TpMt@smile.fi.intel.com>
+ <Yb2skaWF7cx6PHLO@kunai>
+In-Reply-To: <Yb2skaWF7cx6PHLO@kunai>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 19 Dec 2021 13:04:58 +0200
+Message-ID: <CAHp75VcV35r_54FXRGS31VT7W0LV6-U+PJOL46L49ro-T_hp4A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] gpio: add sloppy logic analyzer using polling
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Documentation List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.12.2021 13:40, Greg Kroah-Hartman wrote:
-[...]
+On Sat, Dec 18, 2021 at 11:21 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 
->>> This is caused by uninitialization of list_head.
->>
->>     Again, there's no such word as "uninitialization" (even if it existed, it
->> wouldn't mean what you wanted to say); please replace by "not initializing".
-> 
-> We are not English language scholars, most of us do not have English as
-> their native language.  We all can understand what is being said here,
-> there's no need for any change, please do not be so critical.
+> > > +Result is a .sr file to be consumed with PulseView or sigrok-cli from the free
+> > > +`sigrok`_ project. It is a zip file which also contains the binary sample data
+> > > +which may be consumed by other software. The filename is the logic analyzer
+> > > +instance name plus a since-epoch timestamp.
+> > > +
+> > > +.. _sigrok: https://sigrok.org/
+> >
+> > Alas, yet another tool required... (Sad thoughts since recently has installed
+> > PicoScope software).
+>
+> ? For sure, another tool is required. Do you want the analyzer itself to
+> output pretty SVG files? :)
 
-    OK, noted...
-    I was just somewhat upset that my 1st comment was ignored. :-/
+I mean that there are similar functionality in different tools and for
+one purpose you need one, for another another and there is no format
+file convertors available (as far as my shallow googling shows).
 
-> thanks,
-> 
-> greg k-h
+...
 
-MBR, Sergey
+> > > +   if (ret >= 0 && ret != priv->descs->ndescs)
+> >
+> > > +           ret = -ENODATA;
+> >
+> > Don't remember if we already discussed this error code, but data is there,
+> > it's not correct. EBADSLT? EBADR? ECHRNG?
+>
+> In your V1 review, you suggested -ENODATA. I will pick yet another one,
+> but it really matters zero in practice.
+
+Ah, okay, then choose the one you think fits most.
+
+...
+
+> > Do we really need the 'probe%02u=' part? It's redundant since it may be derived
+> > from the line number of the output (and it always in [1..ndescs+1]).
+>
+> It makes creating the .sr-file a lot easier. If you feel strong about
+> it, then you can later remove it and also update the script, I'd say.
+
+No strong opinion, I don't know the Sigrok tool and its file format,
+so I can't tell if it makes sense or doesn't.
+
+...
+
+> > `> /dev/null 2>&1` is idiomatic. And I think there is actually a subtle
+> > difference between two.
+>
+> What is the difference? Does it matter here?
+
+I'm a bit lost in the context here, but the ' > /dev/null 2>&1' means
+to redirect stdout to the /dev/null followed by redirecting stderr to
+stdout (which is redirected to /dev/null). The other construction
+might have side effects IIRC.
+
+...
+
+> > > +                   [ "$chan" != "$elem" ] && [ "$chan" -le $max_chans ] || fail "Trigger syntax error: $elem"
+> >
+> > No need to execute `test` twice:
+> >
+> >                       [ "$chan" != "$elem" -a "$chan" -le $max_chans ] || fail "Trigger syntax error: $elem"
+>
+> I read that '-a' and '-o' are deprecated. Dunno where but looking again
+> I found this: https://stackoverflow.com/questions/20449680/boolean-operators-a-o-in-bash
+
+The SO talks about _bash_, your script is a plain Shell one, right?
+And for the record, I don't like bashisms in some generic code, like
+the one we use with Linux kernel.
+
+...
+
+> > > +   taskset "$1" echo 1 > "$lasysfsdir"/capture || fail "Capture error! Check kernel log"
+> >
+> > Shouldn't this function setup signal TRAPs?
+>
+> To do what?
+
+To clean up the garbage it may leave in case of the interrupted run, no?
+
+...
+
+> > $@ is better, actually one should never use $*.
+>
+> What difference does it make when expanding into a string?
+
+The difference is on how the  "foo bar" (with double quotes!) will be
+represented. In your case it will be translated as "foo" and "bar", in
+the case I'm saying it will be "foo bar".
+
+-- 
+With Best Regards,
+Andy Shevchenko

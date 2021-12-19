@@ -2,237 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DEF479FC2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 07:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7227B479FCA
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 07:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbhLSGmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 01:42:12 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:13966 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229756AbhLSGmK (ORCPT
+        id S235339AbhLSGzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 01:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235323AbhLSGzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 01:42:10 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A9+kqIqzCytXDHq0z8Ux6t+cmxyrEfRIJ4+MujC/?=
- =?us-ascii?q?XYbTApG9whmcAzTBNXzyFOv+NZjb3eIh3a4rg8E0H7JTdyt9mHQtv/xmBbVoa8?=
- =?us-ascii?q?JufXYzxwmTYZn7JcJWbFCqL1yivAzX5BJhcokT0+1H9YtANkVEmjfvRH+ClWLa?=
- =?us-ascii?q?eUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAfNNw1cbgr435m+RCZH5?=
- =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
- =?us-ascii?q?Nkr/3aEwHRNY+PyDe1zwIC+772EEE/3Npuko4HKN0hUN/iSiNntk3zNxSvJi0Y?=
- =?us-ascii?q?QYvJKzF3uoHO/VdO3gnYvIYpuOaSZS4mYnJp6HcSFPn3u90C0M7J4AK0vx2Gmx?=
- =?us-ascii?q?T7boeJSxlRgqKieu7xJq4R/Nqi8BlK9PkVKsEoHBmzC/QFrA+SJbPWbjU7NNR9?=
- =?us-ascii?q?DMxgN1eW/fYe8cdLzFoaXzoZxBJMH8UBYg4kePugWPwGxVGqUiYvqpx4HXWxRZ?=
- =?us-ascii?q?Z1LnrOcDSPNuQSq19mkeeu3KD52HRHB4XLpqcxCCD/3bqgfXA9Qv/WYQPBPi7+?=
- =?us-ascii?q?+RsjVm72GMeElsVWEG9rP3/jVSxM/paKkob/QI0oKQy/VDtRd74NzWgrWKJpAw?=
- =?us-ascii?q?0WtxeCeQ25QiBjK3O7G6xBHUeT3hFZdgitecsSDAq30PPlNTsbRRxsbueRHSBs?=
- =?us-ascii?q?LiJrC+uPjQ9KW4EbDUDCwwf7LHeTCsb5v7UZo88S+js1ISzR2G2k23MtiUgwa4?=
- =?us-ascii?q?dl4gN2rnTwLwOuBr0zrChc+L/zly/srqZ0z5E?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Awc9T1q0x+2ZUkRvYDTxWFwqjBRpyeYIsimQD?=
- =?us-ascii?q?101hICG9Lfb3qyn+ppsmPEHP5Ar5AEtQ5expOMG7MBfhHO1OkPYs1NCZLUfbUQ?=
- =?us-ascii?q?qTXc5fBO7ZogEIdBeOjtK1uZ0QEZSWTeeAcGSS7vyKoTVQcexQu+VvmZrA7Yy1?=
- =?us-ascii?q?ohcdLj2CKZsQlTuRYjzrSXGeLzM2YqbRYaDsn/av0ADQH0j/AP7LY0UtbqzmnZ?=
- =?us-ascii?q?nmhZjmaRkJC1oM8w+Vlw6l77b8Dlyxwgoeeykn+8ZjzUH11yjCoomzufCyzRHR?=
- =?us-ascii?q?k0XJ6Y5NpdfnwtxfQOSRl8kuLCn2gArAXvUjZ1TChkF2nAic0idvrDD+mWZmAy?=
- =?us-ascii?q?210QKWQoiBm2qp5+An6kd215at8y7BvZKpm72GeNtzMbsxuWseSGqC16NohqAN?=
- =?us-ascii?q?7Itbm22erJZZFhXGgWD04MXJTQhjkg6urWMlivN7tQ0UbWIyUs4YkWUkxjIfLH?=
- =?us-ascii?q?7AJlOP1Kk3VO11SM3M7vdfdl2XK3jfo2l02dSpGnA+BA2PTEQOstGcl2E+pgE0?=
- =?us-ascii?q?82IIgMgE2nsQ/pM0TJdJo+zCL6RzjblLCssbd7h0CusNSda+TmbNXRXPOmSPJk?=
- =?us-ascii?q?mPLtBLB1vd75rspLkl7uCjf5IFiJM0hZTaSVtd8XU/fkr/YPf+laGjMiq9NllV?=
- =?us-ascii?q?cQ6duP221qIJzYEUHoCbQhFrYGpe5vednw=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,217,1635199200"; 
-   d="scan'208";a="11776645"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 07:42:09 +0100
-Date:   Sun, 19 Dec 2021 07:42:07 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Francisco Jerez <currojerez@riseup.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <871r29tvdj.fsf@riseup.net>
-Message-ID: <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sun, 19 Dec 2021 01:55:14 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B187C061574;
+        Sat, 18 Dec 2021 22:55:14 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id t5so25194663edd.0;
+        Sat, 18 Dec 2021 22:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=imn0//z0neW5U8hyxa6HwFdhRTH0GBtIxspDrfE6Ot0=;
+        b=MLuewlbSp7mGvsCpgZmab7zE2hNYwyz7zAU+6HYhbjbblN+Ufy5ZwMQc/GBDMf7wKM
+         97SHDpv3aXwkDeMR7M1MIgx02GVFMvh7BV3LuKlex6EOdogwIjcZoxAceJ5QxWvkoypH
+         gjxADSsPP50fJxbENOqqhIlHxckbe9cwswH34stvpQACRrqbs4nPtKRGHIbHdaQL9wMO
+         yDn6gwvrqSiAz4lkVAC7pwCPwwZnpDVYHzmsb9VuLYXyAwiGtIqgP8IHy0DaStXMvjSy
+         CC66Qjwfq/nGfyJPEeqOlZ2t6XlYSySm3VzgZbd7F4GAqZzblWSKOGXwRLwcmVdh3Bj+
+         ND7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=imn0//z0neW5U8hyxa6HwFdhRTH0GBtIxspDrfE6Ot0=;
+        b=2qquLjiViaM/UKpjYJbH/GrUz/b4aoTgyI+diqrlCa2sNn7dXLTwwSgnr0d6rkT6lo
+         EZloP1Og7LysH2WRn6UB8xwjETWlTLSlm4LMX1YvVx9zHzO0/HIMuHo/cwDVFK3btr0M
+         PBZGvJziBFsyp5FlaoouMOC/5wEnTypDyGExD8HuDmli1rw+6CSUhu/tPam9K2PHYdtG
+         AY54Zoy1vSEX6WQOWvFmVPiEBhGExkOJ104SldpJzNpF+tsXn1cmdn/W1kNrfdfMrgq2
+         xiCu68V/AwhzVopQ1X0SvKz6FtHMmYMHhREblDxT0DBkPkNltdr4ZH6Av7aq/MWPunBc
+         xDDw==
+X-Gm-Message-State: AOAM531iC2CeJXq9024Y1/cbs62i8WsaGDM35IMh1XDzwN6Ii/e/p3WS
+        7GqOskNAdNDrGUysobRkE0ZRnErDAEbX18Ry7dC7+DrIdXTagA==
+X-Google-Smtp-Source: ABdhPJyJoJEygh1uTynsT0zFIyWGiogF+yFeGT8pGrB54qj5okoKoLFUhuCkWeuuf76vit6e/6jDJkWiOPJVQWHR7gM=
+X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr10381020edc.297.1639896912420;
+ Sat, 18 Dec 2021 22:55:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <000000000000372da005d24efed8@google.com>
+In-Reply-To: <000000000000372da005d24efed8@google.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Sun, 19 Dec 2021 14:54:46 +0800
+Message-ID: <CAD-N9QXE+c3y6y14=OBXmFWSt74-vyFrgLo3FJVUoK1mt38iqA@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in virtio_gpu_array_put_free
+To:     syzbot <syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com>
+Cc:     airlied@linux.ie, christian.koenig@amd.com, daniel@ffwll.ch,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        kraxel@redhat.com, linaro-mm-sig@lists.linaro.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Sat, 18 Dec 2021, Francisco Jerez wrote:
-
-> Julia Lawall <julia.lawall@inria.fr> writes:
+On Sat, Dec 4, 2021 at 5:53 PM syzbot
+<syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com> wrote:
 >
-> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
-> >
-> >> Julia Lawall <julia.lawall@inria.fr> writes:
-> >>
-> >> >> As you can see in intel_pstate.c, min_pstate is initialized on core
-> >> >> platforms from MSR_PLATFORM_INFO[47:40], which is "Maximum Efficiency
-> >> >> Ratio (R/O)".  However that seems to deviate massively from the most
-> >> >> efficient ratio on your system, which may indicate a firmware bug, some
-> >> >> sort of clock gating problem, or an issue with the way that
-> >> >> intel_pstate.c processes this information.
-> >> >
-> >> > I'm not sure to understand the bug part.  min_pstate gives the frequency
-> >> > that I find as the minimum frequency when I look for the specifications of
-> >> > the CPU.  Should one expect that it should be something different?
-> >> >
-> >>
-> >> I'd expect the minimum frequency on your processor specification to
-> >> roughly match the "Maximum Efficiency Ratio (R/O)" value from that MSR,
-> >> since there's little reason to claim your processor can be clocked down
-> >> to a frequency which is inherently inefficient /and/ slower than the
-> >> maximum efficiency ratio -- In fact they both seem to match in your
-> >> system, they're just nowhere close to the frequency which is actually
-> >> most efficient, which smells like a bug, like your processor
-> >> misreporting what the most efficient frequency is, or it deviating from
-> >> the expected one due to your CPU static power consumption being greater
-> >> than it would be expected to be under ideal conditions -- E.g. due to
-> >> some sort of clock gating issue, possibly due to a software bug, or due
-> >> to our scheduling of such workloads with a large amount of lightly
-> >> loaded threads being unnecessarily inefficient which could also be
-> >> preventing most of your CPU cores from ever being clock-gated even
-> >> though your processor may be sitting idle for a large fraction of their
-> >> runtime.
-> >
-> > The original mail has results from two different machines: Intel 6130
-> > (skylake) and Intel 5218 (cascade lake).  I have access to another cluster
-> > of 6130s and 5218s.  I can try them.
-> >
-> > I tried 5.9 in which I just commented out the schedutil code to make
-> > frequency requests.  I only tested avrora (tiny pauses) and h2 (longer
-> > pauses) and in both case the execution is almost entirely in the turbo
-> > frequencies.
-> >
-> > I'm not sure to understand the term "clock-gated".  What C state does that
-> > correspond to?  The turbostat output for one run of avrora is below.
-> >
+> Hello,
 >
-> I didn't have any specific C1+ state in mind, most of the deeper ones
-> implement some sort of clock gating among other optimizations, I was
-> just wondering whether some sort of software bug and/or the highly
-> intermittent CPU utilization pattern of these workloads are preventing
-> most of your CPU cores from entering deep sleep states.  See below.
+> syzbot found the following issue on:
 >
-> > julia
-> >
-> > 78.062895 sec
-> > Package Core  CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     SMI     POLL    C1      C1E     C6      POLL%   C1%     C1E%    C6%     CPU%c1  CPU%c6  CoreTmp PkgTmp  Pkg%pc2 Pkg%pc6 Pkg_J   RAM_J   PKG_%   RAM_%
-> > -     -       -       31      2.95    1065    2096    156134  0       1971    155458  2956270 657130  0.00    0.20    4.78    92.26   14.75   82.31   40      41      45.14   0.04    4747.52 2509.05 0.00    0.00
-> > 0     0       0       13      1.15    1132    2095    11360   0       0       2       39      19209   0.00    0.00    0.01    99.01   8.02    90.83   39      41      90.24   0.04    2266.04 1346.09 0.00    0.00
+> HEAD commit:    d58071a8a76d Linux 5.16-rc3
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11f773f6b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=171728a464c05f2b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e9072e90624a31dfa85f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 >
-> This seems suspicious:                                                                                                                                                          ^^^^    ^^^^^^^
+> Unfortunately, I don't have any reproducer for this issue yet.
 >
-> I hadn't understood that you're running this on a dual-socket system
-> until I looked at these results.
-
-Sorry not to have mentioned that.
-
-> It seems like package #0 is doing
-> pretty much nothing according to the stats below, but it's still
-> consuming nearly half of your energy, apparently because the idle
-> package #0 isn't entering deep sleep states (Pkg%pc6 above is close to
-> 0%).  That could explain your unexpectedly high static power consumption
-> and the deviation of the real maximum efficiency frequency from the one
-> reported by your processor, since the reported maximum efficiency ratio
-> cannot possibly take into account the existence of a second CPU package
-> with dysfunctional idle management.
-
-Our assumption was that if anything happens on any core, all of the
-packages remain in a state that allows them to react in a reasonable
-amount of time ot any memory request.
-
-> I'm guessing that if you fully disable one of your CPU packages and
-> repeat the previous experiment forcing various P-states between 10 and
-> 37 you should get a maximum efficiency ratio closer to the theoretical
-> one for this CPU?
-
-OK, but that's not really a natural usage context...  I do have a
-one-socket Intel 5220.  I'll see what happens there.
-
-I did some experiements with forcing different frequencies.  I haven't
-finished processing the results, but I notice that as the frequency goes
-up, the utilization (specifically the value of
-map_util_perf(sg_cpu->util) at the point of the call to
-cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-Is this expected?
-
-thanks,
-julia
-
-> > 0     0       32      1       0.09    1001    2095    37      0       0       0       0       42      0.00    0.00    0.00    100.00  9.08
-> > 0     1       4       0       0.04    1000    2095    57      0       0       0       1       133     0.00    0.00    0.00    99.96   0.08    99.88   38
-> > 0     1       36      0       0.00    1000    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.12
-> > 0     2       8       0       0.03    1000    2095    64      0       0       0       1       124     0.00    0.00    0.00    99.97   0.08    99.89   38
-> > 0     2       40      0       0.00    1000    2095    36      0       0       0       0       40      0.00    0.00    0.00    100.00  0.10
-> > 0     3       12      0       0.00    1000    2095    42      0       0       0       0       71      0.00    0.00    0.00    100.00  0.14    99.86   38
-> > 0     3       44      1       0.09    1000    2095    63      0       0       0       0       65      0.00    0.00    0.00    99.91   0.05
-> > 0     4       14      0       0.00    1010    2095    38      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04    99.96   39
-> > 0     4       46      0       0.00    1011    2095    36      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04
-> > 0     5       10      0       0.01    1084    2095    39      0       0       0       0       58      0.00    0.00    0.00    99.99   0.04    99.95   38
-> > 0     5       42      0       0.00    1114    2095    35      0       0       0       0       39      0.00    0.00    0.00    100.00  0.05
-> > 0     6       6       0       0.03    1005    2095    89      0       0       0       1       116     0.00    0.00    0.00    99.97   0.07    99.90   39
-> > 0     6       38      0       0.00    1000    2095    38      0       0       0       0       41      0.00    0.00    0.00    100.00  0.10
-> > 0     7       2       0       0.05    1001    2095    59      0       0       0       1       133     0.00    0.00    0.00    99.95   0.09    99.86   40
-> > 0     7       34      0       0.00    1000    2095    39      0       0       0       0       65      0.00    0.00    0.00    100.00  0.13
-> > 0     8       16      0       0.00    1000    2095    43      0       0       0       0       47      0.00    0.00    0.00    100.00  0.04    99.96   38
-> > 0     8       48      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.04
-> > 0     9       20      0       0.00    1000    2095    33      0       0       0       0       37      0.00    0.00    0.00    100.00  0.03    99.97   38
-> > 0     9       52      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
-> > 0     10      24      0       0.00    1000    2095    36      0       0       0       1       40      0.00    0.00    0.00    100.00  0.03    99.96   39
-> > 0     10      56      0       0.00    1000    2095    37      0       0       0       1       38      0.00    0.00    0.00    100.00  0.03
-> > 0     11      28      0       0.00    1002    2095    35      0       0       0       1       37      0.00    0.00    0.00    100.00  0.03    99.97   38
-> > 0     11      60      0       0.00    1004    2095    34      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
-> > 0     12      30      0       0.00    1001    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.11    99.88   38
-> > 0     12      62      0       0.01    1000    2095    197     0       0       0       0       197     0.00    0.00    0.00    99.99   0.10
-> > 0     13      26      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.03    99.97   39
-> > 0     13      58      0       0.00    1000    2095    38      0       0       0       0       40      0.00    0.00    0.00    100.00  0.03
-> > 0     14      22      0       0.01    1000    2095    149     0       1       2       0       142     0.00    0.01    0.00    99.99   0.07    99.92   39
-> > 0     14      54      0       0.00    1000    2095    35      0       0       0       0       38      0.00    0.00    0.00    100.00  0.07
-> > 0     15      18      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03    99.97   39
-> > 0     15      50      0       0.00    1000    2095    34      0       0       0       0       38      0.00    0.00    0.00    100.00  0.03
-> > 1     0       1       32      3.23    1008    2095    2385    0       31      3190    45025   10144   0.00    0.28    4.68    91.99   11.21   85.56   32      35      0.04    0.04    2481.49 1162.96 0.00    0.00
-> > 1     0       33      9       0.63    1404    2095    12206   0       5       162     2480    10283   0.00    0.04    0.75    98.64   13.81
-> > 1     1       5       1       0.07    1384    2095    236     0       0       38      24      314     0.00    0.09    0.06    99.77   4.66    95.27   33
-> > 1     1       37      81      3.93    2060    2095    1254    0       5       40      59      683     0.00    0.01    0.02    96.05   0.80
-> > 1     2       9       37      3.46    1067    2095    2396    0       29      2256    55406   11731   0.00    0.17    6.02    90.54   54.10   42.44   31
-> > 1     2       41      151     14.51   1042    2095    10447   0       135     10494   248077  42327   0.01    0.87    26.57   58.84   43.05
-> > 1     3       13      110     10.47   1053    2095    7120    0       120     9218    168938  33884   0.01    0.77    16.63   72.68   42.58   46.95   32
-> > 1     3       45      69      6.76    1021    2095    4730    0       66      5598    115410  23447   0.00    0.44    12.06   81.12   46.29
-> > 1     4       15      112     10.64   1056    2095    7204    0       116     8831    171423  37754   0.01    0.70    17.56   71.67   28.01   61.35   33
-> > 1     4       47      18      1.80    1006    2095    1771    0       13      915     29315   6564    0.00    0.07    3.20    95.03   36.85
-> > 1     5       11      63      5.96    1065    2095    4090    0       58      6449    99015   18955   0.00    0.45    10.27   83.64   31.24   62.80   31
-> > 1     5       43      72      7.11    1016    2095    4794    0       73      6203    115361  26494   0.00    0.48    11.79   81.02   30.09
-> > 1     6       7       35      3.39    1022    2095    2328    0       45      3377    52721   13759   0.00    0.27    5.10    91.43   25.84   70.77   32
-> > 1     6       39      67      6.09    1096    2095    4483    0       52      3696    94964   19366   0.00    0.30    10.32   83.61   23.14
-> > 1     7       3       1       0.06    1395    2095    91      0       0       0       1       167     0.00    0.00    0.00    99.95   25.36   74.58   35
-> > 1     7       35      83      8.16    1024    2095    5785    0       100     7398    134640  27428   0.00    0.56    13.39   78.34   17.26
-> > 1     8       17      46      4.49    1016    2095    3229    0       52      3048    74914   16010   0.00    0.27    8.29    87.19   29.71   65.80   33
-> > 1     8       49      64      6.12    1052    2095    4210    0       89      5782    100570  21463   0.00    0.42    10.63   83.17   28.08
-> > 1     9       21      73      7.02    1036    2095    4917    0       64      5786    109887  21939   0.00    0.55    11.61   81.18   22.10   70.88   33
-> > 1     9       53      64      6.33    1012    2095    4074    0       69      5957    97596   20580   0.00    0.51    9.78    83.74   22.79
-> > 1     10      25      26      2.58    1013    2095    1825    0       22      2124    42630   8627    0.00    0.17    4.17    93.24   53.91   43.52   33
-> > 1     10      57      159     15.59   1022    2095    10951   0       175     14237   256828  56810   0.01    1.10    26.00   58.16   40.89
-> > 1     11      29      112     10.54   1065    2095    7462    0       126     9548    179206  39821   0.01    0.85    18.49   70.71   29.46   60.00   31
-> > 1     11      61      29      2.89    1011    2095    2002    0       24      2468    45558   10288   0.00    0.20    4.71    92.36   37.11
-> > 1     12      31      37      3.66    1011    2095    2596    0       79      3161    61027   13292   0.00    0.24    6.48    89.79   23.75   72.59   32
-> > 1     12      63      56      5.08    1107    2095    3789    0       62      4777    79133   17089   0.00    0.41    7.91    86.86   22.31
-> > 1     13      27      12      1.14    1045    2095    1477    0       16      888     18744   3250    0.00    0.06    2.18    96.70   21.23   77.64   32
-> > 1     13      59      60      5.81    1038    2095    5230    0       60      4936    87225   21402   0.00    0.41    8.95    85.14   16.55
-> > 1     14      23      28      2.75    1024    2095    2008    0       20      1839    47417   9177    0.00    0.13    5.08    92.21   34.18   63.07   32
-> > 1     14      55      106     9.58    1105    2095    6292    0       89      7182    141379  31354   0.00    0.63    14.45   75.81   27.36
-> > 1     15      19      118     11.65   1012    2095    7872    0       121     10014   193186  40448   0.01    0.80    19.53   68.68   37.53   50.82   32
-> > 1     15      51      59      5.58    1059    2095    3967    0       54      5842    88063   21138   0.00    0.39    9.12    85.23   43.60
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com
 >
+>  </TASK>
+> general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+> CPU: 0 PID: 20114 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> RIP: 0010:virtio_gpu_array_put_free+0x2f/0x190 drivers/gpu/drm/virtio/virtgpu_gem.c:251
+
+From the description of stack trace, the bug resides in the missing
+allocation of objs variable.
+
+If fense is NULL, it will bypass the assignment of objs. And then in
+the error handling of virtio_gpu_object_shmem_init, objs will be used
+to dereference, leading to Null Pointer Dereference.
+
+if (fence) {
+ret = -ENOMEM;
+objs = virtio_gpu_array_alloc(1);  // if fence is NULL, this
+assignment will be bypassed.
+if (!objs)
+goto err_put_id;
+virtio_gpu_array_add_obj(objs, &bo->base.base);
+
+ret = virtio_gpu_array_lock_resv(objs);
+if (ret != 0)
+goto err_put_objs;
+}
+
+ret = virtio_gpu_object_shmem_init(vgdev, bo, &ents, &nents);
+if (ret != 0) {
+virtio_gpu_array_put_free(objs);
+virtio_gpu_free_object(&shmem_obj->base);
+return ret;
+}
+
+
+> Code: 55 49 89 fd 41 54 55 53 48 83 ec 08 e8 5a dd 09 fd 49 8d 45 70 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 21 01 00 00 41 8b 5d 70 31 ff
+> RSP: 0018:ffffc90005a9fa90 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc900262ce000
+> RDX: 000000000000000e RSI: ffffffff846cf6e6 RDI: 0000000000000000
+> RBP: ffff88801882b800 R08: 0000000000000000 R09: ffffc90005a9f9ef
+> R10: ffffffff846dcc29 R11: 0000000000000000 R12: ffffc90005a9fbd0
+> R13: 0000000000000000 R14: ffff888045f60000 R15: 00000000fffffff4
+> FS:  00007f4ad9393700(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f561e680558 CR3: 0000000050bde000 CR4: 0000000000150ef0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+> Call Trace:
+>  <TASK>
+>  virtio_gpu_object_create+0x5c7/0xd90 drivers/gpu/drm/virtio/virtgpu_object.c:251
+>  virtio_gpu_gem_create drivers/gpu/drm/virtio/virtgpu_gem.c:42 [inline]
+>  virtio_gpu_mode_dumb_create+0x319/0x5c0 drivers/gpu/drm/virtio/virtgpu_gem.c:90
+>  drm_mode_create_dumb+0x26c/0x2f0 drivers/gpu/drm/drm_dumb_buffers.c:96
+>  drm_ioctl_kernel+0x27d/0x4e0 drivers/gpu/drm/drm_ioctl.c:782
+>  drm_ioctl+0x51e/0x9d0 drivers/gpu/drm/drm_ioctl.c:885
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:874 [inline]
+>  __se_sys_ioctl fs/ioctl.c:860 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f4adbe1dae9
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f4ad9393188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007f4adbf30f60 RCX: 00007f4adbe1dae9
+> RDX: 0000000020000040 RSI: 00000000c02064b2 RDI: 0000000000000003
+> RBP: 00007f4ad93931d0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+> R13: 00007ffccb96db4f R14: 00007f4ad9393300 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 8191b5e5ff4f69ef ]---
+> RIP: 0010:virtio_gpu_array_put_free+0x2f/0x190 drivers/gpu/drm/virtio/virtgpu_gem.c:251
+> Code: 55 49 89 fd 41 54 55 53 48 83 ec 08 e8 5a dd 09 fd 49 8d 45 70 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 21 01 00 00 41 8b 5d 70 31 ff
+> RSP: 0018:ffffc90005a9fa90 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc900262ce000
+> RDX: 000000000000000e RSI: ffffffff846cf6e6 RDI: 0000000000000000
+> RBP: ffff88801882b800 R08: 0000000000000000 R09: ffffc90005a9f9ef
+> R10: ffffffff846dcc29 R11: 0000000000000000 R12: ffffc90005a9fbd0
+> R13: 0000000000000000 R14: ffff888045f60000 R15: 00000000fffffff4
+> FS:  00007f4ad9393700(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000000000065f4d7 CR3: 0000000050bde000 CR4: 0000000000150ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   55                      push   %rbp
+>    1:   49 89 fd                mov    %rdi,%r13
+>    4:   41 54                   push   %r12
+>    6:   55                      push   %rbp
+>    7:   53                      push   %rbx
+>    8:   48 83 ec 08             sub    $0x8,%rsp
+>    c:   e8 5a dd 09 fd          callq  0xfd09dd6b
+>   11:   49 8d 45 70             lea    0x70(%r13),%rax
+>   15:   48 89 c2                mov    %rax,%rdx
+>   18:   48 89 04 24             mov    %rax,(%rsp)
+>   1c:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   23:   fc ff df
+>   26:   48 c1 ea 03             shr    $0x3,%rdx
+> * 2a:   0f b6 04 02             movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+>   2e:   84 c0                   test   %al,%al
+>   30:   74 08                   je     0x3a
+>   32:   3c 03                   cmp    $0x3,%al
+>   34:   0f 8e 21 01 00 00       jle    0x15b
+>   3a:   41 8b 5d 70             mov    0x70(%r13),%ebx
+>   3e:   31 ff                   xor    %edi,%edi
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000372da005d24efed8%40google.com.

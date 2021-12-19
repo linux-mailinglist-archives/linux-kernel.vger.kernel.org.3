@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EF747A1BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E864947A1BD
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236304AbhLSSUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 13:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S236311AbhLSSUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 13:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbhLSSUJ (ORCPT
+        with ESMTP id S230134AbhLSSUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 13:20:09 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B59C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:09 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f5so6400323edq.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:09 -0800 (PST)
+        Sun, 19 Dec 2021 13:20:38 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19876C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:38 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id g2so4801101pgo.9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h2JGTItMZLnyhLTpH8eIkTs8tCi5ANTqOzNBuD2pnIU=;
-        b=ooxS5Pi1aTq1KoApuVHAb3j+mIhWhTLHJIYpTMPDJUCl2QGSXGUmOJ7tf0CcpFK8R8
-         cx/sXjC9Y+einAyZsFPtoQ3FQxaoUpN2iIeV7Z2sRujSSqW54zhqC8BUIqKoR2cwqWW1
-         lwZQOKDb0p8qHdzgx5nfpF39rQBQbWQdZ+LV797QdZyJ6kQJDZJh0O7W6pNDGPHt5klX
-         mfRGvETqaKIYdR6qFR0o77ywAQSUQg8EW9tKUbrHF7TpESUMsp8dak/8l5IHmC9FhLAe
-         7pq5+FHWeudmap0HL2s1aSWNV+34HNd7HhF/idHO1QJfKS/Dmcholz2JybU7/P4KtXyT
-         BIQQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=u74cWTopnVH44MujokkrRkfCfXsq6ZRs2mw3KCw/CPU=;
+        b=Dk0MsH5XNuAraSVgPHFMysD7ERqAqCiLBWVLN/71If7J9EBQPqS0L9VQxOknuDAHK5
+         es30u7K3pka8DrQVJFcceYwaStyahPQz+wM84OgG0k91L+bJeLPz8Kr8+ExyOR3/y3Uc
+         /+mq1ZZl0ZcEKbN7NjcQmJcSmcyGTQ5ucaGLsIRk/KBAOC7aPtnkxuu4zmHJQQbjeHoA
+         5dvhX9YgyFJECc7u186r8K7EjVrL6VJKhkw+PzFyt6LLCRX3kr8hg6y65wWc20uTVkXQ
+         B33vPwnwGJC9NEmVdojl2lR1dXBsZYdk/z2MLSaPxDZtXnOPNLN9XTOPiKIIbYE5gduc
+         1WaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=h2JGTItMZLnyhLTpH8eIkTs8tCi5ANTqOzNBuD2pnIU=;
-        b=w45Ized2XyQb818wy8K63JuwCSLBaEwTVHmZQgGR7AiMy1ZV6avga+3mwd3swtKT7J
-         fmLo2MiMDp5n6hmW4ziPKB4FRBrh//Y9hBSpcXFEIqTORX/lh13mYfQJude92XZQla2e
-         s2YgNHcnBA35M78BPEs4IaGtNpbajTH9/HopYwTt561286VWFPx6Ypu07qkvV3/pLxVI
-         jr1+kc8PbZtoWToYBldEnN+wIlpp+xmEAM1dKGZBb09RmBoLVSaSdnaxPyQcK/sFVdfj
-         vizktsI/qUxxsk+HsNK5kFOx3AQ17xw/VMLgXjqZYm7rm7JSCFRv1GC8qeDXPsL/T9Se
-         yKGA==
-X-Gm-Message-State: AOAM530xtmJ6IrVkzF8ZT3rwgp0sFGJK6c7l35vky5qsOG39HFUebucY
-        UzjnhBFvQ/6ddI7RvBdFK4A=
-X-Google-Smtp-Source: ABdhPJwaS6VqugQvFlRzTs6C2xE6a4EjAnj8tlDm5Ra041uaV2Sbn0I2V98QJIlbgUukrNUWNs/pEA==
-X-Received: by 2002:aa7:dd56:: with SMTP id o22mr12387440edw.73.1639938008044;
-        Sun, 19 Dec 2021 10:20:08 -0800 (PST)
-Received: from tom-desktop.station (net-93-151-129-173.cust.dsl.teletu.it. [93.151.129.173])
-        by smtp.gmail.com with ESMTPSA id go35sm1149540ejc.191.2021.12.19.10.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 10:20:07 -0800 (PST)
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     linuxfancy@googlegroups.com, tomm.merciai@gmail.com,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alberto Merciai <alb3rt0.m3rciai@gmail.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: vt6655: drop off byRxMode var in device.h
-Date:   Sun, 19 Dec 2021 19:20:03 +0100
-Message-Id: <20211219182004.25656-1-tomm.merciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=u74cWTopnVH44MujokkrRkfCfXsq6ZRs2mw3KCw/CPU=;
+        b=a/u9GUaKE7JIhNoA4jLu0TJekN+3Ij/WEoGUFMrqDWGpBVw929u9B38KlYDX4tVXR2
+         a3qJGLfnyf02EG2sTP6K0bpJEm3NXGChtoBFntdlCGT2pp7aQAYTJl8jAO9UG+etApN3
+         20kzeYXSEGeuEXbgSuSdw7iS9786+fAnb9/ZCEYwbEUu6SMNeow6d8D03U4oixnM2QaG
+         Q+vCaRQNqEAOftdRn1DsT1Rr+jx809Mwz4wZr1ZQlhDYBFg97tgNS8VO+4v08UqS+QiH
+         uePTWNq9cQbrSr2qCJS0s6jikVs4AF/sj6xfIsces9Ahd4cUYffpykxgDSq/b7+mjs55
+         vJHw==
+X-Gm-Message-State: AOAM530t1ATLIIuyaiK58yPw6c1CdG9dRkBm4QKbyJAVVZlSoikLNd/B
+        r884EFRw/mKMaD8tCaIj5qA=
+X-Google-Smtp-Source: ABdhPJyvN359C0RRu1+t8X0WexVORAvsU8PlbIbx3hHdgYJi+uvSgoAlbRbHICPH70i4d9Qh/LtuBA==
+X-Received: by 2002:a63:114:: with SMTP id 20mr8050324pgb.342.1639938037547;
+        Sun, 19 Dec 2021 10:20:37 -0800 (PST)
+Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
+        by smtp.gmail.com with ESMTPSA id n18sm2243641pff.110.2021.12.19.10.20.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 10:20:37 -0800 (PST)
+Message-ID: <f58052cb-bc5c-614c-10f9-8e6bfc7ff24b@gmail.com>
+Date:   Sun, 19 Dec 2021 10:20:34 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] ASoC: bcm: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211219181039.24812-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211219181039.24812-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211219181039.24812-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop off unused variable byRxMode in device.h, this fix following 
-checkpatch.pl check:
 
-CHECK: Avoid CamelCase: <byRxMode>
-131: FILE: drivers/staging/vt6655/device.h:131:
-	unsigned char byRxMode
 
-Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
----
- drivers/staging/vt6655/device.h | 2 --
- 1 file changed, 2 deletions(-)
+On 12/19/2021 10:10 AM, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+> 
+> While at it also drop "r_irq" member from struct bcm_i2s_priv as there
+> are no users of it.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 4706bde1ec1d..84b1dcf80e47 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -128,8 +128,6 @@ struct vnt_private {
- 	u32                         memaddr;
- 	u32                         ioaddr;
- 
--	unsigned char byRxMode;
--
- 	spinlock_t                  lock;
- 
- 	volatile int                iTDUsed[TYPE_MAXTD];
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Thanks!
 -- 
-2.25.1
-
+Florian

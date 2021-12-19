@@ -2,114 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB6047A0F1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE3A47A0F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbhLSOaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 09:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhLSOaO (ORCPT
+        id S235927AbhLSOar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 09:30:47 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42848 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230483AbhLSOaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 09:30:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8D0C061574;
-        Sun, 19 Dec 2021 06:30:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B01060EB1;
-        Sun, 19 Dec 2021 14:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3EB1C36AE7;
-        Sun, 19 Dec 2021 14:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639924212;
-        bh=Qny2sjQySbXk3dQjRlY8kV/10SyC62AaBUtkCv1exiU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rvhGQP2wNzSqYZj61e17VQn0J14Tq2dhga/DF3aiR6CwakL87MbsZEnV114gkM4xX
-         7anmzEBG/avsJLiC+gzG5wkKg02Bh39KpR7Cb2gZSlFOcSgJzmoyJvh4+/1vh+EVzl
-         gTnceXFKYDdTZ9fgEmVZFzxT5/P+BG4C3XUH4c3K7teGtMLpKuwK8KdbGtH6uZNYt2
-         NgczK9cJ8p3uj0lS+SbptixcDNq87u+TqSEBDjnDxM+lnz6lS9bV+EOATZYi70nMaf
-         kyC3tE9v1I1OgxlueKmMdElemxi4ryeqR2lrLx4sahRJGn+oLOZzIpUo29sdbOZ4sH
-         fQ6nmNeQVVFZg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9818060A9C;
-        Sun, 19 Dec 2021 14:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 19 Dec 2021 09:30:46 -0500
+Received: by mail-oi1-f178.google.com with SMTP id p4so11775027oia.9;
+        Sun, 19 Dec 2021 06:30:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9af47FwWul6o7IH1rtZ+HSandlhBJqTDESORN+oRbv8=;
+        b=GH0sCxGlExZFB7T+BdbASzPcaCUUquYUqXJiji5J86+pdw48kfUb0vV4nkla1uGP3v
+         Ab94EPee79SDAaIMlNokLKde1M4fX8R2gTaMOQ2Z1fmvrOo4qlpP54qLY1j1OI3Am+kX
+         29aW2S+C9lHan5uzeD657jNm7/X9138MCLp2aqYNol7yGKF5DgQ91v64D/iqtV+UdPBz
+         Q7SmCY+kshVgZlZxufb7yDKCD9qGQ8zwm3AhHyg6Pg+XtG+Vcyj5tz4SK55Yg6pp7RNt
+         02PAbEwoJcS+5kC+tnNyzWPIytbmasCG4k5IWPkyK22XxHawR35j6Pn7/N6WdaSrBkUA
+         Zm1w==
+X-Gm-Message-State: AOAM53242or7fMF5b/YHXAhrKjDtB8rkNsNWp9clu69j9Js2PKzWnUJb
+        C4nsYX8BYJlHiXlzJHAEK8Elfg5X0NwnsUXEN24=
+X-Google-Smtp-Source: ABdhPJxsRx+54LStAhl26NuPic23Khf1uKyrooPHzQJBaQ+VxEUHynjCN/86uP7tA9efRuWadXQ8Al/fk6HKuD15/Vc=
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr8500618oiw.154.1639924245949;
+ Sun, 19 Dec 2021 06:30:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v8 net-next 00/13] allow user to offload tc action to net
- device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163992421261.25478.13959206033604654129.git-patchwork-notify@kernel.org>
-Date:   Sun, 19 Dec 2021 14:30:12 +0000
-References: <20211217181629.28081-1-simon.horman@corigine.com>
-In-Reply-To: <20211217181629.28081-1-simon.horman@corigine.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        alexandre.belloni@bootlin.com, andrew@lunn.ch,
-        claudiu.manoil@nxp.com, xiyou.wangcong@gmail.com,
-        f.fainelli@gmail.com, idosch@nvidia.com, jhs@mojatatu.com,
-        jiri@resnulli.us, leon@kernel.org, michael.chan@broadcom.com,
-        ozsh@nvidia.com, petrm@nvidia.com, roid@nvidia.com,
-        saeedm@nvidia.com, vivien.didelot@gmail.com, vladbu@nvidia.com,
-        vladimir.oltean@nxp.com, baowen.zheng@corigine.com,
-        louis.peens@corigine.com, UNGLinuxDriver@microchip.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        netdev@vger.kernel.org, oss-drivers@corigine.com
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <CAJZ5v0he+_p5qVkx+fGUg7BCBYmm5yRh4q-_9jgJoZLwDf1c2Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0he+_p5qVkx+fGUg7BCBYmm5yRh4q-_9jgJoZLwDf1c2Q@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 19 Dec 2021 15:30:34 +0100
+Message-ID: <CAJZ5v0h98XXvSOpBFn4vV1QivFtsSzzVg8sJGq4v04uf5bi5Jw@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Francisco Jerez <currojerez@riseup.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sun, Dec 19, 2021 at 3:19 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Sun, Dec 19, 2021 at 7:42 AM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> >
+> >
+> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+> >
+> > > Julia Lawall <julia.lawall@inria.fr> writes:
+> > >
+> > > > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+> > > >
+> > > >> Julia Lawall <julia.lawall@inria.fr> writes:
+> > > >>
+> > > >> >> As you can see in intel_pstate.c, min_pstate is initialized on core
+> > > >> >> platforms from MSR_PLATFORM_INFO[47:40], which is "Maximum Efficiency
+> > > >> >> Ratio (R/O)".  However that seems to deviate massively from the most
+> > > >> >> efficient ratio on your system, which may indicate a firmware bug, some
+> > > >> >> sort of clock gating problem, or an issue with the way that
+> > > >> >> intel_pstate.c processes this information.
+> > > >> >
+> > > >> > I'm not sure to understand the bug part.  min_pstate gives the frequency
+> > > >> > that I find as the minimum frequency when I look for the specifications of
+> > > >> > the CPU.  Should one expect that it should be something different?
+> > > >> >
+> > > >>
+> > > >> I'd expect the minimum frequency on your processor specification to
+> > > >> roughly match the "Maximum Efficiency Ratio (R/O)" value from that MSR,
+> > > >> since there's little reason to claim your processor can be clocked down
+> > > >> to a frequency which is inherently inefficient /and/ slower than the
+> > > >> maximum efficiency ratio -- In fact they both seem to match in your
+> > > >> system, they're just nowhere close to the frequency which is actually
+> > > >> most efficient, which smells like a bug, like your processor
+> > > >> misreporting what the most efficient frequency is, or it deviating from
+> > > >> the expected one due to your CPU static power consumption being greater
+> > > >> than it would be expected to be under ideal conditions -- E.g. due to
+> > > >> some sort of clock gating issue, possibly due to a software bug, or due
+> > > >> to our scheduling of such workloads with a large amount of lightly
+> > > >> loaded threads being unnecessarily inefficient which could also be
+> > > >> preventing most of your CPU cores from ever being clock-gated even
+> > > >> though your processor may be sitting idle for a large fraction of their
+> > > >> runtime.
+> > > >
+> > > > The original mail has results from two different machines: Intel 6130
+> > > > (skylake) and Intel 5218 (cascade lake).  I have access to another cluster
+> > > > of 6130s and 5218s.  I can try them.
+> > > >
+> > > > I tried 5.9 in which I just commented out the schedutil code to make
+> > > > frequency requests.  I only tested avrora (tiny pauses) and h2 (longer
+> > > > pauses) and in both case the execution is almost entirely in the turbo
+> > > > frequencies.
+> > > >
+> > > > I'm not sure to understand the term "clock-gated".  What C state does that
+> > > > correspond to?  The turbostat output for one run of avrora is below.
+> > > >
+> > >
+> > > I didn't have any specific C1+ state in mind, most of the deeper ones
+> > > implement some sort of clock gating among other optimizations, I was
+> > > just wondering whether some sort of software bug and/or the highly
+> > > intermittent CPU utilization pattern of these workloads are preventing
+> > > most of your CPU cores from entering deep sleep states.  See below.
+> > >
+> > > > julia
+> > > >
+> > > > 78.062895 sec
+> > > > Package Core  CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     SMI     POLL    C1      C1E     C6      POLL%   C1%     C1E%    C6%     CPU%c1  CPU%c6  CoreTmp PkgTmp  Pkg%pc2 Pkg%pc6 Pkg_J   RAM_J   PKG_%   RAM_%
+> > > > -     -       -       31      2.95    1065    2096    156134  0       1971    155458  2956270 657130  0.00    0.20    4.78    92.26   14.75   82.31   40      41      45.14   0.04    4747.52 2509.05 0.00    0.00
+> > > > 0     0       0       13      1.15    1132    2095    11360   0       0       2       39      19209   0.00    0.00    0.01    99.01   8.02    90.83   39      41      90.24   0.04    2266.04 1346.09 0.00    0.00
+> > >
+> > > This seems suspicious:                                                                                                                                                          ^^^^    ^^^^^^^
+> > >
+> > > I hadn't understood that you're running this on a dual-socket system
+> > > until I looked at these results.
+> >
+> > Sorry not to have mentioned that.
+> >
+> > > It seems like package #0 is doing
+> > > pretty much nothing according to the stats below, but it's still
+> > > consuming nearly half of your energy, apparently because the idle
+> > > package #0 isn't entering deep sleep states (Pkg%pc6 above is close to
+> > > 0%).  That could explain your unexpectedly high static power consumption
+> > > and the deviation of the real maximum efficiency frequency from the one
+> > > reported by your processor, since the reported maximum efficiency ratio
+> > > cannot possibly take into account the existence of a second CPU package
+> > > with dysfunctional idle management.
+> >
+> > Our assumption was that if anything happens on any core, all of the
+> > packages remain in a state that allows them to react in a reasonable
+> > amount of time ot any memory request.
+> >
+> > > I'm guessing that if you fully disable one of your CPU packages and
+> > > repeat the previous experiment forcing various P-states between 10 and
+> > > 37 you should get a maximum efficiency ratio closer to the theoretical
+> > > one for this CPU?
+> >
+> > OK, but that's not really a natural usage context...  I do have a
+> > one-socket Intel 5220.  I'll see what happens there.
+> >
+> > I did some experiements with forcing different frequencies.  I haven't
+> > finished processing the results, but I notice that as the frequency goes
+> > up, the utilization (specifically the value of
+> > map_util_perf(sg_cpu->util) at the point of the call to
+> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+> > Is this expected?
+>
+> It isn't, as long as the scale-invariance mechanism mentioned in my
+> previous message works properly.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+But even if it doesn't, the utilization should decrease when the
+frequency increases.
 
-On Fri, 17 Dec 2021 19:16:16 +0100 you wrote:
-> Baowen Zheng says:
-> 
-> Allow use of flow_indr_dev_register/flow_indr_dev_setup_offload to offload
-> tc actions independent of flows.
-> 
-> The motivation for this work is to prepare for using TC police action
-> instances to provide hardware offload of OVS metering feature - which calls
-> for policers that may be used by multiple flows and whose lifecycle is
-> independent of any flows that use them.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v8,net-next,01/13] flow_offload: fill flags to action structure
-    https://git.kernel.org/netdev/net-next/c/40bd094d65fc
-  - [v8,net-next,02/13] flow_offload: reject to offload tc actions in offload drivers
-    https://git.kernel.org/netdev/net-next/c/144d4c9e800d
-  - [v8,net-next,03/13] flow_offload: add index to flow_action_entry structure
-    https://git.kernel.org/netdev/net-next/c/5a9959008fb6
-  - [v8,net-next,04/13] flow_offload: rename offload functions with offload instead of flow
-    https://git.kernel.org/netdev/net-next/c/9c1c0e124ca2
-  - [v8,net-next,05/13] flow_offload: add ops to tc_action_ops for flow action setup
-    https://git.kernel.org/netdev/net-next/c/c54e1d920f04
-  - [v8,net-next,06/13] flow_offload: allow user to offload tc action to net device
-    https://git.kernel.org/netdev/net-next/c/8cbfe939abe9
-  - [v8,net-next,07/13] flow_offload: add skip_hw and skip_sw to control if offload the action
-    https://git.kernel.org/netdev/net-next/c/7adc57651211
-  - [v8,net-next,08/13] flow_offload: rename exts stats update functions with hw
-    https://git.kernel.org/netdev/net-next/c/bcd64368584b
-  - [v8,net-next,09/13] flow_offload: add process to update action stats from hardware
-    https://git.kernel.org/netdev/net-next/c/c7a66f8d8a94
-  - [v8,net-next,10/13] net: sched: save full flags for tc action
-    https://git.kernel.org/netdev/net-next/c/e8cb5bcf6ed6
-  - [v8,net-next,11/13] flow_offload: add reoffload process to update hw_count
-    https://git.kernel.org/netdev/net-next/c/13926d19a11e
-  - [v8,net-next,12/13] flow_offload: validate flags of filter and actions
-    https://git.kernel.org/netdev/net-next/c/c86e0209dc77
-  - [v8,net-next,13/13] selftests: tc-testing: add action offload selftest for action and filter
-    https://git.kernel.org/netdev/net-next/c/eb473bac4a4b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Increasing frequency should cause more instructions to be retired per
+unit of time and so there should be more idle time in the workload.

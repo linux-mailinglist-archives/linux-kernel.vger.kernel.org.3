@@ -2,105 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D82479EE3
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 03:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210B0479EE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 03:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhLSCuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 21:50:24 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:33779 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229804AbhLSCuX (ORCPT
+        id S230300AbhLSCwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 21:52:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37208 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbhLSCwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 21:50:23 -0500
-Received: (qmail 885118 invoked by uid 1000); 18 Dec 2021 21:50:22 -0500
-Date:   Sat, 18 Dec 2021 21:50:22 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Julio Faracco <jcfaracco@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        axboe@kernel.dk, tglx@linutronix.de, damien.lemoal@wdc.com,
-        dkadashev@gmail.com, paul.gortmaker@windriver.com,
-        zhouyanjie@wanyeetech.com, niklas.cassel@wdc.com,
-        macro@orcam.me.uk, caihuoqing@baidu.com
-Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
-Message-ID: <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
-References: <20211218042420.28466-1-jcfaracco@gmail.com>
- <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
- <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
+        Sat, 18 Dec 2021 21:52:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3353C60C36;
+        Sun, 19 Dec 2021 02:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFE0C36AE1;
+        Sun, 19 Dec 2021 02:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639882327;
+        bh=LL/DQcC2N9azPevEEwI7fD5zh/Svk3aIPF7eb5otGdQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JdrEgo3p0YIVADumT+fDaJGTfd8+FIry4DqKXny80l8ERdQk63CiOO9HChX9zznVv
+         6U2pJfCqP+p27rSg8TKHAtFs1d1PWiPK/nK8EytJuH7k+tn4Dkr+bSdTkaANq6GvtE
+         OToqqfKzx2zGqMOtQGAkxcTRLcYDPVFUJv1qFO2rTe4n/iZLkJ2co9efWg8l3ypOMC
+         8Yl7R0I5VqBdVfKYF/kOFrj0JfYciUjysekvMoYf8tfRBGCHok/f89o7v/0F+MZjsV
+         5JfqU3XTiR33Knx3j+7Lul/Fg/Gx3/Ensg0Lp6yc3HLGU3IBQPqtmVckqzO0L6Pmq8
+         zAlPsbR2V279g==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A . Donenfeld " <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH RESEND] random: use correct memory barriers for crng_node_pool
+Date:   Sat, 18 Dec 2021 20:51:39 -0600
+Message-Id: <20211219025139.31085-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 10:41:02AM +0900, Tetsuo Handa wrote:
-> On 2021/12/19 3:05, Alan Stern wrote:
-> >> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> >> index 2cbf4f85bff3..98cb44414e78 100644
-> >> --- a/drivers/usb/host/ehci-q.c
-> >> +++ b/drivers/usb/host/ehci-q.c
-> >> @@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
-> >>  		}
-> >>  
-> >>  		/* short packets may only terminate transfers */
-> >> -		if (count != len)
-> >> +		if (count != len && maxpacket > 0)
-> >>  			count -= (count % maxpacket);
-> > 
-> > This is different.  But again, I do not think the extra check should be 
-> > added.  If maxpacket is 0, we _want_ the code to fail in a highly 
-> > visible manner -- it would mean there is a bug somewhere else in the 
-> > kernel.
-> 
-> Some of the callers are passing the return value from usb_maxpacket(), and
-> usb_maxpacket() can return 0. But division by 0 bug here becomes visible
-> only when len < count in
-> 
-> 	count = 0x1000 - (buf & 0x0fff);	/* rest of that page */
-> 	if (likely (len < count))		/* ... iff needed */
-> 		count = len;
-> 
-> is false and count != len in
-> 
-> 		if (count != len)
-> 			count -= (count % maxpacket);
-> 
-> is true, which may be quite difficult to trigger.
-> 
-> Maybe we should make sure that maxpacket > 0 on the caller side, for e.g.
-> 
-> 	/* qh makes control packets use qtd toggle; maybe switch it */
-> 	if ((maxpacket & (this_qtd_len + (maxpacket - 1))) == 0)
-> 		token ^= QTD_TOGGLE;
-> 
-> and
-> 
-> 	if (usb_pipecontrol (urb->pipe)) {
-> 		one_more = 1;
-> 		token ^= 0x0100;	/* "in" <--> "out"  */
-> 		token |= QTD_TOGGLE;	/* force DATA1 */
-> 	} else if (usb_pipeout(urb->pipe)
-> 			&& (urb->transfer_flags & URB_ZERO_PACKET)
-> 			&& !(urb->transfer_buffer_length % maxpacket)) {
-> 		one_more = 1;
-> 	}
-> 
-> are expecting that maxpacket > 0 ?
+From: Eric Biggers <ebiggers@google.com>
 
-You should read this code in usb_submit_urb():
+When a CPU selects which CRNG to use, it accesses crng_node_pool without
+a memory barrier.  That's wrong, because crng_node_pool can be set by
+another CPU concurrently.  Without a memory barrier, the crng_state that
+is used might not appear to be fully initialized.
 
-	max = usb_endpoint_maxp(&ep->desc);
-	if (max <= 0) {
-		dev_dbg(&dev->dev,
-			"bogus endpoint ep%d%s in %s (bad maxpacket %d)\n",
-			usb_endpoint_num(&ep->desc), is_out ? "out" : "in",
-			__func__, max);
-		return -EMSGSIZE;
-	}
+There's an explicit mb() on the write side, but it's redundant with
+cmpxchg() (or cmpxchg_release()) and does nothing to fix the read side.
 
-As far as I know, every code path leading to qtd_fill() has to pass this 
-test.
+Implement this correctly by using a cmpxchg_release() +
+smp_load_acquire() pair.
 
-Alan Stern
+Note: READ_ONCE() could be used instead of smp_load_acquire(), but it is
+harder to verify that it is correct, so I'd prefer not to use it here.
+
+Fixes: 1e7f583af67b ("random: make /dev/urandom scalable for silly userspace programs")
+Cc: <stable@vger.kernel.org> # v4.8+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+
+I sent this fix about a year ago
+(https://lore.kernel.org/lkml/20200916233042.51634-1-ebiggers@kernel.org/T/#u),
+and though it's a correct fix, it was derailed by a debate about whether
+it's safe to use READ_ONCE() instead of smp_load_acquire() or not.
+Therefore, the current code, which (AFAIK) everyone agrees is buggy, was
+never actually fixed.  Since random.c has a new maintainer now, I think
+it's worth sending this fix for reconsideration.
+
+ drivers/char/random.c | 42 ++++++++++++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 605969ed0f96..349a6f235c61 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -843,8 +843,8 @@ static void do_numa_crng_init(struct work_struct *work)
+ 		crng_initialize_secondary(crng);
+ 		pool[i] = crng;
+ 	}
+-	mb();
+-	if (cmpxchg(&crng_node_pool, NULL, pool)) {
++	/* pairs with smp_load_acquire() in select_crng() */
++	if (cmpxchg_release(&crng_node_pool, NULL, pool) != NULL) {
+ 		for_each_node(i)
+ 			kfree(pool[i]);
+ 		kfree(pool);
+@@ -857,8 +857,26 @@ static void numa_crng_init(void)
+ {
+ 	schedule_work(&numa_crng_init_work);
+ }
++
++static inline struct crng_state *select_crng(void)
++{
++	struct crng_state **pool;
++	int nid = numa_node_id();
++
++	/* pairs with cmpxchg_release() in do_numa_crng_init() */
++	pool = smp_load_acquire(&crng_node_pool);
++	if (pool && pool[nid])
++		return pool[nid];
++
++	return &primary_crng;
++}
+ #else
+ static void numa_crng_init(void) {}
++
++static inline struct crng_state *select_crng(void)
++{
++	return &primary_crng;
++}
+ #endif
+ 
+ /*
+@@ -1005,15 +1023,7 @@ static void _extract_crng(struct crng_state *crng,
+ 
+ static void extract_crng(__u8 out[CHACHA_BLOCK_SIZE])
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_extract_crng(crng, out);
++	_extract_crng(select_crng(), out);
+ }
+ 
+ /*
+@@ -1042,15 +1052,7 @@ static void _crng_backtrack_protect(struct crng_state *crng,
+ 
+ static void crng_backtrack_protect(__u8 tmp[CHACHA_BLOCK_SIZE], int used)
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_crng_backtrack_protect(crng, tmp, used);
++	_crng_backtrack_protect(select_crng(), tmp, used);
+ }
+ 
+ static ssize_t extract_crng_user(void __user *buf, size_t nbytes)
+-- 
+2.34.1
+

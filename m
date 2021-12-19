@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B72DA47A1B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EF747A1BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbhLSSK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 13:10:59 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:21001 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236280AbhLSSK5 (ORCPT
+        id S236304AbhLSSUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 13:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234077AbhLSSUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 13:10:57 -0500
-X-IronPort-AV: E=Sophos;i="5.88,218,1635174000"; 
-   d="scan'208";a="104455502"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 20 Dec 2021 03:10:56 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 477DB40CB08A;
-        Mon, 20 Dec 2021 03:10:54 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] ASoC: bcm: Use platform_get_irq() to get the interrupt
-Date:   Sun, 19 Dec 2021 18:10:39 +0000
-Message-Id: <20211219181039.24812-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211219181039.24812-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211219181039.24812-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sun, 19 Dec 2021 13:20:09 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B59C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:09 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id f5so6400323edq.6
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h2JGTItMZLnyhLTpH8eIkTs8tCi5ANTqOzNBuD2pnIU=;
+        b=ooxS5Pi1aTq1KoApuVHAb3j+mIhWhTLHJIYpTMPDJUCl2QGSXGUmOJ7tf0CcpFK8R8
+         cx/sXjC9Y+einAyZsFPtoQ3FQxaoUpN2iIeV7Z2sRujSSqW54zhqC8BUIqKoR2cwqWW1
+         lwZQOKDb0p8qHdzgx5nfpF39rQBQbWQdZ+LV797QdZyJ6kQJDZJh0O7W6pNDGPHt5klX
+         mfRGvETqaKIYdR6qFR0o77ywAQSUQg8EW9tKUbrHF7TpESUMsp8dak/8l5IHmC9FhLAe
+         7pq5+FHWeudmap0HL2s1aSWNV+34HNd7HhF/idHO1QJfKS/Dmcholz2JybU7/P4KtXyT
+         BIQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h2JGTItMZLnyhLTpH8eIkTs8tCi5ANTqOzNBuD2pnIU=;
+        b=w45Ized2XyQb818wy8K63JuwCSLBaEwTVHmZQgGR7AiMy1ZV6avga+3mwd3swtKT7J
+         fmLo2MiMDp5n6hmW4ziPKB4FRBrh//Y9hBSpcXFEIqTORX/lh13mYfQJude92XZQla2e
+         s2YgNHcnBA35M78BPEs4IaGtNpbajTH9/HopYwTt561286VWFPx6Ypu07qkvV3/pLxVI
+         jr1+kc8PbZtoWToYBldEnN+wIlpp+xmEAM1dKGZBb09RmBoLVSaSdnaxPyQcK/sFVdfj
+         vizktsI/qUxxsk+HsNK5kFOx3AQ17xw/VMLgXjqZYm7rm7JSCFRv1GC8qeDXPsL/T9Se
+         yKGA==
+X-Gm-Message-State: AOAM530xtmJ6IrVkzF8ZT3rwgp0sFGJK6c7l35vky5qsOG39HFUebucY
+        UzjnhBFvQ/6ddI7RvBdFK4A=
+X-Google-Smtp-Source: ABdhPJwaS6VqugQvFlRzTs6C2xE6a4EjAnj8tlDm5Ra041uaV2Sbn0I2V98QJIlbgUukrNUWNs/pEA==
+X-Received: by 2002:aa7:dd56:: with SMTP id o22mr12387440edw.73.1639938008044;
+        Sun, 19 Dec 2021 10:20:08 -0800 (PST)
+Received: from tom-desktop.station (net-93-151-129-173.cust.dsl.teletu.it. [93.151.129.173])
+        by smtp.gmail.com with ESMTPSA id go35sm1149540ejc.191.2021.12.19.10.20.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 10:20:07 -0800 (PST)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     linuxfancy@googlegroups.com, tomm.merciai@gmail.com,
+        Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alberto Merciai <alb3rt0.m3rciai@gmail.com>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: vt6655: drop off byRxMode var in device.h
+Date:   Sun, 19 Dec 2021 19:20:03 +0100
+Message-Id: <20211219182004.25656-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+Drop off unused variable byRxMode in device.h, this fix following 
+checkpatch.pl check:
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+CHECK: Avoid CamelCase: <byRxMode>
+131: FILE: drivers/staging/vt6655/device.h:131:
+	unsigned char byRxMode
 
-While at it also drop "r_irq" member from struct bcm_i2s_priv as there
-are no users of it.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
 ---
- sound/soc/bcm/bcm63xx-i2s.h          |  1 -
- sound/soc/bcm/bcm63xx-pcm-whistler.c | 12 +++++-------
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ drivers/staging/vt6655/device.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/sound/soc/bcm/bcm63xx-i2s.h b/sound/soc/bcm/bcm63xx-i2s.h
-index edc328ba53d3..f30556bec89e 100644
---- a/sound/soc/bcm/bcm63xx-i2s.h
-+++ b/sound/soc/bcm/bcm63xx-i2s.h
-@@ -74,7 +74,6 @@
+diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
+index 4706bde1ec1d..84b1dcf80e47 100644
+--- a/drivers/staging/vt6655/device.h
++++ b/drivers/staging/vt6655/device.h
+@@ -128,8 +128,6 @@ struct vnt_private {
+ 	u32                         memaddr;
+ 	u32                         ioaddr;
  
- struct bcm_i2s_priv {
- 	struct device *dev;
--	struct resource *r_irq;
- 	struct regmap *regmap_i2s;
- 	struct clk *i2s_clk;
- 	struct snd_pcm_substream	*play_substream;
-diff --git a/sound/soc/bcm/bcm63xx-pcm-whistler.c b/sound/soc/bcm/bcm63xx-pcm-whistler.c
-index b5096f64c576..41f80d564020 100644
---- a/sound/soc/bcm/bcm63xx-pcm-whistler.c
-+++ b/sound/soc/bcm/bcm63xx-pcm-whistler.c
-@@ -387,14 +387,12 @@ int bcm63xx_soc_platform_probe(struct platform_device *pdev,
- {
- 	int ret;
+-	unsigned char byRxMode;
+-
+ 	spinlock_t                  lock;
  
--	i2s_priv->r_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!i2s_priv->r_irq) {
--		dev_err(&pdev->dev, "Unable to get register irq resource.\n");
--		return -ENODEV;
--	}
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
- 
--	ret = devm_request_irq(&pdev->dev, i2s_priv->r_irq->start, i2s_dma_isr,
--			i2s_priv->r_irq->flags, "i2s_dma", (void *)i2s_priv);
-+	ret = devm_request_irq(&pdev->dev, ret, i2s_dma_isr,
-+			       irq_get_trigger_type(ret), "i2s_dma", (void *)i2s_priv);
- 	if (ret) {
- 		dev_err(&pdev->dev,
- 			"i2s_init: failed to request interrupt.ret=%d\n", ret);
+ 	volatile int                iTDUsed[TYPE_MAXTD];
 -- 
-2.17.1
+2.25.1
 

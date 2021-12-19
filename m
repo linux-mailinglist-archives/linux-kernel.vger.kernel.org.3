@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 891C647A281
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 22:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FB947A288
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 23:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbhLSV51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 16:57:27 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:47071 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbhLSV50 (ORCPT
+        id S233652AbhLSWCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 17:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229790AbhLSWCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 16:57:26 -0500
-Received: by mail-oi1-f172.google.com with SMTP id s139so12971369oie.13;
-        Sun, 19 Dec 2021 13:57:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=3AjklewXqdG1lkYWZ+uYneVSQQ4mjuR7rV0/WxbDbIc=;
-        b=kGhlYRdt3ZxSTA9ExD7Ee/aKZE/9nmk8tRHFRJHPZjJWwlR0xodcUHBURKkQlx5h7K
-         j/ZF3lbsAp4IvP7r7yy+V3fuLasGOTUf6pOx1le2c9AfgZN3eUKieD72zkbBCNlSxDha
-         1F0YtwUUxMnMM42gp2Z2Fz3/Q3q7fNf+Q51gG9tPbz9mI4RKiqU1Dx9oGPM9YQREBvp4
-         WfQE7vLu/5EPNI0iaGKSid3ozl4xwz0ZNckBrrm7dshOZu7O18FnY21ib6CRLSh0FEiC
-         CyWgGBoJKNQV3SjxMITjkEUyikd1PCtNMRgo04pIN5Nqx8eM9/ubK9EjJZitullACRUG
-         J8zw==
-X-Gm-Message-State: AOAM532zchiwGLQSsrZH4uSv8+3cOmwaZIWnnvbQint94/6Ynlr8L5nd
-        MJ+y6gskBejePnE6WCBQ+Q==
-X-Google-Smtp-Source: ABdhPJw+WVWyfOwd110EyY0TN6edT8Ajj5a+WA4SmxByJWkQKr2y1y4aL/QJbbrjvZ0mKLkgv0L7Og==
-X-Received: by 2002:a05:6808:699:: with SMTP id k25mr9880760oig.135.1639951045370;
-        Sun, 19 Dec 2021 13:57:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t11sm2899395otj.24.2021.12.19.13.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 13:57:24 -0800 (PST)
-Received: (nullmailer pid 2758870 invoked by uid 1000);
-        Sun, 19 Dec 2021 21:57:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alex Elder <elder@linaro.org>, ~okias/devicetree@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20211218205039.35994-1-david@ixit.cz>
-References: <20211218205039.35994-1-david@ixit.cz>
-Subject: Re: [PATCH] dt-binding: soc: qcom: convert QCOM SMP2P binding to yaml
-Date:   Sun, 19 Dec 2021 15:57:22 -0600
-Message-Id: <1639951042.384579.2758869.nullmailer@robh.at.kernel.org>
+        Sun, 19 Dec 2021 17:02:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F7FC061574;
+        Sun, 19 Dec 2021 14:02:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ik7CaEEGpXRuQZR++uVqSeU17yFR4TjXp+S6ZiNh9rg=; b=az+/fZN5Ak/kbQo+9I5FXY8TPy
+        EEJRR5S7BVufkP1mfPhtDSNGSqLr2ZEviQuohFwoOg6UM3YcEMkuWwP2FJR3nvR1Odmg2rftJqhgl
+        9LYCodt4Rm3ZbuX0A0n0iN6asY0sEY7mxrzqB3U4RSB8Wpm7xZl1RE/FgPnMbOLvmB3AkEZIk8pss
+        LCDPPSjNEf8EVmlvojXs+Udpopt0vieHfI4oCKJ/ayr2TOScFkepZ+vOlOh1YpVX9ZjpQbpTo8wIa
+        EXnAzIZQlFrL/8Xw7EX3Me2vGZgLjBEAM/gkwHupiutdFzvNkHp/ZmNIUJX3jk2rnjGQr908Rtxtr
+        Lyzw4W4Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mz4Fm-0014AH-18; Sun, 19 Dec 2021 22:02:02 +0000
+Date:   Sun, 19 Dec 2021 22:02:01 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <Yb+r2W6RCKhO5toC@casper.infradead.org>
+References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <CAHk-=wiAzmB-jiHvF+EZ1-b0X3ts4LAYHaVhzpzXEjmC0X95eg@mail.gmail.com>
+ <Yb+oi8fg1dJe1uBm@casper.infradead.org>
+ <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Dec 2021 21:50:39 +0100, David Heidelberg wrote:
-> Convert Qualcomm SoC SMP2P binding to the yaml format.
+On Sun, Dec 19, 2021 at 01:53:36PM -0800, Linus Torvalds wrote:
+> On Sun, Dec 19, 2021 at 1:48 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > Yes, agreed, I was thinking that we could use "not mapped at all"
+> > as an optimisation to avoid doing rmap walks.  eg __unmap_and_move().
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/soc/qcom/qcom,smp2p.txt          | 110 --------------
->  .../bindings/soc/qcom/qcom,smp2p.yaml         | 139 ++++++++++++++++++
->  2 files changed, 139 insertions(+), 110 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
+> So the thing is, it's a very dodgy optimization for a rather simple
+> reason: what if somebody pages the page in?
 > 
+> So even "not mapped at all" is questionable.
+> 
+> You have to check that it's also not a swapcache page, and hold the
+> page lock for that check, at the very least.
+> 
+> And by then, you're really in a very unusual situation - and my gut
+> feel says not one worth optimizing for (because anon pages are
+> _usually_ mapped at least once).
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/qcom,ipa.example.dt.yaml: smp2p-mpss: 'qcom,smem' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/qcom,ipa.example.dt.yaml: smp2p-mpss: 'qcom,local-pid' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/qcom,ipa.example.dt.yaml: smp2p-mpss: 'qcom,remote-pid' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/qcom,ipa.example.dt.yaml: smp2p-mpss: 'anyOf' conditional failed, one must be fixed:
-	'mboxes' is a required property
-	'qcom,ipc' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mailbox/qcom-ipcc.example.dt.yaml: smp2p-modem: 'qcom,smem' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mailbox/qcom-ipcc.example.dt.yaml: smp2p-modem: 'qcom,local-pid' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mailbox/qcom-ipcc.example.dt.yaml: smp2p-modem: 'qcom,remote-pid' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smp2p.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1570617
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+I'd like to get rid of ->mapcount for file pages too.  And those are
+definitely never mapped in the majority of cases.

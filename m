@@ -2,104 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28427479EB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 02:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B383E479ED0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 03:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbhLSBlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 20:41:50 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:55232 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbhLSBlu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 20:41:50 -0500
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BJ1f62r060317;
-        Sun, 19 Dec 2021 10:41:06 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Sun, 19 Dec 2021 10:41:06 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BJ1f5N7060314
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 19 Dec 2021 10:41:05 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Message-ID: <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
-Date:   Sun, 19 Dec 2021 10:41:02 +0900
+        id S234267AbhLSCXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 21:23:13 -0500
+Received: from mga11.intel.com ([192.55.52.93]:47333 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231683AbhLSCXM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 18 Dec 2021 21:23:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639880592; x=1671416592;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dZzUy/ylE8HDIfzxo7aLmBaw93MJXZM/7zylurdRbGs=;
+  b=KklyRLLa+uLlz9Co7wFkw4TwdedfFh+7p/PUXQCdxMvcITBRgYpMMYTQ
+   Ud28lPn9ejaiQa8XcIKKJgDFj+RS5fMkQgQ5QNh8binS7k8OTA/EgPbiE
+   aDvURkY76EXxKLQii5L8z/Vjr+OSRHPwZK+UJrSHQ8yWHPvJvr9aKIQA8
+   dcr87Ksoiy+befmuJ8K+hJ6metar52mOVHFc/Y+rmrSaa4X42sS18gkI8
+   TAgG9jzyV0pF0t1YLHqguGfcg+AiOKhsYz1lI82ETmmZTZv+DXKtDJGJ8
+   RbZHG81meJk+zalBKeJMrQR1v9tXBlyvplfUJxTfuWdZQgu7vmdSVUH7L
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10202"; a="237509053"
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="237509053"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2021 18:23:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,217,1635231600"; 
+   d="scan'208";a="683827717"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 18 Dec 2021 18:23:11 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mylqw-0006dB-A9; Sun, 19 Dec 2021 02:23:10 +0000
+Date:   Sun, 19 Dec 2021 10:22:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ f16cc980d649e664b8f41e1bbaba50255d24e5d1
+Message-ID: <61be9781.MHdj6IFjutwWdtiU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Julio Faracco <jcfaracco@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, axboe@kernel.dk, tglx@linutronix.de,
-        damien.lemoal@wdc.com, dkadashev@gmail.com,
-        paul.gortmaker@windriver.com, zhouyanjie@wanyeetech.com,
-        niklas.cassel@wdc.com, macro@orcam.me.uk, caihuoqing@baidu.com
-References: <20211218042420.28466-1-jcfaracco@gmail.com>
- <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-In-Reply-To: <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/19 3:05, Alan Stern wrote:
->> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
->> index 2cbf4f85bff3..98cb44414e78 100644
->> --- a/drivers/usb/host/ehci-q.c
->> +++ b/drivers/usb/host/ehci-q.c
->> @@ -64,7 +64,7 @@ qtd_fill(struct ehci_hcd *ehci, struct ehci_qtd *qtd, dma_addr_t buf,
->>  		}
->>  
->>  		/* short packets may only terminate transfers */
->> -		if (count != len)
->> +		if (count != len && maxpacket > 0)
->>  			count -= (count % maxpacket);
-> 
-> This is different.  But again, I do not think the extra check should be 
-> added.  If maxpacket is 0, we _want_ the code to fail in a highly 
-> visible manner -- it would mean there is a bug somewhere else in the 
-> kernel.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: f16cc980d649e664b8f41e1bbaba50255d24e5d1  Merge branch 'locking/urgent' into locking/core
 
-Some of the callers are passing the return value from usb_maxpacket(), and
-usb_maxpacket() can return 0. But division by 0 bug here becomes visible
-only when len < count in
+elapsed time: 938m
 
-	count = 0x1000 - (buf & 0x0fff);	/* rest of that page */
-	if (likely (len < count))		/* ... iff needed */
-		count = len;
+configs tested: 197
+configs skipped: 3
 
-is false and count != len in
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-		if (count != len)
-			count -= (count % maxpacket);
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20211218
+mips                 randconfig-c004-20211218
+powerpc                       maple_defconfig
+nds32                               defconfig
+arm                          simpad_defconfig
+mips                        bcm63xx_defconfig
+sh                           se7724_defconfig
+mips                     loongson1b_defconfig
+openrisc                            defconfig
+powerpc                   motionpro_defconfig
+powerpc                    socrates_defconfig
+powerpc                      arches_defconfig
+powerpc                          g5_defconfig
+powerpc                 canyonlands_defconfig
+arm                        trizeps4_defconfig
+powerpc                      chrp32_defconfig
+nios2                         10m50_defconfig
+arm                          lpd270_defconfig
+powerpc                 mpc8315_rdb_defconfig
+mips                   sb1250_swarm_defconfig
+parisc                              defconfig
+m68k                        m5307c3_defconfig
+mips                      malta_kvm_defconfig
+um                             i386_defconfig
+sparc64                             defconfig
+arm                        mvebu_v7_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                             allmodconfig
+powerpc                 mpc85xx_cds_defconfig
+powerpc                    ge_imp3a_defconfig
+alpha                            alldefconfig
+arc                        nsim_700_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arc                                 defconfig
+sparc                               defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      cm5200_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                        multi_v7_defconfig
+arm                      pxa255-idp_defconfig
+h8300                            alldefconfig
+arm                       spear13xx_defconfig
+mips                         cobalt_defconfig
+mips                           ip28_defconfig
+powerpc                      pasemi_defconfig
+nds32                             allnoconfig
+powerpc                        fsp2_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arc                 nsimosci_hs_smp_defconfig
+xtensa                       common_defconfig
+arm                         shannon_defconfig
+arm                        clps711x_defconfig
+m68k                       m5249evb_defconfig
+arm                            dove_defconfig
+powerpc                     powernv_defconfig
+um                           x86_64_defconfig
+mips                        jmr3927_defconfig
+powerpc                     stx_gp3_defconfig
+sh                  sh7785lcr_32bit_defconfig
+m68k                             alldefconfig
+mips                         tb0219_defconfig
+sparc                       sparc64_defconfig
+m68k                        mvme147_defconfig
+arm                  colibri_pxa270_defconfig
+sh                         ecovec24_defconfig
+m68k                         apollo_defconfig
+m68k                         amcore_defconfig
+mips                        bcm47xx_defconfig
+h8300                    h8300h-sim_defconfig
+mips                             allyesconfig
+sh                   sh7770_generic_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     tqm8560_defconfig
+mips                  cavium_octeon_defconfig
+m68k                          hp300_defconfig
+xtensa                generic_kc705_defconfig
+sh                          rsk7269_defconfig
+arm                          pxa168_defconfig
+nios2                            alldefconfig
+powerpc                     taishan_defconfig
+powerpc                      acadia_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                       aspeed_g4_defconfig
+sh                             espt_defconfig
+parisc                           allyesconfig
+powerpc                      makalu_defconfig
+arc                     haps_hs_smp_defconfig
+mips                          rb532_defconfig
+m68k                            mac_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                         ps3_defconfig
+parisc                           alldefconfig
+m68k                       m5208evb_defconfig
+powerpc                     tqm5200_defconfig
+arm                  randconfig-c002-20211218
+arm                  randconfig-c002-20211219
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                               defconfig
+arc                              allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211218
+x86_64               randconfig-a005-20211218
+x86_64               randconfig-a001-20211218
+x86_64               randconfig-a003-20211218
+x86_64               randconfig-a002-20211218
+x86_64               randconfig-a004-20211218
+x86_64               randconfig-a006-20211216
+x86_64               randconfig-a005-20211216
+x86_64               randconfig-a001-20211216
+x86_64               randconfig-a002-20211216
+x86_64               randconfig-a003-20211216
+x86_64               randconfig-a004-20211216
+i386                 randconfig-a001-20211216
+i386                 randconfig-a005-20211216
+i386                 randconfig-a003-20211216
+i386                 randconfig-a006-20211216
+i386                 randconfig-a002-20211218
+i386                 randconfig-a005-20211218
+i386                 randconfig-a003-20211218
+i386                 randconfig-a006-20211218
+i386                 randconfig-a004-20211218
+x86_64               randconfig-a011-20211219
+x86_64               randconfig-a013-20211219
+x86_64               randconfig-a012-20211219
+x86_64               randconfig-a014-20211219
+x86_64               randconfig-a015-20211219
+x86_64               randconfig-a016-20211219
+i386                 randconfig-a011-20211219
+i386                 randconfig-a015-20211219
+i386                 randconfig-a012-20211219
+arc                  randconfig-r043-20211216
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-is true, which may be quite difficult to trigger.
+clang tested configs:
+i386                 randconfig-a002-20211219
+i386                 randconfig-a001-20211219
+i386                 randconfig-a005-20211219
+i386                 randconfig-a003-20211219
+i386                 randconfig-a006-20211219
+i386                 randconfig-a004-20211219
+x86_64               randconfig-a014-20211214
+x86_64               randconfig-a012-20211214
+x86_64               randconfig-a013-20211214
+x86_64               randconfig-a016-20211214
+x86_64               randconfig-a015-20211214
+x86_64               randconfig-a011-20211218
+x86_64               randconfig-a015-20211218
+x86_64               randconfig-a016-20211218
+i386                 randconfig-a013-20211218
+i386                 randconfig-a011-20211218
+i386                 randconfig-a016-20211218
+i386                 randconfig-a015-20211218
+i386                 randconfig-a014-20211218
+i386                 randconfig-a012-20211218
+hexagon              randconfig-r045-20211216
+s390                 randconfig-r044-20211216
+riscv                randconfig-r042-20211216
+hexagon              randconfig-r041-20211216
+hexagon              randconfig-r045-20211219
+hexagon              randconfig-r041-20211219
 
-Maybe we should make sure that maxpacket > 0 on the caller side, for e.g.
-
-	/* qh makes control packets use qtd toggle; maybe switch it */
-	if ((maxpacket & (this_qtd_len + (maxpacket - 1))) == 0)
-		token ^= QTD_TOGGLE;
-
-and
-
-	if (usb_pipecontrol (urb->pipe)) {
-		one_more = 1;
-		token ^= 0x0100;	/* "in" <--> "out"  */
-		token |= QTD_TOGGLE;	/* force DATA1 */
-	} else if (usb_pipeout(urb->pipe)
-			&& (urb->transfer_flags & URB_ZERO_PACKET)
-			&& !(urb->transfer_buffer_length % maxpacket)) {
-		one_more = 1;
-	}
-
-are expecting that maxpacket > 0 ?
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

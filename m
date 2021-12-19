@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E864947A1BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3FD47A1C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 19:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbhLSSUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 13:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S236323AbhLSSVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 13:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbhLSSUi (ORCPT
+        with ESMTP id S230134AbhLSSVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 13:20:38 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19876C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:38 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id g2so4801101pgo.9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 10:20:38 -0800 (PST)
+        Sun, 19 Dec 2021 13:21:35 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985ADC061574;
+        Sun, 19 Dec 2021 10:21:35 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id d11so7383053pgl.1;
+        Sun, 19 Dec 2021 10:21:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=u74cWTopnVH44MujokkrRkfCfXsq6ZRs2mw3KCw/CPU=;
-        b=Dk0MsH5XNuAraSVgPHFMysD7ERqAqCiLBWVLN/71If7J9EBQPqS0L9VQxOknuDAHK5
-         es30u7K3pka8DrQVJFcceYwaStyahPQz+wM84OgG0k91L+bJeLPz8Kr8+ExyOR3/y3Uc
-         /+mq1ZZl0ZcEKbN7NjcQmJcSmcyGTQ5ucaGLsIRk/KBAOC7aPtnkxuu4zmHJQQbjeHoA
-         5dvhX9YgyFJECc7u186r8K7EjVrL6VJKhkw+PzFyt6LLCRX3kr8hg6y65wWc20uTVkXQ
-         B33vPwnwGJC9NEmVdojl2lR1dXBsZYdk/z2MLSaPxDZtXnOPNLN9XTOPiKIIbYE5gduc
-         1WaA==
+        bh=EZHxJaMWMqX23r2o3MMCrXFx8mIGPMNeherD/8EdFIk=;
+        b=lKM0+20/SsF3WNCsyNIE5NBMzoEVurIjwDmPMlnErJUu3zuQcBrn3JM1Ty+/ChyijM
+         z4cKfd9eUroNC2Odz/AkMi6pzxutR3BSvsidjgUU+UiYIFoo8l03fuWkCpjmiqA9dAla
+         VDD4MC5s8iB+m+f+szpdtKrMudktgznM7Jb/RypvJm6fqEMMEjQ8TlzTsCg7G5XEUvaO
+         8LmrEG9zV6vBo6q05d2I9UgdLw2I5BAZYz9IVlhG//zyHdhkBrIuVGWCpHg/FjC2Qk5L
+         PpxfxRVdI2uzhSOcX9PwmHttszExuu8tWxHRgJgtEaPBBwQB/H1p8j47XMOAKPARBph2
+         v/Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=u74cWTopnVH44MujokkrRkfCfXsq6ZRs2mw3KCw/CPU=;
-        b=a/u9GUaKE7JIhNoA4jLu0TJekN+3Ij/WEoGUFMrqDWGpBVw929u9B38KlYDX4tVXR2
-         a3qJGLfnyf02EG2sTP6K0bpJEm3NXGChtoBFntdlCGT2pp7aQAYTJl8jAO9UG+etApN3
-         20kzeYXSEGeuEXbgSuSdw7iS9786+fAnb9/ZCEYwbEUu6SMNeow6d8D03U4oixnM2QaG
-         Q+vCaRQNqEAOftdRn1DsT1Rr+jx809Mwz4wZr1ZQlhDYBFg97tgNS8VO+4v08UqS+QiH
-         uePTWNq9cQbrSr2qCJS0s6jikVs4AF/sj6xfIsces9Ahd4cUYffpykxgDSq/b7+mjs55
-         vJHw==
-X-Gm-Message-State: AOAM530t1ATLIIuyaiK58yPw6c1CdG9dRkBm4QKbyJAVVZlSoikLNd/B
-        r884EFRw/mKMaD8tCaIj5qA=
-X-Google-Smtp-Source: ABdhPJyvN359C0RRu1+t8X0WexVORAvsU8PlbIbx3hHdgYJi+uvSgoAlbRbHICPH70i4d9Qh/LtuBA==
-X-Received: by 2002:a63:114:: with SMTP id 20mr8050324pgb.342.1639938037547;
-        Sun, 19 Dec 2021 10:20:37 -0800 (PST)
+        bh=EZHxJaMWMqX23r2o3MMCrXFx8mIGPMNeherD/8EdFIk=;
+        b=AcdqqRjcjgUurk2yDsZbgUDt9ppicvFvi6vcN8Os/Ln1LCd8rVnmPxhypUR55LKLqY
+         PviGXfpHEIMYdrpAEJ/dpwNjpwgapv29jlrujcGZlsPMVwxneEV9fbJNHyiNw3KWo9ul
+         QnVKXvsEFGkqXtIsqUAxq5Az4RHVOAILbQl3VAL7xq+Wk9CaQ0HsO9E/XxYzSlxGZ3Fp
+         UER4GnLc3ra3VHxxZpdJ3CjUcBKubo11Q4FM2JJuXRLICexbRniByWxJ2N5tHRAFWK5S
+         jVHNhhlYIgNwz3y+ua8kTZgRtyfj5mkGVXjBZgxZ9VhItggV+JmrkkU6mV9NyKG/rr81
+         IlFg==
+X-Gm-Message-State: AOAM5310FO0QcpZnKr7RFlkNM4W/eo13Zgos/mbKKO6s0UtJh/wRhqQn
+        O3pI1ZIH2jKUaBwWrTh6zUUfgLwCsaI=
+X-Google-Smtp-Source: ABdhPJx2a0IgmxESThZswhvQAQAC2BOq1oRCWx1w6AQenCD/oe0oWBxbrxntzpVXTMGy88lHHYs12g==
+X-Received: by 2002:a65:498e:: with SMTP id r14mr11780905pgs.47.1639938095127;
+        Sun, 19 Dec 2021 10:21:35 -0800 (PST)
 Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
-        by smtp.gmail.com with ESMTPSA id n18sm2243641pff.110.2021.12.19.10.20.35
+        by smtp.gmail.com with ESMTPSA id g17sm14330420pgh.46.2021.12.19.10.21.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 10:20:37 -0800 (PST)
-Message-ID: <f58052cb-bc5c-614c-10f9-8e6bfc7ff24b@gmail.com>
-Date:   Sun, 19 Dec 2021 10:20:34 -0800
+        Sun, 19 Dec 2021 10:21:34 -0800 (PST)
+Message-ID: <247b7421-e195-2e7c-b210-3165e8ea83a7@gmail.com>
+Date:   Sun, 19 Dec 2021 10:21:32 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] ASoC: bcm: Use platform_get_irq() to get the
+Subject: Re: [PATCH 1/3] i2c: bcm2835: Use platform_get_irq() to get the
  interrupt
 Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211219181039.24812-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211219181039.24812-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <a02d76dc-52cc-3ecc-5ef7-825c3167431a@gmail.com>
+ <CA+V-a8ug-7i7H=pc4j+WtL8ARC6UVhxaeJ1Db23s_yEFTSu8pw@mail.gmail.com>
+ <CA+V-a8v8RLCEphjyNxCn+BRaqudwoLxJibjp1ZG5GEv4htNK9g@mail.gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211219181039.24812-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <CA+V-a8v8RLCEphjyNxCn+BRaqudwoLxJibjp1ZG5GEv4htNK9g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -81,23 +87,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12/19/2021 10:10 AM, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+On 12/19/2021 1:52 AM, Lad, Prabhakar wrote:
+> Hi Florian,
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
-> 
-> While at it also drop "r_irq" member from struct bcm_i2s_priv as there
-> are no users of it.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> On Sat, Dec 18, 2021 at 10:44 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+>>
+>> Hi Florian,
+>>
+>> Thank you for the review.
+>>
+>> On Sat, Dec 18, 2021 at 9:17 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>
+>>>
+>>>
+>>> On 12/18/2021 8:52 AM, Lad Prabhakar wrote:
+>>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+>>>> allocation of IRQ resources in DT core code, this causes an issue
+>>>> when using hierarchical interrupt domains using "interrupts" property
+>>>> in the node as this bypasses the hierarchical setup and messes up the
+>>>> irq chaining.
+>>>>
+>>>> In preparation for removal of static setup of IRQ resource from DT core
+>>>> code use platform_get_irq().
+>>>>
+>>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>>
+>>> Just one nit below:
+>>>> ---
+>>>>    drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
+>>>>    1 file changed, 4 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
+>>>> index 37443edbf754..d63dec5f3cb1 100644
+>>>> --- a/drivers/i2c/busses/i2c-bcm2835.c
+>>>> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+>>>> @@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
+>>>>    static int bcm2835_i2c_probe(struct platform_device *pdev)
+>>>>    {
+>>>>        struct bcm2835_i2c_dev *i2c_dev;
+>>>> -     struct resource *mem, *irq;
+>>>> +     struct resource *mem;
+>>>>        int ret;
+>>>>        struct i2c_adapter *adap;
+>>>>        struct clk *mclk;
+>>>> @@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
+>>>>                return ret;
+>>>>        }
+>>>>
+>>>> -     irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+>>>> -     if (!irq) {
+>>>> -             dev_err(&pdev->dev, "No IRQ resource\n");
+>>>> -             return -ENODEV;
+>>>> -     }
+>>>> -     i2c_dev->irq = irq->start;
+>>>> +     i2c_dev->irq = platform_get_irq(pdev, 0);
+>>>> +     if (i2c_dev->irq <= 0)
+>>>> +             return i2c_dev->irq ? i2c_dev->irq : -ENXIO;
+>>>
+>>> Why not just check for a negative return code and propagate it as is?
+>>>
+>> platform_get_irq() may return 0 said that we do get a splat in this
+>> case and further request_irq() will fail so instead check it here.
+>>
+> My bad, just the negative check should suffice.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Thanks!
+Think so too, looking forward to v2, thanks!
 -- 
 Florian

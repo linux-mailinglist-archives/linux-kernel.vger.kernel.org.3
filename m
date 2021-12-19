@@ -2,53 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F9747A17F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 18:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B245C47A18A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 18:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbhLSRRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 12:17:35 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:34104 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229742AbhLSRRe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 12:17:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BKWAYL47JFJaZRS92IGpz1iysGkYA5br3xDiNdelryc=; b=XvA8Eai5KBxdkRvX10go2bQv6g
-        n++5ziNpBAGpXgP8B3nxp6MD/6dW1OgqFHncHmJfa6OytbDP1LJecsBX3cfu/EMfhl4w8P2xoLUt1
-        7VqdnsJOCzbu0Fx0ktu0yBE2qib3nxIqLTcPOiyWN3+OM7Nbnsaz2kvbCxZENtnLzA4M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1myzoI-00Gy8y-Jr; Sun, 19 Dec 2021 18:17:22 +0100
-Date:   Sun, 19 Dec 2021 18:17:22 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     syzbot <syzbot+f44badb06036334e867a@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux@rempel-privat.de, netdev@vger.kernel.org,
-        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KMSAN: uninit-value in asix_mdio_read (2)
-Message-ID: <Yb9pIs2nmm8oEViQ@lunn.ch>
-References: <13821c8b-c809-c820-04f0-2eadfdef0296@gmail.com>
- <000000000000e99dbc05d3755514@google.com>
+        id S233368AbhLSRfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 12:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233317AbhLSRfJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 12:35:09 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6A6C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 09:35:09 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id bm14so16338915edb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 09:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KJMrZEXDcM/T7DLnqDgvdZVEREMw/sAHU3NJ11ovNwQ=;
+        b=cgLwCh1hva5/ZFr7b/ckunrr4Un/SrfEk3NNboLI8xh1YV4i5YiQ6V0wF7FUDhGnSp
+         c8K5T/WyCeMD8xhVCc9XL+bcpOjty8tNVo7PFFsqw1ABN7x2xZXxAnAJa1GRflKMBpcr
+         0h+OOKMqmXLfixl3bPNrF7iMsIc1mP3RCBy+8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KJMrZEXDcM/T7DLnqDgvdZVEREMw/sAHU3NJ11ovNwQ=;
+        b=ljOeWsH/VqLOPJsdd/7SNALP8tw0vWhHwa1JczLqSjS127c+kZgi803U7JqKNQdtJ5
+         XLGulVxL9wndAQrqIUvgazkUMgcqgzdJ3A1Z6VTG0s565xlzkAZ07/kL6McS9FfX7Trp
+         i0YyKJuLnSFYB7aTR8aR5MizhLnh+tvqJTS2l4uAE6A5FdKBBcCjyKFyr5+z1Vp0Tzdd
+         7AH0gr4JwDVNcp+XI3LUMuWpxPxiG4VknH08KvGZlKuHJUEMAvlmnAvOOzilUf0+3F/F
+         ljDeA2PehTNY4ORVZgeM4ORfTDS6KnSDXDnr0NYdDQCNqUxMwWUGW9TzRRUnJzoLESi4
+         3DHQ==
+X-Gm-Message-State: AOAM532aDPdGysWUj79vAT5oZQ8JcQHN4OT9qQTP/+5FJKDH2mj0980V
+        nriCi4u7Bp+dOwSUEDgaot8fR4AUehGU0akG8Lk=
+X-Google-Smtp-Source: ABdhPJxPlKlxOyiXpYTD4XPzkwW/pi3+23HWDXTE3DdUMNWuZDhsvNRvk6fw5ljmFheTqETCdjQdew==
+X-Received: by 2002:a17:907:972a:: with SMTP id jg42mr8397696ejc.420.1639935307387;
+        Sun, 19 Dec 2021 09:35:07 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id 9sm2997022ejd.199.2021.12.19.09.35.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 09:35:07 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id j9so15440600wrc.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 09:35:06 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr10021527wrp.442.1639934853596;
+ Sun, 19 Dec 2021 09:27:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000e99dbc05d3755514@google.com>
+References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+ <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
+ <20211218030509.GA1432915@nvidia.com> <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
+ <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+In-Reply-To: <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 19 Dec 2021 09:27:17 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+Message-ID: <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Nadav Amit <namit@vmware.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 05:03:09PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-and-tested-by: syzbot+f44badb06036334e867a@syzkaller.appspotmail.com
+On Sat, Dec 18, 2021 at 10:02 PM Nadav Amit <namit@vmware.com> wrote:
+>
+> I found my old messy code for the software-PTE thing.
+>
+> I see that eventually I decided to hold a pointer to the =E2=80=9Cextra P=
+TEs=E2=80=9D
+> of each page in the PMD-page-struct. [ I also implemented the 2-adjacent
+> pages approach but this code is long gone. ]
 
-So it looks like you were right. But maybe ret < sizeof(smsr) would be
-better?
+Ok, I understand why that ends up being the choice, but it makes it
+too ugly and messy to look up  to be worth it, I think.
 
-	Andrew
+> I still don=E2=80=99t know what exactly you have in mind for making use
+> out of it for the COW issue.
+
+So the truly fundamental question for COW (and for a long-term GUP) is
+fairly simple:
+
+ - Is the page I have truly owned exclusively by this VM?
+
+If that _isn't_ the case, you absolutely have to COW.
+
+If that _is_ the case, you can re-use the page.
+
+That is really it, boiled down to the pure basics.
+
+And if you aren't sure whether you are the ultimate and only authority
+over the page, then COW is the "safer" option, in that breaking
+sharing is fundamentally better than over-sharing.
+
+Now, the reason I like "page_count()=3D=3D1" is that it is a 100% certain
+way to know that you own the page absolutely and clearly.
+
+There is no question what-so-ever about it.
+
+And the reason I hate "page_mapcount()=3D=3D1" with a passion is that it
+is NOTHING OF THE KIND. It is an entirely meaningless number. It
+doesn't mean anything at all.
+
+Even if the page mapcount is exactly right, it could easily and
+trivially be a result of "fork, then unmap in either parent or child".
+
+Now that page_mapcount() is unquestionably 1, but despite that, at
+some point the page was shared by another VM, and you can not know
+whether you really have exclusive access.
+
+And that "even if page mapcount is exactly right" is a big issue in
+itself, as I hope I've explained.
+
+It requires page locking, it requires that you take swapcache users
+into account, it is just a truly messy and messed up thing.
+
+There really is absolutely no reason for page_mapcount to exist. It's
+a mistake. We have it for completely broken historical reasons.
+
+It's WRONG.
+
+Now, if "page_count()=3D=3D1" is so great, what is the issue? Problem solve=
+d.
+
+No, while page_count()=3D=3D1 is one really fundamental marker (unlike the
+mapcount), it does have problems too.
+
+Because yes, "page_count()=3D=3D1" does mean that you have truly exclusive
+ownership of the page, but the reverse is not true.
+
+The way the current regular VM code handles that "the reverse is not
+true" is by making "the page is writable" be the second way you can
+say "you clearly have full ownership of the page".
+
+So that's why you then have the "maybe_pinned()" thing in fork() and
+in swap cache creation that keeps such a page writable, and doesn't do
+the virtual copy and make it read-only again.
+
+But that's also why it has problems with write-protect (whether
+mprotect or uddf_wp).
+
+Anyway, that was a long explanation to make the thinking clear, and
+finally come to the actual answer to your question:
+
+Adding another bit in the page tables - *purely* to say "this VM owns
+the page outright" - would be fairly powerful. And fairly simple.
+
+Then any COW event will set that bit - because when you actually COW,
+the page you install is *yours*. No questions asked.
+
+And fork() would simply clear that bit (unless the page was one of the
+pinned pages that we simply copy).
+
+See how simple that kind of concept is.
+
+And please, see how INCREDIBLY BROKEN page_mapcount() is. It really
+fundamentally is pure and utter garbage.  It in no way says "I have
+exclusive ownership of this page", because even if the mapcount is 1
+*now*, it could have been something else earlier, and some other VM
+could have gotten a reference to it before the current VM did so.
+
+This is why I will categoricall NAK any stupid attempt to re-introduce
+page_mapcount() for COW or GUP handling. It's unacceptably
+fundamentally broken.
+
+Btw, the extra bit doesn't really have to be in the page tables. It
+could be a bit in the page itself. We could add another page bit that
+we just clear when we do the "add ref to page as you make a virtual
+copy during fork() etc".
+
+And no, we can't use "pincount" either, because it's not exact. The
+fact that the page count is so elevated that we think it's pinned is a
+_heuristic_, and that's ok when you have the opposite problem, and ask
+"*might* this page be pinned". You want to never get a false negative,
+but it can get a false positive.
+
+                 Linus

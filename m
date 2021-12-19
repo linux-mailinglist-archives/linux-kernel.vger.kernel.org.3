@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A76FF479EDE
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 03:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23ED479EE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 03:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbhLSCmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Dec 2021 21:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S229749AbhLSCoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Dec 2021 21:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhLSCmJ (ORCPT
+        with ESMTP id S229715AbhLSCoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Dec 2021 21:42:09 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A41C06173E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 18:42:08 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id iy13so468709pjb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 18:42:08 -0800 (PST)
+        Sat, 18 Dec 2021 21:44:11 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69610C06173E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 18:44:11 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z3so472348plg.8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Dec 2021 18:44:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1fCDnzs11QBF/HgkFGJOxPwWBFoX6qDm6eKaoQut7Fg=;
-        b=u385DoqLNxdGOTSHTYc/tJNFZZ1KR5LO4JfCZc8oc2ITGuRYg01B992ZOPe2SZHECt
-         ucGsrko12/gWUNGpwPEqTUnUT9i75KKR2zCkUOJv+rGJ+PkuGN3LscQYCrS6ny0HS3cu
-         AuhXPWp3EcbWy2hBuND6IYJp079NG7jcZUqbYrBqdrXeIlK1WCrfi/yxi+qPOdpGIZdP
-         y3B5HeRMLbJ5PBxmcSRpKglfmI0mFRuGXtjqqowILph1dorR3MABpJFveEHLlYQkykHS
-         ThZB44WazlXOe/rKp2DXaFy1TUTNSpd7fwlpJqzo9KnWfcvh9YfBniBJGyJ/rPhLFHD5
-         wCGQ==
+        bh=+/WmQ/iRXlvfFQfyUxv672lLQSIAmQe/JfLFwckBMM8=;
+        b=VrtCE048LD8DRTjNSOBoqXx5EQ81QV4t0Eu/JTofGG4c2UqCNGWgNI8jsDnHev5LXS
+         wKsI8Ts0wtL0Zm6v+lLYu9IgyCxOY8wj1M/tVC7ZptbN4AxUvXLc2YegdfDMKnnoKZTY
+         J6IMJqkGn31opL38WeuuFt10071KkRgMgg/2mgcZGcYzIuWX/zzFscX9RKvfqF8T5h1T
+         U3MHgUjS+B7yTy2lO5SjzV8ub/cqJ21kEKunSxx14IXWl2tgKwbEuI5V7uWbfFoklp6Z
+         1nNf4/9dUpVXWtJNTL02ABAkkrav7s+1SOIu3/wJimbtSNz9d5TEoV6BKl+GQe0dDEVg
+         SnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1fCDnzs11QBF/HgkFGJOxPwWBFoX6qDm6eKaoQut7Fg=;
-        b=wUv+9iBsG8lD+X2B6kcUW0nLdAF3JFu6F+6RA3PyxB/CxRVS2Pgep78f6PNpA7UeRC
-         Ky8ZsLp3Bjza0jkbqp63OlFKImtbCbArtiB9RuaTeJ1D9VGvYl0Bd6Yvb7cUJJaTzrKW
-         zhZsgbWQs/+6DwUtIUj6gB6Vxep+5dfxkc4slll004ciqHzfI9CHZZVHvCnt+FiRz3Pw
-         GtqAm36XaP4FsWNuK7HhODdk9IV9TZuqEWYQzsHluoZMNbubzR+mxOBFR6IVvdJuJgyq
-         C0X2jEQW9NMVbHKxNv/gCSQlbrSyKF2X9sy5bhNb4Y9DewkjtFlL9mKlFHBSxBsIUzBV
-         XJIA==
-X-Gm-Message-State: AOAM530/yAcUjvi9c2auUgF819FDPVj4ygzg+OkXy0P1ZHSCurVMF6yW
-        oZZzlihgNUen5MYhkEqJeMFEfQ==
-X-Google-Smtp-Source: ABdhPJxk/oVPS0gygqoiITAj+VMP6vtxy4gQJ1MgcFYsT1CEkq/FsylJcLjy2YKSwOBAC1ZGZWuhAA==
-X-Received: by 2002:a17:90b:3a86:: with SMTP id om6mr5386779pjb.16.1639881728052;
-        Sat, 18 Dec 2021 18:42:08 -0800 (PST)
+        bh=+/WmQ/iRXlvfFQfyUxv672lLQSIAmQe/JfLFwckBMM8=;
+        b=HVmiFslV8nuqlA/RVU0RhQx94cLGVX0euYw0RCtx6CjfpjUwlPyHM51yhYp3v+nXy0
+         PY1PD6zCUqkPWZ5UY0YGjlZLesK32z0TtdrOPEkYIyuaSqGYN7PyBPSn88mC2/mJhL+z
+         GFf5bCLQ4qejVRwiocLbS8Ia7fv2sSz9lEHJpYjpYsYbWv7c5Que6grCpvX+63QznZpe
+         TWl21ymEU1CEGXIvNFltvZvAJXQMbO/LovAXNYxW8AfrHyDDWFmnCgWngfrMP1It/l3R
+         LsycMpNUmYgNG68kx3tlQqnrMks0AmtlP1whgMZXuZlD+n1fC/Em5lIUUADJmYLPGQvu
+         K+mQ==
+X-Gm-Message-State: AOAM533jD8YTTWNfUJw09z8nVSaG2L1WWvRCOOpz+YU0gqVAbAiEKzYK
+        G0Q1qHd1Iap5iWrDnOHHI8JiZA==
+X-Google-Smtp-Source: ABdhPJwmN/h8U1PBybZ9renDYxDqdOjoXnQkkwYOWAOKQVq0lOmzH6l62LgHVRjG6sALKJM+o4/8Wg==
+X-Received: by 2002:a17:903:2348:b0:141:d60b:ee90 with SMTP id c8-20020a170903234800b00141d60bee90mr9980528plh.15.1639881850944;
+        Sat, 18 Dec 2021 18:44:10 -0800 (PST)
 Received: from localhost.localdomain ([139.177.225.247])
-        by smtp.gmail.com with ESMTPSA id y191sm13223415pfb.124.2021.12.18.18.42.05
+        by smtp.gmail.com with ESMTPSA id s16sm13854211pfu.109.2021.12.18.18.44.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 Dec 2021 18:42:07 -0800 (PST)
+        Sat, 18 Dec 2021 18:44:10 -0800 (PST)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     akpm@linux-foundation.org, keescook@chromium.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH] cpuset: convert 'allowed' in __cpuset_node_allowed() to be boolean
-Date:   Sun, 19 Dec 2021 10:41:54 +0800
-Message-Id: <20211219024154.28853-1-zhengqi.arch@bytedance.com>
+Subject: [PATCH] proc: convert the return type of proc_fd_access_allowed() to be boolean
+Date:   Sun, 19 Dec 2021 10:44:04 +0800
+Message-Id: <20211219024404.29779-1-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,28 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert 'allowed' in __cpuset_node_allowed() to be boolean since the
-return types of node_isset() and __cpuset_node_allowed() are both
-boolean.
+Convert return type of proc_fd_access_allowed() and the 'allowed' in it
+to be boolean since the return type of ptrace_may_access() is boolean.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 ---
- kernel/cgroup/cpuset.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/proc/base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 0dd7d853ed17..dc653ab26e50 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3528,7 +3528,7 @@ static struct cpuset *nearest_hardwall_ancestor(struct cpuset *cs)
- bool __cpuset_node_allowed(int node, gfp_t gfp_mask)
- {
- 	struct cpuset *cs;		/* current cpuset ancestors */
--	int allowed;			/* is allocation in zone z allowed? */
-+	bool allowed;			/* is allocation in zone z allowed? */
- 	unsigned long flags;
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 13eda8de2998..d654ce7150fd 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -670,10 +670,10 @@ static int proc_pid_syscall(struct seq_file *m, struct pid_namespace *ns,
+ /************************************************************************/
  
- 	if (in_interrupt())
+ /* permission checks */
+-static int proc_fd_access_allowed(struct inode *inode)
++static bool proc_fd_access_allowed(struct inode *inode)
+ {
+ 	struct task_struct *task;
+-	int allowed = 0;
++	bool allowed = false;
+ 	/* Allow access to a task's file descriptors if it is us or we
+ 	 * may use ptrace attach to the process and find out that
+ 	 * information.
 -- 
 2.11.0
 

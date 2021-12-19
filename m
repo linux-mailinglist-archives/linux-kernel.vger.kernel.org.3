@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACE847A0DC
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CB047A0E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 15:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbhLSOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 09:19:20 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:40809 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbhLSOTT (ORCPT
+        id S235910AbhLSOXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 09:23:35 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:28237 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231478AbhLSOXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 09:19:19 -0500
-Received: by mail-oi1-f179.google.com with SMTP id bk14so11779759oib.7;
-        Sun, 19 Dec 2021 06:19:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M8fkO6sztNTGjCarwVb9jws0HF6xzXbkKxksAkZdMlk=;
-        b=HV6AnkGU5ElSLN+2K9cS0J9WrRJ+wSzc/D41QnzhRwoepac4580uU8OnJBHTfd4FOQ
-         v6fewLGMwdlpr8T0o4t1mIX8/3v78VXCRdnfZnJD8tbZv9i/O+0MhXP8HoYnoE5pa7o5
-         S4DSF7VT2KLLgE7R9SCba8+DzpAwezx/+I2dVroG0eo0xBWmrBnOV6NmhfetAZ4WOK7k
-         CGcythqi/kKTl9QWzvVy1EfqV6HN0A2P0Tr4gyVpBE0IoHQghcLvBzr4q0LecTEUehL3
-         tqByNWeyS+izq50QQRlFRSwlcWVu/d30y8qix67J+tTx9U41+N0A0/MptvWzbda2hJDB
-         qRhA==
-X-Gm-Message-State: AOAM530P98Nhu7AYaxBRhVG7JLTH4y1iGIW7RbdcSj2Ye+Vy75QtTxt9
-        fPKcn7t23HX2OV0WdpygLbj5Z3lOi6Fmwcb62I0=
-X-Google-Smtp-Source: ABdhPJwQZNUWhCuvwexCpAeqRYpPA6dou5ANnAqWZ0tzXyisJRCsB1/Rqxa3HDXWdAJMo7vM5qmjGKLuxl0YBIWlyLM=
-X-Received: by 2002:aca:eb0b:: with SMTP id j11mr14439681oih.51.1639923558577;
- Sun, 19 Dec 2021 06:19:18 -0800 (PST)
+        Sun, 19 Dec 2021 09:23:33 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-47-lARwkb-CPHSriFWVJJMrNw-1; Sun, 19 Dec 2021 14:23:30 +0000
+X-MC-Unique: lARwkb-CPHSriFWVJJMrNw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Sun, 19 Dec 2021 14:23:29 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Sun, 19 Dec 2021 14:23:29 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'John Garry' <john.garry@huawei.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: RE: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+Thread-Topic: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+Thread-Index: AQHX81JQISxKPCuGHU2T1v53saw8BKw53sKg
+Date:   Sun, 19 Dec 2021 14:23:29 +0000
+Message-ID: <3a10b91258bf432baf51932a08335f6e@AcuMS.aculab.com>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com>
+ <CAK8P3a1D5DzmNGsEPQomkyMCmMrtD6pQ11JRMh78vbY53edp-Q@mail.gmail.com>
+ <CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
+ <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
+ <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+ <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+ <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+In-Reply-To: <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 19 Dec 2021 15:19:07 +0100
-Message-ID: <CAJZ5v0he+_p5qVkx+fGUg7BCBYmm5yRh4q-_9jgJoZLwDf1c2Q@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 7:42 AM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->
-> On Sat, 18 Dec 2021, Francisco Jerez wrote:
->
-> > Julia Lawall <julia.lawall@inria.fr> writes:
-> >
-> > > On Sat, 18 Dec 2021, Francisco Jerez wrote:
-> > >
-> > >> Julia Lawall <julia.lawall@inria.fr> writes:
-> > >>
-> > >> >> As you can see in intel_pstate.c, min_pstate is initialized on core
-> > >> >> platforms from MSR_PLATFORM_INFO[47:40], which is "Maximum Efficiency
-> > >> >> Ratio (R/O)".  However that seems to deviate massively from the most
-> > >> >> efficient ratio on your system, which may indicate a firmware bug, some
-> > >> >> sort of clock gating problem, or an issue with the way that
-> > >> >> intel_pstate.c processes this information.
-> > >> >
-> > >> > I'm not sure to understand the bug part.  min_pstate gives the frequency
-> > >> > that I find as the minimum frequency when I look for the specifications of
-> > >> > the CPU.  Should one expect that it should be something different?
-> > >> >
-> > >>
-> > >> I'd expect the minimum frequency on your processor specification to
-> > >> roughly match the "Maximum Efficiency Ratio (R/O)" value from that MSR,
-> > >> since there's little reason to claim your processor can be clocked down
-> > >> to a frequency which is inherently inefficient /and/ slower than the
-> > >> maximum efficiency ratio -- In fact they both seem to match in your
-> > >> system, they're just nowhere close to the frequency which is actually
-> > >> most efficient, which smells like a bug, like your processor
-> > >> misreporting what the most efficient frequency is, or it deviating from
-> > >> the expected one due to your CPU static power consumption being greater
-> > >> than it would be expected to be under ideal conditions -- E.g. due to
-> > >> some sort of clock gating issue, possibly due to a software bug, or due
-> > >> to our scheduling of such workloads with a large amount of lightly
-> > >> loaded threads being unnecessarily inefficient which could also be
-> > >> preventing most of your CPU cores from ever being clock-gated even
-> > >> though your processor may be sitting idle for a large fraction of their
-> > >> runtime.
-> > >
-> > > The original mail has results from two different machines: Intel 6130
-> > > (skylake) and Intel 5218 (cascade lake).  I have access to another cluster
-> > > of 6130s and 5218s.  I can try them.
-> > >
-> > > I tried 5.9 in which I just commented out the schedutil code to make
-> > > frequency requests.  I only tested avrora (tiny pauses) and h2 (longer
-> > > pauses) and in both case the execution is almost entirely in the turbo
-> > > frequencies.
-> > >
-> > > I'm not sure to understand the term "clock-gated".  What C state does that
-> > > correspond to?  The turbostat output for one run of avrora is below.
-> > >
-> >
-> > I didn't have any specific C1+ state in mind, most of the deeper ones
-> > implement some sort of clock gating among other optimizations, I was
-> > just wondering whether some sort of software bug and/or the highly
-> > intermittent CPU utilization pattern of these workloads are preventing
-> > most of your CPU cores from entering deep sleep states.  See below.
-> >
-> > > julia
-> > >
-> > > 78.062895 sec
-> > > Package Core  CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     SMI     POLL    C1      C1E     C6      POLL%   C1%     C1E%    C6%     CPU%c1  CPU%c6  CoreTmp PkgTmp  Pkg%pc2 Pkg%pc6 Pkg_J   RAM_J   PKG_%   RAM_%
-> > > -     -       -       31      2.95    1065    2096    156134  0       1971    155458  2956270 657130  0.00    0.20    4.78    92.26   14.75   82.31   40      41      45.14   0.04    4747.52 2509.05 0.00    0.00
-> > > 0     0       0       13      1.15    1132    2095    11360   0       0       2       39      19209   0.00    0.00    0.01    99.01   8.02    90.83   39      41      90.24   0.04    2266.04 1346.09 0.00    0.00
-> >
-> > This seems suspicious:                                                                                                                                                          ^^^^    ^^^^^^^
-> >
-> > I hadn't understood that you're running this on a dual-socket system
-> > until I looked at these results.
->
-> Sorry not to have mentioned that.
->
-> > It seems like package #0 is doing
-> > pretty much nothing according to the stats below, but it's still
-> > consuming nearly half of your energy, apparently because the idle
-> > package #0 isn't entering deep sleep states (Pkg%pc6 above is close to
-> > 0%).  That could explain your unexpectedly high static power consumption
-> > and the deviation of the real maximum efficiency frequency from the one
-> > reported by your processor, since the reported maximum efficiency ratio
-> > cannot possibly take into account the existence of a second CPU package
-> > with dysfunctional idle management.
->
-> Our assumption was that if anything happens on any core, all of the
-> packages remain in a state that allows them to react in a reasonable
-> amount of time ot any memory request.
->
-> > I'm guessing that if you fully disable one of your CPU packages and
-> > repeat the previous experiment forcing various P-states between 10 and
-> > 37 you should get a maximum efficiency ratio closer to the theoretical
-> > one for this CPU?
->
-> OK, but that's not really a natural usage context...  I do have a
-> one-socket Intel 5220.  I'll see what happens there.
->
-> I did some experiements with forcing different frequencies.  I haven't
-> finished processing the results, but I notice that as the frequency goes
-> up, the utilization (specifically the value of
-> map_util_perf(sg_cpu->util) at the point of the call to
-> cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-> Is this expected?
+RnJvbTogSm9obiBHYXJyeQ0KPiBTZW50OiAxNyBEZWNlbWJlciAyMDIxIDE0OjI4DQo+IA0KPiBP
+biAxNy8xMi8yMDIxIDEzOjUyLCBOaWtsYXMgU2NobmVsbGUgd3JvdGU6DQo+IA0KPiBUaGFua3Mg
+Zm9yIGxvb2tpbmcgYXQgdGhpcyBhZ2Fpbi4NCj4gDQo+ID4+PiBJIGhhdmUgdGVzdGVkIHRoaXMg
+b24gczM5MCB3aXRoIEhBU19JT1BPUlQ9biBhbmQgYWxseWVzY29uZmlnIGFzIHdlbGwNCj4gPj4+
+IGFzIHJ1bm5pbmcgaXQgd2l0aCBkZWZjb25maWcuIEkndmUgYWxzbyBiZWVuIHVzaW5nIGl0IG9u
+IG15IFJ5emVuIDM5OTBYDQo+ID4+PiB3b3Jrc3RhdGlvbiB3aXRoIExFR0FDWV9QQ0k9biBmb3Ig
+YSBmZXcgZGF5cy4gSSBkbyBnZXQgYWJvdXQgNjAgTWlCDQo+ID4+PiBmZXdlciBtb2R1bGVzIGNv
+bXBhcmVkIHdpdGggYSBzaW1pbGFyIGNvbmZpZyBvZiB2NS4xNS44LiBIYXJkIHRvIHNheQ0KPiA+
+Pj4gd2hpY2ggb3RoZXIgc3lzdGVtcyBtaWdodCBtaXNzIHRoaW5ncyBvZiBjb3Vyc2UuDQo+ID4+
+Pg0KPiA+Pj4gSSBoYXZlIG5vdCB5ZXQgd29ya2VkIG9uIHRoZSBkaXNjdXNzZWQgSU9QT1JUX05B
+VElWRSBmbGFnLiBNb3N0bHkgSSdtDQo+ID4+PiB3b25kZXJpbmcgdHdvIHRoaW5ncy4gRm9yIG9u
+ZSBpdCBmZWVscyBsaWtlIHRoYXQgY291bGQgYmUgYSBzZXBhcmF0ZQ0KPiA+Pj4gY2hhbmdlIG9u
+IHRvcCBzaW5jZSBIQVNfSU9QT1JUICsgTEVHQUNZX1BDSSBpcyBhbHJlYWR5IHF1aXRlIGJpZy4N
+Cj4gPj4+IFNlY29uZGx5IEknbSB3b25kZXJpbmcgYWJvdXQgZ29vZCB3YXlzIG9mIGlkZW50aWZ5
+aW5nIHN1Y2ggZHJpdmVycyBhbmQNCj4gPj4+IGhvdyBtdWNoIHRoaXMgb3ZlcmxhcHMgd2l0aCB0
+aGUgSVNBIGNvbmZpZyBmbGFnLg0KPiANCj4gSSB3YXMgaW50ZXJlc3RpbmcgaW4gdGhlIElPUE9S
+VF9OQVRJVkUgZmxhZyAob3Igd2hhdGV2ZXIgd2UgY2FsbCBpdCkgYXMNCj4gaXQgc29sdmVzIHRo
+ZSBwcm9ibGVtIG9mIGRyaXZlcnMgd2hpY2ggInVuY29uZGl0aW9uYWxseSBkbyBpbmIoKS9vdXRi
+KCkNCj4gd2l0aG91dCBjaGVja2luZyB0aGUgdmFsaWRpdHkgb2YgdGhlIGFkZHJlc3MgdXNpbmcg
+ZmlybXdhcmUgb3Igb3RoZXINCj4gbWV0aG9kcyBmaXJzdCIgYmVpbmcgYnVpbHQgZm9yIChhbmQg
+bG9hZGVkIG9uIGFuZCBjcmFzaGluZykgdW5zdWl0YWJsZQ0KPiBzeXN0ZW1zLiBTdWNoIGEgcHJv
+YmxlbSBpcyBpbiBbMF0NCj4gDQo+IFNvIGlmIHdlIHdhbnQgdG8gc3VwcG9ydCB0aGF0IGxhdGVy
+LCB0aGVuIGl0IHNlZW1zIHRoYXQgc29tZW9uZSB3b3VsZA0KPiBuZWVkIHRvIGdvIGJhY2sgYW5k
+IHJlLWVkaXQgbWFueSBzYW1lIGRyaXZlciBLY29uZmlncyDigJMgbGlrZSBod29uLCBmb3INCj4g
+ZXhhbXBsZS4gSSB0aGluayBpdCdzIGJldHRlciB0byBhdm9pZCB0aGF0IGFuZCBkbyBpdCBub3cu
+DQoNCkNvdWxkIHlvdSBkbyBzb21ldGhpbmcgd2hlcmUgdmFsaWQgYXJndW1lbnRzIHRvIGluYigp
+IGhhdmUgdG8gY29tZQ0KZnJvbSBzb21lIGtlcm5lbCBtYXBwaW5nL3ZhbGlkYXRpb24gZnVuY3Rp
+b24gYW5kIGFyZSBuZXZlciBpbiB0aGUNCnJhbmdlIFsweDAsIDB4MTAwMDApLg0KVGhlbiBkcml2
+ZXJzIHRoYXQgYXJlIGNoZWF0aW5nIHRoZSBzeXN0ZW0gd2lsbCBmYWlsLg0KDQpPciwgbWF5YmUs
+IG9ubHkgYWxsb3cgWzB4MCwgMHgxMDAwMCkgb24gc3lzdGVtcyB0aGF0IGhhdmUgYSBzdWl0YWJs
+ZSBidXMuDQpXaXRoIHRoZSBtYXBwaW5nIGZ1bmN0aW9ucyByZXR1cm5pbmcgYSBkaWZmZXJlbnQg
+dmFsdWUgKGVnIHRoZSBLVkEgaW50bw0KdGhlIFBDSSBtYXN0ZXIgd2luZG93KSB0aGF0IGNhbiBi
+ZSBzZXBhcmF0ZWx5IHZlcmlmaWVkLg0KVGhhdCB3b3VsZCBsZXQgZHJpdmVycyBkbyAoc2F5KSBp
+bmIoMHgxMjApIG9uIHN5c3RlbXMgdGhhdCBoYXZlIChzb21ldGhpbmcNCmxpa2UpIGFuZCBJU0Eg
+YnVzLCBidXQgbm90IG9uIFBDSS1vbmx5IHN5c3RlbXMgd2hpY2ggc3VwcG9ydCBQQ0kgSU8NCmFj
+Y2Vzc2VzIHRocm91Z2ggYSBwaHlzaWNhbCBhZGRyZXNzIHdpbmRvdy4NCg0KCURhdmlkDQoNCi0N
+ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
+aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
+cykNCg==
 
-It isn't, as long as the scale-invariance mechanism mentioned in my
-previous message works properly.

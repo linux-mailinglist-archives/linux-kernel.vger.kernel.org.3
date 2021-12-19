@@ -2,258 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575D047A291
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 23:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE0647A292
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 23:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236762AbhLSWKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 17:10:51 -0500
-Received: from mx1.riseup.net ([198.252.153.129]:58460 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233685AbhLSWKu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 17:10:50 -0500
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4JHH3W6fCBzDyP5;
-        Sun, 19 Dec 2021 14:10:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1639951848; bh=wNe6ZM9rIyP7/LAXqsNMgfPGakMEi9b8vvkhOkIUv3g=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=loj1zHBYFjfjBKwvgPvsnDGc0VUxYI4H7ofnqRBgvb6wocmZC+XChP4pfJgxr27RW
-         FeQ4xwlY92v1Ki0N8+Um5MWxI21gq3IObo8GlJHBiLqR1W4dZITK+4YWNhdUM0cf/W
-         buny+p5vugsr1IAUhTKiy9vtZCUZFg9n8udT2UvY=
-X-Riseup-User-ID: 8863BACB2F58A21F495A518BDBE7D8A18AE88311490F3C984038F2C814D43DD1
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4JHH3W2GDBz1xmv;
-        Sun, 19 Dec 2021 14:10:47 -0800 (PST)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien>
- <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien>
- <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien>
- <871r29tvdj.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-Date:   Sun, 19 Dec 2021 14:10:36 -0800
-Message-ID: <87wnk0s0tf.fsf@riseup.net>
+        id S236765AbhLSWM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 17:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233594AbhLSWMZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 17:12:25 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061FC061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 14:12:24 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id bm14so17994317edb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 14:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z1EeGlidL5zxbN8lavZvrIotlPnJ2iSVy9AUU7Sk+Ag=;
+        b=NdJgcvEjsZfkR59wZEXSS0eAS2OrzVKVMrHaeDy2k3yG7QDmcSTrqgVUsjoRTxYAYZ
+         vCIPJCJjuPYvuxe2TKemOH14PEfxj7KcsAVyY5LORM9MPvai7r31koyJWODlLOnNa1hM
+         YVOo44slRSUgIgcV41XWNlfxShfEvbw6SoJH0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z1EeGlidL5zxbN8lavZvrIotlPnJ2iSVy9AUU7Sk+Ag=;
+        b=N26IcpZo/wTbIdATjLfkv6/VZH05K0UWOEZKMflEnm+jHBPi7a1Bm4JtJuyZ4Zeij6
+         dCSs0uHld693Op+5WIABLrEekcCqK0Edcw8zngc7lnbvMicm/zBR2XAu5X2K/0qfTHAv
+         13qGp6cYSmXSXyT92JccZ+0F/rosEQjMtT6hkkaZI78PNyfeUnfzQHlWA3Artd/9DbjN
+         UuB6b8JJDaAN8HxVoBnr+KE9vER5fupgs7RkJPxV5xFi5K3EKkNXxB8SeGe5ZT6LxaxK
+         tfiY1D/sYqU2Iinqfv01N31C5jz0mqKMm3NdMHTo7JK1EIMwFT6bF7nwKwD0YnCI0al1
+         Y9Kw==
+X-Gm-Message-State: AOAM532bNgwQzEG5tXgIPgg0IXJ8GvGohW7V2A6TQeidUWTlgR5tMcFJ
+        PrYZr7VaVr2WnlW5ZPNW4YBmxkZmCMpp79iEJLA=
+X-Google-Smtp-Source: ABdhPJy0VToFOL5a3p+lnpxzASUXb/a/Z6sVpc/zBH+y7iacMt3nzKmtR/jK9vCzTf6BNipmsk0gtA==
+X-Received: by 2002:a17:906:dc94:: with SMTP id cs20mr7372125ejc.316.1639951943152;
+        Sun, 19 Dec 2021 14:12:23 -0800 (PST)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id jt4sm2776437ejb.105.2021.12.19.14.12.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 14:12:21 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id b73so5716172wmd.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 14:12:20 -0800 (PST)
+X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr9481320wmb.152.1639951940498;
+ Sun, 19 Dec 2021 14:12:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <CAHk-=wiAzmB-jiHvF+EZ1-b0X3ts4LAYHaVhzpzXEjmC0X95eg@mail.gmail.com>
+ <Yb+oi8fg1dJe1uBm@casper.infradead.org> <CAHk-=wgLLRT_KeM5Se1AxGcf-g5MkCS-JmPy169Rpdeky_YkXg@mail.gmail.com>
+ <Yb+r2W6RCKhO5toC@casper.infradead.org>
+In-Reply-To: <Yb+r2W6RCKhO5toC@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 19 Dec 2021 14:12:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wibQevWUPb4V67gs0FsUBKO+bSMvp9tpOU3PM4Mg_4i4Q@mail.gmail.com>
+Message-ID: <CAHk-=wibQevWUPb4V67gs0FsUBKO+bSMvp9tpOU3PM4Mg_4i4Q@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Julia Lawall <julia.lawall@inria.fr> writes:
+On Sun, Dec 19, 2021 at 2:02 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> I'd like to get rid of ->mapcount for file pages too.  And those are
+> definitely never mapped in the majority of cases.
 
-> On Sat, 18 Dec 2021, Francisco Jerez wrote:
->
->> Julia Lawall <julia.lawall@inria.fr> writes:
->>
->> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
->> >
->> >> Julia Lawall <julia.lawall@inria.fr> writes:
->> >>
->> >> >> As you can see in intel_pstate.c, min_pstate is initialized on core
->> >> >> platforms from MSR_PLATFORM_INFO[47:40], which is "Maximum Efficiency
->> >> >> Ratio (R/O)".  However that seems to deviate massively from the most
->> >> >> efficient ratio on your system, which may indicate a firmware bug, some
->> >> >> sort of clock gating problem, or an issue with the way that
->> >> >> intel_pstate.c processes this information.
->> >> >
->> >> > I'm not sure to understand the bug part.  min_pstate gives the frequency
->> >> > that I find as the minimum frequency when I look for the specifications of
->> >> > the CPU.  Should one expect that it should be something different?
->> >> >
->> >>
->> >> I'd expect the minimum frequency on your processor specification to
->> >> roughly match the "Maximum Efficiency Ratio (R/O)" value from that MSR,
->> >> since there's little reason to claim your processor can be clocked down
->> >> to a frequency which is inherently inefficient /and/ slower than the
->> >> maximum efficiency ratio -- In fact they both seem to match in your
->> >> system, they're just nowhere close to the frequency which is actually
->> >> most efficient, which smells like a bug, like your processor
->> >> misreporting what the most efficient frequency is, or it deviating from
->> >> the expected one due to your CPU static power consumption being greater
->> >> than it would be expected to be under ideal conditions -- E.g. due to
->> >> some sort of clock gating issue, possibly due to a software bug, or due
->> >> to our scheduling of such workloads with a large amount of lightly
->> >> loaded threads being unnecessarily inefficient which could also be
->> >> preventing most of your CPU cores from ever being clock-gated even
->> >> though your processor may be sitting idle for a large fraction of their
->> >> runtime.
->> >
->> > The original mail has results from two different machines: Intel 6130
->> > (skylake) and Intel 5218 (cascade lake).  I have access to another cluster
->> > of 6130s and 5218s.  I can try them.
->> >
->> > I tried 5.9 in which I just commented out the schedutil code to make
->> > frequency requests.  I only tested avrora (tiny pauses) and h2 (longer
->> > pauses) and in both case the execution is almost entirely in the turbo
->> > frequencies.
->> >
->> > I'm not sure to understand the term "clock-gated".  What C state does that
->> > correspond to?  The turbostat output for one run of avrora is below.
->> >
->>
->> I didn't have any specific C1+ state in mind, most of the deeper ones
->> implement some sort of clock gating among other optimizations, I was
->> just wondering whether some sort of software bug and/or the highly
->> intermittent CPU utilization pattern of these workloads are preventing
->> most of your CPU cores from entering deep sleep states.  See below.
->>
->> > julia
->> >
->> > 78.062895 sec
->> > Package Core  CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     SMI     POLL    C1      C1E     C6      POLL%   C1%     C1E%    C6%     CPU%c1  CPU%c6  CoreTmp PkgTmp  Pkg%pc2 Pkg%pc6 Pkg_J   RAM_J   PKG_%   RAM_%
->> > -     -       -       31      2.95    1065    2096    156134  0       1971    155458  2956270 657130  0.00    0.20    4.78    92.26   14.75   82.31   40      41      45.14   0.04    4747.52 2509.05 0.00    0.00
->> > 0     0       0       13      1.15    1132    2095    11360   0       0       2       39      19209   0.00    0.00    0.01    99.01   8.02    90.83   39      41      90.24   0.04    2266.04 1346.09 0.00    0.00
->>
->> This seems suspicious:                                                                                                                                                          ^^^^    ^^^^^^^
->>
->> I hadn't understood that you're running this on a dual-socket system
->> until I looked at these results.
->
-> Sorry not to have mentioned that.
->
->> It seems like package #0 is doing
->> pretty much nothing according to the stats below, but it's still
->> consuming nearly half of your energy, apparently because the idle
->> package #0 isn't entering deep sleep states (Pkg%pc6 above is close to
->> 0%).  That could explain your unexpectedly high static power consumption
->> and the deviation of the real maximum efficiency frequency from the one
->> reported by your processor, since the reported maximum efficiency ratio
->> cannot possibly take into account the existence of a second CPU package
->> with dysfunctional idle management.
->
-> Our assumption was that if anything happens on any core, all of the
-> packages remain in a state that allows them to react in a reasonable
-> amount of time ot any memory request.
+Fair enough.
 
-I can see how that might be helpful for workloads that need to be able
-to unleash the whole processing power of your multi-socket system with
-minimal latency, but the majority of multi-socket systems out there with
-completely idle CPU packages are unlikely to notice any performance
-difference as long as their idle CPU packages are idle, so the
-environmentalist in me tells me that this is a bad idea. ;)
+You'd probably be better off checking "is this mapping mapped" though.
+Because otherwise you have to get the page lock to serialize each
+page.
 
->
->> I'm guessing that if you fully disable one of your CPU packages and
->> repeat the previous experiment forcing various P-states between 10 and
->> 37 you should get a maximum efficiency ratio closer to the theoretical
->> one for this CPU?
->
-> OK, but that's not really a natural usage context...  I do have a
-> one-socket Intel 5220.  I'll see what happens there.
->
-
-Fair, I didn't intend to suggest you take it offline manually every time
-you don't plan to use it, my suggestion was just intended as an
-experiment to help us confirm or disprove the theory that the reason for
-the deviation from reality of your reported maximum efficiency ratio is
-the presence of that second CPU package with broken idle management.  If
-that's the case the P-state vs. energy usage plot should show a minimum
-closer to the ideal maximum efficiency ratio after disabling the second
-CPU package.
-
-> I did some experiements with forcing different frequencies.  I haven't
-> finished processing the results, but I notice that as the frequency goes
-> up, the utilization (specifically the value of
-> map_util_perf(sg_cpu->util) at the point of the call to
-> cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-> Is this expected?
->
-
-Actually, it *is* expected based on our previous hypothesis that these
-workloads are largely latency-bound: In cases where a given burst of CPU
-work is not parallelizable with any other tasks the thread needs to
-complete subsequently, its overall runtime will decrease monotonically
-with increasing frequency, therefore the number of instructions executed
-per unit of time will increase monotonically with increasing frequency,
-and with it its frequency-invariant utilization.
-
-> thanks,
-> julia
->
->> > 0     0       32      1       0.09    1001    2095    37      0       0       0       0       42      0.00    0.00    0.00    100.00  9.08
->> > 0     1       4       0       0.04    1000    2095    57      0       0       0       1       133     0.00    0.00    0.00    99.96   0.08    99.88   38
->> > 0     1       36      0       0.00    1000    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.12
->> > 0     2       8       0       0.03    1000    2095    64      0       0       0       1       124     0.00    0.00    0.00    99.97   0.08    99.89   38
->> > 0     2       40      0       0.00    1000    2095    36      0       0       0       0       40      0.00    0.00    0.00    100.00  0.10
->> > 0     3       12      0       0.00    1000    2095    42      0       0       0       0       71      0.00    0.00    0.00    100.00  0.14    99.86   38
->> > 0     3       44      1       0.09    1000    2095    63      0       0       0       0       65      0.00    0.00    0.00    99.91   0.05
->> > 0     4       14      0       0.00    1010    2095    38      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04    99.96   39
->> > 0     4       46      0       0.00    1011    2095    36      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04
->> > 0     5       10      0       0.01    1084    2095    39      0       0       0       0       58      0.00    0.00    0.00    99.99   0.04    99.95   38
->> > 0     5       42      0       0.00    1114    2095    35      0       0       0       0       39      0.00    0.00    0.00    100.00  0.05
->> > 0     6       6       0       0.03    1005    2095    89      0       0       0       1       116     0.00    0.00    0.00    99.97   0.07    99.90   39
->> > 0     6       38      0       0.00    1000    2095    38      0       0       0       0       41      0.00    0.00    0.00    100.00  0.10
->> > 0     7       2       0       0.05    1001    2095    59      0       0       0       1       133     0.00    0.00    0.00    99.95   0.09    99.86   40
->> > 0     7       34      0       0.00    1000    2095    39      0       0       0       0       65      0.00    0.00    0.00    100.00  0.13
->> > 0     8       16      0       0.00    1000    2095    43      0       0       0       0       47      0.00    0.00    0.00    100.00  0.04    99.96   38
->> > 0     8       48      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.04
->> > 0     9       20      0       0.00    1000    2095    33      0       0       0       0       37      0.00    0.00    0.00    100.00  0.03    99.97   38
->> > 0     9       52      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
->> > 0     10      24      0       0.00    1000    2095    36      0       0       0       1       40      0.00    0.00    0.00    100.00  0.03    99.96   39
->> > 0     10      56      0       0.00    1000    2095    37      0       0       0       1       38      0.00    0.00    0.00    100.00  0.03
->> > 0     11      28      0       0.00    1002    2095    35      0       0       0       1       37      0.00    0.00    0.00    100.00  0.03    99.97   38
->> > 0     11      60      0       0.00    1004    2095    34      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
->> > 0     12      30      0       0.00    1001    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.11    99.88   38
->> > 0     12      62      0       0.01    1000    2095    197     0       0       0       0       197     0.00    0.00    0.00    99.99   0.10
->> > 0     13      26      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.03    99.97   39
->> > 0     13      58      0       0.00    1000    2095    38      0       0       0       0       40      0.00    0.00    0.00    100.00  0.03
->> > 0     14      22      0       0.01    1000    2095    149     0       1       2       0       142     0.00    0.01    0.00    99.99   0.07    99.92   39
->> > 0     14      54      0       0.00    1000    2095    35      0       0       0       0       38      0.00    0.00    0.00    100.00  0.07
->> > 0     15      18      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03    99.97   39
->> > 0     15      50      0       0.00    1000    2095    34      0       0       0       0       38      0.00    0.00    0.00    100.00  0.03
->> > 1     0       1       32      3.23    1008    2095    2385    0       31      3190    45025   10144   0.00    0.28    4.68    91.99   11.21   85.56   32      35      0.04    0.04    2481.49 1162.96 0.00    0.00
->> > 1     0       33      9       0.63    1404    2095    12206   0       5       162     2480    10283   0.00    0.04    0.75    98.64   13.81
->> > 1     1       5       1       0.07    1384    2095    236     0       0       38      24      314     0.00    0.09    0.06    99.77   4.66    95.27   33
->> > 1     1       37      81      3.93    2060    2095    1254    0       5       40      59      683     0.00    0.01    0.02    96.05   0.80
->> > 1     2       9       37      3.46    1067    2095    2396    0       29      2256    55406   11731   0.00    0.17    6.02    90.54   54.10   42.44   31
->> > 1     2       41      151     14.51   1042    2095    10447   0       135     10494   248077  42327   0.01    0.87    26.57   58.84   43.05
->> > 1     3       13      110     10.47   1053    2095    7120    0       120     9218    168938  33884   0.01    0.77    16.63   72.68   42.58   46.95   32
->> > 1     3       45      69      6.76    1021    2095    4730    0       66      5598    115410  23447   0.00    0.44    12.06   81.12   46.29
->> > 1     4       15      112     10.64   1056    2095    7204    0       116     8831    171423  37754   0.01    0.70    17.56   71.67   28.01   61.35   33
->> > 1     4       47      18      1.80    1006    2095    1771    0       13      915     29315   6564    0.00    0.07    3.20    95.03   36.85
->> > 1     5       11      63      5.96    1065    2095    4090    0       58      6449    99015   18955   0.00    0.45    10.27   83.64   31.24   62.80   31
->> > 1     5       43      72      7.11    1016    2095    4794    0       73      6203    115361  26494   0.00    0.48    11.79   81.02   30.09
->> > 1     6       7       35      3.39    1022    2095    2328    0       45      3377    52721   13759   0.00    0.27    5.10    91.43   25.84   70.77   32
->> > 1     6       39      67      6.09    1096    2095    4483    0       52      3696    94964   19366   0.00    0.30    10.32   83.61   23.14
->> > 1     7       3       1       0.06    1395    2095    91      0       0       0       1       167     0.00    0.00    0.00    99.95   25.36   74.58   35
->> > 1     7       35      83      8.16    1024    2095    5785    0       100     7398    134640  27428   0.00    0.56    13.39   78.34   17.26
->> > 1     8       17      46      4.49    1016    2095    3229    0       52      3048    74914   16010   0.00    0.27    8.29    87.19   29.71   65.80   33
->> > 1     8       49      64      6.12    1052    2095    4210    0       89      5782    100570  21463   0.00    0.42    10.63   83.17   28.08
->> > 1     9       21      73      7.02    1036    2095    4917    0       64      5786    109887  21939   0.00    0.55    11.61   81.18   22.10   70.88   33
->> > 1     9       53      64      6.33    1012    2095    4074    0       69      5957    97596   20580   0.00    0.51    9.78    83.74   22.79
->> > 1     10      25      26      2.58    1013    2095    1825    0       22      2124    42630   8627    0.00    0.17    4.17    93.24   53.91   43.52   33
->> > 1     10      57      159     15.59   1022    2095    10951   0       175     14237   256828  56810   0.01    1.10    26.00   58.16   40.89
->> > 1     11      29      112     10.54   1065    2095    7462    0       126     9548    179206  39821   0.01    0.85    18.49   70.71   29.46   60.00   31
->> > 1     11      61      29      2.89    1011    2095    2002    0       24      2468    45558   10288   0.00    0.20    4.71    92.36   37.11
->> > 1     12      31      37      3.66    1011    2095    2596    0       79      3161    61027   13292   0.00    0.24    6.48    89.79   23.75   72.59   32
->> > 1     12      63      56      5.08    1107    2095    3789    0       62      4777    79133   17089   0.00    0.41    7.91    86.86   22.31
->> > 1     13      27      12      1.14    1045    2095    1477    0       16      888     18744   3250    0.00    0.06    2.18    96.70   21.23   77.64   32
->> > 1     13      59      60      5.81    1038    2095    5230    0       60      4936    87225   21402   0.00    0.41    8.95    85.14   16.55
->> > 1     14      23      28      2.75    1024    2095    2008    0       20      1839    47417   9177    0.00    0.13    5.08    92.21   34.18   63.07   32
->> > 1     14      55      106     9.58    1105    2095    6292    0       89      7182    141379  31354   0.00    0.63    14.45   75.81   27.36
->> > 1     15      19      118     11.65   1012    2095    7872    0       121     10014   193186  40448   0.01    0.80    19.53   68.68   37.53   50.82   32
->> > 1     15      51      59      5.58    1059    2095    3967    0       54      5842    88063   21138   0.00    0.39    9.12    85.23   43.60
->>
+               Linus

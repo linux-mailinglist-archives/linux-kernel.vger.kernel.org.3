@@ -2,145 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200547A133
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 16:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C642547A139
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Dec 2021 16:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbhLSPqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 10:46:15 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:46101 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236032AbhLSPqO (ORCPT
+        id S236079AbhLSP5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 10:57:09 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:35567 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233204AbhLSP5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 10:46:14 -0500
-Received: (qmail 894690 invoked by uid 1000); 19 Dec 2021 10:46:13 -0500
-Date:   Sun, 19 Dec 2021 10:46:13 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Julio Faracco <jcfaracco@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        axboe@kernel.dk, tglx@linutronix.de, damien.lemoal@wdc.com,
-        dkadashev@gmail.com, paul.gortmaker@windriver.com,
-        zhouyanjie@wanyeetech.com, niklas.cassel@wdc.com,
-        macro@orcam.me.uk, caihuoqing@baidu.com
-Subject: Re: [PATCH] usb: fixing some clang warnings inside usb host drivers
-Message-ID: <Yb9TxT4Z57AN/lgm@rowland.harvard.edu>
-References: <20211218042420.28466-1-jcfaracco@gmail.com>
- <Yb4i7LyYIlJi/9fb@rowland.harvard.edu>
- <7c5bbc97-b9dc-96bb-5764-58bebec0178d@i-love.sakura.ne.jp>
- <Yb6d7tflQeJ+1Et2@rowland.harvard.edu>
- <0804469c-664a-219d-bb6a-b4e5f133edd9@i-love.sakura.ne.jp>
+        Sun, 19 Dec 2021 10:57:08 -0500
+Received: by mail-il1-f198.google.com with SMTP id b3-20020a92c563000000b002aea8d2dfa7so3866758ilj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 07:57:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=J1Z0E8FYOyeGYmMCih47JGz9INwvVqcSBEE3r+oJjRA=;
+        b=Sj0kOicynoQXgF//kR//B2TBcOgsquhpSLbWEpY2z4dem6qwlAEnZczlRGFlr/WVKg
+         HCNWKvgIfFr2YUsjg6gNknu0H6VgSfI3Ol77JTgzL3gwCE5greHdHsvEZYp5TqXW1Zdl
+         4s39OjTTKgkaJANBlOipnXk+1vsVEpMe3C/wR+cGItpUCwXd22Wk922e+tIcdC/GeX9h
+         /2Pk8zyh/q6mzuGEI+yBg0ajoRBIjYaJDTz/2IdFwo8TxmsF/jbOkkFlVOpretMmKth3
+         NdVhwvnm/GJ5nTUMSBnfV3T6OQM7Z6QFBcFH8oP9X6OpKvdO2bsbFhX0ODJpqmhu/IBW
+         vmHQ==
+X-Gm-Message-State: AOAM531LShf3arxBfCdYjT7RuBl9BroXfwpUqtRz9JeHQePD/25zf8En
+        8K2k1VB1VkvhfOGRMF6eY+prtn5JeoqTPUzPyabNWSFX+T8o
+X-Google-Smtp-Source: ABdhPJzibjb8GU6GjM7AflOG1x8TLswRn7G6hxR5g2tBuxN6SrcEX/7NjUMQhAmD4CNcXRBnPUoAQBEM5E0iq4KRPSEZAzxtSFzJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0804469c-664a-219d-bb6a-b4e5f133edd9@i-love.sakura.ne.jp>
+X-Received: by 2002:a6b:2cc1:: with SMTP id s184mr6122309ios.63.1639929427727;
+ Sun, 19 Dec 2021 07:57:07 -0800 (PST)
+Date:   Sun, 19 Dec 2021 07:57:07 -0800
+In-Reply-To: <000000000000685c4605d0e47dad@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ff1c4105d381d24f@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in drm_gem_object_release_handle
+From:   syzbot <syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com>
+To:     airlied@linux.ie, christian.koenig@amd.com, daniel.vetter@ffwll.ch,
+        daniel.vetter@intel.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        linaro-mm-sig-owner@lists.linaro.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 04:59:44PM +0900, Tetsuo Handa wrote:
-> On 2021/12/19 11:50, Alan Stern wrote:
-> > You should read this code in usb_submit_urb():
-> > 
-> > 	max = usb_endpoint_maxp(&ep->desc);
-> > 	if (max <= 0) {
-> > 		dev_dbg(&dev->dev,
-> > 			"bogus endpoint ep%d%s in %s (bad maxpacket %d)\n",
-> > 			usb_endpoint_num(&ep->desc), is_out ? "out" : "in",
-> > 			__func__, max);
-> > 		return -EMSGSIZE;
-> > 	}
-> > 
-> > As far as I know, every code path leading to qtd_fill() has to pass this 
-> > test.
-> 
-> Excuse me, but surely qtd_fill() is using the result from usb_maxpacket()
-> 
-> ----------------------------------------
-> static struct list_head *
-> qh_urb_transaction (
-> 	struct ehci_hcd		*ehci,
-> 	struct urb		*urb,
-> 	struct list_head	*head,
-> 	gfp_t			flags
-> ) {
-> (...snipped...)
-> 	maxpacket = usb_maxpacket(urb->dev, urb->pipe, !is_input);
-> 
-> 	/*
-> 	 * buffer gets wrapped in one or more qtds;
-> 	 * last one may be "short" (including zero len)
-> 	 * and may serve as a control status ack
-> 	 */
-> 	for (;;) {
-> 		int this_qtd_len;
-> 
-> 		this_qtd_len = qtd_fill(ehci, qtd, buf, this_sg_len, token,
-> 				maxpacket);
-> 		this_sg_len -= this_qtd_len;
-> 		len -= this_qtd_len;
-> 		buf += this_qtd_len;
-> (...snipped...)
-> }
-> ----------------------------------------
-> 
-> and usb_maxpacket() may return 0 ?
-> 
-> ----------------------------------------
-> static inline __u16
-> usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
-> {
-> 	struct usb_host_endpoint	*ep;
-> 	unsigned			epnum = usb_pipeendpoint(pipe);
-> 
-> 	if (is_out) {
-> 		WARN_ON(usb_pipein(pipe));
-> 		ep = udev->ep_out[epnum];
-> 	} else {
-> 		WARN_ON(usb_pipeout(pipe));
-> 		ep = udev->ep_in[epnum];
-> 	}
-> 	if (!ep)
-> 		return 0;
-> 
-> 	/* NOTE:  only 0x07ff bits are for packet size... */
-> 	return usb_endpoint_maxp(&ep->desc);
-> }
-> ----------------------------------------
+syzbot has bisected this issue to:
 
-You should also read this code in usb_submit_urb():
+commit 45d9c8dde4cd8589f9180309ec60f0da2ce486e4
+Author: Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Thu Aug 12 13:14:12 2021 +0000
 
-	ep = usb_pipe_endpoint(dev, urb->pipe);
-	if (!ep)
-		return -ENOENT;
+    drm/vgem: use shmem helpers
 
-together with the definition of usb_pipe_endpoint():
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=147953cbb00000
+start commit:   3f667b5d4053 Merge tag 'tty-5.16-rc6' of git://git.kernel...
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=167953cbb00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=127953cbb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
+dashboard link: https://syzkaller.appspot.com/bug?extid=c8ae65286134dd1b800d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fd41ebb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1483c7d5b00000
 
-static inline struct usb_host_endpoint *
-usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
-{
-	struct usb_host_endpoint **eps;
-	eps = usb_pipein(pipe) ? dev->ep_in : dev->ep_out;
-	return eps[usb_pipeendpoint(pipe)];
-}
+Reported-by: syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
+Fixes: 45d9c8dde4cd ("drm/vgem: use shmem helpers")
 
-As you can see, this carries out the same calculation that 
-usb_maxpacket() makes, but it fails with an error if ep would be NULL.
-
-> If we don't need to care about the possibility of returning 0 (including
-> all possible race conditions taken into account), please explain it as a
-> comment block.
-
-You may write such a comment and submit it as a patch, if you like.  But 
-keep in mind that the USB subsystem is full of potential race conditions 
-like this one, kept in check by appropriate locking and synchronization.  
-Writing a comment for each and every possible occurrence would be 
-daunting and counterproductive.
-
-Also, if you like, you may submit a patch that changes 
-qh_urb_transaction() so that it calls usb_endpoint_maxp() rather than 
-usb_maxpacket() (using &urb->ep->desc as the argument rather than 
-urb->pipe), so that it more closely imitates the calculation in 
-usb_submit_urb().  You can even add a WARN_ON(maxpacket == 0), but I 
-do not expect it will ever be triggered.
-
-Alan Stern
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

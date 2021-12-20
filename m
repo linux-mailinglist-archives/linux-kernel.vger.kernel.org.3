@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5038447B51E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B2447B52F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbhLTVZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:25:00 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:33218 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231239AbhLTVYw (ORCPT
+        id S231284AbhLTV2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230393AbhLTV17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:24:52 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BKLOQng007278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 16:24:27 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 69CAE15C33A4; Mon, 20 Dec 2021 16:24:26 -0500 (EST)
-Date:   Mon, 20 Dec 2021 16:24:26 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
-Message-ID: <YcD0itBAoOPNNKvX@mit.edu>
-References: <00000000000032992d05d370f75f@google.com>
- <20211219023540.1638-1-hdanton@sina.com>
- <Yb6zKVoxuD3lQMA/@casper.infradead.org>
+        Mon, 20 Dec 2021 16:27:59 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4E1C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:27:59 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id w16so15345899edc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
+        b=BlcnCZc5c1t5Dfig8sDq8+kwYqCC5UxX6TKvoHp42AdOCuhs3rMbspFkuXfJmAXJmn
+         AGLGLo8y6eS/99X7esXkovRQFwuKpXpaeZOFoeiIWJJaZBHwkF0L6FJ8hQr5zCDB00D4
+         Pgj1fWZ4XRAjJ+KB5ZQMvjvAc+FPYlGHucNEs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
+        b=WOhGVWAzp/y4Ov5TIE1OrKGb29u6TVltkcDJTNeBxd0F3fGIqI/8ym7dYuD5HbyA8n
+         dHGEG5nfDbGhP0Fp9ftDRC3pcieLNsbFyr639+7bsGyH9iiQ3sanede5f8+ZujuzzY9s
+         wQfnUlT6nrp73/3ZiLAEd22Y4NxcrwoGQidsA77SFEoDWwpAgnqo5aPaRI91m8Hg49N+
+         TmuAsXEIGTuLd+RMuChtBVEqFwBnIoVjUTYOPBfjpHvp6rMS5Pm53V5CyMHbUd2BggiT
+         OYgMl/VvSXy1lCpEpuI+E3MtvnhCk/uS959Bj097A6rZNsJNGV1gTDotkRE/Jll3LR9B
+         7y+g==
+X-Gm-Message-State: AOAM532wU0OoCmawIAksogX5QO5UqRf/SfQkbqfK62hu7kKJf1MTTUbz
+        YlWobe++CcOJKvsgShcjSma+jg0KYJyy1kgvaKQ=
+X-Google-Smtp-Source: ABdhPJwnjr1wnyaqBf0Y8a6KfnwWc/IRTXQLCVEVylN785vgHuTpUj7OLWhYe0Sjz3QhQsYjNNiDsw==
+X-Received: by 2002:a17:907:6d87:: with SMTP id sb7mr89765ejc.220.1640035677569;
+        Mon, 20 Dec 2021 13:27:57 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id ht16sm1671944ejc.4.2021.12.20.13.27.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 13:27:56 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id a9so22656282wrr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:27:55 -0800 (PST)
+X-Received: by 2002:adf:d1a6:: with SMTP id w6mr35633wrc.274.1640035674847;
+ Mon, 20 Dec 2021 13:27:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yb6zKVoxuD3lQMA/@casper.infradead.org>
+References: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <YcDNaoGcGS6ypucg@casper.infradead.org> <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+ <YcDvTMUF3XWKWgSW@casper.infradead.org>
+In-Reply-To: <YcDvTMUF3XWKWgSW@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Dec 2021 13:27:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
+Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 04:20:57AM +0000, Matthew Wilcox wrote:
-> > Hey Willy
-> > >
-> > >sched_setattr(0x0, &(0x7f0000000080)={0x38, 0x1, 0x0, 0x0, 0x1}, 0x0)
-> > >
-> > >so you've set a SCHED_FIFO priority and then are surprised that some
-> > >tasks are getting starved?
-> > 
-> > Can you speficy a bit more on how fifo could block journald waiting for
-> > IO completion more than 120 seconds?
-> 
-> Sure!  You can see from the trace below that jbd2/sda1-8 is in D state,
-> so we know nobody's called unlock_buffer() yet, which would have woken
-> it.  That would happen in journal_end_buffer_io_sync(), which is
-> the b_end_io for the buffer.
-> 
-> Learning more detail than that would require knowing the I/O path
-> for this particular test system.  I suspect that the I/O was submitted
-> and has even completed, but there's a kernel thread waiting to run which
-> will call the ->b_end_io that hasn't been scheduled yet, because it's
-> at a lower priority than all the threads which are running at
-> SCHED_FIFO.
-> 
-> I'm disinclined to look at this report much further because syzbot is
-> stumbling around trying things which are definitely in the category of
-> "if you do this and things break, you get to keep both pieces".  You
-> can learn some interesting things by playing with the various RT
-> scheduling classes, but mostly what you can learn is that you need to
-> choose your priorities carefully to have a functioning system.
+On Mon, Dec 20, 2021 at 1:02 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> Hah, that was actually how I did it originally (without actually
+> committing at each step, and with a few "Oh, hang on, now we can avoid
+> calculating this too" stops and restarts along the way), but I thought
+> it all hung together logically as a single change.  It's hard to see
+> things from the other person's perspective at times.
 
-In general, real-time threads (anything scheduled with SCHED_FIFO or
-SCHED_RT) should never, *ever* try to do any kind of I/O.  After all,
-I/O can block, and if a real-time thread blocks, so much for any kind
-of real-time guarantee that you might have.
+In just about any other area, I wouldn't mind one bigger patch that
+just removes code that isn't used.
 
-If you must use do I/O from soft real-time thread, one trick you *can*
-do is to some number of CPU's which are reserved for real-time
-threads, and a subset of threads which are reserved for non-real-time
-threads, enforced using CPU pinning.  It's still not prefect, since
-there are still priority inheritance issues, and while this protects
-against a non-real-time thread holding some lock which is needed by a
-real-time (SCHED_FIFO) thread, if there are two SCHED_FIFO running at
-different priorities it's still possible to deadlock the entire
-kernel.
+But when it's in the vm code, and it's pretty grotty, I do prefer
+seeing three patches that individually are much easier to see that
+"yeah, this doesn't actually change anything at all".
 
-Can it be done?  Sure; I was part of an effort to make it work for the
-US Navy's DDG-1000 Zumwalt-class destroyer[1].  But it's tricky, and
-it's why IBM got paid the big bucks. :-)  Certainly it's going to be
-problematic for syzkaller if it's just going to be randomly trying to
-set some threads to be real-time without doing any kind of formal
-planning.
+The combined patch may be exactly the same thing, it's just much
+harder to see that "oh, now it's not used any more".
 
-[1] https://dl.acm.org/doi/10.1147/sj.472.0207
+That was perhaps especially true since a number of the changes also
+ended up doing statement simplification when the old layout made no
+sense any more with part of the results not used.
 
-Cheers,
+So your 3-patch series was much easier to look at and go "Yeah, I
+believe each of these patches is a no-op".
 
-						- Ted
+So ACK on all those patches.
+
+          Linus

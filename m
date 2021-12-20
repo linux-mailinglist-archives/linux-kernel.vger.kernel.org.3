@@ -2,148 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3078D47AB54
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E62347ABA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbhLTOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbhLTOfu (ORCPT
+        id S233891AbhLTOh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:37:57 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:44863 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234003AbhLTOhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:35:50 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74793C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id q3so2099104qvc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
-        b=DiEjH6My8Ez1IQhVc6pvDrx8DdYBf5P9Q+clTviqtdAcGoyrz8O3Mm0QM1wUFrNkY0
-         erUGHvnkQdBzOobPRhQhMUs2tWFe8BqPjTGLGO7iDNYJjnvifWvJK0CZAwohnr/jSIgz
-         QpKt+Ew79In897TuLR2zRLivKaLe3tEQEONG8JVkG6PU0InE460sA5jq4dymMlHT8XSX
-         zg2DC/LWEyYpH62+sfMqlCvUH8ljGrMJB9GT5NpPjnlC3IZ7ST16PWtT0L8tFOZmLFjb
-         TIGp0qdZPmp5QBN5QRqIC1GTcIzUBcUI8b5RNxMVY+8vGRJeuba9qlq6VNmEPxlzglI1
-         v4Rw==
+        Mon, 20 Dec 2021 09:37:32 -0500
+Received: by mail-oi1-f175.google.com with SMTP id be32so16010867oib.11;
+        Mon, 20 Dec 2021 06:37:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
-        b=HhsuHToFCXEZa+Mh46clZvZZA6Sz6QLelzwHL10N8hYrcf4iVkEPcuwBox7g9z1Vu9
-         SRf+toCjMoJleg6+rCPLUm+raexwv2UjQrp5pgW8xVrLFmotO4sTpbbunvEe1eNQryPK
-         MFj/58yr6OxlD0YSU7vfkTTX8rc5V/yl+qZbmWhJ+rl8udxDcnC1eiAIN83NY94uICs5
-         jKT01FsziW1PlBaLfU65FuL2N795Dihokj5mqUwulMwl961hVM//FL591rrYcWtB9p13
-         l2mz1XXzH3/pZudrziJ9yBA9IsNHim+L/f2iQRNHU4EtIlcAedxSDbh4jWH55oI/6CX3
-         G+VQ==
-X-Gm-Message-State: AOAM533qOZMVibYtibSLULIUV1QjHfHJ+8EyxXR4A/zTq2fzxmuccbyE
-        JuPD/cP65DSVj22x35UM2HvKn/Cj/vYKuhE2Rd6pEg==
-X-Google-Smtp-Source: ABdhPJzaFRZE2AdeTnoG9pfGf1WQwZj1GmAFj8sa8rSd0l4vITphwUpgRq+6SCv0VHaU8fAW9eiqASykEX99MrCy/vM=
-X-Received: by 2002:a0c:8031:: with SMTP id 46mr13207207qva.126.1640010949396;
- Mon, 20 Dec 2021 06:35:49 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MX2xD6NxZlK32RqDAc9k/pbvJlT/hpUSltlaWuBfZyY=;
+        b=EFHAOJhyVqLeqLC/eUZp83i4qW9h4YsxiQz2Endqotu0xrixWxvWd51u/Mqkb7sMio
+         h1Lyk7zHU/w+XXWEEgVN3nKVgjv6g+RLXclq7nzzprAVXh4W9b+Ozxm4O1+5k8KN+6xy
+         XqTGAUAk5YcfTKNpVtaCVP0Ahj97GESfyZvC+rm5DzW0nr/SXBiyg96cardibAGmTXYx
+         BaRm7Y5xBsHam/DpXYVW8zj5cr4360MEa6PZsVWOd6/6IzxloEx6JGSaTz2a1rZExP2y
+         EmyzyOLEyAkn0MqxUzZBstAbOTf9K9C8J7lupepcNiEftPFer015i4OyhcLXUFuc/ZCj
+         RsTw==
+X-Gm-Message-State: AOAM531PojBh0b0PMiH0ad3dIU3BUpU2gh04Izx25rJJo1R2ztYNFii1
+        Du0pl3Pu0uP9Z+ShpT1I/A==
+X-Google-Smtp-Source: ABdhPJwb8Epp66kgn5FAQJGNGoQLiIht6dxhdac9TXEyh6nIWNGhfonlF1xdobHH+VltWNqopZLZIQ==
+X-Received: by 2002:a05:6808:11:: with SMTP id u17mr1043535oic.88.1640011051574;
+        Mon, 20 Dec 2021 06:37:31 -0800 (PST)
+Received: from robh.at.kernel.org ([12.252.7.226])
+        by smtp.gmail.com with ESMTPSA id ay40sm3423367oib.1.2021.12.20.06.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 06:37:30 -0800 (PST)
+Received: (nullmailer pid 3403888 invoked by uid 1000);
+        Mon, 20 Dec 2021 14:37:28 -0000
+Date:   Mon, 20 Dec 2021 08:37:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atish.patra@wdc.com
+Subject: Re: [PATCH v2 07/17] dt-bindings: rtc: add bindings for microchip
+ mpfs rtc
+Message-ID: <YcCVKFm+7aEG2FYH@robh.at.kernel.org>
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-8-conor.dooley@microchip.com>
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-40-glider@google.com>
- <87bl1ec32a.ffs@tglx>
-In-Reply-To: <87bl1ec32a.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 20 Dec 2021 15:35:13 +0100
-Message-ID: <CAG_fn=VTow8S-H8SQbDNmB8gj+QpBm3RFKeiYhH=CRo0yd_CKg@mail.gmail.com>
-Subject: Re: [PATCH 39/43] x86: kmsan: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217093325.30612-8-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:51 PM Thomas Gleixner <tglx@linutronix.de> wrote=
-:
->
-> Alexander,
->
-> On Tue, Dec 14 2021 at 17:20, Alexander Potapenko wrote:
-> > When calling KMSAN-instrumented functions from non-instrumented
-> > functions, function parameters may not be initialized properly, leading
-> > to false positive reports. In particular, this happens all the time whe=
-n
-> > calling interrupt handlers from `noinstr` IDT entries.
-> >
-> > Fortunately, x86 code has instrumentation_begin() and
->
-> It's not only x86 code:
-> >  kernel/entry/common.c           | 3 +++
+On Fri, Dec 17, 2021 at 09:33:15AM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Add device tree bindings for the real time clock on
+> the Microchip PolarFire SoC.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> ---
+>  .../bindings/rtc/microchip,mfps-rtc.yaml      | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> new file mode 100644
+> index 000000000000..d57460cbe5e3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
+> +
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +maintainers:
+> +  - Daire McNamara <daire.mcnamara@microchip.com>
+> +  - Lewis Hanly <lewis.hanly@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,mpfs-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 2
 
-Shall this bit go into a separate patch?
+Need to define what each one is.
 
-> > @@ -76,6 +77,7 @@ __visible noinstr void do_syscall_64(struct pt_regs *=
-regs, int nr)
-> >       nr =3D syscall_enter_from_user_mode(regs, nr);
-> >
-> >       instrumentation_begin();
-> > +     kmsan_instrumentation_begin(regs);
->
-> Can we please make this something like:
->
->        instrumentation_begin_at_entry(regs);
-
-Fine, will do.
-Do you think it would make sense to hide it inside
-instrumentation_begin(), or is it ok to have both macros follow each
-other?
-
-> or some other sensible name which hides that kmsan gunk and avoids to
-> touch all of this again when KFOOSAN comes around?
->
-> Thanks,
->
->         tglx
->
->
->
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+> +
+> +  microchip,prescaler:
+> +    description: |
+> +      The prescaler divides the input frequency to create a time-based strobe (typically 1 Hz) for
+> +      the calendar counter. The Alarm and Compare Registers, in conjunction with the calendar
+> +      counter, facilitate time-matched events. To properly operate in Calendar or Binary mode,
+> +      the 26-bit prescaler must be programmed to generate a strobe to the RTC.
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: rtc
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/microchip,mpfs-clock.h>
+> +    rtc@20124000 {
+> +        compatible = "microchip,mpfs-rtc";
+> +        reg = <0x20124000 0x1000>;
+> +        clocks = <&clkcfg CLK_RTC>;
+> +        clock-names = "rtc";
+> +        interrupts = <80>, <81>;
+> +    };
+> +...
+> -- 
+> 2.33.1
+> 
+> 

@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBEE47AD74
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CD547AE39
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbhLTOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55824 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235890AbhLTOtH (ORCPT
+        id S239467AbhLTO7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:59:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47538 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238047AbhLTO46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:07 -0500
+        Mon, 20 Dec 2021 09:56:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9CBFB80EE4;
-        Mon, 20 Dec 2021 14:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294C2C36AE9;
-        Mon, 20 Dec 2021 14:49:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AE13611B0;
+        Mon, 20 Dec 2021 14:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D96C36AE7;
+        Mon, 20 Dec 2021 14:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011744;
-        bh=ljdZuRv6SWrPfmyPw5YotBu5n4WVdDCuwnE3pikCLzw=;
+        s=korg; t=1640012217;
+        bh=OVsUMNMsMOcdzVGqGn3riysdJBFyQaJWM8YPT+bbVLU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wuq+Y0dPwyl1D8xV7MyDt3Td2/oPsG51y3ACNr21gyQ1dspUQ59OyLZdnGuYIthaJ
-         m3blml/Pu33QIH6amUZvuLd/r8ANy9HtRKd/HL4U/vsVUV1orIbq/AuZ5+opXXCqC/
-         D9IlHKer4DG/UCxz/RSHE9ORkGdxyqJxQrZ7Ysrk=
+        b=fqdiAHOQzhDELk2RxWProJK6jRaCWNbSU4WWtNVDYv94dsYANqKniCPwj2SPOwv+Z
+         1VJFBiv6t7GDKH89YJS+uH/9uiSSJdolcotPwD6u83+YmYDvncLXiLr+drA7dZ7hce
+         lLbDE4kBHG3HXiXEteEeXIE/r9hRDvjNIQ+oIkuQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
-        Dust Li <dust.li@linux.alibaba.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 59/99] net/smc: Prevent smc_release() from long blocking
+        stable@vger.kernel.org,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Subject: [PATCH 5.15 122/177] usb: xhci: Extend support for runtime power management for AMDs Yellow carp.
 Date:   Mon, 20 Dec 2021 15:34:32 +0100
-Message-Id: <20211220143031.372434343@linuxfoundation.org>
+Message-Id: <20211220143044.188756394@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,81 +45,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: D. Wythe <alibuda@linux.alibaba.com>
+From: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
 
-[ Upstream commit 5c15b3123f65f8fbb1b445d9a7e8812e0e435df2 ]
+commit f886d4fbb7c97b8f5f447c92d2dab99c841803c0 upstream.
 
-In nginx/wrk benchmark, there's a hung problem with high probability
-on case likes that: (client will last several minutes to exit)
+AMD's Yellow Carp platform has few more XHCI controllers,
+enable the runtime power management support for the same.
 
-server: smc_run nginx
-
-client: smc_run wrk -c 10000 -t 1 http://server
-
-Client hangs with the following backtrace:
-
-0 [ffffa7ce8Of3bbf8] __schedule at ffffffff9f9eOd5f
-1 [ffffa7ce8Of3bc88] schedule at ffffffff9f9eløe6
-2 [ffffa7ce8Of3bcaO] schedule_timeout at ffffffff9f9e3f3c
-3 [ffffa7ce8Of3bd2O] wait_for_common at ffffffff9f9el9de
-4 [ffffa7ce8Of3bd8O] __flush_work at ffffffff9fOfeOl3
-5 [ffffa7ce8øf3bdfO] smc_release at ffffffffcO697d24 [smc]
-6 [ffffa7ce8Of3be2O] __sock_release at ffffffff9f8O2e2d
-7 [ffffa7ce8Of3be4ø] sock_close at ffffffff9f8ø2ebl
-8 [ffffa7ce8øf3be48] __fput at ffffffff9f334f93
-9 [ffffa7ce8Of3be78] task_work_run at ffffffff9flOlff5
-10 [ffffa7ce8Of3beaO] do_exit at ffffffff9fOe5Ol2
-11 [ffffa7ce8Of3bflO] do_group_exit at ffffffff9fOe592a
-12 [ffffa7ce8Of3bf38] __x64_sys_exit_group at ffffffff9fOe5994
-13 [ffffa7ce8Of3bf4O] do_syscall_64 at ffffffff9f9d4373
-14 [ffffa7ce8Of3bfsO] entry_SYSCALL_64_after_hwframe at ffffffff9fa0007c
-
-This issue dues to flush_work(), which is used to wait for
-smc_connect_work() to finish in smc_release(). Once lots of
-smc_connect_work() was pending or all executing work dangling,
-smc_release() has to block until one worker comes to free, which
-is equivalent to wait another smc_connnect_work() to finish.
-
-In order to fix this, There are two changes:
-
-1. For those idle smc_connect_work(), cancel it from the workqueue; for
-   executing smc_connect_work(), waiting for it to finish. For that
-   purpose, replace flush_work() with cancel_work_sync().
-
-2. Since smc_connect() hold a reference for passive closing, if
-   smc_connect_work() has been cancelled, release the reference.
-
-Fixes: 24ac3a08e658 ("net/smc: rebuild nonblocking connect")
-Reported-by: Tony Lu <tonylu@linux.alibaba.com>
-Tested-by: Dust Li <dust.li@linux.alibaba.com>
-Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Link: https://lore.kernel.org/r/1639571361-101128-1-git-send-email-alibuda@linux.alibaba.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211215093216.1839065-1-Nehal-Bakulchandra.shah@amd.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/af_smc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-pci.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index d324a12c26cd9..99b902e410c49 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -191,7 +191,9 @@ static int smc_release(struct socket *sock)
- 	/* cleanup for a dangling non-blocking connect */
- 	if (smc->connect_nonblock && sk->sk_state == SMC_INIT)
- 		tcp_abort(smc->clcsock->sk, ECONNABORTED);
--	flush_work(&smc->connect_work);
-+
-+	if (cancel_work_sync(&smc->connect_work))
-+		sock_put(&smc->sk); /* sock_hold in smc_connect for passive closing */
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -71,6 +71,8 @@
+ #define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4		0x161e
+ #define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5		0x15d6
+ #define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6		0x15d7
++#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7		0x161c
++#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8		0x161f
  
- 	if (sk->sk_state == SMC_LISTEN)
- 		/* smc_close_non_accepted() is called and acquires
--- 
-2.33.0
-
+ #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
+ #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
+@@ -330,7 +332,9 @@ static void xhci_pci_quirks(struct devic
+ 	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3 ||
+ 	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4 ||
+ 	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5 ||
+-	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6))
++	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6 ||
++	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7 ||
++	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
 
 

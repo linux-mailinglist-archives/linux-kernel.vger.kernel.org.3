@@ -2,121 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC5347A30F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 01:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEE247A311
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 01:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbhLTAEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 19:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbhLTAD7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 19:03:59 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7938FC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:03:59 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s1so16642875wrg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:03:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=Xx6OMdIi22+6zt9FpONm3lXfxPNhgakvQCXiMugwLDM=;
-        b=HFT8TQEIUV+7MPAbCggOwFOKlbz6qbsuOc2juKnd+PpBb3YLRoied/iaW8HoWr++fl
-         TTbnpZnCl2V56TPrScgFTF/0i9ap8gBCiiGLVZNNI8UF4+4y4diMPKMBhHlfRhVXWKRM
-         D1Pe73ufUqOjegc4sAk0H+b0gjydGl0iimf2/QYGtbgotj9xG1j5J0rdN8waKhwqu1rl
-         VQMEqnMaO44SqhAV5PNCq7W2ktrUBEmPErXOcFkELWj4ufG1uuLiNx8YX1/JAxgk+lMt
-         DPMfDY3b5KX904b8ECUq9fBGmrxCoMt7EsPTKfx4km5y6TDqrjOjkVuZgJzZI5UvGFCX
-         +ctQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=Xx6OMdIi22+6zt9FpONm3lXfxPNhgakvQCXiMugwLDM=;
-        b=et0da7buCW/bouVQoPHYkW329yH7YzZ2wDZYSENjlyQvIkwjywYElqB5IEERYY5LGh
-         4VxrXqaCZWmyY43krEu7Rak4Gp+aj4KgyxnoRHK8HNASMzi0QiAk5XNsUNmvzyw8OKJl
-         tg7q1/vSQGnfAb/VRWRNlHWc8B1FAZFLNKsUs3SeqK3O9Vq/AVddJ4P1huKR8Ck4hu5y
-         r2USEmJWRRLmEcYLRHGXb50+xCafsyjdoYp04ilfzxrwMzb4kDOaLf9MIGT7zMrszmGA
-         a4HOvOhKBJIlhPH1mgGyVLiKkqcVzFb7GGHCsUFOxQ9X4abfX0ANZwAQHwCK3guZwmI2
-         aKcQ==
-X-Gm-Message-State: AOAM532ZKgE6zOgE1oSgwNTK1GOhtU+2FICk0hn0TFzQGETbVY51Jnc9
-        XuTuGo78hbbpqb7ibduLSa7tb9k/jqRu8eQ+yhI=
-X-Google-Smtp-Source: ABdhPJwfJVlP65Z4pGc7whhHYQixmMu6sQBaZzg/szCUd6oLCiYQbV9u1mX/N0/owLMT3GtGI6AB5eXWd3dLkjoT6lk=
-X-Received: by 2002:a05:6000:1acb:: with SMTP id i11mr3304095wry.244.1639958637832;
- Sun, 19 Dec 2021 16:03:57 -0800 (PST)
+        id S236916AbhLTARu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 19:17:50 -0500
+Received: from mga03.intel.com ([134.134.136.65]:9596 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231496AbhLTARt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 19:17:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639959469; x=1671495469;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B4612cnzwqqoxNHP5GCepLC22DEtW7I78S9cbryf0z8=;
+  b=DUb/aZ3H/BQ+q180NANqd9CvzjsQbRlI1qLmrLMU29EO3oRjQDeUAFSm
+   7avJP+8J0XxjbMfofYB2+zfPaCZHFyAREQ06JjzEstLDPZZVaPnkE3DIN
+   Km5OuDXoEYGA6km4fw817pZ8T0S05oY8Q/PlWepQ5wh2bGsCqIXH6C47q
+   XaxH0Vgbcp8iG3NpQkqWvEsGNtMPw3rJlQZiHryW/fuPGb5eLMlaJ89zF
+   KOmHq+H4yrj60GK0ImkszABh2mPIN3xRVvPUB2XkQCrlIWv0kCH8C46GA
+   LobCgwTwy4crvTlIeoV+ESjS9Nzt6M4RVKr2zi8yYdWrBdMhRosQd+pBy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="240021572"
+X-IronPort-AV: E=Sophos;i="5.88,219,1635231600"; 
+   d="scan'208";a="240021572"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 16:17:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,219,1635231600"; 
+   d="scan'208";a="507482261"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 Dec 2021 16:17:47 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mz6N8-0007NN-Mm; Mon, 20 Dec 2021 00:17:46 +0000
+Date:   Mon, 20 Dec 2021 08:17:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:640
+ dcn31_clk_mgr_construct() warn: inconsistent indenting
+Message-ID: <202112200801.HcZHxY7X-lkp@intel.com>
 MIME-Version: 1.0
-Sender: mrs.kimhongyeoh055@gmail.com
-Received: by 2002:a7b:cb87:0:0:0:0:0 with HTTP; Sun, 19 Dec 2021 16:03:57
- -0800 (PST)
-From:   Ms Nadia Emaan <mrsnadiaemaan52@gmail.com>
-Date:   Mon, 20 Dec 2021 00:03:57 +0000
-X-Google-Sender-Auth: xNkpBgjHXKwqhxKo_9gPb0A0zjY
-Message-ID: <CA+gskbdZYBnjvpGdYHS3Qm9_8Cq2ppwLXHdwN1qx983MViKoQA@mail.gmail.com>
-Subject: May the peace of God Almighty be with You:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May God Bless You,
+Hi Alex,
 
-I am contacting you through this means because I need your urgent
-assistance and also help me to carry a charity project in your
-country. I found your email address as a true child of God for past
-few days now that I have been praying to know if you are really the
-chosen one for this great charity project, according to God's
-direction, after all prayers I am convinced, and I have decided to
-contact you. Please, i want you use the funds for the Lord's work,
-with confidence, read and respond now.
+First bad commit (maybe != root cause):
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f291e2d899d120880bfe8e0fa6fe22a97a54e054
+commit: 8fe44c080a53ac0ccbe88053a2e40f9acca33091 drm/amdgpu/display: fold DRM_AMD_DC_DCN3_1 into DRM_AMD_DC_DCN
+date:   6 months ago
+config: x86_64-randconfig-m001-20211207 (https://download.01.org/0day-ci/archive/20211220/202112200801.HcZHxY7X-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
-My name is  Mrs. Emman Nadia, a widow, but currently based in West
-Africa since my life with my late husband, who was a businessman in
-this country before dying some years ago. We were married to many
-years without a child. He died after a brief illness that lasted only
-six days and I myself have been suffering from an ovarian cancer
-disease. At this moment I am about to finish the race in this way
-because the disease has reached a very bad stage, without any family
-member and without children. I hope you do not expose or betray this
-trust and I am sure that I am about to trust you for the mutual
-benefit of orphans and the less privileged. I have some funds that I
-inherited from my late husband, the total sum of ($ 12,500,000.00)
-deposited at a bank here in Burkina Faso. After knowing my current
-state of health, I decided to trust you with this fund, believing that
-you will use it in the way I will instruct here.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+New smatch warnings:
+drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:640 dcn31_clk_mgr_construct() warn: inconsistent indenting
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:533 get_meta_and_pte_attr() warn: right shifting more than type allows 32 vs 4294966273
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:709 get_meta_and_pte_attr() warn: add some parenthesis here?
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:709 get_meta_and_pte_attr() warn: maybe use && instead of &
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:1204 dml_rq_dlg_get_dlg_params() warn: inconsistent indenting
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hwseq.c:132 dcn31_init_hw() warn: variable dereferenced before check 'res_pool->dccg' (see line 79)
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hwseq.c:293 dcn31_init_hw() error: we previously assumed 'dc->clk_mgr' could be null (see line 75)
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:1398 CalculatePrefetchSchedule() warn: inconsistent indenting
 
-you will use this $12.5 Million for public benefit as follows;
+Old smatch warnings:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_31.c:549 get_meta_and_pte_attr() warn: right shifting more than type allows 32 vs 4294966273
 
-1. Establish An Orphanage Home To Help The Orphanages Children.
-2. Build A Hospital To Help The Poor.
-3. Build A Nursing Home For Elderly People Need Care & Meal.
+vim +640 drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c
 
-You will named them after my late husband.Therefore, I need you to
-help me and claim this money and use it for charities, for orphanages
-and provide justice and help to the poor, needy and to promote the
-words of God and the effort to maintain the house of God, according to
-the bible in the book of. Jeremiah 22: 15-16, without minding our
-different religions.
+118a331516581c Nicholas Kazlauskas 2021-05-19  575  
+118a331516581c Nicholas Kazlauskas 2021-05-19  576  void dcn31_clk_mgr_construct(
+118a331516581c Nicholas Kazlauskas 2021-05-19  577  		struct dc_context *ctx,
+118a331516581c Nicholas Kazlauskas 2021-05-19  578  		struct clk_mgr_dcn31 *clk_mgr,
+118a331516581c Nicholas Kazlauskas 2021-05-19  579  		struct pp_smu_funcs *pp_smu,
+118a331516581c Nicholas Kazlauskas 2021-05-19  580  		struct dccg *dccg)
+118a331516581c Nicholas Kazlauskas 2021-05-19  581  {
+118a331516581c Nicholas Kazlauskas 2021-05-19  582  	struct dcn31_smu_dpm_clks smu_dpm_clks = { 0 };
+118a331516581c Nicholas Kazlauskas 2021-05-19  583  
+118a331516581c Nicholas Kazlauskas 2021-05-19  584  	clk_mgr->base.base.ctx = ctx;
+118a331516581c Nicholas Kazlauskas 2021-05-19  585  	clk_mgr->base.base.funcs = &dcn31_funcs;
+118a331516581c Nicholas Kazlauskas 2021-05-19  586  
+118a331516581c Nicholas Kazlauskas 2021-05-19  587  	clk_mgr->base.pp_smu = pp_smu;
+118a331516581c Nicholas Kazlauskas 2021-05-19  588  
+118a331516581c Nicholas Kazlauskas 2021-05-19  589  	clk_mgr->base.dccg = dccg;
+118a331516581c Nicholas Kazlauskas 2021-05-19  590  	clk_mgr->base.dfs_bypass_disp_clk = 0;
+118a331516581c Nicholas Kazlauskas 2021-05-19  591  
+118a331516581c Nicholas Kazlauskas 2021-05-19  592  	clk_mgr->base.dprefclk_ss_percentage = 0;
+118a331516581c Nicholas Kazlauskas 2021-05-19  593  	clk_mgr->base.dprefclk_ss_divider = 1000;
+118a331516581c Nicholas Kazlauskas 2021-05-19  594  	clk_mgr->base.ss_on_dprefclk = false;
+118a331516581c Nicholas Kazlauskas 2021-05-19  595  
+118a331516581c Nicholas Kazlauskas 2021-05-19  596  	clk_mgr->smu_wm_set.wm_set = (struct dcn31_watermarks *)dm_helpers_allocate_gpu_mem(
+118a331516581c Nicholas Kazlauskas 2021-05-19  597  				clk_mgr->base.base.ctx,
+118a331516581c Nicholas Kazlauskas 2021-05-19  598  				DC_MEM_ALLOC_TYPE_FRAME_BUFFER,
+118a331516581c Nicholas Kazlauskas 2021-05-19  599  				sizeof(struct dcn31_watermarks),
+118a331516581c Nicholas Kazlauskas 2021-05-19  600  				&clk_mgr->smu_wm_set.mc_address.quad_part);
+118a331516581c Nicholas Kazlauskas 2021-05-19  601  
+118a331516581c Nicholas Kazlauskas 2021-05-19  602  	if (clk_mgr->smu_wm_set.wm_set == 0) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  603  		clk_mgr->smu_wm_set.wm_set = &dummy_wms;
+118a331516581c Nicholas Kazlauskas 2021-05-19  604  		clk_mgr->smu_wm_set.mc_address.quad_part = 0;
+118a331516581c Nicholas Kazlauskas 2021-05-19  605  	}
+118a331516581c Nicholas Kazlauskas 2021-05-19  606  	ASSERT(clk_mgr->smu_wm_set.wm_set);
+118a331516581c Nicholas Kazlauskas 2021-05-19  607  
+118a331516581c Nicholas Kazlauskas 2021-05-19  608  	smu_dpm_clks.dpm_clks = (DpmClocks_t *)dm_helpers_allocate_gpu_mem(
+118a331516581c Nicholas Kazlauskas 2021-05-19  609  				clk_mgr->base.base.ctx,
+118a331516581c Nicholas Kazlauskas 2021-05-19  610  				DC_MEM_ALLOC_TYPE_FRAME_BUFFER,
+118a331516581c Nicholas Kazlauskas 2021-05-19  611  				sizeof(DpmClocks_t),
+118a331516581c Nicholas Kazlauskas 2021-05-19  612  				&smu_dpm_clks.mc_address.quad_part);
+118a331516581c Nicholas Kazlauskas 2021-05-19  613  
+118a331516581c Nicholas Kazlauskas 2021-05-19  614  	if (smu_dpm_clks.dpm_clks == NULL) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  615  		smu_dpm_clks.dpm_clks = &dummy_clocks;
+118a331516581c Nicholas Kazlauskas 2021-05-19  616  		smu_dpm_clks.mc_address.quad_part = 0;
+118a331516581c Nicholas Kazlauskas 2021-05-19  617  	}
+118a331516581c Nicholas Kazlauskas 2021-05-19  618  
+118a331516581c Nicholas Kazlauskas 2021-05-19  619  	ASSERT(smu_dpm_clks.dpm_clks);
+118a331516581c Nicholas Kazlauskas 2021-05-19  620  
+118a331516581c Nicholas Kazlauskas 2021-05-19  621  	if (IS_FPGA_MAXIMUS_DC(ctx->dce_environment)) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  622  		clk_mgr->base.base.funcs = &dcn3_fpga_funcs;
+118a331516581c Nicholas Kazlauskas 2021-05-19  623  	} else {
+118a331516581c Nicholas Kazlauskas 2021-05-19  624  		struct clk_log_info log_info = {0};
+118a331516581c Nicholas Kazlauskas 2021-05-19  625  
+118a331516581c Nicholas Kazlauskas 2021-05-19  626  		clk_mgr->base.smu_ver = dcn31_smu_get_smu_version(&clk_mgr->base);
+118a331516581c Nicholas Kazlauskas 2021-05-19  627  
+118a331516581c Nicholas Kazlauskas 2021-05-19  628  		if (clk_mgr->base.smu_ver)
+118a331516581c Nicholas Kazlauskas 2021-05-19  629  			clk_mgr->base.smu_present = true;
+118a331516581c Nicholas Kazlauskas 2021-05-19  630  
+118a331516581c Nicholas Kazlauskas 2021-05-19  631  		/* TODO: Check we get what we expect during bringup */
+118a331516581c Nicholas Kazlauskas 2021-05-19  632  		clk_mgr->base.base.dentist_vco_freq_khz = get_vco_frequency_from_reg(&clk_mgr->base);
+118a331516581c Nicholas Kazlauskas 2021-05-19  633  
+118a331516581c Nicholas Kazlauskas 2021-05-19  634  		if (ctx->dc_bios->integrated_info->memory_type == LpDdr5MemType) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  635  			dcn31_bw_params.wm_table = lpddr5_wm_table;
+118a331516581c Nicholas Kazlauskas 2021-05-19  636  		} else {
+118a331516581c Nicholas Kazlauskas 2021-05-19  637  			dcn31_bw_params.wm_table = ddr4_wm_table;
+118a331516581c Nicholas Kazlauskas 2021-05-19  638  		}
+118a331516581c Nicholas Kazlauskas 2021-05-19  639  		/* Saved clocks configured at boot for debug purposes */
+118a331516581c Nicholas Kazlauskas 2021-05-19 @640  		 dcn31_dump_clk_registers(&clk_mgr->base.base.boot_snapshot, &clk_mgr->base.base, &log_info);
+118a331516581c Nicholas Kazlauskas 2021-05-19  641  
+118a331516581c Nicholas Kazlauskas 2021-05-19  642  	}
+118a331516581c Nicholas Kazlauskas 2021-05-19  643  
+118a331516581c Nicholas Kazlauskas 2021-05-19  644  	clk_mgr->base.base.dprefclk_khz = 600000;
+118a331516581c Nicholas Kazlauskas 2021-05-19  645  	clk_mgr->base.dccg->ref_dtbclk_khz = 600000;
+118a331516581c Nicholas Kazlauskas 2021-05-19  646  	dce_clock_read_ss_info(&clk_mgr->base);
+118a331516581c Nicholas Kazlauskas 2021-05-19  647  
+118a331516581c Nicholas Kazlauskas 2021-05-19  648  	clk_mgr->base.base.bw_params = &dcn31_bw_params;
+118a331516581c Nicholas Kazlauskas 2021-05-19  649  
+118a331516581c Nicholas Kazlauskas 2021-05-19  650  	if (clk_mgr->base.base.ctx->dc->debug.pstate_enabled) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  651  		dcn31_get_dpm_table_from_smu(&clk_mgr->base, &smu_dpm_clks);
+118a331516581c Nicholas Kazlauskas 2021-05-19  652  
+118a331516581c Nicholas Kazlauskas 2021-05-19  653  		if (ctx->dc_bios && ctx->dc_bios->integrated_info) {
+118a331516581c Nicholas Kazlauskas 2021-05-19  654  			dcn31_clk_mgr_helper_populate_bw_params(
+118a331516581c Nicholas Kazlauskas 2021-05-19  655  					&clk_mgr->base,
+118a331516581c Nicholas Kazlauskas 2021-05-19  656  					ctx->dc_bios->integrated_info,
+118a331516581c Nicholas Kazlauskas 2021-05-19  657  					smu_dpm_clks.dpm_clks);
+118a331516581c Nicholas Kazlauskas 2021-05-19  658  		}
+118a331516581c Nicholas Kazlauskas 2021-05-19  659  	}
+118a331516581c Nicholas Kazlauskas 2021-05-19  660  
+118a331516581c Nicholas Kazlauskas 2021-05-19  661  	if (smu_dpm_clks.dpm_clks && smu_dpm_clks.mc_address.quad_part != 0)
+118a331516581c Nicholas Kazlauskas 2021-05-19  662  		dm_helpers_free_gpu_mem(clk_mgr->base.base.ctx, DC_MEM_ALLOC_TYPE_FRAME_BUFFER,
+118a331516581c Nicholas Kazlauskas 2021-05-19  663  				smu_dpm_clks.dpm_clks);
+118a331516581c Nicholas Kazlauskas 2021-05-19  664  }
+118a331516581c Nicholas Kazlauskas 2021-05-19  665  
 
-It will be a pleasure to compensate with 40% percent of the total
-money for your effort in handling the transaction, while 60% of the
-money will go to charity project.
+:::::: The code at line 640 was first introduced by commit
+:::::: 118a331516581c3acf1279857b0f663a54b7f31b drm/amd/display: Add DCN3.1 clock manager support
 
-All I need from you is sincerity and ability to complete the task of
-God without any failure. It will be my pleasure to see that the bank
-has finally released and transferred the fund to your bank account in
-the country, even before I die here in the hospital, due to my current
-state of health, everything must be processed as soon as possible.
+:::::: TO: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
-I am waiting for your immediate response, if you are only interested
-in obtaining more details about the transaction and execution of this
-humanitarian project for the glory and honor of God.
-
-Sorry if you received this letter in your spam, is due to recent
-connection/network error here in the country.
-
-Please I am waiting for your urgent reply now.
-
-May God Bless you,
-Mrs. Emman Nadia.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

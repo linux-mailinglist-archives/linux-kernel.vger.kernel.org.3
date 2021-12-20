@@ -2,119 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1BF47A7E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC9B47A7FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbhLTKsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhLTKse (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:48:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECB3C061574;
-        Mon, 20 Dec 2021 02:48:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBE31B80E33;
-        Mon, 20 Dec 2021 10:48:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8C0C36AE8;
-        Mon, 20 Dec 2021 10:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639997311;
-        bh=/NSsQes1J6WO5yIuZj0nTzaqt1pu+ZA3HTbUn4zWOmc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=sECi3Batpy9APxumOzMNhpwUC4WcmGcMd+MZnM/nJ3LD60GznYoRjC0TV+RfiOqJ3
-         Muo7dzIrk6/5LF+Tf1FDdDSEuF2NAkrcAFi0JK0VtQXNuFcT2oI2UkU409i2wd5kSN
-         CK//zbHAIcIx1BsBodFeHaqheW8PHQs+2deks7huyz8e2yXs0O90f/zOa4E2IHSWSV
-         aE+foku0FGpTxDNddSUS/xATFeg5e52ZFs5v08RyScZc8l4WH2wxpHw8Yv68UnccC/
-         kRQ/xl6BbMeU7BVbCShPu3dTBUY4GeAKOAN7Rs1BibrgAUpnyGX+pXEizihxS1qHrD
-         UUf2AogLs0Tpg==
-Subject: Re: [PATCH 5/6] usb: cdns3: Use platform_get_irq_byname() to get the
- interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211220010411.12075-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <95e016e9-4259-c1d6-f73c-ad79b7cef413@kernel.org>
-Date:   Mon, 20 Dec 2021 12:48:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S229970AbhLTKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:54:06 -0500
+Received: from mga11.intel.com ([192.55.52.93]:39521 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229962AbhLTKyG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:54:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639997646; x=1671533646;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4sNheOiOGp/+IXIraAHwfAxSRiGC2eIdgFPlHk9Na4E=;
+  b=inuMW7zlmRVOqQdj7gkFH5Ddsn1vMgt2JP+Wo+DXpCUcM0cR/uVNl6rD
+   ABTSRV593MCuz6aBDGHbN9uFc1OIKacExIEbENF0xcllS6bfu8KHsOGKU
+   Rr94V6DtbH6ZAr+pI9mWnjmPeH/EU6pFIP0Gzh63Q2zNSNLCo73H8V9WQ
+   mpLfVGfXQeZgVdsmDGKY0lOhkhXm5/pbqnY08jaAoIYLajEcrUmwnjR5j
+   Dp6A/sTvFf8wICmsuz0TI4qNm3+2jQ/FMKTLKzx+8j2zdTl9BKmzBcZH/
+   GTWtYyMhIMD4vF2EGBCSPjHRM/ob94O3Fso6SOlLEzimEwAEeM18n+r3R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237681035"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="237681035"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 02:54:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="606679789"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2021 02:54:04 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzGIt-0007hD-GF; Mon, 20 Dec 2021 10:54:03 +0000
+Date:   Mon, 20 Dec 2021 18:53:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 57690554abe135fee81d6ac33cc94d75a7e224bb
+Message-ID: <61c060a5.rvrbzGsCiMME9J9u%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20211220010411.12075-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 57690554abe135fee81d6ac33cc94d75a7e224bb  x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 
+elapsed time: 725m
 
-On 20/12/2021 03:04, Lad Prabhakar wrote:
-> platform_get_resource_byname(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
-> 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_byname().
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/usb/cdns3/cdns3-plat.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 4d0f027e5bd3..dc068e940ed5 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -13,6 +13,7 @@
->   */
->  
->  #include <linux/module.h>
-> +#include <linux/irq.h>
->  #include <linux/kernel.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> @@ -65,13 +66,14 @@ static int cdns3_plat_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, cdns);
->  
-> -	res = platform_get_resource_byname(pdev, IORESOURCE_IRQ, "host");
-> -	if (!res) {
-> -		dev_err(dev, "missing host IRQ\n");
-> -		return -ENODEV;
-> -	}
-> +	ret = platform_get_irq_byname(pdev, "host");
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	cdns->xhci_res[0] = *res;
-> +	cdns->xhci_res[0].start = ret;
-> +	cdns->xhci_res[0].end = ret;
-> +	cdns->xhci_res[0].flags = IORESOURCE_IRQ | irq_get_trigger_type(ret);
-> +	cdns->xhci_res[0].name = "host";
->  
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "xhci");
->  	if (!res) {
-> 
+configs tested: 77
+configs skipped: 72
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---
-cheers,
--roger
+gcc tested configs:
+powerpc                 mpc834x_itx_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                    adder875_defconfig
+m68k                       m5249evb_defconfig
+powerpc                     sequoia_defconfig
+arm                           viper_defconfig
+m68k                          hp300_defconfig
+powerpc                    amigaone_defconfig
+csky                                defconfig
+s390                       zfcpdump_defconfig
+sh                          landisk_defconfig
+openrisc                  or1klitex_defconfig
+sh                        sh7763rdp_defconfig
+arm                       versatile_defconfig
+powerpc                      ppc44x_defconfig
+m68k                        m5307c3_defconfig
+sh                         apsh4a3a_defconfig
+arm                       cns3420vb_defconfig
+powerpc                         wii_defconfig
+powerpc                 canyonlands_defconfig
+mips                           ci20_defconfig
+nios2                         10m50_defconfig
+mips                            ar7_defconfig
+powerpc                        cell_defconfig
+openrisc                 simple_smp_defconfig
+arm                  randconfig-c002-20211220
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+x86_64               randconfig-a001-20211220
+x86_64               randconfig-a003-20211220
+x86_64               randconfig-a002-20211220
+x86_64               randconfig-a004-20211220
+x86_64               randconfig-a005-20211220
+x86_64               randconfig-a006-20211220
+i386                 randconfig-a002-20211220
+i386                 randconfig-a003-20211220
+i386                 randconfig-a001-20211220
+i386                 randconfig-a005-20211220
+i386                 randconfig-a006-20211220
+i386                 randconfig-a004-20211220
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a013-20211220
+x86_64               randconfig-a015-20211220
+x86_64               randconfig-a014-20211220
+x86_64               randconfig-a012-20211220
+x86_64               randconfig-a011-20211220
+x86_64               randconfig-a016-20211220
+i386                 randconfig-a012-20211220
+i386                 randconfig-a011-20211220
+i386                 randconfig-a014-20211220
+i386                 randconfig-a016-20211220
+i386                 randconfig-a015-20211220
+i386                 randconfig-a013-20211220
+hexagon              randconfig-r041-20211220
+hexagon              randconfig-r045-20211220
+riscv                randconfig-r042-20211220
+s390                 randconfig-r044-20211220
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

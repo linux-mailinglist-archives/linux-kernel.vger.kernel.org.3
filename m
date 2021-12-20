@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2832147AF99
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F1F47AEB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbhLTPPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S237950AbhLTPCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239561AbhLTPN7 (ORCPT
+        with ESMTP id S239148AbhLTO62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:13:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856C5C0086DB;
-        Mon, 20 Dec 2021 06:57:26 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AB4C061394;
+        Mon, 20 Dec 2021 06:49:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 231FE611C4;
-        Mon, 20 Dec 2021 14:57:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C538C36AE8;
-        Mon, 20 Dec 2021 14:57:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8E2AB80EDA;
+        Mon, 20 Dec 2021 14:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25818C36AE7;
+        Mon, 20 Dec 2021 14:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012245;
-        bh=7s65w84pj5WPUwAZ4D2CQCA6Yl+0sQeh7Z4ff43BDjk=;
+        s=korg; t=1640011772;
+        bh=vmiKDqNKZcMNo0YFJt7fBJKb7F/kv+pcJAJFUaf++dE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iR6i8NDC8lxEgor+yD/4yLl7M+3UsivLjsQhErW/mPv/2B1W38dqD/LLA52KUUgud
-         lD6T3SaRpN3DYjSPPvlTUBLf9cMyQANswnd3REqtL7tUWVzthmGMBqnWvzIdsDi9W8
-         lrXYgQ7Bgyjj9ETcDuoEDg4Zy2o56oQKB+cmXeKA=
+        b=SNUHmdRZxVmyaESOF0r0PxsQQpfgjdFOdraJiTXtuLA9SQ4LAYA5Rhno9jfy5fqm5
+         n5v9gxMN8A4eV1Kb6Jt8+8EHRaT1zLIuvLcnlY2mFDWYzvL6Vle+AhqN+SG45pSG6z
+         9QsVOCU74/xBfVMJivYHlonZ7y2OmxgpZNyGEP7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Mayhew <smayhew@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 5.15 131/177] selinux: fix sleeping function called from invalid context
+        stable@vger.kernel.org, markpearson@lenovo.com,
+        Jimmy Wang <wangjm221@gmail.com>
+Subject: [PATCH 5.10 68/99] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
 Date:   Mon, 20 Dec 2021 15:34:41 +0100
-Message-Id: <20211220143044.483849194@linuxfoundation.org>
+Message-Id: <20211220143031.688525428@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,200 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Scott Mayhew <smayhew@redhat.com>
+From: Jimmy Wang <wangjm221@gmail.com>
 
-commit cc274ae7763d9700a56659f3228641d7069e7a3f upstream.
+commit 0ad3bd562bb91853b9f42bda145b5db6255aee90 upstream.
 
-selinux_sb_mnt_opts_compat() is called via sget_fc() under the sb_lock
-spinlock, so it can't use GFP_KERNEL allocations:
+This device doesn't work well with LPM, losing connectivity intermittently.
+Disable LPM to resolve the issue.
 
-[  868.565200] BUG: sleeping function called from invalid context at
-               include/linux/sched/mm.h:230
-[  868.568246] in_atomic(): 1, irqs_disabled(): 0,
-               non_block: 0, pid: 4914, name: mount.nfs
-[  868.569626] preempt_count: 1, expected: 0
-[  868.570215] RCU nest depth: 0, expected: 0
-[  868.570809] Preemption disabled at:
-[  868.570810] [<0000000000000000>] 0x0
-[  868.571848] CPU: 1 PID: 4914 Comm: mount.nfs Kdump: loaded
-               Tainted: G        W         5.16.0-rc5.2585cf9dfa #1
-[  868.573273] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-               BIOS 1.14.0-4.fc34 04/01/2014
-[  868.574478] Call Trace:
-[  868.574844]  <TASK>
-[  868.575156]  dump_stack_lvl+0x34/0x44
-[  868.575692]  __might_resched.cold+0xd6/0x10f
-[  868.576308]  slab_pre_alloc_hook.constprop.0+0x89/0xf0
-[  868.577046]  __kmalloc_track_caller+0x72/0x420
-[  868.577684]  ? security_context_to_sid_core+0x48/0x2b0
-[  868.578569]  kmemdup_nul+0x22/0x50
-[  868.579108]  security_context_to_sid_core+0x48/0x2b0
-[  868.579854]  ? _nfs4_proc_pathconf+0xff/0x110 [nfsv4]
-[  868.580742]  ? nfs_reconfigure+0x80/0x80 [nfs]
-[  868.581355]  security_context_str_to_sid+0x36/0x40
-[  868.581960]  selinux_sb_mnt_opts_compat+0xb5/0x1e0
-[  868.582550]  ? nfs_reconfigure+0x80/0x80 [nfs]
-[  868.583098]  security_sb_mnt_opts_compat+0x2a/0x40
-[  868.583676]  nfs_compare_super+0x113/0x220 [nfs]
-[  868.584249]  ? nfs_try_mount_request+0x210/0x210 [nfs]
-[  868.584879]  sget_fc+0xb5/0x2f0
-[  868.585267]  nfs_get_tree_common+0x91/0x4a0 [nfs]
-[  868.585834]  vfs_get_tree+0x25/0xb0
-[  868.586241]  fc_mount+0xe/0x30
-[  868.586605]  do_nfs4_mount+0x130/0x380 [nfsv4]
-[  868.587160]  nfs4_try_get_tree+0x47/0xb0 [nfsv4]
-[  868.587724]  vfs_get_tree+0x25/0xb0
-[  868.588193]  do_new_mount+0x176/0x310
-[  868.588782]  __x64_sys_mount+0x103/0x140
-[  868.589388]  do_syscall_64+0x3b/0x90
-[  868.589935]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  868.590699] RIP: 0033:0x7f2b371c6c4e
-[  868.591239] Code: 48 8b 0d dd 71 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e
-                     0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00
-                     00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d aa 71
-                     0e 00 f7 d8 64 89 01 48
-[  868.593810] RSP: 002b:00007ffc83775d88 EFLAGS: 00000246
-               ORIG_RAX: 00000000000000a5
-[  868.594691] RAX: ffffffffffffffda RBX: 00007ffc83775f10 RCX: 00007f2b371c6c4e
-[  868.595504] RDX: 0000555d517247a0 RSI: 0000555d51724700 RDI: 0000555d51724540
-[  868.596317] RBP: 00007ffc83775f10 R08: 0000555d51726890 R09: 0000555d51726890
-[  868.597162] R10: 0000000000000000 R11: 0000000000000246 R12: 0000555d51726890
-[  868.598005] R13: 0000000000000003 R14: 0000555d517246e0 R15: 0000555d511ac925
-[  868.598826]  </TASK>
-
-Cc: stable@vger.kernel.org
-Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-Signed-off-by: Scott Mayhew <smayhew@redhat.com>
-[PM: cleanup/line-wrap the backtrace]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Reviewed-by: <markpearson@lenovo.com>
+Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211214012652.4898-1-wangjm221@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/selinux/hooks.c |   33 +++++++++++++++++++--------------
- 1 file changed, 19 insertions(+), 14 deletions(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -611,10 +611,11 @@ static int bad_option(struct superblock_
- 	return 0;
- }
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
--static int parse_sid(struct super_block *sb, const char *s, u32 *sid)
-+static int parse_sid(struct super_block *sb, const char *s, u32 *sid,
-+		     gfp_t gfp)
- {
- 	int rc = security_context_str_to_sid(&selinux_state, s,
--					     sid, GFP_KERNEL);
-+					     sid, gfp);
- 	if (rc)
- 		pr_warn("SELinux: security_context_str_to_sid"
- 		       "(%s) failed for (dev %s, type %s) errno=%d\n",
-@@ -685,7 +686,8 @@ static int selinux_set_mnt_opts(struct s
- 	 */
- 	if (opts) {
- 		if (opts->fscontext) {
--			rc = parse_sid(sb, opts->fscontext, &fscontext_sid);
-+			rc = parse_sid(sb, opts->fscontext, &fscontext_sid,
-+					GFP_KERNEL);
- 			if (rc)
- 				goto out;
- 			if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid,
-@@ -694,7 +696,8 @@ static int selinux_set_mnt_opts(struct s
- 			sbsec->flags |= FSCONTEXT_MNT;
- 		}
- 		if (opts->context) {
--			rc = parse_sid(sb, opts->context, &context_sid);
-+			rc = parse_sid(sb, opts->context, &context_sid,
-+					GFP_KERNEL);
- 			if (rc)
- 				goto out;
- 			if (bad_option(sbsec, CONTEXT_MNT, sbsec->mntpoint_sid,
-@@ -703,7 +706,8 @@ static int selinux_set_mnt_opts(struct s
- 			sbsec->flags |= CONTEXT_MNT;
- 		}
- 		if (opts->rootcontext) {
--			rc = parse_sid(sb, opts->rootcontext, &rootcontext_sid);
-+			rc = parse_sid(sb, opts->rootcontext, &rootcontext_sid,
-+					GFP_KERNEL);
- 			if (rc)
- 				goto out;
- 			if (bad_option(sbsec, ROOTCONTEXT_MNT, root_isec->sid,
-@@ -712,7 +716,8 @@ static int selinux_set_mnt_opts(struct s
- 			sbsec->flags |= ROOTCONTEXT_MNT;
- 		}
- 		if (opts->defcontext) {
--			rc = parse_sid(sb, opts->defcontext, &defcontext_sid);
-+			rc = parse_sid(sb, opts->defcontext, &defcontext_sid,
-+					GFP_KERNEL);
- 			if (rc)
- 				goto out;
- 			if (bad_option(sbsec, DEFCONTEXT_MNT, sbsec->def_sid,
-@@ -2701,14 +2706,14 @@ static int selinux_sb_mnt_opts_compat(st
- 		return (sbsec->flags & SE_MNTMASK) ? 1 : 0;
++	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
++	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
+ 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
  
- 	if (opts->fscontext) {
--		rc = parse_sid(sb, opts->fscontext, &sid);
-+		rc = parse_sid(sb, opts->fscontext, &sid, GFP_NOWAIT);
- 		if (rc)
- 			return 1;
- 		if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid, sid))
- 			return 1;
- 	}
- 	if (opts->context) {
--		rc = parse_sid(sb, opts->context, &sid);
-+		rc = parse_sid(sb, opts->context, &sid, GFP_NOWAIT);
- 		if (rc)
- 			return 1;
- 		if (bad_option(sbsec, CONTEXT_MNT, sbsec->mntpoint_sid, sid))
-@@ -2718,14 +2723,14 @@ static int selinux_sb_mnt_opts_compat(st
- 		struct inode_security_struct *root_isec;
- 
- 		root_isec = backing_inode_security(sb->s_root);
--		rc = parse_sid(sb, opts->rootcontext, &sid);
-+		rc = parse_sid(sb, opts->rootcontext, &sid, GFP_NOWAIT);
- 		if (rc)
- 			return 1;
- 		if (bad_option(sbsec, ROOTCONTEXT_MNT, root_isec->sid, sid))
- 			return 1;
- 	}
- 	if (opts->defcontext) {
--		rc = parse_sid(sb, opts->defcontext, &sid);
-+		rc = parse_sid(sb, opts->defcontext, &sid, GFP_NOWAIT);
- 		if (rc)
- 			return 1;
- 		if (bad_option(sbsec, DEFCONTEXT_MNT, sbsec->def_sid, sid))
-@@ -2748,14 +2753,14 @@ static int selinux_sb_remount(struct sup
- 		return 0;
- 
- 	if (opts->fscontext) {
--		rc = parse_sid(sb, opts->fscontext, &sid);
-+		rc = parse_sid(sb, opts->fscontext, &sid, GFP_KERNEL);
- 		if (rc)
- 			return rc;
- 		if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid, sid))
- 			goto out_bad_option;
- 	}
- 	if (opts->context) {
--		rc = parse_sid(sb, opts->context, &sid);
-+		rc = parse_sid(sb, opts->context, &sid, GFP_KERNEL);
- 		if (rc)
- 			return rc;
- 		if (bad_option(sbsec, CONTEXT_MNT, sbsec->mntpoint_sid, sid))
-@@ -2764,14 +2769,14 @@ static int selinux_sb_remount(struct sup
- 	if (opts->rootcontext) {
- 		struct inode_security_struct *root_isec;
- 		root_isec = backing_inode_security(sb->s_root);
--		rc = parse_sid(sb, opts->rootcontext, &sid);
-+		rc = parse_sid(sb, opts->rootcontext, &sid, GFP_KERNEL);
- 		if (rc)
- 			return rc;
- 		if (bad_option(sbsec, ROOTCONTEXT_MNT, root_isec->sid, sid))
- 			goto out_bad_option;
- 	}
- 	if (opts->defcontext) {
--		rc = parse_sid(sb, opts->defcontext, &sid);
-+		rc = parse_sid(sb, opts->defcontext, &sid, GFP_KERNEL);
- 		if (rc)
- 			return rc;
- 		if (bad_option(sbsec, DEFCONTEXT_MNT, sbsec->def_sid, sid))
 
 

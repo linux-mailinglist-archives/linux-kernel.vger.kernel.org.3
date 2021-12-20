@@ -2,119 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFF347A5E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787EC47A5DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237881AbhLTIT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbhLTIT6 (ORCPT
+        id S237866AbhLTISx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:18:53 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:3983 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231147AbhLTISw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:19:58 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3106C061574;
-        Mon, 20 Dec 2021 00:19:57 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so9423735pjw.2;
-        Mon, 20 Dec 2021 00:19:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EnWZaMVaub9bhuoJRmTQ6iCKZ/plnA1dGYyz2w8wNeg=;
-        b=GV0fGLWuAUCiC02QPyI+3zEM+kPGREQnUpDRLMmICxTXkbtIFZ2AB5CXMFgMP0cOqG
-         qAr1ke0MGRzLRhQuJUr+GyM5v6G/eJ5tDKu3wEo8iotkZE2w9ImqMfgHuh4HKmqOFiGH
-         0fR50tIYNnF9zC+A+1ela+NtdfYj9wNRfWpNQvxZCuSKNktgLuvcDnW/emkdANgPjsRF
-         o6Bx/Q6qRID5HbVpZu4n+Z+zC7+Dac6+//Us+HK0sdVTEE6WLLdUlO8pyfJiuShWWgA5
-         biVe8qVFD691mlCV4Gx5+dHrONEfSZZ+K4WKbfrYta9EiM9f6dIEFYYj9HuVdmsxmlyM
-         4qKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EnWZaMVaub9bhuoJRmTQ6iCKZ/plnA1dGYyz2w8wNeg=;
-        b=uKdk+v4pq93qwt7fFGe7uKYy/SJ7WDKww3KYLV7fiCHyFn2BKNDVJtkjxwU0PR4L+1
-         5kHbkMxDSZN90dErGrsQETAKaO5dWfTjYcUMGxY1kMLzj5sq7cItAN1X/+mKmwqv8oY+
-         qoG8ot0csJzFFavnLjMcqrIKIit2KMrXiwQGBICo/CbgwWyEvy+mDXGrCpsXR200A9Vk
-         Dhc6CwSqxezTZVkRUu/y/qrkxSNJFdJWAO7zEfnhR8cXZfE83xgWIiU39Fk1F5B/A/jU
-         q0Jb7Inx+0rrJdVbNkB1gkcDgPhETEkpb+UDW4FOS4o4qn1VCsONAwUni7kh2VxuTx0z
-         GhDg==
-X-Gm-Message-State: AOAM530/Me8MNDnlog7MULhqD9AvwmTjAAsbncu0c+lHdNgUvCSOivpA
-        rR43Qw4qwG2vJhKz3+S9QIU=
-X-Google-Smtp-Source: ABdhPJwgkvVMmnEbIFrcZvx8hOqLQBi+JM2r6aklfpVaZ2uX6vk+jnsl6y+C7uMvPDQ94XBg2gUpJA==
-X-Received: by 2002:a17:90a:b94c:: with SMTP id f12mr11773171pjw.211.1639988397288;
-        Mon, 20 Dec 2021 00:19:57 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:3e2e:1228:8845:1f8d])
-        by smtp.gmail.com with ESMTPSA id w8sm4486622pfu.162.2021.12.20.00.19.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 00:19:56 -0800 (PST)
-Date:   Mon, 20 Dec 2021 00:19:53 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@suse.de>,
-        syzbot+9780d2b05ac158d32284@syzkaller.appspotmail.com,
-        Dmitry Torokhov <dtor@insightbb.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver: powermate: kill urb in the disconnect function
-Message-ID: <YcA8qX3irdSSJnN+@google.com>
-References: <20211219060241.4125076-1-mudongliangabcd@gmail.com>
+        Mon, 20 Dec 2021 03:18:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639988332; x=1671524332;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ISW5FkR//LYmJW1LVpg55ZKZkD0EVr7TmFhR8/yLhh0=;
+  b=uB/hFe52bWopHxvvTN+M4zcQqIaauL4zNzYnHkQIYvjvIirsgAwS1fMN
+   jVcsfbH0Yne+Jbo6fqQtOu4hXphQ4JWIwRl/E2yoGzjQWHAsCBwHYZwEe
+   WHRXaNdRe2NqJNMrYMSX8da2dHxR8LpANlj6+V2AvvMQ/c+VyM/NfvlIC
+   YhgNDDRkxsIiiVUdDLTMBPtX0VF1uYuSvDsSbV1dV5mS0PQUgdgqlUFNp
+   Z2NANiny+1v4I9uwrScD32oc4pRyQrqqw526aLy4e8LiDb1sbuh++LMvF
+   MvjtLF86mnvyuwTwgWxjvk/t/DawICeR0XV8EXyJR6YXJeJSkW3FdUFvN
+   w==;
+IronPort-SDR: T9WJgY+YiPzajydBuXNayNkmGQnueWYu0BBe7aEYd8+dcVUQuIEOXOnbpB4Pc05lw5uDnHzzGS
+ I2CgZf8WKGmZNWWBz0ds++M6/aQtlnJjK/WEDjPjIYQhz6BvI89g+bT6K32jRfPaEYX5Q1kjOZ
+ i8Eq+Mq959DCWK3l20T7FX6Nve8rQjQrI7k+QaPI6VzcWpyYGBh/23eEBv7icVzYF6SrCvP9jm
+ /ljDZP5DhaDgPRqayFh1mx05YMtK+9iXZK95/FbJaZ8T8OPjHI/rcI0fx3QG1agzs/DR4V8NmE
+ XTbt0woaiwmy16RN68lNUaBm
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="147786972"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Dec 2021 01:18:51 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 20 Dec 2021 01:18:50 -0700
+Received: from rob-dk-mpu02.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 20 Dec 2021 01:18:48 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] ARM: dts: at91: sama7g5: fix compilation warning
+Date:   Mon, 20 Dec 2021 10:20:58 +0200
+Message-ID: <20211220082058.21687-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211219060241.4125076-1-mudongliangabcd@gmail.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
+Fix the following compilation warning:
+"Warning (unit_address_vs_reg): /memory: node has a reg or ranges
+property, but no unit name".
 
-On Sun, Dec 19, 2021 at 02:02:15PM +0800, Dongliang Mu wrote:
-> In powermate_disconnect, powermate_pulse_led will invoke
-> powermate_sync_state and submit one urb with pm as its context.
-> If powermate disconnect before the execution of complete handler,
-> the pm will become a dangling pointer and lead to UAF.
-> 
-> Fix this by calling usb_kill_urb(pm->config) in the disconnect function.
-> Note that, the error handling error does not need to take care of this.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/boot/dts/sama7g5.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Unfortunately this analysis is not correct and adding usb_kill_urb()
-does not really help, as while input device is registered there may be
-new events coming into the driver that may cause config URB be submitted
-again.
-
-What actually happens is that call to usb_free_urb(pm->config) below
-tries to properly shutdown and destroy URB, but unfortunately
-powermate_config_complete() handler only uses urb->status to print error
-message, and resubmits the URB that is about to be freed again.
-
-The URB completion handler needs to check for -ESHUTDOWN (-108) and
-other terminal error codes before attempting to resubmit the URB.
-
-> 
-> Reported-by: syzbot+9780d2b05ac158d32284@syzkaller.appspotmail.com
-> Fixes: ba0acb5ee318901 ("Input: move USB miscellaneous devices under drivers/input/misc")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->  drivers/input/misc/powermate.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/input/misc/powermate.c b/drivers/input/misc/powermate.c
-> index c4e0e1886061..903993469fde 100644
-> --- a/drivers/input/misc/powermate.c
-> +++ b/drivers/input/misc/powermate.c
-> @@ -424,6 +424,7 @@ static void powermate_disconnect(struct usb_interface *intf)
->  	if (pm) {
->  		pm->requires_update = 0;
->  		usb_kill_urb(pm->irq);
-> +		usb_kill_urb(pm->config);
->  		input_unregister_device(pm->input);
->  		usb_free_urb(pm->irq);
->  		usb_free_urb(pm->config);
-> -- 
-> 2.25.1
-> 
-
-Thanks.
-
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index 8961d2851df3..cc75d0593729 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -108,7 +108,7 @@ map1 {
+ 	};
+ 
+ 	/* 512 M */
+-	memory {
++	memory@60000000 {
+ 		device_type = "memory";
+ 		reg = <0x60000000 0x20000000>;
+ 	};
 -- 
-Dmitry
+2.32.0
+

@@ -2,102 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903E247A707
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6FB47A70C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbhLTJa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S229536AbhLTJbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhLTJa5 (ORCPT
+        with ESMTP id S229461AbhLTJbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:30:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF83C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vQ/+G+wMkNfXl75KOzcYvN1wxxQzG2BQjplN5zLRrOM=; b=q0rb2yfnDBauZA3s8qPD/AU6Hg
-        zgmsGSLpJi0x7gObxMn/GPm7u9CFyPHSmOrnPHf0dx8t5kflpdhHiccNi62ltEJDCrVCdarqMBe/H
-        s6sl6yRUJ/cdld3rtpkX/F9sqbY7IGT3OIBUJWvIXDkZmfv9LvAGSaoAkRJ96Swu0DVClR4ID+yHq
-        fOYdLVQYqri82Ob4t8ShmPgtCsNuOqxBmjR6fxaFPPbo1agFFe3FlrvbWxaiGyeZ6e23cDZziqY0F
-        uN8606zH+OPyQaAojb10UQnRzIDeQRfIugAnBSKArCQa1mVJ/ONtgUl92bo4kgk3+xG7Z9tkjQMav
-        09y2VRrA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzF07-001QdY-Is; Mon, 20 Dec 2021 09:30:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40E3B3002AE;
-        Mon, 20 Dec 2021 10:30:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1480E2019D9B6; Mon, 20 Dec 2021 10:30:34 +0100 (CET)
-Date:   Mon, 20 Dec 2021 10:30:34 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events
- too
-Message-ID: <YcBNOsMG3aGVpnWK@hirez.programming.kicks-ass.net>
-References: <20211205224843.1503081-1-namhyung@kernel.org>
- <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
- <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com>
- <20211210103341.GS16608@worktop.programming.kicks-ass.net>
- <Yby8Su+fVA1lqVjT@hirez.programming.kicks-ass.net>
- <7A415BC0-E6F2-4ED2-8996-8F5871ED8001@fb.com>
+        Mon, 20 Dec 2021 04:31:32 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65ADC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:31:31 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id j9so18841563wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Htm2M/1UPb5WYk7y28mkq1tTi0RGZ2Jp48YbGwwH0kA=;
+        b=ZF/MduX4/4cT+oBmR4T+v8wQ+QDwsxOJuqK9/wRsJS6zcgT2AKpV/tkvOsOZ5L5v6m
+         6lR2L48gW5VYExLPAmgVcEuReMeF3qKNn0fEl4cDu9N7mwYe03+7XG7yhhRMXGiShQAG
+         VuATgjbbmIZ4i7mM+4AGwwVET8Ejjexw+StR8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Htm2M/1UPb5WYk7y28mkq1tTi0RGZ2Jp48YbGwwH0kA=;
+        b=Cr93fdc8J2TMQUh3OrelO7Q4Lea+VWKa19FNtMUJFpTL6arU8gnGs4c1SeVahRf4hf
+         ENQZvDHj0bA02KBCE1AxXb51CgU6aTkEFNh6JIEwn1IZI3KzDhdjR7UFAk9yMEQWgPd8
+         fv1vXwPC+6pjc6c1OFLDl3OXkV27YzUvtL+5hf8Ty9BTk6POoMyFZcfJE+gcfwzPgRiJ
+         X81sAq6q3IOsB1+sjPs2A++3IT+02NygZYddQctPt9gTs2CBBVOMadGP5//XwFrHerDf
+         dIDEg/AUdqRE84WmP6PyxuagSRlj37B/+pr5hqR/1l53Nn4mwVYlqswuhdBIk7su4rHx
+         W8UA==
+X-Gm-Message-State: AOAM532XfaGN7mREKv6tqambprZtUeSMpzU9o6cqDxxbSnOdVnhKUxFy
+        OT1ftc1iqDUUIgqZxZKHoXpyvw==
+X-Google-Smtp-Source: ABdhPJzIKEWyHUlLuEcrr0JV7s9D8oMvc34Me/oLD7Mq3UMFLkvWeDwegpHqyN1hAZyC9N8Yil8rXg==
+X-Received: by 2002:a05:6000:148:: with SMTP id r8mr11746823wrx.333.1639992690397;
+        Mon, 20 Dec 2021 01:31:30 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id r17sm15109035wmq.11.2021.12.20.01.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 01:31:29 -0800 (PST)
+Date:   Mon, 20 Dec 2021 10:31:27 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Shunsuke Mie <mie@igel.co.jp>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Doug Ledford <dledford@redhat.com>,
+        Jianxin Xiong <jianxin.xiong@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Sean Hefty <sean.hefty@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>,
+        Tomohito Esaki <etom@igel.co.jp>
+Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
+Message-ID: <YcBNbypJT3UJ0RG6@phenom.ffwll.local>
+Mail-Followup-To: Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Shunsuke Mie <mie@igel.co.jp>, Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jianxin Xiong <jianxin.xiong@intel.com>,
+        Leon Romanovsky <leon@kernel.org>, Maor Gottlieb <maorg@nvidia.com>,
+        Sean Hefty <sean.hefty@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>, Tomohito Esaki <etom@igel.co.jp>
+References: <20211122110817.33319-1-mie@igel.co.jp>
+ <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
+ <20211207171447.GA6467@ziepe.ca>
+ <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
+ <20211210124204.GG6467@ziepe.ca>
+ <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
+ <20211210132656.GH6467@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7A415BC0-E6F2-4ED2-8996-8F5871ED8001@fb.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211210132656.GH6467@ziepe.ca>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 09:09:05AM +0000, Song Liu wrote:
-> 
-> 
-> > On Dec 17, 2021, at 8:35 AM, Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, Dec 10, 2021 at 09:26:56AM -0400, Jason Gunthorpe wrote:
+> On Fri, Dec 10, 2021 at 01:47:37PM +0100, Christian König wrote:
+> > Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
+> > > On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
+> > > > Hi Jason,
+> > > > Thank you for replying.
+> > > > 
+> > > > 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
+> > > > > On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
+> > > > > > Hi maintainers,
+> > > > > > 
+> > > > > > Could you please review this patch series?
+> > > > > Why is it RFC?
+> > > > > 
+> > > > > I'm confused why this is useful?
+> > > > > 
+> > > > > This can't do copy from MMIO memory, so it shouldn't be compatible
+> > > > > with things like Gaudi - does something prevent this?
+> > > > I think if an export of the dma-buf supports vmap, CPU is able to access the
+> > > > mmio memory.
+> > > > 
+> > > > Is it wrong? If this is wrong, there is no advantages this changes..
+> > > I don't know what the dmabuf folks did, but yes, it is wrong.
+> > > 
+> > > IOMEM must be touched using only special accessors, some platforms
+> > > crash if you don't do this. Even x86 will crash if you touch it with
+> > > something like an XMM optimized memcpy.
+> > > 
+> > > Christian? If the vmap succeeds what rules must the caller use to
+> > > access the memory?
 > > 
-> > On Fri, Dec 10, 2021 at 11:33:41AM +0100, Peter Zijlstra wrote:
+> > See dma-buf-map.h and especially struct dma_buf_map.
 > > 
-> >> I'm thinking this is a cgroup specific thing. Normally the shadow_time
-> >> thing is simply a relative displacement between event-time and the
-> >> global clock. That displacement never changes, except when you do
-> >> IOC_DISABLE/IOC_ENABLE.
-> >> 
-> >> However, for cgroup things are different, since the cgroup events aren't
-> >> unconditionally runnable, that is, the enabled time should only count
-> >> when the cgroup is active, right?
-> >> 
-> >> So perhaps perf_event_read_local() should use a cgroup clock instead of
-> >> perf_clock() for cgroup events.
-> >> 
-> >> Let me think about that some more...
-> > 
-> > How's this then? Song, could you also please test and or better explain
-> > the problem f79256532682 pretends to cure? Because the below is
-> > reverting that, I *really* hate having to touch the events we're not
-> > scheduling.
+> > MMIO memory is perfectly supported here and actually the most common case.
 > 
-> Unfortunately, this change bring the bug back. For time_enabled in rdpmc
-> case to work properly, we have to touch all the enabled but not running 
-> events, right?
+> Okay that looks sane, but this rxe RFC seems to ignore this
+> completely. It stuffs the vaddr directly into a umem which goes to all
+> manner of places in the driver.
+> 
+> ??
 
-Ohh.. argh. I think I see why, it looses the context time enable edge,
-and because this is all strictly per-event in the uapi (there is no ctx
-representation) it can't be cured by improving ctx time handling :/
+dma_buf_map is fairly new and we haven't rolled it out consistently yet.
+In the past 10 years we simply yolo'd this :-)
 
-Bah, I so hate this.
-
+Just an explanation, not an excuse for new code to not use dma_buf_map
+consistently now that we fixed this mistake.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

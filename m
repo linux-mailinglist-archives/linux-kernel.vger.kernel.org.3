@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AFF47B355
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7482147B358
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240633AbhLTTAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:00:10 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38936 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240632AbhLTTAJ (ORCPT
+        id S240643AbhLTTCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234357AbhLTTCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:00:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 394C7CE1257;
-        Mon, 20 Dec 2021 19:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5486AC36AE8;
-        Mon, 20 Dec 2021 19:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640026805;
-        bh=rwYeJ/de83n49NCu9Q3vsserOc6YR2pZGMXISJrudiw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dXhNCD2xXVvBQSGAz3la62v/bCIV7bf4CEZC3/CKFE+Y1uJn9XeORWmh/V+Vp9Oc1
-         hJRX7be53GZICEOgdrrMjiC8l28b02ShdGP8z+9C4Nu4wUiSkVxI6TP8nP4+mR0APP
-         9YRuBHL0Kp15NHHuy7clsaijsEX8btVNn0vt+THza5Mp0E2IFAXE6q/zW87ONmZGsT
-         exW6mUmvSVyEKyRrJzVNUBb+XWvPxvSH49kbGlnJNqHyeYdKny2hVZUaCE33JVyL+z
-         FRA8uGmGOwxK/Gf/9a6muZtvBhKjSAGY5f649yQxK+Ehrgpx/HPyMEf0ijmXyBaDEF
-         TV54SqI7kqTJA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01D3D5C1610; Mon, 20 Dec 2021 11:00:04 -0800 (PST)
-Date:   Mon, 20 Dec 2021 11:00:04 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH RESEND] random: use correct memory barriers for
- crng_node_pool
-Message-ID: <20211220190004.GD641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211219025139.31085-1-ebiggers@kernel.org>
- <CAHmME9pQ4vp0jHpOyQXHRbJ-xQKYapQUsWPrLouK=dMO56y1zA@mail.gmail.com>
- <20211220181115.GZ641268@paulmck-ThinkPad-P17-Gen-1>
- <CAHmME9qZDNz2uxPa13ZtBMT2RR+sP1OU=b73tcZ9BTD1T_MJOg@mail.gmail.com>
- <20211220183140.GC641268@paulmck-ThinkPad-P17-Gen-1>
- <YcDM2cpwiGCb56Gp@quark>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcDM2cpwiGCb56Gp@quark>
+        Mon, 20 Dec 2021 14:02:04 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01718C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:02:03 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t184-20020a2546c1000000b006008b13c80bso21185092yba.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Tap7nBAM0h0L8VrB9lLDO+R7RMvpcS4S2PLyP50CL8w=;
+        b=UcUzIg+ZujUKm8Nx/UydFFi+uMvumbtNCxprjcJkB01d9AJrO6NJPDVVzuERlTxtoo
+         O0qsQou5K98cO5aXEfF7StBWN2OD2N2Ruy5v+ZsYRMvEagNADmvgQdir0ZW1D13+mle1
+         jrS33OHIGUH/+y3ah7lppcTv6FOZjU4gieOL9hEPdxCjiZKdeHaQBpua6b2XJCshuWD/
+         0TrRAV/tx7tDmDUo+GXyiZFehOJMqe7FwPbaRBkPAuG+AktfcTU+Z+zDOpvaUUK0aW3M
+         R8FJyCnv6fEkO+fiqyV0n8mBlyH9hM9PjUUscNVeD7G5HBY5M8QUDPt2NsTBRIk+zIsb
+         z9MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Tap7nBAM0h0L8VrB9lLDO+R7RMvpcS4S2PLyP50CL8w=;
+        b=tW8j8nRWNDPEZzeCFhUsrWNa4t9MhvytKJJz43XD5Y71v/FQ/+YACVNjfJHK9VJfJC
+         YbY9DLdAqClNlcO6JUZqxePvSgFII9Md7UhqsaeogLjFb2Gz9L+TZz7lf2t5V0+lYa/o
+         Zj4MmYx4/GGNyNpc1I49sCjRi1iRmA2/Oa3qadp1evoxwnpDbmQxtMeAElmQwj8jSllA
+         A8i1Et+4PyRR/RfJAkhPJKNdIZU3VTwwilc1qvQk+CSft/LYN+X0FChA1CS0ASmvvVqs
+         BZHVflj5Kge5xhGUWFB6jSfa8dOvfM5h7oxvYdoxRlSBoiqts2pkeLdPeA+BHiSHuciu
+         Yi6A==
+X-Gm-Message-State: AOAM532poeFmNv6ZKYqitcoi35yJZrdUjYKafxA7Db2xKi2Tz3kX4joX
+        3zoI/mQWLxn7c8t5HBYzk85yuRDRSA==
+X-Google-Smtp-Source: ABdhPJxZdayCcLgGEvMgK9ZDeJlqsTgjaZ1M/Le/NEE1z5TpUoR902tFNIT9OoDe4Yfw9al4vallvqy71g==
+X-Received: from tkjos-desktop.mtv.corp.google.com ([2620:15c:211:200:1cee:d72d:c926:e290])
+ (user=tkjos job=sendgmr) by 2002:a25:850f:: with SMTP id w15mr26872987ybk.373.1640026923099;
+ Mon, 20 Dec 2021 11:02:03 -0800 (PST)
+Date:   Mon, 20 Dec 2021 11:01:50 -0800
+Message-Id: <20211220190150.2107077-1-tkjos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
+Subject: [PATCH] binder: fix async_free_space accounting for empty parcels
+From:   Todd Kjos <tkjos@google.com>
+To:     tkjos@google.com, gregkh@linuxfoundation.org, christian@brauner.io,
+        arve@android.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, maco@google.com
+Cc:     joel@joelfernandes.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 12:35:05PM -0600, Eric Biggers wrote:
-> On Mon, Dec 20, 2021 at 10:31:40AM -0800, Paul E. McKenney wrote:
-> > On Mon, Dec 20, 2021 at 07:16:48PM +0100, Jason A. Donenfeld wrote:
-> > > On Mon, Dec 20, 2021 at 7:11 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > First I would want
-> > > 
-> > > It looks like you've answered my question with four other questions,
-> > > which seem certainly technically warranted, but also indicates we're
-> > > probably not going to get to the nice easy resting place of, "it is
-> > > safe; go for it" that I was hoping for. In light of that, it seems
-> > > like merging Eric's patch is reasonable.
-> > 
-> > My hope would be that the questions can be quickly answered by the
-> > developers and maintainers.  But yes, hope springs eternal.
-> > 
-> > 							Thanx, Paul
-> 
-> I wouldn't expect READ_ONCE() to provide a noticable performance improvement
-> here, as it would be lost in the noise of the other work done, especially
-> chacha20_block().
-> 
-> The data structures in question are never freed, so your other questions are
-> irrelevant, if I understand correctly.
+In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+fixed a kernel structure visibility issue. As part of that patch,
+sizeof(void *) was used as the buffer size for 0-length data payloads so
+the driver could detect abusive clients sending 0-length asynchronous
+transactions to a server by enforcing limits on async_free_size.
 
-Very good, and thank you!  You are correct, if the structures never are
-freed, there is no use-after-free issue.  And that also explains why I
-was not able to find the free path.  ;-)
+Unfortunately, on the "free" side, the accounting of async_free_space
+did not add the sizeof(void *) back. The result was that up to 8-bytes of
+async_free_space were leaked on every async transaction of 8-bytes or
+less.  These small transactions are uncommon, so this accounting issue
+has gone undetected for several years.
 
-So the main issue is the race between insertion and lookup.  So yes,
-READ_ONCE() suffices.
+The fix is to use "buffer_size" (the allocated buffer size) instead of
+"size" (the logical buffer size) when updating the async_free_space
+during the free operation. These are the same except for this
+corner case of asynchronous transactions with payloads < 8 bytes.
 
-This assumes that the various crng_node_pool[i] pointers never change
-while accessible to readers (and that some sort of synchronization applies
-to the values in the pointed-to structure).  If these pointers do change,
-then there also needs to be a READ_ONCE(pool[nid]) in select_crng(), where
-the value returned from this READ_ONCE() is both tested and returned.
-(As in assign this value to a temporary.)
+Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+Signed-off-by: Todd Kjos <tkjos@google.com>
+---
+ drivers/android/binder_alloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But if the various crng_node_pool[i] pointers really are constant
-while readers can access them, then the cmpxchg_release() suffices.
-The loads from pool[nid] are then data-race free, and because they
-are unmarked, the compiler is prohibited from hoisting them out from
-within the "if" statement.  The address dependency prohibits the
-CPU from reordering them.
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 340515f54498..47bc74a8c7b6 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -671,7 +671,7 @@ static void binder_free_buf_locked(struct binder_alloc *alloc,
+ 	BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
+ 
+ 	if (buffer->async_transaction) {
+-		alloc->free_async_space += size + sizeof(struct binder_buffer);
++		alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
+ 
+ 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
+ 			     "%d: binder_free_buf size %zd async free %zd\n",
+-- 
+2.34.1.307.g9b7440fafd-goog
 
-So READ_ONCE() should be just fine.  Which answers Jason's question.  ;-)
-
-Looking at _extract_crng(), if this was my code, I would use READ_ONCE()
-in the checks, but that might be my misunderstanding boot-time constraints
-or some such.  Without some sort of constraint, I don't see how the code
-avoids confusion from reloads of crng->init_time if two CPUs concurrently
-see the expiration of CRNG_RESEED_INTERVAL, but I could easily be missing
-something that makes this safe.  (And this is irrelevant to this patch.)
-
-You do appear to have ->lock guarding the pointed-to data, so that
-is good.
-
-							Thanx, Paul

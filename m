@@ -2,154 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6FB47A70C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D17347A712
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbhLTJbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhLTJbc (ORCPT
+        id S229596AbhLTJbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:31:42 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59302
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229575AbhLTJbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:31:32 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65ADC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:31:31 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j9so18841563wrc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Htm2M/1UPb5WYk7y28mkq1tTi0RGZ2Jp48YbGwwH0kA=;
-        b=ZF/MduX4/4cT+oBmR4T+v8wQ+QDwsxOJuqK9/wRsJS6zcgT2AKpV/tkvOsOZ5L5v6m
-         6lR2L48gW5VYExLPAmgVcEuReMeF3qKNn0fEl4cDu9N7mwYe03+7XG7yhhRMXGiShQAG
-         VuATgjbbmIZ4i7mM+4AGwwVET8Ejjexw+StR8=
+        Mon, 20 Dec 2021 04:31:40 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B9CED3F207
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639992698;
+        bh=q7I5LUCu0tEwQU8mlJ01Zkswbw7h7CV+lz20uT47oA0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Ng1l1eIritaiNWM0hFMVK7QICsmgRUs2q1QqNrul9KMoMONrspnBU2h12FnNVJJy2
+         c+mzWAocGLskq3DAaYdSUMw39JejHBXCIaegQJBvEBU3jYBOayZy7V8G44o3SodcJb
+         jrz5Zng1Dy6NIgk38cjbq2gX6dt/GvCOpKlSc97hVTXytGGKtmu8x2KV4NIHi2CPqM
+         WHWPYX5e9JunAzXtISzebwOYuN9SKpkZCkEXXxwiZUvkEDnn05v3shZmeu2r+zdrBh
+         A5yjmkxFSlZtZBEdbMv5+BgmhlTx360cftJhqm80JymCIRQmu9INP9EQZrpqx73iit
+         cH2oekmxGcVPQ==
+Received: by mail-lf1-f72.google.com with SMTP id z23-20020a0565120c1700b004258a35caf2so2575128lfu.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:31:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Htm2M/1UPb5WYk7y28mkq1tTi0RGZ2Jp48YbGwwH0kA=;
-        b=Cr93fdc8J2TMQUh3OrelO7Q4Lea+VWKa19FNtMUJFpTL6arU8gnGs4c1SeVahRf4hf
-         ENQZvDHj0bA02KBCE1AxXb51CgU6aTkEFNh6JIEwn1IZI3KzDhdjR7UFAk9yMEQWgPd8
-         fv1vXwPC+6pjc6c1OFLDl3OXkV27YzUvtL+5hf8Ty9BTk6POoMyFZcfJE+gcfwzPgRiJ
-         X81sAq6q3IOsB1+sjPs2A++3IT+02NygZYddQctPt9gTs2CBBVOMadGP5//XwFrHerDf
-         dIDEg/AUdqRE84WmP6PyxuagSRlj37B/+pr5hqR/1l53Nn4mwVYlqswuhdBIk7su4rHx
-         W8UA==
-X-Gm-Message-State: AOAM532XfaGN7mREKv6tqambprZtUeSMpzU9o6cqDxxbSnOdVnhKUxFy
-        OT1ftc1iqDUUIgqZxZKHoXpyvw==
-X-Google-Smtp-Source: ABdhPJzIKEWyHUlLuEcrr0JV7s9D8oMvc34Me/oLD7Mq3UMFLkvWeDwegpHqyN1hAZyC9N8Yil8rXg==
-X-Received: by 2002:a05:6000:148:: with SMTP id r8mr11746823wrx.333.1639992690397;
-        Mon, 20 Dec 2021 01:31:30 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id r17sm15109035wmq.11.2021.12.20.01.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 01:31:29 -0800 (PST)
-Date:   Mon, 20 Dec 2021 10:31:27 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-Message-ID: <YcBNbypJT3UJ0RG6@phenom.ffwll.local>
-Mail-Followup-To: Jason Gunthorpe <jgg@ziepe.ca>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shunsuke Mie <mie@igel.co.jp>, Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>, Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>, Tomohito Esaki <etom@igel.co.jp>
-References: <20211122110817.33319-1-mie@igel.co.jp>
- <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca>
- <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
- <20211210124204.GG6467@ziepe.ca>
- <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
- <20211210132656.GH6467@ziepe.ca>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q7I5LUCu0tEwQU8mlJ01Zkswbw7h7CV+lz20uT47oA0=;
+        b=Z3JJcOH4vD3LYUPYGE3aICYBdyrmLmkBGOkwY9rV8EWyXkRowNs6Z99CAlJwwYd6nq
+         dSflSWVelHzuZhqrJTqxcC3jfnGtCeV7Tzvw8dtAgsovymQMM7x7W+UqK4Q8KhSbZD0O
+         mSxQ20APpcQvMzNJ+8EGR+EvppsaG3YjsiITJtxijhFmUPB1sLVLkKv835DnMvEE9szq
+         9WBqezNJ5iDPn6NyWR3Gly8uvQ89J5qaF7j3GB0WLvo5n9TmAl9fm7pNXNhC/YBI+c/f
+         Ghuoxl6WfhWInAeKl3+BFAuM7mppWeK+R7D329BXdqWT23GVAtb1RaogSkcF2xobX3oK
+         7bGA==
+X-Gm-Message-State: AOAM530mv26P+pavB8lf02vSlCpiw64NtcDy5w2MVE+CAifMou7dKufF
+        w2ZDHbyySP29sCo0hMpfu9IGX4AoIIUF6fbEkgebAgFTM5dxdVyL9ZhYMGnuW6qga2MQoRp8cmX
+        MwmHEKPIyE1YSk2913/BHK6yGx5efGICCSwMzhfiRzQ==
+X-Received: by 2002:a05:651c:503:: with SMTP id o3mr14038817ljp.249.1639992696181;
+        Mon, 20 Dec 2021 01:31:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzgVVgGiKkGKbx4ide5sjyVaqJ3UmUjO0Zkflx9HK1jDuh36xwydUtGqYdkrGBefX8MPBCelg==
+X-Received: by 2002:a05:651c:503:: with SMTP id o3mr14038784ljp.249.1639992695825;
+        Mon, 20 Dec 2021 01:31:35 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id j19sm2466716lji.94.2021.12.20.01.31.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 01:31:34 -0800 (PST)
+Message-ID: <5bd5c0bf-4390-22c2-e4e0-cb02b80dfb9c@canonical.com>
+Date:   Mon, 20 Dec 2021 10:31:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211210132656.GH6467@ziepe.ca>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+Content-Language: en-US
+To:     Sylwester Nawrocki <snawrocki@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211217161549.24836-1-semen.protsenko@linaro.org>
+ <20211217161549.24836-2-semen.protsenko@linaro.org>
+ <2fdc5c97-6c19-8e70-d717-28b29d86160c@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <2fdc5c97-6c19-8e70-d717-28b29d86160c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:26:56AM -0400, Jason Gunthorpe wrote:
-> On Fri, Dec 10, 2021 at 01:47:37PM +0100, Christian König wrote:
-> > Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
-> > > On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
-> > > > Hi Jason,
-> > > > Thank you for replying.
-> > > > 
-> > > > 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
-> > > > > On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
-> > > > > > Hi maintainers,
-> > > > > > 
-> > > > > > Could you please review this patch series?
-> > > > > Why is it RFC?
-> > > > > 
-> > > > > I'm confused why this is useful?
-> > > > > 
-> > > > > This can't do copy from MMIO memory, so it shouldn't be compatible
-> > > > > with things like Gaudi - does something prevent this?
-> > > > I think if an export of the dma-buf supports vmap, CPU is able to access the
-> > > > mmio memory.
-> > > > 
-> > > > Is it wrong? If this is wrong, there is no advantages this changes..
-> > > I don't know what the dmabuf folks did, but yes, it is wrong.
-> > > 
-> > > IOMEM must be touched using only special accessors, some platforms
-> > > crash if you don't do this. Even x86 will crash if you touch it with
-> > > something like an XMM optimized memcpy.
-> > > 
-> > > Christian? If the vmap succeeds what rules must the caller use to
-> > > access the memory?
-> > 
-> > See dma-buf-map.h and especially struct dma_buf_map.
-> > 
-> > MMIO memory is perfectly supported here and actually the most common case.
+On 19/12/2021 23:29, Sylwester Nawrocki wrote:
+> On 17.12.2021 17:15, Sam Protsenko wrote:
+>> System Register is used to configure system behavior, like USI protocol,
+>> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+>> make it possible to modify SYSREG registers.
+>>
+>> While at it, add also missing PMU and GPIO clocks, which looks necessary
+>> and might be needed for corresponding Exynos850 features soon.
+>>
+>> Reviewed-by: Krzysztof Kozlowski<krzysztof.kozlowski@canonical.com>
+>> Acked-by: Rob Herring<robh@kernel.org>
+>> Acked-by: Chanwoo Choi<cw00.choi@samsung.com>
+>> Signed-off-by: Sam Protsenko<semen.protsenko@linaro.org>
 > 
-> Okay that looks sane, but this rxe RFC seems to ignore this
-> completely. It stuffs the vaddr directly into a umem which goes to all
-> manner of places in the driver.
+> Apologies for late reply, this patch is applied now.
 > 
-> ??
 
-dma_buf_map is fairly new and we haven't rolled it out consistently yet.
-In the past 10 years we simply yolo'd this :-)
+Sam,
 
-Just an explanation, not an excuse for new code to not use dma_buf_map
-consistently now that we fixed this mistake.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+The clock is used in the DTSI, so since this was applied, there are only
+two choices now:
+1. wait for next cycle with DTSI and DTS,
+2. Resubmit with replacing the newly added clocks in DTSI/DTS with
+numbers and a TODO note.
+
+Best regards,
+Krzysztof

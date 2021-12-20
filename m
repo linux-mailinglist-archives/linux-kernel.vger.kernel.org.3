@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1056A47B5F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A658F47B5F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbhLTWsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhLTWsX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:48:23 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BB7C061574;
-        Mon, 20 Dec 2021 14:48:23 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BCF6F1EC04E4;
-        Mon, 20 Dec 2021 23:48:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640040497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FTdRJbvgD63oUHMOrYjWy5nRUmOd9XvXNqQ7stf7PJ0=;
-        b=Lvq/LueX72/2Jeg6cTGhbJ/WttPypQkeaKdGZA84/DWA5Przw464qXs7ttqDoCH5BgCpHI
-        QfVKhQzQwbGvb0hKkeyZvUkf8SeDnPSPJA4MaI9mSsYQ0Qq33GWGAazn2moLOefa9Kn/oH
-        6D2saOIXBhG0TWaXctCWzg68pIIXUTU=
-Date:   Mon, 20 Dec 2021 23:48:20 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-sgx@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] x86/sgx: Add accounting for tracking overcommit
-Message-ID: <YcEINHL3LViw11Yv@zn.tnic>
-References: <20211220174640.7542-1-kristen@linux.intel.com>
- <20211220174640.7542-2-kristen@linux.intel.com>
- <YcDZ4++GQN+ODm50@zn.tnic>
- <9e08e13208950e9fd955a46994b7fef705751dd6.camel@linux.intel.com>
- <YcDxhWZ7lzB2BB8N@zn.tnic>
- <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
+        id S230382AbhLTWta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:49:30 -0500
+Received: from mga05.intel.com ([192.55.52.43]:24856 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230348AbhLTWt3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 17:49:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640040569; x=1671576569;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=my0KIrmXAw+5z5ffRD5IcbXV6540slU+/vIMI7WMMZM=;
+  b=ct+MZTT9f7tPJ02G9V0yI13yYrXxngQVG/axBDkzNSAvDkOagNZXtH34
+   qiEgDpVMZBrop5DenvGJhQiWgI56NbSga2adUtrybU+NiN4d/UlpKyoWo
+   vOTPXPj0BLsFYXrwWJR8nW2fH56pqs5L9a53KKUIqP57L/EUsM8PXCOL4
+   zK94788TgSufL45WXD455XN8DvshE7OazAq2rosvr4RDDgLPNAzqox7Fl
+   1bBintoyYZ7vx7x0dBXz7Wq+U4NdueDk556Bsg2O2SCrgTj0FG5OQ2v1M
+   47SbT73PuJqjqJmNwnsUunqHMrV7Vzq+kucK3AOQTcNLk02H/oWXqBkF8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="326580722"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="326580722"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 14:49:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="467563796"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2021 14:49:27 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzRTC-0008N0-S2; Mon, 20 Dec 2021 22:49:26 +0000
+Date:   Tue, 21 Dec 2021 06:49:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
+        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 5/9] fs/f2fs/data.c:4178:16: error: implicit
+ declaration of function 'dax_writeback_mapping_range'
+Message-ID: <202112210648.cDXIAYGW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 01:35:03PM -0800, Kristen Carlson Accardi wrote:
-> So, in your proposal you would first change the calculated number of
-> maximum available backing pages to be based on total system RAM rather
-> than EPC memory, got it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
+commit: 2908c6445a36c37b0af40ba94f72c957a87d8fd8 [5/9] f2fs: support dax address space operation
+config: microblaze-randconfig-r015-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210648.cDXIAYGW-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=2908c6445a36c37b0af40ba94f72c957a87d8fd8
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout 2908c6445a36c37b0af40ba94f72c957a87d8fd8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash fs/f2fs/
 
-This was just an example. My point is to try to make it automatic and
-not introduce another knob. And to decide on the limits and behavior
-by using common sense and addressing the common use cases first.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> This would require recalculating the max number of allowed backing
-> pages per enclave at run time whenever a new enclave is loaded - but
-> all the existing enclaves may have already used more than the new max
-> number of per-enclave allowable pages. How would you handle that
-> scenario? This would add a lot of complexity for sure - and it does
-> make me wonder whether any additional benefit of limiting per enclave
-> would be worth it.
+All errors (new ones prefixed by >>):
 
-See above - this was just an example. And as you've shown, an example of
-what *not* to do.
+   fs/f2fs/data.c: In function 'f2fs_dax_writepages':
+>> fs/f2fs/data.c:4178:16: error: implicit declaration of function 'dax_writeback_mapping_range' [-Werror=implicit-function-declaration]
+    4178 |         return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-> Thanks for your more detailed explanation - I will take a look at the
-> VM overcommit limits. Since obviously the original implementation did
-> have a default value set, I had still a remaining specific question
-> about your comments. Are you suggesting that there should not be a way
-> to override any overcommit limit at all? So drop the parameter all
-> together?
 
-So let me ask you a counter-question:
+vim +/dax_writeback_mapping_range +4178 fs/f2fs/data.c
 
-Imagine you're a sysadmin. Or a general, common system user if there
-ever is one.
+  4169	
+  4170	static int f2fs_dax_writepages(struct address_space *mapping,
+  4171						struct writeback_control *wbc)
+  4172	{
+  4173		struct f2fs_sb_info *sbi = F2FS_I_SB(mapping->host);
+  4174	
+  4175		if (unlikely(f2fs_cp_error(sbi)))
+  4176			return -EIO;
+  4177	
+> 4178		return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
+  4179	}
+  4180	
 
-When your system starts thrashing and you're running a bunch of
-enclaves, how do you find out there even is a knob which might
-potentially help you?
-
-And after you find it, how would you use that knob?
-
-Or would you rather prefer that the system did the right thing for you
-instead of having to figure out what the sensible values for that knob
-would be?
-
-My point is: put yourself in the user's shoes and try to think about
-what would be the optimal thing the system should do.
-
-Once that is cleanly and properly defined, then we can deal with knobs
-and policies etc.
-
-I sincerely hope that makes more sense.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

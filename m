@@ -2,138 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5905547B59A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAF747B59C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbhLTWAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S232238AbhLTWA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232254AbhLTWAw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Dec 2021 17:00:52 -0500
-Received: from out1.migadu.com ([91.121.223.63]:41541 "EHLO out1.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232226AbhLTWA0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:00:26 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZYMkDyTA14TCHWK1+gvITVpmr4ZV7O4DHhp5KoEByVw=;
-        b=TA4mQFnrtqV6PiB0sDy104rgupwRkB63dwG8lXTQVEhksWCixie9CZP2WILPS6N4pUHl+l
-        ynKIW5NzkQsZwGeAWh7rLoxruINlH3iwb+QolawAW56uRSUcKzRDpKCXe3T2OK7FWgnPfa
-        Mq+d0m2gHLxVcfBpvikL/C6lMpbumbg=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v4 21/39] kasan, vmalloc: reset tags in vmalloc functions
-Date:   Mon, 20 Dec 2021 22:59:36 +0100
-Message-Id: <e31d392c5eca9db6f45ca6b320a929ecd53f787c.1640036051.git.andreyknvl@google.com>
-In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
-References: <cover.1640036051.git.andreyknvl@google.com>
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0B8C061746
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:00:51 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so506791pjo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YFHQWppCbOEAFqrREcsgFmxNS+L3tGaGeD2fMDLbOQs=;
+        b=Ooq5mtLbhHBGvrLO9N3S8DKVBu4TyC/0xH2U+HDtDjdxlgSelm9jw/ydcATf3RXlQP
+         CfsR7D5NHa6uRY7xW7BpPUI5+zMENwBv4cgOFAMdIf1GgaAN7R0B6F89lLkLve554xs1
+         /RGW6xm5kAzxntrHEmCa3m3PmpcjBik7p894+XCyH0RcbPLofRl/HBrhF1DvycTgntCw
+         OLjmviW7arzpICMT8NIxpXdjfVLdzOzWWwLl0qljCVOXkYGBWsXVbjp5BII36UcnoCWf
+         36mvnuSFus05DnP/5p1eze1ViCYgAdTZIJVXAHT7PSkcjGRMWWF4yRUdnwoZvZRhCCdJ
+         OZsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YFHQWppCbOEAFqrREcsgFmxNS+L3tGaGeD2fMDLbOQs=;
+        b=UOMifdaybGKEq3SGl9efDrg9rztPB7WRFfZTHgu//8fM9A6niU8UL7mh5c9sJCqQdc
+         YuN+QIN9ykLuFH+0dF+pK6P4iEHxhWdrFFVQewJevXoCI1YkRMH96xlIFepvFLKGQ+M1
+         LbuxeZNYVTMZXx8PL5jfdinzAUAS9h/G6aD3riF3Y5abTcvy2PuWtX2ahi5bkF7vsBsp
+         hbMKh213rd/kG4GxqR8orBTdvEU5xeYcNPrqkjpOyLPx4MOWKtUl13MPW0g1sImjUTj9
+         w2S9+/e8OmjmNz+sroqOBdjYtKNBF/Nu/t6v8f2enUT0fJn8+6pyB59+srDsa/ofYlwq
+         uHwQ==
+X-Gm-Message-State: AOAM533cXXM1TKILYPX073Aw+AU5hWuL8t7CMiLyFtS4kHSYKi9EH+yb
+        owbA5TmOmgI4op/tKbg9PL4=
+X-Google-Smtp-Source: ABdhPJzfKbh00OOS2Ax3BYY7qkAjc5pZuaFM4J70J2a7kJRPCEM8RhMHTBoI3ntM0Oh5V8ddiStFyw==
+X-Received: by 2002:a17:902:a601:b0:148:adf2:9725 with SMTP id u1-20020a170902a60100b00148adf29725mr142062plq.136.1640037651105;
+        Mon, 20 Dec 2021 14:00:51 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:9632:a1c4:968a:6f66])
+        by smtp.gmail.com with ESMTPSA id d1sm16593583pfj.90.2021.12.20.14.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 14:00:49 -0800 (PST)
+Date:   Mon, 20 Dec 2021 14:00:46 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        gwendal@google.com, seanpaul@google.com, marcheau@google.com,
+        rajatxjain@gmail.com
+Subject: Re: [PATCH v2 2/2] drm/privacy_screen_x86: Add entry for ChromeOS
+ privacy-screen
+Message-ID: <YcD9DkYLrdexyP0p@google.com>
+References: <20211217202850.1967594-1-rajatja@google.com>
+ <20211217202850.1967594-2-rajatja@google.com>
+ <YcDegV8wqljpU3J0@google.com>
+ <CACK8Z6FyvpjhHqh3PRfRFYAhVaxgkxBT_1SnYH0PkvNv5qwOvw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACK8Z6FyvpjhHqh3PRfRFYAhVaxgkxBT_1SnYH0PkvNv5qwOvw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+On Mon, Dec 20, 2021 at 12:29:18PM -0800, Rajat Jain wrote:
+> Hello,
+> 
+> On Mon, Dec 20, 2021 at 11:50 AM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+> >
+> > On Fri, Dec 17, 2021 at 12:28:50PM -0800, Rajat Jain wrote:
+> > > Add a static entry in the x86 table, to detect and wait for
+> > > privacy-screen on some ChromeOS platforms.
+> > >
+> > > Please note that this means that if CONFIG_CHROMEOS_PRIVACY_SCREEN is
+> > > enabled, and if "GOOG0010" device is found in ACPI, then the i915 probe
+> > > shall return EPROBE_DEFER until a platform driver actually registers the
+> > > privacy-screen: https://hansdegoede.livejournal.com/25948.html
+> > >
+> > > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > > ---
+> > > v2: * Use #if instead of #elif
+> > >     * Reorder the patches in the series.
+> > >     * Rebased on drm-tip
+> > >
+> > >  drivers/gpu/drm/drm_privacy_screen_x86.c | 22 ++++++++++++++++++++++
+> > >  1 file changed, 22 insertions(+)
+> > >
+> > > diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> > > index a2cafb294ca6..0c5699ad70a3 100644
+> > > --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
+> > > +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> > > @@ -47,6 +47,18 @@ static bool __init detect_thinkpad_privacy_screen(void)
+> > >  }
+> > >  #endif
+> > >
+> > > +#if IS_ENABLED(CONFIG_CHROMEOS_PRIVACY_SCREEN)
+> > > +static bool __init detect_chromeos_privacy_screen(void)
+> >
+> > Does marking this __init work in case there is a deferral?
+> 
+> Yes, I have verified that for Chromeos case, it is a deferral.
+> 
+> > Can it happen
+> > that privacy screen is a module and so will get loaded only after we
+> > discarded __init sections.
+> 
+> Perhaps. But I do not think that  is a problem. All the functions and
+> data in this file are in __init sections, and this entry is here to
+> ensure that the drm probe will wait for the privacy screen driver
+> (whenever it is loaded).
 
-In preparation for adding vmalloc support to SW/HW_TAGS KASAN,
-reset pointer tags in functions that use pointer values in
-range checks.
+Ah, OK, we are not leaking detect() pointers outside this module. 
 
-vread() is a special case here. Despite the untagging of the addr
-pointer in its prologue, the accesses performed by vread() are checked.
+> That is the reason, ideally we  would want to
+> somehow restrict the privacy screen to be built into the kernel so as
+> to minimize the delay if any.
 
-Instead of accessing the virtual mappings though addr directly, vread()
-recovers the physical address via page_address(vmalloc_to_page()) and
-acceses that. And as page_address() recovers the pointer tag, the
-accesses get checked.
+I understand, but we can not code to the config we expect to use on
+Chrome OS, we need to make sure we cover all possibilities.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-
----
-
-Changes v1->v2:
-- Clarified the description of untagging in vread().
----
- mm/vmalloc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 10011a07231d..eaacdf3abfa7 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -73,7 +73,7 @@ static const bool vmap_allow_huge = false;
- 
- bool is_vmalloc_addr(const void *x)
- {
--	unsigned long addr = (unsigned long)x;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(x);
- 
- 	return addr >= VMALLOC_START && addr < VMALLOC_END;
- }
-@@ -631,7 +631,7 @@ int is_vmalloc_or_module_addr(const void *x)
- 	 * just put it in the vmalloc space.
- 	 */
- #if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
--	unsigned long addr = (unsigned long)x;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(x);
- 	if (addr >= MODULES_VADDR && addr < MODULES_END)
- 		return 1;
- #endif
-@@ -805,6 +805,8 @@ static struct vmap_area *find_vmap_area_exceed_addr(unsigned long addr)
- 	struct vmap_area *va = NULL;
- 	struct rb_node *n = vmap_area_root.rb_node;
- 
-+	addr = (unsigned long)kasan_reset_tag((void *)addr);
-+
- 	while (n) {
- 		struct vmap_area *tmp;
- 
-@@ -826,6 +828,8 @@ static struct vmap_area *__find_vmap_area(unsigned long addr)
- {
- 	struct rb_node *n = vmap_area_root.rb_node;
- 
-+	addr = (unsigned long)kasan_reset_tag((void *)addr);
-+
- 	while (n) {
- 		struct vmap_area *va;
- 
-@@ -2144,7 +2148,7 @@ EXPORT_SYMBOL_GPL(vm_unmap_aliases);
- void vm_unmap_ram(const void *mem, unsigned int count)
- {
- 	unsigned long size = (unsigned long)count << PAGE_SHIFT;
--	unsigned long addr = (unsigned long)mem;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(mem);
- 	struct vmap_area *va;
- 
- 	might_sleep();
-@@ -3406,6 +3410,8 @@ long vread(char *buf, char *addr, unsigned long count)
- 	unsigned long buflen = count;
- 	unsigned long n;
- 
-+	addr = kasan_reset_tag(addr);
-+
- 	/* Don't allow overflow */
- 	if ((unsigned long) addr + count < count)
- 		count = -(unsigned long) addr;
+Thanks.
 -- 
-2.25.1
-
+Dmitry

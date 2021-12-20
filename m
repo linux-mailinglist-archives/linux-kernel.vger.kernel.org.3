@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6069E47B00B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E3547B013
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbhLTPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:24:06 -0500
-Received: from mga11.intel.com ([192.55.52.93]:58278 "EHLO mga11.intel.com"
+        id S239636AbhLTPYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:24:24 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58159 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237502AbhLTPXE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:23:04 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237732826"
+        id S235977AbhLTPXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:23:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237732829"
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="237732826"
+   d="scan'208";a="237732829"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:16:06 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:16:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="484086907"
+   d="scan'208";a="484086910"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 07:16:06 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -35,11 +35,10 @@ Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v2 5/7] thermal: intel: hfi: Enable notification interrupt
-Date:   Mon, 20 Dec 2021 07:14:36 -0800
-Message-Id: <20211220151438.1196-6-ricardo.neri-calderon@linux.intel.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 6/7] thermal: netlink: Add a new event to notify CPU capabilities change
+Date:   Mon, 20 Dec 2021 07:14:37 -0800
+Message-Id: <20211220151438.1196-7-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
 References: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
@@ -47,240 +46,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When hardware wants to inform the operating system about updates in the HFI
-table, it issues a package-level thermal event interrupt. For this,
-hardware has new interrupt and status bits in the IA32_PACKAGE_THERM_
-INTERRUPT and IA32_PACKAGE_THERM_STATUS registers. The existing thermal
-throttle driver already handles thermal event interrupts: it initializes
-the thermal vector of the local APIC as well as per-CPU and package-level
-interrupt reporting. It also provides routines to service such interrupts.
-Extend its functionality to also handle HFI interrupts.
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-The frequency of the thermal HFI interrupt is specific to each processor
-model. On some processors, a single interrupt happens as soon as the HFI is
-enabled and hardware will never update HFI capabilities afterwards. On
-other processors, thermal and power constraints may cause thermal HFI
-interrupts every tens of milliseconds.
+Add a new netlink event to notify change in CPU capabilities in terms of
+performance and efficiency.
 
-To not overwhelm consumers of the HFI data, use delayed work to throttle
-the rate at which HFI updates are processed.
+Firmware may change CPU capabilities as a result of thermal events in the
+system or to account for changes in the TDP (thermal design power) level.
+
+This notification type will allow user space to avoid running workloads
+on certain CPUs or proactively adjust power limits to avoid future events.
+
+The netlink message consists of a nested attribute
+(THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
+
+ * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
+   -- logical CPU number
+ * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
+   -- Scaled performance from 0-1023
+ * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
+   -- Scaled efficiency from 0-1023
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: Aubrey Li <aubrey.li@linux.intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Lukasz Luba <lukasz.luba@arm.com>
 Cc: Tim Chen <tim.c.chen@linux.intel.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Reviewed-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
 Changes since v1:
-  * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Boris)
-  * Repurposed hfi_instance::event_lock to handle HFI interrupt
-    events to avoid keeping CPUs spinning needlessly. Added a new
-    hfi_instance::table_lock to serialize access to an HFI table.
-    (PeterZ)
-  * Replaced raw_spin_[un]lock[restore|save]() with raw_spin_[un]lock().
-    intel_hfi_process_event() runs in interrupt context and hence there
-    is no need to save interrupt flags.
-  * Renamed HFI_CONFIG_ENABLE_BIT as HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT
-    for clarity.
-  * Reworked timestamp updates for readability. Removed redundant
-    hfi_instance::timestamp.
-  * Relaxed timestamp check to allow time wrap-around.
+  * Reworded commit message.
+  * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
+  * Defined the CPU capability attributes to be scaled in the [0, 1023]
+    interval. (Lukasz)
 ---
- drivers/thermal/intel/intel_hfi.c   | 99 +++++++++++++++++++++++++++++
- drivers/thermal/intel/intel_hfi.h   |  2 +
- drivers/thermal/intel/therm_throt.c | 10 +++
- 3 files changed, 111 insertions(+)
+ drivers/thermal/thermal_netlink.c | 55 +++++++++++++++++++++++++++++++
+ drivers/thermal/thermal_netlink.h | 13 ++++++++
+ include/uapi/linux/thermal.h      |  6 +++-
+ 3 files changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 9b68fa25950e..227d2f258666 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -27,8 +27,12 @@
- 
- #include "intel_hfi.h"
- 
-+#define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
-+				     BIT(9) | BIT(11) | BIT(26))
-+
- /* Hardware Feedback Interface MSR configuration bits */
- #define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
-+#define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT	BIT(0)
- 
- /* CPUID detection and enumeration definitions for HFI */
- 
-@@ -87,6 +91,9 @@ struct hfi_hdr {
-  * @data:		Base address of the local table data
-  * @cpus:		CPUs represented in this HFI table instance
-  * @hw_table:		Pointer to the HFI table of this instance
-+ * @update_work:	Delayed work to process HFI updates
-+ * @table_lock:		Lock to protect acceses to the table of this instance
-+ * @event_lock:		Lock to process HFI interrupts
-  * @initialized:	True if this HFI instance has bee initialized
-  *
-  * A set of parameters to parse and navigate a specific HFI table.
-@@ -100,6 +107,9 @@ struct hfi_instance {
- 	void			*data;
- 	cpumask_var_t		cpus;
- 	void			*hw_table;
-+	struct delayed_work	update_work;
-+	raw_spinlock_t		table_lock;
-+	raw_spinlock_t		event_lock;
- 	bool			initialized;
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index a16dd4d5d710..38e6c20f460c 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
+ 	[THERMAL_GENL_ATTR_CDEV_MAX_STATE]	= { .type = NLA_U32 },
+ 	[THERMAL_GENL_ATTR_CDEV_NAME]		= { .type = NLA_STRING,
+ 						    .len = THERMAL_NAME_LENGTH },
++	/* CPU capabilities */
++	[THERMAL_GENL_ATTR_CPU_CAPABILITY]		= { .type = NLA_NESTED },
++	[THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]		= { .type = NLA_U32 },
++	[THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]	= { .type = NLA_U32 },
++	[THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]	= { .type = NLA_U32 },
  };
  
-@@ -138,6 +148,83 @@ static struct hfi_instance *hfi_instances;
- static struct hfi_features hfi_features;
- static DEFINE_MUTEX(hfi_lock);
+ struct param {
+@@ -58,6 +63,8 @@ struct param {
+ 	int temp;
+ 	int cdev_state;
+ 	int cdev_max_state;
++	struct cpu_capability *cpu_capabilities;
++	int cpu_capabilities_count;
+ };
  
-+#define HFI_UPDATE_INTERVAL	HZ
-+
-+static void hfi_update_work_fn(struct work_struct *work)
-+{
-+	struct hfi_instance *hfi_instance;
-+
-+	hfi_instance = container_of(to_delayed_work(work), struct hfi_instance,
-+				    update_work);
-+	if (!hfi_instance)
-+		return;
-+
-+	/* TODO: Consume update here. */
-+}
-+
-+void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
-+{
-+	struct hfi_instance *hfi_instance;
-+	int cpu = smp_processor_id();
-+	struct hfi_cpu_info *info;
-+	u64 new_timestamp;
-+
-+	if (!pkg_therm_status_msr_val)
-+		return;
-+
-+	info = &per_cpu(hfi_cpu_info, cpu);
-+	if (!info)
-+		return;
-+
-+	/*
-+	 * It is possible that we get an HFI thermal interrupt on this CPU
-+	 * before its HFI instance is initialized. This is not a problem. The
-+	 * CPU that enabled the interrupt for this package will also get the
-+	 * interrupt and is fully initialized.
-+	 */
-+	hfi_instance = info->hfi_instance;
-+	if (!hfi_instance)
-+		return;
-+
-+	/*
-+	 * On most systems, all CPUs in the package receive a package-level
-+	 * thermal interrupt when there is an HFI update. It is sufficient to
-+	 * let a single CPU to acknowledge the update and schedule work to
-+	 * process it. The remaining CPUs can resume their work.
-+	 */
-+	if (!raw_spin_trylock(&hfi_instance->event_lock))
-+		return;
-+
-+	/* Skip duplicated updates. */
-+	new_timestamp = *(u64 *)hfi_instance->hw_table;
-+	if (*hfi_instance->timestamp == new_timestamp) {
-+		raw_spin_unlock(&hfi_instance->event_lock);
-+		return;
-+	}
-+
-+	raw_spin_lock(&hfi_instance->table_lock);
-+
-+	/*
-+	 * Copy the updated table into our local copy. This includes the new
-+	 * timestamp.
-+	 */
-+	memcpy(hfi_instance->local_table, hfi_instance->hw_table,
-+	       hfi_features.nr_table_pages << PAGE_SHIFT);
-+
-+	raw_spin_unlock(&hfi_instance->table_lock);
-+	raw_spin_unlock(&hfi_instance->event_lock);
-+
-+	/*
-+	 * Let hardware know that we are done reading the HFI table and it is
-+	 * free to update it again.
-+	 */
-+	pkg_therm_status_msr_val &= THERM_STATUS_CLEAR_PKG_MASK &
-+				    ~PACKAGE_THERM_STATUS_HFI_UPDATED;
-+	wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, pkg_therm_status_msr_val);
-+
-+	schedule_delayed_work(&hfi_instance->update_work, HFI_UPDATE_INTERVAL);
-+}
-+
- static void init_hfi_cpu_index(struct hfi_cpu_info *info)
- {
- 	union cpuid6_edx edx;
-@@ -252,9 +339,21 @@ void intel_hfi_online(unsigned int cpu)
- 
- 	init_hfi_instance(hfi_instance);
- 
-+	INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn);
-+	raw_spin_lock_init(&hfi_instance->table_lock);
-+	raw_spin_lock_init(&hfi_instance->event_lock);
-+
- 	cpumask_set_cpu(cpu, hfi_instance->cpus);
- 	info->hfi_instance = hfi_instance;
- 
-+	/*
-+	 * Enable the hardware feedback interface and never disable it. See
-+	 * comment on programming the address of the table.
-+	 */
-+	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-+	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-+	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-+
- 	mutex_unlock(&hfi_lock);
- 
- 	return;
-diff --git a/drivers/thermal/intel/intel_hfi.h b/drivers/thermal/intel/intel_hfi.h
-index bc91cafc908b..5d6e722e3b4c 100644
---- a/drivers/thermal/intel/intel_hfi.h
-+++ b/drivers/thermal/intel/intel_hfi.h
-@@ -6,10 +6,12 @@
- void __init intel_hfi_init(void);
- void intel_hfi_online(unsigned int cpu);
- void intel_hfi_offline(unsigned int cpu);
-+void intel_hfi_process_event(__u64 pkg_therm_status_msr_val);
- #else
- static inline void intel_hfi_init(void) { }
- static inline void intel_hfi_online(unsigned int cpu) { }
- static inline void intel_hfi_offline(unsigned int cpu) { }
-+static inline void intel_hfi_process_event(__u64 pkg_therm_status_msr_val) { }
- #endif
- 
- #endif /* _INTEL_HFI_H */
-diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-index 2a79598a7f7a..930e19eeeac6 100644
---- a/drivers/thermal/intel/therm_throt.c
-+++ b/drivers/thermal/intel/therm_throt.c
-@@ -619,6 +619,10 @@ void intel_thermal_interrupt(void)
- 					PACKAGE_THERM_STATUS_POWER_LIMIT,
- 					POWER_LIMIT_EVENT,
- 					PACKAGE_LEVEL);
-+
-+		if (this_cpu_has(X86_FEATURE_HFI))
-+			intel_hfi_process_event(msr_val &
-+						PACKAGE_THERM_STATUS_HFI_UPDATED);
- 	}
+ typedef int (*cb_t)(struct param *);
+@@ -190,6 +197,45 @@ static int thermal_genl_event_gov_change(struct param *p)
+ 	return 0;
  }
  
-@@ -728,6 +732,12 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
- 			wrmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT,
- 			      l | (PACKAGE_THERM_INT_LOW_ENABLE
- 				| PACKAGE_THERM_INT_HIGH_ENABLE), h);
++static int thermal_genl_event_cpu_capability_change(struct param *p)
++{
++	struct cpu_capability *cpu_cap = p->cpu_capabilities;
++	struct sk_buff *msg = p->msg;
++	struct nlattr *start_cap;
++	int i, ret;
 +
-+		if (cpu_has(c, X86_FEATURE_HFI)) {
-+			rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, l, h);
-+			wrmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT,
-+			      l | PACKAGE_THERM_INT_HFI_ENABLE, h);
++	start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
++	if (!start_cap)
++		return -EMSGSIZE;
++
++	for (i = 0; i < p->cpu_capabilities_count; ++i) {
++		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
++				cpu_cap->cpu)) {
++			ret = -EMSGSIZE;
++			goto out_cancel_nest;
 +		}
- 	}
++		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
++				cpu_cap->performance)) {
++			ret = -EMSGSIZE;
++			goto out_cancel_nest;
++		}
++		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
++				cpu_cap->efficiency)) {
++			ret = -EMSGSIZE;
++			goto out_cancel_nest;
++		}
++		++cpu_cap;
++	}
++
++	nla_nest_end(msg, start_cap);
++
++	return 0;
++out_cancel_nest:
++	nla_nest_cancel(msg, start_cap);
++
++	return ret;
++}
++
+ int thermal_genl_event_tz_delete(struct param *p)
+ 	__attribute__((alias("thermal_genl_event_tz")));
  
- 	rdmsr(MSR_IA32_MISC_ENABLE, l, h);
+@@ -219,6 +265,7 @@ static cb_t event_cb[] = {
+ 	[THERMAL_GENL_EVENT_CDEV_DELETE]	= thermal_genl_event_cdev_delete,
+ 	[THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]	= thermal_genl_event_cdev_state_update,
+ 	[THERMAL_GENL_EVENT_TZ_GOV_CHANGE]	= thermal_genl_event_gov_change,
++	[THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
+ };
+ 
+ /*
+@@ -356,6 +403,14 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
+ 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
+ }
+ 
++int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
++{
++	struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
++
++	return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
++}
++EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
++
+ /*************************** Command encoding ********************************/
+ 
+ static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index e554f76291f4..44bc3dec5568 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -4,6 +4,12 @@
+  *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+  */
+ 
++struct cpu_capability {
++	int cpu;
++	int performance;
++	int efficiency;
++};
++
+ /* Netlink notification function */
+ #ifdef CONFIG_THERMAL_NETLINK
+ int __init thermal_netlink_init(void);
+@@ -23,6 +29,7 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
+ int thermal_notify_cdev_delete(int cdev_id);
+ int thermal_notify_tz_gov_change(int tz_id, const char *name);
+ int thermal_genl_sampling_temp(int id, int temp);
++int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps);
+ #else
+ static inline int thermal_netlink_init(void)
+ {
+@@ -101,4 +108,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
+ {
+ 	return 0;
+ }
++
++static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
++{
++	return 0;
++}
++
+ #endif /* CONFIG_THERMAL_NETLINK */
+diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+index 9aa2fedfa309..fc78bf3aead7 100644
+--- a/include/uapi/linux/thermal.h
++++ b/include/uapi/linux/thermal.h
+@@ -44,7 +44,10 @@ enum thermal_genl_attr {
+ 	THERMAL_GENL_ATTR_CDEV_MAX_STATE,
+ 	THERMAL_GENL_ATTR_CDEV_NAME,
+ 	THERMAL_GENL_ATTR_GOV_NAME,
+-
++	THERMAL_GENL_ATTR_CPU_CAPABILITY,
++	THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
++	THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
++	THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+ 	__THERMAL_GENL_ATTR_MAX,
+ };
+ #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
+@@ -71,6 +74,7 @@ enum thermal_genl_event {
+ 	THERMAL_GENL_EVENT_CDEV_DELETE,		/* Cdev unbound */
+ 	THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,	/* Cdev state updated */
+ 	THERMAL_GENL_EVENT_TZ_GOV_CHANGE,	/* Governor policy changed  */
++	THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,	/* CPU capability changed */
+ 	__THERMAL_GENL_EVENT_MAX,
+ };
+ #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
 -- 
 2.17.1
 

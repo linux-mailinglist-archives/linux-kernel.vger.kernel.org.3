@@ -2,160 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C9D47AB2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9317F47AB31
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbhLTOTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:19:12 -0500
-Received: from mga07.intel.com ([134.134.136.100]:13155 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231219AbhLTOTL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:19:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640009951; x=1671545951;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/9n+Tb3zHlZ2tiyjf1n4wRWqLSjrFPxWG1lA/TBA3U8=;
-  b=bhMnyi7B5HzmDSC11Yb3Y0gpbdiHoy6gSMlzhJ9+xV8f4qFaaE64F6ha
-   ruTXHms3JEw+o7PlNTr453Zzk96Lf31drlfjlGsKyYGHcdWFqqpXynSRH
-   Ui8GVxmaLPhBUvDWizU9ro3sXIPY+Nw3gopeb5CMYestiFVHaA32wseQv
-   LteAkxkWHzuvET8yo6leHvIiUY4I+Y7KsZD/3uaXKYDfbgXpHNAJ/WyOv
-   qz735gV0DWuagh0EbdlumUCs4IMmVN9ArYt7uKyz76f1OAmloTEq4OfAg
-   +5lnetpZkL7gELW7TVKsgMiVGHH4gDyMM/iGe4lbiqfZdmXJUl8IQAc9t
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="303546101"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="303546101"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:19:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="684278595"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 06:19:08 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzJVM-0007qz-6B; Mon, 20 Dec 2021 14:19:08 +0000
-Date:   Mon, 20 Dec 2021 22:18:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/5.10 7710/9999]
- arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used
-Message-ID: <202112202231.xzaVKrHI-lkp@intel.com>
+        id S233606AbhLTOTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233604AbhLTOTR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:19:17 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B7EC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:19:17 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so6772147wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sc+7jY7u7JL3gjoK1ONPiTQNSX0Y662aLa89J2Uhm6Q=;
+        b=GvOUtgsXbwOppDo6i/VTH9j6pgkj/GVh3MaAqceDl2RuErlaE4xIDrswa9hWC4L4VW
+         JQwWeZC5Zyq3r0NgTx81m42ml/LxAly2FS4wFq7EwzA7xQIUsiO49DbcNvp4oqIzWu1J
+         iScxmgw3qRri1rD1Mt9azhAcafL5hsdgLNS1s9cp8rPiNiVxWHWYYZAVFX6tD6mybkHL
+         tdsfOSx3VZfVvQakWy/TeWnuqCNl3qGposFCsvBCbthGTPWwg7iHZ6ODTnInbh5auj38
+         9X3O2RZhDXiwJxSNihYf4rry41bBF4zWSzNbwPe5XomCu0NcQmhZNfbaYHcNtRgyLguX
+         rH9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sc+7jY7u7JL3gjoK1ONPiTQNSX0Y662aLa89J2Uhm6Q=;
+        b=awsgvkVqjMImDsOEZoqb+R6Xjb5VaciPWOtJ0GuX0HDLQ4j83W7BZ5/3MOrwfWJwar
+         bEV0XUns/j1jBZzuiAleQMvLmRjwBXuMO8BEPMRcv/eKzdKRvEY8W4eXm83CkDG/Kgua
+         B6Pw4wTtiIZIHJVCOKURtgi8O6FWVjxzXI8kNC1fZaTBXghJwcs/z5PVTy//xTWWG5t2
+         /86OA6K737Y5s+ia7t2wlegWu+IZlJhcKj6O4TlXHaCUnY7k4KMip8sSmvaLBIz4ENgd
+         Kbx2+0hUSoRBohUzJXOYyg6o+9TMFnq3DPs131qaxxXCq7TlMzXCRhcTR7yu/RzTi+ZN
+         ar4w==
+X-Gm-Message-State: AOAM530qHap1RmqtLG/tHB01V1xBl9I3jgg7Iz29q563v3jOYzAS9XqD
+        UDYxahdpw4p0NFSgW5/ra3zsig==
+X-Google-Smtp-Source: ABdhPJy/8Z6x62OBpzx2JyHeAdaUAF/0h3nRSDXoHeSzSV1zfT+Pj6SrVxraZs8AbL0VO89RZcJxkg==
+X-Received: by 2002:a05:600c:a0e:: with SMTP id z14mr7100429wmp.43.1640009955498;
+        Mon, 20 Dec 2021 06:19:15 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:ac6:da31:b84c:183? ([2a01:e34:ed2f:f020:ac6:da31:b84c:183])
+        by smtp.googlemail.com with ESMTPSA id p13sm4039540wmq.19.2021.12.20.06.19.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 06:19:15 -0800 (PST)
+Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
+ <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bdec1a89-ad1b-1e16-a248-029f7f02ae80@linaro.org>
+Date:   Mon, 20 Dec 2021 15:19:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srikar,
+On 20/12/2021 14:48, Geert Uytterhoeven wrote:
+> On Mon, Dec 20, 2021 at 1:29 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>> On 18/12/2021 15:41, Lad Prabhakar wrote:
+>>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+>>> allocation of IRQ resources in DT core code, this causes an issue
+>>> when using hierarchical interrupt domains using "interrupts" property
+>>> in the node as this bypasses the hierarchical setup and messes up the
+>>> irq chaining.
+>>>
+>>> In preparation for removal of static setup of IRQ resource from DT core
+>>> code use platform_get_irq_optional().
+>>>
+>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> ---
+>>> Hi,
+>>>
+>>> Dropping usage of platform_get_resource() was agreed based on
+>>> the discussion [0].
+>>>
+>>> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+>>> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>>>
+>>> Cheers,
+>>> Prabhakar
+>>> ---
+>>>  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
+>>>  1 file changed, 11 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+>>> index b49f04daaf47..e4c7bc1bf7ef 100644
+>>> --- a/drivers/thermal/rcar_thermal.c
+>>> +++ b/drivers/thermal/rcar_thermal.c
+>>> @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>>>       struct rcar_thermal_common *common;
+>>>       struct rcar_thermal_priv *priv;
+>>>       struct device *dev = &pdev->dev;
+>>> -     struct resource *res, *irq;
+>>> +     struct resource *res;
+>>>       const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+>>>       int mres = 0;
+>>>       int i;
+>>> @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>>>       pm_runtime_get_sync(dev);
+>>>
+>>>       for (i = 0; i < chip->nirqs; i++) {
+>>> -             irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+>>> -             if (!irq)
+>>> +             int irq;
+>>> +
+>>> +             irq = platform_get_irq_optional(pdev, i);
+>>> +             if (irq <= 0 && irq != -ENXIO) {
+>>> +                     ret = irq ? irq : -ENXIO;
+>>> +                     goto error_unregister;
+>>> +             }
+>>> +             if (irq == -ENXIO)
+>>>                       continue;
+>>
+>> Why not invert the conditions?
+>>
+>>                 if (irq == -ENXIO)
+>>                         continue;
+> 
+> And this can be break.
+> 
+>>
+>>                 if (irq <= 0) {
+>>                         ret = irq ? irq : -ENXIO;
+> 
+> irq == 0 cannot happen.
+> 
+>>                         goto out_unregister;
+>>                 }
 
-FYI, the error/warning still remains.
+Sorry, I don't get the two comments. May be I missed something but it
+seems for me the results are the same with the inverted conditions or not.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   dbe776a5c4bf873c74f82ce3cdf8fd4e22b53b8d
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [7710/9999] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-currituck_defconfig (https://download.01.org/0day-ci/archive/20211220/202112202231.xzaVKrHI-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+if (irq <= 0 && irq != -ENXIO)
+	goto out;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+if (irq == -ENXIO)
+	continue;
 
-All errors (new ones prefixed by >>):
+Can be changed to:
 
-   arch/powerpc/kernel/smp.c:551:6: error: no previous prototype for 'tick_broadcast' [-Werror=missing-prototypes]
-     551 | void tick_broadcast(const struct cpumask *mask)
-         |      ^~~~~~~~~~~~~~
-   arch/powerpc/kernel/smp.c:561:6: error: no previous prototype for 'debugger_ipi_callback' [-Werror=missing-prototypes]
-     561 | void debugger_ipi_callback(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/smp.c: In function 'add_cpu_to_masks':
->> arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used [-Werror=unused-but-set-variable]
-    1380 |         bool ret;
-         |              ^~~
-   cc1: all warnings being treated as errors
+if (irq != -ENXIO)
+	if (irq <= 0)
+		goto out;
+
+if (irq == -ENXIO)
+	continue;
+
+Can be changed to:
 
 
-vim +/ret +1380 arch/powerpc/kernel/smp.c
+if (irq == -ENXIO)
+	continue;
 
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
+if (irq != -ENXIO)
+	if (irq <= 0)
+		goto out;
 
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
+The second condition is always true because the first condition is the
+opposite of the second condition, if the second condition block is
+reached, that means irq != -ENXIO, so we can remove the second condition
+and that results into:
 
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+if (irq == -ENXIO)
+	continue;
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+if (irq <= 0)
+	goto out;
+
+
+Did I miss your point ?
+
+
+
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

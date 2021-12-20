@@ -2,143 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 898EF47AA82
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C5547AA88
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbhLTNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:42:12 -0500
-Received: from mga14.intel.com ([192.55.52.115]:17968 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229539AbhLTNmK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:42:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640007730; x=1671543730;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CncPVdtGApcxRcU6/VwWzk2H+dVxK8ATq00Lsjz+hXo=;
-  b=DBHRM2zFQcLNT48EXJXPqdZ19fPgOa+QrbIRqhp6IsKV5mNNWugo0z8L
-   8s2VxRbZ5TXYgtRJWR5oBhUsHcZFHGlM1R6VKIb9zov9u+PDHwrvywDYU
-   z4hawd8nTkfXd84Bbgntf0a8+yyMcrzmVcqimEMIy/3ALcSFHioDKSa96
-   8MpJk4dFy4EnlbZ0ZBG5f2PwxwaHRRwt9r0aix/TADdHkOe4xoBoBRWy0
-   SdN7P9ooCxrie1ejrAe6l1jp+j6cpaNPivGy45g5q9kB2peQTJj8p4bu0
-   9o4PHKkWUBNKz63vEX3l90BqZKUiJ4o3WdasggZb6zsfYLb78wA2l7eNz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="240387606"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="240387606"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:42:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="465941525"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 20 Dec 2021 05:42:07 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzIvX-0007oJ-70; Mon, 20 Dec 2021 13:42:07 +0000
-Date:   Mon, 20 Dec 2021 21:41:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>, kraxel@redhat.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: Re: [PATCH] udmabuf: put dmabuf in case of get fd failed
-Message-ID: <202112202114.4rnU3YZF-lkp@intel.com>
-References: <20211220054333.3041893-1-xianting.tian@linux.alibaba.com>
+        id S233020AbhLTNnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:43:07 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:36982 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229539AbhLTNnH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:43:07 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACnrZ1ViMBh4K1uBA--.25001S2;
+        Mon, 20 Dec 2021 21:42:45 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ok@artecdesign.ee, gregkh@linuxfoundation.org, s.shtylyov@omp.ru
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] USB: host: Check for null res pointer
+Date:   Mon, 20 Dec 2021 21:42:44 +0800
+Message-Id: <20211220134244.930727-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220054333.3041893-1-xianting.tian@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACnrZ1ViMBh4K1uBA--.25001S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JFyDuFWfCr1DXrW7uF1kAFb_yoWkXFX_Cr
+        409395KryDCFn0ya18Arnxua92ywsxur4UZa1kta4avryUJr17J3yDurWfCr98Ww4DCryD
+        C34kZrZ3u343ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUU3CzJUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xianting,
+The return value of platform_get_resource() needs to be checked.
+To avoid use of error pointer in case that there is no suitable resource.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc6 next-20211217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Xianting-Tian/udmabuf-put-dmabuf-in-case-of-get-fd-failed/20211220-134433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a7904a538933c525096ca2ccde1e60d0ee62c08e
-config: x86_64-randconfig-r024-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202114.4rnU3YZF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/322781a4da9de4a3057afd933108d23ca7f5282e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xianting-Tian/udmabuf-put-dmabuf-in-case-of-get-fd-failed/20211220-134433
-        git checkout 322781a4da9de4a3057afd933108d23ca7f5282e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/dma-buf/udmabuf.c:293:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/dma-buf/udmabuf.c:312:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/dma-buf/udmabuf.c:334:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/dma-buf/udmabuf.c:353:20: error: use of undeclared identifier 'udmabuf_ioctl'
-           .unlocked_ioctl = udmabuf_ioctl,
-                             ^
-   drivers/dma-buf/udmabuf.c:355:20: error: use of undeclared identifier 'udmabuf_ioctl'
-           .compat_ioctl   = udmabuf_ioctl,
-                             ^
-   drivers/dma-buf/udmabuf.c:366:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/dma-buf/udmabuf.c:371:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/dma-buf/udmabuf.c:375:13: error: use of undeclared identifier 'udmabuf_dev_init'
-   module_init(udmabuf_dev_init)
-               ^
-   drivers/dma-buf/udmabuf.c:375:13: error: use of undeclared identifier 'udmabuf_dev_init'
-   drivers/dma-buf/udmabuf.c:376:13: error: use of undeclared identifier 'udmabuf_dev_exit'
-   module_exit(udmabuf_dev_exit)
-               ^
-   drivers/dma-buf/udmabuf.c:379:26: error: expected '}'
-   MODULE_LICENSE("GPL v2");
-                            ^
-   drivers/dma-buf/udmabuf.c:166:1: note: to match this '{'
-   {
-   ^
->> drivers/dma-buf/udmabuf.c:351:37: warning: ISO C90 forbids mixing declarations and code [-Wdeclaration-after-statement]
-   static const struct file_operations udmabuf_fops = {
-                                       ^
-   1 warning and 11 errors generated.
-
-
-vim +351 drivers/dma-buf/udmabuf.c
-
-fbb0de79507819 Gerd Hoffmann          2018-08-27  350  
-fbb0de79507819 Gerd Hoffmann          2018-08-27 @351  static const struct file_operations udmabuf_fops = {
-fbb0de79507819 Gerd Hoffmann          2018-08-27  352  	.owner		= THIS_MODULE,
-fbb0de79507819 Gerd Hoffmann          2018-08-27  353  	.unlocked_ioctl = udmabuf_ioctl,
-d4a197f4047e01 Kristian H. Kristensen 2020-09-03  354  #ifdef CONFIG_COMPAT
-d4a197f4047e01 Kristian H. Kristensen 2020-09-03  355  	.compat_ioctl   = udmabuf_ioctl,
-d4a197f4047e01 Kristian H. Kristensen 2020-09-03  356  #endif
-fbb0de79507819 Gerd Hoffmann          2018-08-27  357  };
-fbb0de79507819 Gerd Hoffmann          2018-08-27  358  
-
+Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changelog:
+
+v2 -> v3
+
+*Change 1. Correct the commit message.
+*CHange 2. Change the return code.
+---
+ drivers/usb/host/isp116x-hcd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 8835f6bd528e..addd2b43a14c 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,9 +1541,15 @@ static int isp116x_remove(struct platform_device *pdev)
+ 
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (!res)
++		return -ENODEV;
++
+ 	release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -ENODEV;
++
+ 	release_mem_region(res->start, 2);
+ 
+ 	usb_put_hcd(hcd);
+-- 
+2.25.1
+

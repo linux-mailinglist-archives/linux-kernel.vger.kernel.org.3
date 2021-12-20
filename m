@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3206547AA66
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2EF47AA68
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbhLTNcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:32:04 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55078 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhLTNcD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:32:03 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVkKh032531;
-        Mon, 20 Dec 2021 07:31:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640007106;
-        bh=5Xojthp86AJPaaXIqo7bpdpUtIVJBB4beqVhAYVWPmY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=m6x5oO5rFQzL7oRKY0b2681tm5TN8vEsXyNhyFDNyWClWzsK1gtRNRVPSYdF6j3va
-         fPXbbrXCY7ibk6fx2bPoALMHzh7Ri+JcmxCL84e2jdlp/tEhrQ4F4UYnyhUIdO/sYA
-         DmSsvJPrvdymW+wLjfm6WErMr66tFzENq4EIA/Ls=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKDVkMB115486
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Dec 2021 07:31:46 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 07:31:46 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 07:31:46 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVjhM041337;
-        Mon, 20 Dec 2021 07:31:45 -0600
-Date:   Mon, 20 Dec 2021 07:31:45 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        <SantoshShilimkarssantosh@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: smartreflex: Use platform_get_irq_optional() to
- get the interrupt
-Message-ID: <20211220133145.uiww2nuormjks7gc@unruly>
-References: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S232942AbhLTNdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:33:08 -0500
+Received: from mga01.intel.com ([192.55.52.88]:2146 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230176AbhLTNdH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:33:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="264348002"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="264348002"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:33:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="547332616"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 20 Dec 2021 05:33:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 91449190; Mon, 20 Dec 2021 15:33:13 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] tty: tty_io: Switch to vmalloc() fallback in case of TTY_NO_WRITE_SPLIT
+Date:   Mon, 20 Dec 2021 15:32:50 +0200
+Message-Id: <20211220133250.3070-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15:39-20211218, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
-> 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional().
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Hi,
-> 
-> Dropping usage of platform_get_resource() was agreed based on
-> the discussion [0].
-> 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
-> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> 
-> Cheers,
-> Prabhakar
-> ---
->  drivers/soc/ti/smartreflex.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-> index b5b2fa538d5c..4f311e00fa46 100644
-> --- a/drivers/soc/ti/smartreflex.c
-> +++ b/drivers/soc/ti/smartreflex.c
-> @@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
->  {
->  	struct omap_sr *sr_info;
->  	struct omap_sr_data *pdata = pdev->dev.platform_data;
-> -	struct resource *mem, *irq;
-> +	struct resource *mem;
->  	struct dentry *nvalue_dir;
->  	int i, ret = 0;
->  
-> @@ -844,7 +844,12 @@ static int omap_sr_probe(struct platform_device *pdev)
->  	if (IS_ERR(sr_info->base))
->  		return PTR_ERR(sr_info->base);
->  
-> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> +	ret = platform_get_irq_optional(pdev, 0);
-> +	if (ret <= 0 && ret != -ENXIO)
-> +		return ret ? ret : -ENXIO;
-^^ minor: This is a better check compared to what existed, might be good
-to add that to commit message, also does this cause the driver to fail
-probe silently?
+When TTY_NO_WRITE_SPLIT is set and 64 KiB chunks are used, allow
+vmalloc() fallback. Supply __GFP_RETRY_MAYFAIL to make kmalloc()
+preferable over vmalloc() since we may want a better performance.
 
-> +	if (ret > 0)
-> +		sr_info->irq = ret;
-> +	ret = 0;
->  
->  	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
->  	if (IS_ERR(sr_info->fck))
-> @@ -870,9 +875,6 @@ static int omap_sr_probe(struct platform_device *pdev)
->  	sr_info->autocomp_active = false;
->  	sr_info->ip_type = pdata->ip_type;
->  
-> -	if (irq)
-> -		sr_info->irq = irq->start;
-> -
->  	sr_set_clk_length(sr_info);
->  
->  	list_add(&sr_info->node, &sr_list);
-> -- 
-> 2.17.1
-> 
+Note, both current users copy data to another buffer anyway, so
+the type of our allocation doesn't affect their expectations.
 
-Otherwise, looks fine to me. but it is a little late since I have sent out my
-5.17 PR. We can try for rc OR 5.18.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/tty_io.c        | 9 +++------
+ drivers/usb/class/cdc-acm.c | 4 ----
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 6616d4a0d41d..8fedfe88dff7 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -170,7 +170,7 @@ static void free_tty_struct(struct tty_struct *tty)
+ {
+ 	tty_ldisc_deinit(tty);
+ 	put_device(tty->dev);
+-	kfree(tty->write_buf);
++	kvfree(tty->write_buf);
+ 	tty->magic = 0xDEADDEAD;
+ 	kfree(tty);
+ }
+@@ -997,9 +997,6 @@ static inline ssize_t do_tty_write(
+ 	 * layer has problems with bigger chunks. It will
+ 	 * claim to be able to handle more characters than
+ 	 * it actually does.
+-	 *
+-	 * FIXME: This can probably go away now except that 64K chunks
+-	 * are too likely to fail unless switched to vmalloc...
+ 	 */
+ 	chunk = 2048;
+ 	if (test_bit(TTY_NO_WRITE_SPLIT, &tty->flags))
+@@ -1014,12 +1011,12 @@ static inline ssize_t do_tty_write(
+ 		if (chunk < 1024)
+ 			chunk = 1024;
+ 
+-		buf_chunk = kmalloc(chunk, GFP_KERNEL);
++		buf_chunk = kvmalloc(chunk, GFP_KERNEL | __GFP_RETRY_MAYFAIL);
+ 		if (!buf_chunk) {
+ 			ret = -ENOMEM;
+ 			goto out;
+ 		}
+-		kfree(tty->write_buf);
++		kvfree(tty->write_buf);
+ 		tty->write_cnt = chunk;
+ 		tty->write_buf = buf_chunk;
+ 	}
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index b3ce7338cb6b..9b9aea24d58c 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -685,10 +685,6 @@ static int acm_port_activate(struct tty_port *port, struct tty_struct *tty)
+ 	if (retval)
+ 		goto error_get_interface;
+ 
+-	/*
+-	 * FIXME: Why do we need this? Allocating 64K of physically contiguous
+-	 * memory is really nasty...
+-	 */
+ 	set_bit(TTY_NO_WRITE_SPLIT, &tty->flags);
+ 	acm->control->needs_remote_wakeup = 1;
+ 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.34.1
+

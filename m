@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB2747AA5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3206547AA66
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbhLTNa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:30:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52480 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230176AbhLTNaZ (ORCPT
+        id S232931AbhLTNcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:32:04 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55078 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhLTNcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:30:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640007024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z2EKJ44NVclr39JIBnz6A51WStQAYZHbOe+OWM8qvbU=;
-        b=dYUjBkDt1ssGJnahq26RaXEwkRHEGtnJRZTsKtup4BV+7R5yC2e2U9GIiRKcUyC4pJU8/N
-        MZef1YeDl/K/KPEFRJeko8Tg8q4UvhalZpwAJbH6vTOBy6GWH1aNDqkO9t9+QJS4pA4hev
-        6DpiSzcbZf10a9by1a/b9W86Y8D9V8I=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-jv5APi1EMmq25IGRHhcwwQ-1; Mon, 20 Dec 2021 08:30:23 -0500
-X-MC-Unique: jv5APi1EMmq25IGRHhcwwQ-1
-Received: by mail-ed1-f69.google.com with SMTP id w17-20020a056402269100b003f7ed57f96bso7537003edd.16
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 05:30:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Z2EKJ44NVclr39JIBnz6A51WStQAYZHbOe+OWM8qvbU=;
-        b=lnK4DWL4L2n6AZRt1lJKBkLjaxym4tR4pRBMSjPCw4wfNX8FCUTtsOCpycGNjtsbwJ
-         K2TjlHyLiqhA3NKygoL2aTSkAmNEJL42d10KgaH4KdSYu01VKcrr49Gerv0Oawr1q2hE
-         g61Zz0JY0/vJVBwbSStqo6NecI9icDf5fBXE2ilovuUbFjyhaGEBNoJyqTWmTr8G3k9T
-         sWbcWhssxNAON5TSJC3xzYkKSVHHdCn7xGza+Y6dCt+W5ThEiKIC0tVCAgPMebv8Z9PJ
-         Myt1v+FcPDOixlXjeUP1V7XeLsZAZQ3UVsbETwg+7SdRyWpe1tVhOtczoiPW2JwfpiB8
-         imjw==
-X-Gm-Message-State: AOAM531+IX700VKyF0cVz2EAXf5Uf8876eeQXHkY+bQm7pCjt0staPLs
-        cJyEAh1fFwZH4xQoQ3r3D+oZ8FvhG2Bvzw2z/ZW5OmF5XQ5tdMmx8X5WqJavWftsWQHMXZ2qUoP
-        UlbGFOcTfSfTPHzhetAzwm9/Q
-X-Received: by 2002:a17:906:4788:: with SMTP id cw8mr3409646ejc.232.1640007022261;
-        Mon, 20 Dec 2021 05:30:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwqgMGNv50pAGIWQ9ZtUDpXvvkrP4KEhKRd2mYFwbqepWudxTftGB+6RrEd2fnS8IYSRqAsDA==
-X-Received: by 2002:a17:906:4788:: with SMTP id cw8mr3409633ejc.232.1640007022076;
-        Mon, 20 Dec 2021 05:30:22 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id di5sm5404969ejc.45.2021.12.20.05.30.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 05:30:21 -0800 (PST)
-Message-ID: <e93265b9-7700-fa79-046d-70bb5ec990f1@redhat.com>
-Date:   Mon, 20 Dec 2021 14:30:20 +0100
+        Mon, 20 Dec 2021 08:32:03 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVkKh032531;
+        Mon, 20 Dec 2021 07:31:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640007106;
+        bh=5Xojthp86AJPaaXIqo7bpdpUtIVJBB4beqVhAYVWPmY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=m6x5oO5rFQzL7oRKY0b2681tm5TN8vEsXyNhyFDNyWClWzsK1gtRNRVPSYdF6j3va
+         fPXbbrXCY7ibk6fx2bPoALMHzh7Ri+JcmxCL84e2jdlp/tEhrQ4F4UYnyhUIdO/sYA
+         DmSsvJPrvdymW+wLjfm6WErMr66tFzENq4EIA/Ls=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKDVkMB115486
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Dec 2021 07:31:46 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Dec 2021 07:31:46 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Dec 2021 07:31:46 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVjhM041337;
+        Mon, 20 Dec 2021 07:31:45 -0600
+Date:   Mon, 20 Dec 2021 07:31:45 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        <SantoshShilimkarssantosh@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH] soc: ti: smartreflex: Use platform_get_irq_optional() to
+ get the interrupt
+Message-ID: <20211220133145.uiww2nuormjks7gc@unruly>
+References: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v1 1/3] platform/x86: asus-wmi: Join string literals back
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Luke D. Jones" <luke@ljones.dev>,
-        acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>
-References: <20211210163009.19894-1-andriy.shevchenko@linux.intel.com>
- <YcCALCOv46Y0TogB@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YcCALCOv46Y0TogB@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/20/21 14:07, Andy Shevchenko wrote:
-> On Fri, Dec 10, 2021 at 06:30:07PM +0200, Andy Shevchenko wrote:
->> For easy grepping on debug purposes join string literals back in
->> the messages.
->>
->> No functional change.
+On 15:39-20211218, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 > 
-> Hans, any comments on the series?
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+> 
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+> 
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> 
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/soc/ti/smartreflex.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
+> index b5b2fa538d5c..4f311e00fa46 100644
+> --- a/drivers/soc/ti/smartreflex.c
+> +++ b/drivers/soc/ti/smartreflex.c
+> @@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  {
+>  	struct omap_sr *sr_info;
+>  	struct omap_sr_data *pdata = pdev->dev.platform_data;
+> -	struct resource *mem, *irq;
+> +	struct resource *mem;
+>  	struct dentry *nvalue_dir;
+>  	int i, ret = 0;
+>  
+> @@ -844,7 +844,12 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  	if (IS_ERR(sr_info->base))
+>  		return PTR_ERR(sr_info->base);
+>  
+> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> +	ret = platform_get_irq_optional(pdev, 0);
+> +	if (ret <= 0 && ret != -ENXIO)
+> +		return ret ? ret : -ENXIO;
+^^ minor: This is a better check compared to what existed, might be good
+to add that to commit message, also does this cause the driver to fail
+probe silently?
 
-No comments, the series looks good to me. I plan to another round of
-merging pdx86 patches tomorrow and then I plan to pick these up too.
+> +	if (ret > 0)
+> +		sr_info->irq = ret;
+> +	ret = 0;
+>  
+>  	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
+>  	if (IS_ERR(sr_info->fck))
+> @@ -870,9 +875,6 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  	sr_info->autocomp_active = false;
+>  	sr_info->ip_type = pdata->ip_type;
+>  
+> -	if (irq)
+> -		sr_info->irq = irq->start;
+> -
+>  	sr_set_clk_length(sr_info);
+>  
+>  	list_add(&sr_info->node, &sr_list);
+> -- 
+> 2.17.1
+> 
 
+Otherwise, looks fine to me. but it is a little late since I have sent out my
+5.17 PR. We can try for rc OR 5.18.
+
+-- 
 Regards,
-
-Hans
-
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

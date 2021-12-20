@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA4847A3E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 04:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3424C47A3E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 04:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237351AbhLTDYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 22:24:18 -0500
-Received: from smtpbg604.qq.com ([59.36.128.82]:54312 "EHLO smtpbg604.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234022AbhLTDYR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 22:24:17 -0500
-X-QQ-mid: bizesmtp48t1639970647t66ah7sm
+        id S234052AbhLTD0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 22:26:45 -0500
+Received: from smtpbg126.qq.com ([106.55.201.22]:42990 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233995AbhLTD0o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 22:26:44 -0500
+X-QQ-mid: bizesmtp38t1639970789tau23sx0
 Received: from localhost.localdomain (unknown [118.121.67.96])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 20 Dec 2021 11:24:05 +0800 (CST)
+        id ; Mon, 20 Dec 2021 11:26:27 +0800 (CST)
 X-QQ-SSF: 01000000002000D0K000B00A0000000
-X-QQ-FEAT: Z7q/N3OHGe84WMDAKKh1niE7bGmiiMVnpPotlMmuk40ljh59ew1pW8gG/ctug
-        eHPFoO6mxxzlx1Jxxmva3EvDFYSUOs1I03gX8Jku454Ek7yqf7Sx6WHXnD9l/LizUXSmlYa
-        DtDXxBYHx/236sMVk5Ux5hThSmm83p7ZG+1wDjhnW3tv3zpzobv3ypwxRlkhy6qI1T2CTld
-        SawXK6jPtXMn+3eP3nnrrrRix5Kw8q7Clmlrp63Bv4WK1kRBBbZWZBPmBR2iwEU0aOA8Qt7
-        RzqnU3NJuAR5CMpLZ5hwJHxoxwyGZfHOlMMRsd3K/85USlUvUB8teng1oAfyV6L4+gA6DFG
-        R/P1070Gj5JCNPz6a3Afarn0T/xQw==
+X-QQ-FEAT: WGgATWfafh560fyrqOc26y4jR9QpUqCbeKlhvkrBAB3v+HIO3RE+uBsqWpNv/
+        +qYkPjeI7VXJEOj+if1jePWkHYOsI7rihNugCJq5ncXvS+30INt/QyhEfWYcVnTs49TH3Xe
+        GvEWh+OEs8Z6b4uUBb34g0RbT1qI62izkRgwL2c8W/g/1qj0vbOEHhODFwbMEtVUU1ZjTNz
+        A/C4qLVawZ737m7KQSY72ZWCUnDLQ35R870J0OUz7zdc5vHUEU12F007shEtFT/PonnWnLm
+        I+CtNavQFd0B1nPwNQDLLoVFLo71mgPuEQVegOj1T2zjO10+sGQPeGDaJTJbrN0zrwn7/Nh
+        pw5y/xNLh+NSY80bhWXj8jrV+c3V37uoV3lPn82
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     mpe@ellerman.id.au
-Cc:     benh@kernel.crashing.org, paulus@samba.org, wangborong@cdjrlc.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: use strscpy to copy strings
-Date:   Mon, 20 Dec 2021 11:24:02 +0800
-Message-Id: <20211220032402.630240-1-wangborong@cdjrlc.com>
+To:     davem@davemloft.net
+Cc:     wangborong@cdjrlc.com, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] sparc: use strscpy to copy strings
+Date:   Mon, 20 Dec 2021 11:26:23 +0800
+Message-Id: <20211220032623.634463-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam4
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -52,22 +52,22 @@ Thus, replace strlcpy with strscpy.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/powerpc/platforms/pasemi/misc.c | 2 +-
+ arch/sparc/prom/bootstr_32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/pasemi/misc.c b/arch/powerpc/platforms/pasemi/misc.c
-index 1bf65d02d3ba..06a1ffd43bfe 100644
---- a/arch/powerpc/platforms/pasemi/misc.c
-+++ b/arch/powerpc/platforms/pasemi/misc.c
-@@ -35,7 +35,7 @@ static int __init find_i2c_driver(struct device_node *node,
- 	for (i = 0; i < ARRAY_SIZE(i2c_devices); i++) {
- 		if (!of_device_is_compatible(node, i2c_devices[i].of_device))
- 			continue;
--		if (strlcpy(info->type, i2c_devices[i].i2c_type,
-+		if (strscpy(info->type, i2c_devices[i].i2c_type,
- 			    I2C_NAME_SIZE) >= I2C_NAME_SIZE)
- 			return -ENOMEM;
- 		return 0;
+diff --git a/arch/sparc/prom/bootstr_32.c b/arch/sparc/prom/bootstr_32.c
+index e3b731ff00f0..1c7cd258b0dc 100644
+--- a/arch/sparc/prom/bootstr_32.c
++++ b/arch/sparc/prom/bootstr_32.c
+@@ -52,7 +52,7 @@ prom_getbootargs(void)
+ 		 * V3 PROM cannot supply as with more than 128 bytes
+ 		 * of an argument. But a smart bootstrap loader can.
+ 		 */
+-		strlcpy(barg_buf, *romvec->pv_v2bootargs.bootargs, sizeof(barg_buf));
++		strscpy(barg_buf, *romvec->pv_v2bootargs.bootargs, sizeof(barg_buf));
+ 		break;
+ 	default:
+ 		break;
 -- 
 2.34.1
 

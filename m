@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5075347AB6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F4F47ABCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbhLTOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:36:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51670 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbhLTOg2 (ORCPT
+        id S234759AbhLTOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234499AbhLTOie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:36:28 -0500
+        Mon, 20 Dec 2021 09:38:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAE6C061756;
+        Mon, 20 Dec 2021 06:38:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F0D81CE10C2;
-        Mon, 20 Dec 2021 14:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF9DC36AF8;
-        Mon, 20 Dec 2021 14:36:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35086B80EDA;
+        Mon, 20 Dec 2021 14:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFF7C36AE7;
+        Mon, 20 Dec 2021 14:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640010985;
-        bh=QBVNNCqtZq9uDU+S8HY7sv+rbkMJ+CgccoQixfS2biQ=;
+        s=korg; t=1640011112;
+        bh=YmkwCDC5i18IxblnK6WAk4lSOSXJpyWLHEDQtWTvy0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uCCRl2/GmGumv1g/JdV6ZXvWi06z7DgwrSGcE+VGLSRWgZp2EWSs2DG75RaUgK6YL
-         Uc2kRC3P7Op4MmVP2sncdiwIyBUZTuRZ1yN6Mp0sr+lK3fwT9dAKikk+pSXP6mck4f
-         XanGWXwGx5jF8EN2m7O4KsyBM97m6A+dgtkweJzg=
+        b=P41UPoyjAqLFJAvBMO1/M0jHSoiWEMTsTlV0BB8tZnVSerLqwL/InvX7fZ2gzs2PH
+         oGXPIJXJbKqKDQJuD56Li+TQ6yYLXC2gcl/t1TnFR17l/1cbM8Wb9FG4KqKstH4KfC
+         xrD9z7W4++pW8FBYqbQ/UQllxBYWZRbfbI5k/rN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.4 19/23] Input: touchscreen - avoid bitwise vs logical OR warning
-Date:   Mon, 20 Dec 2021 15:34:20 +0100
-Message-Id: <20211220143018.465825642@linuxfoundation.org>
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
+Subject: [PATCH 4.9 21/31] fuse: annotate lock in fuse_reverse_inval_entry()
+Date:   Mon, 20 Dec 2021 15:34:21 +0100
+Message-Id: <20211220143020.655635941@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-References: <20211220143017.842390782@linuxfoundation.org>
+In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
+References: <20211220143019.974513085@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,78 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
+commit bda9a71980e083699a0360963c0135657b73f47a upstream.
 
-A new warning in clang points out a few places in this driver where a
-bitwise OR is being used with boolean types:
+Add missing inode lock annotatation; found by syzbot.
 
-drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This use of a bitwise OR is intentional, as bitwise operations do not
-short circuit, which allows all the calls to touchscreen_get_prop_u32()
-to happen so that the last parameter is initialized while coalescing the
-results of the calls to make a decision after they are all evaluated.
-
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each touchscreen_get_prop_u32() call to data_present,
-which keeps the meaning of the code the same but makes it obvious that
-every one of these calls is expected to happen.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reported-and-tested-by: syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/touchscreen/of_touchscreen.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ fs/fuse/dir.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/input/touchscreen/of_touchscreen.c
-+++ b/drivers/input/touchscreen/of_touchscreen.c
-@@ -75,8 +75,8 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-x",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -86,8 +86,8 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-y",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -97,11 +97,11 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev,
- 						"touchscreen-max-pressure",
- 						input_abs_get_max(input, axis),
--						&maximum) |
--		       touchscreen_get_prop_u32(dev,
--						"touchscreen-fuzz-pressure",
--						input_abs_get_fuzz(input, axis),
--						&fuzz);
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev,
-+						 "touchscreen-fuzz-pressure",
-+						 input_abs_get_fuzz(input, axis),
-+						 &fuzz);
- 	if (data_present)
- 		touchscreen_set_params(input, axis, maximum, fuzz);
- }
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -973,7 +973,7 @@ int fuse_reverse_inval_entry(struct supe
+ 	if (!parent)
+ 		return -ENOENT;
+ 
+-	inode_lock(parent);
++	inode_lock_nested(parent, I_MUTEX_PARENT);
+ 	if (!S_ISDIR(parent->i_mode))
+ 		goto unlock;
+ 
 
 

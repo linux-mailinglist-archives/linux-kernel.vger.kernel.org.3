@@ -2,113 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEF847B11F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A5C47B122
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238185AbhLTQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbhLTQdO (ORCPT
+        id S238273AbhLTQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:33:27 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:57277 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237496AbhLTQd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:33:14 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32E7C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:13 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id x6so13889774iol.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3y3ZdzFgGAR1E/AaB8gqHxACx/fgP2N34Knou9lpjtk=;
-        b=hqzGSYuC7wPQmzYN/AXyRjf2vTckJfNumqkFL5+8wWwpUkQWPdqum68/xsisk4dFzS
-         xdrW/rUdYpNddkooTfxbUCufKv28PyGYsgoe4WvaybmZwSSHQg23GM/8/f2Ol1Nyq8we
-         fknO1BvT1m5zJiDqTOaGbZjKtsc9ELdEJx3iR0Y65paa4/MD3Ti1zsrIWdtkLZCzEmA9
-         jE7tjztPkjFL5etePZpHEVFe1OtxmqXB3v/6GgBr08u/qdLSCGFJhjdOFFzaE6So7tC9
-         D6XDzCQf3po1elwKkkfpihceDFxbZ+IsmEoaF/s2x2PCbMuHQClsGd3s+/ZuTrYG5Afo
-         5I6w==
+        Mon, 20 Dec 2021 11:33:26 -0500
+Received: by mail-io1-f72.google.com with SMTP id r199-20020a6b2bd0000000b005e234972ddfso7391801ior.23
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3y3ZdzFgGAR1E/AaB8gqHxACx/fgP2N34Knou9lpjtk=;
-        b=YsIKcOzw4jYu0FhrWhWNe9p+y493RMHzTV/1pYmyzycoZ3fcKzE3ofdz6/ZlV9Nm/E
-         s30PQ6okxhau5+YDUfumk0THwLJdBQqIGy13s6ymTX7MRTlw4BFJLRh69jiEeDwN5Yo7
-         ScVzOY6+k5CgJ4g8LPqf1FcARmCzGkzUwDCTThv7XhKiSeN7O34vXjtOgfKtcBrpoqca
-         3sm4pVGWvqzs6AiGbmcwgQZWzRdV/NICI44feP1WqqjmGjj7XABhAdONmzVfd0Bpk8W6
-         VDrba6toF2fER46PsqvfgNvpIDpyn5pvQ1PAhY33Pm6IQy8sRVZq2Dl3GPemuRfKFcRp
-         53vA==
-X-Gm-Message-State: AOAM530nYArZlGiqwFJm47m7uFE+/zBv6qmZMeEbM5biKc2ukp/18T+a
-        VM57wqBoUDXbQuWopXljsL6g9KcFwlzdIQ==
-X-Google-Smtp-Source: ABdhPJzQPMLTftdafFpdN9TE+Gkm65iOSMK91N8RDy/Vf1PcatP90M7X4n9+g5UvAIWIVwNw20TAZw==
-X-Received: by 2002:a05:6638:22d0:: with SMTP id j16mr4879118jat.166.1640017993036;
-        Mon, 20 Dec 2021 08:33:13 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id m6sm9753671ilh.4.2021.12.20.08.33.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 08:33:12 -0800 (PST)
-Subject: Re: [PATCH] paride: fix up build warning on mips platforms
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, tim@cyberelk.net
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211130084626.3215987-1-gregkh@linuxfoundation.org>
- <YcCo8+jTG3b+5GTA@kroah.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
-Date:   Mon, 20 Dec 2021 09:33:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=OWl8IqkEe6OQ3NoMzT2jKNMg3ANYUfrpYcjnt7QOHjU=;
+        b=LCgyu/bvn3/vnwKQN72JfpyRhC8GNkxBK3yPK74i0uxRVgQ6EdxFxovQOQd2Rory5w
+         S3xb3ZOQR2d9j7wHOaVhZeolmlNSlYzarNtAGHK3d35d49Ro/d0qdckaAWVKC//ksGnJ
+         Y0KtIxjvP3g03ZZZBFE4agaq0vffFeTSeiUxB0R0xDvF6ybXl1VCFU5SuZN7zyE+GKqq
+         QTVEcaFplhfv9VNHbqSe2Tzx83JrwVNMKOEG1kad/bdqQt2l0sTMxp7pRp9IB3pHquSF
+         Fbma84vkkq+L+2+T8tMmT7g8u2YJ2SUhZ71Q6xcu0XLzYWLklkNbIc1/clSMLRvE5VEL
+         DgbA==
+X-Gm-Message-State: AOAM533+ydgQzVDWl9j8iO0GB8La3pH+1XoGmt7O6e8Mamhb4/VnKxuz
+        4KcBDyzSqlCYm76XtT7La4WW+3jrH+8xw6cACacU62BQmZw2
+X-Google-Smtp-Source: ABdhPJwEgVPP9VnoS1clFZZYGPSVttbjCw84l/MMrlPCl1pB4FM0f8NFdQeS4WukMV6Q+LaQ/li7XRRgRXkARL78CJsI3O4wJmUE
 MIME-Version: 1.0
-In-Reply-To: <YcCo8+jTG3b+5GTA@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:cac2:: with SMTP id m2mr9191921ilq.195.1640018005762;
+ Mon, 20 Dec 2021 08:33:25 -0800 (PST)
+Date:   Mon, 20 Dec 2021 08:33:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a8a64205d39672b8@google.com>
+Subject: [syzbot] KMSAN: kernel-infoleak in move_addr_to_user (6)
+From:   syzbot <syzbot+cdbd40e0c3ca02cae3b7@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, glider@google.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/21 9:01 AM, Greg Kroah-Hartman wrote:
-> On Tue, Nov 30, 2021 at 09:46:26AM +0100, Greg Kroah-Hartman wrote:
->> MIPS include files define "PC" so when building the paride driver the
->> following build warning shows up:
->>
->> 	rivers/block/paride/bpck.c:32: warning: "PC" redefined
->>
->> Fix this by undefining PC before redefining it as is done for other
->> defines in this driver.
->>
->> Cc: Tim Waugh <tim@cyberelk.net>
->> Cc: Jens Axboe <axboe@kernel.dk>
->> Cc: linux-block@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> ---
->>  drivers/block/paride/bpck.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/block/paride/bpck.c b/drivers/block/paride/bpck.c
->> index f5f63ca2889d..d880a9465e9b 100644
->> --- a/drivers/block/paride/bpck.c
->> +++ b/drivers/block/paride/bpck.c
->> @@ -28,6 +28,7 @@
->>  
->>  #undef r2
->>  #undef w2
->> +#undef PC
->>  
->>  #define PC			pi->private
->>  #define r2()			(PC=(in_p(2) & 0xff))
->> -- 
->> 2.34.1
->>
-> 
-> Given the lack of objections to this, I'll just take it through one of
-> my trees for 5.17-rc1.
+Hello,
 
-Sorry about that, got lost. I can queue it  up too, or you can add my
-acked-by, either is fine.
+syzbot found the following issue on:
 
--- 
-Jens Axboe
+HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a45071b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdbd40e0c3ca02cae3b7
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343f443b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16efa493b00000
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cdbd40e0c3ca02cae3b7@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline] lib/usercopy.c:33
+BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33 lib/usercopy.c:33
+ instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+ instrument_copy_to_user include/linux/instrumented.h:121 [inline] lib/usercopy.c:33
+ _copy_to_user+0x1c9/0x270 lib/usercopy.c:33 lib/usercopy.c:33
+ copy_to_user include/linux/uaccess.h:209 [inline]
+ copy_to_user include/linux/uaccess.h:209 [inline] net/socket.c:287
+ move_addr_to_user+0x3f6/0x600 net/socket.c:287 net/socket.c:287
+ __sys_getpeername+0x470/0x6b0 net/socket.c:1987 net/socket.c:1987
+ __do_sys_getpeername net/socket.c:1997 [inline]
+ __se_sys_getpeername net/socket.c:1994 [inline]
+ __do_sys_getpeername net/socket.c:1997 [inline] net/socket.c:1994
+ __se_sys_getpeername net/socket.c:1994 [inline] net/socket.c:1994
+ __x64_sys_getpeername+0xda/0x120 net/socket.c:1994 net/socket.c:1994
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was stored to memory at:
+ tipc_getname+0x575/0x5e0 net/tipc/socket.c:757 net/tipc/socket.c:757
+ __sys_getpeername+0x3b3/0x6b0 net/socket.c:1984 net/socket.c:1984
+ __do_sys_getpeername net/socket.c:1997 [inline]
+ __se_sys_getpeername net/socket.c:1994 [inline]
+ __do_sys_getpeername net/socket.c:1997 [inline] net/socket.c:1994
+ __se_sys_getpeername net/socket.c:1994 [inline] net/socket.c:1994
+ __x64_sys_getpeername+0xda/0x120 net/socket.c:1994 net/socket.c:1994
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was stored to memory at:
+ msg_set_word net/tipc/msg.h:212 [inline]
+ msg_set_destport net/tipc/msg.h:619 [inline]
+ msg_set_word net/tipc/msg.h:212 [inline] net/tipc/socket.c:1486
+ msg_set_destport net/tipc/msg.h:619 [inline] net/tipc/socket.c:1486
+ __tipc_sendmsg+0x44fa/0x5890 net/tipc/socket.c:1486 net/tipc/socket.c:1486
+ tipc_sendmsg+0xeb/0x140 net/tipc/socket.c:1402 net/tipc/socket.c:1402
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ sock_sendmsg_nosec net/socket.c:704 [inline] net/socket.c:2409
+ sock_sendmsg net/socket.c:724 [inline] net/socket.c:2409
+ ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ ___sys_sendmsg net/socket.c:2463 [inline] net/socket.c:2492
+ __sys_sendmsg+0x704/0x840 net/socket.c:2492 net/socket.c:2492
+ __do_sys_sendmsg net/socket.c:2501 [inline]
+ __se_sys_sendmsg net/socket.c:2499 [inline]
+ __do_sys_sendmsg net/socket.c:2501 [inline] net/socket.c:2499
+ __se_sys_sendmsg net/socket.c:2499 [inline] net/socket.c:2499
+ __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2499 net/socket.c:2499
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Local variable skaddr created at:
+ __tipc_sendmsg+0x2d0/0x5890 net/tipc/socket.c:1419 net/tipc/socket.c:1419
+ tipc_sendmsg+0xeb/0x140 net/tipc/socket.c:1402 net/tipc/socket.c:1402
+
+Bytes 4-7 of 16 are uninitialized
+Memory access of size 16 starts at ffff888113753e00
+Data copied to user address 0000000020000280
+
+CPU: 1 PID: 3479 Comm: syz-executor115 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

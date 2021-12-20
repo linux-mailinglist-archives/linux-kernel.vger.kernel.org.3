@@ -2,286 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EB847AF45
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DDB47B02D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbhLTPKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:10:48 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.227]:47099 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238764AbhLTPJI (ORCPT
+        id S239805AbhLTP1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236753AbhLTP1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:09:08 -0500
-HMM_SOURCE_IP: 172.18.0.188:41400.2025081230
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-120.244.206.96 (unknown [172.18.0.188])
-        by chinatelecom.cn (HERMES) with SMTP id A71D3280098;
-        Mon, 20 Dec 2021 23:09:01 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.188])
-        by app0023 with ESMTP id 448f2ce83d55476ebb2bb0b912c8404f for eric.dumazet@gmail.com;
-        Mon, 20 Dec 2021 23:09:04 CST
-X-Transaction-ID: 448f2ce83d55476ebb2bb0b912c8404f
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.188
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-Message-ID: <e5815ae7-e716-95ab-72ef-2dbe6554968d@chinatelecom.cn>
-Date:   Mon, 20 Dec 2021 23:09:00 +0800
+        Mon, 20 Dec 2021 10:27:00 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E9C08EB1F;
+        Mon, 20 Dec 2021 07:11:16 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id z5so39666392edd.3;
+        Mon, 20 Dec 2021 07:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hBIoGw/e/zcvG+pHiU6S4HSaNOHwibSXXHgdcOqKpt0=;
+        b=g5w3zq2NJj7FJNKB6S4eRDs8mFKJE6NotK7FF6GXMEgZ18UwBT107QQbz/ylRJ7XAD
+         rxMXVmWZocz1dWweCJ2U+MWs5LfN2YOXXpHQ6R7YVX5Ap6+8XTiet4rQbNbnW3nowwVS
+         8N3oMITPRhSHD2f7ULqqZ3trHI9x/5BuskLxk0KwxbygoH3ALIDkpcUmyg5RMTzRvGHh
+         yJPWWLUNnGQXmUvhgp+o3fwjdRsRwO37RHPCmyC3K0n8P3fhLxW5ZcrZ8dqdALg1cNZN
+         3tFRVXQDd6/az+dttSn69qu74M70HGJj0fpJpn/KayqQWWY0VpUau1OGGvvFa2CIThk3
+         G+uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hBIoGw/e/zcvG+pHiU6S4HSaNOHwibSXXHgdcOqKpt0=;
+        b=M4Z6D2R37WqYrdEc4PdJtZb2FEj53mcIJM3dll0GH61st0/LI8DB4eL2dzMUfCrjH4
+         G8X4bmzH5NM6zQ1mBylel0K0cQrJWMPMYgxPLfY9wramDGTabByYr4wfLPQAjhWEr+Tr
+         4XzYmFPyP4f1h+gGqRPgF1OScHhRqBNSILxErfUtL6GTUgJn2AQTPpB+gLlPX6LhQ6Mi
+         6XcRl1AIJPROTIJmzl6abu9MmjNYIg/4jDjt8zXG1ny9racmdrinuox0S/AbmK41in2y
+         G304VEcdxUNYw/z09k9UC3D82Ixwhad1Zpk6mCBgwlRaxQfG5uIu4UMOtX/56xfQ6Q7z
+         9drA==
+X-Gm-Message-State: AOAM5329OnYupZ1heotXo4kC6Vm26L8VLSKcqtdHWdLXIJvtCtsOHh3x
+        zEQLvUIfhxIxY5JtqdJl8Fm8pFYzzMsoLrk2iYU=
+X-Google-Smtp-Source: ABdhPJwNPdlFiyq6tdH9hFgzAwymj19tpiQ0KxZM4gqqznfenD0pSWIWIRrWm9wcb1jCZbCyqF5YMjt/cuc4WnfY9lc=
+X-Received: by 2002:aa7:c7cd:: with SMTP id o13mr16731637eds.37.1640013075412;
+ Mon, 20 Dec 2021 07:11:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3] net: bonding: Add support for IPV6 ns/na
-To:     Eric Dumazet <eric.dumazet@gmail.com>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-References: <20211217164829.31388-1-sunshouxin@chinatelecom.cn>
- <f35ef160-ffdb-e6de-6079-440cd72ab389@gmail.com>
-From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
-In-Reply-To: <f35ef160-ffdb-e6de-6079-440cd72ab389@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20211220132439.1194-1-andriy.shevchenko@linux.intel.com> <CAMRc=Md3bpCJe_eFBjiKuhCRO_xqnFxSc1sw100fgNmajy6gaw@mail.gmail.com>
+In-Reply-To: <CAMRc=Md3bpCJe_eFBjiKuhCRO_xqnFxSc1sw100fgNmajy6gaw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Dec 2021 17:09:15 +0200
+Message-ID: <CAHp75VcbaYXfDpc7xE=asSqUspscRoHfqrg-yMtx=uo5UNqxfw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: Remove unused local OF node pointers
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        linux-unisoc@lists.infradead.org,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 20, 2021 at 5:09 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Mon, Dec 20, 2021 at 2:24 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > After the commit 448cf90513d9 ("gpio: Get rid of duplicate of_node
+> > assignment in the drivers") the OF node local pointers become unused.
+> > Remove them for good and make compiler happy about.
+> >
+> > Fixes: 448cf90513d9 ("gpio: Get rid of duplicate of_node assignment in the drivers")
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-在 2021/12/20 23:03, Eric Dumazet 写道:
+...
+
+> > -               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", dev->of_node);
+> > +               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", np);
 >
-> On 12/17/21 8:48 AM, Sun Shouxin wrote:
->> Since ipv6 neighbor solicitation and advertisement messages
->> isn't handled gracefully in bonding6 driver, we can see packet
->> drop due to inconsistency bewteen mac address in the option
->> message and source MAC .
->>
->> Another examples is ipv6 neighbor solicitation and advertisement
->> messages from VM via tap attached to host brighe, the src mac
->> mighe be changed through balance-alb mode, but it is not synced
->> with Link-layer address in the option message.
->>
->> The patch implements bond6's tx handle for ipv6 neighbor
->> solicitation and advertisement messages.
->>
->>                          Border-Leaf
->>                          /        \
->>                         /          \
->>                      Tunnel1    Tunnel2
->>                       /              \
->>                      /                \
->>                    Leaf-1--Tunnel3--Leaf-2
->>                      \                /
->>                       \              /
->>                        \            /
->>                         \          /
->>                         NIC1    NIC2
->>                          \      /
->>                          server
->>
->> We can see in our lab the Border-Leaf receives occasionally
->> a NA packet which is assigned to NIC1 mac in ND/NS option
->> message, but actaully send out via NIC2 mac due to tx-alb,
->> as a result, it will cause inconsistency between MAC table
->> and ND Table in Border-Leaf, i.e, NIC1 = Tunnel2 in ND table
->> and  NIC1 = Tunnel1 in mac table.
->>
->> And then, Border-Leaf starts to forward packet destinated
->> to the Server, it will only check the ND table entry in some
->> switch to encapsulate the destination MAC of the message as
->> NIC1 MAC, and then send it out from Tunnel2 by ND table.
->> Then, Leaf-2 receives the packet, it notices the destination
->> MAC of message is NIC1 MAC and should forword it to Tunne1
->> by Tunnel3.
->>
->> However, this traffic forward will be failure due to split
->> horizon of VxLAN tunnels.
->>
->> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->> Reviewed-by: Jay Vosburgh<jay.vosburgh@canonical.com>
->> Reviewed-by: Eric Dumazet<eric.dumazet@gmail.com>
->
->
-> ??? I do not recall giving my Reviewed-by:
-Thanks your comment, I'll adjust it and send out V4 soon.
->
->
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->> ---
->>   drivers/net/bonding/bond_alb.c | 131 +++++++++++++++++++++++++++++++++
->>   1 file changed, 131 insertions(+)
->>
->> diff --git a/drivers/net/bonding/bond_alb.c 
->> b/drivers/net/bonding/bond_alb.c
->> index 533e476988f2..b14017364594 100644
->> --- a/drivers/net/bonding/bond_alb.c
->> +++ b/drivers/net/bonding/bond_alb.c
->> @@ -22,6 +22,7 @@
->>   #include <asm/byteorder.h>
->>   #include <net/bonding.h>
->>   #include <net/bond_alb.h>
->> +#include <net/ndisc.h>
->>     static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
->>       0x33, 0x33, 0x00, 0x00, 0x00, 0x01
->> @@ -1269,6 +1270,119 @@ static int alb_set_mac_address(struct bonding 
->> *bond, void *addr)
->>       return res;
->>   }
->>   +/*determine if the packet is NA or NS*/
->> +static bool alb_determine_nd(struct icmp6hdr *hdr)
->> +{
->> +    if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
->> +        hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
->> +        return true;
->> +    }
->> +
->> +    return false;
->> +}
->> +
->> +static void alb_change_nd_option(struct sk_buff *skb, void *data)
->> +{
->> +    struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
->> +    struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
->> +    struct net_device *dev = skb->dev;
->> +    struct icmp6hdr *icmp6h = icmp6_hdr(skb);
->> +    struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
->> +    u8 *lladdr = NULL;
->> +    u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
->> +                offsetof(struct nd_msg, opt));
->> +
->> +    while (ndoptlen) {
->> +        int l;
->> +
->> +        switch (nd_opt->nd_opt_type) {
->> +        case ND_OPT_SOURCE_LL_ADDR:
->> +        case ND_OPT_TARGET_LL_ADDR:
->> +        lladdr = ndisc_opt_addr_data(nd_opt, dev);
->> +        break;
->> +
->> +        default:
->> +        lladdr = NULL;
->> +        break;
->> +        }
->> +
->> +        l = nd_opt->nd_opt_len << 3;
->> +
->> +        if (ndoptlen < l || l == 0)
->> +            return;
->> +
->> +        if (lladdr) {
->> +            memcpy(lladdr, data, dev->addr_len);
->> +            icmp6h->icmp6_cksum = 0;
->> +
->> +            icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
->> +                                  &ip6hdr->daddr,
->> +                        ntohs(ip6hdr->payload_len),
->> +                        IPPROTO_ICMPV6,
->> +                        csum_partial(icmp6h,
->> +                                 ntohs(ip6hdr->payload_len), 0));
->> +        }
->> +        ndoptlen -= l;
->> +        nd_opt = ((void *)nd_opt) + l;
->> +    }
->> +}
->> +
->> +static u8 *alb_get_lladdr(struct sk_buff *skb)
->> +{
->> +    struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
->> +    struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
->> +    struct net_device *dev = skb->dev;
->> +    u8 *lladdr = NULL;
->> +    u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
->> +                offsetof(struct nd_msg, opt));
->> +
->> +    while (ndoptlen) {
->> +        int l;
->> +
->> +        switch (nd_opt->nd_opt_type) {
->> +        case ND_OPT_SOURCE_LL_ADDR:
->> +        case ND_OPT_TARGET_LL_ADDR:
->> +            lladdr = ndisc_opt_addr_data(nd_opt, dev);
->> +            break;
->> +
->> +        default:
->> +            break;
->> +        }
->> +
->> +        l = nd_opt->nd_opt_len << 3;
->> +
->> +        if (ndoptlen < l || l == 0)
->> +            return NULL;
->> +
->> +        if (lladdr)
->> +            return lladdr;
->> +
->> +        ndoptlen -= l;
->> +        nd_opt = ((void *)nd_opt) + l;
->> +    }
->> +
->> +    return lladdr;
->> +}
->> +
->> +static void alb_set_nd_option(struct sk_buff *skb, struct bonding 
->> *bond,
->> +                  struct slave *tx_slave)
->> +{
->> +    struct ipv6hdr *ip6hdr;
->> +    struct icmp6hdr *hdr = NULL;
->> +
->> +    if (skb->protocol == htons(ETH_P_IPV6)) {
->> +        if (tx_slave && tx_slave !=
->> +            rcu_access_pointer(bond->curr_active_slave)) {
->> +            ip6hdr = ipv6_hdr(skb);
->> +            if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->> +                hdr = icmp6_hdr(skb);
->> +                if (alb_determine_nd(hdr))
->> +                    alb_change_nd_option(skb, tx_slave->dev->dev_addr);
->> +            }
->> +        }
->> +    }
->> +}
->> +
->>   /************************ exported alb functions 
->> ************************/
->>     int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->> @@ -1415,6 +1529,7 @@ struct slave *bond_xmit_alb_slave_get(struct 
->> bonding *bond,
->>       }
->>       case ETH_P_IPV6: {
->>           const struct ipv6hdr *ip6hdr;
->> +        struct icmp6hdr *hdr = NULL;
->>             /* IPv6 doesn't really use broadcast mac address, but leave
->>            * that here just in case.
->> @@ -1446,6 +1561,21 @@ struct slave *bond_xmit_alb_slave_get(struct 
->> bonding *bond,
->>               break;
->>           }
->>   +        if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->> +            hdr = icmp6_hdr(skb);
->> +            if (alb_determine_nd(hdr)) {
->> +                u8 *lladdr = NULL;
->> +
->> +                lladdr = alb_get_lladdr(skb);
->> +                if (lladdr) {
->> +                    if (!bond_slave_has_mac_rx(bond, lladdr)) {
->> +                        do_tx_balance = false;
->> +                        break;
->> +                    }
->> +                }
->> +            }
->> +        }
->> +
->>           hash_start = (char *)&ip6hdr->daddr;
->>           hash_size = sizeof(ip6hdr->daddr);
->>           break;
->> @@ -1489,6 +1619,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, 
->> struct net_device *bond_dev)
->>       struct slave *tx_slave = NULL;
->>         tx_slave = bond_xmit_alb_slave_get(bond, skb);
->> +    alb_set_nd_option(skb, bond, tx_slave);
->>       return bond_do_alb_xmit(skb, bond, tx_slave);
->>   }
->>
->> base-commit: 6441998e2e37131b0a4c310af9156d79d3351c16
+> This is unrelated though. Can you make it a separate patch?
+
+It actually makes use of the local np IIRC.
+It's related, no?
+
+-- 
+With Best Regards,
+Andy Shevchenko

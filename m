@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C6147ABE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7481A47ACD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbhLTOj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbhLTOjF (ORCPT
+        id S236636AbhLTOrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:47:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50940 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235619AbhLTOoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B186C061746;
-        Mon, 20 Dec 2021 06:39:05 -0800 (PST)
+        Mon, 20 Dec 2021 09:44:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32F72B80EDE;
-        Mon, 20 Dec 2021 14:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66183C36AE7;
-        Mon, 20 Dec 2021 14:39:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B69BDB80EF1;
+        Mon, 20 Dec 2021 14:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA574C36AEA;
+        Mon, 20 Dec 2021 14:44:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011143;
-        bh=T00b3qHIvJqSZfWRbcobjwdLWi4yChbMrZGbF2isnis=;
+        s=korg; t=1640011451;
+        bh=uYzN3QOkhwmsq9zrNHALrJIuEIJNsHcGDRsdNYW3B/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mRn6Zzf4ogYQMb1iVw3K3ajq3SL+0RPNKx4bXr9MMg9+XcnPe7yaYVP5MerAqb38K
-         uw97/1KudcL+nm2te2lTX/6CuYJGJ6aAFKyeYnSFs3Y5NDmPd0X11P9OeqXkcG3vjG
-         KOlZZR//24m1lWBx1VdPOfNy0r0gK7vJpIYgcwQo=
+        b=YOh0LoSaKwHLfAII75nYtmjUHUMVjoXakwqe7Je4Kly2NzoyVFBgtyTjE1T+fkBE/
+         +piikeS854if3/xjkRcYrnahmVpDMD7jPDd51Vk2EFK2KYmccoHSd2a0iiL8HAlIBe
+         EPtVJDKxw0HKiihlEFHpmljIXzrr+XLUGNQ019M8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
         Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 19/45] dmaengine: st_fdma: fix MODULE_ALIAS
+Subject: [PATCH 5.4 25/71] dmaengine: st_fdma: fix MODULE_ALIAS
 Date:   Mon, 20 Dec 2021 15:34:14 +0100
-Message-Id: <20211220143022.919613861@linuxfoundation.org>
+Message-Id: <20211220143026.530314292@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/dma/st_fdma.c b/drivers/dma/st_fdma.c
-index bfb79bd0c6de5..087d22ba8a2f6 100644
+index 67087dbe2f9fa..f7393c19a1ba3 100644
 --- a/drivers/dma/st_fdma.c
 +++ b/drivers/dma/st_fdma.c
-@@ -886,4 +886,4 @@ MODULE_LICENSE("GPL v2");
+@@ -873,4 +873,4 @@ MODULE_LICENSE("GPL v2");
  MODULE_DESCRIPTION("STMicroelectronics FDMA engine driver");
  MODULE_AUTHOR("Ludovic.barre <Ludovic.barre@st.com>");
  MODULE_AUTHOR("Peter Griffin <peter.griffin@linaro.org>");

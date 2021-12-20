@@ -2,50 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FB947AB87
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C3447AC0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbhLTOhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbhLTOhH (ORCPT
+        id S234934AbhLTOlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53944 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230331AbhLTOj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9783CC06175B;
-        Mon, 20 Dec 2021 06:37:07 -0800 (PST)
+        Mon, 20 Dec 2021 09:39:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58658B80EE4;
-        Mon, 20 Dec 2021 14:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D670C36AE7;
-        Mon, 20 Dec 2021 14:37:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0074CCE110C;
+        Mon, 20 Dec 2021 14:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B64C36B03;
+        Mon, 20 Dec 2021 14:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011025;
-        bh=SI0+HK4ruuDe7k2ecKTb663fseSRDlsvJTY43eeUJCQ=;
+        s=korg; t=1640011193;
+        bh=nXozThGBMgnmYCx2Uwly7tb+lU5/ML1dXMm5km/IDY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P6hI0GcALChH1JRCIZz5P0J/Op01lEpO29V4UKsGTNsyjS1bPOSj1IVI0kf9QuZL6
-         23kbKjgFFS7Ss2XPuvWrf9kaL8w2oZVw0owDTyYfhhaWIG8bHnD/A/ZCt1Zua1D23z
-         0PIjOly+WavsmcdOcPHU+czSklZdTzhzWYsQdR2E=
+        b=Qk2XJ5l9HOQo3FNtfqyXYr97kICcQalHxDwWGAC0Sf9DBHRy4v/bLRdPOttkXQn5i
+         TWkfztdtJHeNkwqR6/IbVABN80G0RQf39lFe8T/fmlxYoyMGLmKbO1h74SbMB3bYEJ
+         DUjd33MmcFuC7BEKJFGr9syJYptNzfcCdWj1nlpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+f9f76f4a0766420b4a02@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 01/31] nfc: fix segfault in nfc_genl_dump_devices_done
-Date:   Mon, 20 Dec 2021 15:34:01 +0100
-Message-Id: <20211220143020.031915064@linuxfoundation.org>
+        stable@vger.kernel.org, Chen Jun <chenjun102@huawei.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 07/45] tracing: Fix a kmemleak false positive in tracing_map
+Date:   Mon, 20 Dec 2021 15:34:02 +0100
+Message-Id: <20211220143022.514634932@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -53,57 +46,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Chen Jun <chenjun102@huawei.com>
 
-commit fd79a0cbf0b2e34bcc45b13acf962e2032a82203 upstream.
+[ Upstream commit f25667e5980a4333729cac3101e5de1bb851f71a ]
 
-When kmalloc in nfc_genl_dump_devices() fails then
-nfc_genl_dump_devices_done() segfaults as below
+Doing the command:
+  echo 'hist:key=common_pid.execname,common_timestamp' > /sys/kernel/debug/tracing/events/xxx/trigger
 
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 25 Comm: kworker/0:1 Not tainted 5.16.0-rc4-01180-g2a987e65025e-dirty #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-6.fc35 04/01/2014
-Workqueue: events netlink_sock_destruct_work
-RIP: 0010:klist_iter_exit+0x26/0x80
-Call Trace:
-<TASK>
-class_dev_iter_exit+0x15/0x20
-nfc_genl_dump_devices_done+0x3b/0x50
-genl_lock_done+0x84/0xd0
-netlink_sock_destruct+0x8f/0x270
-__sk_destruct+0x64/0x3b0
-sk_destruct+0xa8/0xd0
-__sk_free+0x2e8/0x3d0
-sk_free+0x51/0x90
-netlink_sock_destruct_work+0x1c/0x20
-process_one_work+0x411/0x710
-worker_thread+0x6fd/0xa80
+Triggers many kmemleak reports:
 
-Link: https://syzkaller.appspot.com/bug?id=fc0fa5a53db9edd261d56e74325419faf18bd0df
-Reported-by: syzbot+f9f76f4a0766420b4a02@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20211208182742.340542-1-tadeusz.struk@linaro.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+
+The reason is elts->pages[i] is alloced by get_zeroed_page.
+and kmemleak will not scan the area alloced by get_zeroed_page.
+The address stored in elts->pages will be regarded as leaked.
+
+That is, the elts->pages[i] will have pointers loaded onto it as well, and
+without telling kmemleak about it, those pointers will look like memory
+without a reference.
+
+To fix this, call kmemleak_alloc to tell kmemleak to scan elts->pages[i]
+
+Link: https://lkml.kernel.org/r/20211124140801.87121-1-chenjun102@huawei.com
+
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/netlink.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/trace/tracing_map.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/nfc/netlink.c
-+++ b/net/nfc/netlink.c
-@@ -669,8 +669,10 @@ static int nfc_genl_dump_devices_done(st
- {
- 	struct class_dev_iter *iter = (struct class_dev_iter *) cb->args[0];
+--- a/kernel/trace/tracing_map.c
++++ b/kernel/trace/tracing_map.c
+@@ -24,6 +24,7 @@
+ #include <linux/jhash.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
++#include <linux/kmemleak.h>
  
--	nfc_device_iter_exit(iter);
--	kfree(iter);
-+	if (iter) {
-+		nfc_device_iter_exit(iter);
-+		kfree(iter);
-+	}
+ #include "tracing_map.h"
+ #include "trace.h"
+@@ -227,6 +228,7 @@ void tracing_map_array_free(struct traci
+ 	for (i = 0; i < a->n_pages; i++) {
+ 		if (!a->pages[i])
+ 			break;
++		kmemleak_free(a->pages[i]);
+ 		free_page((unsigned long)a->pages[i]);
+ 	}
  
- 	return 0;
- }
+@@ -262,6 +264,7 @@ struct tracing_map_array *tracing_map_ar
+ 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
+ 		if (!a->pages[i])
+ 			goto free;
++		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
+ 	}
+  out:
+ 	return a;
 
 

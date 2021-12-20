@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C9C47AAD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C60F47AAD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbhLTOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:00:52 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48234 "EHLO
+        id S233340AbhLTOAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:00:54 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48240 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbhLTOAt (ORCPT
+        with ESMTP id S233278AbhLTOAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:00:49 -0500
-Date:   Mon, 20 Dec 2021 14:00:46 -0000
+        Mon, 20 Dec 2021 09:00:51 -0500
+Date:   Mon, 20 Dec 2021 14:00:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640008848;
+        s=2020; t=1640008849;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+KcQh3iItRbDP4Z2oavn24TitZ608MXK9XLgWk3bpxU=;
-        b=KQUDYBRyIbnwSAvrLB8j/W1uUXM5DMIYA4Z9/CD6RWSBDbv2PRk1Oa0KdaDfJVbZXIk7tY
-        ps6wvtL4i0OBSr6iGDr+8Y9rq04qDu+cur2qG5ExCEAkEn5cZSCp8T4dkfAwWpbEYWiVP+
-        g2Icovx110eXKzCMBwQ++b4hS8XCFlCNG8n5M9yNMHYyw6eoCPi04DehAIlu/2/rIQg2Oo
-        9eBfP768MPbzD5qtMVxrgdSDXOMsHfiZXjgAzllLXRS+n7pKJHTsb/ciXImn3SA9XfBDR9
-        d1KBbSe+44Z8MmxNfc/bslO4YuD1DSGFkGRZ5kd1c7gGOh+xh0JG06vF7IB+lw==
+        bh=1ppB7xB4HPOqjXSqkrtYN4R7oyaDk/c0qUqcYGfwM40=;
+        b=F0YIXO7LuKYNregTukNcAql3xTeXxem9EivCkaLrV2YSPhnvLNZscNBQCVroWxmjVpFMRJ
+        Cn9xCLCEYFxECqfapepqOmnmuAEiBzR8lCGr5/clqEGgjXXbAxT8HjmJP+Jt6fj8u/iNQ1
+        Cpz+iMOQFLhzOt2PU4swaELjf0J3kKGFSryS31DlSIjZjD1qbftBUd64IiGxr9cYt4JSTd
+        j2QFO6WIg9dh4QyN0FILNDgN9h8hCmisTWgJAkm7twJ7lt+18um04wuTKzrZdw8rnOVnTH
+        3rsEAUwxz1Pw0uMyucu1U+wyuNU4IO7lHyjGFhZhQlLOl+J9aIRowRQXjXZ7zw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640008848;
+        s=2020e; t=1640008849;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+KcQh3iItRbDP4Z2oavn24TitZ608MXK9XLgWk3bpxU=;
-        b=B3mlTFgR61QldnYzRTmyx0BQJrTMu+LTZv0knEqP/g2lu9hXbsldS6+Qo8fHB1CeT7jDmA
-        pd75ztBthbX3HsAA==
-From:   "irqchip-bot for Vitaly Kuznetsov" <tip-bot2@linutronix.de>
+        bh=1ppB7xB4HPOqjXSqkrtYN4R7oyaDk/c0qUqcYGfwM40=;
+        b=ANOj2yh8kDAhoPR3JuK1/P0Lr2bQFWVt+HUSVfq07qNYLqYRVLivZ0ElHF3kwZOGU3jQLV
+        J5hcxilYQyWWVADA==
+From:   "irqchip-bot for Rikard Falkeborn" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] KVM: Drop stale
- kvm_is_transparent_hugepage() declaration
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+Subject: [irqchip: irq/irqchip-next] KVM: arm64: Constify kvm_io_gic_ops
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20211018151407.2107363-1-vkuznets@redhat.com>
-References: <20211018151407.2107363-1-vkuznets@redhat.com>
+In-Reply-To: <20211204213518.83642-1-rikard.falkeborn@gmail.com>
+References: <20211204213518.83642-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
-Message-ID: <164000884699.23020.4987538299959927283.tip-bot2@tip-bot2>
+Message-ID: <164000884802.23020.11471347198452228590.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,36 +57,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     f0e6e6fa41b3d2aa1dcb61dd4ed6d7be004bb5a8
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/f0e6e6fa41b3d2aa1dcb61dd4ed6d7be004bb5a8
-Author:        Vitaly Kuznetsov <vkuznets@redhat.com>
-AuthorDate:    Mon, 18 Oct 2021 17:14:07 +02:00
+Commit-ID:     636dcd0204599f94680f8f87b46cef7c66034ac0
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/636dcd0204599f94680f8f87b46cef7c66034ac0
+Author:        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+AuthorDate:    Sat, 04 Dec 2021 22:35:18 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 07 Dec 2021 09:13:28 
+CommitterDate: Mon, 06 Dec 2021 08:34:06 
 
-KVM: Drop stale kvm_is_transparent_hugepage() declaration
+KVM: arm64: Constify kvm_io_gic_ops
 
-kvm_is_transparent_hugepage() was removed in commit 205d76ff0684 ("KVM:
-Remove kvm_is_transparent_hugepage() and PageTransCompoundMap()") but its
-declaration in include/linux/kvm_host.h persisted. Drop it.
+The only usage of kvm_io_gic_ops is to make a comparison with its
+address and to pass its address to kvm_iodevice_init() which takes a
+pointer to const kvm_io_device_ops as input. Make it const to allow the
+compiler to put it in read-only memory.
 
-Fixes: 205d76ff0684 (""KVM: Remove kvm_is_transparent_hugepage() and PageTransCompoundMap()")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211018151407.2107363-1-vkuznets@redhat.com
+Link: https://lore.kernel.org/r/20211204213518.83642-1-rikard.falkeborn@gmail.com
 ---
- include/linux/kvm_host.h | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/kvm/vgic/vgic-mmio.c | 2 +-
+ arch/arm64/kvm/vgic/vgic-mmio.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index c310648..6d138ad 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1174,7 +1174,6 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
+diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+index 48c6067..7068da0 100644
+--- a/arch/arm64/kvm/vgic/vgic-mmio.c
++++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+@@ -1050,7 +1050,7 @@ static int dispatch_mmio_write(struct kvm_vcpu *vcpu, struct kvm_io_device *dev,
+ 	return 0;
+ }
  
- bool kvm_is_reserved_pfn(kvm_pfn_t pfn);
- bool kvm_is_zone_device_pfn(kvm_pfn_t pfn);
--bool kvm_is_transparent_hugepage(kvm_pfn_t pfn);
+-struct kvm_io_device_ops kvm_io_gic_ops = {
++const struct kvm_io_device_ops kvm_io_gic_ops = {
+ 	.read = dispatch_mmio_read,
+ 	.write = dispatch_mmio_write,
+ };
+diff --git a/arch/arm64/kvm/vgic/vgic-mmio.h b/arch/arm64/kvm/vgic/vgic-mmio.h
+index fefcca2..3fa696f 100644
+--- a/arch/arm64/kvm/vgic/vgic-mmio.h
++++ b/arch/arm64/kvm/vgic/vgic-mmio.h
+@@ -34,7 +34,7 @@ struct vgic_register_region {
+ 	};
+ };
  
- struct kvm_irq_ack_notifier {
- 	struct hlist_node link;
+-extern struct kvm_io_device_ops kvm_io_gic_ops;
++extern const struct kvm_io_device_ops kvm_io_gic_ops;
+ 
+ #define VGIC_ACCESS_8bit	1
+ #define VGIC_ACCESS_32bit	2

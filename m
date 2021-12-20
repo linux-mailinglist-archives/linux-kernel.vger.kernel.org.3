@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD72047B1D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9524B47B1D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbhLTRH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
+        id S240022AbhLTRHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbhLTRHY (ORCPT
+        with ESMTP id S240025AbhLTRHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:07:24 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED42C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:07:24 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id f9so30745001ybq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:07:24 -0800 (PST)
+        Mon, 20 Dec 2021 12:07:31 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9045FC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:07:30 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id s139so16681132oie.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:07:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/vGg57+Lx01rJOL0ZhVsf4BrYu1RDSpnZdQ9lgCWOVk=;
-        b=Q8tWcGZEA2RwU8ph7C8XH17hY5haCfVSblfA1IOWIbH8QAu9bSscvDUXUBu9D/QnF/
-         f9brp6m2rRS2E+U8AleTh8YdO1krRwtV9uKRejX+nonXaKWPTr5bY1fUS8z12E8FBlCR
-         v3N2cDchfkImjqS/6jSk5FTJqHGEd6K2+3puFNkJA6mwSB2Cfngo4SK7eQ7nU55IQY9P
-         G73dsBqnE8/uBTed1Nq814/CitTuk9GoPKlwr2y1Qlyd6KAiubvGHsAx1r8xaz2Q2cDh
-         sueV9ITQnlW650TCH/J9/10Y4Cz/dc2IXdbpzujXaCUpv2SQ6bMn+22/71OyhhSbnjQK
-         Abhg==
+         :cc;
+        bh=l2fOqYYhEHrIQH3EGI+nA0MRIDmpXYHQDdPKYEFCJPU=;
+        b=DbzOy6XXO9Cu3gUCRkwnAGcf4VCW9K4svhQ22lRY8Jo2hT9gjOufJm/YrKqeweHBm7
+         ofH/3w2veyxrdbknRhThz5XuBgM3/BIebH0WVZciGuhP5UK8oeO9snEbCfyk7s6WOVy/
+         CjghKnwPEf0ZRwhbG1SM3dCi756DLR9xkNufQBSIIEHAyioeusQdyVacfqdqCkKKKRPE
+         TbRY/ry1gZlHS6i2rEIJjUTOFT6hdNsbalFImshTp7NTLyRPmlvBr4y5BRVv3d82HdjT
+         hfmhV8Ma2XfflwERnNTn/xZmNjvEUtKia8LC8XuHKF32DbA8mszouf6rLKSGP4/QGkT9
+         LMfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/vGg57+Lx01rJOL0ZhVsf4BrYu1RDSpnZdQ9lgCWOVk=;
-        b=NM6CsAOhRLNhUreVArpKuy29uKtX4gWDefNi48tigzFO5Ohzru04CtXF0emchd6JRV
-         WEIQ90rlYubE6oafNVO0oSM5GVXIngAEAOUWA1yvsRAdLrqm6Ev/0+2ssSm6H0BXIjp8
-         RnoRZGhUIGnTo2rbq1r7YW/jzJQL5pKge2Zpp8VJUzL6AsilQzA5R6dIwUUXFfJKO6Wh
-         cdUyU3dakPg0hei3j/7EB9Ja8Zfxusi1fBZozBbQKvCVwvbockE+kwNqsPx8sEhC/6am
-         DJNcHNB9bX4Pjg03XGEkoW+OPkabDcjMJd5bk7MhJhcgTWxHuSvrYKWvR6Zd5gsF3W1O
-         b+Qw==
-X-Gm-Message-State: AOAM530dChXlS6+vNlVWPISR+CXPJ7u5qgmiX1z6UM1mQOy1y1Jc2QZ7
-        keE0bUIwU9gX3sWz9sGIVamD8cxNKmLZitdkuBA=
-X-Google-Smtp-Source: ABdhPJzqi3Y0rFLMOjNnGpRCeJK8EYzvGtbOVCEEW+XrAligjHV5vfUmYxuvatKdOlVN51nPEk0MMvHxJVVj2lIpCZk=
-X-Received: by 2002:a25:84c1:: with SMTP id x1mr23994389ybm.690.1640020043245;
- Mon, 20 Dec 2021 09:07:23 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=l2fOqYYhEHrIQH3EGI+nA0MRIDmpXYHQDdPKYEFCJPU=;
+        b=iFSed0fC7oMwElCY29NPYEiwq4rp/UyKd1yJQZG5J1fGCZsV4ca7nMLRAKtO9qLQGN
+         Q1as3IJ4NSS5pRa+9VdZPHJcl/tiul3rmJaznNyXPms5Vh0p/2pbDH9AkKeZFL2BFJlV
+         wjftO/y55+ICxeCAmS2kHI2H2QwNb9cQZWl7hJqGT9JSEwLZclOZzFPe3kvaIDPqhNXR
+         vFK1ZHUhgs8fAIi4O3uuw58Yrucm5sqXDDOUyqC4w7qPhUkI5XJli8hVr2/8fgz7fDtr
+         3kww2eMMqfwyWvts/BIYOscuVcp+ovI4tfSxQybYi6s6kyH2Pf2l/cOGT4M0PqDc3v1R
+         Tq2Q==
+X-Gm-Message-State: AOAM530p7JUv1chhNOJxzX3fP3e+qsfOEGRxSTOzSVuS10XdlacGJjOq
+        /VgP3+5EkRd+QQe0B4qXmf2eEbwYL8FPVju/Sv/5Dg==
+X-Google-Smtp-Source: ABdhPJwGvvq1EwhlNnfRxWt9o1B+wPNGDptAa9msVK50zubAZFr19kF1QX90/CoT41/VLy2U+d3HS1tS+tVNshcfEtE=
+X-Received: by 2002:a05:6808:118c:: with SMTP id j12mr12803071oil.65.1640020048260;
+ Mon, 20 Dec 2021 09:07:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211220144654.926112-1-pgwipeout@gmail.com> <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
- <b0d0e2ff-4282-f104-b8f5-554b059200c9@gmail.com>
-In-Reply-To: <b0d0e2ff-4282-f104-b8f5-554b059200c9@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 20 Dec 2021 12:07:12 -0500
-Message-ID: <CAMdYzYoYU-Avi1RK_-gHBWqiWdnxH9Pwa5nnJkU1ZewHm-1OHw@mail.gmail.com>
-Subject: Re: Aw: [PATCH v3] mfd: rk808: add reboot support to rk808.c
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <a746b5baebbf79f8160c1fe09d6f8a5ab7bde1d7.1640017993.git.andreyknvl@google.com>
+In-Reply-To: <a746b5baebbf79f8160c1fe09d6f8a5ab7bde1d7.1640017993.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 20 Dec 2021 18:07:17 +0100
+Message-ID: <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com>
+Subject: Re: [PATCH] kasan: fix quarantine conflicting with init_on_free
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:36 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+On Mon, 20 Dec 2021 at 17:37, <andrey.konovalov@linux.dev> wrote:
 >
-> 20.12.2021 19:33, Frank Wunderlich =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi
-> >
-> >> Gesendet: Montag, 20. Dezember 2021 um 15:46 Uhr
-> >> Von: "Peter Geis" <pgwipeout@gmail.com>
-> >> @@ -749,6 +791,9 @@ static int rk808_remove(struct i2c_client *client)
-> >>      if (pm_power_off =3D=3D rk808_pm_power_off)
-> >>              pm_power_off =3D NULL;
-> >>
-> >> +    if (of_property_read_bool(np, "rockchip,system-power-controller")=
-)
-> >> +            unregister_restart_handler(&rk808_restart_handler);
-> >> +
-> >>      return 0;
-> >>  }
-> >
-> > this change misses a declaration
-> >
-> > struct device_node *np =3D client->dev.of_node;
+> From: Andrey Konovalov <andreyknvl@google.com>
 >
-> Good catch, technically the whole of_property_read_bool() could be
-> dropped from rk808_remove() since unregister_restart_handler() survives
-> if handler wasn't registered.
+> KASAN's quarantine might save its metadata inside freed objects. As
+> this happens after the memory is zeroed by the slab allocator when
+> init_on_free is enabled, the memory coming out of quarantine is not
+> properly zeroed.
+>
+> This causes lib/test_meminit.c tests to fail with Generic KASAN.
+>
+> Zero the metadata when the object is removed from quarantine.
+>
+> Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  mm/kasan/quarantine.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
+> index 587da8995f2d..2e50869fd8e2 100644
+> --- a/mm/kasan/quarantine.c
+> +++ b/mm/kasan/quarantine.c
+> @@ -132,11 +132,22 @@ static void *qlink_to_object(struct qlist_node *qlink, struct kmem_cache *cache)
+>  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
+>  {
+>         void *object = qlink_to_object(qlink, cache);
+> +       struct kasan_free_meta *meta = kasan_get_free_meta(cache, object);
+>         unsigned long flags;
+>
+>         if (IS_ENABLED(CONFIG_SLAB))
+>                 local_irq_save(flags);
+>
+> +       /*
+> +        * If init_on_free is enabled and KASAN's free metadata is stored in
+> +        * the object, zero the metadata. Otherwise, the object's memory will
+> +        * not be properly zeroed, as KASAN saves the metadata after the slab
+> +        * allocator zeroes the object.
+> +        */
+> +       if (slab_want_init_on_free(cache) &&
+> +           cache->kasan_info.free_meta_offset == 0)
+> +               memset(meta, 0, sizeof(*meta));
 
-Thank you all!
+memzero_explicit()
+
+although in this case it probably doesn't matter much, because AFAIK
+memzero_explicit() only exists to prevent the compiler from eliding
+the zeroing. Up to you.
+
+> +
+>         /*
+>          * As the object now gets freed from the quarantine, assume that its
+>          * free track is no longer valid.
+> --
+> 2.25.1
+>

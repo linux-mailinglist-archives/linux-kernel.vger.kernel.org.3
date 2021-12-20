@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E548147ABAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392CF47ABF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234074AbhLTOiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:38:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46744 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbhLTOhl (ORCPT
+        id S234595AbhLTOk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:40:26 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53110 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234591AbhLTOjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:41 -0500
+        Mon, 20 Dec 2021 09:39:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14FF8B80EB3;
-        Mon, 20 Dec 2021 14:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B5CC36AE7;
-        Mon, 20 Dec 2021 14:37:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24289CE1102;
+        Mon, 20 Dec 2021 14:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B11C36AE9;
+        Mon, 20 Dec 2021 14:39:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011058;
-        bh=glxp8tiGpTIkTgiLSNQYHxYns/panT72gq7bR60vXqQ=;
+        s=korg; t=1640011162;
+        bh=rriXzqEyF+GAONL86RaazS3IzxMxt1iH41ylbmJWOgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fXGOon2z6EKPCPfHCTujF/FOu4Teq2zKeOWlxM/V4JLB1/vSxXgoVqz6OeKVP9c1m
-         yitJnidOdsV3rxmgf8qBMlLiGuFr276f0Xtm2cZw3BYStPSqrr01ZU5LQUCaXN0KFR
-         VbWUULPymPIkqJUUeLQ1Y2Dli4XFz6uNbcej/BcU=
+        b=o8gtIjVidg3sHddCnHhjO5YucbtAmddjdA5ZstL79vcoCO3wojTSGAy4rXZJxKPqi
+         MRQYYlI7C9pRShb6FuNE+h/lF/NMJyVKkj038JYpDxvkGbtrOKJ5qmkzc2HBQB6qwS
+         HDZsDKflgp8cCQNx5OuL35keN1TL2i1Vtcs3iqTk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pedro Batista <pedbap.g@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4.9 20/31] firmware: arm_scpi: Fix string overflow in SCPI genpd driver
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Szymon Heidrich <szymon.heidrich@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 25/45] USB: gadget: bRequestType is a bitfield, not a enum
 Date:   Mon, 20 Dec 2021 15:34:20 +0100
-Message-Id: <20211220143020.624017639@linuxfoundation.org>
+Message-Id: <20211220143023.108746640@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,55 +46,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sudeep Holla <sudeep.holla@arm.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 865ed67ab955428b9aa771d8b4f1e4fb7fd08945 upstream.
+[ Upstream commit f08adf5add9a071160c68bb2a61d697f39ab0758 ]
 
-Without the bound checks for scpi_pd->name, it could result in the buffer
-overflow when copying the SCPI device name from the corresponding device
-tree node as the name string is set at maximum size of 30.
+Szymon rightly pointed out that the previous check for the endpoint
+direction in bRequestType was not looking at only the bit involved, but
+rather the whole value.  Normally this is ok, but for some request
+types, bits other than bit 8 could be set and the check for the endpoint
+length could not stall correctly.
 
-Let us fix it by using devm_kasprintf so that the string buffer is
-allocated dynamically.
+Fix that up by only checking the single bit.
 
-Fixes: 8bec4337ad40 ("firmware: scpi: add device power domain support using genpd")
-Reported-by: Pedro Batista <pedbap.g@gmail.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-Cc: stable@vger.kernel.org
-Cc: Cristian Marussi <cristian.marussi@arm.com>
-Link: https://lore.kernel.org/r/20211209120456.696879-1-sudeep.holla@arm.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
+Cc: Felipe Balbi <balbi@kernel.org>
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Link: https://lore.kernel.org/r/20211214184621.385828-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/scpi_pm_domain.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/composite.c    | 6 +++---
+ drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
+ drivers/usb/gadget/legacy/inode.c | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
---- a/drivers/firmware/scpi_pm_domain.c
-+++ b/drivers/firmware/scpi_pm_domain.c
-@@ -27,7 +27,6 @@ struct scpi_pm_domain {
- 	struct generic_pm_domain genpd;
- 	struct scpi_ops *ops;
- 	u32 domain;
--	char name[30];
- };
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index bcebec17bdd51..b407f907d6555 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1636,14 +1636,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u8				endp;
  
- /*
-@@ -121,8 +120,13 @@ static int scpi_pm_domain_probe(struct p
+ 	if (w_length > USB_COMP_EP0_BUFSIZ) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			goto done;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
  
- 		scpi_pd->domain = i;
- 		scpi_pd->ops = scpi_ops;
--		sprintf(scpi_pd->name, "%s.%d", np->name, i);
--		scpi_pd->genpd.name = scpi_pd->name;
-+		scpi_pd->genpd.name = devm_kasprintf(dev, GFP_KERNEL,
-+						     "%s.%d", np->name, i);
-+		if (!scpi_pd->genpd.name) {
-+			dev_err(dev, "Failed to allocate genpd name:%s.%d\n",
-+				np->name, i);
-+			continue;
-+		}
- 		scpi_pd->genpd.power_off = scpi_pd_power_off;
- 		scpi_pd->genpd.power_on = scpi_pd_power_on;
+ 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
+ 			w_length = USB_COMP_EP0_BUFSIZ;
++		} else {
++			goto done;
+ 		}
+ 	}
  
+diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
+index f1c5a22704b28..e8818ad973e4b 100644
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -345,14 +345,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
+ 	u16 len = 0;
+ 
+ 	if (length > DBGP_REQ_LEN) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return err;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(DBGP_REQ_LEN);
+ 			length = DBGP_REQ_LEN;
++		} else {
++			return err;
+ 		}
+ 	}
+ 
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index ee4c206150a83..c67d53beed85e 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1339,14 +1339,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u16				w_length = le16_to_cpu(ctrl->wLength);
+ 
+ 	if (w_length > RBUF_SIZE) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return value;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(RBUF_SIZE);
+ 			w_length = RBUF_SIZE;
++		} else {
++			return value;
+ 		}
+ 	}
+ 
+-- 
+2.34.1
+
 
 

@@ -2,109 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09C747A877
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D367C47A87B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbhLTLSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:18:43 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:52520 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbhLTLSm (ORCPT
+        id S231642AbhLTLTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231633AbhLTLTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:18:42 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKBIU8B005960;
-        Mon, 20 Dec 2021 05:18:30 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639999110;
-        bh=aM+DkVdHhah+ozhy7i5sI/2zcufpmw4b8BATTNe7JGc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=noE1RkT0c916jEJAV/NOTIl9tubZyB7VyT8gOBwN6if0Zx/MUJ3JSi2Tt6ZRpemrg
-         8gdqUp8/m7iA9UtpuVcSiKaK4O+YHIAK7y/yCCf3gE7slo856OuUhE5KqyOqWhV2YZ
-         0Bx4J7ji1sqBafJvPThE25Kb6GjIl0I17tdScr4o=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKBIU99036571
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Dec 2021 05:18:30 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 05:18:30 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 05:18:30 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKBITxp081660;
-        Mon, 20 Dec 2021 05:18:30 -0600
-Date:   Mon, 20 Dec 2021 16:48:29 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
-Subject: Re: [PATCH v5 2/2] mtd: spi-nor: macronix: Add support for
- mx66lm1g45g
-Message-ID: <20211220111827.m7cymttlgmpnyejb@ti.com>
-References: <20211217180601.585825-1-tudor.ambarus@microchip.com>
- <20211217180601.585825-2-tudor.ambarus@microchip.com>
- <20211220102514.bnws67ks5uia5yfh@ti.com>
- <213719a3-ed81-b1c6-9c9e-85dbeee85ff5@microchip.com>
+        Mon, 20 Dec 2021 06:19:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E269DC06173E;
+        Mon, 20 Dec 2021 03:19:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84ACB60FDD;
+        Mon, 20 Dec 2021 11:19:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28A0C36AE8;
+        Mon, 20 Dec 2021 11:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639999161;
+        bh=3DSyoLMiqIKiqjwMN/htAWvTm7cVAVrGS2EpGgIP6Pg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uB46tSGt7Vwl5j/7pi65+1YbO2pWqSJ1tEdCLqdTaMQy2CJgYRJqCOQ2kcfKyX2pU
+         4ZhwSg+sOAUgWUw9cAigxIDVxaXwJg2Nu2k6ABTw9rID5ylgSIYs3A1S5RsJR7flrh
+         zVbg2DqrsT1pYItaQnKVlmbxXxbOAHbh/crDd3GonVm/V1yY7GfukbfLwKEI1aOKml
+         8Ukcjdtgxf7QVn68VOC5aLkEHHoXHmA+B9AGhji8bmEbxXcFFHfr+bp8H1uSz9Ifvw
+         Ta3fvCU/xS/JyCozueoPkVUa3yS9NQKaj696i4++/Y0IT1fNBxF6dFT3sF5TdvKEuq
+         cmrk3z25pavDw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mzGhG-000638-Sy; Mon, 20 Dec 2021 12:19:14 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Marc Ferland <ferlandm@amotus.ca>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] gnss: add USB support
+Date:   Mon, 20 Dec 2021 12:18:59 +0100
+Message-Id: <20211220111901.23206-1-johan@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <213719a3-ed81-b1c6-9c9e-85dbeee85ff5@microchip.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/21 11:10AM, Tudor.Ambarus@microchip.com wrote:
-> On 12/20/21 12:25 PM, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Hi Tudor,
-> > 
-> > On 17/12/21 08:06PM, Tudor Ambarus wrote:
-> >> mx66lm1g45g supports just 1-1-1, 8-8-8 and 8D-8D-8D modes. There are
-> >> versions of mx66lm1g45g which do not support SFDP, thus use
-> >> SPI_NOR_SKIP_SFDP. The RDID command issued through the octal peripheral
-> >> interface outputs data always in STR mode for whatever reason. Since
-> >> 8D-8D-8S is not common, avoid reading the ID when enabling the octal dtr
-> >> mode. Instead, read back the CR2 to check if the switch was successful.
-> > 
-> > I replied to your v2 just now about this.
-> > 
-> >> Tested in 1-1-1 and 8d-8d-8d modes using sama7g5 QSPI IP.
-> > 
-> > Link to datasheet in the commit message would be nice.
-> 
-> Do you know if there's a standardized way to add a link to a datasheet
-> in the commit message, i.e. should I use the Link tag or just a simple
-> link will do?
+This series adds a generic driver for GNSS receivers with a USB
+interface and a first device id for the Sierra Wireless XM1210 receiver.
 
-I don't know if there is. Something like "Datasheet: <link>" should be 
-fine I think.
+Johan
 
-> > 
-> > As discussed on IRC, this flash reverses byte order in 8D-8D-8D mode. So
-> > the data you write in 1S-1S-1S mode will be have byte order reversed
-> > when reading in 8D-8D-8D mode. Do you have any plans on doing something
-> > for this? Or do we just leave it to the user to figure it out?
-> 
-> I don't think we should amend this in software. Reading/writing in
-> 8D-8D-8D will give sane results, the problem is just when you
-> use STR for write and DTR for read, or viceversa. This is just a bad
-> design and we should leave it as it is.
 
-Sounds good to me.
+Johan Hovold (2):
+  gnss: add USB support
+  gnss: usb: add support for Sierra Wireless XM1210
 
-> 
-> I'll address all your other comments in a v6. Thanks.
-> ta
+ drivers/gnss/Kconfig  |  11 +++
+ drivers/gnss/Makefile |   3 +
+ drivers/gnss/usb.c    | 210 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 224 insertions(+)
+ create mode 100644 drivers/gnss/usb.c
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.32.0
+

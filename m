@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB3047B49F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A147B4A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhLTVCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S230094AbhLTVCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbhLTVCN (ORCPT
+        with ESMTP id S230053AbhLTVCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:02:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CACEC061574;
-        Mon, 20 Dec 2021 13:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/7i/EyiBffh3uFhRPiI1lN3v+SNq4maU6QWoZIbFIf8=; b=KOKPu0fJgXqoZgD/h9NDuD9qAw
-        8mD9YrV7i0OysQiwRdzwJciSXi60cSTpkWtleOU/8fKUXFBN1hs45AbYoKWYsWGBa4hUZDymm21GV
-        ibcIggcK8oG7MtV7Nd/ZI6qZoFM9PACLtu2BsJ6o/ppvfEbwThbLy0/9n3g6VFsApz0Lgeu1HdLgK
-        ScYOuIsf8BYNZErNz5R4gYcH5JX6bpNEqzJ3UqO3ef/BNtcbIZpVYuIwOZiJ5S7GkloC7hm0ZFWaQ
-        DvefRV2jUkplhspfvRxdL3/WcpCrwXwo9y75569myXpkbyu8bVw9QRW8cDAZ4az0zo0fBMxhCDG5Q
-        5nns1S6g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzPnI-001ulY-GV; Mon, 20 Dec 2021 21:02:04 +0000
-Date:   Mon, 20 Dec 2021 21:02:04 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <YcDvTMUF3XWKWgSW@casper.infradead.org>
-References: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <Yb+gId/gXocrlJYD@casper.infradead.org>
- <YcDNaoGcGS6ypucg@casper.infradead.org>
- <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+        Mon, 20 Dec 2021 16:02:19 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4D4C06173E;
+        Mon, 20 Dec 2021 13:02:19 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id t19so17678197oij.1;
+        Mon, 20 Dec 2021 13:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IkO/tNWZaeS2Vxk1XDI6+YW5tksUF9B3U8MJxg8VTl0=;
+        b=e80CwVHZEfIGXqP0IHbQ2xCxTEpKGwE6cLT5Dwo0v18zT9l0Am2jAExrOqtmgc9P8w
+         BsLHvgXPwIEEYF0P1VWhvIBTIRS0bFzsLXWN8ThphBSM2xxTyshPYGjh7Z0TT/wBdfrd
+         zdptURAgfcxSxoLJpt0deLzDAJv23yGxHXNzgui087ZgdryguCKcdJrnk0wBOmzRWtzV
+         y94guDBENn73Ftv2q9eb20QoO3hAHa2Y2e8GCqqKKdvyFOF2d1q80jqoEdtsLoFd5cA0
+         VwgJd7AzEhbqkR+B4nMJoKc50NuwiKD+zDUVQY81TuYay8wqZDO59l4f21aZUEPUfTwb
+         XW5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=IkO/tNWZaeS2Vxk1XDI6+YW5tksUF9B3U8MJxg8VTl0=;
+        b=YMOCztguq/wnis10qYNkRw/mapMSd7scRIWIKbpzmSlxtO5Mls4K87XucCd00HGAVu
+         OqvH90k0StI11Kmcj1qxd0sE/RJ3tYakvBYLr5SmRaFZRLumsodhNiTiXwENKyI7whwc
+         Kg2jPj6u3RWJMbIBlL/agUdRhosNKiDWqRbvh/yUqL513T0AlcqRun1rJI+fS2H+g/aR
+         F2nYH23KY2ueACGuqEi328uV3D4Rnd44wfelg+SdGH/maqPrAxfJRwuI41T3Wuo3Pf9v
+         Gx7hgcauvuxubDe3AuujbOltykPXxT89TDHsnr3V9N6RQQDz93zkl4mIWutQuwJak6Pd
+         ZsKw==
+X-Gm-Message-State: AOAM531A0aUwam+TeubXxJ6Bvzjf9eWDuesw9mblig2hhYN5oMOS3bkc
+        5pXKC37gTyh11WQY2iBj3f1W9J7ZbUQ=
+X-Google-Smtp-Source: ABdhPJzMua0TCdQNktopncQKHxqwNZMpp6Y29yYK/VUWS2ZKkNKkgiD7rSE/+f7Dw4KTTC6YDcX8Wg==
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr900oiw.154.1640034138475;
+        Mon, 20 Dec 2021 13:02:18 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bj8sm3878007oib.51.2021.12.20.13.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 13:02:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 20 Dec 2021 13:02:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] hwmon/pmbus: (ir38064): Fix spelling mistake
+ "comaptible" -> "compatible"
+Message-ID: <20211220210216.GA194595@roeck-us.net>
+References: <20211220155527.179125-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+In-Reply-To: <20211220155527.179125-1-colin.i.king@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:15:14AM -0800, Linus Torvalds wrote:
-> Well, that patch seems to be a no-op removal of dead code, so absolutely yes.
+On Mon, Dec 20, 2021 at 03:55:27PM +0000, Colin Ian King wrote:
+> There is a spelling mistake in the module description, fix it.
 > 
-> That said, I think it would be good to split it up. I looked at that
-> patch and went "is that really a no-op" to the point of recreating it.
-> 
-> I think it would be good to make it multiple patches that are each
-> individally trivial. IOW, start with
-> 
->  (1) remove second argument to reuse_swap_page() that is always NULL,
-> without making any other changes
-> 
->  (2) that now made 'total_mapcount' unused in reuse_swap_page(),
-> remove it as an argument from page_trans_huge_map_swapcount()
-> 
->  (3) that now made 'total_mapcount' unused in
-> page_trans_huge_mapcount(), remove it as an argument there too.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Hah, that was actually how I did it originally (without actually
-committing at each step, and with a few "Oh, hang on, now we can avoid
-calculating this too" stops and restarts along the way), but I thought
-it all hung together logically as a single change.  It's hard to see
-things from the other person's perspective at times.
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/pmbus/ir38064.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
+> index 07bdbb16f216..0ea7e1c18bdc 100644
+> --- a/drivers/hwmon/pmbus/ir38064.c
+> +++ b/drivers/hwmon/pmbus/ir38064.c
+> @@ -85,6 +85,6 @@ static struct i2c_driver ir38064_driver = {
+>  module_i2c_driver(ir38064_driver);
+>  
+>  MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
+> -MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and comaptible chips");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and compatible chips");
+>  MODULE_LICENSE("GPL");
+>  MODULE_IMPORT_NS(PMBUS);

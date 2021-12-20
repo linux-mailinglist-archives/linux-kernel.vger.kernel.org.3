@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E27647B0AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E9447B0B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237009AbhLTPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbhLTPvy (ORCPT
+        id S237335AbhLTPxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:53:42 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56780 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231790AbhLTPxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:51:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731E8C061574;
-        Mon, 20 Dec 2021 07:51:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p6oI7t6a2sP+y+8OnSAo1gKUw6uZD1Gb+30mWCzcviM=; b=TbrO5EIrYsdS1CZXyeUMFR1ZGj
-        igJHlz87ytOr2HT8Scqbk1ZenaFxBIoXwSi/zvAsHkk2d+ZJQ3j0GMVjUdHheawHIz0wKzkFoHyiG
-        T9ZHq9vF1RZ88SgZGZTR8mq0EeULOXJ71RFoWcYTDG4oaBS0c6lOkXXiM3aNnhTAOJ58QlcfngYnQ
-        Ea2XeVCuz89bpJIiroPXhTK2X+LOL1fEazLkOK/y6+b8DXbmPHOum4l5JQIWZP62lH/zC10eCMSP0
-        2J5tqVGEwSetWQTvxHD3/yoqJAKxMFPvuFyZphCUbyDzbwXL51E8KmL9GfZmTaSwL/12WQvi24R9n
-        OzAToDKQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzKww-002X19-7X; Mon, 20 Dec 2021 15:51:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0F38530003C;
-        Mon, 20 Dec 2021 16:51:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AB011200E706A; Mon, 20 Dec 2021 16:51:40 +0100 (CET)
-Date:   Mon, 20 Dec 2021 16:51:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <YcCmjP8GCD+2qQH0@hirez.programming.kicks-ass.net>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
- <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
+        Mon, 20 Dec 2021 10:53:41 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BKB4Q9e022873;
+        Mon, 20 Dec 2021 16:53:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=selector1;
+ bh=Jgsa623SaViueGDOZhOSg8j75LYCq3JkOD9aq+r/VfQ=;
+ b=Ldd5V86MOT/fE2WF4Lg2DS8jBjbIvCL4my+RuOlmH9NHg5Jz0/O/lZqlhOtJ4SKESwV+
+ 2wo+st4yxIOSOzjHtynk+FNnuMp5Ua1/1mJox/Co0VfeEHcBbTK5pT+04gvAuHQKTGGj
+ odrpRrq+Zo4LPAhJTO00OjEErxPppMMtd+Yr5Y6MomCgCPOQ2tNskW43nFX7khUYIZCt
+ iFTIRLEEfH9lrB3KgyHY9LzdErs2ZCs7ubnTmg+sowEQ4Cj4A3/BE7rjVYz0JCSzcRdA
+ YCJRnM/Z5HOkW3T6eHaIKRVqV+EpBLodW1+iitopQBxJBNJlqrOhG1p3MfrrTLklEEgg zw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2kjnkbee-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 16:53:20 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B828C10002A;
+        Mon, 20 Dec 2021 16:53:18 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AEF9D207546;
+        Mon, 20 Dec 2021 16:53:18 +0100 (CET)
+Received: from [192.168.8.15] (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 20 Dec
+ 2021 16:53:17 +0100
+Message-ID: <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
+Subject: Re: [PATCH] drm: adv7511: override i2c address of cec before
+ accessing it
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Jonas Karlman" <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Date:   Mon, 20 Dec 2021 16:53:12 +0100
+In-Reply-To: <164001209406.2512616.469307346369770543@Monstersaurus>
+References: <20211218182804.208906-1-antonio.borneo@foss.st.com>
+         <164001209406.2512616.469307346369770543@Monstersaurus>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-20_07,2021-12-20_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:34:13PM +0200, Mathias Nyman wrote:
-> On 17.12.2021 15.55, Peter Zijlstra wrote:
-> > On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
-> >> I can reproduce this.
-> >> Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
-> >>
-> >> 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
-> > 
-> > I can confirm, reverting that solves the boot hang, things aren't quite
-> > working for me though.
-> > 
-> >> Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
-> >> Maybe  it's too early for ktime.
-> > 
-> > It certainly is, using ktime for delay loops sounds daft to me anyhow.
-> > 
-> >> After reverting that patch it works again for me.
-> > 
-> > [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0-rc3+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc force_early_printk sched_verbose ftrace=nop mitigations=off nokaslr
-> > ...
-> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> > ...
-> > [    3.161367] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+On Mon, 2021-12-20 at 14:54 +0000, Kieran Bingham wrote:
+> Hi Antonio,
 > 
-> Ok, this is some other issue. I got the boot messages over USB
-> (running minicom at the other end, listening to ttyUSB0)
-
-I have a regular A->A USB3 cable, not the special one with a wire
-missing. Given the dbc thing works, I feel this ought to work too.
-
-> > The machine does boot.. but I *am* getting tons of:
+> Quoting Antonio Borneo (2021-12-18 18:28:04)
+> > Commit 680532c50bca ("drm: adv7511: Add support for
+> > i2c_new_secondary_device") allows a device tree node to override
+> > the default addresses of the secondary i2c devices. This is useful
+> > for solving address conflicts on the i2c bus.
 > > 
-> > [  485.546898] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
-> > [  485.546963] usb usb4-port4: config error
+> > In adv7511_init_cec_regmap() the new i2c address of cec device is
+> > read from device tree and immediately accessed, well before it is
+> > written in the proper register to override the default address.
+> > This can cause an i2c error during probe and a consequent probe
+> > failure.
 > 
-> This is expected when xhci driver takes over after the early dbc driver,
-> xhci driver resets xHC controller, and all ports turn to normal host ports again.
+> Ouch, it does seem that way. I guess no one has used the CEC for
+> quite
+> some time, as it must have been like this for a while?
+
+Using the default i2c address for cec works without problem; apparently
+everyone is happy with such default. The issue appears only when you
+have to override the default cec address.
+The commit 680532c50bca landed in v4.18.
+
+> > Once the new i2c address is read from the device tree, override
+> > the default address before any attempt to access the cec.
 > 
-> Because of the special cable you now have two hosts connected to each other,
-> both trying to enumerate a device.
-> 
-> This whole transition from earlyprintk xdbc to normal xhci driver is 
-> not very userfriendly.
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Uhhmm... but but that shouldn't be. What if I want to keep using xdbc as
-console after that point? specifically, I'll probably end up having:
+Thanks!
+Antonio
 
- earlyprintk=xdbc,keep
-
-once all this starts working. The whole point of early consoles is that
-they're more reliable than regular consoles, not that they're 'early'.
-
-> > However, when I do:
+> > Tested with adv7533 and stm32mp157f.
 > > 
-> > $ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+> > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> > Fixes: 680532c50bca ("drm: adv7511: Add support for
+> > i2c_new_secondary_device")
+> > ---
+> > To: Andrzej Hajda <a.hajda@samsung.com>
+> > To: Neil Armstrong <narmstrong@baylibre.com>
+> > To: Robert Foss <robert.foss@linaro.org>
+> > To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> > To: Jonas Karlman <jonas@kwiboo.se>
+> > To: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > To: David Airlie <airlied@linux.ie>
+> > To: Daniel Vetter <daniel@ffwll.ch>
+> > To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> > To: dri-devel@lists.freedesktop.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-stm32@st-md-mailman.stormreply.com
+> > ---
+> >  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
 > > 
-> 
-> Yes, this works as it turns on the DbC feature on in xHC hardware,
-> which turns the first USB port into a usb device.
+> > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > index 76555ae64e9c..629e05286fd9 100644
+> > --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > @@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct
+> > adv7511 *adv)
+> >                                                
+> > ADV7511_CEC_I2C_ADDR_DEFAULT);
+> >         if (IS_ERR(adv->i2c_cec))
+> >                 return PTR_ERR(adv->i2c_cec);
+> > +
+> > +       regmap_write(adv->regmap, ADV7511_REG_CEC_I2C_ADDR,
+> > +                    adv->i2c_cec->addr << 1);
+> > +
+> >         i2c_set_clientdata(adv->i2c_cec, adv);
+> >  
+> >         adv->regmap_cec = devm_regmap_init_i2c(adv->i2c_cec,
+> > @@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client
+> > *i2c, const struct i2c_device_id *id)
+> >         if (ret)
+> >                 goto err_i2c_unregister_packet;
+> >  
+> > -       regmap_write(adv7511->regmap, ADV7511_REG_CEC_I2C_ADDR,
+> > -                    adv7511->i2c_cec->addr << 1);
+> > -
+> >         INIT_WORK(&adv7511->hpd_work, adv7511_hpd_work);
+> >  
+> >         if (i2c->irq) {
+> > 
+> > base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
+> > -- 
+> > 2.34.1
+> > 
 
-But if this works, why isn't earlyprintk working for me?

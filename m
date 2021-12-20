@@ -2,156 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5290F47B06C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7FB47B06E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbhLTPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236419AbhLTPhb (ORCPT
+        id S236944AbhLTPiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:38:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39610 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbhLTPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:37:31 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D046C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:37:31 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id f5so16827771edq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:37:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:subject:from
-         :to:cc:references:in-reply-to;
-        bh=Hu5iDisR7EDNko6/1UheOiwFNf5HuOYdbuiMvDAkPr8=;
-        b=awS6r+yj1kX54JiC6uQ4UGUPUuKxDqlZGh8Wvb6mS4CUHItoYJL47NOjzIoHWwwKqa
-         hOCRtj56AFhAm/Psev43HKVOavvv70ux9Hjc4anUbwhzGNeqcBiM78ZCJ0dKjpy2dmBG
-         I4c+CeddSLfYPEtlXdwZGMYgOz8QsR9ZAMmS/bw43B3Cf5qQ0qRKlVtWkf5eb0i0E9HO
-         7djFJBWjqzjtiYejt4CbszOwvkF9mlG8BzxrO3z01UUkxErKCKaVJEHNpd+5gJV578SW
-         JTCziv/PKb+5MhzVKII/IWr0uB3fmx0D2VXeKmPkPM5iKg9OYk+1+J2gSK32dKtTsf3z
-         WXhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:subject:from:to:cc:references:in-reply-to;
-        bh=Hu5iDisR7EDNko6/1UheOiwFNf5HuOYdbuiMvDAkPr8=;
-        b=hEg0z2ymQLbdCyPwoo2giokZw5EH/Kv+Cq9DFBZIxrvwXRU4cpZmzuVLc04XT5KDHz
-         cuREQdW9KBnbzFaMD97W0soPV79QJ1M6Tut3v5Di86Jpm4ARk2zgOYIuIAhXbTQn87GV
-         KCG6gw15JBSZqF+940bMQUiRjOTDY9xLLEvPVGaX+d8mqrGCs7Sh1YfJOtUjmaSA8fWQ
-         j2y6j1owqEuHmEWVFF9SqgafYiMB3Oxw2ZMq4B+j39qsbp0Ft/krk4lKbRaIYt6h9G1c
-         iQBTOlmvFFT7v1GEIb5ho06kUFeZB/8LTuHk89IkBrSNNCV4fYx16jRs9/lAPtJ/Zkmu
-         92cA==
-X-Gm-Message-State: AOAM530yOr/GY/piUuqYcDUsEnWh9+AAmfOqiYS3ZhiJvKZHvYFIjPjN
-        mFeu2sQ5f7BaZdA/iAomhOs7wQ==
-X-Google-Smtp-Source: ABdhPJxk2P6RffxSmBWcsYri0yKYsj0/TdqH1vYXh0e1KLw0oC1SCQPXZO3W8zNYh9OK26O6K9VlsQ==
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr16220893edc.276.1640014649832;
-        Mon, 20 Dec 2021 07:37:29 -0800 (PST)
-Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
-        by smtp.gmail.com with ESMTPSA id r17sm3489883edd.53.2021.12.20.07.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 07:37:29 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 20 Dec 2021 15:37:28 +0000
-Message-Id: <CGK8O8M50JX6.3E0WU3HUN6K5W@arch-thunder>
-Subject: Re: [PATCH 4/6] usb: isp1760: Use platform_get_irq() to get the
- interrupt
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
-To:     "Lad Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
-        "Pawel Laszczak" <pawell@cadence.com>,
-        "Roger Quadros" <rogerq@kernel.org>,
-        "Aswath Govindraju" <a-govindraju@ti.com>,
-        "Felipe Balbi" <balbi@kernel.org>, "Bin Liu" <b-liu@ti.com>
-Cc:     <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Prabhakar" <prabhakar.csengg@gmail.com>
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 20 Dec 2021 10:38:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5602C6120B;
+        Mon, 20 Dec 2021 15:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E8BC36AE8;
+        Mon, 20 Dec 2021 15:38:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640014680;
+        bh=Mi2oDzNFK4OW/+LbhQ7Lp2q28SlQE9TbUmYOWSv2Rw0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mIRJq8Sovx4hb5vC5VINd9mGwalS9pjiGG4mOVTyl9jKn2A8Phe48TA7X48lZQluy
+         ax+99u+gTVy+RfJAp8lyp+ztrqoUA99nGL/H0iNLuiXhi6ilf6K/lXBFY4f8psCeNM
+         1C82LXjIjkVhcrYooilJ64xaagAVRFOPe9AwZt64=
+Date:   Mon, 20 Dec 2021 16:37:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] serial: pch_uart: potential dereference of null
+ pointer
+Message-ID: <YcCjVpm9kC06kLbG@kroah.com>
+References: <20211216141454.423333-1-jiasheng@iscas.ac.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216141454.423333-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lad,
-Thanks for the patch.
-
-On Mon Dec 20, 2021 at 1:04 AM WET, Lad Prabhakar wrote:
-
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq(). Also use irq_get_trigger_type to get the
-> IRQ trigger flags.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-LGTM.
-Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
-
-------
-Cheers,
-     Rui
-
+On Thu, Dec 16, 2021 at 10:14:54PM +0800, Jiasheng Jiang wrote:
+> The return value of dma_alloc_coherent() needs to be checked.
+> To avoid dereference of null pointer in case of the failure of alloc.
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
->  drivers/usb/isp1760/isp1760-if.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/isp1760/isp1760-if.c b/drivers/usb/isp1760/isp17=
-60-if.c
-> index 7cc349c0b2ad..65ba5aca2a4f 100644
-> --- a/drivers/usb/isp1760/isp1760-if.c
-> +++ b/drivers/usb/isp1760/isp1760-if.c
-> @@ -13,6 +13,7 @@
-> =20
->  #include <linux/usb.h>
->  #include <linux/io.h>
-> +#include <linux/irq.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> @@ -191,17 +192,15 @@ static int isp1760_plat_probe(struct platform_devic=
-e *pdev)
->  	unsigned long irqflags;
->  	unsigned int devflags =3D 0;
->  	struct resource *mem_res;
-> -	struct resource *irq_res;
-> +	int irq;
->  	int ret;
-> =20
->  	mem_res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> =20
-> -	irq_res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -	if (!irq_res) {
-> -		pr_warn("isp1760: IRQ resource not available\n");
-> -		return -ENODEV;
-> -	}
-> -	irqflags =3D irq_res->flags & IRQF_TRIGGER_MASK;
-> +	irq =3D platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +	irqflags =3D irq_get_trigger_type(irq);
-> =20
->  	if (IS_ENABLED(CONFIG_OF) && pdev->dev.of_node) {
->  		struct device_node *dp =3D pdev->dev.of_node;
-> @@ -239,8 +238,7 @@ static int isp1760_plat_probe(struct platform_device =
-*pdev)
->  		return -ENXIO;
+> Changelog:
+> 
+> v2 -> v3
+> 
+> *Change 1. Remove dev_err.
+> *Change 2. Change the return type of pch_request_dma to int.
+> *Change 3. Return -ENOMEM when dma_alloc_coherent() failed and 0 the
+> others.
+> *Change 4. Check return value of dma_alloc_coherent().
+> ---
+>  drivers/tty/serial/pch_uart.c | 25 +++++++++++++++++++------
+>  1 file changed, 19 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
+> index f0351e6f0ef6..cfad5592010c 100644
+> --- a/drivers/tty/serial/pch_uart.c
+> +++ b/drivers/tty/serial/pch_uart.c
+> @@ -698,7 +698,7 @@ static bool filter(struct dma_chan *chan, void *slave)
 >  	}
-> =20
-> -	ret =3D isp1760_register(mem_res, irq_res->start, irqflags, &pdev->dev,
-> -			       devflags);
-> +	ret =3D isp1760_register(mem_res, irq, irqflags, &pdev->dev, devflags);
+>  }
+>  
+> -static void pch_request_dma(struct uart_port *port)
+> +static int pch_request_dma(struct uart_port *port)
+>  {
+>  	dma_cap_mask_t mask;
+>  	struct dma_chan *chan;
+> @@ -723,7 +723,7 @@ static void pch_request_dma(struct uart_port *port)
+>  	if (!chan) {
+>  		dev_err(priv->port.dev, "%s:dma_request_channel FAILS(Tx)\n",
+>  			__func__);
+> -		return;
+> +		return 0;
+>  	}
+>  	priv->chan_tx = chan;
+>  
+> @@ -739,13 +739,20 @@ static void pch_request_dma(struct uart_port *port)
+>  			__func__);
+>  		dma_release_channel(priv->chan_tx);
+>  		priv->chan_tx = NULL;
+> -		return;
+> +		return 0;
+>  	}
+>  
+>  	/* Get Consistent memory for DMA */
+>  	priv->rx_buf_virt = dma_alloc_coherent(port->dev, port->fifosize,
+>  				    &priv->rx_buf_dma, GFP_KERNEL);
+> +	if (!priv->rx_buf_virt) {
+> +		dma_release_channel(priv->chan_tx);
+> +		priv->chan_tx = NULL;
+> +		return -ENOMEM;
+> +	}
+> +
+>  	priv->chan_rx = chan;
+> +	return 0;
+>  }
+>  
+>  static void pch_dma_rx_complete(void *arg)
+> @@ -1321,8 +1328,11 @@ static int pch_uart_startup(struct uart_port *port)
 >  	if (ret < 0)
 >  		return ret;
-> =20
-> --=20
-> 2.17.1
+>  
+> -	if (priv->use_dma)
+> -		pch_request_dma(port);
+> +	if (priv->use_dma) {
+> +		ret = pch_request_dma(port);
+> +		if (ret)
+> +			return ret;
+> +	}
+>  
+>  	priv->start_rx = 1;
+>  	pch_uart_hal_enable_interrupt(priv, PCH_UART_HAL_RX_INT |
+> @@ -1469,6 +1479,7 @@ static int pch_uart_verify_port(struct uart_port *port,
+>  				struct serial_struct *serinfo)
+>  {
+>  	struct eg20t_port *priv;
+> +	int ret;
+>  
+>  	priv = container_of(port, struct eg20t_port, port);
+>  	if (serinfo->flags & UPF_LOW_LATENCY) {
+> @@ -1483,7 +1494,9 @@ static int pch_uart_verify_port(struct uart_port *port,
+>  		return -EOPNOTSUPP;
+>  #endif
+>  		if (!priv->use_dma) {
+> -			pch_request_dma(port);
+> +			ret = pch_request_dma(port);
+> +			if (ret)
+> +				return ret;
+>  			if (priv->chan_rx)
+>  				priv->use_dma = 1;
+>  		}
+> -- 
+> 2.25.1
+> 
 
+This patch is obviously not correct, and will cause problems if it were
+accepted.
 
+Please work on whatever tool you are using to find and make these
+changes, as it is not working properly.
 
+Or, if this was a manual change, please work on your kernel programming
+skills.  There are a number of bugs in this proposed change, showing
+that it was not tested at all.
+
+thanks,
+
+greg k-h

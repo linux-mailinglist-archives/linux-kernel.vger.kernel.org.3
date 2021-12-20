@@ -2,102 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6B547AB11
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB99147AB18
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhLTOLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:11:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36389 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233479AbhLTOLE (ORCPT
+        id S233502AbhLTONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:13:04 -0500
+Received: from mail-ua1-f48.google.com ([209.85.222.48]:33620 "EHLO
+        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230064AbhLTOND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:11:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640009464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7x3Yj+bf5SRda5v35eOr/TWOXggky5rJXTXtDeJkHCM=;
-        b=heO8NlyYcQpmeAn/PCW0cpw4iayjEEEhf6XjwhaK+fbdtpbcKLSzYcUdNNyDQim240TmlQ
-        O3bbh10EW0mxFGmkzu9quFu6xdG1hsktboLNjQDuLyVXeCs61QNd7iGmJG1BYimbXEyG2t
-        JnfNEUrhYOhaXAPSMtgNYvjLQseLnMQ=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-t-FkDsZhPwCXGRY9sO9-Vw-1; Mon, 20 Dec 2021 09:11:02 -0500
-X-MC-Unique: t-FkDsZhPwCXGRY9sO9-Vw-1
-Received: by mail-pj1-f70.google.com with SMTP id p4-20020a17090a348400b001b103a13f69so9784943pjb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:11:02 -0800 (PST)
+        Mon, 20 Dec 2021 09:13:03 -0500
+Received: by mail-ua1-f48.google.com with SMTP id a14so17997274uak.0;
+        Mon, 20 Dec 2021 06:13:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7x3Yj+bf5SRda5v35eOr/TWOXggky5rJXTXtDeJkHCM=;
-        b=miaS7Zl40bPJwVzClV5y5DpfV6EigGomqo4YgzmqZ1blnUhaOHp7TcuFyvaVlobd+M
-         1njg/jdEAF8qyNDRqHXZtxE7ZKebh922D5pQCHKets1NSkQ20uKvQsklnFyvsleO1K2p
-         JVbPldhOLnvD/2cB5VYofjDcmQBbpID/mwDHEpf4DiFhzk7X8C0wTyiD1qyTXUiAVTvf
-         3MIaKuIw7MRHmUGhMmgSBrfh4N63s5h0hC1c6gC6YuxDw3Inobo/Uc3owBOPIclcenfp
-         FYNC0qGTVSj/2NowpUGuD/wrLWIQnBDmo9w333BBjwIi8SceW6DrLyLTY3wVDavbyXfc
-         GLCA==
-X-Gm-Message-State: AOAM531y6tv4hEB9fof1FRHqqGFG04LlA+pk8dEKDjQcaO9pIUU9kldb
-        mfnAyJNY4wyFrJwkDPUyl+wDZ8Z00vQyagZ+j5iayZQPwmVLRD8gizTsnze7uTHDN1eqzjbb/tE
-        U+G9MY2XhrfZChH6vKf6Ng+9z2ENfipwGJaowm/C2
-X-Received: by 2002:a17:903:1ca:b0:149:2125:9a13 with SMTP id e10-20020a17090301ca00b0014921259a13mr2497949plh.73.1640009461413;
-        Mon, 20 Dec 2021 06:11:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyz7Lzpf8qTZb+BOpbafi/m/Rtvan0nbNH0abUqJMPCoVzsBuO8rydUJne9VUVWoV1WbMaft0UiVp9emZclYxk=
-X-Received: by 2002:a17:903:1ca:b0:149:2125:9a13 with SMTP id
- e10-20020a17090301ca00b0014921259a13mr2497929plh.73.1640009461208; Mon, 20
- Dec 2021 06:11:01 -0800 (PST)
+        bh=qI2m0RuJx2HJ9/PBBEh4eurnObxLQchHY+T7nx9ViKc=;
+        b=YtqSaOJWjKpdtqi1nbMl6JvU9MIBJjk4bb5oqYIaC+EJ9bZkZIVxi/hZGsoybu6hxr
+         ufkh29dIa3R2s/MX1IuRroBwH6/SPoft1FYhem4BixzlTtDxVukf2milF7mkavySMP0G
+         DjoRQDOqaNmCbTjyvoYzWZaCmPJfofRfeb9fan0OeCoNCfN0wZzXo7fJuDDoz19Ca83w
+         AxgT9H1WnPYXSi4v+Qba8+Dgun+eALnOqWKOoADL6tzZPSqaNDQJCFGKVwKL3ATlRA0T
+         nunFarF0R1yxksG5tN7bbZzsl5711R9AMih9F3NT9Xq88HieKUts8T32/BDD6fTcNdOh
+         HYHg==
+X-Gm-Message-State: AOAM531tfMK2//mrQ7xLtVTpZlnd6lJvYV8SQyxztRBq9poGSl41KKwP
+        +2DzJxBXVBP7aFGH4e3FikAC36j2vCwtlQ==
+X-Google-Smtp-Source: ABdhPJyRr92PJLwZzQ3nuH3AzmoyA4eQRjGR+og7zdX8nzSR1MOcetA1t5mTqROOImC583py0d4ruw==
+X-Received: by 2002:a67:f1d8:: with SMTP id v24mr5215933vsm.8.1640009582261;
+        Mon, 20 Dec 2021 06:13:02 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id k131sm2109132vka.30.2021.12.20.06.13.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 06:13:02 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id a14so17997157uak.0;
+        Mon, 20 Dec 2021 06:13:01 -0800 (PST)
+X-Received: by 2002:a9f:22ca:: with SMTP id 68mr4899782uan.78.1640009581604;
+ Mon, 20 Dec 2021 06:13:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215083605.117638-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20211215083605.117638-1-jiasheng@iscas.ac.cn>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 20 Dec 2021 15:10:50 +0100
-Message-ID: <CAO-hwJ+VZscrj9yGOkPruuUXXkg4NOPRnj36aa+-+5JvGxGk+w@mail.gmail.com>
-Subject: Re: [PATCH] HID: potential dereference of null pointer
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20211219132442.4080-1-wsa+renesas@sang-engineering.com> <20211219132442.4080-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20211219132442.4080-2-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Dec 2021 15:12:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
+Message-ID: <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/1] gpio: add sloppy logic analyzer using polling
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 9:36 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> The return value of devm_kzalloc() needs to be checked.
-> To avoid hdev->dev->driver_data to be null in case of the failure of
-> alloc.
->
-> Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
+Hi Wolfram,
 
-Thanks for the fix. I have now pushed it to hid.git, branch
-for-5.16/upstream-fixes
-
-Cheers,
-Benjamin
-
->  drivers/hid/hid-vivaldi.c | 3 +++
->  1 file changed, 3 insertions(+)
+On Mon, Dec 20, 2021 at 10:07 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> This is a sloppy logic analyzer using GPIOs. It comes with a script to
+> isolate a CPU for polling. While this is definitely not a production
+> level analyzer, it can be a helpful first view when remote debugging.
+> Read the documentation for details.
 >
-> diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-> index cd7ada48b1d9..72957a9f7117 100644
-> --- a/drivers/hid/hid-vivaldi.c
-> +++ b/drivers/hid/hid-vivaldi.c
-> @@ -57,6 +57,9 @@ static int vivaldi_probe(struct hid_device *hdev,
->         int ret;
->
->         drvdata = devm_kzalloc(&hdev->dev, sizeof(*drvdata), GFP_KERNEL);
-> +       if (!drvdata)
-> +               return -ENOMEM;
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/tools/gpio/gpio-sloppy-logic-analyzer
+> @@ -0,0 +1,221 @@
+> +#!/bin/sh -eu
+> +# Helper script for the Linux Kernel GPIO sloppy logic analyzer
+> +#
+> +# Copyright (C) Wolfram Sang <wsa@sang-engineering.com>
+> +# Copyright (C) Renesas Electronics Corporation
+> +#
+> +# TODO: support SI units in command line parameters?
 > +
->         hid_set_drvdata(hdev, drvdata);
->
->         ret = hid_parse(hdev);
-> --
-> 2.25.1
->
+> +samplefreq=1000000
+> +numsamples=250000
+> +cpusetdir='/dev/cpuset'
+> +debugdir='/sys/kernel/debug'
+> +ladirname='gpio-sloppy-logic-analyzer'
+> +outputdir="$PWD"
+> +neededcmds='taskset zip'
+> +max_chans=8
+> +duration=
+> +initcpu=
+> +lainstance=
+> +lasysfsdir=
+> +triggerdat=
+> +trigger_bindat=
+> +progname="${0##*/}"
+> +print_help()
+> +{
+> +       cat << EOF
+> +$progname - helper script for the Linux Kernel Sloppy GPIO Logic Analyzer
+> +Available options:
+> +       -c|--cpu <n>: which CPU to isolate for sampling. Only needed once. Default <1>.
+> +                     Remember that a more powerful CPU gives you higher sampling speeds.
+> +                     Also CPU0 is not recommended as it usually does extra bookkeeping.
+> +       -d|--duration-us <n>: number of microseconds to sample. Overrides -n, no default value.
+> +       -h|--help: print this help
+> +       -i|--instance <str>: name of the logic analyzer in case you have multiple instances. Default
+> +                            to first instance found
+> +       -k|--kernel-debug-dir: path to the kernel debugfs mountpoint. Default: <$debugdir>
+> +       -n|--num_samples <n>: number of samples to acquire. Default <$numsamples>
+> +       -o|--output-dir <str>: directory to put the result files. Default: current dir
+> +       -s|--sample_freq <n>: desired sampling frequency. Might be capped if too large. Default: 1MHz.
+> +       -t|--trigger <str>: pattern to use as trigger. <str> consists of two-char pairs. First
+> +                           char is channel number starting at "1". Second char is trigger level:
+> +                           "L" - low; "H" - high; "R" - rising; "F" - falling
+> +                           These pairs can be combined with "+", so "1H+2F" triggers when probe 1
+> +                           is high while probe 2 has a falling edge. You can have multiple triggers
+> +                           combined with ",". So, "1H+2F,1H+2R" is like the example before but it
+> +                           waits for a rising edge on probe 2 while probe 1 is still high after the
+> +                           first trigger has been met.
+> +                           Trigger data will only be used for the next capture and then be erased.
+> +Examples:
+> +Samples $numsamples values at 1MHz with an already prepared CPU or automatically prepares CPU1 if needed,
+> +use the first logic analyzer instance found:
+> +       '$progname'
+> +Samples 50us at 2MHz waiting for a falling edge on channel 2. CPU and instance as above:
+> +       '$progname -d 50 -s 2000000 -t "2F"'
+> +
+> +Note that the process exits after checking all parameters but a sub-process still works in
+> +the background. The result is only available once the sub-process finishes.
+> +
+> +Result is a .sr file to be consumed with PulseView from the free Sigrok project. It is
+> +a zip file which also contains the binary sample data which may be consumed by others.
+> +The filename is the logic analyzer instance name plus a since-epoch timestamp.
+> +EOF
+> +}
+> +
+> +fail()
+> +{
+> +       echo "$1"
+> +       exit 1
+> +}
+> +
+> +set_newmask()
+> +{
+> +       for f in $(find "$1" -iname "$2"); do echo "$newmask" > "$f" 2>/dev/null || true; done
+> +}
+> +
+> +init_cpu()
+> +{
+> +       isol_cpu="$1"
+> +       [ -d $cpusetdir ] || mkdir $cpusetdir
+> +       mount | grep -q $cpusetdir || mount -t cpuset cpuset $cpusetdir
 
+This needs CONFIG_CPUSETS=y, so you may want to document that.
+
+> +       [ -d "$lacpusetdir" ] || mkdir "$lacpusetdir"
+> +
+> +       cur_cpu="$(cat "$lacpusetdir"/cpus)"
+
+cat: /dev/cpuset/gpio-sloppy-logic-analyzer/cpus: No such file or directory
+
+I do have a "cpuset.cpus" file.
+
+> +       [ "$cur_cpu" = "$isol_cpu" ] && return
+> +       [ -z "$cur_cpu" ] || fail "CPU$isol_cpu requested but CPU$cur_cpu already isolated"
+> +
+> +       echo "$isol_cpu" > "$lacpusetdir"/cpus || fail "Could not isolate CPU$isol_cpu. Does it exist?"
+> +       echo 1 > "$lacpusetdir"/cpu_exclusive
+> +       echo 0 > "$lacpusetdir"/mems
+
+No complaint, although the real files have a "cpuset."-prefix again.
+
+[...]
+
+> +workcpu=$(cat "$lacpusetdir"/effective_cpus)
+
+cat: /dev/cpuset/gpio-sloppy-logic-analyzer/effective_cpus: No such
+file or directory
+
+I do have a "cpuset.effective_cpus" file.
+
+> +[ -n "$workcpu" ] || fail "No isolated CPU found"
+> +cpumask=$(printf '%x' $((1 << workcpu)))
+> +instance=${lasysfsdir##*/}
+> +echo "Setting up '$instance': $numsamples samples at ${samplefreq}Hz with ${triggerdat:-no} trigger using CPU$workcpu"
+> +do_capture "$cpumask" &
+
+Anyone with a clue? Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

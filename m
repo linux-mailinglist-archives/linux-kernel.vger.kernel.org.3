@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9499D47AC09
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40E847AC64
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbhLTOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbhLTOjs (ORCPT
+        id S234291AbhLTOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:43:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49458 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233146AbhLTOmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ABBC0613A1;
-        Mon, 20 Dec 2021 06:39:48 -0800 (PST)
+        Mon, 20 Dec 2021 09:42:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9705DCE1112;
-        Mon, 20 Dec 2021 14:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B14C36AE8;
-        Mon, 20 Dec 2021 14:39:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1519BB80EE4;
+        Mon, 20 Dec 2021 14:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB32C36AE8;
+        Mon, 20 Dec 2021 14:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011184;
-        bh=6QpwS/9Vb12Zo4I5wEAM8ZPeJpvINJqCzEKoMF6wWOM=;
+        s=korg; t=1640011318;
+        bh=3dMq2PJ2XAZkl3Gogfslwj469eWupVU1ITCKufkSN8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cKNK2j/ccu0zmR5Tb2rSLJIvx251x1V7DMgVAXUwm6b+J1sOv+ViBpY7urnIBNV5R
-         19gOV0LuowQ1S4pbbclVj+2Pg4QvM6HZgOslEs27cqfno/eVuPQnSG8WQDjdqlaYkj
-         G0MpKubvXUkWP1HFvw2XHLXQYrJNEMnO6PTtRQTo=
+        b=0mhdGlhsdCT6t8w6a4cid1Jsq4xYiezWcK4EgM0S7HaDH95E1v4I9AlWBaKD4KB27
+         VyA0b0+CPsQjgo03qbjJP/tv3UIqD6q9atuYHdDIaGkyeucVamwf7iR7K/ehbbZICD
+         jB9m6D/t/dWiCzAuKdC/K1xL8LaJkqNtyvXqafAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 04/45] parisc/agp: Annotate parisc agp init functions with __init
+        stable@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
+        John Keeping <john@metanate.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 06/56] i2c: rk3x: Handle a spurious start completion interrupt flag
 Date:   Mon, 20 Dec 2021 15:33:59 +0100
-Message-Id: <20211220143022.410463284@linuxfoundation.org>
+Message-Id: <20211220143023.653113012@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +46,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Ondrej Jirman <megous@megous.com>
 
-[ Upstream commit 8d88382b7436551a9ebb78475c546b670790cbf6 ]
+[ Upstream commit 02fe0fbd8a21e183687925c3a266ae27dda9840f ]
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reported-by: kernel test robot <lkp@intel.com>
+In a typical read transfer, start completion flag is being set after
+read finishes (notice ipd bit 4 being set):
+
+trasnfer poll=0
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
+
+This causes I2C transfer being aborted in polled mode from a stop completion
+handler:
+
+trasnfer poll=1
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
+i2c stop
+rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
+
+Clearing the START flag after read fixes the issue without any obvious
+side effects.
+
+This issue was dicovered on RK3566 when adding support for powering
+off the RK817 PMIC.
+
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/agp/parisc-agp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-rk3x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
-index 15f2e7025b78e..1d5510cb6db4e 100644
---- a/drivers/char/agp/parisc-agp.c
-+++ b/drivers/char/agp/parisc-agp.c
-@@ -285,7 +285,7 @@ agp_ioc_init(void __iomem *ioc_regs)
-         return 0;
- }
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index b8a2728dd4b69..e76ad020a5420 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -425,8 +425,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
+ 	if (!(ipd & REG_INT_MBRF))
+ 		return;
  
--static int
-+static int __init
- lba_find_capability(int cap)
- {
- 	struct _parisc_agp_info *info = &parisc_agp_info;
-@@ -370,7 +370,7 @@ parisc_agp_setup(void __iomem *ioc_hpa, void __iomem *lba_hpa)
- 	return error;
- }
+-	/* ack interrupt */
+-	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
++	/* ack interrupt (read also produces a spurious START flag, clear it too) */
++	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
  
--static int
-+static int __init
- find_quicksilver(struct device *dev, void *data)
- {
- 	struct parisc_device **lba = data;
-@@ -382,7 +382,7 @@ find_quicksilver(struct device *dev, void *data)
- 	return 0;
- }
- 
--static int
-+static int __init
- parisc_agp_init(void)
- {
- 	extern struct sba_device *sba_list;
+ 	/* Can only handle a maximum of 32 bytes at a time */
+ 	if (len > 32)
 -- 
 2.33.0
 

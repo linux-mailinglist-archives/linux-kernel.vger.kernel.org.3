@@ -2,364 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A76947B489
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E970D47B48E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhLTUsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 15:48:39 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43796
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229853AbhLTUsi (ORCPT
+        id S229948AbhLTUtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 15:49:55 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:39811 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229926AbhLTUtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 15:48:38 -0500
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3F5F74005A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 20:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640033309;
-        bh=CylAiDcMKCHAAC8ueNcVTekyeto0IoqUMHSzLnhZjac=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=F048ZRYRjhB1i5uP8DyeaSXARwEG9OjBieEbCtW+HDKrBhYnWlWI9x9WNY1UJSAAR
-         pJ1T0ZlK/U/bnoIMfA8GRGYQ5lUByr1zoRa83puBa3IyweSxMrWAJEUyferjGxuHPs
-         qfaS8yviZEoKqfUwS3o4pDn9WoNEPZ4WcB1oqHndERtqJuON4ta9vveHgT/wN6e9C5
-         xWuac3wqnxeaVVeKfn0XXbl+OydvCKb6/OkG4IrDhwqTrc9gGoRIv4J00PUjonn51L
-         31twV5UlbwEFfXVIBchwhK30oQXHCdPWm6ZVU2E2XX+rWbKKwfj2X8tcd9ZB817IND
-         mk/WgFjTJ1gjA==
-Received: by mail-pf1-f197.google.com with SMTP id a23-20020a62bd17000000b004a3f6892612so4370027pff.22
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:48:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
-         :comments:mime-version:content-id:content-transfer-encoding:date
-         :message-id;
-        bh=CylAiDcMKCHAAC8ueNcVTekyeto0IoqUMHSzLnhZjac=;
-        b=ugaDrcWq4+jShh/1R+sXEhnhyFSiDvb3h50yAHHPJmtL/S7WQyE/LGfCWcjajDIRQZ
-         7oBVZoQdPdg7ivG5fTqPaE9Up5stQEB8DknA01fPM2A15/IfBCEmS0uMfHT29kKSDY1r
-         7/L03nmzZc3L7gb9X8hcS7555uTGQ+kYK00jsefe6ulDLwjE0sI4efvqeIhMxHRwpdko
-         dpSvTwWrNSOF4Q38yY2wi+AouuSCy7n7m19UeL2pNYR+6ucTc1gWjs/Lff/PMFLW/574
-         9IROeRzUNCP2EukH/RosBaOr27C0glMqtDZsk8nSN8889jbWNk2jSly9nskrQQnoXOGo
-         HgZA==
-X-Gm-Message-State: AOAM531IYQfKrZudT/4PMGe1YOfK9Enig4fcSfZJSsr4C/Q0NSF0xDeE
-        jhToxs8BQH95swwII0GoQWh3Hedki3gab3a89ZPmQm7sWlarjoBG3BokSm1vqEoVWSdr3U67Dg4
-        O1FqOTQADjIGWuNShtfeQY8qA7C1Rl1p/jwvjTFAs6Q==
-X-Received: by 2002:a63:1166:: with SMTP id 38mr16319048pgr.368.1640033307610;
-        Mon, 20 Dec 2021 12:48:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWXKIlRW85bc7t4CizzKbVzxzW8+0o3YcSARQH4dMBeOxRRg7dcHblg9qgDF9SoMJq8ha7zg==
-X-Received: by 2002:a63:1166:: with SMTP id 38mr16319030pgr.368.1640033307304;
-        Mon, 20 Dec 2021 12:48:27 -0800 (PST)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id ls7sm272012pjb.11.2021.12.20.12.48.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 Dec 2021 12:48:26 -0800 (PST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id 7DD825FDEE; Mon, 20 Dec 2021 12:48:26 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id 75B3EA0B22;
-        Mon, 20 Dec 2021 12:48:26 -0800 (PST)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
-cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
-Subject: Re: [PATCH v4] net: bonding: Add support for IPV6 ns/na to balance-alb mode
-In-reply-to: <20211220152455.37413-1-sunshouxin@chinatelecom.cn>
-References: <20211220152455.37413-1-sunshouxin@chinatelecom.cn>
-Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
-   message dated "Mon, 20 Dec 2021 10:24:55 -0500."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        Mon, 20 Dec 2021 15:49:51 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MWiYi-1mx7KP1UGe-00X5pM; Mon, 20 Dec 2021 21:49:49 +0100
+Received: by mail-wr1-f52.google.com with SMTP id e5so22514739wrc.5;
+        Mon, 20 Dec 2021 12:49:49 -0800 (PST)
+X-Gm-Message-State: AOAM533/6UV4jqalZ3JM0SOxNZ4gp1QjWuTFtlmAf/2D10ZL6DQw+mOS
+        aGEgp+fbxhIV4K6IEK4gg4vZD61iLmYQh4ra1DY=
+X-Google-Smtp-Source: ABdhPJwWDWTHZHgNTSQ0wUTfz4jo1LccX5HWkJMwwdvMUlK5BwiPavZdpQ4FzYCH7w8gBRNjEdFErZH7zpIbmXFg6qY=
+X-Received: by 2002:adf:f051:: with SMTP id t17mr14325348wro.192.1640033388952;
+ Mon, 20 Dec 2021 12:49:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <31772.1640033306.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 20 Dec 2021 12:48:26 -0800
-Message-ID: <31773.1640033306@famine>
+References: <20211220143023.451982183@linuxfoundation.org> <20211220143024.049888083@linuxfoundation.org>
+ <20211220203136.GA4116@duo.ucw.cz>
+In-Reply-To: <20211220203136.GA4116@duo.ucw.cz>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 20 Dec 2021 21:49:32 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3XVPWJqoRoKz-jvAkbVwcNVrrjq9pj9OCPN9bQsizisg@mail.gmail.com>
+Message-ID: <CAK8P3a3XVPWJqoRoKz-jvAkbVwcNVrrjq9pj9OCPN9bQsizisg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 18/56] hv: utils: add PTP_1588_CLOCK to Kconfig to
+ fix build
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:H3uwgO1U98h6P06K3X8mALyoked0McQHHkSd6U3OWk1oTX80Cez
+ xoSeykkLmDluSCGUqhL9LtsrM0HlSe71gnLaytpVmPDKXubwOtFm1kkPCbMqW2qnEtH5Hbr
+ LoTjCTUplqBg//TDvyMXx2hn9Pt0TE+ls8lpUtaaXhQleX1oBETXH3RIplMR1eYZNpoCxz5
+ Jhyr8V47zQeOhK9dUfJTw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:An6FaNtMhHc=:Qyg8QVs+NhTPUnQOXQ/KpR
+ rfhFgOsQKC6Vli6mw1Hav9ruQHn/0EV8WHZHfV+nCztHnDaDE7fb4am7PEtencFGVdMg+3oRF
+ 1tWefsN3PcZkI1dScd+26JdR16qvsYEzwEzXg+2pyfEY4nE+4ucQk0YPQqkqP2lZzBTA4DRmM
+ hQkW28RrOnn5uOAHuIzWeUw7nBdmF+2tZ6h40ZQrdWxsKNOpotqb5EJ53OnDNWTCcy/Tz2ey8
+ ARdrkwvDK19sFxBz8KbgwGQaVGrhSStekobPxv7PHVB8DCMwBInOJmlNSTtYN0gLOKDDZYvQw
+ 7ewSUBoZMyL4ytI6DBF3YY0CosjVNPNlV+TVrvAGyDH+Hc+prArvVWbj9hjuk2aJGjk/b4Ysm
+ Rs7DTaVs1JzEjOaZ6aNJ68NReX2nEo9VJI0XWIjG3qdc4hgyoatkJpgQY/U0FEKF3ZuXrYOM8
+ 4sO59zbYn0VV0xUxev5yOlg2B0lFsz7lR2fqCqTH38a3MyN9kbIUgTlKcNJxnMjERY7tHXGhW
+ R4qkVvX4Xi9ZLAr6etvaQnqN8o7GBJtWTVSFHQaABnxIUt+SW4TAtjJpPnUv6chRcqizg3Iaa
+ vK2/MxlP61DpMNdfTg48nqQng6XTEljAN3tHeNz18vzAHCePwKhHneBz+W/b5664vtcdPrKux
+ 2cj3OccHapus/RgPfWNW8ZlSW8EzcyglgPqEKYZSP4Dwk0A9xXYVwMNK4Qs0rUDrQRco=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
-
->Since ipv6 neighbor solicitation and advertisement messages
->isn't handled gracefully in bonding6 driver, we can see packet
->drop due to inconsistency bewteen mac address in the option
->message and source MAC .
+On Mon, Dec 20, 2021 at 9:31 PM Pavel Machek <pavel@ucw.cz> wrote:
+> > From: Randy Dunlap <rdunlap@infradead.org>
+> >
+> > [ Upstream commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 ]
+> >
+> > The hyperv utilities use PTP clock interfaces and should depend a
+> > a kconfig symbol such that they will be built as a loadable module or
+> > builtin so that linker errors do not happen.
+> >
+> > Prevents these build errors:
+> >
+> > ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
+> > hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
+> > ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
+> > hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
 >
->Another examples is ipv6 neighbor solicitation and advertisement
->messages from VM via tap attached to host brighe, the src mac
->mighe be changed through balance-alb mode, but it is not synced
->with Link-layer address in the option message.
+> This is bad idea for 4.19:
 >
->The patch implements bond6's tx handle for ipv6 neighbor
->solicitation and advertisement messages.
+> > +++ b/drivers/hv/Kconfig
+> > @@ -16,6 +16,7 @@ config HYPERV_TSCPAGE
+> >  config HYPERV_UTILS
+> >       tristate "Microsoft Hyper-V Utilities driver"
+> >       depends on HYPERV && CONNECTOR && NLS
+> > +     depends on PTP_1588_CLOCK_OPTIONAL
+> >       help
+> >         Select this option to enable the Hyper-V Utilities.
 >
->                        Border-Leaf
->                        /        \
->                       /          \
->                    Tunnel1    Tunnel2
->                     /              \
->                    /                \
->                  Leaf-1--Tunnel3--Leaf-2
->                    \                /
->                     \              /
->                      \            /
->                       \          /
->                       NIC1    NIC2
->                         \      /
->                          server
+> grep -ri PTP_1588_CLOCK_OPTIONAL .
 >
->We can see in our lab the Border-Leaf receives occasionally
->a NA packet which is assigned to NIC1 mac in ND/NS option
->message, but actaully send out via NIC2 mac due to tx-alb,
->as a result, it will cause inconsistency between MAC table
->and ND Table in Border-Leaf, i.e, NIC1 =3D Tunnel2 in ND table
->and  NIC1 =3D Tunnel1 in mac table.
->
->And then, Border-Leaf starts to forward packet destinated
->to the Server, it will only check the ND table entry in some
->switch to encapsulate the destination MAC of the message as
->NIC1 MAC, and then send it out from Tunnel2 by ND table.
->Then, Leaf-2 receives the packet, it notices the destination
->MAC of message is NIC1 MAC and should forword it to Tunne1
->by Tunnel3.
+> Results in no result in 4.19. So this will break hyperv. No results in
+> 5.10, either, so it is bad idea there, too.
 
-	Should the above state "forward it to Leaf-1 by Tunnel3", not
-"to Tunnel1"?  Presumably Leaf-1 would then forward a packet with NIC1
-MAC destination directly to NIC1.  You mention VXLAN split horizon
-below, but I'm unclear on exactly why that results in a failure to
-forward vs selecting a suboptimal path.
+Right, this doesn't work, but the bug does exist anyway, and could be
+fixed by listing the dependency explicitly as
 
-	My overall concern here is that this is a complex solution for a
-very specific configuration, and I'm not sure exactly which piece is
-doing something wrong (i.e., is Border-Leaf correct in selecting
-Tunnel2?).
+           depends on PTP_1588_CLOCK || PTP_1588_CLOCK=n
 
-	And, further, this topology is outside the scope of what the tlb
-/ alb modes were designed around (which was interfacing with a single
-switch, not a distributed switch topology as shown above); alb's inbound
-load balancing in particular wasn't set up for IPv6 (it only modifies
-ARPs to assign peers to specific bonding interfaces).  That's not to say
-that we can't fix up the IPv6 support, but I don't want to eventually
-have a collection of band-aids for specific corner cases.
+The PTP_1588_CLOCK_OPTIONAL was added as a shortcut to
+avoid the odd Kconfig syntax that most developers struggle with understanding
+at first.
 
-	Also, on thinking about it, I'm unsure why the tlb mode would
-not exhibit the same issue, since you're not altering the alb inbound
-load balancer (the "tailored ARP per peer" logic), just the regular
-transmit side, which is largely the same for tlb.  Have you tested
-balance-tlb mode?
-
-	Lastly, Eric's question about not altering the original skb
-isn't explictly addressed that I can see (although it seems Eric was
-concerned about received packets, and this is modifying packets being
-transmitted).  The code looks like it shouldn't modify NS/NA packets
-that are being forwarded through the bond (the bond_slave_has_mac_rx
-test), but is it possible for a locally originating NS/NA to be a clone?
-
-	-J
-
->However, this traffic forward will be failure due to split
->horizon of VxLAN tunnels.
->
->Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->Reported-by: kernel test robot <lkp@intel.com>
->Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->---
-> drivers/net/bonding/bond_alb.c | 132 +++++++++++++++++++++++++++++++++
-> 1 file changed, 132 insertions(+)
->
->diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
-b.c
->index 533e476988f2..e8d6d1f2f540 100644
->--- a/drivers/net/bonding/bond_alb.c
->+++ b/drivers/net/bonding/bond_alb.c
->@@ -22,6 +22,7 @@
-> #include <asm/byteorder.h>
-> #include <net/bonding.h>
-> #include <net/bond_alb.h>
->+#include <net/ndisc.h>
-> =
-
-> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned =3D {
-> 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
->@@ -1269,6 +1270,120 @@ static int alb_set_mac_address(struct bonding *bo=
-nd, void *addr)
-> 	return res;
-> }
-> =
-
->+/*determine if the packet is NA or NS*/
->+static bool alb_determine_nd(struct icmp6hdr *hdr)
->+{
->+	if (hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_ADVERTISEMENT ||
->+	    hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_SOLICITATION) {
->+		return true;
->+	}
->+
->+	return false;
->+}
->+
->+static void alb_change_nd_option(struct sk_buff *skb, void *data)
->+{
->+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
->+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
->+	struct net_device *dev =3D skb->dev;
->+	struct icmp6hdr *icmp6h =3D icmp6_hdr(skb);
->+	struct ipv6hdr *ip6hdr =3D ipv6_hdr(skb);
->+	u8 *lladdr =3D NULL;
->+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
->+				offsetof(struct nd_msg, opt));
->+
->+	while (ndoptlen) {
->+		int l;
->+
->+		switch (nd_opt->nd_opt_type) {
->+		case ND_OPT_SOURCE_LL_ADDR:
->+		case ND_OPT_TARGET_LL_ADDR:
->+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
->+			break;
->+
->+		default:
->+			lladdr =3D NULL;
->+			break;
->+		}
->+
->+		l =3D nd_opt->nd_opt_len << 3;
->+
->+		if (ndoptlen < l || l =3D=3D 0)
->+			return;
->+
->+		if (lladdr) {
->+			memcpy(lladdr, data, dev->addr_len);
->+			icmp6h->icmp6_cksum =3D 0;
->+
->+			icmp6h->icmp6_cksum =3D csum_ipv6_magic(&ip6hdr->saddr,
->+							      &ip6hdr->daddr,
->+						ntohs(ip6hdr->payload_len),
->+						IPPROTO_ICMPV6,
->+						csum_partial(icmp6h,
->+							     ntohs(ip6hdr->payload_len), 0));
->+			return;
->+		}
->+		ndoptlen -=3D l;
->+		nd_opt =3D ((void *)nd_opt) + l;
->+	}
->+}
->+
->+static u8 *alb_get_lladdr(struct sk_buff *skb)
->+{
->+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
->+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
->+	struct net_device *dev =3D skb->dev;
->+	u8 *lladdr =3D NULL;
->+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
->+				offsetof(struct nd_msg, opt));
->+
->+	while (ndoptlen) {
->+		int l;
->+
->+		switch (nd_opt->nd_opt_type) {
->+		case ND_OPT_SOURCE_LL_ADDR:
->+		case ND_OPT_TARGET_LL_ADDR:
->+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
->+			break;
->+
->+		default:
->+			break;
->+		}
->+
->+		l =3D nd_opt->nd_opt_len << 3;
->+
->+		if (ndoptlen < l || l =3D=3D 0)
->+			return NULL;
->+
->+		if (lladdr)
->+			return lladdr;
->+
->+		ndoptlen -=3D l;
->+		nd_opt =3D ((void *)nd_opt) + l;
->+	}
->+
->+	return lladdr;
->+}
->+
->+static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
->+			      struct slave *tx_slave)
->+{
->+	struct ipv6hdr *ip6hdr;
->+	struct icmp6hdr *hdr;
->+
->+	if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
->+		if (tx_slave && tx_slave !=3D
->+		    rcu_access_pointer(bond->curr_active_slave)) {
->+			ip6hdr =3D ipv6_hdr(skb);
->+			if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
->+				hdr =3D icmp6_hdr(skb);
->+				if (alb_determine_nd(hdr))
->+					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
->+			}
->+		}
->+	}
->+}
->+
-> /************************ exported alb functions ***********************=
-*/
-> =
-
-> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->@@ -1415,6 +1530,7 @@ struct slave *bond_xmit_alb_slave_get(struct bondin=
-g *bond,
-> 	}
-> 	case ETH_P_IPV6: {
-> 		const struct ipv6hdr *ip6hdr;
->+		struct icmp6hdr *hdr;
-> =
-
-> 		/* IPv6 doesn't really use broadcast mac address, but leave
-> 		 * that here just in case.
->@@ -1446,6 +1562,21 @@ struct slave *bond_xmit_alb_slave_get(struct bondi=
-ng *bond,
-> 			break;
-> 		}
-> =
-
->+		if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
->+			hdr =3D icmp6_hdr(skb);
->+			if (alb_determine_nd(hdr)) {
->+				u8 *lladdr;
->+
->+				lladdr =3D alb_get_lladdr(skb);
->+				if (lladdr) {
->+					if (!bond_slave_has_mac_rx(bond, lladdr)) {
->+						do_tx_balance =3D false;
->+						break;
->+					}
->+				}
->+			}
->+		}
->+
-> 		hash_start =3D (char *)&ip6hdr->daddr;
-> 		hash_size =3D sizeof(ip6hdr->daddr);
-> 		break;
->@@ -1489,6 +1620,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, stru=
-ct net_device *bond_dev)
-> 	struct slave *tx_slave =3D NULL;
-> =
-
-> 	tx_slave =3D bond_xmit_alb_slave_get(bond, skb);
->+	alb_set_nd_option(skb, bond, tx_slave);
-> 	return bond_do_alb_xmit(skb, bond, tx_slave);
-> }
-> =
-
->
->base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
->-- =
-
->2.27.0
->
-
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+         Arnd

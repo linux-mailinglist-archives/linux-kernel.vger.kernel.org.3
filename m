@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7EF47A7B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E0247A7B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbhLTKVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:21:50 -0500
-Received: from mail-ua1-f44.google.com ([209.85.222.44]:37691 "EHLO
-        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbhLTKVt (ORCPT
+        id S231209AbhLTKXU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Dec 2021 05:23:20 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:44227 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231187AbhLTKXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:21:49 -0500
-Received: by mail-ua1-f44.google.com with SMTP id o1so16750513uap.4;
-        Mon, 20 Dec 2021 02:21:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YZuaGItJIS6bhn0pnYKjSvX8duMimq87kuh/1dcSYow=;
-        b=aRkJOOTNPw696QPGeQ8mJJL5ml+4d9Ss3igqtx3KsjVYZKRhGFSPd+jQPI+F2N73Ke
-         fPOKoIkVBmM+23P0fKTOwFMz2/A8ETL8RPn1k7UYzgUAxUPo2b9eVhBrYRMWJYEiUXlS
-         gBUL1kNHI6M3ZMj7YNzPRLEefwA39arOqKnteP4Nad01fqkyB3Lqa/kGOj6PNkhglciy
-         uIWsveO1LCrzDNZQwBf4OiUO/0iJA19B8mjhJxcJT9WxCzANR+DwWqtmTEbPHwTXoikO
-         zhYNXAHXI8NfIu+ANltFo19DJoLL7Yv3sVj7fEc79LY5Ygmi+Dmh3kQspKlOP2+kMtEj
-         1WXg==
-X-Gm-Message-State: AOAM533tpInY4aabqF+XKYXSAYAdIWPrJpb29qRy37X+bUebtk4yut0T
-        DJ0LIwj7ItBpM7ymeUlyzlRGL1BI+6bwlQ==
-X-Google-Smtp-Source: ABdhPJw6BR9Ub8uR9XHB5wgFkSpeBcPX2wk8nPa835SPT4+6i35xxCNVpRDG2ny5O3ACX9rM3wVQFw==
-X-Received: by 2002:a67:ac49:: with SMTP id n9mr4735802vsh.65.1639995708807;
-        Mon, 20 Dec 2021 02:21:48 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id b10sm3075523uad.8.2021.12.20.02.21.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 02:21:48 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id i6so16749005uae.6;
-        Mon, 20 Dec 2021 02:21:47 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr4782661uai.89.1639995707724;
- Mon, 20 Dec 2021 02:21:47 -0800 (PST)
+        Mon, 20 Dec 2021 05:23:19 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-1-5ELj3wkrPNSGHHm-pqNVkA-1; Mon, 20 Dec 2021 10:23:17 +0000
+X-MC-Unique: 5ELj3wkrPNSGHHm-pqNVkA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 10:23:16 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 20 Dec 2021 10:23:16 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jason Wang' <wangborong@cdjrlc.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
+CC:     "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] powerpc: use strscpy to copy strings
+Thread-Topic: [PATCH] powerpc: use strscpy to copy strings
+Thread-Index: AQHX9VEUZ6FjgeLc1kWSeYk5lSMsIaw7KVuQ
+Date:   Mon, 20 Dec 2021 10:23:16 +0000
+Message-ID: <c82f01143a174c8281930158e4804a4b@AcuMS.aculab.com>
+References: <20211220032402.630240-1-wangborong@cdjrlc.com>
+In-Reply-To: <20211220032402.630240-1-wangborong@cdjrlc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211220010411.12075-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211220010411.12075-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Dec 2021 11:21:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUcZ4scjzoLE7gpJKTpixT8hUEXiLX8nCzrjViBcipPbw@mail.gmail.com>
-Message-ID: <CAMuHMdUcZ4scjzoLE7gpJKTpixT8hUEXiLX8nCzrjViBcipPbw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] usb: host: fotg210: Use platform_get_irq() to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:18 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Jason Wang
+> Sent: 20 December 2021 03:24
+> 
+> The strlcpy should not be used because it doesn't limit the source
+> length. So that it will lead some potential bugs.
+> 
+> But the strscpy doesn't require reading memory from the src string
+> beyond the specified "count" bytes, and since the return value is
+> easier to error-check than strlcpy()'s. In addition, the implementation
+> is robust to the string changing out from underneath it, unlike the
+> current strlcpy() implementation.
+> 
+> Thus, replace strlcpy with strscpy.
+> 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  arch/powerpc/platforms/pasemi/misc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/platforms/pasemi/misc.c b/arch/powerpc/platforms/pasemi/misc.c
+> index 1bf65d02d3ba..06a1ffd43bfe 100644
+> --- a/arch/powerpc/platforms/pasemi/misc.c
+> +++ b/arch/powerpc/platforms/pasemi/misc.c
+> @@ -35,7 +35,7 @@ static int __init find_i2c_driver(struct device_node *node,
+>  	for (i = 0; i < ARRAY_SIZE(i2c_devices); i++) {
+>  		if (!of_device_is_compatible(node, i2c_devices[i].of_device))
+>  			continue;
+> -		if (strlcpy(info->type, i2c_devices[i].i2c_type,
+> +		if (strscpy(info->type, i2c_devices[i].i2c_type,
+>  			    I2C_NAME_SIZE) >= I2C_NAME_SIZE)
+>  			return -ENOMEM;
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Isn't that the wrong overflow check?
+Doesn't strscpy() return a -ve errno value on failure
+(just to cause a different buffer overflow issue?)
 
-Gr{oetje,eeting}s,
+Not that any kind of overflow is actually possible in that over-engineered
+code fragment.
 
-                        Geert
+	David
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

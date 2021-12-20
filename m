@@ -2,93 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0521047A946
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A46447A941
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhLTMNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:13:38 -0500
-Received: from relay034.a.hostedemail.com ([64.99.140.34]:36372 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231173AbhLTMNh (ORCPT
+        id S232314AbhLTMN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231173AbhLTMN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:13:37 -0500
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 796EB1D8;
-        Mon, 20 Dec 2021 12:13:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 533192002C;
-        Mon, 20 Dec 2021 12:13:21 +0000 (UTC)
-Message-ID: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
-Subject: Re: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
- HostCmd_SET_SEQ_NO_BSS_INFO
-From:   Joe Perches <joe@perches.com>
-To:     Anders Roxell <anders.roxell@linaro.org>, stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
-        huxinming820@gmail.com, kvalo@codeaurora.org,
-        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, dmitry.torokhov@gmail.com,
-        ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andy Lavr <andy.lavr@gmail.com>
-Date:   Mon, 20 Dec 2021 04:13:20 -0800
-In-Reply-To: <20211217144119.2538175-4-anders.roxell@linaro.org>
-References: <20211217144119.2538175-1-anders.roxell@linaro.org>
-         <20211217144119.2538175-4-anders.roxell@linaro.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 533192002C
-X-Spam-Status: No, score=-1.11
-X-Stat-Signature: 5gayuqe4kzuw64zsi7w1zyzmxgih75tc
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18u6WrSAOpDdNGkNCm15RZg1zit1HkWz44=
-X-HE-Tag: 1640002401-869126
+        Mon, 20 Dec 2021 07:13:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7900CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:13:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7A060C56
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694F4C36AE8;
+        Mon, 20 Dec 2021 12:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640002405;
+        bh=F+EIDma6PIfATaPATe78x4z2Ut9azQL91B1JpnDdiJM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i7MDpZcZjxOvkww/AAAene3xh6OBpmnhpWU5ZpNuwlTDBNbsP5wsNStxribLkrRKZ
+         9lRt6A+/jI2fJZONERj0sOogYT1DzndEoyI5a8YNQbRbuPrDJn2Gn+sMEyQJy78iPg
+         VwC0Ukg2t7vs+BhLEn4qIvG4tZSEqDyGtW65d+iVVDWuovQ8zs1SfWVleiNW1n5TAa
+         qrcyYyx4Ylnh+f1vzefmpTmU/cvD/5Sq7E0+CnVE7/yNRlI8ANPt9AYXCF/Mi0dYw9
+         Ogsy196UfyJkoMsHm8ksuKTy9Gd0iwyW+pFkEX3ZeI22rMe8huNaeZMQlHM7F7jf3m
+         pvgphVgn/D4Yg==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mzHXf-00DHH8-FK; Mon, 20 Dec 2021 12:13:23 +0000
+Date:   Mon, 20 Dec 2021 12:13:23 +0000
+Message-ID: <87czlrwk2k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V8 02/10] irqchip/loongson-pch-pic: Add ACPI init support
+In-Reply-To: <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
+References: <20211216125157.631992-1-chenhuacai@loongson.cn>
+        <20211216125356.632067-1-chenhuacai@loongson.cn>
+        <20211216125356.632067-2-chenhuacai@loongson.cn>
+        <87pmpwwpw5.wl-maz@kernel.org>
+        <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@gmail.com, chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
-> From: Nathan Chancellor <natechancellor@gmail.com>
+On Fri, 17 Dec 2021 04:45:24 +0000,
+Huacai Chen <chenhuacai@gmail.com> wrote:
 > 
-> commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+> Hi, Marc,
 > 
-> A new warning in clang points out when macro expansion might result in a
-> GNU C statement expression. There is an instance of this in the mwifiex
-> driver:
+> On Thu, Dec 16, 2021 at 11:06 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Thu, 16 Dec 2021 12:53:48 +0000,
+> > Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > >
+> > > We are preparing to add new Loongson (based on LoongArch, not compatible
+> > > with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
+> > > as its boot protocol, so add ACPI init support.
+> > >
+> > > PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+> > > Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+> > > please refer Documentation/loongarch/irq-chip-model.rst.
+> > >
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  drivers/irqchip/irq-loongson-pch-pic.c | 108 ++++++++++++++++++-------
+> > >  1 file changed, 81 insertions(+), 27 deletions(-)
+> >
+> > [...]
+> >
+> > >
+> > > +#ifdef CONFIG_ACPI
+> > > +
+> > > +struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+> > > +                                     struct acpi_madt_bio_pic *acpi_pchpic)
+> >
+> > Who is calling this? This works the opposite way from what the arm64
+> > irqchips are doing. Why? I have the ugly feeling that this is called
+> > from the arch code, bypassing the existing infrastructure...
+> Yes, this is called from the arch code and a bit ugly, but I can't
+> find a better way to do this.
 > 
-> drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-> ')' tokens terminating statement expression appear in different macro
-> expansion contexts [-Wcompound-token-split-by-macro]
->         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-[]
-> diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
-[]
-> @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
->  
->  #define RF_ANTENNA_AUTO                 0xFFFF
->  
-> -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
-> -	(((seq) & 0x00ff) |                             \
-> -	 (((num) & 0x000f) << 8)) |                     \
-> -	(((type) & 0x000f) << 12);                  }
-> +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-> +	((((seq) & 0x00ff) |                        \
-> +	 (((num) & 0x000f) << 8)) |                 \
-> +	(((type) & 0x000f) << 12))
+> Is the "existing infrastructure" declare the irqchip init function
+> with  IRQCHIP_ACPI_DECLARE and the arch code only need to call
+> irqchip_init()? Then we have a problem: our irqchips have a 4 level
+> hierachy and the parent should be initialized before its children. In
+> FDT world this is not a problem, because of_irq_init() will sort
+> irqchip drivers to ensure the right order. But in ACPI world,
+> acpi_probe_device_table just call init functions in the linking order.
+> If we want to control the order, it seems we can only sort the drivers
+> in drivers/irq/Makefile. But I don't think this is a good idea...
+> 
+> If there are better solutions, please let me know. Thanks.
 
-Perhaps this would be better as a static inline
+We have the exact same thing on the arm64 side, and we don't need of
+this to be arch specific:
 
-static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
-{
-	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
-}
+- The MADT table describes the root interrupt controller, and it is
+  probed via IRQCHIP_ACPI_DECLARE().
 
+- Each children controller is declared in ACPI as a *device*, and is
+  both an interrupt producer and an interrupt consumer. Normal probe
+  deferral rules apply. See irq-mbigen.c for an example of how this is
+  done.
 
+With that, you can remove all the probing order management from your
+arch code and let the standard Linux driver model take over.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

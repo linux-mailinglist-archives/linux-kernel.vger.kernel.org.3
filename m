@@ -2,182 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B9247B54E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1BF47B556
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhLTVi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbhLTViz (ORCPT
+        id S231637AbhLTVpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:45:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37386 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229618AbhLTVpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:38:55 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A323C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:38:55 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id k21so15149711ioh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:38:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jXmZ+qTH7fz9THsh6sRW8Beptw0SkxxLv33cz0RQxd4=;
-        b=UTnVYe+GGThhIyDprEn2wZxqDP8Z8xBG/uLPp6XFIAwW/suw6+1ow5LRtu+Pg6xcDT
-         0ZriIG8pD3L6q8OKmD3XhK08zCmLCxXwzPDTZjEaebPrXyHNRYYIQ5F1vp92FdEPkX0O
-         qTuHVrqJTWm/flACUWoG8zNAYX/DH01bPhEF3R+1SC7TlqiqOlYgzPqlsa7+MuJsxlVW
-         /b5vlapxs8iLpdFEIbwyZ5vKAla5BG74+5wq85yBVU9VNbZlqGU/9oHc5vuZqDD2JObC
-         q1SCUCRdxBP3SCOSn85B5ga/PZeW2zYhlzCQ/HEoT3tbFNayjSvgFCTE6aLKJ24oA39l
-         7EAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jXmZ+qTH7fz9THsh6sRW8Beptw0SkxxLv33cz0RQxd4=;
-        b=saruAwS7CO0CGYeJVOAMRQkzB1IntvpLd4Clovnqr75jr4ZC36qD2b9wJ+5sisPifM
-         PQL3loxpTbAeSAbjLC/dph+3shaL3DkpvMO1/+z1nTk+Im1nTQ6iuoSQmIdN88megPrS
-         SuQL6PRH/dqVSMq125GqtGFWc0HjoK0JGMXtHKRJlf68Vix0rJxYydZ3ocHyB4jiv7VC
-         xTEb//zwH7scL/OXC2WS68QChYsipOLq724mt+ri3sjf9wRN9VMIDndEGFk7+ptVe11F
-         DCQpbWAlgX1SvKzHiMng8Gtj7b5Kn8MKqKsrMAKyWweqDHmXc+K07AVDb3CcddfYFdMS
-         7GfA==
-X-Gm-Message-State: AOAM5304ZB/ikySYv34d7Er7Rqp7qSZIO0QFzQYPgvuIfeTD40MhjlT0
-        1iDFqZ/9+W8TmWmRLUuAhxyesfDqZ+QZsR0FO+4=
-X-Google-Smtp-Source: ABdhPJxeyUmnDdbXsgknOTn/FLvRFgBHRyYMqPetQbqBWRZhXny15fWy7BL16oR/ZDRe+WVEIdyrjNidsqhGx2LWSXg=
-X-Received: by 2002:a05:6638:2512:: with SMTP id v18mr104863jat.22.1640036334760;
- Mon, 20 Dec 2021 13:38:54 -0800 (PST)
+        Mon, 20 Dec 2021 16:45:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF48561312;
+        Mon, 20 Dec 2021 21:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C27C36AE8;
+        Mon, 20 Dec 2021 21:45:28 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KpsP/GlJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1640036726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aA2Bl8evLjGGLtxFv2VrCQNlAHwiK5GW7WhSRj3VUIA=;
+        b=KpsP/GlJbL0+yzA2Iher3Hy8QlOOiE2ft46o2FA5DyalTUS+Oei0RX8pZq/t+tEHUz0LCU
+        ZERubS26ayyaxpXk2PiehOxPLhSynEKQ0GmCdYyFx7qawrTbNdQjnL/j2DGtjCOhO3jy62
+        E0I65Q79GtCBMnKgjYvqJA/CQHR8Ik4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c6b62022 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 20 Dec 2021 21:45:26 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id x32so32731086ybi.12;
+        Mon, 20 Dec 2021 13:45:26 -0800 (PST)
+X-Gm-Message-State: AOAM530g3R+OR3GtxjFXT8KQUwS+uoBCapdMjvAi+2KifKLYqeTNfI85
+        15W6Bf19fnYWpogQC1aTQcWUoFshsiVr+Aa7YLA=
+X-Google-Smtp-Source: ABdhPJxLKGQm5lMId5634PD84twG9X59MZjnL5UC/sVtnNLiFgqyWB1zG3BW3zDC83GJRsOF0suJiDM4LnT2II2osC0=
+X-Received: by 2002:a25:d393:: with SMTP id e141mr192518ybf.255.1640036725620;
+ Mon, 20 Dec 2021 13:45:25 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <d91e501aef74c5bb924cae90b469ff0dc1d56488.1639432170.git.andreyknvl@google.com>
- <YbjQNdst07JqbG0j@arm.com> <CA+fCnZftd93rARJ+xpUApimkgTsN0RRmiSVnrUMkCvdSu4-tcA@mail.gmail.com>
- <YbjwN0YlDV4hm3x6@arm.com>
-In-Reply-To: <YbjwN0YlDV4hm3x6@arm.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 20 Dec 2021 22:38:43 +0100
-Message-ID: <CA+fCnZfmiqpnX-754Tqes6prNccG+cMzMEteqr+Ar8gM1RTjDg@mail.gmail.com>
-Subject: Re: [PATCH mm v3 25/38] kasan, vmalloc, arm64: mark vmalloc mappings
- as pgprot_tagged
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
+References: <20211219025139.31085-1-ebiggers@kernel.org> <CAHmME9pQ4vp0jHpOyQXHRbJ-xQKYapQUsWPrLouK=dMO56y1zA@mail.gmail.com>
+ <20211220181115.GZ641268@paulmck-ThinkPad-P17-Gen-1> <CAHmME9qZDNz2uxPa13ZtBMT2RR+sP1OU=b73tcZ9BTD1T_MJOg@mail.gmail.com>
+ <20211220183140.GC641268@paulmck-ThinkPad-P17-Gen-1> <YcDM2cpwiGCb56Gp@quark> <20211220190004.GD641268@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211220190004.GD641268@paulmck-ThinkPad-P17-Gen-1>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 20 Dec 2021 22:45:15 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rv9RZai-0diV6kdc9yfXRog29QiStEzDpC9v25OWY81Q@mail.gmail.com>
+Message-ID: <CAHmME9rv9RZai-0diV6kdc9yfXRog29QiStEzDpC9v25OWY81Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND] random: use correct memory barriers for crng_node_pool
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
         LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 8:27 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+Hi Paul,
+
+On Mon, Dec 20, 2021 at 8:00 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> This assumes that the various crng_node_pool[i] pointers never change
+> while accessible to readers (and that some sort of synchronization applies
+> to the values in the pointed-to structure).  If these pointers do change,
+> then there also needs to be a READ_ONCE(pool[nid]) in select_crng(), where
+> the value returned from this READ_ONCE() is both tested and returned.
+> (As in assign this value to a temporary.)
 >
-> On Tue, Dec 14, 2021 at 07:27:09PM +0100, Andrey Konovalov wrote:
-> > On Tue, Dec 14, 2021 at 6:11 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > On Mon, Dec 13, 2021 at 10:54:21PM +0100, andrey.konovalov@linux.dev wrote:
-> > > > diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
-> > > > index b9185503feae..3d35adf365bf 100644
-> > > > --- a/arch/arm64/include/asm/vmalloc.h
-> > > > +++ b/arch/arm64/include/asm/vmalloc.h
-> > > > @@ -25,4 +25,14 @@ static inline bool arch_vmap_pmd_supported(pgprot_t prot)
-> > > >
-> > > >  #endif
-> > > >
-> > > > +#define arch_vmalloc_pgprot_modify arch_vmalloc_pgprot_modify
-> > > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
-> > > > +{
-> > > > +     if (IS_ENABLED(CONFIG_KASAN_HW_TAGS) &&
-> > > > +                     (pgprot_val(prot) == pgprot_val(PAGE_KERNEL)))
-> > > > +             prot = pgprot_tagged(prot);
-> > > > +
-> > > > +     return prot;
-> > > > +}
-> > > > +
-> > > >  #endif /* _ASM_ARM64_VMALLOC_H */
-> > > > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> > > > index 28becb10d013..760caeedd749 100644
-> > > > --- a/include/linux/vmalloc.h
-> > > > +++ b/include/linux/vmalloc.h
-> > > > @@ -115,6 +115,13 @@ static inline int arch_vmap_pte_supported_shift(unsigned long size)
-> > > >  }
-> > > >  #endif
-> > > >
-> > > > +#ifndef arch_vmalloc_pgprot_modify
-> > > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
-> > > > +{
-> > > > +     return prot;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  /*
-> > > >   *   Highlevel APIs for driver use
-> > > >   */
-> > > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > > > index 837ed355bfc6..58bd2f7f86d7 100644
-> > > > --- a/mm/vmalloc.c
-> > > > +++ b/mm/vmalloc.c
-> > > > @@ -3060,6 +3060,8 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
-> > > >               return NULL;
-> > > >       }
-> > > >
-> > > > +     prot = arch_vmalloc_pgprot_modify(prot);
-> > > > +
-> > > >       if (vmap_allow_huge && !(vm_flags & VM_NO_HUGE_VMAP)) {
-> > > >               unsigned long size_per_node;
-> > >
-> > > I wonder whether we could fix the prot bits in the caller instead and we
-> > > won't need to worry about the exec or the module_alloc() case. Something
-> > > like:
-> > >
-> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > > index d2a00ad4e1dd..4e8c61255b92 100644
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@ -3112,7 +3112,7 @@ void *__vmalloc_node(unsigned long size, unsigned long align,
-> > >                             gfp_t gfp_mask, int node, const void *caller)
-> > >  {
-> > >         return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
-> > > -                               gfp_mask, PAGE_KERNEL, 0, node, caller);
-> > > +                       gfp_mask, pgprot_hwasan(PAGE_KERNEL), 0, node, caller);
-> > >  }
-> > >  /*
-> > >   * This is only for performance analysis of vmalloc and stress purpose.
-> > > @@ -3161,7 +3161,7 @@ EXPORT_SYMBOL(vmalloc);
-> > >  void *vmalloc_no_huge(unsigned long size)
-> > >  {
-> > >         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-> > > -                                   GFP_KERNEL, PAGE_KERNEL, VM_NO_HUGE_VMAP,
-> > > +                                   GFP_KERNEL, pgprot_hwasan(PAGE_KERNEL), VM_NO_HUGE_VMAP,
-> > >                                     NUMA_NO_NODE, __builtin_return_address(0));
-> > >  }
-> > >  EXPORT_SYMBOL(vmalloc_no_huge);
-> > >
-> > > with pgprot_hwasan() defined to pgprot_tagged() only if KASAN_HW_TAGS is
-> > > enabled.
-> >
-> > And also change kasan_unpoison_vmalloc() to tag only if
-> > pgprot_tagged() has been applied, I assume.
-> >
-> > Hm. Then __vmalloc_node_range() callers will never get tagged memory
-> > unless requested. I suppose that's OK, most of them untag the pointer
-> > anyway.
-> >
-> > But this won't work for SW_TAGS mode, which is also affected by the
-> > exec issue and needs those kasan_reset_tag()s in module_alloc()/BPF.
-> > We could invent some virtual protection bit for it and reuse
-> > pgprot_hwasan(). Not sure if this would be acceptable.
->
-> Ah, a pgprot_hwasan() for the sw tags is probably not acceptable as this
-> requires an unnecessary pte bit. An alternative could be a GFP flag that
-> gets passed only from __vmalloc_node() etc.
+> But if the various crng_node_pool[i] pointers really are constant
+> while readers can access them, then the cmpxchg_release() suffices.
+> The loads from pool[nid] are then data-race free, and because they
+> are unmarked, the compiler is prohibited from hoisting them out from
+> within the "if" statement.  The address dependency prohibits the
+> CPU from reordering them.
 
-This will still leave the BPF JIT special case though.
+Right, this is just an initialization-time allocation and assignment,
+never updated or freed again after.
 
-So I'm leaning towards keeping my approach.
+> So READ_ONCE() should be just fine.  Which answers Jason's question.  ;-)
 
-Thanks!
+Great. So v2 of this patch can use READ_ONCE then. Thanks!
+
+> Looking at _extract_crng(), if this was my code, I would use READ_ONCE()
+> in the checks, but that might be my misunderstanding boot-time constraints
+> or some such.  Without some sort of constraint, I don't see how the code
+> avoids confusion from reloads of crng->init_time if two CPUs concurrently
+> see the expiration of CRNG_RESEED_INTERVAL, but I could easily be missing
+> something that makes this safe.  (And this is irrelevant to this patch.)
+
+Indeed init_time seems to race via the crng_reseed path, and
+READ_ONCE()ing that seems reasonable. The other setters of it --
+initialize_{primary,secondary} -- are in the boot path.
+
+Jason

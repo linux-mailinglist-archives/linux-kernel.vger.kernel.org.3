@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9173647AEC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3658747AFC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238408AbhLTPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S238519AbhLTPSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239808AbhLTO7N (ORCPT
+        with ESMTP id S238600AbhLTPRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:59:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55DDC0698DE;
-        Mon, 20 Dec 2021 06:50:51 -0800 (PST)
+        Mon, 20 Dec 2021 10:17:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6CBC08EC99;
+        Mon, 20 Dec 2021 06:58:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D048B80EE3;
-        Mon, 20 Dec 2021 14:50:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D09C36AE7;
-        Mon, 20 Dec 2021 14:50:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EC7C611A1;
+        Mon, 20 Dec 2021 14:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141F2C36AE7;
+        Mon, 20 Dec 2021 14:58:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011850;
-        bh=gcSSZfyvDzm+/VWc0/q9phlKa96AsdNTC46kSJjRtrw=;
+        s=korg; t=1640012323;
+        bh=ODWJTRXKy8xSS4+g6COkmOYMLdb0LQomb8Z3YB/r018=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kmgoBMTwxgoXPYMSgjESgqtcCBzOG6hxkP0NPwVaj4BQHd5p9CY/1FRnx35Wo0MvB
-         JgodhYN3NgssHAO/pCY43FL8By4xPd0d7aBDYskNduRGy0zw7rHIS3mwrjX4LeTKLH
-         K70Yykne5AHB+l4taVstB0UoEgP/KF12vG17RVew=
+        b=uTVLqdrhOxtVBiRElvyILFm0HdmIYW4IJMwR7Uc5uvAgcHWqBqkBcI8dCq9VOb6+E
+         msyvLwR8y04hfW+vDSy0LB9MMN6bp6tlkHCPd8L/1aXeJbX2H3r3N6CAzoxjeMoshL
+         Qo0Fg0ZoG8miHCGYRyi0PVut0njsib6n6hxLKHzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 97/99] xen/console: harden hvc_xen against event channel storms
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        syzbot+5ca0bf339f13c4243001@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 160/177] media: mxl111sf: change mutex_init() location
 Date:   Mon, 20 Dec 2021 15:35:10 +0100
-Message-Id: <20211220143032.663312933@linuxfoundation.org>
+Message-Id: <20211220143045.468569697@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,98 +50,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit fe415186b43df0db1f17fa3a46275fd92107fe71 upstream.
+commit 44870a9e7a3c24acbb3f888b2a7cc22c9bdf7e7f upstream.
 
-The Xen console driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using a lateeoi event
-channel.
+Syzbot reported, that mxl111sf_ctrl_msg() uses uninitialized
+mutex. The problem was in wrong mutex_init() location.
 
-For the normal domU initial console this requires the introduction of
-bind_evtchn_to_irq_lateeoi() as there is no xenbus device available
-at the time the event channel is bound to the irq.
+Previous mutex_init(&state->msg_lock) call was in ->init() function, but
+dvb_usbv2_init() has this order of calls:
 
-As the decision whether an interrupt was spurious or not requires to
-test for bytes having been read from the backend, move sending the
-event into the if statement, as sending an event without having found
-any bytes to be read is making no sense at all.
+	dvb_usbv2_init()
+	  dvb_usbv2_adapter_init()
+	    dvb_usbv2_adapter_frontend_init()
+	      props->frontend_attach()
 
-This is part of XSA-391
+	  props->init()
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Since mxl111sf_* devices call mxl111sf_ctrl_msg() in ->frontend_attach()
+internally we need to initialize state->msg_lock before
+frontend_attach(). To achieve it, ->probe() call added to all mxl111sf_*
+devices, which will simply initiaize mutex.
+
+Reported-and-tested-by: syzbot+5ca0bf339f13c4243001@syzkaller.appspotmail.com
+
+Fixes: 8572211842af ("[media] mxl111sf: convert to new DVB USB")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/hvc/hvc_xen.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ drivers/media/usb/dvb-usb-v2/mxl111sf.c |   16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/hvc/hvc_xen.c
-+++ b/drivers/tty/hvc/hvc_xen.c
-@@ -37,6 +37,8 @@ struct xencons_info {
- 	struct xenbus_device *xbdev;
- 	struct xencons_interface *intf;
- 	unsigned int evtchn;
-+	XENCONS_RING_IDX out_cons;
-+	unsigned int out_cons_same;
- 	struct hvc_struct *hvc;
- 	int irq;
- 	int vtermno;
-@@ -138,6 +140,8 @@ static int domU_read_console(uint32_t vt
- 	XENCONS_RING_IDX cons, prod;
- 	int recv = 0;
- 	struct xencons_info *xencons = vtermno_to_xencons(vtermno);
-+	unsigned int eoiflag = 0;
-+
- 	if (xencons == NULL)
- 		return -EINVAL;
- 	intf = xencons->intf;
-@@ -157,7 +161,27 @@ static int domU_read_console(uint32_t vt
- 	mb();			/* read ring before consuming */
- 	intf->in_cons = cons;
+--- a/drivers/media/usb/dvb-usb-v2/mxl111sf.c
++++ b/drivers/media/usb/dvb-usb-v2/mxl111sf.c
+@@ -931,8 +931,6 @@ static int mxl111sf_init(struct dvb_usb_
+ 		  .len = sizeof(eeprom), .buf = eeprom },
+ 	};
  
--	notify_daemon(xencons);
-+	/*
-+	 * When to mark interrupt having been spurious:
-+	 * - there was no new data to be read, and
-+	 * - the backend did not consume some output bytes, and
-+	 * - the previous round with no read data didn't see consumed bytes
-+	 *   (we might have a race with an interrupt being in flight while
-+	 *   updating xencons->out_cons, so account for that by allowing one
-+	 *   round without any visible reason)
-+	 */
-+	if (intf->out_cons != xencons->out_cons) {
-+		xencons->out_cons = intf->out_cons;
-+		xencons->out_cons_same = 0;
-+	}
-+	if (recv) {
-+		notify_daemon(xencons);
-+	} else if (xencons->out_cons_same++ > 1) {
-+		eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+	}
-+
-+	xen_irq_lateeoi(xencons->irq, eoiflag);
-+
- 	return recv;
+-	mutex_init(&state->msg_lock);
+-
+ 	ret = get_chip_info(state);
+ 	if (mxl_fail(ret))
+ 		pr_err("failed to get chip info during probe");
+@@ -1074,6 +1072,14 @@ static int mxl111sf_get_stream_config_dv
+ 	return 0;
  }
  
-@@ -386,7 +410,7 @@ static int xencons_connect_backend(struc
- 	if (ret)
- 		return ret;
- 	info->evtchn = evtchn;
--	irq = bind_evtchn_to_irq(evtchn);
-+	irq = bind_interdomain_evtchn_to_irq_lateeoi(dev->otherend_id, evtchn);
- 	if (irq < 0)
- 		return irq;
- 	info->irq = irq;
-@@ -550,7 +574,7 @@ static int __init xen_hvc_init(void)
- 			return r;
++static int mxl111sf_probe(struct dvb_usb_device *dev)
++{
++	struct mxl111sf_state *state = d_to_priv(dev);
++
++	mutex_init(&state->msg_lock);
++	return 0;
++}
++
+ static struct dvb_usb_device_properties mxl111sf_props_dvbt = {
+ 	.driver_name = KBUILD_MODNAME,
+ 	.owner = THIS_MODULE,
+@@ -1083,6 +1089,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
  
- 		info = vtermno_to_xencons(HVC_COOKIE);
--		info->irq = bind_evtchn_to_irq(info->evtchn);
-+		info->irq = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	}
- 	if (info->irq < 0)
- 		info->irq = 0; /* NO_IRQ */
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_dvbt,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
+@@ -1124,6 +1131,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
+ 
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_atsc,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
+@@ -1165,6 +1173,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
+ 
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_mh,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
+@@ -1233,6 +1242,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
+ 
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_atsc_mh,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
+@@ -1311,6 +1321,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
+ 
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_mercury,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
+@@ -1381,6 +1392,7 @@ static struct dvb_usb_device_properties
+ 	.generic_bulk_ctrl_endpoint = 0x02,
+ 	.generic_bulk_ctrl_endpoint_response = 0x81,
+ 
++	.probe             = mxl111sf_probe,
+ 	.i2c_algo          = &mxl111sf_i2c_algo,
+ 	.frontend_attach   = mxl111sf_frontend_attach_mercury_mh,
+ 	.tuner_attach      = mxl111sf_attach_tuner,
 
 

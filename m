@@ -2,75 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B410847A50B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 07:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BB247A517
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 07:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237574AbhLTGey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 01:34:54 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:34392 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237557AbhLTGex (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 01:34:53 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAnvqbrI8BhGjpcBA--.19122S2;
-        Mon, 20 Dec 2021 14:34:19 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     s.hauer@pengutronix.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] video: fbdev: Check for null res pointer
-Date:   Mon, 20 Dec 2021 14:34:18 +0800
-Message-Id: <20211220063418.793624-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S237588AbhLTGsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 01:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234258AbhLTGsB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 01:48:01 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA54BC061574;
+        Sun, 19 Dec 2021 22:48:00 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id l7so14331395lja.2;
+        Sun, 19 Dec 2021 22:48:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OZK8I8DJMk78yfNAEBH1J2MfMzMrX2iK0Dh2ltSlAL0=;
+        b=ClCt5pr/wzbDlmKyld3PrMLzGHdkIWrGIBwRmxeSTqDgKHHJkKfWjpqHG52PJk+Fzw
+         d8890MKBRmbzGeQJXHyXqYXfbzMcSQvNrvVNUQNT32l4FRa3uLocDjaDeqMoDB3NNQis
+         UpjGFf9bga9feTIKZhNC+CacEYuMUfVJ+AZqb0vbXfbxd5hCqsLoKEa+A+/0xOjaQBy9
+         WoyBuNCpc9BXZl3pXylv0lLNKHRNwkE0gUYfBZlUDtVguaP8+9cGA1X2KGgXvlI/PMNE
+         o/L432R1GBvUzoL6RO3guDomxg2WV64he+1wIjDKZY9vqDsP2HRpkub6aqu7fOvTqFm7
+         IIdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OZK8I8DJMk78yfNAEBH1J2MfMzMrX2iK0Dh2ltSlAL0=;
+        b=yBMG3EtrqJP0N49eZLkB+61qLpUtXo0zvw/wXf/awoxscyxv31t3bYFZIspw+HKdxb
+         AkMmwhDWwVqDXL2WIG2Cpon73zuM01luNJLwamCDoJnYkuRgYS+lBT5hwGatN5ErizGO
+         0ImFYnW/aKcAm+9M6XcHOYVscCBUtadm16PgRvtXVRJFyhJoC6ftCxCUcjjHC6fd12PJ
+         cWilsFdA11VvwYCQzIdiiXNg4nONrIe8SIZM+yHo88tdEs1GZLIQutHrO8x8j+uiHHFh
+         0uhwBfmmPxroCalns7zSsu3GkwkzWyTFN5R6mkIL79z4H6dIsnd6K2g+AggPvxjlFn4s
+         bXuw==
+X-Gm-Message-State: AOAM530D/p4kBAecJ3EyjXyj4hsw7jtnVMfSd0Y72ub+RQsT74VkvgcC
+        9kREwG6z61KSqSmtGsAOpQ0=
+X-Google-Smtp-Source: ABdhPJyoFKqmYCoDbYJJPG//JduXI2jqovIzqUHIbZG7adJWjV+nOyc7kKa+DKRsQp1FqZTyvjBTdQ==
+X-Received: by 2002:a05:651c:2116:: with SMTP id a22mr8140675ljq.435.1639982878492;
+        Sun, 19 Dec 2021 22:47:58 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id z39sm210260lfu.52.2021.12.19.22.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 22:47:58 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 1/2] sysfs: add sysfs_add_bin_file_to_group()
+Date:   Mon, 20 Dec 2021 07:47:29 +0100
+Message-Id: <20211220064730.28806-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAnvqbrI8BhGjpcBA--.19122S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7AF1kAF18WFW5tw18Krg_yoW3Wwc_Ca
-        1DurWrWr9IkF1vkF4ktr43ZryYvFsruF93urn2qasakry7Zr1rZrWUZr1fuayUur1UAFWD
-        Aryq9r4Sv34fCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb38FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUYeHqDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of platform_get_resource() needs to be checked.
-To avoid use of error pointer in case of the failure of alloc.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Fixes: f7018c213502 ("video: move fbdev to drivers/video/fbdev")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+There already is sysfs_add_file_to_group() for adding "attribute" to a
+group. This new function allows adding "bin_attribute" as well.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- drivers/video/fbdev/imxfb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/sysfs/file.c       | 31 +++++++++++++++++++++++++++----
+ include/linux/sysfs.h |  3 +++
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-index ad598257ab38..68288756ffff 100644
---- a/drivers/video/fbdev/imxfb.c
-+++ b/drivers/video/fbdev/imxfb.c
-@@ -1083,6 +1083,8 @@ static int imxfb_remove(struct platform_device *pdev)
- 	struct resource *res;
+diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
+index 42dcf96881b6..30c798c38d89 100644
+--- a/fs/sysfs/file.c
++++ b/fs/sysfs/file.c
+@@ -376,14 +376,19 @@ EXPORT_SYMBOL_GPL(sysfs_create_files);
+  * @attr: attribute descriptor.
+  * @group: group name.
+  */
+-int sysfs_add_file_to_group(struct kobject *kobj,
+-		const struct attribute *attr, const char *group)
++int __sysfs_add_file_to_group(struct kobject *kobj,
++			      const struct attribute *attr,
++			      const struct bin_attribute *battr,
++			      const char *group)
+ {
+ 	struct kernfs_node *parent;
+ 	kuid_t uid;
+ 	kgid_t gid;
+ 	int error;
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
++	if (WARN_ON((attr && battr) || (!attr && !battr)))
 +		return -EINVAL;
++
+ 	if (group) {
+ 		parent = kernfs_find_and_get(kobj->sd, group);
+ 	} else {
+@@ -395,14 +400,32 @@ int sysfs_add_file_to_group(struct kobject *kobj,
+ 		return -ENOENT;
  
- 	imxfb_disable_controller(fbi);
+ 	kobject_get_ownership(kobj, &uid, &gid);
+-	error = sysfs_add_file_mode_ns(parent, attr, attr->mode, uid, gid,
+-				       NULL);
++	if (attr)
++		error = sysfs_add_file_mode_ns(parent, attr, attr->mode, uid,
++					       gid, NULL);
++	else
++		error = sysfs_add_bin_file_mode_ns(parent, battr, battr->attr.mode,
++						   uid, gid, NULL);
+ 	kernfs_put(parent);
  
+ 	return error;
+ }
++
++int sysfs_add_file_to_group(struct kobject *kobj, const struct attribute *attr,
++			    const char *group)
++{
++	return __sysfs_add_file_to_group(kobj, attr, NULL, group);
++}
+ EXPORT_SYMBOL_GPL(sysfs_add_file_to_group);
+ 
++int sysfs_add_bin_file_to_group(struct kobject *kobj,
++				const struct bin_attribute *battr,
++				const char *group)
++{
++	return __sysfs_add_file_to_group(kobj, NULL, battr, group);
++}
++EXPORT_SYMBOL_GPL(sysfs_add_bin_file_to_group);
++
+ /**
+  * sysfs_chmod_file - update the modified mode value on an object attribute.
+  * @kobj: object we're acting for.
+diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+index e3f1e8ac1f85..9b4f9d405604 100644
+--- a/include/linux/sysfs.h
++++ b/include/linux/sysfs.h
+@@ -302,6 +302,9 @@ void sysfs_remove_groups(struct kobject *kobj,
+ 			 const struct attribute_group **groups);
+ int sysfs_add_file_to_group(struct kobject *kobj,
+ 			const struct attribute *attr, const char *group);
++int sysfs_add_bin_file_to_group(struct kobject *kobj,
++				const struct bin_attribute *battr,
++				const char *group);
+ void sysfs_remove_file_from_group(struct kobject *kobj,
+ 			const struct attribute *attr, const char *group);
+ int sysfs_merge_group(struct kobject *kobj,
 -- 
-2.25.1
+2.31.1
 

@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA2147AE86
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C5347ACFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbhLTPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbhLTO63 (ORCPT
+        id S237023AbhLTOsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:48:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38258 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234529AbhLTOpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5475FC0617A0;
-        Mon, 20 Dec 2021 06:49:43 -0800 (PST)
+        Mon, 20 Dec 2021 09:45:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1510CB80EE7;
-        Mon, 20 Dec 2021 14:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61192C36AE8;
-        Mon, 20 Dec 2021 14:49:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAF156119E;
+        Mon, 20 Dec 2021 14:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860FBC36AE8;
+        Mon, 20 Dec 2021 14:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011780;
-        bh=1k6lPIqdNusG1NReznnMavSBD6vtxZ72VCOx+i7W7ZE=;
+        s=korg; t=1640011541;
+        bh=Wfd3cUPApCmWbTIqlOspaTPNGEWZGYSTwXpmKgqSFaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/GfN/bsU+jUpnt+hEqkn11X5xe3WKcsdLxE/cWBM0Gl5gNUr5dSjMUaa/iHa38EF
-         aBh6DHLWE+KlfRf8FI+xY9YP1S18PXJ/r4YuETknLh31hQ7l57cUsxaz9CUl5O9Ohp
-         uUQNxMqEF8osoOyUtsJSRJn1rfyKkLgpvfu/ErwI=
+        b=QUxysdj1zvVIO6fY6QSdwHEdWkpDubS7yYAuH7b2Xz5shqHd8kU0OEVYB3Qopu/qG
+         5qb7DjE1dIJ9i2SlE+kayT5LsR+AdRwFb729UbtCtXyF2R0Br6PgZPjLmTNU709zKb
+         6ol+0HBD6dJRVDUYwLHQXMPowac0Jw17mG0TxRvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 5.10 71/99] PCI/MSI: Mask MSI-X vectors only on success
-Date:   Mon, 20 Dec 2021 15:34:44 +0100
-Message-Id: <20211220143031.779120408@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 5.4 56/71] Input: touchscreen - avoid bitwise vs logical OR warning
+Date:   Mon, 20 Dec 2021 15:34:45 +0100
+Message-Id: <20211220143027.569905083@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,74 +47,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Roese <sr@denx.de>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 83dbf898a2d45289be875deb580e93050ba67529 upstream.
+commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
 
-Masking all unused MSI-X entries is done to ensure that a crash kernel
-starts from a clean slate, which correponds to the reset state of the
-device as defined in the PCI-E specificion 3.0 and later:
+A new warning in clang points out a few places in this driver where a
+bitwise OR is being used with boolean types:
 
- Vector Control for MSI-X Table Entries
- --------------------------------------
+drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- "00: Mask bit:  When this bit is set, the function is prohibited from
-                 sending a message using this MSI-X Table entry.
-                 ...
-                 This bit’s state after reset is 1 (entry is masked)."
+This use of a bitwise OR is intentional, as bitwise operations do not
+short circuit, which allows all the calls to touchscreen_get_prop_u32()
+to happen so that the last parameter is initialized while coalescing the
+results of the calls to make a decision after they are all evaluated.
 
-A Marvell NVME device fails to deliver MSI interrupts after trying to
-enable MSI-X interrupts due to that masking. It seems to take the MSI-X
-mask bits into account even when MSI-X is disabled.
+To make this clearer to the compiler, use the '|=' operator to assign
+the result of each touchscreen_get_prop_u32() call to data_present,
+which keeps the meaning of the code the same but makes it obvious that
+every one of these calls is expected to happen.
 
-While not specification compliant, this can be cured by moving the masking
-into the success path, so that the MSI-X table entries stay in device reset
-state when the MSI-X setup fails.
-
-[ tglx: Move it into the success path, add comment and amend changelog ]
-
-Fixes: aa8092c1d1f1 ("PCI/MSI: Mask all unused MSI-X entries")
-Signed-off-by: Stefan Roese <sr@denx.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-pci@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211210161025.3287927-1-sr@denx.de
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/msi.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/input/touchscreen/of_touchscreen.c |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -828,9 +828,6 @@ static int msix_capability_init(struct p
- 		goto out_disable;
- 	}
+--- a/drivers/input/touchscreen/of_touchscreen.c
++++ b/drivers/input/touchscreen/of_touchscreen.c
+@@ -81,8 +81,8 @@ void touchscreen_parse_properties(struct
+ 		       touchscreen_get_prop_u32(dev, "touchscreen-size-x",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
+ 						input_abs_get_fuzz(input, axis),
+ 						&fuzz);
+ 	if (data_present)
+@@ -95,8 +95,8 @@ void touchscreen_parse_properties(struct
+ 		       touchscreen_get_prop_u32(dev, "touchscreen-size-y",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
+ 						input_abs_get_fuzz(input, axis),
+ 						&fuzz);
+ 	if (data_present)
+@@ -106,11 +106,11 @@ void touchscreen_parse_properties(struct
+ 	data_present = touchscreen_get_prop_u32(dev,
+ 						"touchscreen-max-pressure",
+ 						input_abs_get_max(input, axis),
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev,
+-						"touchscreen-fuzz-pressure",
+-						input_abs_get_fuzz(input, axis),
+-						&fuzz);
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev,
++						 "touchscreen-fuzz-pressure",
++						 input_abs_get_fuzz(input, axis),
++						 &fuzz);
+ 	if (data_present)
+ 		touchscreen_set_params(input, axis, 0, maximum, fuzz);
  
--	/* Ensure that all table entries are masked. */
--	msix_mask_all(base, tsize);
--
- 	ret = msix_setup_entries(dev, base, entries, nvec, affd);
- 	if (ret)
- 		goto out_disable;
-@@ -853,6 +850,16 @@ static int msix_capability_init(struct p
- 	/* Set MSI-X enabled bits and unmask the function */
- 	pci_intx_for_msi(dev, 0);
- 	dev->msix_enabled = 1;
-+
-+	/*
-+	 * Ensure that all table entries are masked to prevent
-+	 * stale entries from firing in a crash kernel.
-+	 *
-+	 * Done late to deal with a broken Marvell NVME device
-+	 * which takes the MSI-X mask bits into account even
-+	 * when MSI-X is disabled, which prevents MSI delivery.
-+	 */
-+	msix_mask_all(base, tsize);
- 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL, 0);
- 
- 	pcibios_free_irq(dev);
 
 

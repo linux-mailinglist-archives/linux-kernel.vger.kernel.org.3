@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB47F47ABC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744C547AC82
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbhLTOjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:39:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47410 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbhLTOiX (ORCPT
+        id S236235AbhLTOoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:44:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36322 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235672AbhLTOmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:38:23 -0500
+        Mon, 20 Dec 2021 09:42:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2D3BB80EDE;
-        Mon, 20 Dec 2021 14:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44DB3C36AE7;
-        Mon, 20 Dec 2021 14:38:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93E93611C1;
+        Mon, 20 Dec 2021 14:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B701C36AEA;
+        Mon, 20 Dec 2021 14:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011100;
-        bh=H9YoIvwfbJHPZC6ivMdbbQJkpuKF68puiQgNv1RCO7M=;
+        s=korg; t=1640011364;
+        bh=btwXDiTXSKi4FJvDxSn8KrKSAWsF0fRa+tTHZmoJ8mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GGBQ/DPVgrA0zT6XzGZ+5RORO6cZX5l1VvIF5IYc/Be2tfaJpSiIaGDxKFnkr18tV
-         /LujzYxn9ZybrkyhKKUbQXJQY8kCY5d9ZVq1jl02mdCXC36sk6B3LYo9B8fZ47devQ
-         1XouoLPBBFM9v3JVqqwkDbP0kuNv5uodqX1kUDaY=
+        b=db5NvDEkrtQ27DQZU3NF9/s4Ia34no10hq8ZiBZWDYFFLLJ/i7TYJ7DuZc+Tgkq73
+         mnKt341KvLqxugGTb5IbK/XqJRX74ItVszxqkTiTvCHqMlCP1Lh0w/+gl6QxFjS2Ma
+         7pgjgQzwSUZZjKMR7AWQdfT7CN93ob5pC9o5Y3Lo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.9 27/31] xen/blkfront: harden blkfront against event channel storms
+        stable@vger.kernel.org, Maarten Brock <m.brock@vanmierlo.com>,
+        Karoly Pados <pados@pados.hu>, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 34/56] USB: serial: cp210x: fix CP2105 GPIO registration
 Date:   Mon, 20 Dec 2021 15:34:27 +0100
-Message-Id: <20211220143020.841423126@linuxfoundation.org>
+Message-Id: <20211220143024.562262515@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,76 +45,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 0fd08a34e8e3b67ec9bd8287ac0facf8374b844a upstream.
+commit 83b67041f3eaf33f98a075249aa7f4c7617c2f85 upstream.
 
-The Xen blkfront driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using lateeoi event
-channels.
+When generalising GPIO support and adding support for CP2102N, the GPIO
+registration for some CP2105 devices accidentally broke. Specifically,
+when all the pins of a port are in "modem" mode, and thus unavailable
+for GPIO use, the GPIO chip would now be registered without having
+initialised the number of GPIO lines. This would in turn be rejected by
+gpiolib and some errors messages would be printed (but importantly probe
+would still succeed).
 
-This is part of XSA-391
+Fix this by initialising the number of GPIO lines before registering the
+GPIO chip.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Note that as for the other device types, and as when all CP2105 pins are
+muxed for LED function, the GPIO chip is registered also when no pins
+are available for GPIO use.
+
+Reported-by: Maarten Brock <m.brock@vanmierlo.com>
+Link: https://lore.kernel.org/r/5eb560c81d2ea1a2b4602a92d9f48a89@vanmierlo.com
+Fixes: c8acfe0aadbe ("USB: serial: cp210x: implement GPIO support for CP2102N")
+Cc: stable@vger.kernel.org      # 4.19
+Cc: Karoly Pados <pados@pados.hu>
+Link: https://lore.kernel.org/r/20211126094348.31698-1-johan@kernel.org
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Maarten Brock <m.brock@vanmierlo.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/usb/serial/cp210x.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -1555,9 +1555,12 @@ static irqreturn_t blkif_interrupt(int i
- 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
- 	struct blkfront_info *info = rinfo->dev_info;
- 	int error;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -1535,6 +1535,8 @@ static int cp2105_gpioconf_init(struct u
  
--	if (unlikely(info->connected != BLKIF_STATE_CONNECTED))
-+	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
-+	}
- 
- 	spin_lock_irqsave(&rinfo->ring_lock, flags);
-  again:
-@@ -1573,6 +1576,8 @@ static irqreturn_t blkif_interrupt(int i
- 		unsigned long id;
- 		unsigned int op;
- 
-+		eoiflag = 0;
+ 	/*  2 banks of GPIO - One for the pins taken from each serial port */
+ 	if (intf_num == 0) {
++		priv->gc.ngpio = 2;
 +
- 		RING_COPY_RESPONSE(&rinfo->ring, i, &bret);
- 		id = bret.id;
- 
-@@ -1684,6 +1689,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
- 
-+	xen_irq_lateeoi(irq, eoiflag);
+ 		if (mode.eci == CP210X_PIN_MODE_MODEM) {
+ 			/* mark all GPIOs of this interface as reserved */
+ 			priv->gpio_altfunc = 0xff;
+@@ -1545,8 +1547,9 @@ static int cp2105_gpioconf_init(struct u
+ 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+ 						CP210X_ECI_GPIO_MODE_MASK) >>
+ 						CP210X_ECI_GPIO_MODE_OFFSET);
+-		priv->gc.ngpio = 2;
+ 	} else if (intf_num == 1) {
++		priv->gc.ngpio = 3;
 +
- 	return IRQ_HANDLED;
- 
-  err:
-@@ -1691,6 +1698,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
- 
-+	/* No EOI in order to avoid further interrupts. */
-+
- 	pr_alert("%s disabled for further use\n", info->gd->disk_name);
- 	return IRQ_HANDLED;
- }
-@@ -1730,8 +1739,8 @@ static int setup_blkring(struct xenbus_d
- 	if (err)
- 		goto fail;
- 
--	err = bind_evtchn_to_irqhandler(rinfo->evtchn, blkif_interrupt, 0,
--					"blkif", rinfo);
-+	err = bind_evtchn_to_irqhandler_lateeoi(rinfo->evtchn, blkif_interrupt,
-+						0, "blkif", rinfo);
- 	if (err <= 0) {
- 		xenbus_dev_fatal(dev, err,
- 				 "bind_evtchn_to_irqhandler failed");
+ 		if (mode.sci == CP210X_PIN_MODE_MODEM) {
+ 			/* mark all GPIOs of this interface as reserved */
+ 			priv->gpio_altfunc = 0xff;
+@@ -1557,7 +1560,6 @@ static int cp2105_gpioconf_init(struct u
+ 		priv->gpio_pushpull = (u8)((le16_to_cpu(config.gpio_mode) &
+ 						CP210X_SCI_GPIO_MODE_MASK) >>
+ 						CP210X_SCI_GPIO_MODE_OFFSET);
+-		priv->gc.ngpio = 3;
+ 	} else {
+ 		return -ENODEV;
+ 	}
 
 

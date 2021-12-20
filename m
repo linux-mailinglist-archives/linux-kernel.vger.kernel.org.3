@@ -2,129 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A623447A6B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05A347A6B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbhLTJRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:17:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34966 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbhLTJRe (ORCPT
+        id S231450AbhLTJSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229765AbhLTJSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:17:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F23660F13;
-        Mon, 20 Dec 2021 09:17:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F05C36AF8;
-        Mon, 20 Dec 2021 09:17:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639991853;
-        bh=4+z4MVcPf/vwKLP5WpH1FLTAs/YDepAbppw8qxij2dk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RORZ8FOw5XgCfTedf8Vy4x/Kl7XUma5ObTwalOH2cpItN6PusnsjAaknMoFb9TDJy
-         Vn5HSAelSIcanbH9Z6LicVbjMkXhurbYiqRngLzWVpI/+VSU61pEtjwBO71Rjs/nAR
-         /bnrwbg8l/6JHKBqbP/eov9VvGYmwwazgRY2h8GI8XJ19FbNP4MhaBoBfZH+TOrtWa
-         n1vldrkZQL3PW2zxAV4xWDJh06uQHgnnkUY0HS/V24mZNsvpTT55bujoSNt25Kqqfn
-         ceiu+JZ1RXYw23uIYkXwX9vLzsTf21ndZn0hkkMPkNntjcNVqIPvZTsH1S5WfLqVDz
-         InAVWDfCognMA==
-Received: by mail-wm1-f49.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so6212724wmb.0;
-        Mon, 20 Dec 2021 01:17:33 -0800 (PST)
-X-Gm-Message-State: AOAM530sFjBLyawhk2EgADOIEtAMpRM8JwfXnWQOGF3hfg0iGHwYaqxe
-        vVyy5ruQTokLcxrGsmiU2ZMC0FQld9SX/xyaKP8=
-X-Google-Smtp-Source: ABdhPJx5h88IXQvYmswzOZH9pshCavecGzDNWpi0p2Dn/d/bkKU5f+wXghRuyty1pglHInCAdE5taSAXaJWtpT1dxOs=
-X-Received: by 2002:a1c:1f93:: with SMTP id f141mr4145000wmf.56.1639991851853;
- Mon, 20 Dec 2021 01:17:31 -0800 (PST)
+        Mon, 20 Dec 2021 04:18:43 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1260C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:18:42 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id p36-20020a05600c1da400b003457428ec78so7911379wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:18:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9w/ZSPyCi0NPX3Lyvam5j4ID+6iXQhov8aHhTDMcgAs=;
+        b=MdcGx+BZF7lTug8mlLMGIPgkZMemghLdc5dYMWXRcQ1a6d2ScE9/9p0SYgYzZqd5eU
+         GkJt6m1C6sJy8e31e2fapHYpAUjwCYUiqlg7G8O+EQZyJJbKxTRSQM8d+9n3kmn/kFVL
+         yXCZi12djADFC2sXTEXh81PvtG1UXiHKaef5g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=9w/ZSPyCi0NPX3Lyvam5j4ID+6iXQhov8aHhTDMcgAs=;
+        b=RwDKD/QgVlj/T89dN6jozkHdF7qeUmkpFoqCW8s/4fiskOCrNhFnzW7xOt15pI/Vko
+         N5SgjnL14c1YApvp/4ulb1VSlU2KxBY0qofQrkQLcAz5HRgZPZ2HiGMfX3NNBg5ntmPe
+         rqdpKbF5YHdd99zpwA2ea/Y1IfNfnzEkDNWlg9kpEe1KlnYE29u3HrWQabClV2mLDe0U
+         9NQ3HI9UJ7gDZkY8uKehgIBbgJ6xm5E3cPRTuN6me+IuUF7MhDDsp5qFZzZV3La6q/AK
+         HFDuUUvbgpyahh7seQv1OLEqxttuBY6ZAeIajO/NcdeL0EpIr9/QeaGmQK3gGDdfRojJ
+         ZP+w==
+X-Gm-Message-State: AOAM533r/EkwtbEvMYidMxgm1DreFSBTjAg1xzIq2b7UvGb3W4i28PjY
+        WOZXAddYwtrlQi2hZ9hsSh+GnvKG9gCZYQ==
+X-Google-Smtp-Source: ABdhPJx7KY7b44GAF3z2oyvxQbtRLkUoqeuSGgEMIQLTgKI1t2RaspDsXPwYsNciZ579soIvaDz1EQ==
+X-Received: by 2002:a1c:7f50:: with SMTP id a77mr13530374wmd.57.1639991921338;
+        Mon, 20 Dec 2021 01:18:41 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id e18sm9318917wrx.36.2021.12.20.01.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 01:18:40 -0800 (PST)
+Date:   Mon, 20 Dec 2021 10:18:38 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Claudio Suarez <cssk@net-c.es>
+Cc:     dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH v2] drm: fix error found in some cases after the patch
+ d1af5cd86997
+Message-ID: <YcBKbn/9oqD2taCk@phenom.ffwll.local>
+Mail-Followup-To: Claudio Suarez <cssk@net-c.es>,
+        dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>
+References: <YaC7zXW119tlzfVh@gineta.localdomain>
+ <20211128142015.GB5295@xsang-OptiPlex-9020>
+ <YaUpsaP7hng6zpFh@gineta.localdomain>
+ <YaXi803g7iv9MxWR@phenom.ffwll.local>
+ <YaiVfZWNyMkG8uED@gineta.localdomain>
+ <YaiXEARd8z2C463h@gineta.localdomain>
 MIME-Version: 1.0
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
- <20211206104657.433304-13-alexandre.ghiti@canonical.com> <CAJF2gTQEHv1dVzv=JNCYSzD8oh6UxYOFRTdBOp-FFeeeOhSJrQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTQEHv1dVzv=JNCYSzD8oh6UxYOFRTdBOp-FFeeeOhSJrQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 20 Dec 2021 10:17:20 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
-Message-ID: <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
-Subject: Re: [PATCH v3 12/13] riscv: Initialize thread pointer before calling
- C functions
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaiXEARd8z2C463h@gineta.localdomain>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 10:11, Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, Dec 7, 2021 at 11:55 AM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
-> >
-> > Because of the stack canary feature that reads from the current task
-> > structure the stack canary value, the thread pointer register "tp" must
-> > be set before calling any C function from head.S: by chance, setup_vm
-> Shall we disable -fstack-protector for setup_vm() with __attribute__?
+On Thu, Dec 02, 2021 at 10:51:12AM +0100, Claudio Suarez wrote:
+> The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
+> calls in drm core, files drm_a*.c") fails when the drm_device
+> cannot be found in the parameter plane_state->crtc.
+> Fix it using plane_state->plane.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
+> Signed-off-by: Claudio Suarez <cssk@net-c.es>
 
-Don't use __attribute__((optimize())) for that: it is known to be
-broken, and documented as debug purposes only in the GCC info pages:
+Sorry I missed these two patches, but both applied now, thanks.
+-Daniel
 
-https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
+> ---
+>  drivers/gpu/drm/drm_atomic_helper.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+> index aef2fbd676e5..a7a05e1e26bb 100644
+> --- a/drivers/gpu/drm/drm_atomic_helper.c
+> +++ b/drivers/gpu/drm/drm_atomic_helper.c
+> @@ -828,8 +828,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+>  	}
+>  
+>  	if (!crtc_state->enable && !can_update_disabled) {
+> -		drm_dbg_kms(plane_state->crtc->dev,
+> -			       "Cannot update plane of a disabled CRTC.\n");
+> +		drm_dbg_kms(plane_state->plane->dev,
+> +			    "Cannot update plane of a disabled CRTC.\n");
+>  		return -EINVAL;
+>  	}
+>  
+> @@ -839,8 +839,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+>  	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
+>  	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
+>  	if (hscale < 0 || vscale < 0) {
+> -		drm_dbg_kms(plane_state->crtc->dev,
+> -			       "Invalid scaling of plane\n");
+> +		drm_dbg_kms(plane_state->plane->dev,
+> +			    "Invalid scaling of plane\n");
+>  		drm_rect_debug_print("src: ", &plane_state->src, true);
+>  		drm_rect_debug_print("dst: ", &plane_state->dst, false);
+>  		return -ERANGE;
+> @@ -864,8 +864,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+>  		return 0;
+>  
+>  	if (!can_position && !drm_rect_equals(dst, &clip)) {
+> -		drm_dbg_kms(plane_state->crtc->dev,
+> -			       "Plane must cover entire CRTC\n");
+> +		drm_dbg_kms(plane_state->plane->dev,
+> +			    "Plane must cover entire CRTC\n");
+>  		drm_rect_debug_print("dst: ", dst, false);
+>  		drm_rect_debug_print("clip: ", &clip, false);
+>  		return -EINVAL;
+> -- 
+> 2.33.0
+> 
+> 
+> 
 
-
-
-
-> Actually, we've already init tp later.
->
-> > and all the functions that it calls does not seem to be part of the
-> > functions where the canary check is done, but in the following commits,
-> > some functions will.
-> >
-> > Fixes: f2c9699f65557a31 ("riscv: Add STACKPROTECTOR supported")
-> > Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > ---
-> >  arch/riscv/kernel/head.S | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > index c3c0ed559770..86f7ee3d210d 100644
-> > --- a/arch/riscv/kernel/head.S
-> > +++ b/arch/riscv/kernel/head.S
-> > @@ -302,6 +302,7 @@ clear_bss_done:
-> >         REG_S a0, (a2)
-> >
-> >         /* Initialize page tables and relocate to virtual addresses */
-> > +       la tp, init_task
-> >         la sp, init_thread_union + THREAD_SIZE
-> >         XIP_FIXUP_OFFSET sp
-> >  #ifdef CONFIG_BUILTIN_DTB
-> > --
-> > 2.32.0
-> >
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

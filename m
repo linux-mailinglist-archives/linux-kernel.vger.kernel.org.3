@@ -2,147 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B702B47A36B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDF847A37C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbhLTCDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 21:03:14 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:56111 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237126AbhLTCDN (ORCPT
+        id S237194AbhLTCHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 21:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237125AbhLTCHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 21:03:13 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BK1uUmI075902;
-        Mon, 20 Dec 2021 09:56:30 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 20 Dec
- 2021 10:01:48 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <hverkuil-cisco@xs4all.nl>, <sakari.ailus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <eajames@linux.ibm.com>,
-        <mchehab@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
-        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 4/4] media: aspeed: Extend debug message
-Date:   Mon, 20 Dec 2021 10:01:43 +0800
-Message-ID: <20211220020143.1216-5-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211220020143.1216-1-jammy_huang@aspeedtech.com>
-References: <20211220020143.1216-1-jammy_huang@aspeedtech.com>
+        Sun, 19 Dec 2021 21:07:06 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103CCC061574;
+        Sun, 19 Dec 2021 18:07:06 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso11408623pji.0;
+        Sun, 19 Dec 2021 18:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=44frKLBjDoKoXxQ8vCCuFrEW3887v3fISzPaK57VSks=;
+        b=FqSqP03FGGeduGfunQo2NNYyvLpJGhBnhUgZoy99T0F80I6aSZxy8biV9H1L/uKQXb
+         Zhukoz2Wd4f6Kb9FIrsvGfxwZw79tThdOJulHdM3+q6fBofjzvbbVo+4C0QCu33PFvu/
+         6gqUwtvf8g3WVt+XqtG1Nh4h7XueE+DtGYXYiZyUIVw2a5yzRVeILaqUZ/7Ti3o1hGfA
+         H7X/lA6u2LAUszzIzLpcbX76F3At6IVsjrVRv2YqrnbqCbSHKlNFkrP8vcGzwoZiy5Rj
+         sgkUNrsXZkPKra3B1kMxnQVpIF3I3gYi0NSOX6J2u/0agviuxr6rhjxx7HzCalfoXGky
+         RY/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=44frKLBjDoKoXxQ8vCCuFrEW3887v3fISzPaK57VSks=;
+        b=pzNaKelgV+nJQEyCjJm1IZeWYwK2yR0W+AEyQ3ils/B68voihzxWNp5VosocOL4acI
+         /kdA7iFUWP9CDtBSTKzwUvf48t0ca0JQQYwGfvJjCR/gLYidk5pS4OcZ2XdWU9bmJxbF
+         riVg8UC6zY+aTScisQWrGtK03UKTHyRe8Bcib9VR3KAmt4624Jzm5C/FH/s1PBWPvyFk
+         8jnXYzfkbNCpvDA7p9rqf/0+dO8PZhSnKmuMdS9qQQsDTYmROyx39Q8Ti2YHtBmnfzQU
+         iJ0L20yP69g2bj1hZY2Ifoi/FLhFa4L03O4Ic4Ilvy8j2QXM+Qb6DNPxAuKItgri3zmC
+         fR+g==
+X-Gm-Message-State: AOAM532tAod4AdHveRT2spXHwWQ/PxqpFdvGPK/vzZdJExiZWi5qHwqJ
+        bxz1uGt92lvlpSRJAsL0eMRrh8h7Ji0=
+X-Google-Smtp-Source: ABdhPJyvjwA2D67Iw4qitWQoguW24AqqOkqX1oH+5BaXzVO5p0vFM1e+/mgg4oC3lIbo8N5g7jnMgQ==
+X-Received: by 2002:a17:90b:33c8:: with SMTP id lk8mr25293962pjb.191.1639966025517;
+        Sun, 19 Dec 2021 18:07:05 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:3e2e:1228:8845:1f8d])
+        by smtp.gmail.com with ESMTPSA id 13sm16002162pfp.216.2021.12.19.18.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 18:07:04 -0800 (PST)
+Date:   Sun, 19 Dec 2021 18:07:01 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: byd - fix typo in a comment
+Message-ID: <Yb/lRVC4B7S0kANf@google.com>
+References: <20211216082735.11948-1-wangxiang@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BK1uUmI075902
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216082735.11948-1-wangxiang@cdjrlc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-updated as below:
+On Thu, Dec 16, 2021 at 04:27:35PM +0800, Xiang wangx wrote:
+> The double `the' in a comment is repeated, thus it should be removed.
+> 
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 
-Capture:
-  Mode                : Direct fetch
-  VGA bpp mode        : 32
-  Signal              : lock
-  Width               : 1920
-  Height              : 1080
-  FRC                 : 0
+Applied, thank you.
 
-Compression:
-  Format              : JPEG
-  Subsampling         : 444
-  Quality             : 4
-
-Performance:
-  Frame#              : 4
-  Frame Duration(ms)  :
-    Now               : 22
-    Min               : 21
-    Max               : 22
-  FPS                 : 45
-
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
-v7:
-  - update debugfs message. Aspeed-jpeg's compression parameters only shown
-    if it's aspeed jpeg now
-v6:
-  - no update
-v5:
-  - no update
-v4:
-  - update debugfs log
-v3:
-  - no update
-v2:
-  - update commit message
----
- drivers/media/platform/aspeed-video.c | 35 +++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index c0cfcf98659d..b388bc56ce81 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -1835,10 +1835,29 @@ static const struct vb2_ops aspeed_video_vb2_ops = {
- static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
- {
- 	struct aspeed_video *v = s->private;
-+	u32 val08;
- 
- 	seq_puts(s, "\n");
- 
- 	seq_puts(s, "Capture:\n");
-+	val08 = aspeed_video_read(v, VE_CTRL);
-+	if (FIELD_GET(VE_CTRL_DIRECT_FETCH, val08)) {
-+		seq_printf(s, "  %-20s:\tDirect fetch\n", "Mode");
-+		seq_printf(s, "  %-20s:\t%s\n", "VGA bpp mode",
-+			   FIELD_GET(VE_CTRL_INT_DE, val08) ? "16" : "32");
-+	} else {
-+		seq_printf(s, "  %-20s:\tSync\n", "Mode");
-+		seq_printf(s, "  %-20s:\t%s\n", "Video source",
-+			   FIELD_GET(VE_CTRL_SOURCE, val08) ?
-+			   "external" : "internal");
-+		seq_printf(s, "  %-20s:\t%s\n", "DE source",
-+			   FIELD_GET(VE_CTRL_INT_DE, val08) ?
-+			   "internal" : "external");
-+		seq_printf(s, "  %-20s:\t%s\n", "Cursor overlay",
-+			   FIELD_GET(VE_CTRL_AUTO_OR_CURSOR, val08) ?
-+			   "Without" : "With");
-+	}
-+
- 	seq_printf(s, "  %-20s:\t%s\n", "Signal",
- 		   v->v4l2_input_status ? "Unlock" : "Lock");
- 	seq_printf(s, "  %-20s:\t%d\n", "Width", v->pix_fmt.width);
-@@ -1847,6 +1866,22 @@ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
- 
- 	seq_puts(s, "\n");
- 
-+	seq_puts(s, "Compression:\n");
-+	seq_printf(s, "  %-20s:\t%s\n", "Format", format_str[v->format]);
-+	seq_printf(s, "  %-20s:\t%s\n", "Subsampling",
-+		   v->yuv420 ? "420" : "444");
-+	seq_printf(s, "  %-20s:\t%d\n", "Quality", v->jpeg_quality);
-+	if (v->format == VIDEO_FMT_ASPEED) {
-+		seq_printf(s, "  %-20s:\t%s\n", "HQ Mode",
-+			   v->hq_mode ? "on" : "off");
-+		seq_printf(s, "  %-20s:\t%d\n", "HQ Quality",
-+			   v->hq_mode ? v->jpeg_hq_quality : 0);
-+		seq_printf(s, "  %-20s:\t%s\n", "Coding Scheme",
-+			   compress_scheme_str[v->compression_scheme]);
-+	}
-+
-+	seq_puts(s, "\n");
-+
- 	seq_puts(s, "Performance:\n");
- 	seq_printf(s, "  %-20s:\t%d\n", "Frame#", v->sequence);
- 	seq_printf(s, "  %-20s:\n", "Frame Duration(ms)");
 -- 
-2.25.1
-
+Dmitry

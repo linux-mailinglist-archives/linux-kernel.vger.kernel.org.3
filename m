@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606F947B606
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1056A47B5F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbhLTWxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        id S230286AbhLTWsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbhLTWxp (ORCPT
+        with ESMTP id S229474AbhLTWsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:53:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68A1C061574;
-        Mon, 20 Dec 2021 14:53:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 20 Dec 2021 17:48:23 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BB7C061574;
+        Mon, 20 Dec 2021 14:48:23 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D83361337;
-        Mon, 20 Dec 2021 22:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C45C36AEC;
-        Mon, 20 Dec 2021 22:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640040823;
-        bh=RpRZvozu/onQgx+G+WE8lozUq8hxY78j5HN9za1ByWs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tHnhq92rp4xPP1w3j5TlKfq/XXRXMqMOhvEv/TqzNFozx6U3IlVG1U65lnV0mVqZP
-         MUlH9Vr6GdS8LoFOa7A/ID6gUPbpPSHc/JuUurnAjXrONGlH9hCKjwRyMtyGlJ8vLr
-         NKcVJc0mi7R8wt2QVqD1GYN8g6EdtrzGeFUOVb7FHYK2TBj34/DAgwjP/lEeC7RAnB
-         FDcAU/QjUgQ4ld6anULlLUehYttaJcNMQlFxWIcmlGMJby8El9IWdjLHriejWjvDtJ
-         LUP6K49R2hTb/aoJmvwAhvdc9HSKXJkdUTYzaRCsZ/ZfodRoGBULYZH+kVPiYUcpbs
-         NxocZphdvMINw==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A . Donenfeld " <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH v2 2/2] random: fix data race on crng init time
-Date:   Mon, 20 Dec 2021 16:41:57 -0600
-Message-Id: <20211220224157.111959-3-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220224157.111959-1-ebiggers@kernel.org>
-References: <20211220224157.111959-1-ebiggers@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BCF6F1EC04E4;
+        Mon, 20 Dec 2021 23:48:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640040497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=FTdRJbvgD63oUHMOrYjWy5nRUmOd9XvXNqQ7stf7PJ0=;
+        b=Lvq/LueX72/2Jeg6cTGhbJ/WttPypQkeaKdGZA84/DWA5Przw464qXs7ttqDoCH5BgCpHI
+        QfVKhQzQwbGvb0hKkeyZvUkf8SeDnPSPJA4MaI9mSsYQ0Qq33GWGAazn2moLOefa9Kn/oH
+        6D2saOIXBhG0TWaXctCWzg68pIIXUTU=
+Date:   Mon, 20 Dec 2021 23:48:20 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-sgx@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] x86/sgx: Add accounting for tracking overcommit
+Message-ID: <YcEINHL3LViw11Yv@zn.tnic>
+References: <20211220174640.7542-1-kristen@linux.intel.com>
+ <20211220174640.7542-2-kristen@linux.intel.com>
+ <YcDZ4++GQN+ODm50@zn.tnic>
+ <9e08e13208950e9fd955a46994b7fef705751dd6.camel@linux.intel.com>
+ <YcDxhWZ7lzB2BB8N@zn.tnic>
+ <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Mon, Dec 20, 2021 at 01:35:03PM -0800, Kristen Carlson Accardi wrote:
+> So, in your proposal you would first change the calculated number of
+> maximum available backing pages to be based on total system RAM rather
+> than EPC memory, got it.
 
-_extract_crng() does plain loads of crng->init_time and
-crng_global_init_time, which causes undefined behavior if
-crng_reseed() and RNDRESEEDCRNG modify these corrently.
+This was just an example. My point is to try to make it automatic and
+not introduce another knob. And to decide on the limits and behavior
+by using common sense and addressing the common use cases first.
 
-Use READ_ONCE() and WRITE_ONCE() to make the behavior defined.
+> This would require recalculating the max number of allowed backing
+> pages per enclave at run time whenever a new enclave is loaded - but
+> all the existing enclaves may have already used more than the new max
+> number of per-enclave allowable pages. How would you handle that
+> scenario? This would add a lot of complexity for sure - and it does
+> make me wonder whether any additional benefit of limiting per enclave
+> would be worth it.
 
-Don't fix the race on crng->init_time by protecting it with crng->lock,
-since it's not a problem for duplicate reseedings to occur.  I.e., the
-lockless access with READ_ONCE() is fine.
+See above - this was just an example. And as you've shown, an example of
+what *not* to do.
 
-Fixes: d848e5f8e1eb ("random: add new ioctl RNDRESEEDCRNG")
-Fixes: e192be9d9a30 ("random: replace non-blocking pool with a Chacha20-based CRNG")
-Cc: stable@vger.kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- drivers/char/random.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+> Thanks for your more detailed explanation - I will take a look at the
+> VM overcommit limits. Since obviously the original implementation did
+> have a default value set, I had still a remaining specific question
+> about your comments. Are you suggesting that there should not be a way
+> to override any overcommit limit at all? So drop the parameter all
+> together?
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 1294b4527cdd..1a7bb66d6a58 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -980,7 +980,7 @@ static void crng_reseed(struct crng_state *crng, struct entropy_store *r)
- 		crng->state[i+4] ^= buf.key[i] ^ rv;
- 	}
- 	memzero_explicit(&buf, sizeof(buf));
--	crng->init_time = jiffies;
-+	WRITE_ONCE(crng->init_time, jiffies);
- 	spin_unlock_irqrestore(&crng->lock, flags);
- 	if (crng == &primary_crng && crng_init < 2) {
- 		invalidate_batched_entropy();
-@@ -1006,12 +1006,15 @@ static void crng_reseed(struct crng_state *crng, struct entropy_store *r)
- static void _extract_crng(struct crng_state *crng,
- 			  __u8 out[CHACHA_BLOCK_SIZE])
- {
--	unsigned long v, flags;
-+	unsigned long v, flags, init_time;
- 
--	if (crng_ready() &&
--	    (time_after(crng_global_init_time, crng->init_time) ||
--	     time_after(jiffies, crng->init_time + CRNG_RESEED_INTERVAL)))
--		crng_reseed(crng, crng == &primary_crng ? &input_pool : NULL);
-+	if (crng_ready()) {
-+		init_time = READ_ONCE(crng->init_time);
-+		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
-+		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
-+			crng_reseed(crng, crng == &primary_crng ?
-+				    &input_pool : NULL);
-+	}
- 	spin_lock_irqsave(&crng->lock, flags);
- 	if (arch_get_random_long(&v))
- 		crng->state[14] ^= v;
-@@ -1951,7 +1954,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 		if (crng_init < 2)
- 			return -ENODATA;
- 		crng_reseed(&primary_crng, &input_pool);
--		crng_global_init_time = jiffies - 1;
-+		WRITE_ONCE(crng_global_init_time, jiffies - 1);
- 		return 0;
- 	default:
- 		return -EINVAL;
+So let me ask you a counter-question:
+
+Imagine you're a sysadmin. Or a general, common system user if there
+ever is one.
+
+When your system starts thrashing and you're running a bunch of
+enclaves, how do you find out there even is a knob which might
+potentially help you?
+
+And after you find it, how would you use that knob?
+
+Or would you rather prefer that the system did the right thing for you
+instead of having to figure out what the sensible values for that knob
+would be?
+
+My point is: put yourself in the user's shoes and try to think about
+what would be the optimal thing the system should do.
+
+Once that is cleanly and properly defined, then we can deal with knobs
+and policies etc.
+
+I sincerely hope that makes more sense.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

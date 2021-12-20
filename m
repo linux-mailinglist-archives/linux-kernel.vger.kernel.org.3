@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6251947ACAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896E347AD8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbhLTOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbhLTOos (ORCPT
+        id S237816AbhLTOwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:52:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56306 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237757AbhLTOtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:44:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC37C08E79C;
-        Mon, 20 Dec 2021 06:42:53 -0800 (PST)
+        Mon, 20 Dec 2021 09:49:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EE086113B;
-        Mon, 20 Dec 2021 14:42:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC594C36AE7;
-        Mon, 20 Dec 2021 14:42:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB4DB80EA3;
+        Mon, 20 Dec 2021 14:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB70C36AE8;
+        Mon, 20 Dec 2021 14:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011372;
-        bh=jpmK9jCuLCC3s8tMUAjua6+4GMC5WNF+4S5lpZTfVeE=;
+        s=korg; t=1640011789;
+        bh=L+9fR+PGCBZHmH6eDdBT7bA7XtMjaWNwPL6qt/+IUsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKS/TCIzi9IBygVr0+N44u2Xufk1F/w1YEnd8hNZKwldw7oL0y46p/TltdD24Hgs3
-         NL/t4wJlpW6ZxtAPN6u4txARMnCxjHvjHF0X23LaeFDiMik7LoFswkgMP/S842487k
-         c0AumynDQPeU6C5DrtBG0HcFTfR1E3YJde06oSWY=
+        b=be/D32E2M2ZYj5JseOX3/Lwt7ORjz2R1+9mS7WIBFM/hEsWfsBuqNjqOylb9SSIhF
+         H/saHw4WsU4vSG1+oU5z+NvbtyXhY119PVjH2tzizfkeqS8UdghhVTb8Ju9+MMT8JX
+         9mvGeRY6fgfsMLPPb3hUeRHl5QoIlezFfX8K5OAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.19 54/56] xen/console: harden hvc_xen against event channel storms
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 74/99] USB: serial: option: add Telit FN990 compositions
 Date:   Mon, 20 Dec 2021 15:34:47 +0100
-Message-Id: <20211220143025.245140526@linuxfoundation.org>
+Message-Id: <20211220143031.876614225@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,98 +45,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-This is commit fe415186b43df0db1f17fa3a46275fd92107fe71 upstream.
+commit 2b503c8598d1b232e7fc7526bce9326d92331541 upstream.
 
-The Xen console driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using a lateeoi event
-channel.
+Add the following Telit FN990 compositions:
 
-For the normal domU initial console this requires the introduction of
-bind_evtchn_to_irq_lateeoi() as there is no xenbus device available
-at the time the event channel is bound to the irq.
+0x1070: tty, adb, rmnet, tty, tty, tty, tty
+0x1071: tty, adb, mbim, tty, tty, tty, tty
+0x1072: rndis, tty, adb, tty, tty, tty, tty
+0x1073: tty, adb, ecm, tty, tty, tty, tty
 
-As the decision whether an interrupt was spurious or not requires to
-test for bytes having been read from the backend, move sending the
-event into the if statement, as sending an event without having found
-any bytes to be read is making no sense at all.
-
-This is part of XSA-391
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://lore.kernel.org/r/20211210100714.22587-1-dnlplm@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/hvc/hvc_xen.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ drivers/usb/serial/option.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/tty/hvc/hvc_xen.c
-+++ b/drivers/tty/hvc/hvc_xen.c
-@@ -37,6 +37,8 @@ struct xencons_info {
- 	struct xenbus_device *xbdev;
- 	struct xencons_interface *intf;
- 	unsigned int evtchn;
-+	XENCONS_RING_IDX out_cons;
-+	unsigned int out_cons_same;
- 	struct hvc_struct *hvc;
- 	int irq;
- 	int vtermno;
-@@ -138,6 +140,8 @@ static int domU_read_console(uint32_t vt
- 	XENCONS_RING_IDX cons, prod;
- 	int recv = 0;
- 	struct xencons_info *xencons = vtermno_to_xencons(vtermno);
-+	unsigned int eoiflag = 0;
-+
- 	if (xencons == NULL)
- 		return -EINVAL;
- 	intf = xencons->intf;
-@@ -157,7 +161,27 @@ static int domU_read_console(uint32_t vt
- 	mb();			/* read ring before consuming */
- 	intf->in_cons = cons;
- 
--	notify_daemon(xencons);
-+	/*
-+	 * When to mark interrupt having been spurious:
-+	 * - there was no new data to be read, and
-+	 * - the backend did not consume some output bytes, and
-+	 * - the previous round with no read data didn't see consumed bytes
-+	 *   (we might have a race with an interrupt being in flight while
-+	 *   updating xencons->out_cons, so account for that by allowing one
-+	 *   round without any visible reason)
-+	 */
-+	if (intf->out_cons != xencons->out_cons) {
-+		xencons->out_cons = intf->out_cons;
-+		xencons->out_cons_same = 0;
-+	}
-+	if (recv) {
-+		notify_daemon(xencons);
-+	} else if (xencons->out_cons_same++ > 1) {
-+		eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+	}
-+
-+	xen_irq_lateeoi(xencons->irq, eoiflag);
-+
- 	return recv;
- }
- 
-@@ -386,7 +410,7 @@ static int xencons_connect_backend(struc
- 	if (ret)
- 		return ret;
- 	info->evtchn = evtchn;
--	irq = bind_evtchn_to_irq(evtchn);
-+	irq = bind_interdomain_evtchn_to_irq_lateeoi(dev->otherend_id, evtchn);
- 	if (irq < 0)
- 		return irq;
- 	info->irq = irq;
-@@ -550,7 +574,7 @@ static int __init xen_hvc_init(void)
- 			return r;
- 
- 		info = vtermno_to_xencons(HVC_COOKIE);
--		info->irq = bind_evtchn_to_irq(info->evtchn);
-+		info->irq = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	}
- 	if (info->irq < 0)
- 		info->irq = 0; /* NO_IRQ */
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1219,6 +1219,14 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1063, 0xff),	/* Telit LN920 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1070, 0xff),	/* Telit FN990 (rmnet) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1071, 0xff),	/* Telit FN990 (MBIM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1072, 0xff),	/* Telit FN990 (RNDIS) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 
 

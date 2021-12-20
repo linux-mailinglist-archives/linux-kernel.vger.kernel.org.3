@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6380347AF94
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C6347AF97
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbhLTPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:15:10 -0500
-Received: from ixit.cz ([94.230.151.217]:43688 "EHLO ixit.cz"
+        id S238786AbhLTPPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:15:38 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:35118 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239703AbhLTPNX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:13:23 -0500
-Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 509762243C;
-        Mon, 20 Dec 2021 16:13:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1640013201; h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type; bh=KrX7y60poYGBCDm0ycPvzme2bfekqQewMZgSm+ZbFeU=;
-        b=EgzYxS5aV8QckJ0t+JLOTVIuzL3NBmmHoDKTt75i+STRXVbKXdyCvGhI+fpKgT/PK5KH24
-        54HmSsHkbeojqoAmhKtBIjx5UY0BIrhwRprXNGltyr/NV/s1RKB/xGGrEHiA8yGVnebgcI
-        +OaPam8/3g/JiKGnkZgaaYu/eD/+pq0=
-Date:   Mon, 20 Dec 2021 16:13:14 +0100
-From:   David Heidelberg <david@ixit.cz>
-Reply-To: 20211110105922.217895-4-bhupesh.sharma@linaro.org
-Subject: Re: [PATCH v5 03/22] dt-bindings: qcom-bam: Convert binding to YAML
-To:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, stephan@gerhold.net,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Message-Id: <2A6F4R.O6RS9WA32JJ91@ixit.cz>
-X-Mailer: geary/40.0
+        id S239615AbhLTPNs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:13:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=RyB3+kF9jgGQv01+nZFU/Byy+c41V2RXJGRIwmyYPyw=; b=MTcAeLiJpPgyRUAU26XPT5nLtO
+        +af6aTW7j+l+F+cj4m47z/FOpo1AxocK5bA3SkkF7nOAOfGiyl1xaAKW0ufSuqYZlOK0dawule1xL
+        2M/TO3QYhWLz4gPS5ax/JWUSyWjWzgMvbj78GnSMNC/3BTfX0gT+1wm6ZZkXxcaRNSec=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mzKMD-00H3a5-UP; Mon, 20 Dec 2021 16:13:45 +0100
+Date:   Mon, 20 Dec 2021 16:13:45 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Voon, Weifeng" <weifeng.voon@intel.com>,
+        "Wong, Vee Khee" <vee.khee.wong@intel.com>
+Subject: Re: [BUG] net: phy: genphy_loopback: add link speed configuration
+Message-ID: <YcCdqX1bq3nLGHlw@lunn.ch>
+References: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YbhmTcFITSD1dOts@lunn.ch>
+ <CO1PR11MB477111F4B2AF4EFA61D9B7F4D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <Ybm0Bgclc0FP/Q3f@lunn.ch>
+ <CO1PR11MB47715A9B7ADB8AF36066DCE6D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <Ybm7jVwNfj01b7S4@lunn.ch>
+ <CO1PR11MB47710EE8587C6F4A4D40851ED5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <CO1PR11MB477197B3DACAF00CCF94631ED57B9@CO1PR11MB4771.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CO1PR11MB477197B3DACAF00CCF94631ED57B9@CO1PR11MB4771.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some nitpicks:
-- `description:` -> `description: >`
-- you dropped part of example, wouldn't be better to keep it there?
-- remove `binding` from the title
+On Mon, Dec 20, 2021 at 11:11:32AM +0000, Ismail, Mohammad Athari wrote:
+> Hi Andrew,
+> 
 
-Feel free to put:
-Reviewed-by: David Heidelberg <david@ixit.cz>
+> As the current genphy_loopback() is not applicable for Marvell
+> 88E1510 PHY, should we implement Marvell specific PHY loopback
+> function as below?
 
-Thank you
-David Heidelberg
+Yes, that is probably a good solution. We will have to see if other
+PHY drivers need this as well. If they do, we might move this simple
+implementation into the core. But for the moment, it can be in the
+Marvell driver.
 
-
+	Andrew

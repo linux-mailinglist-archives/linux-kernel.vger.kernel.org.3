@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF86847B347
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F026247B350
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbhLTS47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:56:59 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:54832 "EHLO mail.skyhub.de"
+        id S240628AbhLTS7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:59:49 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:55208 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240092AbhLTS46 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:56:58 -0500
+        id S235112AbhLTS7s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:59:48 -0500
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DDD861EC03E3;
-        Mon, 20 Dec 2021 19:56:52 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 83E5A1EC03E3;
+        Mon, 20 Dec 2021 19:59:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640026613;
+        t=1640026782;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=b1X+g4YTEFKWkDa+EeT00pYJALymcKesJUx7buSoYsw=;
-        b=GvTc9ISu+5pWT8q92vl8Xar/1lvq9JctiQ2Mk4aIgLK9Y1YCLvUAKSCHpaioDbk/BI4ell
-        TnF+gDmhPUX5BuX+h8G0NcH2+tnbloO38qQRjwp/nLzMoJ3luT/g2fLwoM1HlvAjSXbYls
-        9c5N7IBLJvtUYwScn2t7rLSvxnpCejg=
-Date:   Mon, 20 Dec 2021 19:56:55 +0100
+        bh=fHiGX6yDgTud+wFWGgTd535xV9pRxQfKjBv0lrEdXcE=;
+        b=I5VNZB9WgwOMBwnubGIeQ5xqcnHsyR3yVUUhsHhyVqQWsMRum5bdMfgkRSBTi2qophZSVl
+        ub0fjIE3xohKYDw4ImclTVSX0Cxq+O4/rVL0fIH8MmU/WLziUwuSO4Dd0P90yCQuGigfwV
+        q/bxBz/++syOJ+v+CbDvNOeHtVDe5h0=
+Date:   Mon, 20 Dec 2021 19:59:49 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 1/4] x86/entry: Make paranoid_exit() callable
-Message-ID: <YcDR92+JFkVAZi5c@zn.tnic>
-References: <20211213150340.9419-1-jiangshanlai@gmail.com>
- <20211213150340.9419-2-jiangshanlai@gmail.com>
+To:     "Patrick J. Volkerding" <volkerdi@gmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
+        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
+        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
+        x86@kernel.org, Hugh Dickins <hughd@google.com>
+Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
+ early param parsing
+Message-ID: <YcDSpcO8giLoSMOn@zn.tnic>
+References: <YbIeYIM6JEBgO3tG@zn.tnic>
+ <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
+ <YbIgsO/7oQW9h6wv@zn.tnic>
+ <YbIu55LZKoK3IVaF@kernel.org>
+ <YbIw1nUYJ3KlkjJQ@zn.tnic>
+ <YbM5yR+Hy+kwmMFU@zn.tnic>
+ <YbcCM81Fig3GC4Yi@kernel.org>
+ <YbcTgQdTpJAHAZw4@zn.tnic>
+ <CANGBn69pGb-nscv8tXN1UKDEQGEMWRKuPVPLgg+q2m7V_sBvHw@mail.gmail.com>
+ <CANGBn6_cCd3ASh-9aec5qQkuK0s=mWbo90h0rMNwBiqsgb5AAA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211213150340.9419-2-jiangshanlai@gmail.com>
+In-Reply-To: <CANGBn6_cCd3ASh-9aec5qQkuK0s=mWbo90h0rMNwBiqsgb5AAA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:03:37PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
+On Mon, Dec 20, 2021 at 12:49:52PM -0600, Patrick J. Volkerding wrote:
+> Trying again since gmail didn't use plain text and the message got rejected.
 > 
-> Move the last JMP out of paranoid_exit() and make it callable.
-> 
-> It will allow asm_exc_nmi() to call it and avoid duplicated code.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
-> ---
->  arch/x86/entry/entry_64.S | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 44dadea935f7..3dc3cec03425 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -439,7 +439,8 @@ SYM_CODE_START(\asmsym)
->  
->  	call	\cfunc
->  
-> -	jmp	paranoid_exit
-> +	call	paranoid_exit
-> +	jmp	restore_regs_and_return_to_kernel
+> We're waiting for these patches to appear in a 5.15 kernel so that we
+> can ship with an unpatched kernel. Will they be queued for the stable
+> kernels sometime soon?
 
-I guess but I don't like the glueing of the CALL to paranoid_exit with
-the JMP to the restore_regs_and_return_to_kernel label. That reads
-to me as, "if you're calling paranoid_exit() you must jump to the
-restore_regs_and_return_to_kernel label but not always."
+Yes, they're currently queued here:
 
-So I'm thinking you should leave the jump to that label inside
-paranoid_exit() and use its %rbx argument to control when to jump to it
-and when not.
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/urgent
 
-I.e., not jump to it in the NMI case.
+and will go to Linus on the weekend.
 
-AFAICT, ofc. asm is always nasty to stare at.
+Which reminds me - they need stable tags. Lemme add those.
 
 Thx.
 

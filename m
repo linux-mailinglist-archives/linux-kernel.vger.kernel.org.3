@@ -2,205 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7350B47A9E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B7047A9E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbhLTMta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:49:30 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:32135 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231130AbhLTMt3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:49:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1640004568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBHH8WJbdq4BQrFDov+29v6Ttxk66pZRJkY+OpKFi/8=;
-        b=ar5Ox3cqhB4z59bzHnckn2SGW0n/5g+HCH+ykmLEvtwXn+0oein/qF1DXGYgEhs4QMYSqo
-        gtnL94/9j5epMpu9bmzCP292IWP7pwNUBQKyObK4Deut0L+/ptqB2XeYkvE69elVzlvYzT
-        YnDmcz9PgVaq25dKvdHZDlL33dm7LH8=
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com
- (mail-am5eur02lp2050.outbound.protection.outlook.com [104.47.4.50]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-9-DP8MgJ6uMbK7bnce5nPuCg-1; Mon, 20 Dec 2021 13:49:26 +0100
-X-MC-Unique: DP8MgJ6uMbK7bnce5nPuCg-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LiZSwonp0YyoCtLDlPU7zttdobde1ezwirA0ppko+VgCpyy3e5Qdsg68hkAe8y6ds2NpMPirPSxITZURlyxvO86wBAusFh9o3g/SA1kaB4+ta9SCleFCjRZlHFOOJ0YrfS39YZn6MHe0uk+FApBSwR/sDrji/3vkTuk+SJ/EhWDa91fHty2K5T68cAtaue6oq4Dq0QucbM4mhPivoxkuYCfSCbOrIOfZHrb+csCZTUtk62ldZ+EiY1G1NStDqUphEy3XS1fQ8XwyNyV0l5qgUHSdkFmiYMcihIALEDd8ySjn5Z3ekVd6/aCgxV3Bs2KZuJNorlgwaxGPpIWxPjGIZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BZt9HHz6TxmgdY6uK6AM40cBC7j2oee7FwFB/0+eO9U=;
- b=VtWLtBBZmxAEsh55cEfqI7g5s7PQuGddc2cnUU3AJM2nLtTMi0H2YzjI8IS/HbYKhUobTF1DI3yNzRyBtDgr3Zl+0lsVnGtYmhIq2M9VYKPtiqk49MTL8v5kvBr+t+870/r8k5o1k2kbOttcvae+aB8merrrmJvyebdzKix4Nl8QQAQs0MZo/fQ1QyGHB2ozqa9p652qEQIOMLj8bVhkApYYuYY4DLFptxMS2+U8FoE3Dad0u9reiWCuKoS46urRsYQPwujgqK9Z0jeG4LrvhmWRvYMZXe7aSp/+mIPoXJDVuWqDk/nWkxty1f4zEKNBi1hXFwgUA9c2qvLWb704dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by DB7PR04MB5179.eurprd04.prod.outlook.com (2603:10a6:10:1a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Mon, 20 Dec
- 2021 12:49:25 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
- 12:49:25 +0000
-Subject: Re: [PATCH 1/2] gnss: add USB support
-To:     Johan Hovold <johan@kernel.org>
-CC:     Marc Ferland <ferlandm@amotus.ca>, linux-usb@vger.kernel.org,
+        id S231821AbhLTMuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:50:10 -0500
+Received: from mga12.intel.com ([192.55.52.136]:52331 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230262AbhLTMuJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 07:50:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640004609; x=1671540609;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zmqTgQigwxpoPm/a643f5O+7SMOl9506FX3+kEj+TcY=;
+  b=eETR9x0LgebjWIWMlf2tDJRvsxJhFSHmUiLbQeI9n3H8n1mUoULfWozo
+   lm6BrfsC5qsDfi811qucLCngGRzIAChAUN6Mh8MBkrKv2AZYLzf1hKRag
+   wws450OlXbezN8eol5jO0j45jov4KHf2H4X5UakWD2pOqsv8hoBRg/g2C
+   n83/NmlrzmzZklueSIx3Tnnfk4y/XKMud6YSSU75xkLjgNcBYjIrmkBry
+   i0XPugLLmec/fuSTPQWjy4xpcgblqPkBTt2ak7Y+DylHZrQiURzFGp5pU
+   LPRImg95ZGj5Tv3C1W4fwWUy1XivKEljVGOfcBvwhztIPhh9CPSFkWeKR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220169423"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="220169423"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 04:50:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="606704928"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2021 04:50:07 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzI7C-0007lz-D8; Mon, 20 Dec 2021 12:50:06 +0000
+Date:   Mon, 20 Dec 2021 20:49:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
         linux-kernel@vger.kernel.org
-References: <20211220111901.23206-1-johan@kernel.org>
- <20211220111901.23206-2-johan@kernel.org>
-From:   Oliver Neukum <oneukum@suse.com>
-Message-ID: <091d25b4-cfa5-c702-144a-8cfdb70b7f42@suse.com>
-Date:   Mon, 20 Dec 2021 13:49:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <20211220111901.23206-2-johan@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-ClientProxiedBy: AS9PR06CA0317.eurprd06.prod.outlook.com
- (2603:10a6:20b:45b::27) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+Subject: [chao:feature/dax 2/9] fs/f2fs/gc.c:1522:30: error: no member named
+ 'i_dax_task' in 'struct f2fs_inode_info'
+Message-ID: <202112202023.RCgYHT6K-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 37717fee-cfc4-48fd-67a6-08d9c3b72701
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5179:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR04MB517923D397F1D626F521EBCDC77B9@DB7PR04MB5179.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P6xq7Co0olC53Zqss5DQ0fdUZdExVagjkot1NGaabNTVnjoj1mSOT7NFL969HeD677X+OuEz653u/PW4cTtX9hfFMuFh3h1Si9QqbVzwI3dUUcjXoIFLLHFjHvK3K6SbmuW757702g1oNjN4audAg/d0h2oUFpTnuWgANMMUazOg4czjfz+ia/s6uZJFMGHwDM3JdqIfCTyLEO9nPxe3ilMerQH1fIsWchBiqdEX2MrshDpMaAkyfK3Fcz6yu9As4GiOQPPL3ycdZSaTTVJHXZyuNREKyEgxwbw/3RxCjdgRbgGBAisz3kTOK1P2dxGBorlbebSP1RKtzqNtPO5qnY6xw4p03qJyY6HpVepknIsoP4YRVfwsFsjcUjV8npqYObvDYlc2SAJFkaqptfiEeSv1afxe+2EZGW2QA0HGBdOAR8wn2krmCxA4WE2TsxU5KMyyv9PWCvilsJXkz3LyquEe2LEPg9/0ctepmtlcybTcMQ6Lx3pNlPyhYCptaS1y4cFp1U+XUpr+spxsISY9bCfWryTIZXKyPwOJXxYL2G5aUMVXDxs4ED0CUYfrjexhz522oZsPao4qJZW0HNCDOhXGxtSC54Dj21r7s/QBtOtzpDLqeipFDcVDmLiDPbuSVoeMbr0q98SH2CU4lhegn+25xCxQ5hgQCgjF9TX/TKkwmF7/Uij1DwLoieJHVufICRlOH6kJXr+JsqzeBDE9AVTc9DPNxpxVFBpFEYjATtg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(38100700002)(2906002)(4326008)(316002)(5660300002)(508600001)(31696002)(6512007)(53546011)(6506007)(8676002)(186003)(36756003)(86362001)(6916009)(6486002)(8936002)(66476007)(2616005)(31686004)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cTcqaB0i4WEBOmAWDfmGL0tqu/fONkARLehxqCgd5fPJAOZp1Cfb74np3fuS?=
- =?us-ascii?Q?CKcmtTjw9mAeJPxKoB6wP6+3+a4LpEh+YqA0c0n1qSEoqk5OImTgFWu/exQx?=
- =?us-ascii?Q?+INkaLLZhv7YwhDpZ+aq7qIfHsWvWUp1/KoY4otz8yd9LQusmiuMOpgmv4PV?=
- =?us-ascii?Q?An0P7k0QvtZsajFzsgjYu8DkdAy+NHTLrxM7X6esE2tQLL+x+TqgyvFkhg3V?=
- =?us-ascii?Q?OyqsoG6DCVowq/9PlW3Mvx/tKL5mbfIeuO2tVKuydSS59qWcXgZEJQFWjBdS?=
- =?us-ascii?Q?zICmmKoqmDV9Kfv3UPS181pq4PJ/3JP1vLESn+A2YrKavQr09uaQTKVm5kXt?=
- =?us-ascii?Q?7DOAinHRZMg0J+j2sgLy4L+LLs2voX8VVsNgO9aMB+lUGkpuGlHEHBNkBYX0?=
- =?us-ascii?Q?fL8TrlJAujFT6retQpP9Ql1Cu1yNz82rNFrh1jpYVhayAItA78hYA3yT8iS8?=
- =?us-ascii?Q?y1g0+PdciXeJYrM8xVaLgpc33BLEMla6xYjFleAWvnhD60VgYYDF2mcCcVFu?=
- =?us-ascii?Q?Eea07OCwoXJfVltiiwmCH/5x7c6vXoXvp9fbgo7lCECE7hRvMrA3bD7MRWNz?=
- =?us-ascii?Q?nlQiWNoTzuaS+882vdJojD4JM606DNFzyETCDsEkTo71UbfKTg6y2zu50E8H?=
- =?us-ascii?Q?WXmjiNaHpOaS5FMxzaPUMRChe7cm7OYcZDVFbbqVwqaFoUdXdX5rOGMZQXY7?=
- =?us-ascii?Q?6Adty/TeCIVqQybTyz+IGWDafKmuuRbeeLyZV71QvVMq/PtrwhX6jxhUs/CJ?=
- =?us-ascii?Q?bjUW/NCTIqMRR3ZRbN79zSlc9y6J8M6rn7FX0XzlI24Z1RT6iX7IPYL0bz0o?=
- =?us-ascii?Q?m47Sf3WCLG7OQalDHzawI3WqtTc55eYM9ouGKLkeIZ+Tgr6iZTqRbvHknIRe?=
- =?us-ascii?Q?lqUhO5XT5mA0ZuIr1AWvT3PbPLpX14Ji3+ok9b9b5n7F51nUMkEeKICecTja?=
- =?us-ascii?Q?WRbybQajAhqLvfKhfTR3ho/r/Xfor7PF8Qy33Vqtu1N3unRPetupu+s2hf2C?=
- =?us-ascii?Q?soWpt8u3ibDzdbRg0mp9YL0zwu9R7od96OaElPE5upPIsEA/ymNFuBFxqqKO?=
- =?us-ascii?Q?++Jl+lLO1Gerf/eIJLOCF5z+2VaR0jjsTFdTIwZ1nkFO03gOaOv+5dg11NLo?=
- =?us-ascii?Q?f+fzBd4M8aaUOtJEN16rKsI5N6chB0NDJoc4TJyyUbeC3VtjWzOcgnKgM9cH?=
- =?us-ascii?Q?PbYQd1jvYZzLUfTkwPjPr0kIh8EYM8l4gZNuGRAHf0L3tMXKym1GSLILqRy0?=
- =?us-ascii?Q?IBXbguiUmWJ/LTgaY9l3+AU39eHwQHUL3al/cfM5CrWAgaWMXjqjoZZdeA6w?=
- =?us-ascii?Q?JqnIF8fT6D21pMjzY/eoMuHRobut1T3FGDylz7PpnpP77AbfOO4whXGNkN0A?=
- =?us-ascii?Q?GCvklPSGKQ+8bcYd+xgXauZQCy3Bm1WlWuivgTPRvlu3KAq5n/1zADd+kr99?=
- =?us-ascii?Q?l499BAyyE+l8HsM7ac6JiPHAVCLaV1a9rxdYnPy+LT+mLRzc2hwkqmtxNZbY?=
- =?us-ascii?Q?1Bx2DedAKSCE0jjBhT7DxUEmcMtqhb3HfNbhu7Pepg8/DxNmhpI4K87dWf8f?=
- =?us-ascii?Q?NNjaqOTQ2+RsrySmFazVwp60HlKayqcPxxYW2xJThbZE5zDmUFZXqcrfVWVZ?=
- =?us-ascii?Q?+Q7qoV9+cH2YEM/4QirHOVPz24/ObnhiNI4kZL63ju+bZhf4PD8JkeZpJAil?=
- =?us-ascii?Q?ecUQ//3Gc8CHp6EMp1Epash6jes=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37717fee-cfc4-48fd-67a6-08d9c3b72701
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 12:49:25.2809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dltaDbH/H/E0z7ZYjpvI1cIhGcKdx5wk/FgmvzGZ+klMOMj5cDdh4eQtMWiIquu5+CWac7f9wpcpW+r/F5JRaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5179
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
+commit: cb4f6683be8c466d963c263ea71dc4164f1eca10 [2/9] f2fs: support dax file operations
+config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202023.RCgYHT6K-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=cb4f6683be8c466d963c263ea71dc4164f1eca10
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout cb4f6683be8c466d963c263ea71dc4164f1eca10
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
 
-On 20.12.21 12:19, Johan Hovold wrote:
-> +static int gnss_usb_probe(struct usb_interface *intf, const struct usb_d=
-evice_id *id)
-> +{
-> +	struct usb_device *udev =3D interface_to_usbdev(intf);
-> +	struct usb_endpoint_descriptor *in, *out;
-> +	struct gnss_device *gdev;
-> +	struct gnss_usb *gusb;
-> +	struct urb *urb;
-> +	size_t buf_len;
-> +	void *buf;
-> +	int ret;
-> +
-> +	ret =3D usb_find_common_endpoints(intf->cur_altsetting, &in, &out, NULL=
-,
-> +			NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	gusb =3D kzalloc(sizeof(*gusb), GFP_KERNEL);
-> +	if (!gusb)
-> +		return -ENOMEM;
-> +
-> +	gdev =3D gnss_allocate_device(&intf->dev);
-> +	if (!gdev) {
-> +		ret =3D -ENOMEM;
-> +		goto err_free_gusb;
-> +	}
-> +
-> +	gdev->ops =3D &gnss_usb_gnss_ops;
-> +	gdev->type =3D GNSS_TYPE_NMEA;
-> +	gnss_set_drvdata(gdev, gusb);
-> +
-> +	urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!urb)
-> +			goto err_put_gdev;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The value of 'ret' here is the result of
-usb_find_common_endpoints(), hence 0 due to the prior test.
+All errors (new ones prefixed by >>):
 
-> +
-> +	buf_len =3D max(usb_endpoint_maxp(in), GNSS_USB_READ_BUF_LEN);
-> +
-> +	buf =3D kzalloc(buf_len, GFP_KERNEL);
-> +	if (!buf)
-> +		goto err_free_urb;
-> +
-> +	usb_fill_bulk_urb(urb, udev,
-> +			usb_rcvbulkpipe(udev, usb_endpoint_num(in)),
-> +			buf, buf_len, gnss_usb_rx_complete, gusb);
-> +
-> +	gusb->intf =3D intf;
-> +	gusb->udev =3D udev;
-> +	gusb->gdev =3D gdev;
-> +	gusb->read_urb =3D urb;
-> +	gusb->write_pipe =3D usb_sndbulkpipe(udev, usb_endpoint_num(out));
-> +
-> +	ret =3D gnss_register_device(gdev);
-> +	if (ret)
-> +		goto err_free_buf;
-> +
-> +	usb_set_intfdata(intf, gusb);
-> +
-> +	return 0;
-> +
-> +err_free_buf:
-> +	kfree(buf);
-> +err_free_urb:
-> +	usb_free_urb(urb);
-> +err_put_gdev:
-> +	gnss_put_device(gdev);
-> +err_free_gusb:
-> +	kfree(gusb);
-> +
-> +	return ret;
-Yet you return it in the error case and subsequent error cases..
+>> fs/f2fs/gc.c:1522:30: error: no member named 'i_dax_task' in 'struct f2fs_inode_info'
+                                   if (IS_DAX(inode) && fi->i_dax_task == current)
+                                                        ~~  ^
+   1 error generated.
 
-=C2=A0=C2=A0=C2=A0 HTH
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 
+vim +1522 fs/f2fs/gc.c
+
+  1405	
+  1406	/*
+  1407	 * This function tries to get parent node of victim data block, and identifies
+  1408	 * data block validity. If the block is valid, copy that with cold status and
+  1409	 * modify parent node.
+  1410	 * If the parent node is not valid or the data block address is different,
+  1411	 * the victim data block is ignored.
+  1412	 */
+  1413	static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+  1414			struct gc_inode_list *gc_list, unsigned int segno, int gc_type,
+  1415			bool force_migrate)
+  1416	{
+  1417		struct super_block *sb = sbi->sb;
+  1418		struct f2fs_summary *entry;
+  1419		block_t start_addr;
+  1420		int off;
+  1421		int phase = 0;
+  1422		int submitted = 0;
+  1423		unsigned int usable_blks_in_seg = f2fs_usable_blks_in_seg(sbi, segno);
+  1424	
+  1425		start_addr = START_BLOCK(sbi, segno);
+  1426	
+  1427	next_step:
+  1428		entry = sum;
+  1429	
+  1430		for (off = 0; off < usable_blks_in_seg; off++, entry++) {
+  1431			struct page *data_page;
+  1432			struct inode *inode;
+  1433			struct node_info dni; /* dnode info for the data */
+  1434			unsigned int ofs_in_node, nofs;
+  1435			block_t start_bidx;
+  1436			nid_t nid = le32_to_cpu(entry->nid);
+  1437	
+  1438			/*
+  1439			 * stop BG_GC if there is not enough free sections.
+  1440			 * Or, stop GC if the segment becomes fully valid caused by
+  1441			 * race condition along with SSR block allocation.
+  1442			 */
+  1443			if ((gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) ||
+  1444				(!force_migrate && get_valid_blocks(sbi, segno, true) ==
+  1445								BLKS_PER_SEC(sbi)))
+  1446				return submitted;
+  1447	
+  1448			if (check_valid_map(sbi, segno, off) == 0)
+  1449				continue;
+  1450	
+  1451			if (phase == 0) {
+  1452				f2fs_ra_meta_pages(sbi, NAT_BLOCK_OFFSET(nid), 1,
+  1453								META_NAT, true);
+  1454				continue;
+  1455			}
+  1456	
+  1457			if (phase == 1) {
+  1458				f2fs_ra_node_page(sbi, nid);
+  1459				continue;
+  1460			}
+  1461	
+  1462			/* Get an inode by ino with checking validity */
+  1463			if (!is_alive(sbi, entry, &dni, start_addr + off, &nofs))
+  1464				continue;
+  1465	
+  1466			if (phase == 2) {
+  1467				f2fs_ra_node_page(sbi, dni.ino);
+  1468				continue;
+  1469			}
+  1470	
+  1471			ofs_in_node = le16_to_cpu(entry->ofs_in_node);
+  1472	
+  1473			if (phase == 3) {
+  1474				inode = f2fs_iget(sb, dni.ino);
+  1475				if (IS_ERR(inode) || is_bad_inode(inode) ||
+  1476						special_file(inode->i_mode))
+  1477					continue;
+  1478	
+  1479				if (!down_write_trylock(
+  1480					&F2FS_I(inode)->i_gc_rwsem[WRITE])) {
+  1481					iput(inode);
+  1482					sbi->skipped_gc_rwsem++;
+  1483					continue;
+  1484				}
+  1485	
+  1486				start_bidx = f2fs_start_bidx_of_node(nofs, inode) +
+  1487									ofs_in_node;
+  1488	
+  1489				if (f2fs_post_read_required(inode)) {
+  1490					int err = ra_data_block(inode, start_bidx);
+  1491	
+  1492					up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+  1493					if (err) {
+  1494						iput(inode);
+  1495						continue;
+  1496					}
+  1497					add_gc_inode(gc_list, inode);
+  1498					continue;
+  1499				}
+  1500	
+  1501				data_page = f2fs_get_read_data_page(inode,
+  1502							start_bidx, REQ_RAHEAD, true);
+  1503				up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+  1504				if (IS_ERR(data_page)) {
+  1505					iput(inode);
+  1506					continue;
+  1507				}
+  1508	
+  1509				f2fs_put_page(data_page, 0);
+  1510				add_gc_inode(gc_list, inode);
+  1511				continue;
+  1512			}
+  1513	
+  1514			/* phase 4 */
+  1515			inode = find_gc_inode(gc_list, dni.ino);
+  1516			if (inode) {
+  1517				struct f2fs_inode_info *fi = F2FS_I(inode);
+  1518				bool locked = false;
+  1519				int err;
+  1520	
+  1521				if (S_ISREG(inode->i_mode)) {
+> 1522					if (IS_DAX(inode) && fi->i_dax_task == current)
+  1523						goto move_data;
+  1524					if (!down_write_trylock(&fi->i_gc_rwsem[READ])) {
+  1525						sbi->skipped_gc_rwsem++;
+  1526						continue;
+  1527					}
+  1528					if (!down_write_trylock(
+  1529							&fi->i_gc_rwsem[WRITE])) {
+  1530						sbi->skipped_gc_rwsem++;
+  1531						up_write(&fi->i_gc_rwsem[READ]);
+  1532						continue;
+  1533					}
+  1534					locked = true;
+  1535	
+  1536					/* wait for all inflight aio data */
+  1537					inode_dio_wait(inode);
+  1538				}
+  1539	
+  1540	move_data:
+  1541				start_bidx = f2fs_start_bidx_of_node(nofs, inode)
+  1542									+ ofs_in_node;
+  1543				if (f2fs_post_read_required(inode))
+  1544					err = move_data_block(inode, start_bidx,
+  1545								gc_type, segno, off);
+  1546				else
+  1547					err = move_data_page(inode, start_bidx, gc_type,
+  1548									segno, off);
+  1549	
+  1550				if (!err && (gc_type == FG_GC ||
+  1551						f2fs_post_read_required(inode)))
+  1552					submitted++;
+  1553	
+  1554				if (locked) {
+  1555					up_write(&fi->i_gc_rwsem[WRITE]);
+  1556					up_write(&fi->i_gc_rwsem[READ]);
+  1557				}
+  1558	
+  1559				stat_inc_data_blk_count(sbi, 1, gc_type);
+  1560			}
+  1561		}
+  1562	
+  1563		if (++phase < 5)
+  1564			goto next_step;
+  1565	
+  1566		return submitted;
+  1567	}
+  1568	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

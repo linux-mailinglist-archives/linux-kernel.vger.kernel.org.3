@@ -2,104 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7952647AA77
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA0547AA7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbhLTNko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S233002AbhLTNlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhLTNkn (ORCPT
+        with ESMTP id S230300AbhLTNlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:40:43 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F6C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 05:40:42 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so5202613wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 05:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lOKHr4M8GH4POVA6wGDp/sQJEDhJB1D5YusNPIcTnV8=;
-        b=TRdshk0Ls9G3yxCdXzlyAYBiAIwi/glzUAHy1zkBYWOTGG47hOWM6R9g1/cO8RdrWa
-         8b447PoK+3ObAZ2tIFsSmAnDdY9kkCG79AvTOmE/XQX28g87k7xtJpcSsJj8fjVRIq9e
-         2WmGvMYbawhHWS6VA9j2hlsaOWo8SAMYcRLnZCzpvWjYMEvs8DnEZ7L4rfNVMXH2K3sl
-         uxu/0ZVHz4C46hmlXU9KP2ywWksP2TLy6R2KeaaJ8VQqIqOaIux5Jo1zzB8+viSOrRty
-         E/O81psfbUH+IpeLEMQBp4rHXT0r/l+jaxY/O49HEzlZY+RuWOHf1tofNGAFj14GKa0z
-         9DoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lOKHr4M8GH4POVA6wGDp/sQJEDhJB1D5YusNPIcTnV8=;
-        b=D45hOgPFjVEMIBXWNn/zXR6JvsAgdBP1/C3Hmacsl/t/e1CZQDch8AKdQCS2Qq9/cT
-         w00GSwtoSls0l6os2/iv8hXSDjKnKRyBdOmcdC4KxAMofYWcBnj/phOXENOwaRieVmX6
-         YViGs5dFBBknLPL2/pOhMup2+HLtG5cVGC2D0j3jeMJGy0zHN9QL0MvZx25RJlrJ2lGI
-         ly7/96gXl+0ubLLHkLWm8Qrlo9Pw+/IDrmj3skZMRLyf+j3S6Pcs5O9NTqlu7k0fQUnK
-         dbpE7HBstrBx0Fp79FLiMtf9lXTghY0pN7qhIIUSD1FyECABC/JdSzqkCPruX+T6U/yJ
-         yd4w==
-X-Gm-Message-State: AOAM532kDXNFm1Q0fh9ygsNrm4Ui+BxhM7Ag+8Ci1wvTkU9b/+H/grYE
-        +F41pjee7x+uTWrWBdgRra0UWYDAv+m67A==
-X-Google-Smtp-Source: ABdhPJxSixlSyXgyg5g6e+BZWTVcP9HEpU2UqeXtQzwQ1r5GbXolyNkJHBhLSN6pz/LJ6C/nT7pM5w==
-X-Received: by 2002:a05:600c:1987:: with SMTP id t7mr13976740wmq.24.1640007641300;
-        Mon, 20 Dec 2021 05:40:41 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id m6sm19327640wrp.34.2021.12.20.05.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 05:40:40 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: dts: Fix some I2C unit addresses
-Date:   Mon, 20 Dec 2021 14:40:36 +0100
-Message-Id: <20211220134036.683309-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Dec 2021 08:41:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B80C061574;
+        Mon, 20 Dec 2021 05:41:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E6C9B80EA2;
+        Mon, 20 Dec 2021 13:41:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B994C36AE9;
+        Mon, 20 Dec 2021 13:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640007663;
+        bh=sEhqYPxM4z19kGZYE2peDh+u0pT/5DH5Q0sa/WgLz2s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oT13uPmkAxGD5Bshuprq6DF7tVZgmsbYCW7m81SlEheTzmKYwN9cteS2Qm0f+yzG6
+         FxEZ90zHRkBUkkldie3P2GUorJw1P9OF2hEnTx8f/v+ToJqdVDYWB/RZ1XHjnjfRxL
+         fLVSWyLXsF5rXhpcI2KLW7oGXDoL1S/kUska8UuCqrAnXLgCH77Juo+nSxz7bV+YX3
+         3WfuXF6l3rrDlcVq5dlYauRBATyJZitLDYYQCif2MaHz6a5dvEw228kOuvYnysWwa9
+         APhZ9+umMMMIfdZxyvdYYy+6SLkJwLHrNpa2baLRP4StlCKGzXgQu+j2Qe1Fq0Q/Z8
+         2W1x/QxmwJyOQ==
+Received: by mail-ua1-f54.google.com with SMTP id o1so17725858uap.4;
+        Mon, 20 Dec 2021 05:41:02 -0800 (PST)
+X-Gm-Message-State: AOAM533SMp5A/u+oBrZeD2y/zBD71doYSiFNpX9Sa1mxW40hpKMaRaJr
+        PpTwsONAqV+SNvyXUEDHCIMmWPpjSyzD5j+ow4k=
+X-Google-Smtp-Source: ABdhPJwGr/+MFfoW7ipUpJBlTl+ZN+AB5Gr6EIJrZEEcp5Ttg/AYr9iCWiGr8Ukebm4uIUfe9nTB/0FRTqyMvS0jIYU=
+X-Received: by 2002:a05:6102:316e:: with SMTP id l14mr233250vsm.8.1640007662059;
+ Mon, 20 Dec 2021 05:41:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+ <20211206104657.433304-13-alexandre.ghiti@canonical.com> <CAJF2gTQEHv1dVzv=JNCYSzD8oh6UxYOFRTdBOp-FFeeeOhSJrQ@mail.gmail.com>
+ <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
+In-Reply-To: <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 20 Dec 2021 21:40:51 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR2pDN8vvknmE2s1nj2WSuCfTkXYkU074rCck+CCwQv7Q@mail.gmail.com>
+Message-ID: <CAJF2gTR2pDN8vvknmE2s1nj2WSuCfTkXYkU074rCck+CCwQv7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 12/13] riscv: Initialize thread pointer before calling
+ C functions
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        panqinglin2020@iscas.ac.cn,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Mon, Dec 20, 2021 at 5:17 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Mon, 20 Dec 2021 at 10:11, Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Tue, Dec 7, 2021 at 11:55 AM Alexandre Ghiti
+> > <alexandre.ghiti@canonical.com> wrote:
+> > >
+> > > Because of the stack canary feature that reads from the current task
+> > > structure the stack canary value, the thread pointer register "tp" must
+> > > be set before calling any C function from head.S: by chance, setup_vm
+> > Shall we disable -fstack-protector for setup_vm() with __attribute__?
+>
+> Don't use __attribute__((optimize())) for that: it is known to be
+> broken, and documented as debug purposes only in the GCC info pages:
+>
+> https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
+Oh, thx for the link.
 
-The unit-address for the Maxim MAX1237 ADCs on XPedite5200 boards don't
-match the value in the "reg" property and cause a DTC warning.
+>
+>
+>
+>
+> > Actually, we've already init tp later.
+> >
+> > > and all the functions that it calls does not seem to be part of the
+> > > functions where the canary check is done, but in the following commits,
+> > > some functions will.
+> > >
+> > > Fixes: f2c9699f65557a31 ("riscv: Add STACKPROTECTOR supported")
+> > > Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> > > ---
+> > >  arch/riscv/kernel/head.S | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> > > index c3c0ed559770..86f7ee3d210d 100644
+> > > --- a/arch/riscv/kernel/head.S
+> > > +++ b/arch/riscv/kernel/head.S
+> > > @@ -302,6 +302,7 @@ clear_bss_done:
+> > >         REG_S a0, (a2)
+> > >
+> > >         /* Initialize page tables and relocate to virtual addresses */
+> > > +       la tp, init_task
+> > >         la sp, init_thread_union + THREAD_SIZE
+> > >         XIP_FIXUP_OFFSET sp
+> > >  #ifdef CONFIG_BUILTIN_DTB
+> > > --
+> > > 2.32.0
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+> > ML: https://lore.kernel.org/linux-csky/
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- arch/powerpc/boot/dts/xpedite5200.dts      | 2 +-
- arch/powerpc/boot/dts/xpedite5200_xmon.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/boot/dts/xpedite5200.dts b/arch/powerpc/boot/dts/xpedite5200.dts
-index 840ea84bbb59..74b346f2d43c 100644
---- a/arch/powerpc/boot/dts/xpedite5200.dts
-+++ b/arch/powerpc/boot/dts/xpedite5200.dts
-@@ -132,7 +132,7 @@ rtc@68 {
- 				reg = <0x68>;
- 			};
- 
--			dtt@48 {
-+			dtt@34 {
- 				compatible = "maxim,max1237";
- 				reg = <0x34>;
- 			};
-diff --git a/arch/powerpc/boot/dts/xpedite5200_xmon.dts b/arch/powerpc/boot/dts/xpedite5200_xmon.dts
-index 449fc1b5dc23..d491c7a8f979 100644
---- a/arch/powerpc/boot/dts/xpedite5200_xmon.dts
-+++ b/arch/powerpc/boot/dts/xpedite5200_xmon.dts
-@@ -136,7 +136,7 @@ rtc@68 {
- 				reg = <0x68>;
- 			};
- 
--			dtt@48 {
-+			dtt@34 {
- 				compatible = "maxim,max1237";
- 				reg = <0x34>;
- 			};
+
 -- 
-2.34.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

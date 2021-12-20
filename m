@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 292DF47AC88
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AFD47AD60
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236302AbhLTOob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbhLTOm6 (ORCPT
+        id S236652AbhLTOva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:51:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54544 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235504AbhLTOr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:42:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56E8C06139C;
-        Mon, 20 Dec 2021 06:41:55 -0800 (PST)
+        Mon, 20 Dec 2021 09:47:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76BA8B80EEF;
-        Mon, 20 Dec 2021 14:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFC2C36AE8;
-        Mon, 20 Dec 2021 14:41:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BAEFB80EE9;
+        Mon, 20 Dec 2021 14:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA58C36AE7;
+        Mon, 20 Dec 2021 14:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011313;
-        bh=+ujxdqI/HpDnZEPVLzroYRyWIoElKf+V2bFWz8LvKcg=;
+        s=korg; t=1640011647;
+        bh=VLF/6JVooaR1fAgBByo04dqJVL0sKw6ncRWbOB4/yHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YPZYrjfc7vHJe0lLra7fFPDCPwd1yaypiDOVYZB1TbZ0I0AnSVIJ5wV6VDkkd4bhU
-         HXYvFmvYgKK2deLL++3D702ipLoFPYmxr3+mxwZTQiM2vSm5a+q3dw1BIHXVHcQYpq
-         Pju9Uzb3zAjoRPoaCZG5fkBYhuYni46GMMULGMss=
+        b=Km0nr4Hy9pzox2qIXhM+DhRh1eeijONdyuRj+b3H/EAHNgUHBqvksBJI8T3k4CnXA
+         DfBxkatQDv8MgbmzR3fwELPEYN1fnGEGDm0FzQRbrjyALtU+yLTdVa1gF1iZDfaViW
+         SMk9plI8IZPcfIJmA63cyKiFP51Sk/tCggilMWvE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Stapelberg <michael@stapelberg.ch>,
-        Erik Ekman <erik@kryo.se>, Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 04/56] net/mlx4_en: Update reported link modes for 1/10G
+Subject: [PATCH 5.10 24/99] tee: amdtee: fix an IS_ERR() vs NULL bug
 Date:   Mon, 20 Dec 2021 15:33:57 +0100
-Message-Id: <20211220143023.591052698@linuxfoundation.org>
+Message-Id: <20211220143030.167535107@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,112 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Erik Ekman <erik@kryo.se>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 2191b1dfef7d45f44b5008d2148676d9f2c82874 ]
+[ Upstream commit 9d7482771fac8d8e38e763263f2ca0ca12dd22c6 ]
 
-When link modes were initially added in commit 2c762679435dc
-("net/mlx4_en: Use PTYS register to query ethtool settings") and
-later updated for the new ethtool API in commit 3d8f7cc78d0eb
-("net: mlx4: use new ETHTOOL_G/SSETTINGS API") the only 1/10G non-baseT
-link modes configured were 1000baseKX, 10000baseKX4 and 10000baseKR.
-It looks like these got picked to represent other modes since nothing
-better was available.
+The __get_free_pages() function does not return error pointers it returns
+NULL so fix this condition to avoid a NULL dereference.
 
-Switch to using more specific link modes added in commit 5711a98221443
-("net: ethtool: add support for 1000BaseX and missing 10G link modes").
-
-Tested with MCX311A-XCAT connected via DAC.
-Before:
-
-% sudo ethtool enp3s0
-Settings for enp3s0:
-	Supported ports: [ FIBRE ]
-	Supported link modes:   1000baseKX/Full
-	                        10000baseKR/Full
-	Supported pause frame use: Symmetric Receive-only
-	Supports auto-negotiation: No
-	Supported FEC modes: Not reported
-	Advertised link modes:  1000baseKX/Full
-	                        10000baseKR/Full
-	Advertised pause frame use: Symmetric
-	Advertised auto-negotiation: No
-	Advertised FEC modes: Not reported
-	Speed: 10000Mb/s
-	Duplex: Full
-	Auto-negotiation: off
-	Port: Direct Attach Copper
-	PHYAD: 0
-	Transceiver: internal
-	Supports Wake-on: d
-	Wake-on: d
-        Current message level: 0x00000014 (20)
-                               link ifdown
-	Link detected: yes
-
-With this change:
-
-% sudo ethtool enp3s0
-	Settings for enp3s0:
-	Supported ports: [ FIBRE ]
-	Supported link modes:   1000baseX/Full
-	                        10000baseCR/Full
- 	                        10000baseSR/Full
-	Supported pause frame use: Symmetric Receive-only
-	Supports auto-negotiation: No
-	Supported FEC modes: Not reported
-	Advertised link modes:  1000baseX/Full
- 	                        10000baseCR/Full
- 	                        10000baseSR/Full
-	Advertised pause frame use: Symmetric
-	Advertised auto-negotiation: No
-	Advertised FEC modes: Not reported
-	Speed: 10000Mb/s
-	Duplex: Full
-	Auto-negotiation: off
-	Port: Direct Attach Copper
-	PHYAD: 0
-	Transceiver: internal
-	Supports Wake-on: d
-	Wake-on: d
-        Current message level: 0x00000014 (20)
-                               link ifdown
-	Link detected: yes
-
-Tested-by: Michael Stapelberg <michael@stapelberg.ch>
-Signed-off-by: Erik Ekman <erik@kryo.se>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 757cc3e9ff1d ("tee: add AMD-TEE driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Rijo Thomas <Rijo-john.Thomas@amd.com>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_ethtool.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tee/amdtee/core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-index 6a005014d46af..f652cfd8127bf 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-@@ -663,7 +663,7 @@ void __init mlx4_en_init_ptys2ethtool_map(void)
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_1000BASE_T, SPEED_1000,
- 				       ETHTOOL_LINK_MODE_1000baseT_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_1000BASE_CX_SGMII, SPEED_1000,
--				       ETHTOOL_LINK_MODE_1000baseKX_Full_BIT);
-+				       ETHTOOL_LINK_MODE_1000baseX_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_1000BASE_KX, SPEED_1000,
- 				       ETHTOOL_LINK_MODE_1000baseKX_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_10GBASE_T, SPEED_10000,
-@@ -675,9 +675,9 @@ void __init mlx4_en_init_ptys2ethtool_map(void)
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_10GBASE_KR, SPEED_10000,
- 				       ETHTOOL_LINK_MODE_10000baseKR_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_10GBASE_CR, SPEED_10000,
--				       ETHTOOL_LINK_MODE_10000baseKR_Full_BIT);
-+				       ETHTOOL_LINK_MODE_10000baseCR_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_10GBASE_SR, SPEED_10000,
--				       ETHTOOL_LINK_MODE_10000baseKR_Full_BIT);
-+				       ETHTOOL_LINK_MODE_10000baseSR_Full_BIT);
- 	MLX4_BUILD_PTYS2ETHTOOL_CONFIG(MLX4_20GBASE_KR2, SPEED_20000,
- 				       ETHTOOL_LINK_MODE_20000baseMLD2_Full_BIT,
- 				       ETHTOOL_LINK_MODE_20000baseKR2_Full_BIT);
+diff --git a/drivers/tee/amdtee/core.c b/drivers/tee/amdtee/core.c
+index da6b88e80dc07..297dc62bca298 100644
+--- a/drivers/tee/amdtee/core.c
++++ b/drivers/tee/amdtee/core.c
+@@ -203,9 +203,8 @@ static int copy_ta_binary(struct tee_context *ctx, void *ptr, void **ta,
+ 
+ 	*ta_size = roundup(fw->size, PAGE_SIZE);
+ 	*ta = (void *)__get_free_pages(GFP_KERNEL, get_order(*ta_size));
+-	if (IS_ERR(*ta)) {
+-		pr_err("%s: get_free_pages failed 0x%llx\n", __func__,
+-		       (u64)*ta);
++	if (!*ta) {
++		pr_err("%s: get_free_pages failed\n", __func__);
+ 		rc = -ENOMEM;
+ 		goto rel_fw;
+ 	}
 -- 
 2.33.0
 

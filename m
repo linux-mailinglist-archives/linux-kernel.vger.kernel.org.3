@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A9B47AB6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908ED47AE3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbhLTOgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:36:43 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51734 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbhLTOge (ORCPT
+        id S238819AbhLTO7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:59:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34152 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238496AbhLTO41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:36:34 -0500
+        Mon, 20 Dec 2021 09:56:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9DD18CE110C;
-        Mon, 20 Dec 2021 14:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67607C36AE8;
-        Mon, 20 Dec 2021 14:36:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 878BFB80EF5;
+        Mon, 20 Dec 2021 14:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDEBC36AE7;
+        Mon, 20 Dec 2021 14:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640010991;
-        bh=man+0ueV1g91q32w1KcrSorf6LfwBGLx54Op6ZT18s4=;
+        s=korg; t=1640012184;
+        bh=eOpUGIF7+iDVg+xN+h3qxoKk41uVUs8NCd4DQQ3tuE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CbJXdhjgIQvos4Oh4bXmAolek1fH5MI7L+TovZZ1ok5H/WGcwCsWGAbkH9/cYxsJ6
-         tKfpWQQ7wqJuq52x9hE6cBk2Lo67eUH9W81lkDOvAH1wHEOurVFEuriNjDByOyql6i
-         5bsNM9wyCMnU/DhX+RI6eUaFSxW85ia6uartOkj0=
+        b=H3ImnD4EcANneM2tk5wb+wFX6yM6mx7sB8zUDPG9ty/7lyjn9dWH/rBTaZELHPCxx
+         z6gI3Wcg8tbtccWhYz7VQb+oAjv3u9YaZrxwCmdBdwH2s9Rl/y/2cIdPKp2pdnIvcj
+         u4YcVnUaDDpIwiu2SZKzrknmoIaLHTpStISy//4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.4 20/23] xen/blkfront: harden blkfront against event channel storms
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 111/177] bpf, selftests: Fix racing issue in btf_skc_cls_ingress test
 Date:   Mon, 20 Dec 2021 15:34:21 +0100
-Message-Id: <20211220143018.496834879@linuxfoundation.org>
+Message-Id: <20211220143043.814191641@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-References: <20211220143017.842390782@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,76 +47,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Martin KaFai Lau <kafai@fb.com>
 
-commit 0fd08a34e8e3b67ec9bd8287ac0facf8374b844a upstream.
+[ Upstream commit c2fcbf81c332b42382a0c439bfe2414a241e4f5b ]
 
-The Xen blkfront driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using lateeoi event
-channels.
+The libbpf CI reported occasional failure in btf_skc_cls_ingress:
 
-This is part of XSA-391
+  test_syncookie:FAIL:Unexpected syncookie states gen_cookie:80326634 recv_cookie:0
+  bpf prog error at line 97
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+"error at line 97" means the bpf prog cannot find the listening socket
+when the final ack is received.  It then skipped processing
+the syncookie in the final ack which then led to "recv_cookie:0".
+
+The problem is the userspace program did not do accept() and went
+ahead to close(listen_fd) before the kernel (and the bpf prog) had
+a chance to process the final ack.
+
+The fix is to add accept() call so that the userspace will wait for
+the kernel to finish processing the final ack first before close()-ing
+everything.
+
+Fixes: 9a856cae2217 ("bpf: selftest: Add test_btf_skc_cls_ingress")
+Reported-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211216191630.466151-1-kafai@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/xen-blkfront.c |   12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/btf_skc_cls_ingress.c         | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -1319,11 +1319,13 @@ static irqreturn_t blkif_interrupt(int i
- 	unsigned long flags;
- 	struct blkfront_info *info = (struct blkfront_info *)dev_id;
- 	int error;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index 762f6a9da8b5e..664ffc0364f4f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -90,7 +90,7 @@ static void print_err_line(void)
  
- 	spin_lock_irqsave(&info->io_lock, flags);
+ static void test_conn(void)
+ {
+-	int listen_fd = -1, cli_fd = -1, err;
++	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
  
- 	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
- 		spin_unlock_irqrestore(&info->io_lock, flags);
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
- 	}
+@@ -112,6 +112,10 @@ static void test_conn(void)
+ 	if (CHECK_FAIL(cli_fd == -1))
+ 		goto done;
  
-@@ -1340,6 +1342,8 @@ static irqreturn_t blkif_interrupt(int i
- 		unsigned long id;
- 		unsigned int op;
- 
-+		eoiflag = 0;
++	srv_fd = accept(listen_fd, NULL, NULL);
++	if (CHECK_FAIL(srv_fd == -1))
++		goto done;
 +
- 		RING_COPY_RESPONSE(&info->ring, i, &bret);
- 		id   = bret.id;
- 
-@@ -1444,6 +1448,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&info->io_lock, flags);
- 
-+	xen_irq_lateeoi(irq, eoiflag);
-+
- 	return IRQ_HANDLED;
- 
-  err:
-@@ -1451,6 +1457,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&info->io_lock, flags);
- 
-+	/* No EOI in order to avoid further interrupts. */
-+
- 	pr_alert("%s disabled for further use\n", info->gd->disk_name);
- 	return IRQ_HANDLED;
+ 	if (CHECK(skel->bss->listen_tp_sport != srv_port ||
+ 		  skel->bss->req_sk_sport != srv_port,
+ 		  "Unexpected sk src port",
+@@ -134,11 +138,13 @@ static void test_conn(void)
+ 		close(listen_fd);
+ 	if (cli_fd != -1)
+ 		close(cli_fd);
++	if (srv_fd != -1)
++		close(srv_fd);
  }
-@@ -1489,8 +1497,8 @@ static int setup_blkring(struct xenbus_d
- 	if (err)
- 		goto fail;
  
--	err = bind_evtchn_to_irqhandler(info->evtchn, blkif_interrupt, 0,
--					"blkif", info);
-+	err = bind_evtchn_to_irqhandler_lateeoi(info->evtchn, blkif_interrupt,
-+						0, "blkif", info);
- 	if (err <= 0) {
- 		xenbus_dev_fatal(dev, err,
- 				 "bind_evtchn_to_irqhandler failed");
+ static void test_syncookie(void)
+ {
+-	int listen_fd = -1, cli_fd = -1, err;
++	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
+ 
+@@ -161,6 +167,10 @@ static void test_syncookie(void)
+ 	if (CHECK_FAIL(cli_fd == -1))
+ 		goto done;
+ 
++	srv_fd = accept(listen_fd, NULL, NULL);
++	if (CHECK_FAIL(srv_fd == -1))
++		goto done;
++
+ 	if (CHECK(skel->bss->listen_tp_sport != srv_port,
+ 		  "Unexpected tp src port",
+ 		  "listen_tp_sport:%u expected:%u\n",
+@@ -188,6 +198,8 @@ static void test_syncookie(void)
+ 		close(listen_fd);
+ 	if (cli_fd != -1)
+ 		close(cli_fd);
++	if (srv_fd != -1)
++		close(srv_fd);
+ }
+ 
+ struct test {
+-- 
+2.33.0
+
 
 

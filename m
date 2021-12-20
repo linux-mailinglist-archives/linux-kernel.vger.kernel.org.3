@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9B447AD76
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBC747ADC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237437AbhLTOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41314 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236384AbhLTOtK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87554611A7;
-        Mon, 20 Dec 2021 14:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5D0C36AE8;
-        Mon, 20 Dec 2021 14:49:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k6AL52Jn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640011748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZB+YlnrmyeFEXztbZ4HD56lvMI75wzDWPgfGxZYzu90=;
-        b=k6AL52Jn8WlJNjFIhOohPsH1zGF26B01uLOEqYe6OtPQfKM5dd2SspYqZfukIxn3FsJDrF
-        Ch2pJ9tSJQoMCJqeUdSXU4A2fElYTtCoFHe/5s9pelCw7z0V2vHSqqK47lPWEWqr1o1qrM
-        kvN9ppEUBWTFRDD1sQWbqp8cwbsS6yw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b1cf1e0f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 20 Dec 2021 14:49:08 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id y68so29612532ybe.1;
-        Mon, 20 Dec 2021 06:49:08 -0800 (PST)
-X-Gm-Message-State: AOAM5317vKQ92CRAp6QuIgf9Rt1qw2KN4tF+rlsOpIVf1RPAA2MW5/JO
-        kRtdG1DLbo3DMjvFyuSp70+nQqfBZGBJr3+EFco=
-X-Google-Smtp-Source: ABdhPJyEVxPM+FkwuqnhftSYPgXpViHoiltyHD6WFrPWaqROFVl1pBGJ+E+Tr401ZCOmsSFqEGUfixqnPM7A5NoHIg8=
-X-Received: by 2002:a25:2450:: with SMTP id k77mr23286190ybk.121.1640011746707;
- Mon, 20 Dec 2021 06:49:06 -0800 (PST)
+        id S238770AbhLTOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:54:34 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:34906 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233606AbhLTOwA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:52:00 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAB3WBV3mMBhi3w_BA--.56502S2;
+        Mon, 20 Dec 2021 22:51:35 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] sfc: Check null pointer of rx_queue->page_ring
+Date:   Mon, 20 Dec 2021 22:51:34 +0800
+Message-Id: <20211220145134.978462-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211012082708.121931-1-iivanov@suse.de> <YWVKAk4h5bsUA3b6@light.dominikbrodowski.net>
- <YaivhAV8LouB0zGV@light.dominikbrodowski.net> <CAHmME9qxBeBzfKCjzfAFX9ZWAGKv1TKCQw3x22d_DmJtaAewLw@mail.gmail.com>
- <YanOIvAV1iPBEXR3@light.dominikbrodowski.net> <CAJMQK-i0vZ8k8cNrUaDBdCBv4ucd-DzUWix3ui7QZ_2awZHe6g@mail.gmail.com>
- <Ya55SjgSkO+INcbb@light.dominikbrodowski.net> <CAHmME9oonMxxfEq7sjSSYc7XPwzjW4e45JTbBCJ2hFEbL-tnyw@mail.gmail.com>
-In-Reply-To: <CAHmME9oonMxxfEq7sjSSYc7XPwzjW4e45JTbBCJ2hFEbL-tnyw@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 20 Dec 2021 15:48:55 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oZZdxW3H+7UyGTqebZoBHgEARcw0ea-83ghZR8pwfRsw@mail.gmail.com>
-Message-ID: <CAHmME9oZZdxW3H+7UyGTqebZoBHgEARcw0ea-83ghZR8pwfRsw@mail.gmail.com>
-Subject: Re: [PATCH v5] random: fix crash on multiple early calls to add_bootloader_randomness()
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Ivan T. Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAB3WBV3mMBhi3w_BA--.56502S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aV
+        CY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
+        x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6x
+        CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
+        I402YVCY1x02628vn2kIc2xKxwCY02Avz4vE14v_Xryl42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUjuWlDUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Dominik,
+On Mon, Dec 20, 2021 at 10:16:28PM +0800, Greg KH wrote:
+> Why not return an error?
 
-Just following up here, as I never heard back from you. These seem
-like real bug I'd like to fix at some point. I was waiting to hear
-back about your latest patch, and perhaps you wanted to spin a new
-revision? Or not, in which case, please let me know?
+Because I have received the mail from Martin Habets that telling me
+it doesn't need to return error code.
+Here is the mail.
+https://lore.kernel.org/lkml/20211219092948.t2iprptmyfrzgthb@gmail.com/
+On Sun, Dec 19, 2021 at 05:29:48PM +0800, Martin Habets wrote:
+> Your predicate is wrong. The code that uses rx_queue->page_ring
+> can deal with it being NULL.
+> The only thing you might want to do is set rx_queue->page_ptr_mask
+> to 0.
 
-Thanks,
-Jason
+Jiasheng
+

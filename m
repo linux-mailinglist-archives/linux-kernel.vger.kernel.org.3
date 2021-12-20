@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E315A47AC3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2509F47ACA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbhLTOmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        id S235154AbhLTOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbhLTOlG (ORCPT
+        with ESMTP id S235147AbhLTOnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FB0C0698D6;
-        Mon, 20 Dec 2021 06:40:41 -0800 (PST)
+        Mon, 20 Dec 2021 09:43:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7758DC07E5F2;
+        Mon, 20 Dec 2021 06:42:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5A241CE10FE;
-        Mon, 20 Dec 2021 14:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271E4C36AE8;
-        Mon, 20 Dec 2021 14:40:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14F20611AD;
+        Mon, 20 Dec 2021 14:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3750C36AE7;
+        Mon, 20 Dec 2021 14:42:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011237;
-        bh=6lCVY5COw0CEcv1f15jkDBnbfj3oEBGx3Usu2ezsoIE=;
+        s=korg; t=1640011341;
+        bh=X8+oBFMjLsXCKvfTf3w4ykFeb04LQsvyG2ydIMFu8rM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jeC2DHkW0RjAeQGKSdDVBgtlB7v1ftF5XBopaY23C4xOPZvAXZHV0Mc0/s8NQMDJr
-         6mJhHm9d104I1nyQnR8kkmF0gYTaaTn+5B9VYp38YH5eRwDusWxbgGEY5HzNtxM9gW
-         BpcH9Kt1Yu+1THHUX6vaozPKNSOVar9BIXKNwkMA=
+        b=sz1OI2L2hfDKf3igT1ekyHBN6LfFhzU5NGGYz63RPWSn6zVEShqArGaI8zb61FVSw
+         FSR6Ac7AJPZZZKTbgAONRSmTLoCUcxZuILdE7eZP6fmpR9KQJ5D2I4Mf+gtNlBmrbE
+         Q9zKlF6OLOBolTiRlFC8bmsE74uuh/KFRgySUoao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.14 41/45] xen/blkfront: harden blkfront against event channel storms
-Date:   Mon, 20 Dec 2021 15:34:36 +0100
-Message-Id: <20211220143023.639041898@linuxfoundation.org>
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 4.19 44/56] ARM: 8800/1: use choice for kernel unwinders
+Date:   Mon, 20 Dec 2021 15:34:37 +0100
+Message-Id: <20211220143024.898466749@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,76 +50,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Stefan Agner <stefan@agner.ch>
 
-commit 0fd08a34e8e3b67ec9bd8287ac0facf8374b844a upstream.
+commit f9b58e8c7d031b0daa5c9a9ee27f5a4028ba53ac upstream.
 
-The Xen blkfront driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using lateeoi event
-channels.
+While in theory multiple unwinders could be compiled in, it does
+not make sense in practise. Use a choice to make the unwinder
+selection mutually exclusive and mandatory.
 
-This is part of XSA-391
+Already before this commit it has not been possible to deselect
+FRAME_POINTER. Remove the obsolete comment.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Furthermore, to produce a meaningful backtrace with FRAME_POINTER
+enabled the kernel needs a specific function prologue:
+    mov    ip, sp
+    stmfd    sp!, {fp, ip, lr, pc}
+    sub    fp, ip, #4
+
+To get to the required prologue gcc uses apcs and no-sched-prolog.
+This compiler options are not available on clang, and clang is not
+able to generate the required prologue. Make the FRAME_POINTER
+config symbol depending on !clang.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ arch/arm/Kconfig.debug |   44 ++++++++++++++++++++++++++++----------------
+ lib/Kconfig.debug      |    6 +++---
+ 2 files changed, 31 insertions(+), 19 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -1566,9 +1566,12 @@ static irqreturn_t blkif_interrupt(int i
- 	unsigned long flags;
- 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
- 	struct blkfront_info *info = rinfo->dev_info;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -45,30 +45,42 @@ config DEBUG_WX
  
--	if (unlikely(info->connected != BLKIF_STATE_CONNECTED))
-+	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
-+	}
+ 		If in doubt, say "Y".
  
- 	spin_lock_irqsave(&rinfo->ring_lock, flags);
-  again:
-@@ -1584,6 +1587,8 @@ static irqreturn_t blkif_interrupt(int i
- 		unsigned long id;
- 		unsigned int op;
+-# RMK wants arm kernels compiled with frame pointers or stack unwinding.
+-# If you know what you are doing and are willing to live without stack
+-# traces, you can get a slightly smaller kernel by setting this option to
+-# n, but then RMK will have to kill you ;).
+-config FRAME_POINTER
+-	bool
+-	depends on !THUMB2_KERNEL
+-	default y if !ARM_UNWIND || FUNCTION_GRAPH_TRACER
++choice
++	prompt "Choose kernel unwinder"
++	default UNWINDER_ARM if AEABI && !FUNCTION_GRAPH_TRACER
++	default UNWINDER_FRAME_POINTER if !AEABI || FUNCTION_GRAPH_TRACER
+ 	help
+-	  If you say N here, the resulting kernel will be slightly smaller and
+-	  faster. However, if neither FRAME_POINTER nor ARM_UNWIND are enabled,
+-	  when a problem occurs with the kernel, the information that is
+-	  reported is severely limited.
++	  This determines which method will be used for unwinding kernel stack
++	  traces for panics, oopses, bugs, warnings, perf, /proc/<pid>/stack,
++	  livepatch, lockdep, and more.
  
-+		eoiflag = 0;
+-config ARM_UNWIND
+-	bool "Enable stack unwinding support (EXPERIMENTAL)"
++config UNWINDER_FRAME_POINTER
++	bool "Frame pointer unwinder"
++	depends on !THUMB2_KERNEL && !CC_IS_CLANG
++	select ARCH_WANT_FRAME_POINTERS
++	select FRAME_POINTER
++	help
++	  This option enables the frame pointer unwinder for unwinding
++	  kernel stack traces.
 +
- 		RING_COPY_RESPONSE(&rinfo->ring, i, &bret);
- 		id = bret.id;
- 
-@@ -1699,6 +1704,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
- 
-+	xen_irq_lateeoi(irq, eoiflag);
++config UNWINDER_ARM
++	bool "ARM EABI stack unwinder"
+ 	depends on AEABI
+-	default y
++	select ARM_UNWIND
+ 	help
+ 	  This option enables stack unwinding support in the kernel
+ 	  using the information automatically generated by the
+ 	  compiler. The resulting kernel image is slightly bigger but
+ 	  the performance is not affected. Currently, this feature
+-	  only works with EABI compilers. If unsure say Y.
++	  only works with EABI compilers.
 +
- 	return IRQ_HANDLED;
- 
-  err:
-@@ -1706,6 +1713,8 @@ static irqreturn_t blkif_interrupt(int i
- 
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
- 
-+	/* No EOI in order to avoid further interrupts. */
++endchoice
 +
- 	pr_alert("%s disabled for further use\n", info->gd->disk_name);
- 	return IRQ_HANDLED;
- }
-@@ -1745,8 +1754,8 @@ static int setup_blkring(struct xenbus_d
- 	if (err)
- 		goto fail;
++config ARM_UNWIND
++	bool
++
++config FRAME_POINTER
++	bool
  
--	err = bind_evtchn_to_irqhandler(rinfo->evtchn, blkif_interrupt, 0,
--					"blkif", rinfo);
-+	err = bind_evtchn_to_irqhandler_lateeoi(rinfo->evtchn, blkif_interrupt,
-+						0, "blkif", rinfo);
- 	if (err <= 0) {
- 		xenbus_dev_fatal(dev, err,
- 				 "bind_evtchn_to_irqhandler failed");
+ config OLD_MCOUNT
+ 	bool
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1178,7 +1178,7 @@ config LOCKDEP
+ 	bool
+ 	depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+ 	select STACKTRACE
+-	select FRAME_POINTER if !MIPS && !PPC && !ARM_UNWIND && !S390 && !MICROBLAZE && !ARC && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+ 	select KALLSYMS
+ 	select KALLSYMS_ALL
+ 
+@@ -1589,7 +1589,7 @@ config FAULT_INJECTION_STACKTRACE_FILTER
+ 	depends on FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT
+ 	depends on !X86_64
+ 	select STACKTRACE
+-	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !X86
+ 	help
+ 	  Provide stacktrace filter for fault-injection capabilities
+ 
+@@ -1598,7 +1598,7 @@ config LATENCYTOP
+ 	depends on DEBUG_KERNEL
+ 	depends on STACKTRACE_SUPPORT
+ 	depends on PROC_FS
+-	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !X86
+ 	select KALLSYMS
+ 	select KALLSYMS_ALL
+ 	select STACKTRACE
 
 

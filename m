@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787D947B28F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B02147B297
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbhLTSGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:06:20 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:35290 "EHLO vps0.lunn.ch"
+        id S240303AbhLTSKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:10:41 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:48512 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230489AbhLTSGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:06:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=F2yXVlUie46ploGVEKTVoENJ3NUWMLnJ1b5tqhVQaJ8=; b=sRKEgiDutdKLfiIWGcZwR6DJjY
-        tkJpVp4UrKYNEvC1+bCY38BOs5h9PuBYHQIs5nK4hYza8WEvPxf4TlqPKv5F2ByyB5LXEFYQ9hnez
-        yU4Az32dJqGLoCM3dhIg3hPraYOUfTArs1JHlPSERJk8eIUXqdsh+rY4mu3ThMuQEIeY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mzN2y-00H47W-Bl; Mon, 20 Dec 2021 19:06:04 +0100
-Date:   Mon, 20 Dec 2021 19:06:04 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        SoC Team <soc@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        gongruiqi1@huawei.com, wangweiyang2@huawei.com
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-Message-ID: <YcDGDLScE+3ZlU8/@lunn.ch>
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
- <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+        id S230489AbhLTSKj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:10:39 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E2F431EC02AD;
+        Mon, 20 Dec 2021 19:10:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640023829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=u3qadLJLiGlSgg2xgOL2YC+8FxEP43TobdqfUt7kZfs=;
+        b=QmswxF0+lNGM5M1aASyqrDia50ovg/fASW425kO6II3UgRUEDk7qDKW5x2diW9uBn4cFwN
+        8Go6v7DlrLikQSAnRE9A53xfP+VfrhPTF04qONhX2QpcnXQbJq28hRJ2+dpkX1JUdu1SCs
+        pp11efyKP/pk75Bs0dtNIKKVTQuMxVY=
+Date:   Mon, 20 Dec 2021 19:10:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        Mikolaj Lisik <lisik@google.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 08/40] x86/sev: Check the vmpl level
+Message-ID: <YcDHF016tJLkempZ@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-9-brijesh.singh@amd.com>
+ <YbugbgXhApv9ECM2@dt>
+ <CADtC8PX_bEk3rQR1sonbp-rX7rAG4fdbM41r3YLhfj3qWvqJrw@mail.gmail.com>
+ <79c91197-a7d8-4b93-b6c3-edb7b2da4807@amd.com>
+ <d56c2f64-9e31-81d8-f250-e9772ba37d7e@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
+In-Reply-To: <d56c2f64-9e31-81d8-f250-e9772ba37d7e@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:39:43PM +0100, Arnd Bergmann wrote:
-> On Sat, Dec 18, 2021 at 9:58 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
-> >
-> > These patches replace an open coded calculation to obtain the physical
-> > address of a far symbol with a call to the new ldr_l etc macro, and they
-> > belong to the kaslr patch set of arm32.
-> >
-> > Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
-> >
-> > Ard Biesheuvel (3):
-> >   arm-soc: exynos: replace open coded VA->PA conversions
-> >   arm-soc: mvebu: replace open coded VA->PA conversion
-> >   arm-soc: various: replace open coded VA->PA calculation
+On Fri, Dec 17, 2021 at 04:33:02PM -0600, Tom Lendacky wrote:
+> > > > > +      * There is no straightforward way to query the current VMPL level. The
+> > > > > +      * simplest method is to use the RMPADJUST instruction to change a page
+> > > > > +      * permission to a VMPL level-1, and if the guest kernel is launched at
+> > > > > +      * a level <= 1, then RMPADJUST instruction will return an error.
+> > > > Perhaps a nit. When you say "level <= 1", do you mean a level lower than or
+> > > > equal to 1 semantically, or numerically?
+> > 
+> > Its numerically, please see the AMD APM vol 3.
 > 
-> Usually these patches should go through the respective platform
-> maintainer trees,
-> and from there into the soc tree, but time is a little short here.
-> 
-> I could apply them directly with the maintainer Acks
+> Actually it is not numerically...  if it was numerically, then 0 <= 1 would
+> return an error, but VMPL0 is the highest permission level.
 
-Sorry, but this is too low level for me to understand what is going
-on, and so feel confident actually giving an ACK for the mvebu change.
+Just write in that comment exactly what this function does:
 
-Should the resulting assembly be exactly the same? Has the submitter
-disassembled the object code and shown there is no actual difference
-in the assembler output?
+"RMPADJUST modifies RMP permissions of a lesser-privileged (numerically
+higher) privilege level. Here, clear the VMPL1 permission mask of the
+GHCB page. If the guest is not running at VMPL0, this will fail.
 
-   Andrew
+If the guest is running at VMP0, it will succeed. Even if that operation
+modifies permission bits, it is still ok to do currently because Linux
+SNP guests are supported only on VMPL0 so VMPL1 or higher permission
+masks changing is a don't-care."
+
+and then everything is clear wrt numbering, privilege, etc.
+
+Ok?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

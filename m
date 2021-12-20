@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF51247AB75
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D6047AC80
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbhLTOgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S236219AbhLTOoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbhLTOgm (ORCPT
+        with ESMTP id S235661AbhLTOmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:36:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF064C06175B;
-        Mon, 20 Dec 2021 06:36:41 -0800 (PST)
+        Mon, 20 Dec 2021 09:42:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5A8C061394;
+        Mon, 20 Dec 2021 06:41:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8022EB80EE4;
-        Mon, 20 Dec 2021 14:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B08C36AE7;
-        Mon, 20 Dec 2021 14:36:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AACD6118E;
+        Mon, 20 Dec 2021 14:41:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0004BC36AE7;
+        Mon, 20 Dec 2021 14:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640010999;
-        bh=t1dMpFf3j5CuNqrxOKolOP8OviOWu3ZjwbgahhGG8DE=;
+        s=korg; t=1640011310;
+        bh=vmiKDqNKZcMNo0YFJt7fBJKb7F/kv+pcJAJFUaf++dE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2O5YNEjYlHq6gtCv/2zFSaG+vhdM6OhUt5xITQ3Q2O2zD6zfNeKlSvjgJpe6KMm1w
-         aAAATCAwvJ90bRog8YZRE38dIY/IJOBkmEI8QOOF5Llgyn7m625Ic1wWtAQdtcGnt3
-         hUWhgCOmAeWnSK0kNI6JbZhwWPJwxCvaRZGgFeWE=
+        b=WLDkK/wwveJqryS2KrOgh46zcZD0Vsq4sZ0evSs0jYhs8VmQKdx/rGTxHptVPcPD+
+         qUwxHoKkJOzrb//IfVQK5JtuYbnhIhBst+m4GBQfeC/VpYMvGBm9OIMuPhnD3VqKhY
+         p7qsjlzp08ZKqwy1bwZZVBlHhGm0ogXf/5tJCGLg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.4 23/23] xen/netback: dont queue unlimited number of packages
+        stable@vger.kernel.org, markpearson@lenovo.com,
+        Jimmy Wang <wangjm221@gmail.com>
+Subject: [PATCH 4.19 31/56] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
 Date:   Mon, 20 Dec 2021 15:34:24 +0100
-Message-Id: <20211220143018.590839553@linuxfoundation.org>
+Message-Id: <20211220143024.464620988@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-References: <20211220143017.842390782@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,66 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Jimmy Wang <wangjm221@gmail.com>
 
-commit be81992f9086b230623ae3ebbc85ecee4d00a3d3 upstream.
+commit 0ad3bd562bb91853b9f42bda145b5db6255aee90 upstream.
 
-In case a guest isn't consuming incoming network traffic as fast as it
-is coming in, xen-netback is buffering network packages in unlimited
-numbers today. This can result in host OOM situations.
+This device doesn't work well with LPM, losing connectivity intermittently.
+Disable LPM to resolve the issue.
 
-Commit f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal
-queue and carrier flapping") meant to introduce a mechanism to limit
-the amount of buffered data by stopping the Tx queue when reaching the
-data limit, but this doesn't work for cases like UDP.
-
-When hitting the limit don't queue further SKBs, but drop them instead.
-In order to be able to tell Rx packages have been dropped increment the
-rx_dropped statistics counter in this case.
-
-It should be noted that the old solution to continue queueing SKBs had
-the additional problem of an overflow of the 32-bit rx_queue_len value
-would result in intermittent Tx queue enabling.
-
-This is part of XSA-392
-
-Fixes: f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal queue and carrier flapping")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: <markpearson@lenovo.com>
+Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211214012652.4898-1-wangjm221@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netback/netback.c |   13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/xen-netback/netback.c
-+++ b/drivers/net/xen-netback/netback.c
-@@ -189,11 +189,15 @@ void xenvif_rx_queue_tail(struct xenvif_
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
- 
--	__skb_queue_tail(&queue->rx_queue, skb);
--
--	queue->rx_queue_len += skb->len;
--	if (queue->rx_queue_len > queue->rx_queue_max)
-+	if (queue->rx_queue_len >= queue->rx_queue_max) {
- 		netif_tx_stop_queue(netdev_get_tx_queue(queue->vif->dev, queue->id));
-+		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
-+	} else {
-+		__skb_queue_tail(&queue->rx_queue, skb);
++	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
++	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
 +
-+		queue->rx_queue_len += skb->len;
-+	}
- 
- 	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
- }
-@@ -243,6 +247,7 @@ static void xenvif_rx_queue_drop_expired
- 			break;
- 		xenvif_rx_dequeue(queue);
- 		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
- 	}
- }
+ 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
+ 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
  
 
 

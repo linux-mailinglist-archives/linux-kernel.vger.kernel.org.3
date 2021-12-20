@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3750447AD95
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC29F47AC07
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbhLTOxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:53:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41982 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbhLTOuV (ORCPT
+        id S234442AbhLTOlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48546 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232743AbhLTOjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:50:21 -0500
+        Mon, 20 Dec 2021 09:39:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F3DF6119C;
-        Mon, 20 Dec 2021 14:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63991C36AE9;
-        Mon, 20 Dec 2021 14:50:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A1B3B80EB3;
+        Mon, 20 Dec 2021 14:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91763C36AE7;
+        Mon, 20 Dec 2021 14:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011819;
-        bh=3kqhqbfbqsdyzaL66YJCT1UkRYcBkhpS2LPgGIMxF0k=;
+        s=korg; t=1640011182;
+        bh=YRcSG+OzEruk/iVXAFsqA0Md2RyA7GHNZKGXnYVG80Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cNjNTCQgPXhABAHWwTADUcVDUFE/2ifwTzALqjD0ovR+ib0HDMmfpcGHEu9cnUxns
-         7R49Ia9RSGyXA1Fic1hNi7RnNcstsDRjLD0tAF7Sei18iwPkZKcAEzkSn5VvdVoMfL
-         rkDWe0ZT/5leI03tibNvZQfdMGm9nOGxBM5m7rtY=
+        b=kSFlpHgkqu+CMvmgGclU0SZs/HvXZhP+eHzBnUbVoEY0A+q/i7z8ISOTBD0ZI512r
+         cFu630JQ9GHg2ukMX9T+UzuhqB3AGb8AXUiM97luzFj5oAqxjUBXuuOgf2sCtoAz/g
+         AG+dkuKJu3Sbxndpn7PY0wVR545RZOUz/Ajfi1Nc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 53/99] ixgbe: Document how to enable NBASE-T support
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 31/45] net: systemport: Add global locking for descriptor lifecycle
 Date:   Mon, 20 Dec 2021 15:34:26 +0100
-Message-Id: <20211220143031.175925081@linuxfoundation.org>
+Message-Id: <20211220143023.308960527@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,78 +45,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Schlabbach <robert_s@gmx.net>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit 271225fd57c2f1e0b3f8826df51be6c634affefe ]
+commit 8b8e6e782456f1ce02a7ae914bbd5b1053f0b034 upstream.
 
-Commit a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0
-Gbps support") introduced suppression of the advertisement of NBASE-T
-speeds by default, according to Todd Fujinaka to accommodate customers
-with network switches which could not cope with advertised NBASE-T
-speeds, as posted in the E1000-devel mailing list:
+The descriptor list is a shared resource across all of the transmit queues, and
+the locking mechanism used today only protects concurrency across a given
+transmit queue between the transmit and reclaiming. This creates an opportunity
+for the SYSTEMPORT hardware to work on corrupted descriptors if we have
+multiple producers at once which is the case when using multiple transmit
+queues.
 
-https://sourceforge.net/p/e1000/mailman/message/37106269/
+This was particularly noticeable when using multiple flows/transmit queues and
+it showed up in interesting ways in that UDP packets would get a correct UDP
+header checksum being calculated over an incorrect packet length. Similarly TCP
+packets would get an equally correct checksum computed by the hardware over an
+incorrect packet length.
 
-However, the suppression was not documented at all, nor was how to
-enable NBASE-T support.
+The SYSTEMPORT hardware maintains an internal descriptor list that it re-arranges
+when the driver produces a new descriptor anytime it writes to the
+WRITE_PORT_{HI,LO} registers, there is however some delay in the hardware to
+re-organize its descriptors and it is possible that concurrent TX queues
+eventually break this internal allocation scheme to the point where the
+length/status part of the descriptor gets used for an incorrect data buffer.
 
-Properly document the NBASE-T suppression and how to enable NBASE-T
-support.
+The fix is to impose a global serialization for all TX queues in the short
+section where we are writing to the WRITE_PORT_{HI,LO} registers which solves
+the corruption even with multiple concurrent TX queues being used.
 
-Fixes: a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0 Gbps support")
-Reported-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 80105befdb4b ("net: systemport: add Broadcom SYSTEMPORT Ethernet MAC driver")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20211215202450.4086240-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../device_drivers/ethernet/intel/ixgbe.rst      | 16 ++++++++++++++++
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c    |  4 ++++
- 2 files changed, 20 insertions(+)
+ drivers/net/ethernet/broadcom/bcmsysport.c |    5 +++++
+ drivers/net/ethernet/broadcom/bcmsysport.h |    1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
-index f1d5233e5e510..0a233b17c664e 100644
---- a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
-+++ b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
-@@ -440,6 +440,22 @@ NOTE: For 82599-based network connections, if you are enabling jumbo frames in
- a virtual function (VF), jumbo frames must first be enabled in the physical
- function (PF). The VF MTU setting cannot be larger than the PF MTU.
+--- a/drivers/net/ethernet/broadcom/bcmsysport.c
++++ b/drivers/net/ethernet/broadcom/bcmsysport.c
+@@ -120,9 +120,13 @@ static inline void tdma_port_write_desc_
+ 					     struct dma_desc *desc,
+ 					     unsigned int port)
+ {
++	unsigned long desc_flags;
++
+ 	/* Ports are latched, so write upper address first */
++	spin_lock_irqsave(&priv->desc_lock, desc_flags);
+ 	tdma_writel(priv, desc->addr_status_len, TDMA_WRITE_PORT_HI(port));
+ 	tdma_writel(priv, desc->addr_lo, TDMA_WRITE_PORT_LO(port));
++	spin_unlock_irqrestore(&priv->desc_lock, desc_flags);
+ }
  
-+NBASE-T Support
-+---------------
-+The ixgbe driver supports NBASE-T on some devices. However, the advertisement
-+of NBASE-T speeds is suppressed by default, to accommodate broken network
-+switches which cannot cope with advertised NBASE-T speeds. Use the ethtool
-+command to enable advertising NBASE-T speeds on devices which support it::
-+
-+  ethtool -s eth? advertise 0x1800000001028
-+
-+On Linux systems with INTERFACES(5), this can be specified as a pre-up command
-+in /etc/network/interfaces so that the interface is always brought up with
-+NBASE-T support, e.g.::
-+
-+  iface eth? inet dhcp
-+       pre-up ethtool -s eth? advertise 0x1800000001028 || true
-+
- Generic Receive Offload, aka GRO
- --------------------------------
- The driver supports the in-kernel software implementation of GRO. GRO has
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index ffe322136c584..a3a02e2f92f64 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -5532,6 +5532,10 @@ static int ixgbe_non_sfp_link_config(struct ixgbe_hw *hw)
- 	if (!speed && hw->mac.ops.get_link_capabilities) {
- 		ret = hw->mac.ops.get_link_capabilities(hw, &speed,
- 							&autoneg);
-+		/* remove NBASE-T speeds from default autonegotiation
-+		 * to accommodate broken network switches in the field
-+		 * which cannot cope with advertised NBASE-T speeds
-+		 */
- 		speed &= ~(IXGBE_LINK_SPEED_5GB_FULL |
- 			   IXGBE_LINK_SPEED_2_5GB_FULL);
+ /* Ethtool operations */
+@@ -1880,6 +1884,7 @@ static int bcm_sysport_open(struct net_d
  	}
--- 
-2.33.0
-
+ 
+ 	/* Initialize both hardware and software ring */
++	spin_lock_init(&priv->desc_lock);
+ 	for (i = 0; i < dev->num_tx_queues; i++) {
+ 		ret = bcm_sysport_init_tx_ring(priv, i);
+ 		if (ret) {
+--- a/drivers/net/ethernet/broadcom/bcmsysport.h
++++ b/drivers/net/ethernet/broadcom/bcmsysport.h
+@@ -733,6 +733,7 @@ struct bcm_sysport_priv {
+ 	int			wol_irq;
+ 
+ 	/* Transmit rings */
++	spinlock_t		desc_lock;
+ 	struct bcm_sysport_tx_ring *tx_rings;
+ 
+ 	/* Receive queue */
 
 

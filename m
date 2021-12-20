@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3E347A880
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC2847A883
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhLTLUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S231710AbhLTLVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhLTLUV (ORCPT
+        with ESMTP id S230211AbhLTLU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:20:21 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA688C061574;
-        Mon, 20 Dec 2021 03:20:20 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id e5so19326778wrc.5;
-        Mon, 20 Dec 2021 03:20:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EHCh6r9rSUzZ/WtBAei5gQAlNFlmbVYEHyjfRoUFZ7s=;
-        b=fEVWBffJru8IdLqq0/poRqBNYp9BdtpI7gmLYKwH2icX36GcB2UZ+XpIHHadAn1suM
-         OWKDH5Ch4A6Xu8NYopwoAKkWAK4cgy/ZenusZWIGKYKLqelwT3bpWfaFyu4+91/ZBVqy
-         SOrOeHHglpl6NcQ7ZDM92PiyUI2gCk145cnbQbekEkUcu5aFSs6DNq1EUksgodu4qesU
-         kyekcdTf6doPJH0+0/ZlAHLIUQ20SiJF3nQ/GOzRkq6xge618TG8BNQWLcaNlRlXQXFO
-         daqN+V55O7XaR9LFsTRCJfqLUkZm/zv/SB0tNQ/XXftV2hGQ1v9ZflW1JSu7B8mULkUH
-         AYUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=EHCh6r9rSUzZ/WtBAei5gQAlNFlmbVYEHyjfRoUFZ7s=;
-        b=hO0Fnketcua7QGHUAz8zSxz63YDF75d/Ic2fbnvCHDs8oFrUB5Q9VPXOqN81zb1JGi
-         c/ZpKl5kwhUGZvtM7S6NphiafPExoDRRhsyNn2RPlxa1vEpLHldL2b4w7j8TspoR09ug
-         f40/HyJP557zX39WiY4E6qRQ9AKdFp2786BfZCb0El0IAXw82Vl2cxdgsPKsDH5x3T2Z
-         BOPur+5moUyyLwFPhr3nIAH2gkDvOvv+4VHPJwWUAyxkPmuzVb9xApKWHOYvmyqhFzZw
-         aKNAzOyT3VNR0erf272EBIoitqLZWdu/T1GrYRtltt4dN3jsqYTQLA88F/liMsR+m9x2
-         McWw==
-X-Gm-Message-State: AOAM531v9p/am0S2+6z1/FhYosHhnqQqnJ0H6si1e2AErgZvsuKxS2uq
-        xE0n3O7dnav5rZe6pOr33/E=
-X-Google-Smtp-Source: ABdhPJwKyZ0pbjgqzvj4ZR4Gv09Oi5kKYLzREwH1BaSi81GKh6DEMSmDI5X1l7G91KXKkLMXG/DmzQ==
-X-Received: by 2002:a5d:624f:: with SMTP id m15mr12176674wrv.13.1639999219382;
-        Mon, 20 Dec 2021 03:20:19 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id m21sm15413494wrb.2.2021.12.20.03.20.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 Dec 2021 03:20:18 -0800 (PST)
-Date:   Mon, 20 Dec 2021 11:20:16 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v4] sfc: potential dereference null pointer of
- rx_queue->page_ring
-Message-ID: <20211220112016.skhopsmnu6a4eapd@gmail.com>
-Mail-Followup-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20211220023715.746815-1-jiasheng@iscas.ac.cn>
+        Mon, 20 Dec 2021 06:20:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C942C061574;
+        Mon, 20 Dec 2021 03:20:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACF5860C7A;
+        Mon, 20 Dec 2021 11:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22511C36AE8;
+        Mon, 20 Dec 2021 11:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639999258;
+        bh=MVa0Q2mU+egWC6GFZ3kyV1Q/dRebhp0ifKOVrYUeGMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Px2i42Z+ew22oyULvyxyha0RNxO2vZgsA9kfSUFMJLvKPKAo3QVcpVIUVitWotUu4
+         MbETS8o9G5oV3WvtMAzPKDw4SY5sWyaEyDmf7yi5o2WdbgH5cE8uTfcRGzANU+H9J4
+         zGEXMPEueA1u8uXNWwx0yb5/GVGfcLF4RjfBnWDKvWnp9f8X/ADhFiL+3RIi/CAFJ/
+         OG7cYyaC+m1k00Z2WpKk/jAmrynour+esg9v+EH26FIlaX0m5G3feqffnNJ0hnuAHF
+         cNcrNuqTKO6I9IiUZhGhbWm0hogezjEmC4//t6tfTKsec+U5or4F8Hjzo1C1Lz9gme
+         OYxjN5LK9Ai2g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mzGip-00063h-4U; Mon, 20 Dec 2021 12:20:51 +0100
+Date:   Mon, 20 Dec 2021 12:20:51 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     ferlandm@amotus.ca
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: simple: add sierra wireless xm1210 gnss
+ receiver
+Message-ID: <YcBnE3j5x0QeWaJq@hovoldconsulting.com>
+References: <20211027200223.72701-1-ferlandm@amotus.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220023715.746815-1-jiasheng@iscas.ac.cn>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20211027200223.72701-1-ferlandm@amotus.ca>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:37:15AM +0800, Jiasheng Jiang wrote:
-> The return value of kcalloc() needs to be checked.
-
-Maybe my previous reply against v2 crossed with your later versions.
-
-Your predicate is wrong. The code that uses rx_queue->page_ring
-can deal with it being NULL.
-The only thing you might want to do is set rx_queue->page_ptr_mask
-to 0.
-It is a mask, never use a signed value for it.
-
-Martin
-
-> To avoid dereference of null pointer in case of the failure of alloc,
-> such as efx_fini_rx_recycle_ring().
-> Therefore, it should be better to change the definition of page_ptr_mask
-> to signed int and then assign the page_ptr_mask to -1 when page_ring is
-> NULL, in order to avoid the use in the loop.
+On Wed, Oct 27, 2021 at 04:02:23PM -0400, ferlandm@amotus.ca wrote:
+> From: Marc Ferland <ferlandm@amotus.ca>
 > 
-> Fixes: 5a6681e22c14 ("sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
+> Add device id for the Sierra Wireless XM1210 Multi-GNSS module.
 > 
-> v3 -> v4
+> https://www.sierrawireless.com/iot-solutions/products/xm1210/
 > 
-> *Change 1. Casade return -ENOMEM when alloc fails and deal with the
-> error.
-> *Change 2. Set size to -1 instead of return error.
-> *Change 3. Change the Fixes tag.
-> ---
->  drivers/net/ethernet/sfc/net_driver.h | 2 +-
->  drivers/net/ethernet/sfc/rx_common.c  | 5 ++++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
+> $ lsusb -vd 1199:b000
 > 
-> diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-> index 9b4b25704271..beba3e0a6027 100644
-> --- a/drivers/net/ethernet/sfc/net_driver.h
-> +++ b/drivers/net/ethernet/sfc/net_driver.h
-> @@ -407,7 +407,7 @@ struct efx_rx_queue {
->  	unsigned int page_recycle_count;
->  	unsigned int page_recycle_failed;
->  	unsigned int page_recycle_full;
-> -	unsigned int page_ptr_mask;
-> +	int page_ptr_mask;
->  	unsigned int max_fill;
->  	unsigned int fast_fill_trigger;
->  	unsigned int min_fill;
-> diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-> index 68fc7d317693..d9d0a5805f1c 100644
-> --- a/drivers/net/ethernet/sfc/rx_common.c
-> +++ b/drivers/net/ethernet/sfc/rx_common.c
-> @@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
->  					    efx->rx_bufs_per_page);
->  	rx_queue->page_ring = kcalloc(page_ring_size,
->  				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
-> -	rx_queue->page_ptr_mask = page_ring_size - 1;
-> +	if (!rx_queue->page_ring)
-> +		rx_queue->page_ptr_mask = -1;
-> +	else
-> +		rx_queue->page_ptr_mask = page_ring_size - 1;
->  }
->  
->  static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
-> -- 
-> 2.25.1
+> Bus 002 Device 003: ID 1199:b000 Sierra Wireless, Inc. Sierra Wireless_GNSS
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               1.00
+>   bDeviceClass            0
+>   bDeviceSubClass         0
+>   bDeviceProtocol         0
+>   bMaxPacketSize0        64
+>   idVendor           0x1199 Sierra Wireless, Inc.
+>   idProduct          0xb000
+>   bcdDevice            0.01
+>   iManufacturer           1 Sierra-wireless
+>   iProduct                2 Sierra Wireless_GNSS
+>   iSerial                 0
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x0020
+>     bNumInterfaces          1
+>     bConfigurationValue     1
+>     iConfiguration          0
+>     bmAttributes         0xc0
+>       Self Powered
+>     MaxPower               50mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass         0
+>       bInterfaceSubClass      0
+>       bInterfaceProtocol      0
+>       iInterface              0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x81  EP 1 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval             255
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x01  EP 1 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval             255
+> can't get debug descriptor: Resource temporarily unavailable
+> Device Status:     0x0001
+>   Self Powered
+> 
+> Device is also working correctly with:
+> 
+> $ echo 0x1199 0xb000 > /sys/bus/usb-serial/drivers/generic/new_id
+> 
+> Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
+
+Sorry about the late reply on this.
+
+I've been meaning to look into adding USB support to the GNSS subsystem
+and using that instead of USB serial, but I've been really short on time
+lately.
+
+The GNSS subsystem provides a generic interface to user-space regardless
+of the type of interface used (e.g. serial, i2c, spi, USB) and can be
+extended with GNSS specific features (e.g. power control signals) as
+needed.
+
+I've written a small generic driver for GNSS receivers with a USB
+interface which I've verified using a u-blox receiver:
+
+	https://lore.kernel.org/r/20211220111901.23206-1-johan@kernel.org
+
+Would you mind giving it a spin with the Sierra device as well?
+
+Johan

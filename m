@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E6F47A7E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3686747A7E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbhLTKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:48:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:52110 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229629AbhLTKsH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:48:07 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38F171042;
-        Mon, 20 Dec 2021 02:48:07 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.197.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE11A3F718;
-        Mon, 20 Dec 2021 02:48:05 -0800 (PST)
-Date:   Mon, 20 Dec 2021 10:48:03 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Beata Michalska <Beata.Michalska@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] sched/sugov: Ignore 'busy' filter when rq is capped
- by uclamp_max
-Message-ID: <20211220104803.lejehpl44p3b4gvg@e107158-lin.cambridge.arm.com>
-References: <20211216225320.2957053-1-qais.yousef@arm.com>
- <20211216225320.2957053-2-qais.yousef@arm.com>
- <CAJZ5v0h4xWs5EregN4nM-WEJYtQ8hyfdrEybyy6eZsaqSFaNmg@mail.gmail.com>
+        id S231417AbhLTKsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:48:20 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:47158 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231407AbhLTKsS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:48:18 -0500
+Date:   Mon, 20 Dec 2021 10:48:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639997297;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yPp1LBQFD8V9zdIDydz0LHUmOd6euwTtWzO5ulnY73w=;
+        b=AJ8fJk3xtWqPlap2rNfFQFEhLA+c1knjayGkqac5vV9MgA91GgorCQlBWvcE3qZQSsxS1k
+        86BAgCBwOIrTsVI+XU6XGE7gP1HWpEVaZmdrDhJBGtHC+CCHImgUrtFDBG20WLXwflsnNl
+        GZG2u6i1Msbzb6hk/jsuabtdATBq0EPTLS+ob6DWq3zInvKRjtazUiO1MXzXTwHfehreIk
+        DeuQzX5q6ZP/Ae87jUfPD5ENI3uwMju98hcSeqBHmgTInoXMhWBpjjfunfM5dmjbGafztT
+        79HlCl2D6tG+Y1Ny7W/UhjY8f20NrvcVabA9P1MjbmcD2kCugAaRTd9XIGYlQw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639997297;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yPp1LBQFD8V9zdIDydz0LHUmOd6euwTtWzO5ulnY73w=;
+        b=hqUPIR4MhAraJi5VTQSMAgxTcfcV/XezkgaAXzphCWYm48IzY3BZErnAkVtpH/K7o8X8OU
+        3pXFME0WcZkyG9Ag==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/mce: Check regs before accessing it
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211217102029.GA29708@kili>
+References: <20211217102029.GA29708@kili>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h4xWs5EregN4nM-WEJYtQ8hyfdrEybyy6eZsaqSFaNmg@mail.gmail.com>
+Message-ID: <163999729659.23020.13602058944330070928.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 16:54, Rafael J. Wysocki wrote:
-> On Thu, Dec 16, 2021 at 11:53 PM Qais Yousef <qais.yousef@arm.com> wrote:
-> >
-> > sugov_update_single_{freq, perf}() contains a 'busy' filter that ensures
-> > we don't bring the frqeuency down if there's no idle time (CPU is busy).
-> >
-> > The problem is that with uclamp_max we will have scenarios where a busy
-> > task is capped to run at a lower frequency and this filter prevents
-> > applying the capping when this task starts running.
-> >
-> > We handle this by skipping the filter when uclamp is enabled and the rq
-> > is being capped by uclamp_max.
-> >
-> > We introduce a new function uclamp_rq_is_capped() to help detecting when
-> > this capping is taking effect. Some code shuffling was required to allow
-> > using cpu_util_{cfs, rt}() in this new function.
-> >
-> > On 2 Core SMT2 Intel laptop I see:
-> >
-> > Without this patch:
-> >
-> >         uclampset -M 0 sysbench --test=cpu --threads = 4 run
-> >
-> > produces a score of ~3200 consistently. Which is the highest possible.
-> >
-> > Compiling the kernel also results in frequency running at max 3.1GHz all
-> > the time - running uclampset -M 400 to cap it has no effect without this
-> > patch.
-> >
-> > With this patch:
-> >
-> >         uclampset -M 0 sysbench --test=cpu --threads = 4 run
-> >
-> > produces a score of ~1100 with some outliers in ~1700. Uclamp max
-> > aggregates the performance requirements, so having high values sometimes
-> > is expected if some other task happens to require that frequency starts
-> > running at the same time.
-> >
-> > When compiling the kernel with uclampset -M 400 I can see the
-> > frequencies mostly in the ~2GHz region. Helpful to conserve power and
-> > prevent heating when not plugged in.
-> >
-> > Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >
-> > I haven't dug much into the busy filter, but I assume it is something that is
-> > still required right?
-> 
-> It is AFAICS.
-> 
-> > If there's a better alternative we can take to make this
-> > filter better instead, I'm happy to hear ideas. Otherwise hopefully this
-> > proposal is logical too.
-> 
-> It looks reasonable to me.
-> 
-> For the schedutil changes:
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The following commit has been merged into the ras/core branch of tip:
 
-Thanks for having a look!
+Commit-ID:     1acd85feba81084fcef00b73fc1601e42b77c5d8
+Gitweb:        https://git.kernel.org/tip/1acd85feba81084fcef00b73fc1601e42b77c5d8
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Fri, 17 Dec 2021 16:49:25 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 20 Dec 2021 11:41:02 +01:00
 
-Cheers
+x86/mce: Check regs before accessing it
 
---
-Qais Yousef
+Commit in Fixes accesses pt_regs before checking whether it is NULL or
+not. Make sure the NULL pointer check happens first.
+
+Fixes: 0a5b288e85bb ("x86/mce: Prevent severity computation from being instrumented")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/20211217102029.GA29708@kili
+---
+ arch/x86/kernel/cpu/mce/severity.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index a326467..7aa2bda 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -222,6 +222,9 @@ static bool is_copy_from_user(struct pt_regs *regs)
+ 	struct insn insn;
+ 	int ret;
+ 
++	if (!regs)
++		return false;
++
+ 	if (copy_from_kernel_nofault(insn_buf, (void *)regs->ip, MAX_INSN_SIZE))
+ 		return false;
+ 
+@@ -283,7 +286,7 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+ 	switch (fixup_type) {
+ 	case EX_TYPE_UACCESS:
+ 	case EX_TYPE_COPY:
+-		if (!regs || !copy_user)
++		if (!copy_user)
+ 			return IN_KERNEL;
+ 		m->kflags |= MCE_IN_KERNEL_COPYIN;
+ 		fallthrough;

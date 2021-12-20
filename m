@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F11B47AD5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA047ACF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbhLTOv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:51:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56070 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbhLTOt0 (ORCPT
+        id S236362AbhLTOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:47:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38108 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237113AbhLTOpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:26 -0500
+        Mon, 20 Dec 2021 09:45:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66D7DB80EEC;
-        Mon, 20 Dec 2021 14:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3361C36AE7;
-        Mon, 20 Dec 2021 14:49:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E37DE6119C;
+        Mon, 20 Dec 2021 14:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03487C36AE8;
+        Mon, 20 Dec 2021 14:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011764;
-        bh=w4NvOpzW6h3pkAvSSQmI3obNZi3DKLv3L7tuerst79g=;
+        s=korg; t=1640011524;
+        bh=D+iey9O1rBxJrDJpHf5DcPbNxIBUg3gy2kCBc/l00M4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZZ4HFLEEAWEag28EK5g9T23fLjSZVEI5dxCOLj0XxDO3X9JvyCKqnbtj/hKGlbPbJ
-         uw+chE5ySVAEBvdQi3kEB0/L3Qx89DE0YkpQ/rGhR45EEnQ6WlC3olv/hgY1814+Zy
-         rcx39/tBWKKci4Nei1XjGw9kuI4k9/icLOZ35EF8=
+        b=WmmCStPSvCdghaBmW8JifYqflGWcrolfPj2nIfXofrwIPlcfTpWLDJUeZa7Z4bvZH
+         tGtjPFRXbemIlcP1erfMeMFveO4gxlK2ETWi3nNEiEHT+X8AZG5SBRNx8vF5hJqUKk
+         yCPB9sJ/M7wszEqk36pOkiHZVZm3Ed8cYhW3xCSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 66/99] KVM: x86: Drop guest CPUID check for host initiated writes to MSR_IA32_PERF_CAPABILITIES
-Date:   Mon, 20 Dec 2021 15:34:39 +0100
-Message-Id: <20211220143031.609395263@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 5.4 51/71] timekeeping: Really make sure wall_to_monotonic isnt positive
+Date:   Mon, 20 Dec 2021 15:34:40 +0100
+Message-Id: <20211220143027.400901533@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +45,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Yu Liao <liaoyu15@huawei.com>
 
-[ Upstream commit 1aa2abb33a419090c7c87d4ae842a6347078ee12 ]
+commit 4e8c11b6b3f0b6a283e898344f154641eda94266 upstream.
 
-The ability to write to MSR_IA32_PERF_CAPABILITIES from the host should
-not depend on guest visible CPUID entries, even if just to allow
-creating/restoring guest MSRs and CPUIDs in any sequence.
+Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
+isn't positive") it is still possible to make wall_to_monotonic positive
+by running the following code:
 
-Fixes: 27461da31089 ("KVM: x86/pmu: Support full width counting")
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20211216165213.338923-3-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    int main(void)
+    {
+        struct timespec time;
+
+        clock_gettime(CLOCK_MONOTONIC, &time);
+        time.tv_nsec = 0;
+        clock_settime(CLOCK_REALTIME, &time);
+        return 0;
+    }
+
+The reason is that the second parameter of timespec64_compare(), ts_delta,
+may be unnormalized because the delta is calculated with an open coded
+substraction which causes the comparison of tv_sec to yield the wrong
+result:
+
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
+
+That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
+but actually the result should be wall_to_monotonic > ts_delta.
+
+After normalization, the result of timespec64_compare() is correct because
+the tv_sec comparison is not longer misleading:
+
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
+
+Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
+issue.
+
+Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/time/timekeeping.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b885063dc393f..4f828cac0273e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3065,7 +3065,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -1236,8 +1236,7 @@ int do_settimeofday64(const struct times
+ 	timekeeping_forward_now(tk);
  
- 		if (!msr_info->host_initiated)
- 			return 1;
--		if (guest_cpuid_has(vcpu, X86_FEATURE_PDCM) && kvm_get_msr_feature(&msr_ent))
-+		if (kvm_get_msr_feature(&msr_ent))
- 			return 1;
- 		if (data & ~msr_ent.data)
- 			return 1;
--- 
-2.34.1
-
+ 	xt = tk_xtime(tk);
+-	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
+-	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
++	ts_delta = timespec64_sub(*ts, xt);
+ 
+ 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
+ 		ret = -EINVAL;
 
 

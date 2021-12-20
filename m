@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A2347A81F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CF947A821
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbhLTLAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S230297AbhLTLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbhLTLAK (ORCPT
+        with ESMTP id S229766AbhLTLBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:00:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB510C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 03:00:09 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Mon, 20 Dec 2021 06:01:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAE8C061574;
+        Mon, 20 Dec 2021 03:01:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 17CF11EC0567;
-        Mon, 20 Dec 2021 12:00:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639998004;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NVH+9Xv+mhJGrugUsoTinsKz21v2dpO7caEXunwTj4g=;
-        b=VgsHUwyOifCQpiR3cvL/hgK0X6tE2JBvQTuLOdR9LdDOOuGWs7/JnxvJMvgkOtZ6oiHb0Z
-        AE03A/omyUE/lLZMpgo/06bCgr+EM2B3qjftAsMUYsy7dXKd52allhqwL4axTUP36a+beI
-        L71ePkgkKAduC5cNNi3YL25LF0ITDmE=
-Date:   Mon, 20 Dec 2021 12:00:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     x86@kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, bfields@fieldses.org, llvm@lists.linux.dev,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] x86/mm: Prevent early boot triple-faults with instrumentation
-Message-ID: <YcBiNqhYrxBPZphJ@zn.tnic>
-References: <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
- <20211216115838.GA23522@linux.intel.com>
- <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
- <YbyIJYzqtHPKRMFt@zn.tnic>
- <YbzRHXEMnZjyXzWa@archlinux-ax161>
- <Yb2/QCOExDEsj47w@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF31A60F7D;
+        Mon, 20 Dec 2021 11:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB828C36AE8;
+        Mon, 20 Dec 2021 11:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639998083;
+        bh=mbYZpWkOpBpdkdwTg12if6HElD5q2Vqht+vy/9jDAwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mtmlcauAAglMXUHRrvG+kdWk3FNldRIFxjvE87jPdneXrTq0XdwVO2Y0BVJiS929G
+         9r5EhjX9ZyBZ8f+tqYWSkoP2NcFS5rXv9/IRpU9sEi7ba2dEyUbGAwFN2Vu7pyMqx3
+         xX1VoS14lKnWZKlbSAPqkzukUZ6PfOpHTL5ufwvk=
+Date:   Mon, 20 Dec 2021 12:01:20 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pedro Batista <pedbap.g@gmail.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] [BACKPORT v4.9 - v4.19] firmware: arm_scpi: Fix string
+ overflow in SCPI genpd driver
+Message-ID: <YcBigHusYbH/CY7I@kroah.com>
+References: <20211217142056.866487-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yb2/QCOExDEsj47w@zn.tnic>
+In-Reply-To: <20211217142056.866487-1-sudeep.holla@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Fri, Dec 17, 2021 at 02:20:56PM +0000, Sudeep Holla wrote:
+> commit 865ed67ab955428b9aa771d8b4f1e4fb7fd08945 upstream.
+> 
+> Without the bound checks for scpi_pd->name, it could result in the buffer
+> overflow when copying the SCPI device name from the corresponding device
+> tree node as the name string is set at maximum size of 30.
+> 
+> Let us fix it by using devm_kasprintf so that the string buffer is
+> allocated dynamically.
+> 
+> Fixes: 8bec4337ad40 ("firmware: scpi: add device power domain support using genpd")
+> Reported-by: Pedro Batista <pedbap.g@gmail.com>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: stable@vger.kernel.org #v4.9, v4.14, v4.19
+> Cc: Cristian Marussi <cristian.marussi@arm.com>
+> Link: https://lore.kernel.org/r/20211209120456.696879-1-sudeep.holla@arm.com
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/firmware/scpi_pm_domain.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/firmware/scpi_pm_domain.c b/drivers/firmware/scpi_pm_domain.c
+> index f395dec27113..a6e62a793fbe 100644
+> --- a/drivers/firmware/scpi_pm_domain.c
+> +++ b/drivers/firmware/scpi_pm_domain.c
+> @@ -27,7 +27,6 @@ struct scpi_pm_domain {
+>  	struct generic_pm_domain genpd;
+>  	struct scpi_ops *ops;
+>  	u32 domain;
+> -	char name[30];
+>  };
+>  
+>  /*
+> @@ -121,8 +120,13 @@ static int scpi_pm_domain_probe(struct platform_device *pdev)
+>  
+>  		scpi_pd->domain = i;
+>  		scpi_pd->ops = scpi_ops;
+> -		sprintf(scpi_pd->name, "%s.%d", np->name, i);
+> -		scpi_pd->genpd.name = scpi_pd->name;
+> +		scpi_pd->genpd.name = devm_kasprintf(dev, GFP_KERNEL,
+> +						     "%s.%d", np->name, i);
+> +		if (!scpi_pd->genpd.name) {
+> +			dev_err(dev, "Failed to allocate genpd name:%s.%d\n",
+> +				np->name, i);
+> +			continue;
+> +		}
+>  		scpi_pd->genpd.power_off = scpi_pd_power_off;
+>  		scpi_pd->genpd.power_on = scpi_pd_power_on;
+>  
+> -- 
+> 2.25.1
+> 
 
-Commit in Fixes added a global TLB flush on the early boot path, after
-the kernel switches off of the trampoline page table.
+Now queued up, thanks.
 
-Compiler profiling options add additional measurement code
-which needs to be initialized prior to use. The global flush in
-x86_64_start_kernel() happens before those initializations can happen,
-leading to accessing invalid memory.
-
-The second issue this fixes is with KASAN: for a similar reason,
-kasan_early_init() needs to have happened before KASAN-instrumented
-functions are called.
-
-Therefore, reorder the flush to happen after the KASAN early init
-and prevent the compilers from adding profiling instrumentation to
-native_write_cr4().
-
-Fixes: f154f290855b ("x86/mm/64: Flush global TLB on boot and AP bringup")
-Reported-by: "J. Bruce Fields" <bfields@fieldses.org>
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211209144141.GC25654@xsang-OptiPlex-9020
----
- arch/x86/kernel/cpu/common.c |  2 +-
- arch/x86/kernel/head64.c     | 16 ++++++++++++++--
- 2 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 0083464de5e3..79b3d67addcc 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
- }
- EXPORT_SYMBOL(native_write_cr0);
- 
--void native_write_cr4(unsigned long val)
-+void __no_profile native_write_cr4(unsigned long val)
- {
- 	unsigned long bits_changed = 0;
- 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 75acb6027a87..f5e80a8377ad 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -483,10 +483,12 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
- 	/* Kill off the identity-map trampoline */
- 	reset_early_page_tables();
- 
--	__native_tlb_flush_global(native_read_cr4());
--
- 	clear_bss();
- 
-+	/*
-+	 * This needs to happen *before* kasan_early_init() because latter maps stuff
-+	 * into that page.
-+	 */
- 	clear_page(init_top_pgt);
- 
- 	/*
-@@ -498,6 +500,16 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
- 
- 	kasan_early_init();
- 
-+	/*
-+	 * Flush global TLB entries which could be left over from the trampoline page
-+	 * table.
-+	 *
-+	 * This needs to happen *after* kasan_early_init() as KASAN-enabled .configs
-+	 * instrument native_write_cr4() so KASAN must be initialized for that
-+	 * instrumentation to work.
-+	 */
-+	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
-+
- 	idt_setup_early_handler();
- 
- 	copy_bootdata(__va(real_mode_data));
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

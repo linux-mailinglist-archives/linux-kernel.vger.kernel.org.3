@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A3947AE7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D2947ADB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239416AbhLTPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:01:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34030 "EHLO
+        id S235921AbhLTOyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:54:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57246 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239001AbhLTO61 (ORCPT
+        with ESMTP id S237136AbhLTOvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:27 -0500
+        Mon, 20 Dec 2021 09:51:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62522B80ED1;
-        Mon, 20 Dec 2021 14:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D06C36AE7;
-        Mon, 20 Dec 2021 14:58:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A1DFB80EEA;
+        Mon, 20 Dec 2021 14:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C94E6C36AE8;
+        Mon, 20 Dec 2021 14:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012304;
-        bh=3uYhQb3bWY54x9fRpOlW0W4fux/f2ZgTlxdNGkLbGnc=;
+        s=korg; t=1640011878;
+        bh=PMhfV8jqau9aY5M5UMhGD2SwWPmIg4h8xrk3OUwlSoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=twwc57V/Nt/zXY4vo6aiNEL8fwzb4ouzeX3dY/HQ8LQ2b2GD7NtqLxKv0ETftEIse
-         YCRPRK2ikLM9buFLq1eY3qe4lhVpA5iUaoM61CzmcsmGrl2146LZWbdeCLQHvMO2Lj
-         YksKlSdloOYtk+tBpR1vQwy2u2Ork7ya46cbX9zA=
+        b=YNFHEMhygt756nbnQTp1Ldu7gKL+mEnVZjwMB2kf0yoF9tvdRzxHXHCUTRWdVfPAN
+         Q2VFRneiZw21Gz5nbuQqa+ospARw2rx7/RkUYSqRsrtbxxkLUEf55G+uFQ7v81Eqxz
+         BoV7g57koj4L7YWXXZkH0tmRclVRYkz+378oVllk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Makarov <georgemakarov1@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.15 154/177] ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
-Date:   Mon, 20 Dec 2021 15:35:04 +0100
-Message-Id: <20211220143045.257852492@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+e08a83a1940ec3846cd5@syzkaller.appspotmail.com,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH 5.10 92/99] rcu: Mark accesses to rcu_state.n_force_qs
+Date:   Mon, 20 Dec 2021 15:35:05 +0100
+Message-Id: <20211220143032.491507034@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,37 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-commit 737e65c7956795b3553781fb7bc82fce1c39503f upstream.
+commit 2431774f04d1050292054c763070021bade7b151 upstream.
 
-According to the i.MX6ULL Reference Manual, pad CSI_DATA07 may
-have the ESAI_TX0 functionality, not ESAI_T0.
+This commit marks accesses to the rcu_state.n_force_qs.  These data
+races are hard to make happen, but syzkaller was equal to the task.
 
-Also, NXP's i.MX Config Tools 10.0 generates dtsi with the
-MX6ULL_PAD_CSI_DATA07__ESAI_TX0 naming, so fix it accordingly.
-
-There are no devicetree users in mainline that use the old name,
-so just remove the old entry.
-
-Fixes: c201369d4aa5 ("ARM: dts: imx6ull: add imx6ull support")
-Reported-by: George Makarov <georgemakarov1@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Reported-by: syzbot+e08a83a1940ec3846cd5@syzkaller.appspotmail.com
+Acked-by: Marco Elver <elver@google.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx6ull-pinfunc.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/rcu/tree.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/arch/arm/boot/dts/imx6ull-pinfunc.h
-+++ b/arch/arm/boot/dts/imx6ull-pinfunc.h
-@@ -82,6 +82,6 @@
- #define MX6ULL_PAD_CSI_DATA04__ESAI_TX_FS                         0x01F4 0x0480 0x0000 0x9 0x0
- #define MX6ULL_PAD_CSI_DATA05__ESAI_TX_CLK                        0x01F8 0x0484 0x0000 0x9 0x0
- #define MX6ULL_PAD_CSI_DATA06__ESAI_TX5_RX0                       0x01FC 0x0488 0x0000 0x9 0x0
--#define MX6ULL_PAD_CSI_DATA07__ESAI_T0                            0x0200 0x048C 0x0000 0x9 0x0
-+#define MX6ULL_PAD_CSI_DATA07__ESAI_TX0                           0x0200 0x048C 0x0000 0x9 0x0
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -1888,7 +1888,7 @@ static void rcu_gp_fqs(bool first_time)
+ 	struct rcu_node *rnp = rcu_get_root();
  
- #endif /* __DTS_IMX6ULL_PINFUNC_H */
+ 	WRITE_ONCE(rcu_state.gp_activity, jiffies);
+-	rcu_state.n_force_qs++;
++	WRITE_ONCE(rcu_state.n_force_qs, rcu_state.n_force_qs + 1);
+ 	if (first_time) {
+ 		/* Collect dyntick-idle snapshots. */
+ 		force_qs_rnp(dyntick_save_progress_counter);
+@@ -2530,7 +2530,7 @@ static void rcu_do_batch(struct rcu_data
+ 	/* Reset ->qlen_last_fqs_check trigger if enough CBs have drained. */
+ 	if (count == 0 && rdp->qlen_last_fqs_check != 0) {
+ 		rdp->qlen_last_fqs_check = 0;
+-		rdp->n_force_qs_snap = rcu_state.n_force_qs;
++		rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 	} else if (count < rdp->qlen_last_fqs_check - qhimark)
+ 		rdp->qlen_last_fqs_check = count;
+ 
+@@ -2876,10 +2876,10 @@ static void __call_rcu_core(struct rcu_d
+ 		} else {
+ 			/* Give the grace period a kick. */
+ 			rdp->blimit = DEFAULT_MAX_RCU_BLIMIT;
+-			if (rcu_state.n_force_qs == rdp->n_force_qs_snap &&
++			if (READ_ONCE(rcu_state.n_force_qs) == rdp->n_force_qs_snap &&
+ 			    rcu_segcblist_first_pend_cb(&rdp->cblist) != head)
+ 				rcu_force_quiescent_state();
+-			rdp->n_force_qs_snap = rcu_state.n_force_qs;
++			rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 			rdp->qlen_last_fqs_check = rcu_segcblist_n_cbs(&rdp->cblist);
+ 		}
+ 	}
+@@ -3986,7 +3986,7 @@ int rcutree_prepare_cpu(unsigned int cpu
+ 	/* Set up local state, ensuring consistent view of global state. */
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	rdp->qlen_last_fqs_check = 0;
+-	rdp->n_force_qs_snap = rcu_state.n_force_qs;
++	rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 	rdp->blimit = blimit;
+ 	if (rcu_segcblist_empty(&rdp->cblist) && /* No early-boot CBs? */
+ 	    !rcu_segcblist_is_offloaded(&rdp->cblist))
 
 

@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043CC47AFF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBB447AE9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbhLTPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S237224AbhLTPBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbhLTPWY (ORCPT
+        with ESMTP id S239278AbhLTO6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:22:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE01C08C5D9;
-        Mon, 20 Dec 2021 07:02:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC8FB80ED3;
-        Mon, 20 Dec 2021 15:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B805C36AE8;
-        Mon, 20 Dec 2021 15:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012547;
-        bh=U7/RAfWf0ohq7ORVC8vlxJx5oX8ogjWmNdFAhAij1a8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jb6EtDnKl0D7MlYBdIl1SwNI3F0D5bA4co4UKnqdArAQnI9nygtrkovHKCgnD9EkD
-         hlxfywsll1k7vD4hSdS655BaeVg8+Aook5YySHWS6TVl4/KNtGsedcwTDBVSMTwyJO
-         BS4RjVO63gIeVSefC4q0+b6I1nsecer6Mi08pJO8=
-Date:   Mon, 20 Dec 2021 15:45:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     ok@artecdesign.ee, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: host: Check for null res pointer
-Message-ID: <YcCXB0QMkkFYXMIY@kroah.com>
-References: <20211220064946.817004-1-jiasheng@iscas.ac.cn>
+        Mon, 20 Dec 2021 09:58:32 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A62C06139A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:50:14 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y22so39418941edq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:50:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9sp8lrqTjH4tVEgy9/yn4LBGgEPK1p0BL+G9kAR2qkM=;
+        b=2/vdq9148EAdfRpKl6tYPEzDbfFu13ViRxqVWcSnjBotLg94Wx/ThILPI9po2jYS/r
+         88a94qWtaic2hcHfXvAwMb2xTymT7xcHELJlfoNSgogwh1BMe7Ebdo7j+jK+Br63Rvsm
+         FhfEtBiDGkl9bHtQHCMzs5ZuRbPp5fevGMZoi59Z88KsyG0axZeKbQ5ERzJ899oGbvGy
+         vpE7U87LI9bnB3E49ZpU8zhzyZR3JKyomD1Qh8WmaZQKsIOkafWe2STcWIjOO+Mv1aNU
+         ow5grn1kYOTlpF9Xh5pHxjcP2RzwoYUpLg+n/2dLaICwAw4bMAM3HUWM3PS4QJ72iCSL
+         5M4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9sp8lrqTjH4tVEgy9/yn4LBGgEPK1p0BL+G9kAR2qkM=;
+        b=U57WYdAO/Onb+g5tvzHUGy5ay/bPXjzqUBmQy3XHsWQYCVsBatFTLXs++LgCNsbvu5
+         U1McqV8f2KYHlQmdF+pjtSwmx6fIxmeyRfoMLBMDPZqRyfimyaSnAB3rhw29mKEfUtUf
+         qJTjqjLn7iSc+FdXlNcxPUmbKlv2jRHCW+EO4fG5vxokXYrOFn1svgh1XYXj6Ip1duKr
+         xN2hiwujQ4B8ulgZIBSltul1aS2JgDuXsH6BMIDuUSGbNfztOCcuNUeWrZ509GbqJz7R
+         9WTvwqHhJnkwYpMincaRzPGfQZVDmKw4BE2yj6ckBhLKbuA+YqqTYVMXRNmxsam4oBzc
+         z0+Q==
+X-Gm-Message-State: AOAM532psdFOPmzOi+lVWih4oajLmXTh9qH1Yz22SZLZbvKdC2+O2lmo
+        +PxHI6u88q/xex4SIjWfIyy1c/0D5jgyxn1uKVYQ1A==
+X-Google-Smtp-Source: ABdhPJyMcS0XdQOUX70jwFfNF+jSawe7Vvo1hbs0CHqHEfUeODevfaejc/+ceii7yoZJZQEWFGqjVMtOEj2zRBDNVB0=
+X-Received: by 2002:a17:906:249a:: with SMTP id e26mr13252984ejb.492.1640011813155;
+ Mon, 20 Dec 2021 06:50:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220064946.817004-1-jiasheng@iscas.ac.cn>
+References: <20211213094036.1787950-1-daniel@0x0f.com> <20211213094036.1787950-5-daniel@0x0f.com>
+In-Reply-To: <20211213094036.1787950-5-daniel@0x0f.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 20 Dec 2021 15:50:02 +0100
+Message-ID: <CAMRc=Md_2b-sBnPQL-E59byYSv+Z0+d3V8JrbPqpGSMjGS+tgA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] gpio: msc313: Add support for SSD201 and SSD202D
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 02:49:46PM +0800, Jiasheng Jiang wrote:
-> The return value of platform_get_resource() needs to be checked.
-> To avoid use of error pointer in case of the failure of alloc.
-> 
-> Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Mon, Dec 13, 2021 at 10:40 AM Daniel Palmer <daniel@0x0f.com> wrote:
+>
+> This adds GPIO support for the SSD201 and SSD202D chips.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  drivers/usb/host/isp116x-hcd.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
-> index 8835f6bd528e..addd2b43a14c 100644
-> --- a/drivers/usb/host/isp116x-hcd.c
-> +++ b/drivers/usb/host/isp116x-hcd.c
-> @@ -1541,9 +1541,15 @@ static int isp116x_remove(struct platform_device *pdev)
->  
->  	iounmap(isp116x->data_reg);
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	if (!res)
-> +		return -EINVAL;
 
-You really can not fail a remove call.  If you do so here, memory will
-leak.
+I applied patches 1-3. This triggers a bunch of checkpatch errors.
+Please address them and resend this single patch.
 
-Please make this work no matter what.
-
-thanks,
-
-greg k-h
+Bart

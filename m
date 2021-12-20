@@ -2,1334 +2,600 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C39147A964
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB6B47A965
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbhLTMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:18:52 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:57006 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232428AbhLTMSq (ORCPT
+        id S230064AbhLTMUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhLTMUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:18:46 -0500
-X-UUID: d44aeb8cf5624ab4827127f592e7713c-20211220
-X-UUID: d44aeb8cf5624ab4827127f592e7713c-20211220
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2128122031; Mon, 20 Dec 2021 20:18:39 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 20 Dec 2021 20:18:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 20 Dec
- 2021 20:18:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 20 Dec 2021 20:18:37 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <matthias.bgg@gmail.com>, <broonie@kernel.org>
-CC:     <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
-        <bayi.cheng@mediatek.com>, <gch981213@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>
-Subject: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and evaluation board
-Date:   Mon, 20 Dec 2021 20:18:25 +0800
-Message-ID: <20211220121825.6446-5-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.15.GIT
-In-Reply-To: <20211220121825.6446-1-tinghan.shen@mediatek.com>
-References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
+        Mon, 20 Dec 2021 07:20:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27847C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:20:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xkpC/prBYZz56yjSOapPCAxq7oymUf09an78+QHN69g=; b=IN9KDZxIjDm4T+dR1IkPt+uuCs
+        V3qrjErbUUw8E7RLop9xWWXaszwxTynvDqMH5fW8y+Vt9hBuCQZk2ILDic7ZZpEvZnKsr7FtZ0fsk
+        CKsHQ72cnlM4yrf6r0w4sYDq2s0JFMAkUyaYcveakyyWc5zrITwevv0FjbM9saGwrO3IjLzMfoRLr
+        hhgic71hL0j1jkVVljwqr0ruBEct/QKrQqK/8kgcR6md3KEF0W3POtbxQUASD5hYzPQfGA+9Jgy/F
+        vg0mEo+MNy1ZsWSQgIlXw8h/JD6CVmFvpAnNJwPUNzD04l8z9FKdLyfbCglqSRwNA2A4030dZ00gA
+        AsU7hyxg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzHdy-001XMZ-Jq; Mon, 20 Dec 2021 12:19:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3783930003C;
+        Mon, 20 Dec 2021 13:19:53 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EB0292C9C515D; Mon, 20 Dec 2021 13:19:52 +0100 (CET)
+Date:   Mon, 20 Dec 2021 13:19:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events
+ too
+Message-ID: <YcB06DasOBtU0b00@hirez.programming.kicks-ass.net>
+References: <20211205224843.1503081-1-namhyung@kernel.org>
+ <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
+ <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com>
+ <20211210103341.GS16608@worktop.programming.kicks-ass.net>
+ <Yby8Su+fVA1lqVjT@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yby8Su+fVA1lqVjT@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic chip support for mediatek mt8195.
 
-Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+How's this then?
+
 ---
- arch/arm64/boot/dts/mediatek/Makefile       |    1 +
- arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  209 ++++
- arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1034 +++++++++++++++++++
- 3 files changed, 1244 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+Subject: perf: Fix perf_event_read_local() time
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Mon Dec 20 09:59:47 CET 2021
 
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 4f68ebed2e31..7aa08bb4c078 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -32,4 +32,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-new file mode 100644
-index 000000000000..e581c6bbead6
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+Time readers that cannot take locks (due to NMI etc..) currently make
+use of perf_event::shadow_ctx_time, which, for that event gives:
+
+	time' = now + (time - timestamp)
+
+or, alternatively arranged:
+
+	time' = time + (now - timestamp)
+
+IOW, the progression of time since the last time the shadow_ctx_time
+was updated.
+
+There's problems with this:
+
+ A) the shadow_ctx_time is per-event, even though the ctx_time it
+    reflects is obviously per context. The direct concequence of this
+    is that the context needs to iterate all events all the time to
+    keep the shadow_ctx_time in sync.
+
+ B) even with the prior point, the context itself might not be active
+    meaning its time should not advance to begin with.
+
+ C) shadow_ctx_time isn't consistently updated when ctx_time is
+
+There are 3 users of this stuff, that suffer differently from this:
+
+ - calc_timer_values()
+   - perf_output_read()
+   - perf_event_update_userpage()	/* A */
+
+ - perf_event_read_local()		/* A,B */
+
+In particular, perf_output_read() doesn't suffer at all, because it's
+sample driven and hence only relevant when the event is actually
+running.
+
+This same was supposed to be true for perf_event_update_userpage(),
+after all self-monitoring implies the context is active *HOWEVER*, as
+per commit f79256532682 ("perf/core: fix userpage->time_enabled of
+inactive events") this goes wrong when combined with counter
+overcommit, in that case those events that do not get scheduled when
+the context becomes active (task events typically) miss out on the
+EVENT_TIME update and ENABLED time is inflated (for a little while)
+with the time the context was inactive. Once the event gets rotated
+in, this gets corrected, leading to a non-monotonic timeflow.
+
+perf_event_read_local() made things even worse, it can request time at
+any point, suffering all the problems perf_event_update_userpage()
+does and more. Because while perf_event_update_userpage() is limited
+by the context being active, perf_event_read_local() users have no
+such constraint.
+
+Therefore, completely overhaul things and do away with
+perf_event::shadow_ctx_time. Instead have regular context time updates
+keep track of this offset directly and provide perf_event_time_now()
+to complement perf_event_time().
+
+perf_event_time_now() will, in adition to being context wide, also
+take into account if the context is active. For inactive context, it
+will not advance time.
+
+This latter property means the cgroup perf_cgroup_info context needs
+to grow addition state to track this.
+
+Additionally, since all this is strictly per-cpu, we can use barrier()
+to order context activity vs context time.
+
+Fixes: 7d9285e82db5 ("perf/bpf: Extend the perf_event_read_local() interface, a.k.a. "bpf: perf event change needed for subsequent bpf helpers"")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ include/linux/perf_event.h |   15 ---
+ kernel/events/core.c       |  224 +++++++++++++++++++++++++++------------------
+ 2 files changed, 138 insertions(+), 101 deletions(-)
+
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -683,18 +683,6 @@ struct perf_event {
+ 	u64				total_time_running;
+ 	u64				tstamp;
+ 
+-	/*
+-	 * timestamp shadows the actual context timing but it can
+-	 * be safely used in NMI interrupt context. It reflects the
+-	 * context time as it was when the event was last scheduled in,
+-	 * or when ctx_sched_in failed to schedule the event because we
+-	 * run out of PMC.
+-	 *
+-	 * ctx_time already accounts for ctx->timestamp. Therefore to
+-	 * compute ctx_time for a sample, simply add perf_clock().
+-	 */
+-	u64				shadow_ctx_time;
+-
+ 	struct perf_event_attr		attr;
+ 	u16				header_size;
+ 	u16				id_header_size;
+@@ -841,6 +829,7 @@ struct perf_event_context {
+ 	 */
+ 	u64				time;
+ 	u64				timestamp;
++	u64				timeoffset;
+ 
+ 	/*
+ 	 * These fields let us detect when two contexts have both
+@@ -923,6 +912,8 @@ struct bpf_perf_event_data_kern {
+ struct perf_cgroup_info {
+ 	u64				time;
+ 	u64				timestamp;
++	u64				timeoffset;
++	int				active;
+ };
+ 
+ struct perf_cgroup {
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -674,6 +674,23 @@ perf_event_set_state(struct perf_event *
+ 	WRITE_ONCE(event->state, state);
+ }
+ 
 +/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Author: Seiya Wang <seiya.wang@mediatek.com>
-+ */
-+/dts-v1/;
-+#include "mt8195.dtsi"
-+
-+/ {
-+	model = "MediaTek MT8195 evaluation board";
-+	compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:921600n8";
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0 0x40000000 0 0x80000000>;
-+	};
-+};
-+
-+&auxadc {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pin>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pin>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pin>;
-+	status = "disabled";
-+};
-+
-+&i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c3_pin>;
-+	status = "disabled";
-+};
-+
-+&i2c4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c4_pin>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c5_pin>;
-+	status = "disabled";
-+};
-+
-+&i2c6 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c6_pin>;
-+	clock-frequency = <400000>;
-+	status = "disabled";
-+};
-+
-+&nor_flash {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&nor_pins_default>;
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <50000000>;
-+	};
-+};
-+
-+&pio {
-+	i2c0_pin: i2c0-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
-+				 <PINMUX_GPIO9__FUNC_SCL0>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <0>;
-+			drive-strength = <MTK_DRIVE_6mA>;
-+		};
-+	};
-+	i2c1_pin: i2c1-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
-+				 <PINMUX_GPIO11__FUNC_SCL1>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <0>;
-+			drive-strength = <MTK_DRIVE_6mA>;
-+		};
-+	};
-+	i2c2_pin: i2c2-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO12__FUNC_SDA2>,
-+				 <PINMUX_GPIO13__FUNC_SCL2>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <7>;
-+		};
-+	};
-+	i2c3_pin: i2c3-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO14__FUNC_SDA3>,
-+				 <PINMUX_GPIO15__FUNC_SCL3>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <7>;
-+		};
-+	};
-+	i2c4_pin: i2c4-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
-+				 <PINMUX_GPIO17__FUNC_SCL4>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <7>;
-+		};
-+	};
-+	i2c5_pin: i2c5-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO29__FUNC_SCL5>,
-+				 <PINMUX_GPIO30__FUNC_SDA5>;
-+			bias-pull-up = <1>;
-+			mediatek,rsel = <7>;
-+			mediatek,drive-strength-adv = <7>;
-+		};
-+	};
-+	i2c6_pin: i2c6-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
-+				 <PINMUX_GPIO26__FUNC_SCL6>;
-+			bias-pull-up = <1>;
-+		};
-+	};
-+	i2c7_pin: i2c7-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
-+				 <PINMUX_GPIO28__FUNC_SDA7>;
-+			bias-pull-up = <1>;
-+		};
-+	};
-+	nor_pins_default: nor-pins {
-+		pins0 {
-+			pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
-+					 <PINMUX_GPIO141__FUNC_SPINOR_CK>,
-+					 <PINMUX_GPIO143__FUNC_SPINOR_IO1>;
-+			bias-pull-down;
-+		};
-+		pins1 {
-+			pinmux = <PINMUX_GPIO140__FUNC_SPINOR_CS>,
-+				     <PINMUX_GPIO130__FUNC_SPINOR_IO2>,
-+				     <PINMUX_GPIO131__FUNC_SPINOR_IO3>;
-+			bias-pull-up;
-+		};
-+	};
-+	uart0_pin: uart0-pins {
-+		pins {
-+			pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
-+				<PINMUX_GPIO99__FUNC_URXD0>;
-+		};
-+	};
-+};
-+
-+&u2port0 {
-+	status = "okay";
-+};
-+
-+&u2port1 {
-+	status = "okay";
-+};
-+
-+&u3phy0 {
-+	status="okay";
-+};
-+
-+&u3phy1 {
-+	status="okay";
-+};
-+
-+&u3port0 {
-+	status = "okay";
-+};
-+
-+&u3port1 {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pin>;
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-new file mode 100644
-index 000000000000..057a8492edec
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -0,0 +1,1034 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (c) 2021 MediaTek Inc.
-+ * Author: Seiya Wang <seiya.wang@mediatek.com>
++ * UP store-release, load-acquire
 + */
 +
-+/dts-v1/;
-+#include <dt-bindings/clock/mt8195-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/pinctrl/mt8195-pinfunc.h>
-+#include <dt-bindings/reset/ti-syscon.h>
-+
-+/ {
-+	compatible = "mediatek,mt8195";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	clk26m: oscillator0 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <26000000>;
-+		clock-output-names = "clk26m";
-+	};
-+
-+	clk32k: oscillator1 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "clk32k";
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x000>;
-+			enable-method = "psci";
-+			clock-frequency = <1701000000>;
-+			capacity-dmips-mhz = <578>;
-+			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x100>;
-+			enable-method = "psci";
-+			clock-frequency = <1701000000>;
-+			capacity-dmips-mhz = <578>;
-+			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x200>;
-+			enable-method = "psci";
-+			clock-frequency = <1701000000>;
-+			capacity-dmips-mhz = <578>;
-+			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x300>;
-+			enable-method = "psci";
-+			clock-frequency = <1701000000>;
-+			capacity-dmips-mhz = <578>;
-+			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x400>;
-+			enable-method = "psci";
-+			clock-frequency = <2171000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x500>;
-+			enable-method = "psci";
-+			clock-frequency = <2171000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x600>;
-+			enable-method = "psci";
-+			clock-frequency = <2171000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x700>;
-+			enable-method = "psci";
-+			clock-frequency = <2171000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+			};
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu4>;
-+				};
-+				core1 {
-+					cpu = <&cpu5>;
-+				};
-+				core2 {
-+					cpu = <&cpu6>;
-+				};
-+				core3 {
-+					cpu = <&cpu7>;
-+				};
-+			};
-+		};
-+
-+		idle-states {
-+			entry-method = "arm,psci";
-+			cpuoff_l: cpuoff_l {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x00010001>;
-+				local-timer-stop;
-+				entry-latency-us = <50>;
-+				exit-latency-us = <95>;
-+				min-residency-us = <580>;
-+			};
-+			cpuoff_b: cpuoff_b {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x00010001>;
-+				local-timer-stop;
-+				entry-latency-us = <45>;
-+				exit-latency-us = <140>;
-+				min-residency-us = <740>;
-+			};
-+			clusteroff_l: clusteroff_l {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x01010002>;
-+				local-timer-stop;
-+				entry-latency-us = <55>;
-+				exit-latency-us = <155>;
-+				min-residency-us = <840>;
-+			};
-+			clusteroff_b: clusteroff_b {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x01010002>;
-+				local-timer-stop;
-+				entry-latency-us = <50>;
-+				exit-latency-us = <200>;
-+				min-residency-us = <1000>;
-+			};
-+		};
-+
-+		l2_0: l2-cache0 {
-+			compatible = "cache";
-+			next-level-cache = <&l3_0>;
-+		};
-+
-+		l2_1: l2-cache1 {
-+			compatible = "cache";
-+			next-level-cache = <&l3_0>;
-+		};
-+
-+		l3_0: l3-cache {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	dsu-pmu {
-+		compatible = "arm,dsu-pmu";
-+		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH 0>;
-+		cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
-+		       <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-+	};
-+
-+	pmu-a55 {
-+		compatible = "arm,cortex-a55-pmu";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster0>;
-+	};
-+
-+	pmu-a78 {
-+		compatible = "arm,cortex-a78-pmu";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster1>;
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	timer: timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clock-frequency = <13000000>;
-+	};
-+
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
-+
-+		gic: interrupt-controller@c000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <4>;
-+			#redistributor-regions = <1>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x0c000000 0 0x40000>,
-+			      <0 0x0c040000 0 0x200000>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-+
-+			ppi-partitions {
-+				ppi_cluster0: interrupt-partition-0 {
-+					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
-+				};
-+				ppi_cluster1: interrupt-partition-1 {
-+					affinity = <&cpu4 &cpu5 &cpu6 &cpu7>;
-+				};
-+			};
-+		};
-+
-+		topckgen: syscon@10000000 {
-+			compatible = "mediatek,mt8195-topckgen", "syscon";
-+			reg = <0 0x10000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		infracfg_ao: syscon@10001000 {
-+			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+			infracfg_rst: reset-controller {
-+				compatible = "ti,syscon-reset";
-+				#reset-cells = <1>;
-+				ti,reset-bits = <
-+					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+					0x120 0 0x124 0 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+					0x730 10 0x734 10 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
-+				>;
-+			};
-+		};
-+
-+		pericfg: syscon@10003000 {
-+			compatible = "mediatek,mt8195-pericfg", "syscon";
-+			reg = <0 0x10003000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		pio: pinctrl@10005000 {
-+			compatible = "mediatek,mt8195-pinctrl";
-+			reg = <0 0x10005000 0 0x1000>,
-+			      <0 0x11d10000 0 0x1000>,
-+			      <0 0x11d30000 0 0x1000>,
-+			      <0 0x11d40000 0 0x1000>,
-+			      <0 0x11e20000 0 0x1000>,
-+			      <0 0x11eb0000 0 0x1000>,
-+			      <0 0x11f40000 0 0x1000>,
-+			      <0 0x1000b000 0 0x1000>;
-+			reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
-+				    "iocfg_br", "iocfg_lm", "iocfg_rb",
-+				    "iocfg_tl", "eint";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&pio 0 0 144>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH 0>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		watchdog: watchdog@10007000 {
-+			compatible = "mediatek,mt8195-wdt",
-+				     "mediatek,mt6589-wdt";
-+			reg = <0 0x10007000 0 0x100>;
-+		};
-+
-+		apmixedsys: syscon@1000c000 {
-+			compatible = "mediatek,mt8195-apmixedsys", "syscon";
-+			reg = <0 0x1000c000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		systimer: timer@10017000 {
-+			compatible = "mediatek,mt8195-timer",
-+				     "mediatek,mt6765-timer";
-+			reg = <0 0x10017000 0 0x1000>;
-+			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_CLK26M_D2>;
-+		};
-+
-+		pwrap: pwrap@10024000 {
-+			compatible = "mediatek,mt8195-pwrap", "syscon";
-+			reg = <0 0x10024000 0 0x1000>;
-+			reg-names = "pwrap";
-+			interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_PMIC_AP>,
-+				 <&infracfg_ao CLK_INFRA_AO_PMIC_TMR>;
-+			clock-names = "spi", "wrap";
-+			assigned-clocks = <&topckgen CLK_TOP_PWRAP_ULPOSC>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_ULPOSC1_D10>;
-+		};
-+
-+		scp_adsp: clock-controller@10720000 {
-+			compatible = "mediatek,mt8195-scp_adsp";
-+			reg = <0 0x10720000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		uart0: serial@11001100 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001100 0 0x100>;
-+			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART0>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@11001200 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001200 0 0x100>;
-+			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART1>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart2: serial@11001300 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001300 0 0x100>;
-+			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART2>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart3: serial@11001400 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001400 0 0x100>;
-+			interrupts = <GIC_SPI 723 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART3>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart4: serial@11001500 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001500 0 0x100>;
-+			interrupts = <GIC_SPI 724 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART4>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart5: serial@11001600 {
-+			compatible = "mediatek,mt8195-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11001600 0 0x100>;
-+			interrupts = <GIC_SPI 725 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART5>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		auxadc: auxadc@11002000 {
-+			compatible = "mediatek,mt8195-auxadc",
-+				     "mediatek,mt8173-auxadc";
-+			reg = <0 0x11002000 0 0x1000>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_AUXADC>;
-+			clock-names = "main";
-+			#io-channel-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		pericfg_ao: syscon@11003000 {
-+			compatible = "mediatek,mt8195-pericfg_ao", "syscon";
-+			reg = <0 0x11003000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		spi0: spi@1100a000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x1100a000 0 0x1000>;
-+			interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI0>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi1: spi@11010000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11010000 0 0x1000>;
-+			interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI1>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi2: spi@11012000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11012000 0 0x1000>;
-+			interrupts = <GIC_SPI 193 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI2>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi3: spi@11013000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11013000 0 0x1000>;
-+			interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI3>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi4: spi@11018000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11018000 0 0x1000>;
-+			interrupts = <GIC_SPI 195 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI4>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi5: spi@11019000 {
-+			compatible = "mediatek,mt8195-spi",
-+				     "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11019000 0 0x1000>;
-+			interrupts = <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI5>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spis0: spi@1101d000 {
-+			compatible = "mediatek,mt8195-spi-slave";
-+			reg = <0 0x1101d000 0 0x1000>;
-+			interrupts = <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_SPIS0>;
-+			clock-names = "spi";
-+			assigned-clocks = <&topckgen CLK_TOP_SPIS>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D6>;
-+			status = "disabled";
-+		};
-+
-+		spis1: spi@1101e000 {
-+			compatible = "mediatek,mt8195-spi-slave";
-+			reg = <0 0x1101e000 0 0x1000>;
-+			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_SPIS1>;
-+			clock-names = "spi";
-+			assigned-clocks = <&topckgen CLK_TOP_SPIS>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D6>;
-+			status = "disabled";
-+		};
-+
-+		xhci0: usb@11200000 {
-+			compatible = "mediatek,mt8195-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x11200000 0 0x1000>,
-+			      <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port0 PHY_TYPE_USB2>,
-+			       <&u3port0 PHY_TYPE_USB3>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_REF>,
-+				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
-+			status = "disabled";
-+		};
-+
-+		mmc0: mmc@11230000 {
-+			compatible = "mediatek,mt8195-mmc",
-+				     "mediatek,mt8183-mmc";
-+			reg = <0 0x11230000 0 0x10000>,
-+			      <0 0x11f50000 0 0x1000>;
-+			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MSDC50_0>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC0>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC0_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			status = "disabled";
-+		};
-+
-+		mmc1: mmc@11240000 {
-+			compatible = "mediatek,mt8195-mmc",
-+				     "mediatek,mt8183-mmc";
-+			reg = <0 0x11240000 0 0x1000>,
-+			      <0 0x11c70000 0 0x1000>;
-+			interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MSDC30_1>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC1>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC1_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			assigned-clocks = <&topckgen CLK_TOP_MSDC30_1>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
-+			status = "disabled";
-+		};
-+
-+		mmc2: mmc@11250000 {
-+			compatible = "mediatek,mt8195-mmc",
-+				     "mediatek,mt8183-mmc";
-+			reg = <0 0x11250000 0 0x1000>,
-+			      <0 0x11e60000 0 0x1000>;
-+			interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MSDC30_2>,
-+				 <&infracfg_ao CLK_INFRA_AO_CG1_MSDC2>,
-+				 <&infracfg_ao CLK_INFRA_AO_CG3_MSDC2>;
-+			clock-names = "source", "hclk", "source_cg";
-+			assigned-clocks = <&topckgen CLK_TOP_MSDC30_2>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
-+			status = "disabled";
-+		};
-+
-+		xhci1: usb@11290000 {
-+			compatible = "mediatek,mt8195-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x11290000 0 0x1000>,
-+			      <0 0x11293e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port1 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
-+				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
-+				 <&apmixedsys CLK_APMIXED_USB1PLL>;
-+			clock-names = "sys_ck", "ref_ck", "xhci_ck", "mcu_ck";
-+			status = "disabled";
-+		};
-+
-+		xhci2: usb@112a0000 {
-+			compatible = "mediatek,mt8195-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x112a0000 0 0x1000>,
-+			      <0 0x112a3e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port2 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
-+				 <&topckgen CLK_TOP_SSUSB_P2_REF>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
-+			clock-names = "sys_ck", "ref_ck", "xhci_ck";
-+			status = "disabled";
-+		};
-+
-+		xhci3: usb@112b0000 {
-+			compatible = "mediatek,mt8195-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x112b0000 0 0x1000>,
-+			      <0 0x112b3e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port3 PHY_TYPE_USB2>;
-+			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
-+					  <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-+						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-+			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
-+				 <&topckgen CLK_TOP_SSUSB_P3_REF>;
-+			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-+			usb2-lpm-disable;
-+			status = "disabled";
-+		};
-+
-+		nor_flash: spi@1132c000 {
-+			compatible = "mediatek,mt8195-nor",
-+				     "mediatek,mt8173-nor";
-+			reg = <0 0x1132c000 0 0x1000>;
-+			interrupts = <GIC_SPI 825 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_SPINOR>,
-+				 <&pericfg_ao CLK_PERI_AO_FLASHIF_FLASH>,
-+				 <&pericfg_ao CLK_PERI_AO_FLASHIF_BUS>;
-+			clock-names = "spi", "sf", "axi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		u3phy2: t-phy@11c40000 {
-+			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11c40000 0x700>;
-+			status = "disabled";
-+
-+			u2port2: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P2_REF>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
-+		u3phy3: t-phy@11c50000 {
-+			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11c50000 0x700>;
-+			status = "disabled";
-+
-+			u2port3: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P3_REF>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
-+		i2c5: i2c@11d00000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11d00000 0 0x1000>,
-+			      <0 0x10220580 0 0x80>;
-+			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C5>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c6: i2c@11d01000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11d01000 0 0x1000>,
-+			      <0 0x10220600 0 0x80>;
-+			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C6>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c7: i2c@11d02000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11d02000 0 0x1000>,
-+			      <0 0x10220680 0 0x80>;
-+			interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C7>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		imp_iic_wrap_s: clock-controller@11d03000 {
-+			compatible = "mediatek,mt8195-imp_iic_wrap_s";
-+			reg = <0 0x11d03000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		i2c0: i2c@11e00000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11e00000 0 0x1000>,
-+			      <0 0x10220080 0 0x80>;
-+			interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C0>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "okay";
-+		};
-+
-+		i2c1: i2c@11e01000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11e01000 0 0x1000>,
-+			      <0 0x10220200 0 0x80>;
-+			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C1>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@11e02000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11e02000 0 0x1000>,
-+			      <0 0x10220380 0 0x80>;
-+			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C2>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@11e03000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11e03000 0 0x1000>,
-+			      <0 0x10220480 0 0x80>;
-+			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C3>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c4: i2c@11e04000 {
-+			compatible = "mediatek,mt8195-i2c",
-+				     "mediatek,mt8192-i2c";
-+			reg = <0 0x11e04000 0 0x1000>,
-+			      <0 0x10220500 0 0x80>;
-+			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clock-div = <1>;
-+			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C4>,
-+				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
-+			clock-names = "main", "dma";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		imp_iic_wrap_w: clock-controller@11e05000 {
-+			compatible = "mediatek,mt8195-imp_iic_wrap_w";
-+			reg = <0 0x11e05000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		u3phy1: t-phy@11e30000 {
-+			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11e30000 0xe00>;
-+			status = "disabled";
-+
-+			u2port1: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>,
-+					 <&clk26m>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u3port1: usb-phy@700 {
-+				reg = <0x700 0x700>;
-+				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
-+					 <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
-+		u3phy0: t-phy@11e40000 {
-+			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11e40000 0xe00>;
-+			status = "disabled";
-+
-+			u2port0: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&topckgen CLK_TOP_SSUSB_PHY_REF>,
-+					 <&clk26m>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u3port0: usb-phy@700 {
-+				reg = <0x700 0x700>;
-+				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
-+					 <&topckgen CLK_TOP_SSUSB_PHY_REF>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
-+		ufsphy: ufs-phy@11fa0000 {
-+			compatible = "mediatek,mt8195-ufsphy", "mediatek,mt8183-ufsphy";
-+			reg = <0 0x11fa0000 0 0xc000>;
-+			clocks = <&clk26m>, <&clk26m>;
-+			clock-names = "unipro", "mp";
-+			#phy-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		mfgcfg: clock-controller@13fbf000 {
-+			compatible = "mediatek,mt8195-mfgcfg";
-+			reg = <0 0x13fbf000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		wpesys: clock-controller@14e00000 {
-+			compatible = "mediatek,mt8195-wpesys";
-+			reg = <0 0x14e00000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		wpesys_vpp0: clock-controller@14e02000 {
-+			compatible = "mediatek,mt8195-wpesys_vpp0";
-+			reg = <0 0x14e02000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		wpesys_vpp1: clock-controller@14e03000 {
-+			compatible = "mediatek,mt8195-wpesys_vpp1";
-+			reg = <0 0x14e03000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys: clock-controller@15000000 {
-+			compatible = "mediatek,mt8195-imgsys";
-+			reg = <0 0x15000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys1_dip_top: clock-controller@15110000 {
-+			compatible = "mediatek,mt8195-imgsys1_dip_top";
-+			reg = <0 0x15110000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys1_dip_nr: clock-controller@15130000 {
-+			compatible = "mediatek,mt8195-imgsys1_dip_nr";
-+			reg = <0 0x15130000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys1_wpe: clock-controller@15220000 {
-+			compatible = "mediatek,mt8195-imgsys1_wpe";
-+			reg = <0 0x15220000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		ipesys: clock-controller@15330000 {
-+			compatible = "mediatek,mt8195-ipesys";
-+			reg = <0 0x15330000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys: clock-controller@16000000 {
-+			compatible = "mediatek,mt8195-camsys";
-+			reg = <0 0x16000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_rawa: clock-controller@1604f000 {
-+			compatible = "mediatek,mt8195-camsys_rawa";
-+			reg = <0 0x1604f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_yuva: clock-controller@1606f000 {
-+			compatible = "mediatek,mt8195-camsys_yuva";
-+			reg = <0 0x1606f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_rawb: clock-controller@1608f000 {
-+			compatible = "mediatek,mt8195-camsys_rawb";
-+			reg = <0 0x1608f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_yuvb: clock-controller@160af000 {
-+			compatible = "mediatek,mt8195-camsys_yuvb";
-+			reg = <0 0x160af000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_mraw: clock-controller@16140000 {
-+			compatible = "mediatek,mt8195-camsys_mraw";
-+			reg = <0 0x16140000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		ccusys: clock-controller@17200000 {
-+			compatible = "mediatek,mt8195-ccusys";
-+			reg = <0 0x17200000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vdecsys_soc: clock-controller@1800f000 {
-+			compatible = "mediatek,mt8195-vdecsys_soc";
-+			reg = <0 0x1800f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vdecsys: clock-controller@1802f000 {
-+			compatible = "mediatek,mt8195-vdecsys";
-+			reg = <0 0x1802f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vdecsys_core1: clock-controller@1803f000 {
-+			compatible = "mediatek,mt8195-vdecsys_core1";
-+			reg = <0 0x1803f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		apusys_pll: clock-controller@190f3000 {
-+			compatible = "mediatek,mt8195-apusys_pll";
-+			reg = <0 0x190f3000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vencsys: clock-controller@1a000000 {
-+			compatible = "mediatek,mt8195-vencsys";
-+			reg = <0 0x1a000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vencsys_core1: clock-controller@1b000000 {
-+			compatible = "mediatek,mt8195-vencsys_core1";
-+			reg = <0 0x1b000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+	};
-+};
--- 
-2.18.0
-
++#define __store_release(ptr, val)					\
++do {									\
++	barrier();							\
++	WRITE_ONCE(*(ptr), (val));					\
++} while (0)
++
++#define __load_acquire(ptr)						\
++({									\
++	__unqual_scalar_typeof(*(ptr)) ___p = READ_ONCE(*(ptr));	\
++	barrier();							\
++	___p;								\
++})
++
+ #ifdef CONFIG_CGROUP_PERF
+ 
+ static inline bool
+@@ -719,34 +736,51 @@ static inline u64 perf_cgroup_event_time
+ 	return t->time;
+ }
+ 
+-static inline void __update_cgrp_time(struct perf_cgroup *cgrp)
++static inline u64 perf_cgroup_event_time_now(struct perf_event *event, u64 now)
+ {
+-	struct perf_cgroup_info *info;
+-	u64 now;
+-
+-	now = perf_clock();
++	struct perf_cgroup_info *t;
+ 
+-	info = this_cpu_ptr(cgrp->info);
++	t = per_cpu_ptr(event->cgrp->info, event->cpu);
++	if (!__load_acquire(&t->active))
++		return t->time;
++	now += READ_ONCE(t->timeoffset);
++	return now;
++}
+ 
+-	info->time += now - info->timestamp;
++static inline void __update_cgrp_time(struct perf_cgroup_info *info, u64 now, bool adv)
++{
++	if (adv)
++		info->time += now - info->timestamp;
+ 	info->timestamp = now;
++	/*
++	 * see update_context_time()
++	 */
++	WRITE_ONCE(info->timeoffset, info->time - info->timestamp);
+ }
+ 
+-static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx)
++static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx, bool final)
+ {
+ 	struct perf_cgroup *cgrp = cpuctx->cgrp;
+ 	struct cgroup_subsys_state *css;
++	struct perf_cgroup_info *info;
+ 
+ 	if (cgrp) {
++		u64 now = perf_clock();
++
+ 		for (css = &cgrp->css; css; css = css->parent) {
+ 			cgrp = container_of(css, struct perf_cgroup, css);
+-			__update_cgrp_time(cgrp);
++			info = this_cpu_ptr(cgrp->info);
++
++			__update_cgrp_time(info, now, true);
++			if (final)
++				__store_release(&info->active, 0);
+ 		}
+ 	}
+ }
+ 
+ static inline void update_cgrp_time_from_event(struct perf_event *event)
+ {
++	struct perf_cgroup_info *info;
+ 	struct perf_cgroup *cgrp;
+ 
+ 	/*
+@@ -760,8 +794,10 @@ static inline void update_cgrp_time_from
+ 	/*
+ 	 * Do not update time when cgroup is not active
+ 	 */
+-	if (cgroup_is_descendant(cgrp->css.cgroup, event->cgrp->css.cgroup))
+-		__update_cgrp_time(event->cgrp);
++	if (cgroup_is_descendant(cgrp->css.cgroup, event->cgrp->css.cgroup)) {
++		info = this_cpu_ptr(event->cgrp->info);
++		__update_cgrp_time(info, perf_clock(), true);
++	}
+ }
+ 
+ static inline void
+@@ -785,7 +821,8 @@ perf_cgroup_set_timestamp(struct task_st
+ 	for (css = &cgrp->css; css; css = css->parent) {
+ 		cgrp = container_of(css, struct perf_cgroup, css);
+ 		info = this_cpu_ptr(cgrp->info);
+-		info->timestamp = ctx->timestamp;
++		__update_cgrp_time(info, ctx->timestamp, false);
++		__store_release(&info->active, 1);
+ 	}
+ }
+ 
+@@ -982,14 +1019,6 @@ static inline int perf_cgroup_connect(in
+ }
+ 
+ static inline void
+-perf_cgroup_set_shadow_time(struct perf_event *event, u64 now)
+-{
+-	struct perf_cgroup_info *t;
+-	t = per_cpu_ptr(event->cgrp->info, event->cpu);
+-	event->shadow_ctx_time = now - t->timestamp;
+-}
+-
+-static inline void
+ perf_cgroup_event_enable(struct perf_event *event, struct perf_event_context *ctx)
+ {
+ 	struct perf_cpu_context *cpuctx;
+@@ -1066,7 +1095,8 @@ static inline void update_cgrp_time_from
+ {
+ }
+ 
+-static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx)
++static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx,
++						bool final)
+ {
+ }
+ 
+@@ -1098,12 +1128,12 @@ perf_cgroup_switch(struct task_struct *t
+ {
+ }
+ 
+-static inline void
+-perf_cgroup_set_shadow_time(struct perf_event *event, u64 now)
++static inline u64 perf_cgroup_event_time(struct perf_event *event)
+ {
++	return 0;
+ }
+ 
+-static inline u64 perf_cgroup_event_time(struct perf_event *event)
++static inline u64 perf_cgroup_event_time_now(struct perf_event *event, u64 now)
+ {
+ 	return 0;
+ }
+@@ -1525,22 +1555,59 @@ static void perf_unpin_context(struct pe
+ /*
+  * Update the record of the current time in a context.
+  */
+-static void update_context_time(struct perf_event_context *ctx)
++static void __update_context_time(struct perf_event_context *ctx, bool adv)
+ {
+ 	u64 now = perf_clock();
+ 
+-	ctx->time += now - ctx->timestamp;
++	if (adv)
++		ctx->time += now - ctx->timestamp;
+ 	ctx->timestamp = now;
++
++	/*
++	 * The above: time' = time + (now - timestamp), can be re-arranged
++	 * into: time` = now + (time - timestamp), which gives a single value
++	 * offset to compute future time without locks on.
++	 *
++	 * See perf_event_time_now(), which can be used from NMI context where
++	 * it's (obviously) not possible to acquire ctx->lock in order to read
++	 * both the above values in a consistent manner.
++	 */
++	WRITE_ONCE(ctx->timeoffset, ctx->time - ctx->timestamp);
++}
++
++static void update_context_time(struct perf_event_context *ctx)
++{
++	__update_context_time(ctx, true);
+ }
+ 
+ static u64 perf_event_time(struct perf_event *event)
+ {
+ 	struct perf_event_context *ctx = event->ctx;
+ 
++	if (unlikely(!ctx))
++		return 0;
++
+ 	if (is_cgroup_event(event))
+ 		return perf_cgroup_event_time(event);
+ 
+-	return ctx ? ctx->time : 0;
++	return ctx->time;
++}
++
++static u64 perf_event_time_now(struct perf_event *event, u64 now)
++{
++	struct perf_event_context *ctx = event->ctx;
++
++	if (unlikely(!ctx))
++		return 0;
++
++	if (is_cgroup_event(event))
++		return perf_cgroup_event_time_now(event, now);
++
++	if (!(__load_acquire(&ctx->is_active) & EVENT_TIME))
++		return ctx->time;
++
++	now += READ_ONCE(ctx->timeoffset);
++	return now;
+ }
+ 
+ static enum event_type_t get_event_type(struct perf_event *event)
+@@ -2346,7 +2413,7 @@ __perf_remove_from_context(struct perf_e
+ 
+ 	if (ctx->is_active & EVENT_TIME) {
+ 		update_context_time(ctx);
+-		update_cgrp_time_from_cpuctx(cpuctx);
++		update_cgrp_time_from_cpuctx(cpuctx, false);
+ 	}
+ 
+ 	event_sched_out(event, cpuctx, ctx);
+@@ -2357,6 +2424,9 @@ __perf_remove_from_context(struct perf_e
+ 	list_del_event(event, ctx);
+ 
+ 	if (!ctx->nr_events && ctx->is_active) {
++		if (ctx == &cpuctx->ctx)
++			update_cgrp_time_from_cpuctx(cpuctx, true);
++
+ 		ctx->is_active = 0;
+ 		ctx->rotate_necessary = 0;
+ 		if (ctx->task) {
+@@ -2478,40 +2548,6 @@ void perf_event_disable_inatomic(struct
+ 	irq_work_queue(&event->pending);
+ }
+ 
+-static void perf_set_shadow_time(struct perf_event *event,
+-				 struct perf_event_context *ctx)
+-{
+-	/*
+-	 * use the correct time source for the time snapshot
+-	 *
+-	 * We could get by without this by leveraging the
+-	 * fact that to get to this function, the caller
+-	 * has most likely already called update_context_time()
+-	 * and update_cgrp_time_xx() and thus both timestamp
+-	 * are identical (or very close). Given that tstamp is,
+-	 * already adjusted for cgroup, we could say that:
+-	 *    tstamp - ctx->timestamp
+-	 * is equivalent to
+-	 *    tstamp - cgrp->timestamp.
+-	 *
+-	 * Then, in perf_output_read(), the calculation would
+-	 * work with no changes because:
+-	 * - event is guaranteed scheduled in
+-	 * - no scheduled out in between
+-	 * - thus the timestamp would be the same
+-	 *
+-	 * But this is a bit hairy.
+-	 *
+-	 * So instead, we have an explicit cgroup call to remain
+-	 * within the time source all along. We believe it
+-	 * is cleaner and simpler to understand.
+-	 */
+-	if (is_cgroup_event(event))
+-		perf_cgroup_set_shadow_time(event, event->tstamp);
+-	else
+-		event->shadow_ctx_time = event->tstamp - ctx->timestamp;
+-}
+-
+ #define MAX_INTERRUPTS (~0ULL)
+ 
+ static void perf_log_throttle(struct perf_event *event, int enable);
+@@ -2552,8 +2588,6 @@ event_sched_in(struct perf_event *event,
+ 
+ 	perf_pmu_disable(event->pmu);
+ 
+-	perf_set_shadow_time(event, ctx);
+-
+ 	perf_log_itrace_start(event);
+ 
+ 	if (event->pmu->add(event, PERF_EF_START)) {
+@@ -3247,16 +3281,6 @@ static void ctx_sched_out(struct perf_ev
+ 		return;
+ 	}
+ 
+-	ctx->is_active &= ~event_type;
+-	if (!(ctx->is_active & EVENT_ALL))
+-		ctx->is_active = 0;
+-
+-	if (ctx->task) {
+-		WARN_ON_ONCE(cpuctx->task_ctx != ctx);
+-		if (!ctx->is_active)
+-			cpuctx->task_ctx = NULL;
+-	}
+-
+ 	/*
+ 	 * Always update time if it was set; not only when it changes.
+ 	 * Otherwise we can 'forget' to update time for any but the last
+@@ -3270,7 +3294,22 @@ static void ctx_sched_out(struct perf_ev
+ 	if (is_active & EVENT_TIME) {
+ 		/* update (and stop) ctx time */
+ 		update_context_time(ctx);
+-		update_cgrp_time_from_cpuctx(cpuctx);
++		update_cgrp_time_from_cpuctx(cpuctx, ctx == &cpuctx->ctx);
++		/*
++		 * CPU-release for the below ->is_active store,
++		 * see __load_acquire() in perf_event_time_now()
++		 */
++		barrier();
++	}
++
++	ctx->is_active &= ~event_type;
++	if (!(ctx->is_active & EVENT_ALL))
++		ctx->is_active = 0;
++
++	if (ctx->task) {
++		WARN_ON_ONCE(cpuctx->task_ctx != ctx);
++		if (!ctx->is_active)
++			cpuctx->task_ctx = NULL;
+ 	}
+ 
+ 	is_active ^= ctx->is_active; /* changed bits */
+@@ -3707,13 +3746,19 @@ static noinline int visit_groups_merge(s
+ 	return 0;
+ }
+ 
++/*
++ * Because the userpage is strictly per-event (there is no concept of context,
++ * so there cannot be a context indirection), every userpage must be updated
++ * when context time starts :-(
++ *
++ * IOW, we must not miss EVENT_TIME edges.
++ */
+ static inline bool event_update_userpage(struct perf_event *event)
+ {
+ 	if (likely(!atomic_read(&event->mmap_count)))
+ 		return false;
+ 
+ 	perf_event_update_time(event);
+-	perf_set_shadow_time(event, event->ctx);
+ 	perf_event_update_userpage(event);
+ 
+ 	return true;
+@@ -3797,13 +3842,23 @@ ctx_sched_in(struct perf_event_context *
+ 	     struct task_struct *task)
+ {
+ 	int is_active = ctx->is_active;
+-	u64 now;
+ 
+ 	lockdep_assert_held(&ctx->lock);
+ 
+ 	if (likely(!ctx->nr_events))
+ 		return;
+ 
++	if (is_active ^ EVENT_TIME) {
++		/* start ctx time */
++		__update_context_time(ctx, false);
++		perf_cgroup_set_timestamp(task, ctx);
++		/*
++		 * CPU-release for the below ->is_active store,
++		 * see __load_acquire() in perf_event_time_now()
++		 */
++		barrier();
++	}
++
+ 	ctx->is_active |= (event_type | EVENT_TIME);
+ 	if (ctx->task) {
+ 		if (!is_active)
+@@ -3814,13 +3869,6 @@ ctx_sched_in(struct perf_event_context *
+ 
+ 	is_active ^= ctx->is_active; /* changed bits */
+ 
+-	if (is_active & EVENT_TIME) {
+-		/* start ctx time */
+-		now = perf_clock();
+-		ctx->timestamp = now;
+-		perf_cgroup_set_timestamp(task, ctx);
+-	}
+-
+ 	/*
+ 	 * First go through the list and put on any pinned groups
+ 	 * in order to give them the best chance of going on.
+@@ -4473,10 +4521,9 @@ int perf_event_read_local(struct perf_ev
+ 
+ 	*value = local64_read(&event->count);
+ 	if (enabled || running) {
+-		u64 now = event->shadow_ctx_time + perf_clock();
+-		u64 __enabled, __running;
++		u64 __enabled, __running, __now;;
+ 
+-		__perf_update_times(event, now, &__enabled, &__running);
++		calc_timer_values(event, &__now, &__enabled, &__running);
+ 		if (enabled)
+ 			*enabled = __enabled;
+ 		if (running)
+@@ -5806,7 +5853,7 @@ static void calc_timer_values(struct per
+ 	u64 ctx_time;
+ 
+ 	*now = perf_clock();
+-	ctx_time = event->shadow_ctx_time + *now;
++	ctx_time = perf_event_time_now(event, *now);
+ 	__perf_update_times(event, ctx_time, enabled, running);
+ }
+ 
+@@ -6349,7 +6396,6 @@ static int perf_mmap(struct file *file,
+ 		ring_buffer_attach(event, rb);
+ 
+ 		perf_event_update_time(event);
+-		perf_set_shadow_time(event, event->ctx);
+ 		perf_event_init_userpage(event);
+ 		perf_event_update_userpage(event);
+ 	} else {

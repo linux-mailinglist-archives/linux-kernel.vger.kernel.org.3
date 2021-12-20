@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E504D47AD78
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D15D47AE4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237525AbhLTOwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41322 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236395AbhLTOtL (ORCPT
+        id S239116AbhLTPAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238813AbhLTO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:11 -0500
+        Mon, 20 Dec 2021 09:57:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91151C061A72;
+        Mon, 20 Dec 2021 06:49:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E641D611B7;
-        Mon, 20 Dec 2021 14:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0564C36AE9;
-        Mon, 20 Dec 2021 14:49:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A9FAB80EB3;
+        Mon, 20 Dec 2021 14:49:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C279C36AEA;
+        Mon, 20 Dec 2021 14:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011750;
-        bh=mMHJG1ohPsr3vwq6uBpU8VzBAFXIxmyKxzqlBn6mEWM=;
+        s=korg; t=1640011753;
+        bh=1KKZw59rn9/ClpSm9NOMsW0j3bZRjXko9Z6LEb3Y3bM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hww7UNc5r1X2jzGFZctVce2fZk7Sbmk9hbJ+7YYOmkzNLFEoOJyUNaDRopod9HWTD
-         mKzV47q1ovu+3tx5lNSfAKJ7jeqskfyyEqgsnTRuf7kbvp+2q6yP+gXRO4yZHQ+WbI
-         1tb9i742w5Sy7tDzaGI4+ZdJHio4h9H5TKMnQR/w=
+        b=dnpJAqodzR1A/bYgc2tbcpA8RMblRbpZJ0M8kw0BUPuInOBGgQAHaJeA+M5BAlDHI
+         VXSw81BQ3otP2Ks9Yb/WZBLihlIMdN6HcUmjlcxVf+9DsvBwP+wgr/8o+uqwLKIWuW
+         CT1ObliyZBdI6rKq7r5rL4GkOAK8SQqzi+5tR+GU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 61/99] sit: do not call ipip6_dev_free() from sit_init_net()
-Date:   Mon, 20 Dec 2021 15:34:34 +0100
-Message-Id: <20211220143031.441527415@linuxfoundation.org>
+Subject: [PATCH 5.10 62/99] bpf, selftests: Fix racing issue in btf_skc_cls_ingress test
+Date:   Mon, 20 Dec 2021 15:34:35 +0100
+Message-Id: <20211220143031.478287688@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 References: <20211220143029.352940568@linuxfoundation.org>
@@ -47,86 +50,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Martin KaFai Lau <kafai@fb.com>
 
-[ Upstream commit e28587cc491ef0f3c51258fdc87fbc386b1d4c59 ]
+[ Upstream commit c2fcbf81c332b42382a0c439bfe2414a241e4f5b ]
 
-ipip6_dev_free is sit dev->priv_destructor, already called
-by register_netdevice() if something goes wrong.
+The libbpf CI reported occasional failure in btf_skc_cls_ingress:
 
-Alternative would be to make ipip6_dev_free() robust against
-multiple invocations, but other drivers do not implement this
-strategy.
+  test_syncookie:FAIL:Unexpected syncookie states gen_cookie:80326634 recv_cookie:0
+  bpf prog error at line 97
 
-syzbot reported:
+"error at line 97" means the bpf prog cannot find the listening socket
+when the final ack is received.  It then skipped processing
+the syncookie in the final ack which then led to "recv_cookie:0".
 
-dst_release underflow
-WARNING: CPU: 0 PID: 5059 at net/core/dst.c:173 dst_release+0xd8/0xe0 net/core/dst.c:173
-Modules linked in:
-CPU: 1 PID: 5059 Comm: syz-executor.4 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:dst_release+0xd8/0xe0 net/core/dst.c:173
-Code: 4c 89 f2 89 d9 31 c0 5b 41 5e 5d e9 da d5 44 f9 e8 1d 90 5f f9 c6 05 87 48 c6 05 01 48 c7 c7 80 44 99 8b 31 c0 e8 e8 67 29 f9 <0f> 0b eb 85 0f 1f 40 00 53 48 89 fb e8 f7 8f 5f f9 48 83 c3 a8 48
-RSP: 0018:ffffc9000aa5faa0 EFLAGS: 00010246
-RAX: d6894a925dd15a00 RBX: 00000000ffffffff RCX: 0000000000040000
-RDX: ffffc90005e19000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000000 R08: ffffffff816a1f42 R09: ffffed1017344f2c
-R10: ffffed1017344f2c R11: 0000000000000000 R12: 0000607f462b1358
-R13: 1ffffffff1bfd305 R14: ffffe8ffffcb1358 R15: dffffc0000000000
-FS:  00007f66c71a2700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f88aaed5058 CR3: 0000000023e0f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dst_cache_destroy+0x107/0x1e0 net/core/dst_cache.c:160
- ipip6_dev_free net/ipv6/sit.c:1414 [inline]
- sit_init_net+0x229/0x550 net/ipv6/sit.c:1936
- ops_init+0x313/0x430 net/core/net_namespace.c:140
- setup_net+0x35b/0x9d0 net/core/net_namespace.c:326
- copy_net_ns+0x359/0x5c0 net/core/net_namespace.c:470
- create_new_namespaces+0x4ce/0xa00 kernel/nsproxy.c:110
- unshare_nsproxy_namespaces+0x11e/0x180 kernel/nsproxy.c:226
- ksys_unshare+0x57d/0xb50 kernel/fork.c:3075
- __do_sys_unshare kernel/fork.c:3146 [inline]
- __se_sys_unshare kernel/fork.c:3144 [inline]
- __x64_sys_unshare+0x34/0x40 kernel/fork.c:3144
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f66c882ce99
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f66c71a2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000110
-RAX: ffffffffffffffda RBX: 00007f66c893ff60 RCX: 00007f66c882ce99
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000048040200
-RBP: 00007f66c8886ff1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff6634832f R14: 00007f66c71a2300 R15: 0000000000022000
- </TASK>
+The problem is the userspace program did not do accept() and went
+ahead to close(listen_fd) before the kernel (and the bpf prog) had
+a chance to process the final ack.
 
-Fixes: cf124db566e6 ("net: Fix inconsistent teardown and release of private netdev state.")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20211216111741.1387540-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The fix is to add accept() call so that the userspace will wait for
+the kernel to finish processing the final ack first before close()-ing
+everything.
+
+Fixes: 9a856cae2217 ("bpf: selftest: Add test_btf_skc_cls_ingress")
+Reported-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211216191630.466151-1-kafai@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/sit.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../bpf/prog_tests/btf_skc_cls_ingress.c         | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index a6a3d759246ec..bab0e99f6e356 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -1924,7 +1924,6 @@ static int __net_init sit_init_net(struct net *net)
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index 86ccf37e26b3f..d16fd888230a5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -90,7 +90,7 @@ static void print_err_line(void)
  
- err_reg_dev:
--	ipip6_dev_free(sitn->fb_tunnel_dev);
- 	free_netdev(sitn->fb_tunnel_dev);
- err_alloc_dev:
- 	return err;
+ static void test_conn(void)
+ {
+-	int listen_fd = -1, cli_fd = -1, err;
++	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
+ 
+@@ -112,6 +112,10 @@ static void test_conn(void)
+ 	if (CHECK_FAIL(cli_fd == -1))
+ 		goto done;
+ 
++	srv_fd = accept(listen_fd, NULL, NULL);
++	if (CHECK_FAIL(srv_fd == -1))
++		goto done;
++
+ 	if (CHECK(skel->bss->listen_tp_sport != srv_port ||
+ 		  skel->bss->req_sk_sport != srv_port,
+ 		  "Unexpected sk src port",
+@@ -134,11 +138,13 @@ static void test_conn(void)
+ 		close(listen_fd);
+ 	if (cli_fd != -1)
+ 		close(cli_fd);
++	if (srv_fd != -1)
++		close(srv_fd);
+ }
+ 
+ static void test_syncookie(void)
+ {
+-	int listen_fd = -1, cli_fd = -1, err;
++	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
+ 
+@@ -161,6 +167,10 @@ static void test_syncookie(void)
+ 	if (CHECK_FAIL(cli_fd == -1))
+ 		goto done;
+ 
++	srv_fd = accept(listen_fd, NULL, NULL);
++	if (CHECK_FAIL(srv_fd == -1))
++		goto done;
++
+ 	if (CHECK(skel->bss->listen_tp_sport != srv_port,
+ 		  "Unexpected tp src port",
+ 		  "listen_tp_sport:%u expected:%u\n",
+@@ -188,6 +198,8 @@ static void test_syncookie(void)
+ 		close(listen_fd);
+ 	if (cli_fd != -1)
+ 		close(cli_fd);
++	if (srv_fd != -1)
++		close(srv_fd);
+ }
+ 
+ struct test {
 -- 
 2.33.0
 

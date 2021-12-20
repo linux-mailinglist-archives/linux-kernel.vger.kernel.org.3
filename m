@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101BD47B1A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5002647B1A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239737AbhLTQwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbhLTQwf (ORCPT
+        id S239750AbhLTQxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:53:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35792 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233291AbhLTQxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:52:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61551C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=veUDKqMKuSB4HBrVKjW4+6BqbEJvZQtvyOx4w1AWZFU=; b=CBSoc/Eg1ilESSqjlwU840PIWy
-        hEm938JPDsjsqVc6TKwdb17rrFW7xgr/app4xiHNcv33aOt77a6xsE2XLX9kXLJKxQJr7j3f6/kXi
-        XDFP/kQIPL9E+u8iu6bLUFkbcRmjRYKWz0tL5LqP44mxEiYUv0BhW/9k0hZox7UA1LwILZ+O75wE5
-        vEMS0xD6TSwb9F6k2o8dyzKYXmCqrw0Wt/ozP7sDxZZgmJCcKabOFgbjErRw6zDTm6c066ZJ13vc3
-        MvB+KQkArExN7zxSVCD4hZsMyQIbMBu3fR7qYzdoTaF7ZwwydcYjuaTzvA6t5k/kNbxLxcHdUSG4A
-        cr8hGSGQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzLtm-003Onc-9s; Mon, 20 Dec 2021 16:52:30 +0000
-Date:   Mon, 20 Dec 2021 08:52:30 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Martin Wilck <martin.wilck@suse.com>
-Cc:     Jessica Yu <jeyu@kernel.org>, Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
-Message-ID: <YcC0zpFV8ppOCtZw@bombadil.infradead.org>
-References: <YbLvDWdyFivlj7pP@google.com>
- <YbPsqR5ZyiFwJul3@bombadil.infradead.org>
- <YbP6Q9J++OVKqPfn@google.com>
+        Mon, 20 Dec 2021 11:53:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C95B8B80FAE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 16:53:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7F3C36AEB;
+        Mon, 20 Dec 2021 16:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640019215;
+        bh=3tng0c+exoWLRMJhgUUBf8iWK6eeHHSOlliF3Y22w8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RQ8wMoXleAc54QXgk6aG90sPteIpAjI4Sclqch1tFNhfql2CkHysTEp9+R+oPStu2
+         bV2EyQ/peBQeUuVJ1+kqM5iA0qE1nOKPtOGvglygUEwUMc47Qi5S50Qyarh0VlPI6q
+         jHOJl3ph7/Rho44asibCYenHnd73IVnNnC6dXIsAcUx890C0OWjoRVGZa2i6Hdyb0J
+         Jfnp6u2c/hm0cQifluxyoHKSAvEO+FHPyAzVkdYNCrqIwjo4RxP2m5moSzCYVzXD4A
+         LmGcRa4IRR93xvjNFKzZYK/5tRXkA9uKRa3m8NNwUhLit3a6mVpJQbeX3L/IkJMDfD
+         /ZhcWy+ocgY1Q==
+Date:   Mon, 20 Dec 2021 09:53:30 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [hyperv:hyperv-next 4/5] drivers/hv/vmbus_drv.c:2082:29:
+ warning: shift count >= width of type
+Message-ID: <YcC1CobR/n0tJhdV@archlinux-ax161>
+References: <202112181827.o3X7GmHz-lkp@intel.com>
+ <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbP6Q9J++OVKqPfn@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:09:23PM -0800, Dmitry Torokhov wrote:
-> On Fri, Dec 10, 2021 at 04:11:21PM -0800, Luis Chamberlain wrote:
-> > On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
-> > > diff --git a/init/Kconfig b/init/Kconfig
-> > > index cd23faa163d1..d90774ff7610 100644
-> > > --- a/init/Kconfig
-> > > +++ b/init/Kconfig
-> > > @@ -2305,6 +2305,19 @@ config MODULE_COMPRESS_ZSTD
-> > >  
-> > >  endchoice
-> > >  
-> > > +config MODULE_DECOMPRESS
-> > > +	bool "Support in-kernel module decompression"
-> > > +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-> > > +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-> > > +	select XZ_DEC if MODULE_COMPRESS_XZ
+Hi Wei,
+
+On Sun, Dec 19, 2021 at 12:29:37PM +0000, Wei Liu wrote:
+> On Sat, Dec 18, 2021 at 06:20:43PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+> > head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
+> > commit: 6327882f7b4a476ea902de4bee5657f1028d6859 [4/5] scsi: storvsc: Add Isolation VM support for storvsc driver
+> > config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181827.o3X7GmHz-lkp@intel.com/config)
+> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=6327882f7b4a476ea902de4bee5657f1028d6859
+> >         git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+> >         git fetch --no-tags hyperv hyperv-next
+> >         git checkout 6327882f7b4a476ea902de4bee5657f1028d6859
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hv/
 > > 
-> > What if MODULE_COMPRESS_GZIP and MODULE_COMPRESS_XZ are enabled?
-> > These are not mutually exclusive.
-> 
-> They are mutually exclusive, the kernel uses the same (one) compression
-> method for all kernel modules that it generates (i.e we do not compress
-> drivers/usb/... with gzip while drivers/net/... with xz).
-
-Ah yes I failed to see the choice/prompt for it.
-
-> The idea here is to allow the kernel consume the same format that was
-> used when generating modules. Supporting multiple formats at once is
-> overkill IMO.
-
-Indeed.
-
-> > > +	help
-> > > +
-> > > +	  Support for decompressing kernel modules by the kernel itself
-> > > +	  instead of relying on userspace to perform this task. Useful when
-> > > +	  load pinning security policy is enabled.
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
 > > 
-> > Shouldn't kernel decompression be faster too? If so, what's the
-> > point of doing it in userspace?
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/hv/vmbus_drv.c:2082:29: warning: shift count >= width of type [-Wshift-count-overflow]
+> >    static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
+> >                                ^~~~~~~~~~~~~~~~
+> >    include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+> >    #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> >                                                         ^ ~~~
 > 
-> Make the kernel smaller?
+> I don't think there is anything wrong with the code. When n is 64 the
+> problematic expression is not evaluated.
 
-Yes this I buy.
+Yes, unfortunately, this is an outstanding bug in clang where it does
+not properly build a control flow graph for expressions at a global
+scope:
 
-> Have more flexibility with exotic compression
-> formats?
+https://github.com/ClangBuiltLinux/linux/issues/92
 
-I just have a hunch that doing module decompression in the kernel will
-speed things quite a bit... any chance you can provide some before and
-after systemd-analyze ?
+We should absolutely fix that but it has not come up too often so other
+fires have been prioritized. Now that -Werror is a thing, that issue's
+priority should probably be upgraded, as this warning will break
+allmodconfig for clang.
 
-  Luis
+If you were feeling generous, just changing that to ~0ULL directly would
+solve the warning but I get that it is less documentation that way.
+
+Cheers,
+Nathan

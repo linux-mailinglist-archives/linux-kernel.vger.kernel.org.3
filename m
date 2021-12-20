@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE86147AE9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BA347AFB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239287AbhLTPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S237112AbhLTPRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbhLTO6c (ORCPT
+        with ESMTP id S239045AbhLTPQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:32 -0500
+        Mon, 20 Dec 2021 10:16:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580D0C06139B;
-        Mon, 20 Dec 2021 06:50:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5841DC110F35;
+        Mon, 20 Dec 2021 06:58:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DA061185;
-        Mon, 20 Dec 2021 14:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F19C36AE8;
-        Mon, 20 Dec 2021 14:50:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7D576119C;
+        Mon, 20 Dec 2021 14:57:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C4FC36AE8;
+        Mon, 20 Dec 2021 14:57:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011814;
-        bh=T0TxMKwaoVrOXXrVUWlYzijRlYnxq206fcvX1INbAco=;
+        s=korg; t=1640012279;
+        bh=IuuTPBxZkgqvm54s/lsg7dRAuQILdH8j0YSojMVnBLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RQAiQCkoOlZBDDKuOuelAvV0x95FEfAYzu+3E2JCRiGS+lgVl2q4pobMQkmD1/F+s
-         j3fXZp2zhynoIbr5uy6kLHr6NU6053Vvuggr89d2+vK/saTcidZeu1FfM5+YCA2RNn
-         sB34gW5Z2ZQzKJD/JqVkzd9ydJfcfGQsdMsLq3nQ=
+        b=2bhhmGdzOTBZDayAM57K6rRi7zoGZEHA/BJM7yTZc7deUleMCqO040IJDZrRf2A7g
+         mb2uW5/GbvyMC99UF67cuFWNEOX4MxQ0BsIz7KWp3s5ZPU3doPSIcLK6Dwhtu4fPu3
+         3XvHe+Oxvzcsq3ljow6NJqZbUaWWZJQb28C8BXzk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Le Ma <le.ma@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 82/99] drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>
+Subject: [PATCH 5.15 145/177] perf inject: Fix segfault due to perf_data__fd() without open
 Date:   Mon, 20 Dec 2021 15:34:55 +0100
-Message-Id: <20211220143032.160264814@linuxfoundation.org>
+Message-Id: <20211220143044.961497941@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,34 +51,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Le Ma <le.ma@amd.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit f3a8076eb28cae1553958c629aecec479394bbe2 upstream.
+commit c271a55b0c6029fed0cac909fa57999a11467132 upstream.
 
-should count on GC IP base address
+The fixed commit attempts to get the output file descriptor even if the
+file was never opened e.g.
 
-Signed-off-by: Le Ma <le.ma@amd.com>
-Signed-off-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+  $ perf record uname
+  Linux
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.002 MB perf.data (7 samples) ]
+  $ perf inject -i perf.data --vm-time-correlation=dry-run
+  Segmentation fault (core dumped)
+  $ gdb --quiet perf
+  Reading symbols from perf...
+  (gdb) r inject -i perf.data --vm-time-correlation=dry-run
+  Starting program: /home/ahunter/bin/perf inject -i perf.data --vm-time-correlation=dry-run
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+  Program received signal SIGSEGV, Segmentation fault.
+  __GI___fileno (fp=0x0) at fileno.c:35
+  35      fileno.c: No such file or directory.
+  (gdb) bt
+  #0  __GI___fileno (fp=0x0) at fileno.c:35
+  #1  0x00005621e48dd987 in perf_data__fd (data=0x7fff4c68bd08) at util/data.h:72
+  #2  perf_data__fd (data=0x7fff4c68bd08) at util/data.h:69
+  #3  cmd_inject (argc=<optimized out>, argv=0x7fff4c69c1f0) at builtin-inject.c:1017
+  #4  0x00005621e4936783 in run_builtin (p=0x5621e4ee6878 <commands+600>, argc=4, argv=0x7fff4c69c1f0) at perf.c:313
+  #5  0x00005621e4897d5c in handle_internal_command (argv=<optimized out>, argc=<optimized out>) at perf.c:365
+  #6  run_argv (argcp=<optimized out>, argv=<optimized out>) at perf.c:409
+  #7  main (argc=4, argv=0x7fff4c69c1f0) at perf.c:539
+  (gdb)
+
+Fixes: 0ae03893623dd1dd ("perf tools: Pass a fd to perf_file_header__read_pipe()")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
 Cc: stable@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20211213084829.114772-3-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/builtin-inject.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-@@ -3002,8 +3002,8 @@ static void gfx_v9_0_init_pg(struct amdg
- 			      AMD_PG_SUPPORT_CP |
- 			      AMD_PG_SUPPORT_GDS |
- 			      AMD_PG_SUPPORT_RLC_SMU_HS)) {
--		WREG32(mmRLC_JUMP_TABLE_RESTORE,
--		       adev->gfx.rlc.cp_table_gpu_addr >> 8);
-+		WREG32_SOC15(GC, 0, mmRLC_JUMP_TABLE_RESTORE,
-+			     adev->gfx.rlc.cp_table_gpu_addr >> 8);
- 		gfx_v9_0_init_gfx_power_gating(adev);
- 	}
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -755,12 +755,16 @@ static int parse_vm_time_correlation(con
+ 	return inject->itrace_synth_opts.vm_tm_corr_args ? 0 : -ENOMEM;
  }
+ 
++static int output_fd(struct perf_inject *inject)
++{
++	return inject->in_place_update ? -1 : perf_data__fd(&inject->output);
++}
++
+ static int __cmd_inject(struct perf_inject *inject)
+ {
+ 	int ret = -EINVAL;
+ 	struct perf_session *session = inject->session;
+-	struct perf_data *data_out = &inject->output;
+-	int fd = inject->in_place_update ? -1 : perf_data__fd(data_out);
++	int fd = output_fd(inject);
+ 	u64 output_data_offset;
+ 
+ 	signal(SIGINT, sig_handler);
+@@ -1006,7 +1010,7 @@ int cmd_inject(int argc, const char **ar
+ 	}
+ 
+ 	inject.session = __perf_session__new(&data, repipe,
+-					     perf_data__fd(&inject.output),
++					     output_fd(&inject),
+ 					     &inject.tool);
+ 	if (IS_ERR(inject.session)) {
+ 		ret = PTR_ERR(inject.session);
 
 

@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC847B1FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286A147B1FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240146AbhLTRS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:18:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50106 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbhLTRS2 (ORCPT
+        id S240158AbhLTRSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233337AbhLTRSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:18:28 -0500
+        Mon, 20 Dec 2021 12:18:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46848C061574;
+        Mon, 20 Dec 2021 09:18:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0286561250
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:18:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBE7C36AE2;
-        Mon, 20 Dec 2021 17:18:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21AD7B81032;
+        Mon, 20 Dec 2021 17:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63617C36AE2;
+        Mon, 20 Dec 2021 17:18:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640020707;
-        bh=sSNfHTfJjn2otaO4uiaeX9OFSmqG0bSnNb+zEzAt0ow=;
+        s=k20201202; t=1640020727;
+        bh=esoKJwod6Tm/yy8Oq298aSkhk4zw305MKSe4jClNvO4=;
         h=From:To:Cc:Subject:Date:From;
-        b=e4PtLQ8cLZGVrQePE2tQa4jRiKw+0gDrrCzLWvvXX8mVIJ333edmdRQaLze3lTBA6
-         HFYd+2iyiNRncNWLlXP/StOvMMyEKjGl+Q61X+utbVMevz9pFPqWxRgkO6dzYL5Eix
-         9Md2PZLZKM73GSwdBJz7GY7bmNx228UJnyg6nmB2sd00Pnc/F87S4rSkIfCCeJRUIS
-         5fZgaqb4yaJxQTDKxGBKe8EqnJAxslpRjepL9KVkuHHUnObJ5y72VjNtKTUu0D7Vkc
-         4cRXd3XWPLz4kkhINTwshi5wym9jYPr+L+m2ckbP+v4FxdVv5W53QDYujQfDK2iXUz
-         n1Cc/QkSv1RxQ==
+        b=vH7J7OwwMkL05uNNpyhc9MqyV9UC/1gRu9F6tYTs5g7IQQ6pvCsJbhGWWumb5bgPU
+         dCOQWBSppx17owda2WP08YE21FeZbVkvTXNA08ofCH8pHC+QnH0vE+phCMe70fXsjc
+         wlFjcJTOyVfkga0bl3OhB52Dx86umfThe0RDTiZYpcfqdKmddxf1x1XPCSWw9si1L5
+         b9y4AxQv8VIQ3puQfgPDWtkIudG1jzn0YaB90ebEmhr+IgR0mOiGTbVjiN0blQMt5b
+         UtccyWZhjiqgCzbDsbg5kkJN4IpglhkcokGd2khkCvEYA0nNfVcEtrljvKSuQLeZsX
+         +I2V6ybq4yfow==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v5.16-rc6
-Date:   Mon, 20 Dec 2021 17:18:11 +0000
-Message-Id: <20211220171826.CDBE7C36AE2@smtp.kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.16-rc6
+Date:   Mon, 20 Dec 2021 17:18:33 +0000
+Message-Id: <20211220171847.63617C36AE2@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6966df483d7b5b218aeb0e13e7e334a8fc3c1744:
+The following changes since commit 07fb78a78de4e67b5d6d5407aeee1250a327a698:
 
-  regulator: Update protection IRQ helper docs (2021-11-18 13:57:09 +0000)
+  spi: spi-rockchip: Add rk3568-spi compatible (2021-11-29 12:19:32 +0000)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.16-rc6
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.16-rc6
 
-for you to fetch changes up to 85223d609c99eaa07cc598632b426cb33753526f:
+for you to fetch changes up to db6689b643d8653092f5853751ea2cdbc299f8d3:
 
-  regulator: dt-bindings: samsung,s5m8767: add missing op_mode to bucks (2021-12-06 13:49:07 +0000)
-
-----------------------------------------------------------------
-regulator: Binding fix for v5.16
-
-This fixes problems validating DT bindings using op_mode which wasn't
-described as it should have been when converting to DT schema.
+  spi: change clk_disable_unprepare to clk_unprepare (2021-12-06 13:49:40 +0000)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      regulator: dt-bindings: samsung,s5m8767: add missing op_mode to bucks
+spi: Fix for v5.16
 
- .../bindings/regulator/samsung,s5m8767.yaml        | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+One small fix for a long standing issue with error handling on probe in
+the Armada driver.
+
+----------------------------------------------------------------
+Dongliang Mu (1):
+      spi: change clk_disable_unprepare to clk_unprepare
+
+ drivers/spi/spi-armada-3700.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

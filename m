@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D260447B1FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEC847B1FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240136AbhLTRRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:17:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:59922 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240110AbhLTRRm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:17:42 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 853F2D6E;
-        Mon, 20 Dec 2021 09:17:42 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47F3B3F774;
-        Mon, 20 Dec 2021 09:17:41 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, qperret@google.com,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: Re: [PATCH 3/3] sched/fair: Do not raise overutilized for idle CPUs
-In-Reply-To: <20211220114323.22811-4-vincent.donnefort@arm.com>
-References: <20211220114323.22811-1-vincent.donnefort@arm.com> <20211220114323.22811-4-vincent.donnefort@arm.com>
-Date:   Mon, 20 Dec 2021 17:17:38 +0000
-Message-ID: <8735mn8abx.mognet@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S240146AbhLTRS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:18:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50106 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233328AbhLTRS2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 12:18:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0286561250
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBE7C36AE2;
+        Mon, 20 Dec 2021 17:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640020707;
+        bh=sSNfHTfJjn2otaO4uiaeX9OFSmqG0bSnNb+zEzAt0ow=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e4PtLQ8cLZGVrQePE2tQa4jRiKw+0gDrrCzLWvvXX8mVIJ333edmdRQaLze3lTBA6
+         HFYd+2iyiNRncNWLlXP/StOvMMyEKjGl+Q61X+utbVMevz9pFPqWxRgkO6dzYL5Eix
+         9Md2PZLZKM73GSwdBJz7GY7bmNx228UJnyg6nmB2sd00Pnc/F87S4rSkIfCCeJRUIS
+         5fZgaqb4yaJxQTDKxGBKe8EqnJAxslpRjepL9KVkuHHUnObJ5y72VjNtKTUu0D7Vkc
+         4cRXd3XWPLz4kkhINTwshi5wym9jYPr+L+m2ckbP+v4FxdVv5W53QDYujQfDK2iXUz
+         n1Cc/QkSv1RxQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v5.16-rc6
+Date:   Mon, 20 Dec 2021 17:18:11 +0000
+Message-Id: <20211220171826.CDBE7C36AE2@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/21 12:43, Vincent Donnefort wrote:
-> During a migration, the lock for the previous runqueue is not taken and
-> hence, the task contribution isn't directly removed from that runqueue
-> utilization but instead temporarily saved, until the next PELT signals
-> update where it would be accounted. There is then a window in which a
-> CPU can ben idle be nonetheless overutilized.
->
-> The load balancer wouldn't be able to do anything to help a sleeping CPU,
-> it brings then no gain to raise overutilized there, only the risk of
-> spuriously doing it.
->
-> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
->
+The following changes since commit 6966df483d7b5b218aeb0e13e7e334a8fc3c1744:
 
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+  regulator: Update protection IRQ helper docs (2021-11-18 13:57:09 +0000)
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 51f6f55abb37..37f737c5f0b8 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8641,26 +8641,28 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->
->               nr_running = rq->nr_running;
->               sgs->sum_nr_running += nr_running;
-> -
-> -		if (nr_running > 1)
-> -			*sg_status |= SG_OVERLOAD;
-> -
-> -		if (cpu_overutilized(i))
-> -			*sg_status |= SG_OVERUTILIZED;
-> -
->  #ifdef CONFIG_NUMA_BALANCING
->               sgs->nr_numa_running += rq->nr_numa_running;
->               sgs->nr_preferred_running += rq->nr_preferred_running;
->  #endif
-> +		if (nr_running > 1)
-> +			*sg_status |= SG_OVERLOAD;
-> +
->               /*
->                * No need to call idle_cpu() if nr_running is not 0
->                */
->               if (!nr_running && idle_cpu(i)) {
->                       sgs->idle_cpus++;
-> -			/* Idle cpu can't have misfit task */
-> +			/*
-> +			 * Idle cpu can neither be overutilized nor have a
-> +			 * misfit task.
-> +			 */
->                       continue;
->               }
->
-> +		if (cpu_overutilized(i))
-> +			*sg_status |= SG_OVERUTILIZED;
-> +
->               if (local_group)
->                       continue;
->
-> --
-> 2.25.1
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.16-rc6
+
+for you to fetch changes up to 85223d609c99eaa07cc598632b426cb33753526f:
+
+  regulator: dt-bindings: samsung,s5m8767: add missing op_mode to bucks (2021-12-06 13:49:07 +0000)
+
+----------------------------------------------------------------
+regulator: Binding fix for v5.16
+
+This fixes problems validating DT bindings using op_mode which wasn't
+described as it should have been when converting to DT schema.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      regulator: dt-bindings: samsung,s5m8767: add missing op_mode to bucks
+
+ .../bindings/regulator/samsung,s5m8767.yaml        | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)

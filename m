@@ -2,89 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE36D47A752
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B85A47A758
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbhLTJkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbhLTJkA (ORCPT
+        id S229917AbhLTJkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:40:45 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55610
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229907AbhLTJko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:40:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA06C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SCrJl+mA3XNgJT5wjfD3E6ACuMQWYHkEg7dcI0G+7BE=; b=lTwXfgKqPl5kgVY92j2hia4thA
-        3qeBfW2DO+vyxdaHL6OYjRGTb6SV8qKEtTCvSS18KFlaWMp06e9xtbctVmyehkMGXi9WH//9Ap+po
-        rHI1v6+zyXTYuq7ZH9/FJgCPtpmTrw1xQAeV5diN/a7Tc/SmDSEkWp3tlPL2XD/oYqjhe3mlQg2LC
-        wxBfvEVkTsWl5iJueeELh18VOzFiRFHaFhjXUPaRQ6Q0YDMIJZtXku2SsqcPVGJfwa7XoN9uHmbVe
-        Kp5p3uqjVYoadRx747bih2SBMbSMp8POcNh68TYNzqPZTfmRlhO3XcWIaEo5pPQSShsBS8zEqTUk4
-        W84OOivg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzF93-001R3N-RF; Mon, 20 Dec 2021 09:39:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 20 Dec 2021 04:40:44 -0500
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6EF9E3002BE;
-        Mon, 20 Dec 2021 10:39:49 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 302AA2C9B91DE; Mon, 20 Dec 2021 10:39:49 +0100 (CET)
-Date:   Mon, 20 Dec 2021 10:39:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events
- too
-Message-ID: <YcBPZXtu0OOesleq@hirez.programming.kicks-ass.net>
-References: <20211205224843.1503081-1-namhyung@kernel.org>
- <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
- <YbHp2MXmP1V5WE4B@hirez.programming.kicks-ass.net>
- <CAM9d7chMn7Gmc4FYn_ZjMiojUCao90e80Zg5+hNXQ7MTeHrK_A@mail.gmail.com>
- <20211210101950.GR16608@worktop.programming.kicks-ass.net>
- <CAM9d7cgugnvrv5CJPe_EP_M8pp8h+GsCCW3-RDmyrd+JDGYJrQ@mail.gmail.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D05DC402EB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639993243;
+        bh=EVGM/+q0CXCgdQ8nkwe34/uQXDmUodwxi1yGzkWco68=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=H7WTeLrQ4LIfZn3h0e27RBmvGzozMutsv6rP7eWxKsA8d+YFtWDzqUYX1Wp1Q7Miy
+         JMK8ykTcemsML8o3ludr7qdBcjQ/7ZhFC2BlxyynE/erOzpndj/oFrcJGkrzdr6w9b
+         zQrdb9wCk5H57KKHGWje2prH9NQzpfu29bZOx/jITnrUnSfyA/285KlTTGkpRC3guG
+         bKuVsG5cM/SZ0TJpKg1XGS9mTi/JAFQTLTq0CSyECOGXFCLpZebSyMEtfkEPqw050m
+         zGgyxFMfl35JGrqDH+3ebPIHRFliARtPufVkptV10gBKNOy8NcgXx0WxXJ5T9Rd/6x
+         Nogx/Sr/LlyCg==
+Received: by mail-lf1-f69.google.com with SMTP id g2-20020a19e042000000b00425cfac0e67so1080232lfj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:40:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=EVGM/+q0CXCgdQ8nkwe34/uQXDmUodwxi1yGzkWco68=;
+        b=wSv0IHJBFG1MzUPas4Q7DSrb3TiwktkwTh25J1Uc6F9tY69eXd/WYc3REA6K8zAH+3
+         P3+m1eRTz9subrsbAExPj90IcsDTRcg2mm6HCT7GpLir+RVqgFIDA3+GVoFsgbW6CjcT
+         lH4riV4lCdIGspQetmHiRhykoPqS9SiDP9A0cch/nweoVVWFbxnGxMZ/lkDRZaNSXHFT
+         i4DWR1NU03QML2qu0R2Xu5u1TdfDyP3BXElCfKBjs9rINlaQaPuNsqtyOULpRYU103PD
+         gz0b16Z5PRIyi1/lv0EuCgGKEjrQRVzkbLs+e14eII1mCMOxAGIXrvhCEwew7EKO91bY
+         d0uA==
+X-Gm-Message-State: AOAM530K/nMlEox4Q9WR6tdhpn/Cm3XMG8OIKr6278r3sIwdBo1EYAh9
+        1p3/DdY4tsKxTgc+dd5FDLf5B0+RaY49XN0udTehcFVFqadQrgUU0+ZXQPHMlVPvb6dvoKPwCkP
+        8UgOQSTrYL4opi+clYfCZP2/sjfz7OLwbaID4S+Pm5Q==
+X-Received: by 2002:a2e:81da:: with SMTP id s26mr13591966ljg.94.1639993243231;
+        Mon, 20 Dec 2021 01:40:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxM2KvTkLS2aeCYmftY/HbRanVa+empcVyws/mA/hlDePnsN/jZUkCVGawwvT8X6EoeDauwow==
+X-Received: by 2002:a2e:81da:: with SMTP id s26mr13591954ljg.94.1639993243069;
+        Mon, 20 Dec 2021 01:40:43 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id j16sm2306251lfe.4.2021.12.20.01.40.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 01:40:42 -0800 (PST)
+Message-ID: <b49ffb8c-8784-978b-faf5-6fe1ace37c9e@canonical.com>
+Date:   Mon, 20 Dec 2021 10:40:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cgugnvrv5CJPe_EP_M8pp8h+GsCCW3-RDmyrd+JDGYJrQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add bindings definitions for
+ Exynos7885 CMU
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        David Virag <virag.david003@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211206153124.427102-1-virag.david003@gmail.com>
+ <20211206153124.427102-2-virag.david003@gmail.com>
+ <aa76e303-95ac-20ff-c0a9-26f7f8c6b2cb@canonical.com>
+In-Reply-To: <aa76e303-95ac-20ff-c0a9-26f7f8c6b2cb@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:59:49AM -0800, Namhyung Kim wrote:
-
-> > You're doing that bpf-cgroup crud, right? Where exactly do you hook into
-> > to do the counter reads?
+On 12/12/2021 19:39, Krzysztof Kozlowski wrote:
+> On 06/12/2021 16:31, David Virag wrote:
+>> Just like on Exynos850, the clock controller driver is designed to have
+>> separate instances for each particular CMU, so clock IDs start from 1
+>> for each CMU in this bindings header too.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Signed-off-by: David Virag <virag.david003@gmail.com>
+>> ---
+>> Changes in v2:
+>>   - Added R-b tag by Krzysztof Kozlowski
+>>
+>> Changes in v3:
+>>   - Nothing
+>>
+>> Changes in v4:
+>>   - Nothing
+>>
+>>  include/dt-bindings/clock/exynos7885.h | 115 +++++++++++++++++++++++++
+>>  1 file changed, 115 insertions(+)
+>>  create mode 100644 include/dt-bindings/clock/exynos7885.h
+>>
 > 
-> That's true but it doesn't use cgroup events actually.  They are plain cpu
-> events and BPF is called from a separate 'cgroup-switches' event to
-> read out the counters.
-
-Oh, right.
-
-> > > Maybe because the event is enabled from the beginning.
-> > > Then it might miss set_state/update_time at all.
-> >
-> > Even then, it's set to INACTIVE and any state change thereafter needs to
-> > go through perf_event_set_state() and update the relevant timestamps.
+> Hi Sylwester,
 > 
-> Right, but the problem happens when you read the event *before*
-> any state change.
+> The DTS/DTSI patch (7/7) depends on this one, just like the clock driver.
+> 
+> Since some time Arnd and Olof prefer not to have external trees going
+> into the arm-soc, even if this is only the header change. They recommend
+> one of:
+> 1. to hard-code the numbers in DTS and replace numbers->macros later,
+> 2. merge headers to arm-soc tree with DTS and provide the header to an
+> external (e.g. clk) tree,
+> 3. wait with merging DTSI till headers reach mainline.
+> 
+> I propose that I take the clock headers, put on separate branch and
+> provide them to you as stable tag. You can base clk driver changes on
+> top of it.
+> 
+> Are you okay with this?
 
-But the per-cpu event should be the simplest case ever, the cpu context
-is *always* active, enabled time always runs.
+Hi Sylwester,
+
+I see you applied the patches, so I understand we are not going with
+this proposal.
+
+David,
+
+Your DTSI and DTS will have to either wait for next cycle or please
+resend with clock macros replaced with numbers + TODO note.
+
+Best regards,
+Krzysztof

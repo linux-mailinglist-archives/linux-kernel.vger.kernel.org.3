@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C14C647B380
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99CC47B374
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240739AbhLTTJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:09:11 -0500
-Received: from aposti.net ([89.234.176.197]:34378 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240733AbhLTTJH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:09:07 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 2/2] mmc: jz4740: Support using a bi-directional DMA channel
-Date:   Mon, 20 Dec 2021 19:08:40 +0000
-Message-Id: <20211220190840.108061-3-paul@crapouillou.net>
-In-Reply-To: <20211220190840.108061-1-paul@crapouillou.net>
-References: <20211220190840.108061-1-paul@crapouillou.net>
+        id S240697AbhLTTIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234318AbhLTTIn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 14:08:43 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD37C061574;
+        Mon, 20 Dec 2021 11:08:42 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 21DB61EC03E3;
+        Mon, 20 Dec 2021 20:08:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640027316;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6Kj6fV3H5G8bJXHXRh1uQP+tqsb/ecR+wZMVk72GGEE=;
+        b=EYwPLfFpWSwzFjqAIXNVp0VMwqjZm5CCKfgtT6H/djUURQR98HE/Gs12Ba8rjDrU1qOe4T
+        oOGU+apSSjjNiYSXOvgn2FaHBCsn20DnVSt6Wtd+nv8hc047DpyC5wdrb8A0ulGbMotL1+
+        mzxDEf9CLRjb3CtHR6y6gdL7Bmn+Olg=
+Date:   Mon, 20 Dec 2021 20:08:43 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Patrick J. Volkerding" <volkerdi@gmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
+        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
+        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
+        x86@kernel.org, Hugh Dickins <hughd@google.com>
+Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
+ early param parsing
+Message-ID: <YcDUu4+YhyKsvVBA@zn.tnic>
+References: <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
+ <YbIgsO/7oQW9h6wv@zn.tnic>
+ <YbIu55LZKoK3IVaF@kernel.org>
+ <YbIw1nUYJ3KlkjJQ@zn.tnic>
+ <YbM5yR+Hy+kwmMFU@zn.tnic>
+ <YbcCM81Fig3GC4Yi@kernel.org>
+ <YbcTgQdTpJAHAZw4@zn.tnic>
+ <CANGBn69pGb-nscv8tXN1UKDEQGEMWRKuPVPLgg+q2m7V_sBvHw@mail.gmail.com>
+ <CANGBn6_cCd3ASh-9aec5qQkuK0s=mWbo90h0rMNwBiqsgb5AAA@mail.gmail.com>
+ <YcDSpcO8giLoSMOn@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YcDSpcO8giLoSMOn@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the MMC/SD controller in Ingenic SoCs work in half-duplex, it is
-possible to use one single DMA channel for both TX and RX operations,
-instead of using separate channels.
+On Mon, Dec 20, 2021 at 07:59:49PM +0100, Borislav Petkov wrote:
+> Which reminds me - they need stable tags. Lemme add those.
 
-As some older Ingenic SoCs offer only a handful of DMA channels,
-supporting bi-directional channels allow more hardware to use the
-channels that would otherwise be used for the MMC/SD operation.
+Actually, it'll be a lot easier if I send backporting instructions to
+the stable@ folks next week. Yap, I'll do that.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/mmc/host/jz4740_mmc.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+/me adds a TODO.
 
-diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-index 80a2c270d502..a0b94f61ddcf 100644
---- a/drivers/mmc/host/jz4740_mmc.c
-+++ b/drivers/mmc/host/jz4740_mmc.c
-@@ -217,11 +217,23 @@ static void jz4740_mmc_release_dma_channels(struct jz4740_mmc_host *host)
- 		return;
- 
- 	dma_release_channel(host->dma_tx);
--	dma_release_channel(host->dma_rx);
-+	if (host->dma_rx)
-+		dma_release_channel(host->dma_rx);
- }
- 
- static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
- {
-+	struct device *dev = mmc_dev(host->mmc);
-+
-+	host->dma_tx = dma_request_chan(dev, "tx-rx");
-+	if (!IS_ERR(host->dma_tx))
-+		return 0;
-+
-+	if (PTR_ERR(host->dma_tx) != -ENODEV) {
-+		dev_err(dev, "Failed to get dma tx-rx channel\n");
-+		return PTR_ERR(host->dma_tx);
-+	}
-+
- 	host->dma_tx = dma_request_chan(mmc_dev(host->mmc), "tx");
- 	if (IS_ERR(host->dma_tx)) {
- 		dev_err(mmc_dev(host->mmc), "Failed to get dma_tx channel\n");
-@@ -241,7 +253,10 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
- static inline struct dma_chan *jz4740_mmc_get_dma_chan(struct jz4740_mmc_host *host,
- 						       struct mmc_data *data)
- {
--	return (data->flags & MMC_DATA_READ) ? host->dma_rx : host->dma_tx;
-+	if ((data->flags & MMC_DATA_READ) && host->dma_rx)
-+		return host->dma_rx;
-+	else
-+		return host->dma_tx;
- }
- 
- static void jz4740_mmc_dma_unmap(struct jz4740_mmc_host *host,
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

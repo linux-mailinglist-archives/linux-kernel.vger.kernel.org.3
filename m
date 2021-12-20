@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F30147AE08
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD8D47ACA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbhLTO5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:57:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45978 "EHLO
+        id S237316AbhLTOpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:45:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36866 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbhLTOy6 (ORCPT
+        with ESMTP id S235907AbhLTOnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:54:58 -0500
+        Mon, 20 Dec 2021 09:43:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DE9261185;
-        Mon, 20 Dec 2021 14:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5287EC36AE7;
-        Mon, 20 Dec 2021 14:54:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24577611A5;
+        Mon, 20 Dec 2021 14:43:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DBAC36AE8;
+        Mon, 20 Dec 2021 14:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012097;
-        bh=0WZ/L5rKqdFrf9z79jCKvJKq0+4HRyaaf9TqKhlOzA8=;
+        s=korg; t=1640011403;
+        bh=sVrBckBf4Xc9ghYP4g2k+ODa4zC8rS1Mc4p5wnN6P5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NBqeGbaT5LMi/rUggsFlYSatgnEByTfJe9jKA+TFUi2uSdFWZMw0o2/K6iYegDYhZ
-         lt/5tFEsbZx1GgjdmXzlmomCg/7/lYQLH7YmZstqtvdqB5c+o+tmTdGA0QcPaS1ffB
-         LnYDdlsupmtE8jgBHl/jca8K+bi6WIVK6dAqp48c=
+        b=FeCwnK7tF0okkMvOXKAL/CwKltrb209kpwR7xwa26b+WTyfgroaHO2xzxn8S4Kyp+
+         qPkGTGhnFmhH8GVZqbWBBP5vttXStekoqG0YX1hE3iGXx0k2qF8EuebQFLFQo/m9vL
+         2Z3lSFPMyLYF4kOY+0MlcCErvDq2ne7XFTOVDTSQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Murphy <lists@colorremedies.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 080/177] mac80211: agg-tx: dont schedule_and_wake_txq() under sta->lock
+Subject: [PATCH 5.4 01/71] KVM: selftests: Make sure kvm_create_max_vcpus test wont hit RLIMIT_NOFILE
 Date:   Mon, 20 Dec 2021 15:33:50 +0100
-Message-Id: <20211220143042.797854984@linuxfoundation.org>
+Message-Id: <20211220143025.730952947@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,94 +49,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 06c41bda0ea14aa7fba932a9613c4ee239682cf0 ]
+[ Upstream commit 908fa88e420f30dde6d80f092795a18ec72ca6d3 ]
 
-When we call ieee80211_agg_start_txq(), that will in turn call
-schedule_and_wake_txq(). Called from ieee80211_stop_tx_ba_cb()
-this is done under sta->lock, which leads to certain circular
-lock dependencies, as reported by Chris Murphy:
-https://lore.kernel.org/r/CAJCQCtSXJ5qA4bqSPY=oLRMbv-irihVvP7A2uGutEbXQVkoNaw@mail.gmail.com
+With the elevated 'KVM_CAP_MAX_VCPUS' value kvm_create_max_vcpus test
+may hit RLIMIT_NOFILE limits:
 
-In general, ieee80211_agg_start_txq() is usually not called
-with sta->lock held, only in this one place. But it's always
-called with sta->ampdu_mlme.mtx held, and that's therefore
-clearly sufficient.
+ # ./kvm_create_max_vcpus
+ KVM_CAP_MAX_VCPU_ID: 4096
+ KVM_CAP_MAX_VCPUS: 1024
+ Testing creating 1024 vCPUs, with IDs 0...1023.
+ /dev/kvm not available (errno: 24), skipping test
 
-Change ieee80211_stop_tx_ba_cb() to also call it without the
-sta->lock held, by factoring it out of ieee80211_remove_tid_tx()
-(which is only called in this one place).
+Adjust RLIMIT_NOFILE limits to make sure KVM_CAP_MAX_VCPUS fds can be
+opened. Note, raising hard limit ('rlim_max') requires CAP_SYS_RESOURCE
+capability which is generally not needed to run kvm selftests (but without
+raising the limit the test is doomed to fail anyway).
 
-This breaks the locking chain and makes it less likely that
-we'll have similar locking chain problems in the future.
-
-Fixes: ba8c3d6f16a1 ("mac80211: add an intermediate software queue implementation")
-Reported-by: Chris Murphy <lists@colorremedies.com>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211202152554.f519884c8784.I555fef8e67d93fff3d9a304886c4a9f8b322e591@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20211123135953.667434-1-vkuznets@redhat.com>
+[Skip the test if the hard limit can be raised. - Paolo]
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Tested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/agg-tx.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/kvm_create_max_vcpus.c |   30 +++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
-index 58761ca7da3c5..74a878f213d3e 100644
---- a/net/mac80211/agg-tx.c
-+++ b/net/mac80211/agg-tx.c
-@@ -9,7 +9,7 @@
-  * Copyright 2007, Michael Wu <flamingice@sourmilk.net>
-  * Copyright 2007-2010, Intel Corporation
-  * Copyright(c) 2015-2017 Intel Deutschland GmbH
-- * Copyright (C) 2018 - 2020 Intel Corporation
-+ * Copyright (C) 2018 - 2021 Intel Corporation
-  */
+--- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
++++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+@@ -12,6 +12,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <sys/resource.h>
  
- #include <linux/ieee80211.h>
-@@ -213,6 +213,8 @@ ieee80211_agg_start_txq(struct sta_info *sta, int tid, bool enable)
- 	struct ieee80211_txq *txq = sta->sta.txq[tid];
- 	struct txq_info *txqi;
+ #include "test_util.h"
  
-+	lockdep_assert_held(&sta->ampdu_mlme.mtx);
-+
- 	if (!txq)
- 		return;
- 
-@@ -290,7 +292,6 @@ static void ieee80211_remove_tid_tx(struct sta_info *sta, int tid)
- 	ieee80211_assign_tid_tx(sta, tid, NULL);
- 
- 	ieee80211_agg_splice_finish(sta->sdata, tid);
--	ieee80211_agg_start_txq(sta, tid, false);
- 
- 	kfree_rcu(tid_tx, rcu_head);
- }
-@@ -889,6 +890,7 @@ void ieee80211_stop_tx_ba_cb(struct sta_info *sta, int tid,
+@@ -43,11 +44,40 @@ int main(int argc, char *argv[])
  {
- 	struct ieee80211_sub_if_data *sdata = sta->sdata;
- 	bool send_delba = false;
-+	bool start_txq = false;
+ 	int kvm_max_vcpu_id = kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
+ 	int kvm_max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
++	/*
++	 * Number of file descriptors reqired, KVM_CAP_MAX_VCPUS for vCPU fds +
++	 * an arbitrary number for everything else.
++	 */
++	int nr_fds_wanted = kvm_max_vcpus + 100;
++	struct rlimit rl;
  
- 	ht_dbg(sdata, "Stopping Tx BA session for %pM tid %d\n",
- 	       sta->sta.addr, tid);
-@@ -906,10 +908,14 @@ void ieee80211_stop_tx_ba_cb(struct sta_info *sta, int tid,
- 		send_delba = true;
+ 	printf("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
+ 	printf("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
  
- 	ieee80211_remove_tid_tx(sta, tid);
-+	start_txq = true;
- 
-  unlock_sta:
- 	spin_unlock_bh(&sta->lock);
- 
-+	if (start_txq)
-+		ieee80211_agg_start_txq(sta, tid, false);
+ 	/*
++	 * Check that we're allowed to open nr_fds_wanted file descriptors and
++	 * try raising the limits if needed.
++	 */
++	TEST_ASSERT(!getrlimit(RLIMIT_NOFILE, &rl), "getrlimit() failed!");
 +
- 	if (send_delba)
- 		ieee80211_send_delba(sdata, sta->sta.addr, tid,
- 			WLAN_BACK_INITIATOR, WLAN_REASON_QSTA_NOT_USE);
--- 
-2.33.0
-
++	if (rl.rlim_cur < nr_fds_wanted) {
++		rl.rlim_cur = nr_fds_wanted;
++		if (rl.rlim_max < nr_fds_wanted) {
++			int old_rlim_max = rl.rlim_max;
++			rl.rlim_max = nr_fds_wanted;
++
++			int r = setrlimit(RLIMIT_NOFILE, &rl);
++			if (r < 0) {
++				printf("RLIMIT_NOFILE hard limit is too low (%d, wanted %d)\n",
++				       old_rlim_max, nr_fds_wanted);
++				exit(KSFT_SKIP);
++			}
++		} else {
++			TEST_ASSERT(!setrlimit(RLIMIT_NOFILE, &rl), "setrlimit() failed!");
++		}
++	}
++
++	/*
+ 	 * Upstream KVM prior to 4.8 does not support KVM_CAP_MAX_VCPU_ID.
+ 	 * Userspace is supposed to use KVM_CAP_MAX_VCPUS as the maximum ID
+ 	 * in this case.
 
 

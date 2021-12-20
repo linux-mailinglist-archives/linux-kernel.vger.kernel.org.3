@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B5847AEA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117CC47AEC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbhLTPBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:01:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37212 "EHLO
+        id S239694AbhLTPDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:03:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35682 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239439AbhLTO7C (ORCPT
+        with ESMTP id S239853AbhLTO7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:59:02 -0500
+        Mon, 20 Dec 2021 09:59:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0B53B80ED3;
-        Mon, 20 Dec 2021 14:58:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 008C4C36AE8;
-        Mon, 20 Dec 2021 14:58:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23A65B80EF2;
+        Mon, 20 Dec 2021 14:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A79AC36AE8;
+        Mon, 20 Dec 2021 14:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012337;
-        bh=vRZkm1a4q47YJvEqn2uc1GNEdWpxtHwei1ERi2mNqA4=;
+        s=korg; t=1640012357;
+        bh=LndbSx9pGweVPS9CSTYwNHtNtDHI2PXLrCz8E/chtFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=naud94eDwdocxXsx3Wi1xsxN4oMGmw3Hiacg7Xqjm2nSt6Ngq92UIZUbPzRScBkIQ
-         n5EYpUplRxP4Iyq/oz4kB0k1rqs6NJEbBcxEfeketYWc2zOdND4uBXvw1H7QIjYIKo
-         Pms5YYcrMy0a6SU+uCZFxKnWu8zvYBe3jYBWw20I=
+        b=aV+vp4jg8NUj1GBhSl+prV4AY2ZGst1osUbcRkrOFA1fsu117Oc1OkHURVE6cxJCp
+         9JcisX8OUAPgAyQilkZpVB6HDCgPvXizMs7jlmRPJO1IJwZWxGeMwrJXPiSQBedy/f
+         wJG/3XzsUAEIGeTyAHk5fOScI8//8fcN3mGps1Fk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH 5.15 138/177] serial: 8250_fintek: Fix garbled text for console
-Date:   Mon, 20 Dec 2021 15:34:48 +0100
-Message-Id: <20211220143044.733708335@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 5.15 139/177] timekeeping: Really make sure wall_to_monotonic isnt positive
+Date:   Mon, 20 Dec 2021 15:34:49 +0100
+Message-Id: <20211220143044.764792811@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
 References: <20211220143040.058287525@linuxfoundation.org>
@@ -45,79 +45,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ji-Ze Hong (Peter Hong) <hpeter@gmail.com>
+From: Yu Liao <liaoyu15@huawei.com>
 
-commit 6c33ff728812aa18792afffaf2c9873b898e7512 upstream.
+commit 4e8c11b6b3f0b6a283e898344f154641eda94266 upstream.
 
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-introduced support to use high baudrate with Fintek SuperIO UARTs. It'll
-change clocksources when the UART probed.
+Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
+isn't positive") it is still possible to make wall_to_monotonic positive
+by running the following code:
 
-But when user add kernel parameter "console=ttyS0,115200 console=tty0" to make
-the UART as console output, the console will output garbled text after the
-following kernel message.
+    int main(void)
+    {
+        struct timespec time;
 
-[    3.681188] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+        clock_gettime(CLOCK_MONOTONIC, &time);
+        time.tv_nsec = 0;
+        clock_settime(CLOCK_REALTIME, &time);
+        return 0;
+    }
 
-The issue is occurs in following step:
-	probe_setup_port() -> fintek_8250_goto_highspeed()
+The reason is that the second parameter of timespec64_compare(), ts_delta,
+may be unnormalized because the delta is calculated with an open coded
+substraction which causes the comparison of tv_sec to yield the wrong
+result:
 
-It change clocksource from 115200 to 921600 with wrong time, it should change
-clocksource in set_termios() not in probed. The following 3 patches are
-implemented change clocksource in fintek_8250_set_termios().
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
 
-Commit 58178914ae5b ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81216H")
-Commit 195638b6d44f ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81866")
-Commit 423d9118c624 ("serial: 8250_fintek: Add F81966 Support")
+That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
+but actually the result should be wall_to_monotonic > ts_delta.
 
-Due to the high baud rate had implemented above 3 patches and the patch
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-is bugged, So this patch will remove it.
+After normalization, the result of timespec64_compare() is correct because
+the tv_sec comparison is not longer misleading:
 
-Fixes: fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-Link: https://lore.kernel.org/r/20211215075835.2072-1-hpeter+linux_kernel@gmail.com
-Cc: stable <stable@vger.kernel.org>
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
+
+Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
+issue.
+
+Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_fintek.c |   20 --------------------
- 1 file changed, 20 deletions(-)
+ kernel/time/timekeeping.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_fintek.c
-+++ b/drivers/tty/serial/8250/8250_fintek.c
-@@ -290,25 +290,6 @@ static void fintek_8250_set_max_fifo(str
- 	}
- }
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -1306,8 +1306,7 @@ int do_settimeofday64(const struct times
+ 	timekeeping_forward_now(tk);
  
--static void fintek_8250_goto_highspeed(struct uart_8250_port *uart,
--			      struct fintek_8250 *pdata)
--{
--	sio_write_reg(pdata, LDN, pdata->index);
--
--	switch (pdata->pid) {
--	case CHIP_ID_F81966:
--	case CHIP_ID_F81866: /* set uart clock for high speed serial mode */
--		sio_write_mask_reg(pdata, F81866_UART_CLK,
--			F81866_UART_CLK_MASK,
--			F81866_UART_CLK_14_769MHZ);
--
--		uart->port.uartclk = 921600 * 16;
--		break;
--	default: /* leave clock speed untouched */
--		break;
--	}
--}
--
- static void fintek_8250_set_termios(struct uart_port *port,
- 				    struct ktermios *termios,
- 				    struct ktermios *old)
-@@ -430,7 +411,6 @@ static int probe_setup_port(struct finte
+ 	xt = tk_xtime(tk);
+-	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
+-	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
++	ts_delta = timespec64_sub(*ts, xt);
  
- 				fintek_8250_set_irq_mode(pdata, level_mode);
- 				fintek_8250_set_max_fifo(pdata);
--				fintek_8250_goto_highspeed(uart, pdata);
- 
- 				fintek_8250_exit_key(addr[i]);
- 
+ 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
+ 		ret = -EINVAL;
 
 

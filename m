@@ -2,150 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135B947A6F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CAA47A6AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhLTJZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:25:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57417 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229812AbhLTJZD (ORCPT
+        id S231322AbhLTJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:14:53 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15943 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230195AbhLTJOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:25:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639992301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nnk2J4ZoXBtJE9rH5Olhc2v3ow2o0jQFMpDHq6LmjfY=;
-        b=HDaoGsW3dxlMHccLchAocZIxgbMJEg7V4d3cubwlhKRX5i/2/PvSVparaIXn6rKGxukFFi
-        4yN4k2F2SzbgZol2hIShdVCjzt8BLaFaX2DybHxEKEbTLgqa8pmByx2w0COknkzrWAbgJg
-        5v6r4fTQqZAJ5OqWXvy7wiz2w7LH0WI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-W1wLzSbCM2OQZlXWmvcx4Q-1; Mon, 20 Dec 2021 04:23:38 -0500
-X-MC-Unique: W1wLzSbCM2OQZlXWmvcx4Q-1
-Received: by mail-ed1-f71.google.com with SMTP id y17-20020a056402271100b003f7ef5ca612so7029761edd.17
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:23:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Nnk2J4ZoXBtJE9rH5Olhc2v3ow2o0jQFMpDHq6LmjfY=;
-        b=gKtCctOzSlUTHQ0dKxWUvE8OriW01wEKRWbASdkkhAEJvUETn3KN6o/H7ChP87erpf
-         48mbThXBXc5o7HUiJk7jMaD0CxeDiSWwmjutsguEtkvFo2fZT5CHJAZhVRIG8TU1xS/c
-         FyzTyeuYFGmXRE6XIfp3aluy2nPmbPXuW/DOl8wMnCcaQY93bryZogoV+AIlA90RwXtG
-         ddjmzwG/H0JBfeNMD+0X1gVhXoAui0k6cN8wM+0vWTuVm4wI+b7unixob5TYHwnABJwl
-         u7dFggaNND2czSFB5IjJ8+fi3VhV5pYc8UnAmIEgp4Yh4as9JFJ/Fog7MMmeM9R+TCIn
-         ozDg==
-X-Gm-Message-State: AOAM530f+59YfCobZtV4PyQsOioiFqnv21rWkrJTfJX0YPFP3F6tRwHd
-        dlRtNuE8fkQsLHkF9xGGeaya6os+RNJNeNv/ljUpFZg+jceIUHrmQLWqYUpmAjgYKVRzi0m10O5
-        L8gZxQf70kAqaBSlI0gwst3cW
-X-Received: by 2002:a05:6402:c0a:: with SMTP id co10mr14695516edb.295.1639992217400;
-        Mon, 20 Dec 2021 01:23:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzUAbBEWaDB55xFPv1shMHEPRY0K/FLkT72nUjo6PPZahsoOBnw0777NBsB1oiVAcMaXdj8AQ==
-X-Received: by 2002:a05:6402:c0a:: with SMTP id co10mr14695500edb.295.1639992217232;
-        Mon, 20 Dec 2021 01:23:37 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id j11sm6434339edv.0.2021.12.20.01.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 01:23:36 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Andra Paraschiv <andraprs@amazon.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Alexandru Ciobotaru <alcioa@amazon.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alexandru Vasile <lexnv@amazon.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Tim Gardner <tim.gardner@canonical.com>,
-        kvm <kvm@vger.kernel.org>,
-        ne-devel-upstream <ne-devel-upstream@amazon.com>,
-        stable <stable@vger.kernel.org>,
-        Andra Paraschiv <andraprs@amazon.com>
-Subject: Re: [PATCH =?utf-8?Q?v1=C2=A0=5D?= nitro_enclaves: Add
- mmap_read_lock() for the
- get_user_pages() call
-In-Reply-To: <20211218103525.26739-1-andraprs@amazon.com>
-References: <20211218103525.26739-1-andraprs@amazon.com>
-Date:   Mon, 20 Dec 2021 10:23:35 +0100
-Message-ID: <87o85btyso.fsf@redhat.com>
+        Mon, 20 Dec 2021 04:14:52 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JHYk73C24zZdhn;
+        Mon, 20 Dec 2021 17:11:43 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 20 Dec
+ 2021 17:14:49 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <mcgrof@kernel.org>, <akpm@linux-foundation.org>,
+        <keescook@chromium.org>, <yzaikin@google.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <libaokun1@huawei.com>, <yukuai3@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next V2] sysctl: returns -EINVAL when a negative value is passed to proc_doulongvec_minmax
+Date:   Mon, 20 Dec 2021 17:26:27 +0800
+Message-ID: <20211220092627.3744624-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andra Paraschiv <andraprs@amazon.com> writes:
+When we pass a negative value to the proc_doulongvec_minmax() function,
+the function returns 0, but the corresponding interface value does not
+change.
 
-> After commit 5b78ed24e8ec (mm/pagemap: add mmap_assert_locked()
-> annotations to find_vma*()), the call to get_user_pages() will trigger
-> the mmap assert.
->
-> static inline void mmap_assert_locked(struct mm_struct *mm)
-> {
-> 	lockdep_assert_held(&mm->mmap_lock);
-> 	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
-> }
->
-> [   62.521410] kernel BUG at include/linux/mmap_lock.h:156!
-> ...........................................................
-> [   62.538938] RIP: 0010:find_vma+0x32/0x80
-> ...........................................................
-> [   62.605889] Call Trace:
-> [   62.608502]  <TASK>
-> [   62.610956]  ? lock_timer_base+0x61/0x80
-> [   62.614106]  find_extend_vma+0x19/0x80
-> [   62.617195]  __get_user_pages+0x9b/0x6a0
-> [   62.620356]  __gup_longterm_locked+0x42d/0x450
-> [   62.623721]  ? finish_wait+0x41/0x80
-> [   62.626748]  ? __kmalloc+0x178/0x2f0
-> [   62.629768]  ne_set_user_memory_region_ioctl.isra.0+0x225/0x6a0 [nitro_enclaves]
-> [   62.635776]  ne_enclave_ioctl+0x1cf/0x6d7 [nitro_enclaves]
-> [   62.639541]  __x64_sys_ioctl+0x82/0xb0
-> [   62.642620]  do_syscall_64+0x3b/0x90
-> [   62.645642]  entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> Add mmap_read_lock() for the get_user_pages() call when setting the
-> enclave memory regions.
->
-> Signed-off-by: Andra Paraschiv <andraprs@amazon.com>
-> Cc: stable@vger.kernel.org
+we can easily reproduce this problem with the following commands:
+    `cd /proc/sys/fs/epoll`
+    `echo -1 > max_user_watches; echo $?; cat max_user_watches`
 
-In case commit 5b78ed24e8ec broke Nitro Enclaves driver, we need to
-explicitly state this:
+This function requires a non-negative number to be passed in, so when
+a negative number is passed in, -EINVAL is returned.
 
-Fixes: 5b78ed24e8ec ("mm/pagemap: add mmap_assert_locked() annotations to find_vma*()")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	Modify the judgment position.
 
-> ---
->  drivers/virt/nitro_enclaves/ne_misc_dev.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/virt/nitro_enclaves/ne_misc_dev.c b/drivers/virt/nitro_enclaves/ne_misc_dev.c
-> index 8939612ee0e0..6c51ff024036 100644
-> --- a/drivers/virt/nitro_enclaves/ne_misc_dev.c
-> +++ b/drivers/virt/nitro_enclaves/ne_misc_dev.c
-> @@ -886,8 +886,13 @@ static int ne_set_user_memory_region_ioctl(struct ne_enclave *ne_enclave,
->  			goto put_pages;
->  		}
->  
-> +		mmap_read_lock(current->mm);
-> +
->  		gup_rc = get_user_pages(mem_region.userspace_addr + memory_size, 1, FOLL_GET,
->  					ne_mem_region->pages + i, NULL);
-> +
-> +		mmap_read_unlock(current->mm);
-> +
+ kernel/sysctl.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-This looks very much like get_user_pages_unlocked(), I think we can use
-it instead of open-coding it.
-
->  		if (gup_rc < 0) {
->  			rc = gup_rc;
-
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 7f07b058b180..4211e39a5fd3 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1147,10 +1147,11 @@ static int __do_proc_doulongvec_minmax(void *data, struct ctl_table *table,
+ 			err = proc_get_long(&p, &left, &val, &neg,
+ 					     proc_wspace_sep,
+ 					     sizeof(proc_wspace_sep), NULL);
+-			if (err)
++			if (err || neg) {
++				err = -EINVAL;
+ 				break;
+-			if (neg)
+-				continue;
++			}
++
+ 			val = convmul * val / convdiv;
+ 			if ((min && val < *min) || (max && val > *max)) {
+ 				err = -EINVAL;
 -- 
-Vitaly
+2.31.1
 

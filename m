@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C7C47ACEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6031847AD51
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbhLTOrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        id S236196AbhLTOvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbhLTOpT (ORCPT
+        with ESMTP id S237202AbhLTOs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:45:19 -0500
+        Mon, 20 Dec 2021 09:48:26 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87910C061375;
-        Mon, 20 Dec 2021 06:43:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CBBC061398;
+        Mon, 20 Dec 2021 06:45:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41EC8B80EB3;
-        Mon, 20 Dec 2021 14:43:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725A3C36AE8;
-        Mon, 20 Dec 2021 14:43:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34533B80EDF;
+        Mon, 20 Dec 2021 14:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D569C36AE7;
+        Mon, 20 Dec 2021 14:45:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011398;
-        bh=16aPzMk2+E1iTfFeLVkXbN0uRm6nQS02/uw1xRu/lnQ=;
+        s=korg; t=1640011505;
+        bh=vmiKDqNKZcMNo0YFJt7fBJKb7F/kv+pcJAJFUaf++dE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IFvIn6xnS8Kk4N6TgI6HDYc1QQI0myfR09MBJkI01U2DP04OJzYBj/eedzMaBtxqD
-         +Srf2tc6C2Xql1KUiMZ9lQsqXs6nfguDxtzmy+Ps92hKBy6Sob/BJjhrXQW0lXmmMJ
-         tx80QPgqjdbWOSqJUfgFcnDhLVnRMmTiGjXpSkOU=
+        b=zu2GMafcgpHJQ39a0z0ifnWYepldd//HUDxH5JXdCi3l0FMIDS+M4SrAhXuptto40
+         ix7RN/QmyKygNcDKLx79ea2eKi9VwytLGm+2/Vek/W6++r+qLKIHHl6HRJuHWELZV3
+         a3lycxozhfdgrrj8Eu8m5/oZI5q0W8o5/KpWETbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.19 41/56] net: lan78xx: Avoid unnecessary self assignment
+        stable@vger.kernel.org, markpearson@lenovo.com,
+        Jimmy Wang <wangjm221@gmail.com>
+Subject: [PATCH 5.4 45/71] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
 Date:   Mon, 20 Dec 2021 15:34:34 +0100
-Message-Id: <20211220143024.793715346@linuxfoundation.org>
+Message-Id: <20211220143027.197550440@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,45 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Jimmy Wang <wangjm221@gmail.com>
 
-commit 94e7c844990f0db92418586b107be135b4963b66 upstream.
+commit 0ad3bd562bb91853b9f42bda145b5db6255aee90 upstream.
 
-Clang warns when a variable is assigned to itself.
+This device doesn't work well with LPM, losing connectivity intermittently.
+Disable LPM to resolve the issue.
 
-drivers/net/usb/lan78xx.c:940:11: warning: explicitly assigning value of
-variable of type 'u32' (aka 'unsigned int') to itself [-Wself-assign]
-                        offset = offset;
-                        ~~~~~~ ^ ~~~~~~
-1 warning generated.
-
-Reorder the if statement to acheive the same result and avoid a self
-assignment warning.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/129
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: <markpearson@lenovo.com>
+Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211214012652.4898-1-wangjm221@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/lan78xx.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -945,11 +945,9 @@ static int lan78xx_read_otp(struct lan78
- 	ret = lan78xx_read_raw_otp(dev, 0, 1, &sig);
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	if (ret == 0) {
--		if (sig == OTP_INDICATOR_1)
--			offset = offset;
--		else if (sig == OTP_INDICATOR_2)
-+		if (sig == OTP_INDICATOR_2)
- 			offset += 0x100;
--		else
-+		else if (sig != OTP_INDICATOR_1)
- 			ret = -EINVAL;
- 		if (!ret)
- 			ret = lan78xx_read_raw_otp(dev, offset, length, data);
++	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
++	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
+ 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
+ 
 
 

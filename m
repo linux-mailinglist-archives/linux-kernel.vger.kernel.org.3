@@ -2,402 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F4E47A35B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 02:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0613547A360
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 02:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236984AbhLTBtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 20:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhLTBtU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 20:49:20 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ADDC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 17:49:19 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so8153313pjp.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 17:49:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hQFA7Ij855EVoB0UKJms5vbfe/w+xK5vbniMZ6ftKKg=;
-        b=iVA9q+uLo0kGTuqQCvRYNVX/GllVBrQ64vNb23YOFjksuCNLAW0xNDtktl7kzlhQVZ
-         Wi2UvwZXsU98ZFYxj8qibERksONxgUXittKx5GWK2RAZ5h/mdfS+okgLs2i30QsIoxls
-         97ePtq4v8qBEFQ83Ujm9/FPBe7Xg4ldzWWeX7IVE/Sld++krk6GqHz+Id+qpY3Bj/p8B
-         xPjwMNSfR6muOK417oV8L8BNqCSwY2iPM72SDAcqIAe/LMVeZY1eTYH8FBUTe08588/9
-         0Kongiu66B2orqVyf39FKtZhMYmIWfbR9NXGN3YxZhUaDM9c27wVJz21Ytc/Vwm0Pbpu
-         k6yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hQFA7Ij855EVoB0UKJms5vbfe/w+xK5vbniMZ6ftKKg=;
-        b=jzo4ydEnA6rCX5olvvP+c8FvWp/skOwp5TEt5y1ey4JASkIsfKxPCtd6tDWf5Pru/d
-         jtjBEI4Hf+0gJwSTtdCohB2Z2PSbyKb3RTmB6HAREK6lbtbXtEstc2wBZIa13mdLOLZA
-         AuH+Q5/2lQaoaYr06+Rcu9Nsxg7eg4ipRLB6ZMqrKW6Zv5eegPgZxWo4TKq4fCdkX4Ex
-         m0bbt5bqyUcBGhTiPwiqk2YwfypKDX1J0mSMecoALgp6439tt/1XnVw4Paca2HqRsoYe
-         xiFI05xCMEd+8auLqm5WNlvCSOYSe4++TG4wRRKGf0FCGRVklyEX69XpsGRyXDn3ZB/q
-         I3tA==
-X-Gm-Message-State: AOAM530KPBrx01kr5GzbL7pElC0MY0GLKD6H1agj1oTSZz+VvXtepTQi
-        Y7n343QsDadWX3CdgK2XuSkLnw==
-X-Google-Smtp-Source: ABdhPJwwK8ZFmksHtJ2tJ6fblsBKSvyuhh5KlxNFHsSlvs8sFJclxhzAFOUkonquJwLZQkKLGb/1bQ==
-X-Received: by 2002:a17:902:bd85:b0:148:ba0a:528a with SMTP id q5-20020a170902bd8500b00148ba0a528amr14295168pls.169.1639964959050;
-        Sun, 19 Dec 2021 17:49:19 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id on2sm3248488pjb.19.2021.12.19.17.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 17:49:18 -0800 (PST)
-Date:   Mon, 20 Dec 2021 01:49:15 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Peter Gonda <pgonda@google.com>
-Subject: Re: [PATCH v2 08/13] KVM: selftests: add SEV boot tests
-Message-ID: <Yb/hGzeiRi0AwfV6@google.com>
-References: <20211216171358.61140-1-michael.roth@amd.com>
- <20211216171358.61140-9-michael.roth@amd.com>
+        id S237080AbhLTBv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 20:51:26 -0500
+Received: from mga17.intel.com ([192.55.52.151]:58967 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237009AbhLTBvZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 20:51:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639965085; x=1671501085;
+  h=subject:to:cc:references:from:message-id:date:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=+AV21kSzQ8QCiBdyC/xVOm6zCdyvpzOsSIUOCNzWvRs=;
+  b=TbzTUOeUIAEP47AiQW3yKbKTLqgUNpFRwSWuNLGuZWoloSjoNmR/v4Dc
+   p+TG62wcQHO3FyS9h+IgaoXVKlDN3umPEOMB7zZhsyGyJsSjD7NAm4AfV
+   gtVHTdioQwUN4UwjAAzDXIpN1Syo/T6y0HdEJ0+0pB3QxnRCsVKbXzT4m
+   0Kr9PMdvSD0v17v4k9RUsIWhFdMQUB3qW1Xm2dFJW1IchICN9BntNPD1b
+   dxv0CtkaoowigS8Th9Ypj3JX78hrYoJgAzubUJEh9Z/+CjzzmhbIiIzwd
+   h+a+uKuaXfYSmOCirnPpjENZd/uoscPG+g0ToRAhpTIcuwE9u9qxeNGhf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220754313"
+X-IronPort-AV: E=Sophos;i="5.88,219,1635231600"; 
+   d="scan'208";a="220754313"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 17:51:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,219,1635231600"; 
+   d="scan'208";a="547109418"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga001.jf.intel.com with ESMTP; 19 Dec 2021 17:51:19 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 19 Dec 2021 17:51:19 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 19 Dec 2021 17:51:19 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Sun, 19 Dec 2021 17:51:19 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Sun, 19 Dec 2021 17:51:18 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CllRHcWRTpNGZ+ZiUMVaBxybp6W5RElff2ldTy/6RJkblVhrOTKO2XxtVnxBsbjaUAbOWN80Vz3lfYeziqoi4Zr8ZQnc93YETJCOP/5B27etPDzpwcR/xbv5wcbRdvoBiO2MJtIPDgj1Pk5R6YsMMOclRJncckGnvG4W+EvuMtn+dO8MmSMXnR29UsRUBHaoxil2S+Pn10CvJBYinbzLMyfcyQBT8V17NfXgMudTWk8Q3KYyL6pQQREyeslzAnwiXAsSw+QCnl0Lj5mo6vyy9fhXkzOH4GoSnfGUxeDlTKpw9adfNFQBgg2CPV8dwjUkIfi5P4Mb2GzqoOPxNryzxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q892WJtUqTp546l5Xj64L/8YDg8GnnEzv8EQN0tilUo=;
+ b=arLhld62q7+JdcCiX7cQIWrzmtYrUpkGLAZs1z4jsNL78yQ9ZhI4kbb/sW5baKCCDca07ftoucJGuEwA199NY1FyDjOQq0yfPIZ+bGcaxs/A01KYH6XACSpmgBtgg8NMeAeAePargspeW7AgebMeeGW58RVP46wCBeZ3QzK1n985ZlZyUxYkHRSwSBWuuQThqLGBhfR9QglOOPFEkDfTTd7vc55Fhp9a6011SLiDTC5vb6/3BUR8tOJebEbcPdIlqRATGm49rY13DIjxjRDckZN0cKSmqoR5Yb7o6uHVLrs6F49hD30cp02Y1lUerjIFfWD/9DsNVjmBVHX2Au0ZTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by MW5PR11MB5809.namprd11.prod.outlook.com (2603:10b6:303:197::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.19; Mon, 20 Dec
+ 2021 01:51:14 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::99e7:e9ce:ff26:49cb]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::99e7:e9ce:ff26:49cb%5]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
+ 01:51:14 +0000
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+To:     Borislav Petkov <bp@suse.de>
+CC:     Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <lkp@lists.01.org>, <lkp@intel.com>, <bfields@fieldses.org>,
+        <llvm@lists.linux.dev>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic> <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic> <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic> <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com> <YbyIJYzqtHPKRMFt@zn.tnic>
+ <b11156b7-e912-5b65-3b2f-4fd940727bc9@intel.com> <Yb2/nqfzu3VYo+bG@zn.tnic>
+From:   Yin Fengwei <fengwei.yin@intel.com>
+Message-ID: <5f5d8258-d468-c37c-e480-b4fb9a3eb91b@intel.com>
+Date:   Mon, 20 Dec 2021 09:51:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+In-Reply-To: <Yb2/nqfzu3VYo+bG@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR06CA0004.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::16) To CO1PR11MB4820.namprd11.prod.outlook.com
+ (2603:10b6:303:6f::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216171358.61140-9-michael.roth@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 72d8dddb-26c8-44c7-bdcc-08d9c35b34c5
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5809:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <MW5PR11MB580992ADEA4521F7B94D34BDEE7B9@MW5PR11MB5809.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SGEaSlqLw7Vk4o3mv+Of43tpF+Gga53myDsq0quL7g2GiNPBeibnFfR7bJJlfwAJZBQ54yExI+eTutKSJhnkWYwemEbdyuvNmdQD4D314CMTuzuuPRkPddOew7gXaeDAp2EH36+IR4bwP67551csLzctCTSGCO5p7/YE6JkwxpmW7ugEulBH0iRai9L551L3z6zFNmeaeOO1bpz26DvKTmrICB3ldNTLAyuf9u5XzLHeFgnHOLeU6tyNqdEHymPPKi9YkJ83R/ngk2es5Zhz9hiriCR5So4A9BSMrB2OINCBdhZf/sek3DF156RsIjxjNQW/R5IFoIoaZb50HglVvxj2FOOXzXuB9YDjd5WJgKKSGyiW13+hWjaW7ypvdvS+VSS4jxibJjpRUm1IwNBUPVV2tTnC0VNrbkyCf0PKXTqM9TDhtDiuz4R3g1OtUA3ylLcxCu3+rZCvfbSReBBWjhhsyCdNbu6XD2ZbhiqHPtuKmphsr1BFSBMhV6FGdU9UfBKDoweRyodQ0wu7kszLEQP3VPlIZQDh/2sXnVZJs7mfTYX98VRNKMMwGYRAd95vsVcV1LZAYLgvOjOuaoxWOvKDVgc1Ig4rqmNUwClW/+0KWTgnLqROhVb3h4epHpAKbI7N7W973qcrxaQvXX6KrJyfjn38aXZQvRSweEpGL+UlwdIQmcArsSSer66+D48Q9fxkGdRXLHtziN6lt3g7iwDgKlg4FJQMTKV1nAJFb5o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(4744005)(6512007)(82960400001)(36756003)(6486002)(186003)(508600001)(53546011)(6506007)(8676002)(26005)(66946007)(4326008)(38100700002)(66556008)(66476007)(86362001)(2616005)(5660300002)(8936002)(2906002)(54906003)(6916009)(316002)(31686004)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TnZzdGhST1FkUXRpdTJJcGVoZGdKZllTdFpPdFpMMko0ZHBUbE8zOHhYQS9m?=
+ =?utf-8?B?NE83dkM5WGNQSVdpS0xtc1ZvWkFIa081VFVaeG15QjFkQXZLM2Q2Qjd5bnZo?=
+ =?utf-8?B?WlpncXRkMWJJdFlkYStZS2hHa1paMkdVYmd2UXV3bVhTOW5JSjdaSVk1SnVJ?=
+ =?utf-8?B?QmljRUtuT0MxYUg2SnhBcjZkSVFjcGpBWFRKbXRCMzJMV1Q1NE5pSmMvSVQ2?=
+ =?utf-8?B?TERvTVlRSzdHQmRLOE9RVWNWRTMyL2IzazE3UXBsUjR4K1lyOWF5eERLR2Y3?=
+ =?utf-8?B?SUJ3aVJ0bDBnK2NwUUcveWtvUXBQM0tmNVVMdXJTcEMwQVltK09lMGc0dksx?=
+ =?utf-8?B?ZFI1dlE2VGt0UUNUSGlsTHBucHFGSVRZZ1ZDUGpBZzhBRm43SG14cGNOVlR0?=
+ =?utf-8?B?NmljWEJkaGI3RXduVllrMHAxYTNuREhZWVZUT0NHNXdiL25nTS9TMkFIQ0hD?=
+ =?utf-8?B?dWlCVXBuVmxkaXRucGJISGhhQVhaR0xGY0ZLdi9uQUUvUFgra2xRTTlrTS8w?=
+ =?utf-8?B?dVhzTmxVWmgyMlpkQ3VvRklxWElEcDRTREFPV3E5WFZ6Zm1EdUY0cndXUFFU?=
+ =?utf-8?B?RytvTklOYlVKeDl1Ris4S2ExTXlMMkxMM1hPd1ZFZzRYUGxRem1Oc3NBWnNo?=
+ =?utf-8?B?c1JiSzNxTEpwVmpmazEzbzFMOTFJd1AzWjBRaW1pcDQwV25VTTVZS3F2OEJB?=
+ =?utf-8?B?RnNHa1h6Yml6ZlRlNXBhZmFtZk56bTNyU1dNK25paHZYNkpEYk5BTkxDbjRr?=
+ =?utf-8?B?VmtIMzczMEFSalNNWGtpSFdZeUNpN1BiSWNoV3VEWklVMUZQenNYdXdOOWk2?=
+ =?utf-8?B?bjQ1UFM0S3lDb1V2RkFYaTRMb1d5bWpHeDlBeVJBM080RXlITXE3WTRNTCtF?=
+ =?utf-8?B?VUU1aU54THB4aHpBd3ZFZXpnTGk3bEhhMUxmZzA3OW5QbUxYUnhLZTUzWmR4?=
+ =?utf-8?B?eVRzMFFhcUxTWHl1dlJRN3kzTmRnQ1Y0YnpMTXEwU2Q0UW0rWGN2SkM4U2M5?=
+ =?utf-8?B?SFdnVk92Y1U5MHV0aFZabHlFUS9DRDR4Tys2NzBPeU5jRjdDVzRmUEJtbmZt?=
+ =?utf-8?B?bFRmdm1aT2w5VERHY2hlKzNLQmd3ODMzcXE4TmhEemVOckJOaTRuUWc2OHJ5?=
+ =?utf-8?B?Y1NHRFh5cXZYWTE4MXlKenRwa21vbW1kS1Z4TzljYXFoMW84T2dGT1ZGTDRt?=
+ =?utf-8?B?Z2htcUxyV2VYRURRTHRqQlloMlhpSks5S00wZHNNeENXK3dXTjkyb1FDUnNC?=
+ =?utf-8?B?L3VTcENyalYvb1hGSGEvYUxTR1FYSEMyZFpadjZLNlVuQVVlelZicTdid1Np?=
+ =?utf-8?B?L1I2R2VpYjZSWnl5L1ZEMkFYbDZEMnh0QXZ6RjVVdlROVzFhWjgvM0E1WmdT?=
+ =?utf-8?B?UXFvellqcjQrR0ZLMzRMUUZRVHVtTCtqOFBYZGRPVXBMZGNWZndSdkdhV2hP?=
+ =?utf-8?B?d3Z5U2JQMXdUMko2TVI0T3VnSUVuVXFCRzl5c1phU2ZJNlBnRzd6alVNM0Ur?=
+ =?utf-8?B?SWcrR01sMkpudm5CZjVtaEJvNnhqalp6SjFJTHBzS05abGp3anpqY0VRRkpO?=
+ =?utf-8?B?UHJYZkM2cG05REczaitHOS9UZXB5L0lnRTd1bHV3Z28zdHpScnVWVlp4V05F?=
+ =?utf-8?B?VENQTjM0N3BmSDVjQnFwVWQ4cFlydWI3T08zUEh2WHhVSGxnODZvNVU2TldL?=
+ =?utf-8?B?L2Nnb0x2WngxU1dxeVZmdDJUZVRaUVdheGhBVFM5MDZ1amozd08wQ3l4Z3Fm?=
+ =?utf-8?B?eTZObCt5TWlMdzRNL0hZbnNqNDZkbENtRGJvVElOZVg2Ykd4b0JRL3hackQ5?=
+ =?utf-8?B?M0twZzc0S1U0aVdSRkZwQjBjdG1IdkZEUk82cEo2NTRFbFlDZGQ2ckhOcStW?=
+ =?utf-8?B?WTdFTUpNOHZ4QmVCK3FUOGNKM0ZnejRzMzZEMis0UVlZYjZaN2ltKzYxTXFH?=
+ =?utf-8?B?b0NrbkxRdklwVmVIRFk2M0pLeUlTczNrQXVxSnhiNENPeitqN2JMN2xlMDFU?=
+ =?utf-8?B?amxFU2dyTDl6UjdyYWh2K1NzNklUZFovQ09wclNwMGx0LytxZHNVMTh6RzNv?=
+ =?utf-8?B?WmVkQk5zR3kxdnBNcGk5YSt1K3EyRGdoVzN2QWtpR1RDZjNRc2dYWWM3YzhI?=
+ =?utf-8?B?RlZjOEQxMEdMTmRJbUpjQ2k2UFUwQ2pyTlpSL3ZkRWtCTU43SUtrYXZuWlZG?=
+ =?utf-8?Q?rje6oELftoZQ3x5zuBJ0VUw=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72d8dddb-26c8-44c7-bdcc-08d9c35b34c5
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 01:51:14.5700
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2WESqoC0eZ5Ierhjeo9Ze9drMwXR5nNi2K+JYDIIVFPcrOFvlZvaGB/qBKRC0xeXlVFJE4PMs8+YNJPXMcl+vA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5809
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021, Michael Roth wrote:
-> A common aspect of booting SEV guests is checking related CPUID/MSR
-> bits and accessing shared/private memory. Add a basic test to cover
-> this.
->
-> This test will be expanded to cover basic boot of SEV-ES and SEV-SNP in
-> subsequent patches.
->
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/x86_64/sev_all_boot_test.c  | 255 ++++++++++++++++++
->  3 files changed, 257 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
->
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 4a801cba9c62..cc73de938a2a 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -43,6 +43,7 @@
->  /x86_64/xen_vmcall_test
->  /x86_64/xss_msr_test
->  /x86_64/vmx_pmu_msrs_test
-> +/x86_64/sev_all_boot_test
->  /access_tracking_perf_test
->  /demand_paging_test
->  /dirty_log_test
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index ccc382a827f1..6f250e190fde 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -81,6 +81,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
->  TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
->  TEST_GEN_PROGS_x86_64 += x86_64/vmx_pi_mmio_test
->  TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
-> +TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
->  TEST_GEN_PROGS_x86_64 += demand_paging_test
->  TEST_GEN_PROGS_x86_64 += dirty_log_test
->  TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
-> diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-> new file mode 100644
-> index 000000000000..329a740a7cb2
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-> @@ -0,0 +1,255 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Basic SEV boot tests.
-> + *
-> + * Copyright (C) 2021 Advanced Micro Devices
-> + */
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
-> +#include <fcntl.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +
-> +#include "test_util.h"
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "svm_util.h"
-> +#include "linux/psp-sev.h"
-> +#include "sev.h"
-> +
-> +#define VCPU_ID			2
-> +#define PAGE_SIZE		4096
-> +#define PAGE_STRIDE		32
-> +
-> +#define SHARED_PAGES		8192
-> +#define SHARED_VADDR_MIN	0x1000000
-> +
-> +#define PRIVATE_PAGES		2048
-> +#define PRIVATE_VADDR_MIN	(SHARED_VADDR_MIN + SHARED_PAGES * PAGE_SIZE)
-> +
-> +#define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
-> +
-> +static void fill_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
-> +{
-> +	int i, j;
-> +
-> +	for (i = 0; i < pages; i++)
-> +		for (j = 0; j < PAGE_SIZE; j += stride)
-> +			buf[i * PAGE_SIZE + j] = val;
-> +}
-> +
-> +static bool check_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
-> +{
-> +	int i, j;
-> +
-> +	for (i = 0; i < pages; i++)
-> +		for (j = 0; j < PAGE_SIZE; j += stride)
-> +			if (buf[i * PAGE_SIZE + j] != val)
-> +				return false;
-> +
-> +	return true;
-> +}
-> +
-> +static void guest_test_start(struct ucall *uc)
-> +{
-> +	/* Initial guest check-in. */
-> +	GUEST_SHARED_SYNC(uc, 1);
-> +}
-> +
-> +static void test_start(struct kvm_vm *vm, struct ucall *uc)
-> +{
-> +	vcpu_run(vm, VCPU_ID);
-> +
-> +	/* Initial guest check-in. */
-> +	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 1);
-> +}
-> +
-> +static void
-> +guest_test_common(struct ucall *uc, uint8_t *shared_buf, uint8_t *private_buf)
-> +{
-> +	bool success;
-> +
-> +	/* Initial check-in for common. */
-> +	GUEST_SHARED_SYNC(uc, 100);
 
-Probably, you want to use macros to represent those states which should
-make it more clear. Otherwise, it is quite cumbersome for readers to
-remember the meaning (or state) of 100/101/102.
-> +
-> +	/* Ensure initial shared pages are intact. */
-> +	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x41);
-> +	GUEST_SHARED_ASSERT(uc, success);
-> +
-> +	/* Ensure initial private pages are intact/encrypted. */
-> +	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-> +	GUEST_SHARED_ASSERT(uc, success);
-> +
-> +	/* Ensure host userspace can't read newly-written encrypted data. */
-> +	fill_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x43);
-> +
-> +	GUEST_SHARED_SYNC(uc, 101);
 
-ditto.
-> +
-> +	/* Ensure guest can read newly-written shared data from host. */
-> +	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x44);
-> +	GUEST_SHARED_ASSERT(uc, success);
-> +
-> +	/* Ensure host can read newly-written shared data from guest. */
-> +	fill_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x45);
-> +
-> +	GUEST_SHARED_SYNC(uc, 102);
+On 12/18/21 7:01 PM, Borislav Petkov wrote:
+> On Sat, Dec 18, 2021 at 06:39:46PM +0800, Yin Fengwei wrote:
+>> Thanks a lot for sharing this. Lessons learnt here. Will follow this
+>> rule exactly in the future.
+> 
+> Thanks. And for the future, please trim your reply like I just did. :)
+Sure. Thanks.
 
-ditto.
-> +}
-> +
-> +static void
-> +test_common(struct kvm_vm *vm, struct ucall *uc,
-> +		  uint8_t *shared_buf, uint8_t *private_buf)
-> +{
-> +	bool success;
-> +
-> +	/* Initial guest check-in. */
-> +	vcpu_run(vm, VCPU_ID);
-> +	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 100);
-> +
-> +	/* Ensure initial private pages are intact/encrypted. */
-> +	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-> +	TEST_ASSERT(!success, "Initial guest memory not encrypted!");
-> +
-> +	vcpu_run(vm, VCPU_ID);
-> +	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 101);
-> +
-> +	/* Ensure host userspace can't read newly-written encrypted data. */
-> +	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x43);
+> 
+>> I tried this fix and it works fine in my local env. Will test it also
+>> in our test box once we back to office. Thanks.
+> 
+> Good, much appreciated.
+It's our pleasure. Carel will send out the official test report on our
+test box.
 
-I am not sure if it is safe here. Since the cache coherency is not there
-for neither SEV or SEV-ES. Reading confidential memory from host side
-will generate cache lines that is not coherent with the guest. So might
-be better to add clfush here?
+Regards
+Yin, Fengwei
 
-> +	TEST_ASSERT(!success, "Modified guest memory not encrypted!");
-> +
-> +	/* Ensure guest can read newly-written shared data from host. */
-> +	fill_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x44);
-> +
-> +	vcpu_run(vm, VCPU_ID);
-> +	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 102);
-> +
-> +	/* Ensure host can read newly-written shared data from guest. */
-> +	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x45);
-> +	TEST_ASSERT(success, "Host can't read shared guest memory!");
-> +}
-> +
-> +static void
-> +guest_test_done(struct ucall *uc)
-> +{
-> +	GUEST_SHARED_DONE(uc);
-> +}
-> +
-> +static void
-> +test_done(struct kvm_vm *vm, struct ucall *uc)
-> +{
-> +	vcpu_run(vm, VCPU_ID);
-> +	CHECK_SHARED_DONE(vm, VCPU_ID, uc);
-> +}
-> +
-> +static void __attribute__((__flatten__))
-> +guest_sev_code(struct ucall *uc, uint8_t *shared_buf, uint8_t *private_buf)
-> +{
-> +	uint32_t eax, ebx, ecx, edx;
-> +	uint64_t sev_status;
-> +
-> +	guest_test_start(uc);
-> +
-> +	/* Check SEV CPUID bit. */
-> +	eax = 0x8000001f;
-> +	ecx = 0;
-> +	cpuid(&eax, &ebx, &ecx, &edx);
-> +	GUEST_SHARED_ASSERT(uc, eax & (1 << 1));
-> +
-> +	/* Check SEV MSR bit. */
-> +	sev_status = rdmsr(MSR_AMD64_SEV);
-> +	GUEST_SHARED_ASSERT(uc, (sev_status & 0x1) == 1);
-> +
-> +	guest_test_common(uc, shared_buf, private_buf);
-> +
-> +	guest_test_done(uc);
-> +}
-> +
-> +static struct sev_vm *
-> +setup_test_common(void *guest_code, uint64_t policy, struct ucall **uc,
-> +		  uint8_t **shared_buf, uint8_t **private_buf)
-> +{
-> +	vm_vaddr_t uc_vaddr, shared_vaddr, private_vaddr;
-> +	uint8_t measurement[512];
-> +	struct sev_vm *sev;
-> +	struct kvm_vm *vm;
-> +	int i;
-> +
-> +	sev = sev_vm_create(policy, TOTAL_PAGES);
-> +	if (!sev)
-> +		return NULL;
-> +	vm = sev_get_vm(sev);
-> +
-> +	/* Set up VCPU and initial guest kernel. */
-> +	vm_vcpu_add_default(vm, VCPU_ID, guest_code);
-> +	kvm_vm_elf_load(vm, program_invocation_name);
-> +
-> +	/* Set up shared ucall buffer. */
-> +	uc_vaddr = ucall_shared_alloc(vm, 1);
-> +
-> +	/* Set up buffer for reserved shared memory. */
-> +	shared_vaddr = vm_vaddr_alloc_shared(vm, SHARED_PAGES * PAGE_SIZE,
-> +					     SHARED_VADDR_MIN);
-> +	*shared_buf = addr_gva2hva(vm, shared_vaddr);
-> +	fill_buf(*shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x41);
-> +
-> +	/* Set up buffer for reserved private memory. */
-> +	private_vaddr = vm_vaddr_alloc(vm, PRIVATE_PAGES * PAGE_SIZE,
-> +				       PRIVATE_VADDR_MIN);
-> +	*private_buf = addr_gva2hva(vm, private_vaddr);
-> +	fill_buf(*private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-> +
-> +	/* Set up guest params. */
-> +	vcpu_args_set(vm, VCPU_ID, 4, uc_vaddr, shared_vaddr, private_vaddr);
-> +
-> +	/*
-> +	 * Hand these back to test harness, translation is needed now since page
-> +	 * table will be encrypted after SEV VM launch.
-> +	 */
-> +	*uc = addr_gva2hva(vm, uc_vaddr);
-> +	*shared_buf = addr_gva2hva(vm, shared_vaddr);
-> +	*private_buf = addr_gva2hva(vm, private_vaddr);
-> +
-> +	/* Allocations/setup done. Encrypt initial guest payload. */
-> +	sev_vm_launch(sev);
-> +
-> +	/* Dump the initial measurement. A test to actually verify it would be nice. */
-> +	sev_vm_launch_measure(sev, measurement);
-> +	pr_info("guest measurement: ");
-> +	for (i = 0; i < 32; ++i)
-> +		pr_info("%02x", measurement[i]);
-> +	pr_info("\n");
-> +
-> +	sev_vm_launch_finish(sev);
-> +
-> +	return sev;
-> +}
-> +
-> +static void test_sev(void *guest_code, uint64_t policy)
-> +{
-> +	uint8_t *shared_buf, *private_buf;
-> +	struct sev_vm *sev;
-> +	struct kvm_vm *vm;
-> +	struct ucall *uc;
-> +
-> +	sev = setup_test_common(guest_code, policy, &uc, &shared_buf, &private_buf);
-> +	if (!sev)
-> +		return;
-> +	vm = sev_get_vm(sev);
-> +
-> +	/* Guest is ready to run. Do the tests. */
-> +	test_start(vm, uc);
-> +	test_common(vm, uc, shared_buf, private_buf);
-> +	test_done(vm, uc);
-> +
-> +	sev_vm_free(sev);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	/* SEV tests */
-> +	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-> +	test_sev(guest_sev_code, 0);
-> +
-> +	return 0;
-> +}
-> --
-> 2.25.1
->
+> 
+> Thx.
+> 

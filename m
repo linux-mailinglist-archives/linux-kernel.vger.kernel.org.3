@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C020A47B288
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787D947B28F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240319AbhLTSDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240344AbhLTSDw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:03:52 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D174EC061756;
-        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso13605422otf.0;
-        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cKZsIJDWWTwCIgi/2NihvVcIBzyaJLdAfiGfAj1Uxuo=;
-        b=dIs6ErdXWcyhQgra2IgIOLuDQxBQ1KkMK1FwYx+LYxqeyyIQwxgzeh/gzDo2BeJMSL
-         n/2iUcZiDmkj3oohOSdk9OBjvHcK7oocP7otYQwCn4Dkk7XIbnex74LYSUIVA3x/iZNY
-         XR/m16otuPILqnyQW0V1odQ1ogCqTcF2IUblxzVQjgErN4rc/MbxFlOVDJjXghbFJvTm
-         AmKmYvVa0xSSqUqg5deti56HzZ2m89IJdL7Vdd2jdUlsTTT/T0snmeWzBd7UyqzQ/53P
-         qmAe3bgZ1lFVvx7dHpcTJ9LA2EVKpwCy47ySUwpmWw9VLZDjKI0u7X9aob7fm6BIpghT
-         CNmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cKZsIJDWWTwCIgi/2NihvVcIBzyaJLdAfiGfAj1Uxuo=;
-        b=bRnOaE4uCoIC6hImMzB1Ow8vyOCylrOJuFimIlIaOprUyi5J0mcegibDXpyW3hPUm9
-         +SmuJNJNltJd9JQk8GUZBSjY6BIIevFJnsQrtLC7W5pgSiefXq8uYkOmYYmnm54N9Bqt
-         2BOebl+miBv3T+3r5U+Rx++Uu9ZfyNvFO2H4t6Vq2o2VDhb6A2X2DWFZQ9Ji0nWY3BRs
-         TrU2B5O7FlUM6jRw2EnWUeFwEYGrPEP/PWkET+BLnzLWemJV3/gQQhjoVVBMSnhSyP8K
-         1obknB5e+h2NIJGCTV/PrM+5NLZ7BDLb3aHi+I4mZv2g9yGjZZvHAsWJdfEG+OuXcnPd
-         GyYQ==
-X-Gm-Message-State: AOAM53365wRYK3RAHLt0OiXkmu1MacG/wFJQljTzhSPyTO+8wPPARnUn
-        +sbpN2Yvm0T9WpCQ39+Lw2XUZdt9jgc=
-X-Google-Smtp-Source: ABdhPJzC6fVrBcFBEQYb88Z1X3S3GiAEZvPUdZxWo1kHcbCWZn1uhA3Z2NMcoSbq3Lp/5IreErTY0Q==
-X-Received: by 2002:a9d:5549:: with SMTP id h9mr12372501oti.36.1640023431269;
-        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
-Received: from ?IPV6:2603:8081:140c:1a00:5ca2:d0f7:3dc4:a0f8? (2603-8081-140c-1a00-5ca2-d0f7-3dc4-a0f8.res6.spectrum.com. [2603:8081:140c:1a00:5ca2:d0f7:3dc4:a0f8])
-        by smtp.gmail.com with ESMTPSA id y17sm3414201ote.48.2021.12.20.10.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 10:03:50 -0800 (PST)
-Message-ID: <e5d50502-7adc-d773-2a18-307f8d0592e7@gmail.com>
-Date:   Mon, 20 Dec 2021 12:03:50 -0600
+        id S235112AbhLTSGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:06:20 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:35290 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230489AbhLTSGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:06:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=F2yXVlUie46ploGVEKTVoENJ3NUWMLnJ1b5tqhVQaJ8=; b=sRKEgiDutdKLfiIWGcZwR6DJjY
+        tkJpVp4UrKYNEvC1+bCY38BOs5h9PuBYHQIs5nK4hYza8WEvPxf4TlqPKv5F2ByyB5LXEFYQ9hnez
+        yU4Az32dJqGLoCM3dhIg3hPraYOUfTArs1JHlPSERJk8eIUXqdsh+rY4mu3ThMuQEIeY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mzN2y-00H47W-Bl; Mon, 20 Dec 2021 19:06:04 +0100
+Date:   Mon, 20 Dec 2021 19:06:04 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        SoC Team <soc@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        gongruiqi1@huawei.com, wangweiyang2@huawei.com
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+Message-ID: <YcDGDLScE+3ZlU8/@lunn.ch>
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] RDMA/rxe: fix a typo in opcode name
-Content-Language: en-US
-To:     Chengguang Xu <cgxu519@mykernel.net>, zyjzyj2000@gmail.com,
-        jgg@ziepe.ca
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211218112320.3558770-1-cgxu519@mykernel.net>
-From:   Bob Pearson <rpearsonhpe@gmail.com>
-In-Reply-To: <20211218112320.3558770-1-cgxu519@mykernel.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/18/21 05:23, Chengguang Xu wrote:
-> There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
-> so just fix it.
+On Mon, Dec 20, 2021 at 04:39:43PM +0100, Arnd Bergmann wrote:
+> On Sat, Dec 18, 2021 at 9:58 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+> >
+> > These patches replace an open coded calculation to obtain the physical
+> > address of a far symbol with a call to the new ldr_l etc macro, and they
+> > belong to the kaslr patch set of arm32.
+> >
+> > Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
+> >
+> > Ard Biesheuvel (3):
+> >   arm-soc: exynos: replace open coded VA->PA conversions
+> >   arm-soc: mvebu: replace open coded VA->PA conversion
+> >   arm-soc: various: replace open coded VA->PA calculation
 > 
-> Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
-> ---
->  drivers/infiniband/sw/rxe/rxe_opcode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Usually these patches should go through the respective platform
+> maintainer trees,
+> and from there into the soc tree, but time is a little short here.
 > 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
-> index 3ef5a10a6efd..47ebaac8f475 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
-> @@ -117,7 +117,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
->  		}
->  	},
->  	[IB_OPCODE_RC_SEND_MIDDLE]		= {
-> -		.name	= "IB_OPCODE_RC_SEND_MIDDLE]",
-> +		.name	= "IB_OPCODE_RC_SEND_MIDDLE",
->  		.mask	= RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
->  				| RXE_MIDDLE_MASK,
->  		.length = RXE_BTH_BYTES,
-> 
+> I could apply them directly with the maintainer Acks
 
-Looks good
+Sorry, but this is too low level for me to understand what is going
+on, and so feel confident actually giving an ACK for the mvebu change.
 
-Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Should the resulting assembly be exactly the same? Has the submitter
+disassembled the object code and shown there is no actual difference
+in the assembler output?
+
+   Andrew

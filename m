@@ -2,108 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0333F47A53E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352A747A544
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbhLTHAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 02:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S237604AbhLTHHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 02:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbhLTHAR (ORCPT
+        with ESMTP id S234362AbhLTHHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 02:00:17 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2C8C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:00:16 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id t19so14472868oij.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:00:16 -0800 (PST)
+        Mon, 20 Dec 2021 02:07:08 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EECAC06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:07:08 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id y68so26039352ybe.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:07:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bOWHMfUqWgS66PgQYYet33MLKueM0ddFZqC4iawf0eo=;
-        b=EhTOwMFaKZI9Jc0S3FLUHeHgNZW+azpNir8KH/VrP5S/q0y/3AOZjr1zWLXrpNYBX2
-         Mzp+4L8bKsAjfPRlbONenEwbuhMhHOM6FO8qSMITDd+droYp+xnPV3k+06tJ976mZiJR
-         oF+qh6lCPn/+aDX3OxXe3P3blZXRd6QjiBE/l9NmSCQU/xcTi4ANTEMHJIedw3AEPOmY
-         YW7AfOEfldV2VkNhHXLclHAcJSzDb2LjogbFmEaRRz6BDFFtZP45zDURm/VRdiSuiHVR
-         3JrA/20ul6M6/yzgTLEtCMAT2ayYyphFIvO8s4H1G0DVT51A1nNF5mUkxhJ/mzK+KnNO
-         cVTg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=fcGOhpP2fh4L0P54itv7DpzugvdwboeZoteLAX3ou8w=;
+        b=BOnF4u/vB0QJPE8oOyzTkGIh9a63T3fcBp8yZDIvTJiSFBp1vbbhAGa/f+R6mTyG4z
+         bkbtQU04rkcvvUuTb1VPJVTOEMStLZmEJXru3u3Esi+R4SRaDBf5Jq8bUlbm94LGt0iP
+         cK9WRLnNsl1Oj13jPoBTOD9XReUmaS+4ZBmZXKkuPGiXS0yr990KtXlqc6PM3UCS7Oj6
+         wEZOhIijCDUocQ350tlQg6JY824GSqRfplRjgHK6i9e6K05SXJ3dZvy6WMKPsrIRhH1B
+         Pfdmce3G/ZMlla/0n0empe6xCs6h9PIKF2+Z1/IPeISeRAMxu4V0w/wZnsD/EI7TYTxa
+         FeOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bOWHMfUqWgS66PgQYYet33MLKueM0ddFZqC4iawf0eo=;
-        b=hP6RqlEM29X4RUSgCiNpKHLYJ334dP5uUUeckmBE0qVmDP/oVhVxQ+anoMVdMeAwZp
-         Q+iJu0aYYAdiNPcEdcrXjZt78LT+Ascm+tA3PZHXHU8pifk2fVl6/+OVbuMH44pk55tm
-         c9jn1/l96CHYjVr4GJqtuy64udue5ntzpoE5NXKqoYISCBVtRbT33hNfCxMPnfsmtQLx
-         Cxw1/UCr7qwmQCWCDXtta/1jEYbtKH9mL4HFbTZHlDbS4d33EwpuGx6FJI/hYnSOhajb
-         l03LOFmHKY9OMMLX2cEPaBDWFWhjGNsLrKqKqBPJScnuAJ0344BxsH0n/FIzZteSAAiF
-         xmHA==
-X-Gm-Message-State: AOAM5305yAnIq58QNKoD7kWGNI3+tLbNgJ2W6FGI+eFppiSGM5Tt2FuR
-        3+ON0XJesp2bQ/gxndxozKw+qUDwOQuzByPWERfu2w==
-X-Google-Smtp-Source: ABdhPJx5Mh/dkzyGPzJF57IaS36QpKLdrS0B5NBIdJYTPkT2PN892GsWzomJqWkjhL/oqgJcA03tECRpPMH/GB+4WEk=
-X-Received: by 2002:aca:af50:: with SMTP id y77mr11164327oie.134.1639983616081;
- Sun, 19 Dec 2021 23:00:16 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=fcGOhpP2fh4L0P54itv7DpzugvdwboeZoteLAX3ou8w=;
+        b=OoVxtwCF7sP8Zd3SX4V22ooh6rM/dtSyAO1KtojhLmyocLgVnncKQP1rqfp8TsEcOf
+         /Uh7XZw/iqqzsw0xWUiIPfk0ONG034nqy3xx9Idsia/ziRDj/HmDRBd6XViKNjPjwoZa
+         BSJCuX8lzNt2EuaOu9rKs4e/o7LXtYkHtU5j3fkgfCwuUPRwbN/RkbJyFCUM2nfk+AeD
+         Lmjk1IREfNc5hck5AvmOOrx9C3GEmxAojBunV7wsMN6tZTvVBp6VCrhiimmMyaJOwb35
+         daqXPAy3KqiJIkkAKBfi80iUFlQdIrhH+QrG3+a0C3J2JBSTYXQZPRQMCFPEkF41IInD
+         BAew==
+X-Gm-Message-State: AOAM532HXiL7SxUYXB2TUk1QbQdg8C527KjykCDUOZf1ONDIUwFjuvGd
+        isP7KsuzsQ9V3wOJ9aGS1mmWgizBU1k17bF8Fwg=
+X-Google-Smtp-Source: ABdhPJysg7ZkJ2pwWFqedD4jG+5uYjbdrn0lHj76XIxYxGp3RLMDgB5nRczW3NtKZHmYutQNMPRihK67OS6Om8u6pfk=
+X-Received: by 2002:a25:8b07:: with SMTP id i7mr21841616ybl.334.1639984026008;
+ Sun, 19 Dec 2021 23:07:06 -0800 (PST)
 MIME-Version: 1.0
-References: <YbHTKUjEejZCLyhX@elver.google.com> <20211209201616.GU614@gate.crashing.org>
- <CANpmjNN4OAA_DM_KNLGJah3fk-PaZktGjziiu8ztf6fevZy5ug@mail.gmail.com>
-In-Reply-To: <CANpmjNN4OAA_DM_KNLGJah3fk-PaZktGjziiu8ztf6fevZy5ug@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 20 Dec 2021 08:00:00 +0100
-Message-ID: <CANpmjNM3eSd9sxi-1tV0cRthJ0hudrME8nYdhYP=ttcWDoPNfg@mail.gmail.com>
-Subject: Re: randomize_kstack: To init or not to init?
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Jann Horn <jannh@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Received: by 2002:a05:7110:70f6:b0:11b:c683:626 with HTTP; Sun, 19 Dec 2021
+ 23:07:05 -0800 (PST)
+Reply-To: aishagaddafi5788@gmail.com
+From:   "Mrs. Aisha Gaddafi" <webbweb3@gmail.com>
+Date:   Mon, 20 Dec 2021 08:07:05 +0100
+Message-ID: <CAK08YQOpzNNqn07idY47a5sVOCzihLnLgcuWM3oESF5U6-sSAg@mail.gmail.com>
+Subject: Hello!!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 21:33, Marco Elver <elver@google.com> wrote:
-> On Thu, 9 Dec 2021 at 21:19, Segher Boessenkool <segher@kernel.crashing.org> wrote:
-> > On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
-> > > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
-> > > default since dcb7c0b9461c2, which is why this came on my radar. And
-> > > Clang also performs auto-init of allocas when auto-init is on
-> > > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
-> > > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
-> > > allocas.
-> >
-> > The space allocated by alloca is not an automatic variable, so of course
-> > it is not affected by this compiler flag.  And it should not, this flag
-> > is explicitly for *small fixed-size* stack variables (initialising
-> > others can be much too expensive).
-> >
-> > >       C. Introduce a new __builtin_alloca_uninitialized().
-> >
-> > That is completely backwards.  That is the normal behaviour of alloca
-> > already.  Also you can get __builtin_alloca inserted by the compiler
-> > (for a variable length array for example), and you typically do not want
-> > those initialised either, for the same reasons.
->
-> You're right, if we're strict about it, initializing allocas is
-> technically out-of-scope of that feature.
->
-> So, option D: Add a param to control this, and probably it shouldn't
-> do it by default. Let's see how far that gets then.
+Dear Friend,
 
-Just an update: after some discussion, the Clang side says that
-alloca() is in scope, because the intent is that trivially initialized
-"automatic stack storage" should be handled by ftrivial-auto-var-init.
-And alloca() is automatic stack storage:
-https://www.gnu.org/software/libc/manual/html_node/Variable-Size-Automatic.html
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al-Qaddafi, the only daughter to Former
+President of Libya Col. Muammar Al-Qaddafi. Am a Widow with Children.
 
-So currently it looks like the builtin is the only solution in this case.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
-Thanks.
+I am willing to negotiate investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf, kindly reply
+urgent to enable me provide you more information about the investment
+funds.
+
+Your Urgent Reply Will Be Appreciated
+
+Best Regards
+Mrs Aisha Al-Qaddafi
+Email: (  aishagaddafi5788@gmail.com  ).

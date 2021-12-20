@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 091A247B53D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3642F47B540
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbhLTVbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:31:49 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:51875 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231488AbhLTVbr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:31:47 -0500
-Received: from [192.168.0.2] (ip5f5aed30.dynamic.kabel-deutschland.de [95.90.237.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 360AD61EA1927;
-        Mon, 20 Dec 2021 22:31:46 +0100 (CET)
-Message-ID: <a93c0fa7-7b84-6aea-265b-c913e0c84678@molgen.mpg.de>
-Date:   Mon, 20 Dec 2021 22:31:45 +0100
+        id S231454AbhLTVfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:35:07 -0500
+Received: from mga03.intel.com ([134.134.136.65]:61415 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229999AbhLTVfG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:35:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240227055"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="240227055"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 13:35:05 -0800
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="616545840"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.42.105])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 13:35:04 -0800
+Message-ID: <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] x86/sgx: Add accounting for tracking overcommit
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-sgx@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Date:   Mon, 20 Dec 2021 13:35:03 -0800
+In-Reply-To: <YcDxhWZ7lzB2BB8N@zn.tnic>
+References: <20211220174640.7542-1-kristen@linux.intel.com>
+         <20211220174640.7542-2-kristen@linux.intel.com> <YcDZ4++GQN+ODm50@zn.tnic>
+         <9e08e13208950e9fd955a46994b7fef705751dd6.camel@linux.intel.com>
+         <YcDxhWZ7lzB2BB8N@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Unable to transfer big files to Nokia N9
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <eb6d86eb-d156-d7ac-0965-181719023d51@molgen.mpg.de>
- <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
- <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
-In-Reply-To: <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Luiz,
-
-
-Am 01.12.21 um 23:07 schrieb Paul Menzel:
-
-> Am 01.12.21 um 19:29 schrieb Luiz Augusto von Dentz:
+On Mon, 2021-12-20 at 22:11 +0100, Borislav Petkov wrote:
+> Bah, that thread is not on lkml. Please always Cc lkml in the future.
 > 
->> On Wed, Dec 1, 2021 at 9:39 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+> On Mon, Dec 20, 2021 at 12:39:19PM -0800, Kristen Carlson Accardi
+> wrote:
+> > If a malicious or just extra large enclave is loaded, or even just
+> > a
+> > lot of enclaves, it can eat up all the normal RAM on the system.
+> > Normal
+> > methods of finding out where all the memory on the system is being
+> > used, wouldn't be able to find this usage since it is shared
+> > memory. In
+> > addition, the OOM killer wouldn't be able to kill any enclaves.
 > 
->>> For the first time, I wanted to transfer a 2 MB PDF file from a Dell
->>> Latitude E7250 with Debian sid/unstable with Linux 5.16-rc1 to a Nokia
->>> N9 (MeeGo/Harmattan). Using the package *bluez-obexd* 5.61-1 and GNOME
->>> 41, the device was found, and paired fine. Then I selected to transfer
->>> the 2 MB file, and after starting for a second, it timed out after the
->>> progress bar moves forward ones and failed.
->>>
->>> The systemd journal contains:
->>>
->>>       obexd[21139]: Transfer(0x56243fe4f790) Error: Timed out waiting 
->>> for response
->>>
->>> Testing with a a 5 byte test text file, worked fine. Also testing with a
->>> Galaly M32, both files were transferred without problems (though slowly
->>> with 32 KB/s.)
->>>
->>> Trying to connect to the device with bluetoothctl failed for me, and the
->>> journal contained, it failed.
->>>
->>>       $ bluetoothctl
->>>       Agent registered
->>>       [bluetooth]# connect 40:98:4E:5B:CE:XX
->>>       Attempting to connect to 40:98:4E:5B:CE:XX
->>>       Failed to connect: org.bluez.Error.Failed
->>>
->>>       bluetoothd[21104]: src/service.c:btd_service_connect() 
->>> a2dp-source profile connect failed for 40:98:4E:5B:CE:B3: Protocol 
->>> not available
->>>
->>> As the Nokia N9 was once pretty popular in the Linux community, I am
->>> pretty sure, it used to work fine in the past, and there is some
->>> regression. It’d be great, if you could give me some hints how to
->>> further debug the issue.
->>
->> We will need some logs, obexd and btmon, if possible.
+> So you need some sort of limiting against malicious enclaves anyways,
+> regardless of this knob. IOW, you can set a percentage limit of
+> per-enclave memory which cannot exceed a certain amount which won't
+> prevent the system from its normal operation. For example.
 > 
-> I only managed to get the btmon trace [1]. I did `sudo modprobe -r 
-> btusb` and `sudo btmon -w /dev/shm/trace.log`.
+> > I completely agree - so I'm trying to make sure I understand this
+> > comment, as the value is currently set to default that would
+> > automatically apply that is based on EPC memory present and not a
+> > fixed
+> > value. So I'd like to understand what you'd like to see done
+> > differently. are you saying you'd like to eliminated the ability to
+> > override the automatic default? Or just that you'd rather calculate
+> > the
+> > percentage based on total normal system RAM rather than EPC memory?
 > 
-> Linux messages:
+> So you say that there are cases where swapping to normal RAM can eat
+> up all RAM.
 > 
->      [29880.100381] calling  btusb_driver_init+0x0/0x1000 [btusb] @ 28716
->      [29880.239603] usbcore: registered new interface driver btusb
->      [29880.239608] initcall btusb_driver_init+0x0/0x1000 [btusb] returned 0 after 135952 usecs
->      [29880.240706] Bluetooth: hci0: unexpected event for opcode 0x0500
->      [29880.241598] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3 week 17 2014
->      [29880.241605] Bluetooth: hci0: Intel device is already patched. patch num: 32
+> So the first heuristic should be: do not allow for *all* enclaves
+> together to use up more than X percent of normal RAM during EPC
+> reclaim.
+
+So, in your proposal, you would first change the calculated number of
+maximum available backing pages to be based on total system RAM rather
+than EPC memory, got it.
+
 > 
->  From the system journal:
+> X percent being, say, 90% of all RAM. For example. I guess 10% should
+> be enough for normal operation but someone who's more knowledgeable
+> in
+> system limits could chime in here.
 > 
->      Dez 01 22:52:19 ersatz obexd[21139]: Transfer(0x56243fe53dd0) Error: Timed out waiting for response
+> Then, define a per-enclave limit which says, an enclave can use Y %
+> of
+> memory for swapping when trying to reclaim EPC memory. And that can
+> be
+> something like:
+> 
+> 	90 % RAM
+> 	--------
+> 	total amount of enclaves currently on the system
+> 
 
-Were you able to see anything in the attached logs? If the obexd logs 
-are missing, can you please tell how I should capture them?
+This would require recalculating the max number of allowed backing
+pages per enclave at run time whenever a new enclave is loaded - but
+all the existing enclaves may have already used more than the new max
+number of per-enclave allowable pages. How would you handle that
+scenario? This would add a lot of complexity for sure - and it does
+make me wonder whether any additional benefit of limiting per enclave
+would be worth it.
 
-I also tested with Ubuntu 20.04 (*linux-image-5.11.0-27-generic*) and 
-21.10 (*linux-image-5.13.0-19-generic*) live systems booted from a USB 
-storage device, and transferring `/usr/bin/systemctl` 
-(`/lib/systemd/systemd`) with size of 1.8 MB worked fine.
+> And you can obviously create scenarios where creating too many
+> enclaves
+> can bring the system into a situation where it doesn't do any forward
+> progress.
+> 
+> But you probably can cause the same with overcommitting with VMs so
+> perhaps it would be a good idea to look how overcommitting VMs and
+> limits there are handled.
+> 
+> Bottom line is: the logic should be for the most common cases to
+> function properly, out-of-the-box, without knobs. And then to keep
+> the
+> system operational by preventing enclaves from bringing it down to a
+> halt just by doing EPC reclaim.
+> 
+> Does that make more sense?
+> 
 
-Could there be a regression in that area? Unfortunately, it’s not easy 
-for me to do a bisection on the device at hand.
+Thanks for your more detailed explanation - I will take a look at the
+VM overcommit limits. Since obviously the original implementation did
+have a default value set, I had still a remaining specific question
+about your comments. Are you suggesting that there should not be a way
+to override any overcommit limit at all? So drop the parameter all
+together?
 
-(Would it be possible to do with QEMU and USB controller and Bluetooth 
-device passthrough? How can I transfer the file on the command line so I 
-wouldn’t need to install a desktop environment?)
-
-
-Kind regards,
-
-Paul
-
-
-> [1]: https://owww.molgen.mpg.de/~pmenzel/trace.log.7z

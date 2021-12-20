@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D257B47AC33
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1203347ABAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbhLTOmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49514 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbhLTOkv (ORCPT
+        id S234421AbhLTOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233961AbhLTOhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:51 -0500
+        Mon, 20 Dec 2021 09:37:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B104C06139A;
+        Mon, 20 Dec 2021 06:37:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAB6CB80EE3;
-        Mon, 20 Dec 2021 14:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406AEC36AE8;
-        Mon, 20 Dec 2021 14:40:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 20C34CE1109;
+        Mon, 20 Dec 2021 14:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01F0C36AF0;
+        Mon, 20 Dec 2021 14:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011248;
-        bh=xevNN71LVY1590c+Mb0u1A4Tv0j38C6SG/2qB4Q5KjE=;
+        s=korg; t=1640011064;
+        bh=UqIoGty3x6i+tPouRMfzEwDwRqaI2XcL1JbTVVMihyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D+niztgH8uN9n6bb4v8mvUx6xf7Iw543T9hCvv2JBC7JOHDgZ4IThXH05WXdawLxA
-         nmrtz+K8tjKRg9rcVCU/ZJ49qLVztYjrXOCb5knAmiVqTXj+HY+mvczqntss1JrDMG
-         9W1FrFLNcX3ghZVdbACyLRHFm7AQiM3XYJrFT41E=
+        b=Jn4Gk9FdkOVcCByVxIUv/3CYA7YgXSWPLC1RnDmZ95YV/G9DqYi2B8DHFXu7gW6IJ
+         rKXqICBApE0EO9vgsYQAQysyCYm66g+RQayuYw1bENrrvWnhijYtOBslmTdPxWigS5
+         +6PyWXGdaMpJtz9tjYb1hTjP2p+dRR1Sy6/qKMQA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jerome Marchand <jmarchan@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 4.19 11/56] recordmcount.pl: look for jgnop instruction as well as bcrl on s390
+        stable@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
+        John Keeping <john@metanate.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 04/31] i2c: rk3x: Handle a spurious start completion interrupt flag
 Date:   Mon, 20 Dec 2021 15:34:04 +0100
-Message-Id: <20211220143023.827232404@linuxfoundation.org>
+Message-Id: <20211220143020.127663446@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
+References: <20211220143019.974513085@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,36 +49,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Marchand <jmarchan@redhat.com>
+From: Ondrej Jirman <megous@megous.com>
 
-commit 85bf17b28f97ca2749968d8786dc423db320d9c2 upstream.
+[ Upstream commit 02fe0fbd8a21e183687925c3a266ae27dda9840f ]
 
-On s390, recordmcount.pl is looking for "bcrl 0,<xxx>" instructions in
-the objdump -d outpout. However since binutils 2.37, objdump -d
-display "jgnop <xxx>" for the same instruction. Update the
-mcount_regex so that it accepts both.
+In a typical read transfer, start completion flag is being set after
+read finishes (notice ipd bit 4 being set):
 
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211210093827.1623286-1-jmarchan@redhat.com
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+trasnfer poll=0
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
+
+This causes I2C transfer being aborted in polled mode from a stop completion
+handler:
+
+trasnfer poll=1
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
+i2c stop
+rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
+
+Clearing the START flag after read fixes the issue without any obvious
+side effects.
+
+This issue was dicovered on RK3566 when adding support for powering
+off the RK817 PMIC.
+
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/recordmcount.pl |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-rk3x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/scripts/recordmcount.pl
-+++ b/scripts/recordmcount.pl
-@@ -252,7 +252,7 @@ if ($arch eq "x86_64") {
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index df220666d6274..b4f8cd7dc8b74 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -424,8 +424,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
+ 	if (!(ipd & REG_INT_MBRF))
+ 		return;
  
- } elsif ($arch eq "s390" && $bits == 64) {
-     if ($cc =~ /-DCC_USING_HOTPATCH/) {
--	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*brcl\\s*0,[0-9a-f]+ <([^\+]*)>\$";
-+	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*(bcrl\\s*0,|jgnop\\s*)[0-9a-f]+ <([^\+]*)>\$";
- 	$mcount_adjust = 0;
-     } else {
- 	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*R_390_(PC|PLT)32DBL\\s+_mcount\\+0x2\$";
+-	/* ack interrupt */
+-	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
++	/* ack interrupt (read also produces a spurious START flag, clear it too) */
++	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
+ 
+ 	/* Can only handle a maximum of 32 bytes at a time */
+ 	if (len > 32)
+-- 
+2.33.0
+
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 591A547AC27
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6508D47ACEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbhLTOlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:53158 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbhLTOkc (ORCPT
+        id S236150AbhLTOrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236990AbhLTOpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:32 -0500
+        Mon, 20 Dec 2021 09:45:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C401BC061373;
+        Mon, 20 Dec 2021 06:43:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04182CE1109;
-        Mon, 20 Dec 2021 14:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50E5C36AE9;
-        Mon, 20 Dec 2021 14:40:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69A37B80EB3;
+        Mon, 20 Dec 2021 14:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D66C36AE8;
+        Mon, 20 Dec 2021 14:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011229;
-        bh=ZuZ+j66KwZKYQ3fplNdWas3Cm5mPhQJHkNXqvGiajsw=;
+        s=korg; t=1640011395;
+        bh=PnZGPTkCe0hxcq/awHaMgLihtVzRpARrbfE0xlwt4XM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0PdIDdh/gimfwTEfy4p6abbnv072bd2kKm2a7o8NNnC3jzFIiXR0cq9Z92Nv+spq9
-         BY/HBr00NHEemxsmgGzxFWJKRh5w/5tmKGVbe9Jzqp0Uf+e4vtDbBkCOMDNZ4qpAMB
-         261xoJKF/RhmKWSDRNv7jkAvLo+bctnXZ98TEq8I=
+        b=h2gVOy2Quol+Q+LMMHWhr6xE5KQ5VN1M671w2DAnmq3de/3WnsKkh0sDuAySdmico
+         dKuHA/UsV619duVEZ1J9HJWUKwoHLnywPEDnsbZG8up6kJG1CQRPH2Tx7ZHR+OL0qS
+         DzYCjjpAIVo7EJRrC3iou7Bi5dpQtTA/DzrVV0es=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Lavr <andy.lavr@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.14 38/45] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+        stable@vger.kernel.org,
+        syzbot+59bdff68edce82e393b6@syzkaller.appspotmail.com,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.19 40/56] mac80211: validate extended element ID is present
 Date:   Mon, 20 Dec 2021 15:34:33 +0100
-Message-Id: <20211220143023.543987672@linuxfoundation.org>
+Message-Id: <20211220143024.761456488@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,72 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+commit 768c0b19b50665e337c96858aa2b7928d6dcf756 upstream.
 
-A new warning in clang points out when macro expansion might result in a
-GNU C statement expression. There is an instance of this in the mwifiex
-driver:
+Before attempting to parse an extended element, verify that
+the extended element ID is present.
 
-drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-')' tokens terminating statement expression appear in different macro
-expansion contexts [-Wcompound-token-split-by-macro]
-        host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/wireless/marvell/mwifiex/fw.h:519:46: note: expanded from
-macro 'HostCmd_SET_SEQ_NO_BSS_INFO'
-        (((type) & 0x000f) << 12);                  }
-                                                    ^
-
-This does not appear to be a real issue. Removing the braces and
-replacing them with parentheses will fix the warning and not change the
-meaning of the code.
-
-Fixes: 5e6e3a92b9a4 ("wireless: mwifiex: initial commit for Marvell mwifiex driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1146
-Reported-by: Andy Lavr <andy.lavr@gmail.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20200901070834.1015754-1-natechancellor@gmail.com
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Fixes: 41cbb0f5a295 ("mac80211: add support for HE")
+Reported-by: syzbot+59bdff68edce82e393b6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20211211201023.f30a1b128c07.I5cacc176da94ba316877c6e10fe3ceec8b4dbd7d@changeid
+Cc: stable@vger.kernel.org
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/marvell/mwifiex/cmdevt.c |    4 ++--
- drivers/net/wireless/marvell/mwifiex/fw.h     |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ net/mac80211/util.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-+++ b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-@@ -323,9 +323,9 @@ static int mwifiex_dnld_sleep_confirm_cm
- 
- 	adapter->seq_num++;
- 	sleep_cfm_buf->seq_num =
--		cpu_to_le16((HostCmd_SET_SEQ_NO_BSS_INFO
-+		cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
- 					(adapter->seq_num, priv->bss_num,
--					 priv->bss_type)));
-+					 priv->bss_type));
- 
- 	mwifiex_dbg(adapter, CMD,
- 		    "cmd: DNLD_CMD: %#x, act %#x, len %d, seqno %#x\n",
---- a/drivers/net/wireless/marvell/mwifiex/fw.h
-+++ b/drivers/net/wireless/marvell/mwifiex/fw.h
-@@ -498,10 +498,10 @@ enum mwifiex_channel_flags {
- 
- #define RF_ANTENNA_AUTO                 0xFFFF
- 
--#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
--	(((seq) & 0x00ff) |                             \
--	 (((num) & 0x000f) << 8)) |                     \
--	(((type) & 0x000f) << 12);                  }
-+#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-+	((((seq) & 0x00ff) |                        \
-+	 (((num) & 0x000f) << 8)) |                 \
-+	(((type) & 0x000f) << 12))
- 
- #define HostCmd_GET_SEQ_NO(seq)       \
- 	((seq) & HostCmd_SEQ_NUM_MASK)
+--- a/net/mac80211/util.c
++++ b/net/mac80211/util.c
+@@ -1102,6 +1102,8 @@ u32 ieee802_11_parse_elems_crc(const u8
+ 				elems->max_idle_period_ie = (void *)pos;
+ 			break;
+ 		case WLAN_EID_EXTENSION:
++			if (!elen)
++				break;
+ 			if (pos[0] == WLAN_EID_EXT_HE_MU_EDCA &&
+ 			    elen >= (sizeof(*elems->mu_edca_param_set) + 1)) {
+ 				elems->mu_edca_param_set = (void *)&pos[1];
 
 

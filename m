@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D3F47AF7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEFF47AEB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbhLTPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S237566AbhLTPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238491AbhLTPLR (ORCPT
+        with ESMTP id S239200AbhLTO63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:11:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1CDC08EB32;
-        Mon, 20 Dec 2021 06:56:28 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A61C061396;
+        Mon, 20 Dec 2021 06:50:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF294611BB;
-        Mon, 20 Dec 2021 14:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A025BC36AE7;
-        Mon, 20 Dec 2021 14:56:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97402B80EE2;
+        Mon, 20 Dec 2021 14:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB06C36AE8;
+        Mon, 20 Dec 2021 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012187;
-        bh=1+ZTRF3+8NGjaT7/hkS3eY+fxbWr4+MMtKRkyA50sUY=;
+        s=korg; t=1640011800;
+        bh=3cp1xpV7FD62VkDShfMHSubkHGbAzqWQyXlmC43hKb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oTtvx9phcZ+NEswbyN1HCsoEmeSRCYrdpEqg4T2dOEQAd3hpABc3zdOxleAkuLQjz
-         7o3Tto0hqEB4af+f16NRFyfCDTwJAfDXGG68etpRijkeuG31hgEgEWN2FACYorlT2d
-         4AS4TJu4PbKNUxuDUUxRhmLrMqmJzM5FxwQ9V9PU=
+        b=CkKqt4R2TJxrQuYZt5rv1VMEfnyNnQ4VuMGFDvVwV2wssq0F7qfdjyUQRdezy6fIN
+         6hh1gRhBOQvzqvfSQcZDEfSWII6UbP8lLEYWTSc1JYFRTGB77zqDk0/2F3Y3SMfyCy
+         rf4Zvq5T/Ol9k7VnfH/cISlo7WjV+7eoc0EWaoU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Kennedy <hurricos@gmail.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 112/177] powerpc/85xx: Fix oops when CONFIG_FSL_PMC=n
-Date:   Mon, 20 Dec 2021 15:34:22 +0100
-Message-Id: <20211220143043.844382794@linuxfoundation.org>
+Subject: [PATCH 5.10 51/99] igbvf: fix double free in `igbvf_probe`
+Date:   Mon, 20 Dec 2021 15:34:24 +0100
+Message-Id: <20211220143031.100242099@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,68 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoming Ni <nixiaoming@huawei.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-[ Upstream commit 3dc709e518b47386e6af937eaec37bb36539edfd ]
+[ Upstream commit b6d335a60dc624c0d279333b22c737faa765b028 ]
 
-When CONFIG_FSL_PMC is set to n, no value is assigned to cpu_up_prepare
-in the mpc85xx_pm_ops structure. As a result, oops is triggered in
-smp_85xx_start_cpu().
+In `igbvf_probe`, if register_netdev() fails, the program will go to
+label err_hw_init, and then to label err_ioremap. In free_netdev() which
+is just below label err_ioremap, there is `list_for_each_entry_safe` and
+`netif_napi_del` which aims to delete all entries in `dev->napi_list`.
+The program has added an entry `adapter->rx_ring->napi` which is added by
+`netif_napi_add` in igbvf_alloc_queues(). However, adapter->rx_ring has
+been freed below label err_hw_init. So this a UAF.
 
-  smp: Bringing up secondary CPUs ...
-  kernel tried to execute user page (0) - exploit attempt? (uid: 0)
-  BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-  Faulting instruction address: 0x00000000
-  Oops: Kernel access of bad area, sig: 11 [#1]
-  ...
-  NIP [00000000] 0x0
-  LR [c0021d2c] smp_85xx_kick_cpu+0xe8/0x568
-  Call Trace:
-  [c1051da8] [c0021cb8] smp_85xx_kick_cpu+0x74/0x568 (unreliable)
-  [c1051de8] [c0011460] __cpu_up+0xc0/0x228
-  [c1051e18] [c0031bbc] bringup_cpu+0x30/0x224
-  [c1051e48] [c0031f3c] cpu_up.constprop.0+0x180/0x33c
-  [c1051e88] [c00322e8] bringup_nonboot_cpus+0x88/0xc8
-  [c1051eb8] [c07e67bc] smp_init+0x30/0x78
-  [c1051ed8] [c07d9e28] kernel_init_freeable+0x118/0x2a8
-  [c1051f18] [c00032d8] kernel_init+0x14/0x124
-  [c1051f38] [c0010278] ret_from_kernel_thread+0x14/0x1c
+In terms of how to patch the problem, we can refer to igbvf_remove() and
+delete the entry before `adapter->rx_ring`.
 
-Fixes: c45361abb918 ("powerpc/85xx: fix timebase sync issue when CONFIG_HOTPLUG_CPU=n")
-Reported-by: Martin Kennedy <hurricos@gmail.com>
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
-Tested-by: Martin Kennedy <hurricos@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211126041153.16926-1-nixiaoming@huawei.com
+The KASAN logs are as follows:
+
+[   35.126075] BUG: KASAN: use-after-free in free_netdev+0x1fd/0x450
+[   35.127170] Read of size 8 at addr ffff88810126d990 by task modprobe/366
+[   35.128360]
+[   35.128643] CPU: 1 PID: 366 Comm: modprobe Not tainted 5.15.0-rc2+ #14
+[   35.129789] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[   35.131749] Call Trace:
+[   35.132199]  dump_stack_lvl+0x59/0x7b
+[   35.132865]  print_address_description+0x7c/0x3b0
+[   35.133707]  ? free_netdev+0x1fd/0x450
+[   35.134378]  __kasan_report+0x160/0x1c0
+[   35.135063]  ? free_netdev+0x1fd/0x450
+[   35.135738]  kasan_report+0x4b/0x70
+[   35.136367]  free_netdev+0x1fd/0x450
+[   35.137006]  igbvf_probe+0x121d/0x1a10 [igbvf]
+[   35.137808]  ? igbvf_vlan_rx_add_vid+0x100/0x100 [igbvf]
+[   35.138751]  local_pci_probe+0x13c/0x1f0
+[   35.139461]  pci_device_probe+0x37e/0x6c0
+[   35.165526]
+[   35.165806] Allocated by task 366:
+[   35.166414]  ____kasan_kmalloc+0xc4/0xf0
+[   35.167117]  foo_kmem_cache_alloc_trace+0x3c/0x50 [igbvf]
+[   35.168078]  igbvf_probe+0x9c5/0x1a10 [igbvf]
+[   35.168866]  local_pci_probe+0x13c/0x1f0
+[   35.169565]  pci_device_probe+0x37e/0x6c0
+[   35.179713]
+[   35.179993] Freed by task 366:
+[   35.180539]  kasan_set_track+0x4c/0x80
+[   35.181211]  kasan_set_free_info+0x1f/0x40
+[   35.181942]  ____kasan_slab_free+0x103/0x140
+[   35.182703]  kfree+0xe3/0x250
+[   35.183239]  igbvf_probe+0x1173/0x1a10 [igbvf]
+[   35.184040]  local_pci_probe+0x13c/0x1f0
+
+Fixes: d4e0fe01a38a0 (igbvf: add new driver to support 82576 virtual functions)
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/85xx/smp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igbvf/netdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/85xx/smp.c b/arch/powerpc/platforms/85xx/smp.c
-index 83f4a6389a282..d7081e9af65c7 100644
---- a/arch/powerpc/platforms/85xx/smp.c
-+++ b/arch/powerpc/platforms/85xx/smp.c
-@@ -220,7 +220,7 @@ static int smp_85xx_start_cpu(int cpu)
- 	local_irq_save(flags);
- 	hard_irq_disable();
+diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c b/drivers/net/ethernet/intel/igbvf/netdev.c
+index 07c9e9e0546f5..fe8c0a26b7201 100644
+--- a/drivers/net/ethernet/intel/igbvf/netdev.c
++++ b/drivers/net/ethernet/intel/igbvf/netdev.c
+@@ -2873,6 +2873,7 @@ static int igbvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	return 0;
  
--	if (qoriq_pm_ops)
-+	if (qoriq_pm_ops && qoriq_pm_ops->cpu_up_prepare)
- 		qoriq_pm_ops->cpu_up_prepare(cpu);
- 
- 	/* if cpu is not spinning, reset it */
-@@ -292,7 +292,7 @@ static int smp_85xx_kick_cpu(int nr)
- 		booting_thread_hwid = cpu_thread_in_core(nr);
- 		primary = cpu_first_thread_sibling(nr);
- 
--		if (qoriq_pm_ops)
-+		if (qoriq_pm_ops && qoriq_pm_ops->cpu_up_prepare)
- 			qoriq_pm_ops->cpu_up_prepare(nr);
- 
- 		/*
+ err_hw_init:
++	netif_napi_del(&adapter->rx_ring->napi);
+ 	kfree(adapter->tx_ring);
+ 	kfree(adapter->rx_ring);
+ err_sw_init:
 -- 
-2.34.1
+2.33.0
 
 
 

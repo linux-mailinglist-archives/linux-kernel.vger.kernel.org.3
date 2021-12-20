@@ -2,152 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF447A9B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C7947A9B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbhLTMZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S229974AbhLTM3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbhLTMZk (ORCPT
+        with ESMTP id S229820AbhLTM3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:25:40 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB037C061396
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:31 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id o20so37455174eds.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:31 -0800 (PST)
+        Mon, 20 Dec 2021 07:29:47 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78B0C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:29:46 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so9491502wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:29:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w5l6X42Q1hhXCCV2zsPbnIHkIz6QpyD+5/B2sPrSWbY=;
-        b=uHtnQauXfEDehUTW3/mo9D+1L4N9XvyEnrV3PWHgIVKLDI0+YN6JE59jYmRUu8ttAt
-         snnxXD/D/LfL4gCCzkyGoT80nqJCm1pv9GEQCuWz73zs71md02zDrXnEZafgTrP8lHiN
-         UFGQAGnwigOuPBvE182PuL34GxLCmKBT7N+5VSyIWaJBN7u1pFH5voc5Kypo2PSwKpo1
-         VLuyc3Q5ZSJcUql9Jfue73VA6vpf94pys2R1tl8svSpsz0XNuncp4eL3NSbhaN+sNimc
-         mRmAWdH6kcbsjeE/VO1HfmRMvdycysQ2XRzDqxjp2fKCrBMfp9NjlEd2abN0RWaMITmZ
-         P5+w==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+PcnGxhJFgJFq8C9/A9f7W+O7WZ4IV+4n9+SWg14/VU=;
+        b=yoZ590xupjWmnjiXUltg7zRY6rWXuOa4c3FPxdaivdy8VQ/I1E6MTvCUpNwF8Yir2e
+         MYeJK5Z8MA8x+01/VLZ4B3/YIV6k9a9LdQ6QruGkxrUCM3yccYa2GpngoVQFJEBJpDWw
+         Iox2GXDfOgWO2ju02MjdRqduDoLdEx9HuPrcIEWixXTO0boWkM7cLK5uYLiOdBNxygoC
+         UVCYe3XX2P43PxAMn1OnT3bOUhUl/lb9nC4LZ0yYi4Z/xahVjqDwKces4z1Bw3a9oJ+t
+         /s2m/Jkx+z0kuuIVPjWXV7gjbcbRzTN21V/yeU7rgDa0GbES+6N1yeyEzUGTgQT/WIEu
+         TZdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w5l6X42Q1hhXCCV2zsPbnIHkIz6QpyD+5/B2sPrSWbY=;
-        b=uNWcRqpG03flk5tmXysq2VoPmQ5SSeEZcEofKXzz9MpcIEZGQ052nP3DR9sdIg89FI
-         0uPyAX32Tqduo9yi24n4orm+FUbCXoYiSe/O1UQbVHPAGsEH4BVGjZX2wi4dFlNVBSNz
-         UpTFDU5iONLAqyg3pH5OU1kjbNUsFJJA8OIsY7hvlxI6lMVDo9tzjkvaikfeBkOyiKBa
-         ktkYm0JYipQPQ0YY3Pc35OsToSzsktO34GoGV8LHCA9RZs1nNRkwzoXOeXUZn7w/YgyT
-         zzNBgLwMny2IefinZIWBqLCUudpExbjWgFcD9jJr/XD2VIzsTz62M6F9T0WLsXBrY5zT
-         kw3g==
-X-Gm-Message-State: AOAM533oGFEyaaYD+ztZnIPJxAtAC6Ou6eVIqQb7qcIVCA8+ykILF60Z
-        fxAQ0oNKyr+u1+hFSK6Uyg9VAg==
-X-Google-Smtp-Source: ABdhPJy7gIVM+o8shhal/Gr1KRTZnigRs3pcnv4cEkYdnY7HfAegHCfmBO0COi70irMOHyzh7/q03A==
-X-Received: by 2002:a17:907:16a8:: with SMTP id hc40mr10497296ejc.210.1640003130404;
-        Mon, 20 Dec 2021 04:25:30 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id f27sm4335374ejc.137.2021.12.20.04.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 04:25:30 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
-        huxinming820@gmail.com, kvalo@codeaurora.org,
-        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, dmitry.torokhov@gmail.com,
-        ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.14 6/6] Input: touchscreen - avoid bitwise vs logical OR warning
-Date:   Mon, 20 Dec 2021 13:25:06 +0100
-Message-Id: <20211220122506.3631672-7-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220122506.3631672-1-anders.roxell@linaro.org>
-References: <20211220122506.3631672-1-anders.roxell@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+PcnGxhJFgJFq8C9/A9f7W+O7WZ4IV+4n9+SWg14/VU=;
+        b=1BrVBDAn+4CoJrh/6DxM7+sH94u/QF1L/g3ij4/pvvBKsvvLeUCe3WuIrnLW4j259D
+         wt9M7FKpwQyfpr0aiYGxNga49VK24XDf8la5+TvaHydPILkWBK9HLfh/jkWgdaVUTklB
+         j5a9/69VfJL0e08pU+B0TBUPrCmLkn+jE22XOk84mxHY66OolljpTD5NJHe1dzNTY+pa
+         X5kFs0A35uSiTm/p6W5x3qty3mkNxDq0OD9OrHTw+DnxHMSjXev9aZD1Yew8LfiOY7Rp
+         +2VBJO74oLId9p1PDNVH1zXMzgX34TJexmc6mVnrS9ddwFLXqSaaoquIioaHWX86Ewbl
+         +lww==
+X-Gm-Message-State: AOAM530Z5bPV1+cJNC/BXqHirh55wMaTQuEAP2QNCwSy0XnDt9+ehosr
+        oSWSsnnCmN4Yc/QcYxugG7nr6Q==
+X-Google-Smtp-Source: ABdhPJwDNRbbdfnlpSzXceRp9wC+Lp3t4UEDGZej7Ki6uZQTh5Z88Z3EgNxYi7qkF2gQ0KHyDFcyLQ==
+X-Received: by 2002:a7b:c92a:: with SMTP id h10mr884520wml.26.1640003385145;
+        Mon, 20 Dec 2021 04:29:45 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:ac6:da31:b84c:183? ([2a01:e34:ed2f:f020:ac6:da31:b84c:183])
+        by smtp.googlemail.com with ESMTPSA id p1sm6339686wma.42.2021.12.20.04.29.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 04:29:44 -0800 (PST)
+Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
+Date:   Mon, 20 Dec 2021 13:29:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+On 18/12/2021 15:41, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
+> 
+> Dropping usage of platform_get_resource() was agreed based on
+> the discussion [0].
+> 
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> 
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index b49f04daaf47..e4c7bc1bf7ef 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  	struct rcar_thermal_common *common;
+>  	struct rcar_thermal_priv *priv;
+>  	struct device *dev = &pdev->dev;
+> -	struct resource *res, *irq;
+> +	struct resource *res;
+>  	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+>  	int mres = 0;
+>  	int i;
+> @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  	pm_runtime_get_sync(dev);
+>  
+>  	for (i = 0; i < chip->nirqs; i++) {
+> -		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+> -		if (!irq)
+> +		int irq;
+> +
+> +		irq = platform_get_irq_optional(pdev, i);
+> +		if (irq <= 0 && irq != -ENXIO) {
+> +			ret = irq ? irq : -ENXIO;
+> +			goto error_unregister;
+> +		}
+> +		if (irq == -ENXIO)
+>  			continue;
 
-commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
+Why not invert the conditions?
 
-A new warning in clang points out a few places in this driver where a
-bitwise OR is being used with boolean types:
+		if (irq == -ENXIO)
+			continue;
 
-drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		if (irq <= 0) {
+			ret = irq ? irq : -ENXIO;
+			goto out_unregister;
+		}
 
-This use of a bitwise OR is intentional, as bitwise operations do not
-short circuit, which allows all the calls to touchscreen_get_prop_u32()
-to happen so that the last parameter is initialized while coalescing the
-results of the calls to make a decision after they are all evaluated.
 
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each touchscreen_get_prop_u32() call to data_present,
-which keeps the meaning of the code the same but makes it obvious that
-every one of these calls is expected to happen.
+> +
+>  		if (!common->base) {
+>  			/*
+>  			 * platform has IRQ support.
+> @@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  			idle = 0; /* polling delay is not needed */
+>  		}
+>  
+> -		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
+> +		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+>  				       IRQF_SHARED, dev_name(dev), common);
+>  		if (ret) {
+>  			dev_err(dev, "irq request failed\n ");
+> 
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- drivers/input/touchscreen/of_touchscreen.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/input/touchscreen/of_touchscreen.c b/drivers/input/touchscreen/of_touchscreen.c
-index 8d7f9c8f2771..db499ef6ccff 100644
---- a/drivers/input/touchscreen/of_touchscreen.c
-+++ b/drivers/input/touchscreen/of_touchscreen.c
-@@ -79,8 +79,8 @@ void touchscreen_parse_properties(struct input_dev *input, bool multitouch,
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-x",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -90,8 +90,8 @@ void touchscreen_parse_properties(struct input_dev *input, bool multitouch,
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-y",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -101,11 +101,11 @@ void touchscreen_parse_properties(struct input_dev *input, bool multitouch,
- 	data_present = touchscreen_get_prop_u32(dev,
- 						"touchscreen-max-pressure",
- 						input_abs_get_max(input, axis),
--						&maximum) |
--		       touchscreen_get_prop_u32(dev,
--						"touchscreen-fuzz-pressure",
--						input_abs_get_fuzz(input, axis),
--						&fuzz);
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev,
-+						 "touchscreen-fuzz-pressure",
-+						 input_abs_get_fuzz(input, axis),
-+						 &fuzz);
- 	if (data_present)
- 		touchscreen_set_params(input, axis, maximum, fuzz);
- 
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

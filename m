@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90EA47AC0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF36947AE14
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbhLTOlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbhLTOju (ORCPT
+        id S237631AbhLTO5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:57:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33376 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239411AbhLTOzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:50 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1F7C0613B1;
-        Mon, 20 Dec 2021 06:39:49 -0800 (PST)
+        Mon, 20 Dec 2021 09:55:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6410BCE111A;
-        Mon, 20 Dec 2021 14:39:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A63C36AE9;
-        Mon, 20 Dec 2021 14:39:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5117B80EE3;
+        Mon, 20 Dec 2021 14:55:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BEA3C36AE8;
+        Mon, 20 Dec 2021 14:55:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011187;
-        bh=IOp27fWHEyFabm28nK96fSbGm+oP2n3zr0PYA2P6JFs=;
+        s=korg; t=1640012128;
+        bh=bc2McG7xOdeZED+/riqAmyY0sWbZhfv2LnK0AsZGMD4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bbzTP649PbuUlU5l2Dk4/NkZnAntdzoF0LNNl1NBrPmNnuVzP6usAVsvOCvuOYSNa
-         NuAh0BKypFG4hOBUjlYdrMxqB9Eoc4aO4o1C8RMsgd2L9M1aZLpWVWomLVqBAFcV84
-         lDQaQ+Egs97d/OTxNznYl+4lBjolqKidoO3lt3hE=
+        b=RTI23ZoUbA5QwQom8WboRa0GgE5qnrenzDEPMPBF4no/4g8DhCRyvAgGrTkEak2bT
+         2K+GGc4CI2U63RWSJRiM20qwoUrw9Rp/3pOHhkNTnS1pUtz/lGQJSmwdwskT4AdTgD
+         R8uTCW4zJsGoPAMDS8/Nobnnh2gvLX/oYuWGd2tg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
-        John Keeping <john@metanate.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 05/45] i2c: rk3x: Handle a spurious start completion interrupt flag
+        stable@vger.kernel.org,
+        syzbot+1fd9b69cde42967d1add@syzkaller.appspotmail.com,
+        Florian Westphal <fw@strlen.de>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 090/177] mptcp: remove tcp ulp setsockopt support
 Date:   Mon, 20 Dec 2021 15:34:00 +0100
-Message-Id: <20211220143022.446190196@linuxfoundation.org>
+Message-Id: <20211220143043.145213292@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,64 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Jirman <megous@megous.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 02fe0fbd8a21e183687925c3a266ae27dda9840f ]
+[ Upstream commit 404cd9a22150f24acf23a8df2ad0c094ba379f57 ]
 
-In a typical read transfer, start completion flag is being set after
-read finishes (notice ipd bit 4 being set):
+TCP_ULP setsockopt cannot be used for mptcp because its already
+used internally to plumb subflow (tcp) sockets to the mptcp layer.
 
-trasnfer poll=0
-i2c start
-rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-i2c read
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-i2c stop
-rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
+syzbot managed to trigger a crash for mptcp connections that are
+in fallback mode:
 
-This causes I2C transfer being aborted in polled mode from a stop completion
-handler:
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 1 PID: 1083 Comm: syz-executor.3 Not tainted 5.16.0-rc2-syzkaller #0
+RIP: 0010:tls_build_proto net/tls/tls_main.c:776 [inline]
+[..]
+ __tcp_set_ulp net/ipv4/tcp_ulp.c:139 [inline]
+ tcp_set_ulp+0x428/0x4c0 net/ipv4/tcp_ulp.c:160
+ do_tcp_setsockopt+0x455/0x37c0 net/ipv4/tcp.c:3391
+ mptcp_setsockopt+0x1b47/0x2400 net/mptcp/sockopt.c:638
 
-trasnfer poll=1
-i2c start
-rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-i2c read
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-i2c stop
-rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
-i2c stop
-rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
+Remove support for TCP_ULP setsockopt.
 
-Clearing the START flag after read fixes the issue without any obvious
-side effects.
-
-This issue was dicovered on RK3566 when adding support for powering
-off the RK817 PMIC.
-
-Signed-off-by: Ondrej Jirman <megous@megous.com>
-Reviewed-by: John Keeping <john@metanate.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: d9e4c1291810 ("mptcp: only admit explicitly supported sockopt")
+Reported-by: syzbot+1fd9b69cde42967d1add@syzkaller.appspotmail.com
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-rk3x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/mptcp/sockopt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index fe234578380ac..548089aa9aba5 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -424,8 +424,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
- 	if (!(ipd & REG_INT_MBRF))
- 		return;
- 
--	/* ack interrupt */
--	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
-+	/* ack interrupt (read also produces a spurious START flag, clear it too) */
-+	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
- 
- 	/* Can only handle a maximum of 32 bytes at a time */
- 	if (len > 32)
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index 8c03afac5ca03..4bb305342fcc7 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -523,7 +523,6 @@ static bool mptcp_supported_sockopt(int level, int optname)
+ 		case TCP_NODELAY:
+ 		case TCP_THIN_LINEAR_TIMEOUTS:
+ 		case TCP_CONGESTION:
+-		case TCP_ULP:
+ 		case TCP_CORK:
+ 		case TCP_KEEPIDLE:
+ 		case TCP_KEEPINTVL:
 -- 
 2.33.0
 

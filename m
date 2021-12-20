@@ -2,161 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E9447B0B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C91847B0BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237335AbhLTPxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:53:42 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56780 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231790AbhLTPxl (ORCPT
+        id S237458AbhLTPzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231790AbhLTPzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:53:41 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BKB4Q9e022873;
-        Mon, 20 Dec 2021 16:53:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=selector1;
- bh=Jgsa623SaViueGDOZhOSg8j75LYCq3JkOD9aq+r/VfQ=;
- b=Ldd5V86MOT/fE2WF4Lg2DS8jBjbIvCL4my+RuOlmH9NHg5Jz0/O/lZqlhOtJ4SKESwV+
- 2wo+st4yxIOSOzjHtynk+FNnuMp5Ua1/1mJox/Co0VfeEHcBbTK5pT+04gvAuHQKTGGj
- odrpRrq+Zo4LPAhJTO00OjEErxPppMMtd+Yr5Y6MomCgCPOQ2tNskW43nFX7khUYIZCt
- iFTIRLEEfH9lrB3KgyHY9LzdErs2ZCs7ubnTmg+sowEQ4Cj4A3/BE7rjVYz0JCSzcRdA
- YCJRnM/Z5HOkW3T6eHaIKRVqV+EpBLodW1+iitopQBxJBNJlqrOhG1p3MfrrTLklEEgg zw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2kjnkbee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 16:53:20 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B828C10002A;
-        Mon, 20 Dec 2021 16:53:18 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AEF9D207546;
-        Mon, 20 Dec 2021 16:53:18 +0100 (CET)
-Received: from [192.168.8.15] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 20 Dec
- 2021 16:53:17 +0100
-Message-ID: <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
-Subject: Re: [PATCH] drm: adv7511: override i2c address of cec before
- accessing it
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Jonas Karlman" <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Date:   Mon, 20 Dec 2021 16:53:12 +0100
-In-Reply-To: <164001209406.2512616.469307346369770543@Monstersaurus>
-References: <20211218182804.208906-1-antonio.borneo@foss.st.com>
-         <164001209406.2512616.469307346369770543@Monstersaurus>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        Mon, 20 Dec 2021 10:55:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544FC061574;
+        Mon, 20 Dec 2021 07:55:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D61E5611DF;
+        Mon, 20 Dec 2021 15:55:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B207DC36AE7;
+        Mon, 20 Dec 2021 15:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640015704;
+        bh=dUn/siHCed+00iFm6+pbfrfR17i6Fgn0zXZ5qKc0C9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SPqciD3W7ys3TkAP7vRIEcOvkw/yVFTld83zJs9H67NGf+/y92yA4sRT6n5/ex7vk
+         OOC2FYgA/dVG65wUoL0/mLtPiHF0yX1gl295zBN6vPBD9+rPqbPVImHIkb4IEmAn2Q
+         I27qoKpzCP8WgIaJ1uHV05gnX/eFWbFkw45cU+F4=
+Date:   Mon, 20 Dec 2021 16:55:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
+Message-ID: <YcCnVfp2DWuVlXIw@kroah.com>
+References: <20211204195757.8600-1-semen.protsenko@linaro.org>
+ <20211204195757.8600-4-semen.protsenko@linaro.org>
+ <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
+ <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-20_07,2021-12-20_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-20 at 14:54 +0000, Kieran Bingham wrote:
-> Hi Antonio,
+On Mon, Dec 20, 2021 at 05:21:16PM +0200, Sam Protsenko wrote:
+> On Mon, 13 Dec 2021 at 13:35, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+> >
+> > On 04/12/2021 20:57, Sam Protsenko wrote:
+> > > USI control is now extracted to the dedicated USI driver. Remove USI
+> > > related code from serial driver to avoid conflicts and code duplication.
+> > >
+> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > ---
+> > > Changes in v3:
+> > >   - Spell check fixes in commit message
+> > >
+> > > Changes in v2:
+> > >   - (none)
+> > >
+> > >  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
+> > >  include/linux/serial_s3c.h       |  9 --------
+> > >  2 files changed, 4 insertions(+), 41 deletions(-)
+> > >
+> >
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >
+> > Greg,
+> > If you are fine with the changes, please take the serial driver changes
+> > via your tree.
+> >
 > 
-> Quoting Antonio Borneo (2021-12-18 18:28:04)
-> > Commit 680532c50bca ("drm: adv7511: Add support for
-> > i2c_new_secondary_device") allows a device tree node to override
-> > the default addresses of the secondary i2c devices. This is useful
-> > for solving address conflicts on the i2c bus.
-> > 
-> > In adv7511_init_cec_regmap() the new i2c address of cec device is
-> > read from device tree and immediately accessed, well before it is
-> > written in the proper register to override the default address.
-> > This can cause an i2c error during probe and a consequent probe
-> > failure.
+> Hi Greg,
 > 
-> Ouch, it does seem that way. I guess no one has used the CEC for
-> quite
-> some time, as it must have been like this for a while?
+> If it's ok with you, can you please apply patches 3, 4 and 5 from this
+> series? If it's possible, would be nice to see those in v5.17.
 
-Using the default i2c address for cec works without problem; apparently
-everyone is happy with such default. The issue appears only when you
-have to override the default cec address.
-The commit 680532c50bca landed in v4.18.
+All now queued up, thanks.
 
-> > Once the new i2c address is read from the device tree, override
-> > the default address before any attempt to access the cec.
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-Thanks!
-Antonio
-
-> > Tested with adv7533 and stm32mp157f.
-> > 
-> > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-> > Fixes: 680532c50bca ("drm: adv7511: Add support for
-> > i2c_new_secondary_device")
-> > ---
-> > To: Andrzej Hajda <a.hajda@samsung.com>
-> > To: Neil Armstrong <narmstrong@baylibre.com>
-> > To: Robert Foss <robert.foss@linaro.org>
-> > To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> > To: Jonas Karlman <jonas@kwiboo.se>
-> > To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > To: David Airlie <airlied@linux.ie>
-> > To: Daniel Vetter <daniel@ffwll.ch>
-> > To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > To: dri-devel@lists.freedesktop.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-stm32@st-md-mailman.stormreply.com
-> > ---
-> >  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > index 76555ae64e9c..629e05286fd9 100644
-> > --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > @@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct
-> > adv7511 *adv)
-> >                                                
-> > ADV7511_CEC_I2C_ADDR_DEFAULT);
-> >         if (IS_ERR(adv->i2c_cec))
-> >                 return PTR_ERR(adv->i2c_cec);
-> > +
-> > +       regmap_write(adv->regmap, ADV7511_REG_CEC_I2C_ADDR,
-> > +                    adv->i2c_cec->addr << 1);
-> > +
-> >         i2c_set_clientdata(adv->i2c_cec, adv);
-> >  
-> >         adv->regmap_cec = devm_regmap_init_i2c(adv->i2c_cec,
-> > @@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client
-> > *i2c, const struct i2c_device_id *id)
-> >         if (ret)
-> >                 goto err_i2c_unregister_packet;
-> >  
-> > -       regmap_write(adv7511->regmap, ADV7511_REG_CEC_I2C_ADDR,
-> > -                    adv7511->i2c_cec->addr << 1);
-> > -
-> >         INIT_WORK(&adv7511->hpd_work, adv7511_hpd_work);
-> >  
-> >         if (i2c->irq) {
-> > 
-> > base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
-> > -- 
-> > 2.34.1
-> > 
-
+greg k-h

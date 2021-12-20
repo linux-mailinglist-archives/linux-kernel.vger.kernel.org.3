@@ -2,455 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBA347B485
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A76947B489
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbhLTUni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 15:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbhLTUnd (ORCPT
+        id S229906AbhLTUsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 15:48:39 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43796
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229853AbhLTUsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 15:43:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DB2C06173E;
-        Mon, 20 Dec 2021 12:43:32 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 20 Dec 2021 15:48:38 -0500
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4EC861EC04FB;
-        Mon, 20 Dec 2021 21:43:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640033007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=T86GXEX9vGJuX8nPoBJwt1R9Pp7ZHqucQb6aglaYx4U=;
-        b=pTaOMUE+xrYRjcx5kQinHy8DkvFRWsoYUWkwdac9oyJ3kfArAHcuP7Ns7c/CCzrl4Egayh
-        SwY7aLioQjs75J0OAhOiTpsPVIOOAT0VRZe4/3EArEFoElcT6b+lxVqzGo15VwMID81sC4
-        9zMSkJFZ0HuIEogiCUqpt4wKlkPR2lg=
-Date:   Mon, 20 Dec 2021 21:43:28 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Zhaolong Zhang <zhangzl2013@126.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH] x86/mce: Remove the tolerance level control
-Message-ID: <YcDq8PxvKtTENl/e@zn.tnic>
-References: <YYj8ir/UYnG/zVK4@zn.tnic>
- <4a77f582.4434.17cff975224.Coremail.zhangzl2013@126.com>
- <776fad3d.3369.17d03d2c2ba.Coremail.zhangzl2013@126.com>
- <YYo6VwPZLCWcP3Bl@zn.tnic>
- <d66e53d9d8cf4dabb2daade220308d7a@intel.com>
- <YYrQe7bYe+OBzZ4B@zn.tnic>
- <84e2622e4300490587793d2509f7b3ff@intel.com>
- <YYrYUpM7c5Z+nFsv@zn.tnic>
- <42d1d11d63f3453db61fad58a91e2ba5@intel.com>
- <YYroWYUVJEVKqy+7@zn.tnic>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3F5F74005A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 20:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640033309;
+        bh=CylAiDcMKCHAAC8ueNcVTekyeto0IoqUMHSzLnhZjac=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=F048ZRYRjhB1i5uP8DyeaSXARwEG9OjBieEbCtW+HDKrBhYnWlWI9x9WNY1UJSAAR
+         pJ1T0ZlK/U/bnoIMfA8GRGYQ5lUByr1zoRa83puBa3IyweSxMrWAJEUyferjGxuHPs
+         qfaS8yviZEoKqfUwS3o4pDn9WoNEPZ4WcB1oqHndERtqJuON4ta9vveHgT/wN6e9C5
+         xWuac3wqnxeaVVeKfn0XXbl+OydvCKb6/OkG4IrDhwqTrc9gGoRIv4J00PUjonn51L
+         31twV5UlbwEFfXVIBchwhK30oQXHCdPWm6ZVU2E2XX+rWbKKwfj2X8tcd9ZB817IND
+         mk/WgFjTJ1gjA==
+Received: by mail-pf1-f197.google.com with SMTP id a23-20020a62bd17000000b004a3f6892612so4370027pff.22
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:48:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=CylAiDcMKCHAAC8ueNcVTekyeto0IoqUMHSzLnhZjac=;
+        b=ugaDrcWq4+jShh/1R+sXEhnhyFSiDvb3h50yAHHPJmtL/S7WQyE/LGfCWcjajDIRQZ
+         7oBVZoQdPdg7ivG5fTqPaE9Up5stQEB8DknA01fPM2A15/IfBCEmS0uMfHT29kKSDY1r
+         7/L03nmzZc3L7gb9X8hcS7555uTGQ+kYK00jsefe6ulDLwjE0sI4efvqeIhMxHRwpdko
+         dpSvTwWrNSOF4Q38yY2wi+AouuSCy7n7m19UeL2pNYR+6ucTc1gWjs/Lff/PMFLW/574
+         9IROeRzUNCP2EukH/RosBaOr27C0glMqtDZsk8nSN8889jbWNk2jSly9nskrQQnoXOGo
+         HgZA==
+X-Gm-Message-State: AOAM531IYQfKrZudT/4PMGe1YOfK9Enig4fcSfZJSsr4C/Q0NSF0xDeE
+        jhToxs8BQH95swwII0GoQWh3Hedki3gab3a89ZPmQm7sWlarjoBG3BokSm1vqEoVWSdr3U67Dg4
+        O1FqOTQADjIGWuNShtfeQY8qA7C1Rl1p/jwvjTFAs6Q==
+X-Received: by 2002:a63:1166:: with SMTP id 38mr16319048pgr.368.1640033307610;
+        Mon, 20 Dec 2021 12:48:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWXKIlRW85bc7t4CizzKbVzxzW8+0o3YcSARQH4dMBeOxRRg7dcHblg9qgDF9SoMJq8ha7zg==
+X-Received: by 2002:a63:1166:: with SMTP id 38mr16319030pgr.368.1640033307304;
+        Mon, 20 Dec 2021 12:48:27 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id ls7sm272012pjb.11.2021.12.20.12.48.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 Dec 2021 12:48:26 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 7DD825FDEE; Mon, 20 Dec 2021 12:48:26 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 75B3EA0B22;
+        Mon, 20 Dec 2021 12:48:26 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v4] net: bonding: Add support for IPV6 ns/na to balance-alb mode
+In-reply-to: <20211220152455.37413-1-sunshouxin@chinatelecom.cn>
+References: <20211220152455.37413-1-sunshouxin@chinatelecom.cn>
+Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
+   message dated "Mon, 20 Dec 2021 10:24:55 -0500."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YYroWYUVJEVKqy+7@zn.tnic>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <31772.1640033306.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 20 Dec 2021 12:48:26 -0800
+Message-ID: <31773.1640033306@famine>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I guess something like this:
+Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
+
+>Since ipv6 neighbor solicitation and advertisement messages
+>isn't handled gracefully in bonding6 driver, we can see packet
+>drop due to inconsistency bewteen mac address in the option
+>message and source MAC .
+>
+>Another examples is ipv6 neighbor solicitation and advertisement
+>messages from VM via tap attached to host brighe, the src mac
+>mighe be changed through balance-alb mode, but it is not synced
+>with Link-layer address in the option message.
+>
+>The patch implements bond6's tx handle for ipv6 neighbor
+>solicitation and advertisement messages.
+>
+>                        Border-Leaf
+>                        /        \
+>                       /          \
+>                    Tunnel1    Tunnel2
+>                     /              \
+>                    /                \
+>                  Leaf-1--Tunnel3--Leaf-2
+>                    \                /
+>                     \              /
+>                      \            /
+>                       \          /
+>                       NIC1    NIC2
+>                         \      /
+>                          server
+>
+>We can see in our lab the Border-Leaf receives occasionally
+>a NA packet which is assigned to NIC1 mac in ND/NS option
+>message, but actaully send out via NIC2 mac due to tx-alb,
+>as a result, it will cause inconsistency between MAC table
+>and ND Table in Border-Leaf, i.e, NIC1 =3D Tunnel2 in ND table
+>and  NIC1 =3D Tunnel1 in mac table.
+>
+>And then, Border-Leaf starts to forward packet destinated
+>to the Server, it will only check the ND table entry in some
+>switch to encapsulate the destination MAC of the message as
+>NIC1 MAC, and then send it out from Tunnel2 by ND table.
+>Then, Leaf-2 receives the packet, it notices the destination
+>MAC of message is NIC1 MAC and should forword it to Tunne1
+>by Tunnel3.
+
+	Should the above state "forward it to Leaf-1 by Tunnel3", not
+"to Tunnel1"?  Presumably Leaf-1 would then forward a packet with NIC1
+MAC destination directly to NIC1.  You mention VXLAN split horizon
+below, but I'm unclear on exactly why that results in a failure to
+forward vs selecting a suboptimal path.
+
+	My overall concern here is that this is a complex solution for a
+very specific configuration, and I'm not sure exactly which piece is
+doing something wrong (i.e., is Border-Leaf correct in selecting
+Tunnel2?).
+
+	And, further, this topology is outside the scope of what the tlb
+/ alb modes were designed around (which was interfacing with a single
+switch, not a distributed switch topology as shown above); alb's inbound
+load balancing in particular wasn't set up for IPv6 (it only modifies
+ARPs to assign peers to specific bonding interfaces).  That's not to say
+that we can't fix up the IPv6 support, but I don't want to eventually
+have a collection of band-aids for specific corner cases.
+
+	Also, on thinking about it, I'm unsure why the tlb mode would
+not exhibit the same issue, since you're not altering the alb inbound
+load balancer (the "tailored ARP per peer" logic), just the regular
+transmit side, which is largely the same for tlb.  Have you tested
+balance-tlb mode?
+
+	Lastly, Eric's question about not altering the original skb
+isn't explictly addressed that I can see (although it seems Eric was
+concerned about received packets, and this is modifying packets being
+transmitted).  The code looks like it shouldn't modify NS/NA packets
+that are being forwarded through the bond (the bond_slave_has_mac_rx
+test), but is it possible for a locally originating NS/NA to be a clone?
+
+	-J
+
+>However, this traffic forward will be failure due to split
+>horizon of VxLAN tunnels.
+>
+>Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>---
+> drivers/net/bonding/bond_alb.c | 132 +++++++++++++++++++++++++++++++++
+> 1 file changed, 132 insertions(+)
+>
+>diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
+b.c
+>index 533e476988f2..e8d6d1f2f540 100644
+>--- a/drivers/net/bonding/bond_alb.c
+>+++ b/drivers/net/bonding/bond_alb.c
+>@@ -22,6 +22,7 @@
+> #include <asm/byteorder.h>
+> #include <net/bonding.h>
+> #include <net/bond_alb.h>
+>+#include <net/ndisc.h>
+> =
+
+> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned =3D {
+> 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+>@@ -1269,6 +1270,120 @@ static int alb_set_mac_address(struct bonding *bo=
+nd, void *addr)
+> 	return res;
+> }
+> =
+
+>+/*determine if the packet is NA or NS*/
+>+static bool alb_determine_nd(struct icmp6hdr *hdr)
+>+{
+>+	if (hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_ADVERTISEMENT ||
+>+	    hdr->icmp6_type =3D=3D NDISC_NEIGHBOUR_SOLICITATION) {
+>+		return true;
+>+	}
+>+
+>+	return false;
+>+}
+>+
+>+static void alb_change_nd_option(struct sk_buff *skb, void *data)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	struct icmp6hdr *icmp6h =3D icmp6_hdr(skb);
+>+	struct ipv6hdr *ip6hdr =3D ipv6_hdr(skb);
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+			break;
+>+
+>+		default:
+>+			lladdr =3D NULL;
+>+			break;
+>+		}
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return;
+>+
+>+		if (lladdr) {
+>+			memcpy(lladdr, data, dev->addr_len);
+>+			icmp6h->icmp6_cksum =3D 0;
+>+
+>+			icmp6h->icmp6_cksum =3D csum_ipv6_magic(&ip6hdr->saddr,
+>+							      &ip6hdr->daddr,
+>+						ntohs(ip6hdr->payload_len),
+>+						IPPROTO_ICMPV6,
+>+						csum_partial(icmp6h,
+>+							     ntohs(ip6hdr->payload_len), 0));
+>+			return;
+>+		}
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
+>+	}
+>+}
+>+
+>+static u8 *alb_get_lladdr(struct sk_buff *skb)
+>+{
+>+	struct nd_msg *msg =3D (struct nd_msg *)skb_transport_header(skb);
+>+	struct nd_opt_hdr *nd_opt =3D (struct nd_opt_hdr *)msg->opt;
+>+	struct net_device *dev =3D skb->dev;
+>+	u8 *lladdr =3D NULL;
+>+	u32 ndoptlen =3D skb_tail_pointer(skb) - (skb_transport_header(skb) +
+>+				offsetof(struct nd_msg, opt));
+>+
+>+	while (ndoptlen) {
+>+		int l;
+>+
+>+		switch (nd_opt->nd_opt_type) {
+>+		case ND_OPT_SOURCE_LL_ADDR:
+>+		case ND_OPT_TARGET_LL_ADDR:
+>+			lladdr =3D ndisc_opt_addr_data(nd_opt, dev);
+>+			break;
+>+
+>+		default:
+>+			break;
+>+		}
+>+
+>+		l =3D nd_opt->nd_opt_len << 3;
+>+
+>+		if (ndoptlen < l || l =3D=3D 0)
+>+			return NULL;
+>+
+>+		if (lladdr)
+>+			return lladdr;
+>+
+>+		ndoptlen -=3D l;
+>+		nd_opt =3D ((void *)nd_opt) + l;
+>+	}
+>+
+>+	return lladdr;
+>+}
+>+
+>+static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
+>+			      struct slave *tx_slave)
+>+{
+>+	struct ipv6hdr *ip6hdr;
+>+	struct icmp6hdr *hdr;
+>+
+>+	if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
+>+		if (tx_slave && tx_slave !=3D
+>+		    rcu_access_pointer(bond->curr_active_slave)) {
+>+			ip6hdr =3D ipv6_hdr(skb);
+>+			if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+				hdr =3D icmp6_hdr(skb);
+>+				if (alb_determine_nd(hdr))
+>+					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
+>+			}
+>+		}
+>+	}
+>+}
+>+
+> /************************ exported alb functions ***********************=
+*/
+> =
+
+> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+>@@ -1415,6 +1530,7 @@ struct slave *bond_xmit_alb_slave_get(struct bondin=
+g *bond,
+> 	}
+> 	case ETH_P_IPV6: {
+> 		const struct ipv6hdr *ip6hdr;
+>+		struct icmp6hdr *hdr;
+> =
+
+> 		/* IPv6 doesn't really use broadcast mac address, but leave
+> 		 * that here just in case.
+>@@ -1446,6 +1562,21 @@ struct slave *bond_xmit_alb_slave_get(struct bondi=
+ng *bond,
+> 			break;
+> 		}
+> =
+
+>+		if (ip6hdr->nexthdr =3D=3D IPPROTO_ICMPV6) {
+>+			hdr =3D icmp6_hdr(skb);
+>+			if (alb_determine_nd(hdr)) {
+>+				u8 *lladdr;
+>+
+>+				lladdr =3D alb_get_lladdr(skb);
+>+				if (lladdr) {
+>+					if (!bond_slave_has_mac_rx(bond, lladdr)) {
+>+						do_tx_balance =3D false;
+>+						break;
+>+					}
+>+				}
+>+			}
+>+		}
+>+
+> 		hash_start =3D (char *)&ip6hdr->daddr;
+> 		hash_size =3D sizeof(ip6hdr->daddr);
+> 		break;
+>@@ -1489,6 +1620,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, stru=
+ct net_device *bond_dev)
+> 	struct slave *tx_slave =3D NULL;
+> =
+
+> 	tx_slave =3D bond_xmit_alb_slave_get(bond, skb);
+>+	alb_set_nd_option(skb, bond, tx_slave);
+> 	return bond_do_alb_xmit(skb, bond, tx_slave);
+> }
+> =
+
+>
+>base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+>-- =
+
+>2.27.0
+>
 
 ---
-From: Borislav Petkov <bp@suse.de>
-
-This is pretty much unused and not really useful. What is more, all
-relevant MCA hardware has recoverable machine checks support so there's
-no real need to tweak MCA tolerance levels in order to *maybe* extend
-machine lifetime.
-
-So rip it out.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- Documentation/ABI/removed/sysfs-mce       | 37 ++++++++++++++++
- Documentation/ABI/testing/sysfs-mce       | 32 --------------
- Documentation/vm/hwpoison.rst             |  2 -
- Documentation/x86/x86_64/boot-options.rst |  9 +---
- arch/x86/kernel/cpu/mce/core.c            | 53 +++++++++--------------
- arch/x86/kernel/cpu/mce/internal.h        |  3 +-
- arch/x86/kernel/cpu/mce/severity.c        | 21 ++++-----
- 7 files changed, 68 insertions(+), 89 deletions(-)
- create mode 100644 Documentation/ABI/removed/sysfs-mce
-
-diff --git a/Documentation/ABI/removed/sysfs-mce b/Documentation/ABI/removed/sysfs-mce
-new file mode 100644
-index 000000000000..ef5dd2a80918
---- /dev/null
-+++ b/Documentation/ABI/removed/sysfs-mce
-@@ -0,0 +1,37 @@
-+What:		/sys/devices/system/machinecheck/machinecheckX/tolerant
-+Contact:	Borislav Petkov <bp@suse.de>
-+Date:		Dec, 2021
-+Description:
-+		Unused and obsolete after the advent of recoverable machine
-+		checks (see last sentence below) and those are present since
-+		2010 (Nehalem).
-+
-+		Original description:
-+
-+		The entries appear for each CPU, but they are truly shared
-+		between all CPUs.
-+
-+		Tolerance level. When a machine check exception occurs for a
-+		non corrected machine check the kernel can take different
-+		actions.
-+
-+		Since machine check exceptions can happen any time it is
-+		sometimes risky for the kernel to kill a process because it
-+		defies normal kernel locking rules. The tolerance level
-+		configures how hard the kernel tries to recover even at some
-+		risk of	deadlock. Higher tolerant values trade potentially
-+		better uptime with the risk of a crash or even corruption
-+		(for tolerant >= 3).
-+
-+		==  ===========================================================
-+		 0  always panic on uncorrected errors, log corrected errors
-+		 1  panic or SIGBUS on uncorrected errors, log corrected errors
-+		 2  SIGBUS or log uncorrected errors, log corrected errors
-+		 3  never panic or SIGBUS, log all errors (for testing only)
-+		==  ===========================================================
-+
-+		Default: 1
-+
-+		Note this only makes a difference if the CPU allows recovery
-+		from a machine check exception. Current x86 CPUs generally
-+		do not.
-diff --git a/Documentation/ABI/testing/sysfs-mce b/Documentation/ABI/testing/sysfs-mce
-index c8cd989034b4..83172f50e27c 100644
---- a/Documentation/ABI/testing/sysfs-mce
-+++ b/Documentation/ABI/testing/sysfs-mce
-@@ -53,38 +53,6 @@ Description:
- 		(but some corrected errors might be still reported
- 		in other ways)
- 
--What:		/sys/devices/system/machinecheck/machinecheckX/tolerant
--Contact:	Andi Kleen <ak@linux.intel.com>
--Date:		Feb, 2007
--Description:
--		The entries appear for each CPU, but they are truly shared
--		between all CPUs.
--
--		Tolerance level. When a machine check exception occurs for a
--		non corrected machine check the kernel can take different
--		actions.
--
--		Since machine check exceptions can happen any time it is
--		sometimes risky for the kernel to kill a process because it
--		defies normal kernel locking rules. The tolerance level
--		configures how hard the kernel tries to recover even at some
--		risk of	deadlock. Higher tolerant values trade potentially
--		better uptime with the risk of a crash or even corruption
--		(for tolerant >= 3).
--
--		==  ===========================================================
--		 0  always panic on uncorrected errors, log corrected errors
--		 1  panic or SIGBUS on uncorrected errors, log corrected errors
--		 2  SIGBUS or log uncorrected errors, log corrected errors
--		 3  never panic or SIGBUS, log all errors (for testing only)
--		==  ===========================================================
--
--		Default: 1
--
--		Note this only makes a difference if the CPU allows recovery
--		from a machine check exception. Current x86 CPUs generally
--		do not.
--
- What:		/sys/devices/system/machinecheck/machinecheckX/trigger
- Contact:	Andi Kleen <ak@linux.intel.com>
- Date:		Feb, 2007
-diff --git a/Documentation/vm/hwpoison.rst b/Documentation/vm/hwpoison.rst
-index 89b5f7a52077..c742de1769d1 100644
---- a/Documentation/vm/hwpoison.rst
-+++ b/Documentation/vm/hwpoison.rst
-@@ -60,8 +60,6 @@ There are two (actually three) modes memory failure recovery can be in:
- 
- vm.memory_failure_recovery sysctl set to zero:
- 	All memory failures cause a panic. Do not attempt recovery.
--	(on x86 this can be also affected by the tolerant level of the
--	MCE subsystem)
- 
- early kill
- 	(can be controlled globally and per process)
-diff --git a/Documentation/x86/x86_64/boot-options.rst b/Documentation/x86/x86_64/boot-options.rst
-index ccb7e86bf8d9..07aa0007f346 100644
---- a/Documentation/x86/x86_64/boot-options.rst
-+++ b/Documentation/x86/x86_64/boot-options.rst
-@@ -47,14 +47,7 @@ Please see Documentation/x86/x86_64/machinecheck.rst for sysfs runtime tunables.
- 		in a reboot. On Intel systems it is enabled by default.
-    mce=nobootlog
- 		Disable boot machine check logging.
--   mce=tolerancelevel[,monarchtimeout] (number,number)
--		tolerance levels:
--		0: always panic on uncorrected errors, log corrected errors
--		1: panic or SIGBUS on uncorrected errors, log corrected errors
--		2: SIGBUS or log uncorrected errors, log corrected errors
--		3: never panic or SIGBUS, log all errors (for testing only)
--		Default is 1
--		Can be also set using sysfs which is preferable.
-+   mce=monarchtimeout (number)
- 		monarchtimeout:
- 		Sets the time in us to wait for other CPUs on machine checks. 0
- 		to disable.
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5818b837fd4d..8d30469ab38c 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -86,14 +86,6 @@ struct mce_vendor_flags mce_flags __read_mostly;
- 
- struct mca_config mca_cfg __read_mostly = {
- 	.bootlog  = -1,
--	/*
--	 * Tolerant levels:
--	 * 0: always panic on uncorrected errors, log corrected errors
--	 * 1: panic or SIGBUS on uncorrected errors, log corrected errors
--	 * 2: SIGBUS or log uncorrected errors (if possible), log corr. errors
--	 * 3: never panic or SIGBUS, log all errors (for testing only)
--	 */
--	.tolerant = 1,
- 	.monarch_timeout = -1
- };
- 
-@@ -774,7 +766,7 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- 			goto clear_it;
- 
- 		mce_read_aux(&m, i);
--		m.severity = mce_severity(&m, NULL, mca_cfg.tolerant, NULL, false);
-+		m.severity = mce_severity(&m, NULL, NULL, false);
- 		/*
- 		 * Don't get the IP here because it's unlikely to
- 		 * have anything to do with the actual error location.
-@@ -854,7 +846,7 @@ static int mce_no_way_out(struct mce *m, char **msg, unsigned long *validp,
- 			quirk_sandybridge_ifu(i, m, regs);
- 
- 		m->bank = i;
--		if (mce_severity(m, regs, mca_cfg.tolerant, &tmp, true) >= MCE_PANIC_SEVERITY) {
-+		if (mce_severity(m, regs, &tmp, true) >= MCE_PANIC_SEVERITY) {
- 			mce_read_aux(m, i);
- 			*msg = tmp;
- 			return 1;
-@@ -902,12 +894,11 @@ static noinstr int mce_timed_out(u64 *t, const char *msg)
- 	if (!mca_cfg.monarch_timeout)
- 		goto out;
- 	if ((s64)*t < SPINUNIT) {
--		if (mca_cfg.tolerant <= 1) {
--			if (cpumask_and(&mce_missing_cpus, cpu_online_mask, &mce_missing_cpus))
--				pr_emerg("CPUs not responding to MCE broadcast (may include false positives): %*pbl\n",
--					 cpumask_pr_args(&mce_missing_cpus));
--			mce_panic(msg, NULL, NULL);
--		}
-+		if (cpumask_and(&mce_missing_cpus, cpu_online_mask, &mce_missing_cpus))
-+			pr_emerg("CPUs not responding to MCE broadcast (may include false positives): %*pbl\n",
-+				 cpumask_pr_args(&mce_missing_cpus));
-+		mce_panic(msg, NULL, NULL);
-+
- 		ret = 1;
- 		goto out;
- 	}
-@@ -971,9 +962,9 @@ static void mce_reign(void)
- 	 * This dumps all the mces in the log buffer and stops the
- 	 * other CPUs.
- 	 */
--	if (m && global_worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3) {
-+	if (m && global_worst >= MCE_PANIC_SEVERITY) {
- 		/* call mce_severity() to get "msg" for panic */
--		mce_severity(m, NULL, mca_cfg.tolerant, &msg, true);
-+		mce_severity(m, NULL, &msg, true);
- 		mce_panic("Fatal machine check", m, msg);
- 	}
- 
-@@ -987,7 +978,7 @@ static void mce_reign(void)
- 	 * No machine check event found. Must be some external
- 	 * source or one CPU is hung. Panic.
- 	 */
--	if (global_worst <= MCE_KEEP_SEVERITY && mca_cfg.tolerant < 3)
-+	if (global_worst <= MCE_KEEP_SEVERITY)
- 		mce_panic("Fatal machine check from unknown source", NULL, NULL);
- 
- 	/*
-@@ -1234,7 +1225,7 @@ __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *final,
- 		/* Set taint even when machine check was not enabled. */
- 		taint++;
- 
--		severity = mce_severity(m, regs, cfg->tolerant, NULL, true);
-+		severity = mce_severity(m, regs, NULL, true);
- 
- 		/*
- 		 * When machine check was for corrected/deferred handler don't
-@@ -1392,7 +1383,6 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	int worst = 0, order, no_way_out, kill_current_task, lmce, taint = 0;
- 	DECLARE_BITMAP(valid_banks, MAX_NR_BANKS) = { 0 };
- 	DECLARE_BITMAP(toclear, MAX_NR_BANKS) = { 0 };
--	struct mca_config *cfg = &mca_cfg;
- 	struct mce m, *final;
- 	char *msg = NULL;
- 
-@@ -1411,7 +1401,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 
- 	/*
- 	 * If no_way_out gets set, there is no safe way to recover from this
--	 * MCE.  If mca_cfg.tolerant is cranked up, we'll try anyway.
-+	 * MCE.
- 	 */
- 	no_way_out = 0;
- 
-@@ -1445,7 +1435,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 * severity is MCE_AR_SEVERITY we have other options.
- 	 */
- 	if (!(m.mcgstatus & MCG_STATUS_RIPV))
--		kill_current_task = (cfg->tolerant == 3) ? 0 : 1;
-+		kill_current_task = 1;
- 	/*
- 	 * Check if this MCE is signaled to only this logical processor,
- 	 * on Intel, Zhaoxin only.
-@@ -1462,7 +1452,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 * to see it will clear it.
- 	 */
- 	if (lmce) {
--		if (no_way_out && cfg->tolerant < 3)
-+		if (no_way_out)
- 			mce_panic("Fatal local machine check", &m, msg);
- 	} else {
- 		order = mce_start(&no_way_out);
-@@ -1482,7 +1472,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 			if (!no_way_out)
- 				no_way_out = worst >= MCE_PANIC_SEVERITY;
- 
--			if (no_way_out && cfg->tolerant < 3)
-+			if (no_way_out)
- 				mce_panic("Fatal machine check on current CPU", &m, msg);
- 		}
- 	} else {
-@@ -1494,8 +1484,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		 * fatal error. We call "mce_severity()" again to
- 		 * make sure we have the right "msg".
- 		 */
--		if (worst >= MCE_PANIC_SEVERITY && mca_cfg.tolerant < 3) {
--			mce_severity(&m, regs, cfg->tolerant, &msg, true);
-+		if (worst >= MCE_PANIC_SEVERITY) {
-+			mce_severity(&m, regs, &msg, true);
- 			mce_panic("Local fatal machine check!", &m, msg);
- 		}
- 	}
-@@ -2223,10 +2213,9 @@ static int __init mcheck_enable(char *str)
- 		cfg->bios_cmci_threshold = 1;
- 	else if (!strcmp(str, "recovery"))
- 		cfg->recovery = 1;
--	else if (isdigit(str[0])) {
--		if (get_option(&str, &cfg->tolerant) == 2)
--			get_option(&str, &(cfg->monarch_timeout));
--	} else {
-+	else if (isdigit(str[0]))
-+		get_option(&str, &(cfg->monarch_timeout));
-+	else {
- 		pr_info("mce argument %s ignored. Please use /sys\n", str);
- 		return 0;
- 	}
-@@ -2476,7 +2465,6 @@ static ssize_t store_int_with_restart(struct device *s,
- 	return ret;
- }
- 
--static DEVICE_INT_ATTR(tolerant, 0644, mca_cfg.tolerant);
- static DEVICE_INT_ATTR(monarch_timeout, 0644, mca_cfg.monarch_timeout);
- static DEVICE_BOOL_ATTR(dont_log_ce, 0644, mca_cfg.dont_log_ce);
- static DEVICE_BOOL_ATTR(print_all, 0644, mca_cfg.print_all);
-@@ -2497,7 +2485,6 @@ static struct dev_ext_attribute dev_attr_cmci_disabled = {
- };
- 
- static struct device_attribute *mce_device_attrs[] = {
--	&dev_attr_tolerant.attr,
- 	&dev_attr_check_interval.attr,
- #ifdef CONFIG_X86_MCELOG_LEGACY
- 	&dev_attr_trigger,
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 52c633950b38..831d2e2c6c3b 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -35,7 +35,7 @@ int mce_gen_pool_add(struct mce *mce);
- int mce_gen_pool_init(void);
- struct llist_node *mce_gen_pool_prepare_records(void);
- 
--int mce_severity(struct mce *a, struct pt_regs *regs, int tolerant, char **msg, bool is_excp);
-+int mce_severity(struct mce *a, struct pt_regs *regs, char **msg, bool is_excp);
- struct dentry *mce_get_debugfs_dir(void);
- 
- extern mce_banks_t mce_banks_ce_disabled;
-@@ -127,7 +127,6 @@ struct mca_config {
- 	bool ignore_ce;
- 	bool print_all;
- 
--	int tolerant;
- 	int monarch_timeout;
- 	int panic_timeout;
- 	u32 rip_msr;
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 7aa2bda93cbb..b9f29d0434db 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -330,8 +330,7 @@ static int mce_severity_amd_smca(struct mce *m, enum context err_ctx)
-  * See AMD Error Scope Hierarchy table in a newer BKDG. For example
-  * 49125_15h_Models_30h-3Fh_BKDG.pdf, section "RAS Features"
-  */
--static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, int tolerant,
--				    char **msg, bool is_excp)
-+static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	enum context ctx = error_context(m, regs);
- 
-@@ -383,8 +382,7 @@ static noinstr int mce_severity_amd(struct mce *m, struct pt_regs *regs, int tol
- 	return MCE_KEEP_SEVERITY;
- }
- 
--static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs,
--				      int tolerant, char **msg, bool is_excp)
-+static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	enum exception excp = (is_excp ? EXCP_CONTEXT : NO_EXCP);
- 	enum context ctx = error_context(m, regs);
-@@ -412,22 +410,21 @@ static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs,
- 		if (msg)
- 			*msg = s->msg;
- 		s->covered = 1;
--		if (s->sev >= MCE_UC_SEVERITY && ctx == IN_KERNEL) {
--			if (tolerant < 1)
--				return MCE_PANIC_SEVERITY;
--		}
-+
-+		if (s->sev >= MCE_UC_SEVERITY && ctx == IN_KERNEL)
-+			return MCE_PANIC_SEVERITY;
-+
- 		return s->sev;
- 	}
- }
- 
--int noinstr mce_severity(struct mce *m, struct pt_regs *regs, int tolerant, char **msg,
--			 bool is_excp)
-+int noinstr mce_severity(struct mce *m, struct pt_regs *regs, char **msg, bool is_excp)
- {
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
- 	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
--		return mce_severity_amd(m, regs, tolerant, msg, is_excp);
-+		return mce_severity_amd(m, regs, msg, is_excp);
- 	else
--		return mce_severity_intel(m, regs, tolerant, msg, is_excp);
-+		return mce_severity_intel(m, regs, msg, is_excp);
- }
- 
- #ifdef CONFIG_DEBUG_FS
--- 
-2.29.2
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+	-Jay Vosburgh, jay.vosburgh@canonical.com

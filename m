@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C4A47AB95
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D6247AB63
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbhLTOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S233825AbhLTOgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbhLTOh1 (ORCPT
+        with ESMTP id S233795AbhLTOgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6ACC061394;
-        Mon, 20 Dec 2021 06:37:24 -0800 (PST)
+        Mon, 20 Dec 2021 09:36:17 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5C3C061401;
+        Mon, 20 Dec 2021 06:36:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E226B80EDE;
-        Mon, 20 Dec 2021 14:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682E8C36AE7;
-        Mon, 20 Dec 2021 14:37:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF854CE0F9E;
+        Mon, 20 Dec 2021 14:36:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CCA7C36AE8;
+        Mon, 20 Dec 2021 14:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011041;
-        bh=U7DC+L+ngJnk1aU6NWbe3abC310Dt5dUlAy/FdgO4sk=;
+        s=korg; t=1640010974;
+        bh=zSxiHtoEfF9ac69Sw3XlKypxbQSu3wWHa7wFk+QAG6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vIiFV02aaulsTV6FaJpQVxHCICqyEsKD8pKuAzdqIsZ5PXrh+zCEshn8KMj3vJXM4
-         OF+vwSKZ0YKGKotvAo25GOxJJGI36PZNINqMTujY7ZklwzbrKBwNnwgMa+Z8o2dECA
-         BkdMF2K73qhVF62pDsGpnzvTGsLmIWR3cHfre/Zw=
+        b=MWiu4h91JGiJHTpuU6xzQ/c8MjovbLhmJ+wFbANpTqPm2pO+Dek8dGxeeJu1mGeqa
+         Y53rx77FhuyNXQPlkfkqmsi/RAiujrOkLmTfR0Sot3kV7m13TzaQj0nlc/agYCfqqg
+         oZ4layD2/7Ew8NXtt+zLM9AyeHAJo2pUdTZRi3o4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Szymon Heidrich <szymon.heidrich@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 15/31] USB: gadget: bRequestType is a bitfield, not a enum
-Date:   Mon, 20 Dec 2021 15:34:15 +0100
-Message-Id: <20211220143020.470251443@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 4.4 15/23] timekeeping: Really make sure wall_to_monotonic isnt positive
+Date:   Mon, 20 Dec 2021 15:34:16 +0100
+Message-Id: <20211220143018.347293321@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,98 +48,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Yu Liao <liaoyu15@huawei.com>
 
-[ Upstream commit f08adf5add9a071160c68bb2a61d697f39ab0758 ]
+commit 4e8c11b6b3f0b6a283e898344f154641eda94266 upstream.
 
-Szymon rightly pointed out that the previous check for the endpoint
-direction in bRequestType was not looking at only the bit involved, but
-rather the whole value.  Normally this is ok, but for some request
-types, bits other than bit 8 could be set and the check for the endpoint
-length could not stall correctly.
+Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
+isn't positive") it is still possible to make wall_to_monotonic positive
+by running the following code:
 
-Fix that up by only checking the single bit.
+    int main(void)
+    {
+        struct timespec time;
 
-Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
-Cc: Felipe Balbi <balbi@kernel.org>
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Link: https://lore.kernel.org/r/20211214184621.385828-1-gregkh@linuxfoundation.org
+        clock_gettime(CLOCK_MONOTONIC, &time);
+        time.tv_nsec = 0;
+        clock_settime(CLOCK_REALTIME, &time);
+        return 0;
+    }
+
+The reason is that the second parameter of timespec64_compare(), ts_delta,
+may be unnormalized because the delta is calculated with an open coded
+substraction which causes the comparison of tv_sec to yield the wrong
+result:
+
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
+
+That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
+but actually the result should be wall_to_monotonic > ts_delta.
+
+After normalization, the result of timespec64_compare() is correct because
+the tv_sec comparison is not longer misleading:
+
+  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
+  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
+
+Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
+issue.
+
+Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/composite.c    | 6 +++---
- drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
- drivers/usb/gadget/legacy/inode.c | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ kernel/time/timekeeping.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 3d14a316830a6..a7c44a3cb2d25 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1632,14 +1632,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u8				endp;
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -966,8 +966,7 @@ int do_settimeofday64(const struct times
+ 	timekeeping_forward_now(tk);
  
- 	if (w_length > USB_COMP_EP0_BUFSIZ) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			goto done;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 	xt = tk_xtime(tk);
+-	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
+-	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
++	ts_delta = timespec64_sub(*ts, xt);
  
- 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
- 			w_length = USB_COMP_EP0_BUFSIZ;
-+		} else {
-+			goto done;
- 		}
- 	}
- 
-diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
-index f1c5a22704b28..e8818ad973e4b 100644
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -345,14 +345,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
- 	u16 len = 0;
- 
- 	if (length > DBGP_REQ_LEN) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return err;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(DBGP_REQ_LEN);
- 			length = DBGP_REQ_LEN;
-+		} else {
-+			return err;
- 		}
- 	}
- 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index d39bd1a1ab8fc..19eb954a7afa3 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1339,14 +1339,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u16				w_length = le16_to_cpu(ctrl->wLength);
- 
- 	if (w_length > RBUF_SIZE) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return value;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(RBUF_SIZE);
- 			w_length = RBUF_SIZE;
-+		} else {
-+			return value;
- 		}
- 	}
- 
--- 
-2.34.1
-
+ 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
+ 		ret = -EINVAL;
 
 

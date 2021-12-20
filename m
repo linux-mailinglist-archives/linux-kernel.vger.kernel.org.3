@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5E047AACF
+	by mail.lfdr.de (Postfix) with ESMTP id E7C9C47AAD0
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbhLTOAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:00:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48230 "EHLO
+        id S233281AbhLTOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:00:52 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48234 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbhLTOAs (ORCPT
+        with ESMTP id S233260AbhLTOAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:00:48 -0500
+        Mon, 20 Dec 2021 09:00:49 -0500
 Date:   Mon, 20 Dec 2021 14:00:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640008847;
+        s=2020; t=1640008848;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=4NUQQSVwxddAYWUDoOtrc+IdNXMpYwNUDekEgjVNrV8=;
-        b=zqGwdBa0CxZAwR6p7zepz9uVwdlWWH4qsTb2Sk0wUcg8/WSw3NDXaLxLuiESaJoiT2dsHb
-        F0rsXrK4ifRGivdyinPOPP9LjxqDHR82enTyXtd7jZD8/pLSqpQGplriicbT6n96nSB8+P
-        M5msQyqRfEhektpb+uTg925PWQcDNr+7/5QJ/xlwFl0cq3cEADoRFmqamkx9ujmFp1te/Z
-        V1Nt9Vlb2FJz3SjVsgekXlUY15nw5VtuwpTmX6KlVgd/+OJFOopB1530iw3cvJZU9Ufkhr
-        t8DypKfFDogv8S0rGvyrn6eww6m6ea9MHwhcALHsdrQgQOTmSRsX6bvhPtdISg==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+KcQh3iItRbDP4Z2oavn24TitZ608MXK9XLgWk3bpxU=;
+        b=KQUDYBRyIbnwSAvrLB8j/W1uUXM5DMIYA4Z9/CD6RWSBDbv2PRk1Oa0KdaDfJVbZXIk7tY
+        ps6wvtL4i0OBSr6iGDr+8Y9rq04qDu+cur2qG5ExCEAkEn5cZSCp8T4dkfAwWpbEYWiVP+
+        g2Icovx110eXKzCMBwQ++b4hS8XCFlCNG8n5M9yNMHYyw6eoCPi04DehAIlu/2/rIQg2Oo
+        9eBfP768MPbzD5qtMVxrgdSDXOMsHfiZXjgAzllLXRS+n7pKJHTsb/ciXImn3SA9XfBDR9
+        d1KBbSe+44Z8MmxNfc/bslO4YuD1DSGFkGRZ5kd1c7gGOh+xh0JG06vF7IB+lw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640008847;
+        s=2020e; t=1640008848;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=4NUQQSVwxddAYWUDoOtrc+IdNXMpYwNUDekEgjVNrV8=;
-        b=3zeCT4WMbrK1Uorlb4tNFhXxaq2QOqp431h/t2/7z/ONCqH1sBbniq600WRtiw7Zjd8iaN
-        sS8ZHmxCs4jbwYBQ==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+KcQh3iItRbDP4Z2oavn24TitZ608MXK9XLgWk3bpxU=;
+        b=B3mlTFgR61QldnYzRTmyx0BQJrTMu+LTZv0knEqP/g2lu9hXbsldS6+Qo8fHB1CeT7jDmA
+        pd75ztBthbX3HsAA==
+From:   "irqchip-bot for Vitaly Kuznetsov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] KVM: arm64: Drop unused workaround_flags
- vcpu field
-Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+Subject: [irqchip: irq/irqchip-next] KVM: Drop stale
+ kvm_is_transparent_hugepage() declaration
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20211018151407.2107363-1-vkuznets@redhat.com>
+References: <20211018151407.2107363-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Message-ID: <164000884613.23020.16840133765876356033.tip-bot2@tip-bot2>
+Message-ID: <164000884699.23020.4987538299959927283.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -51,50 +58,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     142ff9bddbde757674c7081ffc238cfcffa1859b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/142ff9bddbde757674c7081ffc238cfcffa1859b
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Wed, 08 Dec 2021 14:46:41 
+Commit-ID:     f0e6e6fa41b3d2aa1dcb61dd4ed6d7be004bb5a8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/f0e6e6fa41b3d2aa1dcb61dd4ed6d7be004bb5a8
+Author:        Vitaly Kuznetsov <vkuznets@redhat.com>
+AuthorDate:    Mon, 18 Oct 2021 17:14:07 +02:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 08 Dec 2021 14:54:07 
+CommitterDate: Tue, 07 Dec 2021 09:13:28 
 
-KVM: arm64: Drop unused workaround_flags vcpu field
+KVM: Drop stale kvm_is_transparent_hugepage() declaration
 
-workaround_flags is a leftover from our earlier Spectre-v4 workaround
-implementation, and now serves no purpose.
+kvm_is_transparent_hugepage() was removed in commit 205d76ff0684 ("KVM:
+Remove kvm_is_transparent_hugepage() and PageTransCompoundMap()") but its
+declaration in include/linux/kvm_host.h persisted. Drop it.
 
-Get rid of the field and the corresponding asm-offset definition.
-
-Fixes: 29e8910a566a ("KVM: arm64: Simplify handling of ARCH_WORKAROUND_2")
+Fixes: 205d76ff0684 (""KVM: Remove kvm_is_transparent_hugepage() and PageTransCompoundMap()")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211018151407.2107363-1-vkuznets@redhat.com
 ---
- arch/arm64/include/asm/kvm_host.h | 3 ---
- arch/arm64/kernel/asm-offsets.c   | 1 -
- 2 files changed, 4 deletions(-)
+ include/linux/kvm_host.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 2a5f7f3..3811d19 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -298,9 +298,6 @@ struct kvm_vcpu_arch {
- 	/* Exception Information */
- 	struct kvm_vcpu_fault_info fault;
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index c310648..6d138ad 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1174,7 +1174,6 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
  
--	/* State of various workarounds, see kvm_asm.h for bit assignment */
--	u64 workaround_flags;
--
- 	/* Miscellaneous vcpu state flags */
- 	u64 flags;
+ bool kvm_is_reserved_pfn(kvm_pfn_t pfn);
+ bool kvm_is_zone_device_pfn(kvm_pfn_t pfn);
+-bool kvm_is_transparent_hugepage(kvm_pfn_t pfn);
  
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 6d0c3af..1197e76 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -111,7 +111,6 @@ int main(void)
- #ifdef CONFIG_KVM
-   DEFINE(VCPU_CONTEXT,		offsetof(struct kvm_vcpu, arch.ctxt));
-   DEFINE(VCPU_FAULT_DISR,	offsetof(struct kvm_vcpu, arch.fault.disr_el1));
--  DEFINE(VCPU_WORKAROUND_FLAGS,	offsetof(struct kvm_vcpu, arch.workaround_flags));
-   DEFINE(VCPU_HCR_EL2,		offsetof(struct kvm_vcpu, arch.hcr_el2));
-   DEFINE(CPU_USER_PT_REGS,	offsetof(struct kvm_cpu_context, regs));
-   DEFINE(CPU_RGSR_EL1,		offsetof(struct kvm_cpu_context, sys_regs[RGSR_EL1]));
+ struct kvm_irq_ack_notifier {
+ 	struct hlist_node link;

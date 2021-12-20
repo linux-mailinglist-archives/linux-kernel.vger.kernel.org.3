@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F52847AC6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614E547AB56
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbhLTOnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:43:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35816 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbhLTOmI (ORCPT
+        id S233710AbhLTOgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233633AbhLTOf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:42:08 -0500
+        Mon, 20 Dec 2021 09:35:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA96AC061574;
+        Mon, 20 Dec 2021 06:35:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16EF26119E;
-        Mon, 20 Dec 2021 14:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF34EC36AE7;
-        Mon, 20 Dec 2021 14:42:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A63EB80EE2;
+        Mon, 20 Dec 2021 14:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5001C36AE7;
+        Mon, 20 Dec 2021 14:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011327;
-        bh=eNaSp5OCuTzXQFDWQsOH85NuNgQelaHJNnUjEhbEnFQ=;
+        s=korg; t=1640010957;
+        bh=78q+Ws+TAxCKq+1q6znTrWqC/zEihNtciNzJ3e+34XU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+tuw56BtNHRUMMm0zZozZ3560/GIJWkFb3hLDQYxkZr6PCW70FNCDiC/rX3Im6V5
-         Dnq2T7oWtPsrk+KXKH4xPJRgszCyLWzKMvcaktX9KaaifWHq5KAVPJw3Yqt8+TCnsr
-         7bXKgIkcbDirYid2tG/G1LLZqM6PLEcZcOj9Z1Rw=
+        b=wgrpLWeMclkc7mcEk3H0lnp3VvbaZBfVGoyqfReDfRNAwlackAZGfqTTgHO1IxqdV
+         zOH1Fk45s0Vd1vCNeyYPg12Ra77chgZbhnCb+myK0Y6Wm0PyLHknbMguZE0s0QDAOP
+         pCtw9KunhppvCKNZgZgiE8RiYkH0ahTNWaIvlr1o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4.19 09/56] hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+        stable@vger.kernel.org,
+        syzbot+f9f76f4a0766420b4a02@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 01/23] nfc: fix segfault in nfc_genl_dump_devices_done
 Date:   Mon, 20 Dec 2021 15:34:02 +0100
-Message-Id: <20211220143023.748460497@linuxfoundation.org>
+Message-Id: <20211220143017.889032992@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -46,50 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-commit dbd3e6eaf3d813939b28e8a66e29d81cdc836445 upstream.
+commit fd79a0cbf0b2e34bcc45b13acf962e2032a82203 upstream.
 
-The removal function is called regardless of whether
-/proc/i8k was created successfully or not, the later
-causing a WARN() on module removal.
-Fix that by only registering the removal function
-if /proc/i8k was created successfully.
+When kmalloc in nfc_genl_dump_devices() fails then
+nfc_genl_dump_devices_done() segfaults as below
 
-Tested on a Inspiron 3505.
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 25 Comm: kworker/0:1 Not tainted 5.16.0-rc4-01180-g2a987e65025e-dirty #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-6.fc35 04/01/2014
+Workqueue: events netlink_sock_destruct_work
+RIP: 0010:klist_iter_exit+0x26/0x80
+Call Trace:
+<TASK>
+class_dev_iter_exit+0x15/0x20
+nfc_genl_dump_devices_done+0x3b/0x50
+genl_lock_done+0x84/0xd0
+netlink_sock_destruct+0x8f/0x270
+__sk_destruct+0x64/0x3b0
+sk_destruct+0xa8/0xd0
+__sk_free+0x2e8/0x3d0
+sk_free+0x51/0x90
+netlink_sock_destruct_work+0x1c/0x20
+process_one_work+0x411/0x710
+worker_thread+0x6fd/0xa80
 
-Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20211112171440.59006-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://syzkaller.appspot.com/bug?id=fc0fa5a53db9edd261d56e74325419faf18bd0df
+Reported-by: syzbot+f9f76f4a0766420b4a02@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20211208182742.340542-1-tadeusz.struk@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/dell-smm-hwmon.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/nfc/netlink.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -591,15 +591,18 @@ static const struct file_operations i8k_
- 	.unlocked_ioctl	= i8k_ioctl,
- };
- 
-+static struct proc_dir_entry *entry;
-+
- static void __init i8k_init_procfs(void)
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -632,8 +632,10 @@ static int nfc_genl_dump_devices_done(st
  {
- 	/* Register the proc entry */
--	proc_create("i8k", 0, NULL, &i8k_fops);
-+	entry = proc_create("i8k", 0, NULL, &i8k_fops);
- }
+ 	struct class_dev_iter *iter = (struct class_dev_iter *) cb->args[0];
  
- static void __exit i8k_exit_procfs(void)
- {
--	remove_proc_entry("i8k", NULL);
-+	if (entry)
-+		remove_proc_entry("i8k", NULL);
- }
+-	nfc_device_iter_exit(iter);
+-	kfree(iter);
++	if (iter) {
++		nfc_device_iter_exit(iter);
++		kfree(iter);
++	}
  
- #else
+ 	return 0;
+ }
 
 

@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D122147B0C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A832347B0C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbhLTPzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S237851AbhLTP7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237485AbhLTPza (ORCPT
+        with ESMTP id S234309AbhLTP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:55:30 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BF6C061574;
-        Mon, 20 Dec 2021 07:55:29 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id i22so20964949wrb.13;
-        Mon, 20 Dec 2021 07:55:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9FPHt4xWJuyC6gdHJsu28XiwBLFa9d5usSSlTiDeCYw=;
-        b=c8IvuhTEtIBHwwXw3dX7LRmVixLdlxaYUGHybVAQVwwXG4eQf5J9X+YhrOyRL4UC6D
-         paFv3FscJAJQkAz95YljUdLLhbJgjoI+neVJzFFNvrzHWoHRR2I7dzn+VFC6C4BnehdG
-         alldIw57cUKc1XEoGWI5UOwFn9BnUG5oEoAf9gGbeKGzSwSC7HtAIeRBMmdKWq0X8cTB
-         GSKrT94y4n8EwBdtJ+qFhdLROCaG8RJHs7npZpsSO54NMrZRzTolMgmyuuwqBXxVqk2q
-         kQAe38bZkALupoYJH+oHaLJys8da9nGG3z/BuTUdQjmwrw/9ot35gWUCne0AekE+oPV6
-         0jPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9FPHt4xWJuyC6gdHJsu28XiwBLFa9d5usSSlTiDeCYw=;
-        b=Motu4rFJqh3mjuZ68FlMy7IH9Yl4tuYBTHj2WODL1NLeokrswU0dV6j+SZkn4QjiJ1
-         rxpBV+cLLazH/5kgAjCiobj6OdRVm6Qqszpjdz2ggfH/CzRGe/F1fYG1BUyEpyVGHkW4
-         VxiZ3vGYtR0spiYkEaJkAn+KRDltCoCiTf0hdwhJeALxOoqfztyVVtXgSUDoPuUmR2Bl
-         PPOlJ7brCZxrUXP3yL/3ZNE814m7343q2submd9dtmjBGsKQC3LgFg6qT5H+Ux5bTHW6
-         KKtMqJBv+IQ8F7TenE14Dom5fotsXc6GygLpAfBkcbrCAOMR2UwbrYa/XULyOL9SIZ8P
-         tJSg==
-X-Gm-Message-State: AOAM530blkJXwWxxVVR9aCK27Qu0XVE9KROR/hCk8DX00rS5RWbx81Td
-        1AVoDceV3nBd06iqVMJURF4=
-X-Google-Smtp-Source: ABdhPJzhHDlAtzMTkmgBhfZNL3YQOcg2PDhKP1f6lkVEeVqJ3mrcrGIKbbldJpB3rP45ucn6NZAhhA==
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr5624491wrb.249.1640015728498;
-        Mon, 20 Dec 2021 07:55:28 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b19sm21053664wmb.38.2021.12.20.07.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 07:55:28 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] hwmon/pmbus: (ir38064): Fix spelling mistake "comaptible" -> "compatible"
-Date:   Mon, 20 Dec 2021 15:55:27 +0000
-Message-Id: <20211220155527.179125-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 20 Dec 2021 10:59:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E12C061574;
+        Mon, 20 Dec 2021 07:59:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0A42B80EDE;
+        Mon, 20 Dec 2021 15:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43561C36AE7;
+        Mon, 20 Dec 2021 15:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640015955;
+        bh=a6D5AcKl2s8KjzQmrDHkkawywm4+FO0HkiMb5d4UetM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YF3VT8hJ7xpTbHhdpaEs+ssZvDYcDDcY25fW8CvAx7tCibqYjbY7lZUX+f7+r71F6
+         31qNSv2KHwJNDnhPM8q6rChY3T8uJdEg1bt+yt85iM2Lv0WnN4/xFOv48yZpyAWM7/
+         d+BSyK99dJc352JMyIaOjD/w9i5G1NwygB5mR5Ck=
+Date:   Mon, 20 Dec 2021 16:59:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v4] usb: ohci: add check for host controller functional
+ states
+Message-ID: <YcCoUb7UBUErfvkm@kroah.com>
+References: <1633957378-39631-1-git-send-email-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1633957378-39631-1-git-send-email-zhuyinbo@loongson.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in the module description, fix it.
+On Mon, Oct 11, 2021 at 09:02:58PM +0800, Yinbo Zhu wrote:
+> The usb states of ohci controller include UsbOperational, UsbReset,
+> UsbSuspend and UsbResume. Among them, only the UsbOperational state
+> supports launching the start of frame for host controller according
+> the ohci protocol spec, but in S3 and S4 (suspend to memory/suspend
+> to disk) press test procedure, it may happen that the start of
+> frame was launched in other usb states and cause ohci works failed,
+> that the phenomenon was hc will allways reproduce the SoF interrupt
+> and consider that hc doesn't deal with the ed/td/done list in non-
+> UsbOperational, and this patch was to add check for host controller
+> functional states and if it is not UsbOperational state that need
+> set INTR_SF in intrdisable register to ensure SOF Token generation
+> was been disabled so that it can fix ohci SoF abnormally interrupt.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/hwmon/pmbus/ir38064.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I do not understand this change.  What commit is this fixing?  What
+devices today do not work with the code as-is?
 
-diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
-index 07bdbb16f216..0ea7e1c18bdc 100644
---- a/drivers/hwmon/pmbus/ir38064.c
-+++ b/drivers/hwmon/pmbus/ir38064.c
-@@ -85,6 +85,6 @@ static struct i2c_driver ir38064_driver = {
- module_i2c_driver(ir38064_driver);
- 
- MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
--MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and comaptible chips");
-+MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and compatible chips");
- MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS(PMBUS);
--- 
-2.33.1
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v4:
+> 		Rework the commit log information.
+> 		Remove the extra unnecessary blank line. 
+> 
+> 
+>  drivers/usb/host/ohci-hcd.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+> index 1f5e693..4fd59fa 100644
+> --- a/drivers/usb/host/ohci-hcd.c
+> +++ b/drivers/usb/host/ohci-hcd.c
+> @@ -879,7 +879,7 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>  {
+>  	struct ohci_hcd		*ohci = hcd_to_ohci (hcd);
+>  	struct ohci_regs __iomem *regs = ohci->regs;
+> -	int			ints;
+> +	int			ints, ctl;
 
+New line for a new variable please.
+
+>  
+>  	/* Read interrupt status (and flush pending writes).  We ignore the
+>  	 * optimization of checking the LSB of hcca->done_head; it doesn't
+> @@ -969,9 +969,14 @@ static irqreturn_t ohci_irq (struct usb_hcd *hcd)
+>  	 * when there's still unlinking to be done (next frame).
+>  	 */
+>  	ohci_work(ohci);
+> -	if ((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+> -			&& ohci->rh_state == OHCI_RH_RUNNING)
+> +
+> +	ctl = ohci_readl(ohci, &regs->control);
+> +	if (((ints & OHCI_INTR_SF) != 0 && !ohci->ed_rm_list
+> +			&& ohci->rh_state == OHCI_RH_RUNNING) ||
+> +			((ctl & OHCI_CTRL_HCFS) != OHCI_USB_OPER)) {
+>  		ohci_writel (ohci, OHCI_INTR_SF, &regs->intrdisable);
+> +		(void)ohci_readl(ohci, &regs->intrdisable);
+
+No need for (void).
+
+thanks,
+
+greg k-h

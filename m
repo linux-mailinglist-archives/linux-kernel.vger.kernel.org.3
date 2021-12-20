@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240ED47ACAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CE647AC21
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbhLTOqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37882 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236503AbhLTOos (ORCPT
+        id S234209AbhLTOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234142AbhLTOkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:44:48 -0500
+        Mon, 20 Dec 2021 09:40:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4040C061A08;
+        Mon, 20 Dec 2021 06:40:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 397F761141;
-        Mon, 20 Dec 2021 14:44:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B308C36AE7;
-        Mon, 20 Dec 2021 14:44:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BD00B80EA3;
+        Mon, 20 Dec 2021 14:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDADEC36AE8;
+        Mon, 20 Dec 2021 14:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011487;
-        bh=Cx7fiQV8TDvWr5DRBWGmOgB/tc7QSMtVQ4ojKugAxl4=;
+        s=korg; t=1640011218;
+        bh=DgUJeCi6f00l52yaNNon5R87DiPyXiLlVRgh8L4s/30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2WrgVmLox6aMieSSEGG5fJ3BGNiPXm8GhrVRhJhz2KIUFn5hqdZPcdgSepnjtHhH
-         NTj7RFRrcI+wPSDsz97EyjXT9yQgCf5rdwzv/8kxLYMOYVrkG1pVrdbCc+b/2Er855
-         GWzQw+5b4mGeFKEjn0J1HncIKp1CQHU4X/1LPWq8=
+        b=17J4X/OekapYljjuswSO/S3h0MZETkabCjNuGt7dCn4hfLdtpYHJpW0T8a9eEPoWr
+         wtN5nDfVztqGY1ZWwTWtEa64B4q3WLn667MRctICmoWqxVibkQErrKQL/h9aq6AXeb
+         I2nBbW8nfNXxGbHIbYL59eVvI55PuDfm5lQZsaJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 39/71] net/packet: rx_owner_map depends on pg_vec
-Date:   Mon, 20 Dec 2021 15:34:28 +0100
-Message-Id: <20211220143026.991159980@linuxfoundation.org>
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
+Subject: [PATCH 4.14 34/45] fuse: annotate lock in fuse_reverse_inval_entry()
+Date:   Mon, 20 Dec 2021 15:34:29 +0100
+Message-Id: <20211220143023.405798649@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
+commit bda9a71980e083699a0360963c0135657b73f47a upstream.
 
-Packet sockets may switch ring versions. Avoid misinterpreting state
-between versions, whose fields share a union. rx_owner_map is only
-allocated with a packet ring (pg_vec) and both are swapped together.
-If pg_vec is NULL, meaning no packet ring was allocated, then neither
-was rx_owner_map. And the field may be old state from a tpacket_v3.
+Add missing inode lock annotatation; found by syzbot.
 
-Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
-Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-and-tested-by: syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/packet/af_packet.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/fuse/dir.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 0ffbf3d17911a..6062bd5bf132b 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -4453,9 +4453,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
- 	}
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -969,7 +969,7 @@ int fuse_reverse_inval_entry(struct supe
+ 	if (!parent)
+ 		return -ENOENT;
  
- out_free_pg_vec:
--	bitmap_free(rx_owner_map);
--	if (pg_vec)
-+	if (pg_vec) {
-+		bitmap_free(rx_owner_map);
- 		free_pg_vec(pg_vec, order, req->tp_block_nr);
-+	}
- out:
- 	return err;
- }
--- 
-2.33.0
-
+-	inode_lock(parent);
++	inode_lock_nested(parent, I_MUTEX_PARENT);
+ 	if (!S_ISDIR(parent->i_mode))
+ 		goto unlock;
+ 
 
 

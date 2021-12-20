@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4326D47ACCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C5247ABD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbhLTOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37148 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236029AbhLTOno (ORCPT
+        id S234807AbhLTOjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:39:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47132 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234142AbhLTOij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:43:44 -0500
+        Mon, 20 Dec 2021 09:38:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E54E611A1;
-        Mon, 20 Dec 2021 14:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04360C36AEA;
-        Mon, 20 Dec 2021 14:43:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3610B80EE0;
+        Mon, 20 Dec 2021 14:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B601C36AE8;
+        Mon, 20 Dec 2021 14:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011423;
-        bh=MUH4uSvx6x5CiYVFKVkIJr1gc22kiF4irDGPplKLsBg=;
+        s=korg; t=1640011117;
+        bh=vxQGH/F4L0g0ZYb8bm4uKhQSh35ghDEjnnb1g0JrjfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x/jBkYLO7H5li2E7myU/O6IiUcMa4PI+I4xahV8LGVHZJsisWAUNFd9gmYNqWMtXU
-         yBxsXk3MqoFIRWuM+G8I4WXVUJtUf4dQKxMMlTtJAUv6PpOicIwDh8mJIFUxHPjmNQ
-         eS5fP7r3PE8izZmDeaKYoyTKTux7yshzDZjwiy/g=
+        b=mKAiNchsvpRtqDtTDKf1Kij2S2cEW0+eLeN2JGBsW1A2enEA8WNxQ1bvmQaWhs+j5
+         JdpO+GpbUKqJSHQBayQdtE4BrrIGg72/Ru+s27hgSeV+j/TDGMLmwm3+m9fgs5Z9hD
+         57EYlzCBJdyuFDxrGoCVYf3gb88mxBnpoxoI1E/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 16/71] ARM: socfpga: dts: fix qspi node compatible
+        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.14 10/45] mac80211: send ADDBA requests using the tid/queue of the aggregation session
 Date:   Mon, 20 Dec 2021 15:34:05 +0100
-Message-Id: <20211220143026.231646956@linuxfoundation.org>
+Message-Id: <20211220143022.608658706@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,128 +45,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Felix Fietkau <nbd@nbd.name>
 
-[ Upstream commit cb25b11943cbcc5a34531129952870420f8be858 ]
+commit 1fe98f5690c4219d419ea9cc190f94b3401cf324 upstream.
 
-The QSPI flash node needs to have the required "jedec,spi-nor" in the
-compatible string.
+Sending them out on a different queue can cause a race condition where a
+number of packets in the queue may be discarded by the receiver, because
+the ADDBA request is sent too early.
+This affects any driver with software A-MPDU setup which does not allocate
+packet seqno in hardware on tx, regardless of whether iTXQ is used or not.
+The only driver I've seen that explicitly deals with this issue internally
+is mwl8k.
 
-Fixes: 1df99da8953 ("ARM: dts: socfpga: Enable QSPI in Arria10 devkit")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20211202124533.80388-1-nbd@nbd.name
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   | 2 +-
- arch/arm/boot/dts/socfpga_arria5_socdk.dts         | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sockit.dts      | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socrates.dts    | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts | 4 ++--
- 7 files changed, 8 insertions(+), 8 deletions(-)
+ net/mac80211/agg-tx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts b/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-index b4c0a76a4d1af..4c2fcfcc7baed 100644
---- a/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-+++ b/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-@@ -12,7 +12,7 @@ &qspi {
- 	flash0: n25q00@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00aa";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -109,7 +109,7 @@ static void ieee80211_send_addba_request
+ 	mgmt->u.action.u.addba_req.start_seq_num =
+ 					cpu_to_le16(start_seq_num << 4);
  
-diff --git a/arch/arm/boot/dts/socfpga_arria5_socdk.dts b/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-index 90e676e7019f2..1b02d46496a85 100644
---- a/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-+++ b/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-@@ -119,7 +119,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q256a";
-+		compatible = "micron,n25q256a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
+-	ieee80211_tx_skb(sdata, skb);
++	ieee80211_tx_skb_tid(sdata, skb, tid);
+ }
  
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts b/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-index 6f138b2b26163..51bb436784e24 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-@@ -124,7 +124,7 @@ &qspi {
- 	flash0: n25q00@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;	/* chip select */
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts b/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-index c155ff02eb6e0..cae9ddd5ed38b 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-@@ -169,7 +169,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts b/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-index 8d5d3996f6f27..ca18b959e6559 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-@@ -80,7 +80,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q256a";
-+		compatible = "micron,n25q256a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts b/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-index 99a71757cdf46..3f7aa7bf0863a 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-@@ -116,7 +116,7 @@ &qspi {
- 	flash0: n25q512a@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q512a";
-+		compatible = "micron,n25q512a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-index a060718758b67..25874e1b9c829 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-@@ -224,7 +224,7 @@ &qspi {
- 	n25q128@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q128";
-+		compatible = "micron,n25q128", "jedec,spi-nor";
- 		reg = <0>;		/* chip select */
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
-@@ -241,7 +241,7 @@ n25q128@0 {
- 	n25q00@1 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <1>;		/* chip select */
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
--- 
-2.33.0
-
+ void ieee80211_send_bar(struct ieee80211_vif *vif, u8 *ra, u16 tid, u16 ssn)
 
 

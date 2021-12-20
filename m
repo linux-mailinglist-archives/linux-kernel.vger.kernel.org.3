@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 742DE47AC6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3750447AD95
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbhLTOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:43:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50640 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbhLTOmP (ORCPT
+        id S238021AbhLTOxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:53:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41982 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238225AbhLTOuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:42:15 -0500
+        Mon, 20 Dec 2021 09:50:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44E6AB80EE3;
-        Mon, 20 Dec 2021 14:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87487C36AE8;
-        Mon, 20 Dec 2021 14:42:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F3DF6119C;
+        Mon, 20 Dec 2021 14:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63991C36AE9;
+        Mon, 20 Dec 2021 14:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011333;
-        bh=dsyhPV3pGgf/4WJmlaH/zgA+cgIArokgSGhXtKSLHqc=;
+        s=korg; t=1640011819;
+        bh=3kqhqbfbqsdyzaL66YJCT1UkRYcBkhpS2LPgGIMxF0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PRlxF98EwLCsPDsKHWSVDCyR5vwCe3ZiGqyO1mP+YdhyKgCtdF4V9hktUVkI0kKW2
-         3eb6+HOMOc8CWdKIFGOoFrOZ8X5Olgnnzz8yiKZ0okuBiU6YawLGanTYzp2miiG33M
-         2w18zKksvKlNR0RmVqjl/2qtHoykrvmwZv4vQrqg=
+        b=cNjNTCQgPXhABAHWwTADUcVDUFE/2ifwTzALqjD0ovR+ib0HDMmfpcGHEu9cnUxns
+         7R49Ia9RSGyXA1Fic1hNi7RnNcstsDRjLD0tAF7Sei18iwPkZKcAEzkSn5VvdVoMfL
+         rkDWe0ZT/5leI03tibNvZQfdMGm9nOGxBM5m7rtY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 4.19 33/56] PCI/MSI: Mask MSI-X vectors only on success
+        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 53/99] ixgbe: Document how to enable NBASE-T support
 Date:   Mon, 20 Dec 2021 15:34:26 +0100
-Message-Id: <20211220143024.526582062@linuxfoundation.org>
+Message-Id: <20211220143031.175925081@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,74 +46,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Roese <sr@denx.de>
+From: Robert Schlabbach <robert_s@gmx.net>
 
-commit 83dbf898a2d45289be875deb580e93050ba67529 upstream.
+[ Upstream commit 271225fd57c2f1e0b3f8826df51be6c634affefe ]
 
-Masking all unused MSI-X entries is done to ensure that a crash kernel
-starts from a clean slate, which correponds to the reset state of the
-device as defined in the PCI-E specificion 3.0 and later:
+Commit a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0
+Gbps support") introduced suppression of the advertisement of NBASE-T
+speeds by default, according to Todd Fujinaka to accommodate customers
+with network switches which could not cope with advertised NBASE-T
+speeds, as posted in the E1000-devel mailing list:
 
- Vector Control for MSI-X Table Entries
- --------------------------------------
+https://sourceforge.net/p/e1000/mailman/message/37106269/
 
- "00: Mask bit:  When this bit is set, the function is prohibited from
-                 sending a message using this MSI-X Table entry.
-                 ...
-                 This bit’s state after reset is 1 (entry is masked)."
+However, the suppression was not documented at all, nor was how to
+enable NBASE-T support.
 
-A Marvell NVME device fails to deliver MSI interrupts after trying to
-enable MSI-X interrupts due to that masking. It seems to take the MSI-X
-mask bits into account even when MSI-X is disabled.
+Properly document the NBASE-T suppression and how to enable NBASE-T
+support.
 
-While not specification compliant, this can be cured by moving the masking
-into the success path, so that the MSI-X table entries stay in device reset
-state when the MSI-X setup fails.
-
-[ tglx: Move it into the success path, add comment and amend changelog ]
-
-Fixes: aa8092c1d1f1 ("PCI/MSI: Mask all unused MSI-X entries")
-Signed-off-by: Stefan Roese <sr@denx.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-pci@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211210161025.3287927-1-sr@denx.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0 Gbps support")
+Reported-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/msi.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ .../device_drivers/ethernet/intel/ixgbe.rst      | 16 ++++++++++++++++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c    |  4 ++++
+ 2 files changed, 20 insertions(+)
 
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -799,9 +799,6 @@ static int msix_capability_init(struct p
- 		goto out_disable;
- 	}
+diff --git a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
+index f1d5233e5e510..0a233b17c664e 100644
+--- a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
++++ b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
+@@ -440,6 +440,22 @@ NOTE: For 82599-based network connections, if you are enabling jumbo frames in
+ a virtual function (VF), jumbo frames must first be enabled in the physical
+ function (PF). The VF MTU setting cannot be larger than the PF MTU.
  
--	/* Ensure that all table entries are masked. */
--	msix_mask_all(base, tsize);
--
- 	ret = msix_setup_entries(dev, base, entries, nvec, affd);
- 	if (ret)
- 		goto out_disable;
-@@ -824,6 +821,16 @@ static int msix_capability_init(struct p
- 	/* Set MSI-X enabled bits and unmask the function */
- 	pci_intx_for_msi(dev, 0);
- 	dev->msix_enabled = 1;
++NBASE-T Support
++---------------
++The ixgbe driver supports NBASE-T on some devices. However, the advertisement
++of NBASE-T speeds is suppressed by default, to accommodate broken network
++switches which cannot cope with advertised NBASE-T speeds. Use the ethtool
++command to enable advertising NBASE-T speeds on devices which support it::
 +
-+	/*
-+	 * Ensure that all table entries are masked to prevent
-+	 * stale entries from firing in a crash kernel.
-+	 *
-+	 * Done late to deal with a broken Marvell NVME device
-+	 * which takes the MSI-X mask bits into account even
-+	 * when MSI-X is disabled, which prevents MSI delivery.
-+	 */
-+	msix_mask_all(base, tsize);
- 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL, 0);
- 
- 	pcibios_free_irq(dev);
++  ethtool -s eth? advertise 0x1800000001028
++
++On Linux systems with INTERFACES(5), this can be specified as a pre-up command
++in /etc/network/interfaces so that the interface is always brought up with
++NBASE-T support, e.g.::
++
++  iface eth? inet dhcp
++       pre-up ethtool -s eth? advertise 0x1800000001028 || true
++
+ Generic Receive Offload, aka GRO
+ --------------------------------
+ The driver supports the in-kernel software implementation of GRO. GRO has
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index ffe322136c584..a3a02e2f92f64 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -5532,6 +5532,10 @@ static int ixgbe_non_sfp_link_config(struct ixgbe_hw *hw)
+ 	if (!speed && hw->mac.ops.get_link_capabilities) {
+ 		ret = hw->mac.ops.get_link_capabilities(hw, &speed,
+ 							&autoneg);
++		/* remove NBASE-T speeds from default autonegotiation
++		 * to accommodate broken network switches in the field
++		 * which cannot cope with advertised NBASE-T speeds
++		 */
+ 		speed &= ~(IXGBE_LINK_SPEED_5GB_FULL |
+ 			   IXGBE_LINK_SPEED_2_5GB_FULL);
+ 	}
+-- 
+2.33.0
+
 
 

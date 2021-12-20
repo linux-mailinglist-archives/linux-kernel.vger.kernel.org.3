@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1454E47A574
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D176147A578
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbhLTHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 02:41:26 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:40696 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbhLTHlZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 02:41:25 -0500
-Received: by mail-il1-f197.google.com with SMTP id u8-20020a056e021a4800b002a1ec0f08afso4701651ilv.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:41:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RytUdnzVGkCTxVVyLQox42i7D0tYk89snCrw0fjmvko=;
-        b=R9exzJWdFZG7+Q8oMG6N9UsxMciTbSscvTuzeAtLpbIzL5T1BtAGePZIuJEUxgVXue
-         RUuIiWGhxC4OKAnAU0bNEJq9LCpk19pPcfB3bqaGmlx74+0Po6jFQjFR3ev4lfNz6b85
-         K31p2inp1SmStqKexbnAneKpHRVkXRBONC0VhfuVACaByaFz4N9Lvxn4v3Wiq0bEGjAb
-         iW+zQLL2P/DygY3HL+qQkNH9cfjDuYUSHOGi1Hxh4xkgpEpAb/6+ianRQyhKRox4X5xE
-         MIRP0GZ40PAe3+EceeJQ/b1xlitiXvgIufrs81lVUnNXxkWvgOx69NBP0qbuB66cMVZL
-         X9oA==
-X-Gm-Message-State: AOAM5318gJcJNw5IsNVQYlIxAU4hcgkzGgppBZh3pH5ApABex8ti/l2k
-        mmueCO2objGy22FYiUPTd51TCR9uWJw2wmZbCmXpCyb1LHSs
-X-Google-Smtp-Source: ABdhPJzICsA6qDPBF+mKbLrfqRVchCfqb00wsIltL+sOGZotjPXUJvuV9XAYiXTL6RNrqNBTWh8kQKMyQTGr/yFWw+iX0+xU+sYo
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:168a:: with SMTP id f10mr2413086jat.279.1639986084902;
- Sun, 19 Dec 2021 23:41:24 -0800 (PST)
-Date:   Sun, 19 Dec 2021 23:41:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006fee605d38f0418@google.com>
-Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
-From:   syzbot <syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lmb@cloudflare.com, netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        id S237750AbhLTHqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 02:46:20 -0500
+Received: from mail.thorsis.com ([92.198.35.195]:39931 "EHLO mail.thorsis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229680AbhLTHqT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 02:46:19 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id 240F9144D;
+        Mon, 20 Dec 2021 08:46:18 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qpMcXO4EMgae; Mon, 20 Dec 2021 08:46:18 +0100 (CET)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id E3DFF10F5; Mon, 20 Dec 2021 08:46:17 +0100 (CET)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: microchip.com]
+        * -0.0 NO_RECEIVED Informational: message has no Received headers
+Date:   Mon, 20 Dec 2021 08:46:03 +0100
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, robh+dt@kernel.org,
+        linux@armlinux.org.uk, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/8] ARM: configs: at91: sama7: enable cpu idle
+Message-ID: <YcA0uxt8O/kO3Bo5@ada-deb-carambola.ifak-system.com>
+Mail-Followup-To: Claudiu Beznea <claudiu.beznea@microchip.com>,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, robh+dt@kernel.org,
+        linux@armlinux.org.uk, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211216141338.35144-1-claudiu.beznea@microchip.com>
+ <20211216141338.35144-8-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216141338.35144-8-claudiu.beznea@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Claudiu,
 
-syzbot found the following issue on:
+Am Thu, Dec 16, 2021 at 04:13:37PM +0200 schrieb Claudiu Beznea:
+> Enable CPU idle support for SAMA7 config.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  arch/arm/configs/sama7_defconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> index 938aae4bd80b..95c2a7ed4816 100644
+> --- a/arch/arm/configs/sama7_defconfig
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -26,6 +26,7 @@ CONFIG_FORCE_MAX_ZONEORDER=15
+>  CONFIG_UACCESS_WITH_MEMCPY=y
+>  # CONFIG_ATAGS is not set
+>  CONFIG_CMDLINE="console=ttyS0,115200 earlyprintk ignore_loglevel"
+> +CONFIG_CPU_IDLE=y
+>  CONFIG_VFP=y
+>  CONFIG_NEON=y
+>  CONFIG_KERNEL_MODE_NEON=y
+> @@ -33,7 +34,6 @@ CONFIG_MODULES=y
+>  CONFIG_MODULE_FORCE_LOAD=y
+>  CONFIG_MODULE_UNLOAD=y
+>  CONFIG_MODULE_FORCE_UNLOAD=y
+> -# CONFIG_BLK_DEV_BSG is not set
+>  CONFIG_PARTITION_ADVANCED=y
+>  # CONFIG_EFI_PARTITION is not set
+>  # CONFIG_COREDUMP is not set
+> @@ -90,6 +90,7 @@ CONFIG_BLK_DEV_RAM_SIZE=8192
+>  CONFIG_EEPROM_AT24=y
+>  CONFIG_SCSI=y
+>  CONFIG_BLK_DEV_SD=y
+> +# CONFIG_BLK_DEV_BSG is not set
 
-HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ed4143b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=10f3f669b8093e95
-dashboard link: https://syzkaller.appspot.com/bug?extid=bb73e71cf4b8fd376a4f
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112d6ca5b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17393549b00000
+That move of the CONFIG_BLK_DEV_BSG entry is not related to enabling
+the CONFIG_CPU_IDLE option, right?
 
-The issue was bisected to:
+Greets
+Alex
 
-commit 38207a5e81230d6ffbdd51e5fa5681be5116dcae
-Author: John Fastabend <john.fastabend@gmail.com>
-Date:   Fri Nov 19 18:14:17 2021 +0000
-
-    bpf, sockmap: Attach map progs to psock early for feature probes
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13532e85b00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10d32e85b00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17532e85b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
-Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
-
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
-BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
-Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
-
-CPU: 1 PID: 3641 Comm: syz-executor020 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
- dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106 lib/dump_stack.c:106
- print_address_description+0x65/0x380 mm/kasan/report.c:247 mm/kasan/report.c:247
- __kasan_report mm/kasan/report.c:433 [inline]
- __kasan_report mm/kasan/report.c:433 [inline] mm/kasan/report.c:450
- kasan_report+0x19a/0x1f0 mm/kasan/report.c:450 mm/kasan/report.c:450
- __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
- __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
- bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
- bpf_prog_release+0x37/0x40 kernel/bpf/syscall.c:1837 kernel/bpf/syscall.c:1837
- __fput+0x3fc/0x870 fs/file_table.c:280 fs/file_table.c:280
- task_work_run+0x146/0x1c0 kernel/task_work.c:164 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- exit_task_work include/linux/task_work.h:32 [inline] kernel/exit.c:832
- do_exit+0x705/0x24f0 kernel/exit.c:832 kernel/exit.c:832
- do_group_exit+0x168/0x2d0 kernel/exit.c:929 kernel/exit.c:929
- __do_sys_exit_group+0x13/0x20 kernel/exit.c:940 kernel/exit.c:940
- __se_sys_exit_group+0x10/0x10 kernel/exit.c:938 kernel/exit.c:938
- __x64_sys_exit_group+0x37/0x40 kernel/exit.c:938 kernel/exit.c:938
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f3b90ccd1d9
-Code: Unable to access opcode bytes at RIP 0x7f3b90ccd1af.
-RSP: 002b:00007ffdeec58318 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f3b90d41330 RCX: 00007f3b90ccd1d9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc4 R09: 00007ffdeec58390
-R10: 00007ffdeec58390 R11: 0000000000000246 R12: 00007f3b90d41330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-
-
-Memory state around the buggy address:
- ffffc90000e75f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000e75f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90000e76000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                        ^
- ffffc90000e76080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000e76100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>  CONFIG_NETDEVICES=y
+>  CONFIG_MACB=y
+>  CONFIG_MICREL_PHY=y
+> -- 
+> 2.32.0
+> 

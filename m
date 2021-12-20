@@ -2,94 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F32047B079
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555BB47B07B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236341AbhLTPkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:40:02 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:49347 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbhLTPkB (ORCPT
+        id S237247AbhLTPkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:40:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35464 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231987AbhLTPke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:40:01 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M8hMt-1n41bK3RBJ-004jkf; Mon, 20 Dec 2021 16:39:59 +0100
-Received: by mail-wr1-f54.google.com with SMTP id j18so21002597wrd.2;
-        Mon, 20 Dec 2021 07:39:59 -0800 (PST)
-X-Gm-Message-State: AOAM531K4tCtk58OTys5yK8vogqrbO3YF9GlwaxJz8YbT2J8+Idw7LlE
-        JeHE46iDXibwkbbEEd1qG7PMYr6Gob5e2RunbN8=
-X-Google-Smtp-Source: ABdhPJwyf1gl42e1+1ii3zT0maFx9sw6pqM+dmpJrc6Cp5f8QnUR5djHD7r/X/OWPoyaJf/hbjF5DreC2K3feE7WjvE=
-X-Received: by 2002:adf:f051:: with SMTP id t17mr13408714wro.192.1640014799482;
- Mon, 20 Dec 2021 07:39:59 -0800 (PST)
+        Mon, 20 Dec 2021 10:40:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1637AB80EF4;
+        Mon, 20 Dec 2021 15:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A54C36AE7;
+        Mon, 20 Dec 2021 15:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640014831;
+        bh=Xoihq8kvKvktAGd2hXqEi3P1s3byYn9KFsMfwXpRhXM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X5UGZpjRt9y92DXCtQ5ldWCj+StRaSayDxNFEc4ZzfG/hZn0Xg+oFuoklfwN4mHyI
+         zBfCZ1zT4MoCkLtrpgCy9zq6pbRjokXsb3jJHrevBsxEAxBPr7SBGEM6YbS4+MBJi0
+         bTpzGXgU3U6k291aNziTnxE0p/xt9fXK+DKnH0fk=
+Date:   Mon, 20 Dec 2021 16:40:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tty: timbuart: Check for null res pointer
+Message-ID: <YcCj7cj4JlCwoyhH@kroah.com>
+References: <20211220082127.883885-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
-In-Reply-To: <20211218085843.212497-1-cuigaosheng1@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Dec 2021 16:39:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
-Message-ID: <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
-To:     Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        SoC Team <soc@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        gongruiqi1@huawei.com, wangweiyang2@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:0gArGAU/6xkyPS/OO+lrntkvNVVGNM1vGVCTqQ7uZnBtlqSoIE6
- VjFtW3tUIEw5Sq6L5XGRHwtl7142fPoTYCgVGL5oV3uCiZks1xXVL6sN2OqRYZM79KLCdrX
- NjM9D8Rfz0wdgxQF3w9uowT7ilSXe8U3BWlOtU/v6qoR+bxjK6f9K2tIVKLyZ7BZBgNw/pG
- 391KbQxz6cw4WMQV92lrA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/cmRBXKXLEc=:RfvIVqDBoEDZIaNLseXoCB
- o8z1MEJkl6yTEeOHwy2MfKsNo3+1EzdiyWtA3LpYO+ItCYqvQhMYfkrp6IuWunYijaqZui7Yz
- Qtg7hbgSolFRbwvuuOp+gyTYEgJHSlOuS+jpIXCzG3mOyrLl2fYHEjwuL418qjKJEdSmqippp
- SFBLewJ+A88DkJKJ/nSTtQbNwqdzftA9lvT6PwYTswmV3h3oJ5NMQ+4X3cywoxN+FaCtvfgu0
- 35DUh4bnEsci2KsCojmb+LbIpHJITABjlbdc150+iHUMYt7V3NZiZtncNrRZ4YEGY3OXnSVhJ
- mDQwIpgoTkJa8D3TDml85JfuKIUv8pJVHayv8cvIY72EHD58likXt2w56UnOBzScQ8aZdjwHD
- Qe5Dpb0VkfqVgn8BviVUIwofLYYHdjZ4o3iD2ZLuLc4ulhM2/+oDh+ndnJE38REUJTP0mlg5c
- u4qstfFA0MA94+obUgOhgsqCdVOHZIJcY6Sylsja1JZYC1blpnejai0PBtpHORkmnhdoIWLgT
- bIVeBiim7qVimcPRaTv/hLUKCjBjib/xXAWCeo9lvldmUR2njk3aKgqME4aMIKsW2Od56r0k9
- XPWNqn/h5rVvePNNAsRB1Wrer+hFa3LyBMl+O67KyFyHryO7e7qVvvbCwZKbiDv2kQ7PbbmCj
- fb1tMNrK/YeFlgB9GxV6eEhpEuu3n0SwysfvJxAAyn8x4ikbiBQYVeJagatQSIYGDMUB7gz+i
- gJQc+3y9K3Tg59YVfQheiCW701FwVoQ7K0jJbwzXNI5cvqmFqr7D9HFI06FznJNle1SvCSpBW
- 4L/zKGD4zw14LHgj68837WDkZKQhEaOfeQIFgK98blhzCgeV04=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220082127.883885-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 9:58 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
->
-> These patches replace an open coded calculation to obtain the physical
-> address of a far symbol with a call to the new ldr_l etc macro, and they
-> belong to the kaslr patch set of arm32.
->
-> Reference: https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=arm-kaslr-latest
->
-> Ard Biesheuvel (3):
->   arm-soc: exynos: replace open coded VA->PA conversions
->   arm-soc: mvebu: replace open coded VA->PA conversion
->   arm-soc: various: replace open coded VA->PA calculation
+On Mon, Dec 20, 2021 at 04:21:27PM +0800, Jiasheng Jiang wrote:
+> The return value of platform_get_resource() needs to be checked.
+> To avoid use of error pointer in case that there is no suitable
+> resource.
+> 
+> Fixes: ab4382d27412 ("tty: move drivers/serial/ to drivers/tty/serial/")
 
-Usually these patches should go through the respective platform
-maintainer trees,
-and from there into the soc tree, but time is a little short here.
+No it does not.  I thought I said that already.
 
-I could apply them directly with the maintainer Acks, but I don't understand
-the significance of you sending them now. Is something broken without the
-three patches? Are these the only ones missing from Ard's original series,
-or is this preparation? Would you expect the patches to get backported to
-stable kernels?
+I am going to just add your emails to a "ignore filter" for a while.
+Your changes are not correct, and when asked about them, you just send
+another version of the patch, which is not how to have a conversation
+about a review.
 
-       Arnd
+good luck,
+
+greg k-h

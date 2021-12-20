@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE2F47ABEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE8B47AB61
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbhLTOkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S233807AbhLTOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbhLTOjN (ORCPT
+        with ESMTP id S233754AbhLTOgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32E3C061A32;
-        Mon, 20 Dec 2021 06:39:11 -0800 (PST)
+        Mon, 20 Dec 2021 09:36:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB26FC06173E;
+        Mon, 20 Dec 2021 06:36:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40417CE1110;
-        Mon, 20 Dec 2021 14:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA52C36AE7;
-        Mon, 20 Dec 2021 14:39:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76CAFB80EE3;
+        Mon, 20 Dec 2021 14:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B12C36AE9;
+        Mon, 20 Dec 2021 14:36:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011148;
-        bh=uAco94sYnfeVlWdVTcHRRZWCEcGcS8WcwMTCSoJ1i5A=;
+        s=korg; t=1640010971;
+        bh=fUo1LADvLkAmjOHtY2moLLrZ8V5j/hwXpyU10SN5xac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kshTj8ltgayRj0UkFXR7QkngWzIbtmvTyX/QQ/GKdIPFmfCRc13F5XTB9a6vtv21U
-         uHMFwbbiFqFDRMK4HR0AlTicfchy/uG+ztQDIdwjKOhr7xRGXjpFlqJWv4AhrKeQJd
-         qegD96arTwqU7y8iWRX2td3NkrqxU6miKvVAg7d8=
+        b=Yvc2V1wMUrRpYOD1gbSStstHP4Q9SOqylJDAa9SCaGWX4vOeghgRQt8+0VwFPo0lO
+         +EsRuUiKhGfPd58dtPvJYviHZ37gb4A+ZjwnU1AdtlEiFMJSh6nWT4RWT2/xvHmAPk
+         siW87qr6fuaTJ71VtauihKwWiR3Iipz7f4rQKEJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 20/45] soc/tegra: fuse: Fix bitwise vs. logical OR warning
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.4 14/23] USB: serial: option: add Telit FN990 compositions
 Date:   Mon, 20 Dec 2021 15:34:15 +0100
-Message-Id: <20211220143022.949899854@linuxfoundation.org>
+Message-Id: <20211220143018.317081428@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,73 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-[ Upstream commit a7083763619f7485ccdade160deb81737cf2732f ]
+commit 2b503c8598d1b232e7fc7526bce9326d92331541 upstream.
 
-A new warning in clang points out two instances where boolean
-expressions are being used with a bitwise OR instead of logical OR:
+Add the following Telit FN990 compositions:
 
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both operands to int to silence this warning
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both operands to int to silence this warning
-2 warnings generated.
+0x1070: tty, adb, rmnet, tty, tty, tty, tty
+0x1071: tty, adb, mbim, tty, tty, tty, tty
+0x1072: rndis, tty, adb, tty, tty, tty, tty
+0x1073: tty, adb, ecm, tty, tty, tty, tty
 
-The motivation for the warning is that logical operations short circuit
-while bitwise operations do not.
-
-In this instance, tegra_fuse_read_spare() is not semantically returning
-a boolean, it is returning a bit value. Use u32 for its return type so
-that it can be used with either bitwise or boolean operators without any
-warnings.
-
-Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1488
-Suggested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://lore.kernel.org/r/20211210100714.22587-1-dnlplm@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
- drivers/soc/tegra/fuse/fuse.h       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/serial/option.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
-index 37bde5c8268d1..a623e498a97bc 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-@@ -178,7 +178,7 @@ static struct platform_driver tegra_fuse_driver = {
- };
- builtin_platform_driver(tegra_fuse_driver);
- 
--bool __init tegra_fuse_read_spare(unsigned int spare)
-+u32 __init tegra_fuse_read_spare(unsigned int spare)
- {
- 	unsigned int offset = fuse->soc->info->spare + spare * 4;
- 
-diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
-index 10c2076d5089a..f368bd5373088 100644
---- a/drivers/soc/tegra/fuse/fuse.h
-+++ b/drivers/soc/tegra/fuse/fuse.h
-@@ -62,7 +62,7 @@ struct tegra_fuse {
- void tegra_init_revision(void);
- void tegra_init_apbmisc(void);
- 
--bool __init tegra_fuse_read_spare(unsigned int spare);
-+u32 __init tegra_fuse_read_spare(unsigned int spare);
- u32 __init tegra_fuse_read_early(unsigned int offset);
- 
- #ifdef CONFIG_ARCH_TEGRA_2x_SOC
--- 
-2.33.0
-
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1195,6 +1195,14 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1063, 0xff),	/* Telit LN920 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1070, 0xff),	/* Telit FN990 (rmnet) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1071, 0xff),	/* Telit FN990 (MBIM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1072, 0xff),	/* Telit FN990 (RNDIS) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 
 

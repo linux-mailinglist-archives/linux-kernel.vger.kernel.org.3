@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FCE47AADD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8019F47AAE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbhLTOCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:02:23 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29270 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbhLTOCW (ORCPT
+        id S233240AbhLTODy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:03:54 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42370 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232505AbhLTODx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:02:22 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHh915hwyzbjWh;
-        Mon, 20 Dec 2021 22:01:57 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 22:02:19 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 22:02:19 +0800
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211214135555.125348-1-pulehui@huawei.com>
- <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
- <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
- <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com>
-Date:   Mon, 20 Dec 2021 22:02:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 20 Dec 2021 09:03:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D5645CE10DA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271DCC36AED
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:03:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640009030;
+        bh=bPKiX+8jJwxqxaprS1JmXvLTrG48KvnlDMVxkN7OFbA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=neci6bJ5ARsw7TZS1v4XYQMlwGD3ZiVOlxc4GNe7v4DjRkqpEKXz4zQsiWp2TDMpw
+         04dYKK3YfCidzlFI9iaYUl2sdtXh1dmWnfaKxMTNgUetCeUNNu6bKTQsLHgnKRR36m
+         /be8L3FXxeylj9bOlyWqr0XEVdzQ5KGiXmU5NJL/PjdUEoZ0PBLQh3yxG4eJSh9rv1
+         2FYsKABN4gCe9Y7AGow3th6BAKrTNel/dnZwIJe0LNoFAa577uoUZfiZs7FUGdxtv+
+         M3sc4MLmTicHJJU+xzQUW6Ht82elcQJFVf0O3tUX5gS9UYH7H/EQJ6dSvrB1o02vpb
+         HrfKMmfMCpllA==
+Received: by mail-wr1-f50.google.com with SMTP id q16so20325958wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:03:50 -0800 (PST)
+X-Gm-Message-State: AOAM533YaYm4oqc89HCdiRRdbm/5YtsfJuUorEZCsJEwIqWsGA4EFBQ+
+        6ktNfbsEs8EZTQayv2fSvi8MxRKiEXC7OB7dNVw=
+X-Google-Smtp-Source: ABdhPJzBpdpvGiiJ4qIik9Z4FCJ+PCqE74SgR6Q/Xbr20R+VLueDh0Qtg/ZmiHZcKIEFZM9TLRIylnJX1GqXS9T0VJI=
+X-Received: by 2002:adf:c450:: with SMTP id a16mr12436578wrg.454.1640009028187;
+ Mon, 20 Dec 2021 06:03:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+References: <20211220140142.922323-1-frederic@kernel.org>
+In-Reply-To: <20211220140142.922323-1-frederic@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 20 Dec 2021 15:03:36 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEBWJVGtRVKRkxeJc5bj4Cbb9oA_67PyJDYhTwiaHc7jA@mail.gmail.com>
+Message-ID: <CAMj1kXEBWJVGtRVKRkxeJc5bj4Cbb9oA_67PyJDYhTwiaHc7jA@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: Support dynamic preemption v3
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morse <james.morse@arm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Frederic,
 
+On Mon, 20 Dec 2021 at 15:01, Frederic Weisbecker <frederic@kernel.org> wrote:
+>
+> Hi,
+>
+> I haven't seen much comments on the static key based version from Mark
+> so I don't know which direction we'll eventually take. I still hope we
+> can focus on a unified static call based implementation, considering
+> there are other users waiting on arm64 static calls.
+>
 
-On 2021/12/18 0:45, Andrii Nakryiko wrote:
-> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
->>
->>
->>
->> On 2021/12/16 12:06, Andrii Nakryiko wrote:
->>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
->>>>
->>>> When building bpf selftests on arm64, the following error will occur:
->>>>
->>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
->>>> user_pt_regs'
->>>>
->>>> Some archs, like arm64 and riscv, use userspace pt_regs in
->>>> bpf_tracing.h, which causes build failure when bpf prog use
->>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
->>>
->>> We could probably also extend bpf_tracing.h to work with
->>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
->>> __VMLINUX_H__ checks). It's more work, but will benefit other end
->>> users, not just selftests.
->>>
->> It might change a lot. We can use header file directory generated by
->> "make headers_install" to fix it.
-> 
-> We don't have dependency on "make headers_install" and I'd rather not add it.
-> 
-> What do you mean by "change a lot"?
-> 
-Maybe I misunderstood your advice. Your suggestion might be to extend 
-bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64, 
-only support user-space. So the patch might be like this:
+Which other users are you referring to here?
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index db05a5937105..2c3cb8e9ae92 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -195,9 +195,13 @@ struct pt_regs;
-
-  #elif defined(bpf_target_arm64)
-
--struct pt_regs;
-+#if defined(__KERNEL__)
-+#define PT_REGS_ARM64 const volatile struct pt_regs
-+#else
-  /* arm64 provides struct user_pt_regs instead of struct pt_regs to 
-userspace */
-  #define PT_REGS_ARM64 const volatile struct user_pt_regs
-+#endif
-+
-  #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-  #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
-  #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
-
->>
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -294,7 +294,8 @@ MENDIAN=$(if
->> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->>    CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->>    BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
->>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
->> -            -I$(abspath $(OUTPUT)/../usr/include)
->> +            -I$(abspath $(OUTPUT)/../usr/include) \
->> +            -I../../../../usr/include
->>>>
->>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->>>> ---
->>>>    tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
->>>>    .../selftests/bpf/progs/test_overhead.c       |  8 ++------
->>>>    .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
->>>>    6 files changed, 15 insertions(+), 43 deletions(-)
->>>>
->>>
->>> [...]
->>> .
->>>
-> .
-> 
+> So here is a rebase against the latest tip:sched/core and arm64 static
+> call proposal.
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+>         preempt/arm-v4
+>
+> HEAD: 6fc1c7e3d83c4e06b019b041894d9bb25f37ac6c
+>
+> Thanks,
+>         Frederic
+> ---
+>
+> Frederic Weisbecker (3):
+>       sched/preempt: Prepare for supporting !CONFIG_GENERIC_ENTRY dynamic preemption
+>       arm64: Implement IRQ exit preemption static call for dynamic preemption
+>       arm64: Implement HAVE_PREEMPT_DYNAMIC
+>
+> Ard Biesheuvel (2):
+>       static_call: Use non-function types to refer to the trampolines
+>       arm64: implement support for static call trampolines
+>
+>
+>  arch/Kconfig                         |  1 -
+>  arch/arm64/Kconfig                   |  3 ++
+>  arch/arm64/include/asm/preempt.h     | 23 ++++++++++-
+>  arch/arm64/include/asm/static_call.h | 40 +++++++++++++++++++
+>  arch/arm64/kernel/entry-common.c     | 15 +++++--
+>  arch/arm64/kernel/patching.c         | 77 ++++++++++++++++++++++++++++++++++--
+>  arch/arm64/kernel/vmlinux.lds.S      |  1 +
+>  include/linux/entry-common.h         |  3 +-
+>  include/linux/static_call.h          |  4 +-
+>  include/linux/static_call_types.h    | 11 ++++--
+>  kernel/sched/core.c                  |  6 ++-
+>  11 files changed, 168 insertions(+), 16 deletions(-)

@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A544247B641
+	by mail.lfdr.de (Postfix) with ESMTP id EE0CE47B642
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 00:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbhLTXoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 18:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S233202AbhLTXoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 18:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbhLTXn7 (ORCPT
+        with ESMTP id S231187AbhLTXoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 18:43:59 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83483C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:43:59 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id p23so15458788iod.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:43:59 -0800 (PST)
+        Mon, 20 Dec 2021 18:44:00 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438ECC06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:44:00 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id 14so15418532ioe.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:44:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lNqaSlrOE70VPTa+GjJ5DlEK6n0EAgcYkJbBO9oyFQk=;
-        b=jUmFumTvIIdji9Cf7/UTW3J0mtygeMxgJLE07pAbntRBj5W7WGySBEXF+XrO69kC58
-         55pP1A/xiMYYlW9P4IwZDtIE1fSy17IXppqoMS3o/u8B0n2/cXxDq9bq/2ZnGdwYcApg
-         acU0YA94vLuG9mB+6GrJ5ql40FjSItokhabYw=
+        bh=qPLa+lTt8vCW4IqiZRoAjFD2+DlmxgEl4wmSi4FTuOw=;
+        b=O9l0LEb7TUTSspyh/AxCMkfk93Be4GaRLHafsGgHpnuCZ44FW2+fOwGF33R7FZiIk+
+         HaBxmoAoqGeayPqmlu/1yOxD+aemuqviVdRi3nLfpJVTx0VhJJiO1eGIkEzSyTeYJxdC
+         VwX0i/zyKbxKb9Obr+VcykFgeAWGZ56+0Gp54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lNqaSlrOE70VPTa+GjJ5DlEK6n0EAgcYkJbBO9oyFQk=;
-        b=uArdn/+x2wyI2qwcYo5UUK78Rl5YKV5utgzJ9GH1gde5MK5BuRApFDmu3iP+3bZQ9a
-         Pn0A4/AiFCTccBmHxJFM0Ej/8xYw36OMqFD/010SsXPxT8+w4D9uD/s68qDjfRq/Gq8K
-         VLBn6fyh+DLFgiyhwKyuFAYNuKwODoTbI6AWO54zSiiw4NDJt5FsCDJAt7M7TZFS9S7W
-         zXlrAc9A2WHvqsR4KSCdPX1BnOP8x1EzkbwRHElBmTd0at+GJgtftY5hsN/qCx4eX772
-         iqjdrkzZo9qRAImyLBop2slbvFI80A2NcstzIayWRYggoheXs2zBvjwgsbz2PRTjEbll
-         tPYg==
-X-Gm-Message-State: AOAM531AopJ1C1SfG0i0Xr+uh079lQRheZXRoK8ip/8KIGUP8N8erWfp
-        7hsCnzMq3SFScBfx/mbB+PPjeL0MlLYlpg==
-X-Google-Smtp-Source: ABdhPJzUHNnstH41oXkBeK5J7PARGhWrTMv2EcttYGTcNS5AYBraDp2A2GI+XOH/RQC6P87vAEUWWg==
-X-Received: by 2002:a02:8501:: with SMTP id g1mr369627jai.144.1640043838916;
-        Mon, 20 Dec 2021 15:43:58 -0800 (PST)
+        bh=qPLa+lTt8vCW4IqiZRoAjFD2+DlmxgEl4wmSi4FTuOw=;
+        b=M9iKBKqwjyE+A0kU/ZIjkV/f8os5+ATEsP7yauMX2UANLnNlfolEnJpq898hi1h5Dw
+         5oyNGctXNtBOyt520bI3gkeB94reQiaKcET1+BFBw0g7mh3TUgaRIGjyey9KV5nJfLaJ
+         ZnDaCgB7zXODqFHypQu+Utnms42jLMN3Dw8QbjGtgOuaVJYPNzsNS6CEi4BkMuuV6MyZ
+         nHJPWKdXazqKvwJNLNti191Wn27OXvLELE65EPjIUQtyqwot9wk7EaCNHGFA+PNToFAj
+         KIwwMVyd00QpWk9Vfi5jDe76fFMVyhAUyfIGd2X8HmBatoqrzPbZzeFSLt+mHb7uUie1
+         +irg==
+X-Gm-Message-State: AOAM533UKuZOutYwgXnDVi6D326X7BAPW+iiGFKv9HY5Y1/d8JP6uEvt
+        W4WmLGIYKcSSxt/R476mO+iUPgDr3jWtUQ==
+X-Google-Smtp-Source: ABdhPJxt7kvyeNHdnIFlVtQ7EkSTD2BNbhkBbLVbnBSYJW9499zBRWaFWT7dSKIXap6NXxEEnSftAg==
+X-Received: by 2002:a05:6638:25cd:: with SMTP id u13mr392376jat.8.1640043839566;
+        Mon, 20 Dec 2021 15:43:59 -0800 (PST)
 Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id k19sm4077521ilr.34.2021.12.20.15.43.58
+        by smtp.gmail.com with ESMTPSA id k19sm4077521ilr.34.2021.12.20.15.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 15:43:58 -0800 (PST)
+        Mon, 20 Dec 2021 15:43:59 -0800 (PST)
 From:   Raul E Rangel <rrangel@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     mario.limonciello@amd.com, linux-input@vger.kernel.org,
         dianders@chromium.org, Raul E Rangel <rrangel@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>
-Subject: [PATCH 2/3] Input: elan_i2c - Use PM subsystem to manage wake irq
-Date:   Mon, 20 Dec 2021 16:43:45 -0700
-Message-Id: <20211220163823.2.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>
+Subject: [PATCH 3/3] platform/chrome: cros_ec: Don't enable wake pin if ACPI managed
+Date:   Mon, 20 Dec 2021 16:43:46 -0700
+Message-Id: <20211220163823.3.I2339b40dd2ed02569ba204734dc335866a1c5b98@changeid>
 X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
 In-Reply-To: <20211220234346.2798027-1-rrangel@chromium.org>
 References: <20211220234346.2798027-1-rrangel@chromium.org>
@@ -63,94 +66,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Elan I2C touchpad driver is currently manually managing the wake
-IRQ. When a device is managed by device tree or ACPI it is expected that
-those subsystems manage defining the wake pin and manage enabling it.
+In ACPI managed systems, the `_PRW` method defines the wake source for
+the device. This could be a GPE or a GPIO not related to the IRQ. The
+way the cros_ec_lpc driver works is that the irq field is optional. The
+IRQ defined in the `_CRS` is only used to speed up sensor event
+processing. Before this change, the SYNC_IRQ GPIO would have its wake
+bit enabled. This means that we now have two wake sources defined for
+the EC. This change makes the CrOS EC driver leave wake configuration
+alone if the device is ACPI managed.
 
-This change removes the explicit enable_irq_wake/disable_irq_wake and
-relies on the PM subsystem. See device_wakeup_arm_wake_irqs.
-
-It also registers the IRQ using dev_pm_set_wake_irq only in the case
-where the device isn't DT or ACPI managed. This should preserve the
-existing behavior. I'm not sure how we actually get into this state
-though.
-
-I tested this with an ACPI device that has a `_PRW` method that uses a
-GPE was the wake event. I no longer see the GPIO controller being called
-to enable the wake pin. This results in the GPE correctly being marked
-as the wake source.
+I tested this on guybrush and no longer see the EC SYNC IRQ enabled as a
+wake source when suspending.
 
 Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 ---
 
- drivers/input/mouse/elan_i2c_core.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ drivers/platform/chrome/cros_ec.c           | 8 ++++++--
+ include/linux/platform_data/cros_ec_proto.h | 1 -
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
-index 47af62c12267..58f056ee0747 100644
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -33,6 +33,7 @@
- #include <linux/jiffies.h>
- #include <linux/completion.h>
- #include <linux/of.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/property.h>
- #include <linux/regulator/consumer.h>
- #include <asm/unaligned.h>
-@@ -86,8 +87,6 @@ struct elan_tp_data {
- 	u16			fw_page_size;
- 	u32			fw_signature_address;
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index fc5aa1525d13..81e334157338 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -9,6 +9,7 @@
+  * battery charging and regulator control, firmware update.
+  */
  
--	bool			irq_wake;
--
- 	u8			min_baseline;
- 	u8			max_baseline;
- 	bool			baseline_ready;
-@@ -1368,11 +1367,13 @@ static int elan_probe(struct i2c_client *client,
- 	}
++#include <linux/acpi.h>
+ #include <linux/of_platform.h>
+ #include <linux/interrupt.h>
+ #include <linux/slab.h>
+@@ -336,11 +337,14 @@ int cros_ec_suspend(struct cros_ec_device *ec_dev)
+ 		dev_dbg(ec_dev->dev, "Error %d sending suspend event to ec",
+ 			ret);
  
- 	/*
--	 * Systems using device tree should set up wakeup via DTS,
-+	 * Systems using device tree or ACPI should set up wakeup via DTS/ACPI,
- 	 * the rest will configure device as wakeup source by default.
- 	 */
--	if (!dev->of_node)
-+	if (!dev->of_node && !ACPI_COMPANION(dev)) {
- 		device_init_wakeup(dev, true);
-+		dev_pm_set_wake_irq(dev, client->irq);
-+	}
+-	if (device_may_wakeup(dev))
++	/*
++	 * For non-ACPI subsystems we need to explicitly enable the wake source.
++	 * For ACPI systems, the ACPI subsystem will handle all the details.
++	 */
++	if (device_may_wakeup(dev) && !ACPI_COMPANION(ec_dev->dev))
+ 		ec_dev->wake_enabled = !enable_irq_wake(ec_dev->irq);
+ 
+ 	disable_irq(ec_dev->irq);
+-	ec_dev->was_wake_device = ec_dev->wake_enabled;
+ 	ec_dev->suspended = true;
  
  	return 0;
- }
-@@ -1394,13 +1395,10 @@ static int __maybe_unused elan_suspend(struct device *dev)
- 
- 	disable_irq(client->irq);
- 
--	if (device_may_wakeup(dev)) {
-+	if (device_may_wakeup(dev))
- 		ret = elan_sleep(data);
--		/* Enable wake from IRQ */
--		data->irq_wake = (enable_irq_wake(client->irq) == 0);
--	} else {
-+	else
- 		ret = elan_disable_power(data);
--	}
- 
- 	mutex_unlock(&data->sysfs_mutex);
- 	return ret;
-@@ -1412,11 +1410,6 @@ static int __maybe_unused elan_resume(struct device *dev)
- 	struct elan_tp_data *data = i2c_get_clientdata(client);
- 	int error;
- 
--	if (device_may_wakeup(dev) && data->irq_wake) {
--		disable_irq_wake(client->irq);
--		data->irq_wake = false;
--	}
--
- 	error = elan_enable_power(data);
- 	if (error) {
- 		dev_err(dev, "power up when resuming failed: %d\n", error);
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index 992796e40cd6..054d28ddb4c1 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -139,7 +139,6 @@ struct cros_ec_device {
+ 	/* These are used by other drivers that want to talk to the EC */
+ 	const char *phys_name;
+ 	struct device *dev;
+-	bool was_wake_device;
+ 	struct class *cros_class;
+ 	int (*cmd_readmem)(struct cros_ec_device *ec, unsigned int offset,
+ 			   unsigned int bytes, void *dest);
 -- 
 2.34.1.307.g9b7440fafd-goog
 

@@ -2,63 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBC747ADC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5483A47AE06
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238770AbhLTOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:54:34 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:34906 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233606AbhLTOwA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:52:00 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAB3WBV3mMBhi3w_BA--.56502S2;
-        Mon, 20 Dec 2021 22:51:35 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] sfc: Check null pointer of rx_queue->page_ring
-Date:   Mon, 20 Dec 2021 22:51:34 +0800
-Message-Id: <20211220145134.978462-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S236177AbhLTO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:57:30 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:54846 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239025AbhLTOy6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:54:58 -0500
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 613FCB9C;
+        Mon, 20 Dec 2021 15:54:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640012096;
+        bh=/guRRmIERl/qLzatv9YDpEOMXqaanjVtGvX/PBxiWRA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=g7P6bDMUQcLcXYfXzz6ctYt+YXhWqJxnOiald35pv5ivVeulQfIlBGhSCMZQLq/9A
+         NYbDxkmEVdnA4RyaL4K0dZAe6g0tXzHs5uyyLmIFdnjOjghon0RZ4GK6/QWWjD/VcA
+         WxMJn/0io3UiRUDnPbvpK6NZ7hlqnI+CqE8/z0UU=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAB3WBV3mMBhi3w_BA--.56502S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aV
-        CY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
-        x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6x
-        CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
-        I402YVCY1x02628vn2kIc2xKxwCY02Avz4vE14v_Xryl42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUjuWlDUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211218182804.208906-1-antonio.borneo@foss.st.com>
+References: <20211218182804.208906-1-antonio.borneo@foss.st.com>
+Subject: Re: [PATCH] drm: adv7511: override i2c address of cec before accessing it
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+To:     Andrzej Hajda <a.hajda@samsung.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        dri-devel@lists.freedesktop.org
+Date:   Mon, 20 Dec 2021 14:54:54 +0000
+Message-ID: <164001209406.2512616.469307346369770543@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:16:28PM +0800, Greg KH wrote:
-> Why not return an error?
+Hi Antonio,
 
-Because I have received the mail from Martin Habets that telling me
-it doesn't need to return error code.
-Here is the mail.
-https://lore.kernel.org/lkml/20211219092948.t2iprptmyfrzgthb@gmail.com/
-On Sun, Dec 19, 2021 at 05:29:48PM +0800, Martin Habets wrote:
-> Your predicate is wrong. The code that uses rx_queue->page_ring
-> can deal with it being NULL.
-> The only thing you might want to do is set rx_queue->page_ptr_mask
-> to 0.
+Quoting Antonio Borneo (2021-12-18 18:28:04)
+> Commit 680532c50bca ("drm: adv7511: Add support for
+> i2c_new_secondary_device") allows a device tree node to override
+> the default addresses of the secondary i2c devices. This is useful
+> for solving address conflicts on the i2c bus.
+>=20
+> In adv7511_init_cec_regmap() the new i2c address of cec device is
+> read from device tree and immediately accessed, well before it is
+> written in the proper register to override the default address.
+> This can cause an i2c error during probe and a consequent probe
+> failure.
 
-Jiasheng
+Ouch, it does seem that way. I guess no one has used the CEC for quite
+some time, as it must have been like this for a while?
 
+> Once the new i2c address is read from the device tree, override
+> the default address before any attempt to access the cec.
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> Tested with adv7533 and stm32mp157f.
+>=20
+> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> Fixes: 680532c50bca ("drm: adv7511: Add support for i2c_new_secondary_dev=
+ice")
+> ---
+> To: Andrzej Hajda <a.hajda@samsung.com>
+> To: Neil Armstrong <narmstrong@baylibre.com>
+> To: Robert Foss <robert.foss@linaro.org>
+> To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> To: Jonas Karlman <jonas@kwiboo.se>
+> To: Jernej Skrabec <jernej.skrabec@gmail.com>
+> To: David Airlie <airlied@linux.ie>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> To: dri-devel@lists.freedesktop.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> ---
+>  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/d=
+rm/bridge/adv7511/adv7511_drv.c
+> index 76555ae64e9c..629e05286fd9 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> @@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct adv7511 =
+*adv)
+>                                                 ADV7511_CEC_I2C_ADDR_DEFA=
+ULT);
+>         if (IS_ERR(adv->i2c_cec))
+>                 return PTR_ERR(adv->i2c_cec);
+> +
+> +       regmap_write(adv->regmap, ADV7511_REG_CEC_I2C_ADDR,
+> +                    adv->i2c_cec->addr << 1);
+> +
+>         i2c_set_clientdata(adv->i2c_cec, adv);
+> =20
+>         adv->regmap_cec =3D devm_regmap_init_i2c(adv->i2c_cec,
+> @@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client *i2c, co=
+nst struct i2c_device_id *id)
+>         if (ret)
+>                 goto err_i2c_unregister_packet;
+> =20
+> -       regmap_write(adv7511->regmap, ADV7511_REG_CEC_I2C_ADDR,
+> -                    adv7511->i2c_cec->addr << 1);
+> -
+>         INIT_WORK(&adv7511->hpd_work, adv7511_hpd_work);
+> =20
+>         if (i2c->irq) {
+>=20
+> base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
+> --=20
+> 2.34.1
+>

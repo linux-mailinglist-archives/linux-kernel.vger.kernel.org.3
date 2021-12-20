@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCB847ABB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EBB47ABDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234316AbhLTOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:38:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52614 "EHLO
+        id S234362AbhLTOjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:39:32 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53158 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbhLTOh7 (ORCPT
+        with ESMTP id S234366AbhLTOiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:59 -0500
+        Mon, 20 Dec 2021 09:38:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7804BCE10F9;
-        Mon, 20 Dec 2021 14:37:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4274EC36AE7;
-        Mon, 20 Dec 2021 14:37:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81F62CE0F99;
+        Mon, 20 Dec 2021 14:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCDCC36AE8;
+        Mon, 20 Dec 2021 14:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011075;
-        bh=vxQGH/F4L0g0ZYb8bm4uKhQSh35ghDEjnnb1g0JrjfQ=;
+        s=korg; t=1640011128;
+        bh=9SB4ilI3RvzZP85oONpjTXjke3jrhzxuI+84IkNABCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVliJWuw7jZlFc0agpEB0vhUEImFtBcWbsId4m00AY4oxbcH59GughVUUO0AnEP3t
-         rlXuyazIyjlR9pmzQwGvEmPmWcBVxPFqB1e9wD+bk/ks6TJvLyxKph2HlCYjp+8fdv
-         5U7diBIOURxBz9eluk2nrRFi6raUJi5TVc7ZqcPc=
+        b=wQ5KXDizS4dXx1kRSTDFiizSC3O3KkzhQeVj/R3YLpAykKjXIN3UgMwkcBeC4hKuw
+         5+AfcZ3+7dyvfSCAYwVU3/oH03hVXlnuqXrTArAlfZcz8BsdRS/AaJVng5ekXO4U73
+         r8N/ZZMkXlDUA6Xmj+IcSg3twVfJqZyB/Kxpms4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.9 08/31] mac80211: send ADDBA requests using the tid/queue of the aggregation session
-Date:   Mon, 20 Dec 2021 15:34:08 +0100
-Message-Id: <20211220143020.251285227@linuxfoundation.org>
+        stable@vger.kernel.org, "J. Bruce Fields" <bfields@redhat.com>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH 4.14 14/45] nfsd: fix use-after-free due to delegation race
+Date:   Mon, 20 Dec 2021 15:34:09 +0100
+Message-Id: <20211220143022.742724409@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,37 +45,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: J. Bruce Fields <bfields@redhat.com>
 
-commit 1fe98f5690c4219d419ea9cc190f94b3401cf324 upstream.
+commit 548ec0805c399c65ed66c6641be467f717833ab5 upstream.
 
-Sending them out on a different queue can cause a race condition where a
-number of packets in the queue may be discarded by the receiver, because
-the ADDBA request is sent too early.
-This affects any driver with software A-MPDU setup which does not allocate
-packet seqno in hardware on tx, regardless of whether iTXQ is used or not.
-The only driver I've seen that explicitly deals with this issue internally
-is mwl8k.
+A delegation break could arrive as soon as we've called vfs_setlease.  A
+delegation break runs a callback which immediately (in
+nfsd4_cb_recall_prepare) adds the delegation to del_recall_lru.  If we
+then exit nfs4_set_delegation without hashing the delegation, it will be
+freed as soon as the callback is done with it, without ever being
+removed from del_recall_lru.
+
+Symptoms show up later as use-after-free or list corruption warnings,
+usually in the laundromat thread.
+
+I suspect aba2072f4523 "nfsd: grant read delegations to clients holding
+writes" made this bug easier to hit, but I looked as far back as v3.0
+and it looks to me it already had the same problem.  So I'm not sure
+where the bug was introduced; it may have been there from the beginning.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Link: https://lore.kernel.org/r/20211202124533.80388-1-nbd@nbd.name
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: J. Bruce Fields <bfields@redhat.com>
+[Salvatore Bonaccorso: Backport for context changes to versions which do
+not have 20b7d86f29d3 ("nfsd: use boottime for lease expiry calculation")]
+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/agg-tx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfsd/nfs4state.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/net/mac80211/agg-tx.c
-+++ b/net/mac80211/agg-tx.c
-@@ -109,7 +109,7 @@ static void ieee80211_send_addba_request
- 	mgmt->u.action.u.addba_req.start_seq_num =
- 					cpu_to_le16(start_seq_num << 4);
- 
--	ieee80211_tx_skb(sdata, skb);
-+	ieee80211_tx_skb_tid(sdata, skb, tid);
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -955,6 +955,11 @@ hash_delegation_locked(struct nfs4_deleg
+ 	return 0;
  }
  
- void ieee80211_send_bar(struct ieee80211_vif *vif, u8 *ra, u16 tid, u16 ssn)
++static bool delegation_hashed(struct nfs4_delegation *dp)
++{
++	return !(list_empty(&dp->dl_perfile));
++}
++
+ static bool
+ unhash_delegation_locked(struct nfs4_delegation *dp)
+ {
+@@ -962,7 +967,7 @@ unhash_delegation_locked(struct nfs4_del
+ 
+ 	lockdep_assert_held(&state_lock);
+ 
+-	if (list_empty(&dp->dl_perfile))
++	if (!delegation_hashed(dp))
+ 		return false;
+ 
+ 	dp->dl_stid.sc_type = NFS4_CLOSED_DELEG_STID;
+@@ -3881,7 +3886,7 @@ static void nfsd4_cb_recall_prepare(stru
+ 	 * queued for a lease break. Don't queue it again.
+ 	 */
+ 	spin_lock(&state_lock);
+-	if (dp->dl_time == 0) {
++	if (delegation_hashed(dp) && dp->dl_time == 0) {
+ 		dp->dl_time = get_seconds();
+ 		list_add_tail(&dp->dl_recall_lru, &nn->del_recall_lru);
+ 	}
 
 

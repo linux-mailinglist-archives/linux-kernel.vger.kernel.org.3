@@ -2,132 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B0947A56F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1454E47A574
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbhLTHif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 02:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbhLTHie (ORCPT
+        id S234433AbhLTHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 02:41:26 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:40696 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234428AbhLTHlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 02:38:34 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944EBC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:38:34 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id v25so3558029pge.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kz9CGPu+qcyNzfgsh0eLlnl2PhsMfFh4FqJwuDDdwjY=;
-        b=aP4aAClcYaYdvX32umHD67g+4wneIP6wkSfT5Cq1s2ApcHUBNw7bqttgpY64MEEe2z
-         5hbWKLWD7/05v4sPZz+dcvfSW841gnE492OFIT6WUJcnldyvZFItiIhI4CI6OoJCSDGu
-         iDEEqZnruca/gYWcivOGh3fn4rdQ4rNsRuwvUs/pxTZoo6sLc6Ftp1sO/XPGFdhBfrHi
-         VOyB4PF9MQcjgjPA83m5zUigNpaJuYP5aiMKLR8jGepcwiQAepv6+ts2GwhbNK5t4GeT
-         5uPvDSF35ffg2lx4ydLJDEU97ZY3Rp2ebUheWveuxWx3woATQrtgUOpFtT3uO39YfJr+
-         nfQQ==
+        Mon, 20 Dec 2021 02:41:25 -0500
+Received: by mail-il1-f197.google.com with SMTP id u8-20020a056e021a4800b002a1ec0f08afso4701651ilv.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:41:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kz9CGPu+qcyNzfgsh0eLlnl2PhsMfFh4FqJwuDDdwjY=;
-        b=3QOY7qYpM3UWZUwbvgM56PpJaOl6Y08kyuXOh3u0batNNYiUBSmMiCINfuR489lSQ0
-         Ha8cl4SWJA824a+s8gtuU5svPsinboSObHl/FJmVx2ry4MTDj2s8Eb6t6z5lyqFpd7Og
-         uCZ9y/jI7/ndV/5IXRToIideFmGUR3fhktfz8B2Zi5pFJp5+xbXPTFUeDdcP8/AzTrgC
-         KlFZZ+ygN71grYoQnlmXrQvfN38m6omxhtI2Y3LtT4HejmF0pNSduSAsKOm3sNUSZqF2
-         +zaZ9SRtlruEPpuPOGnhwCEysnrnC3HAfIAaz9lTSVjRSpqp1lq5A3ajGbqBY6/TAFmn
-         VdfQ==
-X-Gm-Message-State: AOAM532igtRue9w8mTwNnTfOBJkaYNfrO1LUyE54STijTaHHW7KVwMsm
-        dGmD9ErLzgQY4kEopPgT1SE7jg==
-X-Google-Smtp-Source: ABdhPJyOIciwHIKNCAyy7yxAoC2Vn55Rnkci/LcIm3ekwVjMK296xLzbG+9dP8tLhS4lsV9OY5x8sQ==
-X-Received: by 2002:a05:6a00:1946:b0:492:64f1:61b5 with SMTP id s6-20020a056a00194600b0049264f161b5mr14926149pfk.52.1639985914115;
-        Sun, 19 Dec 2021 23:38:34 -0800 (PST)
-Received: from [10.255.173.206] ([139.177.225.253])
-        by smtp.gmail.com with ESMTPSA id mu2sm5301805pjb.43.2021.12.19.23.38.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Dec 2021 23:38:33 -0800 (PST)
-Message-ID: <c27af938-5f96-f153-63b5-df7e2d3f2e3e@bytedance.com>
-Date:   Mon, 20 Dec 2021 15:38:27 +0800
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RytUdnzVGkCTxVVyLQox42i7D0tYk89snCrw0fjmvko=;
+        b=R9exzJWdFZG7+Q8oMG6N9UsxMciTbSscvTuzeAtLpbIzL5T1BtAGePZIuJEUxgVXue
+         RUuIiWGhxC4OKAnAU0bNEJq9LCpk19pPcfB3bqaGmlx74+0Po6jFQjFR3ev4lfNz6b85
+         K31p2inp1SmStqKexbnAneKpHRVkXRBONC0VhfuVACaByaFz4N9Lvxn4v3Wiq0bEGjAb
+         iW+zQLL2P/DygY3HL+qQkNH9cfjDuYUSHOGi1Hxh4xkgpEpAb/6+ianRQyhKRox4X5xE
+         MIRP0GZ40PAe3+EceeJQ/b1xlitiXvgIufrs81lVUnNXxkWvgOx69NBP0qbuB66cMVZL
+         X9oA==
+X-Gm-Message-State: AOAM5318gJcJNw5IsNVQYlIxAU4hcgkzGgppBZh3pH5ApABex8ti/l2k
+        mmueCO2objGy22FYiUPTd51TCR9uWJw2wmZbCmXpCyb1LHSs
+X-Google-Smtp-Source: ABdhPJzICsA6qDPBF+mKbLrfqRVchCfqb00wsIltL+sOGZotjPXUJvuV9XAYiXTL6RNrqNBTWh8kQKMyQTGr/yFWw+iX0+xU+sYo
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH] sched/cpuacct: fix percpu time accounting
-Content-Language: en-US
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
-Cc:     rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        Xuan Lu <luxuan.windniw@bytedance.com>,
-        Minye Zhu <zhuminye@bytedance.com>,
-        Qiang Wang <wangqiang.wq.frank@bytedance.com>
-References: <20211208073836.70619-1-zhouchengming@bytedance.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20211208073836.70619-1-zhouchengming@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6638:168a:: with SMTP id f10mr2413086jat.279.1639986084902;
+ Sun, 19 Dec 2021 23:41:24 -0800 (PST)
+Date:   Sun, 19 Dec 2021 23:41:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000006fee605d38f0418@google.com>
+Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
+From:   syzbot <syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lmb@cloudflare.com, netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping guys. Any comments or suggestions?
+Hello,
 
-On 2021/12/8 3:38 下午, Chengming Zhou wrote:
-> The usage percpu data is the CPU time consumed on each CPU by all tasks
-> in this cgroup (including tasks lower in the hierarchy). When cpuacct_charge
-> called from other CPUs, we should use the CPU of task, not this CPU.
-> 
-> e.g.
->     cpuacct_charge+1
->     update_curr+332
->     enqueue_entity+70
->     enqueue_task_fair+169
->     activate_task+57
->     attach_task+46
->     load_balance+1512
->     run_rebalance_domains+451
->     __do_softirq+282
->     sysvec_apic_timer_interrupt+159
->     asm_sysvec_apic_timer_interrupt+18
->     native_safe_halt+11
->     default_idle+10
->     default_enter_idle+45
->     cpuidle_enter_state+130
->     cpuidle_enter+47
->     do_idle+489
->     cpu_startup_entry+25
->     start_secondary+261
->     secondary_startup_64_no_verify+176
-> 
-> Reported-by: Xuan Lu <luxuan.windniw@bytedance.com>
-> Reported-by: Minye Zhu <zhuminye@bytedance.com>
-> Co-developed-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
-> Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  kernel/sched/cpuacct.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-> index 893eece65bfd..aab51c88bd34 100644
-> --- a/kernel/sched/cpuacct.c
-> +++ b/kernel/sched/cpuacct.c
-> @@ -341,6 +341,7 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
->  	struct cpuacct *ca;
->  	int index = CPUACCT_STAT_SYSTEM;
->  	struct pt_regs *regs = get_irq_regs() ? : task_pt_regs(tsk);
-> +	unsigned int cpu = task_cpu(tsk);
->  
->  	if (regs && user_mode(regs))
->  		index = CPUACCT_STAT_USER;
-> @@ -348,7 +349,7 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
->  	rcu_read_lock();
->  
->  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
-> -		__this_cpu_add(ca->cpuusage->usages[index], cputime);
-> +		per_cpu_ptr(ca->cpuusage, cpu)->usages[index] += cputime;
->  
->  	rcu_read_unlock();
->  }
+syzbot found the following issue on:
+
+HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10ed4143b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10f3f669b8093e95
+dashboard link: https://syzkaller.appspot.com/bug?extid=bb73e71cf4b8fd376a4f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112d6ca5b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17393549b00000
+
+The issue was bisected to:
+
+commit 38207a5e81230d6ffbdd51e5fa5681be5116dcae
+Author: John Fastabend <john.fastabend@gmail.com>
+Date:   Fri Nov 19 18:14:17 2021 +0000
+
+    bpf, sockmap: Attach map progs to psock early for feature probes
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13532e85b00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10d32e85b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17532e85b00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
+Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
+
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
+BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
+Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
+
+CPU: 1 PID: 3641 Comm: syz-executor020 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
+ dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106 lib/dump_stack.c:106
+ print_address_description+0x65/0x380 mm/kasan/report.c:247 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ __kasan_report mm/kasan/report.c:433 [inline] mm/kasan/report.c:450
+ kasan_report+0x19a/0x1f0 mm/kasan/report.c:450 mm/kasan/report.c:450
+ __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
+ __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
+ bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
+ bpf_prog_release+0x37/0x40 kernel/bpf/syscall.c:1837 kernel/bpf/syscall.c:1837
+ __fput+0x3fc/0x870 fs/file_table.c:280 fs/file_table.c:280
+ task_work_run+0x146/0x1c0 kernel/task_work.c:164 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ exit_task_work include/linux/task_work.h:32 [inline] kernel/exit.c:832
+ do_exit+0x705/0x24f0 kernel/exit.c:832 kernel/exit.c:832
+ do_group_exit+0x168/0x2d0 kernel/exit.c:929 kernel/exit.c:929
+ __do_sys_exit_group+0x13/0x20 kernel/exit.c:940 kernel/exit.c:940
+ __se_sys_exit_group+0x10/0x10 kernel/exit.c:938 kernel/exit.c:938
+ __x64_sys_exit_group+0x37/0x40 kernel/exit.c:938 kernel/exit.c:938
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3b90ccd1d9
+Code: Unable to access opcode bytes at RIP 0x7f3b90ccd1af.
+RSP: 002b:00007ffdeec58318 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f3b90d41330 RCX: 00007f3b90ccd1d9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc4 R09: 00007ffdeec58390
+R10: 00007ffdeec58390 R11: 0000000000000246 R12: 00007f3b90d41330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+
+Memory state around the buggy address:
+ ffffc90000e75f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000e75f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90000e76000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                        ^
+ ffffc90000e76080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000e76100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

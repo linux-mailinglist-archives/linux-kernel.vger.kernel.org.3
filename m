@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9239F47A612
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FAA47A61D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbhLTIfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:35:20 -0500
-Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:39592
-        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229718AbhLTIfT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:35:19 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(4597:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Mon, 20 Dec 2021 16:35:20 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Mon, 20 Dec 2021 16:35:15 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Mon, 20 Dec 2021 16:35:15 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     gregkh <gregkh@linuxfoundation.org>
-CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
-Subject: RE: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Topic: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Index: AQHX8xaG69RkrTnSM0GRURxouCuBCKw2RwtQ//+LwYCABT7skA==
-Date:   Mon, 20 Dec 2021 08:35:15 +0000
-Message-ID: <bdb3687ec29f4360b626822c5756443e@sphcmbx02.sunplus.com.tw>
-References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
- <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
- <YbrsbtBgUDnjZJ/o@kroah.com>
- <CAHpW4oRTcXq6k2o4cjFeHznZrR737947UPE60nWyPTRLPTR0Gw@mail.gmail.com>
- <3a2820c389444f7db99712f7cd11de30@sphcmbx02.sunplus.com.tw>
- <YbxJSxjumZ8nkOm8@kroah.com>
-In-Reply-To: <YbxJSxjumZ8nkOm8@kroah.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S237964AbhLTIie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:38:34 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:35540 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237925AbhLTIic (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:38:32 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAA3UJL0QMBhfh7vAw--.59045S2;
+        Mon, 20 Dec 2021 16:38:12 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     sean.wang@mediatek.com, sre@kernel.org, matthias.bgg@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] rtc: mt6397: Check for null res pointer
+Date:   Mon, 20 Dec 2021 16:38:11 +0800
+Message-Id: <20211220083811.907261-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAA3UJL0QMBhfh7vAw--.59045S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JFyDuFW3uF4fWr1Duw1fXrb_yoWfAFc_X3
+        y2934xAF93GF12kFsrAFn3ZFWIkF9xuFs3Xr4rtFWak345Xw1Dta4jgr97Gr17Xw1UZFWD
+        GasFvr43AFyfAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8ZwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU8Z2-UUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBncmVwa2g6DQoNCj4gPiA+ID4gKw0KPiA+ID4gPiArc3RhdGljIHNzaXplX3Qgc3BfaW9w
-X3N0YXRlMV9zaG93KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0DQo+ID4gPiA+ICtkZXZpY2Vf
-YXR0cmlidXRlICphdHRyLCBjaGFyICpidWYpIHsNCj4gPiA+ID4gKyAgICAgc3RydWN0IHNwX2lv
-cCAqaW9wID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gPiA+ICsgICAgIHNzaXplX3QgbGVu
-ID0gMDsNCj4gPiA+ID4gKw0KPiA+ID4gPiArICAgICBzcF9pb3Bfc3RhbmRieV9tb2RlKGlvcCk7
-DQo+ID4gPiA+ICsgICAgIG1kZWxheSgxMCk7DQo+ID4gPiA+ICsgICAgIHNwX2lvcF9zMW1vZGUo
-ZGV2LCBpb3ApOw0KPiA+ID4gPiArICAgICByZXR1cm4gbGVuOw0KPiA+ID4gPiArfQ0KPiA+ID4N
-Cj4gPiA+IFRoaXMgZnVuY3Rpb24gaXMgbm90IHNob3dpbmcgYW55dGhpbmcuDQo+ID4gPg0KPiA+
-DQo+ID4gVGhlIHB1cnBvc2Ugb2YgdGhpcyBmdW5jdGlvbjoNCj4gPiBTUDcwMjEgaGFzIHRocmVl
-IHBvd2VyIHN0YXRlczpTMCwgUzEgYW5kIFMzLg0KPiA+IFMwOkRlZmF1bHQgZG9tYWluIGlzIG9u
-LiBJT1AgZG9tYWluIGlzIG9uLiBBTyBkb21haW4gaXMgb24uDQo+IA0KPiA+IFMxOkRlZmF1bHQg
-ZG9tYWluIGlzIG9mZi4gSU9QIGRvbWFpbiBpcyBvbi4gQU8gZG9tYWluIGlzIG9uLg0KPiANCj4g
-PiBTMzpEZWZhdWx0IGRvbWFpbiBpcyBvZmYuIElPUCBkb21haW4gaXMgb2ZmLiBBTyBkb21haW4g
-aXMgb24uDQo+IA0KPiA+IFN5c3RlbSBlbnRlciBTMSBtb2RlIHdoZW4gcmVhZCBzeXNmcyBzcF9p
-b3Bfc3RhdGUxLA0KPiANCj4gDQo+IFRoYXQgaXMgbm90IHdoYXQgc3lzZnMgaXMgZm9yLCBzb3Jy
-eS4NCg0KSSB3aWxsIG1vZGlmeSB0aGlzIGZ1bmN0aW9uLg0KDQo+IA0KPiA+IEkgaG9wZSB0byBw
-cm92aWRlIHVzZXJzIHdpdGggdGhlIGFiaWxpdHkgdG8gZW50ZXIgUzEgbW9kZSBieSB0aGVtc2Vs
-dmVzLg0KPiANCj4gPiBTbyBJIGNhbm5vdCB1c2UgREVWSUNFX0FUVFIuIEkgc2hvdWxkIHVzZSBm
-aWxlX29wZXJhdGlvbnMgbWV0aG9kLg0KPiANCj4gDQo+IE5vLCBwbGVhc2UgdXNlIHRoZSBub3Jt
-YWwgcG93ZXIgbWFuYWdlbWVudCBjYWxsYmFja3MgZm9yIHlvdXIgZHJpdmVyIHRoYXQNCj4gYWxs
-IG90aGVyIGRyaXZlcnMgdXNlIGluIHRoZSBrZXJuZWwuICBUaGVyZSBpcyBub3RoaW5nIHNwZWNp
-YWwgYWJvdXQgdGhpcyBvbmUNCj4gZHJpdmVyIHRvIHdhcnJhbnQgYSB0b3RhbGx5IG5ldyB1c2Vy
-L2tlcm5lbCBhcGkgZm9yIGl0Lg0KPiANCg0KT0ssIEkgdW5kZXJzdGFuZC4NCg0KVGhhbmtzDQoN
-Cg==
+The return value of platform_get_resource() needs to be checked.
+To avoid use of error pointer in case that there is no suitable
+resource.
+
+Fixes: d28c74c10751 ("power: reset: add driver for mt6323 poweroff")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/power/reset/mt6323-poweroff.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+index 0532803e6cbc..d90e76fcb938 100644
+--- a/drivers/power/reset/mt6323-poweroff.c
++++ b/drivers/power/reset/mt6323-poweroff.c
+@@ -57,6 +57,9 @@ static int mt6323_pwrc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
++
+ 	pwrc->base = res->start;
+ 	pwrc->regmap = mt6397_chip->regmap;
+ 	pwrc->dev = &pdev->dev;
+-- 
+2.25.1
+

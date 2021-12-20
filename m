@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4435647A7BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB4747A7BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbhLTKZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:25:53 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:33286 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbhLTKZw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:25:52 -0500
-Received: by mail-ua1-f48.google.com with SMTP id a14so16859514uak.0;
-        Mon, 20 Dec 2021 02:25:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z2smqINfKA19iYQ44Bhl9wK+mvghDg0/7q+uBVmH7jA=;
-        b=go53PH3sry0r6BWnC7C1yOtxWzGVXVob4/5nEXqvoiWbZzeUvOa3HG1/zUCi8rujsP
-         6TKl4UlcC4CvC0T7ITwivKBXnzQf7Mz/ps3nX0nwRy3fRLfD1r6volrpoZOSGQt/GXNv
-         /JE9gqjpg2Cox3tq9Yqt5f1VFFyq1fFBihttS1V/MX3XCnta2UOLAFuPLuoAlINBe8X1
-         UKxs5YVJ0ZFeE3VkRVSz2pHEH777RTuBUcNm/qaOlQrunsS482Hbjdsfb8quG1Ro2gMX
-         mRXTrZU4nhGTRRy53jQX0PFNNtXB3tDvfsr66Q8K6cZdCifjmq6yROQ/2SFE0TsoHMlm
-         w5lw==
-X-Gm-Message-State: AOAM5339tCSOcnz3H00GSGOOuL9Me0/pCT2cvSe8nSvxknuHsR9ghezF
-        cIu9IyVlyr5puXClRR+vHrSYj8rFItxZwQ==
-X-Google-Smtp-Source: ABdhPJwK25uF9eY+lek9CiyjkR061l7RamrBXMGhfohfhof3lNbJaG8hKDo917JDbgIFLnrZXmD+DQ==
-X-Received: by 2002:a05:6102:3f04:: with SMTP id k4mr4605188vsv.3.1639995951052;
-        Mon, 20 Dec 2021 02:25:51 -0800 (PST)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id u18sm1625313vsi.3.2021.12.20.02.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 02:25:50 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id 70so5795391vkx.7;
-        Mon, 20 Dec 2021 02:25:49 -0800 (PST)
-X-Received: by 2002:a1f:2196:: with SMTP id h144mr5442171vkh.7.1639995949603;
- Mon, 20 Dec 2021 02:25:49 -0800 (PST)
+        id S231268AbhLTKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:25:55 -0500
+Received: from mail.djicorp.com ([202.66.152.220]:61205 "EHLO mail.djicorp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231250AbhLTKZy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:25:54 -0500
+IronPort-SDR: K0X66Yie50VdUrKYFUJUFAOZTRZBZuXAeIQiiQgRyCl0VzWZnkWLb3bNZVQT0VZrN0fnbe9Ea3
+ 73t7jMKalsew==
+X-IronPort-AV: E=Sophos;i="5.88,220,1635177600"; 
+   d="scan'208";a="13139988"
+From:   wigin zeng <wigin.zeng@dji.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        First Light <xiaoguang.chen@dji.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRD?=
+ =?utf-8?Q?H]_serial:_8250:_add_lock_for_dma_rx?=
+Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiBbUEFUQ0hdIHNlcmlh?=
+ =?utf-8?Q?l:_8250:_add_lock_for_dma_rx?=
+Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw//+PM4CAEXtykP//udeAABInGiD//4DlgP//eQnw
+Date:   Mon, 20 Dec 2021 10:25:51 +0000
+Message-ID: <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
+References: <20211209073339.21694-1-wigin.zeng@dji.com>
+ <YbGygPtkz6ihyW51@kroah.com>
+ <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
+ <YbHBb2uB9JRP0tWc@kroah.com>
+ <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
+ <YbHVXwdCUCvmZrbS@kroah.com>
+ <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
+ <YcBEy9zi2G7UYErE@kroah.com>
+ <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
+ <YcBT/Vf41PWUYdxT@kroah.com>
+In-Reply-To: <YcBT/Vf41PWUYdxT@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [58.34.188.114]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Dec 2021 11:25:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUYagDwtzqZv3WdxM4SXsUqmmQmt_S61taY5nAxLQ4sBA@mail.gmail.com>
-Message-ID: <CAMuHMdUYagDwtzqZv3WdxM4SXsUqmmQmt_S61taY5nAxLQ4sBA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] usb: isp1760: Use platform_get_irq() to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Bin Liu <b-liu@ti.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:18 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq(). Also use irq_get_trigger_type to get the
-> IRQ trigger flags.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+T24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSArMDAwMCwgd2lnaW4gemVuZyB3cm90
+ZToNCj4gPiA+VGhhdCBtYWtlcyBubyBzZW5zZSwgYXMgd2hhdCBvcmRlcnMgdGhlIGRhdGEgY29t
+aW5nIGluPyAgVGhlIDIgYnl0ZXMgY291bGQgYmUgYWRkZWQgdG8gdGhlIHR0eSBidWZmZXIgYmVm
+b3JlIHRoZSA1MTIgYnl0ZXMsIG9yIHRoZSBvdGhlciB3YXkgYXJvdW5kLg0KPg0KPiA+ID5XaGF0
+IGhhcmR3YXJlIGFyZSB5b3UgdXNpbmcgdGhhdCBpcyBtaXhpbmcgZG1hIGFuZCBpcnEgZGF0YSBs
+aWtlIHRoaXM/DQo+ID4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4NCj4gPkl0IGlzIG5vdCBu
+b3JtYWwgY2FzZSwgbm9ybWFsbHksIHRoZSBpbnB1dCBzaXplIHNob3VsZCBzbWFsbGVyIHRoYW4g
+RE1BIGJsb2NrIHNpemUgYW5kIERNQSBjb21wbGV0ZSB0aGUgd2hvbGUgY29weS4NCj4gPkhvd2V2
+ZXIsIHRoZXJlIGFyZSBzb21lIGFibm9ybWFsIHNpdHVhdGlvbnMuIFRoZSBleHRlcm5hbCBpbnB1
+dCBpcyB1bmV4cGVjdGVkbHkgbGFyZ2VyIHRoYW4gdGhlIGRhdGEgbGVuZ3RoIG9mIHRoZSBETUEg
+Y29uZmlndXJhdGlvbi4gVGhpcyBzaXR1YXRpb24gaW4gbXkgZXhhbXBsZSB3aWxsIGFwcGVhciwg
+YW5kIGl0IG1heSBjYXVzZSB0aGUga2VybmVsIHRvIHBhbmljLg0KDQo+WW91IGRpZCBub3QgYW5z
+d2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KPkFuZCBhZ2FpbiwgaG93
+IGlzIHRoaXMgaGFwcGVuaW5nPyAgSWYgeW91IHVzZSBETUEsIGFsbCBkYXRhIHNob3VsZCBiZSBj
+b21pbmcgdGhyb3VnaCBETUEgYW5kIG5vdCB0aGUgaXJxLiAgT3RoZXJ3aXNlIGNyYXp5IHN0dWZm
+IGxpa2UgdGhpcyB3aWxsIGhhcHBlbiBpbiBhbnkgdHlwZSBvZiBkcml2ZXIsIHlvdXIgaGFyZHdh
+cmUgY2FuIG5vdCBtaXggdGhpcyB0eXBlIG9mIHN0dWZmIHVwLg0KDQpPbiBvdXIgcGxhdGZvcm0s
+IFVBUlQgY29ubmVjdGVkIHRvIGEgTUNVIHdoaWNoIHdpbGwgc2VuZCBkYXRhIG9mIHZhcmlhYmxl
+IGxlbmd0aCBmcm9tIHRpbWUgdG8gdGltZS4gVGhlcmUgaXMgbm8gZGVmaW5pdGlvbiBvZiBhIG1h
+eGltdW0gdHJhbnNtaXNzaW9uIGxlbmd0aC4NCldlIGNvbmZpZ3VyZWQgRE1BIGJsb2NrIHNpemUg
+aXMgNDA5NmJ5dGVzLCBob3dldmVyLCB0aGVyZSBhcmUgbW9yZSB0aGFuIDQxMDAgYnl0ZXMgaW5w
+dXQsIERNQSBqdXN0IGhhbmRsZWQgNDA5NmJ5dGVzIGFuZCBsZWZ0IGJ5dGVzIGluIEZJRk8gY2Fu
+bm90IHRyaWdnZXIgbmV4dCBETUEgDQpUcmFuc2ZlciBkb25lIGludGVycnVwdChsZWZ0IGJ5dGVz
+IG51bWJlciA8IERNQSBibG9jayBzaXplICksIHNvIHRoZXNlIGRhdGEgc2hvdWxkIGJlIHByb2Nl
+c3NlZCBieSBVQVJUIElSUS4NCg0KSW4gb3RoZXIgd29yZCwgaWYgdGhlIGV4dGVybmFsIHVzZSBV
+QVJUICJ2dWxuZXJhYmlsaXR5IiB0byBhdHRhY2sgdGhlIHN5c3RlbSwgd2UgbmVlZCB0byBlbnN1
+cmUgdGhhdCB0aGUgc3lzdGVtIG5vdCBjcmFzaCBhdCBsZWFzdCwgcmlnaHQ/DQoNCj5Ib3cgY2Fu
+IGZsb3cgY29udHJvbCBoYW5kbGUgdGhpcyBhdCBhbGw/ICBGbG93IGNvbnRyb2wgaXMgYXQgdGhl
+IHNlcmlhbCBkYXRhIHN0cmVhbSBsZXZlbC4gIFRoaXMgaXMgY29uZnVzaW5nIHRoZSBQQ0kgZGF0
+YSBzdHJlYW0gb3JkZXIuDQoNCkkganVzdCB0aGluayBtb3JlIGxvZ2ljIGlzIG5lZWRlZCB0byBj
+b250cm9sIHRoZSBvcmRlciBvZiBkYXRhIHByb2Nlc3NpbmcgYnkgRE1BIGFuZCBVQVJUIElSUSB0
+byBrZWVwIHRoZSBpbnRlZ3JpdHkgb2Ygc2VyaWFsIGRhdGEuIA0KQnV0IHRoZSBzcGVjaWZpYyBk
+ZXNpZ24sIEkgaGF2ZW4ndCBjb25zaWRlcmVkIHlldCwgdGhlIGZpcnN0IGdvYWwgaXMgdGhlIGtl
+ZXAgdGhlIHN5c3RlbSBhbGl2ZS4NCg0KQlJzDQpXZWlqdW4NCiANCi0tLS0t6YKu5Lu25Y6f5Lu2
+LS0tLS0NCuWPkeS7tuS6ujogR3JlZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24u
+b3JnXSANCuWPkemAgeaXtumXtDogMjAyMeW5tDEy5pyIMjDml6UgMTc6NTkNCuaUtuS7tuS6ujog
+d2lnaW4gemVuZyA8d2lnaW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVs
+Lm9yZzsgbGludXgtc2VyaWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsgRmlyc3QgTGlnaHQgPHhpYW9ndWFuZy5jaGVuQGRqaS5jb20+DQrkuLvpopg6IFJl
+OiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRDSF0gc2VyaWFsOiA4MjUwOiBh
+ZGQgbG9jayBmb3IgZG1hIHJ4DQoNCuOAkEVYVEVSTkFMIEVNQUlM44CRIERPIE5PVCBDTElDSyBh
+bnkgbGlua3Mgb3IgYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gbWFrZSBzdXJlIGJvdGggdGhl
+IHNlbmRlciBhbmQgdGhlIGNvbnRlbnQgYXJlIHRydXN0d29ydGh5Lg0KDQoNCuOAkOWklumDqOmC
+ruS7tuaPkOmGkuOAkeS7peS4i+mCruS7tuadpea6kOS6juWFrOWPuOWklumDqO+8jOivt+WLv+eC
+ueWHu+mTvuaOpeaIlumZhOS7tu+8jOmZpOmdnuaCqOehruiupOmCruS7tuWPkeS7tuS6uuWSjOWG
+heWuueWPr+S/oeOAgg0KDQoNCg0KT24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSAr
+MDAwMCwgd2lnaW4gemVuZyB3cm90ZToNCj4gPlRoYXQgbWFrZXMgbm8gc2Vuc2UsIGFzIHdoYXQg
+b3JkZXJzIHRoZSBkYXRhIGNvbWluZyBpbj8gIFRoZSAyIGJ5dGVzIGNvdWxkIGJlIGFkZGVkIHRv
+IHRoZSB0dHkgYnVmZmVyIGJlZm9yZSB0aGUgNTEyIGJ5dGVzLCBvciB0aGUgb3RoZXIgd2F5IGFy
+b3VuZC4NCj4NCj4gPldoYXQgaGFyZHdhcmUgYXJlIHlvdSB1c2luZyB0aGF0IGlzIG1peGluZyBk
+bWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8NCj4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4N
+Cj4gSXQgaXMgbm90IG5vcm1hbCBjYXNlLCBub3JtYWxseSwgdGhlIGlucHV0IHNpemUgc2hvdWxk
+IHNtYWxsZXIgdGhhbiBETUEgYmxvY2sgc2l6ZSBhbmQgRE1BIGNvbXBsZXRlIHRoZSB3aG9sZSBj
+b3B5Lg0KPiBIb3dldmVyLCB0aGVyZSBhcmUgc29tZSBhYm5vcm1hbCBzaXR1YXRpb25zLiBUaGUg
+ZXh0ZXJuYWwgaW5wdXQgaXMgdW5leHBlY3RlZGx5IGxhcmdlciB0aGFuIHRoZSBkYXRhIGxlbmd0
+aCBvZiB0aGUgRE1BIGNvbmZpZ3VyYXRpb24uIFRoaXMgc2l0dWF0aW9uIGluIG15IGV4YW1wbGUg
+d2lsbCBhcHBlYXIsIGFuZCBpdCBtYXkgY2F1c2UgdGhlIGtlcm5lbCB0byBwYW5pYy4NCg0KWW91
+IGRpZCBub3QgYW5zd2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KQW5k
+IGFnYWluLCBob3cgaXMgdGhpcyBoYXBwZW5pbmc/ICBJZiB5b3UgdXNlIERNQSwgYWxsIGRhdGEg
+c2hvdWxkIGJlIGNvbWluZyB0aHJvdWdoIERNQSBhbmQgbm90IHRoZSBpcnEuICBPdGhlcndpc2Ug
+Y3Jhenkgc3R1ZmYgbGlrZSB0aGlzIHdpbGwgaGFwcGVuIGluIGFueSB0eXBlIG9mIGRyaXZlciwg
+eW91ciBoYXJkd2FyZSBjYW4gbm90IG1peCB0aGlzIHR5cGUgb2Ygc3R1ZmYgdXAuDQoNCj4gPklm
+IHRoZXkgYXJlIHJ1bm5pbmcgb24gZGlmZmVyZW50IGNvcmVzLCB0aGVuIHlvdSB3aWxsIGhhdmUg
+ZGF0YSBjb3JydXB0aW9uIGlzc3VlcyBubyBtYXR0ZXIgaWYgeW91IGhhdmUgYSBsb2NrIG9yIG5v
+dCwgc28gdGhpcyBpcyBub3QgdGhlIGNvcnJlY3Qgc29sdXRpb24gZm9yIHRoaXMgaGFyZHdhcmUg
+Y29uZmlndXJhdGlvbiBwcm9ibGVtLg0KPg0KPiBUaGUgcHVycG9zZSBvZiBhZGRpbmcgbG9jayBp
+cyB0byBlbnN1cmUgdGhhdCB0aGUga2VybmVsIHdpbGwgbm90IHBhbmljIA0KPiBpbiB0aGlzIGV4
+dHJlbWUgY2FzZSwgSWYgeW91IHdhbnQgdG8gZW5zdXJlIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIA0K
+PiBzZXJpYWwgcG9ydCBkYXRhLCB5b3UgbmVlZCB0byBhZGQgbW9yZSBmbG93IGNvbnRyb2wgbG9n
+aWMNCg0KSG93IGNhbiBmbG93IGNvbnRyb2wgaGFuZGxlIHRoaXMgYXQgYWxsPyAgRmxvdyBjb250
+cm9sIGlzIGF0IHRoZSBzZXJpYWwgZGF0YSBzdHJlYW0gbGV2ZWwuICBUaGlzIGlzIGNvbmZ1c2lu
+ZyB0aGUgUENJIGRhdGEgc3RyZWFtIG9yZGVyLg0KDQp0aGFua3MsDQoNCmdyZWcgay1oDQpUaGlz
+IGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0byBtYXkgY29udGFpbiBwcml2YXRlLCBj
+b25maWRlbnRpYWwsIGFuZCBwcml2aWxlZ2VkIG1hdGVyaWFsIGZvciB0aGUgc29sZSB1c2Ugb2Yg
+dGhlIGludGVuZGVkIHJlY2lwaWVudC4gQW55IHJldmlldywgY29weWluZywgb3IgZGlzdHJpYnV0
+aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFueSBhdHRhY2htZW50cyB0aGVyZXRvKSBieSBvdGhlcnMg
+aXMgc3RyaWN0bHkgcHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lw
+aWVudCwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBhbmQgcGVybWFuZW50
+bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBhbmQgYW55IGNvcGllcyBvZiB0aGlzIGVtYWlsIGFuZCBh
+bnkgYXR0YWNobWVudHMgdGhlcmV0by4NCg0K5q2k55S15a2Q6YKu5Lu25Y+K6ZmE5Lu25omA5YyF
+5ZCr5YaF5a655YW35pyJ5py65a+G5oCn77yM5LiU5LuF6ZmQ5LqO5o6l5pS25Lq65L2/55So44CC
+5pyq57uP5YWB6K6477yM56aB5q2i56ys5LiJ5Lq66ZiF6K+744CB5aSN5Yi25oiW5Lyg5pKt6K+l
+55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V5L+h5oGv44CC5aaC5p6c5oKo5LiN5bGe5LqO5Lul5LiK
+55S15a2Q6YKu5Lu255qE55uu5qCH5o6l5pS26ICF77yM6K+35oKo56uL5Y2z6YCa55+l5Y+R6YCB
+5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu5Lu25Y+K5YW255u45YWz55qE6ZmE5Lu244CCDQo=

@@ -2,221 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2543E47ABBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6ED47ACA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbhLTOij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:38:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47132 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbhLTOiD (ORCPT
+        id S235868AbhLTOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhLTOnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:38:03 -0500
+        Mon, 20 Dec 2021 09:43:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD3AC061397;
+        Mon, 20 Dec 2021 06:42:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7702DB80EE0;
-        Mon, 20 Dec 2021 14:38:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF35DC36AE7;
-        Mon, 20 Dec 2021 14:38:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FC9D611B4;
+        Mon, 20 Dec 2021 14:42:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E60C36AFD;
+        Mon, 20 Dec 2021 14:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011081;
-        bh=yZwDomJ7iZv0yg4NQO/za5XSW2HvCH8bIhjWKLBEYMU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W+VMHB5vspUsUdHdkLx+PnXhjAD5aTIoePbBmpDiHgq1q7F0ySFsqbCreHFkABLwP
-         gA33V7FcfJElToHa4eozFzjjtbAfRg56uuzefpZQYElSnG06/LHwZUONUtUKmAjD53
-         PFrIjf16rpTQtqqFFuEj+Ke3J2tRDBZxPBgD0cAM=
+        s=korg; t=1640011321;
+        bh=xDcKYHalA0NURW+yGjIClmsrwAK0Zu61JNztvzYLPhI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AetdMWL6Ezo/Adz268q4ue0Ml1hi/eaFPK1v7W0hmpwWfTTFtHpXHobSI2KVbUvfq
+         q/AIvU45ErIXQa+U8FzZRKTaudg5zi0AbpVdjZF5n4kaHZMcwJaq40270erSSa3RNI
+         QwF7Q2hAXCzvIyFoAmW+rdfTfTUaUg5MDGPJIZ18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: [PATCH 4.9 00/31] 4.9.294-rc1 review
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 07/56] net: netlink: af_netlink: Prevent empty skb by adding a check on len.
 Date:   Mon, 20 Dec 2021 15:34:00 +0100
-Message-Id: <20211220143019.974513085@linuxfoundation.org>
+Message-Id: <20211220143023.686993838@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.294-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.294-rc1
-X-KernelTest-Deadline: 2021-12-22T14:30+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.294 release.
-There are 31 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 
-Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-Anything received after that time might be too late.
+[ Upstream commit f123cffdd8fe8ea6c7fded4b88516a42798797d0 ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.294-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-and the diffstat can be found below.
+Adding a check on len parameter to avoid empty skb. This prevents a
+division error in netem_enqueue function which is caused when skb->len=0
+and skb->data_len=0 in the randomized corruption step as shown below.
 
-thanks,
+skb->data[prandom_u32() % skb_headlen(skb)] ^= 1<<(prandom_u32() % 8);
 
-greg k-h
+Crash Report:
+[  343.170349] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family
+0 port 6081 - 0
+[  343.216110] netem: version 1.3
+[  343.235841] divide error: 0000 [#1] PREEMPT SMP KASAN NOPTI
+[  343.236680] CPU: 3 PID: 4288 Comm: reproducer Not tainted 5.16.0-rc1+
+[  343.237569] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.11.0-2.el7 04/01/2014
+[  343.238707] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+[  343.239499] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+[  343.241883] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+[  343.242589] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+0000000000000000
+[  343.243542] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+ffff88800f8eda40
+[  343.244474] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+ffffffff94fb8445
+[  343.245403] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+0000000000000000
+[  343.246355] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+0000000000000020
+[  343.247291] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+knlGS:0000000000000000
+[  343.248350] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  343.249120] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+00000000000006e0
+[  343.250076] Call Trace:
+[  343.250423]  <TASK>
+[  343.250713]  ? memcpy+0x4d/0x60
+[  343.251162]  ? netem_init+0xa0/0xa0 [sch_netem]
+[  343.251795]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.252443]  netem_enqueue+0xe28/0x33c0 [sch_netem]
+[  343.253102]  ? stack_trace_save+0x87/0xb0
+[  343.253655]  ? filter_irq_stacks+0xb0/0xb0
+[  343.254220]  ? netem_init+0xa0/0xa0 [sch_netem]
+[  343.254837]  ? __kasan_check_write+0x14/0x20
+[  343.255418]  ? _raw_spin_lock+0x88/0xd6
+[  343.255953]  dev_qdisc_enqueue+0x50/0x180
+[  343.256508]  __dev_queue_xmit+0x1a7e/0x3090
+[  343.257083]  ? netdev_core_pick_tx+0x300/0x300
+[  343.257690]  ? check_kcov_mode+0x10/0x40
+[  343.258219]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+[  343.258899]  ? __kasan_init_slab_obj+0x24/0x30
+[  343.259529]  ? setup_object.isra.71+0x23/0x90
+[  343.260121]  ? new_slab+0x26e/0x4b0
+[  343.260609]  ? kasan_poison+0x3a/0x50
+[  343.261118]  ? kasan_unpoison+0x28/0x50
+[  343.261637]  ? __kasan_slab_alloc+0x71/0x90
+[  343.262214]  ? memcpy+0x4d/0x60
+[  343.262674]  ? write_comp_data+0x2f/0x90
+[  343.263209]  ? __kasan_check_write+0x14/0x20
+[  343.263802]  ? __skb_clone+0x5d6/0x840
+[  343.264329]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.264958]  dev_queue_xmit+0x1c/0x20
+[  343.265470]  netlink_deliver_tap+0x652/0x9c0
+[  343.266067]  netlink_unicast+0x5a0/0x7f0
+[  343.266608]  ? netlink_attachskb+0x860/0x860
+[  343.267183]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.267820]  ? write_comp_data+0x2f/0x90
+[  343.268367]  netlink_sendmsg+0x922/0xe80
+[  343.268899]  ? netlink_unicast+0x7f0/0x7f0
+[  343.269472]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.270099]  ? write_comp_data+0x2f/0x90
+[  343.270644]  ? netlink_unicast+0x7f0/0x7f0
+[  343.271210]  sock_sendmsg+0x155/0x190
+[  343.271721]  ____sys_sendmsg+0x75f/0x8f0
+[  343.272262]  ? kernel_sendmsg+0x60/0x60
+[  343.272788]  ? write_comp_data+0x2f/0x90
+[  343.273332]  ? write_comp_data+0x2f/0x90
+[  343.273869]  ___sys_sendmsg+0x10f/0x190
+[  343.274405]  ? sendmsg_copy_msghdr+0x80/0x80
+[  343.274984]  ? slab_post_alloc_hook+0x70/0x230
+[  343.275597]  ? futex_wait_setup+0x240/0x240
+[  343.276175]  ? security_file_alloc+0x3e/0x170
+[  343.276779]  ? write_comp_data+0x2f/0x90
+[  343.277313]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.277969]  ? write_comp_data+0x2f/0x90
+[  343.278515]  ? __fget_files+0x1ad/0x260
+[  343.279048]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.279685]  ? write_comp_data+0x2f/0x90
+[  343.280234]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.280874]  ? sockfd_lookup_light+0xd1/0x190
+[  343.281481]  __sys_sendmsg+0x118/0x200
+[  343.281998]  ? __sys_sendmsg_sock+0x40/0x40
+[  343.282578]  ? alloc_fd+0x229/0x5e0
+[  343.283070]  ? write_comp_data+0x2f/0x90
+[  343.283610]  ? write_comp_data+0x2f/0x90
+[  343.284135]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.284776]  ? ktime_get_coarse_real_ts64+0xb8/0xf0
+[  343.285450]  __x64_sys_sendmsg+0x7d/0xc0
+[  343.285981]  ? syscall_enter_from_user_mode+0x4d/0x70
+[  343.286664]  do_syscall_64+0x3a/0x80
+[  343.287158]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  343.287850] RIP: 0033:0x7fdde24cf289
+[  343.288344] Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
+[  343.290729] RSP: 002b:00007fdde2bd6d98 EFLAGS: 00000246 ORIG_RAX:
+000000000000002e
+[  343.291730] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+00007fdde24cf289
+[  343.292673] RDX: 0000000000000000 RSI: 00000000200000c0 RDI:
+0000000000000004
+[  343.293618] RBP: 00007fdde2bd6e20 R08: 0000000100000001 R09:
+0000000000000000
+[  343.294557] R10: 0000000100000001 R11: 0000000000000246 R12:
+0000000000000000
+[  343.295493] R13: 0000000000021000 R14: 0000000000000000 R15:
+00007fdde2bd7700
+[  343.296432]  </TASK>
+[  343.296735] Modules linked in: sch_netem ip6_vti ip_vti ip_gre ipip
+sit ip_tunnel geneve macsec macvtap tap ipvlan macvlan 8021q garp mrp
+hsr wireguard libchacha20poly1305 chacha_x86_64 poly1305_x86_64
+ip6_udp_tunnel udp_tunnel libblake2s blake2s_x86_64 libblake2s_generic
+curve25519_x86_64 libcurve25519_generic libchacha xfrm_interface
+xfrm6_tunnel tunnel4 veth netdevsim psample batman_adv nlmon dummy team
+bonding tls vcan ip6_gre ip6_tunnel tunnel6 gre tun ip6t_rpfilter
+ipt_REJECT nf_reject_ipv4 ip6t_REJECT nf_reject_ipv6 xt_conntrack ip_set
+ebtable_nat ebtable_broute ip6table_nat ip6table_mangle
+ip6table_security ip6table_raw iptable_nat nf_nat nf_conntrack
+nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_security
+iptable_raw ebtable_filter ebtables rfkill ip6table_filter ip6_tables
+iptable_filter ppdev bochs drm_vram_helper drm_ttm_helper ttm
+drm_kms_helper cec parport_pc drm joydev floppy parport sg syscopyarea
+sysfillrect sysimgblt i2c_piix4 qemu_fw_cfg fb_sys_fops pcspkr
+[  343.297459]  ip_tables xfs virtio_net net_failover failover sd_mod
+sr_mod cdrom t10_pi ata_generic pata_acpi ata_piix libata virtio_pci
+virtio_pci_legacy_dev serio_raw virtio_pci_modern_dev dm_mirror
+dm_region_hash dm_log dm_mod
+[  343.311074] Dumping ftrace buffer:
+[  343.311532]    (ftrace buffer empty)
+[  343.312040] ---[ end trace a2e3db5a6ae05099 ]---
+[  343.312691] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+[  343.313481] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+[  343.315893] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+[  343.316622] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+0000000000000000
+[  343.317585] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+ffff88800f8eda40
+[  343.318549] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+ffffffff94fb8445
+[  343.319503] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+0000000000000000
+[  343.320455] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+0000000000000020
+[  343.321414] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+knlGS:0000000000000000
+[  343.322489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  343.323283] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+00000000000006e0
+[  343.324264] Kernel panic - not syncing: Fatal exception in interrupt
+[  343.333717] Dumping ftrace buffer:
+[  343.334175]    (ftrace buffer empty)
+[  343.334653] Kernel Offset: 0x13600000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[  343.336027] Rebooting in 86400 seconds..
 
--------------
-Pseudo-Shortlog of commits:
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Link: https://lore.kernel.org/r/20211129175328.55339-1-harshit.m.mogalapalli@oracle.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/netlink/af_netlink.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.294-rc1
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index dd4e4289d0d2a..a7497361e4d78 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -1853,6 +1853,11 @@ static int netlink_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
+ 	if (msg->msg_flags&MSG_OOB)
+ 		return -EOPNOTSUPP;
+ 
++	if (len == 0) {
++		pr_warn_once("Zero length message leads to an empty skb\n");
++		return -ENODATA;
++	}
++
+ 	err = scm_send(sock, msg, &scm, true);
+ 	if (err < 0)
+ 		return err;
+-- 
+2.33.0
 
-Juergen Gross <jgross@suse.com>
-    xen/netback: don't queue unlimited number of packages
-
-Juergen Gross <jgross@suse.com>
-    xen/netback: fix rx queue stall detection
-
-Juergen Gross <jgross@suse.com>
-    xen/console: harden hvc_xen against event channel storms
-
-Juergen Gross <jgross@suse.com>
-    xen/netfront: harden netfront against event channel storms
-
-Juergen Gross <jgross@suse.com>
-    xen/blkfront: harden blkfront against event channel storms
-
-Nathan Chancellor <nathan@kernel.org>
-    Input: touchscreen - avoid bitwise vs logical OR warning
-
-Nathan Chancellor <natechancellor@gmail.com>
-    mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
-
-Nicolas Pitre <nicolas.pitre@linaro.org>
-    ARM: 8805/2: remove unneeded naked function usage
-
-Nathan Chancellor <natechancellor@gmail.com>
-    net: lan78xx: Avoid unnecessary self assignment
-
-George Kennedy <george.kennedy@oracle.com>
-    scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
-
-Miklos Szeredi <mszeredi@redhat.com>
-    fuse: annotate lock in fuse_reverse_inval_entry()
-
-Sudeep Holla <sudeep.holla@arm.com>
-    firmware: arm_scpi: Fix string overflow in SCPI genpd driver
-
-Florian Fainelli <f.fainelli@gmail.com>
-    net: systemport: Add global locking for descriptor lifecycle
-
-Yu Liao <liaoyu15@huawei.com>
-    timekeeping: Really make sure wall_to_monotonic isn't positive
-
-Daniele Palmas <dnlplm@gmail.com>
-    USB: serial: option: add Telit FN990 compositions
-
-Thomas Gleixner <tglx@linutronix.de>
-    PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    USB: gadget: bRequestType is a bitfield, not a enum
-
-Cyril Novikov <cnovikov@lynx.com>
-    ixgbe: set X550 MDIO speed before talking to PHY
-
-Letu Ren <fantasquex@gmail.com>
-    igbvf: fix double free in `igbvf_probe`
-
-Nathan Chancellor <nathan@kernel.org>
-    soc/tegra: fuse: Fix bitwise vs. logical OR warning
-
-J. Bruce Fields <bfields@redhat.com>
-    nfsd: fix use-after-free due to delegation race
-
-Joe Thornber <ejt@redhat.com>
-    dm btree remove: fix use after free in rebalance_children()
-
-Jerome Marchand <jmarchan@redhat.com>
-    recordmcount.pl: look for jgnop instruction as well as bcrl on s390
-
-Felix Fietkau <nbd@nbd.name>
-    mac80211: send ADDBA requests using the tid/queue of the aggregation session
-
-Armin Wolf <W_Armin@gmx.de>
-    hwmon: (dell-smm) Fix warning on /proc/i8k creation error
-
-Chen Jun <chenjun102@huawei.com>
-    tracing: Fix a kmemleak false positive in tracing_map
-
-Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-    net: netlink: af_netlink: Prevent empty skb by adding a check on len.
-
-Ondrej Jirman <megous@megous.com>
-    i2c: rk3x: Handle a spurious start completion interrupt flag
-
-Helge Deller <deller@gmx.de>
-    parisc/agp: Annotate parisc agp init functions with __init
-
-Erik Ekman <erik@kryo.se>
-    net/mlx4_en: Update reported link modes for 1/10G
-
-Tadeusz Struk <tadeusz.struk@linaro.org>
-    nfc: fix segfault in nfc_genl_dump_devices_done
-
-
--------------
-
-Diffstat:
-
- Makefile                                        |   4 +-
- arch/arm/mm/copypage-fa.c                       |  35 ++++---
- arch/arm/mm/copypage-feroceon.c                 |  98 +++++++++----------
- arch/arm/mm/copypage-v4mc.c                     |  19 ++--
- arch/arm/mm/copypage-v4wb.c                     |  41 ++++----
- arch/arm/mm/copypage-v4wt.c                     |  37 ++++---
- arch/arm/mm/copypage-xsc3.c                     |  71 ++++++--------
- arch/arm/mm/copypage-xscale.c                   |  71 +++++++-------
- drivers/block/xen-blkfront.c                    |  15 ++-
- drivers/char/agp/parisc-agp.c                   |   6 +-
- drivers/firmware/scpi_pm_domain.c               |  10 +-
- drivers/hwmon/dell-smm-hwmon.c                  |   7 +-
- drivers/i2c/busses/i2c-rk3x.c                   |   4 +-
- drivers/input/touchscreen/of_touchscreen.c      |  18 ++--
- drivers/md/persistent-data/dm-btree-remove.c    |   2 +-
- drivers/net/ethernet/broadcom/bcmsysport.c      |   5 +
- drivers/net/ethernet/broadcom/bcmsysport.h      |   1 +
- drivers/net/ethernet/intel/igbvf/netdev.c       |   1 +
- drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c   |   3 +
- drivers/net/ethernet/mellanox/mlx4/en_ethtool.c |   6 +-
- drivers/net/usb/lan78xx.c                       |   6 +-
- drivers/net/wireless/marvell/mwifiex/cmdevt.c   |   4 +-
- drivers/net/wireless/marvell/mwifiex/fw.h       |   8 +-
- drivers/net/xen-netback/common.h                |   1 +
- drivers/net/xen-netback/rx.c                    |  77 +++++++++------
- drivers/net/xen-netfront.c                      | 125 ++++++++++++++++++------
- drivers/pci/msi.c                               |   2 +-
- drivers/scsi/scsi_debug.c                       |   4 +-
- drivers/soc/tegra/fuse/fuse-tegra.c             |   2 +-
- drivers/soc/tegra/fuse/fuse.h                   |   2 +-
- drivers/tty/hvc/hvc_xen.c                       |  30 +++++-
- drivers/usb/gadget/composite.c                  |   6 +-
- drivers/usb/gadget/legacy/dbgp.c                |   6 +-
- drivers/usb/gadget/legacy/inode.c               |   6 +-
- drivers/usb/serial/option.c                     |   8 ++
- fs/fuse/dir.c                                   |   2 +-
- fs/nfsd/nfs4state.c                             |   9 +-
- kernel/time/timekeeping.c                       |   3 +-
- kernel/trace/tracing_map.c                      |   3 +
- net/mac80211/agg-tx.c                           |   2 +-
- net/netlink/af_netlink.c                        |   5 +
- net/nfc/netlink.c                               |   6 +-
- scripts/recordmcount.pl                         |   2 +-
- 43 files changed, 456 insertions(+), 317 deletions(-)
 
 

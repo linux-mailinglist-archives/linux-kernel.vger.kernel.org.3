@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E36A247AF8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFC847AEA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbhLTPO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239682AbhLTPM3 (ORCPT
+        id S237892AbhLTPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47588 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238156AbhLTO5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:12:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A1C08EBB0;
-        Mon, 20 Dec 2021 06:56:57 -0800 (PST)
+        Mon, 20 Dec 2021 09:57:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A7ADB80EA3;
-        Mon, 20 Dec 2021 14:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C76BC36AE7;
-        Mon, 20 Dec 2021 14:56:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB36611C8;
+        Mon, 20 Dec 2021 14:57:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3FEC36AE9;
+        Mon, 20 Dec 2021 14:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012215;
-        bh=w1xIGX/Xy+QzyzD3lyYqHDydm6v+LvlETH0E9elbBHY=;
+        s=korg; t=1640012220;
+        bh=ryrD61VgsU7jY9+QdctlxBe2PRJnPS3Ma3LYzPDuV+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWZB2uYHh7vZrNxcqKwvPvvgEjpbYpgy8Nfd4NJuO3CpWDSY6rLjm3vb4WpD4xQlU
-         XadwWge6ua4TC4FyhfLUaTS+6iADv5vweiQWLxC/ClQjKbVRinna4p2WGuasJUJIvb
-         hdZJKdEAycLPQBiV4k9NzqsK7t+q9zFjbV7pYwLw=
+        b=WC1nkIUJlwB56GvU3VPse4AqkT+A5ZzvrHwpkxBE7jxoIfLJiXEj58OIVuvhZyRpi
+         Ib6yygPDQtn+VHnv2e/76pmcknoAW/pYvCfi18HOGNjhMqpLzMmibdlj7UlLmtsaqM
+         oCa4G5CvU+EF+/CLRTC+woI2G6w7TyXvUxQTSuuI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH 5.15 121/177] usb: xhci-mtk: fix list_del warning when enable list debug
-Date:   Mon, 20 Dec 2021 15:34:31 +0100
-Message-Id: <20211220143044.148958063@linuxfoundation.org>
+        stable@vger.kernel.org, "Ken (Jian) He" <jianhe@ambarella.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH 5.15 123/177] usb: cdnsp: Fix incorrect status for control request
+Date:   Mon, 20 Dec 2021 15:34:33 +0100
+Message-Id: <20211220143044.221672296@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
 References: <20211220143040.058287525@linuxfoundation.org>
@@ -47,32 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+From: Pawel Laszczak <pawell@cadence.com>
 
-commit ccc14c6cfd346e85c3ecb970975afd5132763437 upstream.
+commit 99ea221f2e2f2743314e348b25c1e2574b467528 upstream.
 
-There is warning of 'list_del corruption' when enable list debug
-(CONFIG_DEBUG_LIST=y), fix it by using list_del_init()
+Patch fixes incorrect status for control request.
+Without this fix all usb_request objects were returned to upper drivers
+with usb_reqest->status field set to -EINPROGRESS.
 
-Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in drop_endpoint")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/20211209025422.17108-1-chunfeng.yun@mediatek.com
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+cc: <stable@vger.kernel.org>
+Reported-by: Ken (Jian) He <jianhe@ambarella.com>
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Link: https://lore.kernel.org/r/20211207091838.39572-1-pawell@gli-login.cadence.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/cdns3/cdnsp-ring.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -781,7 +781,7 @@ int xhci_mtk_check_bandwidth(struct usb_
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -1029,6 +1029,8 @@ static void cdnsp_process_ctrl_td(struct
+ 		return;
+ 	}
  
- 	ret = xhci_check_bandwidth(hcd, udev);
- 	if (!ret)
--		INIT_LIST_HEAD(&mtk->bw_ep_chk_list);
-+		list_del_init(&mtk->bw_ep_chk_list);
- 
- 	return ret;
++	*status = 0;
++
+ 	cdnsp_finish_td(pdev, td, event, pep, status);
  }
+ 
 
 

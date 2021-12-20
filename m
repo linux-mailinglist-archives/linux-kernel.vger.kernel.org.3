@@ -2,93 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4321447AA10
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D52947AA15
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbhLTNBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:01:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52298 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbhLTNBT (ORCPT
+        id S232463AbhLTNDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:03:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23754 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230115AbhLTNDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:01:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 163F2CE102B;
-        Mon, 20 Dec 2021 13:01:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C11C36AE7;
-        Mon, 20 Dec 2021 13:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640005275;
-        bh=REUKzYvTnWFtSseRl3TT7ssf0DMkQQjLPLGHo24Iw9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AasdkjnnNJsF6oJgAWJT46rCcWhebElwpln7Xpf1P6NArnvIcFfIbpOGhC7lMsx4W
-         UsDtDACQOU78EolMCL/awrtb+O7ENvyEU7TnKFn3/UT94i7PufoeQCE/b18F3XyAHz
-         Y7eNUT4qNIGc65ebCagifqHyLXBQcCSPmjLpsUIhSsn/4SvvPbbsGDCuHR5zR/nOEL
-         /txjGN7JclFRQkedc7znxNTw9U0nsK3JyyfkNhYrKGvj/lUyuBW+Q7qKAF71bwQm8y
-         624/nIfXaukjrN8wceJstgK54zySU15CPhXC7B3fKNOzkc9/UmpaSwjUTQFFXJT/5G
-         5b8xH68R8hG6w==
-Date:   Mon, 20 Dec 2021 13:01:09 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 08/10] ACPI / scan: Create platform device for
- CLSA0100 and CSC3551 ACPI nodes
-Message-ID: <YcB+lUePGlo1S9tX@sirena.org.uk>
-References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
- <20211217115708.882525-9-tanureal@opensource.cirrus.com>
- <CAJZ5v0jTELqFeO6q6w_mYNo_yf1R9SX66RrEz0ZSe27w7E6kog@mail.gmail.com>
- <4b5506b1-20c6-3983-d541-86dc2388b2a7@redhat.com>
+        Mon, 20 Dec 2021 08:03:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640005424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XBpnjd0qJqx5setzEXTieOlKMvhEu72PDNDbPO3CE2U=;
+        b=EvY2EzcC+dvaX1FljiqA1mEQKDuPoQ+bd9+jCDmvtDzlTjLgNNnd80oOTRqtajAcTi2T/m
+        m9rJ0Y17BAWQCAUpBa8YGq3oRwqwHENpHMejlbbJMsFrvkq1iIjoBCIOULZQnVZkyv2Trr
+        IjdtvVX60vEPAyI1ZsbmiSs0SDrW/qs=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-412-wOXHzZVOMbKMxui84Nq0OQ-1; Mon, 20 Dec 2021 08:03:43 -0500
+X-MC-Unique: wOXHzZVOMbKMxui84Nq0OQ-1
+Received: by mail-ed1-f72.google.com with SMTP id v19-20020a056402349300b003f7eba50675so7524246edc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 05:03:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XBpnjd0qJqx5setzEXTieOlKMvhEu72PDNDbPO3CE2U=;
+        b=F2Hrm009Dpb659QfrHTW5r0iSTqbBVqLGo15WUVl1b/yLf3RmloXLvqA6t1+5lZ4mF
+         fhOQpEQ3xECLl8muRwDVUmDdqZ99HUG6nIzmTZAoSYbd9VDoaiS818JlDKjD4/PbRgRI
+         4j0mPJYXTODRyaM3ONr0BVcKjio1kRgYfXDRM4b9FQ2fV+lA9kw3P/BB+WYzwxdR44eU
+         eJuwc5UmRaM7BVvnSCWPg0Zn6Uqay3WVm71x0HL5spFZAkKgDTbIRIJ7BWm5SJ6ZrqrY
+         q8KxHiL3rNl8qNHb3cInJ6+NEq3k/3M6vmm7Oh4ehrMFxLs2xJ4rkPph9iHYSZBsO1YG
+         jm2Q==
+X-Gm-Message-State: AOAM533fPqEbiC0UNk8lxkhLJweEQLgRINULm/5LceQ/BVJrS1dAz64X
+        s5rnq3hrVohb5yxaoJ3zWFe9jfESIejzZuvV9Qy90kgjHij6j5QmaCCYOFBubaL9SyF20ehZP9C
+        IAXmPI4paxjLkhAXZ14BXZW2TFMyQkr+qJ9re3EE+
+X-Received: by 2002:a05:6402:292e:: with SMTP id ee46mr16034895edb.222.1640005422125;
+        Mon, 20 Dec 2021 05:03:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw5qkWn7Z2+JMkK3+w0SkB4ygK8sjuRNxin0OqX57PkQ1C+0NTUgch9nFnWhDS5hJhjh2ZJJB37/uIp3Zw0bQM=
+X-Received: by 2002:a05:6402:292e:: with SMTP id ee46mr16034878edb.222.1640005421923;
+ Mon, 20 Dec 2021 05:03:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9/Pqt07Ueb9aNBfT"
-Content-Disposition: inline
-In-Reply-To: <4b5506b1-20c6-3983-d541-86dc2388b2a7@redhat.com>
-X-Cookie: Christ was born in 4 B.C.
+References: <20211217141656.8720-1-wander@redhat.com> <YcBVcOkWumdpjtvI@linutronix.de>
+In-Reply-To: <YcBVcOkWumdpjtvI@linutronix.de>
+From:   Wander Costa <wcosta@redhat.com>
+Date:   Mon, 20 Dec 2021 10:03:30 -0300
+Message-ID: <CAAq0SU=5_K-qk9C5KWjot-FtN8fK88V7iAFynDf=-MGhfitqBg@mail.gmail.com>
+Subject: Re: [PATCH v3] blktrace: switch trace spinlock to a raw spinlock
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 20, 2021 at 7:05 AM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2021-12-17 11:16:56 [-0300], Wander Lairson Costa wrote:
+>
+> Assuming neither Steven nor Jens object,
+>
+> > TRACE_EVENT disables preemption before calling the callback. Because of
+> > that blktrace triggers the following bug under PREEMPT_RT:
+>
+> The tracepoint is invoked with disabled preemption.
+>
+> >  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:35
+> >  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 119, name: kworker/u2:2
+> >  5 locks held by kworker/u2:2/119:
+> >   #0: ffff8c2e4a88f538 ((wq_completion)xfs-cil/dm-0){+.+.}-{0:0}, at: process_one_work+0x200/0x450
+> >   #1: ffffab3840ac7e68 ((work_completion)(&cil->xc_push_work)){+.+.}-{0:0}, at: process_one_work+0x200/0x450
+> >   #2: ffff8c2e4a887128 (&cil->xc_ctx_lock){++++}-{3:3}, at: xlog_cil_push_work+0xb7/0x670 [xfs]
+> >   #3: ffffffffa6a63780 (rcu_read_lock){....}-{1:2}, at: blk_add_trace_bio+0x0/0x1f0
+> >   #4: ffffffffa6610620 (running_trace_lock){+.+.}-{2:2}, at: __blk_add_trace+0x3ef/0x480
+> >  Preemption disabled at:
+> >  [<ffffffffa4d35c05>] migrate_enable+0x45/0x140
+> >  CPU: 0 PID: 119 Comm: kworker/u2:2 Kdump: loaded Not tainted 5.14.0-25.rt21.25.light.el9.x86_64+debug #1
+> >  Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+> >  Workqueue: xfs-cil/dm-0 xlog_cil_push_work [xfs]
+> >  Call Trace:
+> >   ? migrate_enable+0x45/0x140
+> >   dump_stack_lvl+0x57/0x7d
+> >   ___might_sleep.cold+0xe3/0xf7
+> >   rt_spin_lock+0x3a/0xd0
+> >   ? __blk_add_trace+0x3ef/0x480
+> >   __blk_add_trace+0x3ef/0x480
+> >   blk_add_trace_bio+0x18d/0x1f0
+> >   trace_block_bio_queue+0xb5/0x150
+> >   submit_bio_checks+0x1f0/0x520
+> >   ? sched_clock_cpu+0xb/0x100
+> >   submit_bio_noacct+0x30/0x1d0
+> >   ? bio_associate_blkg+0x66/0x190
+> >   xlog_cil_push_work+0x1b6/0x670 [xfs]
+> >   ? register_lock_class+0x43/0x4f0
+> >   ? xfs_swap_extents+0x5f0/0x5f0 [xfs]
+> >   process_one_work+0x275/0x450
+> >   ? process_one_work+0x200/0x450
+> >   worker_thread+0x55/0x3c0
+> >   ? process_one_work+0x450/0x450
+> >   kthread+0x188/0x1a0
+> >   ? set_kthread_struct+0x40/0x40
+> >   ret_from_fork+0x22/0x30
+>
+> The above fills 90% of my screen with _no_ additional information. What
+> about:
+>
+>    The running_trace_lock protects running_trace_list and is acquired
+>    within the tracepoint which implies disabled preemption. The spinlock_t
+>    typed lock can not be acquired with disabled preemption on PREEMPT_RT
+>    because it becomes a sleeping lock.
+>    The runtime of the tracepoint depends on the number of entries in
+>    running_trace_list and has no limit. The blk-tracer is considered debug
+>    code and higher latencies here are okay.
+>
+>    Make running_trace_lock a raw_spinlock_t
+>
+> > To avoid this bug, we switch the trace lock to a raw spinlock.
+>
+> Basically I want to give rationale _why_ changing a lock to
+> raw_spinlock_t _here_ is okay. I want to avoid that people slap a
+> s/spinlock_t/raw_spinlock_t/ each time they see warning of this kind.
+>
 
---9/Pqt07Ueb9aNBfT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks, this sounds great. I am going to send v4 with the modified
+commit message right now.
 
-On Fri, Dec 17, 2021 at 07:26:51PM +0100, Hans de Goede wrote:
+> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+>
+> Sebastian
+>
 
-> This is fine with me, but I wonder if it would not be better
-> to keep it under drivers/platform/x86 ? Since the new SPI
-> use-cases are also all on x86 laptops AFAICT.
-
-Someone's going to end up using it for one of the Arm devices with ACPI,
-*especially* if it's put in drivers/platform/x86.
-
---9/Pqt07Ueb9aNBfT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHAfpQACgkQJNaLcl1U
-h9Ac8wf9FmAjh+2RRFMNCcPoRlzeJvaGXlVOENLgOET0tUOx6vtKf/bBmdZ04Jfn
-/EnxgiVJOnHRjALACEva0AvgeooyLzMROopnthAcw6fbR0t4mWTruzNn8uawTUU7
-Jdz52ctPsB3q0kLrYCvCMI3qvmUFUcN+0iyDhMlP5yxSBEJadzdlMYDtywlfoO3e
-URO0st0GO/Vmhlp/EqEiwbEnp48KbSi/YvSbYMGeSemQ+PU6t43NikAV80DWAZgt
-2kbHYXZEOV/HA2qPrtGRalL2CqpriYMbeF4lm1zml+DliGSVBYIVKOryZfz1cX0v
-JP7EXWfEgcaclQFKDq4295OGuW0K/A==
-=QTdH
------END PGP SIGNATURE-----
-
---9/Pqt07Ueb9aNBfT--

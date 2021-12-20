@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 851D347AD7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFBE47AC1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbhLTOwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41438 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbhLTOtU (ORCPT
+        id S235329AbhLTOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235051AbhLTOkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:20 -0500
+        Mon, 20 Dec 2021 09:40:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77008C0619D9;
+        Mon, 20 Dec 2021 06:40:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4230D611BD;
-        Mon, 20 Dec 2021 14:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275FCC36AE8;
-        Mon, 20 Dec 2021 14:49:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C85B9CE0F8B;
+        Mon, 20 Dec 2021 14:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961B4C36AE8;
+        Mon, 20 Dec 2021 14:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011758;
-        bh=MdfuhgFYWTYD4Bn36K4cGr+JtfolbjcOvKhKOmkKO9Q=;
+        s=korg; t=1640011207;
+        bh=f3b3PvKG86Cw8ijIbf91tL5ACZu+3RlJTx+wQzb5bq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WXY77ujeuqxb+Ub8SZi6tMuYz6yDXTSg0+X6EVsecnf6YYEXouoSRb8ZFsfcIIxBT
-         9MixUAnpnKZB4wD0v+RvAt70mGBT8Pfp48dvC0zMLEn4a/afjOakEzFIc+VtWMA1As
-         EUe3QUNaJ3Lz1YnpQ5DMH2mYUyTidTHZt4yTEVlU=
+        b=XFqj5Py9Zvq01v4VtjacW9b4b840AB0Wvk153WF1dzHIvHrFu3iIOfe+R6Du2q8Ro
+         0KIx4K2x0tpiO5OsZEIzgpCE3deW1No35Mq9KM84fb6Sf2mx6FdWSptiShlRVPFtiQ
+         76Tq9zZIN/hiND5SSBXey8PBkpXMaM6WLsSKEgs4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Szymon Heidrich <szymon.heidrich@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 64/99] USB: gadget: bRequestType is a bitfield, not a enum
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 42/45] xen/netfront: harden netfront against event channel storms
 Date:   Mon, 20 Dec 2021 15:34:37 +0100
-Message-Id: <20211220143031.546288967@linuxfoundation.org>
+Message-Id: <20211220143023.670346423@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,98 +48,293 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Juergen Gross <jgross@suse.com>
 
-[ Upstream commit f08adf5add9a071160c68bb2a61d697f39ab0758 ]
+commit b27d47950e481f292c0a5ad57357edb9d95d03ba upstream.
 
-Szymon rightly pointed out that the previous check for the endpoint
-direction in bRequestType was not looking at only the bit involved, but
-rather the whole value.  Normally this is ok, but for some request
-types, bits other than bit 8 could be set and the check for the endpoint
-length could not stall correctly.
+The Xen netfront driver is still vulnerable for an attack via excessive
+number of events sent by the backend. Fix that by using lateeoi event
+channels.
 
-Fix that up by only checking the single bit.
+For being able to detect the case of no rx responses being added while
+the carrier is down a new lock is needed in order to update and test
+rsp_cons and the number of seen unconsumed responses atomically.
 
-Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
-Cc: Felipe Balbi <balbi@kernel.org>
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Link: https://lore.kernel.org/r/20211214184621.385828-1-gregkh@linuxfoundation.org
+This is part of XSA-391
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/composite.c    | 6 +++---
- drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
- drivers/usb/gadget/legacy/inode.c | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/net/xen-netfront.c |  125 +++++++++++++++++++++++++++++++++------------
+ 1 file changed, 94 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 426132988512d..8bec0cbf844ed 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1649,14 +1649,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u8				endp;
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -142,6 +142,9 @@ struct netfront_queue {
+ 	struct sk_buff *rx_skbs[NET_RX_RING_SIZE];
+ 	grant_ref_t gref_rx_head;
+ 	grant_ref_t grant_rx_ref[NET_RX_RING_SIZE];
++
++	unsigned int rx_rsp_unconsumed;
++	spinlock_t rx_cons_lock;
+ };
  
- 	if (w_length > USB_COMP_EP0_BUFSIZ) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			goto done;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ struct netfront_info {
+@@ -366,12 +369,13 @@ static int xennet_open(struct net_device
+ 	return 0;
+ }
  
- 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
- 			w_length = USB_COMP_EP0_BUFSIZ;
-+		} else {
-+			goto done;
- 		}
+-static void xennet_tx_buf_gc(struct netfront_queue *queue)
++static bool xennet_tx_buf_gc(struct netfront_queue *queue)
+ {
+ 	RING_IDX cons, prod;
+ 	unsigned short id;
+ 	struct sk_buff *skb;
+ 	bool more_to_do;
++	bool work_done = false;
+ 	const struct device *dev = &queue->info->netdev->dev;
+ 
+ 	BUG_ON(!netif_carrier_ok(queue->info->netdev));
+@@ -388,6 +392,8 @@ static void xennet_tx_buf_gc(struct netf
+ 		for (cons = queue->tx.rsp_cons; cons != prod; cons++) {
+ 			struct xen_netif_tx_response txrsp;
+ 
++			work_done = true;
++
+ 			RING_COPY_RESPONSE(&queue->tx, cons, &txrsp);
+ 			if (txrsp.status == XEN_NETIF_RSP_NULL)
+ 				continue;
+@@ -431,11 +437,13 @@ static void xennet_tx_buf_gc(struct netf
+ 
+ 	xennet_maybe_wake_tx(queue);
+ 
+-	return;
++	return work_done;
+ 
+  err:
+ 	queue->info->broken = true;
+ 	dev_alert(dev, "Disabled for further use\n");
++
++	return work_done;
+ }
+ 
+ struct xennet_gnttab_make_txreq {
+@@ -755,6 +763,16 @@ static int xennet_close(struct net_devic
+ 	return 0;
+ }
+ 
++static void xennet_set_rx_rsp_cons(struct netfront_queue *queue, RING_IDX val)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&queue->rx_cons_lock, flags);
++	queue->rx.rsp_cons = val;
++	queue->rx_rsp_unconsumed = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
++	spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
++}
++
+ static void xennet_move_rx_slot(struct netfront_queue *queue, struct sk_buff *skb,
+ 				grant_ref_t ref)
+ {
+@@ -806,7 +824,7 @@ static int xennet_get_extras(struct netf
+ 		xennet_move_rx_slot(queue, skb, ref);
+ 	} while (extra.flags & XEN_NETIF_EXTRA_FLAG_MORE);
+ 
+-	queue->rx.rsp_cons = cons;
++	xennet_set_rx_rsp_cons(queue, cons);
+ 	return err;
+ }
+ 
+@@ -886,7 +904,7 @@ next:
  	}
  
-diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
-index 355bc7dab9d5f..6bcbad3825802 100644
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -346,14 +346,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
- 	u16 len = 0;
+ 	if (unlikely(err))
+-		queue->rx.rsp_cons = cons + slots;
++		xennet_set_rx_rsp_cons(queue, cons + slots);
  
- 	if (length > DBGP_REQ_LEN) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return err;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
- 
- 			*temp = cpu_to_le16(DBGP_REQ_LEN);
- 			length = DBGP_REQ_LEN;
-+		} else {
-+			return err;
+ 	return err;
+ }
+@@ -940,7 +958,8 @@ static int xennet_fill_frags(struct netf
+ 			__pskb_pull_tail(skb, pull_to - skb_headlen(skb));
  		}
+ 		if (unlikely(skb_shinfo(skb)->nr_frags >= MAX_SKB_FRAGS)) {
+-			queue->rx.rsp_cons = ++cons + skb_queue_len(list);
++			xennet_set_rx_rsp_cons(queue,
++					       ++cons + skb_queue_len(list));
+ 			kfree_skb(nskb);
+ 			return -ENOENT;
+ 		}
+@@ -953,7 +972,7 @@ static int xennet_fill_frags(struct netf
+ 		kfree_skb(nskb);
  	}
  
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 04b9c4f5f129d..217d2b66fa514 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1336,14 +1336,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 	u16				w_length = le16_to_cpu(ctrl->wLength);
+-	queue->rx.rsp_cons = cons;
++	xennet_set_rx_rsp_cons(queue, cons);
  
- 	if (w_length > RBUF_SIZE) {
--		if (ctrl->bRequestType == USB_DIR_OUT) {
--			return value;
--		} else {
-+		if (ctrl->bRequestType & USB_DIR_IN) {
- 			/* Cast away the const, we are going to overwrite on purpose. */
- 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 	return 0;
+ }
+@@ -1074,7 +1093,9 @@ err:
  
- 			*temp = cpu_to_le16(RBUF_SIZE);
- 			w_length = RBUF_SIZE;
-+		} else {
-+			return value;
+ 			if (unlikely(xennet_set_skb_gso(skb, gso))) {
+ 				__skb_queue_head(&tmpq, skb);
+-				queue->rx.rsp_cons += skb_queue_len(&tmpq);
++				xennet_set_rx_rsp_cons(queue,
++						       queue->rx.rsp_cons +
++						       skb_queue_len(&tmpq));
+ 				goto err;
+ 			}
  		}
+@@ -1098,7 +1119,8 @@ err:
+ 
+ 		__skb_queue_tail(&rxq, skb);
+ 
+-		i = ++queue->rx.rsp_cons;
++		i = queue->rx.rsp_cons + 1;
++		xennet_set_rx_rsp_cons(queue, i);
+ 		work_done++;
  	}
  
--- 
-2.34.1
-
+@@ -1260,40 +1282,79 @@ static int xennet_set_features(struct ne
+ 	return 0;
+ }
+ 
+-static irqreturn_t xennet_tx_interrupt(int irq, void *dev_id)
++static bool xennet_handle_tx(struct netfront_queue *queue, unsigned int *eoi)
+ {
+-	struct netfront_queue *queue = dev_id;
+ 	unsigned long flags;
+ 
+-	if (queue->info->broken)
+-		return IRQ_HANDLED;
++	if (unlikely(queue->info->broken))
++		return false;
+ 
+ 	spin_lock_irqsave(&queue->tx_lock, flags);
+-	xennet_tx_buf_gc(queue);
++	if (xennet_tx_buf_gc(queue))
++		*eoi = 0;
+ 	spin_unlock_irqrestore(&queue->tx_lock, flags);
+ 
++	return true;
++}
++
++static irqreturn_t xennet_tx_interrupt(int irq, void *dev_id)
++{
++	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
++
++	if (likely(xennet_handle_tx(dev_id, &eoiflag)))
++		xen_irq_lateeoi(irq, eoiflag);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+-static irqreturn_t xennet_rx_interrupt(int irq, void *dev_id)
++static bool xennet_handle_rx(struct netfront_queue *queue, unsigned int *eoi)
+ {
+-	struct netfront_queue *queue = dev_id;
+-	struct net_device *dev = queue->info->netdev;
++	unsigned int work_queued;
++	unsigned long flags;
++
++	if (unlikely(queue->info->broken))
++		return false;
+ 
+-	if (queue->info->broken)
+-		return IRQ_HANDLED;
++	spin_lock_irqsave(&queue->rx_cons_lock, flags);
++	work_queued = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
++	if (work_queued > queue->rx_rsp_unconsumed) {
++		queue->rx_rsp_unconsumed = work_queued;
++		*eoi = 0;
++	} else if (unlikely(work_queued < queue->rx_rsp_unconsumed)) {
++		const struct device *dev = &queue->info->netdev->dev;
++
++		spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
++		dev_alert(dev, "RX producer index going backwards\n");
++		dev_alert(dev, "Disabled for further use\n");
++		queue->info->broken = true;
++		return false;
++	}
++	spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
+ 
+-	if (likely(netif_carrier_ok(dev) &&
+-		   RING_HAS_UNCONSUMED_RESPONSES(&queue->rx)))
++	if (likely(netif_carrier_ok(queue->info->netdev) && work_queued))
+ 		napi_schedule(&queue->napi);
+ 
++	return true;
++}
++
++static irqreturn_t xennet_rx_interrupt(int irq, void *dev_id)
++{
++	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
++
++	if (likely(xennet_handle_rx(dev_id, &eoiflag)))
++		xen_irq_lateeoi(irq, eoiflag);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+ static irqreturn_t xennet_interrupt(int irq, void *dev_id)
+ {
+-	xennet_tx_interrupt(irq, dev_id);
+-	xennet_rx_interrupt(irq, dev_id);
++	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
++
++	if (xennet_handle_tx(dev_id, &eoiflag) &&
++	    xennet_handle_rx(dev_id, &eoiflag))
++		xen_irq_lateeoi(irq, eoiflag);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -1527,9 +1588,10 @@ static int setup_netfront_single(struct
+ 	if (err < 0)
+ 		goto fail;
+ 
+-	err = bind_evtchn_to_irqhandler(queue->tx_evtchn,
+-					xennet_interrupt,
+-					0, queue->info->netdev->name, queue);
++	err = bind_evtchn_to_irqhandler_lateeoi(queue->tx_evtchn,
++						xennet_interrupt, 0,
++						queue->info->netdev->name,
++						queue);
+ 	if (err < 0)
+ 		goto bind_fail;
+ 	queue->rx_evtchn = queue->tx_evtchn;
+@@ -1557,18 +1619,18 @@ static int setup_netfront_split(struct n
+ 
+ 	snprintf(queue->tx_irq_name, sizeof(queue->tx_irq_name),
+ 		 "%s-tx", queue->name);
+-	err = bind_evtchn_to_irqhandler(queue->tx_evtchn,
+-					xennet_tx_interrupt,
+-					0, queue->tx_irq_name, queue);
++	err = bind_evtchn_to_irqhandler_lateeoi(queue->tx_evtchn,
++						xennet_tx_interrupt, 0,
++						queue->tx_irq_name, queue);
+ 	if (err < 0)
+ 		goto bind_tx_fail;
+ 	queue->tx_irq = err;
+ 
+ 	snprintf(queue->rx_irq_name, sizeof(queue->rx_irq_name),
+ 		 "%s-rx", queue->name);
+-	err = bind_evtchn_to_irqhandler(queue->rx_evtchn,
+-					xennet_rx_interrupt,
+-					0, queue->rx_irq_name, queue);
++	err = bind_evtchn_to_irqhandler_lateeoi(queue->rx_evtchn,
++						xennet_rx_interrupt, 0,
++						queue->rx_irq_name, queue);
+ 	if (err < 0)
+ 		goto bind_rx_fail;
+ 	queue->rx_irq = err;
+@@ -1670,6 +1732,7 @@ static int xennet_init_queue(struct netf
+ 
+ 	spin_lock_init(&queue->tx_lock);
+ 	spin_lock_init(&queue->rx_lock);
++	spin_lock_init(&queue->rx_cons_lock);
+ 
+ 	setup_timer(&queue->rx_refill_timer, rx_refill_timeout,
+ 		    (unsigned long)queue);
 
 

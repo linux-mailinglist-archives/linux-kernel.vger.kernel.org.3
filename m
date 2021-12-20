@@ -2,141 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A5D47A56A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B0947A56F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbhLTHcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 02:32:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51906 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237723AbhLTHcX (ORCPT
+        id S234421AbhLTHif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 02:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232225AbhLTHie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 02:32:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639985542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m92q6v4zmCnyHVr0ODCnuNSLZNCopKGH9YDYi2JUVw4=;
-        b=HYwZy4b6f0H1uW8OTBH6UYZZjPeZSL2fH0o/+ZBRz4jUqI99A//QfLsTfmf8ynI4S83wGt
-        7H0J4KLj+z46Z+npZobOYrqYxdgH1fARUGdcSZHYYiGczVz82C6gBmKePUg2uqwRbwN7mj
-        uq4MTbC8rO6so5jraap6Uxh0tCvMgo4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-Wqir05YXNv-pctpQYNdbUQ-1; Mon, 20 Dec 2021 02:32:19 -0500
-X-MC-Unique: Wqir05YXNv-pctpQYNdbUQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6ADD190D342;
-        Mon, 20 Dec 2021 07:32:15 +0000 (UTC)
-Received: from localhost (ovpn-12-142.pek2.redhat.com [10.72.12.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A293460C04;
-        Mon, 20 Dec 2021 07:32:12 +0000 (UTC)
-Date:   Mon, 20 Dec 2021 15:32:10 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Vlastimil Babka <vbabka@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, cl@linux.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
- pages in DMA zone
-Message-ID: <20211220073210.GA31681@MiWiFi-R3L-srv>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-6-bhe@redhat.com>
- <20211213134319.GA997240@odroid>
- <20211214053253.GB2216@MiWiFi-R3L-srv>
- <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
- <20211215044818.GB1097530@odroid>
- <20211215070335.GA1165926@odroid>
- <20211215072710.GA3010@lst.de>
- <Ybx2zGCvWGTmm2Ed@ip-172-31-30-232.ap-northeast-1.compute.internal>
+        Mon, 20 Dec 2021 02:38:34 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944EBC061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:38:34 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id v25so3558029pge.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kz9CGPu+qcyNzfgsh0eLlnl2PhsMfFh4FqJwuDDdwjY=;
+        b=aP4aAClcYaYdvX32umHD67g+4wneIP6wkSfT5Cq1s2ApcHUBNw7bqttgpY64MEEe2z
+         5hbWKLWD7/05v4sPZz+dcvfSW841gnE492OFIT6WUJcnldyvZFItiIhI4CI6OoJCSDGu
+         iDEEqZnruca/gYWcivOGh3fn4rdQ4rNsRuwvUs/pxTZoo6sLc6Ftp1sO/XPGFdhBfrHi
+         VOyB4PF9MQcjgjPA83m5zUigNpaJuYP5aiMKLR8jGepcwiQAepv6+ts2GwhbNK5t4GeT
+         5uPvDSF35ffg2lx4ydLJDEU97ZY3Rp2ebUheWveuxWx3woATQrtgUOpFtT3uO39YfJr+
+         nfQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kz9CGPu+qcyNzfgsh0eLlnl2PhsMfFh4FqJwuDDdwjY=;
+        b=3QOY7qYpM3UWZUwbvgM56PpJaOl6Y08kyuXOh3u0batNNYiUBSmMiCINfuR489lSQ0
+         Ha8cl4SWJA824a+s8gtuU5svPsinboSObHl/FJmVx2ry4MTDj2s8Eb6t6z5lyqFpd7Og
+         uCZ9y/jI7/ndV/5IXRToIideFmGUR3fhktfz8B2Zi5pFJp5+xbXPTFUeDdcP8/AzTrgC
+         KlFZZ+ygN71grYoQnlmXrQvfN38m6omxhtI2Y3LtT4HejmF0pNSduSAsKOm3sNUSZqF2
+         +zaZ9SRtlruEPpuPOGnhwCEysnrnC3HAfIAaz9lTSVjRSpqp1lq5A3ajGbqBY6/TAFmn
+         VdfQ==
+X-Gm-Message-State: AOAM532igtRue9w8mTwNnTfOBJkaYNfrO1LUyE54STijTaHHW7KVwMsm
+        dGmD9ErLzgQY4kEopPgT1SE7jg==
+X-Google-Smtp-Source: ABdhPJyOIciwHIKNCAyy7yxAoC2Vn55Rnkci/LcIm3ekwVjMK296xLzbG+9dP8tLhS4lsV9OY5x8sQ==
+X-Received: by 2002:a05:6a00:1946:b0:492:64f1:61b5 with SMTP id s6-20020a056a00194600b0049264f161b5mr14926149pfk.52.1639985914115;
+        Sun, 19 Dec 2021 23:38:34 -0800 (PST)
+Received: from [10.255.173.206] ([139.177.225.253])
+        by smtp.gmail.com with ESMTPSA id mu2sm5301805pjb.43.2021.12.19.23.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 23:38:33 -0800 (PST)
+Message-ID: <c27af938-5f96-f153-63b5-df7e2d3f2e3e@bytedance.com>
+Date:   Mon, 20 Dec 2021 15:38:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybx2zGCvWGTmm2Ed@ip-172-31-30-232.ap-northeast-1.compute.internal>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH] sched/cpuacct: fix percpu time accounting
+Content-Language: en-US
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com
+Cc:     rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        Xuan Lu <luxuan.windniw@bytedance.com>,
+        Minye Zhu <zhuminye@bytedance.com>,
+        Qiang Wang <wangqiang.wq.frank@bytedance.com>
+References: <20211208073836.70619-1-zhouchengming@bytedance.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20211208073836.70619-1-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 at 11:38am, Hyeonggon Yoo wrote:
-> On Wed, Dec 15, 2021 at 08:27:10AM +0100, Christoph Hellwig wrote:
-> > On Wed, Dec 15, 2021 at 07:03:35AM +0000, Hyeonggon Yoo wrote:
-> > > I'm not sure that allocating from ZONE_DMA32 instead of ZONE_DMA
-> > > for kdump kernel is nice way to solve this problem.
-> > 
-> > What is the problem with zones in kdump kernels?
-> > 
-> > > Devices that requires ZONE_DMA memory is rare but we still support them.
-> > 
-> > Indeed.
-> > 
-> > > >     1) Do not call warn_alloc in page allocator if will always fail
-> > > >     to allocate ZONE_DMA pages.
-> > > > 
-> > > > 
-> > > >     2) let's check all callers of kmalloc with GFP_DMA
-> > > >     if they really need GFP_DMA flag and replace those by DMA API or
-> > > >     just remove GFP_DMA from kmalloc()
-> > > > 
-> > > >     3) Drop support for allocating DMA memory from slab allocator
-> > > >     (as Christoph Hellwig said) and convert them to use DMA32
-> > > 
-> > > 	(as Christoph Hellwig said) and convert them to use *DMA API*
-> > > 
-> > > >     and see what happens
-> > 
-> > This is the right thing to do, but it will take a while.  In fact
-> > I dont think we really need the warning in step 1,
-> 
-> Hmm I think step 1) will be needed if someone is allocating pages from
-> DMA zone not using kmalloc or DMA API. (for example directly allocating
-> from buddy allocator) is there such cases?
+Ping guys. Any comments or suggestions?
 
-I think Christoph meant to take off the warning. I will post a patch to
-mute the warning if it's requesting page from DMA zone which has no
-managed pages.
-
+On 2021/12/8 3:38 下午, Chengming Zhou wrote:
+> The usage percpu data is the CPU time consumed on each CPU by all tasks
+> in this cgroup (including tasks lower in the hierarchy). When cpuacct_charge
+> called from other CPUs, we should use the CPU of task, not this CPU.
 > 
-> > a simple grep
-> > already allows to go over them.  I just looked at the uses of GFP_DMA
-> > in drivers/scsi for example, and all but one look bogus.
-> >
+> e.g.
+>     cpuacct_charge+1
+>     update_curr+332
+>     enqueue_entity+70
+>     enqueue_task_fair+169
+>     activate_task+57
+>     attach_task+46
+>     load_balance+1512
+>     run_rebalance_domains+451
+>     __do_softirq+282
+>     sysvec_apic_timer_interrupt+159
+>     asm_sysvec_apic_timer_interrupt+18
+>     native_safe_halt+11
+>     default_idle+10
+>     default_enter_idle+45
+>     cpuidle_enter_state+130
+>     cpuidle_enter+47
+>     do_idle+489
+>     cpu_startup_entry+25
+>     start_secondary+261
+>     secondary_startup_64_no_verify+176
 > 
-> That's good. this cleanup will also remove unnecessary limitations.
-
-I searched and investigated several callsites where kmalloc(GFP_DMA) is
-called. E.g drivers/scsi/sr.c: sr_probe(). The scsi sr driver doesn't
-check DMA supporting capibility at all, e.g the dma limit, to set the
-dma mask or coherent_dma_mask. If we want to convert the
-kmalloc(GFP_DMA) to dma_alloc* API, scsi sr drvier developer/expert's
-suggestion and help is necessary. Either someone who knows this well
-help to change it, or give suggestion how to change so that I can do it. 
-
+> Reported-by: Xuan Lu <luxuan.windniw@bytedance.com>
+> Reported-by: Minye Zhu <zhuminye@bytedance.com>
+> Co-developed-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
+> Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  kernel/sched/cpuacct.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> > > > > > Yeah, I have the same guess too for get_capabilities(), not sure about other
-> > > > > > callers. Or, as ChristophL and ChristophH said(Sorry, not sure if this is
-> > > > > > the right way to call people when the first name is the same. Correct me if
-> > > > > > it's wrong), any buffer requested from kmalloc can be used by device driver.
-> > > > > > Means device enforces getting memory inside addressing limit for those
-> > > > > > DMA transferring buffer which is usually large, Megabytes level with
-> > > > > > vmalloc() or alloc_pages(), but doesn't care about this kind of small
-> > > > > > piece buffer memory allocated with kmalloc()? Just a guess, please tell
-> > > > > > a counter example if anyone happens to know, it could be
-> > > > > > easy.
-> > 
-> > The way this works is that the dma_map* calls will bounce buffer memory
-> > that does to fall into the addressing limitations.  This is a performance
-> > overhead, but allows drivers to address all memory in a system.  If the
-> > driver controls memory allocation it should use one of the dma_alloc_*
-> > APIs that allocate addressable memory from the start.  The allocator
-> > will dip into ZONE_DMA and ZONE_DMA32 when needed.
-> 
-
+> diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
+> index 893eece65bfd..aab51c88bd34 100644
+> --- a/kernel/sched/cpuacct.c
+> +++ b/kernel/sched/cpuacct.c
+> @@ -341,6 +341,7 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+>  	struct cpuacct *ca;
+>  	int index = CPUACCT_STAT_SYSTEM;
+>  	struct pt_regs *regs = get_irq_regs() ? : task_pt_regs(tsk);
+> +	unsigned int cpu = task_cpu(tsk);
+>  
+>  	if (regs && user_mode(regs))
+>  		index = CPUACCT_STAT_USER;
+> @@ -348,7 +349,7 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+>  	rcu_read_lock();
+>  
+>  	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+> -		__this_cpu_add(ca->cpuusage->usages[index], cputime);
+> +		per_cpu_ptr(ca->cpuusage, cpu)->usages[index] += cputime;
+>  
+>  	rcu_read_unlock();
+>  }

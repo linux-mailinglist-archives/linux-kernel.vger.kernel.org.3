@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CE647AC21
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650A847ACAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbhLTOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234142AbhLTOkY (ORCPT
+        id S235610AbhLTOqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:46:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52574 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236517AbhLTOow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4040C061A08;
-        Mon, 20 Dec 2021 06:40:20 -0800 (PST)
+        Mon, 20 Dec 2021 09:44:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BD00B80EA3;
-        Mon, 20 Dec 2021 14:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDADEC36AE8;
-        Mon, 20 Dec 2021 14:40:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89617B80EDE;
+        Mon, 20 Dec 2021 14:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D556BC36AE7;
+        Mon, 20 Dec 2021 14:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011218;
-        bh=DgUJeCi6f00l52yaNNon5R87DiPyXiLlVRgh8L4s/30=;
+        s=korg; t=1640011490;
+        bh=QOFSm/1oHATQPo5VBap0ryhBp/IKrq3+YYrtAMS22bU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=17J4X/OekapYljjuswSO/S3h0MZETkabCjNuGt7dCn4hfLdtpYHJpW0T8a9eEPoWr
-         wtN5nDfVztqGY1ZWwTWtEa64B4q3WLn667MRctICmoWqxVibkQErrKQL/h9aq6AXeb
-         I2nBbW8nfNXxGbHIbYL59eVvI55PuDfm5lQZsaJ8=
+        b=AOGK04StP9lnrHlRAumyRPizVHnWnUuDVrC+r/AiTWPJViqljq1X6Rdol3pVobInr
+         w4ccNHlNeb+RQ5Wf9RsQS7jr9Oup6CzYP6ckMyyOppVu9C7H0+Sa617uiSFLCV4mw2
+         YRE8+RrLp4TM62/u1GFb4zrJKIhzApbF3ucqYNcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
-Subject: [PATCH 4.14 34/45] fuse: annotate lock in fuse_reverse_inval_entry()
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 40/71] net: Fix double 0x prefix print in SKB dump
 Date:   Mon, 20 Dec 2021 15:34:29 +0100
-Message-Id: <20211220143023.405798649@linuxfoundation.org>
+Message-Id: <20211220143027.022549355@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,29 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Gal Pressman <gal@nvidia.com>
 
-commit bda9a71980e083699a0360963c0135657b73f47a upstream.
+[ Upstream commit 8a03ef676ade55182f9b05115763aeda6dc08159 ]
 
-Add missing inode lock annotatation; found by syzbot.
+When printing netdev features %pNF already takes care of the 0x prefix,
+remove the explicit one.
 
-Reported-and-tested-by: syzbot+9f747458f5990eaa8d43@syzkaller.appspotmail.com
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6413139dfc64 ("skbuff: increase verbosity when dumping skb data")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fuse/dir.c |    2 +-
+ net/core/skbuff.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -969,7 +969,7 @@ int fuse_reverse_inval_entry(struct supe
- 	if (!parent)
- 		return -ENOENT;
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 7dba091bc8617..ac083685214e0 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -768,7 +768,7 @@ void skb_dump(const char *level, const struct sk_buff *skb, bool full_pkt)
+ 	       ntohs(skb->protocol), skb->pkt_type, skb->skb_iif);
  
--	inode_lock(parent);
-+	inode_lock_nested(parent, I_MUTEX_PARENT);
- 	if (!S_ISDIR(parent->i_mode))
- 		goto unlock;
- 
+ 	if (dev)
+-		printk("%sdev name=%s feat=0x%pNF\n",
++		printk("%sdev name=%s feat=%pNF\n",
+ 		       level, dev->name, &dev->features);
+ 	if (sk)
+ 		printk("%ssk family=%hu type=%u proto=%u\n",
+-- 
+2.33.0
+
 
 

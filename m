@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 209C547AC52
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E80EC47AD69
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbhLTOnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234812AbhLTOle (ORCPT
+        id S237035AbhLTOvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:51:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38634 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236840AbhLTOsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66332C06173E;
-        Mon, 20 Dec 2021 06:41:05 -0800 (PST)
+        Mon, 20 Dec 2021 09:48:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DB52B80EB3;
-        Mon, 20 Dec 2021 14:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65665C36AE8;
-        Mon, 20 Dec 2021 14:41:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB0F61185;
+        Mon, 20 Dec 2021 14:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90074C36AF0;
+        Mon, 20 Dec 2021 14:48:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011262;
-        bh=W5N0qDLZ+TiDNr89/H/2k26zkGs4ZEXrTeURpmpHWOQ=;
+        s=korg; t=1640011686;
+        bh=u6l7cWOe3Cl8aEC8Liy9VsBmgy8XvYgHzvWCvRR+gh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jzeEn1TN2N4gaskQ5eWXXiB0qEaoPdhhpv2WDUwji5XLImuTfuVPnvr6S9ePKRrr6
-         hLx3jmH2f/PD7Tk6+s4FZ8tuf+xY6SKXEixRjFqP6uf5DVB+pX8hYJjIGPPNE9dq3t
-         GG6JigOaXtrhmQaZzFQCaSaXSZB1XxC/4ci9JBIo=
+        b=tpsqYrsIhRT88XqPC0FrEifSdZ1y/3LY7c6K4ULEbBSgMZE6cfAeEX/OeMLcmKA7h
+         Avu7fSgfWxo39LJFwPLvb7sL21LzLPDV4VaGl1iP+c13PQZODMR5wj6pcq9iczQ/pv
+         WWlnKlviJmqNuoViH6GVPOALL+ePhWpIe5+WZpeE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 4.19 16/56] x86/sme: Explicitly map new EFI memmap table as encrypted
-Date:   Mon, 20 Dec 2021 15:34:09 +0100
-Message-Id: <20211220143023.987200594@linuxfoundation.org>
+        stable@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 37/99] selftests: Fix raw socket bind tests with VRF
+Date:   Mon, 20 Dec 2021 15:34:10 +0100
+Message-Id: <20211220143030.623876528@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Lendacky <thomas.lendacky@amd.com>
+From: David Ahern <dsahern@kernel.org>
 
-commit 1ff2fc02862d52e18fd3daabcfe840ec27e920a8 upstream.
+[ Upstream commit 0f108ae4452025fef529671998f6c7f1c4526790 ]
 
-Reserving memory using efi_mem_reserve() calls into the x86
-efi_arch_mem_reserve() function. This function will insert a new EFI
-memory descriptor into the EFI memory map representing the area of
-memory to be reserved and marking it as EFI runtime memory. As part
-of adding this new entry, a new EFI memory map is allocated and mapped.
-The mapping is where a problem can occur. This new memory map is mapped
-using early_memremap() and generally mapped encrypted, unless the new
-memory for the mapping happens to come from an area of memory that is
-marked as EFI_BOOT_SERVICES_DATA memory. In this case, the new memory will
-be mapped unencrypted. However, during replacement of the old memory map,
-efi_mem_type() is disabled, so the new memory map will now be long-term
-mapped encrypted (in efi.memmap), resulting in the map containing invalid
-data and causing the kernel boot to crash.
+Commit referenced below added negative socket bind tests for VRF. The
+socket binds should fail since the address to bind to is in a VRF yet
+the socket is not bound to the VRF or a device within it. Update the
+expected return code to check for 1 (bind failure) so the test passes
+when the bind fails as expected. Add a 'show_hint' comment to explain
+why the bind is expected to fail.
 
-Since it is known that the area will be mapped encrypted going forward,
-explicitly map the new memory map as encrypted using early_memremap_prot().
-
-Cc: <stable@vger.kernel.org> # 4.14.x
-Fixes: 8f716c9b5feb ("x86/mm: Add support to access boot related data in the clear")
-Link: https://lore.kernel.org/all/ebf1eb2940405438a09d51d121ec0d02c8755558.1634752931.git.thomas.lendacky@amd.com/
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-[ardb: incorporate Kconfig fix by Arnd]
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 75b2b2b3db4c ("selftests: Add ipv4 address bind tests to fcnal-test")
+Reported-by: Li Zhijian <lizhijian@fujitsu.com>
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/Kconfig               |    1 +
- arch/x86/platform/efi/quirks.c |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/fcnal-test.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1950,6 +1950,7 @@ config EFI
- 	depends on ACPI
- 	select UCS2_STRING
- 	select EFI_RUNTIME_WRAPPERS
-+	select ARCH_USE_MEMREMAP_PROT
- 	---help---
- 	  This enables the kernel to use EFI runtime services that are
- 	  available (such as the EFI variable services).
---- a/arch/x86/platform/efi/quirks.c
-+++ b/arch/x86/platform/efi/quirks.c
-@@ -278,7 +278,8 @@ void __init efi_arch_mem_reserve(phys_ad
- 		return;
- 	}
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 9f771f7e57450..dd67004a1d83a 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -1747,8 +1747,9 @@ ipv4_addr_bind_vrf()
+ 	for a in ${NSA_IP} ${VRF_IP}
+ 	do
+ 		log_start
++		show_hint "Socket not bound to VRF, but address is in VRF"
+ 		run_cmd nettest -s -R -P icmp -l ${a} -b
+-		log_test_addr ${a} $? 0 "Raw socket bind to local address"
++		log_test_addr ${a} $? 1 "Raw socket bind to local address"
  
--	new = early_memremap(new_phys, new_size);
-+	new = early_memremap_prot(new_phys, new_size,
-+				  pgprot_val(pgprot_encrypted(FIXMAP_PAGE_NORMAL)));
- 	if (!new) {
- 		pr_err("Failed to map new boot services memmap\n");
- 		return;
+ 		log_start
+ 		run_cmd nettest -s -R -P icmp -l ${a} -d ${NSA_DEV} -b
+-- 
+2.33.0
+
 
 

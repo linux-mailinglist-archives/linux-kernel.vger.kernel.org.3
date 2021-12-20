@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0FC47B567
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E18947B56A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbhLTV4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:56:05 -0500
-Received: from out0.migadu.com ([94.23.1.103]:44517 "EHLO out0.migadu.com"
+        id S231723AbhLTV62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:58:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:28496 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230393AbhLTV4E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:56:04 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1NLhsQtLh77LdZHgbT2kusq/cP+dmXSyIjhww1oL3wE=;
-        b=e8P88o5MaHdVGc8OQf5JJgbMpgqrXP0Jdfxzk4WRTxfgaVMN2N9g1YArJiz9VGb7vPNrHS
-        /GUrUoMY0f/quKjwGChhnxmE176tJ1z/9JOogvVTHYMrmO07LxHbzHbqMw0f9FMo4E24gc
-        Fzn/GtT75f/xyCV+woSTP8Jy3e3Vj8g=
-From:   andrey.konovalov@linux.dev
-To:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2] kasan: fix quarantine conflicting with init_on_free
-Date:   Mon, 20 Dec 2021 22:55:59 +0100
-Message-Id: <2805da5df4b57138fdacd671f5d227d58950ba54.1640037083.git.andreyknvl@google.com>
+        id S231705AbhLTV60 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:58:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640037506; x=1671573506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WePxmrd3wEigSqY9uR8tVCDA1TGLawIzf0UAt16kxQw=;
+  b=aX8jDPjQtRXQxtyhrYZqDx3glogo5/IPHxmDPFDPZziDMOgLrMvN7C4h
+   m3vUNWm4nMvjTPhQqlDhtn3r+OCf7FxkF6jxFFuuR3suiS1Z3ELUbaYrc
+   +x0gaPAVnskf940qx/vv7RYCKrixTd/upW81LlTJdXdXwplp7XAzup09x
+   ymTRcyyIq2zoOSVKHwqLcxsgm3C8Vj/ZpJv9kvf+hWLcHeCEzD+DNVb92
+   0b8AmM8Z250G37dt6pmlXwWEiHx45SS50bVVLcWgdoQDlCF+1+RwOylKj
+   a15SN59d+9xqQhnatO0Yx/mSjzH4GyDrOJ8QGPXbSgMgvKvcrzrPugh3K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="237816169"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="237816169"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 13:58:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="507843353"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Dec 2021 13:58:24 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzQfn-0008Hv-R4; Mon, 20 Dec 2021 21:58:23 +0000
+Date:   Tue, 21 Dec 2021 05:57:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
+        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 4/9] fs/f2fs/file.c:584:14: error: implicit
+ declaration of function 'daxdev_mapping_supported'
+Message-ID: <202112210512.TWkTNRT1-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
+commit: f154828642167c70161576b977082361123a5768 [4/9] f2fs: support dax page fault
+config: microblaze-randconfig-r015-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210512.TWkTNRT1-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=f154828642167c70161576b977082361123a5768
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout f154828642167c70161576b977082361123a5768
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash fs/f2fs/
 
-KASAN's quarantine might save its metadata inside freed objects. As
-this happens after the memory is zeroed by the slab allocator when
-init_on_free is enabled, the memory coming out of quarantine is not
-properly zeroed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This causes lib/test_meminit.c tests to fail with Generic KASAN.
+All errors (new ones prefixed by >>):
 
-Zero the metadata when the object is removed from quarantine.
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from fs/f2fs/file.c:8:
+   fs/f2fs/file.c: In function 'f2fs_file_mmap':
+>> fs/f2fs/file.c:584:14: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror=implicit-function-declaration]
+     584 |         if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   fs/f2fs/file.c:584:9: note: in expansion of macro 'if'
+     584 |         if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+         |         ^~
+   cc1: some warnings being treated as errors
 
-Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+vim +/daxdev_mapping_supported +584 fs/f2fs/file.c
+
+   569	
+   570	static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
+   571	{
+   572		struct inode *inode = file_inode(file);
+   573	
+   574		if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
+   575			return -EIO;
+   576	
+   577		if (!f2fs_is_compress_backend_ready(inode))
+   578			return -EOPNOTSUPP;
+   579	
+   580		/*
+   581		 * We don't support synchronous mappings for non-DAX files and
+   582		 * for DAX files if underneath dax_device is not synchronous.
+   583		 */
+ > 584		if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+   585			return -EOPNOTSUPP;
+   586	
+   587		file_accessed(file);
+   588	
+   589		if (IS_DAX(inode)) {
+   590			vma->vm_ops = &f2fs_dax_vm_ops;
+   591			vma->vm_flags |= VM_HUGEPAGE;
+   592		} else {
+   593			vma->vm_ops = &f2fs_file_vm_ops;
+   594		}
+   595	
+   596		set_inode_flag(inode, FI_MMAP_FILE);
+   597		return 0;
+   598	}
+   599	
 
 ---
-
-Changes v1->v2:
-- Use memzero_explicit() instead of memset().
----
- mm/kasan/quarantine.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
-index 587da8995f2d..08291ed33e93 100644
---- a/mm/kasan/quarantine.c
-+++ b/mm/kasan/quarantine.c
-@@ -132,11 +132,22 @@ static void *qlink_to_object(struct qlist_node *qlink, struct kmem_cache *cache)
- static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
- {
- 	void *object = qlink_to_object(qlink, cache);
-+	struct kasan_free_meta *meta = kasan_get_free_meta(cache, object);
- 	unsigned long flags;
- 
- 	if (IS_ENABLED(CONFIG_SLAB))
- 		local_irq_save(flags);
- 
-+	/*
-+	 * If init_on_free is enabled and KASAN's free metadata is stored in
-+	 * the object, zero the metadata. Otherwise, the object's memory will
-+	 * not be properly zeroed, as KASAN saves the metadata after the slab
-+	 * allocator zeroes the object.
-+	 */
-+	if (slab_want_init_on_free(cache) &&
-+	    cache->kasan_info.free_meta_offset == 0)
-+		memzero_explicit(meta, sizeof(*meta));
-+
- 	/*
- 	 * As the object now gets freed from the quarantine, assume that its
- 	 * free track is no longer valid.
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3642F47B540
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D762447B544
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbhLTVfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:35:07 -0500
-Received: from mga03.intel.com ([134.134.136.65]:61415 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229999AbhLTVfG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:35:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240227055"
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="240227055"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 13:35:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
-   d="scan'208";a="616545840"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.42.105])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 13:35:04 -0800
-Message-ID: <f9faa3ee2614af088c510bc3c68080712665cd8f.camel@linux.intel.com>
-Subject: Re: [PATCH 1/2] x86/sgx: Add accounting for tracking overcommit
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-sgx@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Date:   Mon, 20 Dec 2021 13:35:03 -0800
-In-Reply-To: <YcDxhWZ7lzB2BB8N@zn.tnic>
-References: <20211220174640.7542-1-kristen@linux.intel.com>
-         <20211220174640.7542-2-kristen@linux.intel.com> <YcDZ4++GQN+ODm50@zn.tnic>
-         <9e08e13208950e9fd955a46994b7fef705751dd6.camel@linux.intel.com>
-         <YcDxhWZ7lzB2BB8N@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S231540AbhLTVff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231529AbhLTVfa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:35:30 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670D8C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:35:30 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id q6so3102663ilt.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:35:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qcBG8nhHB+sRNlK7pbQ7JuxvUVpSVTkBiRPlBoBdveA=;
+        b=Fje853ZVa1sigXm3UGhAHhOugdu5MewkFitIfF+07YtqszK3e4KuesQ5cGsiEPuGER
+         7fISAadzACuSMhWy5oZ2uWKqDvMLotfG5hi4QjBLecBHqgBgPbc4dDcvzXWpr07pkrBZ
+         1m2DOj9beJqukp7eN7Cye1xhgmoDOrGIwjKzqdI2yHzgLLznOw+/7Hs4aI50M9B/9gqP
+         +bx+7ewJAPhM0mh6D0IU4sPJvbqoMkyRoqaKfAb7YkAH2jXp0/9v/vSFyK/NPAV0vTRH
+         ff73Q4yuL84ZeqcrAFEr54z7GkfGplMJLZXn9dpfMnq10+1hUWF76b15nuEt0onsOvXK
+         vbPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcBG8nhHB+sRNlK7pbQ7JuxvUVpSVTkBiRPlBoBdveA=;
+        b=BOtIqbY/kC1D01ucB+laQ1Da1V1nrU22Bb3ACEBf6nl6BLvtRpo1HZw9jh2aqyaShG
+         KSRsvUuds05qOTbBvULtDOA8Nlru/ughOJWRZMKANXo3Hk6MQiWlutbAzhabX1vZzfTS
+         /fe7zZ4RnzVqFIUq2wsz1THRsDroeL8cuiMIKsXHQMv9PHAX5ihRIYYauZTP3ef7x8PJ
+         yaibcF3kr1tHGNiJn5CQmqaC1tHt74outPXp9BrQYvy+T9LVldvCmPK7i3TSfv1/rebP
+         67X2VLiUGLShDgYdUiN/pLMY7NGpSl8IqGSZ452qyKAKOfkRSin5U8+tmSxEUErpQ94m
+         LaAg==
+X-Gm-Message-State: AOAM533XQFSBPpNAoR5MfW9wJrvOFa+psHX9n+uEIP3EVoVm8+MztGtT
+        NnKr7r3LMCVKGyhcrwyABXFWWg38s5i57Zi/qfk=
+X-Google-Smtp-Source: ABdhPJxn8l69Bwc+5olDjlFbHVbTxrTbPDSojODyp/C7RJWQAav70g0ZNdqLGDyfKGvbSH/2pmX5IfUJb7NWccgH+O8=
+X-Received: by 2002:a92:d58a:: with SMTP id a10mr9462133iln.81.1640036129810;
+ Mon, 20 Dec 2021 13:35:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <cover.1639432170.git.andreyknvl@google.com> <1a2b5e3047faf05e5c11a9080c3f97a9b9b4c383.1639432170.git.andreyknvl@google.com>
+ <CAG_fn=UWe_wo+E1P-1RyTPRAaSqXcCbhEwLaU=SJ+7ueGSysEg@mail.gmail.com>
+In-Reply-To: <CAG_fn=UWe_wo+E1P-1RyTPRAaSqXcCbhEwLaU=SJ+7ueGSysEg@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 20 Dec 2021 22:35:19 +0100
+Message-ID: <CA+fCnZfHHc9POqt_S78B=xHaqTRZy-5gr1Teix8o5g4jrz73bA@mail.gmail.com>
+Subject: Re: [PATCH mm v3 26/38] kasan, vmalloc: don't unpoison VM_ALLOC pages
+ before mapping
+To:     Alexander Potapenko <glider@google.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-20 at 22:11 +0100, Borislav Petkov wrote:
-> Bah, that thread is not on lkml. Please always Cc lkml in the future.
-> 
-> On Mon, Dec 20, 2021 at 12:39:19PM -0800, Kristen Carlson Accardi
-> wrote:
-> > If a malicious or just extra large enclave is loaded, or even just
-> > a
-> > lot of enclaves, it can eat up all the normal RAM on the system.
-> > Normal
-> > methods of finding out where all the memory on the system is being
-> > used, wouldn't be able to find this usage since it is shared
-> > memory. In
-> > addition, the OOM killer wouldn't be able to kill any enclaves.
-> 
-> So you need some sort of limiting against malicious enclaves anyways,
-> regardless of this knob. IOW, you can set a percentage limit of
-> per-enclave memory which cannot exceed a certain amount which won't
-> prevent the system from its normal operation. For example.
-> 
-> > I completely agree - so I'm trying to make sure I understand this
-> > comment, as the value is currently set to default that would
-> > automatically apply that is based on EPC memory present and not a
-> > fixed
-> > value. So I'd like to understand what you'd like to see done
-> > differently. are you saying you'd like to eliminated the ability to
-> > override the automatic default? Or just that you'd rather calculate
-> > the
-> > percentage based on total normal system RAM rather than EPC memory?
-> 
-> So you say that there are cases where swapping to normal RAM can eat
-> up all RAM.
-> 
-> So the first heuristic should be: do not allow for *all* enclaves
-> together to use up more than X percent of normal RAM during EPC
-> reclaim.
+On Thu, Dec 16, 2021 at 8:08 PM Alexander Potapenko <glider@google.com> wrote:
+>
+> On Mon, Dec 13, 2021 at 10:54 PM <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Make KASAN unpoison vmalloc mappings after that have been mapped in
+> > when it's possible: for vmalloc() (indentified via VM_ALLOC) and
+> > vm_map_ram().
+>
+> The subject says "don't unpoison VM_ALLOC pages", whereas the
+> description says "unpoison VM_ALLOC pages", or am I missing something?
 
-So, in your proposal, you would first change the calculated number of
-maximum available backing pages to be based on total system RAM rather
-than EPC memory, got it.
+Yes :) The title says "don't unpoison *before*", and the body says
+"unpoison *after*".
 
-> 
-> X percent being, say, 90% of all RAM. For example. I guess 10% should
-> be enough for normal operation but someone who's more knowledgeable
-> in
-> system limits could chime in here.
-> 
-> Then, define a per-enclave limit which says, an enclave can use Y %
-> of
-> memory for swapping when trying to reclaim EPC memory. And that can
-> be
-> something like:
-> 
-> 	90 % RAM
-> 	--------
-> 	total amount of enclaves currently on the system
-> 
+I'll reword the changelog in v4 to make it less confusing.
 
-This would require recalculating the max number of allowed backing
-pages per enclave at run time whenever a new enclave is loaded - but
-all the existing enclaves may have already used more than the new max
-number of per-enclave allowable pages. How would you handle that
-scenario? This would add a lot of complexity for sure - and it does
-make me wonder whether any additional benefit of limiting per enclave
-would be worth it.
-
-> And you can obviously create scenarios where creating too many
-> enclaves
-> can bring the system into a situation where it doesn't do any forward
-> progress.
-> 
-> But you probably can cause the same with overcommitting with VMs so
-> perhaps it would be a good idea to look how overcommitting VMs and
-> limits there are handled.
-> 
-> Bottom line is: the logic should be for the most common cases to
-> function properly, out-of-the-box, without knobs. And then to keep
-> the
-> system operational by preventing enclaves from bringing it down to a
-> halt just by doing EPC reclaim.
-> 
-> Does that make more sense?
-> 
-
-Thanks for your more detailed explanation - I will take a look at the
-VM overcommit limits. Since obviously the original implementation did
-have a default value set, I had still a remaining specific question
-about your comments. Are you suggesting that there should not be a way
-to override any overcommit limit at all? So drop the parameter all
-together?
-
+Thanks!

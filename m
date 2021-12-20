@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 721AA47AC24
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F80247AC9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbhLTOlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234606AbhLTOk0 (ORCPT
+        id S236416AbhLTOps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:45:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36674 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235354AbhLTOnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6745AC061763;
-        Mon, 20 Dec 2021 06:40:24 -0800 (PST)
+        Mon, 20 Dec 2021 09:43:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B9C93CE1119;
-        Mon, 20 Dec 2021 14:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A836C36AE9;
-        Mon, 20 Dec 2021 14:40:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A0A6113B;
+        Mon, 20 Dec 2021 14:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C727C36AE7;
+        Mon, 20 Dec 2021 14:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011221;
-        bh=+IZsznwNOk88L/tx/wHgld6KFPO+Y7Pv0Lsh/KzGDKU=;
+        s=korg; t=1640011389;
+        bh=Qp22GWrzA7T69Q54k8BZNo4/dzs2GVJLFR2IjQ3PPMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C8Xd/9FxIdW8/sH3wHKwUled1D4fjFoOBcl35eKSB5n7DQpjfH/22IVWXhQPO++8f
-         glQrWuRrrhYse7CfL+fxMxyf2GPAxMi0CzuWHLpzXM/xn6n6AFYXm21AgmtRYes5ko
-         xE+bXgYolSLbBsRXKnHiwy+mJbWxKFfN3Skw26oo=
+        b=dzT5Izz3vpDBSWxXogRDDK2oscBzPPrIcOoDaLJC4S3ALvEwl1dkkNBFqj7QHb6V9
+         fDYclHymRiYis0tmyhCgZRYhFYTTr88V3co1pKQUDic0Bd1dpBzGboFReouNAnIh1o
+         M/uTO08xzjnQsf4WH3T/vql23Mm0SAqNwfW+nSGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        George Kennedy <george.kennedy@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.14 35/45] scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
-Date:   Mon, 20 Dec 2021 15:34:30 +0100
-Message-Id: <20211220143023.440173202@linuxfoundation.org>
+        stable@vger.kernel.org, Le Ma <le.ma@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 4.19 38/56] drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
+Date:   Mon, 20 Dec 2021 15:34:31 +0100
+Message-Id: <20211220143024.695965971@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,68 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+From: Le Ma <le.ma@amd.com>
 
-commit e0a2c28da11e2c2b963fc01d50acbf03045ac732 upstream.
+commit f3a8076eb28cae1553958c629aecec479394bbe2 upstream.
 
-In resp_mode_select() sanity check the block descriptor len to avoid UAF.
+should count on GC IP base address
 
-BUG: KASAN: use-after-free in resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
-Read of size 1 at addr ffff888026670f50 by task scsicmd/15032
-
-CPU: 1 PID: 15032 Comm: scsicmd Not tainted 5.15.0-01d0625 #15
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-Call Trace:
- <TASK>
- dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:107
- print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:257
- kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:443
- __asan_report_load1_noabort+0x14/0x20 mm/kasan/report_generic.c:306
- resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
- schedule_resp+0x4af/0x1a10 drivers/scsi/scsi_debug.c:5483
- scsi_debug_queuecommand+0x8c9/0x1e70 drivers/scsi/scsi_debug.c:7537
- scsi_queue_rq+0x16b4/0x2d10 drivers/scsi/scsi_lib.c:1521
- blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1640
- __blk_mq_sched_dispatch_requests+0x28f/0x590 block/blk-mq-sched.c:325
- blk_mq_sched_dispatch_requests+0x105/0x190 block/blk-mq-sched.c:358
- __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1762
- __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1839
- blk_mq_run_hw_queue+0x18d/0x350 block/blk-mq.c:1891
- blk_mq_sched_insert_request+0x3db/0x4e0 block/blk-mq-sched.c:474
- blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:63
- sg_common_write.isra.18+0xeb3/0x2000 drivers/scsi/sg.c:837
- sg_new_write.isra.19+0x570/0x8c0 drivers/scsi/sg.c:775
- sg_ioctl_common+0x14d6/0x2710 drivers/scsi/sg.c:941
- sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1166
- __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:52
- do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:50
- entry_SYSCALL_64_after_hwframe+0x44/0xae arch/x86/entry/entry_64.S:113
-
-Link: https://lore.kernel.org/r/1637262208-28850-1-git-send-email-george.kennedy@oracle.com
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Le Ma <le.ma@amd.com>
+Signed-off-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_debug.c |    4 ++--
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2181,11 +2181,11 @@ static int resp_mode_select(struct scsi_
- 			    __func__, param_len, res);
- 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
- 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
--	if (md_len > 2) {
-+	off = bd_len + (mselect6 ? 4 : 8);
-+	if (md_len > 2 || off >= res) {
- 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
- 		return check_condition_result;
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -2198,8 +2198,8 @@ static void gfx_v9_0_init_pg(struct amdg
+ 			      AMD_PG_SUPPORT_CP |
+ 			      AMD_PG_SUPPORT_GDS |
+ 			      AMD_PG_SUPPORT_RLC_SMU_HS)) {
+-		WREG32(mmRLC_JUMP_TABLE_RESTORE,
+-		       adev->gfx.rlc.cp_table_gpu_addr >> 8);
++		WREG32_SOC15(GC, 0, mmRLC_JUMP_TABLE_RESTORE,
++			     adev->gfx.rlc.cp_table_gpu_addr >> 8);
+ 		gfx_v9_0_init_gfx_power_gating(adev);
  	}
--	off = bd_len + (mselect6 ? 4 : 8);
- 	mpage = arr[off] & 0x3f;
- 	ps = !!(arr[off] & 0x80);
- 	if (ps) {
+ }
 
 

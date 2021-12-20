@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EAA47ACC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A90EA47AC0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbhLTOqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51476 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235927AbhLTOn2 (ORCPT
+        id S234913AbhLTOlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234648AbhLTOju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:43:28 -0500
+        Mon, 20 Dec 2021 09:39:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1F7C0613B1;
+        Mon, 20 Dec 2021 06:39:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 943D7B80EB3;
-        Mon, 20 Dec 2021 14:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDEAC36AE7;
-        Mon, 20 Dec 2021 14:43:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6410BCE111A;
+        Mon, 20 Dec 2021 14:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A63C36AE9;
+        Mon, 20 Dec 2021 14:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011406;
-        bh=vo9aJDg3cE7KVNvWvEbr8nXiXtxVSONQAjOm8blIKVI=;
+        s=korg; t=1640011187;
+        bh=IOp27fWHEyFabm28nK96fSbGm+oP2n3zr0PYA2P6JFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcEznmNuvpnOtT0UccUeFA9+BokuAaXmRQwUe9aVE8zQVOdwUjHr3j+sqavd7w2zL
-         4q3G0VKQTWwQiCOqG3uiuOoprwiOkEE9Yb9uMM25ev21caylJZqRXa20OwpR8TAkwa
-         sF+eFIAZwf2gHmFKbjAs1kJH1ha0OrWGGVpxGfLc=
+        b=bbzTP649PbuUlU5l2Dk4/NkZnAntdzoF0LNNl1NBrPmNnuVzP6usAVsvOCvuOYSNa
+         NuAh0BKypFG4hOBUjlYdrMxqB9Eoc4aO4o1C8RMsgd2L9M1aZLpWVWomLVqBAFcV84
+         lDQaQ+Egs97d/OTxNznYl+4lBjolqKidoO3lt3hE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "J. Bruce Fields" <bfields@redhat.com>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: [PATCH 5.4 10/71] nfsd: fix use-after-free due to delegation race
-Date:   Mon, 20 Dec 2021 15:33:59 +0100
-Message-Id: <20211220143026.039333231@linuxfoundation.org>
+        stable@vger.kernel.org, Ondrej Jirman <megous@megous.com>,
+        John Keeping <john@metanate.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 05/45] i2c: rk3x: Handle a spurious start completion interrupt flag
+Date:   Mon, 20 Dec 2021 15:34:00 +0100
+Message-Id: <20211220143022.446190196@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,66 +49,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: J. Bruce Fields <bfields@redhat.com>
+From: Ondrej Jirman <megous@megous.com>
 
-commit 548ec0805c399c65ed66c6641be467f717833ab5 upstream.
+[ Upstream commit 02fe0fbd8a21e183687925c3a266ae27dda9840f ]
 
-A delegation break could arrive as soon as we've called vfs_setlease.  A
-delegation break runs a callback which immediately (in
-nfsd4_cb_recall_prepare) adds the delegation to del_recall_lru.  If we
-then exit nfs4_set_delegation without hashing the delegation, it will be
-freed as soon as the callback is done with it, without ever being
-removed from del_recall_lru.
+In a typical read transfer, start completion flag is being set after
+read finishes (notice ipd bit 4 being set):
 
-Symptoms show up later as use-after-free or list corruption warnings,
-usually in the laundromat thread.
+trasnfer poll=0
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
 
-I suspect aba2072f4523 "nfsd: grant read delegations to clients holding
-writes" made this bug easier to hit, but I looked as far back as v3.0
-and it looks to me it already had the same problem.  So I'm not sure
-where the bug was introduced; it may have been there from the beginning.
+This causes I2C transfer being aborted in polled mode from a stop completion
+handler:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: J. Bruce Fields <bfields@redhat.com>
-[Salvatore Bonaccorso: Backport for context changes to versions which do
-not have 20b7d86f29d3 ("nfsd: use boottime for lease expiry calculation")]
-Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+trasnfer poll=1
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
+i2c stop
+rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
+
+Clearing the START flag after read fixes the issue without any obvious
+side effects.
+
+This issue was dicovered on RK3566 when adding support for powering
+off the RK817 PMIC.
+
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfsd/nfs4state.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-rk3x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -1041,6 +1041,11 @@ hash_delegation_locked(struct nfs4_deleg
- 	return 0;
- }
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index fe234578380ac..548089aa9aba5 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -424,8 +424,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
+ 	if (!(ipd & REG_INT_MBRF))
+ 		return;
  
-+static bool delegation_hashed(struct nfs4_delegation *dp)
-+{
-+	return !(list_empty(&dp->dl_perfile));
-+}
-+
- static bool
- unhash_delegation_locked(struct nfs4_delegation *dp)
- {
-@@ -1048,7 +1053,7 @@ unhash_delegation_locked(struct nfs4_del
+-	/* ack interrupt */
+-	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
++	/* ack interrupt (read also produces a spurious START flag, clear it too) */
++	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
  
- 	lockdep_assert_held(&state_lock);
- 
--	if (list_empty(&dp->dl_perfile))
-+	if (!delegation_hashed(dp))
- 		return false;
- 
- 	dp->dl_stid.sc_type = NFS4_CLOSED_DELEG_STID;
-@@ -4406,7 +4411,7 @@ static void nfsd4_cb_recall_prepare(stru
- 	 * queued for a lease break. Don't queue it again.
- 	 */
- 	spin_lock(&state_lock);
--	if (dp->dl_time == 0) {
-+	if (delegation_hashed(dp) && dp->dl_time == 0) {
- 		dp->dl_time = get_seconds();
- 		list_add_tail(&dp->dl_recall_lru, &nn->del_recall_lru);
- 	}
+ 	/* Can only handle a maximum of 32 bytes at a time */
+ 	if (len > 32)
+-- 
+2.33.0
+
 
 

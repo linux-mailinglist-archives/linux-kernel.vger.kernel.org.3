@@ -2,150 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE8047B549
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B9247B54E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbhLTVhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:37:34 -0500
-Received: from mail-eopbgr80130.outbound.protection.outlook.com ([40.107.8.130]:63219
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229732AbhLTVhc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:37:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XASAVE/QVvCXMxDNYVgOzj2/tqkpWJ0kVZVXgsFwlmbC8gQWw+ofI46onFJha7qDFlq95fE0dYsMUw+/zg5AszbGoDOKeomvejnKXLkwX1ahde7CzGgr/jKGyN6Dm4pjtnRCWkhSghrC5r9kAeHwMozxZVwbaI8cD02X+Qst7pOfL1QSw1u2xcN/2lwCbI6nHxBvbgM/VeySf1M8NKUr7iZn5mxbQgprD0YdMN3+/e1RdKHkbP+gvS67iW7jBdBsiSIDkjpL9U6pGx6eFtbXbwYvGaykh2TKsf0w68o619Rljx2ap0MyZIVdLWh/vJFVKtpB4ps8KNZiPU0cBeYirQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PgB7iOo7wf7wf9nDPy9Ka4dKVYu3o232OvyQUPkQ1+w=;
- b=awlFUWonYYrR3UU4fYCCGjZElXFd/OiLSHxaUCNsTNChVm4/mD2Gg3jZT+eI2MdIC5LWHQMK0Zv3ywwVAOM4XcfHc7BDCG2Ep78pP1sPgZVj/wKbumEFjlE4m5tC9NnZZxTHNDMKPFRAgzfMdLV0NvnB0IlNVNR0QU72nIGskNyV+C/dCDYWOTamlsY0GqJe0HchcZb+D8Mp2tmG83/7wGP2gLHgzjNy90LzkoBYFEn+ktTnxeBE6uHKCP+4Fcxy4mt2h1kJgA1Pdd8PeIhX1ROlWfPEjcj2jjQjlRx3gqLRQd8TPLp2ALChTO05im3Ur+80aHUi36wRBEiS8G95Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PgB7iOo7wf7wf9nDPy9Ka4dKVYu3o232OvyQUPkQ1+w=;
- b=bSdMay5XFGl62sFZLAx/qUnPhPuaWtbyAo9inI7LLtj70rDzMK8jOvMLNuacc4t5b4/4ER0tuJqpRbq7l/iBDY1feB/81/xpoiWflStwxHyOMV0C4ayqS36te3vRmlk7Cqz4v29YhU+891Kg+kCugfvLqxtysTbj+W3Sh3afSic=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
- by DB7PR02MB4475.eurprd02.prod.outlook.com (2603:10a6:10:68::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Mon, 20 Dec
- 2021 21:37:29 +0000
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::7519:c72c:98b1:a39]) by DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::7519:c72c:98b1:a39%4]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
- 21:37:29 +0000
-Message-ID: <898286f0-170e-633d-e924-a5703de468b1@axentia.se>
-Date:   Mon, 20 Dec 2021 22:37:26 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v10 00/14] iio: afe: add temperature rescaling support
-Content-Language: sv-SE
-To:     Liam Beguin <liambeguin@gmail.com>, jic23@kernel.org,
-        lars@metafoo.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-References: <20211219223953.16074-1-liambeguin@gmail.com>
-From:   Peter Rosin <peda@axentia.se>
-Organization: Axentia Technologies AB
-In-Reply-To: <20211219223953.16074-1-liambeguin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3P280CA0094.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:8::7)
- To DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
+        id S231617AbhLTVi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231536AbhLTViz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:38:55 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A323C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:38:55 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id k21so15149711ioh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:38:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jXmZ+qTH7fz9THsh6sRW8Beptw0SkxxLv33cz0RQxd4=;
+        b=UTnVYe+GGThhIyDprEn2wZxqDP8Z8xBG/uLPp6XFIAwW/suw6+1ow5LRtu+Pg6xcDT
+         0ZriIG8pD3L6q8OKmD3XhK08zCmLCxXwzPDTZjEaebPrXyHNRYYIQ5F1vp92FdEPkX0O
+         qTuHVrqJTWm/flACUWoG8zNAYX/DH01bPhEF3R+1SC7TlqiqOlYgzPqlsa7+MuJsxlVW
+         /b5vlapxs8iLpdFEIbwyZ5vKAla5BG74+5wq85yBVU9VNbZlqGU/9oHc5vuZqDD2JObC
+         q1SCUCRdxBP3SCOSn85B5ga/PZeW2zYhlzCQ/HEoT3tbFNayjSvgFCTE6aLKJ24oA39l
+         7EAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jXmZ+qTH7fz9THsh6sRW8Beptw0SkxxLv33cz0RQxd4=;
+        b=saruAwS7CO0CGYeJVOAMRQkzB1IntvpLd4Clovnqr75jr4ZC36qD2b9wJ+5sisPifM
+         PQL3loxpTbAeSAbjLC/dph+3shaL3DkpvMO1/+z1nTk+Im1nTQ6iuoSQmIdN88megPrS
+         SuQL6PRH/dqVSMq125GqtGFWc0HjoK0JGMXtHKRJlf68Vix0rJxYydZ3ocHyB4jiv7VC
+         xTEb//zwH7scL/OXC2WS68QChYsipOLq724mt+ri3sjf9wRN9VMIDndEGFk7+ptVe11F
+         DCQpbWAlgX1SvKzHiMng8Gtj7b5Kn8MKqKsrMAKyWweqDHmXc+K07AVDb3CcddfYFdMS
+         7GfA==
+X-Gm-Message-State: AOAM5304ZB/ikySYv34d7Er7Rqp7qSZIO0QFzQYPgvuIfeTD40MhjlT0
+        1iDFqZ/9+W8TmWmRLUuAhxyesfDqZ+QZsR0FO+4=
+X-Google-Smtp-Source: ABdhPJxeyUmnDdbXsgknOTn/FLvRFgBHRyYMqPetQbqBWRZhXny15fWy7BL16oR/ZDRe+WVEIdyrjNidsqhGx2LWSXg=
+X-Received: by 2002:a05:6638:2512:: with SMTP id v18mr104863jat.22.1640036334760;
+ Mon, 20 Dec 2021 13:38:54 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4365a537-8cf2-46de-f9a9-08d9c400ec21
-X-MS-TrafficTypeDiagnostic: DB7PR02MB4475:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR02MB44753CC66FDC6CD71E45AE67BC7B9@DB7PR02MB4475.eurprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a86sbql0GblOp8ZIjuweQem5W5SuD1Y4Ymm+DaUo9Dc0A2qAR+ND6tzTn6X5NfT6xxi/NSWRNs4+NkPQSHs56Qqyeqqm8UbWc1twVymw27doh5c0+RcdBmlXNCSQc0R//85Ntmi8W6u8VTPmv4zQgYfMGdOHuWsUNDZNapgrMoewQ9+b6CwP0w8AzQNd3/qF/s6QRMPl34pp+j1WkEYwrJpayT/VbFsyjpnDtHM1IlFLkd0FmQ9uCYTiqeSyVxJKjU2RWjIat9cyvM+h5HOrHvc7fr2NoLBX2pmdHB8K7CRqXTm6TMW+bVC8xR5gLerIrgqoib8uYiboO5wA4x7Rqeb9i0YmlJxPgKuzUexDAmPkmIZ2qO3TGKJnWqTcsI90YpogYC2ogAiy5FqSmem1sHvmwXGmJ0WLoroZVzYeIH9NsDCKB3MGk5/p3GmjaQAqJ4dYdPHTZB7u4H4FyUDw6SApWInKIrOMQkzIHd2g+emsAX8u1nxWvvPiG1P6AIj+lzbIWAtuFgyGCaicJrZ64qiZuT5nW/bFT81QJhxDBg+QUW4xJFacsu/ZsRtZkUyxaZ6C7pBiM9zpo6hRaySHEUaXWsKFOKdDEi51qd6Px2EmhkT0ePuVcaATZac5DkKTk7Z8cgY4BLn9KPz/PC0sC0MAuK/mttHwzuhdmFiN5fzhIGVR8A4dr1qWjLzLfnxlnad3gW+qU2dk6MsoYNZCiKF+XCl5SaM9eKrF2SZrKMQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(366004)(396003)(136003)(39840400004)(66556008)(2906002)(5660300002)(66946007)(36756003)(38100700002)(53546011)(31696002)(86362001)(31686004)(4744005)(66476007)(36916002)(2616005)(6512007)(6486002)(26005)(6506007)(186003)(4326008)(508600001)(8676002)(6666004)(8936002)(4001150100001)(83380400001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmRaYWMwQ0Zwa1hzZTZIM1RsSVM3U2owRUZrcGdScEQ4Wk5GS3NPOWdEN3Yx?=
- =?utf-8?B?cWl0WE5nWVJRaG5pRTYwbU1ONGdYSjZPNG9qZ05KU1JMTS9EcW9Bc0RBOHBN?=
- =?utf-8?B?SWpCbm10OHFPbmgrRktMNmQ1RWxuTTFmdWRpcitwMkZWY0k5NkIzRGRoSFd0?=
- =?utf-8?B?T2hlQjI5dlNGUEkwdWx4enFwSTRicDIzbzFqV0lPeVNyVzg1U3ErOEc4TnBT?=
- =?utf-8?B?Q3BPMEN0eUU3NnhlNERiUUVIU0UrcXJZMXZobFlwR0tjbUVmMWpFYmNMUmR1?=
- =?utf-8?B?b3k0eWlkUVRMbXZLNnhzOGJFMUtkL0Jjc0FnNVJRbWR2SDIraWt6RkxkdmEv?=
- =?utf-8?B?Y1JzN0NqdmVyNHlUSTM0VkRUWTlYaUFZTkFnUmNmUFI3bHZWdStXWDg5ZzNs?=
- =?utf-8?B?Z0w3Q3FsOXdBdHcyTTBYdm5URWFidjJ3UTlnRnl5QmlTeC83a2srbXJrOGl4?=
- =?utf-8?B?aVRZQU1OTVY0TTBUVXordWUvREN0ZllQWUEzdzNyUE5xQnpaK1VZTkl5YWlW?=
- =?utf-8?B?RkRPRXV0NWxzZGVETmFvWWM4c2VSQytMNGdIRVp6SFZudmtLVHZPbnRlRnhz?=
- =?utf-8?B?S3dpd2pFK3Q0bzh4dCtSSUV0WWI4NU1OQU4xbUdiakVNUVp1cU5GLzVKbzhH?=
- =?utf-8?B?ZnFTU2ZsRFltdUtYODdBZmI1Rk9udjZVaDhOcHd6YllMenYyeTA4TlZyNUNq?=
- =?utf-8?B?b0NZQ1EzTTQvaTJ0cVZXNEFrb0JKVGZYQVIwUmVMYlpobGFaWHVROGxZR09z?=
- =?utf-8?B?VFlTemZ6cW5qa0N0RkJwQlh6dTRSNlpwWmswVElsUzdScDBFd1R0UW5hV25E?=
- =?utf-8?B?V1V1dHNBblo0S1ZYbmNCZmtSN3hGQ2trYVlGYVZ6cldNSk1TcEtaL2pPK1ls?=
- =?utf-8?B?S0RnWVZOL2FPR2QwM1BvdUdEamxmcGMrb3IyYTYvbHNRYU5YU2hvUUVhU0k0?=
- =?utf-8?B?R1VqOW5jV1ZxdXR2QVVPNDhIYkRPYjFhRGdrVE94QjFHZWF2ZWhxM1F2VkJt?=
- =?utf-8?B?RHZaK2M2cEUyaEc4WEszeSsvdWtyRTM4ZTdVSmxPc2JRcHRKalBnZ1ExNjNS?=
- =?utf-8?B?TUlUN1JDd1Bxa05obFNkWDBjN09LS2Y1RjFwNXpaaG0yeStSVkU3K1NFclA2?=
- =?utf-8?B?YWNqL0pvSXE1U3N3Qnd3RHl0SkpFVGVKTWNvOUxQeGc2Vlh1T0szY2N6a0t2?=
- =?utf-8?B?NGRtU2E0bVBBZzBNRlZVb3I5Wm14N1pqdy9QU2Y0QXA2MjhvWWJyei9Ta21X?=
- =?utf-8?B?MGMxQitYRU95c3BYVkI2ZUFZWUZFajJMSnJnaUx4OG5Vc3J0Y0Z3Y01aMnUy?=
- =?utf-8?B?bGpNaUx4YnhNeXFYd3BuK1MxOFI5aWEyRGZHNzZ0R01nZVNMVFBTclFIa1Z3?=
- =?utf-8?B?a3czS3dRT0VyZTMxK0lodWxZUGx5ZURTREZRR1k1QTk2S0VFUUszVzU5eElM?=
- =?utf-8?B?UDVWUFhsZTVJNVBYNjZnZ21jY2xCNTFKMFU1aHVFSzFMSHdhdUI5dFRQdzc2?=
- =?utf-8?B?R0dTVlVvSnhuWXBIaVdtSVNKVWdJa3ZWQ3l1MkpRUXNNK1lQc2EvcGg3enkz?=
- =?utf-8?B?QXIraDdxVEFsRlBiK3MrZ0cvZVJJWnlveUxxN2RGQ0FnTGlyTEMvN1o0ZTdq?=
- =?utf-8?B?bkhqMlJrYUFMbkFITGJkV3JCRnFvT01yckVmeThZenl0Q3NIbW9lLytzYXF0?=
- =?utf-8?B?dmQxU2tlRnRqNlBUd0djMTRVcklOcXJkZG5JWnVncnRVUXF3Q1M4VnVsZ1Fo?=
- =?utf-8?B?a3BpNnFnay90SGlvS0gyY1IrYXdOc3BiRS82b3lJRFAvYThld0NXOUtpUWhm?=
- =?utf-8?B?Ym1UK3FQNlQ4RFdqWU5rWjJVcHk5MjZsTjlDaVRqejdvTFlLR3pkR2xOVVdP?=
- =?utf-8?B?eVV5RUgwY25sdURJaThHZ2xpcXh3YVZacHlSMFFWQWRnYnRNSCtpRGQrb2NQ?=
- =?utf-8?B?dGhXUHRoUVR0cXY0UTRmekpOa05FRmZRaUZjcURoQTM5WU9CdFg3SlBhRzFY?=
- =?utf-8?B?UUFSTkpyZmR0UGoyOFBjZnlYQ2R0VUZObUxTTFEvU0VYRmlvUkhPVWx1MGJn?=
- =?utf-8?B?WmJqMVVya0craGhhcGhoZWlVYWo0cHpORTMzb3BsdDQ0allRMXd5QUdONllt?=
- =?utf-8?Q?ZJgs=3D?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4365a537-8cf2-46de-f9a9-08d9c400ec21
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 21:37:29.2668
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YgiU0PTUKhRUs1BhfeFpg4/86HLM45WCy+c7C/eQb6SyaXzv4/jbeB+Fv04rQUAY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB4475
+References: <cover.1639432170.git.andreyknvl@google.com> <d91e501aef74c5bb924cae90b469ff0dc1d56488.1639432170.git.andreyknvl@google.com>
+ <YbjQNdst07JqbG0j@arm.com> <CA+fCnZftd93rARJ+xpUApimkgTsN0RRmiSVnrUMkCvdSu4-tcA@mail.gmail.com>
+ <YbjwN0YlDV4hm3x6@arm.com>
+In-Reply-To: <YbjwN0YlDV4hm3x6@arm.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 20 Dec 2021 22:38:43 +0100
+Message-ID: <CA+fCnZfmiqpnX-754Tqes6prNccG+cMzMEteqr+Ar8gM1RTjDg@mail.gmail.com>
+Subject: Re: [PATCH mm v3 25/38] kasan, vmalloc, arm64: mark vmalloc mappings
+ as pgprot_tagged
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Tue, Dec 14, 2021 at 8:27 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Tue, Dec 14, 2021 at 07:27:09PM +0100, Andrey Konovalov wrote:
+> > On Tue, Dec 14, 2021 at 6:11 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Mon, Dec 13, 2021 at 10:54:21PM +0100, andrey.konovalov@linux.dev wrote:
+> > > > diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
+> > > > index b9185503feae..3d35adf365bf 100644
+> > > > --- a/arch/arm64/include/asm/vmalloc.h
+> > > > +++ b/arch/arm64/include/asm/vmalloc.h
+> > > > @@ -25,4 +25,14 @@ static inline bool arch_vmap_pmd_supported(pgprot_t prot)
+> > > >
+> > > >  #endif
+> > > >
+> > > > +#define arch_vmalloc_pgprot_modify arch_vmalloc_pgprot_modify
+> > > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
+> > > > +{
+> > > > +     if (IS_ENABLED(CONFIG_KASAN_HW_TAGS) &&
+> > > > +                     (pgprot_val(prot) == pgprot_val(PAGE_KERNEL)))
+> > > > +             prot = pgprot_tagged(prot);
+> > > > +
+> > > > +     return prot;
+> > > > +}
+> > > > +
+> > > >  #endif /* _ASM_ARM64_VMALLOC_H */
+> > > > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> > > > index 28becb10d013..760caeedd749 100644
+> > > > --- a/include/linux/vmalloc.h
+> > > > +++ b/include/linux/vmalloc.h
+> > > > @@ -115,6 +115,13 @@ static inline int arch_vmap_pte_supported_shift(unsigned long size)
+> > > >  }
+> > > >  #endif
+> > > >
+> > > > +#ifndef arch_vmalloc_pgprot_modify
+> > > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
+> > > > +{
+> > > > +     return prot;
+> > > > +}
+> > > > +#endif
+> > > > +
+> > > >  /*
+> > > >   *   Highlevel APIs for driver use
+> > > >   */
+> > > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > > index 837ed355bfc6..58bd2f7f86d7 100644
+> > > > --- a/mm/vmalloc.c
+> > > > +++ b/mm/vmalloc.c
+> > > > @@ -3060,6 +3060,8 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+> > > >               return NULL;
+> > > >       }
+> > > >
+> > > > +     prot = arch_vmalloc_pgprot_modify(prot);
+> > > > +
+> > > >       if (vmap_allow_huge && !(vm_flags & VM_NO_HUGE_VMAP)) {
+> > > >               unsigned long size_per_node;
+> > >
+> > > I wonder whether we could fix the prot bits in the caller instead and we
+> > > won't need to worry about the exec or the module_alloc() case. Something
+> > > like:
+> > >
+> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > index d2a00ad4e1dd..4e8c61255b92 100644
+> > > --- a/mm/vmalloc.c
+> > > +++ b/mm/vmalloc.c
+> > > @@ -3112,7 +3112,7 @@ void *__vmalloc_node(unsigned long size, unsigned long align,
+> > >                             gfp_t gfp_mask, int node, const void *caller)
+> > >  {
+> > >         return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
+> > > -                               gfp_mask, PAGE_KERNEL, 0, node, caller);
+> > > +                       gfp_mask, pgprot_hwasan(PAGE_KERNEL), 0, node, caller);
+> > >  }
+> > >  /*
+> > >   * This is only for performance analysis of vmalloc and stress purpose.
+> > > @@ -3161,7 +3161,7 @@ EXPORT_SYMBOL(vmalloc);
+> > >  void *vmalloc_no_huge(unsigned long size)
+> > >  {
+> > >         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> > > -                                   GFP_KERNEL, PAGE_KERNEL, VM_NO_HUGE_VMAP,
+> > > +                                   GFP_KERNEL, pgprot_hwasan(PAGE_KERNEL), VM_NO_HUGE_VMAP,
+> > >                                     NUMA_NO_NODE, __builtin_return_address(0));
+> > >  }
+> > >  EXPORT_SYMBOL(vmalloc_no_huge);
+> > >
+> > > with pgprot_hwasan() defined to pgprot_tagged() only if KASAN_HW_TAGS is
+> > > enabled.
+> >
+> > And also change kasan_unpoison_vmalloc() to tag only if
+> > pgprot_tagged() has been applied, I assume.
+> >
+> > Hm. Then __vmalloc_node_range() callers will never get tagged memory
+> > unless requested. I suppose that's OK, most of them untag the pointer
+> > anyway.
+> >
+> > But this won't work for SW_TAGS mode, which is also affected by the
+> > exec issue and needs those kasan_reset_tag()s in module_alloc()/BPF.
+> > We could invent some virtual protection bit for it and reuse
+> > pgprot_hwasan(). Not sure if this would be acceptable.
+>
+> Ah, a pgprot_hwasan() for the sw tags is probably not acceptable as this
+> requires an unnecessary pte bit. An alternative could be a GFP flag that
+> gets passed only from __vmalloc_node() etc.
 
-On 2021-12-19 23:39, Liam Beguin wrote:
-> Hi Jonathan, Peter,
-> 
-> I left out IIO_VAL_INT overflows for now, so that I can focus on getting
-> the rest of these changes pulled in, but I don't mind adding a patch for
-> that later on.
-> 
-> This series focuses on adding temperature rescaling support to the IIO
-> Analog Front End (AFE) driver.
-> 
-> The first few patches address minor bugs in IIO inkernel functions, and
-> prepare the AFE driver for the additional features.
-> 
-> The main changes to the AFE driver include an initial Kunit test suite,
-> support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
-> and temperature transducer sensors.
-> 
-> Thanks for your time,
-> Liam
+This will still leave the BPF JIT special case though.
 
-And thanks for your time and persistence!
+So I'm leaning towards keeping my approach.
 
-This now looks in good order, so for the whole series:
-
-Reviewed-by: Peter Rosin <peda@axentia.se>
-
-Cheers,
-Peter
+Thanks!

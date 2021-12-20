@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F020147AE2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBEE47AD74
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235446AbhLTO6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239584AbhLTO4f (ORCPT
+        id S236593AbhLTOwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:52:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55824 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235890AbhLTOtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:56:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C1CC08ECB4;
-        Mon, 20 Dec 2021 06:49:02 -0800 (PST)
+        Mon, 20 Dec 2021 09:49:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77BBE611A4;
-        Mon, 20 Dec 2021 14:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59697C36AE7;
-        Mon, 20 Dec 2021 14:49:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9CBFB80EE4;
+        Mon, 20 Dec 2021 14:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294C2C36AE9;
+        Mon, 20 Dec 2021 14:49:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011741;
-        bh=mJYwEo/a4YVK9lIvfX4OW9gonCo1Tyc4xQ/f9y/5oZQ=;
+        s=korg; t=1640011744;
+        bh=ljdZuRv6SWrPfmyPw5YotBu5n4WVdDCuwnE3pikCLzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ysUSwJT4NTi0491wYlZLafPO/lObAZ450S676wuixeUeylF0IkX2mGpMIIRJAgzIx
-         jPgMVS5NEylRknd1qX3wVb8Kvmwa68g0iwD5GoNZNauqiz/hCT89nZmBEC/gZ0P664
-         5A8lKlgYPbbRhOiHha4nSRkjS3Q2xHfG40xp+1qY=
+        b=wuq+Y0dPwyl1D8xV7MyDt3Td2/oPsG51y3ACNr21gyQ1dspUQ59OyLZdnGuYIthaJ
+         m3blml/Pu33QIH6amUZvuLd/r8ANy9HtRKd/HL4U/vsVUV1orIbq/AuZ5+opXXCqC/
+         D9IlHKer4DG/UCxz/RSHE9ORkGdxyqJxQrZ7Ysrk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        "D. Wythe" <alibuda@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 58/99] net: Fix double 0x prefix print in SKB dump
-Date:   Mon, 20 Dec 2021 15:34:31 +0100
-Message-Id: <20211220143031.340092116@linuxfoundation.org>
+Subject: [PATCH 5.10 59/99] net/smc: Prevent smc_release() from long blocking
+Date:   Mon, 20 Dec 2021 15:34:32 +0100
+Message-Id: <20211220143031.372434343@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 References: <20211220143029.352940568@linuxfoundation.org>
@@ -49,34 +49,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gal Pressman <gal@nvidia.com>
+From: D. Wythe <alibuda@linux.alibaba.com>
 
-[ Upstream commit 8a03ef676ade55182f9b05115763aeda6dc08159 ]
+[ Upstream commit 5c15b3123f65f8fbb1b445d9a7e8812e0e435df2 ]
 
-When printing netdev features %pNF already takes care of the 0x prefix,
-remove the explicit one.
+In nginx/wrk benchmark, there's a hung problem with high probability
+on case likes that: (client will last several minutes to exit)
 
-Fixes: 6413139dfc64 ("skbuff: increase verbosity when dumping skb data")
-Signed-off-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+server: smc_run nginx
+
+client: smc_run wrk -c 10000 -t 1 http://server
+
+Client hangs with the following backtrace:
+
+0 [ffffa7ce8Of3bbf8] __schedule at ffffffff9f9eOd5f
+1 [ffffa7ce8Of3bc88] schedule at ffffffff9f9eløe6
+2 [ffffa7ce8Of3bcaO] schedule_timeout at ffffffff9f9e3f3c
+3 [ffffa7ce8Of3bd2O] wait_for_common at ffffffff9f9el9de
+4 [ffffa7ce8Of3bd8O] __flush_work at ffffffff9fOfeOl3
+5 [ffffa7ce8øf3bdfO] smc_release at ffffffffcO697d24 [smc]
+6 [ffffa7ce8Of3be2O] __sock_release at ffffffff9f8O2e2d
+7 [ffffa7ce8Of3be4ø] sock_close at ffffffff9f8ø2ebl
+8 [ffffa7ce8øf3be48] __fput at ffffffff9f334f93
+9 [ffffa7ce8Of3be78] task_work_run at ffffffff9flOlff5
+10 [ffffa7ce8Of3beaO] do_exit at ffffffff9fOe5Ol2
+11 [ffffa7ce8Of3bflO] do_group_exit at ffffffff9fOe592a
+12 [ffffa7ce8Of3bf38] __x64_sys_exit_group at ffffffff9fOe5994
+13 [ffffa7ce8Of3bf4O] do_syscall_64 at ffffffff9f9d4373
+14 [ffffa7ce8Of3bfsO] entry_SYSCALL_64_after_hwframe at ffffffff9fa0007c
+
+This issue dues to flush_work(), which is used to wait for
+smc_connect_work() to finish in smc_release(). Once lots of
+smc_connect_work() was pending or all executing work dangling,
+smc_release() has to block until one worker comes to free, which
+is equivalent to wait another smc_connnect_work() to finish.
+
+In order to fix this, There are two changes:
+
+1. For those idle smc_connect_work(), cancel it from the workqueue; for
+   executing smc_connect_work(), waiting for it to finish. For that
+   purpose, replace flush_work() with cancel_work_sync().
+
+2. Since smc_connect() hold a reference for passive closing, if
+   smc_connect_work() has been cancelled, release the reference.
+
+Fixes: 24ac3a08e658 ("net/smc: rebuild nonblocking connect")
+Reported-by: Tony Lu <tonylu@linux.alibaba.com>
+Tested-by: Dust Li <dust.li@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Link: https://lore.kernel.org/r/1639571361-101128-1-git-send-email-alibuda@linux.alibaba.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skbuff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/smc/af_smc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 825e6b9880030..0215ae898e836 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -769,7 +769,7 @@ void skb_dump(const char *level, const struct sk_buff *skb, bool full_pkt)
- 	       ntohs(skb->protocol), skb->pkt_type, skb->skb_iif);
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index d324a12c26cd9..99b902e410c49 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -191,7 +191,9 @@ static int smc_release(struct socket *sock)
+ 	/* cleanup for a dangling non-blocking connect */
+ 	if (smc->connect_nonblock && sk->sk_state == SMC_INIT)
+ 		tcp_abort(smc->clcsock->sk, ECONNABORTED);
+-	flush_work(&smc->connect_work);
++
++	if (cancel_work_sync(&smc->connect_work))
++		sock_put(&smc->sk); /* sock_hold in smc_connect for passive closing */
  
- 	if (dev)
--		printk("%sdev name=%s feat=0x%pNF\n",
-+		printk("%sdev name=%s feat=%pNF\n",
- 		       level, dev->name, &dev->features);
- 	if (sk)
- 		printk("%ssk family=%hu type=%u proto=%u\n",
+ 	if (sk->sk_state == SMC_LISTEN)
+ 		/* smc_close_non_accepted() is called and acquires
 -- 
 2.33.0
 

@@ -2,48 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E247A93F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0521047A946
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbhLTMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:10:56 -0500
-Received: from foss.arm.com ([217.140.110.172]:53242 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231173AbhLTMKz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:10:55 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C0AA1042;
-        Mon, 20 Dec 2021 04:10:55 -0800 (PST)
-Received: from bogus (unknown [10.57.36.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20133F718;
-        Mon, 20 Dec 2021 04:10:53 -0800 (PST)
-Date:   Mon, 20 Dec 2021 12:10:50 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Edwin Chiu <edwinchiu0505tw@gmail.com>
-Cc:     robh+dt@kernel.org, edwin.chiu@sunplus.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
- sp7021
-Message-ID: <20211220121050.rnd3o7d5cksqbqnk@bogus>
-References: <cover.1639971376.git.edwinchiu0505tw@gmail.com>
- <6092f5f372851e2d6bf12b4b23209558038b9fda.1639971376.git.edwinchiu0505tw@gmail.com>
+        id S232342AbhLTMNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:13:38 -0500
+Received: from relay034.a.hostedemail.com ([64.99.140.34]:36372 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231173AbhLTMNh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 07:13:37 -0500
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 796EB1D8;
+        Mon, 20 Dec 2021 12:13:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 533192002C;
+        Mon, 20 Dec 2021 12:13:21 +0000 (UTC)
+Message-ID: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
+Subject: Re: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+From:   Joe Perches <joe@perches.com>
+To:     Anders Roxell <anders.roxell@linaro.org>, stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        clang-built-linux@googlegroups.com, ulli.kroll@googlemail.com,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        amitkarwar@gmail.com, nishants@marvell.com, gbhat@marvell.com,
+        huxinming820@gmail.com, kvalo@codeaurora.org,
+        linux-wireless@vger.kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, dmitry.torokhov@gmail.com,
+        ndesaulniers@google.com, nathan@kernel.org,
+        linux-input@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andy Lavr <andy.lavr@gmail.com>
+Date:   Mon, 20 Dec 2021 04:13:20 -0800
+In-Reply-To: <20211217144119.2538175-4-anders.roxell@linaro.org>
+References: <20211217144119.2538175-1-anders.roxell@linaro.org>
+         <20211217144119.2538175-4-anders.roxell@linaro.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6092f5f372851e2d6bf12b4b23209558038b9fda.1639971376.git.edwinchiu0505tw@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 533192002C
+X-Spam-Status: No, score=-1.11
+X-Stat-Signature: 5gayuqe4kzuw64zsi7w1zyzmxgih75tc
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18u6WrSAOpDdNGkNCm15RZg1zit1HkWz44=
+X-HE-Tag: 1640002401-869126
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 01:37:32PM +0800, Edwin Chiu wrote:
-> Create cpuidle driver for sunplus sp7021 chip
+On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
+> From: Nathan Chancellor <natechancellor@gmail.com>
 > 
+> commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+> 
+> A new warning in clang points out when macro expansion might result in a
+> GNU C statement expression. There is an instance of this in the mwifiex
+> driver:
+> 
+> drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
+> ')' tokens terminating statement expression appear in different macro
+> expansion contexts [-Wcompound-token-split-by-macro]
+>         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[]
+> diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
+[]
+> @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
+>  
+>  #define RF_ANTENNA_AUTO                 0xFFFF
+>  
+> -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
+> -	(((seq) & 0x00ff) |                             \
+> -	 (((num) & 0x000f) << 8)) |                     \
+> -	(((type) & 0x000f) << 12);                  }
+> +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
+> +	((((seq) & 0x00ff) |                        \
+> +	 (((num) & 0x000f) << 8)) |                 \
+> +	(((type) & 0x000f) << 12))
 
-Based on the driver here, I couldn't understand why you can't make use of
-existing cpuidle-arm.c driver
+Perhaps this would be better as a static inline
 
--- 
-Regards,
-Sudeep
+static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
+{
+	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
+}
+
+

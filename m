@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 760CA47B11D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEF847B11F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbhLTQc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:32:28 -0500
-Received: from mga03.intel.com ([134.134.136.65]:36040 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237052AbhLTQc1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:32:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640017947; x=1671553947;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AmeYQ2+C1rq8NgcMuvBbnlKuOlgOSEfDw7amnUjKDY8=;
-  b=F/Pvv9bVJuc1uKua0jjDTsHN4Eu9qkTk6rSk2nbgV0I721akvS/Bz+W1
-   T4zqrdIRWGVB07654zjXI6Hp5iBlNhvL5gKWuqePs1YvoE0M5tDJ2lpxP
-   PxxGHJgRfdsm75aO43Bg2OqeLiWRTD+Iik1LMv4iHO2LbL6Pkf6U0RefZ
-   PRLpgtU+cAE62A+GbTd/5YUhqGC29pz1Je3VTmj2xltfzr5q5wnizP3Lr
-   01UifAI5xs5YMwdOgBEvzGQ1LQYUBP3wSfUn6pVvIxjIF6ubz+IlgTHcN
-   ReyVy0AZKi7MYACDEiSa8/Q89oewB6IZG37V3DkiaL73/qbflT8QRxLxf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="240170939"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="240170939"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 08:32:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="569903457"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 08:32:12 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzLa7-0007zD-H4; Mon, 20 Dec 2021 16:32:11 +0000
-Date:   Tue, 21 Dec 2021 00:31:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 8/9] fs/f2fs/file.c:1106:10: error: implicit
- declaration of function 'dax_layout_busy_page'
-Message-ID: <202112210031.prMeKhRK-lkp@intel.com>
+        id S238185AbhLTQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232810AbhLTQdO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 11:33:14 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32E7C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:13 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id x6so13889774iol.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3y3ZdzFgGAR1E/AaB8gqHxACx/fgP2N34Knou9lpjtk=;
+        b=hqzGSYuC7wPQmzYN/AXyRjf2vTckJfNumqkFL5+8wWwpUkQWPdqum68/xsisk4dFzS
+         xdrW/rUdYpNddkooTfxbUCufKv28PyGYsgoe4WvaybmZwSSHQg23GM/8/f2Ol1Nyq8we
+         fknO1BvT1m5zJiDqTOaGbZjKtsc9ELdEJx3iR0Y65paa4/MD3Ti1zsrIWdtkLZCzEmA9
+         jE7tjztPkjFL5etePZpHEVFe1OtxmqXB3v/6GgBr08u/qdLSCGFJhjdOFFzaE6So7tC9
+         D6XDzCQf3po1elwKkkfpihceDFxbZ+IsmEoaF/s2x2PCbMuHQClsGd3s+/ZuTrYG5Afo
+         5I6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3y3ZdzFgGAR1E/AaB8gqHxACx/fgP2N34Knou9lpjtk=;
+        b=YsIKcOzw4jYu0FhrWhWNe9p+y493RMHzTV/1pYmyzycoZ3fcKzE3ofdz6/ZlV9Nm/E
+         s30PQ6okxhau5+YDUfumk0THwLJdBQqIGy13s6ymTX7MRTlw4BFJLRh69jiEeDwN5Yo7
+         ScVzOY6+k5CgJ4g8LPqf1FcARmCzGkzUwDCTThv7XhKiSeN7O34vXjtOgfKtcBrpoqca
+         3sm4pVGWvqzs6AiGbmcwgQZWzRdV/NICI44feP1WqqjmGjj7XABhAdONmzVfd0Bpk8W6
+         VDrba6toF2fER46PsqvfgNvpIDpyn5pvQ1PAhY33Pm6IQy8sRVZq2Dl3GPemuRfKFcRp
+         53vA==
+X-Gm-Message-State: AOAM530nYArZlGiqwFJm47m7uFE+/zBv6qmZMeEbM5biKc2ukp/18T+a
+        VM57wqBoUDXbQuWopXljsL6g9KcFwlzdIQ==
+X-Google-Smtp-Source: ABdhPJzQPMLTftdafFpdN9TE+Gkm65iOSMK91N8RDy/Vf1PcatP90M7X4n9+g5UvAIWIVwNw20TAZw==
+X-Received: by 2002:a05:6638:22d0:: with SMTP id j16mr4879118jat.166.1640017993036;
+        Mon, 20 Dec 2021 08:33:13 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id m6sm9753671ilh.4.2021.12.20.08.33.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 08:33:12 -0800 (PST)
+Subject: Re: [PATCH] paride: fix up build warning on mips platforms
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, tim@cyberelk.net
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130084626.3215987-1-gregkh@linuxfoundation.org>
+ <YcCo8+jTG3b+5GTA@kroah.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
+Date:   Mon, 20 Dec 2021 09:33:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YcCo8+jTG3b+5GTA@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
-commit: ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa [8/9] f2fs: handle layout changes to pinned DAX mappings
-config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210031.prMeKhRK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+On 12/20/21 9:01 AM, Greg Kroah-Hartman wrote:
+> On Tue, Nov 30, 2021 at 09:46:26AM +0100, Greg Kroah-Hartman wrote:
+>> MIPS include files define "PC" so when building the paride driver the
+>> following build warning shows up:
+>>
+>> 	rivers/block/paride/bpck.c:32: warning: "PC" redefined
+>>
+>> Fix this by undefining PC before redefining it as is done for other
+>> defines in this driver.
+>>
+>> Cc: Tim Waugh <tim@cyberelk.net>
+>> Cc: Jens Axboe <axboe@kernel.dk>
+>> Cc: linux-block@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ---
+>>  drivers/block/paride/bpck.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/block/paride/bpck.c b/drivers/block/paride/bpck.c
+>> index f5f63ca2889d..d880a9465e9b 100644
+>> --- a/drivers/block/paride/bpck.c
+>> +++ b/drivers/block/paride/bpck.c
+>> @@ -28,6 +28,7 @@
+>>  
+>>  #undef r2
+>>  #undef w2
+>> +#undef PC
+>>  
+>>  #define PC			pi->private
+>>  #define r2()			(PC=(in_p(2) & 0xff))
+>> -- 
+>> 2.34.1
+>>
+> 
+> Given the lack of objections to this, I'll just take it through one of
+> my trees for 5.17-rc1.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry about that, got lost. I can queue it  up too, or you can add my
+acked-by, either is fine.
 
-All error/warnings (new ones prefixed by >>):
+-- 
+Jens Axboe
 
-   fs/f2fs/file.c:584:7: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror,-Wimplicit-function-declaration]
-           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-                ^
->> fs/f2fs/file.c:1106:10: error: implicit declaration of function 'dax_layout_busy_page' [-Werror,-Wimplicit-function-declaration]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                          ^
->> fs/f2fs/file.c:1106:8: warning: incompatible integer to pointer conversion assigning to 'struct page *' from 'int' [-Wint-conversion]
-                   page = dax_layout_busy_page(inode->i_mapping);
-                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +/dax_layout_busy_page +1106 fs/f2fs/file.c
-
-  1096	
-  1097	int f2fs_break_layouts(struct inode *inode)
-  1098	{
-  1099		struct page *page;
-  1100		int error;
-  1101	
-  1102		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
-  1103			return -EINVAL;
-  1104	
-  1105		do {
-> 1106			page = dax_layout_busy_page(inode->i_mapping);
-  1107			if (!page)
-  1108				return 0;
-  1109	
-  1110			error = ___wait_var_event(&page->_refcount,
-  1111					atomic_read(&page->_refcount) == 1,
-  1112					TASK_INTERRUPTIBLE, 0, 0,
-  1113					f2fs_wait_dax_page(inode));
-  1114		} while (error == 0);
-  1115	
-  1116		return error;
-  1117	}
-  1118	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A38B47A5F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E2147A609
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238042AbhLTIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:23:16 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:40483 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237925AbhLTIXG (ORCPT
+        id S234406AbhLTIaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:30:10 -0500
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:36855 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231287AbhLTIaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:23:06 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V.Aovn1_1639988581;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.Aovn1_1639988581)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 20 Dec 2021 16:23:02 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH 6/6] crypto: tcrypt - add asynchronous speed test for SM3
-Date:   Mon, 20 Dec 2021 16:22:51 +0800
-Message-Id: <20211220082251.1445-7-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211220082251.1445-1-tianjia.zhang@linux.alibaba.com>
-References: <20211220082251.1445-1-tianjia.zhang@linux.alibaba.com>
+        Mon, 20 Dec 2021 03:30:09 -0500
+Received: by mail-ua1-f45.google.com with SMTP id r15so16325401uao.3;
+        Mon, 20 Dec 2021 00:30:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rMAO1VGZAlbtYZ79yXzZbE6uNLUuolj3od2YVWnGiLQ=;
+        b=UveSCvYZeIXhE5t6S0vI1qJaDHCuld83TYTFt5YiJpP8WSYFirj91wN+ZZdyzNl8aW
+         iPWAupDSSGZKgZAIUC+lorFfSUM97T4+7VYFWGzb5dMF+BBeuL9u2T4wYYR7gNoa631b
+         0CV4sc9NT6USgc+gmBptoyAKpJewbnUqliHlS64Jc7r71k9hpJjLDiwgm5Qnmg+QLtLJ
+         FhCfORKDYSZnrTyeV1ipG6qIjdhFNdNju1XALCtdB0mB7QnoAeqBtvvpUJOsvH3tCy1W
+         JB6/TxRr8hzlm2+ROR9ZereDiOvsIyE3Qs2xS6idona8L7vwZ36B3nCMnYeW02IMfjHY
+         cM4Q==
+X-Gm-Message-State: AOAM530HHaBvSegGY7gfX/JwWqQ0JmE7uWSGDqINmyIIWOR+bTDpJWHN
+        Tw5wPeZl29h3aL5qlZ1K4tvOF8E+WRnEEg==
+X-Google-Smtp-Source: ABdhPJzS+UuIYwicJpWu84Ncm8JS88IQrccXLSHDYpGL5n3GrMm2owLBJOhETRl2BaLGPjN9bEsUCQ==
+X-Received: by 2002:a67:c106:: with SMTP id d6mr4317149vsj.77.1639989008291;
+        Mon, 20 Dec 2021 00:30:08 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id m3sm2540411vsh.7.2021.12.20.00.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 00:30:07 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id p2so16235242uad.11;
+        Mon, 20 Dec 2021 00:30:07 -0800 (PST)
+X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr2504985vsg.68.1639989007492;
+ Mon, 20 Dec 2021 00:30:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211220081132.883709-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211220081132.883709-1-jiasheng@iscas.ac.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Dec 2021 09:29:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWhs-wTcZNq2VrAZXrxeSNa88GR49j2rn5zSryxF4peOw@mail.gmail.com>
+Message-ID: <CAMuHMdWhs-wTcZNq2VrAZXrxeSNa88GR49j2rn5zSryxF4peOw@mail.gmail.com>
+Subject: Re: [PATCH v2] video: fbdev: Check for null res pointer
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, shawnguo@kernel.org,
+        festevam@gmail.com, linux-imx@nxp.com, linux-fbdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tcrypt supports testing of SM3 hash algorithms that use AVX
-instruction acceleration.
+Hi Jiasheng,
 
-In order to add the sm3 asynchronous test to the appropriate
-position, shift the testcase sequence number of the multi buffer
-backward and start from 450.
+On Mon, Dec 20, 2021 at 9:19 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+> The return value of platform_get_resource() needs to be checked.
+> To avoid use of error pointer in case that there is no suitable resource.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- crypto/tcrypt.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Thanks for your patch!
 
-diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-index 00149657a4bc..82b5eef2246a 100644
---- a/crypto/tcrypt.c
-+++ b/crypto/tcrypt.c
-@@ -2571,31 +2571,35 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
- 	case 422:
-+		test_ahash_speed("sm3", sec, generic_hash_speed_template);
-+		if (mode > 400 && mode < 500) break;
-+		fallthrough;
-+	case 450:
- 		test_mb_ahash_speed("sha1", sec, generic_hash_speed_template,
- 				    num_mb);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 423:
-+	case 451:
- 		test_mb_ahash_speed("sha256", sec, generic_hash_speed_template,
- 				    num_mb);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 424:
-+	case 452:
- 		test_mb_ahash_speed("sha512", sec, generic_hash_speed_template,
- 				    num_mb);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 425:
-+	case 453:
- 		test_mb_ahash_speed("sm3", sec, generic_hash_speed_template,
- 				    num_mb);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 426:
-+	case 454:
- 		test_mb_ahash_speed("streebog256", sec,
- 				    generic_hash_speed_template, num_mb);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 427:
-+	case 455:
- 		test_mb_ahash_speed("streebog512", sec,
- 				    generic_hash_speed_template, num_mb);
- 		if (mode > 400 && mode < 500) break;
--- 
-2.32.0
+> Fixes: f7018c213502 ("video: move fbdev to drivers/video/fbdev")
 
+That can't be the real introducer of the "bug"...
+
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+
+> --- a/drivers/video/fbdev/imxfb.c
+> +++ b/drivers/video/fbdev/imxfb.c
+> @@ -1083,6 +1083,8 @@ static int imxfb_remove(struct platform_device *pdev)
+>         struct resource *res;
+>
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       if (!res)
+> +               return -EINVAL;
+
+This cannot happen, as imxfb_remove() can only be called if
+imxfb_probe() succeeded.  imxfb_probe() does check the result of
+platform_get_resource(), and fails if the resource was not found.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

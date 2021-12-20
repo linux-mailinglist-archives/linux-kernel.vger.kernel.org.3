@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB6A47ABC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742DE47AC6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbhLTOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:38:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47344 "EHLO
+        id S236010AbhLTOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:43:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50640 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbhLTOiR (ORCPT
+        with ESMTP id S235438AbhLTOmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:38:17 -0500
+        Mon, 20 Dec 2021 09:42:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7815BB80EB3;
-        Mon, 20 Dec 2021 14:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A2AC36AE8;
-        Mon, 20 Dec 2021 14:38:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44E6AB80EE3;
+        Mon, 20 Dec 2021 14:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87487C36AE8;
+        Mon, 20 Dec 2021 14:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011095;
-        bh=1RDbCD3gJz6XUJ/4bir/KL2cxdEqvCW2LBUTzUiPluY=;
+        s=korg; t=1640011333;
+        bh=dsyhPV3pGgf/4WJmlaH/zgA+cgIArokgSGhXtKSLHqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XzA6SSRd0GIGOjE1336Mk0Kg6h7ZVrNGeKf5+2JVIhnqZuzJXnUpnyo7aB1qMQy5E
-         U5qeGqL1nnsp+/ELX1MRmhM7JtDvlTeLD9g6tcn4U0l20oH7Rej1QhmZtATQoTx7W6
-         ZQJdzmK2m26eNDc8bKSckK8QZT2eK1cwGk+hyNww=
+        b=PRlxF98EwLCsPDsKHWSVDCyR5vwCe3ZiGqyO1mP+YdhyKgCtdF4V9hktUVkI0kKW2
+         3eb6+HOMOc8CWdKIFGOoFrOZ8X5Olgnnzz8yiKZ0okuBiU6YawLGanTYzp2miiG33M
+         2w18zKksvKlNR0RmVqjl/2qtHoykrvmwZv4vQrqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Lavr <andy.lavr@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.9 25/31] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
-Date:   Mon, 20 Dec 2021 15:34:25 +0100
-Message-Id: <20211220143020.779510941@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>
+Subject: [PATCH 4.19 33/56] PCI/MSI: Mask MSI-X vectors only on success
+Date:   Mon, 20 Dec 2021 15:34:26 +0100
+Message-Id: <20211220143024.526582062@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,72 +48,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Stefan Roese <sr@denx.de>
 
-commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+commit 83dbf898a2d45289be875deb580e93050ba67529 upstream.
 
-A new warning in clang points out when macro expansion might result in a
-GNU C statement expression. There is an instance of this in the mwifiex
-driver:
+Masking all unused MSI-X entries is done to ensure that a crash kernel
+starts from a clean slate, which correponds to the reset state of the
+device as defined in the PCI-E specificion 3.0 and later:
 
-drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-')' tokens terminating statement expression appear in different macro
-expansion contexts [-Wcompound-token-split-by-macro]
-        host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/wireless/marvell/mwifiex/fw.h:519:46: note: expanded from
-macro 'HostCmd_SET_SEQ_NO_BSS_INFO'
-        (((type) & 0x000f) << 12);                  }
-                                                    ^
+ Vector Control for MSI-X Table Entries
+ --------------------------------------
 
-This does not appear to be a real issue. Removing the braces and
-replacing them with parentheses will fix the warning and not change the
-meaning of the code.
+ "00: Mask bit:  When this bit is set, the function is prohibited from
+                 sending a message using this MSI-X Table entry.
+                 ...
+                 This bit’s state after reset is 1 (entry is masked)."
 
-Fixes: 5e6e3a92b9a4 ("wireless: mwifiex: initial commit for Marvell mwifiex driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1146
-Reported-by: Andy Lavr <andy.lavr@gmail.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20200901070834.1015754-1-natechancellor@gmail.com
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+A Marvell NVME device fails to deliver MSI interrupts after trying to
+enable MSI-X interrupts due to that masking. It seems to take the MSI-X
+mask bits into account even when MSI-X is disabled.
+
+While not specification compliant, this can be cured by moving the masking
+into the success path, so that the MSI-X table entries stay in device reset
+state when the MSI-X setup fails.
+
+[ tglx: Move it into the success path, add comment and amend changelog ]
+
+Fixes: aa8092c1d1f1 ("PCI/MSI: Mask all unused MSI-X entries")
+Signed-off-by: Stefan Roese <sr@denx.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-pci@vger.kernel.org
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211210161025.3287927-1-sr@denx.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/marvell/mwifiex/cmdevt.c |    4 ++--
- drivers/net/wireless/marvell/mwifiex/fw.h     |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/pci/msi.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-+++ b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-@@ -321,9 +321,9 @@ static int mwifiex_dnld_sleep_confirm_cm
+--- a/drivers/pci/msi.c
++++ b/drivers/pci/msi.c
+@@ -799,9 +799,6 @@ static int msix_capability_init(struct p
+ 		goto out_disable;
+ 	}
  
- 	adapter->seq_num++;
- 	sleep_cfm_buf->seq_num =
--		cpu_to_le16((HostCmd_SET_SEQ_NO_BSS_INFO
-+		cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
- 					(adapter->seq_num, priv->bss_num,
--					 priv->bss_type)));
-+					 priv->bss_type));
+-	/* Ensure that all table entries are masked. */
+-	msix_mask_all(base, tsize);
+-
+ 	ret = msix_setup_entries(dev, base, entries, nvec, affd);
+ 	if (ret)
+ 		goto out_disable;
+@@ -824,6 +821,16 @@ static int msix_capability_init(struct p
+ 	/* Set MSI-X enabled bits and unmask the function */
+ 	pci_intx_for_msi(dev, 0);
+ 	dev->msix_enabled = 1;
++
++	/*
++	 * Ensure that all table entries are masked to prevent
++	 * stale entries from firing in a crash kernel.
++	 *
++	 * Done late to deal with a broken Marvell NVME device
++	 * which takes the MSI-X mask bits into account even
++	 * when MSI-X is disabled, which prevents MSI delivery.
++	 */
++	msix_mask_all(base, tsize);
+ 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL, 0);
  
- 	mwifiex_dbg(adapter, CMD,
- 		    "cmd: DNLD_CMD: %#x, act %#x, len %d, seqno %#x\n",
---- a/drivers/net/wireless/marvell/mwifiex/fw.h
-+++ b/drivers/net/wireless/marvell/mwifiex/fw.h
-@@ -482,10 +482,10 @@ enum mwifiex_channel_flags {
- 
- #define RF_ANTENNA_AUTO                 0xFFFF
- 
--#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
--	(((seq) & 0x00ff) |                             \
--	 (((num) & 0x000f) << 8)) |                     \
--	(((type) & 0x000f) << 12);                  }
-+#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-+	((((seq) & 0x00ff) |                        \
-+	 (((num) & 0x000f) << 8)) |                 \
-+	(((type) & 0x000f) << 12))
- 
- #define HostCmd_GET_SEQ_NO(seq)       \
- 	((seq) & HostCmd_SEQ_NUM_MASK)
+ 	pcibios_free_irq(dev);
 
 

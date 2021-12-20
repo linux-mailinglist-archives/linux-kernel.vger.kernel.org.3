@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9212847AE8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9320447ACF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240725AbhLTPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbhLTO63 (ORCPT
+        id S236788AbhLTOsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:48:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36400 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237192AbhLTOpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA52C061395;
-        Mon, 20 Dec 2021 06:49:36 -0800 (PST)
+        Mon, 20 Dec 2021 09:45:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94A51B80EE5;
-        Mon, 20 Dec 2021 14:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9DA1C36AE9;
-        Mon, 20 Dec 2021 14:49:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89740611A3;
+        Mon, 20 Dec 2021 14:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB02C36AE7;
+        Mon, 20 Dec 2021 14:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011775;
-        bh=ZP7BExbkenyEiFUFz2o6A736QgLbwkeYfWrM5/cC3UE=;
+        s=korg; t=1640011530;
+        bh=ZmArr/aHn5Nz3ko1RUtP7WswYuZ5V8KgM3yDgGj7TN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QY3VXJ1Kw+o3RZKOxFf7gkHtlWhQLQoZA7Bfti4YgVu7xdx6luCftT47iqr6iRmrb
-         zchmPyL5pt20iPmQHFzF3u6ingVce7ixm02W5RHXZ4xtWPkjWWkElp4lKQCgkpRo8l
-         mupg43QNhKjTZqouj0HLw0P1vKfhgziLHMnY+cYw=
+        b=yayksFeujEo9/Zpj2aYHjGHJQMjbbcC9xJ9Tr+iMfaPFTg2cuftCfjf108M2gITmO
+         0DEpSRV0hVc69kIUCdAnYUnNiVpUgiC+J3qCRWDwcAsdTsisvhmNKg7vAvNcPiUAmA
+         iHkl3hdlDnum21IUHBVXaAZGn96E2IUvz4lb8UMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH 5.10 69/99] usb: dwc2: fix STM ID/VBUS detection startup delay in dwc2_driver_probe
+        stable@vger.kernel.org, Le Ma <le.ma@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.4 53/71] drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
 Date:   Mon, 20 Dec 2021 15:34:42 +0100
-Message-Id: <20211220143031.719458456@linuxfoundation.org>
+Message-Id: <20211220143027.470955937@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,39 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Le Ma <le.ma@amd.com>
 
-commit fac6bf87c55f7f0733efb0375565fb6a50cf2caf upstream.
+commit f3a8076eb28cae1553958c629aecec479394bbe2 upstream.
 
-When activate_stm_id_vb_detection is enabled, ID and Vbus detection relies
-on sensing comparators. This detection needs time to stabilize.
-A delay was already applied in dwc2_resume() when reactivating the
-detection, but it wasn't done in dwc2_probe().
-This patch adds delay after enabling STM ID/VBUS detection. Then, ID state
-is good when initializing gadget and host, and avoid to get a wrong
-Connector ID Status Change interrupt.
+should count on GC IP base address
 
-Fixes: a415083a11cc ("usb: dwc2: add support for STM32MP15 SoCs USB OTG HS and FS")
-Cc: stable <stable@vger.kernel.org>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20211207124510.268841-1-amelie.delaunay@foss.st.com
+Signed-off-by: Le Ma <le.ma@amd.com>
+Signed-off-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/platform.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -542,6 +542,9 @@ static int dwc2_driver_probe(struct plat
- 		ggpio |= GGPIO_STM32_OTG_GCCFG_IDEN;
- 		ggpio |= GGPIO_STM32_OTG_GCCFG_VBDEN;
- 		dwc2_writel(hsotg, ggpio, GGPIO);
-+
-+		/* ID/VBUS detection startup time */
-+		usleep_range(5000, 7000);
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -2906,8 +2906,8 @@ static void gfx_v9_0_init_pg(struct amdg
+ 			      AMD_PG_SUPPORT_CP |
+ 			      AMD_PG_SUPPORT_GDS |
+ 			      AMD_PG_SUPPORT_RLC_SMU_HS)) {
+-		WREG32(mmRLC_JUMP_TABLE_RESTORE,
+-		       adev->gfx.rlc.cp_table_gpu_addr >> 8);
++		WREG32_SOC15(GC, 0, mmRLC_JUMP_TABLE_RESTORE,
++			     adev->gfx.rlc.cp_table_gpu_addr >> 8);
+ 		gfx_v9_0_init_gfx_power_gating(adev);
  	}
- 
- 	retval = dwc2_drd_init(hsotg);
+ }
 
 

@@ -2,26 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D7D47A963
+	by mail.lfdr.de (Postfix) with ESMTP id 4C39147A964
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbhLTMSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:18:49 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56984 "EHLO
+        id S232463AbhLTMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:18:52 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57006 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232443AbhLTMSp (ORCPT
+        with ESMTP id S232428AbhLTMSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:18:45 -0500
-X-UUID: f32c6f6f6d8347a98e6a9a9fa020654a-20211220
-X-UUID: f32c6f6f6d8347a98e6a9a9fa020654a-20211220
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        Mon, 20 Dec 2021 07:18:46 -0500
+X-UUID: d44aeb8cf5624ab4827127f592e7713c-20211220
+X-UUID: d44aeb8cf5624ab4827127f592e7713c-20211220
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1539896202; Mon, 20 Dec 2021 20:18:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 20 Dec 2021 20:18:37 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2128122031; Mon, 20 Dec 2021 20:18:39 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 20 Dec 2021 20:18:38 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 20 Dec
+ 2021 20:18:38 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Mon, 20 Dec 2021 20:18:37 +0800
@@ -35,10 +38,11 @@ CC:     <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: [PATCH v7 3/4] dt-bindings: pinctrl: mt8195: add wrapping node of pin configurations
-Date:   Mon, 20 Dec 2021 20:18:24 +0800
-Message-ID: <20211220121825.6446-4-tinghan.shen@mediatek.com>
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>
+Subject: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+Date:   Mon, 20 Dec 2021 20:18:25 +0800
+Message-ID: <20211220121825.6446-5-tinghan.shen@mediatek.com>
 X-Mailer: git-send-email 2.15.GIT
 In-Reply-To: <20211220121825.6446-1-tinghan.shen@mediatek.com>
 References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
@@ -49,381 +53,1283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mt8195, the pinctrl node has pinctrl groups to group pin
-configurations by users' need. In each pinctrl group, it has
-subnode(s) to list pins needed and pin configurations. By supporting
-multiple subnodes, we can configure different pin characteristics
-(driving/pull-up/pull-down/etc.) in a pinctrl group.
+Add basic chip support for mediatek mt8195.
 
-Update pinctrl-mt8195.yaml to add subnode in pinctrl groups and an
-example to illustrate the usage.
-
+Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
 Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 ---
- .../bindings/pinctrl/pinctrl-mt8195.yaml      | 338 ++++++++++--------
- 1 file changed, 188 insertions(+), 150 deletions(-)
+ arch/arm64/boot/dts/mediatek/Makefile       |    1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  209 ++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1034 +++++++++++++++++++
+ 3 files changed, 1244 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-index 5e2bb2bf3a55..567f71cab7b4 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-@@ -55,137 +55,159 @@ properties:
-       Identifying i2c pins pull up/down type which is RSEL. It can support
-       RSEL define or si unit value(ohm) to set different resistance.
- 
--#PIN CONFIGURATION NODES
-+# PIN CONFIGURATION NODES
- patternProperties:
-   '-pins$':
-     type: object
--    description: |
--      A pinctrl node should contain at least one subnodes representing the
--      pinctrl groups available on the machine. Each subnode will list the
--      pins it needs, and how they should be configured, with regard to muxer
--      configuration, pullups, drive strength, input enable/disable and
--      input schmitt.
--      An example of using macro:
--      pincontroller {
--        /* GPIO0 set as multifunction GPIO0 */
--        gpio_pin {
--          pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
--        };
--        /* GPIO8 set as multifunction SDA0 */
--        i2c0_pin {
--          pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
--        };
--      };
--    $ref: "pinmux-node.yaml"
--
--    properties:
--      pinmux:
--        description: |
--          Integer array, represents gpio pin number and mux setting.
--          Supported pin number and mux varies for different SoCs, and are defined
--          as macros in dt-bindings/pinctrl/<soc>-pinfunc.h directly.
--
--      drive-strength:
--        enum: [2, 4, 6, 8, 10, 12, 14, 16]
--
--      bias-pull-down:
--        description: |
--          For pull down type is normal, it don't need add RSEL & R1R0 define
--          and resistance value.
--          For pull down type is PUPD/R0/R1 type, it can add R1R0 define to
--          set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
--          "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" & "MTK_PUPD_SET_R1R0_11"
--          define in mt8195.
--          For pull down type is RSEL, it can add RSEL define & resistance value(ohm)
--          to set different resistance by identifying property "mediatek,rsel_resistance_in_si_unit".
--          It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--          & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" & "MTK_PULL_SET_RSEL_100"
--          & "MTK_PULL_SET_RSEL_101" & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
--          define in mt8195. It can also support resistance value(ohm) "75000" & "5000" in mt8195.
--          oneOf:
--            - enum: [100, 101, 102, 103]
--            - description: mt8195 pull down PUPD/R0/R1 type define value.
--            - enum: [200, 201, 202, 203, 204, 205, 206, 207]
--            - description: mt8195 pull down RSEL type define value.
--            - enum: [75000, 5000]
--            - description: mt8195 pull down RSEL type si unit value(ohm).
--
--          An example of using RSEL define:
--          pincontroller {
--            i2c0_pin {
--              pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
--              bias-pull-down = <MTK_PULL_SET_RSEL_001>;
--            };
--          };
--          An example of using si unit resistance value(ohm):
--          &pio {
--            mediatek,rsel_resistance_in_si_unit;
--          }
--          pincontroller {
--            i2c0_pin {
--              pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
--              bias-pull-down = <75000>;
--            };
--          };
--
--      bias-pull-up:
-+    additionalProperties: false
-+    patternProperties:
-+      '^pins':
-+        type: object
-+        additionalProperties: false
-         description: |
--          For pull up type is normal, it don't need add RSEL & R1R0 define
--          and resistance value.
--          For pull up type is PUPD/R0/R1 type, it can add R1R0 define to
--          set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
--          "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" & "MTK_PUPD_SET_R1R0_11"
--          define in mt8195.
--          For pull up type is RSEL, it can add RSEL define & resistance value(ohm)
--          to set different resistance by identifying property "mediatek,rsel_resistance_in_si_unit".
--          It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
--          & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011" & "MTK_PULL_SET_RSEL_100"
--          & "MTK_PULL_SET_RSEL_101" & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
--          define in mt8195. It can also support resistance value(ohm)
--          "1000" & "1500" & "2000" & "3000" & "4000" & "5000" & "10000" & "75000" in mt8195.
--          oneOf:
--            - enum: [100, 101, 102, 103]
--            - description: mt8195 pull up PUPD/R0/R1 type define value.
--            - enum: [200, 201, 202, 203, 204, 205, 206, 207]
--            - description: mt8195 pull up RSEL type define value.
--            - enum: [1000, 1500, 2000, 3000, 4000, 5000, 10000, 75000]
--            - description: mt8195 pull up RSEL type si unit value(ohm).
--          An example of using RSEL define:
-+          A pinctrl node should contain at least one subnodes representing the
-+          pinctrl groups available on the machine. Each subnode will list the
-+          pins it needs, and how they should be configured, with regard to muxer
-+          configuration, pullups, drive strength, input enable/disable and
-+          input schmitt.
-+          An example of using macro:
-           pincontroller {
--            i2c0_pin {
--              pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
--              bias-pull-up = <MTK_PULL_SET_RSEL_001>;
-+            /* GPIO0 set as multifunction GPIO0 */
-+            gpio-pins {
-+              pins {
-+                pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
-+              }
-             };
--          };
--          An example of using si unit resistance value(ohm):
--          &pio {
--            mediatek,rsel_resistance_in_si_unit;
--          }
--          pincontroller {
--            i2c0_pin {
--              pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
--              bias-pull-up = <1000>;
-+            /* GPIO8 set as multifunction SDA0 */
-+            i2c0-pins {
-+              pins {
-+                pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
-+              }
-             };
-           };
--
--      bias-disable: true
--
--      output-high: true
--
--      output-low: true
--
--      input-enable: true
--
--      input-disable: true
--
--      input-schmitt-enable: true
--
--      input-schmitt-disable: true
--
--    required:
--      - pinmux
--
--    additionalProperties: false
-+        $ref: "pinmux-node.yaml"
+diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+index 4f68ebed2e31..7aa08bb4c078 100644
+--- a/arch/arm64/boot/dts/mediatek/Makefile
++++ b/arch/arm64/boot/dts/mediatek/Makefile
+@@ -32,4 +32,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+new file mode 100644
+index 000000000000..e581c6bbead6
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+@@ -0,0 +1,209 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (C) 2021 MediaTek Inc.
++ * Author: Seiya Wang <seiya.wang@mediatek.com>
++ */
++/dts-v1/;
++#include "mt8195.dtsi"
 +
-+        properties:
-+          pinmux:
-+            description: |
-+              Integer array, represents gpio pin number and mux setting.
-+              Supported pin number and mux varies for different SoCs, and are
-+              defined as macros in dt-bindings/pinctrl/<soc>-pinfunc.h
-+              directly.
++/ {
++	model = "MediaTek MT8195 evaluation board";
++	compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
 +
-+          drive-strength:
-+            enum: [2, 4, 6, 8, 10, 12, 14, 16]
++	aliases {
++		serial0 = &uart0;
++	};
 +
-+          bias-pull-down:
-+            description: |
-+              For pull down type is normal, it don't need add RSEL & R1R0 define
-+              and resistance value.
-+              For pull down type is PUPD/R0/R1 type, it can add R1R0 define to
-+              set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
-+              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-+              "MTK_PUPD_SET_R1R0_11" define in mt8195.
-+              For pull down type is RSEL, it can add RSEL define & resistance
-+              value(ohm) to set different resistance by identifying property
-+              "mediatek,rsel_resistance_in_si_unit".
-+              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
-+              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-+              & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-+              & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
-+              define in mt8195. It can also support resistance value(ohm)
-+              "75000" & "5000" in mt8195.
-+              oneOf:
-+                - enum: [100, 101, 102, 103]
-+                - description: mt8195 pull down PUPD/R0/R1 type define value.
-+                - enum: [200, 201, 202, 203, 204, 205, 206, 207]
-+                - description: mt8195 pull down RSEL type define value.
-+                - enum: [75000, 5000]
-+                - description: mt8195 pull down RSEL type si unit value(ohm).
++	chosen {
++		stdout-path = "serial0:921600n8";
++	};
 +
-+              An example of using RSEL define:
-+              pincontroller {
-+                i2c0_pin {
-+                  pins {
-+                    pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
-+                    bias-pull-down = <MTK_PULL_SET_RSEL_001>;
-+                  }
-+                };
-+              };
-+              An example of using si unit resistance value(ohm):
-+              &pio {
-+                mediatek,rsel_resistance_in_si_unit;
-+              }
-+              pincontroller {
-+                i2c0_pin {
-+                  pins {
-+                    pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
-+                    bias-pull-down = <75000>;
-+                  }
-+                };
-+              };
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0 0x40000000 0 0x80000000>;
++	};
++};
 +
-+          bias-pull-up:
-+            description: |
-+              For pull up type is normal, it don't need add RSEL & R1R0 define
-+              and resistance value.
-+              For pull up type is PUPD/R0/R1 type, it can add R1R0 define to
-+              set different resistance. It can support "MTK_PUPD_SET_R1R0_00" &
-+              "MTK_PUPD_SET_R1R0_01" & "MTK_PUPD_SET_R1R0_10" &
-+              "MTK_PUPD_SET_R1R0_11" define in mt8195.
-+              For pull up type is RSEL, it can add RSEL define & resistance
-+              value(ohm) to set different resistance by identifying property
-+              "mediatek,rsel_resistance_in_si_unit".
-+              It can support "MTK_PULL_SET_RSEL_000" & "MTK_PULL_SET_RSEL_001"
-+              & "MTK_PULL_SET_RSEL_010" & "MTK_PULL_SET_RSEL_011"
-+              & "MTK_PULL_SET_RSEL_100" & "MTK_PULL_SET_RSEL_101"
-+              & "MTK_PULL_SET_RSEL_110" & "MTK_PULL_SET_RSEL_111"
-+              define in mt8195. It can also support resistance value(ohm)
-+              "1000" & "1500" & "2000" & "3000" & "4000" & "5000" & "10000" &
-+              "75000" in mt8195.
-+              oneOf:
-+                - enum: [100, 101, 102, 103]
-+                - description: mt8195 pull up PUPD/R0/R1 type define value.
-+                - enum: [200, 201, 202, 203, 204, 205, 206, 207]
-+                - description: mt8195 pull up RSEL type define value.
-+                - enum: [1000, 1500, 2000, 3000, 4000, 5000, 10000, 75000]
-+                - description: mt8195 pull up RSEL type si unit value(ohm).
-+              An example of using RSEL define:
-+              pincontroller {
-+                i2c0-pins {
-+                  pins {
-+                    pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
-+                    bias-pull-up = <MTK_PULL_SET_RSEL_001>;
-+                  }
-+                };
-+              };
-+              An example of using si unit resistance value(ohm):
-+              &pio {
-+                mediatek,rsel_resistance_in_si_unit;
-+              }
-+              pincontroller {
-+                i2c0-pins {
-+                  pins {
-+                    pinmux = <PINMUX_GPIO8__FUNC_SDA0>;
-+                    bias-pull-up = <1000>;
-+                  }
-+                };
-+              };
++&auxadc {
++	status = "okay";
++};
 +
-+          bias-disable: true
++&i2c0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c0_pin>;
++	clock-frequency = <100000>;
++	status = "okay";
++};
 +
-+          output-high: true
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c1_pin>;
++	clock-frequency = <400000>;
++	status = "okay";
++};
 +
-+          output-low: true
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pin>;
++	status = "disabled";
++};
 +
-+          input-enable: true
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c3_pin>;
++	status = "disabled";
++};
 +
-+          input-disable: true
++&i2c4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c4_pin>;
++	clock-frequency = <400000>;
++	status = "okay";
++};
 +
-+          input-schmitt-enable: true
++&i2c5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c5_pin>;
++	status = "disabled";
++};
 +
-+          input-schmitt-disable: true
++&i2c6 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c6_pin>;
++	clock-frequency = <400000>;
++	status = "disabled";
++};
 +
-+        required:
-+          - pinmux
- 
- required:
-   - compatible
-@@ -201,30 +223,46 @@ additionalProperties: false
- 
- examples:
-   - |
--            #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
--            #include <dt-bindings/interrupt-controller/arm-gic.h>
--            pio: pinctrl@10005000 {
--                    compatible = "mediatek,mt8195-pinctrl";
--                    reg = <0x10005000 0x1000>,
--                          <0x11d10000 0x1000>,
--                          <0x11d30000 0x1000>,
--                          <0x11d40000 0x1000>,
--                          <0x11e20000 0x1000>,
--                          <0x11eb0000 0x1000>,
--                          <0x11f40000 0x1000>,
--                          <0x1000b000 0x1000>;
--                    reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
--                          "iocfg_br", "iocfg_lm", "iocfg_rb",
--                          "iocfg_tl", "eint";
--                    gpio-controller;
--                    #gpio-cells = <2>;
--                    gpio-ranges = <&pio 0 0 144>;
--                    interrupt-controller;
--                    interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH 0>;
--                    #interrupt-cells = <2>;
--
--                    pio-pins {
--                      pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
--                      output-low;
--                    };
--            };
-+    #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #
-+    pio: pinctrl@10005000 {
-+      compatible = "mediatek,mt8195-pinctrl";
-+      reg = <0x10005000 0x1000>,
-+            <0x11d10000 0x1000>,
-+            <0x11d30000 0x1000>,
-+            <0x11d40000 0x1000>,
-+            <0x11e20000 0x1000>,
-+            <0x11eb0000 0x1000>,
-+            <0x11f40000 0x1000>,
-+            <0x1000b000 0x1000>;
-+      reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
-+                  "iocfg_br", "iocfg_lm", "iocfg_rb",
-+                  "iocfg_tl", "eint";
-+      gpio-controller;
-+      #gpio-cells = <2>;
-+      gpio-ranges = <&pio 0 0 144>;
-+      interrupt-controller;
-+      interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH 0>;
-+      #interrupt-cells = <2>;
++&nor_flash {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&nor_pins_default>;
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <50000000>;
++	};
++};
 +
-+      pio-pins {
-+        pins {
-+          pinmux = <PINMUX_GPIO0__FUNC_GPIO0>;
-+          output-low;
-+        };
-+      };
++&pio {
++	i2c0_pin: i2c0-pins {
++		pins {
++			pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
++				 <PINMUX_GPIO9__FUNC_SCL0>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <0>;
++			drive-strength = <MTK_DRIVE_6mA>;
++		};
++	};
++	i2c1_pin: i2c1-pins {
++		pins {
++			pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
++				 <PINMUX_GPIO11__FUNC_SCL1>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <0>;
++			drive-strength = <MTK_DRIVE_6mA>;
++		};
++	};
++	i2c2_pin: i2c2-pins {
++		pins {
++			pinmux = <PINMUX_GPIO12__FUNC_SDA2>,
++				 <PINMUX_GPIO13__FUNC_SCL2>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++	i2c3_pin: i2c3-pins {
++		pins {
++			pinmux = <PINMUX_GPIO14__FUNC_SDA3>,
++				 <PINMUX_GPIO15__FUNC_SCL3>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++	i2c4_pin: i2c4-pins {
++		pins {
++			pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
++				 <PINMUX_GPIO17__FUNC_SCL4>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++	i2c5_pin: i2c5-pins {
++		pins {
++			pinmux = <PINMUX_GPIO29__FUNC_SCL5>,
++				 <PINMUX_GPIO30__FUNC_SDA5>;
++			bias-pull-up = <1>;
++			mediatek,rsel = <7>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++	i2c6_pin: i2c6-pins {
++		pins {
++			pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
++				 <PINMUX_GPIO26__FUNC_SCL6>;
++			bias-pull-up = <1>;
++		};
++	};
++	i2c7_pin: i2c7-pins {
++		pins {
++			pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
++				 <PINMUX_GPIO28__FUNC_SDA7>;
++			bias-pull-up = <1>;
++		};
++	};
++	nor_pins_default: nor-pins {
++		pins0 {
++			pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
++					 <PINMUX_GPIO141__FUNC_SPINOR_CK>,
++					 <PINMUX_GPIO143__FUNC_SPINOR_IO1>;
++			bias-pull-down;
++		};
++		pins1 {
++			pinmux = <PINMUX_GPIO140__FUNC_SPINOR_CS>,
++				     <PINMUX_GPIO130__FUNC_SPINOR_IO2>,
++				     <PINMUX_GPIO131__FUNC_SPINOR_IO3>;
++			bias-pull-up;
++		};
++	};
++	uart0_pin: uart0-pins {
++		pins {
++			pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
++				<PINMUX_GPIO99__FUNC_URXD0>;
++		};
++	};
++};
 +
-+      spi0-pins {
-+        pins-spi {
-+          pinmux = <PINMUX_GPIO132__FUNC_SPIM0_CSB>,
-+                   <PINMUX_GPIO134__FUNC_SPIM0_MO>,
-+                   <PINMUX_GPIO133__FUNC_SPIM0_CLK>;
-+          bias-disable;
-+        };
-+        pins-spi-mi {
-+          pinmux = <PINMUX_GPIO135__FUNC_SPIM0_MI>;
-+          bias-pull-down;
-+        };
-+      };
-+    };
++&u2port0 {
++	status = "okay";
++};
++
++&u2port1 {
++	status = "okay";
++};
++
++&u3phy0 {
++	status="okay";
++};
++
++&u3phy1 {
++	status="okay";
++};
++
++&u3port0 {
++	status = "okay";
++};
++
++&u3port1 {
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pin>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+new file mode 100644
+index 000000000000..057a8492edec
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -0,0 +1,1034 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (c) 2021 MediaTek Inc.
++ * Author: Seiya Wang <seiya.wang@mediatek.com>
++ */
++
++/dts-v1/;
++#include <dt-bindings/clock/mt8195-clk.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/phy/phy.h>
++#include <dt-bindings/pinctrl/mt8195-pinfunc.h>
++#include <dt-bindings/reset/ti-syscon.h>
++
++/ {
++	compatible = "mediatek,mt8195";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	clk26m: oscillator0 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <26000000>;
++		clock-output-names = "clk26m";
++	};
++
++	clk32k: oscillator1 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <32768>;
++		clock-output-names = "clk32k";
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a55";
++			reg = <0x000>;
++			enable-method = "psci";
++			clock-frequency = <1701000000>;
++			capacity-dmips-mhz = <578>;
++			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
++			next-level-cache = <&l2_0>;
++			#cooling-cells = <2>;
++		};
++
++		cpu1: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a55";
++			reg = <0x100>;
++			enable-method = "psci";
++			clock-frequency = <1701000000>;
++			capacity-dmips-mhz = <578>;
++			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
++			next-level-cache = <&l2_0>;
++			#cooling-cells = <2>;
++		};
++
++		cpu2: cpu@200 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a55";
++			reg = <0x200>;
++			enable-method = "psci";
++			clock-frequency = <1701000000>;
++			capacity-dmips-mhz = <578>;
++			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
++			next-level-cache = <&l2_0>;
++			#cooling-cells = <2>;
++		};
++
++		cpu3: cpu@300 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a55";
++			reg = <0x300>;
++			enable-method = "psci";
++			clock-frequency = <1701000000>;
++			capacity-dmips-mhz = <578>;
++			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
++			next-level-cache = <&l2_0>;
++			#cooling-cells = <2>;
++		};
++
++		cpu4: cpu@400 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a78";
++			reg = <0x400>;
++			enable-method = "psci";
++			clock-frequency = <2171000000>;
++			capacity-dmips-mhz = <1024>;
++			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
++			next-level-cache = <&l2_1>;
++			#cooling-cells = <2>;
++		};
++
++		cpu5: cpu@500 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a78";
++			reg = <0x500>;
++			enable-method = "psci";
++			clock-frequency = <2171000000>;
++			capacity-dmips-mhz = <1024>;
++			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
++			next-level-cache = <&l2_1>;
++			#cooling-cells = <2>;
++		};
++
++		cpu6: cpu@600 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a78";
++			reg = <0x600>;
++			enable-method = "psci";
++			clock-frequency = <2171000000>;
++			capacity-dmips-mhz = <1024>;
++			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
++			next-level-cache = <&l2_1>;
++			#cooling-cells = <2>;
++		};
++
++		cpu7: cpu@700 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a78";
++			reg = <0x700>;
++			enable-method = "psci";
++			clock-frequency = <2171000000>;
++			capacity-dmips-mhz = <1024>;
++			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
++			next-level-cache = <&l2_1>;
++			#cooling-cells = <2>;
++		};
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++				core2 {
++					cpu = <&cpu2>;
++				};
++				core3 {
++					cpu = <&cpu3>;
++				};
++			};
++			cluster1 {
++				core0 {
++					cpu = <&cpu4>;
++				};
++				core1 {
++					cpu = <&cpu5>;
++				};
++				core2 {
++					cpu = <&cpu6>;
++				};
++				core3 {
++					cpu = <&cpu7>;
++				};
++			};
++		};
++
++		idle-states {
++			entry-method = "arm,psci";
++			cpuoff_l: cpuoff_l {
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x00010001>;
++				local-timer-stop;
++				entry-latency-us = <50>;
++				exit-latency-us = <95>;
++				min-residency-us = <580>;
++			};
++			cpuoff_b: cpuoff_b {
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x00010001>;
++				local-timer-stop;
++				entry-latency-us = <45>;
++				exit-latency-us = <140>;
++				min-residency-us = <740>;
++			};
++			clusteroff_l: clusteroff_l {
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x01010002>;
++				local-timer-stop;
++				entry-latency-us = <55>;
++				exit-latency-us = <155>;
++				min-residency-us = <840>;
++			};
++			clusteroff_b: clusteroff_b {
++				compatible = "arm,idle-state";
++				arm,psci-suspend-param = <0x01010002>;
++				local-timer-stop;
++				entry-latency-us = <50>;
++				exit-latency-us = <200>;
++				min-residency-us = <1000>;
++			};
++		};
++
++		l2_0: l2-cache0 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l2_1: l2-cache1 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l3_0: l3-cache {
++			compatible = "cache";
++		};
++	};
++
++	dsu-pmu {
++		compatible = "arm,dsu-pmu";
++		interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH 0>;
++		cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
++		       <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
++	};
++
++	pmu-a55 {
++		compatible = "arm,cortex-a55-pmu";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster0>;
++	};
++
++	pmu-a78 {
++		compatible = "arm,cortex-a78-pmu";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster1>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	timer: timer {
++		compatible = "arm,armv8-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH 0>;
++		clock-frequency = <13000000>;
++	};
++
++	soc {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		compatible = "simple-bus";
++		ranges;
++
++		gic: interrupt-controller@c000000 {
++			compatible = "arm,gic-v3";
++			#interrupt-cells = <4>;
++			#redistributor-regions = <1>;
++			interrupt-parent = <&gic>;
++			interrupt-controller;
++			reg = <0 0x0c000000 0 0x40000>,
++			      <0 0x0c040000 0 0x200000>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
++
++			ppi-partitions {
++				ppi_cluster0: interrupt-partition-0 {
++					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
++				};
++				ppi_cluster1: interrupt-partition-1 {
++					affinity = <&cpu4 &cpu5 &cpu6 &cpu7>;
++				};
++			};
++		};
++
++		topckgen: syscon@10000000 {
++			compatible = "mediatek,mt8195-topckgen", "syscon";
++			reg = <0 0x10000000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		infracfg_ao: syscon@10001000 {
++			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
++			reg = <0 0x10001000 0 0x1000>;
++			#clock-cells = <1>;
++			infracfg_rst: reset-controller {
++				compatible = "ti,syscon-reset";
++				#reset-cells = <1>;
++				ti,reset-bits = <
++					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
++					0x120 0 0x124 0 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
++					0x730 10 0x734 10 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
++					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE)
++				>;
++			};
++		};
++
++		pericfg: syscon@10003000 {
++			compatible = "mediatek,mt8195-pericfg", "syscon";
++			reg = <0 0x10003000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		pio: pinctrl@10005000 {
++			compatible = "mediatek,mt8195-pinctrl";
++			reg = <0 0x10005000 0 0x1000>,
++			      <0 0x11d10000 0 0x1000>,
++			      <0 0x11d30000 0 0x1000>,
++			      <0 0x11d40000 0 0x1000>,
++			      <0 0x11e20000 0 0x1000>,
++			      <0 0x11eb0000 0 0x1000>,
++			      <0 0x11f40000 0 0x1000>,
++			      <0 0x1000b000 0 0x1000>;
++			reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
++				    "iocfg_br", "iocfg_lm", "iocfg_rb",
++				    "iocfg_tl", "eint";
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&pio 0 0 144>;
++			interrupt-controller;
++			interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH 0>;
++			#interrupt-cells = <2>;
++		};
++
++		watchdog: watchdog@10007000 {
++			compatible = "mediatek,mt8195-wdt",
++				     "mediatek,mt6589-wdt";
++			reg = <0 0x10007000 0 0x100>;
++		};
++
++		apmixedsys: syscon@1000c000 {
++			compatible = "mediatek,mt8195-apmixedsys", "syscon";
++			reg = <0 0x1000c000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		systimer: timer@10017000 {
++			compatible = "mediatek,mt8195-timer",
++				     "mediatek,mt6765-timer";
++			reg = <0 0x10017000 0 0x1000>;
++			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_CLK26M_D2>;
++		};
++
++		pwrap: pwrap@10024000 {
++			compatible = "mediatek,mt8195-pwrap", "syscon";
++			reg = <0 0x10024000 0 0x1000>;
++			reg-names = "pwrap";
++			interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_PMIC_AP>,
++				 <&infracfg_ao CLK_INFRA_AO_PMIC_TMR>;
++			clock-names = "spi", "wrap";
++			assigned-clocks = <&topckgen CLK_TOP_PWRAP_ULPOSC>;
++			assigned-clock-parents = <&topckgen CLK_TOP_ULPOSC1_D10>;
++		};
++
++		scp_adsp: clock-controller@10720000 {
++			compatible = "mediatek,mt8195-scp_adsp";
++			reg = <0 0x10720000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		uart0: serial@11001100 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001100 0 0x100>;
++			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART0>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		uart1: serial@11001200 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001200 0 0x100>;
++			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART1>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		uart2: serial@11001300 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001300 0 0x100>;
++			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART2>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		uart3: serial@11001400 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001400 0 0x100>;
++			interrupts = <GIC_SPI 723 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART3>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		uart4: serial@11001500 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001500 0 0x100>;
++			interrupts = <GIC_SPI 724 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART4>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		uart5: serial@11001600 {
++			compatible = "mediatek,mt8195-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11001600 0 0x100>;
++			interrupts = <GIC_SPI 725 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART5>;
++			clock-names = "baud", "bus";
++			status = "disabled";
++		};
++
++		auxadc: auxadc@11002000 {
++			compatible = "mediatek,mt8195-auxadc",
++				     "mediatek,mt8173-auxadc";
++			reg = <0 0x11002000 0 0x1000>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_AUXADC>;
++			clock-names = "main";
++			#io-channel-cells = <1>;
++			status = "disabled";
++		};
++
++		pericfg_ao: syscon@11003000 {
++			compatible = "mediatek,mt8195-pericfg_ao", "syscon";
++			reg = <0 0x11003000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		spi0: spi@1100a000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x1100a000 0 0x1000>;
++			interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI0>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spi1: spi@11010000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x11010000 0 0x1000>;
++			interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI1>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spi2: spi@11012000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x11012000 0 0x1000>;
++			interrupts = <GIC_SPI 193 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI2>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spi3: spi@11013000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x11013000 0 0x1000>;
++			interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI3>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spi4: spi@11018000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x11018000 0 0x1000>;
++			interrupts = <GIC_SPI 195 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI4>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spi5: spi@11019000 {
++			compatible = "mediatek,mt8195-spi",
++				     "mediatek,mt6765-spi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x11019000 0 0x1000>;
++			interrupts = <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
++				 <&topckgen CLK_TOP_SPI>,
++				 <&infracfg_ao CLK_INFRA_AO_SPI5>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk";
++			status = "disabled";
++		};
++
++		spis0: spi@1101d000 {
++			compatible = "mediatek,mt8195-spi-slave";
++			reg = <0 0x1101d000 0 0x1000>;
++			interrupts = <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_SPIS0>;
++			clock-names = "spi";
++			assigned-clocks = <&topckgen CLK_TOP_SPIS>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D6>;
++			status = "disabled";
++		};
++
++		spis1: spi@1101e000 {
++			compatible = "mediatek,mt8195-spi-slave";
++			reg = <0 0x1101e000 0 0x1000>;
++			interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_SPIS1>;
++			clock-names = "spi";
++			assigned-clocks = <&topckgen CLK_TOP_SPIS>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D6>;
++			status = "disabled";
++		};
++
++		xhci0: usb@11200000 {
++			compatible = "mediatek,mt8195-xhci",
++				     "mediatek,mtk-xhci";
++			reg = <0 0x11200000 0 0x1000>,
++			      <0 0x11203e00 0 0x0100>;
++			reg-names = "mac", "ippc";
++			interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH 0>;
++			phys = <&u2port0 PHY_TYPE_USB2>,
++			       <&u3port0 PHY_TYPE_USB3>;
++			assigned-clocks = <&topckgen CLK_TOP_USB_TOP>,
++					  <&topckgen CLK_TOP_SSUSB_XHCI>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
++						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB>,
++				 <&infracfg_ao CLK_INFRA_AO_SSUSB_XHCI>,
++				 <&topckgen CLK_TOP_SSUSB_REF>,
++				 <&apmixedsys CLK_APMIXED_USB1PLL>;
++			clock-names = "sys_ck", "xhci_ck", "ref_ck", "mcu_ck";
++			status = "disabled";
++		};
++
++		mmc0: mmc@11230000 {
++			compatible = "mediatek,mt8195-mmc",
++				     "mediatek,mt8183-mmc";
++			reg = <0 0x11230000 0 0x10000>,
++			      <0 0x11f50000 0 0x1000>;
++			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_MSDC50_0>,
++				 <&infracfg_ao CLK_INFRA_AO_MSDC0>,
++				 <&infracfg_ao CLK_INFRA_AO_MSDC0_SRC>;
++			clock-names = "source", "hclk", "source_cg";
++			status = "disabled";
++		};
++
++		mmc1: mmc@11240000 {
++			compatible = "mediatek,mt8195-mmc",
++				     "mediatek,mt8183-mmc";
++			reg = <0 0x11240000 0 0x1000>,
++			      <0 0x11c70000 0 0x1000>;
++			interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_MSDC30_1>,
++				 <&infracfg_ao CLK_INFRA_AO_MSDC1>,
++				 <&infracfg_ao CLK_INFRA_AO_MSDC1_SRC>;
++			clock-names = "source", "hclk", "source_cg";
++			assigned-clocks = <&topckgen CLK_TOP_MSDC30_1>;
++			assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
++			status = "disabled";
++		};
++
++		mmc2: mmc@11250000 {
++			compatible = "mediatek,mt8195-mmc",
++				     "mediatek,mt8183-mmc";
++			reg = <0 0x11250000 0 0x1000>,
++			      <0 0x11e60000 0 0x1000>;
++			interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_MSDC30_2>,
++				 <&infracfg_ao CLK_INFRA_AO_CG1_MSDC2>,
++				 <&infracfg_ao CLK_INFRA_AO_CG3_MSDC2>;
++			clock-names = "source", "hclk", "source_cg";
++			assigned-clocks = <&topckgen CLK_TOP_MSDC30_2>;
++			assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
++			status = "disabled";
++		};
++
++		xhci1: usb@11290000 {
++			compatible = "mediatek,mt8195-xhci",
++				     "mediatek,mtk-xhci";
++			reg = <0 0x11290000 0 0x1000>,
++			      <0 0x11293e00 0 0x0100>;
++			reg-names = "mac", "ippc";
++			interrupts = <GIC_SPI 530 IRQ_TYPE_LEVEL_HIGH 0>;
++			phys = <&u2port1 PHY_TYPE_USB2>;
++			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_1P>,
++					  <&topckgen CLK_TOP_SSUSB_XHCI_1P>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
++						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
++			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_1P_BUS>,
++				 <&topckgen CLK_TOP_SSUSB_P1_REF>,
++				 <&pericfg_ao CLK_PERI_AO_SSUSB_1P_XHCI>,
++				 <&apmixedsys CLK_APMIXED_USB1PLL>;
++			clock-names = "sys_ck", "ref_ck", "xhci_ck", "mcu_ck";
++			status = "disabled";
++		};
++
++		xhci2: usb@112a0000 {
++			compatible = "mediatek,mt8195-xhci",
++				     "mediatek,mtk-xhci";
++			reg = <0 0x112a0000 0 0x1000>,
++			      <0 0x112a3e00 0 0x0100>;
++			reg-names = "mac", "ippc";
++			interrupts = <GIC_SPI 533 IRQ_TYPE_LEVEL_HIGH 0>;
++			phys = <&u2port2 PHY_TYPE_USB2>;
++			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_2P>,
++					  <&topckgen CLK_TOP_SSUSB_XHCI_2P>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
++						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
++			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_2P_BUS>,
++				 <&topckgen CLK_TOP_SSUSB_P2_REF>,
++				 <&pericfg_ao CLK_PERI_AO_SSUSB_2P_XHCI>;
++			clock-names = "sys_ck", "ref_ck", "xhci_ck";
++			status = "disabled";
++		};
++
++		xhci3: usb@112b0000 {
++			compatible = "mediatek,mt8195-xhci",
++				     "mediatek,mtk-xhci";
++			reg = <0 0x112b0000 0 0x1000>,
++			      <0 0x112b3e00 0 0x0100>;
++			reg-names = "mac", "ippc";
++			interrupts = <GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>;
++			phys = <&u2port3 PHY_TYPE_USB2>;
++			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_3P>,
++					  <&topckgen CLK_TOP_SSUSB_XHCI_3P>;
++			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
++						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
++			clocks = <&pericfg_ao CLK_PERI_AO_SSUSB_3P_BUS>,
++				 <&pericfg_ao CLK_PERI_AO_SSUSB_3P_XHCI>,
++				 <&topckgen CLK_TOP_SSUSB_P3_REF>;
++			clock-names = "sys_ck", "xhci_ck", "ref_ck";
++			usb2-lpm-disable;
++			status = "disabled";
++		};
++
++		nor_flash: spi@1132c000 {
++			compatible = "mediatek,mt8195-nor",
++				     "mediatek,mt8173-nor";
++			reg = <0 0x1132c000 0 0x1000>;
++			interrupts = <GIC_SPI 825 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks = <&topckgen CLK_TOP_SPINOR>,
++				 <&pericfg_ao CLK_PERI_AO_FLASHIF_FLASH>,
++				 <&pericfg_ao CLK_PERI_AO_FLASHIF_BUS>;
++			clock-names = "spi", "sf", "axi";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		u3phy2: t-phy@11c40000 {
++			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0 0x11c40000 0x700>;
++			status = "disabled";
++
++			u2port2: usb-phy@0 {
++				reg = <0x0 0x700>;
++				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P2_REF>;
++				clock-names = "ref";
++				#phy-cells = <1>;
++			};
++		};
++
++		u3phy3: t-phy@11c50000 {
++			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0 0x11c50000 0x700>;
++			status = "disabled";
++
++			u2port3: usb-phy@0 {
++				reg = <0x0 0x700>;
++				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P3_REF>;
++				clock-names = "ref";
++				#phy-cells = <1>;
++			};
++		};
++
++		i2c5: i2c@11d00000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11d00000 0 0x1000>,
++			      <0 0x10220580 0 0x80>;
++			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C5>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c6: i2c@11d01000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11d01000 0 0x1000>,
++			      <0 0x10220600 0 0x80>;
++			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C6>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c7: i2c@11d02000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11d02000 0 0x1000>,
++			      <0 0x10220680 0 0x80>;
++			interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_s CLK_IMP_IIC_WRAP_S_I2C7>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		imp_iic_wrap_s: clock-controller@11d03000 {
++			compatible = "mediatek,mt8195-imp_iic_wrap_s";
++			reg = <0 0x11d03000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		i2c0: i2c@11e00000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11e00000 0 0x1000>,
++			      <0 0x10220080 0 0x80>;
++			interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C0>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "okay";
++		};
++
++		i2c1: i2c@11e01000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11e01000 0 0x1000>,
++			      <0 0x10220200 0 0x80>;
++			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C1>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c2: i2c@11e02000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11e02000 0 0x1000>,
++			      <0 0x10220380 0 0x80>;
++			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C2>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c3: i2c@11e03000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11e03000 0 0x1000>,
++			      <0 0x10220480 0 0x80>;
++			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C3>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		i2c4: i2c@11e04000 {
++			compatible = "mediatek,mt8195-i2c",
++				     "mediatek,mt8192-i2c";
++			reg = <0 0x11e04000 0 0x1000>,
++			      <0 0x10220500 0 0x80>;
++			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH 0>;
++			clock-div = <1>;
++			clocks = <&imp_iic_wrap_w CLK_IMP_IIC_WRAP_W_I2C4>,
++				 <&infracfg_ao CLK_INFRA_AO_APDMA_B>;
++			clock-names = "main", "dma";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
++		imp_iic_wrap_w: clock-controller@11e05000 {
++			compatible = "mediatek,mt8195-imp_iic_wrap_w";
++			reg = <0 0x11e05000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		u3phy1: t-phy@11e30000 {
++			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0 0x11e30000 0xe00>;
++			status = "disabled";
++
++			u2port1: usb-phy@0 {
++				reg = <0x0 0x700>;
++				clocks = <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>,
++					 <&clk26m>;
++				clock-names = "ref", "da_ref";
++				#phy-cells = <1>;
++			};
++
++			u3port1: usb-phy@700 {
++				reg = <0x700 0x700>;
++				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
++					 <&topckgen CLK_TOP_SSUSB_PHY_P1_REF>;
++				clock-names = "ref", "da_ref";
++				#phy-cells = <1>;
++			};
++		};
++
++		u3phy0: t-phy@11e40000 {
++			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0 0x11e40000 0xe00>;
++			status = "disabled";
++
++			u2port0: usb-phy@0 {
++				reg = <0x0 0x700>;
++				clocks = <&topckgen CLK_TOP_SSUSB_PHY_REF>,
++					 <&clk26m>;
++				clock-names = "ref", "da_ref";
++				#phy-cells = <1>;
++			};
++
++			u3port0: usb-phy@700 {
++				reg = <0x700 0x700>;
++				clocks = <&apmixedsys CLK_APMIXED_PLL_SSUSB26M>,
++					 <&topckgen CLK_TOP_SSUSB_PHY_REF>;
++				clock-names = "ref", "da_ref";
++				#phy-cells = <1>;
++			};
++		};
++
++		ufsphy: ufs-phy@11fa0000 {
++			compatible = "mediatek,mt8195-ufsphy", "mediatek,mt8183-ufsphy";
++			reg = <0 0x11fa0000 0 0xc000>;
++			clocks = <&clk26m>, <&clk26m>;
++			clock-names = "unipro", "mp";
++			#phy-cells = <0>;
++			status = "disabled";
++		};
++
++		mfgcfg: clock-controller@13fbf000 {
++			compatible = "mediatek,mt8195-mfgcfg";
++			reg = <0 0x13fbf000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		wpesys: clock-controller@14e00000 {
++			compatible = "mediatek,mt8195-wpesys";
++			reg = <0 0x14e00000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		wpesys_vpp0: clock-controller@14e02000 {
++			compatible = "mediatek,mt8195-wpesys_vpp0";
++			reg = <0 0x14e02000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		wpesys_vpp1: clock-controller@14e03000 {
++			compatible = "mediatek,mt8195-wpesys_vpp1";
++			reg = <0 0x14e03000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		imgsys: clock-controller@15000000 {
++			compatible = "mediatek,mt8195-imgsys";
++			reg = <0 0x15000000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		imgsys1_dip_top: clock-controller@15110000 {
++			compatible = "mediatek,mt8195-imgsys1_dip_top";
++			reg = <0 0x15110000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		imgsys1_dip_nr: clock-controller@15130000 {
++			compatible = "mediatek,mt8195-imgsys1_dip_nr";
++			reg = <0 0x15130000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		imgsys1_wpe: clock-controller@15220000 {
++			compatible = "mediatek,mt8195-imgsys1_wpe";
++			reg = <0 0x15220000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		ipesys: clock-controller@15330000 {
++			compatible = "mediatek,mt8195-ipesys";
++			reg = <0 0x15330000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys: clock-controller@16000000 {
++			compatible = "mediatek,mt8195-camsys";
++			reg = <0 0x16000000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys_rawa: clock-controller@1604f000 {
++			compatible = "mediatek,mt8195-camsys_rawa";
++			reg = <0 0x1604f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys_yuva: clock-controller@1606f000 {
++			compatible = "mediatek,mt8195-camsys_yuva";
++			reg = <0 0x1606f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys_rawb: clock-controller@1608f000 {
++			compatible = "mediatek,mt8195-camsys_rawb";
++			reg = <0 0x1608f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys_yuvb: clock-controller@160af000 {
++			compatible = "mediatek,mt8195-camsys_yuvb";
++			reg = <0 0x160af000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		camsys_mraw: clock-controller@16140000 {
++			compatible = "mediatek,mt8195-camsys_mraw";
++			reg = <0 0x16140000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		ccusys: clock-controller@17200000 {
++			compatible = "mediatek,mt8195-ccusys";
++			reg = <0 0x17200000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		vdecsys_soc: clock-controller@1800f000 {
++			compatible = "mediatek,mt8195-vdecsys_soc";
++			reg = <0 0x1800f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		vdecsys: clock-controller@1802f000 {
++			compatible = "mediatek,mt8195-vdecsys";
++			reg = <0 0x1802f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		vdecsys_core1: clock-controller@1803f000 {
++			compatible = "mediatek,mt8195-vdecsys_core1";
++			reg = <0 0x1803f000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		apusys_pll: clock-controller@190f3000 {
++			compatible = "mediatek,mt8195-apusys_pll";
++			reg = <0 0x190f3000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		vencsys: clock-controller@1a000000 {
++			compatible = "mediatek,mt8195-vencsys";
++			reg = <0 0x1a000000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		vencsys_core1: clock-controller@1b000000 {
++			compatible = "mediatek,mt8195-vencsys_core1";
++			reg = <0 0x1b000000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++	};
++};
 -- 
 2.18.0
 

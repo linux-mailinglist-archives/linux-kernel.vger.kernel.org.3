@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 676E747AD3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB6A47ABC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbhLTOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbhLTOsD (ORCPT
+        id S232589AbhLTOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:38:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47344 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234170AbhLTOiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:48:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE00DC07E5DF;
-        Mon, 20 Dec 2021 06:44:40 -0800 (PST)
+        Mon, 20 Dec 2021 09:38:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66202B80EDE;
-        Mon, 20 Dec 2021 14:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B016DC36AE7;
-        Mon, 20 Dec 2021 14:44:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7815BB80EB3;
+        Mon, 20 Dec 2021 14:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A2AC36AE8;
+        Mon, 20 Dec 2021 14:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011479;
-        bh=ntWbnLhnOcwCTUZJaM0mvpAkopqpVyVPfhCxiLyUdHE=;
+        s=korg; t=1640011095;
+        bh=1RDbCD3gJz6XUJ/4bir/KL2cxdEqvCW2LBUTzUiPluY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wjNxjG3ms29eZhe1wEbA+Rkj48EngeMBgcl1AqgTqvKWA1ktOdgQPRUA19bCWAtKp
-         ll10gE3p5D/Jkn/W42QwJK9nzmPcDpDAwIZyn7XDti2zMtdSun3h/ve0tmi7gYAeBE
-         7+3C7ZEddrXtjvQiC4JczvxVwOwwHSkEeucijqJQ=
+        b=XzA6SSRd0GIGOjE1336Mk0Kg6h7ZVrNGeKf5+2JVIhnqZuzJXnUpnyo7aB1qMQy5E
+         U5qeGqL1nnsp+/ELX1MRmhM7JtDvlTeLD9g6tcn4U0l20oH7Rej1QhmZtATQoTx7W6
+         ZQJdzmK2m26eNDc8bKSckK8QZT2eK1cwGk+hyNww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Letu Ren <fantasquex@gmail.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 36/71] igbvf: fix double free in `igbvf_probe`
+        stable@vger.kernel.org, Andy Lavr <andy.lavr@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 4.9 25/31] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
 Date:   Mon, 20 Dec 2021 15:34:25 +0100
-Message-Id: <20211220143026.899039802@linuxfoundation.org>
+Message-Id: <20211220143020.779510941@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
+References: <20211220143019.974513085@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,80 +48,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Letu Ren <fantasquex@gmail.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit b6d335a60dc624c0d279333b22c737faa765b028 ]
+commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
 
-In `igbvf_probe`, if register_netdev() fails, the program will go to
-label err_hw_init, and then to label err_ioremap. In free_netdev() which
-is just below label err_ioremap, there is `list_for_each_entry_safe` and
-`netif_napi_del` which aims to delete all entries in `dev->napi_list`.
-The program has added an entry `adapter->rx_ring->napi` which is added by
-`netif_napi_add` in igbvf_alloc_queues(). However, adapter->rx_ring has
-been freed below label err_hw_init. So this a UAF.
+A new warning in clang points out when macro expansion might result in a
+GNU C statement expression. There is an instance of this in the mwifiex
+driver:
 
-In terms of how to patch the problem, we can refer to igbvf_remove() and
-delete the entry before `adapter->rx_ring`.
+drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
+')' tokens terminating statement expression appear in different macro
+expansion contexts [-Wcompound-token-split-by-macro]
+        host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/marvell/mwifiex/fw.h:519:46: note: expanded from
+macro 'HostCmd_SET_SEQ_NO_BSS_INFO'
+        (((type) & 0x000f) << 12);                  }
+                                                    ^
 
-The KASAN logs are as follows:
+This does not appear to be a real issue. Removing the braces and
+replacing them with parentheses will fix the warning and not change the
+meaning of the code.
 
-[   35.126075] BUG: KASAN: use-after-free in free_netdev+0x1fd/0x450
-[   35.127170] Read of size 8 at addr ffff88810126d990 by task modprobe/366
-[   35.128360]
-[   35.128643] CPU: 1 PID: 366 Comm: modprobe Not tainted 5.15.0-rc2+ #14
-[   35.129789] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-[   35.131749] Call Trace:
-[   35.132199]  dump_stack_lvl+0x59/0x7b
-[   35.132865]  print_address_description+0x7c/0x3b0
-[   35.133707]  ? free_netdev+0x1fd/0x450
-[   35.134378]  __kasan_report+0x160/0x1c0
-[   35.135063]  ? free_netdev+0x1fd/0x450
-[   35.135738]  kasan_report+0x4b/0x70
-[   35.136367]  free_netdev+0x1fd/0x450
-[   35.137006]  igbvf_probe+0x121d/0x1a10 [igbvf]
-[   35.137808]  ? igbvf_vlan_rx_add_vid+0x100/0x100 [igbvf]
-[   35.138751]  local_pci_probe+0x13c/0x1f0
-[   35.139461]  pci_device_probe+0x37e/0x6c0
-[   35.165526]
-[   35.165806] Allocated by task 366:
-[   35.166414]  ____kasan_kmalloc+0xc4/0xf0
-[   35.167117]  foo_kmem_cache_alloc_trace+0x3c/0x50 [igbvf]
-[   35.168078]  igbvf_probe+0x9c5/0x1a10 [igbvf]
-[   35.168866]  local_pci_probe+0x13c/0x1f0
-[   35.169565]  pci_device_probe+0x37e/0x6c0
-[   35.179713]
-[   35.179993] Freed by task 366:
-[   35.180539]  kasan_set_track+0x4c/0x80
-[   35.181211]  kasan_set_free_info+0x1f/0x40
-[   35.181942]  ____kasan_slab_free+0x103/0x140
-[   35.182703]  kfree+0xe3/0x250
-[   35.183239]  igbvf_probe+0x1173/0x1a10 [igbvf]
-[   35.184040]  local_pci_probe+0x13c/0x1f0
-
-Fixes: d4e0fe01a38a0 (igbvf: add new driver to support 82576 virtual functions)
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Letu Ren <fantasquex@gmail.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 5e6e3a92b9a4 ("wireless: mwifiex: initial commit for Marvell mwifiex driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1146
+Reported-by: Andy Lavr <andy.lavr@gmail.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20200901070834.1015754-1-natechancellor@gmail.com
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igbvf/netdev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c |    4 ++--
+ drivers/net/wireless/marvell/mwifiex/fw.h     |    8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c b/drivers/net/ethernet/intel/igbvf/netdev.c
-index 77cb2ab7dab40..1082e49ea0560 100644
---- a/drivers/net/ethernet/intel/igbvf/netdev.c
-+++ b/drivers/net/ethernet/intel/igbvf/netdev.c
-@@ -2887,6 +2887,7 @@ static int igbvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	return 0;
+--- a/drivers/net/wireless/marvell/mwifiex/cmdevt.c
++++ b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
+@@ -321,9 +321,9 @@ static int mwifiex_dnld_sleep_confirm_cm
  
- err_hw_init:
-+	netif_napi_del(&adapter->rx_ring->napi);
- 	kfree(adapter->tx_ring);
- 	kfree(adapter->rx_ring);
- err_sw_init:
--- 
-2.33.0
-
+ 	adapter->seq_num++;
+ 	sleep_cfm_buf->seq_num =
+-		cpu_to_le16((HostCmd_SET_SEQ_NO_BSS_INFO
++		cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+ 					(adapter->seq_num, priv->bss_num,
+-					 priv->bss_type)));
++					 priv->bss_type));
+ 
+ 	mwifiex_dbg(adapter, CMD,
+ 		    "cmd: DNLD_CMD: %#x, act %#x, len %d, seqno %#x\n",
+--- a/drivers/net/wireless/marvell/mwifiex/fw.h
++++ b/drivers/net/wireless/marvell/mwifiex/fw.h
+@@ -482,10 +482,10 @@ enum mwifiex_channel_flags {
+ 
+ #define RF_ANTENNA_AUTO                 0xFFFF
+ 
+-#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
+-	(((seq) & 0x00ff) |                             \
+-	 (((num) & 0x000f) << 8)) |                     \
+-	(((type) & 0x000f) << 12);                  }
++#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
++	((((seq) & 0x00ff) |                        \
++	 (((num) & 0x000f) << 8)) |                 \
++	(((type) & 0x000f) << 12))
+ 
+ #define HostCmd_GET_SEQ_NO(seq)       \
+ 	((seq) & HostCmd_SEQ_NUM_MASK)
 
 

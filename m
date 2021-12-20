@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97ACA47A631
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA90347A635
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237324AbhLTIqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:46:43 -0500
-Received: from smtpbg587.qq.com ([113.96.223.105]:55552 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231216AbhLTIqm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:46:42 -0500
-X-QQ-mid: bizesmtp44t1639989968t7wb2b4n
-Received: from localhost.localdomain (unknown [118.121.67.96])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 20 Dec 2021 16:46:06 +0800 (CST)
-X-QQ-SSF: 01000000002000D0K000B00A0000000
-X-QQ-FEAT: oLjQg92dJAVp3em8+MqWTNkdAYduA6RZTPUI2Tm3DatkpSDTMbtXLMRF7WDgn
-        /4gmb8mCPZ74uq2K0cyhURJv9pXdNosk4NHfXz1+eDhhY4id/84Dpb3wtLT3pWmPXaWMniE
-        f61Oo5mwaU1g6r6hUg2gzFiCLldELnNX+zlxeQ/ofQS4TNJ7CAOy4+2ndhYQKER6fUlb2SH
-        Jqfl2GcGiaM724zuTHKDtcWnqSUfo1oSLWBTMpmXWTWNW/ldPyt/JCcBysqDR1Ajig4rIHx
-        vuM0biExV+uTFfVylD475UA3NVbVBQMAy6gNQMp1RUduoZCJnNdZ5JiRGVAO3zYnIdtEmnF
-        q4boObqsJpL4IQRhSwXaLCd8k+Yb80vxh7Hu5fw3ggX9GEuIMk=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     jcmvbkbc@gmail.com
-Cc:     chris@zankel.net, davem@davemloft.net, kuba@kernel.org,
-        geert@linux-m68k.org, wangborong@cdjrlc.com,
-        linux-xtensa@linux-xtensa.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: xtensa: use strscpy to copy strings
-Date:   Mon, 20 Dec 2021 16:46:02 +0800
-Message-Id: <20211220084602.952091-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
+        id S238017AbhLTIqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238006AbhLTIqu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:46:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC610C06173E;
+        Mon, 20 Dec 2021 00:46:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8604B80E18;
+        Mon, 20 Dec 2021 08:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E35AC36AE9;
+        Mon, 20 Dec 2021 08:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639990007;
+        bh=WzI0C34NvEDOEyNj+7GbTv7iAdUUSLBIH0O1Gq2K6u4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=qxO9mQkDVgrm39oGRllxgrdZJsyyZgIGilQ+TMbRc16ah8N9agAWYS1Ez88lmS+qi
+         0hSb8HaPCCwpIUFQYNSsd4WAs2NpkoFi7IlNxh4xYPURjN63jVp3fgiWHRf3jep3kW
+         I1VGrzX1HF6iJL9E5GTMBROldgrji43oah6rc9vq7h39+VZQqAMXN/WEY/qh8vsg61
+         I9jWHc3nVOJZ+XulR30tBo6VUTAUmd9nKxx6zX4WDiYhun5t4+hBii+vRa8Id+LiFa
+         AogfRXrtl3u0+FwBPTM9qMc1Bldd6ovx+eqpFVsWYUQPMb/1SSQudhJ52RuJxJXfjo
+         g+UqQbN8idNyw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     David Mosberger-Tang <davidm@egauge.net>
+Cc:     Claudiu.Beznea@microchip.com, Ajay.Kathat@microchip.com,
+        adham.abozaeid@microchip.com, davem@davemloft.net,
+        devicetree@vger.kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v5 1/2] wilc1000: Add reset/enable GPIO support to SPI driver
+References: <20211215030501.3779911-1-davidm@egauge.net>
+        <20211215030501.3779911-2-davidm@egauge.net>
+        <d55a2558-b05d-5995-b0f0-f234cb3b50aa@microchip.com>
+        <9cfbcc99f8a70ba2c03a9ad99f273f12e237e09f.camel@egauge.net>
+        <87zgp1c6lz.fsf@codeaurora.org>
+        <938a54814087ca8c4b4011c2f418e773baf2b228.camel@egauge.net>
+Date:   Mon, 20 Dec 2021 10:46:43 +0200
+In-Reply-To: <938a54814087ca8c4b4011c2f418e773baf2b228.camel@egauge.net>
+        (David Mosberger-Tang's message of "Thu, 16 Dec 2021 08:26:22 -0700")
+Message-ID: <87bl1bmznw.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam3
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The strlcpy should not be used because it doesn't limit the source
-length. So that it will lead some potential bugs.
+David Mosberger-Tang <davidm@egauge.net> writes:
 
-But the strscpy doesn't require reading memory from the src string
-beyond the specified "count" bytes, and since the return value is
-easier to error-check than strlcpy()'s. In addition, the implementation
-is robust to the string changing out from underneath it, unlike the
-current strlcpy() implementation.
+> On Thu, 2021-12-16 at 10:10 +0200, Kalle Valo wrote:
+>> David Mosberger-Tang <davidm@egauge.net> writes:
+>> 
+>> > > > +       } else {
+>> > > > +               gpiod_set_value(gpios->reset, 1);       /* assert RESET */
+>> > > > +               gpiod_set_value(gpios->enable, 0);      /* deassert ENABLE */
+>> > > 
+>> > > I don't usually see comments near the code line in kernel. Maybe move them
+>> > > before the actual code line or remove them at all as the code is impler enough?
+>> > 
+>> > You're kidding, right?
+>> 
+>> I agree with Claudiu, the comments are not really providing more
+>> information from what can be seen from the code. And the style of having
+>> the comment in the same line is not commonly used in upstream.
+>
+> The code is obvious if you think of 1 as "assert" and 0 as "deassert".  It looks
+> utterly wrong if you think of 1 as outputting 3.3V and 0 as outputting 0V.
 
-Thus, replace strlcpy with strscpy.
+Yeah, I guess for people who are more hardware orientated that looks
+wrong :)
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- arch/xtensa/platforms/iss/network.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> But if you insist, I'll remove the comments.
 
-diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index 962e5e145209..e62e31c88956 100644
---- a/arch/xtensa/platforms/iss/network.c
-+++ b/arch/xtensa/platforms/iss/network.c
-@@ -174,7 +174,7 @@ static int tuntap_open(struct iss_net_private *lp)
- 
- 	memset(&ifr, 0, sizeof(ifr));
- 	ifr.ifr_flags = IFF_TAP | IFF_NO_PI;
--	strlcpy(ifr.ifr_name, dev_name, sizeof(ifr.ifr_name));
-+	strscpy(ifr.ifr_name, dev_name, sizeof(ifr.ifr_name));
- 
- 	err = simc_ioctl(fd, TUNSETIFF, &ifr);
- 	if (err < 0) {
-@@ -249,7 +249,7 @@ static int tuntap_probe(struct iss_net_private *lp, int index, char *init)
- 		return 0;
- 	}
- 
--	strlcpy(lp->tp.info.tuntap.dev_name, dev_name,
-+	strscpy(lp->tp.info.tuntap.dev_name, dev_name,
- 		sizeof(lp->tp.info.tuntap.dev_name));
- 
- 	setup_etheraddr(dev, mac_str);
+I don't insist removing the comments, but please move them to their own
+line so that the style is consistent.
+
 -- 
-2.34.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C65E547A5DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEABA47A5E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237859AbhLTIR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:17:57 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:30871 "EHLO smtpbg587.qq.com"
+        id S237874AbhLTITe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:19:34 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:19826 "EHLO smtpbg.qq.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231406AbhLTIR4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:17:56 -0500
-X-QQ-mid: bizesmtp50t1639988262tvk1z43j
+        id S231147AbhLTITd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:19:33 -0500
+X-QQ-mid: bizesmtp32t1639988363t3g0gigw
 Received: from localhost.localdomain (unknown [118.121.67.96])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 20 Dec 2021 16:17:40 +0800 (CST)
+        id ; Mon, 20 Dec 2021 16:19:21 +0800 (CST)
 X-QQ-SSF: 01000000002000D0K000B00A0000000
-X-QQ-FEAT: xoS364mEyr0ncuboHM9m7loKAPQJFzQty1PSKk5qn/G3DApA3q1+EbdTHpgpr
-        305N4cZmVXyestbkOPLM+Ru0nWaxFCMEI5kCK/SM22/7AQU+RW6NGTafx7frDLNYslkgetJ
-        Im8ypvINB28J30dZzGiWgL1FpGYWWjxlBM58WsVHPlfd4WOeNk5ZwPzk/Nzax8OijpHk8Io
-        XwB7SNnMzxz4IzC6uyRe2s5/JslH/ciDSfl4aAOm2R/zmCCmKQusoZs01w8DitV90CxVZu9
-        vTDGRtShPLcH2EIrDch2hE7gSlpsSZakJMU8GTrSVAyvrLueVaT+mkw25hmLHrgnnW/5Rfj
-        xLTWYczDKkbEDyG1Ju7Oxa/BRyuMJOJ9a74cOOdIMWyX9sdomA=
+X-QQ-FEAT: ZHPL5yNEtlkMlEtAlTXCD7MKTuPb3NRc04hFy/80o+vxDMQpLJApBCyyEtGCm
+        FoYMjhUBkLP6D7MS9EdNS2JJ1d7Sp3Or/8YIQad+VCh+mFtvRf8Z6c7/0Nh8+7xjjE67AFr
+        vBSy9Sb7Qt0Dgnaeafsq36uLbPFSCnnmrH8aVSGtNbwVuKCXfs0fdHjrNN89/empO1f45wT
+        +ziL6crExfexa/K+5DBucDOGYzYoyoGqrMYuWsatWkdq2vdabbzHu/Ip0bKjOT/S8jVxQvG
+        pkEOTGY13DPHXbcETULKFipVRZiYG85qYTIrgsrSEQz3l3F4RHVh2imfAz58jwFJFZ4pEhJ
+        Yhp5g9Vj2jCE3t4Py+iYkzgfIT9oQryVin1elCQg5L6M2EBsKo=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
 To:     davem@davemloft.net
 Cc:     viro@zeniv.linux.org.uk, wangborong@cdjrlc.com,
         sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sparc64: use strscpy to copy strings
-Date:   Mon, 20 Dec 2021 16:17:29 +0800
-Message-Id: <20211220081729.918843-1-wangborong@cdjrlc.com>
+Subject: [PATCH] sparc32: use strscpy to copy strings
+Date:   Mon, 20 Dec 2021 16:19:17 +0800
+Message-Id: <20211220081917.922068-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -52,15 +52,24 @@ Thus, replace strlcpy with strscpy.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/sparc/kernel/setup_64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/sparc/kernel/setup_32.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/sparc/kernel/setup_64.c b/arch/sparc/kernel/setup_64.c
-index 48abee4eee29..6546ca9d4d3f 100644
---- a/arch/sparc/kernel/setup_64.c
-+++ b/arch/sparc/kernel/setup_64.c
-@@ -636,7 +636,7 @@ void __init setup_arch(char **cmdline_p)
- {
+diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
+index c8e0dd99f370..c3fd44b7fd1a 100644
+--- a/arch/sparc/kernel/setup_32.c
++++ b/arch/sparc/kernel/setup_32.c
+@@ -120,7 +120,7 @@ static struct console prom_early_console = {
+ 	.index =	-1,
+ };
+ 
+-/* 
++/*
+  * Process kernel command line switches that are specific to the
+  * SPARC or that require special low-level processing.
+  */
+@@ -302,7 +302,7 @@ void __init setup_arch(char **cmdline_p)
+ 
  	/* Initialize PROM console and command line. */
  	*cmdline_p = prom_getbootargs();
 -	strlcpy(boot_command_line, *cmdline_p, COMMAND_LINE_SIZE);

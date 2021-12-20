@@ -2,110 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44FE47B064
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5290F47B06C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236252AbhLTPfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:35:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20959 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234992AbhLTPfv (ORCPT
+        id S236769AbhLTPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236419AbhLTPhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:35:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640014551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s0lGMD0pC7skWIYrRhVwKOPgTmBx4KUrBkR78qYxnqw=;
-        b=aE2i3fF0gSE/adNGT206nyHGT8EhTXs7q1HrG0O79BvhT2NKrH4EPqerfl8okbrGH3O6NE
-        3MEEFqvdns8wzb/MhNbNPYR4CmVPkpXjUnyifa41Vu5011cUIGTmhB0FhO5Ql5p95o5VO0
-        U2JtZ+D7umP95nYjp6aaGZh/BN0bgUA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-475-NfkaW3LPM5aMKLigswRqXQ-1; Mon, 20 Dec 2021 10:35:50 -0500
-X-MC-Unique: NfkaW3LPM5aMKLigswRqXQ-1
-Received: by mail-wr1-f72.google.com with SMTP id s30-20020adfa29e000000b001a25caee635so3400184wra.19
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:35:49 -0800 (PST)
+        Mon, 20 Dec 2021 10:37:31 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D046C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:37:31 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id f5so16827771edq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:content-transfer-encoding:date:message-id:subject:from
+         :to:cc:references:in-reply-to;
+        bh=Hu5iDisR7EDNko6/1UheOiwFNf5HuOYdbuiMvDAkPr8=;
+        b=awS6r+yj1kX54JiC6uQ4UGUPUuKxDqlZGh8Wvb6mS4CUHItoYJL47NOjzIoHWwwKqa
+         hOCRtj56AFhAm/Psev43HKVOavvv70ux9Hjc4anUbwhzGNeqcBiM78ZCJ0dKjpy2dmBG
+         I4c+CeddSLfYPEtlXdwZGMYgOz8QsR9ZAMmS/bw43B3Cf5qQ0qRKlVtWkf5eb0i0E9HO
+         7djFJBWjqzjtiYejt4CbszOwvkF9mlG8BzxrO3z01UUkxErKCKaVJEHNpd+5gJV578SW
+         JTCziv/PKb+5MhzVKII/IWr0uB3fmx0D2VXeKmPkPM5iKg9OYk+1+J2gSK32dKtTsf3z
+         WXhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s0lGMD0pC7skWIYrRhVwKOPgTmBx4KUrBkR78qYxnqw=;
-        b=vb2QIqlAoYLeT2piCwEZnULW2zR3sRdeWHYDrHsoqeS7D85h9vIEdEhWpnjFLuWzMe
-         pRZSlQOSgQlRGR5RjEeXzkri1OAexDV8K1MxYwDFDt0bf3Pna4LOPNfxo3F4lX2e8nz1
-         /tLBEFq1GQu1LqkEEuX9pdZiBajatQQv94uH1aJNIu2wAOyhJJCvdiwenlW9v2gojJCr
-         vCilrc2VhOeYqyZdwBjXmfkolmuMoLlU3TdFyCZaqxvYP6MiJeTOXu5nZ+x0rll78naM
-         B+/2N4lavGDjfxouzVJmP1LMLerQfDmYXVyBQ+HIZfHlwIulMXMtkaZL93fhQ+g7WgXX
-         x+zw==
-X-Gm-Message-State: AOAM532L5we/+g29KoI4y44fQJa/8T7w/zwo5o89BA0lO0pyCnQnZbg1
-        lLLQqRaVH8GpYBRdnN23xBQUKO63oy2hnz7gT3+ahOfPnX/vThFtyZHS0rfqvOfxsyfs+x1hKOg
-        0N3HYUYd3qADhN+AZpx9bEUOh
-X-Received: by 2002:a05:600c:1da3:: with SMTP id p35mr2388566wms.9.1640014549025;
-        Mon, 20 Dec 2021 07:35:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxlGp7cXs8bcGDDTJ9A4ThRV7yXkHYo3y8iw5DiCoay9PJOvjvzhVsl1lQ5A8vn6i0apYrFCQ==
-X-Received: by 2002:a05:600c:1da3:: with SMTP id p35mr2388548wms.9.1640014548781;
-        Mon, 20 Dec 2021 07:35:48 -0800 (PST)
-Received: from redhat.com ([2.55.19.224])
-        by smtp.gmail.com with ESMTPSA id b2sm7974828wrd.35.2021.12.20.07.35.45
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:subject:from:to:cc:references:in-reply-to;
+        bh=Hu5iDisR7EDNko6/1UheOiwFNf5HuOYdbuiMvDAkPr8=;
+        b=hEg0z2ymQLbdCyPwoo2giokZw5EH/Kv+Cq9DFBZIxrvwXRU4cpZmzuVLc04XT5KDHz
+         cuREQdW9KBnbzFaMD97W0soPV79QJ1M6Tut3v5Di86Jpm4ARk2zgOYIuIAhXbTQn87GV
+         KCG6gw15JBSZqF+940bMQUiRjOTDY9xLLEvPVGaX+d8mqrGCs7Sh1YfJOtUjmaSA8fWQ
+         j2y6j1owqEuHmEWVFF9SqgafYiMB3Oxw2ZMq4B+j39qsbp0Ft/krk4lKbRaIYt6h9G1c
+         iQBTOlmvFFT7v1GEIb5ho06kUFeZB/8LTuHk89IkBrSNNCV4fYx16jRs9/lAPtJ/Zkmu
+         92cA==
+X-Gm-Message-State: AOAM530yOr/GY/piUuqYcDUsEnWh9+AAmfOqiYS3ZhiJvKZHvYFIjPjN
+        mFeu2sQ5f7BaZdA/iAomhOs7wQ==
+X-Google-Smtp-Source: ABdhPJxk2P6RffxSmBWcsYri0yKYsj0/TdqH1vYXh0e1KLw0oC1SCQPXZO3W8zNYh9OK26O6K9VlsQ==
+X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr16220893edc.276.1640014649832;
+        Mon, 20 Dec 2021 07:37:29 -0800 (PST)
+Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id r17sm3489883edd.53.2021.12.20.07.37.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 07:35:48 -0800 (PST)
-Date:   Mon, 20 Dec 2021 10:35:43 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@axis.com,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gpio: virtio: remove timeout
-Message-ID: <20211220103537-mutt-send-email-mst@kernel.org>
-References: <20211220130656.16900-1-vincent.whitchurch@axis.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220130656.16900-1-vincent.whitchurch@axis.com>
+        Mon, 20 Dec 2021 07:37:29 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 20 Dec 2021 15:37:28 +0000
+Message-Id: <CGK8O8M50JX6.3E0WU3HUN6K5W@arch-thunder>
+Subject: Re: [PATCH 4/6] usb: isp1760: Use platform_get_irq() to get the
+ interrupt
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+To:     "Lad Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
+        "Pawel Laszczak" <pawell@cadence.com>,
+        "Roger Quadros" <rogerq@kernel.org>,
+        "Aswath Govindraju" <a-govindraju@ti.com>,
+        "Felipe Balbi" <balbi@kernel.org>, "Bin Liu" <b-liu@ti.com>
+Cc:     <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Prabhakar" <prabhakar.csengg@gmail.com>
+References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 02:06:56PM +0100, Vincent Whitchurch wrote:
-> The driver imposes an arbitrary one second timeout on virtio requests,
-> but the specification doesn't prevent the virtio device from taking
-> longer to process requests, so remove this timeout to support all
-> systems and device implementations.
-> 
-> Fixes: 3a29355a22c0275fe86 ("gpio: Add virtio-gpio driver")
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Hi Lad,
+Thanks for the patch.
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+On Mon Dec 20, 2021 at 1:04 AM WET, Lad Prabhakar wrote:
+
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq(). Also use irq_get_trigger_type to get the
+> IRQ trigger flags.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+LGTM.
+Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
+
+------
+Cheers,
+     Rui
 
 > ---
->  drivers/gpio/gpio-virtio.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpio-virtio.c b/drivers/gpio/gpio-virtio.c
-> index 84f96b78f32a..9f4941bc5760 100644
-> --- a/drivers/gpio/gpio-virtio.c
-> +++ b/drivers/gpio/gpio-virtio.c
-> @@ -100,11 +100,7 @@ static int _virtio_gpio_req(struct virtio_gpio *vgpio, u16 type, u16 gpio,
->  	virtqueue_kick(vgpio->request_vq);
->  	mutex_unlock(&vgpio->lock);
->  
-> -	if (!wait_for_completion_timeout(&line->completion, HZ)) {
-> -		dev_err(dev, "GPIO operation timed out\n");
-> -		ret = -ETIMEDOUT;
-> -		goto out;
+>  drivers/usb/isp1760/isp1760-if.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/usb/isp1760/isp1760-if.c b/drivers/usb/isp1760/isp17=
+60-if.c
+> index 7cc349c0b2ad..65ba5aca2a4f 100644
+> --- a/drivers/usb/isp1760/isp1760-if.c
+> +++ b/drivers/usb/isp1760/isp1760-if.c
+> @@ -13,6 +13,7 @@
+> =20
+>  #include <linux/usb.h>
+>  #include <linux/io.h>
+> +#include <linux/irq.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -191,17 +192,15 @@ static int isp1760_plat_probe(struct platform_devic=
+e *pdev)
+>  	unsigned long irqflags;
+>  	unsigned int devflags =3D 0;
+>  	struct resource *mem_res;
+> -	struct resource *irq_res;
+> +	int irq;
+>  	int ret;
+> =20
+>  	mem_res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> =20
+> -	irq_res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (!irq_res) {
+> -		pr_warn("isp1760: IRQ resource not available\n");
+> -		return -ENODEV;
 > -	}
-> +	wait_for_completion(&line->completion);
->  
->  	if (unlikely(res->status != VIRTIO_GPIO_STATUS_OK)) {
->  		dev_err(dev, "GPIO request failed: %d\n", gpio);
-> -- 
-> 2.33.1
+> -	irqflags =3D irq_res->flags & IRQF_TRIGGER_MASK;
+> +	irq =3D platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +	irqflags =3D irq_get_trigger_type(irq);
+> =20
+>  	if (IS_ENABLED(CONFIG_OF) && pdev->dev.of_node) {
+>  		struct device_node *dp =3D pdev->dev.of_node;
+> @@ -239,8 +238,7 @@ static int isp1760_plat_probe(struct platform_device =
+*pdev)
+>  		return -ENXIO;
+>  	}
+> =20
+> -	ret =3D isp1760_register(mem_res, irq_res->start, irqflags, &pdev->dev,
+> -			       devflags);
+> +	ret =3D isp1760_register(mem_res, irq, irqflags, &pdev->dev, devflags);
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> --=20
+> 2.17.1
+
+
 

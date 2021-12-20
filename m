@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8492047A340
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 02:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547AC47A337
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 02:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbhLTBEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 20:04:54 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:1252 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237029AbhLTBEj (ORCPT
+        id S237080AbhLTBEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 20:04:44 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:59820 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237030AbhLTBEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 20:04:39 -0500
+        Sun, 19 Dec 2021 20:04:42 -0500
 X-IronPort-AV: E=Sophos;i="5.88,219,1635174000"; 
-   d="scan'208";a="104485876"
+   d="scan'208";a="104020226"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 20 Dec 2021 10:04:38 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 20 Dec 2021 10:04:41 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B2318416745E;
-        Mon, 20 Dec 2021 10:04:35 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D1C50416745E;
+        Mon, 20 Dec 2021 10:04:38 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,9 +32,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 3/6] usb: dwc3: Drop unneeded calls to platform_get_resource_byname()
-Date:   Mon, 20 Dec 2021 01:04:08 +0000
-Message-Id: <20211220010411.12075-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 4/6] usb: isp1760: Use platform_get_irq() to get the interrupt
+Date:   Mon, 20 Dec 2021 01:04:09 +0000
+Message-Id: <20211220010411.12075-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211220010411.12075-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -42,108 +42,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop unneeded calls to platform_get_resource_byname() from
-dwc3_host_init(). dwc3_host_init() already calls dwc3_host_get_irq()
-which gets the irq number, just use this to get the IRQ resource data
-and fill the xhci_resources[1]
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
+
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq(). Also use irq_get_trigger_type to get the
+IRQ trigger flags.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/usb/dwc3/host.c | 45 ++++++++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 19 deletions(-)
+ drivers/usb/isp1760/isp1760-if.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f29a264635aa..eda871973d6c 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -8,32 +8,55 @@
-  */
+diff --git a/drivers/usb/isp1760/isp1760-if.c b/drivers/usb/isp1760/isp1760-if.c
+index 7cc349c0b2ad..65ba5aca2a4f 100644
+--- a/drivers/usb/isp1760/isp1760-if.c
++++ b/drivers/usb/isp1760/isp1760-if.c
+@@ -13,6 +13,7 @@
  
- #include <linux/acpi.h>
+ #include <linux/usb.h>
+ #include <linux/io.h>
 +#include <linux/irq.h>
-+#include <linux/of.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
  #include <linux/platform_device.h>
+@@ -191,17 +192,15 @@ static int isp1760_plat_probe(struct platform_device *pdev)
+ 	unsigned long irqflags;
+ 	unsigned int devflags = 0;
+ 	struct resource *mem_res;
+-	struct resource *irq_res;
++	int irq;
+ 	int ret;
  
- #include "core.h"
+ 	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
  
-+static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-+					int irq, char *name)
-+{
-+	struct platform_device *pdev = to_platform_device(dwc->dev);
-+	struct device_node *np = dev_of_node(&pdev->dev);
-+
-+	dwc->xhci_resources[1].start = irq;
-+	dwc->xhci_resources[1].end = irq;
-+	dwc->xhci_resources[1].flags = IORESOURCE_IRQ | irq_get_trigger_type(irq);
-+	if (!name && np)
-+		dwc->xhci_resources[1].name = of_node_full_name(pdev->dev.of_node);
-+	else
-+		dwc->xhci_resources[1].name = name;
-+}
-+
- static int dwc3_host_get_irq(struct dwc3 *dwc)
- {
- 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
- 	int irq;
+-	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!irq_res) {
+-		pr_warn("isp1760: IRQ resource not available\n");
+-		return -ENODEV;
+-	}
+-	irqflags = irq_res->flags & IRQF_TRIGGER_MASK;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++	irqflags = irq_get_trigger_type(irq);
  
- 	irq = platform_get_irq_byname_optional(dwc3_pdev, "host");
--	if (irq > 0)
-+	if (irq > 0) {
-+		dwc3_host_fill_xhci_irq_res(dwc, irq, "host");
- 		goto out;
-+	}
+ 	if (IS_ENABLED(CONFIG_OF) && pdev->dev.of_node) {
+ 		struct device_node *dp = pdev->dev.of_node;
+@@ -239,8 +238,7 @@ static int isp1760_plat_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
  
- 	if (irq == -EPROBE_DEFER)
- 		goto out;
+-	ret = isp1760_register(mem_res, irq_res->start, irqflags, &pdev->dev,
+-			       devflags);
++	ret = isp1760_register(mem_res, irq, irqflags, &pdev->dev, devflags);
+ 	if (ret < 0)
+ 		return ret;
  
- 	irq = platform_get_irq_byname_optional(dwc3_pdev, "dwc_usb3");
--	if (irq > 0)
-+	if (irq > 0) {
-+		dwc3_host_fill_xhci_irq_res(dwc, irq, "dwc_usb3");
- 		goto out;
-+	}
- 
- 	if (irq == -EPROBE_DEFER)
- 		goto out;
- 
- 	irq = platform_get_irq(dwc3_pdev, 0);
--	if (irq > 0)
-+	if (irq > 0) {
-+		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
- 		goto out;
-+	}
- 
- 	if (!irq)
- 		irq = -EINVAL;
-@@ -47,28 +70,12 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	struct property_entry	props[4];
- 	struct platform_device	*xhci;
- 	int			ret, irq;
--	struct resource		*res;
--	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
- 	int			prop_idx = 0;
- 
- 	irq = dwc3_host_get_irq(dwc);
- 	if (irq < 0)
- 		return irq;
- 
--	res = platform_get_resource_byname(dwc3_pdev, IORESOURCE_IRQ, "host");
--	if (!res)
--		res = platform_get_resource_byname(dwc3_pdev, IORESOURCE_IRQ,
--				"dwc_usb3");
--	if (!res)
--		res = platform_get_resource(dwc3_pdev, IORESOURCE_IRQ, 0);
--	if (!res)
--		return -ENOMEM;
--
--	dwc->xhci_resources[1].start = irq;
--	dwc->xhci_resources[1].end = irq;
--	dwc->xhci_resources[1].flags = res->flags;
--	dwc->xhci_resources[1].name = res->name;
--
- 	xhci = platform_device_alloc("xhci-hcd", PLATFORM_DEVID_AUTO);
- 	if (!xhci) {
- 		dev_err(dwc->dev, "couldn't allocate xHCI device\n");
 -- 
 2.17.1
 

@@ -2,86 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C3647B3ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A93D47B3EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbhLTTti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:49:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40500 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232672AbhLTTtb (ORCPT
+        id S232748AbhLTTub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232728AbhLTTua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:49:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640029770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3VSP4OBZcEiBFIlN5V7GjmvAdtCAZV6sVo+w00kLvxM=;
-        b=Xn8Ld1gUUfG3DKxmPdW3klMBrqSyLZB2B2R9/osNprq4KfWvag82HAf+aybmpQRQ4Og0nG
-        t+H//5uO+m1PQL6dMeopcbSsf5EjSCuUlWfYwG/XhjJS1Xd45w1GnnvbJ3I3DhxPA6KRFj
-        HGMTiqbDuXbMsrdrTYML7klkNTPGX3o=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-td0sy_-LNV6D3iu6ffELzg-1; Mon, 20 Dec 2021 14:49:29 -0500
-X-MC-Unique: td0sy_-LNV6D3iu6ffELzg-1
-Received: by mail-ed1-f69.google.com with SMTP id o20-20020a056402439400b003f83cf1e472so4272460edc.18
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:49:28 -0800 (PST)
+        Mon, 20 Dec 2021 14:50:30 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF349C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:50:29 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso174991pjc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=omKEumi0/sMUkgfeE+wVUPVvzgif1Rbc6lYFVM9Ereo=;
+        b=WFEPFl7giFl5WW+J8eGbuaecw13OosUZpEnVjwmAIv0f0GrUmpe2I4cMqiNhCX2y+M
+         fnLJSYSVI/MpVdRy0OJ4ii5qC6GfsHDdH/9AM6HYK5INFmMOyN95FVzobzntgaYmPuf9
+         Fvxavs+g7o+dGGUB4hea2bSr4T/CkFJK4PcUBouh9OgEIeUO7KkqoWOIHuB3WJiXxh3A
+         S3+s3qZR7Q8DMwcKgxOXsEky6EmOFulwtljyHxt2r1Sy0cnI4/+Mpk2UPhb7onqN6C6L
+         xpj+WeSEQihVEJBHsOjO4+EgyaGKrbh848bupGwUyyQi7g9fmVLkXjjWNLG6Ll/KhKkY
+         8nqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3VSP4OBZcEiBFIlN5V7GjmvAdtCAZV6sVo+w00kLvxM=;
-        b=0rnCEbSbCXDJkJzuF/RNf8MNUBphX0as0DbrAqEaAYZB+MjFhhFeRzY/0hZ1cLzEu5
-         GBfkgecf6nIS8QOkYw5RW2BwYrTLTBrOViuFSME4uKsZQO/RHmFjre2QGKHwYnIE71Cl
-         mGyOK9SyeaPpbsoKPTrSwd1btd5MG1UfSyFL3/ET3s0eANVGjeLhY1ReeixXgguXb+Ts
-         nmvS5Nq2r3WStsGNjr4Q/rsXRvmgfL6TSCQJOtR5dj+yCU0b2EdGUD0kaOs+UwU0f8Lf
-         lVSUfLUPrj9d/0qTN0UdZn7xN/EifdG6vck3lW79M3/4UHw+0vxeEw7DmqbfP69XFbTP
-         Jg1A==
-X-Gm-Message-State: AOAM532Z+RxCCX0RnyBWEkfGoEXvJBMdPjFzWQAdEiIEpDRVTCJpVtbr
-        kihM2OhhXbB14g1u3BVY8FuJNsjm0t9CyeabXGSMJbjAifG70rQafTS6lt7vOTceUuCZISZ9iyO
-        opavKIIefVPKwkrGw6w7rQHF93lRyFhjbBFgw1YrB
-X-Received: by 2002:a50:bb2a:: with SMTP id y39mr17427889ede.348.1640029767968;
-        Mon, 20 Dec 2021 11:49:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhSVk25TmTevOiqf/ZAhUDa3cnqjvCV/LJQO37gUx/6JKAe7MTtqbY+kUf+K8UhvVPcor0Ilp2ZbmgaOqNvqg=
-X-Received: by 2002:a50:bb2a:: with SMTP id y39mr17427876ede.348.1640029767788;
- Mon, 20 Dec 2021 11:49:27 -0800 (PST)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=omKEumi0/sMUkgfeE+wVUPVvzgif1Rbc6lYFVM9Ereo=;
+        b=hSGJIGcDC1H42Tsw+9SoSAqIy1gQG6AdbLCD8QZSZ1SuVA+cABLg0fvV3FQC3ac7wS
+         86pVkKibO0XVFH6QQ0Te+PQJ2Co5CbDlF8b+ddUO/Xy+z/0SLuqG1/xXRebdUtMon1Ei
+         fQsDi/ZJPurlxA8FU+Pka31euEOU5lbLRhHfedHP7J2MidEWlC0kgXgx0CXqNU5B4EAq
+         1Y9bY58iYYths58UEBySaBHvnTA4WF91f5qGpja4rmazIlB1wWn/HlZhrpZlLtDfzJ5d
+         QkhkcPrqWQnU7i/3DyugIargLWI6RmQ76Yrva8lKVCodi1YMrPv0xJkIeoiUH7njfhRA
+         5MwQ==
+X-Gm-Message-State: AOAM530a19YFcJ2UbPlkcQf6f+Ou9ed/n4JYE1A/ij2WvjaPbVpeB2ep
+        SZrkHfXIxWO8+3JwoRapc3E=
+X-Google-Smtp-Source: ABdhPJy/mPgkfT3mRFUEuhymyrtCUZdWxuGjUuiyRrndhASUC0JLvGsa4Xa69qvSHb0zGdkwMZABsw==
+X-Received: by 2002:a17:90a:e7c6:: with SMTP id kb6mr626149pjb.61.1640029829357;
+        Mon, 20 Dec 2021 11:50:29 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:9632:a1c4:968a:6f66])
+        by smtp.gmail.com with ESMTPSA id kb1sm185294pjb.56.2021.12.20.11.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 11:50:28 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+X-Google-Original-From: Dmitry Torokhov <dtor@google.com>
+Date:   Mon, 20 Dec 2021 11:50:25 -0800
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        gwendal@google.com, seanpaul@google.com, marcheau@google.com,
+        rajatxjain@gmail.com
+Subject: Re: [PATCH v2 2/2] drm/privacy_screen_x86: Add entry for ChromeOS
+ privacy-screen
+Message-ID: <YcDegV8wqljpU3J0@google.com>
+References: <20211217202850.1967594-1-rajatja@google.com>
+ <20211217202850.1967594-2-rajatja@google.com>
 MIME-Version: 1.0
-References: <20211220192827.38297-1-wander@redhat.com> <8340efc7-f922-fb8c-772c-de72cefe3470@kernel.dk>
-In-Reply-To: <8340efc7-f922-fb8c-772c-de72cefe3470@kernel.dk>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Mon, 20 Dec 2021 16:49:16 -0300
-Message-ID: <CAAq0SUn_Nru1NTyzgjB9ETsaM46bgDRf3DTa+Z9sG-c8yjuQdw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] blktrace: switch trace spinlock to a raw spinlock
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217202850.1967594-2-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 4:38 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 12/20/21 12:28 PM, Wander Lairson Costa wrote:
-> > The running_trace_lock protects running_trace_list and is acquired
-> > within the tracepoint which implies disabled preemption. The spinlock_t
-> > typed lock can not be acquired with disabled preemption on PREEMPT_RT
-> > because it becomes a sleeping lock.
-> > The runtime of the tracepoint depends on the number of entries in
-> > running_trace_list and has no limit. The blk-tracer is considered debug
-> > code and higher latencies here are okay.
->
-> You didn't put a changelog in here. Was this one actually compiled? Was
-> it runtime tested?
+On Fri, Dec 17, 2021 at 12:28:50PM -0800, Rajat Jain wrote:
+> Add a static entry in the x86 table, to detect and wait for
+> privacy-screen on some ChromeOS platforms.
+> 
+> Please note that this means that if CONFIG_CHROMEOS_PRIVACY_SCREEN is
+> enabled, and if "GOOG0010" device is found in ACPI, then the i915 probe
+> shall return EPROBE_DEFER until a platform driver actually registers the
+> privacy-screen: https://hansdegoede.livejournal.com/25948.html
+> 
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> ---
+> v2: * Use #if instead of #elif
+>     * Reorder the patches in the series.
+>     * Rebased on drm-tip
+> 
+>  drivers/gpu/drm/drm_privacy_screen_x86.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> index a2cafb294ca6..0c5699ad70a3 100644
+> --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
+> +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> @@ -47,6 +47,18 @@ static bool __init detect_thinkpad_privacy_screen(void)
+>  }
+>  #endif
+>  
+> +#if IS_ENABLED(CONFIG_CHROMEOS_PRIVACY_SCREEN)
+> +static bool __init detect_chromeos_privacy_screen(void)
 
-It feels like the changelog reached the inboxes after patch (at least
-mine was so). Would you like that I send a v6 in the hope things
-arrive in order?
+Does marking this __init work in case there is a deferral? Can it happen
+that privacy screen is a module and so will get loaded only after we
+discarded __init sections.
 
+> +{
+> +	if (!acpi_dev_present("GOOG0010", NULL, -1))
+> +		return false;
+> +
+> +	pr_info("%s: Need to wait for ChromeOS privacy-screen drvr", __func__);
+
+I still do not see how this message is helpful. If it is really desired,
+I'd put something into the code that calls into lookups.
+
+> +	return true;
+> +
+> +}
+> +#endif
+> +
+>  static const struct arch_init_data arch_init_data[] __initconst = {
+>  #if IS_ENABLED(CONFIG_THINKPAD_ACPI)
+>  	{
+> @@ -58,6 +70,16 @@ static const struct arch_init_data arch_init_data[] __initconst = {
+>  		.detect = detect_thinkpad_privacy_screen,
+>  	},
+>  #endif
+> +#if IS_ENABLED(CONFIG_CHROMEOS_PRIVACY_SCREEN)
+> +	{
+> +		.lookup = {
+> +			.dev_id = NULL,
+> +			.con_id = NULL,
+> +			.provider = "privacy_screen-GOOG0010:00",
+> +		},
+> +		.detect = detect_chromeos_privacy_screen,
+> +	},
+> +#endif
+>  };
+>  
+>  void __init drm_privacy_screen_lookup_init(void)
+> -- 
+> 2.34.1.307.g9b7440fafd-goog
+> 
+
+Thanks.
+
+-- 
+Dmitry

@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 275E947B3CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B6147B3D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240859AbhLTTdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:33:45 -0500
-Received: from aposti.net ([89.234.176.197]:38784 "EHLO aposti.net"
+        id S232271AbhLTTjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:39:37 -0500
+Received: from ip-15.mailobj.net ([213.182.54.15]:60294 "EHLO msg-4.mailo.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240847AbhLTTdo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:33:44 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 2/2] clk: ingenic: Add MDMA and BDMA clocks
-Date:   Mon, 20 Dec 2021 19:33:19 +0000
-Message-Id: <20211220193319.114974-3-paul@crapouillou.net>
-In-Reply-To: <20211220193319.114974-1-paul@crapouillou.net>
-References: <20211220193319.114974-1-paul@crapouillou.net>
+        id S232236AbhLTTi5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 14:38:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1640029070; bh=lemlXquTS0nN8VDw9hKqIsDNGAze45CcccMhX4gx0fM=;
+        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+         MIME-Version:Content-Transfer-Encoding;
+        b=jt81mpAIUX+vk9yJcW7r8Lsn6PTMWwbMPWvR+2pSGd+xGgEzFgQ1rytzMuD8s4pCy
+         3yQ6MOxyfgY1mAamKJi42QnqNroEvFXybF/N9Ix0FO7drye6X5UrCzpzy0g17B2k/6
+         3d3hsnF0gDZp4+9xvte6wzejzJH/GX6XPQ95wQTo=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via proxy.mailoo.org [213.182.55.207]
+        Mon, 20 Dec 2021 20:37:50 +0100 (CET)
+X-EA-Auth: b7Mo3T0KbdTHogRefIKytdYuExPxQulrJ6XWn+/8Bze2SmOx8jmtqxmb7O7UqDw2g42SGmgRi3w+z3Mdzy5T/ZQvpTkTNaTxuhtULkZDfrk=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     stephan@gerhold.net, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 1/2] ASoC: dt-bindings: codecs: Add bindings for ak4375
+Date:   Mon, 20 Dec 2021 20:37:24 +0100
+Message-Id: <20211220193725.2650356-1-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Ingenic JZ4760 and JZ4770 both have an extra DMA core named BDMA
-dedicated to the NAND and BCH controller, but which can also do
-memory-to-memory transfers. The JZ4760 additionally has a DMA core named
-MDMA dedicated to memory-to-memory transfers. The programming manual for
-the JZ4770 does have a bit for a MDMA clock, but does not seem to have
-the hardware wired in.
+AK4375 is an audio DAC with headphones amplifier controlled via I2C.
+Add simple device tree bindings that describe how to set it up.
 
-Add the BDMA and MDMA clocks to the JZ4760 CGU code, and the BDMA clock
-to the JZ4770 code, so that the BDMA and MDMA controllers can be used.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
+Changed in v2:
+- Changed avdd-supply to be required
+- Picked up Rob's Reviewed-by
+  Sorry if it was not appropriate following the avdd change...
+---
+ .../devicetree/bindings/sound/ak4375.yaml     | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/ak4375.yaml
 
-Notes:
-    v2: No change
-    
-    v3: Split off dt-bindings include changes to its own patch
-
- drivers/clk/ingenic/jz4760-cgu.c | 10 ++++++++++
- drivers/clk/ingenic/jz4770-cgu.c |  5 +++++
- 2 files changed, 15 insertions(+)
-
-diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
-index 080d492ac95c..8fdd383560fb 100644
---- a/drivers/clk/ingenic/jz4760-cgu.c
-+++ b/drivers/clk/ingenic/jz4760-cgu.c
-@@ -313,6 +313,16 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
- 		.parents = { JZ4760_CLK_H2CLK, },
- 		.gate = { CGU_REG_CLKGR0, 21 },
- 	},
-+	[JZ4760_CLK_MDMA] = {
-+		"mdma", CGU_CLK_GATE,
-+		.parents = { JZ4760_CLK_HCLK, },
-+		.gate = { CGU_REG_CLKGR0, 25 },
-+	},
-+	[JZ4760_CLK_BDMA] = {
-+		"bdma", CGU_CLK_GATE,
-+		.parents = { JZ4760_CLK_HCLK, },
-+		.gate = { CGU_REG_CLKGR1, 0 },
-+	},
- 	[JZ4760_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
- 		.parents = { JZ4760_CLK_EXT, },
-diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
-index 8c6c1208f462..7ef91257630e 100644
---- a/drivers/clk/ingenic/jz4770-cgu.c
-+++ b/drivers/clk/ingenic/jz4770-cgu.c
-@@ -329,6 +329,11 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
- 		.parents = { JZ4770_CLK_H2CLK, },
- 		.gate = { CGU_REG_CLKGR0, 21 },
- 	},
-+	[JZ4770_CLK_BDMA] = {
-+		"bdma", CGU_CLK_GATE,
-+		.parents = { JZ4770_CLK_H2CLK, },
-+		.gate = { CGU_REG_CLKGR1, 0 },
-+	},
- 	[JZ4770_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
- 		.parents = { JZ4770_CLK_EXT, },
+diff --git a/Documentation/devicetree/bindings/sound/ak4375.yaml b/Documentation/devicetree/bindings/sound/ak4375.yaml
+new file mode 100644
+index 000000000000..f1d5074a024d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/ak4375.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/ak4375.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: AK4375 DAC and headphones amplifier Device Tree Bindings
++
++maintainers:
++  - Vincent Knecht <vincent.knecht@mailoo.org>
++
++properties:
++  compatible:
++    const: asahi-kasei,ak4375
++
++  reg:
++    maxItems: 1
++
++  '#sound-dai-cells':
++    const: 0
++
++  avdd-supply:
++    description: regulator phandle for the AVDD power supply.
++
++  tvdd-supply:
++    description: regulator phandle for the TVDD power supply.
++
++  pdn-gpios:
++    description: optional GPIO to set the PDN pin.
++
++required:
++  - compatible
++  - reg
++  - '#sound-dai-cells'
++  - avdd-supply
++  - tvdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      headphones: audio-codec@10 {
++        compatible = "asahi-kasei,ak4375";
++        reg = <0x10>;
++        avdd-supply = <&reg_headphones_avdd>;
++        tvdd-supply = <&pm8916_l6>;
++        pdn-gpios = <&msmgpio 114 GPIO_ACTIVE_HIGH>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&headphones_pdn_default>;
++        #sound-dai-cells = <0>;
++      };
++    };
 -- 
-2.34.1
+2.31.1
+
+
 

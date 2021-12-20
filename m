@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F1F47AEB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B614447AF9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbhLTPCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S239136AbhLTPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239148AbhLTO62 (ORCPT
+        with ESMTP id S239887AbhLTPOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:28 -0500
+        Mon, 20 Dec 2021 10:14:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AB4C061394;
-        Mon, 20 Dec 2021 06:49:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38E9C00693D;
+        Mon, 20 Dec 2021 06:57:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8E2AB80EDA;
-        Mon, 20 Dec 2021 14:49:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25818C36AE7;
-        Mon, 20 Dec 2021 14:49:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E808B80EE3;
+        Mon, 20 Dec 2021 14:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D696AC36AE8;
+        Mon, 20 Dec 2021 14:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011772;
-        bh=vmiKDqNKZcMNo0YFJt7fBJKb7F/kv+pcJAJFUaf++dE=;
+        s=korg; t=1640012248;
+        bh=bK1n+S427wb23NqOofsbrM4ULxmkuDog0jSt8VwB6mQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SNUHmdRZxVmyaESOF0r0PxsQQpfgjdFOdraJiTXtuLA9SQ4LAYA5Rhno9jfy5fqm5
-         n5v9gxMN8A4eV1Kb6Jt8+8EHRaT1zLIuvLcnlY2mFDWYzvL6Vle+AhqN+SG45pSG6z
-         9QsVOCU74/xBfVMJivYHlonZ7y2OmxgpZNyGEP7Q=
+        b=NhTwV/tOdNleaOGRfEJUqGzRiGeS9muDVPdRzxo4IokhyNhiMD8xhC76FTYCd3CmR
+         FsHYJev6yYZe4ef4wpVvbEpRrIj3YRwzVPVwjbbqaoWGYgNla0gLdgpquz3KUjZDYf
+         tixfiNisg+yfg/bJ2ONLTNzDcB4SxmSldZqv6d5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, markpearson@lenovo.com,
-        Jimmy Wang <wangjm221@gmail.com>
-Subject: [PATCH 5.10 68/99] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
-Date:   Mon, 20 Dec 2021 15:34:41 +0100
-Message-Id: <20211220143031.688525428@linuxfoundation.org>
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Jianglei Nie <niejianglei2021@163.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 132/177] btrfs: fix memory leak in __add_inode_ref()
+Date:   Mon, 20 Dec 2021 15:34:42 +0100
+Message-Id: <20211220143044.516478168@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,33 +50,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Wang <wangjm221@gmail.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-commit 0ad3bd562bb91853b9f42bda145b5db6255aee90 upstream.
+commit f35838a6930296fc1988764cfa54cb3f705c0665 upstream.
 
-This device doesn't work well with LPM, losing connectivity intermittently.
-Disable LPM to resolve the issue.
+Line 1169 (#3) allocates a memory chunk for victim_name by kmalloc(),
+but  when the function returns in line 1184 (#4) victim_name allocated
+by line 1169 (#3) is not freed, which will lead to a memory leak.
+There is a similar snippet of code in this function as allocating a memory
+chunk for victim_name in line 1104 (#1) as well as releasing the memory
+in line 1116 (#2).
 
-Reviewed-by: <markpearson@lenovo.com>
-Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211214012652.4898-1-wangjm221@gmail.com
+We should kfree() victim_name when the return value of backref_in_log()
+is less than zero and before the function returns in line 1184 (#4).
+
+1057 static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
+1058 				  struct btrfs_root *root,
+1059 				  struct btrfs_path *path,
+1060 				  struct btrfs_root *log_root,
+1061 				  struct btrfs_inode *dir,
+1062 				  struct btrfs_inode *inode,
+1063 				  u64 inode_objectid, u64 parent_objectid,
+1064 				  u64 ref_index, char *name, int namelen,
+1065 				  int *search_done)
+1066 {
+
+1104 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+	// #1: kmalloc (victim_name-1)
+1105 	if (!victim_name)
+1106 		return -ENOMEM;
+
+1112	ret = backref_in_log(log_root, &search_key,
+1113			parent_objectid, victim_name,
+1114			victim_name_len);
+1115	if (ret < 0) {
+1116		kfree(victim_name); // #2: kfree (victim_name-1)
+1117		return ret;
+1118	} else if (!ret) {
+
+1169 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+	// #3: kmalloc (victim_name-2)
+1170 	if (!victim_name)
+1171 		return -ENOMEM;
+
+1180 	ret = backref_in_log(log_root, &search_key,
+1181 			parent_objectid, victim_name,
+1182 			victim_name_len);
+1183 	if (ret < 0) {
+1184 		return ret; // #4: missing kfree (victim_name-2)
+1185 	} else if (!ret) {
+
+1241 	return 0;
+1242 }
+
+Fixes: d3316c8233bb ("btrfs: Properly handle backref_in_log retval")
+CC: stable@vger.kernel.org # 5.10+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/btrfs/tree-log.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
- 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
- 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
- 
-+	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
-+	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
- 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
- 
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1153,6 +1153,7 @@ again:
+ 					     parent_objectid, victim_name,
+ 					     victim_name_len);
+ 			if (ret < 0) {
++				kfree(victim_name);
+ 				return ret;
+ 			} else if (!ret) {
+ 				ret = -ENOENT;
 
 

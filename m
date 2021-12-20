@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80EC47AD69
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5730747AC3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237035AbhLTOvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:51:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38634 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236840AbhLTOsH (ORCPT
+        id S234949AbhLTOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:42:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49720 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234263AbhLTOlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:48:07 -0500
+        Mon, 20 Dec 2021 09:41:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB0F61185;
-        Mon, 20 Dec 2021 14:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90074C36AF0;
-        Mon, 20 Dec 2021 14:48:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05059B80EB3;
+        Mon, 20 Dec 2021 14:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3710AC36AE9;
+        Mon, 20 Dec 2021 14:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011686;
-        bh=u6l7cWOe3Cl8aEC8Liy9VsBmgy8XvYgHzvWCvRR+gh4=;
+        s=korg; t=1640011265;
+        bh=9SaAqYgKcPJsNUw0Yml+mzTfR15IMBXAijvEQkiePU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tpsqYrsIhRT88XqPC0FrEifSdZ1y/3LY7c6K4ULEbBSgMZE6cfAeEX/OeMLcmKA7h
-         Avu7fSgfWxo39LJFwPLvb7sL21LzLPDV4VaGl1iP+c13PQZODMR5wj6pcq9iczQ/pv
-         WWlnKlviJmqNuoViH6GVPOALL+ePhWpIe5+WZpeE=
+        b=sCpZxiHsd1ZZooA/lhCH875MTfY7sJt15ggTXRVAfQQq71YOAEs9mE8QkG/lyXrnl
+         wcG/e7GtzjHQ2GmPFSI0zzA3kWjBwfEk9FP3Kzd5mdxe0kL0D9oQGQzyJ4etaIAgn7
+         CObbja3K+7gEKnDeeWbjGuwyo3o56h0sfh3d8UrY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        syzbot+614e82b88a1a4973e534@syzkaller.appspotmail.com,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 37/99] selftests: Fix raw socket bind tests with VRF
+Subject: [PATCH 4.19 17/56] mac80211: track only QoS data frames for admission control
 Date:   Mon, 20 Dec 2021 15:34:10 +0100
-Message-Id: <20211220143030.623876528@linuxfoundation.org>
+Message-Id: <20211220143024.018821606@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,41 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 0f108ae4452025fef529671998f6c7f1c4526790 ]
+[ Upstream commit d5e568c3a4ec2ddd23e7dc5ad5b0c64e4f22981a ]
 
-Commit referenced below added negative socket bind tests for VRF. The
-socket binds should fail since the address to bind to is in a VRF yet
-the socket is not bound to the VRF or a device within it. Update the
-expected return code to check for 1 (bind failure) so the test passes
-when the bind fails as expected. Add a 'show_hint' comment to explain
-why the bind is expected to fail.
+For admission control, obviously all of that only works for
+QoS data frames, otherwise we cannot even access the QoS
+field in the header.
 
-Fixes: 75b2b2b3db4c ("selftests: Add ipv4 address bind tests to fcnal-test")
-Reported-by: Li Zhijian <lizhijian@fujitsu.com>
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Syzbot reported (see below) an uninitialized value here due
+to a status of a non-QoS nullfunc packet, which isn't even
+long enough to contain the QoS header.
+
+Fix this to only do anything for QoS data packets.
+
+Reported-by: syzbot+614e82b88a1a4973e534@syzkaller.appspotmail.com
+Fixes: 02219b3abca5 ("mac80211: add WMM admission control support")
+Link: https://lore.kernel.org/r/20211122124737.dad29e65902a.Ieb04587afacb27c14e0de93ec1bfbefb238cc2a0@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/fcnal-test.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/mac80211/mlme.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 9f771f7e57450..dd67004a1d83a 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -1747,8 +1747,9 @@ ipv4_addr_bind_vrf()
- 	for a in ${NSA_IP} ${VRF_IP}
- 	do
- 		log_start
-+		show_hint "Socket not bound to VRF, but address is in VRF"
- 		run_cmd nettest -s -R -P icmp -l ${a} -b
--		log_test_addr ${a} $? 0 "Raw socket bind to local address"
-+		log_test_addr ${a} $? 1 "Raw socket bind to local address"
+diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+index cbcb60face2c5..e5c4a72f8e571 100644
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@ -2351,11 +2351,18 @@ static void ieee80211_sta_tx_wmm_ac_notify(struct ieee80211_sub_if_data *sdata,
+ 					   u16 tx_time)
+ {
+ 	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
+-	u16 tid = ieee80211_get_tid(hdr);
+-	int ac = ieee80211_ac_from_tid(tid);
+-	struct ieee80211_sta_tx_tspec *tx_tspec = &ifmgd->tx_tspec[ac];
++	u16 tid;
++	int ac;
++	struct ieee80211_sta_tx_tspec *tx_tspec;
+ 	unsigned long now = jiffies;
  
- 		log_start
- 		run_cmd nettest -s -R -P icmp -l ${a} -d ${NSA_DEV} -b
++	if (!ieee80211_is_data_qos(hdr->frame_control))
++		return;
++
++	tid = ieee80211_get_tid(hdr);
++	ac = ieee80211_ac_from_tid(tid);
++	tx_tspec = &ifmgd->tx_tspec[ac];
++
+ 	if (likely(!tx_tspec->admitted_time))
+ 		return;
+ 
 -- 
 2.33.0
 

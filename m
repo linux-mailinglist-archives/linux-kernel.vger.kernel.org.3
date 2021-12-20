@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B322747B331
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45847B340
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbhLTStS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S240594AbhLTSxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbhLTStQ (ORCPT
+        with ESMTP id S240001AbhLTSxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:49:16 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8FEC061574;
-        Mon, 20 Dec 2021 10:49:16 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 131so31505374ybc.7;
-        Mon, 20 Dec 2021 10:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yq3XkX5Ybk67FSev2pv0YxhwJSiolYJ2lCI24c84oPM=;
-        b=mbEe/DAE2Mt2NqkDpb1/ZVpmAIEAawX0XWFlKLUj1NvyD6BL+/P4TXRSwIDOebHkti
-         JOnnfjV9hd+TIyxfEuyYBybfahTbjEzfwLknNSrblurIT6Z0BJJNC9RXgIG6yH7ZMeGq
-         s/O/kqZV8VQEWL1DyGeIPl3PJDluoHvBOXAWOKuxWTgOJfM+RBalw2tW0kJL0fpxtZdQ
-         W0jVOgZCpjEZuWjGQSsEfNCmHMEPcYko08+gYRQ1oQ8WuuitJ+AI3oCeAA8Wbq4Dt+Vw
-         lvyjwjE1mcTPCfXdAyRfpTL5wGac6LoX0Q/XXj9ZNGbysFmncWaUyV4YpQwjk+U+nG2g
-         87Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yq3XkX5Ybk67FSev2pv0YxhwJSiolYJ2lCI24c84oPM=;
-        b=3hgfF0NoTAismSrA81utt9/QuwzIMFOAI1kxigjB59jT2A16JoWZqCU1CddVSyHCH7
-         hnnFzamdbkdMEjqUfJ3zaDhV4SRLpZnquB15hfiMe/fEqD0Tvmp6eq9AkAdsDNNF5UBa
-         Ee+kZIv9OhvxAX0s5MK4R+kb8RiM+iH8eT6H9Y9lSrtKTdTJZFKT5tDlypZe3C9E41qx
-         SrffREpgisql+LNohsVqc0xxN2r3dJfqkZjcN/mhuRx30AoTurMe/ilrM4VeW1jU13+c
-         z7JfkvNuYnQ/cG0Tzu7VrFMTgoTq4Ro5RUvcKa/7QWGFbTVSvObNIRvVGp8KjxGfWqTe
-         wzlA==
-X-Gm-Message-State: AOAM5321Q93Rji7Amg1bmjP9YZfbfvOHgsZjLzoNcLr4jY1axFk5Ov0n
-        6hssZeECObnYC4drsfJJUHbvPE08w92T2MvlApg=
-X-Google-Smtp-Source: ABdhPJyp9Y0T9l4klvXJ52ihdVW44XVxiAhV0l1KGboTToDy1i6iJsy4qBcsHZArHQqOZWc8MUE4Bb45i2UQB8HS4G0=
-X-Received: by 2002:a25:4086:: with SMTP id n128mr24280844yba.280.1640026155160;
- Mon, 20 Dec 2021 10:49:15 -0800 (PST)
+        Mon, 20 Dec 2021 13:53:06 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4BC061574;
+        Mon, 20 Dec 2021 10:53:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kj2QTGmFgV7Djw7LNhrL5ROHsmbIWJF49HXpYPf8/UU=; b=G4W2D+AlLdNiv8olc5agr0Mi+h
+        4GfDiEqN4qlk9+PrawUwlcprCA++0YwRh7IkFF33ev1js3rxkRRs5EfJO1Jy51/cd01bRVDGPvjwb
+        c1RmwtI/BekNVLw3rqWV31vOCyGklOEVfVNiI8ZnBDNj6xWAHoSW3q/oRxOX7eC6dt5IZicxOSWAA
+        /mJZunkex8i0f4L0kJAa5NAX2OvM5np6uCth6gukXAxux9NprSalVJHYB6XHGxBH4QUuf26j/3oeq
+        1VwjhLn5rUVmgwqXZT8mAQ0MGDZX/RpLVFkOGxx4wUJGzxxJsjRHWI1m4YaH0Mvd0284zlXSbPbpc
+        zfTlnE1Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzNmN-001psh-7z; Mon, 20 Dec 2021 18:52:59 +0000
+Date:   Mon, 20 Dec 2021 18:52:59 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <YcDRC7e0fNAMYi3m@casper.infradead.org>
+References: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <YcDNaoGcGS6ypucg@casper.infradead.org>
 MIME-Version: 1.0
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com> <YbIgsO/7oQW9h6wv@zn.tnic>
- <YbIu55LZKoK3IVaF@kernel.org> <YbIw1nUYJ3KlkjJQ@zn.tnic> <YbM5yR+Hy+kwmMFU@zn.tnic>
- <YbcCM81Fig3GC4Yi@kernel.org> <YbcTgQdTpJAHAZw4@zn.tnic> <CANGBn69pGb-nscv8tXN1UKDEQGEMWRKuPVPLgg+q2m7V_sBvHw@mail.gmail.com>
-In-Reply-To: <CANGBn69pGb-nscv8tXN1UKDEQGEMWRKuPVPLgg+q2m7V_sBvHw@mail.gmail.com>
-From:   "Patrick J. Volkerding" <volkerdi@gmail.com>
-Date:   Mon, 20 Dec 2021 12:49:52 -0600
-Message-ID: <CANGBn6_cCd3ASh-9aec5qQkuK0s=mWbo90h0rMNwBiqsgb5AAA@mail.gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
- param parsing
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
-        x86@kernel.org, Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcDNaoGcGS6ypucg@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Trying again since gmail didn't use plain text and the message got rejected.
+On Mon, Dec 20, 2021 at 06:37:30PM +0000, Matthew Wilcox wrote:
+> +++ b/mm/memory.c
+> @@ -3626,7 +3626,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  	inc_mm_counter_fast(vma->vm_mm, MM_ANONPAGES);
+>  	dec_mm_counter_fast(vma->vm_mm, MM_SWAPENTS);
+>  	pte = mk_pte(page, vma->vm_page_prot);
+> -	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page, NULL)) {
+> +	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page)) {
+>  		pte = maybe_mkwrite(pte_mkdirty(pte), vma);
+>  		vmf->flags &= ~FAULT_FLAG_WRITE;
+>  		ret |= VM_FAULT_WRITE;
+[...]
+> @@ -1673,17 +1665,14 @@ static int page_trans_huge_map_swapcount(struct page *page, int *total_mapcount,
+>   * reuse_swap_page() returns false, but it may be always overwritten
+>   * (see the other implementation for CONFIG_SWAP=n).
+>   */
+> -bool reuse_swap_page(struct page *page, int *total_map_swapcount)
+> +bool reuse_swap_page(struct page *page)
+>  {
+> -	int count, total_mapcount, total_swapcount;
+> +	int count, total_swapcount;
+>  
+>  	VM_BUG_ON_PAGE(!PageLocked(page), page);
+>  	if (unlikely(PageKsm(page)))
+>  		return false;
+> -	count = page_trans_huge_map_swapcount(page, &total_mapcount,
+> -					      &total_swapcount);
+> -	if (total_map_swapcount)
+> -		*total_map_swapcount = total_mapcount + total_swapcount;
+> +	count = page_trans_huge_map_swapcount(page, &total_swapcount);
+>  	if (count == 1 && PageSwapCache(page) &&
+>  	    (likely(!PageTransCompound(page)) ||
+>  	     /* The remaining swap count will be freed soon */
 
-We're waiting for these patches to appear in a 5.15 kernel so that we
-can ship with an unpatched kernel. Will they be queued for the stable
-kernels sometime soon?
-
-Thanks,
-
-Pat
-
-
-On Mon, Dec 20, 2021 at 12:43 PM Patrick J. Volkerding
-<volkerdi@gmail.com> wrote:
->
-> Will these patches be queued for the stable kernels soon?
->
-> Thanks,
->
-> Pat
->
-> On Mon, Dec 13, 2021, 03:33 Borislav Petkov <bp@alien8.de> wrote:
->>
->> On Mon, Dec 13, 2021 at 10:20:03AM +0200, Mike Rapoport wrote:
->> > Thanks for taking care of this!
->>
->> Sure, no probs.
->>
->> Lemme send them out officially so they're on the list. Will queue them
->> this week.
->>
->> Thx.
->>
->> --
->> Regards/Gruss,
->>     Boris.
->>
->> https://people.kernel.org/tglx/notes-about-netiquette
+It makes me wonder if reuse_swap_page() can also be based on refcount
+instead of mapcount?

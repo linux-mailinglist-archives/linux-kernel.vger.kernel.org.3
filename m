@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AFC47AB49
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E6F47AB4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbhLTO20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbhLTO2Z (ORCPT
+        id S233661AbhLTO2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:28:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41642 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233637AbhLTO2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:28:25 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475ACC06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:28:25 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v11so20438688wrw.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WooZ8+G3drvx1+6gABS1CB4CVHUChh8QD6al3hgLHT0=;
-        b=Hu2VM+3/PidvuBJkCTfuoSnf3r5qO3ftqjAkvelo8kOEZ8IHKSIQAhBwod07u+oq55
-         DqyDi6Ve0ed0E89JykoDluEmMSEgXLOAmGOzY/Z+ckuW1Vv0KHSFsgO83Tb3TpCTxq4Q
-         tqqW9C6ramZQNgmApKuN27wZ+A7enW96fegCtVwD1siH5daxTgaBf0zujAQ7T4Px6aun
-         wYPAG/ZlLvoJz2Zve08m22Qw98IYUMKW+TxYR8JIKiUILm0GqN13gbDLtXaZIADF7+5s
-         mQgyVRy3utRYbCCM2Tj77NoJLfnraoQwV/q9D01W52XkS+yfFG3lbJ8hXMtv9Yq9Ab7g
-         cQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WooZ8+G3drvx1+6gABS1CB4CVHUChh8QD6al3hgLHT0=;
-        b=eafSVMbqCfWmickAvP7lUCTWm7iZcRVyGtLhTMHcE1bMgIdmtfo75tNkyxWchIqr9L
-         OcdU0CtQ65OPcZUtalYTwIgbq2EXEuL4yWSJPQLky4cv8KLG/ntUfkE48pFzWk2TeHM2
-         680O8PL+s24oBqMSDpFpyF0M1oPFqxBgVm8P/+1oYeJV0gZiEBalblUDCJ10uIw3BN6d
-         nmPrwBrHJFDn1k0XEXl3Py07JbfVAX8Y+BTNvmrYw8CzVB17/BeDhJaEbNut9WrHYiAY
-         +l33n7HAB5nBTop5o/O5Uqyuq+5KzDm+k5lyiDZDm5s3hil0kgb67pM2nsj598f0OmcI
-         LfAQ==
-X-Gm-Message-State: AOAM533zfYPPuDxa99j9/c1hIHoTLjd+YdteM9oD3ChFWUAE2JbwZuol
-        GMRdZCcAb4tKDHWKuMScKwoe4g==
-X-Google-Smtp-Source: ABdhPJw3TlXRRdDAmrr2xdrbdnLzo6CM5X39e2ZExdeVHSwzM67b1QuANK08rfzgrK5uj0GU/t19mw==
-X-Received: by 2002:a5d:6088:: with SMTP id w8mr8586338wrt.85.1640010503680;
-        Mon, 20 Dec 2021 06:28:23 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ac6:da31:b84c:183? ([2a01:e34:ed2f:f020:ac6:da31:b84c:183])
-        by smtp.googlemail.com with ESMTPSA id l8sm20108265wmc.40.2021.12.20.06.28.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 06:28:23 -0800 (PST)
-Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
- <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
- <bdec1a89-ad1b-1e16-a248-029f7f02ae80@linaro.org>
- <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <619343a0-4911-caff-7f47-a8469290c0f0@linaro.org>
-Date:   Mon, 20 Dec 2021 15:28:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Mon, 20 Dec 2021 09:28:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33F8EB80EB3;
+        Mon, 20 Dec 2021 14:28:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AF9C36AE8;
+        Mon, 20 Dec 2021 14:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640010512;
+        bh=1eIe8Rm8nXRPWnknyt0IFILgScA81zHkg8rD11G9fF8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p9zS+D9+lM9BGBVlOOR7BEGaTWRoP5RvU6xcAPjrrRXKF51uBZ/B+/gpZKV0njXk8
+         pRVnc1fLji+Rz2I+yGK3muR3ShtgOg79+EUlLKOdT007Y9vuEpxyHkTuVcIkkn4J2d
+         8WpundwdMKXb5vMUNIfkkJMKfuB7sM01Zj86B/otdfMzfbB/bv+pGEib6hSU8zllDR
+         ihqBT/zyAC4vVgjCyvZtIdgRBkOAAZg3/Kw6VhD+b0KGT5W2av0w3x1AztV5xxY5zE
+         +GoMmoHcveprG/gKQAtTKJz4KaAnDx6gNIDMp19XQVLIlbVnW9dfPva5sPz7LGuOyz
+         CdjfY5mGXGdFw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mzJeQ-00DIsl-SU; Mon, 20 Dec 2021 14:28:30 +0000
+Date:   Mon, 20 Dec 2021 14:28:30 +0000
+Message-ID: <875yrjwdtd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        frederic <frederic@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+In-Reply-To: <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+        <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mark.rutland@arm.com, nsaenzju@redhat.com, will@kernel.org, paulmck@kernel.org, linux-arm-kernel@lists.infradead.org, rcu@vger.kernel.org, tglx@linutronix.de, frederic@kernel.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2021 15:26, Geert Uytterhoeven wrote:
-
-[ ... ]
-
->>
->> if (irq == -ENXIO)
->>         continue;
->>
->> if (irq <= 0)
->>         goto out;
->>
->>
->> Did I miss your point ?
+On Fri, 17 Dec 2021 13:21:39 +0000,
+Mark Rutland <mark.rutland@arm.com> wrote:
 > 
-> I think so, as I don't see your point, neither ;-)
+> On Fri, Dec 17, 2021 at 12:51:57PM +0100, Nicolas Saenz Julienne wrote:
+> > Hi All,
 > 
-> I meant (a) there is no need to continue the loop when there are no
-> more interrupts present, and (b) irq == 0 cannot happen, so the cod
-> can be simplified to:
+> Hi,
 > 
->     if (irq == -ENXIO)
->             break;
->     if (irq < 0) {
->             ret = irq;
->             goto out_unregister;
->     }
+> > arm64's guest entry code does the following:
+> > 
+> > int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> > {
+> > 	[...]
+> > 
+> > 	guest_enter_irqoff();
+> > 
+> > 	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
+> > 
+> > 	[...]
+> > 
+> > 	local_irq_enable();
+> > 
+> > 	/*
+> > 	 * We do local_irq_enable() before calling guest_exit() so
+> > 	 * that if a timer interrupt hits while running the guest we
+> > 	 * account that tick as being spent in the guest.  We enable
+> > 	 * preemption after calling guest_exit() so that if we get
+> > 	 * preempted we make sure ticks after that is not counted as
+> > 	 * guest time.
+> > 	 */
+> > 	guest_exit();
+> > 	[...]
+> > }
+> > 
+> > 
+> > On a nohz-full CPU, guest_{enter,exit}() delimit an RCU extended quiescent
+> > state (EQS). Any interrupt happening between local_irq_enable() and
+> > guest_exit() should disable that EQS. Now, AFAICT all el0 interrupt handlers
+> > do the right thing if trggered in this context, but el1's won't. Is it
+> > possible to hit an el1 handler (for example __el1_irq()) there?
 > 
+> I think you're right that the EL1 handlers can trigger here and
+> won't exit the EQS.
+> 
+> I'm not immediately sure what we *should* do here. What does x86 do
+> for an IRQ taken from a guest mode? I couldn't spot any handling of
+> that case, but I'm not familiar enough with the x86 exception model
+> to know if I'm looking in the right place.
+> 
+> Note that the EL0 handlers *cannot* trigger for an exception taken
+> from a guest. We use separate vectors while running a guest (for
+> both VHE and nVHE modes), and from the main kernel's PoV we return
+> from kvm_call_hyp_ret(). We can ony take IRQ from EL1 *after* that
+> returns.
+> 
+> We *might* need to audit the KVM vector handlers to make sure they're not
+> dependent on RCU protection (I assume they're not, but it's possible something
+> has leaked into the VHE code).
 
-Makes sense for me now, thanks :)
+The *intent* certainly is that whatever is used in the VHE code to
+handle exceptions arising whilst running in guest context must be
+independent from RCU, if only because we share a bunch with the !VHE
+code, and RCU is, unfortunately, not a thing there.
 
+My most immediate concern is that the VHE/nVHE split now allows all
+sort of instrumentation in VHE, which may rely on RCU. At the very
+least, we should make most of the VHE switch code noinstr.
 
+Thanks,
 
+	M.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Without deviation from the norm, progress is not possible.

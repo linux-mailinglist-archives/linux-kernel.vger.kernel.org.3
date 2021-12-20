@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C20F47AE11
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EAA47ACC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237690AbhLTO5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:57:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45278 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbhLTOz0 (ORCPT
+        id S236424AbhLTOqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:46:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51476 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235927AbhLTOn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:55:26 -0500
+        Mon, 20 Dec 2021 09:43:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B1D3611A4;
-        Mon, 20 Dec 2021 14:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710C9C36AE7;
-        Mon, 20 Dec 2021 14:55:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 943D7B80EB3;
+        Mon, 20 Dec 2021 14:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDEAC36AE7;
+        Mon, 20 Dec 2021 14:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012126;
-        bh=L9Tn91wuneDVfUE4F8HLWO62n9jSIodEQPJIToRT1Ys=;
+        s=korg; t=1640011406;
+        bh=vo9aJDg3cE7KVNvWvEbr8nXiXtxVSONQAjOm8blIKVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zLmq8d8i+tt9hCfafbAj+U7DcLn9ETHdvIKYhNOtmxbMhWN/JZKWmreeSNqWF71lT
-         WuyKiq70atv+Uf0yw451fAE7geT82BOmyxSnFEaM1cfB0qj1DXboXvLeoeAGIMwxAE
-         OrqOCUnQR3PbC3OOazYBjSmNp04F6s9+nErAsq8Y=
+        b=ZcEznmNuvpnOtT0UccUeFA9+BokuAaXmRQwUe9aVE8zQVOdwUjHr3j+sqavd7w2zL
+         4q3G0VKQTWwQiCOqG3uiuOoprwiOkEE9Yb9uMM25ev21caylJZqRXa20OwpR8TAkwa
+         sF+eFIAZwf2gHmFKbjAs1kJH1ha0OrWGGVpxGfLc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lang Yu <lang.yu@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 089/177] drm/amd/pm: fix a potential gpu_metrics_table memory leak
+        stable@vger.kernel.org, "J. Bruce Fields" <bfields@redhat.com>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH 5.4 10/71] nfsd: fix use-after-free due to delegation race
 Date:   Mon, 20 Dec 2021 15:33:59 +0100
-Message-Id: <20211220143043.114371484@linuxfoundation.org>
+Message-Id: <20211220143026.039333231@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +45,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lang Yu <lang.yu@amd.com>
+From: J. Bruce Fields <bfields@redhat.com>
 
-[ Upstream commit aa464957f7e660abd554f2546a588f6533720e21 ]
+commit 548ec0805c399c65ed66c6641be467f717833ab5 upstream.
 
-Memory is allocated for gpu_metrics_table in renoir_init_smc_tables(),
-but not freed in int smu_v12_0_fini_smc_tables(). Free it!
+A delegation break could arrive as soon as we've called vfs_setlease.  A
+delegation break runs a callback which immediately (in
+nfsd4_cb_recall_prepare) adds the delegation to del_recall_lru.  If we
+then exit nfs4_set_delegation without hashing the delegation, it will be
+freed as soon as the callback is done with it, without ever being
+removed from del_recall_lru.
 
-Fixes: 95868b85764a ("drm/amd/powerplay: add Renoir support for gpu metrics export")
+Symptoms show up later as use-after-free or list corruption warnings,
+usually in the laundromat thread.
 
-Signed-off-by: Lang Yu <lang.yu@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+I suspect aba2072f4523 "nfsd: grant read delegations to clients holding
+writes" made this bug easier to hit, but I looked as far back as v3.0
+and it looks to me it already had the same problem.  So I'm not sure
+where the bug was introduced; it may have been there from the beginning.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: J. Bruce Fields <bfields@redhat.com>
+[Salvatore Bonaccorso: Backport for context changes to versions which do
+not have 20b7d86f29d3 ("nfsd: use boottime for lease expiry calculation")]
+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/nfsd/nfs4state.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-index d60b8c5e87157..43028f2cd28b5 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-@@ -191,6 +191,9 @@ int smu_v12_0_fini_smc_tables(struct smu_context *smu)
- 	kfree(smu_table->watermarks_table);
- 	smu_table->watermarks_table = NULL;
- 
-+	kfree(smu_table->gpu_metrics_table);
-+	smu_table->gpu_metrics_table = NULL;
-+
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -1041,6 +1041,11 @@ hash_delegation_locked(struct nfs4_deleg
  	return 0;
  }
  
--- 
-2.33.0
-
++static bool delegation_hashed(struct nfs4_delegation *dp)
++{
++	return !(list_empty(&dp->dl_perfile));
++}
++
+ static bool
+ unhash_delegation_locked(struct nfs4_delegation *dp)
+ {
+@@ -1048,7 +1053,7 @@ unhash_delegation_locked(struct nfs4_del
+ 
+ 	lockdep_assert_held(&state_lock);
+ 
+-	if (list_empty(&dp->dl_perfile))
++	if (!delegation_hashed(dp))
+ 		return false;
+ 
+ 	dp->dl_stid.sc_type = NFS4_CLOSED_DELEG_STID;
+@@ -4406,7 +4411,7 @@ static void nfsd4_cb_recall_prepare(stru
+ 	 * queued for a lease break. Don't queue it again.
+ 	 */
+ 	spin_lock(&state_lock);
+-	if (dp->dl_time == 0) {
++	if (delegation_hashed(dp) && dp->dl_time == 0) {
+ 		dp->dl_time = get_seconds();
+ 		list_add_tail(&dp->dl_recall_lru, &nn->del_recall_lru);
+ 	}
 
 

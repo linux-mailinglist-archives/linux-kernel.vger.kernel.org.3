@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9732647B245
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC6647B246
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbhLTRmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:42:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:60378 "EHLO foss.arm.com"
+        id S239716AbhLTRmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:42:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:60388 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233373AbhLTRmQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:42:16 -0500
+        id S233373AbhLTRmS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 12:42:18 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4992A6D;
-        Mon, 20 Dec 2021 09:42:16 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5676D6E;
+        Mon, 20 Dec 2021 09:42:17 -0800 (PST)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5E4D3F774;
-        Mon, 20 Dec 2021 09:42:14 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DB363F774;
+        Mon, 20 Dec 2021 09:42:16 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, f.fainelli@gmail.com,
         souvik.chakravarty@arm.com, nicola.mazzucato@arm.com,
         Cristian Marussi <cristian.marussi@arm.com>
-Subject: [RFC PATCH 0/2] Sensor readings fixes
-Date:   Mon, 20 Dec 2021 17:41:53 +0000
-Message-Id: <20211220174155.40239-1-cristian.marussi@arm.com>
+Subject: [RFC PATCH 1/2] firmware: arm_scmi: Filter out negative results on scmi_reading_get
+Date:   Mon, 20 Dec 2021 17:41:54 +0000
+Message-Id: <20211220174155.40239-2-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211220174155.40239-1-cristian.marussi@arm.com>
+References: <20211220174155.40239-1-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When the backing SCMI Platform supports a Sensor protocol whose version is
+greater than SCMI v2.0 (0x10000), the underlying SCMI SENSOR_READING_GET
+command will report sensors readings no more as unsigned but as signed
+values.
 
-this was supposed to be an easy fix on how sensor readings are handled
-across different FW versions while maintaining backward compatibility,
-but the solution raised for me more questions than the issue itself...
-...so I posted as an RFC.
+A new scmi_reading_get_timestamped operation was added to properly handle
+this and other changes like timestamps and multi-axis sensors; on the other
+side the Sensor scmi_reading_get protocol operation was kepts as it was for
+backward compatibility and so it stil reports values as unsigned, but no
+check was added to detect the situation in which a newer FW could try to
+report negative values over an unsigned quantity.
 
-In a nutshell, since SCMI FWv3.0 spec, sensors SCMI_READING_GET command
-can report axis and timestamps too, beside readings, so a brand new
-scmi_reading_get_timestamped protocol operation was exposed (used by IIO)
-while the old scmi_reading_get was kept as it was, already used by HWMON
-subsystem for other classes of sensors.
+Filter out negative values in scmi_reading_get, reporting an error, when
+the SCMI FW version is greater than V2.0 and a negative value has been
+received.
 
-Unfortunately, also the flavour of reported values changed from unsigned
-to signed with v3.0, so if you end-up on a system running against an SCMI
-v3.0 FW platform you could end up reading a negative value and interpreting
-it as a big positive since scmi_reading_get reports only u64.
+Reported-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+Note that, till now, HWMON SCMI driver was silently interpreting u64 as
+s64, so after this change whenever a FW >2.0 is used it won't be possible
+anymore to report negative values in HWMON.
+---
+ drivers/firmware/arm_scmi/sensors.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-01/02 simply takes care, when a FW >= 3.0 is detected, to return an error
-to any scmi_reading_get request if that would result in tryinh to carry
-a negative value into an u64.
-
-So this should rectify the API exposed by SCMI sensor and make it
-consistent in general, in such a way that a user calling it won't risk to
-receive a false big-positive which was indeed a 2-complement negative from
-the perpective of the SCMI fw.
-	
-So far so good...sort of...since, to make things more dire, the HWMON
-interface, which is the only current upstream user of scmi_reading_get
-DOES allow indeed to report to the HWMON core negative values, so it was
-just that we were silently interpreting u64 as s64 :P ...
-
-...as a consequence the fix above to the SCMI API will potentially break
-this undocumented behaviour of our only scmi_reading_get user.
-
-Additionally, while looking at this, I realized that for similar reasons
-even on systems running the current SCMI stack API and an old FW <=2.0
-the current HWMON read is potentially broken, since when the FW reports
-a very big and real positive number we'll report it as a signed long to
-the HWMON core, so turning it wrongly into a negative report: for this
-reason 02/02 adds a check inside scmi-hwmon to filter out, reporting
-errors, any result reported by scmi_reading_get so big as to be considered
-a negative in 2-complement...
-
-...and this will probably break even more the undocumented behaviours...
-
-Any feedback welcome !
-
-Thanks,
-Cristian
-
-Cristian Marussi (2):
-  firmware: arm_scmi: Filter out negative results on scmi_reading_get
-  hwmon: (scmi) Filter out results wrongly interpreted as negatives
-
- drivers/firmware/arm_scmi/sensors.c |  8 ++++++++
- drivers/hwmon/scmi-hwmon.c          | 14 ++++++++++++++
- 2 files changed, 22 insertions(+)
-
+diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+index cdbb287bd8bc..f3952f1d9f61 100644
+--- a/drivers/firmware/arm_scmi/sensors.c
++++ b/drivers/firmware/arm_scmi/sensors.c
+@@ -730,6 +730,14 @@ static int scmi_sensor_reading_get(const struct scmi_protocol_handle *ph,
+ 			*value = get_unaligned_le64(t->rx.buf);
+ 	}
+ 
++	if (!ret && si->version > SCMIv2_SENSOR_PROTOCOL && *value & BIT(63)) {
++		dev_warn_once(ph->dev,
++			      "SCMI FW Sensor version:0x%X reported negative value %ld\n",
++			      si->version, (long)*value);
++		*value = 0;
++		ret = -EIO;
++	}
++
+ 	ph->xops->xfer_put(ph, t);
+ 	return ret;
+ }
 -- 
 2.17.1
 

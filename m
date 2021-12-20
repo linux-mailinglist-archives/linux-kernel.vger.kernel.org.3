@@ -2,94 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD53747A886
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A7347A889
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbhLTLVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhLTLVl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:21:41 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83BDC061574;
-        Mon, 20 Dec 2021 03:21:40 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id t34so9370083qtc.7;
-        Mon, 20 Dec 2021 03:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MBczxJm3I08jjd/QHRuYvFh7bIEcTce0GBizMJSEP8c=;
-        b=d1gSa9qhkemwcKujwOGSI9dzt9WFOOqxeh34+7xeJrowWMfJVVYGDxUvaP/s1dXTde
-         WEcPWmAe83rq8rFEyyYCc6YoWWFFE/5X0pZJA3vYAnfeNrF6N35X6aJx//4G2p3qGxwO
-         ZU0sOO9ThRkOZm1LMc4pmmonXPEO9LsfXYD40aYL/htTXNbf4nTpCjycyS+djxW01mmp
-         /3dMO7BkFW3cxjmIHTMPSkqgbJwyYVVe9zCJrnTl0yHrIwH1C8juqbiAXRDuG4LOoTJ7
-         wWftqOiYGjzblReWdiwVDSA+wMFvDKI5ZOj8dyN8Y61aTtUnwVa57sAFFxOX2h8b3kLI
-         dNeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MBczxJm3I08jjd/QHRuYvFh7bIEcTce0GBizMJSEP8c=;
-        b=mqqkr4gMa+i/vDEyntNHolsahJYwLpXrhhompkw00K5o1ujdqvu1HEjlWmRZ9jGF7O
-         7onl6O4ryK3+73KN/ZMW9e5wI0rMgStFI6e0lVoVU1bmYvkhz5kh8RZ5ljAERn6iKvPd
-         Q6pZGFEUErAUkyCoy4ih25/9VXhhPCpMFapD/5cAVB3Zs2tSp4duSIKtzknYtELy/9Vk
-         vAyv4wHdt4NVxvbz74q36panu39P6Tq+JIe4TDjOsUWRXSqvrzGXj3jXqluAuDpUG+Iz
-         qRW2mGAxKUoTkTncO0Woa9Xjg1Y/WA5MXEq6j70+DCfZzgjt9R6B25B7+AjXWafY94wR
-         NaPQ==
-X-Gm-Message-State: AOAM530Q3yZ7YydMS3douYooILZRABGi+wBm8hHNS+WCNHf/xkPv1NjJ
-        9tS4DLWU0DoEkpwEW0NJ5sVWNjro3FU=
-X-Google-Smtp-Source: ABdhPJxiHawe3//spU8yo9RWOXKIfuZi4wTgQUI6t9d6+bgFUY8WNgGtZAIp8IuoiNwyWSV176A+3Q==
-X-Received: by 2002:a05:622a:170e:: with SMTP id h14mr1108255qtk.479.1639999299996;
-        Mon, 20 Dec 2021 03:21:39 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o21sm14724301qta.89.2021.12.20.03.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 03:21:39 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ath11k: use min() to make code cleaner
-Date:   Mon, 20 Dec 2021 11:21:33 +0000
-Message-Id: <20211220112133.472472-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231736AbhLTLXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:23:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:52604 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230489AbhLTLXA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 06:23:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21E8E11FB;
+        Mon, 20 Dec 2021 03:23:00 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 481643F718;
+        Mon, 20 Dec 2021 03:22:58 -0800 (PST)
+Message-ID: <1d3d4486-1fe0-372c-f702-30da7cf86b5a@arm.com>
+Date:   Mon, 20 Dec 2021 11:22:51 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/1] drm/nouveau/device: Get right pgsize_bitmap of
+ iommu_domain
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20211218074546.1772553-1-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20211218074546.1772553-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 2021-12-18 07:45, Lu Baolu wrote:
+> The suported page sizes of an iommu_domain are saved in the pgsize_bitmap
+> field. Retrieve the value from the right place.
+> 
+> Fixes: 58fd9375c2c534 ("drm/nouveau/platform: probe IOMMU if present")
 
-Use min() in order to make code cleaner.
+...except domain->pgsize_bitmap was introduced more than a year after 
+that commit ;)
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/net/wireless/ath/ath11k/wmi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+As an improvement rather than a fix, though,
 
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
-index 2b4d27d807ab..083856034136 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.c
-+++ b/drivers/net/wireless/ath/ath11k/wmi.c
-@@ -614,8 +614,7 @@ int ath11k_wmi_mgmt_send(struct ath11k *ar, u32 vdev_id, u32 buf_id,
- 	u32 buf_len;
- 	int ret, len;
- 
--	buf_len = frame->len < WMI_MGMT_SEND_DOWNLD_LEN ?
--		  frame->len : WMI_MGMT_SEND_DOWNLD_LEN;
-+	buf_len = min(frame->len, WMI_MGMT_SEND_DOWNLD_LEN);
- 
- 	len = sizeof(*cmd) + sizeof(*frame_tlv) + roundup(buf_len, 4);
- 
--- 
-2.25.1
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+> index d0d52c1d4aee..992cc285f2fe 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
+> @@ -133,7 +133,7 @@ nvkm_device_tegra_probe_iommu(struct nvkm_device_tegra *tdev)
+>   		 * or equal to the system's PAGE_SIZE, with a preference if
+>   		 * both are equal.
+>   		 */
+> -		pgsize_bitmap = tdev->iommu.domain->ops->pgsize_bitmap;
+> +		pgsize_bitmap = tdev->iommu.domain->pgsize_bitmap;
+>   		if (pgsize_bitmap & PAGE_SIZE) {
+>   			tdev->iommu.pgshift = PAGE_SHIFT;
+>   		} else {

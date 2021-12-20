@@ -2,285 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A274947B1F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C9647B1F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240108AbhLTRPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:15:24 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:25741 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230225AbhLTRPX (ORCPT
+        id S240113AbhLTRQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230225AbhLTRQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:15:23 -0500
+        Mon, 20 Dec 2021 12:16:07 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F6C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:16:07 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id p23so14211290iod.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:16:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640020523; x=1671556523;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=sUnftenY0Dcj8cPcjDNYikb7V009NGvqmMjZYFYjV3I=;
-  b=IJ6DuSlOSqrgHIUkwYQ3NBwMGRs+1Lc54kUQrbFNDI+ssFaoMnrDMEUe
-   UhB9zPE0w6u3n+kJPO+pGdBd7jxK13lAW2PpGUFM3hIwYaX9kYLJ37nMl
-   MFa91ThpKxiMmWsPriepEb4klzAXtLpufXY5XCy3BEVksGxFqkMdb8yTs
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Dec 2021 09:15:22 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 09:15:22 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 20 Dec 2021 09:15:21 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 20 Dec 2021 09:15:21 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_khsieh@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <p.zabel@pengutronix.de>
-Subject: [PATCH v9] phy: qcom-qmp: add display port v4 voltage and pre-emphasis swing tables
-Date:   Mon, 20 Dec 2021 09:15:12 -0800
-Message-ID: <1640020512-17224-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v5//0K87lk7Jc0WpZqUISoaFtZRXpKHfv2jyt4Plt/w=;
+        b=Za2uc0ZjTJ3p7WVdGb4nQkLZieOH7j/VDhp98Z9W+IYUofMP1w/JsWzlLKdizHQnGm
+         gUirx1Y05APskSBSeXCdqF5VSvcenrw31YK6F4yr5VBtvfZTezZHObxyLbAdF0EsCPVi
+         WrYh4uFoQr7T9bgwA928tLKaHMp2wOCGdDY4da8TJ6EM2tliWSSTPv/Nl1v2MTID7JJh
+         u7hwIzAxpmfcSAK2+lmGInyVDf9COj71UBT30VYGVJ2ZbJmwg3cbLCmDhQMIRODY4JZH
+         WvKNsLsNAwof/cm38B7oepvXWXJNxl+2rDIG4/RONshtwQ+v8iR8cJYejQ4cbBAU4Lw3
+         Bwtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v5//0K87lk7Jc0WpZqUISoaFtZRXpKHfv2jyt4Plt/w=;
+        b=2Jcv7SdossO3A2O9yOHCK0gZCK+9jba+3yqLExE2xdMn75ZFG8zhH5MbseNVwbGno/
+         KPZI4HRmm1oRSVLHv4jnt4zyWafhYlKyXNFz4eSU58Az6NZVhK1ZpW19dqNg85EN7mH4
+         CWcdvW6fJn88PaBmV6VemmYTGyoRzLencty4FnR+hbhV35IwRLx/zuDzL9yCocqQgFDV
+         R0QNQYDm/KTlLSWjmi8LDzsyrpVa+yQMho0Accl4lP/8Dxsq/ECWpo3kD+YyGbI+Hwch
+         0M66meaIovnYC5JtGsrECoENl8NKrf4TMAapV92CFpeRj4baja+cOxt8rh5L/Mqxqh7m
+         UB5g==
+X-Gm-Message-State: AOAM532BZE4do/+HWZQDnfwlQHsPw+9uR4PKpIQ3WwxRQ4fiQPqCK3gj
+        qA+Re1z4jw56djUTHVO292ENixgY/PYDGQIgEZ8=
+X-Google-Smtp-Source: ABdhPJzYaK1o82lVW6qc2Ewtyf3k01M4kblzuMz0WaRPqu4xRADToqCEQ3NmL5KgB9B9vJw2gUnJ9Z7VCUm+dC7xsv0=
+X-Received: by 2002:a02:864b:: with SMTP id e69mr11110608jai.9.1640020566762;
+ Mon, 20 Dec 2021 09:16:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <a746b5baebbf79f8160c1fe09d6f8a5ab7bde1d7.1640017993.git.andreyknvl@google.com>
+ <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com>
+In-Reply-To: <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 20 Dec 2021 18:15:56 +0100
+Message-ID: <CA+fCnZcMWA_VT83dXqD-bFJGG073KWPnULAPYK1=BhQkGsHzUQ@mail.gmail.com>
+Subject: Re: [PATCH] kasan: fix quarantine conflicting with init_on_free
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp
-phy")' added functions to support V4 of the PHY, but it did not update
-voltage and pre-emphasis tables accordingly.
+On Mon, Dec 20, 2021 at 6:07 PM Marco Elver <elver@google.com> wrote:
+>
+> On Mon, 20 Dec 2021 at 17:37, <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > KASAN's quarantine might save its metadata inside freed objects. As
+> > this happens after the memory is zeroed by the slab allocator when
+> > init_on_free is enabled, the memory coming out of quarantine is not
+> > properly zeroed.
+> >
+> > This causes lib/test_meminit.c tests to fail with Generic KASAN.
+> >
+> > Zero the metadata when the object is removed from quarantine.
+> >
+> > Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  mm/kasan/quarantine.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
+> > index 587da8995f2d..2e50869fd8e2 100644
+> > --- a/mm/kasan/quarantine.c
+> > +++ b/mm/kasan/quarantine.c
+> > @@ -132,11 +132,22 @@ static void *qlink_to_object(struct qlist_node *qlink, struct kmem_cache *cache)
+> >  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
+> >  {
+> >         void *object = qlink_to_object(qlink, cache);
+> > +       struct kasan_free_meta *meta = kasan_get_free_meta(cache, object);
+> >         unsigned long flags;
+> >
+> >         if (IS_ENABLED(CONFIG_SLAB))
+> >                 local_irq_save(flags);
+> >
+> > +       /*
+> > +        * If init_on_free is enabled and KASAN's free metadata is stored in
+> > +        * the object, zero the metadata. Otherwise, the object's memory will
+> > +        * not be properly zeroed, as KASAN saves the metadata after the slab
+> > +        * allocator zeroes the object.
+> > +        */
+> > +       if (slab_want_init_on_free(cache) &&
+> > +           cache->kasan_info.free_meta_offset == 0)
+> > +               memset(meta, 0, sizeof(*meta));
+>
+> memzero_explicit()
+>
+> although in this case it probably doesn't matter much, because AFAIK
+> memzero_explicit() only exists to prevent the compiler from eliding
+> the zeroing. Up to you.
 
-This patch add v4 voltage and pre-emphasis swing tables to complete v4
-phy implementation. Both voltage and pre-emphasis swing level are set
-during link training negotiation between host and sink. There are totally
-four tables added.  A voltage swing table for both hbr and hbr1, a voltage
-table for both hbr2 and hbr3, a pre-emphasis table for both hbr and hbr1
-and a pre-emphasis table for both hbr2 and hbr3.
+I've thought about using memzero_explicit(), but the rest of
+init_on_alloc/free code uses memset(0) so I decided to use it as well.
+If we decide to switch to memzero_explicit(), it makes sense to do it
+everywhere.
 
-In addition, write 0x0a to TX_TX_POL_INV is added to complete the sequence
-of configure dp phy base on the hardware documentation.
-
-Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 112 +++++++++++++++++++++++++-----------
- 1 file changed, 77 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index 456a59d..d41e30c 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -4255,40 +4255,50 @@ static void qcom_qmp_v3_phy_dp_aux_init(struct qmp_phy *qphy)
- 	       qphy->pcs + QSERDES_V3_DP_PHY_AUX_INTERRUPT_MASK);
- }
- 
--static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[4][4] = {
-+#define MAX_SWING_LEVEL 4
-+#define MAX_VOLTAGE_LEVEL 4
-+#define MAX_EMPHASIS_LEVEL 4
-+
-+static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
- 	{ 0x00, 0x0c, 0x15, 0x1a },
- 	{ 0x02, 0x0e, 0x16, 0xff },
- 	{ 0x02, 0x11, 0xff, 0xff },
- 	{ 0x04, 0xff, 0xff, 0xff }
- };
- 
--static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[4][4] = {
-+static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
- 	{ 0x02, 0x12, 0x16, 0x1a },
- 	{ 0x09, 0x19, 0x1f, 0xff },
- 	{ 0x10, 0x1f, 0xff, 0xff },
- 	{ 0x1f, 0xff, 0xff, 0xff }
- };
- 
--static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[4][4] = {
-+static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
- 	{ 0x00, 0x0c, 0x14, 0x19 },
- 	{ 0x00, 0x0b, 0x12, 0xff },
- 	{ 0x00, 0x0b, 0xff, 0xff },
- 	{ 0x04, 0xff, 0xff, 0xff }
- };
- 
--static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[4][4] = {
-+static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
- 	{ 0x08, 0x0f, 0x16, 0x1f },
- 	{ 0x11, 0x1e, 0x1f, 0xff },
- 	{ 0x19, 0x1f, 0xff, 0xff },
- 	{ 0x1f, 0xff, 0xff, 0xff }
- };
- 
--static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
--		unsigned int drv_lvl_reg, unsigned int emp_post_reg)
-+static int __qcom_qmp_phy_configure_dp_swing
-+			(struct qmp_phy *qphy,
-+			unsigned int drv_lvl_reg,
-+			unsigned int emp_post_reg,
-+			const u8 voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
-+			const u8 pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL],
-+			const u8 voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
-+			const u8 pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL])
- {
- 	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
- 	unsigned int v_level = 0, p_level = 0;
--	u8 voltage_swing_cfg, pre_emphasis_cfg;
-+	u8 voltage, emphasis;
- 	int i;
- 
- 	for (i = 0; i < dp_opts->lanes; i++) {
-@@ -4297,26 +4307,25 @@ static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
- 	}
- 
- 	if (dp_opts->link_rate <= 2700) {
--		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr_rbr[v_level][p_level];
--		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr_rbr[v_level][p_level];
-+		voltage = voltage_swing_hbr_rbr[v_level][p_level];
-+		emphasis = pre_emphasis_hbr_rbr[v_level][p_level];
- 	} else {
--		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr3_hbr2[v_level][p_level];
--		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr3_hbr2[v_level][p_level];
-+		voltage = voltage_swing_hbr3_hbr2[v_level][p_level];
-+		emphasis = pre_emphasis_hbr3_hbr2[v_level][p_level];
- 	}
- 
- 	/* TODO: Move check to config check */
--	if (voltage_swing_cfg == 0xFF && pre_emphasis_cfg == 0xFF)
-+	if (voltage == 0xFF && emphasis == 0xFF)
- 		return -EINVAL;
- 
- 	/* Enable MUX to use Cursor values from these registers */
--	voltage_swing_cfg |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
--	pre_emphasis_cfg |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
--
--	writel(voltage_swing_cfg, qphy->tx + drv_lvl_reg);
--	writel(pre_emphasis_cfg, qphy->tx + emp_post_reg);
--	writel(voltage_swing_cfg, qphy->tx2 + drv_lvl_reg);
--	writel(pre_emphasis_cfg, qphy->tx2 + emp_post_reg);
-+	voltage |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
-+	emphasis |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
- 
-+	writel(voltage, qphy->tx + drv_lvl_reg);
-+	writel(emphasis, qphy->tx + emp_post_reg);
-+	writel(voltage, qphy->tx2 + drv_lvl_reg);
-+	writel(emphasis, qphy->tx2 + emp_post_reg);
- 	return 0;
- }
- 
-@@ -4325,9 +4334,14 @@ static void qcom_qmp_v3_phy_configure_dp_tx(struct qmp_phy *qphy)
- 	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
- 	u32 bias_en, drvr_en;
- 
--	if (qcom_qmp_phy_configure_dp_swing(qphy,
--				QSERDES_V3_TX_TX_DRV_LVL,
--				QSERDES_V3_TX_TX_EMP_POST1_LVL) < 0)
-+	if (__qcom_qmp_phy_configure_dp_swing
-+			(qphy,
-+			QSERDES_V3_TX_TX_DRV_LVL,
-+			QSERDES_V3_TX_TX_EMP_POST1_LVL,
-+			qmp_dp_v3_voltage_swing_hbr_rbr,
-+			qmp_dp_v3_pre_emphasis_hbr_rbr,
-+			qmp_dp_v3_voltage_swing_hbr3_hbr2,
-+			qmp_dp_v3_pre_emphasis_hbr3_hbr2) < 0)
- 		return;
- 
- 	if (dp_opts->lanes == 1) {
-@@ -4465,6 +4479,35 @@ static int qcom_qmp_v3_dp_phy_calibrate(struct qmp_phy *qphy)
- 	return 0;
- }
- 
-+/* The values in these tables are given without MUX_EN (0x20) bit set */
-+static const u8 qmp_dp_v4_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
-+	{ 0x00, 0x0c, 0x15, 0x1b },
-+	{ 0x02, 0x0e, 0x16, 0xff },
-+	{ 0x02, 0x11, 0xff, 0xff },
-+	{ 0x04, 0xff, 0xff, 0xff }
-+};
-+
-+static const u8 qmp_dp_v4_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
-+	{ 0x02, 0x12, 0x16, 0x1a },
-+	{ 0x09, 0x19, 0x1f, 0xff },
-+	{ 0x10, 0x1f, 0xff, 0xff },
-+	{ 0x1f, 0xff, 0xff, 0xff }
-+};
-+
-+static const u8 qmp_dp_v4_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
-+	{ 0x00, 0x0e, 0x15, 0x1b },
-+	{ 0x00, 0x0e, 0x15, 0xff },
-+	{ 0x00, 0x0e, 0xff, 0xff },
-+	{ 0x04, 0xff, 0xff, 0xff }
-+};
-+
-+static const u8 qmp_dp_v4_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
-+	{ 0x08, 0x0f, 0x16, 0x1f },
-+	{ 0x11, 0x1e, 0x1f, 0xff },
-+	{ 0x16, 0x1f, 0xff, 0xff },
-+	{ 0x1f, 0xff, 0xff, 0xff }
-+};
-+
- static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
- {
- 	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_PSR_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
-@@ -4494,16 +4537,14 @@ static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
- 
- static void qcom_qmp_v4_phy_configure_dp_tx(struct qmp_phy *qphy)
- {
--	/* Program default values before writing proper values */
--	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
--	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
--
--	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
--	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
--
--	qcom_qmp_phy_configure_dp_swing(qphy,
-+	__qcom_qmp_phy_configure_dp_swing
-+			(qphy,
- 			QSERDES_V4_TX_TX_DRV_LVL,
--			QSERDES_V4_TX_TX_EMP_POST1_LVL);
-+			QSERDES_V4_TX_TX_EMP_POST1_LVL,
-+			qmp_dp_v4_voltage_swing_hbr_rbr,
-+			qmp_dp_v4_pre_emphasis_hbr_rbr,
-+			qmp_dp_v4_voltage_swing_hbr3_hbr2,
-+			qmp_dp_v4_pre_emphasis_hbr3_hbr2);
- }
- 
- static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
-@@ -4622,6 +4663,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
- 	writel(drvr1_en, qphy->tx2 + QSERDES_V4_TX_HIGHZ_DRVR_EN);
- 	writel(bias1_en, qphy->tx2 + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
- 
-+	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
-+	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
-+
- 	writel(0x18, qphy->pcs + QSERDES_DP_PHY_CFG);
- 	udelay(2000);
- 	writel(0x19, qphy->pcs + QSERDES_DP_PHY_CFG);
-@@ -4633,11 +4677,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
- 			10000))
- 		return -ETIMEDOUT;
- 
--	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
--	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
- 
--	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
--	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
-+	writel(0x22, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
-+	writel(0x22, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
- 
- 	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
- 	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Thanks!

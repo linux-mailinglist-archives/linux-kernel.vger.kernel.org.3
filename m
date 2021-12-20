@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC9B47A7FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB60B47A7F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhLTKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:54:06 -0500
-Received: from mga11.intel.com ([192.55.52.93]:39521 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229962AbhLTKyG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:54:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639997646; x=1671533646;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4sNheOiOGp/+IXIraAHwfAxSRiGC2eIdgFPlHk9Na4E=;
-  b=inuMW7zlmRVOqQdj7gkFH5Ddsn1vMgt2JP+Wo+DXpCUcM0cR/uVNl6rD
-   ABTSRV593MCuz6aBDGHbN9uFc1OIKacExIEbENF0xcllS6bfu8KHsOGKU
-   Rr94V6DtbH6ZAr+pI9mWnjmPeH/EU6pFIP0Gzh63Q2zNSNLCo73H8V9WQ
-   mpLfVGfXQeZgVdsmDGKY0lOhkhXm5/pbqnY08jaAoIYLajEcrUmwnjR5j
-   Dp6A/sTvFf8wICmsuz0TI4qNm3+2jQ/FMKTLKzx+8j2zdTl9BKmzBcZH/
-   GTWtYyMhIMD4vF2EGBCSPjHRM/ob94O3Fso6SOlLEzimEwAEeM18n+r3R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237681035"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="237681035"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 02:54:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="606679789"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2021 02:54:04 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzGIt-0007hD-GF; Mon, 20 Dec 2021 10:54:03 +0000
-Date:   Mon, 20 Dec 2021 18:53:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 57690554abe135fee81d6ac33cc94d75a7e224bb
-Message-ID: <61c060a5.rvrbzGsCiMME9J9u%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229960AbhLTKxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLTKxu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:53:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE97FC061574;
+        Mon, 20 Dec 2021 02:53:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D19E60F59;
+        Mon, 20 Dec 2021 10:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A4AC36AE8;
+        Mon, 20 Dec 2021 10:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639997628;
+        bh=4e786f0nM+mUPF/RnX4DJlDxDuErC7twDTA11GFsfkM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=c26GdbOJX6ha7RvGLKeMPcY4aT7JoOuGBijU2Gw/DzzBU8A7E7cfqi572C8gz9xw5
+         679vtS7a5fuaHz9Ya8ZdGB3fQaXAC/jeNmjPqRlkKslaf6TRHObn+U1PosPQEoWMKn
+         FH+xg1ouyr7WTsVTxiih7rHIkQtoiIyNJkof6RKXaWwa8v3fQKeYgOHsn2vcCBK837
+         SNgIrYiOPjAhCFk8gYTRCRQfqZWPMkNOUWLUgjP3jUFTTHaz9wIcEK1ZZ7q/d1Bf8D
+         YR8CVUZLtRaFq/YJF6QOJkDbmmQVgn8yi4QtVzf8Jjn4u2gdQ6iiwbIaiQbVujyjIS
+         yfVcmsXawbshg==
+Subject: Re: [PATCH v3 3/4] memory: omap-gpmc: Use a compatible match table
+ when checking for NAND controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        tony@atomide.com
+Cc:     robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211217102945.17432-1-rogerq@kernel.org>
+ <20211217102945.17432-4-rogerq@kernel.org>
+ <88ff0e3e-6709-68fc-88cb-f915dfddbe86@canonical.com>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <76076ff5-22d9-82d8-ba9e-77755e1ac433@kernel.org>
+Date:   Mon, 20 Dec 2021 12:53:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <88ff0e3e-6709-68fc-88cb-f915dfddbe86@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 57690554abe135fee81d6ac33cc94d75a7e224bb  x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
 
-elapsed time: 725m
 
-configs tested: 77
-configs skipped: 72
+On 17/12/2021 17:21, Krzysztof Kozlowski wrote:
+> On 17/12/2021 11:29, Roger Quadros wrote:
+>> As more compatibles can be added to the GPMC NAND controller driver
+>> use a compatible match table.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  drivers/memory/omap-gpmc.c                   | 8 +++++++-
+>>  drivers/mtd/nand/raw/omap2.c                 | 2 +-
+>>  include/linux/platform_data/mtd-nand-omap2.h | 5 +++++
+>>  3 files changed, 13 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+>> index 624153048182..814ddb45c13d 100644
+>> --- a/drivers/memory/omap-gpmc.c
+>> +++ b/drivers/memory/omap-gpmc.c
+>> @@ -2091,6 +2091,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>>  	u32 val;
+>>  	struct gpio_desc *waitpin_desc = NULL;
+>>  	struct gpmc_device *gpmc = platform_get_drvdata(pdev);
+>> +	bool is_nand = false;
+>>  
+>>  	if (of_property_read_u32(child, "reg", &cs) < 0) {
+>>  		dev_err(&pdev->dev, "%pOF has no 'reg' property\n",
+>> @@ -2183,7 +2184,12 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>>  		}
+>>  	}
+>>  
+>> -	if (of_device_is_compatible(child, "ti,omap2-nand")) {
+>> +#if defined(CONFIG_MTD_NAND_OMAP2)
+> 
+> if (IS_ENABLED()) is preferred. If needed, you could make omap_nand_ids
+> symbol visible always (so without ifdef around it), because extern
+> structure should not have impact when not defined (if I recall
+> correctly...).
+> 
+>> +	if (of_match_node(omap_nand_ids, child))
+>> +		is_nand = true;
+>> +#endif
+>> +
+>> +	if (is_nand) {
+>>  		/* NAND specific setup */
+>>  		val = 8;
+>>  		of_property_read_u32(child, "nand-bus-width", &val);
+>> diff --git a/drivers/mtd/nand/raw/omap2.c b/drivers/mtd/nand/raw/omap2.c
+>> index b26d4947af02..fff834ee726f 100644
+>> --- a/drivers/mtd/nand/raw/omap2.c
+>> +++ b/drivers/mtd/nand/raw/omap2.c
+>> @@ -2352,7 +2352,7 @@ static int omap_nand_remove(struct platform_device *pdev)
+>>  	return ret;
+>>  }
+>>  
+>> -static const struct of_device_id omap_nand_ids[] = {
+>> +const struct of_device_id omap_nand_ids[] = {
+>>  	{ .compatible = "ti,omap2-nand", },
+>>  	{},
+>>  };
+> 
+> I think OMAP2 NAND driver can be a module, so this should have
+> EXPORT_SYMBOL.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+To make it work in all combinations (e.g. omap_gpmc built in and
+nand/raw/omap2.c as module) I had to define omap_nand_ids table as static
+in the linux/platform_data/mtd-nand-omap2.h header.
 
-gcc tested configs:
-powerpc                 mpc834x_itx_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                    adder875_defconfig
-m68k                       m5249evb_defconfig
-powerpc                     sequoia_defconfig
-arm                           viper_defconfig
-m68k                          hp300_defconfig
-powerpc                    amigaone_defconfig
-csky                                defconfig
-s390                       zfcpdump_defconfig
-sh                          landisk_defconfig
-openrisc                  or1klitex_defconfig
-sh                        sh7763rdp_defconfig
-arm                       versatile_defconfig
-powerpc                      ppc44x_defconfig
-m68k                        m5307c3_defconfig
-sh                         apsh4a3a_defconfig
-arm                       cns3420vb_defconfig
-powerpc                         wii_defconfig
-powerpc                 canyonlands_defconfig
-mips                           ci20_defconfig
-nios2                         10m50_defconfig
-mips                            ar7_defconfig
-powerpc                        cell_defconfig
-openrisc                 simple_smp_defconfig
-arm                  randconfig-c002-20211220
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a002-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a006-20211220
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a001-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a006-20211220
-i386                 randconfig-a004-20211220
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+EXPORT_SYMBOL will of course be not required there. ;)
 
-clang tested configs:
-x86_64               randconfig-a013-20211220
-x86_64               randconfig-a015-20211220
-x86_64               randconfig-a014-20211220
-x86_64               randconfig-a012-20211220
-x86_64               randconfig-a011-20211220
-x86_64               randconfig-a016-20211220
-i386                 randconfig-a012-20211220
-i386                 randconfig-a011-20211220
-i386                 randconfig-a014-20211220
-i386                 randconfig-a016-20211220
-i386                 randconfig-a015-20211220
-i386                 randconfig-a013-20211220
-hexagon              randconfig-r041-20211220
-hexagon              randconfig-r045-20211220
-riscv                randconfig-r042-20211220
-s390                 randconfig-r044-20211220
+> 
+>> diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
+>> index de6ada739121..e1bb90a8db03 100644
+>> --- a/include/linux/platform_data/mtd-nand-omap2.h
+>> +++ b/include/linux/platform_data/mtd-nand-omap2.h
+>> @@ -61,4 +61,9 @@ struct gpmc_nand_regs {
+>>  	void __iomem	*gpmc_bch_result5[GPMC_BCH_NUM_REMAINDER];
+>>  	void __iomem	*gpmc_bch_result6[GPMC_BCH_NUM_REMAINDER];
+>>  };
+>> +
+>> +#if defined(CONFIG_MTD_NAND_OMAP2)
+>> +extern const struct of_device_id omap_nand_ids[];
+>> +#endif
+>> +
+>>  #endif
+>>
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+cheers,
+-roger

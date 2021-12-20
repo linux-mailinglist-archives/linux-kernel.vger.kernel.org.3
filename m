@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B8D47B046
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323F547AFE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240103AbhLTPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240175AbhLTP3m (ORCPT
+        id S238693AbhLTPWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:22:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35813 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239678AbhLTPVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:29:42 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A65C061D60
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:21:29 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id o2so6379737vkn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7hAp0PfmGB2pMZBztL7AeQzwUtbDOof2ro2NrJ2jvCs=;
-        b=M+kLpz7Y9EgeUAfkXzReP8pE7rXZLW0/U1Va9YBYOrr7qJWrE06Wt5wA5hc2AkOOnS
-         aEDjRMxFcoAKhXyQ0hR+pii4XM1Qyy4qa6yardk03OgJtjRzJlGGldw1Tt8qc4QXUCSk
-         oiv/kFWlK2pooudkx3ErmtmvhmKbq5pe0zZYVhaln/r8Glw1kOgRvA6+Cwj8KnSStIP7
-         cAewagXibrjGcVn/NhdqnxGhI06M4Cvje+W3sF2NjE2w7w0GculzSfbnOzMfpVmaO5vM
-         FOWEzfqQuAAZbKtQo337v2aowvdwYGBjyT4AHdeZAzIn38m+sN5zT02UNAw8PQI20ExE
-         SYUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7hAp0PfmGB2pMZBztL7AeQzwUtbDOof2ro2NrJ2jvCs=;
-        b=SI7pgRIgCrCT3zr9ocNWtM2K0mjhIbx9xGJtO9leIkfALhVadUQ9IsbwAuJu2vGRRp
-         uCuW55pSVSwZG44uMOuVv6powYWjaTrwlUGM0r0R5zJT/Iep/5bI4LbfHw3Zz4UxifZs
-         v3c12GRHijws+L+5TWtO1ep46Q1H7QFEiXQaT2gix/wfGRObtvQfs4G9TNrgmVcCEFUr
-         q9pPJD1/Xhm6bhGIn0SFZWyLE9KZ+WDUIyW880IxjRa/r6PYN4L4qKNv3mYEiwDAp+yM
-         QuCbXUQFfzYso+9RzkgxP6qvK2RdoKschxH9OKYyro2TBCG1tzv4Rk2RJLY0uc41a0s0
-         ttqw==
-X-Gm-Message-State: AOAM5317xvdA0vZ4pbQrRaYrNV8DobOWoZEG85srHkWK1PZ5Hje+1n7e
-        bEUCMKBpPS0gBMXaZdzyCGPq3xMdhWOt8ycUYMoJkg==
-X-Google-Smtp-Source: ABdhPJyTNBpocGV7qtoeL6omBq4tJSpIoSxwQjpiDZ4N44pUz6MFxLuf0bHfL20uGAilVIycAEo0wvXpTET3t9N+9K0=
-X-Received: by 2002:a05:6122:c9b:: with SMTP id ba27mr5956186vkb.14.1640013688504;
- Mon, 20 Dec 2021 07:21:28 -0800 (PST)
+        Mon, 20 Dec 2021 10:21:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640013709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Lw5slxjixiems1mI2kUAJ2ICdnSN+YeINpTB5Htz2PE=;
+        b=VmZCA/AcbkVdJU5NWpiXMvlruZ5U90kCkAWNrrD+8ZioE4qxF8OLMpTExxZK+6PHZiP1jV
+        Qc4hw+LgYUbOabfj3KzGhHkWXQ8ZhvZ/K7cu2HeTfTMQRNG9btmbdyFywHypg6gRMNVesq
+        tgp48vHUMAxSkExeWZNcQlODVYUJCgQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-323-_H-GiVkiOwmbHHLi1_mefg-1; Mon, 20 Dec 2021 10:21:46 -0500
+X-MC-Unique: _H-GiVkiOwmbHHLi1_mefg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A14CD1006AA9;
+        Mon, 20 Dec 2021 15:21:44 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 052C57B6CE;
+        Mon, 20 Dec 2021 15:21:40 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap for Hyper-V-on-KVM and fix it for KVM-on-Hyper-V
+Date:   Mon, 20 Dec 2021 16:21:34 +0100
+Message-Id: <20211220152139.418372-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-References: <20211204195757.8600-1-semen.protsenko@linaro.org>
- <20211204195757.8600-4-semen.protsenko@linaro.org> <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
-In-Reply-To: <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 20 Dec 2021 17:21:16 +0200
-Message-ID: <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 13:35, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 04/12/2021 20:57, Sam Protsenko wrote:
-> > USI control is now extracted to the dedicated USI driver. Remove USI
-> > related code from serial driver to avoid conflicts and code duplication.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> > Changes in v3:
-> >   - Spell check fixes in commit message
-> >
-> > Changes in v2:
-> >   - (none)
-> >
-> >  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
-> >  include/linux/serial_s3c.h       |  9 --------
-> >  2 files changed, 4 insertions(+), 41 deletions(-)
-> >
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
-> Greg,
-> If you are fine with the changes, please take the serial driver changes
-> via your tree.
->
+Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
+hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
+KVM implements the feature for KVM-on-Hyper-V but it seems there was
+a flaw in the implementation and the feature may not be fully functional.
+PATCHes 1-2 fix the problem. The rest of the series implements the same
+feature for Hyper-V-on-KVM.
 
-Hi Greg,
+Vitaly Kuznetsov (5):
+  KVM: SVM: Drop stale comment from
+    svm_hv_vmcb_dirty_nested_enlightenments()
+  KVM: SVM: hyper-v: Enable Enlightened MSR-Bitmap support for real
+  KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
+    rebuilt
+  KVM: x86: Make kvm_hv_hypercall_enabled() static inline
+  KVM: nSVM: Implement Enlightened MSR-Bitmap feature
 
-If it's ok with you, can you please apply patches 3, 4 and 5 from this
-series? If it's possible, would be nice to see those in v5.17.
+ arch/x86/kvm/hyperv.c           | 12 +--------
+ arch/x86/kvm/hyperv.h           |  6 ++++-
+ arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
+ arch/x86/kvm/svm/svm.c          |  3 ++-
+ arch/x86/kvm/svm/svm.h          | 16 +++++++----
+ arch/x86/kvm/svm/svm_onhyperv.h | 12 +++------
+ 6 files changed, 63 insertions(+), 33 deletions(-)
 
-Thanks!
+-- 
+2.33.1
 
-> Best regards,
-> Krzysztof

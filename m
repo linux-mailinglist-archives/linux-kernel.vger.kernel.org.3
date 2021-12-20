@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E3847A75A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E1E47A770
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 10:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbhLTJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 04:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbhLTJkv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:40:51 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2E4C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:40:50 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id a9so18749570wrr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 01:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/teqifaKzeH8UYPm59TO0I2d45cw2lmw9JO9bR+H4mI=;
-        b=j0h5yYgDQFQ/HC62jpTXP67hKBOSxtAaOVYd+RSO5POuYh3SavcH6aGSY/YklWwLRb
-         QJQGkrwmK7hJc1Lz1LYgyNbDo7+oIgWIXIYXCpDs3KfhH2MZo2o69xPhc1R0XLnEJNWa
-         6hm4YnuyZgebSnaQCcyOcwAdbKHxoNTXCNgg8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=/teqifaKzeH8UYPm59TO0I2d45cw2lmw9JO9bR+H4mI=;
-        b=neCATaLVcSH7rA9zSKcMz8BfI9PastVhHz4GsHrCUcaYZValZqHeUu2F5SsbUCXdWV
-         0CTyZna2YNu/ocuyzRlpV+pp6ZQ2RDtm+ZVY0VrkQM01W2biN5ulLV04E1Y2buwVJGds
-         r3u/TOSmECZ4CnpoHekrU2zXZ/iy2n45kXKWnvAQ74J6w/UlGXMuOnTBDJHXaQlAXruO
-         7BQksMajhxIB8ZmgZd70THyOb2SVJJyt/XcPUM2ENv3Vtc8nE07GrC+ClStysy1Djm6o
-         cp4lVDCaBySFS1Ug0oYRy+fFT+vrtKEjLeFnsMFIWDPcCns10zW0GNKhsHbQ5tHrr9Dv
-         b1WA==
-X-Gm-Message-State: AOAM533MIr4/pb5MGEFB7Ul8Xd5sT2SPiCAwAOXLihOLNuUYdztyM11D
-        2K2/T4A+7OC8yO3iLi9sPgyvkw==
-X-Google-Smtp-Source: ABdhPJyht4jB7Rh3dmx83lp86mmNZjHLE5oziFtv62A9+tIk6B/blbQ58E3W3KNjJAQMVssvjE2gkg==
-X-Received: by 2002:a05:6000:23a:: with SMTP id l26mr11798285wrz.666.1639993249547;
-        Mon, 20 Dec 2021 01:40:49 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id b16sm7352006wmq.41.2021.12.20.01.40.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 01:40:48 -0800 (PST)
-Date:   Mon, 20 Dec 2021 10:40:47 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Brian Starkey <brian.starkey@arm.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, liviu.dudau@arm.com,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, nd@arm.com
-Subject: Re: [PATCH] drm: mali-dp: potential dereference of null pointer
-Message-ID: <YcBPn6ZTLbobErXj@phenom.ffwll.local>
-Mail-Followup-To: Brian Starkey <brian.starkey@arm.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>, liviu.dudau@arm.com,
-        airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, nd@arm.com
-References: <20211214100837.46912-1-jiasheng@iscas.ac.cn>
- <20211214110202.unexcdiya3qhsvzc@000377403353>
+        id S230206AbhLTJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 04:51:17 -0500
+Received: from mail.djicorp.com ([14.21.64.4]:51935 "EHLO mail.djicorp.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229831AbhLTJvQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 04:51:16 -0500
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Dec 2021 04:51:15 EST
+IronPort-SDR: HH+t+sgVPi0c9RaNSjt/vox119lRxO8qkuSJ/v+gBmLI/t9kSJupKrwECbdApjH/bywq8QoDdP
+ HOl1DmkNFc9w==
+X-IronPort-AV: E=Sophos;i="5.88,220,1635177600"; 
+   d="scan'208";a="12184666"
+From:   wigin zeng <wigin.zeng@dji.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        First Light <xiaoguang.chen@dji.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiBbUEFUQ0hdIHNlcmlh?=
+ =?utf-8?Q?l:_8250:_add_lock_for_dma_rx?=
+Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTogW1BBVENIXSBzZXJpYWw6IDgyNTA6?=
+ =?utf-8?Q?_add_lock_for_dma_rx?=
+Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw//+PM4CAEXtykP//udeAABInGiA=
+Date:   Mon, 20 Dec 2021 09:44:04 +0000
+Message-ID: <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
+References: <20211209073339.21694-1-wigin.zeng@dji.com>
+ <YbGygPtkz6ihyW51@kroah.com>
+ <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
+ <YbHBb2uB9JRP0tWc@kroah.com>
+ <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
+ <YbHVXwdCUCvmZrbS@kroah.com>
+ <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
+ <YcBEy9zi2G7UYErE@kroah.com>
+In-Reply-To: <YcBEy9zi2G7UYErE@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [58.34.188.114]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214110202.unexcdiya3qhsvzc@000377403353>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:02:02AM +0000, Brian Starkey wrote:
-> Hi,
-> 
-> On Tue, Dec 14, 2021 at 06:08:37PM +0800, Jiasheng Jiang wrote:
-> > The return value of kzalloc() needs to be checked.
-> > To avoid use of null pointer '&state->base' in case of the
-> > failure of alloc.
-> > 
-> > Fixes: 99665d072183 ("drm: mali-dp: add malidp_crtc_state struct")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > ---
-> 
-> You can add my r-b to this one too. Thanks!
-
-Are you (or someone else from arm) also pushing these? Otherwise they'll
-get lost.
--Daniel
-
-> 
-> >  drivers/gpu/drm/arm/malidp_crtc.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/arm/malidp_crtc.c b/drivers/gpu/drm/arm/malidp_crtc.c
-> > index 494075ddbef6..b5928b52e279 100644
-> > --- a/drivers/gpu/drm/arm/malidp_crtc.c
-> > +++ b/drivers/gpu/drm/arm/malidp_crtc.c
-> > @@ -487,7 +487,10 @@ static void malidp_crtc_reset(struct drm_crtc *crtc)
-> >  	if (crtc->state)
-> >  		malidp_crtc_destroy_state(crtc, crtc->state);
-> >  
-> > -	__drm_atomic_helper_crtc_reset(crtc, &state->base);
-> > +	if (state)
-> > +		__drm_atomic_helper_crtc_reset(crtc, &state->base);
-> > +	else
-> > +		__drm_atomic_helper_crtc_reset(crtc, NULL);
-> >  }
-> >  
-> >  static int malidp_crtc_enable_vblank(struct drm_crtc *crtc)
-> > -- 
-> > 2.25.1
-> > 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+PlRoYXQgbWFrZXMgbm8gc2Vuc2UsIGFzIHdoYXQgb3JkZXJzIHRoZSBkYXRhIGNvbWluZyBpbj8g
+IFRoZSAyIGJ5dGVzIGNvdWxkIGJlIGFkZGVkIHRvIHRoZSB0dHkgYnVmZmVyIGJlZm9yZSB0aGUg
+NTEyIGJ5dGVzLCBvciB0aGUgb3RoZXIgd2F5IGFyb3VuZC4NCg0KPldoYXQgaGFyZHdhcmUgYXJl
+IHlvdSB1c2luZyB0aGF0IGlzIG1peGluZyBkbWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8NCj5U
+aGF0IGZlZWxzIHZlcnkgd3JvbmcuDQoNCkl0IGlzIG5vdCBub3JtYWwgY2FzZSwgbm9ybWFsbHks
+IHRoZSBpbnB1dCBzaXplIHNob3VsZCBzbWFsbGVyIHRoYW4gRE1BIGJsb2NrIHNpemUgYW5kIERN
+QSBjb21wbGV0ZSB0aGUgd2hvbGUgY29weS4NCkhvd2V2ZXIsIHRoZXJlIGFyZSBzb21lIGFibm9y
+bWFsIHNpdHVhdGlvbnMuIFRoZSBleHRlcm5hbCBpbnB1dCBpcyB1bmV4cGVjdGVkbHkgbGFyZ2Vy
+IHRoYW4gdGhlIGRhdGEgbGVuZ3RoIG9mIHRoZSBETUEgY29uZmlndXJhdGlvbi4gVGhpcyBzaXR1
+YXRpb24gaW4gbXkgZXhhbXBsZSB3aWxsIGFwcGVhciwgYW5kIGl0IG1heSBjYXVzZSB0aGUga2Vy
+bmVsIHRvIHBhbmljLg0KDQo+SWYgdGhleSBhcmUgcnVubmluZyBvbiBkaWZmZXJlbnQgY29yZXMs
+IHRoZW4geW91IHdpbGwgaGF2ZSBkYXRhIGNvcnJ1cHRpb24gaXNzdWVzIG5vIG1hdHRlciBpZiB5
+b3UgaGF2ZSBhIGxvY2sgb3Igbm90LCBzbyB0aGlzIGlzIG5vdCB0aGUgY29ycmVjdCBzb2x1dGlv
+biBmb3IgdGhpcyBoYXJkd2FyZSBjb25maWd1cmF0aW9uIHByb2JsZW0uDQoNClRoZSBwdXJwb3Nl
+IG9mIGFkZGluZyBsb2NrIGlzIHRvIGVuc3VyZSB0aGF0IHRoZSBrZXJuZWwgd2lsbCBub3QgcGFu
+aWMgaW4gdGhpcyBleHRyZW1lIGNhc2UsIElmIHlvdSB3YW50IHRvIGVuc3VyZSB0aGUgaW50ZWdy
+aXR5IG9mIHRoZSBzZXJpYWwgcG9ydCBkYXRhLCB5b3UgbmVlZCB0byBhZGQgbW9yZSBmbG93IGNv
+bnRyb2wgbG9naWMNCg0KQlJzDQpXZWlqdW4NCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7
+tuS6ujogR3JlZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnXSANCuWPkemA
+geaXtumXtDogMjAyMeW5tDEy5pyIMjDml6UgMTY6NTUNCuaUtuS7tuS6ujogd2lnaW4gemVuZyA8
+d2lnaW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVsLm9yZzsgbGludXgt
+c2VyaWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgRmly
+c3QgTGlnaHQgPHhpYW9ndWFuZy5jaGVuQGRqaS5jb20+DQrkuLvpopg6IFJlOiDnrZTlpI06IOet
+lOWkjTog562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRtYSByeA0K
+DQrjgJBFWFRFUk5BTCBFTUFJTOOAkSBETyBOT1QgQ0xJQ0sgYW55IGxpbmtzIG9yIGF0dGFjaG1l
+bnRzIHVubGVzcyB5b3UgY2FuIG1ha2Ugc3VyZSBib3RoIHRoZSBzZW5kZXIgYW5kIHRoZSBjb250
+ZW50IGFyZSB0cnVzdHdvcnRoeS4NCg0KDQrjgJDlpJbpg6jpgq7ku7bmj5DphpLjgJHku6XkuIvp
+gq7ku7bmnaXmupDkuo7lhazlj7jlpJbpg6jvvIzor7fli7/ngrnlh7vpk77mjqXmiJbpmYTku7bv
+vIzpmaTpnZ7mgqjnoa7orqTpgq7ku7blj5Hku7bkurrlkozlhoXlrrnlj6/kv6HjgIINCg0KDQoN
+Ck9uIE1vbiwgRGVjIDIwLCAyMDIxIGF0IDA1OjI3OjI0QU0gKzAwMDAsIHdpZ2luIHplbmcgd3Jv
+dGU6DQo+IFNvcnJ5IGZvciBsYXRlIHJlc3BvbnNlLg0KPg0KPiA+ID4+IFdoYXQgaXNzdWUgZXhh
+Y3RseT8NCj4gPiBUaGUgaW50ZXJ2YWwgb2YgVUFSVCBpbnB1dCBwYWNrYWdlcyBpcyB2ZXJ5IHNt
+YWxsKDFtc34gMTBtcyksIGFuZCBzb21lIHBhY2thZ2Ugc2l6ZSBsYXJnZXIgdGhhbiBjb25maWd1
+cmVkIERNQSB0cmFuc2ZlciBzaXplLg0KPiA+V2hhdCBkbyB5b3UgbWVhbiBleGFjdGx5IGJ5ICJw
+YWNrYWdlIHNpemUiPyAgSXNuJ3QgaXQgdXAgdG8gdGhlIERNQSB0cmFuc2ZlciB0byBkbyB0aGUg
+d2hvbGUgY29weT8NCj4NCj4gVGhlIGF0dGFjaG1lbnQgaXMgYW4gZXhhbXBsZSBmb3IgdGhlIHJh
+Y2UgY29uZGl0aW9uIGlzc3VlLiBFLmc6IDUxNGJ5dGVzIGlucHV0IHN0cmVhbSBmcm9tIFVBUlQs
+IDUxMmJ5dGVzIHNob3VsZCBiZSBjb3BpZWQgYnkgRE1BKGJsb2NrIHNpemUgc2V0IGFzIDUxMiks
+IGxlZnQgMmJ5dGVzIHNob3VsZCBiZSBjb3BpZWQgYnkgc2VyaWFsIGludGVycnVwdCBoYW5kbGVy
+Lg0KDQpUaGF0IG1ha2VzIG5vIHNlbnNlLCBhcyB3aGF0IG9yZGVycyB0aGUgZGF0YSBjb21pbmcg
+aW4/ICBUaGUgMiBieXRlcyBjb3VsZCBiZSBhZGRlZCB0byB0aGUgdHR5IGJ1ZmZlciBiZWZvcmUg
+dGhlIDUxMiBieXRlcywgb3IgdGhlIG90aGVyIHdheSBhcm91bmQuDQoNCldoYXQgaGFyZHdhcmUg
+YXJlIHlvdSB1c2luZyB0aGF0IGlzIG1peGluZyBkbWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8N
+ClRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCg0KPiA+QWdhaW4sIHdoYXQgY2hhbmdlZCByZWNlbnRs
+eSB0byBjYXVzZSB0aGlzIHRvIHN0YXJ0IGhhcHBlbmluZz8gIFdoeSBpcyB0aGlzIG9ubHkgc2hv
+d2luZyB1cCBub3c/ICBXaGF0IGlzIHVuaXF1ZSBhYm91dCB5b3VyIHN5c3RlbSB0aGF0IGNhdXNl
+cyB0aGlzIGFuZCBwcmV2ZW50cyBpdCBmcm9tIGhhcHBlbmluZyBvbiBhbnkgb3RoZXIgc3lzdGVt
+Pw0KPiBJIHRoaW5rIGl0IGlzIGEgY29ybmVyIGNhc2UgYW5kIGV4aXN0IGluIHByZXZpb3VzIGtl
+cm5lbCB2ZXJzaW9uLCB3ZSBqdXN0IHJlcHJvZHVjZWQgaXQgaW4gcHJlc3N1cmUgdGVzdC4NCj4g
+T3VyIHN5c3RlbSBydW5uaW5nIG11bHRpIGNvcmVzIGFuZCBlbmFibGVkIFJUIGZlYXR1cmUsIERN
+QSBpbnRlcnJ1cHQgdGhyZWFkIGFuZCBzZXJpYWwgaW50ZXJydXB0IHRocmVhZCBhcmUgcnVubmlu
+ZyBvbiBkaWZmZXJlbnQgY29yZXMgaW4gcGFyYWxsZWwuDQoNCklmIHRoZXkgYXJlIHJ1bm5pbmcg
+b24gZGlmZmVyZW50IGNvcmVzLCB0aGVuIHlvdSB3aWxsIGhhdmUgZGF0YSBjb3JydXB0aW9uIGlz
+c3VlcyBubyBtYXR0ZXIgaWYgeW91IGhhdmUgYSBsb2NrIG9yIG5vdCwgc28gdGhpcyBpcyBub3Qg
+dGhlIGNvcnJlY3Qgc29sdXRpb24gZm9yIHRoaXMgaGFyZHdhcmUgY29uZmlndXJhdGlvbiBwcm9i
+bGVtLg0KDQp0aGFua3MsDQoNCmdyZWcgay1oDQpUaGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVu
+dHMgdGhlcmV0byBtYXkgY29udGFpbiBwcml2YXRlLCBjb25maWRlbnRpYWwsIGFuZCBwcml2aWxl
+Z2VkIG1hdGVyaWFsIGZvciB0aGUgc29sZSB1c2Ugb2YgdGhlIGludGVuZGVkIHJlY2lwaWVudC4g
+QW55IHJldmlldywgY29weWluZywgb3IgZGlzdHJpYnV0aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFu
+eSBhdHRhY2htZW50cyB0aGVyZXRvKSBieSBvdGhlcnMgaXMgc3RyaWN0bHkgcHJvaGliaXRlZC4g
+SWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCwgcGxlYXNlIGNvbnRhY3QgdGhl
+IHNlbmRlciBpbW1lZGlhdGVseSBhbmQgcGVybWFuZW50bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBh
+bmQgYW55IGNvcGllcyBvZiB0aGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0by4N
+Cg0K5q2k55S15a2Q6YKu5Lu25Y+K6ZmE5Lu25omA5YyF5ZCr5YaF5a655YW35pyJ5py65a+G5oCn
+77yM5LiU5LuF6ZmQ5LqO5o6l5pS25Lq65L2/55So44CC5pyq57uP5YWB6K6477yM56aB5q2i56ys
+5LiJ5Lq66ZiF6K+744CB5aSN5Yi25oiW5Lyg5pKt6K+l55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V
+5L+h5oGv44CC5aaC5p6c5oKo5LiN5bGe5LqO5Lul5LiK55S15a2Q6YKu5Lu255qE55uu5qCH5o6l
+5pS26ICF77yM6K+35oKo56uL5Y2z6YCa55+l5Y+R6YCB5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu
+5Lu25Y+K5YW255u45YWz55qE6ZmE5Lu244CCDQo=

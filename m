@@ -2,41 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D331347AB84
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1327D47ABDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbhLTOhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:37:18 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52022 "EHLO
+        id S234178AbhLTOjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:39:44 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53170 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234040AbhLTOhC (ORCPT
+        with ESMTP id S234407AbhLTOiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:02 -0500
+        Mon, 20 Dec 2021 09:38:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2DC01CE0F9E;
-        Mon, 20 Dec 2021 14:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED157C36AE8;
-        Mon, 20 Dec 2021 14:36:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 52FB3CE1109;
+        Mon, 20 Dec 2021 14:38:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96EEC36AE7;
+        Mon, 20 Dec 2021 14:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011019;
-        bh=E8vDCCfZbmerrpJ9bcaarvNmB9KhLV39aSHQ2kPK3to=;
+        s=korg; t=1640011131;
+        bh=1TxqclfbZOGmqpcsw9YsdZ/Nb9BH+PH1rHsOpBJkIFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l9eyNzHeobKwJ3ZxndptyzCFJtvEJehraOwIMneruiIuUGqyK4BhCkvRy31EBQeGZ
-         lQsiJUo7CdKOuzDIA8ehRynoZDkiVYoijlI7+E3jsZbLfmieDBhALtxBfql4nKXQaz
-         3TyJYOuH0RO+tjzC6dD4s8mhjLWX8z8NG6pl4ADM=
+        b=nNLkL0as9ao5agGD2w1hmA2ikF3sXBhahpEjYrUbqkmNPiHF1qddJ66ij1ghQfhIB
+         EcFeRzD8p7IGwN0a5zA6qjmvMDHAZzX4wtrSZAWxXtzwVGWEyZedWhvfl9+ATWvzKB
+         nC+Gw98RUgpfVzo1xtPfhYTzfaJsYXFvBOoDXotk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "J. Bruce Fields" <bfields@redhat.com>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Subject: [PATCH 4.4 09/23] nfsd: fix use-after-free due to delegation race
+        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        Alexander Graf <agraf@suse.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leif Lindholm <leif.lindholm@linaro.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        Peter Jones <pjones@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-efi@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
+Subject: [PATCH 4.14 15/45] x86: Make ARCH_USE_MEMREMAP_PROT a generic Kconfig symbol
 Date:   Mon, 20 Dec 2021 15:34:10 +0100
-Message-Id: <20211220143018.148668483@linuxfoundation.org>
+Message-Id: <20211220143022.772557715@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-References: <20211220143017.842390782@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,66 +59,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: J. Bruce Fields <bfields@redhat.com>
+From: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
-commit 548ec0805c399c65ed66c6641be467f717833ab5 upstream.
+commit ce9084ba0d1d8030adee7038ace32f8d9d423d0f upstream.
 
-A delegation break could arrive as soon as we've called vfs_setlease.  A
-delegation break runs a callback which immediately (in
-nfsd4_cb_recall_prepare) adds the delegation to del_recall_lru.  If we
-then exit nfs4_set_delegation without hashing the delegation, it will be
-freed as soon as the callback is done with it, without ever being
-removed from del_recall_lru.
+Turn ARCH_USE_MEMREMAP_PROT into a generic Kconfig symbol, and fix the
+dependency expression to reflect that AMD_MEM_ENCRYPT depends on it,
+instead of the other way around. This will permit ARCH_USE_MEMREMAP_PROT
+to be selected by other architectures.
 
-Symptoms show up later as use-after-free or list corruption warnings,
-usually in the laundromat thread.
+Note that the encryption related early memremap routines in
+arch/x86/mm/ioremap.c cannot be built for 32-bit x86 without triggering
+the following warning:
 
-I suspect aba2072f4523 "nfsd: grant read delegations to clients holding
-writes" made this bug easier to hit, but I looked as far back as v3.0
-and it looks to me it already had the same problem.  So I'm not sure
-where the bug was introduced; it may have been there from the beginning.
+     arch/x86//mm/ioremap.c: In function 'early_memremap_encrypted':
+  >> arch/x86/include/asm/pgtable_types.h:193:27: warning: conversion from
+                     'long long unsigned int' to 'long unsigned int' changes
+                     value from '9223372036854776163' to '355' [-Woverflow]
+      #define __PAGE_KERNEL_ENC (__PAGE_KERNEL | _PAGE_ENC)
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+     arch/x86//mm/ioremap.c:713:46: note: in expansion of macro '__PAGE_KERNEL_ENC'
+       return early_memremap_prot(phys_addr, size, __PAGE_KERNEL_ENC);
 
-Cc: stable@vger.kernel.org
-Signed-off-by: J. Bruce Fields <bfields@redhat.com>
-[Salvatore Bonaccorso: Backport for context changes to versions which do
-not have 20b7d86f29d3 ("nfsd: use boottime for lease expiry calculation")]
-Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+which essentially means they are 64-bit only anyway. However, we cannot
+make them dependent on CONFIG_ARCH_HAS_MEM_ENCRYPT, since that is always
+defined, even for i386 (and changing that results in a slew of build errors)
+
+So instead, build those routines only if CONFIG_AMD_MEM_ENCRYPT is
+defined.
+
+Signed-off-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
+Cc: Alexander Graf <agraf@suse.de>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Heinrich Schuchardt <xypron.glpk@gmx.de>
+Cc: Jeffrey Hugo <jhugo@codeaurora.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Leif Lindholm <leif.lindholm@linaro.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Matt Fleming <matt@codeblueprint.co.uk>
+Cc: Peter Jones <pjones@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-efi@vger.kernel.org
+Link: http://lkml.kernel.org/r/20190202094119.13230-9-ard.biesheuvel@linaro.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4state.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/Kconfig          |    3 +++
+ arch/x86/Kconfig      |    5 +----
+ arch/x86/mm/ioremap.c |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -844,6 +844,11 @@ hash_delegation_locked(struct nfs4_deleg
- 	return 0;
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -980,4 +980,7 @@ config HAVE_ARCH_COMPILER_H
+ 	  linux/compiler-*.h in order to override macro definitions that those
+ 	  headers generally provide.
+ 
++config ARCH_USE_MEMREMAP_PROT
++	bool
++
+ source "kernel/gcov/Kconfig"
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1449,6 +1449,7 @@ config ARCH_HAS_MEM_ENCRYPT
+ config AMD_MEM_ENCRYPT
+ 	bool "AMD Secure Memory Encryption (SME) support"
+ 	depends on X86_64 && CPU_SUP_AMD
++	select ARCH_USE_MEMREMAP_PROT
+ 	---help---
+ 	  Say yes to enable support for the encryption of system memory.
+ 	  This requires an AMD processor that supports Secure Memory
+@@ -1467,10 +1468,6 @@ config AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
+ 	  If set to N, then the encryption of system memory can be
+ 	  activated with the mem_encrypt=on command line option.
+ 
+-config ARCH_USE_MEMREMAP_PROT
+-	def_bool y
+-	depends on AMD_MEM_ENCRYPT
+-
+ # Common NUMA Features
+ config NUMA
+ 	bool "Numa Memory Allocation and Scheduler Support"
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -626,7 +626,7 @@ bool phys_mem_access_encrypted(unsigned
+ 	return arch_memremap_can_ram_remap(phys_addr, size, 0);
  }
  
-+static bool delegation_hashed(struct nfs4_delegation *dp)
-+{
-+	return !(list_empty(&dp->dl_perfile));
-+}
-+
- static bool
- unhash_delegation_locked(struct nfs4_delegation *dp)
- {
-@@ -851,7 +856,7 @@ unhash_delegation_locked(struct nfs4_del
+-#ifdef CONFIG_ARCH_USE_MEMREMAP_PROT
++#ifdef CONFIG_AMD_MEM_ENCRYPT
+ /* Remap memory with encryption */
+ void __init *early_memremap_encrypted(resource_size_t phys_addr,
+ 				      unsigned long size)
+@@ -668,7 +668,7 @@ void __init *early_memremap_decrypted_wp
  
- 	lockdep_assert_held(&state_lock);
+ 	return early_memremap_prot(phys_addr, size, __PAGE_KERNEL_NOENC_WP);
+ }
+-#endif	/* CONFIG_ARCH_USE_MEMREMAP_PROT */
++#endif	/* CONFIG_AMD_MEM_ENCRYPT */
  
--	if (list_empty(&dp->dl_perfile))
-+	if (!delegation_hashed(dp))
- 		return false;
+ static pte_t bm_pte[PAGE_SIZE/sizeof(pte_t)] __page_aligned_bss;
  
- 	dp->dl_stid.sc_type = NFS4_CLOSED_DELEG_STID;
-@@ -3656,7 +3661,7 @@ static void nfsd4_cb_recall_prepare(stru
- 	 * queued for a lease break. Don't queue it again.
- 	 */
- 	spin_lock(&state_lock);
--	if (dp->dl_time == 0) {
-+	if (delegation_hashed(dp) && dp->dl_time == 0) {
- 		dp->dl_time = get_seconds();
- 		list_add_tail(&dp->dl_recall_lru, &nn->del_recall_lru);
- 	}
 
 

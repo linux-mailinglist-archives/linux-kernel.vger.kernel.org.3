@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B436647AA1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D7047AA1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbhLTNGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:06:00 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:39987 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbhLTNGA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:06:00 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 53C87223ED;
-        Mon, 20 Dec 2021 14:05:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640005557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dTY1s8xROZ8eZkA1A8ctnHjL2GpMHeZVdIQO7kot2X0=;
-        b=i5vE1Jo8GK/6GI2L3R56z2AfVIbnr8IAvac2n4bkuLDzPzcfMuE+OqqURvhExSdy+T+cjg
-        4lnyOiNJb8KwXlIjf90s8+Hh7MAgn0S3Sb8qe20tqDujXveTPehf1q0dLvmYxPe3fPOaBX
-        A9Q6DhxDCnp3s44BxzII7MGnK3Ai+f4=
+        id S232644AbhLTNHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:07:02 -0500
+Received: from smtp1.axis.com ([195.60.68.17]:17070 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232629AbhLTNHB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:07:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1640005621;
+  x=1671541621;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WaxVAs1ueWqebp9zPoOJfkKS0rODc9paXkK8rXkLlR4=;
+  b=RYOAYm3aTTo93PYBnS/o9PQql4ahauq9I1GUso4u8I+NZBGwM8LrQqHl
+   lcA8HZsOWp3CF0Ald+Ty00bRc+WVcXaQIuGAs3IZpjYvitEgpUISHbKc3
+   FQUitevYVfWIDXN4U6wqrZIUcDvzUxM3rJ3d1k3HmVk2FhoJ6jWttvCUR
+   J3aPfMs88T231KY5y5/5h+waYMEnaKtZbVbgEfSCQ8ZcP3Ap3HJfNey1J
+   lIYTRyY6vCgTZR9TdZ7MvuE0+dVRZtKqXS1VvsmPW7RT5RtBQCIAXCUgN
+   l00x0pvU1Kq0BChAeLVZba7bYG8wBwoEVc85yDMs3jNuKFhQJ3GYFBlPW
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>
+CC:     <kernel@axis.com>, <mst@redhat.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        <linux-gpio@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] gpio: virtio: remove timeout
+Date:   Mon, 20 Dec 2021 14:06:56 +0100
+Message-ID: <20211220130656.16900-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 20 Dec 2021 14:05:57 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        zhuohao@chromium.org, p.yadav@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] mtd: core: Remove partid and partname debugfs files
-In-Reply-To: <20211217122636.474976-1-tudor.ambarus@microchip.com>
-References: <20211217122636.474976-1-tudor.ambarus@microchip.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <4fb031eee886f1e88b4f0bab6a55c2bd@walle.cc>
-X-Sender: michael@walle.cc
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-12-17 13:26, schrieb Tudor Ambarus:
-> SPI NOR has equivalent sysfs device attributes, thus let's remove the
-> duplicated debugfs entries. There's no one else using partid and 
-> partname
-> debugfs files, thus remove them from the mtd core as well.
-> 
-> If you find the idea acceptable, I would like to queue these through
-> spi-nor/next, I'll have some other patches that will depend on these.
+The driver imposes an arbitrary one second timeout on virtio requests,
+but the specification doesn't prevent the virtio device from taking
+longer to process requests, so remove this timeout to support all
+systems and device implementations.
 
-I'm fine with it.
+Fixes: 3a29355a22c0275fe86 ("gpio: Add virtio-gpio driver")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/gpio/gpio-virtio.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
--michael
+diff --git a/drivers/gpio/gpio-virtio.c b/drivers/gpio/gpio-virtio.c
+index 84f96b78f32a..9f4941bc5760 100644
+--- a/drivers/gpio/gpio-virtio.c
++++ b/drivers/gpio/gpio-virtio.c
+@@ -100,11 +100,7 @@ static int _virtio_gpio_req(struct virtio_gpio *vgpio, u16 type, u16 gpio,
+ 	virtqueue_kick(vgpio->request_vq);
+ 	mutex_unlock(&vgpio->lock);
+ 
+-	if (!wait_for_completion_timeout(&line->completion, HZ)) {
+-		dev_err(dev, "GPIO operation timed out\n");
+-		ret = -ETIMEDOUT;
+-		goto out;
+-	}
++	wait_for_completion(&line->completion);
+ 
+ 	if (unlikely(res->status != VIRTIO_GPIO_STATUS_OK)) {
+ 		dev_err(dev, "GPIO request failed: %d\n", gpio);
+-- 
+2.33.1
+

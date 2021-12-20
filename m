@@ -2,166 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F014D47A4DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 07:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A43B47A4E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 07:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237510AbhLTGLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 01:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbhLTGLn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 01:11:43 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC31C061574;
-        Sun, 19 Dec 2021 22:11:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHTkN1CFSz4xPw;
-        Mon, 20 Dec 2021 17:11:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639980700;
-        bh=xUlUVm970/HDHnNVurSk+4XF/Ezez2ohLvfSRRoJbM4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SEp/epnL6qdbv90kJWGlYGuhVK4Ez7R0Awf2nKuRWydWKi7rJ0hnJ2Yu/PtuY37LQ
-         NYgmiI2zpm1j9GJKntZLcP8OBtZNfi4DoZMbfVZQ4EHv3ng+RcL9hUaePIv9yfH4gx
-         UCQ9quKDi/Du7pjo7pZ57iPY8WDbel5f7esrzhPW9UdSQ23dfkUyjXKMOizcuLrXL7
-         T0jUrEFRXisTrLxEOl3BSnMVWkl5dvVxfJbtWFOFGoJZvPyYh/vF3BPRrIGuwBhSCv
-         RJtYfHXlGe+C3mJVD8kzRyKTRu6OoiHFBgklnXfSAQ3Euth7BKlYm332ytrO/HZWOg
-         k4H+8ZXUOVuRA==
-Date:   Mon, 20 Dec 2021 17:11:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shyam Prasad <Shyam.Prasad@microsoft.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steven French <Steven.French@microsoft.com>
-Subject: Re: [EXTERNAL] Re: linux-next: manual merge of the cifs tree with
- the fscache tree
-Message-ID: <20211220171139.654db374@canb.auug.org.au>
-In-Reply-To: <KL1P15301MB034331969F371B30AAD6642D947B9@KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM>
-References: <20211216124317.4143405-1-broonie@kernel.org>
-        <20211220104610.5f074aec@canb.auug.org.au>
-        <KL1P15301MB034331969F371B30AAD6642D947B9@KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM>
+        id S237520AbhLTGSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 01:18:22 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:58084 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231863AbhLTGSV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 01:18:21 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABHTJwUIMBhWq9bBA--.20431S2;
+        Mon, 20 Dec 2021 14:17:57 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] watchdog: ie6xx_wdt: Check for null res pointer
+Date:   Mon, 20 Dec 2021 14:17:55 +0800
+Message-Id: <20211220061755.770193-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NAS0vxE=0Wbe/BCj7JU5yKv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABHTJwUIMBhWq9bBA--.20431S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWrury5AFWkKr1DJrykAFb_yoWfGrg_Kw
+        12g3y7W3yDGrn3KF1Utw13urWFvr45uF15Xw4ktFWak34kJr98X3yUZr1Sg34Uua45CryD
+        CryDXr4a9asrCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU24E_UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NAS0vxE=0Wbe/BCj7JU5yKv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The return value of platform_get_resource() needs to be checked.
+To avoid use of error pointer in case of the failure of alloc.
 
-Hi Shyam,
+Fixes: 101ce87b3bdd ("watchdog: Add watchdog driver for Intel Atom E6XX")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/watchdog/ie6xx_wdt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On Mon, 20 Dec 2021 04:31:27 +0000 Shyam Prasad <Shyam.Prasad@microsoft.com=
-> wrote:
->
-> -----Original Message-----
-> From: Stephen Rothwell <sfr@canb.auug.org.au>=20
-> Sent: Monday, December 20, 2021 5:16 AM
-> To: David Howells <dhowells@redhat.com>
-> Cc: broonie@kernel.org; Steve French <smfrench@gmail.com>; CIFS <linux-ci=
-fs@vger.kernel.org>; Linux Kernel Mailing List <linux-kernel@vger.kernel.or=
-g>; Linux Next Mailing List <linux-next@vger.kernel.org>; Shyam Prasad <Shy=
-am.Prasad@microsoft.com>; Steven French <Steven.French@microsoft.com>
-> Subject: [EXTERNAL] Re: linux-next: manual merge of the cifs tree with th=
-e fscache tree
->=20
-> Hi all,
->=20
-> On Thu, 16 Dec 2021 12:43:17 +0000 broonie@kernel.org wrote:
-> >
-> > Today's linux-next merge of the cifs tree got a conflict in:
-> >=20
-> >   fs/cifs/inode.c
-> >=20
-> > between commit:
-> >=20
-> >   830c476f5eb82 ("cifs: Support fscache indexing rewrite (untested)")
-> >=20
-> > from the fscache tree and commit:
-> >=20
-> >   68f87ec9c1ce3 ("cifs: ignore resource_id while getting fscache super =
-cookie") =20
->=20
-> This is now commit
->=20
->   b774302e8856 ("cifs: ignore resource_id while getting fscache super coo=
-kie")
->=20
-> in Linus' tree.
->=20
-> > from the cifs tree.
-> >=20
-> > diff --cc fs/cifs/inode.c
-> > index dc2fe76450b96,279622e4eb1c2..0000000000000
-> > --- a/fs/cifs/inode.c
-> > +++ b/fs/cifs/inode.c
-> > @@@ -1372,20 -1370,6 +1367,7 @@@ iget_no_retry
-> >   		iget_failed(inode);
-> >   		inode =3D ERR_PTR(rc);
-> >   	}
-> >  +
-> > - 	if (!rc) {
-> > - 		/*
-> > - 		 * The cookie is initialized from volume info returned above.
-> > - 		 * Inside cifs_fscache_get_super_cookie it checks
-> > - 		 * that we do not get super cookie twice.
-> > - 		 */
-> > - 		rc =3D cifs_fscache_get_super_cookie(tcon);
-> > - 		if (rc < 0) {
-> > - 			iget_failed(inode);
-> > - 			inode =3D ERR_PTR(rc);
-> > - 		}
-> > - 	}
-> > -=20
-> >   out:
-> >   	kfree(path);
-> >   	free_xid(xid); =20
->=20
-> so this is now a conflict between the fscache tree and Linus's tree.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > so this is now a conflict between the fscache tree and Linus's tree. =20
->=20
-> Hi David and Steve,
->=20
-> I think one of these two branches need to be rebased. Can one of you plea=
-se do it?
+diff --git a/drivers/watchdog/ie6xx_wdt.c b/drivers/watchdog/ie6xx_wdt.c
+index 8f28993fab8b..ee5b68d2e271 100644
+--- a/drivers/watchdog/ie6xx_wdt.c
++++ b/drivers/watchdog/ie6xx_wdt.c
+@@ -271,6 +271,9 @@ static int ie6xx_wdt_remove(struct platform_device *pdev)
+ 	struct resource *res;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
++	if (!res)
++		return -EINVAL;
++
+ 	ie6xx_wdt_stop(NULL);
+ 	watchdog_unregister_device(&ie6xx_wdt_dev);
+ 	ie6xx_wdt_debugfs_exit();
+-- 
+2.25.1
 
-Nothing needs t be done, the conflict is trivial.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NAS0vxE=0Wbe/BCj7JU5yKv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHAHpsACgkQAVBC80lX
-0GyyOQf/c+PTloCznCkaa65/7FonJm0jDjkFIcxrmAhwu1Q8bV2qwtRsYoDOz0vF
-e9l48cGmORVRBcAjM4q9YxbEPDnL351zO6iK7V7KAAXTedXAP3kR9kdoDgEfuMPu
-AcBKlnbDOvabFDLVPfR0n0rjUoUVF7LD7Z8dHQSAnVqnC3JsJx2VrA2FrxUVL5ua
-XtPbEVv2DDYQFbVAmMDEiLr+YpvU6Y/VzVTiqTB/ZeaEu1mhlgYt+YyUSqs11GIU
-eR6M72mRyNhuD2/zPiqmcrFzi/4fat6tdy9mBnqKQ58MVjiRMkUr+zf4SRf4VQ/J
-vFAqclCUC54k3dHibYZqWVt8XEMeuw==
-=2uMb
------END PGP SIGNATURE-----
-
---Sig_/NAS0vxE=0Wbe/BCj7JU5yKv--

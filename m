@@ -2,83 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB3547B5D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE98A47B5DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbhLTWQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S232234AbhLTWZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbhLTWQC (ORCPT
+        with ESMTP id S229916AbhLTWZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:16:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03BAC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:16:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8B33B810DE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 22:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766C5C36AE8;
-        Mon, 20 Dec 2021 22:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640038559;
-        bh=NvzUcorftFDufwHxLvjFkT88ytvP40DRNvsxQGK0hDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YDvwWGj7xIm+MlE+mJUD8BLRJ892Qtci8NA9RJzVB0qJfp1X3UM7+s58oQRTzQzJL
-         L4QdwcIf89g2oxC0IS2TUXxSwMMo4MyIgzkxC7rfAbdVvUuCOWr77XXGxJbTHyOKoY
-         4Nf+5hcknmKjVuAlfZ2lulQWRfMuDwSfdhq2jU1qoBknk4xtQIIkVM0C/RTbtP6KF7
-         zcP9Dyo+7muAvRJZF1mnWjpBgQ9L/ojW0ImJjpxFJCnKPl0vU0X/EyY63CuFFInHrw
-         IczNATA148HCROdsK/7Om597mgNx7va5rTp5wci8fvgZTx7Aqrs23CRguMOWV/dVsR
-         ZP3M3TRbhDRrA==
-Date:   Mon, 20 Dec 2021 14:15:57 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: avoid down_write on nat_tree_lock
- during checkpoint
-Message-ID: <YcEAnX2+ARaGXrtx@google.com>
-References: <20211214182435.2595176-1-jaegeuk@kernel.org>
- <443927c3-8eaf-8f00-0e41-2173143fe166@kernel.org>
+        Mon, 20 Dec 2021 17:25:45 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BE3C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:25:45 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z6so9159329plk.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:25:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WhHan/P3Id000y7TKidbql/t1fQORYAY/iPLj24Ndbs=;
+        b=S2sdkGB4VqVc66qNNupKTihUmt8KPKK29ar2rBj4ylOu1ItNRxI93h3t7CmSXPgcMw
+         HhEStR2Sg0J4ZPI6kikffyXZOd1qBzGM7hp3JgInYQqKyB9YSbHx7zuwt6uvaNHAn7uB
+         7b13ILDaoU4zKNnjsidnw3J/XmHQlBz7SrP8BOuw0vKwUKQ9OFP41w6EiTx/rX30L4mb
+         tmZeHetvg2hHo6bZAHnhrPGo2knUsLAReltg8Up5UE8kRlH2Jv60hoV3tRYqTuwR7xxF
+         REVeQ8XqTY2RuCfDPzax93298IlZ6CeWJRmBRk9v7atH+o8cklRl/J06qUXZtBViTxhQ
+         dP2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WhHan/P3Id000y7TKidbql/t1fQORYAY/iPLj24Ndbs=;
+        b=pHzqNBSBpBG0g/ZsHKRVPUyVa2X9kqKKXHqGIxAKHypP0gODJqC0Y+vh5RBH+EHK4b
+         1y4nCE2sEy86FxbEjd0HK2svKfM60LiXSG8fG+KvAuzKVFRF7PElfjh7muWx2Hc0Vouf
+         WmfoVCqXQhCqxyj3kL3vztZ98bkGdbveLoUThb7RlX+DFQU1SL5ikMKFvsi83DCvD7jJ
+         zHgApeSq86up1nMAU8BjUOo9wLK8s2Rb7RHeWLpvsW81MHfe5dgjvImPbA75kwRAGI3e
+         WFAu6Ek8DVeWLbqd2+/Hkv2bGZBqRQEX/LAx3krBeSZoq2cRGH+o1rFfoW60gnWXb0qd
+         ezCg==
+X-Gm-Message-State: AOAM532jaxyhGZ9BHVNxxAR7bfCpahJS37+cjD+Di72z+/U+NIRNKKxK
+        Xj/U1TJuVKz4qXl2kr61cmw=
+X-Google-Smtp-Source: ABdhPJwQjOil6JRfFkqPcb+BLX0At2eOudw8SbBhBcd4WCyZx3VjcMz4WC5jbjS+BcM68IttUE5hxg==
+X-Received: by 2002:a17:90a:4a06:: with SMTP id e6mr369219pjh.228.1640039144631;
+        Mon, 20 Dec 2021 14:25:44 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:9632:a1c4:968a:6f66])
+        by smtp.gmail.com with ESMTPSA id 13sm18703636pfm.161.2021.12.20.14.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 14:25:43 -0800 (PST)
+Date:   Mon, 20 Dec 2021 14:25:41 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     lianzhi chang <changlianzhi@uniontech.com>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, andriy.shevchenko@linux.intel.com,
+        282827961@qq.com
+Subject: Re: [PATCH v22] tty: Fix the keyboard led light display problem
+Message-ID: <YcEC5XOdRwWHz1di@google.com>
+References: <20211215125125.10554-1-changlianzhi@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <443927c3-8eaf-8f00-0e41-2173143fe166@kernel.org>
+In-Reply-To: <20211215125125.10554-1-changlianzhi@uniontech.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/19, Chao Yu wrote:
-> On 2021/12/15 2:24, Jaegeuk Kim wrote:
-> > Let's cache nat entry if there's no lock contention only.
-> > 
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >   fs/f2fs/node.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> > index 556fcd8457f3..b1bc7d76da3b 100644
-> > --- a/fs/f2fs/node.c
-> > +++ b/fs/f2fs/node.c
-> > @@ -430,6 +430,10 @@ static void cache_nat_entry(struct f2fs_sb_info *sbi, nid_t nid,
-> >   	struct f2fs_nm_info *nm_i = NM_I(sbi);
-> >   	struct nat_entry *new, *e;
-> > +	/* Let's mitigate lock contention of nat_tree_lock during checkpoint */
-> > +	if (rwsem_is_locked(&sbi->cp_global_sem))
+On Wed, Dec 15, 2021 at 08:51:25PM +0800, lianzhi chang wrote:
+> Use the "ctrl+alt+Fn" key combination to switch the system from tty to
+> desktop or switch the system from desktop to tty. After the switch is
+> completed, it is found that the state of the keyboard lock is
+> inconsistent with the state of the keyboard Led light.The reasons are
+> as follows:
 > 
-> Why not down_write_trylock(nat_tree_lock)? cp_global_sem lock coverage is larger than
-> nat_tree_lock's in f2fs_write_checkpoint().
+> * The desktop environment (Xorg and other services) is bound to a tty
+>   (assuming it is tty1), and the kb->kbdmode attribute value of tty1
+>   will be set to VC_OFF. According to the current code logic, in the
+>   desktop environment, the values of ledstate and kb->ledflagstate
+>   of tty1 will not be modified anymore, so they are always 0.
+> 
+> * When switching between each tty, the final value of ledstate set by
+>   the previous tty is compared with the kb->ledflagstate value of the
+>   current tty to determine whether to set the state of the keyboard
+>   light. The process of switching between desktop and tty is also the
+>   process of switching between tty1 and other ttys. There are two
+>   situations:
+> 
+>   - (1) In the desktop environment, tty1 will not set the ledstate,
+>   which will cause when switching from the desktop to other ttys,
+>   if the desktop lights up the keyboard's led, after the switch is
+>   completed, the keyboard's led light will always be on;
+> 
+>   - (2) When switching from another tty to the desktop, this
+>   mechanism will trigger tty1 to set the led state. If other tty
+>   lights up the led of the keyboard before switching to the desktop,
+>   the led will be forcibly turned off. This situation should
+>   be avoided.
+> 
+> * The current patch is to solve these problems: When VT is switched,
+>   the keyboard led needs to be set once.Ensure that after the
+>   switch is completed, the state of the keyboard LED is consistent
+>   with the state of the keyboard lock.
+> 
+> Signed-off-by: lianzhi chang <changlianzhi@uniontech.com>
+> Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-I'm focusing on faster checkpoint by minimizing the nat_tree_lock holding time.
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
+> ---
+>  v22:
+>  Return to the v19 plan, remove the judgment condition in
+>  the vt_set_leds_compute_shiftstate() function.
+
+Thank you for making the changes. The patch looks OK to me now.
+
+>  
+>  drivers/tty/vt/keyboard.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> Thanks,
+> diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
+> index c7fbbcdcc346..00283ba9a9e4 100644
+> --- a/drivers/tty/vt/keyboard.c
+> +++ b/drivers/tty/vt/keyboard.c
+> @@ -153,6 +153,7 @@ static int shift_state = 0;
+>  
+>  static unsigned int ledstate = -1U;			/* undefined */
+>  static unsigned char ledioctl;
+> +static bool vt_switch;
+>  
+>  /*
+>   * Notifier list for console keyboard events
+> @@ -414,6 +415,12 @@ void vt_set_leds_compute_shiftstate(void)
+>  {
+>  	unsigned long flags;
+>  
+> +	/*
+> +	 * When VT is switched, the keyboard led needs to be set once.
+> +	 * Ensure that after the switch is completed, the state of the
+> +	 * keyboard LED is consistent with the state of the keyboard lock.
+> +	 */
+> +	vt_switch = true;
+>  	set_leds();
+>  
+>  	spin_lock_irqsave(&kbd_event_lock, flags);
+> @@ -1255,6 +1262,11 @@ static void kbd_bh(struct tasklet_struct *unused)
+>  	leds |= (unsigned int)kbd->lockstate << 8;
+>  	spin_unlock_irqrestore(&led_lock, flags);
+>  
+> +	if (vt_switch) {
+> +		ledstate = ~leds;
+> +		vt_switch = false;
+> +	}
+> +
+>  	if (leds != ledstate) {
+>  		kbd_propagate_led_state(ledstate, leds);
+>  		ledstate = leds;
+> -- 
+> 2.20.1
 > 
-> > +		return;
-> > +
-> >   	new = __alloc_nat_entry(sbi, nid, false);
-> >   	if (!new)
-> >   		return;
+> 
+> 
+
+-- 
+Dmitry

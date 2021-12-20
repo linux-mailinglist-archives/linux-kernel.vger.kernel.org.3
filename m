@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF7B47B004
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1778247B007
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240028AbhLTPXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:23:41 -0500
-Received: from mga11.intel.com ([192.55.52.93]:58460 "EHLO mga11.intel.com"
+        id S239294AbhLTPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:23:52 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58129 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238564AbhLTPWh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:22:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237732823"
+        id S239361AbhLTPWy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:22:54 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237732824"
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="237732823"
+   d="scan'208";a="237732824"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:16:06 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="484086900"
+   d="scan'208";a="484086904"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 07:16:05 -0800
+  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 07:16:06 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v2 3/7] thermal: intel: hfi: Minimally initialize the Hardware Feedback Interface
-Date:   Mon, 20 Dec 2021 07:14:34 -0800
-Message-Id: <20211220151438.1196-4-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 4/7] thermal: intel: hfi: Handle CPU hotplug events
+Date:   Mon, 20 Dec 2021 07:14:35 -0800
+Message-Id: <20211220151438.1196-5-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
 References: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
@@ -47,28 +47,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Intel Hardware Feedback Interface provides guidance to the operating
-system about the performance and energy efficiency capabilities of each
-CPU in the system. Capabilities are numbers between 0 and 255 where a
-higher number represents a higher capability. For each CPU, energy
-efficiency and performance are reported as separate capabilities.
+All CPUs in a package are represented in an HFI table. There exists an
+HFI table per package. Thus, CPUs in a package need to coordinate to
+initialize and access the table. Do such coordination during CPU hotplug.
+Use the first CPU to come online in a package to initialize the HFI table
+and the data structure representing it. Other CPUs in the same package need
+only to register or unregister themselves in that data structure.
 
-Hardware computes these capabilities based on the operating conditions of
-the system such as power and thermal limits. These capabilities are shared
-with the operating system in a table resident in memory. Each package in
-the system has its own HFI instance. Every logical CPU in the package is
-represented in the table. More than one logical CPUs may be represented in
-a single table entry. When the hardware updates the table, it generates a
-package-level thermal interrupt.
-
-The size and format of the HFI table depend on the supported features and
-can only be determined at runtime. To minimally initialize the HFI, parse
-its features and allocate one instance per package of a data structure with
-the necessary parameters to read and navigate a local copy (i.e., owned by
-the driver) of individual HFI tables.
-
-A subsequent changeset will provide per-CPU initialization and interrupt
-handling.
+The HFI depends on both the package-level thermal management and the local
+APIC thermal local vector. Thus, ensure that both are properly configured
+before calling intel_hfi_online(). The CPU hotplug callbacks of the thermal
+throttle events code already meet these conditions. Enable the HFI from
+thermal_throttle_online().
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: Aubrey Li <aubrey.li@linux.intel.com>
@@ -76,282 +66,326 @@ Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: Tim Chen <tim.c.chen@linux.intel.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Reviewed-by: Len Brown <len.brown@intel.com>
-Co-developed by: Aubrey Li <aubrey.li@linux.intel.com>
-Signed-off-by: Aubrey Li <aubrey.li@linux.intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
   * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Boris)
-  * Reworked parsing of HFI features using bitfields instead of bitmasks.
-    (PeterZ).
-  * Removed hfi_instance::parsed as hfi_parse_features() is called only
-    once via intel_hfi_init() via thermal_throttle_init_device().
-    (Rafael)
-  * Converted pr_err() to pr_debug(). (Srinivas, Rafael)
-  * Removed unnecessary dependency on CONFIG_SCHED_MC.
-  * Renamed hfi_instance::ts_counter as hfi_instance::timestamp.
-  * Renamed hfi_instance::table_base as hfi_instance::local_table and
-    relocated its definition to this patch.
-  * Wrapped hfi_instance::timestamp and hfi_instance:local_table in an
-    anonymous union, since both point at the same location.
+  * Relocated definitions of MSR bits from intel_hfi.h to intel_hfi.c.
+  * Renamed HFI_PTR_VALID_BIT as HW_FEEDBACK_PTR_VALID_BIT for clarity.
+  * Reworked init_hfi_cpu_index() to take a pointer of type struct
+    hfi_cpu_info. This makes the function more concise. (Rafael)
+  * In intel_hfi_online(), check for null hfi_instances and improve checks
+    of the die_id. (Rafael)
+  * Use a local cpumask_var_t to keep track of the CPUs of each
+    hfi_instance. (Rafael)
+  * Removed hfi_instance::die_id. It is not used anywhere.
+  * Renamed hfi_instance::table_base as hfi_instance::local_table for
+    clarity.
 ---
- drivers/thermal/intel/Kconfig       |  12 ++
- drivers/thermal/intel/Makefile      |   1 +
- drivers/thermal/intel/intel_hfi.c   | 175 ++++++++++++++++++++++++++++
- drivers/thermal/intel/intel_hfi.h   |  11 ++
- drivers/thermal/intel/therm_throt.c |   3 +
- 5 files changed, 202 insertions(+)
- create mode 100644 drivers/thermal/intel/intel_hfi.c
- create mode 100644 drivers/thermal/intel/intel_hfi.h
+ drivers/thermal/intel/intel_hfi.c   | 204 ++++++++++++++++++++++++++++
+ drivers/thermal/intel/intel_hfi.h   |   4 +
+ drivers/thermal/intel/therm_throt.c |   8 ++
+ 3 files changed, 216 insertions(+)
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index c83ea5d04a1d..1a21ff60fdc7 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -99,3 +99,15 @@ config INTEL_MENLOW
- 	  Intel Menlow platform.
- 
- 	  If unsure, say N.
-+
-+config INTEL_HFI
-+	bool "Intel Hardware Feedback Interface"
-+	depends on CPU_SUP_INTEL
-+	depends on X86_THERMAL_VECTOR
-+	help
-+	  Select this option to enable the Hardware Feedback Interface. If
-+	  selected, hardware provides guidance to the operating system on
-+	  the performance and energy efficiency capabilities of each CPU.
-+	  These capabilities may change as a result of changes in the operating
-+	  conditions of the system such power and thermal limits. If selected,
-+	  the kernel relays updates in CPUs' capabilities to userspace.
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index 960b56268b4a..1a80bffcd699 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -13,3 +13,4 @@ obj-$(CONFIG_INTEL_PCH_THERMAL)	+= intel_pch_thermal.o
- obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
- obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
- obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
-+obj-$(CONFIG_INTEL_HFI) += intel_hfi.o
 diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-new file mode 100644
-index 000000000000..375d835cc5e3
---- /dev/null
+index 375d835cc5e3..9b68fa25950e 100644
+--- a/drivers/thermal/intel/intel_hfi.c
 +++ b/drivers/thermal/intel/intel_hfi.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Hardware Feedback Interface Driver
+@@ -21,10 +21,15 @@
+ 
+ #define pr_fmt(fmt)  "intel-hfi: " fmt
+ 
++#include <linux/bits.h>
++#include <linux/io.h>
+ #include <linux/slab.h>
+ 
+ #include "intel_hfi.h"
+ 
++/* Hardware Feedback Interface MSR configuration bits */
++#define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
++
+ /* CPUID detection and enumeration definitions for HFI */
+ 
+ #define CPUID_HFI_LEAF 6
+@@ -80,6 +85,9 @@ struct hfi_hdr {
+  *			Located at the base of the local table.
+  * @hdr:		Base address of the local table header
+  * @data:		Base address of the local table data
++ * @cpus:		CPUs represented in this HFI table instance
++ * @hw_table:		Pointer to the HFI table of this instance
++ * @initialized:	True if this HFI instance has bee initialized
+  *
+  * A set of parameters to parse and navigate a specific HFI table.
+  */
+@@ -90,6 +98,9 @@ struct hfi_instance {
+ 	};
+ 	void			*hdr;
+ 	void			*data;
++	cpumask_var_t		cpus;
++	void			*hw_table;
++	bool			initialized;
+ };
+ 
+ /**
+@@ -107,10 +118,182 @@ struct hfi_features {
+ 	unsigned int	hdr_size;
+ };
+ 
++/**
++ * struct hfi_cpu_info - Per-CPU attributes to consume HFI data
++ * @index:		Row of this CPU in its HFI table
++ * @hfi_instance:	Attributes of the HFI table to which this CPU belongs
 + *
-+ * Copyright (c) 2021, Intel Corporation.
-+ *
-+ * Authors: Aubrey Li <aubrey.li@linux.intel.com>
-+ *          Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-+ *
-+ *
-+ * The Hardware Feedback Interface provides a performance and energy efficiency
-+ * capability information for each CPU in the system. Depending on the processor
-+ * model, hardware may periodically update these capabilities as a result of
-+ * changes in the operating conditions (e.g., power limits or thermal
-+ * constraints). On other processor models, there is a single HFI update
-+ * at boot.
-+ *
-+ * This file provides functionality to process HFI updates and relay these
-+ * updates to userspace.
++ * Parameters to link a logical processor to an HFI table and a row within it.
 + */
-+
-+#define pr_fmt(fmt)  "intel-hfi: " fmt
-+
-+#include <linux/slab.h>
-+
-+#include "intel_hfi.h"
-+
-+/* CPUID detection and enumeration definitions for HFI */
-+
-+#define CPUID_HFI_LEAF 6
-+
-+union hfi_capabilities {
-+	struct {
-+		u8	performance:1;
-+		u8	energy_efficiency:1;
-+		u8	__reserved:6;
-+	} split;
-+	u8 bits;
++struct hfi_cpu_info {
++	s16			index;
++	struct hfi_instance	*hfi_instance;
 +};
 +
-+union cpuid6_edx {
-+	struct {
-+		union hfi_capabilities	capabilities;
-+		u32			table_pages:4;
-+		u32			__reserved:4;
-+		s32			index:16;
-+	} split;
-+	u32 full;
-+};
++static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
 +
-+/**
-+ * struct hfi_cpu_data - HFI capabilities per CPU
-+ * @perf_cap:		Performance capability
-+ * @ee_cap:		Energy efficiency capability
-+ *
-+ * Capabilities of a logical processor in the HFI table. These capabilities are
-+ * unitless.
-+ */
-+struct hfi_cpu_data {
-+	u8	perf_cap;
-+	u8	ee_cap;
-+} __packed;
+ static int max_hfi_instances;
+ static struct hfi_instance *hfi_instances;
+ 
+ static struct hfi_features hfi_features;
++static DEFINE_MUTEX(hfi_lock);
 +
-+/**
-+ * struct hfi_hdr - Header of the HFI table
-+ * @perf_updated:	Hardware updated performance capabilities
-+ * @ee_updated:		Hardware updated energy efficiency capabilities
-+ *
-+ * Properties of the data in an HFI table.
-+ */
-+struct hfi_hdr {
-+	u8	perf_updated;
-+	u8	ee_updated;
-+} __packed;
-+
-+/**
-+ * struct hfi_instance - Representation of an HFI instance (i.e., a table)
-+ * @local_table:	Base of the local copy of the HFI table
-+ * @timestamp:		Timestamp of the last update of the local table.
-+ *			Located at the base of the local table.
-+ * @hdr:		Base address of the local table header
-+ * @data:		Base address of the local table data
-+ *
-+ * A set of parameters to parse and navigate a specific HFI table.
-+ */
-+struct hfi_instance {
-+	union {
-+		void			*local_table;
-+		u64			*timestamp;
-+	};
-+	void			*hdr;
-+	void			*data;
-+};
-+
-+/**
-+ * struct hfi_features - Supported HFI features
-+ * @nr_table_pages:	Size of the HFI table in 4KB pages
-+ * @cpu_stride:		Stride size to locate capability data of a logical
-+ *			processor within the table (i.e., row stride)
-+ * @hdr_size:		Size of table header
-+ *
-+ * Parameters and supported features that are common to all HFI instances
-+ */
-+struct hfi_features {
-+	unsigned int	nr_table_pages;
-+	unsigned int	cpu_stride;
-+	unsigned int	hdr_size;
-+};
-+
-+static int max_hfi_instances;
-+static struct hfi_instance *hfi_instances;
-+
-+static struct hfi_features hfi_features;
-+
-+static __init int hfi_parse_features(void)
++static void init_hfi_cpu_index(struct hfi_cpu_info *info)
 +{
-+	unsigned int nr_capabilities;
 +	union cpuid6_edx edx;
 +
++	/* Do not re-read @cpu's index if it has already been initialized. */
++	if (info->index > -1)
++		return;
++
++	edx.full = cpuid_edx(CPUID_HFI_LEAF);
++	info->index = edx.split.index;
++}
++
++/*
++ * The format of the HFI table depends on the number of capabilities that the
++ * hardware supports. Keep a data structure to navigate the table.
++ */
++static void init_hfi_instance(struct hfi_instance *hfi_instance)
++{
++	/* The HFI header is below the time-stamp. */
++	hfi_instance->hdr = hfi_instance->local_table +
++			    sizeof(*hfi_instance->timestamp);
++
++	/* The HFI data starts below the header. */
++	hfi_instance->data = hfi_instance->hdr + hfi_features.hdr_size;
++
++	hfi_instance->initialized = true;
++}
++
++/**
++ * intel_hfi_online() - Enable HFI on @cpu
++ * @cpu:	CPU in which the HFI will be enabled
++ *
++ * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
++ * level. The first CPU in the die/package to come online does the full HFI
++ * initialization. Subsequent CPUs will just link themselves to the HFI
++ * instance of their die/package.
++ */
++void intel_hfi_online(unsigned int cpu)
++{
++	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
++	u16 die_id = topology_logical_die_id(cpu);
++	struct hfi_instance *hfi_instance;
++	phys_addr_t hw_table_pa;
++	u64 msr_val;
++
 +	if (!boot_cpu_has(X86_FEATURE_HFI))
-+		return -ENODEV;
++		return;
++
++	/* Not much to do if hfi_instances are missing. */
++	if (!hfi_instances)
++		return;
 +
 +	/*
-+	 * If we are here we know that CPUID_HFI_LEAF exists. Parse the
-+	 * supported capabilities and the size of the HFI table.
++	 * The HFI instance of this @cpu may exist already but they have not
++	 * been linked to @cpu.
 +	 */
-+	edx.full = cpuid_edx(CPUID_HFI_LEAF);
++	hfi_instance = info->hfi_instance;
++	if (!hfi_instance) {
++		if (die_id < 0 || die_id >= max_hfi_instances)
++			return;
 +
-+	if (!edx.split.capabilities.split.performance) {
-+		pr_debug("Performance reporting not supported! Not using HFI\n");
-+		return -ENODEV;
++		hfi_instance = &hfi_instances[die_id];
++		if (!hfi_instance)
++			return;
++	}
++
++	init_hfi_cpu_index(info);
++
++	/*
++	 * Now check if the HFI instance of the package/die of this CPU has
++	 * been initialized. In such case, all we have to do is link @cpu's info
++	 * to the HFI instance of its die/package.
++	 */
++	mutex_lock(&hfi_lock);
++	if (hfi_instance->initialized) {
++		cpumask_set_cpu(cpu, hfi_instance->cpus);
++		info->hfi_instance = hfi_instance;
++
++		mutex_unlock(&hfi_lock);
++		return;
 +	}
 +
 +	/*
-+	 * The number of supported capabilities determines the number of
-+	 * columns in the HFI table. Exclude reserved bits.
++	 * Hardware is programmed with the physical address of the first page
++	 * frame of the table. Hence, the allocated memory must be page-aligned.
 +	 */
-+	edx.split.capabilities.split.__reserved = 0;
-+	nr_capabilities = hweight8(edx.split.capabilities.bits);
++	hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
++						   GFP_KERNEL | __GFP_ZERO);
++	if (!hfi_instance->hw_table)
++		goto err_out;
 +
-+	/* The number of 4KB pages required by the table */
-+	hfi_features.nr_table_pages = edx.split.table_pages + 1;
++	hw_table_pa = virt_to_phys(hfi_instance->hw_table);
 +
 +	/*
-+	 * The header contains change indications for each supported feature.
-+	 * The size of the table header is rounded up to be a multiple of 8
-+	 * bytes.
++	 * Allocate memory to keep a local copy of the table that
++	 * hardware generates.
 +	 */
-+	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	hfi_instance->local_table = kzalloc(hfi_features.nr_table_pages << PAGE_SHIFT,
++					    GFP_KERNEL);
++	if (!hfi_instance->local_table)
++		goto free_hw_table;
 +
 +	/*
-+	 * Data of each logical processor is also rounded up to be a multiple
-+	 * of 8 bytes.
++	 * Program the address of the feedback table of this die/package. On
++	 * some processors, hardware remembers the old address of the HFI table
++	 * even after having been reprogrammed and re-enabled. Thus, do not free
++	 * pages allocated for the table or reprogram the hardware with a new
++	 * base address. Namely, program the hardware only once.
 +	 */
-+	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	msr_val = hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
++	wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
 +
-+	return 0;
++	init_hfi_instance(hfi_instance);
++
++	cpumask_set_cpu(cpu, hfi_instance->cpus);
++	info->hfi_instance = hfi_instance;
++
++	mutex_unlock(&hfi_lock);
++
++	return;
++
++free_hw_table:
++	free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
++err_out:
++	mutex_unlock(&hfi_lock);
 +}
 +
-+void __init intel_hfi_init(void)
++/**
++ * intel_hfi_offline() - Disable HFI on @cpu
++ * @cpu:	CPU in which the HFI will be disabled
++ *
++ * Remove @cpu from those covered by its HFI instance.
++ *
++ * On some processors, hardware remembers previous programming settings even
++ * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
++ * die/package of @cpu are offline. See note in intel_hfi_online().
++ */
++void intel_hfi_offline(unsigned int cpu)
 +{
-+	if (hfi_parse_features())
++	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
++	struct hfi_instance *hfi_instance;
++
++	if (!boot_cpu_has(X86_FEATURE_HFI))
 +		return;
 +
-+	/* There is one HFI instance per die/package. */
-+	max_hfi_instances = topology_max_packages() *
-+			    topology_max_die_per_package();
++	hfi_instance = info->hfi_instance;
++	if (!hfi_instance)
++		return;
 +
-+	/*
-+	 * This allocation may fail. CPU hotplug callbacks must check
-+	 * for a null pointer.
-+	 */
-+	hfi_instances = kcalloc(max_hfi_instances, sizeof(*hfi_instances),
-+				GFP_KERNEL);
++	if (!hfi_instance->initialized)
++		return;
++
++	mutex_lock(&hfi_lock);
++	cpumask_clear_cpu(cpu, hfi_instance->cpus);
++	mutex_unlock(&hfi_lock);
 +}
+ 
+ static __init int hfi_parse_features(void)
+ {
+@@ -159,6 +342,9 @@ static __init int hfi_parse_features(void)
+ 
+ void __init intel_hfi_init(void)
+ {
++	struct hfi_instance *hfi_instance;
++	int i;
++
+ 	if (hfi_parse_features())
+ 		return;
+ 
+@@ -172,4 +358,22 @@ void __init intel_hfi_init(void)
+ 	 */
+ 	hfi_instances = kcalloc(max_hfi_instances, sizeof(*hfi_instances),
+ 				GFP_KERNEL);
++	if (!hfi_instances)
++		return;
++
++	for (i = 0; i < max_hfi_instances; i++) {
++		hfi_instance = &hfi_instances[i];
++		if (!zalloc_cpumask_var(&hfi_instance->cpus, GFP_KERNEL))
++			goto err_nomem;
++	}
++
++	return;
++
++err_nomem:
++	for (i = 0; i < max_hfi_instances; i++) {
++		hfi_instance = &hfi_instances[i];
++		free_cpumask_var(hfi_instance->cpus);
++	}
++
++	kfree(hfi_instances);
+ }
 diff --git a/drivers/thermal/intel/intel_hfi.h b/drivers/thermal/intel/intel_hfi.h
-new file mode 100644
-index 000000000000..8fa3f7c0a64b
---- /dev/null
+index 8fa3f7c0a64b..bc91cafc908b 100644
+--- a/drivers/thermal/intel/intel_hfi.h
 +++ b/drivers/thermal/intel/intel_hfi.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _INTEL_HFI_H
-+#define _INTEL_HFI_H
-+
-+#if defined(CONFIG_INTEL_HFI)
-+void __init intel_hfi_init(void);
-+#else
-+static inline void intel_hfi_init(void) { }
-+#endif
-+
-+#endif /* _INTEL_HFI_H */
+@@ -4,8 +4,12 @@
+ 
+ #if defined(CONFIG_INTEL_HFI)
+ void __init intel_hfi_init(void);
++void intel_hfi_online(unsigned int cpu);
++void intel_hfi_offline(unsigned int cpu);
+ #else
+ static inline void intel_hfi_init(void) { }
++static inline void intel_hfi_online(unsigned int cpu) { }
++static inline void intel_hfi_offline(unsigned int cpu) { }
+ #endif
+ 
+ #endif /* _INTEL_HFI_H */
 diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-index dab7e8fb1059..ac408714d52b 100644
+index ac408714d52b..2a79598a7f7a 100644
 --- a/drivers/thermal/intel/therm_throt.c
 +++ b/drivers/thermal/intel/therm_throt.c
-@@ -32,6 +32,7 @@
- #include <asm/irq.h>
- #include <asm/msr.h>
+@@ -480,6 +480,12 @@ static int thermal_throttle_online(unsigned int cpu)
+ 	l = apic_read(APIC_LVTTHMR);
+ 	apic_write(APIC_LVTTHMR, l & ~APIC_LVT_MASKED);
  
-+#include "intel_hfi.h"
- #include "thermal_interrupt.h"
- 
- /* How long to wait between reporting thermal events */
-@@ -509,6 +510,8 @@ static __init int thermal_throttle_init_device(void)
- 	if (!atomic_read(&therm_throt_en))
- 		return 0;
- 
-+	intel_hfi_init();
++	/*
++	 * Enable the package-level HFI interrupt. By now the local APIC is
++	 * ready to get thermal interrupts.
++	 */
++	intel_hfi_online(cpu);
 +
- 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/therm:online",
- 				thermal_throttle_online,
- 				thermal_throttle_offline);
+ 	return thermal_throttle_add_dev(dev, cpu);
+ }
+ 
+@@ -489,6 +495,8 @@ static int thermal_throttle_offline(unsigned int cpu)
+ 	struct device *dev = get_cpu_device(cpu);
+ 	u32 l;
+ 
++	intel_hfi_offline(cpu);
++
+ 	/* Mask the thermal vector before draining evtl. pending work */
+ 	l = apic_read(APIC_LVTTHMR);
+ 	apic_write(APIC_LVTTHMR, l | APIC_LVT_MASKED);
 -- 
 2.17.1
 

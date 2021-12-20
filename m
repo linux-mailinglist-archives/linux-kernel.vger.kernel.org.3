@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C58247AB50
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309E447AE47
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbhLTOc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:32:58 -0500
-Received: from mga18.intel.com ([134.134.136.126]:26946 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233666AbhLTOc5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:32:57 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="227031371"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="227031371"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:32:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="616414489"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 06:32:54 -0800
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
- <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
- <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
-Date:   Mon, 20 Dec 2021 16:34:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S239921AbhLTO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:59:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47920 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239732AbhLTO5V (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:57:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CAC96113B;
+        Mon, 20 Dec 2021 14:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710F2C36AE8;
+        Mon, 20 Dec 2021 14:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640012240;
+        bh=IaKfO4d7Y9CySaBg4dD1ZfTtQ3nz30Un7XyqSX6ZKbA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XC0yyVWOpqNG58wJXtWHjWFN0RtrgDN+JP+3qpaFXjIGzEi7bl3vwlHOaRBjCgTVx
+         oQTaeSRB1mNHqLN1mW+gEi9gejG2gWGZiVQpl6qTiXEBMI0Oj18iSk4ITWQMKl2TbW
+         kxrH4rm2Bp+js20QGkcPbEpDu+YM024lz6cfDcYk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Andrey Eremeev <Axtone4all@yandex.ru>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 103/177] dsa: mv88e6xxx: fix debug print for SPEED_UNFORCED
+Date:   Mon, 20 Dec 2021 15:34:13 +0100
+Message-Id: <20211220143043.559580595@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.12.2021 15.55, Peter Zijlstra wrote:
-> On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
->> I can reproduce this.
->> Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
->>
->> 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
-> 
-> I can confirm, reverting that solves the boot hang, things aren't quite
-> working for me though.
-> 
->> Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
->> Maybe  it's too early for ktime.
-> 
-> It certainly is, using ktime for delay loops sounds daft to me anyhow.
-> 
->> After reverting that patch it works again for me.
-> 
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0-rc3+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc force_early_printk sched_verbose ftrace=nop mitigations=off nokaslr
-> ...
-> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> ...
-> [    3.161367] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+From: Andrey Eremeev <Axtone4all@yandex.ru>
 
-Ok, this is some other issue. I got the boot messages over USB
-(running minicom at the other end, listening to ttyUSB0)
-  
-> 
-> The machine does boot.. but I *am* getting tons of:
-> 
-> [  485.546898] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
-> [  485.546963] usb usb4-port4: config error
+[ Upstream commit e08cdf63049b711099efff0811273449083bb958 ]
 
-This is expected when xhci driver takes over after the early dbc driver,
-xhci driver resets xHC controller, and all ports turn to normal host ports again.
+Debug print uses invalid check to detect if speed is unforced:
+(speed != SPEED_UNFORCED) should be used instead of (!speed).
 
-Because of the special cable you now have two hosts connected to each other,
-both trying to enumerate a device.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-This whole transition from earlyprintk xdbc to normal xhci driver is 
-not very userfriendly.
+Signed-off-by: Andrey Eremeev <Axtone4all@yandex.ru>
+Fixes: 96a2b40c7bd3 ("net: dsa: mv88e6xxx: add port's MAC speed setter")
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/dsa/mv88e6xxx/port.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> However, when I do:
-> 
-> $ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
-> 
+diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
+index d9817b20ea641..ab41619a809b3 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.c
++++ b/drivers/net/dsa/mv88e6xxx/port.c
+@@ -283,7 +283,7 @@ static int mv88e6xxx_port_set_speed_duplex(struct mv88e6xxx_chip *chip,
+ 	if (err)
+ 		return err;
+ 
+-	if (speed)
++	if (speed != SPEED_UNFORCED)
+ 		dev_dbg(chip->dev, "p%d: Speed set to %d Mbps\n", port, speed);
+ 	else
+ 		dev_dbg(chip->dev, "p%d: Speed unforced\n", port);
+@@ -516,7 +516,7 @@ int mv88e6393x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 	if (err)
+ 		return err;
+ 
+-	if (speed)
++	if (speed != SPEED_UNFORCED)
+ 		dev_dbg(chip->dev, "p%d: Speed set to %d Mbps\n", port, speed);
+ 	else
+ 		dev_dbg(chip->dev, "p%d: Speed unforced\n", port);
+-- 
+2.33.0
 
-Yes, this works as it turns on the DbC feature on in xHC hardware,
-which turns the first USB port into a usb device.
 
-Thanks
--Mathias
+

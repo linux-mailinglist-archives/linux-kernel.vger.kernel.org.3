@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A1047B324
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6947B32A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240560AbhLTSrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:47:19 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:42921 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240549AbhLTSrS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:47:18 -0500
-Received: from [192.168.0.2] (ip5f5aed30.dynamic.kabel-deutschland.de [95.90.237.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 8CC1661EA1927;
-        Mon, 20 Dec 2021 19:47:15 +0100 (CET)
-Message-ID: <214e5c3f-4198-d647-eb05-adaaeba63aa8@molgen.mpg.de>
-Date:   Mon, 20 Dec 2021 19:47:15 +0100
+        id S240570AbhLTSs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240563AbhLTSsV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:48:21 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937A9C061574;
+        Mon, 20 Dec 2021 10:48:20 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id y7so8834633plp.0;
+        Mon, 20 Dec 2021 10:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EVW8mVwqCPiwvrDiSy4h1ZD0TQii03jML5sRqYqVYbc=;
+        b=lilw0cwb0cU3TpM+ZgztYqXOesZ3t8O972b/ylehx5HS1e2MYgH9XlN9QJVidwmOgq
+         AH07T8xDCXNhImF7f21MSY4xRWy/fU0Rxkeh5swNAyrZY0RruX5u6hTMTcYjI4QQi6Nb
+         fxla9ZgT4LUZ8tQMwUXN+jabaQgSj9k8XUTDWuwNc5Khh9aNci9o6oNxitzDmpZ1uPme
+         QXnNj34nfoL3q8Ww+MoTvcgD1h0NCxYMn1iDnSwxbTq+BqpNQFUmAf5vyKO7aaPowgD3
+         ntEVvrNUvVFyOoLXaq+yMF1cyi2i/OppAq1kVC6vLmSI/2tDoZKXZ+vy6P1z637v6tOc
+         XxVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EVW8mVwqCPiwvrDiSy4h1ZD0TQii03jML5sRqYqVYbc=;
+        b=AFn6wnU5Pld4YvMmeFEFzcSCSotKlWxC5c5OGG2TFrINiVHQFHENhmOl60upvgqkGy
+         ZXbx7PGfrYIkn8D7CqQphfC8d6zcz4/W/yyxprU6xPCfj7PLhDdqP4MZ36sDLx6QQH/1
+         JBgh06X0pKrNFPGBkmqGAol/nrTzNYrPSG1L2FA1KKsSNtKEcORpP6oaQOQ1y0FQsXCk
+         8YvzE7bSnc4LehiCjFgQSodVM0ydOu3shcKo2XBRA8C21yKVE/tpDeLXBDjCF9wwG9Tn
+         e90mC1T6rTk7uRQ0zhWEFYVdXjIlDOB2hV26vZOmURYq/9+5tRJonS34HfcPn2ufuErW
+         ZQzA==
+X-Gm-Message-State: AOAM533zXmuOiuxk1oJvbs54RVCs11OAx3JZ8mvgtRIpw1hsgdU3K9HP
+        TXgSAqtzSfO7O1UNrSphl5qipSGvxek=
+X-Google-Smtp-Source: ABdhPJzzrXuP+iR6YjfgngNvrOc0tQZl+O7jxwrD8DuLWELi7xWzqFWol1rp3qrTG2zHujkAMYsMaQ==
+X-Received: by 2002:a17:90a:ce04:: with SMTP id f4mr403245pju.10.1640026100051;
+        Mon, 20 Dec 2021 10:48:20 -0800 (PST)
+Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
+        by smtp.gmail.com with ESMTPSA id m15sm17898175pgd.44.2021.12.20.10.48.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 10:48:19 -0800 (PST)
+Message-ID: <8c0051f5-9aae-f20d-d1dc-7ae28f15b354@gmail.com>
+Date:   Mon, 20 Dec 2021 10:48:17 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH 2/3] Bluetooth: btmtksdio: Enable SCO over I2S function
+Subject: Re: [PATCH 5.4 00/71] 5.4.168-rc1 review
 Content-Language: en-US
-To:     Sean Wang <sean.wang@mediatek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        Mark-YW.Chen@mediatek.com, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <638a2506-c410-d98c-b704-6f16f72e0bc6@molgen.mpg.de--annotate>
- <1640022750-16263-1-git-send-email-sean.wang@mediatek.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1640022750-16263-1-git-send-email-sean.wang@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211220143025.683747691@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sean,
 
 
-Am 20.12.21 um 18:52 schrieb sean.wang@mediatek.com:
-> From: Sean Wang <sean.wang@mediatek.com>
-
->> Am 18.12.21 um 02:08 schrieb sean.wang@mediatek.com:
->>> From: Mark Chen <mark-yw.chen@mediatek.com>
->>> 
->>> For MediaTek chipset, the driver has to issue the specific
->>> command to enable Bluetooth SCO support over the I2S/PCM
->>> interface.
->> 
->> Please document the datasheet name, revision and section, where
->> this is described.
+On 12/20/2021 6:33 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.168 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> the datasheet is not released in public so Mark and I cannot provide
-> the detail here, but we will make the patch easy to review and
-> understand.
-
-Too bad. The name and revision of the datasheet would still be good to 
-have documented.
-
->> Please add how SCO support can be tested. Are all Mediatek chipsets
->> supported?
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
 > 
-> the SCO profile was tested by setting up a VOIP application,
-> connected to HFP device, checked telephony function can work
-> normally.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.168-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> currently, SCO is only supported by mt7921, we will change the
-> subject to "Bluetooth: mt7921s: Enable SCO over I2S function" to
-> avoid any misunderstanding.
+> thanks,
+> 
+> greg k-h
 
-Thank you.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-I also saw a linux-firmare patch updating the firmware. If a specific
-firmware version is required, please mention it too.
-
-[…]
-
-
-Kind regards,
-
-Paul
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

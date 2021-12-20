@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF55A47AD09
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2448F47AD0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbhLTOsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:48:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38778 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbhLTOqQ (ORCPT
+        id S235358AbhLTOsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:48:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53596 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235620AbhLTOqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:46:16 -0500
+        Mon, 20 Dec 2021 09:46:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A52C611B5;
-        Mon, 20 Dec 2021 14:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAC5C36AE7;
-        Mon, 20 Dec 2021 14:46:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B05E1B80EDA;
+        Mon, 20 Dec 2021 14:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DB8C36AE8;
+        Mon, 20 Dec 2021 14:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011574;
-        bh=LMUjudKxZPZr9R/NGqBzbcbR2qqBQNAUknj5AkMWiBs=;
+        s=korg; t=1640011580;
+        bh=ItZUWrodxa/ksBd385ce81n9ylQbHK3fh+/dakLnDlU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=piy5XRzYs5O4qLpj36IvsZfK92pBwjHiM4qU1HliSPrbNuc25/PIr88NCK40tMxNj
-         GtYNOHcBO8djWs7SPFZgdkyenkeFbjXSSUgHLD+YeflvM+PKuN9YyOvjhV5pnlUTd7
-         TZqecHSC4Q2EtCceOrsIFT3IMx8JqGioeCXHp6g4=
+        b=yL8DhLNab/cMK9k5EWWJtF6Y/974+O4rVOQig5aH15mkXtuQK8zuWf4Fj824d/sE4
+         G0owh3USc4UO7ISJnNbnqKXn3FVOo5Ef25IXCesATQwugsZrNgB59NNnGbV6fbavam
+         76RnX55PB5K2GiGy2vDkBQjcoRgBWFM9hDtzp3Hk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        George Kennedy <george.kennedy@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.4 62/71] scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
-Date:   Mon, 20 Dec 2021 15:34:51 +0100
-Message-Id: <20211220143027.776794549@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+e08a83a1940ec3846cd5@syzkaller.appspotmail.com,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH 5.4 63/71] rcu: Mark accesses to rcu_state.n_force_qs
+Date:   Mon, 20 Dec 2021 15:34:52 +0100
+Message-Id: <20211220143027.805913910@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
 References: <20211220143025.683747691@linuxfoundation.org>
@@ -47,68 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-commit e0a2c28da11e2c2b963fc01d50acbf03045ac732 upstream.
+commit 2431774f04d1050292054c763070021bade7b151 upstream.
 
-In resp_mode_select() sanity check the block descriptor len to avoid UAF.
+This commit marks accesses to the rcu_state.n_force_qs.  These data
+races are hard to make happen, but syzkaller was equal to the task.
 
-BUG: KASAN: use-after-free in resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
-Read of size 1 at addr ffff888026670f50 by task scsicmd/15032
-
-CPU: 1 PID: 15032 Comm: scsicmd Not tainted 5.15.0-01d0625 #15
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-Call Trace:
- <TASK>
- dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:107
- print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:257
- kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:443
- __asan_report_load1_noabort+0x14/0x20 mm/kasan/report_generic.c:306
- resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
- schedule_resp+0x4af/0x1a10 drivers/scsi/scsi_debug.c:5483
- scsi_debug_queuecommand+0x8c9/0x1e70 drivers/scsi/scsi_debug.c:7537
- scsi_queue_rq+0x16b4/0x2d10 drivers/scsi/scsi_lib.c:1521
- blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1640
- __blk_mq_sched_dispatch_requests+0x28f/0x590 block/blk-mq-sched.c:325
- blk_mq_sched_dispatch_requests+0x105/0x190 block/blk-mq-sched.c:358
- __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1762
- __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1839
- blk_mq_run_hw_queue+0x18d/0x350 block/blk-mq.c:1891
- blk_mq_sched_insert_request+0x3db/0x4e0 block/blk-mq-sched.c:474
- blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:63
- sg_common_write.isra.18+0xeb3/0x2000 drivers/scsi/sg.c:837
- sg_new_write.isra.19+0x570/0x8c0 drivers/scsi/sg.c:775
- sg_ioctl_common+0x14d6/0x2710 drivers/scsi/sg.c:941
- sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1166
- __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:52
- do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:50
- entry_SYSCALL_64_after_hwframe+0x44/0xae arch/x86/entry/entry_64.S:113
-
-Link: https://lore.kernel.org/r/1637262208-28850-1-git-send-email-george.kennedy@oracle.com
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: syzbot+e08a83a1940ec3846cd5@syzkaller.appspotmail.com
+Acked-by: Marco Elver <elver@google.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_debug.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/rcu/tree.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2296,11 +2296,11 @@ static int resp_mode_select(struct scsi_
- 			    __func__, param_len, res);
- 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
- 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
--	if (md_len > 2) {
-+	off = bd_len + (mselect6 ? 4 : 8);
-+	if (md_len > 2 || off >= res) {
- 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
- 		return check_condition_result;
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -1602,7 +1602,7 @@ static void rcu_gp_fqs(bool first_time)
+ 	struct rcu_node *rnp = rcu_get_root();
+ 
+ 	WRITE_ONCE(rcu_state.gp_activity, jiffies);
+-	rcu_state.n_force_qs++;
++	WRITE_ONCE(rcu_state.n_force_qs, rcu_state.n_force_qs + 1);
+ 	if (first_time) {
+ 		/* Collect dyntick-idle snapshots. */
+ 		force_qs_rnp(dyntick_save_progress_counter);
+@@ -2207,7 +2207,7 @@ static void rcu_do_batch(struct rcu_data
+ 	/* Reset ->qlen_last_fqs_check trigger if enough CBs have drained. */
+ 	if (count == 0 && rdp->qlen_last_fqs_check != 0) {
+ 		rdp->qlen_last_fqs_check = 0;
+-		rdp->n_force_qs_snap = rcu_state.n_force_qs;
++		rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 	} else if (count < rdp->qlen_last_fqs_check - qhimark)
+ 		rdp->qlen_last_fqs_check = count;
+ 
+@@ -2535,10 +2535,10 @@ static void __call_rcu_core(struct rcu_d
+ 		} else {
+ 			/* Give the grace period a kick. */
+ 			rdp->blimit = DEFAULT_MAX_RCU_BLIMIT;
+-			if (rcu_state.n_force_qs == rdp->n_force_qs_snap &&
++			if (READ_ONCE(rcu_state.n_force_qs) == rdp->n_force_qs_snap &&
+ 			    rcu_segcblist_first_pend_cb(&rdp->cblist) != head)
+ 				rcu_force_quiescent_state();
+-			rdp->n_force_qs_snap = rcu_state.n_force_qs;
++			rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 			rdp->qlen_last_fqs_check = rcu_segcblist_n_cbs(&rdp->cblist);
+ 		}
  	}
--	off = bd_len + (mselect6 ? 4 : 8);
- 	mpage = arr[off] & 0x3f;
- 	ps = !!(arr[off] & 0x80);
- 	if (ps) {
+@@ -3029,7 +3029,7 @@ int rcutree_prepare_cpu(unsigned int cpu
+ 	/* Set up local state, ensuring consistent view of global state. */
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	rdp->qlen_last_fqs_check = 0;
+-	rdp->n_force_qs_snap = rcu_state.n_force_qs;
++	rdp->n_force_qs_snap = READ_ONCE(rcu_state.n_force_qs);
+ 	rdp->blimit = blimit;
+ 	if (rcu_segcblist_empty(&rdp->cblist) && /* No early-boot CBs? */
+ 	    !rcu_segcblist_is_offloaded(&rdp->cblist))
 
 

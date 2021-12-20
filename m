@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A7347A889
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E41E947A88F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbhLTLXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:23:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:52604 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230489AbhLTLXA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:23:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21E8E11FB;
-        Mon, 20 Dec 2021 03:23:00 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 481643F718;
-        Mon, 20 Dec 2021 03:22:58 -0800 (PST)
-Message-ID: <1d3d4486-1fe0-372c-f702-30da7cf86b5a@arm.com>
-Date:   Mon, 20 Dec 2021 11:22:51 +0000
+        id S231745AbhLTLYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:24:12 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54714 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230469AbhLTLYM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 06:24:12 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9AAA41F395;
+        Mon, 20 Dec 2021 11:24:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639999450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wlTVl9ZK/wksVMHatLR7d5Sc5OZUko+D/2yNlrYuunk=;
+        b=WaPu+At9ZWDOgKK98/GxzQujaBbjzeQHm5ukEoTqa3FeB+5IbkkVae0HoWIO04tvUtKJcW
+        Uvy/VghxmMiPgtjaNAkvlmt+n/obUgC3H9q+ij2DNHybpv8ymvmvglbrO5FJwYNTGWz7eo
+        0CvZdsPt1vdlj8xl7aCYsNez02WWJuo=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6C688A3B81;
+        Mon, 20 Dec 2021 11:24:10 +0000 (UTC)
+Date:   Mon, 20 Dec 2021 12:24:10 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Subject: Re: [PATCH v2] Documentation: livepatch: Add livepatch API page
+Message-ID: <YcBn2mk2hUp4Zt0s@alley>
+References: <20211215174659.2332589-1-void@manifault.com>
+ <YbsNcAKzRCxGqXUA@alley>
+ <YbtUlkaWSQf4yCIb@dev0025.ash9.facebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/1] drm/nouveau/device: Get right pgsize_bitmap of
- iommu_domain
-Content-Language: en-GB
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20211218074546.1772553-1-baolu.lu@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20211218074546.1772553-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbtUlkaWSQf4yCIb@dev0025.ash9.facebook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-18 07:45, Lu Baolu wrote:
-> The suported page sizes of an iommu_domain are saved in the pgsize_bitmap
-> field. Retrieve the value from the right place.
+On Thu 2021-12-16 07:00:38, David Vernet wrote:
+> Petr Mladek <pmladek@suse.com> wrote on Thu [2021-Dec-16 10:57:04 +0100]:
 > 
-> Fixes: 58fd9375c2c534 ("drm/nouveau/platform: probe IOMMU if present")
-
-...except domain->pgsize_bitmap was introduced more than a year after 
-that commit ;)
-
-As an improvement rather than a fix, though,
-
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->   drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> > This change is not good. The function releases all existing shadow
+> > variables with the given @id for any @obj. And it is not longer clear.
 > 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> index d0d52c1d4aee..992cc285f2fe 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c
-> @@ -133,7 +133,7 @@ nvkm_device_tegra_probe_iommu(struct nvkm_device_tegra *tdev)
->   		 * or equal to the system's PAGE_SIZE, with a preference if
->   		 * both are equal.
->   		 */
-> -		pgsize_bitmap = tdev->iommu.domain->ops->pgsize_bitmap;
-> +		pgsize_bitmap = tdev->iommu.domain->pgsize_bitmap;
->   		if (pgsize_bitmap & PAGE_SIZE) {
->   			tdev->iommu.pgshift = PAGE_SHIFT;
->   		} else {
+> > A solution would be replace '*' with something else, for example, < , id>.
+> 
+> I think this is better than just obj, but in my opinion this may be confusing
+> for readers and look like a typo. I think I prefer your second suggestion,
+> though obj really makes more sense in the case where we're actually passing an
+> @obj to the function. I'll probably (deservedly?) get lambasted for suggesting
+> this, but what about taking a page out of rust's book and doing something like
+> this:
+> 
+>   * klp_shadow_free_all() - detach and free all <_, id> shadow variables
+>   *		with the given @id.
+> 
+> to indicate that in this case we don't care about the obj. Even for a reader
+> unfamiliar with rust, hopefully it would get the point across.
+
+<_, id> looks good to me. And I not even familiar with rust ;-)
+
+Best Regards,
+Petr

@@ -2,41 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C2747ABA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E018B47ABF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhLTOiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:38:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46616 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbhLTOhc (ORCPT
+        id S231620AbhLTOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234142AbhLTOjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:37:32 -0500
+        Mon, 20 Dec 2021 09:39:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA1C06175F;
+        Mon, 20 Dec 2021 06:39:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACEF1B80EDE;
-        Mon, 20 Dec 2021 14:37:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0ADCC36AE7;
-        Mon, 20 Dec 2021 14:37:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99DD2CE110A;
+        Mon, 20 Dec 2021 14:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F8C1C36AE9;
+        Mon, 20 Dec 2021 14:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011050;
-        bh=0aFi0OKiy3aSljiSUGmMm/pYULCJEiqe28HYo6cUbcQ=;
+        s=korg; t=1640011156;
+        bh=F40h85K4HKKKQWHlEQsJrDNzW6aCuv9Dben6MwTnY8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0J/DHyvJNzDKyqm76ULWB29o3/OH2Eh0x34eqDAxQULUNHLsFHWqYNPnZ1IOSq0y+
-         6SudgPilvAlFTdPoZ73cLW9EfrWM5IjRFRM2IacZj6TocqwcUf4i0sgB5jz6+B2VUf
-         CkvE4giRfjEhm7Qv9HzoRDbis6/0NoLX/V9k0ZVA=
+        b=MYGWWqq+pCKbLLRdJToBKhrqnLF+zz6HRA0aHA634azyYbCtnl2eqHg4z/D84Tuqu
+         voQaOM55QaKLRS5EcFcUGll/aXMj3/xw6idbaSAldfYMjsFtJYGMQ8E5H15YXQKgO9
+         sQOE91CjkLbLT261ZA8xnIzeGfeKXaYIwsYXsImk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 4.9 18/31] timekeeping: Really make sure wall_to_monotonic isnt positive
+        stable@vger.kernel.org,
+        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 23/45] net/packet: rx_owner_map depends on pg_vec
 Date:   Mon, 20 Dec 2021 15:34:18 +0100
-Message-Id: <20211220143020.563385684@linuxfoundation.org>
+Message-Id: <20211220143023.045095079@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,65 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Liao <liaoyu15@huawei.com>
+From: Willem de Bruijn <willemb@google.com>
 
-commit 4e8c11b6b3f0b6a283e898344f154641eda94266 upstream.
+[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
 
-Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
-isn't positive") it is still possible to make wall_to_monotonic positive
-by running the following code:
+Packet sockets may switch ring versions. Avoid misinterpreting state
+between versions, whose fields share a union. rx_owner_map is only
+allocated with a packet ring (pg_vec) and both are swapped together.
+If pg_vec is NULL, meaning no packet ring was allocated, then neither
+was rx_owner_map. And the field may be old state from a tpacket_v3.
 
-    int main(void)
-    {
-        struct timespec time;
-
-        clock_gettime(CLOCK_MONOTONIC, &time);
-        time.tv_nsec = 0;
-        clock_settime(CLOCK_REALTIME, &time);
-        return 0;
-    }
-
-The reason is that the second parameter of timespec64_compare(), ts_delta,
-may be unnormalized because the delta is calculated with an open coded
-substraction which causes the comparison of tv_sec to yield the wrong
-result:
-
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
-
-That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
-but actually the result should be wall_to_monotonic > ts_delta.
-
-After normalization, the result of timespec64_compare() is correct because
-the tv_sec comparison is not longer misleading:
-
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
-
-Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
-issue.
-
-Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
+Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/time/timekeeping.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/packet/af_packet.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -1198,8 +1198,7 @@ int do_settimeofday64(const struct times
- 	timekeeping_forward_now(tk);
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 50ca70b3c1759..3177b9320c62d 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -4477,9 +4477,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
+ 	}
  
- 	xt = tk_xtime(tk);
--	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
--	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
-+	ts_delta = timespec64_sub(*ts, xt);
- 
- 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
- 		ret = -EINVAL;
+ out_free_pg_vec:
+-	bitmap_free(rx_owner_map);
+-	if (pg_vec)
++	if (pg_vec) {
++		bitmap_free(rx_owner_map);
+ 		free_pg_vec(pg_vec, order, req->tp_block_nr);
++	}
+ out:
+ 	return err;
+ }
+-- 
+2.33.0
+
 
 

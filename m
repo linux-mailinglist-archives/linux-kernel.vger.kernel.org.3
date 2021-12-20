@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDF147AFBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C0F47AEB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237918AbhLTPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbhLTPRV (ORCPT
+        id S238216AbhLTPCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47098 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239350AbhLTO6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:17:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83966C08E9BA;
-        Mon, 20 Dec 2021 06:58:30 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 256FE61183;
-        Mon, 20 Dec 2021 14:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F42BC36AE7;
-        Mon, 20 Dec 2021 14:58:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F073161183;
+        Mon, 20 Dec 2021 14:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D731EC36AE8;
+        Mon, 20 Dec 2021 14:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012309;
-        bh=Im4tbQPwP58RFUcR/Ks3T2gBkUksFtFY3ChGZAR2pjM=;
+        s=korg; t=1640012312;
+        bh=YoctKyMc9y15TmSWmn8sk6ZHJuGXrzJbQp8ReV9Pb/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lcokpnYVXg33JOyRb4W6H9+xQoGXXxU4kiwgjqFtOIqtUDOjpbcPrVEynehpLAmDV
-         20U5vwEXVCI2K99+UTObsDaf1zcBUDJrKXtNpF5p4M/Y4MoEBgqV0mWsb5NfxdQDgS
-         MM+oZQo3hVa4WZnMdwJaBSFYS5RDKn2rLM/lYsPc=
+        b=kjyyz/NtiIpmYDO3ba5qeOZA8ol9vzBghcbA7OCkrDlwQWdixvq2jrkplhIwzI48p
+         T3oDnTqeb5Fi1hOC3Xtjc67Qzh4672mtzNy2oFcB3A8cL4VueTHQ2QJUnCZzTKfsUz
+         qh2NaH9ceWY+6HlCJk3L8W8W/9WIB9ctI63UjEZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Keith Wiles <keith.wiles@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH 5.15 155/177] xsk: Do not sleep in poll() when need_wakeup set
-Date:   Mon, 20 Dec 2021 15:35:05 +0100
-Message-Id: <20211220143045.289751892@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 156/177] mptcp: add missing documented NL params
+Date:   Mon, 20 Dec 2021 15:35:06 +0100
+Message-Id: <20211220143045.330843043@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
 References: <20211220143040.058287525@linuxfoundation.org>
@@ -50,52 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
+From: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-commit bd0687c18e635b63233dc87f38058cd728802ab4 upstream.
+commit 6813b1928758ce64fabbb8ef157f994b7c2235fa upstream.
 
-Do not sleep in poll() when the need_wakeup flag is set. When this
-flag is set, the application needs to explicitly wake up the driver
-with a syscall (poll, recvmsg, sendmsg, etc.) to guarantee that Rx
-and/or Tx processing will be processed promptly. But the current code
-in poll(), sleeps first then wakes up the driver. This means that no
-driver processing will occur (baring any interrupts) until the timeout
-has expired.
+'loc_id' and 'rem_id' are set in all events linked to subflows but those
+were missing in the events description in the comments.
 
-Fix this by checking the need_wakeup flag first and if set, wake the
-driver and return to the application. Only if need_wakeup is not set
-should the process sleep if there is a timeout set in the poll() call.
-
-Fixes: 77cd0d7b3f25 ("xsk: add support for need_wakeup flag in AF_XDP rings")
-Reported-by: Keith Wiles <keith.wiles@intel.com>
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Link: https://lore.kernel.org/bpf/20211214102607.7677-1-magnus.karlsson@gmail.com
+Fixes: b911c97c7dc7 ("mptcp: add netlink event support")
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/xdp/xsk.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/uapi/linux/mptcp.h |   18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -692,8 +692,6 @@ static __poll_t xsk_poll(struct file *fi
- 	struct xdp_sock *xs = xdp_sk(sk);
- 	struct xsk_buff_pool *pool;
- 
--	sock_poll_wait(file, sock, wait);
--
- 	if (unlikely(!xsk_is_bound(xs)))
- 		return mask;
- 
-@@ -705,6 +703,8 @@ static __poll_t xsk_poll(struct file *fi
- 		else
- 			/* Poll needs to drive Tx also in copy mode */
- 			__xsk_sendmsg(sk);
-+	} else {
-+		sock_poll_wait(file, sock, wait);
- 	}
- 
- 	if (xs->rx && !xskq_prod_is_empty(xs->rx))
+--- a/include/uapi/linux/mptcp.h
++++ b/include/uapi/linux/mptcp.h
+@@ -129,19 +129,21 @@ struct mptcp_info {
+  * MPTCP_EVENT_REMOVED: token, rem_id
+  * An address has been lost by the peer.
+  *
+- * MPTCP_EVENT_SUB_ESTABLISHED: token, family, saddr4 | saddr6,
+- *                              daddr4 | daddr6, sport, dport, backup,
+- *                              if_idx [, error]
++ * MPTCP_EVENT_SUB_ESTABLISHED: token, family, loc_id, rem_id,
++ *                              saddr4 | saddr6, daddr4 | daddr6, sport,
++ *                              dport, backup, if_idx [, error]
+  * A new subflow has been established. 'error' should not be set.
+  *
+- * MPTCP_EVENT_SUB_CLOSED: token, family, saddr4 | saddr6, daddr4 | daddr6,
+- *                         sport, dport, backup, if_idx [, error]
++ * MPTCP_EVENT_SUB_CLOSED: token, family, loc_id, rem_id, saddr4 | saddr6,
++ *                         daddr4 | daddr6, sport, dport, backup, if_idx
++ *                         [, error]
+  * A subflow has been closed. An error (copy of sk_err) could be set if an
+  * error has been detected for this subflow.
+  *
+- * MPTCP_EVENT_SUB_PRIORITY: token, family, saddr4 | saddr6, daddr4 | daddr6,
+- *                           sport, dport, backup, if_idx [, error]
+- *       The priority of a subflow has changed. 'error' should not be set.
++ * MPTCP_EVENT_SUB_PRIORITY: token, family, loc_id, rem_id, saddr4 | saddr6,
++ *                           daddr4 | daddr6, sport, dport, backup, if_idx
++ *                           [, error]
++ * The priority of a subflow has changed. 'error' should not be set.
+  */
+ enum mptcp_event_type {
+ 	MPTCP_EVENT_UNSPEC = 0,
 
 

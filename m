@@ -2,183 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8BF47B156
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC06447B15F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbhLTQkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:40:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60350 "EHLO
+        id S237693AbhLTQlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:41:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60774 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbhLTQkC (ORCPT
+        with ESMTP id S233061AbhLTQlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:40:02 -0500
+        Mon, 20 Dec 2021 11:41:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEF1761227
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 16:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06651C36AE2;
-        Mon, 20 Dec 2021 16:40:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A788761219;
+        Mon, 20 Dec 2021 16:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC6C36AE2;
+        Mon, 20 Dec 2021 16:41:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640018401;
-        bh=i9FEoFyw4FOzJj5FUbVCZL9hvTq00AQkmMJ9j89AFA0=;
+        s=korg; t=1640018465;
+        bh=TuP185pT5gdSlNtfNfQ+Kye5lOB+euhTli9+HNxshOM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GJBjzJ3wi6so7WnEhI+oZulxWBNpWpXfZE8Ix12168TQWW5Q5LARYr6855FjYCuq3
-         U9bTy8jFyKSxqW+P5c+lXSRibZIi0u3zqgtw/rLKhupa4YEE/eeWu2OSua4Uufuxyw
-         hfMXIBEHMvN3NOI+a9/vJ1BhjyzzTY4PZZNT4qXw=
-Date:   Mon, 20 Dec 2021 17:39:59 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ismayil Mirzali <ismayilmirzeli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        fabioaiuto83@gmail.com, paskripkin@gmail.com, linux@roeck-us.net
-Subject: Re: [PATCH v2] staging: rtl8723bs: Fix styling issues
-Message-ID: <YcCx3/bQBY6vKQmf@kroah.com>
-References: <20211219163318.84300-1-ismayilmirzeli@gmail.com>
+        b=enGWQQJij7Gn5KXQIvc6DgLGhW8TsmstPvfbBL0Frpv76daIROB5Wk6RyCml6X1M0
+         INr/wU0RVuAcWcOkPbgbi5U7MaR0NTk6+o3rhiyEe0vywSW27g/jS59FjbvlDzhRr3
+         ovNt3nB3npaxHStYKaqE8ptag4HrP8L17DKCvcbQ=
+Date:   Mon, 20 Dec 2021 17:41:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 08/17] all: replace bitmap_weight with
+ bitmap_weight_{eq,gt,ge,lt,le} where appropriate
+Message-ID: <YcCyHvr1f+Z8M9M1@kroah.com>
+References: <20211218212014.1315894-1-yury.norov@gmail.com>
+ <20211218212014.1315894-9-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211219163318.84300-1-ismayilmirzeli@gmail.com>
+In-Reply-To: <20211218212014.1315894-9-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 06:33:18PM +0200, Ismayil Mirzali wrote:
-> Removed extra whitespaces and brackets for oneline if statements
+On Sat, Dec 18, 2021 at 01:20:04PM -0800, Yury Norov wrote:
+> Kernel code calls bitmap_weight() to compare the weight of bitmap with
+> a given number. We can do it more efficiently with bitmap_weight_{eq, ...}
+> because conditional bitmap_weight may stop traversing the bitmap earlier,
+> as soon as condition is met.
 > 
-> Removed commented code as suggested per reviewer.
-> Added blank line after declarations according to styling guide.
+> This patch replaces bitmap_weight with conditional versions where possible,
+> except for small bitmaps which size is not configurable and  known at
+> constant time. In that case conditional version of bitmap_weight would not
+> benefit due to small_const_nbits() optimization; but readability may
+> suffer.
 > 
-> Signed-off-by: Ismayil Mirzali <ismayilmirzeli@gmail.com>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
->  .../staging/rtl8723bs/hal/rtl8723bs_xmit.c    | 23 +++++++------------
->  1 file changed, 8 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> index 7fe3df863fe1..fdefb72047f0 100644
-> --- a/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> +++ b/drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c
-> @@ -31,9 +31,6 @@ static u8 rtw_sdio_wait_enough_TxOQT_space(struct adapter *padapter, u8 agg_num)
->  
->  	pHalData->SdioTxOQTFreeSpace -= agg_num;
->  
-> -	/* if (n > 1) */
-> -	/* 	++priv->pshare->nr_out_of_txoqt_space; */
-> -
->  	return true;
->  }
->  
-> @@ -147,13 +144,12 @@ s32 rtl8723bs_xmit_buf_handler(struct adapter *padapter)
->  		return _SUCCESS;
->  
->  	ret = rtw_register_tx_alive(padapter);
-> -	if (ret != _SUCCESS) {
-> +	if (ret != _SUCCESS)
->  		return _SUCCESS;
-> -	}
->  
->  	do {
->  		queue_empty = rtl8723_dequeue_writeport(padapter);
-> -/* 	dump secondary adapter xmitbuf */
-> +		/*	dump secondary adapter xmitbuf */
->  	} while (!queue_empty);
->  
->  	rtw_unregister_tx_alive(padapter);
-> @@ -247,6 +243,7 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
->  						if (pxmitbuf->len > 0 &&
->  						    pxmitbuf->priv_data) {
->  							struct xmit_frame *pframe;
-> +
->  							pframe = (struct xmit_frame *)pxmitbuf->priv_data;
->  							pframe->agg_num = k;
->  							pxmitbuf->agg_num = k;
-> @@ -310,8 +307,6 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
->  					txlen = txdesc_size + pxmitframe->attrib.last_txcmdsz;
->  					pxmitframe->pg_num = (txlen + 127) / 128;
->  					pxmitbuf->pg_num += (txlen + 127) / 128;
-> -				    /* if (k != 1) */
-> -					/* 	((struct xmit_frame*)pxmitbuf->priv_data)->pg_num += pxmitframe->pg_num; */
->  					pxmitbuf->ptail += _RND(txlen, 8); /*  round to 8 bytes alignment */
->  					pxmitbuf->len = _RND(pxmitbuf->len, 8) + txlen;
->  				}
-> @@ -333,6 +328,7 @@ static s32 xmit_xmitframes(struct adapter *padapter, struct xmit_priv *pxmitpriv
->  		if (pxmitbuf) {
->  			if (pxmitbuf->len > 0) {
->  				struct xmit_frame *pframe;
-> +
->  				pframe = (struct xmit_frame *)pxmitbuf->priv_data;
->  				pframe->agg_num = k;
->  				pxmitbuf->agg_num = k;
-> @@ -385,9 +381,8 @@ static s32 rtl8723bs_xmit_handler(struct adapter *padapter)
->  	spin_lock_bh(&pxmitpriv->lock);
->  	ret = rtw_txframes_pending(padapter);
->  	spin_unlock_bh(&pxmitpriv->lock);
-> -	if (ret == 0) {
-> +	if (ret == 0)
->  		return _SUCCESS;
-> -	}
->  
->  	/*  dequeue frame and write to hardware */
->  
-> @@ -405,9 +400,8 @@ static s32 rtl8723bs_xmit_handler(struct adapter *padapter)
->  	spin_lock_bh(&pxmitpriv->lock);
->  	ret = rtw_txframes_pending(padapter);
->  	spin_unlock_bh(&pxmitpriv->lock);
-> -	if (ret == 1) {
-> +	if (ret == 1)
->  		goto next;
-> -	}
->  
->  	return _SUCCESS;
->  }
-> @@ -428,10 +422,9 @@ int rtl8723bs_xmit_thread(void *context)
->  
->  	do {
->  		ret = rtl8723bs_xmit_handler(padapter);
-> -		if (signal_pending(current)) {
-> +		if (signal_pending(current))
->  			flush_signals(current);
-> -		}
-> -	} while (_SUCCESS == ret);
-> +	} while (ret == _SUCCESS);
->  
->  	complete(&pxmitpriv->SdioXmitTerminate);
->  
-> -- 
-> 2.25.1
-> 
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c                 |  2 +-
+>  drivers/iio/dummy/iio_simple_dummy_buffer.c            |  4 ++--
+>  drivers/iio/industrialio-trigger.c                     |  2 +-
+>  drivers/memstick/core/ms_block.c                       |  4 ++--
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c         |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c    |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/cmd.c               | 10 +++-------
+>  drivers/net/ethernet/mellanox/mlx4/eq.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/fw.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/main.c              |  2 +-
+>  drivers/perf/thunderx2_pmu.c                           |  4 ++--
+>  drivers/staging/media/tegra-video/vi.c                 |  2 +-
+>  13 files changed, 21 insertions(+), 25 deletions(-)
 
-Hi,
+"all" is not how to submit changes to the kernel.  Please break them up
+into subsystem-specific patches, and send them after your core changes
+are accepted.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+good luck!
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+greg k-h

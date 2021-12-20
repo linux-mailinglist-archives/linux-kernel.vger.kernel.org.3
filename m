@@ -2,98 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E9F47B1DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E398447B1DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240038AbhLTRIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbhLTRIw (ORCPT
+        id S240048AbhLTRKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:10:18 -0500
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:36554 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235057AbhLTRKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:08:52 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1F6C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:08:52 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so3275209oog.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fCui4qeVHQj0pbfWYsegbsAHNIi3Yc2XfX/ERhbLKTM=;
-        b=qemlMel70nxeeXwVoJmXgUm5pDvpcQ2I0aezjxSgQEeg5pOlG2ncZg8zB6d4cn16ZB
-         9u8kooreJ+71DCSNom26R0Lz6VRDIKB2iiw+FZakuugP3lr+FkRqIapKVJRn4N8jLujk
-         DAQmSrKpfjYD8Gbf9ZQTSIXox42ViDjCQ667SsNnh9WyAdYwaJ/7p8gt3SP2etEupoUD
-         bfcSh/Ku3gIn+xiYU2UZk+Y8l3IElcE0yDTISIeRXLkKCOhbYWnT102P+FKqUsR1vo5F
-         1e22m529bfkAroV/6iaNW6aHoh8GyHWTNDL6mClMDuWiLdv4Uf5lpCTZYnXS7QPwRrYF
-         NH8Q==
+        Mon, 20 Dec 2021 12:10:17 -0500
+Received: by mail-pg1-f173.google.com with SMTP id 200so9950471pgg.3;
+        Mon, 20 Dec 2021 09:10:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fCui4qeVHQj0pbfWYsegbsAHNIi3Yc2XfX/ERhbLKTM=;
-        b=GKmjQs8gvU0YfqQV0nTm2zrGq7lqWwuSLLLYB1/gb8a7epQ//md9KF6wB00bf9vdwC
-         dlCY5F+mpdmGgKW6ies9LJGklNw02I8VsTKl8SRvKGtRu/dONDPCAjO5X2qgINqe1Oua
-         lmRNj3KeoYPSEN0eaaNZnUU4v0QWefsBe3VljeQVqixKpoC3LOhMUZVr1T3kOe4BQMqZ
-         AXGjsWV0+h49Ga3aNlvsB64SbhWdGvaqzyhxWTB1YkPhXBL5t0o79K00H8H6YpSl5aCa
-         w0gIzaPlKNpMsByBTrJ9110Y+tuikAYxPogcyfF57TiUSUBE2XWG3d/Bw2qISo8s2JrY
-         Oefw==
-X-Gm-Message-State: AOAM5327SK5FWourEu35MblRyfLavWZe4ofL/+DZdAiqSf+SbcqWwT1S
-        kllbHMZIaqowwvyMmtWZEkykOH2hD6lOWOSf+7wpPg==
-X-Google-Smtp-Source: ABdhPJyNJWFKkOIBkPJc552bmr2a4dVEwxBycNJiHRSED3m3Z/AVm3DoyEe94NY68p54lo7OS7VN9hwGG+kY3Cbni/w=
-X-Received: by 2002:a4a:cf12:: with SMTP id l18mr10659018oos.25.1640020131872;
- Mon, 20 Dec 2021 09:08:51 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tJqbUHV90MYT7sauKSyrvUY9zVpGUS3+UEyHIr2dLnY=;
+        b=UEasx0lBZEwvrRTO2FI4Z9/fnVWR1s3QCrGrlUITfopN6LpLLwNxOgOX6lUKm7ULtQ
+         7zyipi1a289sY2K2+nHpSxTgfGnZcRGT9W56E7YXLuHaoZzFEF+iHJYUJcT8ycJa2DfG
+         mYWI1TBJzs0jmZDXHIYK/7ylyCnjBT14U8NG0cwyYrT87TIg1zLzvqKiXV6yzVsxqZFI
+         pdlGbRpUfy+DoXQOn2DvCBCNcToA0B9RaDp/HTVPCi1usbqEDYCngX9DYZ9c0KurDSz4
+         PeMOXQq1ho/nawpGXY9TkILY7kIP55HEkHkL755+/vA+fPWzCCKuHwHUr+XS3Z0Dg16k
+         +Ttw==
+X-Gm-Message-State: AOAM530HMVuOXiOAS/ZHHzVWnRB1JMhgVtj2GHuC6yUajW6vPcvr7IzC
+        OZTnABaWsyRHrb1VMU7l958=
+X-Google-Smtp-Source: ABdhPJxwOSjE1jdX7wbjjGBxvw5S+FLJAIe83DDBI6cya2hxJp0wNz/zciDp+jHSlP+7qyAUAlUVLw==
+X-Received: by 2002:a63:8ac2:: with SMTP id y185mr15868960pgd.205.1640020216814;
+        Mon, 20 Dec 2021 09:10:16 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id x33sm9549361pfh.212.2021.12.20.09.10.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 09:10:16 -0800 (PST)
+Message-ID: <a4ba2441-83eb-dde2-09ae-7c5f42ff6ad3@acm.org>
+Date:   Mon, 20 Dec 2021 09:10:14 -0800
 MIME-Version: 1.0
-References: <aced20a94bf04159a139f0846e41d38a1537debb.1640018297.git.andreyknvl@google.com>
-In-Reply-To: <aced20a94bf04159a139f0846e41d38a1537debb.1640018297.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 20 Dec 2021 18:08:40 +0100
-Message-ID: <CANpmjNP_ctXe8hZz0K2AHdSGsxr7OEYGXsdT5exk3mifHXzCmg@mail.gmail.com>
-Subject: Re: [PATCH] lib/test_meminit: destroy cache in kmem_cache_alloc_bulk()
- test
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] nbd: Don't use workqueue to handle recv work
+Content-Language: en-US
+To:     Xie Yongji <xieyongji@bytedance.com>, josef@toxicpanda.com,
+        axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org
+References: <20211220122241.150-1-xieyongji@bytedance.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20211220122241.150-1-xieyongji@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 17:39, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Make do_kmem_cache_size_bulk() destroy the cache it creates.
->
-> Fixes: 03a9349ac0e0 ("lib/test_meminit: add a kmem_cache_alloc_bulk() test")
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+On 12/20/21 04:22, Xie Yongji wrote:
+> The rescuer thread might take over the works queued on
+> the workqueue when the worker thread creation timed out.
+> If this happens, we have no chance to create multiple
+> recv threads which causes I/O hung on this nbd device.
+> 
+> To fix it, this tries to create kthreads directly to
+> handle the recv work instead of using workqueue.
 
-Reviewed-by: Marco Elver <elver@google.com>
+Why a kthread instead of only removing the WQ_MEM_RECLAIM flag from the 
+alloc_workqueue() call? This should have been explained in the patch 
+description. Additionally, a Fixes: tag is missing.
 
+Thanks,
 
-> ---
->  lib/test_meminit.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/test_meminit.c b/lib/test_meminit.c
-> index e4f706a404b3..3ca717f11397 100644
-> --- a/lib/test_meminit.c
-> +++ b/lib/test_meminit.c
-> @@ -337,6 +337,7 @@ static int __init do_kmem_cache_size_bulk(int size, int *total_failures)
->                 if (num)
->                         kmem_cache_free_bulk(c, num, objects);
->         }
-> +       kmem_cache_destroy(c);
->         *total_failures += fail;
->         return 1;
->  }
-> --
-> 2.25.1
->
+Bart.

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4850B47AD89
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438B847AE30
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237693AbhLTOws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S238256AbhLTO6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbhLTOtm (ORCPT
+        with ESMTP id S239555AbhLTO4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:42 -0500
+        Mon, 20 Dec 2021 09:56:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B34C07E5F6;
-        Mon, 20 Dec 2021 06:46:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE6BC08ECAF;
+        Mon, 20 Dec 2021 06:49:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E59A8B80EE4;
-        Mon, 20 Dec 2021 14:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C9CC36AE7;
-        Mon, 20 Dec 2021 14:46:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4752AB80EDE;
+        Mon, 20 Dec 2021 14:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D230C36AE7;
+        Mon, 20 Dec 2021 14:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011563;
-        bh=7epsYOuiAkBUnM9MBXGtORvmN8mGsF7Iomhy9N5DwZw=;
+        s=korg; t=1640011739;
+        bh=nrdOd5Dk50jIICou6l21okA0OQWWv2PES90TpcoTTfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cf9EEn8jYhbxl/nAAcHMFxVH48gOgfi+tlcQTr/6ONGLvxgAjKiihEzFrsEywch2f
-         wocadTFe1f8KIDqSCZzufsxzfyUEZZEh0dntDCCRY3W1tjmw+Van0sjsd0HWI2ilyi
-         ksNSIMWYuEytOvalPst7HaZCSITGYIlc746nJRUw=
+        b=DVmhSHMSLSDWZ6IfDxpI1hGH8/0KGAwbP9kx8n6eLGVvVMKA++yWwq3nCtuE1xmbh
+         yI2l7W6kLjj76I2ZYSpU6OjOycUxOWOzFiCd92ELjr3X4+osT06vRxx4/lCn4/bYSa
+         NyRkIFEHG7CKot+54SGojoPZeVM4fAsa3DF5QXHE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Sharath Srinivasan <sharath.srinivasan@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 33/71] rds: memory leak in __rds_conn_create()
+Subject: [PATCH 5.10 49/99] soc/tegra: fuse: Fix bitwise vs. logical OR warning
 Date:   Mon, 20 Dec 2021 15:34:22 +0100
-Message-Id: <20211220143026.798180750@linuxfoundation.org>
+Message-Id: <20211220143031.028039902@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,34 +52,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 5f9562ebe710c307adc5f666bf1a2162ee7977c0 ]
+[ Upstream commit a7083763619f7485ccdade160deb81737cf2732f ]
 
-__rds_conn_create() did not release conn->c_path when loop_trans != 0 and
-trans->t_prefer_loopback != 0 and is_outgoing == 0.
+A new warning in clang points out two instances where boolean
+expressions are being used with a bitwise OR instead of logical OR:
 
-Fixes: aced3ce57cd3 ("RDS tcp loopback connection can hang")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Sharath Srinivasan <sharath.srinivasan@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+                reg = tegra_fuse_read_spare(i) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ||
+drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both operands to int to silence this warning
+drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+                reg = tegra_fuse_read_spare(i) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ||
+drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both operands to int to silence this warning
+2 warnings generated.
+
+The motivation for the warning is that logical operations short circuit
+while bitwise operations do not.
+
+In this instance, tegra_fuse_read_spare() is not semantically returning
+a boolean, it is returning a bit value. Use u32 for its return type so
+that it can be used with either bitwise or boolean operators without any
+warnings.
+
+Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1488
+Suggested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rds/connection.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
+ drivers/soc/tegra/fuse/fuse.h       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/rds/connection.c b/net/rds/connection.c
-index c85bd6340eaa7..92ff40e7a66cf 100644
---- a/net/rds/connection.c
-+++ b/net/rds/connection.c
-@@ -253,6 +253,7 @@ static struct rds_connection *__rds_conn_create(struct net *net,
- 				 * should end up here, but if it
- 				 * does, reset/destroy the connection.
- 				 */
-+				kfree(conn->c_path);
- 				kmem_cache_free(rds_conn_slab, conn);
- 				conn = ERR_PTR(-EOPNOTSUPP);
- 				goto out;
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
+index 94b60a692b515..4388a4a5e0919 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+@@ -260,7 +260,7 @@ static struct platform_driver tegra_fuse_driver = {
+ };
+ builtin_platform_driver(tegra_fuse_driver);
+ 
+-bool __init tegra_fuse_read_spare(unsigned int spare)
++u32 __init tegra_fuse_read_spare(unsigned int spare)
+ {
+ 	unsigned int offset = fuse->soc->info->spare + spare * 4;
+ 
+diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
+index e057a58e20603..21887a57cf2c2 100644
+--- a/drivers/soc/tegra/fuse/fuse.h
++++ b/drivers/soc/tegra/fuse/fuse.h
+@@ -63,7 +63,7 @@ struct tegra_fuse {
+ void tegra_init_revision(void);
+ void tegra_init_apbmisc(void);
+ 
+-bool __init tegra_fuse_read_spare(unsigned int spare);
++u32 __init tegra_fuse_read_spare(unsigned int spare);
+ u32 __init tegra_fuse_read_early(unsigned int offset);
+ 
+ u8 tegra_get_major_rev(void);
 -- 
 2.33.0
 

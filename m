@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF147ADDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7425247AC68
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237163AbhLTO4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238111AbhLTOxS (ORCPT
+        id S234617AbhLTOnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:43:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50512 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235241AbhLTOmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:53:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C28C08E858;
-        Mon, 20 Dec 2021 06:47:36 -0800 (PST)
+        Mon, 20 Dec 2021 09:42:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03AEB61185;
-        Mon, 20 Dec 2021 14:47:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D809BC36AE7;
-        Mon, 20 Dec 2021 14:47:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E96F3B80EE0;
+        Mon, 20 Dec 2021 14:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1B1C36AE8;
+        Mon, 20 Dec 2021 14:42:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011655;
-        bh=cDtb2os7ZmuG46scrk1iATKDGHuB2kAeJqmEYSXt7N8=;
+        s=korg; t=1640011324;
+        bh=67IQHyjtgvsS8cup5Ojt+DPWEsjdJNnKB4Pxob3ISXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CvDDyWH5YduGDl0knzfz2uBdQN9CsWxOKLm2IoafSylMnHCEWfClmEOFc2pu6AGYH
-         6Yl2glLTQ8/mzGgmnYmyWPFFbzW3REdLvf/wwmPt+SMhx9Em5H7ENGhyY5UVZg95F9
-         Wh30y2fPZhDJ28qz2MfK7X1oNc5gvZ42RQg4lwg8=
+        b=Oz+nC1FvLX1c6fHv3mZ+vJylFSfwUZswqRsKFl/pnev774/Bi3VJmGIp8c4HKTJxB
+         pnm0OMRhdmr9/uGPe4JS467fdZEJ+rg0ogau4uCsrGmguwCc49cB6IulzjMf2x5DlJ
+         5hqlw02Ww+emv0V70dDpSHOcC9hj5g9CF0ScP1Ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        stable@vger.kernel.org, Chen Jun <chenjun102@huawei.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 27/99] ARM: socfpga: dts: fix qspi node compatible
-Date:   Mon, 20 Dec 2021 15:34:00 +0100
-Message-Id: <20211220143030.261613850@linuxfoundation.org>
+Subject: [PATCH 4.19 08/56] tracing: Fix a kmemleak false positive in tracing_map
+Date:   Mon, 20 Dec 2021 15:34:01 +0100
+Message-Id: <20211220143023.717641158@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,126 +46,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Chen Jun <chenjun102@huawei.com>
 
-[ Upstream commit cb25b11943cbcc5a34531129952870420f8be858 ]
+[ Upstream commit f25667e5980a4333729cac3101e5de1bb851f71a ]
 
-The QSPI flash node needs to have the required "jedec,spi-nor" in the
-compatible string.
+Doing the command:
+  echo 'hist:key=common_pid.execname,common_timestamp' > /sys/kernel/debug/tracing/events/xxx/trigger
 
-Fixes: 1df99da8953 ("ARM: dts: socfpga: Enable QSPI in Arria10 devkit")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Triggers many kmemleak reports:
+
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+
+The reason is elts->pages[i] is alloced by get_zeroed_page.
+and kmemleak will not scan the area alloced by get_zeroed_page.
+The address stored in elts->pages will be regarded as leaked.
+
+That is, the elts->pages[i] will have pointers loaded onto it as well, and
+without telling kmemleak about it, those pointers will look like memory
+without a reference.
+
+To fix this, call kmemleak_alloc to tell kmemleak to scan elts->pages[i]
+
+Link: https://lkml.kernel.org/r/20211124140801.87121-1-chenjun102@huawei.com
+
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   | 2 +-
- arch/arm/boot/dts/socfpga_arria5_socdk.dts         | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sockit.dts      | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socrates.dts    | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       | 2 +-
- arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts | 4 ++--
- 7 files changed, 8 insertions(+), 8 deletions(-)
+ kernel/trace/tracing_map.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts b/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-index 2b645642b9352..2a745522404d6 100644
---- a/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-+++ b/arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts
-@@ -12,7 +12,7 @@ &qspi {
- 	flash0: n25q00@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00aa";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
+diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
+index 10657b8dc2c2d..83c2a0598c648 100644
+--- a/kernel/trace/tracing_map.c
++++ b/kernel/trace/tracing_map.c
+@@ -15,6 +15,7 @@
+ #include <linux/jhash.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
++#include <linux/kmemleak.h>
  
-diff --git a/arch/arm/boot/dts/socfpga_arria5_socdk.dts b/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-index 90e676e7019f2..1b02d46496a85 100644
---- a/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-+++ b/arch/arm/boot/dts/socfpga_arria5_socdk.dts
-@@ -119,7 +119,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q256a";
-+		compatible = "micron,n25q256a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
+ #include "tracing_map.h"
+ #include "trace.h"
+@@ -307,6 +308,7 @@ void tracing_map_array_free(struct tracing_map_array *a)
+ 	for (i = 0; i < a->n_pages; i++) {
+ 		if (!a->pages[i])
+ 			break;
++		kmemleak_free(a->pages[i]);
+ 		free_page((unsigned long)a->pages[i]);
+ 	}
  
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts b/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-index 6f138b2b26163..51bb436784e24 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts
-@@ -124,7 +124,7 @@ &qspi {
- 	flash0: n25q00@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;	/* chip select */
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts b/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-index c155ff02eb6e0..cae9ddd5ed38b 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_sockit.dts
-@@ -169,7 +169,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts b/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-index 8d5d3996f6f27..ca18b959e6559 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_socrates.dts
-@@ -80,7 +80,7 @@ &qspi {
- 	flash: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q256a";
-+		compatible = "micron,n25q256a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts b/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-index 99a71757cdf46..3f7aa7bf0863a 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_sodia.dts
-@@ -116,7 +116,7 @@ &qspi {
- 	flash0: n25q512a@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q512a";
-+		compatible = "micron,n25q512a", "jedec,spi-nor";
- 		reg = <0>;
- 		spi-max-frequency = <100000000>;
- 
-diff --git a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-index a060718758b67..25874e1b9c829 100644
---- a/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-+++ b/arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts
-@@ -224,7 +224,7 @@ &qspi {
- 	n25q128@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q128";
-+		compatible = "micron,n25q128", "jedec,spi-nor";
- 		reg = <0>;		/* chip select */
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
-@@ -241,7 +241,7 @@ n25q128@0 {
- 	n25q00@1 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		compatible = "n25q00";
-+		compatible = "micron,mt25qu02g", "jedec,spi-nor";
- 		reg = <1>;		/* chip select */
- 		spi-max-frequency = <100000000>;
- 		m25p,fast-read;
+@@ -342,6 +344,7 @@ struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
+ 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
+ 		if (!a->pages[i])
+ 			goto free;
++		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
+ 	}
+  out:
+ 	return a;
 -- 
 2.33.0
 

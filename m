@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E9B47AB08
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6B547AB11
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbhLTOHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:07:43 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48298 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbhLTOHh (ORCPT
+        id S233487AbhLTOLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:11:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36389 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233479AbhLTOLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:07:37 -0500
-Date:   Mon, 20 Dec 2021 14:07:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640009256;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 20 Dec 2021 09:11:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640009464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WsyqyxB5lcS5H20DgZdExqUu5Cc9nIuhzFAFq+Dk5tk=;
-        b=bvVuK9oFeo9kDQ/A3921E2MBczUYuLr809iwK8pK8zTfhsrPa26EU3dby1aOTbgKq7pPBF
-        SPhWxhGV2TEPooKrhYGRhh8dyEkGRaD3PZrp2xAq69fzXtdd95JDc4gZfcb72xYIQtYIe8
-        VtG3QO5UWVHAwWpu2Ik4WNENc7s2ZwWJlCs0HOoVQM++pNNB2T+tEL4/Jgc01TGahSogJR
-        ShbDzxJ765ZY+7q8czGyiaV16QWBOGyrqdn3hw0cPHP/4y3L3GpB55Ei6MjXBcAstW5YCX
-        t7SswsKXsOxzOX8uAVU+SZMQUFTEYPhasmZnd+DpoSrsoKGbLjOyzG0Za50lkw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640009256;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WsyqyxB5lcS5H20DgZdExqUu5Cc9nIuhzFAFq+Dk5tk=;
-        b=wng+ojABF6N9Ks/ghN+W0HfSVaf8sq5ogh708lfKKQoRGN1Fc7omkDnL/PKUyT5VQ0aHTq
-        6KSEarBP9t7+o2AQ==
-From:   "irqchip-bot for Lad Prabhakar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/renesas-irqc: Use
- platform_get_irq_optional() to get the interrupt
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20211216182121.5323-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211216182121.5323-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        bh=7x3Yj+bf5SRda5v35eOr/TWOXggky5rJXTXtDeJkHCM=;
+        b=heO8NlyYcQpmeAn/PCW0cpw4iayjEEEhf6XjwhaK+fbdtpbcKLSzYcUdNNyDQim240TmlQ
+        O3bbh10EW0mxFGmkzu9quFu6xdG1hsktboLNjQDuLyVXeCs61QNd7iGmJG1BYimbXEyG2t
+        JnfNEUrhYOhaXAPSMtgNYvjLQseLnMQ=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-t-FkDsZhPwCXGRY9sO9-Vw-1; Mon, 20 Dec 2021 09:11:02 -0500
+X-MC-Unique: t-FkDsZhPwCXGRY9sO9-Vw-1
+Received: by mail-pj1-f70.google.com with SMTP id p4-20020a17090a348400b001b103a13f69so9784943pjb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:11:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7x3Yj+bf5SRda5v35eOr/TWOXggky5rJXTXtDeJkHCM=;
+        b=miaS7Zl40bPJwVzClV5y5DpfV6EigGomqo4YgzmqZ1blnUhaOHp7TcuFyvaVlobd+M
+         1njg/jdEAF8qyNDRqHXZtxE7ZKebh922D5pQCHKets1NSkQ20uKvQsklnFyvsleO1K2p
+         JVbPldhOLnvD/2cB5VYofjDcmQBbpID/mwDHEpf4DiFhzk7X8C0wTyiD1qyTXUiAVTvf
+         3MIaKuIw7MRHmUGhMmgSBrfh4N63s5h0hC1c6gC6YuxDw3Inobo/Uc3owBOPIclcenfp
+         FYNC0qGTVSj/2NowpUGuD/wrLWIQnBDmo9w333BBjwIi8SceW6DrLyLTY3wVDavbyXfc
+         GLCA==
+X-Gm-Message-State: AOAM531y6tv4hEB9fof1FRHqqGFG04LlA+pk8dEKDjQcaO9pIUU9kldb
+        mfnAyJNY4wyFrJwkDPUyl+wDZ8Z00vQyagZ+j5iayZQPwmVLRD8gizTsnze7uTHDN1eqzjbb/tE
+        U+G9MY2XhrfZChH6vKf6Ng+9z2ENfipwGJaowm/C2
+X-Received: by 2002:a17:903:1ca:b0:149:2125:9a13 with SMTP id e10-20020a17090301ca00b0014921259a13mr2497949plh.73.1640009461413;
+        Mon, 20 Dec 2021 06:11:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyz7Lzpf8qTZb+BOpbafi/m/Rtvan0nbNH0abUqJMPCoVzsBuO8rydUJne9VUVWoV1WbMaft0UiVp9emZclYxk=
+X-Received: by 2002:a17:903:1ca:b0:149:2125:9a13 with SMTP id
+ e10-20020a17090301ca00b0014921259a13mr2497929plh.73.1640009461208; Mon, 20
+ Dec 2021 06:11:01 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <164000925542.23020.16758782166921040706.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20211215083605.117638-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211215083605.117638-1-jiasheng@iscas.ac.cn>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 20 Dec 2021 15:10:50 +0100
+Message-ID: <CAO-hwJ+VZscrj9yGOkPruuUXXkg4NOPRnj36aa+-+5JvGxGk+w@mail.gmail.com>
+Subject: Re: [PATCH] HID: potential dereference of null pointer
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Wed, Dec 15, 2021 at 9:36 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+>
+> The return value of devm_kzalloc() needs to be checked.
+> To avoid hdev->dev->driver_data to be null in case of the failure of
+> alloc.
+>
+> Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
 
-Commit-ID:     befbfe6f8f744acb65c4334cc224b855d31aff1b
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/befbfe6f8f744acb65c4334cc224b855d31aff1b
-Author:        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-AuthorDate:    Thu, 16 Dec 2021 18:21:21 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 20 Dec 2021 12:18:46 
+Thanks for the fix. I have now pushed it to hid.git, branch
+for-5.16/upstream-fixes
 
-irqchip/renesas-irqc: Use platform_get_irq_optional() to get the interrupt
+Cheers,
+Benjamin
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypassed the hierarchical setup and messed up the
-irq chaining.
+>  drivers/hid/hid-vivaldi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
+> index cd7ada48b1d9..72957a9f7117 100644
+> --- a/drivers/hid/hid-vivaldi.c
+> +++ b/drivers/hid/hid-vivaldi.c
+> @@ -57,6 +57,9 @@ static int vivaldi_probe(struct hid_device *hdev,
+>         int ret;
+>
+>         drvdata = devm_kzalloc(&hdev->dev, sizeof(*drvdata), GFP_KERNEL);
+> +       if (!drvdata)
+> +               return -ENOMEM;
+> +
+>         hid_set_drvdata(hdev, drvdata);
+>
+>         ret = hid_parse(hdev);
+> --
+> 2.25.1
+>
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211216182121.5323-2-prabhakar.mahadev-lad.rj@bp.renesas.com
----
- drivers/irqchip/irq-renesas-irqc.c |  9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/irqchip/irq-renesas-irqc.c b/drivers/irqchip/irq-renesas-irqc.c
-index 07a6d8b..909325f 100644
---- a/drivers/irqchip/irq-renesas-irqc.c
-+++ b/drivers/irqchip/irq-renesas-irqc.c
-@@ -126,7 +126,6 @@ static int irqc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	const char *name = dev_name(dev);
- 	struct irqc_priv *p;
--	struct resource *irq;
- 	int ret;
- 	int k;
- 
-@@ -142,13 +141,15 @@ static int irqc_probe(struct platform_device *pdev)
- 
- 	/* allow any number of IRQs between 1 and IRQC_IRQ_MAX */
- 	for (k = 0; k < IRQC_IRQ_MAX; k++) {
--		irq = platform_get_resource(pdev, IORESOURCE_IRQ, k);
--		if (!irq)
-+		ret = platform_get_irq_optional(pdev, k);
-+		if (ret == -ENXIO)
- 			break;
-+		if (ret < 0)
-+			goto err_runtime_pm_disable;
- 
- 		p->irq[k].p = p;
- 		p->irq[k].hw_irq = k;
--		p->irq[k].requested_irq = irq->start;
-+		p->irq[k].requested_irq = ret;
- 	}
- 
- 	p->number_of_irqs = k;

@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E018B47ABF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776EF47AB67
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbhLTOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234142AbhLTOjU (ORCPT
+        id S233853AbhLTOg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44776 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233789AbhLTOgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA1C06175F;
-        Mon, 20 Dec 2021 06:39:20 -0800 (PST)
+        Mon, 20 Dec 2021 09:36:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 99DD2CE110A;
-        Mon, 20 Dec 2021 14:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F8C1C36AE9;
-        Mon, 20 Dec 2021 14:39:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C86F5B80EEE;
+        Mon, 20 Dec 2021 14:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DA2C36AF8;
+        Mon, 20 Dec 2021 14:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011156;
-        bh=F40h85K4HKKKQWHlEQsJrDNzW6aCuv9Dben6MwTnY8Y=;
+        s=korg; t=1640010979;
+        bh=anQhNszbzPGOENSnfAwIhtLRNbzlLFGfaWmRrgmHhJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MYGWWqq+pCKbLLRdJToBKhrqnLF+zz6HRA0aHA634azyYbCtnl2eqHg4z/D84Tuqu
-         voQaOM55QaKLRS5EcFcUGll/aXMj3/xw6idbaSAldfYMjsFtJYGMQ8E5H15YXQKgO9
-         sQOE91CjkLbLT261ZA8xnIzeGfeKXaYIwsYXsImk=
+        b=QbN3Bs1rVBwpYPkLEOR8jOCr/ebwvxXYhyjfcpbPBQS+TwaGWoptqn8ILiARFHpXR
+         AcLSAxKuIbkqqnbfM70jEaShsZSuhKyRL97JU8TEwqk6lSkDQfUFcuzrpKKQaUfnfS
+         IJfAddlvLJeq6B68mInG9o2DvwMR47rnQ2CrVK8I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 23/45] net/packet: rx_owner_map depends on pg_vec
+        Nathan Chancellor <natechancellor@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 4.4 17/23] net: lan78xx: Avoid unnecessary self assignment
 Date:   Mon, 20 Dec 2021 15:34:18 +0100
-Message-Id: <20211220143023.045095079@linuxfoundation.org>
+Message-Id: <20211220143018.407071323@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,46 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
+commit 94e7c844990f0db92418586b107be135b4963b66 upstream.
 
-Packet sockets may switch ring versions. Avoid misinterpreting state
-between versions, whose fields share a union. rx_owner_map is only
-allocated with a packet ring (pg_vec) and both are swapped together.
-If pg_vec is NULL, meaning no packet ring was allocated, then neither
-was rx_owner_map. And the field may be old state from a tpacket_v3.
+Clang warns when a variable is assigned to itself.
 
-Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
-Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+drivers/net/usb/lan78xx.c:940:11: warning: explicitly assigning value of
+variable of type 'u32' (aka 'unsigned int') to itself [-Wself-assign]
+                        offset = offset;
+                        ~~~~~~ ^ ~~~~~~
+1 warning generated.
+
+Reorder the if statement to acheive the same result and avoid a self
+assignment warning.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/129
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/packet/af_packet.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/usb/lan78xx.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 50ca70b3c1759..3177b9320c62d 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -4477,9 +4477,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
- 	}
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -609,11 +609,9 @@ static int lan78xx_read_otp(struct lan78
+ 	ret = lan78xx_read_raw_otp(dev, 0, 1, &sig);
  
- out_free_pg_vec:
--	bitmap_free(rx_owner_map);
--	if (pg_vec)
-+	if (pg_vec) {
-+		bitmap_free(rx_owner_map);
- 		free_pg_vec(pg_vec, order, req->tp_block_nr);
-+	}
- out:
- 	return err;
- }
--- 
-2.33.0
-
+ 	if (ret == 0) {
+-		if (sig == OTP_INDICATOR_1)
+-			offset = offset;
+-		else if (sig == OTP_INDICATOR_2)
++		if (sig == OTP_INDICATOR_2)
+ 			offset += 0x100;
+-		else
++		else if (sig != OTP_INDICATOR_1)
+ 			ret = -EINVAL;
+ 		if (!ret)
+ 			ret = lan78xx_read_raw_otp(dev, offset, length, data);
 
 

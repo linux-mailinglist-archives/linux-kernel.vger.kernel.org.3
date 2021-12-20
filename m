@@ -2,103 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079C647B646
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 00:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300A347B647
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 00:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbhLTXqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 18:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbhLTXqA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 18:46:00 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DF0C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:46:00 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id 14so15422903ioe.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 15:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qhtVAR+sknJEbgT3KYqmYZUz0TiJ2iQjq2f6Rqlsa2k=;
-        b=XxElCAKWWJs2pQKrBlJFbACA67N2Vl59wigT46QPpfxbIZYqq9XJ72QJuKq+2ZE3sG
-         ZBAP0t7vZCvdkJtpyQZgsx2MyzMh58D0uzF6+CSNsqiNPCkXG+m1c5znt9SeHTW0WLkt
-         2GA6dIXavpJopJMLWH+j/CizTQk9SDZDewCBzjvQykY043C7blJ1GSk69iEyftKTR+9K
-         0u9k6jcaIZL0lL2bewC/cElBXgvayAuggxmDUrnIHNSNtQ0DvdoGzhEuqTEymxoFqGbQ
-         lz0xOBH3J/PJzGffW0JZljufm7Y4dOuvDkIbL8wP47u0czxrs5X7EEPtRmz27vRETAZu
-         ezQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qhtVAR+sknJEbgT3KYqmYZUz0TiJ2iQjq2f6Rqlsa2k=;
-        b=aq9k04Yu13aD8pDmfy1w+YGkgfFUjXvD3XebieaTIr/ZqsIyVt/j1zemWjw46BOoij
-         5VutZWrk4mEqpD3JPw4xNUP+qmgLRyQoVOEWeI4WcjmdZfBm0udYHGSm4PdBH04mikMh
-         l1LE92xrfyT5Nzfpe6855y+tGeVijEBzos5zMjNRC0+xNbe/u1tbqDYxNkHJPRLQYTHU
-         DOvV8ZnaaCRkCk+bfLUQlC4se3V/yivsgkflKMVOOhWhBYGypFtNFBuBX0y0bXaeyTUa
-         ktApjn1309XMf6ZmKosucZFYPEXvqfrV2dZd2hgsmgvRu7kLT5zSg9wyddNPAeofOnn+
-         02eg==
-X-Gm-Message-State: AOAM531JYhitlZK7cmMIE9cNOYE5YlFSJrQ9ODYAKcfetBeLpqQQqPnB
-        embgFuSNzyPYO+QyeE6ruOyQBg==
-X-Google-Smtp-Source: ABdhPJzFnCR55CYq0guosnTFrAh3y1n2+5JK2rxvkxO9p/h+QGR5kXv2EVonphXgb6l69YDxEzRaMg==
-X-Received: by 2002:a05:6602:2c50:: with SMTP id x16mr305051iov.114.1640043959752;
-        Mon, 20 Dec 2021 15:45:59 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id l1sm9509232ioj.29.2021.12.20.15.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 15:45:59 -0800 (PST)
-Subject: Re: [PATCH v5 1/1] blktrace: switch trace spinlock to a raw spinlock
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wander Costa <wcosta@redhat.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <20211220192827.38297-1-wander@redhat.com>
- <8340efc7-f922-fb8c-772c-de72cefe3470@kernel.dk>
- <CAAq0SUn_Nru1NTyzgjB9ETsaM46bgDRf3DTa+Z9sG-c8yjuQdw@mail.gmail.com>
- <b07b97b4-dff2-5915-ce56-a039a14a74dd@kernel.dk>
- <CAAq0SUmQ5aXtr-tVYLry7zZwTHG6J=X7QV9q0man7pXn7uZjQQ@mail.gmail.com>
- <2f2f5003-e1bf-15ce-32cd-a543634ba880@kernel.dk>
- <CAAq0SUkZ_Zm_KZc-S02xAuR+td0T1nx=cPCs6D2cb_xt6EsUEg@mail.gmail.com>
- <76333783-cb3a-d1b7-5e40-d07014c4e2c0@kernel.dk>
- <20211220183046.7193720d@rorschach.local.home>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <4d110c2a-2e70-8fc1-a16e-cd576c646a39@kernel.dk>
-Date:   Mon, 20 Dec 2021 16:45:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231449AbhLTXve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 18:51:34 -0500
+Received: from mga04.intel.com ([192.55.52.120]:63181 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230155AbhLTXvd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 18:51:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640044293; x=1671580293;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=825SKF4lonUtoVZOI3apuJmktrwRZh5DSjnDcvikato=;
+  b=W2ZDhIlix3HoDJ4Z8WanYgPQ3BW6KrB3Mh+EtoYI/HyHA03sRSBGJ4s9
+   qX2TVPA9rw8/QgC66949ZZNRIltPENqR5A219Qt+f2Fzmim0IbboMBnBx
+   3H0JH/ymXlFcebJ8r/2JnZzWCEsvah30aXTsM8RUYIDxeCD016+G3wOpU
+   yiZlYsih0MhhENSg3gYBdm8v1NSnmhXKBjLa6zhvVKM3bti+ErY5Gq7jL
+   BzBi+c4He8Ah+L3VzwQBo/8oQGUFqZ6KoIdg9iZmertmtpweX8Wt0uqlq
+   tSfMwXxkKLFE+TVcZJKH6sXWW/Q0TM99U7h0quWlRuD5l0ZADMYoRI7AC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="239035611"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="239035611"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 15:51:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="616578347"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 15:51:31 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzSRG-0008QK-IN; Mon, 20 Dec 2021 23:51:30 +0000
+Date:   Tue, 21 Dec 2021 07:51:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     kbuild-all@lists.01.org, Chao Yu <yuchao0@huawei.com>,
+        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [chao:feature/dax 8/9] fs/f2fs/file.c:1106:24: error: implicit
+ declaration of function 'dax_layout_busy_page'
+Message-ID: <202112210758.BoWlhZBt-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211220183046.7193720d@rorschach.local.home>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/21 4:30 PM, Steven Rostedt wrote:
-> On Mon, 20 Dec 2021 13:49:47 -0700
-> Jens Axboe <axboe@kernel.dk> wrote:
-> 
->> Alright, fair enough, mistakes happen. I think the patch looks fine, my
->> main dislike is that it's Yet Another things that needs special RT
->> handling. But I guess that's how it is...
-> 
-> It's not really "yet another thing". That's because in general tracing
-> needs special RT handling (and a lot of other special handling, not
-> just RT). blktrace falls under the tracing category, and this just
-> falls under one more thing to make tracing work with RT.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
+head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
+commit: ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa [8/9] f2fs: handle layout changes to pinned DAX mappings
+config: microblaze-randconfig-r015-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210758.BoWlhZBt-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao feature/dax
+        git checkout ddf2be0f55254d0a1a8bc51f2c1597c09b1dd2aa
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash fs/f2fs/
 
-This isn't the first patch like this I've applied. I'm not saying this
-is an issue with tracing, just that it's another one of these "spinlocks
-are now preemptible/sleeping with RT" and that necessitates changes like
-this.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Jens Axboe
+All error/warnings (new ones prefixed by >>):
 
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from fs/f2fs/file.c:8:
+   fs/f2fs/file.c: In function 'f2fs_file_mmap':
+   fs/f2fs/file.c:584:14: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror=implicit-function-declaration]
+     584 |         if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   fs/f2fs/file.c:584:9: note: in expansion of macro 'if'
+     584 |         if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
+         |         ^~
+   fs/f2fs/file.c: In function 'f2fs_break_layouts':
+>> fs/f2fs/file.c:1106:24: error: implicit declaration of function 'dax_layout_busy_page' [-Werror=implicit-function-declaration]
+    1106 |                 page = dax_layout_busy_page(inode->i_mapping);
+         |                        ^~~~~~~~~~~~~~~~~~~~
+>> fs/f2fs/file.c:1106:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    1106 |                 page = dax_layout_busy_page(inode->i_mapping);
+         |                      ^
+   cc1: some warnings being treated as errors
+
+
+vim +/dax_layout_busy_page +1106 fs/f2fs/file.c
+
+  1096	
+  1097	int f2fs_break_layouts(struct inode *inode)
+  1098	{
+  1099		struct page *page;
+  1100		int error;
+  1101	
+  1102		if (WARN_ON_ONCE(!rwsem_is_locked(&inode->i_mapping->invalidate_lock)))
+  1103			return -EINVAL;
+  1104	
+  1105		do {
+> 1106			page = dax_layout_busy_page(inode->i_mapping);
+  1107			if (!page)
+  1108				return 0;
+  1109	
+  1110			error = ___wait_var_event(&page->_refcount,
+  1111					atomic_read(&page->_refcount) == 1,
+  1112					TASK_INTERRUPTIBLE, 0, 0,
+  1113					f2fs_wait_dax_page(inode));
+  1114		} while (error == 0);
+  1115	
+  1116		return error;
+  1117	}
+  1118	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

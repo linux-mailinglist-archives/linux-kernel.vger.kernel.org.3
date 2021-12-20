@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CF947A821
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B17047A824
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhLTLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbhLTLBY (ORCPT
+        id S231462AbhLTLCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:02:44 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:57267 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230116AbhLTLCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:01:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAE8C061574;
-        Mon, 20 Dec 2021 03:01:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF31A60F7D;
-        Mon, 20 Dec 2021 11:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB828C36AE8;
-        Mon, 20 Dec 2021 11:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639998083;
-        bh=mbYZpWkOpBpdkdwTg12if6HElD5q2Vqht+vy/9jDAwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtmlcauAAglMXUHRrvG+kdWk3FNldRIFxjvE87jPdneXrTq0XdwVO2Y0BVJiS929G
-         9r5EhjX9ZyBZ8f+tqYWSkoP2NcFS5rXv9/IRpU9sEi7ba2dEyUbGAwFN2Vu7pyMqx3
-         xX1VoS14lKnWZKlbSAPqkzukUZ6PfOpHTL5ufwvk=
-Date:   Mon, 20 Dec 2021 12:01:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
+        Mon, 20 Dec 2021 06:02:42 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4186F580726;
+        Mon, 20 Dec 2021 06:02:42 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 20 Dec 2021 06:02:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=SYYa6YsTGSR/I0GH13kqb+HYdm9
+        OONiz3cbnv97oGII=; b=pq5JbqII0DG1nlui9KuHHJyFhoHCPhIpvInQXFreib4
+        MowLWD0PiKk1vOiclXL9SZwW132/0PB+0CM4QJEDFfZpJNu9pFb966Dduqkj1Gkm
+        aK4qAyukFOzaJBLaw4v6jSLBJiub/DzpTX6MCIDdgWKc7FxAY+3I3boq/TwyQvZI
+        COvclSMileKI0Lz/6mEELTzxc+nREe6wlgYRvEQvpJ5Mon+vNbeIi/jCvt4XpXDL
+        qT3Rghq6mxFyatdquMzqXODoazHkRzc+hxqpGtUg6UIV9BBPtWbwI1YXF0hQqU+Q
+        y1Zv3LaBSM+nd4BTeOUAJpAgOdEQoBAh+DtEuuKH8rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=SYYa6Y
+        sTGSR/I0GH13kqb+HYdm9OONiz3cbnv97oGII=; b=m1JtNBB9nemQLbkYlGrcxI
+        OBaGF0rsA1hASxzSN1V10IFbJv/Dx4RMw+KeMMXdSVasFAgSCz1PJxe75PPDP43t
+        KyPqyzQKWDKlWqD6NJAPMrLqhdvHIsEyLYKOITIQ2SAMQmHwC9QTjfoxpIR3pq2z
+        a3/jcLMqeX7BtLOT0emtGRZTqXabX45AMhqQfaV6z4v6f22Zyg9oLx4YmFAJXUi3
+        a4klRtycrA6E+YxyaCwo+RzuwZiYqzU3EYD8/kpwpyMnea9qz+fLg0VOaWk+IcJH
+        94bsDJg4+LUzrGuRCdnTEIDwZqApBixEzz4AcfwEJ9rqT7K6R2+k0swwzT8cuBBA
+        ==
+X-ME-Sender: <xms:0WLAYcfjuXObVl3M3X7Gh9au2Ss-TnBV8AJOVkZQZa1q3_bMxazcOw>
+    <xme:0WLAYePhNB4_KhD9GFLFLLUveoUskTYnk84Qkdmfiwygd6FVWkHYbQiDR_LO9rJvW
+    oTUCYVJU6pe_w>
+X-ME-Received: <xmr:0WLAYdh3Gm5cMGIH4591Lt2biZZY9wozVVka7QKzx5h6BjuhCilFksci0VQdEV9j15uwJXUnnkijpxGisRDONtxlBCt-R8wi>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtvddgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:0mLAYR-D9LgAoe7wYKMKaD6mGls2HmgFsVnK5sJG--ENIDPjwN6wHw>
+    <xmx:0mLAYYtywWzCE8pXKBJqi_Qu7K6-WXlZJeZgrRztKz4T2OxY6aX2jQ>
+    <xmx:0mLAYYFDUb5wznYbnnp2iAL7kdy_cuRf1fmhi3Nt35qpSHBgJQw0mQ>
+    <xmx:0mLAYYEBnH74_aiAcNvkSAy5RtvsDJ5hMeZbXAsgKxnUKxwGCFil1A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Dec 2021 06:02:41 -0500 (EST)
+Date:   Mon, 20 Dec 2021 12:02:39 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pedro Batista <pedbap.g@gmail.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] [BACKPORT v4.9 - v4.19] firmware: arm_scpi: Fix string
- overflow in SCPI genpd driver
-Message-ID: <YcBigHusYbH/CY7I@kroah.com>
-References: <20211217142056.866487-1-sudeep.holla@arm.com>
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>, davem@davemloft.net,
+        kuba@kernel.org
+Subject: Re: [PATCH 5.15 0/3] m_can_pci bit timings for Elkhart Lake
+Message-ID: <YcBiz/hxgxktWb2E@kroah.com>
+References: <cover.1639990483.git.matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217142056.866487-1-sudeep.holla@arm.com>
+In-Reply-To: <cover.1639990483.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:20:56PM +0000, Sudeep Holla wrote:
-> commit 865ed67ab955428b9aa771d8b4f1e4fb7fd08945 upstream.
+On Mon, Dec 20, 2021 at 10:22:14AM +0100, Matthias Schiffer wrote:
+> The automated backport of "can: m_can: pci: use custom bit timings for
+> Elkhart Lake" failed because I neglected to add Fixes tags to the other
+> two patches it depends on.
 > 
-> Without the bound checks for scpi_pd->name, it could result in the buffer
-> overflow when copying the SCPI device name from the corresponding device
-> tree node as the name string is set at maximum size of 30.
+> Matthias Schiffer (3):
+>   Revert "can: m_can: remove support for custom bit timing"
+>   can: m_can: make custom bittiming fields const
+>   can: m_can: pci: use custom bit timings for Elkhart Lake
 > 
-> Let us fix it by using devm_kasprintf so that the string buffer is
-> allocated dynamically.
+>  drivers/net/can/m_can/m_can.c     | 24 ++++++++++++----
+>  drivers/net/can/m_can/m_can.h     |  3 ++
+>  drivers/net/can/m_can/m_can_pci.c | 48 ++++++++++++++++++++++++++++---
+>  3 files changed, 65 insertions(+), 10 deletions(-)
 > 
-> Fixes: 8bec4337ad40 ("firmware: scpi: add device power domain support using genpd")
-> Reported-by: Pedro Batista <pedbap.g@gmail.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: stable@vger.kernel.org #v4.9, v4.14, v4.19
-> Cc: Cristian Marussi <cristian.marussi@arm.com>
-> Link: https://lore.kernel.org/r/20211209120456.696879-1-sudeep.holla@arm.com
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/firmware/scpi_pm_domain.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/firmware/scpi_pm_domain.c b/drivers/firmware/scpi_pm_domain.c
-> index f395dec27113..a6e62a793fbe 100644
-> --- a/drivers/firmware/scpi_pm_domain.c
-> +++ b/drivers/firmware/scpi_pm_domain.c
-> @@ -27,7 +27,6 @@ struct scpi_pm_domain {
->  	struct generic_pm_domain genpd;
->  	struct scpi_ops *ops;
->  	u32 domain;
-> -	char name[30];
->  };
->  
->  /*
-> @@ -121,8 +120,13 @@ static int scpi_pm_domain_probe(struct platform_device *pdev)
->  
->  		scpi_pd->domain = i;
->  		scpi_pd->ops = scpi_ops;
-> -		sprintf(scpi_pd->name, "%s.%d", np->name, i);
-> -		scpi_pd->genpd.name = scpi_pd->name;
-> +		scpi_pd->genpd.name = devm_kasprintf(dev, GFP_KERNEL,
-> +						     "%s.%d", np->name, i);
-> +		if (!scpi_pd->genpd.name) {
-> +			dev_err(dev, "Failed to allocate genpd name:%s.%d\n",
-> +				np->name, i);
-> +			continue;
-> +		}
->  		scpi_pd->genpd.power_off = scpi_pd_power_off;
->  		scpi_pd->genpd.power_on = scpi_pd_power_on;
->  
 > -- 
 > 2.25.1
 > 
 
-Now queued up, thanks.
+All now queued up, thanks.
 
 greg k-h

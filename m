@@ -2,138 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67D747B20E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DA047B21A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240184AbhLTRZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:25:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25244 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233139AbhLTRZO (ORCPT
+        id S240187AbhLTR2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229767AbhLTR2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:25:14 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BKGSs9b016600;
-        Mon, 20 Dec 2021 17:25:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gqSD4h4kvlqVEOACO6pfhDgwtbRTJH/z9VOTPQEA4kA=;
- b=HulK5k8roXdJwT2+/7jcKYJIoYIrtt6K2Nc1XG07kQ9SsQEd7PHq57hJSfTYZABx3SEH
- ZSLgBzm6SZY40PRY8Yi/mjPwLLjvvJV3P0TziY+tLYKXw1KlRnCAKVNo6H+TG3PYIdFj
- VffkAQUY/PBa6ANod83V0w5h7fFWTjNuO+2l9w0YPDcce/cEJys3x8kq71mEnPr7r28I
- E7yI+hY7PXomDAVcsAEOKvqfkdKvqf08hGBXcMAGmk28JqqGQ4K8P9jnp/ARZvwCuhlN
- xrkiWCK0I1ylKG/WxtmZlreEkEegfTOmbpowcp6nQXSz4dxJc5qIrro72qra6ePwW/xb iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1sqn8dp2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 17:25:14 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BKGrFvq016984;
-        Mon, 20 Dec 2021 17:25:13 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1sqn8dn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 17:25:13 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BKHNUda015231;
-        Mon, 20 Dec 2021 17:25:11 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3d1799x17p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 17:25:11 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BKHP7iB41353608
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Dec 2021 17:25:07 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A47C2AE051;
-        Mon, 20 Dec 2021 17:25:07 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C414AE045;
-        Mon, 20 Dec 2021 17:25:06 +0000 (GMT)
-Received: from [9.171.18.110] (unknown [9.171.18.110])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Dec 2021 17:25:06 +0000 (GMT)
-Message-ID: <3c7e0bb9-f698-066b-8f6d-93c45438ff32@linux.ibm.com>
-Date:   Mon, 20 Dec 2021 18:26:17 +0100
+        Mon, 20 Dec 2021 12:28:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2A7C061574;
+        Mon, 20 Dec 2021 09:28:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 774E0B81038;
+        Mon, 20 Dec 2021 17:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED387C36AEA;
+        Mon, 20 Dec 2021 17:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640021330;
+        bh=HtxJW1aGRyANiNJ/JEzvWBH30x0/FnOKHutc3073TbQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jE3Tgn7I9iEHdQIAf5yH1Xls3yup7ZARMr+YoxYRkmuE+WtbjL6uggRSu3wzaCuKO
+         A+zhrv/3T4N2K1l29T2KSdKNqmzw6qnxI5Kq0s2P0PSOj36PHaqtIihgx2vhCZxfXR
+         9tFUPDRI7B+Qqsbh5yVsuIE68OdZY9GpXFthv6auMAhCj9ecS+BwV5SmQaWfyMWhhW
+         GkHI2xiI5g3RWjB6hiPPIDiM260bgs+Oz5pcOe6cN5XDVRd8UlPTE7AJZhDdZdAJrp
+         En2k2o0HFbpDvrqsO0sHtQnHfxFjF5EHEq5weyGsFNYqm0txc7HiQmaEyWAFWzekDX
+         ctJ3ueQTs8BuA==
+Date:   Mon, 20 Dec 2021 11:28:48 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org,
+        me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@google.com>
+Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
+Message-ID: <20211220172848.GA1006510@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 13/32] KVM: s390: pci: add basic kvm_zdev structure
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-14-mjrosato@linux.ibm.com>
- <37b5de48-adef-225e-fafc-f918b64e7736@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <37b5de48-adef-225e-fafc-f918b64e7736@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NIW17LTxKi8tqhU4MdcEcwiTb9b4kVic
-X-Proofpoint-GUID: z_THP8IatfApU7TLD_NvyKHRKAC_bPMc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-20_08,2021-12-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112200096
+In-Reply-To: <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 16, 2021 at 01:24:00PM -0800, David E. Box wrote:
+> On Thu, 2021-12-16 at 11:26 -0600, Bjorn Helgaas wrote:
+> > On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
+> > > From: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > > 
+> > > On Tiger Lake and Alder Lake platforms, VMD controllers do not have ASPM
+> > > enabled nor LTR values set by BIOS. This leads high power consumption on
+> > > these platforms when VMD is enabled as reported in bugzilla [1].  Enable
+> > > these features in the VMD driver using pcie_aspm_policy_override() to set
+> > > the ASPM policy for the root ports.
+> > > ...
 
-
-On 12/17/21 21:26, Matthew Rosato wrote:
-> On 12/7/21 3:57 PM, Matthew Rosato wrote:
->> This structure will be used to carry kvm passthrough information 
->> related to
->> zPCI devices.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
-> ...
->> Â  static inline bool zdev_enabled(struct zpci_dev *zdev)
->> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
->> index b3aaadc60ead..95ea865e5d29 100644
->> --- a/arch/s390/kvm/Makefile
->> +++ b/arch/s390/kvm/Makefile
->> @@ -10,6 +10,6 @@ common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  
->> $(KVM)/async_pf.o \
->> Â  ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->> Â  kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o 
->> sigp.o
->> -kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
->> +kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o pci.o
+> > > To do this, add an additional flag in VMD features to specify
+> > > devices that must have their respective policies overridden.
+> > 
+> > I'm not clear on why you want this to apply to only certain VMDs
+> > and not others.  Do some BIOSes configure ASPM for devices below
+> > some VMDs?
 > 
-> This should instead be
+> Not currently. But the plan is for future devices to move back to
+> having BIOS do the programming.
+
+Since this is apparently a BIOS design choice, it seems wrong to base
+the functionality on the Device ID instead of some signal that tells
+us what the BIOS is doing.
+
+> > > + * Override the BIOS ASPM policy and set the LTR value for PCI storage
+> > > + * devices on the VMD bride.
+> > 
+> > I don't think there's any BIOS "policy" here.  At this point BIOS
+> > is no longer involved at all, so all that's left is whatever ASPM
+> > config the BIOS did or did not do.
+> > 
+> > Why only storage?
 > 
-> kvm-objs-$(CONFIG_PCI) += pci.o
+> Only storage devices will be on these root ports.
+
+How do you know this?  You say below that there's an M.2 slot, so
+surely the slot could contain a non-storage device?  Couldn't somebody
+build a platform with a VMD root port connected to a regular PCIe x4
+slot?  Couldn't such a slot support hotplug?
+
+It would be very unusual to hard-code topology knowledge like this
+into the kernel, since plug-and-play has always been a major goal of
+PCI.
+
+> > > +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
+> > > +{
+> > > +       int features = *(int *)userdata, pos;
+> > > +
+> > > +       if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
+> > > +           pdev->class != PCI_CLASS_STORAGE_EXPRESS)
+> > > +               return 0;
+
+> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, 0x1003);
+> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT, 0x1003);
+> > 
+> > 1) Where did this magic 0x1003 value come from?  Does that depend
+> > on the VMD device?  The endpoint?  The circuit design?  The path
+> > between endpoint and VMD?  What if there are switches in the path?
 > 
-> I think this makes sense as we aren't about to do PCI passthrough 
-> support anyway if the host kernel doesn't support PCI (no vfio-pci, 
-> etc).Â Â  This will quiet the kernel test robot complaints about 
-> CONFIG_PCI_NR_FUNCTIONS seen on the next patch in this series.
+> The number comes from the BIOS team. They are tied to the SoC. I
+> don't believe there can be switches in the path but Nirmal and
+> Jonathan should know for sure. From what I've seen these root ports
+> are wired directly to M.2 slots on boards that are intended for
+> storage devices.
 
-hum, then you will need more than this to put all pci references in 
-priv.c and kvm-s390.c away.
+I guess you're saying that 0x1003 is determined by the SoC.  If so, I
+think this value should be in your .driver_data (which would mean
+converting it from a scalar to a struct, as many other drivers do).
+The current code suggests that 0x1003 is the correct value for *all*
+VMDs and all configurations.
 
-> 
->> Â  obj-$(CONFIG_KVM) += kvm.o
+I don't understand LTR well enough to be convinced that this static
+value would be the correct value for all possible hierarchies and
+devices that could appear below a VMD root port.  I would love to be
+educated about this.
 
-
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Bjorn

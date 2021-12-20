@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3393B47B1B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3DB47B1BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbhLTQ6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:58:52 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48192 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231579AbhLTQ6u (ORCPT
+        id S239602AbhLTRBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231579AbhLTRBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:58:50 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BKAxI08029724;
-        Mon, 20 Dec 2021 17:58:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=t9KotEOtaUjd/KKdckEBhPCxa4PXFHnRLpPF61TOvNw=;
- b=Y+zi37jyu+mL0uYAzkH3j+KcCaNGazX12tmu6OCOrB2V3cgWgnoS6vqFJKnDdNTcyViX
- H0Dn8VXxsOBEtWhlpO8cAZLOdcR8paEwMmCFYwqLwcFCg4ipA/Z9v+zW4+5IoCNA2ZH0
- X3fIhMaHeWl3QpkGO5UilcxitAqy5tusfbHPlkkjOerR9u08G47cjU7YeQaiKLMO9ANx
- 1p9NN5tdCxfuBvkBAMNa+7gAFPjJVKhO+ujcnwXKBXhBmUp6u9wHB+yCdYX+wfrbgdeS
- +/y71YK6SxSVHKUyDsVCGKsvRp/bhRQsjNaFfGw6mM7ZxyhrP/eZZaqKAcRTND5IbPf8 sQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2kerbrhp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 17:58:28 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3EBE410002A;
-        Mon, 20 Dec 2021 17:58:28 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3718520B20C;
-        Mon, 20 Dec 2021 17:58:28 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 17:58:27
- +0100
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH 1/1] dmaengine: stm32-mdma: fix STM32_MDMA_CTBR_TSEL_MASK
-Date:   Mon, 20 Dec 2021 17:58:27 +0100
-Message-ID: <20211220165827.1238097-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Dec 2021 12:01:33 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B84AC061574;
+        Mon, 20 Dec 2021 09:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sQ7BWNClLWcRoTvAousi7pFg1UZuXIYnl6ojC+f5BuM=; b=ia85Cs9KAcSrA7nOeCBivJsLPf
+        7CDjNGfcKHeuKShrmXHAY2J+S39PDEmQ/N7ExDmfCqjrIIYEb4SH6DgYXfMl48Rzr/o/Xu87GA7tm
+        pbZNkrsfgu4MEz2DZ68Ezb3VYaUH/TS6mf/ptrRlLyEu4Z7o14zPNpJQ3Pm/zbK/HIwDj4HPSlv8K
+        yrrneeznHRLxmxBGtQKG5fTJkt3+fecIBlk9Z1KLywowQF68XpDfV13Yq8rQhrIcLk1z6HhCWyKC5
+        fcgaDRxXrzPRD8x6COeReStFHooE7Ai6+b2qld4/zsrlO0DPng7qVxQI6zMcrM/4dI4Q3yFHnKkcm
+        x16IETmQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzM2G-002XjH-Ql; Mon, 20 Dec 2021 17:01:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2737E300347;
+        Mon, 20 Dec 2021 18:01:13 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D2DEC3015F8F7; Mon, 20 Dec 2021 18:01:13 +0100 (CET)
+Date:   Mon, 20 Dec 2021 18:01:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <YcC22e6KLq/JiU+O@hirez.programming.kicks-ass.net>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YbyqeE39vqE9pEDD@kroah.com>
+ <YcCV0TECWE31fYV7@hirez.programming.kicks-ass.net>
+ <YcCcCjYcXw6T8LjG@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-20_08,2021-12-20_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcCcCjYcXw6T8LjG@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes STM32_MDMA_CTBR_TSEL_MASK, which is [5:0], not [7:0].
+On Mon, Dec 20, 2021 at 04:06:50PM +0100, Greg KH wrote:
+> Please see c4d936efa46d ("Revert "usb: early: convert to
+> readl_poll_timeout_atomic()"") in Linus's tree.  I already added a
+> comment much like yours.  If that's not sufficient, I'll be glad to
+> re-word it.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/dma/stm32-mdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index 76cf2e333e63..6f57ff0e7b37 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -157,7 +157,7 @@
- #define STM32_MDMA_CTBR(x)		(0x68 + 0x40 * (x))
- #define STM32_MDMA_CTBR_DBUS		BIT(17)
- #define STM32_MDMA_CTBR_SBUS		BIT(16)
--#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(7, 0)
-+#define STM32_MDMA_CTBR_TSEL_MASK	GENMASK(5, 0)
- #define STM32_MDMA_CTBR_TSEL(n)		FIELD_PREP(STM32_MDMA_CTBR_TSEL_MASK, (n))
- 
- /* MDMA Channel x mask address register */
--- 
-2.25.1
-
+Oh, no that's excellent, thanks!

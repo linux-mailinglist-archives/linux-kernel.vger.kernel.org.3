@@ -2,151 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7D247B28A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C020A47B288
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240374AbhLTSED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:04:03 -0500
-Received: from meesny.iki.fi ([195.140.195.201]:44240 "EHLO meesny.iki.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240361AbhLTSD6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:03:58 -0500
-Received: from [10.0.0.10] (87-100-201-184.bb.dnainternet.fi [87.100.201.184])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: jussi.kivilinna)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 44C932005D;
-        Mon, 20 Dec 2021 20:03:48 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1640023428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wW83kui2hXf3Lo+4Yk8gj/d8EIV+rRJ4EwkVapYVfxc=;
-        b=IMyVkQseKjGtgDsQ03AWveqmaK+W5R3h8165fdukxV0mHCMZeV/DgAgEBkobdd+FwbUyMn
-        i2RDp14fEaqo4QvsDz7ufnV+Ywo5YHS5njNhlk6xphXSRlZTwyjiB9p2waRqQXoKnl5LZL
-        /5akhVLjIIdjTTH7bvhZYzvSXgLMeCU=
-Message-ID: <9e70bf33-bab5-83a3-1eb0-7cae442c2f64@iki.fi>
-Date:   Mon, 20 Dec 2021 20:03:47 +0200
+        id S240319AbhLTSDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240344AbhLTSDw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:03:52 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D174EC061756;
+        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso13605422otf.0;
+        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cKZsIJDWWTwCIgi/2NihvVcIBzyaJLdAfiGfAj1Uxuo=;
+        b=dIs6ErdXWcyhQgra2IgIOLuDQxBQ1KkMK1FwYx+LYxqeyyIQwxgzeh/gzDo2BeJMSL
+         n/2iUcZiDmkj3oohOSdk9OBjvHcK7oocP7otYQwCn4Dkk7XIbnex74LYSUIVA3x/iZNY
+         XR/m16otuPILqnyQW0V1odQ1ogCqTcF2IUblxzVQjgErN4rc/MbxFlOVDJjXghbFJvTm
+         AmKmYvVa0xSSqUqg5deti56HzZ2m89IJdL7Vdd2jdUlsTTT/T0snmeWzBd7UyqzQ/53P
+         qmAe3bgZ1lFVvx7dHpcTJ9LA2EVKpwCy47ySUwpmWw9VLZDjKI0u7X9aob7fm6BIpghT
+         CNmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cKZsIJDWWTwCIgi/2NihvVcIBzyaJLdAfiGfAj1Uxuo=;
+        b=bRnOaE4uCoIC6hImMzB1Ow8vyOCylrOJuFimIlIaOprUyi5J0mcegibDXpyW3hPUm9
+         +SmuJNJNltJd9JQk8GUZBSjY6BIIevFJnsQrtLC7W5pgSiefXq8uYkOmYYmnm54N9Bqt
+         2BOebl+miBv3T+3r5U+Rx++Uu9ZfyNvFO2H4t6Vq2o2VDhb6A2X2DWFZQ9Ji0nWY3BRs
+         TrU2B5O7FlUM6jRw2EnWUeFwEYGrPEP/PWkET+BLnzLWemJV3/gQQhjoVVBMSnhSyP8K
+         1obknB5e+h2NIJGCTV/PrM+5NLZ7BDLb3aHi+I4mZv2g9yGjZZvHAsWJdfEG+OuXcnPd
+         GyYQ==
+X-Gm-Message-State: AOAM53365wRYK3RAHLt0OiXkmu1MacG/wFJQljTzhSPyTO+8wPPARnUn
+        +sbpN2Yvm0T9WpCQ39+Lw2XUZdt9jgc=
+X-Google-Smtp-Source: ABdhPJzC6fVrBcFBEQYb88Z1X3S3GiAEZvPUdZxWo1kHcbCWZn1uhA3Z2NMcoSbq3Lp/5IreErTY0Q==
+X-Received: by 2002:a9d:5549:: with SMTP id h9mr12372501oti.36.1640023431269;
+        Mon, 20 Dec 2021 10:03:51 -0800 (PST)
+Received: from ?IPV6:2603:8081:140c:1a00:5ca2:d0f7:3dc4:a0f8? (2603-8081-140c-1a00-5ca2-d0f7-3dc4-a0f8.res6.spectrum.com. [2603:8081:140c:1a00:5ca2:d0f7:3dc4:a0f8])
+        by smtp.gmail.com with ESMTPSA id y17sm3414201ote.48.2021.12.20.10.03.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 10:03:50 -0800 (PST)
+Message-ID: <e5d50502-7adc-d773-2a18-307f8d0592e7@gmail.com>
+Date:   Mon, 20 Dec 2021 12:03:50 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
+Subject: Re: [PATCH] RDMA/rxe: fix a typo in opcode name
 Content-Language: en-US
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211220082251.1445-1-tianjia.zhang@linux.alibaba.com>
- <20211220082251.1445-6-tianjia.zhang@linux.alibaba.com>
-From:   Jussi Kivilinna <jussi.kivilinna@iki.fi>
-Subject: Re: [PATCH 5/6] crypto: x86/sm3 - add AVX assembly implementation
-In-Reply-To: <20211220082251.1445-6-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Chengguang Xu <cgxu519@mykernel.net>, zyjzyj2000@gmail.com,
+        jgg@ziepe.ca
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211218112320.3558770-1-cgxu519@mykernel.net>
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <20211218112320.3558770-1-cgxu519@mykernel.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=jussi.kivilinna smtp.mailfrom=jussi.kivilinna@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1640023428; a=rsa-sha256; cv=none;
-        b=da2nvPdHYu4MgAMlGpfMmzPiDl5gUxGRnpSPjVIWl+zJepXuTwmWU4vQXzSbRJZBOs93zI
-        1EB93O8X/uSD2gM4Hz0VghF+ei0ivDzDaHfe3nFMwalLKs4fokzSjLSy9mCR9oO65Sd2JF
-        a4tsA+y/ir0jo6D5I2Daiam48rMTatU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1640023428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wW83kui2hXf3Lo+4Yk8gj/d8EIV+rRJ4EwkVapYVfxc=;
-        b=NuOqQuAbUXBFleWNfstTiT1cbyuHWx3sRdk0yigNUIzEwXN1ndB/rug5BGoLnQN4kJ8mVL
-        J7+3BCgHEAo7XNSWw4c2W1rLTILUGxMtiplDHYPfyWzCRhF3/TGqryELTbJt7/XpCupW8a
-        J3E9tBlc+i5tlps5QIoB75PE4+45uNA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.12.2021 10.22, Tianjia Zhang wrote:
-> This patch adds AVX assembly accelerated implementation of SM3 secure
-> hash algorithm. From the benchmark data, compared to pure software
-> implementation sm3-generic, the performance increase is up to 38%.
+On 12/18/21 05:23, Chengguang Xu wrote:
+> There is a redundant ']' in the name of opcode IB_OPCODE_RC_SEND_MIDDLE,
+> so just fix it.
 > 
-> The main algorithm implementation based on SM3 AES/BMI2 accelerated
-> work by libgcrypt at:
-> https://gnupg.org/software/libgcrypt/index.html
-> 
-> Benchmark on Intel i5-6200U 2.30GHz, performance data of two
-> implementations, pure software sm3-generic and sm3-avx acceleration.
-> The data comes from the 326 mode and 422 mode of tcrypt. The abscissas
-> are different lengths of per update. The data is tabulated and the
-> unit is Mb/s:
-> 
-> update-size |     16      64     256    1024    2048    4096    8192
-> --------------------------------------------------------------------
-> sm3-generic | 105.97  129.60  182.12  189.62  188.06  193.66  194.88
-> sm3-avx     | 119.87  163.05  244.44  260.92  257.60  264.87  265.88
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
 > ---
->   arch/x86/crypto/Makefile         |   3 +
->   arch/x86/crypto/sm3-avx-asm_64.S | 521 +++++++++++++++++++++++++++++++
->   arch/x86/crypto/sm3_avx_glue.c   | 134 ++++++++
->   crypto/Kconfig                   |  13 +
->   4 files changed, 671 insertions(+)
->   create mode 100644 arch/x86/crypto/sm3-avx-asm_64.S
->   create mode 100644 arch/x86/crypto/sm3_avx_glue.c
+>  drivers/infiniband/sw/rxe/rxe_opcode.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
-> index f307c93fc90a..7cbe860f6201 100644
-> --- a/arch/x86/crypto/Makefile
-> +++ b/arch/x86/crypto/Makefile
-> @@ -88,6 +88,9 @@ nhpoly1305-avx2-y := nh-avx2-x86_64.o nhpoly1305-avx2-glue.o
->   
->   obj-$(CONFIG_CRYPTO_CURVE25519_X86) += curve25519-x86_64.o
->   
-> +obj-$(CONFIG_CRYPTO_SM3_AVX_X86_64) += sm3-avx-x86_64.o
-> +sm3-avx-x86_64-y := sm3-avx-asm_64.o sm3_avx_glue.o
-> +
->   obj-$(CONFIG_CRYPTO_SM4_AESNI_AVX_X86_64) += sm4-aesni-avx-x86_64.o
->   sm4-aesni-avx-x86_64-y := sm4-aesni-avx-asm_64.o sm4_aesni_avx_glue.o
->   
-> diff --git a/arch/x86/crypto/sm3-avx-asm_64.S b/arch/x86/crypto/sm3-avx-asm_64.S
-> new file mode 100644
-> index 000000000000..e7a9a37f3609
-> --- /dev/null
-> +++ b/arch/x86/crypto/sm3-avx-asm_64.S
-> @@ -0,0 +1,521 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * SM3 AVX accelerated transform.
-> + * specified in: https://datatracker.ietf.org/doc/html/draft-sca-cfrg-sm3-02
-> + *
-> + * Copyright (C) 2021 Jussi Kivilinna <jussi.kivilinna@iki.fi>
-> + * Copyright (C) 2021 Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> + */
-<snip>
-> +
-> +#define R(i, a, b, c, d, e, f, g, h, round, widx, wtype)                      \
-> +	/* rol(a, 12) => t0 */                                                \
-> +	roll3mov(12, a, t0); /* rorxl here would reduce perf by 6% on zen3 */ \
-> +	/* rol (t0 + e + t), 7) => t1 */                                      \
-> +	addl3(t0, e, t1);                                                     \
-> +	addl $K##round, t1;                                                   \
+> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> index 3ef5a10a6efd..47ebaac8f475 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> @@ -117,7 +117,7 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>  		}
+>  	},
+>  	[IB_OPCODE_RC_SEND_MIDDLE]		= {
+> -		.name	= "IB_OPCODE_RC_SEND_MIDDLE]",
+> +		.name	= "IB_OPCODE_RC_SEND_MIDDLE",
+>  		.mask	= RXE_PAYLOAD_MASK | RXE_REQ_MASK | RXE_SEND_MASK
+>  				| RXE_MIDDLE_MASK,
+>  		.length = RXE_BTH_BYTES,
+> 
 
-It's better to use "leal K##round(t0, e, 1), t1;" here and fix K0-K63 macros
-instead as I noted at libgcrypt mailing-list:
-  https://lists.gnupg.org/pipermail/gcrypt-devel/2021-December/005209.html
+Looks good
 
--Jussi
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>

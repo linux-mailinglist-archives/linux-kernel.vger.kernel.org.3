@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2D347A49F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 06:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C7647A4A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 06:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbhLTFhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 00:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S234186AbhLTFhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 00:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhLTFhR (ORCPT
+        with ESMTP id S234115AbhLTFh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 00:37:17 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58948C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 21:37:17 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id 8so8783741qtx.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 21:37:17 -0800 (PST)
+        Mon, 20 Dec 2021 00:37:28 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E5DC061574;
+        Sun, 19 Dec 2021 21:37:28 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id x15so6796841plg.1;
+        Sun, 19 Dec 2021 21:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HHAFcs23FVd+LLKCG5BENoMpJ5aSln69iW1WacMxcaI=;
-        b=RDaodyT/b/rrB5FcPWYPDpy8BAjvmRsX9zZu3Fik9S4mXNF94N+xbEOgNHir8bt0PN
-         /2JuVGlk8W25rFP0mgxEukIa37P7uRfOIPd2tbP/ENA7rKg15JS8ec9+sN1nkeLEQLLP
-         xpFLDfl/5RITOro1fwqM0E9d+HDcFeBu80iKvprljrLeJ3uYoXCOO+27ggFdko46Lm2Y
-         dtl+XX+HZ9nBOvaD9buxrK1Yl/cfV/S5xYfZLJw/1edP2E9p0Ejf1ZpDAtWm/o0+sFCT
-         8BltCsfNdrOX5qbTEE8nK3PRAA7tainf9JxoLx3t9TMbv28o2tYdzvcTVsXaKeIeCBxV
-         clmA==
+        h=from:to:cc:subject:date:message-id;
+        bh=/0zv1TjvAkVlbENIOA+6biuuFqisgttdoQp5hK0Vkr4=;
+        b=I4xuZrsfOPw/wkNDIP0axQiMXaBEJ9LjC846VAwVA/wkpNEyS1QMn7NNAvUw/diqCh
+         D837D2RBpRcv2bJHkUGIoKm3Sz8wo1gqL40TyhMWGpUb3vxjlc8YXfRFz3aghyHovuVR
+         7fB8XwWQYuU36odAWft8DI/5GkFNgllzIeQTT6ytaKSMWxf27uKm62m48Zu+swfwrWhV
+         0FGzZTrLlffJkVbklahcaTciSsRkzru49Yu1zUi/TILFXDJ+G6Aqm0jhH1wtU/xI/utZ
+         l53AfrRrI/Q5VwEJu4Va5KFjDGqxvpiJxFJk02p4aAdGXAg54L/zN3JA9ofVDAB5KQA6
+         +DLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HHAFcs23FVd+LLKCG5BENoMpJ5aSln69iW1WacMxcaI=;
-        b=dTQ9NVPUKCVntKnhgxO6LyBXyY14tlQYsTE/Th1AEea7ptBQTmjU/nS5+9QtoDRHBA
-         J2NQegLWLhSkQAibsVtxJbRfX5wwi9+RKk/nxXiNEgrIFZT8MrighxJhKP3dC0U/W/0X
-         6C89+7UiXb+e6RysLG2BfWdd3VtF4K33/DU+zqKGQfc2RbLVoZqkgvRo/1F6wQGpjKqk
-         auUtzRIw1TsJ4xoK1eNSKOSBaYLT8FH+iVZIVjITVkYxq6inLL/+2Sg6zcNUH830uYxD
-         a3m6Wshh/rjhgoHjYsC6xV7kvypZLg9SRDqLbGqfLdAd1xfRwj5s3xVJA2VbiiHvLMye
-         0FlQ==
-X-Gm-Message-State: AOAM533dzADCRf8cTwaj+o3ByFNledmO49iaSOrfs7clf2EzoM49MDep
-        3grBnL+4+TFPfzAWVRXCAsA=
-X-Google-Smtp-Source: ABdhPJxeze2edNWKSIb9+Qvy6UkIocmeNz6ZZf+6jQswz4khAzGrGC9O0QDpP1IYe567GLHOd2R5Jg==
-X-Received: by 2002:ac8:4e56:: with SMTP id e22mr5342391qtw.72.1639978636462;
-        Sun, 19 Dec 2021 21:37:16 -0800 (PST)
-Received: from localhost.localdomain ([37.19.198.98])
-        by smtp.gmail.com with ESMTPSA id m9sm12562843qtn.73.2021.12.19.21.37.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 21:37:15 -0800 (PST)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     luc.vanoostenryck@gmail.com
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        corbet@lwn.net, Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Subject: [PATCH] Sparse: Remove dead url
-Date:   Mon, 20 Dec 2021 11:04:21 +0530
-Message-Id: <20211220053421.29848-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/0zv1TjvAkVlbENIOA+6biuuFqisgttdoQp5hK0Vkr4=;
+        b=H+2YHG0SgzIIhjyZaZbXZcNdX37GfZ/CYmlMY/qRJZks642wN/qu2WGK+MAsMMQz5x
+         in28sN4WB83fba0l3nkL963l4ZaKIkZB3k7gntoFiqbMNdEHrhZ9Hw8oh+/3eL0PE5ws
+         DSxAhahD5c5ea4Dj8Ig8dB+UDzE1TkS+2qfu1qMO7GurHCaKRrW1RC+nD3SVC+1H3nP/
+         K4X5sQZoZLhbp7ERLdFnwCoeDyzSW7tEGJ1ynoUVhVxZgfJqyVoO3KNQLXnBIca85oqc
+         phBAxgvaV9ARXkpZZBAmILD/eJ4dRcthHwelrctEyEBl50zei4tNk1fSmcaJzMXn+FWD
+         Q7Sg==
+X-Gm-Message-State: AOAM5332xoicOUxVLyAyWTDBzyJrbOykWrslwlHufTbfiSa4wOgvwrjP
+        MJFLEvx9QHCLXrgcCkl6ozE=
+X-Google-Smtp-Source: ABdhPJwy3uqJ0YNIr/FEAiQtAAEqqQ8op/kTaNNCb4F0yFv1JqQRERuFZbMim5H1NPhYXNkpkQXVLQ==
+X-Received: by 2002:a17:90b:19c7:: with SMTP id nm7mr10189947pjb.107.1639978647883;
+        Sun, 19 Dec 2021 21:37:27 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id d3sm7491501pfv.192.2021.12.19.21.37.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Dec 2021 21:37:27 -0800 (PST)
+From:   Edwin Chiu <edwinchiu0505tw@gmail.com>
+To:     robh+dt@kernel.org, edwin.chiu@sunplus.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org
+Cc:     Edwin Chiu <edwinchiu0505tw@gmail.com>
+Subject: [PATCH v2 0/2] Add cpuidle driver for Sunplus SP7021
+Date:   Mon, 20 Dec 2021 13:37:30 +0800
+Message-Id: <cover.1639971376.git.edwinchiu0505tw@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Luc,
+This is a patch series for cpuidle driver for Sunplus SP7021 SoC.
 
-I stumble upon a dead URL on the user-facing page ,so took it away.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and 
+etc.) into a single chip. It is designed for industrial control.
 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- Documentation/index.rst | 1 -
- 1 file changed, 1 deletion(-)
+Edwin Chiu (2):
+  dt-bingings:arm:sunplus:add sp7021 compatible string to
+    sunplus,idle-state.yaml
+  cpuidle:sunplus:create cpuidle driver for sunplus sp7021
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index e29a5643849a..f96a67b16882 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -72,7 +72,6 @@ Bugs can also be reported and tracked via the `Linux kernel's bugzilla for spars
- Some interesting external documentation:
+ .../bindings/arm/sunplus/sunplus,idle-state.yaml   |  55 +++++++
+ MAINTAINERS                                        |   9 ++
+ drivers/cpuidle/Kconfig.arm                        |   7 +
+ drivers/cpuidle/Makefile                           |   1 +
+ drivers/cpuidle/cpuidle-sunplus.c                  | 180 +++++++++++++++++++++
+ include/linux/platform_data/cpuidle-sunplus.h      |  13 ++
+ 6 files changed, 265 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus/sunplus,idle-state.yaml
+ create mode 100644 drivers/cpuidle/cpuidle-sunplus.c
+ create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
 
- * `Sparse: a look under the hood <https://lwn.net/Articles/689907/>`_
--* `Sparse: a short overview <https://sil2.osadl.org/events/ewc-2019-hands-on/sparse_slides.pdf>`_
-
- .. toctree::
-    :caption: Development
---
-2.32.0
+-- 
+2.7.4
 

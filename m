@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E990447AF77
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6380347AF94
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbhLTPMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:12:51 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:35100 "EHLO vps0.lunn.ch"
+        id S234962AbhLTPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:15:10 -0500
+Received: from ixit.cz ([94.230.151.217]:43688 "EHLO ixit.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239832AbhLTPKp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:10:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=o+thjTOWE2UYctdxFm/V9c9ypGKbYsRqLgLROtcw6dg=; b=52aW0ITSrUS0UfqYZXz6RZx2dZ
-        uOMZ74/mUApufgGFeZmHOEqbMNI2VtvdTvEnsUQ+yQh960i83OQtGSQc84j/0csAA00w9VvdNvYaT
-        2mOu2Y5B5oSITrP+1Mlg8SmxtnSKn5/71zjWZaL73W/HwjDSIViBo3WHtdRJ1cz1YAtk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mzKJH-00H3Yj-31; Mon, 20 Dec 2021 16:10:43 +0100
-Date:   Mon, 20 Dec 2021 16:10:43 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        christian.herber@nxp.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org
-Subject: Re: [PATCH 3/3] phy: nxp-c45-tja11xx: read the tx timestamp without
- lock
-Message-ID: <YcCc84XAlckpTnkF@lunn.ch>
-References: <20211220120859.140453-1-radu-nicolae.pirea@oss.nxp.com>
- <20211220120859.140453-3-radu-nicolae.pirea@oss.nxp.com>
+        id S239703AbhLTPNX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:13:23 -0500
+Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 509762243C;
+        Mon, 20 Dec 2021 16:13:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640013201; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type; bh=KrX7y60poYGBCDm0ycPvzme2bfekqQewMZgSm+ZbFeU=;
+        b=EgzYxS5aV8QckJ0t+JLOTVIuzL3NBmmHoDKTt75i+STRXVbKXdyCvGhI+fpKgT/PK5KH24
+        54HmSsHkbeojqoAmhKtBIjx5UY0BIrhwRprXNGltyr/NV/s1RKB/xGGrEHiA8yGVnebgcI
+        +OaPam8/3g/JiKGnkZgaaYu/eD/+pq0=
+Date:   Mon, 20 Dec 2021 16:13:14 +0100
+From:   David Heidelberg <david@ixit.cz>
+Reply-To: 20211110105922.217895-4-bhupesh.sharma@linaro.org
+Subject: Re: [PATCH v5 03/22] dt-bindings: qcom-bam: Convert binding to YAML
+To:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, stephan@gerhold.net,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Message-Id: <2A6F4R.O6RS9WA32JJ91@ixit.cz>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220120859.140453-3-radu-nicolae.pirea@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 02:08:59PM +0200, Radu Pirea (NXP OSS) wrote:
-> The tx timestamps are read from only one place in interrupt or polling
-> mode. Locking the mutex is useless.
+Some nitpicks:
+- `description:` -> `description: >`
+- you dropped part of example, wouldn't be better to keep it there?
+- remove `binding` from the title
 
-You cannot take a mutex in an interrupt handler. So your description
-is probably not accurate.
+Feel free to put:
+Reviewed-by: David Heidelberg <david@ixit.cz>
 
-Is it safe for other ptp operations to be performed in parallel with
-reading the TX timestamp? _nxp_c45_ptp_settime64()?
+Thank you
+David Heidelberg
 
-	Andrew
+

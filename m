@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0105A47AFF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B8D47B046
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239181AbhLTPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:22:58 -0500
-Received: from mga12.intel.com ([192.55.52.136]:63822 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237448AbhLTPWD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:22:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640013722; x=1671549722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l8AMP3pMeTOE0Bebgw47YiCbv8lrzVYPL5lB+0HCag0=;
-  b=W0wAk8QJgRYODsYmey9Und7gxzn6ZS31BUnWB8tif5TW7vyJ1U+VuZDG
-   tyuB7IaediATvNGso461+l51u1U02SOfQ8JRMOD2+xwESdayky6YBBXEq
-   qdNU/TM/iS/iYBd1QKwBFlx745bKawqAbTdQpA8xjEpb2eK8Se9ESlfw5
-   7I7ggyo77WQfVqzCbDc5OrjIwKPlMYRGpc30AfIbb1D2/sAGqKiI4ANIQ
-   vyIp9z7Pl0pE6gAmswubFIPG7MCk4KU5X0RzgGWKVq48KVYSC6siSyiCx
-   /fupG0FyY7+MZN9wj2Q8K8LnWeG+JbuzIoM9N/IymNXzu6+rUPhBudQGJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220208161"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="220208161"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:20:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="757330263"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Dec 2021 07:20:10 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzKSP-0007ug-H5; Mon, 20 Dec 2021 15:20:09 +0000
-Date:   Mon, 20 Dec 2021 23:19:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 5/9] fs/f2fs/data.c:4178:9: error: implicit
- declaration of function 'dax_writeback_mapping_range'
-Message-ID: <202112202302.OWA4emnZ-lkp@intel.com>
+        id S240103AbhLTPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240175AbhLTP3m (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:29:42 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A65C061D60
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:21:29 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id o2so6379737vkn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7hAp0PfmGB2pMZBztL7AeQzwUtbDOof2ro2NrJ2jvCs=;
+        b=M+kLpz7Y9EgeUAfkXzReP8pE7rXZLW0/U1Va9YBYOrr7qJWrE06Wt5wA5hc2AkOOnS
+         aEDjRMxFcoAKhXyQ0hR+pii4XM1Qyy4qa6yardk03OgJtjRzJlGGldw1Tt8qc4QXUCSk
+         oiv/kFWlK2pooudkx3ErmtmvhmKbq5pe0zZYVhaln/r8Glw1kOgRvA6+Cwj8KnSStIP7
+         cAewagXibrjGcVn/NhdqnxGhI06M4Cvje+W3sF2NjE2w7w0GculzSfbnOzMfpVmaO5vM
+         FOWEzfqQuAAZbKtQo337v2aowvdwYGBjyT4AHdeZAzIn38m+sN5zT02UNAw8PQI20ExE
+         SYUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7hAp0PfmGB2pMZBztL7AeQzwUtbDOof2ro2NrJ2jvCs=;
+        b=SI7pgRIgCrCT3zr9ocNWtM2K0mjhIbx9xGJtO9leIkfALhVadUQ9IsbwAuJu2vGRRp
+         uCuW55pSVSwZG44uMOuVv6powYWjaTrwlUGM0r0R5zJT/Iep/5bI4LbfHw3Zz4UxifZs
+         v3c12GRHijws+L+5TWtO1ep46Q1H7QFEiXQaT2gix/wfGRObtvQfs4G9TNrgmVcCEFUr
+         q9pPJD1/Xhm6bhGIn0SFZWyLE9KZ+WDUIyW880IxjRa/r6PYN4L4qKNv3mYEiwDAp+yM
+         QuCbXUQFfzYso+9RzkgxP6qvK2RdoKschxH9OKYyro2TBCG1tzv4Rk2RJLY0uc41a0s0
+         ttqw==
+X-Gm-Message-State: AOAM5317xvdA0vZ4pbQrRaYrNV8DobOWoZEG85srHkWK1PZ5Hje+1n7e
+        bEUCMKBpPS0gBMXaZdzyCGPq3xMdhWOt8ycUYMoJkg==
+X-Google-Smtp-Source: ABdhPJyTNBpocGV7qtoeL6omBq4tJSpIoSxwQjpiDZ4N44pUz6MFxLuf0bHfL20uGAilVIycAEo0wvXpTET3t9N+9K0=
+X-Received: by 2002:a05:6122:c9b:: with SMTP id ba27mr5956186vkb.14.1640013688504;
+ Mon, 20 Dec 2021 07:21:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211204195757.8600-1-semen.protsenko@linaro.org>
+ <20211204195757.8600-4-semen.protsenko@linaro.org> <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
+In-Reply-To: <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 20 Dec 2021 17:21:16 +0200
+Message-ID: <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
-commit: 2908c6445a36c37b0af40ba94f72c957a87d8fd8 [5/9] f2fs: support dax address space operation
-config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202302.OWA4emnZ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=2908c6445a36c37b0af40ba94f72c957a87d8fd8
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout 2908c6445a36c37b0af40ba94f72c957a87d8fd8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+On Mon, 13 Dec 2021 at 13:35, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 04/12/2021 20:57, Sam Protsenko wrote:
+> > USI control is now extracted to the dedicated USI driver. Remove USI
+> > related code from serial driver to avoid conflicts and code duplication.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> > Changes in v3:
+> >   - Spell check fixes in commit message
+> >
+> > Changes in v2:
+> >   - (none)
+> >
+> >  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
+> >  include/linux/serial_s3c.h       |  9 --------
+> >  2 files changed, 4 insertions(+), 41 deletions(-)
+> >
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>
+> Greg,
+> If you are fine with the changes, please take the serial driver changes
+> via your tree.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Greg,
 
-All errors (new ones prefixed by >>):
+If it's ok with you, can you please apply patches 3, 4 and 5 from this
+series? If it's possible, would be nice to see those in v5.17.
 
->> fs/f2fs/data.c:4178:9: error: implicit declaration of function 'dax_writeback_mapping_range' [-Werror,-Wimplicit-function-declaration]
-           return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
-                  ^
-   1 error generated.
+Thanks!
 
-
-vim +/dax_writeback_mapping_range +4178 fs/f2fs/data.c
-
-  4169	
-  4170	static int f2fs_dax_writepages(struct address_space *mapping,
-  4171						struct writeback_control *wbc)
-  4172	{
-  4173		struct f2fs_sb_info *sbi = F2FS_I_SB(mapping->host);
-  4174	
-  4175		if (unlikely(f2fs_cp_error(sbi)))
-  4176			return -EIO;
-  4177	
-> 4178		return dax_writeback_mapping_range(mapping, sbi->s_daxdev, wbc);
-  4179	}
-  4180	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Best regards,
+> Krzysztof

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DDF47ACB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821D347ADAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbhLTOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S238300AbhLTOxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236663AbhLTOo5 (ORCPT
+        with ESMTP id S236138AbhLTOu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:44:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CF9C0613B4;
-        Mon, 20 Dec 2021 06:42:59 -0800 (PST)
+        Mon, 20 Dec 2021 09:50:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBA0C08EAEA;
+        Mon, 20 Dec 2021 06:46:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42EC2B80EE9;
-        Mon, 20 Dec 2021 14:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEE4C36AE8;
-        Mon, 20 Dec 2021 14:42:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CE4261185;
+        Mon, 20 Dec 2021 14:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33975C36AE7;
+        Mon, 20 Dec 2021 14:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011378;
-        bh=nih9dZrU8O63ScahyWDZ8/H1Eobq4ZvyR31ISJE4lLM=;
+        s=korg; t=1640011602;
+        bh=PqZDWNYbxKDT1UN2AEx9VwMbmZOHsuoKUXiwpYNLLtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BGvog3v+ZOz972YXja5QX5G6ISoJSgl7i1oL2b2zs6HPryYmyMq6iIQnFYRbUq6Bw
-         xebgM4p0sPO7R5rVbbKZmjBSGFDvaOdf075oDnoZ/wU885qPodI4MknyYJzrdbNj6M
-         kkuTd0QgDL6tHbvRyf/HBXxXFIHJj9jk4/ictxL8=
+        b=TTkao0kd4cYB4KexSs2n3hyZnP3oBzYp5SsOb3wVlYLDbo4qKAXjExXxwBC7eM5j9
+         /hvcLJ2WxflMPFgYIxcvYS3Mh8PSJyfjYK+so0E5NAXmb0nvNDsnPxYmVUOh3al/3N
+         l9dt2Mw9ADXLTwuolU+pPGX8l/ie+rRdZ0Yxp410=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.19 56/56] xen/netback: dont queue unlimited number of packages
-Date:   Mon, 20 Dec 2021 15:34:49 +0100
-Message-Id: <20211220143025.310062898@linuxfoundation.org>
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        syzbot+75eab84fd0af9e8bf66b@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 61/71] ovl: fix warning in ovl_create_real()
+Date:   Mon, 20 Dec 2021 15:34:50 +0100
+Message-Id: <20211220143027.743186091@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,73 +48,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit be81992f9086b230623ae3ebbc85ecee4d00a3d3 upstream.
+commit 1f5573cfe7a7056e80a92c7a037a3e69f3a13d1c upstream.
 
-In case a guest isn't consuming incoming network traffic as fast as it
-is coming in, xen-netback is buffering network packages in unlimited
-numbers today. This can result in host OOM situations.
+Syzbot triggered the following warning in ovl_workdir_create() ->
+ovl_create_real():
 
-Commit f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal
-queue and carrier flapping") meant to introduce a mechanism to limit
-the amount of buffered data by stopping the Tx queue when reaching the
-data limit, but this doesn't work for cases like UDP.
+	if (!err && WARN_ON(!newdentry->d_inode)) {
 
-When hitting the limit don't queue further SKBs, but drop them instead.
-In order to be able to tell Rx packages have been dropped increment the
-rx_dropped statistics counter in this case.
+The reason is that the cgroup2 filesystem returns from mkdir without
+instantiating the new dentry.
 
-It should be noted that the old solution to continue queueing SKBs had
-the additional problem of an overflow of the 32-bit rx_queue_len value
-would result in intermittent Tx queue enabling.
+Weird filesystems such as this will be rejected by overlayfs at a later
+stage during setup, but to prevent such a warning, call ovl_mkdir_real()
+directly from ovl_workdir_create() and reject this case early.
 
-This is part of XSA-392
-
-Fixes: f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal queue and carrier flapping")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reported-and-tested-by: syzbot+75eab84fd0af9e8bf66b@syzkaller.appspotmail.com
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netback/rx.c |   18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ fs/overlayfs/dir.c       |    3 +--
+ fs/overlayfs/overlayfs.h |    1 +
+ fs/overlayfs/super.c     |   12 ++++++++----
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -88,16 +88,19 @@ void xenvif_rx_queue_tail(struct xenvif_
- 
- 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
- 
--	if (skb_queue_empty(&queue->rx_queue))
--		xenvif_update_needed_slots(queue, skb);
--
--	__skb_queue_tail(&queue->rx_queue, skb);
--
--	queue->rx_queue_len += skb->len;
--	if (queue->rx_queue_len > queue->rx_queue_max) {
-+	if (queue->rx_queue_len >= queue->rx_queue_max) {
- 		struct net_device *dev = queue->vif->dev;
- 
- 		netif_tx_stop_queue(netdev_get_tx_queue(dev, queue->id));
-+		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
-+	} else {
-+		if (skb_queue_empty(&queue->rx_queue))
-+			xenvif_update_needed_slots(queue, skb);
-+
-+		__skb_queue_tail(&queue->rx_queue, skb);
-+
-+		queue->rx_queue_len += skb->len;
- 	}
- 
- 	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
-@@ -147,6 +150,7 @@ static void xenvif_rx_queue_drop_expired
- 			break;
- 		xenvif_rx_dequeue(queue);
- 		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
- 	}
+--- a/fs/overlayfs/dir.c
++++ b/fs/overlayfs/dir.c
+@@ -113,8 +113,7 @@ kill_whiteout:
+ 	goto out;
  }
  
+-static int ovl_mkdir_real(struct inode *dir, struct dentry **newdentry,
+-			  umode_t mode)
++int ovl_mkdir_real(struct inode *dir, struct dentry **newdentry, umode_t mode)
+ {
+ 	int err;
+ 	struct dentry *d, *dentry = *newdentry;
+--- a/fs/overlayfs/overlayfs.h
++++ b/fs/overlayfs/overlayfs.h
+@@ -409,6 +409,7 @@ struct ovl_cattr {
+ 
+ #define OVL_CATTR(m) (&(struct ovl_cattr) { .mode = (m) })
+ 
++int ovl_mkdir_real(struct inode *dir, struct dentry **newdentry, umode_t mode);
+ struct dentry *ovl_create_real(struct inode *dir, struct dentry *newdentry,
+ 			       struct ovl_cattr *attr);
+ int ovl_cleanup(struct inode *dir, struct dentry *dentry);
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -650,10 +650,14 @@ retry:
+ 			goto retry;
+ 		}
+ 
+-		work = ovl_create_real(dir, work, OVL_CATTR(attr.ia_mode));
+-		err = PTR_ERR(work);
+-		if (IS_ERR(work))
+-			goto out_err;
++		err = ovl_mkdir_real(dir, &work, attr.ia_mode);
++		if (err)
++			goto out_dput;
++
++		/* Weird filesystem returning with hashed negative (kernfs)? */
++		err = -EINVAL;
++		if (d_really_is_negative(work))
++			goto out_dput;
+ 
+ 		/*
+ 		 * Try to remove POSIX ACL xattrs from workdir.  We are good if:
 
 

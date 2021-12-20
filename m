@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B2F47B202
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F415347B205
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240160AbhLTRTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbhLTRTt (ORCPT
+        id S240168AbhLTRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:21:33 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39022
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232743AbhLTRVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:19:49 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A79C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:19:49 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id t19so16812263oij.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ilrvhX4adeXJIaCdTInuQBtNPjTZg76k+bbb32ZDvfA=;
-        b=oVrue8OuxpTW/U9MiEZXd206fFvNx2LFKTdAoPLpR04XIqpoRSOCQBDhBDBFg3UTt2
-         LP0voOok9+a4GuL3lnP5oOWkacYA1uiCt5ognuYsA47nsQrIGh9ks/+8HshfmQQdU80Y
-         KYeX2tZygCz1P7LLQb7wYbcWZGzk53UoHaKda3ZUUIvD8YrEnntY1MZZb4yhHzTwaEvU
-         kDFBVffdzS/N12ZkQDfwURwQOPcSKqPwVjpiOrjGzAU9sXSf76qiAjg5ITaDy5gafYyf
-         MM/2lYC+JLHSblgK7p2up7gDBiYxxezefd4TXxht7FUgmSLYI/wYmsC/5Wly6J3eTEKK
-         vdhg==
+        Mon, 20 Dec 2021 12:21:30 -0500
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8821240036
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640020889;
+        bh=9uepcdD/+xGrreEt0EvBxw805TxTK4a1Lcw9AZ0HvjU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=vW3WziXRD0NbDKDIc0uEmapoWe6K9v9+CG0EluJhE+AIDM7zUS3RYZ98YkxP1h6eb
+         kczHedPoEqhAsUncW5pOFI6xVHO63NrkO25oub56Ryi3OKRyjYhErRO+Oyt9R575CM
+         W+ozbdj1G6dX1WoSPq6PanHMmW5fF6CkbqhWtHUlI21zvnBCEJLKJBAlzp0uAW0rGC
+         tarAvssI3y6kSASQKdiznNUZZ+JSSYqsW2ivzNk0nAguNTgIvfd6Fx22gFkot/0e57
+         SJ2r928qQbbj79Yn9nv2gxYpHqECOuW7nd3w9W8nafJNxspvc3AYwVrA36hXCsjgKH
+         B4NHg8FrkXQSQ==
+Received: by mail-lf1-f69.google.com with SMTP id h40-20020a0565123ca800b00402514d959fso4852510lfv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:21:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ilrvhX4adeXJIaCdTInuQBtNPjTZg76k+bbb32ZDvfA=;
-        b=w4Uw2YjuxX82FgavoAKq8dSkJqRA8JQVQLdBPlZBLZeMl2NZKm2qzGZQFOdKvVfSJc
-         XXNz/3NmlfsG8r6rY925k+Ecy3xW7E92UupFrHfrC5U+MzbdsfblYccT7wpSIDRjNENz
-         l/NPievZPQSTWI7zTFxgVdp0tLXxMxHvS/uwbCMFuFaEtRHLwBF8UueO1NG6RyR9t5gG
-         fVcs/78Sf6OLcJi3u6Ktvs+GcGW7sPDOB2CwczBTrH6qbBVQ8PvZ8IAtU1jWYIlpd6c2
-         f37DgpI5EGb/vp/CQ16PJ/nh67ldeo9ENF+U0PaVN0wmQuAUVvBSixFjCaCzjXO9Pv/s
-         WFYA==
-X-Gm-Message-State: AOAM532qgNujz8BFmMet4Y4zVIbqjtFuASoaI6Mdkk0la4c48rrDQP4r
-        vN2vV9JMszOR8QTK/sJCvqvUFKkY8CKRqeuF8xsQpg==
-X-Google-Smtp-Source: ABdhPJzVPHQTSd85vReZAhk5/xhn8anCH0sWrUGKxyOTm4NJlj66RiGLv/9Ir2GntQIPKa0bOfugKOf4tiMhXK9mc8Y=
-X-Received: by 2002:aca:af50:: with SMTP id y77mr13111576oie.134.1640020788502;
- Mon, 20 Dec 2021 09:19:48 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9uepcdD/+xGrreEt0EvBxw805TxTK4a1Lcw9AZ0HvjU=;
+        b=AbVQxn9KdV3jPTf2x+h92lAyIYfJPPpJyZeT5K2lx4G6FmSr0NdWO/A5sSQNdAqCDD
+         8BEOeyMXqMw7p1A5z+nD6rdIICOW2rfwY+HPodYBFrMpnHl81vo1wQhz+6lbEYHIdS3m
+         YswyuutGuNGrslNAx6euwSfrNOBTfMR9nmcbFKBxpq92TqVfgNC38wv5ZNHE94NPu6uf
+         LlNjat9AW3KtWfj+6IXuiYcCBjdKQ5AZ5f9Y9DdXwl7qXKfIQGgQwJGo3g2/bmYLCwQG
+         FCLoI+BnvlUsTfWSshyQ03cD9gRCXFvcEkSjo4xkPX+ztjUIxrCd55uaA//3bv/WwpIK
+         sJZg==
+X-Gm-Message-State: AOAM533hGMgHuOTQcMVOBq00w3W2rOubU69TfhLGiItwUxNTeJlEYcW5
+        TxOIPHjlNhvH8huzLcFltcjSysKoYLPryZqgrnNPh4nkmjRvsNelP6TFuOCCUHKnvDDx0/RbzRb
+        TobCnaRW90e13PF+rWDbjcge53WvxcAxIr5VDUofHDA==
+X-Received: by 2002:a2e:a176:: with SMTP id u22mr15640206ljl.116.1640020889036;
+        Mon, 20 Dec 2021 09:21:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw12jXDaIaPutKBaiiF5L53Z9AtdC+YiU2FcIO9qaPe7iaLjXk+j/FyWgm2N7as2oT8PjAU/A==
+X-Received: by 2002:a2e:a176:: with SMTP id u22mr15640183ljl.116.1640020888803;
+        Mon, 20 Dec 2021 09:21:28 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id y4sm2568279ljp.16.2021.12.20.09.21.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 09:21:27 -0800 (PST)
+Message-ID: <09d4e9d8-6bfa-5676-50cc-49bfc947b444@canonical.com>
+Date:   Mon, 20 Dec 2021 18:21:24 +0100
 MIME-Version: 1.0
-References: <a746b5baebbf79f8160c1fe09d6f8a5ab7bde1d7.1640017993.git.andreyknvl@google.com>
- <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com> <CA+fCnZcMWA_VT83dXqD-bFJGG073KWPnULAPYK1=BhQkGsHzUQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZcMWA_VT83dXqD-bFJGG073KWPnULAPYK1=BhQkGsHzUQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 20 Dec 2021 18:19:37 +0100
-Message-ID: <CANpmjNOgBVoUiqK809CsUzo_eb_04+Vh3w1GWxS+VLAh7JBk9w@mail.gmail.com>
-Subject: Re: [PATCH] kasan: fix quarantine conflicting with init_on_free
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [GIT PULL 4/6] ARM: samsung: for v5.17
+Content-Language: en-US
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com>
+ <20211220115530.30961-3-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211220115530.30961-3-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 18:16, Andrey Konovalov <andreyknvl@gmail.com> wrote:
->
-> On Mon, Dec 20, 2021 at 6:07 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Mon, 20 Dec 2021 at 17:37, <andrey.konovalov@linux.dev> wrote:
-> > >
-> > > From: Andrey Konovalov <andreyknvl@google.com>
-> > >
-> > > KASAN's quarantine might save its metadata inside freed objects. As
-> > > this happens after the memory is zeroed by the slab allocator when
-> > > init_on_free is enabled, the memory coming out of quarantine is not
-> > > properly zeroed.
-> > >
-> > > This causes lib/test_meminit.c tests to fail with Generic KASAN.
-> > >
-> > > Zero the metadata when the object is removed from quarantine.
-> > >
-> > > Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
-> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > > ---
-> > >  mm/kasan/quarantine.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > >
-> > > diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
-> > > index 587da8995f2d..2e50869fd8e2 100644
-> > > --- a/mm/kasan/quarantine.c
-> > > +++ b/mm/kasan/quarantine.c
-> > > @@ -132,11 +132,22 @@ static void *qlink_to_object(struct qlist_node *qlink, struct kmem_cache *cache)
-> > >  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
-> > >  {
-> > >         void *object = qlink_to_object(qlink, cache);
-> > > +       struct kasan_free_meta *meta = kasan_get_free_meta(cache, object);
-> > >         unsigned long flags;
-> > >
-> > >         if (IS_ENABLED(CONFIG_SLAB))
-> > >                 local_irq_save(flags);
-> > >
-> > > +       /*
-> > > +        * If init_on_free is enabled and KASAN's free metadata is stored in
-> > > +        * the object, zero the metadata. Otherwise, the object's memory will
-> > > +        * not be properly zeroed, as KASAN saves the metadata after the slab
-> > > +        * allocator zeroes the object.
-> > > +        */
-> > > +       if (slab_want_init_on_free(cache) &&
-> > > +           cache->kasan_info.free_meta_offset == 0)
-> > > +               memset(meta, 0, sizeof(*meta));
-> >
-> > memzero_explicit()
-> >
-> > although in this case it probably doesn't matter much, because AFAIK
-> > memzero_explicit() only exists to prevent the compiler from eliding
-> > the zeroing. Up to you.
->
-> I've thought about using memzero_explicit(), but the rest of
-> init_on_alloc/free code uses memset(0) so I decided to use it as well.
-> If we decide to switch to memzero_explicit(), it makes sense to do it
-> everywhere.
+On 20/12/2021 12:55, Krzysztof Kozlowski wrote:
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> 
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.17
+> 
+> for you to fetch changes up to 3ac5f9db26bb7a227ccbf160c36a5567b5394299:
+> 
+>   ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies (2021-11-21 17:46:18 +0100)
+> 
+> ----------------------------------------------------------------
+> Samsung mach/soc changes for v5.17
+> 
+> 1. Minor fixes for S3C platforms.
+> 2. Remove HAVE_S3C2410_I2C Kconfig symbol - not really useful.
+> 
+> ----------------------------------------------------------------
+> Arnd Bergmann (1):
+>       ARM: s3c: add one more "fallthrough" statement in Jive
+> 
+> Krzysztof Kozlowski (1):
+>       ARM: s3c: include header for prototype of s3c2410_modify_misccr
+> 
+> Sam Protsenko (1):
+>       ARM: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies
+> 
 
-memzero_explicit() is newer than those existing memset(0) -- new code
-should probably start using it.
+Hi Arnd and Olof,
 
-So I'd opt for just using it here. Who knows what other optimizations
-future compilers may come up with.
+I forgot to mention possible conflict here with arm tree. Conflict is
+easy to resolve - just remove lines in all cases like:
+
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@@ -471,7 -478,7 +471,6 @@@ config ARCH_S3C24X
+  	select CLKSRC_SAMSUNG_PWM
+  	select GPIO_SAMSUNG
+  	select GPIOLIB
+- 	select HAVE_S3C2410_I2C if I2C
+ -	select GENERIC_IRQ_MULTI_HANDLER
+  	select NEED_MACH_IO_H
+  	select S3C2410_WATCHDOG
+  	select SAMSUNG_ATAGS
+
+
+Best regards,
+Krzysztof

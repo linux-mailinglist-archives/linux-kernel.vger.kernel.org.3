@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D084D47A87A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779AD47A881
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbhLTLTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S231725AbhLTLU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbhLTLTX (ORCPT
+        with ESMTP id S230211AbhLTLU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:19:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11A7C061574;
-        Mon, 20 Dec 2021 03:19:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EAAE60FDA;
-        Mon, 20 Dec 2021 11:19:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD279C36AE7;
-        Mon, 20 Dec 2021 11:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639999161;
-        bh=rFjfI7Vn7vJeC1yK+hK/Qc1NMRxCct+H3Q4AMWxJdCk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rj8tO1uyWdpRHPQ0//QKOsbjqWHCdzwqjq0dKNReb3imsliuoirUMTlvJ95e//VyR
-         iUIJZFeR9gbgqMNmYVa5Zk6dddqcjblgUHzENetfC1734x4QqUv8LVWLKnTf7Anndx
-         LV12a3OOUQZDqH7ihUzQ/gYZwgWac6I4o/yzYvwnS7djqUMlSp7EuE+N4H9oHCxLqG
-         nD4vg9X96gNZ2fBjFNoZKyocf59+6B7l5UCyeddSlBuGXe2RehYb0sytYJPjJLyiew
-         qnT037uIxpYzzOh6TZcZSUyQbEkuu2WEaWtieynoOJvRCTqKVntGoCjY9J+Enc2jBD
-         fFXfAUtbdYzvA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzGhH-00063C-2s; Mon, 20 Dec 2021 12:19:15 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Marc Ferland <ferlandm@amotus.ca>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] gnss: usb: add support for Sierra Wireless XM1210
-Date:   Mon, 20 Dec 2021 12:19:01 +0100
-Message-Id: <20211220111901.23206-3-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211220111901.23206-1-johan@kernel.org>
-References: <20211220111901.23206-1-johan@kernel.org>
+        Mon, 20 Dec 2021 06:20:26 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F309BC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 03:20:25 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so12117926otu.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 03:20:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eLN1SpZ6RD9asc3ZvM6rC3P2ObMSptNgs+ADFfU5zGQ=;
+        b=SzJmJWxJofq+BOBNg17kTJWsdgeWt71gm9KzwgqNGL3NDojTvxjVSlIiLbtYVyEg+P
+         6HTIp0INCi18kRaZtBINKPWEs173N9uVVKBTWaNvbTThYFePj5iUPjg0SIT/iVu6kL4V
+         hBId2FeLX8anQHjVI9ZxMCvmzdTB4UPnpQhMHo26XHSrTyRoe7zig6z2ULehK+v/qsR6
+         /FRFvaTZN7EGbcy6fkhYqxU85T1c4NDgVYpBa+aX0Zo3ufqvY152GTULprMKRYE84FrO
+         va44wLI7Y+uyVip4/3t7kw/2CLrgqd3uIZNhnhwL3VZw5U7fI62/JPYOhvfsSCxKn/Ns
+         mbpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eLN1SpZ6RD9asc3ZvM6rC3P2ObMSptNgs+ADFfU5zGQ=;
+        b=sA1hgO0qLiJA2IauMx61K0TZmIspiXtqcxR5D73mYMPSR1tm6itJ8m7MKDpJEQq+wI
+         Th+k1bIqw9AYiMGDJsuhm9hLxkdzd1CvG3p7uRs8zDRDjO9j75UP8ljI/52JMbuiPvpT
+         cPuiBs9WGvJ7GVMJbLD69hDPD5TO9HrfJazfWM/3flfJduQwyA5XnAQlvzcbUZ+UVVdn
+         829+bKcitUg83d1iRKl0UQPosiIRk64b1gXTKAG/B4IkKT/n625Mk+dkLI21VYAVrZdJ
+         2xZ/ZXWTOqDTtu8xY5DFf7aKqCuNEugSBpa8FgIyvmKY0kKuX+ssE4AaWbp3YeXLaKXp
+         oHKQ==
+X-Gm-Message-State: AOAM532vfl2msXoHeXeToVHaLkLiNctYCpiMR4A8gU3nJgt1Iwb/yrF+
+        FXTjYLuVz2vdERXBxi6t10QETUAgHZv23FyV+OLaGg==
+X-Google-Smtp-Source: ABdhPJzSlPIJkA1oGSHCiY9lUxcpVIcPbSbiO7nCLYrL/Eu2m6zXlIrODGvtzVGXAFhlr1ndpdPOJmgd8OKEAYm5yi4=
+X-Received: by 2002:a9d:2ae1:: with SMTP id e88mr10590196otb.157.1639999225023;
+ Mon, 20 Dec 2021 03:20:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211220035448.12054-1-yajun.deng@linux.dev>
+In-Reply-To: <20211220035448.12054-1-yajun.deng@linux.dev>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 20 Dec 2021 12:20:13 +0100
+Message-ID: <CANpmjNPsCVkq7SsVL-xpktGe3RsJnRGTJxEPZ60VUt1w_5QgPQ@mail.gmail.com>
+Subject: Re: [PATCH] init: fix the wrong __setup_param() definition
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     keescook@chromium.org, samitolvanen@google.com, ojeda@kernel.org,
+        masahiroy@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the USB interface of the Sierra Wireless XM1210
-receiver.
+On Mon, 20 Dec 2021 at 04:55, Yajun Deng <yajun.deng@linux.dev> wrote:
+>
+> The parameters in __setup_param() should be four rather than three when
+> MODULE isn't definited.
 
-Note that the device only supports NMEA.
+This is actually "when MODULE is defined". __setup_param() becomes a
+nop when compiling as a module.
 
-Bus 002 Device 003: ID 1199:b000 Sierra Wireless, Inc. Sierra Wireless_GNSS
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x1199 Sierra Wireless, Inc.
-  idProduct          0xb000
-  bcdDevice            0.01
-  iManufacturer           1 Sierra-wireless
-  iProduct                2 Sierra Wireless_GNSS
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0020
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower               50mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         0
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval             255
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval             255
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0001
-  Self Powered
+But that begs the question: why hasn't this been caught before?
+Probably because nobody should be using __setup_param() if something
+can also be compiled as a module, in which case module_param() and
+friends should be used. But perhaps there are valid usecases where i
+t's meant to become a nop if MODULE.
 
-Reported-by: Marc Ferland <ferlandm@amotus.ca>
-Link: https://lore.kernel.org/r/20211027200223.72701-1-ferlandm@amotus.ca
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/gnss/usb.c | 1 +
- 1 file changed, 1 insertion(+)
+I don't object this fix, since the !MODULE __setup_param() seems like
+it was meant to be defined.
 
-diff --git a/drivers/gnss/usb.c b/drivers/gnss/usb.c
-index 5c0251034def..792235a688ea 100644
---- a/drivers/gnss/usb.c
-+++ b/drivers/gnss/usb.c
-@@ -17,6 +17,7 @@
- #define GNSS_USB_WRITE_TIMEOUT	1000
- 
- static const struct usb_device_id gnss_usb_id_table[] = {
-+	{ USB_DEVICE(0x1199, 0xb000) },		/* Sierra Wireless XM1210 */
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, gnss_usb_id_table);
--- 
-2.32.0
+Just curious: did you actually encounter a problem with some new code
+using __setup_param()?
 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> ---
+>  include/linux/init.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/init.h b/include/linux/init.h
+> index d82b4b2e1d25..62a77850f10e 100644
+> --- a/include/linux/init.h
+> +++ b/include/linux/init.h
+> @@ -355,7 +355,7 @@ void __init parse_early_options(char *cmdline);
+>
+>  #else /* MODULE */
+>
+> -#define __setup_param(str, unique_id, fn)      /* nothing */
+> +#define __setup_param(str, unique_id, fn, early)/* nothing */
+>  #define __setup(str, func)                     /* nothing */
+>  #endif
+>
+> --
+> 2.32.0
+>

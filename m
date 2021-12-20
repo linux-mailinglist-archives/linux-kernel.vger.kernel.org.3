@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 278DE47AC34
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D817A47AE1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbhLTOmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49558 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbhLTOk4 (ORCPT
+        id S237895AbhLTO6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238627AbhLTOy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:56 -0500
+        Mon, 20 Dec 2021 09:54:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB044C08EB4E;
+        Mon, 20 Dec 2021 06:47:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2075B80EE9;
-        Mon, 20 Dec 2021 14:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F5EC36AE7;
-        Mon, 20 Dec 2021 14:40:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3021EB80EDF;
+        Mon, 20 Dec 2021 14:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691DAC36AE8;
+        Mon, 20 Dec 2021 14:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011254;
-        bh=AftJyowQAsUsfuJ0uI4F8Mwu1SL7IWxG0P78QcusfuU=;
+        s=korg; t=1640011675;
+        bh=HPbtV0j//3kCqRb9lSI9XtTSwUZhYLQc5Uutv2uuYNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TpJ0lLajzx9bXH0sNkdn2aXspKFprnNjXf3VCYTYPFa1NSaD5V8x5B6eq+3i8UtRd
-         bazd8AeN+dMYwP10IwfJ1iqh2ULMcPISXj830NUFJXIBSik6j/8hV+KxzNkSiXZbZN
-         VMsHsSBX6Y9LJFZyVrftyAPqqBuG+MuNfZ2vzeXs=
+        b=Y/EXeP/69mnfLot2+qnRI3jokZrJQYdRVvLLQv44Tpye1BOikxtnmhKQoMhFLkln6
+         Be8r7YRFRxGkf4/8vlLK82bH4KbTHZBpD9yPppE7f7Fs/h418xYNtpIvFy4TEMCuZF
+         /OHHSkc78WW1lvKvUUOImNOJwP120yvqloLv/reM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 4.19 13/56] audit: improve robustness of the audit queue handling
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 33/99] sch_cake: do not call cake_destroy() from cake_init()
 Date:   Mon, 20 Dec 2021 15:34:06 +0100
-Message-Id: <20211220143023.887452872@linuxfoundation.org>
+Message-Id: <20211220143030.476050958@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,109 +51,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit f4b3ee3c85551d2d343a3ba159304066523f730f upstream.
+[ Upstream commit ab443c53916730862cec202078d36fd4008bea79 ]
 
-If the audit daemon were ever to get stuck in a stopped state the
-kernel's kauditd_thread() could get blocked attempting to send audit
-records to the userspace audit daemon.  With the kernel thread
-blocked it is possible that the audit queue could grow unbounded as
-certain audit record generating events must be exempt from the queue
-limits else the system enter a deadlock state.
+qdiscs are not supposed to call their own destroy() method
+from init(), because core stack already does that.
 
-This patch resolves this problem by lowering the kernel thread's
-socket sending timeout from MAX_SCHEDULE_TIMEOUT to HZ/10 and tweaks
-the kauditd_send_queue() function to better manage the various audit
-queues when connection problems occur between the kernel and the
-audit daemon.  With this patch, the backlog may temporarily grow
-beyond the defined limits when the audit daemon is stopped and the
-system is under heavy audit pressure, but kauditd_thread() will
-continue to make progress and drain the queues as it would for other
-connection problems.  For example, with the audit daemon put into a
-stopped state and the system configured to audit every syscall it
-was still possible to shutdown the system without a kernel panic,
-deadlock, etc.; granted, the system was slow to shutdown but that is
-to be expected given the extreme pressure of recording every syscall.
+syzbot was able to trigger use after free:
 
-The timeout value of HZ/10 was chosen primarily through
-experimentation and this developer's "gut feeling".  There is likely
-no one perfect value, but as this scenario is limited in scope (root
-privileges would be needed to send SIGSTOP to the audit daemon), it
-is likely not worth exposing this as a tunable at present.  This can
-always be done at a later date if it proves necessary.
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 21902 at kernel/locking/mutex.c:586 __mutex_lock_common kernel/locking/mutex.c:586 [inline]
+WARNING: CPU: 0 PID: 21902 at kernel/locking/mutex.c:586 __mutex_lock+0x9ec/0x12f0 kernel/locking/mutex.c:740
+Modules linked in:
+CPU: 0 PID: 21902 Comm: syz-executor189 Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:586 [inline]
+RIP: 0010:__mutex_lock+0x9ec/0x12f0 kernel/locking/mutex.c:740
+Code: 08 84 d2 0f 85 19 08 00 00 8b 05 97 38 4b 04 85 c0 0f 85 27 f7 ff ff 48 c7 c6 20 00 ac 89 48 c7 c7 a0 fe ab 89 e8 bf 76 ba ff <0f> 0b e9 0d f7 ff ff 48 8b 44 24 40 48 8d b8 c8 08 00 00 48 89 f8
+RSP: 0018:ffffc9000627f290 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88802315d700 RSI: ffffffff815f1db8 RDI: fffff52000c4fe44
+RBP: ffff88818f28e000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815ebb5e R11: 0000000000000000 R12: 0000000000000000
+R13: dffffc0000000000 R14: ffffc9000627f458 R15: 0000000093c30000
+FS:  0000555556abc400(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fda689c3303 CR3: 000000001cfbb000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ tcf_chain0_head_change_cb_del+0x2e/0x3d0 net/sched/cls_api.c:810
+ tcf_block_put_ext net/sched/cls_api.c:1381 [inline]
+ tcf_block_put_ext net/sched/cls_api.c:1376 [inline]
+ tcf_block_put+0xbc/0x130 net/sched/cls_api.c:1394
+ cake_destroy+0x3f/0x80 net/sched/sch_cake.c:2695
+ qdisc_create.constprop.0+0x9da/0x10f0 net/sched/sch_api.c:1293
+ tc_modify_qdisc+0x4c5/0x1980 net/sched/sch_api.c:1660
+ rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5571
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2496
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:724
+ ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f1bb06badb9
+Code: Unable to access opcode bytes at RIP 0x7f1bb06bad8f.
+RSP: 002b:00007fff3012a658 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f1bb06badb9
+RDX: 0000000000000000 RSI: 00000000200007c0 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000003
+R10: 0000000000000003 R11: 0000000000000246 R12: 00007fff3012a688
+R13: 00007fff3012a6a0 R14: 00007fff3012a6e0 R15: 00000000000013c2
+ </TASK>
 
-Cc: stable@vger.kernel.org
-Fixes: 5b52330bbfe63 ("audit: fix auditd/kernel connection state tracking")
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 046f6fd5daef ("sched: Add Common Applications Kept Enhanced (cake) qdisc")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Link: https://lore.kernel.org/r/20211210142046.698336-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit.c |   21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ net/sched/sch_cake.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -726,7 +726,7 @@ static int kauditd_send_queue(struct soc
- {
- 	int rc = 0;
- 	struct sk_buff *skb;
--	static unsigned int failed = 0;
-+	unsigned int failed = 0;
+diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
+index c2c37ffd94f22..c580139fcedec 100644
+--- a/net/sched/sch_cake.c
++++ b/net/sched/sch_cake.c
+@@ -2736,7 +2736,7 @@ static int cake_init(struct Qdisc *sch, struct nlattr *opt,
+ 	q->tins = kvcalloc(CAKE_MAX_TINS, sizeof(struct cake_tin_data),
+ 			   GFP_KERNEL);
+ 	if (!q->tins)
+-		goto nomem;
++		return -ENOMEM;
  
- 	/* NOTE: kauditd_thread takes care of all our locking, we just use
- 	 *       the netlink info passed to us (e.g. sk and portid) */
-@@ -743,32 +743,30 @@ static int kauditd_send_queue(struct soc
- 			continue;
- 		}
- 
-+retry:
- 		/* grab an extra skb reference in case of error */
- 		skb_get(skb);
- 		rc = netlink_unicast(sk, skb, portid, 0);
- 		if (rc < 0) {
--			/* fatal failure for our queue flush attempt? */
-+			/* send failed - try a few times unless fatal error */
- 			if (++failed >= retry_limit ||
- 			    rc == -ECONNREFUSED || rc == -EPERM) {
--				/* yes - error processing for the queue */
- 				sk = NULL;
- 				if (err_hook)
- 					(*err_hook)(skb);
--				if (!skb_hook)
--					goto out;
--				/* keep processing with the skb_hook */
-+				if (rc == -EAGAIN)
-+					rc = 0;
-+				/* continue to drain the queue */
- 				continue;
- 			} else
--				/* no - requeue to preserve ordering */
--				skb_queue_head(queue, skb);
-+				goto retry;
- 		} else {
--			/* it worked - drop the extra reference and continue */
-+			/* skb sent - drop the extra reference and continue */
- 			consume_skb(skb);
- 			failed = 0;
- 		}
- 	}
- 
--out:
- 	return (rc >= 0 ? 0 : rc);
- }
- 
-@@ -1557,7 +1555,8 @@ static int __net_init audit_net_init(str
- 		audit_panic("cannot initialize netlink socket in namespace");
- 		return -ENOMEM;
- 	}
--	aunet->sk->sk_sndtimeo = MAX_SCHEDULE_TIMEOUT;
-+	/* limit the timeout in case auditd is blocked/stopped */
-+	aunet->sk->sk_sndtimeo = HZ / 10;
- 
+ 	for (i = 0; i < CAKE_MAX_TINS; i++) {
+ 		struct cake_tin_data *b = q->tins + i;
+@@ -2766,10 +2766,6 @@ static int cake_init(struct Qdisc *sch, struct nlattr *opt,
+ 	q->min_netlen = ~0;
+ 	q->min_adjlen = ~0;
  	return 0;
+-
+-nomem:
+-	cake_destroy(sch);
+-	return -ENOMEM;
  }
+ 
+ static int cake_dump(struct Qdisc *sch, struct sk_buff *skb)
+-- 
+2.33.0
+
 
 

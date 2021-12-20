@@ -2,173 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CB347ADF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B50F47AB85
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239690AbhLTO5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbhLTOxZ (ORCPT
+        id S234117AbhLTOhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:37:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46168 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234052AbhLTOhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:53:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2BC08E884;
-        Mon, 20 Dec 2021 06:47:39 -0800 (PST)
+        Mon, 20 Dec 2021 09:37:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2A361185;
-        Mon, 20 Dec 2021 14:47:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E72C36AE7;
-        Mon, 20 Dec 2021 14:47:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 887B2B80EE0;
+        Mon, 20 Dec 2021 14:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973A8C36AE7;
+        Mon, 20 Dec 2021 14:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011658;
-        bh=c9PCfpIR0XGVlyTMhHvyZNKQpMt79Q1j84F5sm+v7lc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tICgMmgfxgxvULxUE+5M1n2n6X0CX3nLgT9bX3+1WSiSNK590G9uGxa1hZk0Y0HvO
-         rQRAl9Kj16KQmb4ixMUvY2uTR8N5IYxUHqKc+qGKqOwLdzFQE/SjuSMeSrI1xmwgDv
-         8AWLRvj8d8I/RZNtXfuZ+sdeZUZnifmWiaCxP2tM=
+        s=korg; t=1640011022;
+        bh=yInhjDVQOOAvP9gY99LTKwjRxKM4l3abNFq5X3Zf/T4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XNKEfJ1ChOs+ohL6UsT+f4ugHRAoUOAm1F0/7kV72jhMpth5JPLJuJRmG8ap3ue+W
+         sSQoEnLmgsJjRUCla8zD2eXesGMKRw2mY+9zFd6tG59KHDhhk/LH34svIKU4SltKDT
+         0ciXe+QHkHXUQdhE5+diR5Met5nnjQoAA2UuR+oE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Tipton <quic_mdtipton@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 28/99] clk: Dont parent clks until the parent is fully registered
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 4.4 00/23] 4.4.296-rc1 review
 Date:   Mon, 20 Dec 2021 15:34:01 +0100
-Message-Id: <20211220143030.298618502@linuxfoundation.org>
+Message-Id: <20211220143017.842390782@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.296-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.4.296-rc1
+X-KernelTest-Deadline: 2021-12-22T14:30+00:00
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Tipton <quic_mdtipton@quicinc.com>
+This is the start of the stable review cycle for the 4.4.296 release.
+There are 23 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit 54baf56eaa40aa5cdcd02b3c20d593e4e1211220 ]
+Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+Anything received after that time might be too late.
 
-Before commit fc0c209c147f ("clk: Allow parents to be specified without
-string names") child clks couldn't find their parent until the parent
-clk was added to a list in __clk_core_init(). After that commit, child
-clks can reference their parent clks directly via a clk_hw pointer, or
-they can lookup that clk_hw pointer via DT if the parent clk is
-registered with an OF clk provider.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.296-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.4.y
+and the diffstat can be found below.
 
-The common clk framework treats hw->core being non-NULL as "the clk is
-registered" per the logic within clk_core_fill_parent_index():
+thanks,
 
-	parent = entry->hw->core;
-	/*
-	 * We have a direct reference but it isn't registered yet?
-	 * Orphan it and let clk_reparent() update the orphan status
-	 * when the parent is registered.
-	 */
-	if (!parent)
+greg k-h
 
-Therefore we need to be extra careful to not set hw->core until the clk
-is fully registered with the clk framework. Otherwise we can get into a
-situation where a child finds a parent clk and we move the child clk off
-the orphan list when the parent isn't actually registered, wrecking our
-enable accounting and breaking critical clks.
+-------------
+Pseudo-Shortlog of commits:
 
-Consider the following scenario:
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.4.296-rc1
 
-  CPU0                                     CPU1
-  ----                                     ----
-  struct clk_hw clkBad;
-  struct clk_hw clkA;
+Juergen Gross <jgross@suse.com>
+    xen/netback: don't queue unlimited number of packages
 
-  clkA.init.parent_hws = { &clkBad };
+Juergen Gross <jgross@suse.com>
+    xen/console: harden hvc_xen against event channel storms
 
-  clk_hw_register(&clkA)                   clk_hw_register(&clkBad)
-   ...                                      __clk_register()
-					     hw->core = core
-					     ...
-   __clk_register()
-    __clk_core_init()
-     clk_prepare_lock()
-     __clk_init_parent()
-      clk_core_get_parent_by_index()
-       clk_core_fill_parent_index()
-        if (entry->hw) {
-	 parent = entry->hw->core;
+Juergen Gross <jgross@suse.com>
+    xen/netfront: harden netfront against event channel storms
 
-At this point, 'parent' points to clkBad even though clkBad hasn't been
-fully registered yet. Ouch! A similar problem can happen if a clk
-controller registers orphan clks that are referenced in the DT node of
-another clk controller.
+Juergen Gross <jgross@suse.com>
+    xen/blkfront: harden blkfront against event channel storms
 
-Let's fix all this by only setting the hw->core pointer underneath the
-clk prepare lock in __clk_core_init(). This way we know that
-clk_core_fill_parent_index() can't see hw->core be non-NULL until the
-clk is fully registered.
+Nathan Chancellor <nathan@kernel.org>
+    Input: touchscreen - avoid bitwise vs logical OR warning
 
-Fixes: fc0c209c147f ("clk: Allow parents to be specified without string names")
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-Link: https://lore.kernel.org/r/20211109043438.4639-1-quic_mdtipton@quicinc.com
-[sboyd@kernel.org: Reword commit text, update comment]
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/clk.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+Nicolas Pitre <nicolas.pitre@linaro.org>
+    ARM: 8805/2: remove unneeded naked function usage
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 61c78714c0957..515ef39c4610c 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3389,6 +3389,14 @@ static int __clk_core_init(struct clk_core *core)
- 
- 	clk_prepare_lock();
- 
-+	/*
-+	 * Set hw->core after grabbing the prepare_lock to synchronize with
-+	 * callers of clk_core_fill_parent_index() where we treat hw->core
-+	 * being NULL as the clk not being registered yet. This is crucial so
-+	 * that clks aren't parented until their parent is fully registered.
-+	 */
-+	core->hw->core = core;
-+
- 	ret = clk_pm_runtime_get(core);
- 	if (ret)
- 		goto unlock;
-@@ -3557,8 +3565,10 @@ static int __clk_core_init(struct clk_core *core)
- out:
- 	clk_pm_runtime_put(core);
- unlock:
--	if (ret)
-+	if (ret) {
- 		hlist_del_init(&core->child_node);
-+		core->hw->core = NULL;
-+	}
- 
- 	clk_prepare_unlock();
- 
-@@ -3804,7 +3814,6 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 	core->num_parents = init->num_parents;
- 	core->min_rate = 0;
- 	core->max_rate = ULONG_MAX;
--	hw->core = core;
- 
- 	ret = clk_core_populate_parent_map(core, init);
- 	if (ret)
-@@ -3822,7 +3831,7 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 		goto fail_create_clk;
- 	}
- 
--	clk_core_link_consumer(hw->core, hw->clk);
-+	clk_core_link_consumer(core, hw->clk);
- 
- 	ret = __clk_core_init(core);
- 	if (!ret)
--- 
-2.33.0
+Nathan Chancellor <natechancellor@gmail.com>
+    net: lan78xx: Avoid unnecessary self assignment
 
+Florian Fainelli <f.fainelli@gmail.com>
+    net: systemport: Add global locking for descriptor lifecycle
+
+Yu Liao <liaoyu15@huawei.com>
+    timekeeping: Really make sure wall_to_monotonic isn't positive
+
+Daniele Palmas <dnlplm@gmail.com>
+    USB: serial: option: add Telit FN990 compositions
+
+Thomas Gleixner <tglx@linutronix.de>
+    PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    USB: gadget: bRequestType is a bitfield, not a enum
+
+Letu Ren <fantasquex@gmail.com>
+    igbvf: fix double free in `igbvf_probe`
+
+Nathan Chancellor <nathan@kernel.org>
+    soc/tegra: fuse: Fix bitwise vs. logical OR warning
+
+J. Bruce Fields <bfields@redhat.com>
+    nfsd: fix use-after-free due to delegation race
+
+Joe Thornber <ejt@redhat.com>
+    dm btree remove: fix use after free in rebalance_children()
+
+Jerome Marchand <jmarchan@redhat.com>
+    recordmcount.pl: look for jgnop instruction as well as bcrl on s390
+
+Felix Fietkau <nbd@nbd.name>
+    mac80211: send ADDBA requests using the tid/queue of the aggregation session
+
+Armin Wolf <W_Armin@gmx.de>
+    hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+
+Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+    net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+
+Ondrej Jirman <megous@megous.com>
+    i2c: rk3x: Handle a spurious start completion interrupt flag
+
+Helge Deller <deller@gmx.de>
+    parisc/agp: Annotate parisc agp init functions with __init
+
+Tadeusz Struk <tadeusz.struk@linaro.org>
+    nfc: fix segfault in nfc_genl_dump_devices_done
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                     |   4 +-
+ arch/arm/mm/copypage-fa.c                    |  35 ++++----
+ arch/arm/mm/copypage-feroceon.c              |  98 ++++++++++-----------
+ arch/arm/mm/copypage-v4mc.c                  |  19 ++--
+ arch/arm/mm/copypage-v4wb.c                  |  41 +++++----
+ arch/arm/mm/copypage-v4wt.c                  |  37 ++++----
+ arch/arm/mm/copypage-xsc3.c                  |  71 +++++++--------
+ arch/arm/mm/copypage-xscale.c                |  71 ++++++++-------
+ drivers/block/xen-blkfront.c                 |  12 ++-
+ drivers/char/agp/parisc-agp.c                |   6 +-
+ drivers/hwmon/dell-smm-hwmon.c               |   7 +-
+ drivers/i2c/busses/i2c-rk3x.c                |   4 +-
+ drivers/input/touchscreen/of_touchscreen.c   |  18 ++--
+ drivers/md/persistent-data/dm-btree-remove.c |   2 +-
+ drivers/net/ethernet/broadcom/bcmsysport.c   |   5 ++
+ drivers/net/ethernet/broadcom/bcmsysport.h   |   1 +
+ drivers/net/ethernet/intel/igbvf/netdev.c    |   1 +
+ drivers/net/usb/lan78xx.c                    |   6 +-
+ drivers/net/xen-netback/netback.c            |  13 ++-
+ drivers/net/xen-netfront.c                   | 125 ++++++++++++++++++++-------
+ drivers/pci/msi.c                            |   2 +-
+ drivers/soc/tegra/fuse/fuse-tegra.c          |   2 +-
+ drivers/soc/tegra/fuse/fuse.h                |   2 +-
+ drivers/tty/hvc/hvc_xen.c                    |  30 ++++++-
+ drivers/usb/gadget/composite.c               |   6 +-
+ drivers/usb/gadget/legacy/dbgp.c             |   6 +-
+ drivers/usb/gadget/legacy/inode.c            |   6 +-
+ drivers/usb/serial/option.c                  |   8 ++
+ fs/nfsd/nfs4state.c                          |   9 +-
+ kernel/time/timekeeping.c                    |   3 +-
+ net/mac80211/agg-tx.c                        |   2 +-
+ net/netlink/af_netlink.c                     |   5 ++
+ net/nfc/netlink.c                            |   6 +-
+ scripts/recordmcount.pl                      |   2 +-
+ 34 files changed, 388 insertions(+), 277 deletions(-)
 
 

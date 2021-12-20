@@ -2,120 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D65547AB0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1123F47AB06
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbhLTOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:11:02 -0500
-Received: from mga06.intel.com ([134.134.136.31]:34702 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230116AbhLTOLB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:11:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640009461; x=1671545461;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rqvsOpIixW7RTGrdUz0Xm3qC62qrpABj6D5TeHDs8B0=;
-  b=nl5ZJEYK0L47HRkTeCSwv5WES7Jwe7BLlA6XAED7fHUEf0LhFUVxyLaO
-   2ZW1/yfs0ngzRNJdmprYxK0+93Ep2P5hbyldZ4ZI9u+UPCvNh80V+QOVA
-   xHhu0ZLPUAdP0n200aMcq3tFAVneRi3Ce5XLlJ/FaJZO9NFsCTFCgRSGV
-   bGpxVb2Thp3iaNA0h+ulAoUd+Dq4UX28a3nsMd/PfR9BFEDmpcycoGne/
-   TO1WNEkAxjysdEEgW+NiHuoOtoF8dG4Eypuu6a2Sj+I8z39Rl0YN/y5d5
-   2RZHsKvNfF63wdpm2RwLV5Gb4dGBNy6ujBVM6pLifpdJ4pyrjHTLW7DPI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="300942856"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="300942856"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:07:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="755370719"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Dec 2021 06:07:13 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzJJj-0007pY-NB; Mon, 20 Dec 2021 14:07:07 +0000
-Date:   Mon, 20 Dec 2021 22:06:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [chao:feature/dax 4/9] fs/f2fs/file.c:584:7: error: implicit
- declaration of function 'daxdev_mapping_supported'
-Message-ID: <202112202110.sW5LQCPm-lkp@intel.com>
+        id S230064AbhLTOHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:07:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51202 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229488AbhLTOH3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:07:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 968166115C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F38C36AE8;
+        Mon, 20 Dec 2021 14:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640009249;
+        bh=tJSpd7OxeP1zNUKQ0WQ78sW5o/NiPCZfMRR35kmJmDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pPW2npqWOpjWCmTFxyo5llNE8KwhpLtB/X9zMZfsEJeKC0A3XNOtPa6L4OjVHCPe6
+         qHH2pmFPYTUEEL7Lj/jfxdGXDiICtMkjACdIV/bbsIl6V+tX0D278y7Gt9uwtGgNSv
+         IUlHePoEtMVSlS0YqpO4Sd8qAxx9Ahp9FV9lAcZtdsULJWc1a5MEyUXRnYS4yV1tx7
+         BmZ4Nm4oDEEyejl6xTCtQj1b5T84gW3W6xrVBl4fe3qrOMdesmqthe5vZHUaMkLkN3
+         kn52Cm0WMED/Zoo65x4bn98t3f9MSoTSbH0SSI0bkmJiV9J+gsABEoofRajlWfYsKv
+         +7r6aoAMWk45w==
+Date:   Mon, 20 Dec 2021 15:07:26 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morse <james.morse@arm.com>,
+        David Laight <David.Laight@aculab.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [GIT PULL] arm64: Support dynamic preemption v3
+Message-ID: <20211220140726.GB918551@lothringen>
+References: <20211220140142.922323-1-frederic@kernel.org>
+ <CAMj1kXEBWJVGtRVKRkxeJc5bj4Cbb9oA_67PyJDYhTwiaHc7jA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMj1kXEBWJVGtRVKRkxeJc5bj4Cbb9oA_67PyJDYhTwiaHc7jA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/dax
-head:   d08999836fd60ab725eee1f5a5fb3b00f7bcefd3
-commit: f154828642167c70161576b977082361123a5768 [4/9] f2fs: support dax page fault
-config: mips-randconfig-r002-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202110.sW5LQCPm-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=f154828642167c70161576b977082361123a5768
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao feature/dax
-        git checkout f154828642167c70161576b977082361123a5768
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+On Mon, Dec 20, 2021 at 03:03:36PM +0100, Ard Biesheuvel wrote:
+> Hello Frederic,
+> 
+> On Mon, 20 Dec 2021 at 15:01, Frederic Weisbecker <frederic@kernel.org> wrote:
+> >
+> > Hi,
+> >
+> > I haven't seen much comments on the static key based version from Mark
+> > so I don't know which direction we'll eventually take. I still hope we
+> > can focus on a unified static call based implementation, considering
+> > there are other users waiting on arm64 static calls.
+> >
+> 
+> Which other users are you referring to here?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/f2fs/file.c:584:7: error: implicit declaration of function 'daxdev_mapping_supported' [-Werror,-Wimplicit-function-declaration]
-           if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-                ^
-   1 error generated.
-
-
-vim +/daxdev_mapping_supported +584 fs/f2fs/file.c
-
-   569	
-   570	static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
-   571	{
-   572		struct inode *inode = file_inode(file);
-   573	
-   574		if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
-   575			return -EIO;
-   576	
-   577		if (!f2fs_is_compress_backend_ready(inode))
-   578			return -EOPNOTSUPP;
-   579	
-   580		/*
-   581		 * We don't support synchronous mappings for non-DAX files and
-   582		 * for DAX files if underneath dax_device is not synchronous.
-   583		 */
- > 584		if (!daxdev_mapping_supported(vma, F2FS_I_SB(inode)->s_daxdev))
-   585			return -EOPNOTSUPP;
-   586	
-   587		file_accessed(file);
-   588	
-   589		if (IS_DAX(inode)) {
-   590			vma->vm_ops = &f2fs_dax_vm_ops;
-   591			vma->vm_flags |= VM_HUGEPAGE;
-   592		} else {
-   593			vma->vm_ops = &f2fs_file_vm_ops;
-   594		}
-   595	
-   596		set_inode_flag(inode, FI_MMAP_FILE);
-   597		return 0;
-   598	}
-   599	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I believe Android was interested in it?

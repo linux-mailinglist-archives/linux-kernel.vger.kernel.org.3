@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463F247ADA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB88747ADAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbhLTOxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:53:37 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42236 "EHLO
+        id S236685AbhLTOxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:53:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42350 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236750AbhLTOuq (ORCPT
+        with ESMTP id S234956AbhLTOuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:50:46 -0500
+        Mon, 20 Dec 2021 09:50:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84D25611AB;
-        Mon, 20 Dec 2021 14:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63291C36AE8;
-        Mon, 20 Dec 2021 14:50:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C30A9611C8;
+        Mon, 20 Dec 2021 14:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D9EC36AE7;
+        Mon, 20 Dec 2021 14:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011844;
-        bh=3AyQpVaUmqLkLNvFjtb1HRqMs1Y9ovxAvsSh3xdmabo=;
+        s=korg; t=1640011853;
+        bh=WFmlfzG5I+MJq6rZvxF1F3bvPT8vxp1gXnAF6JdTpa8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CZVZ45+Zz91rvxPprj2inIfnpkKgVtD62mj9EwYrKFHhSxAUUsLE67EmNoHqgIV7V
-         NuUThWeRiIYd8pqe63g7VjWS/LuvvkSv1TvsuBiUHpR9Fc4zJ5zF5a2zONl0UM30r4
-         D+TQxUS8Bs33YOrmPyZ5Ob64vaCEgFXBiNUkv3NQ=
+        b=n+AdqpvHuQ09I/F3ThfBEtjHhID+w2DsmpjPM+YaZ2Z8tVD+yvWZgzcTxfC4nfSgJ
+         a6C+rl8MnphaCs9HRccFVLPRdt2zurHTTkThmbFiPYvylltbr7ukIuhXvnwpKf9EnJ
+         /1J4tmk3r1LY0Js6TNQTz2GYKVypP2RLp9Cypxhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
         Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 95/99] xen/blkfront: harden blkfront against event channel storms
-Date:   Mon, 20 Dec 2021 15:35:08 +0100
-Message-Id: <20211220143032.597120021@linuxfoundation.org>
+Subject: [PATCH 5.10 98/99] xen/netback: fix rx queue stall detection
+Date:   Mon, 20 Dec 2021 15:35:11 +0100
+Message-Id: <20211220143032.703346263@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 References: <20211220143029.352940568@linuxfoundation.org>
@@ -47,74 +47,161 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Juergen Gross <jgross@suse.com>
 
-commit 0fd08a34e8e3b67ec9bd8287ac0facf8374b844a upstream.
+commit 6032046ec4b70176d247a71836186d47b25d1684 upstream.
 
-The Xen blkfront driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using lateeoi event
-channels.
+Commit 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when
+not using GSO") introduced a security problem in netback, as an
+interface would only be regarded to be stalled if no slot is available
+in the rx queue ring page. In case the SKB at the head of the queued
+requests will need more than one rx slot and only one slot is free the
+stall detection logic will never trigger, as the test for that is only
+looking for at least one slot to be free.
 
-This is part of XSA-391
+Fix that by testing for the needed number of slots instead of only one
+slot being available.
 
+In order to not have to take the rx queue lock that often, store the
+number of needed slots in the queue data. As all SKB dequeue operations
+happen in the rx queue kernel thread this is safe, as long as the
+number of needed slots is accessed via READ/WRITE_ONCE() only and
+updates are always done with the rx queue lock held.
+
+Add a small helper for obtaining the number of free slots.
+
+This is part of XSA-392
+
+Fixes: 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when not using GSO")
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/net/xen-netback/common.h |    1 
+ drivers/net/xen-netback/rx.c     |   65 ++++++++++++++++++++++++---------------
+ 2 files changed, 42 insertions(+), 24 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -1573,9 +1573,12 @@ static irqreturn_t blkif_interrupt(int i
- 	unsigned long flags;
- 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
- 	struct blkfront_info *info = rinfo->dev_info;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
+--- a/drivers/net/xen-netback/common.h
++++ b/drivers/net/xen-netback/common.h
+@@ -203,6 +203,7 @@ struct xenvif_queue { /* Per-queue data
+ 	unsigned int rx_queue_max;
+ 	unsigned int rx_queue_len;
+ 	unsigned long last_rx_time;
++	unsigned int rx_slots_needed;
+ 	bool stalled;
  
--	if (unlikely(info->connected != BLKIF_STATE_CONNECTED))
-+	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
-+	}
+ 	struct xenvif_copy_state rx_copy;
+--- a/drivers/net/xen-netback/rx.c
++++ b/drivers/net/xen-netback/rx.c
+@@ -33,28 +33,36 @@
+ #include <xen/xen.h>
+ #include <xen/events.h>
  
- 	spin_lock_irqsave(&rinfo->ring_lock, flags);
-  again:
-@@ -1591,6 +1594,8 @@ static irqreturn_t blkif_interrupt(int i
- 		unsigned long id;
- 		unsigned int op;
+-static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
++/*
++ * Update the needed ring page slots for the first SKB queued.
++ * Note that any call sequence outside the RX thread calling this function
++ * needs to wake up the RX thread via a call of xenvif_kick_thread()
++ * afterwards in order to avoid a race with putting the thread to sleep.
++ */
++static void xenvif_update_needed_slots(struct xenvif_queue *queue,
++				       const struct sk_buff *skb)
+ {
+-	RING_IDX prod, cons;
+-	struct sk_buff *skb;
+-	int needed;
+-	unsigned long flags;
++	unsigned int needed = 0;
  
-+		eoiflag = 0;
+-	spin_lock_irqsave(&queue->rx_queue.lock, flags);
+-
+-	skb = skb_peek(&queue->rx_queue);
+-	if (!skb) {
+-		spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
+-		return false;
++	if (skb) {
++		needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
++		if (skb_is_gso(skb))
++			needed++;
++		if (skb->sw_hash)
++			needed++;
+ 	}
+ 
+-	needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
+-	if (skb_is_gso(skb))
+-		needed++;
+-	if (skb->sw_hash)
+-		needed++;
++	WRITE_ONCE(queue->rx_slots_needed, needed);
++}
+ 
+-	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
++static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
++{
++	RING_IDX prod, cons;
++	unsigned int needed;
 +
- 		RING_COPY_RESPONSE(&rinfo->ring, i, &bret);
- 		id = bret.id;
++	needed = READ_ONCE(queue->rx_slots_needed);
++	if (!needed)
++		return false;
  
-@@ -1707,6 +1712,8 @@ static irqreturn_t blkif_interrupt(int i
+ 	do {
+ 		prod = queue->rx.sring->req_prod;
+@@ -80,6 +88,9 @@ void xenvif_rx_queue_tail(struct xenvif_
  
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
+ 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
  
-+	xen_irq_lateeoi(irq, eoiflag);
++	if (skb_queue_empty(&queue->rx_queue))
++		xenvif_update_needed_slots(queue, skb);
 +
- 	return IRQ_HANDLED;
+ 	__skb_queue_tail(&queue->rx_queue, skb);
  
-  err:
-@@ -1714,6 +1721,8 @@ static irqreturn_t blkif_interrupt(int i
+ 	queue->rx_queue_len += skb->len;
+@@ -100,6 +111,8 @@ static struct sk_buff *xenvif_rx_dequeue
  
- 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
- 
-+	/* No EOI in order to avoid further interrupts. */
+ 	skb = __skb_dequeue(&queue->rx_queue);
+ 	if (skb) {
++		xenvif_update_needed_slots(queue, skb_peek(&queue->rx_queue));
 +
- 	pr_alert("%s disabled for further use\n", info->gd->disk_name);
- 	return IRQ_HANDLED;
+ 		queue->rx_queue_len -= skb->len;
+ 		if (queue->rx_queue_len < queue->rx_queue_max) {
+ 			struct netdev_queue *txq;
+@@ -487,27 +500,31 @@ void xenvif_rx_action(struct xenvif_queu
+ 	xenvif_rx_copy_flush(queue);
  }
-@@ -1753,8 +1762,8 @@ static int setup_blkring(struct xenbus_d
- 	if (err)
- 		goto fail;
  
--	err = bind_evtchn_to_irqhandler(rinfo->evtchn, blkif_interrupt, 0,
--					"blkif", rinfo);
-+	err = bind_evtchn_to_irqhandler_lateeoi(rinfo->evtchn, blkif_interrupt,
-+						0, "blkif", rinfo);
- 	if (err <= 0) {
- 		xenbus_dev_fatal(dev, err,
- 				 "bind_evtchn_to_irqhandler failed");
+-static bool xenvif_rx_queue_stalled(struct xenvif_queue *queue)
++static RING_IDX xenvif_rx_queue_slots(const struct xenvif_queue *queue)
+ {
+ 	RING_IDX prod, cons;
+ 
+ 	prod = queue->rx.sring->req_prod;
+ 	cons = queue->rx.req_cons;
+ 
++	return prod - cons;
++}
++
++static bool xenvif_rx_queue_stalled(const struct xenvif_queue *queue)
++{
++	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
++
+ 	return !queue->stalled &&
+-		prod - cons < 1 &&
++		xenvif_rx_queue_slots(queue) < needed &&
+ 		time_after(jiffies,
+ 			   queue->last_rx_time + queue->vif->stall_timeout);
+ }
+ 
+ static bool xenvif_rx_queue_ready(struct xenvif_queue *queue)
+ {
+-	RING_IDX prod, cons;
+-
+-	prod = queue->rx.sring->req_prod;
+-	cons = queue->rx.req_cons;
++	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
+ 
+-	return queue->stalled && prod - cons >= 1;
++	return queue->stalled && xenvif_rx_queue_slots(queue) >= needed;
+ }
+ 
+ bool xenvif_have_rx_work(struct xenvif_queue *queue, bool test_kthread)
 
 

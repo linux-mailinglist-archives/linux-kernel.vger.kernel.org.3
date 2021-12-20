@@ -2,246 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AA347B25E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD1347B264
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbhLTRwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:52:39 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:36440 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229633AbhLTRwh (ORCPT
+        id S240303AbhLTRyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:54:01 -0500
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:38417 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240286AbhLTRyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:52:37 -0500
-X-UUID: ce36ff468cfd424ca9d6e550672011ca-20211221
-X-UUID: ce36ff468cfd424ca9d6e550672011ca-20211221
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1693687402; Tue, 21 Dec 2021 01:52:34 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 21 Dec 2021 01:52:33 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 21 Dec 2021 01:52:32 +0800
-From:   <sean.wang@mediatek.com>
-To:     <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] Bluetooth: btmtksdio: Enable SCO over I2S function
-Date:   Tue, 21 Dec 2021 01:52:30 +0800
-Message-ID: <1640022750-16263-1-git-send-email-sean.wang@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <638a2506-c410-d98c-b704-6f16f72e0bc6@molgen.mpg.de--annotate>
-References: <638a2506-c410-d98c-b704-6f16f72e0bc6@molgen.mpg.de--annotate>
+        Mon, 20 Dec 2021 12:54:00 -0500
+Received: by mail-wm1-f43.google.com with SMTP id 85-20020a1c0058000000b00345afe7e3c0so65558wma.3;
+        Mon, 20 Dec 2021 09:53:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DKriEzh7Elx5Lb6bhAsX9FpEkdQAr11Q3q/0fePZh5Y=;
+        b=tJ/H+gGfi09mKQwzVO2Maoj73E2T2FeCmn7XQV/x2QM7DEGaDJD+/FhiXq+UqvcNTS
+         /hU0pd+7R5SC2wj9FP+FJfBiEdgol8k7iRu4TLPWvqJrl12VJM9XRJSpcGoNksVHH7/P
+         WVaCtyRn4/43wg0nRoBeigtSeL6Ev3SNBrBh5foE1+a4NzQG03871FIHNvD298TvZofd
+         I1U5hPqhHLwttC4HdQS8C4LDbkYPAW7nq5MeYIBOEGrJYKIO9+vv9B0Tz2nV502ZNyfO
+         5qGBy5BohE5t6D7NGVHpgC58pXr6wVSMcairXMGpwgZJ5fpMh6a9pxpVZ/8BxishqVhp
+         Vvjw==
+X-Gm-Message-State: AOAM530ItPjMszVYMSdzJq5HZTBe4QIUHSGComyccdFZok5//A47Vmk9
+        3NShD1B1ijD97ECCPYj4tG0=
+X-Google-Smtp-Source: ABdhPJzOsPyR4Sb8GC+RVCDt5KiGwvXOYrBIBmxLvLXlhA/HVLtYdo5Xqp1NgECyZ3RGAJWPE8Ui7A==
+X-Received: by 2002:a05:600c:600c:: with SMTP id az12mr81206wmb.86.1640022838674;
+        Mon, 20 Dec 2021 09:53:58 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id bd19sm35117wmb.23.2021.12.20.09.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 09:53:58 -0800 (PST)
+Date:   Mon, 20 Dec 2021 17:53:56 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wei Liu <wei.liu@kernel.org>, David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: Re: linux-next: manual merge of the hyperv tree with the net-next
+ tree
+Message-ID: <20211220175356.ozllm6jqid5zv7oe@liuwe-devbox-debian-v2>
+References: <20211220185139.034d8e15@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220185139.034d8e15@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Mon, Dec 20, 2021 at 06:51:39PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the hyperv tree got a conflict in:
+> 
+>   drivers/net/hyperv/netvsc.c
+> 
+> between commit:
+> 
+>   e9268a943998 ("hv_netvsc: Use bitmap_zalloc() when applicable")
+> 
+> from the net-next tree and commit:
+> 
+>   63cd06c67a2f ("net: netvsc: Add Isolation VM support for netvsc driver")
+> 
+> from the hyperv tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
->Dear Sean, dear Mark,
->
->
->Am 18.12.21 um 02:08 schrieb sean.wang@mediatek.com:
->> From: Mark Chen <mark-yw.chen@mediatek.com>
->>
->> For MediaTek chipset, the driver has to issue the specific command to
->> enable Bluetooth SCO support over the I2S/PCM interface.
->
->Please document the datasheet name, revision and section, where this is described.
+The fix looks correct to me. Thanks.
 
-the datasheet is not released in public so Mark and I cannot provide the detail here, but we will make the patch easy to review and understand.
-
->
->Please add how SCO support can be tested. Are all Mediatek chipsets supported?
-
-the SCO profile was tested by setting up a VOIP application, connected to HFP device, checked telephony function can work normally.
-
-currently, SCO is only supported by mt7921, we will change the subject to "Bluetooth: mt7921s: Enable SCO over I2S function" to avoid any misunderstanding.
-
->
->> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
->> ---
->>   drivers/bluetooth/btmtk.h     | 20 +++++++++
->>   drivers/bluetooth/btmtksdio.c | 76 +++++++++++++++++++++++++++++++++++
->>   2 files changed, 96 insertions(+)
->>
->> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
->> index 2be1d2680ad8..fc57ef09d132 100644
->> --- a/drivers/bluetooth/btmtk.h
->> +++ b/drivers/bluetooth/btmtk.h
->> @@ -7,8 +7,12 @@
->>
->>   #define HCI_WMT_MAX_EVENT_SIZE		64
->>
->> +#define BTMTK_WMT_REG_WRITE 0x1
->>   #define BTMTK_WMT_REG_READ 0x2
->>
->> +#define MT7921_PINMUX_0 0x70005050
->> +#define MT7921_PINMUX_1 0x70005054
->> +
->>   enum {
->>	BTMTK_WMT_PATCH_DWNLD = 0x1,
->>	BTMTK_WMT_TEST = 0x2,
->> @@ -76,6 +80,22 @@ struct btmtk_wakeon {
->>	__le16 wakeup_delay;
->>   } __packed;
->>
->> +struct btmtk_sco {
->> +	u8 clock_config;
->> +	u8 transmit_format_config;
->> +	u8 channel_format_config;
->> +	u8 channel_select_config;
->> +} __packed;
->> +
->> +struct reg_write_cmd {
->> +	u8 type;
->> +	u8 rsv;
->> +	u8 num;
->> +	__le32 addr;
->> +	__le32 data;
->> +	__le32 mask;
->> +} __packed;
->> +
->>   struct btmtk_hci_wmt_params {
->>	u8 op;
->>	u8 flag;
->> diff --git a/drivers/bluetooth/btmtksdio.c
->> b/drivers/bluetooth/btmtksdio.c index 771733ce362b..8e4d8c2da824
->> 100644
->> --- a/drivers/bluetooth/btmtksdio.c
->> +++ b/drivers/bluetooth/btmtksdio.c
->> @@ -830,6 +830,74 @@ static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
->>	return err;
->>   }
->>
->> +static int btsdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32
->> +val, u32 mask) {
->> +	struct btmtk_hci_wmt_params wmt_params;
->> +	struct reg_write_cmd reg_write = {
->> +		.type = 1,
->> +		.num = 1,
->> +		.addr = cpu_to_le32(reg),
->> +		.data = cpu_to_le32(val),
->> +		.mask = cpu_to_le32(mask),
->> +	};
->> +	int err, status;
->> +
->> +	wmt_params.op = BTMTK_WMT_REGISTER;
->> +	wmt_params.flag = BTMTK_WMT_REG_WRITE;
->> +	wmt_params.dlen = sizeof(reg_write);
->> +	wmt_params.data = &reg_write;
->> +	wmt_params.status = &status;
->> +
->> +	err = mtk_hci_wmt_sync(hdev, &wmt_params);
->> +	if (err < 0)
->> +		bt_dev_err(hdev, "Failed to write reg(%d)", err);
->> +
->> +	return err;
->> +}
->> +
->> +static int btsdio_mtk_sco_setting(struct hci_dev *hdev) {
->> +	struct btmtk_sco sco_setting = {
->> +		.clock_config = 0x49,
->> +		.channel_format_config = 0x80,
->> +	};
->> +	struct sk_buff *skb;
->> +	u32 val;
->> +	int err;
->> +
->> +	/* Enable SCO over i2s/pcm for Mediatek Chipset */
->
->s/Chipset/chipset/
-
-will do in the next version
-
->
->> +	skb =  __hci_cmd_sync(hdev, 0xfc72, sizeof(sco_setting),
->> +			      &sco_setting, HCI_CMD_TIMEOUT);
->> +	if (IS_ERR(skb))
->> +		return PTR_ERR(skb);
->> +
->> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_0, &val);
->> +	if (err < 0) {
->> +		bt_dev_err(hdev, "Failed to read register (%d)", err);
->> +		return err;
->> +	}
->> +
->> +	val |= 0x11000000;
->> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_0, val, ~0);
->> +	if (err < 0) {
->> +		bt_dev_err(hdev, "Failed to write register (%d)", err);
->> +		return err;
->> +	}
->> +
->> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_1, &val);
->> +	if (err < 0) {
->> +		bt_dev_err(hdev, "Failed to read register (%d)", err);
->> +		return err;
->> +	}
->> +
->> +	val |= 0x00000101;
->> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
->> +	if (err < 0)
->> +		bt_dev_err(hdev, "Failed to write register (%d)", err);
->> +
->> +	return err;
->> +}
->> +
->>   static int btmtksdio_setup(struct hci_dev *hdev)
->>   {
->>	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev); @@ -862,6
->> +930,14 @@ static int btmtksdio_setup(struct hci_dev *hdev)
->>		err = mt79xx_setup(hdev, fwname);
->>		if (err < 0)
->>			return err;
->> +
->> +		/* Enable sco over i2s/pcm */
->
->s/sco/SCO/
-
-ditto
-
->
->> +		err = btsdio_mtk_sco_setting(hdev);
->> +		if (err < 0) {
->> +			bt_dev_err(hdev, "Failed to enable sco setting (%d)", err);
->
->s/sco/SCO/
-
-ditto
-
->
->> +			return err;
->> +		}
->> +
->>		break;
->>	case 0x7663:
->>	case 0x7668:
->
->
->Kind regards,
->
->Paul
->
+Wei.

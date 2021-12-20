@@ -2,106 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE65947B4FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED41347B507
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbhLTVRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S230523AbhLTVTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbhLTVRp (ORCPT
+        with ESMTP id S229695AbhLTVTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:17:45 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D76AC061574;
-        Mon, 20 Dec 2021 13:17:45 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id x1-20020a17090a2b0100b001b103e48cfaso610385pjc.0;
-        Mon, 20 Dec 2021 13:17:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vjCLCTLgRl+VxxTbnOcpXTd3N8VppC1kQAYRqG5dHQQ=;
-        b=ac8IzJYL9fsZrjnp07aRRuwJarw9CpkxnWRgt2gsLN7+YZtxatgnFrhEmmdVTSygvU
-         fYSUmsF5xfNln8Ak9ZQNfx5FYacSPsgscEfQ/+cKjqm1cEtaXbt+z2eLIm4geBu0WKep
-         JkqjufwFbMZfEzf+X+oXhle36as4bY6B77qqu4FSR/V7lWdKxrGpJhL59sHgDCwkJHG5
-         OPx/VbopCZd1V+asL/Fqp+96f+2BRpwYKQi9JD6Xshq2BInrCn74A2xSdCV6QBEHrsW4
-         d5owDfiIEsPQVFeDxBi0gPt+5KIZvrFJEFL8Abm6X795yK+eAi36RVTbydrYcgowtbwo
-         kOFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vjCLCTLgRl+VxxTbnOcpXTd3N8VppC1kQAYRqG5dHQQ=;
-        b=A0Qe6b+57khKiss7v21mZ9v38URK/tCbLxO09zJKKyscGK9ZYnq1gs72pu6bEUFfwM
-         f81PGkGalX9N3PyfSPipde1kURZzy887QydB19w8VjjebdblUn1/bT+wxv4eXBe0W09i
-         gT9siwqLUqm1jI+Le9SgvfqrbWueMBfUItY1E19aXkmJp0RuM8W9WBVmGBTp1Ehv7M9I
-         dIVxgFXXNJJHjQd7ndaFbMPPvr1CMOsKr7ojEHea1SscqJDXkX/WgX/4XnfS/rIM3WJE
-         bUeqFRgS+N5y5M6xDdjiFhinJb8vZDFvoZdmG2K1LLUuCh85N7eTw4qxdL7SHqKCVH1I
-         NKtA==
-X-Gm-Message-State: AOAM533Y0l7DR6CeQorHb/tCYY4h/Zl8v8cGOmuDP2RUQdTPyiInF/q8
-        ++JyT139ol6QRCdAD8VWpA4=
-X-Google-Smtp-Source: ABdhPJxSz2UePJw+WwNPOXMCXdtfr7R/Dc+IAmsXkeM/vXTRvkUJnFzOC74SfJsVzXxa8C0JK4iVNg==
-X-Received: by 2002:a17:90b:3889:: with SMTP id mu9mr77979pjb.160.1640035064527;
-        Mon, 20 Dec 2021 13:17:44 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id ot6sm301975pjb.32.2021.12.20.13.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 13:17:44 -0800 (PST)
-From:   Tadeusz Struk <tstruk@gmail.com>
-To:     jarkko@kernel.org
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: tpm: add async space test with noneexisting handle
-Date:   Mon, 20 Dec 2021 13:17:00 -0800
-Message-Id: <20211220211700.5772-2-tstruk@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211220211700.5772-1-tstruk@gmail.com>
-References: <20211220211700.5772-1-tstruk@gmail.com>
+        Mon, 20 Dec 2021 16:19:10 -0500
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4873EC061574;
+        Mon, 20 Dec 2021 13:19:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=rUR4T59zgk9unsHq9DSS81YlucLDE0VHV2qTQPF4oEk=; b=bGtP/Rmeshol6YGfEqJJbwruCZ
+        s+oB4r8bEaILorwm2Jhzhc1Z0P7VhdiK/jZPXAS7YY4kq2AhV25Tt7bugCbW6tyErJ4Q93EI+zQkz
+        T3rITYeyRaxgQM0zoqLZ5Sckc8GS7E9RsuXEyriGP9Tg1O2JE0AoFDXcmONZljPFfhmE=;
+Received: from p54ae911a.dip0.t-ipconnect.de ([84.174.145.26] helo=localhost.localdomain)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1mzQ3i-0000zo-6e; Mon, 20 Dec 2021 22:19:02 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     john@phrozen.org, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 01/14] dt-bindings: Add vendor prefix for Airoha
+Date:   Mon, 20 Dec 2021 22:18:41 +0100
+Message-Id: <20211220211854.89452-2-nbd@nbd.name>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211220211854.89452-1-nbd@nbd.name>
+References: <20211220211854.89452-1-nbd@nbd.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test for tpm2 spaces in async mode that checks if
-the code handles invalid handles correctly.
+From: John Crispin <john@phrozen.org>
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>
-Cc: <linux-kselftest@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+Add vendor prefix "airoha" for Airoha, a subsidiary of MediaTek
+
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: John Crispin <john@phrozen.org>
+Signed-off-by: Bert Vermeulen <bert@biot.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 ---
- tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 9d764306887b..b373b0936e40 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
-         log.debug("Calling get_cap in a NON_BLOCKING mode")
-         async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
-         async_client.close()
-+
-+    def test_flush_invlid_context(self):
-+        log = logging.getLogger(__name__)
-+        log.debug(sys._getframe().f_code.co_name)
-+
-+        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
-+        log.debug("Calling flush_context passing in an invalid handle ")
-+        handle = 0x80123456
-+        rc = 0
-+        try:
-+            async_client.flush_context(handle)
-+        except OSError as e:
-+            rc = e.errno
-+
-+        self.assertEqual(rc, 22)
-+        async_client.close()
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 66d6432fd781..025df36aee5f 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -59,6 +59,8 @@ patternProperties:
+     description: Aeroflex Gaisler AB
+   "^aesop,.*":
+     description: AESOP Embedded Forum
++  "^airoha,.*":
++    description: Airoha
+   "^al,.*":
+     description: Annapurna Labs
+   "^alcatel,.*":
 -- 
-2.30.2
+2.34.1
 

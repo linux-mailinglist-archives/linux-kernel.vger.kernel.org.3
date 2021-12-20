@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6107E47AE48
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF34747AD6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239971AbhLTO7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:59:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47940 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238807AbhLTO5X (ORCPT
+        id S236139AbhLTOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237250AbhLTOs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:57:23 -0500
+        Mon, 20 Dec 2021 09:48:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8965BC061399;
+        Mon, 20 Dec 2021 06:45:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5870D60F4E;
-        Mon, 20 Dec 2021 14:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4194BC36AE7;
-        Mon, 20 Dec 2021 14:57:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AE43B80EB3;
+        Mon, 20 Dec 2021 14:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E67C36AE7;
+        Mon, 20 Dec 2021 14:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012242;
-        bh=L+9fR+PGCBZHmH6eDdBT7bA7XtMjaWNwPL6qt/+IUsY=;
+        s=korg; t=1640011527;
+        bh=LltzOfw06CDKQdOxdUEz0pzpdkQ19XJwKPh7hjC5HP0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GRv7Wxa7e/3lWv4ogkcrPj8nafQ2L4SOsJAhckYGXM3Z2MHQe0W2/wawHwdLNQPHc
-         FXFv4EehZRqNHpsSArT4X7m78+RGTIOpS3PdMy47rQRgihLo3c/fUnkH8DBJIe5TyR
-         wtmGCzfZQcEKM6wrCEgnzKLXn46YPiNBl9qDo5so=
+        b=R4Fw+XfhJqIB9giFU1w7PfYkIAA9/Xx1yaRkcJra+ABoY24m5uUOkeYU6ILfZK785
+         teCDss2t7a3H1eTgEZbWPLo5BgyY+tparuoMZ8Teq80TdhzsakSrAofJL/RIXabd0z
+         JV0vOJ+/iIhQdTJaH0j9io76eyLEhGZMAfvAQ8jo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 130/177] USB: serial: option: add Telit FN990 compositions
-Date:   Mon, 20 Dec 2021 15:34:40 +0100
-Message-Id: <20211220143044.453390852@linuxfoundation.org>
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        George Kennedy <george.kennedy@oracle.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.4 52/71] libata: if T_LENGTH is zero, dma direction should be DMA_NONE
+Date:   Mon, 20 Dec 2021 15:34:41 +0100
+Message-Id: <20211220143027.440817793@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,42 +49,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: George Kennedy <george.kennedy@oracle.com>
 
-commit 2b503c8598d1b232e7fc7526bce9326d92331541 upstream.
+commit 5da5231bb47864e5dd6c6731151e98b6ee498827 upstream.
 
-Add the following Telit FN990 compositions:
+Avoid data corruption by rejecting pass-through commands where
+T_LENGTH is zero (No data is transferred) and the dma direction
+is not DMA_NONE.
 
-0x1070: tty, adb, rmnet, tty, tty, tty, tty
-0x1071: tty, adb, mbim, tty, tty, tty, tty
-0x1072: rndis, tty, adb, tty, tty, tty, tty
-0x1073: tty, adb, ecm, tty, tty, tty, tty
-
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Link: https://lore.kernel.org/r/20211210100714.22587-1-dnlplm@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Cc: <stable@vger.kernel.org>
+Reported-by: syzkaller<syzkaller@googlegroups.com>
+Signed-off-by: George Kennedy<george.kennedy@oracle.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/ata/libata-scsi.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1219,6 +1219,14 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(2) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1063, 0xff),	/* Telit LN920 (ECM) */
- 	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1070, 0xff),	/* Telit FN990 (rmnet) */
-+	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1071, 0xff),	/* Telit FN990 (MBIM) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1072, 0xff),	/* Telit FN990 (RNDIS) */
-+	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -3164,8 +3164,19 @@ static unsigned int ata_scsi_pass_thru(s
+ 		goto invalid_fld;
+ 	}
+ 
+-	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
+-		tf->protocol = ATA_PROT_NCQ_NODATA;
++	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
++		/*
++		 * When T_LENGTH is zero (No data is transferred), dir should
++		 * be DMA_NONE.
++		 */
++		if (scmd->sc_data_direction != DMA_NONE) {
++			fp = 2 + cdb_offset;
++			goto invalid_fld;
++		}
++
++		if (ata_is_ncq(tf->protocol))
++			tf->protocol = ATA_PROT_NCQ_NODATA;
++	}
+ 
+ 	/* enable LBA */
+ 	tf->flags |= ATA_TFLAG_LBA;
 
 

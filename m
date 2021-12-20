@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEF547AF6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2636647AEA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238478AbhLTPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240658AbhLTPKV (ORCPT
+        id S240791AbhLTPCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36240 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238577AbhLTO55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:10:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC38C0A8895;
-        Mon, 20 Dec 2021 06:55:57 -0800 (PST)
+        Mon, 20 Dec 2021 09:57:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E316611AB;
-        Mon, 20 Dec 2021 14:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 079F1C36AE8;
-        Mon, 20 Dec 2021 14:55:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2F77B80EE2;
+        Mon, 20 Dec 2021 14:57:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDCCC36AF8;
+        Mon, 20 Dec 2021 14:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012156;
-        bh=XLDyMbcGwUs7pgsRipJ/l5169pG4jkytnlkeSVrVxGo=;
+        s=korg; t=1640012273;
+        bh=l8tORQ9zuIR5+VtJkMFRn0vyHiWieOabk+6VwicJ/3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M7GXDwCywlHPsSEKzdtQ6mcWZIG1PCXcwi8rek4GikrGeZFxd9XTlXfg+HhoIdI9y
-         z5NGBwqMeG6bTrU48YpiWE9KgH2RFfEu6bpMJRH+t/1ilfh+XIKlQaLHEGhYZd+LKU
-         Jmkbs1kr1Pu6X0CPyLr0YTPNMmWDxt0iYZdUI3Mo=
+        b=KGuZ/wxgLfN1gvSBFgrf/qP/L6P5gIrjuLqBiB9vIgL0TzVskNRE3+wul681nIANi
+         KLfakRHHmKYw6itX+3VCDQoy8CFqa7AiRWw3VCAN2MmdcDQScxUKoYJ9F6/SVwCytT
+         sNc9OQft1IDofvmr0faFxNBchBmpQBX5aOHMc4UY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Haimin Zhang <tcs.kernel@gmail.com>,
+        stable@vger.kernel.org,
+        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/177] netdevsim: Zero-initialize memory for new maps value in function nsim_bpf_map_alloc
-Date:   Mon, 20 Dec 2021 15:34:09 +0100
-Message-Id: <20211220143043.423374890@linuxfoundation.org>
+Subject: [PATCH 5.15 100/177] net/packet: rx_owner_map depends on pg_vec
+Date:   Mon, 20 Dec 2021 15:34:10 +0100
+Message-Id: <20211220143043.465394934@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
 References: <20211220143040.058287525@linuxfoundation.org>
@@ -49,46 +49,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs.kernel@gmail.com>
+From: Willem de Bruijn <willemb@google.com>
 
-[ Upstream commit 481221775d53d6215a6e5e9ce1cce6d2b4ab9a46 ]
+[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
 
-Zero-initialize memory for new map's value in function nsim_bpf_map_alloc
-since it may cause a potential kernel information leak issue, as follows:
-1. nsim_bpf_map_alloc calls nsim_map_alloc_elem to allocate elements for
-a new map.
-2. nsim_map_alloc_elem uses kmalloc to allocate map's value, but doesn't
-zero it.
-3. A user application can use IOCTL BPF_MAP_LOOKUP_ELEM to get specific
-element's information in the map.
-4. The kernel function map_lookup_elem will call bpf_map_copy_value to get
-the information allocated at step-2, then use copy_to_user to copy to the
-user buffer.
-This can only leak information for an array map.
+Packet sockets may switch ring versions. Avoid misinterpreting state
+between versions, whose fields share a union. rx_owner_map is only
+allocated with a packet ring (pg_vec) and both are swapped together.
+If pg_vec is NULL, meaning no packet ring was allocated, then neither
+was rx_owner_map. And the field may be old state from a tpacket_v3.
 
-Fixes: 395cacb5f1a0 ("netdevsim: bpf: support fake map offload")
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
-Link: https://lore.kernel.org/r/20211215111530.72103-1-tcs.kernel@gmail.com
+Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
+Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/netdevsim/bpf.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/packet/af_packet.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 90aafb56f1409..a438202129323 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -514,6 +514,7 @@ nsim_bpf_map_alloc(struct netdevsim *ns, struct bpf_offloaded_map *offmap)
- 				goto err_free;
- 			key = nmap->entry[i].key;
- 			*key = i;
-+			memset(nmap->entry[i].value, 0, offmap->map.value_size);
- 		}
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 2a2bc64f75cfd..1bc7ef49e1487 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -4457,9 +4457,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
  	}
  
+ out_free_pg_vec:
+-	bitmap_free(rx_owner_map);
+-	if (pg_vec)
++	if (pg_vec) {
++		bitmap_free(rx_owner_map);
+ 		free_pg_vec(pg_vec, order, req->tp_block_nr);
++	}
+ out:
+ 	return err;
+ }
 -- 
 2.33.0
 

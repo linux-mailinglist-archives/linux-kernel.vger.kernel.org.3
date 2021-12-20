@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2954F47ACB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8F347AE8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbhLTOqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S238654AbhLTPB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbhLTOoz (ORCPT
+        with ESMTP id S239177AbhLTO63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:44:55 -0500
+        Mon, 20 Dec 2021 09:58:29 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79BDC08E84A;
-        Mon, 20 Dec 2021 06:42:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC09C0617A1;
+        Mon, 20 Dec 2021 06:49:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74A5CB80EE9;
-        Mon, 20 Dec 2021 14:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91C6C36AE7;
-        Mon, 20 Dec 2021 14:42:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55207B80EE5;
+        Mon, 20 Dec 2021 14:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDA4C36AE8;
+        Mon, 20 Dec 2021 14:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011375;
-        bh=xLfAzJapR99aoDr1OkaqMFKcg4sP3b9gJh5EUUpcH38=;
+        s=korg; t=1640011792;
+        bh=4pl3MJI3SANXrWVSTKxh1d/yI/hdSsjmSJUBrn2mceI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Q78OuaVOdweZPVWI3ihNojn2sxcAUCSWw0ksWT8LhQD+saxbl/gRfTBfJFzfTu1O
-         d/HPZZ4JLxpxnSyOwVpL0FQOVWRM/y6m8EjfHkLo8r3hlf6APijCmT6Z4KaGYHNDtp
-         B7WPd13J8IKJ1nExJpzHXKtSLa5zzrULNxN0TFN4=
+        b=lS31KMhTA0HxEcCYcUkOqFgdM4tB4pcWsLCDkbtNWnPT2tPAVwG+84IrMywQYR0oR
+         qmZvr7bd31OVx57+PpEgh5gUp9yDDipT292/Usn+aqJkJKWVfnaQbQDxwSJ3rEtmWl
+         d1xxAVd2rkjQvPRTu2/D2ps+vOcutb4fkohvX1m4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.19 55/56] xen/netback: fix rx queue stall detection
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Jianglei Nie <niejianglei2021@163.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 75/99] btrfs: fix memory leak in __add_inode_ref()
 Date:   Mon, 20 Dec 2021 15:34:48 +0100
-Message-Id: <20211220143025.279910554@linuxfoundation.org>
+Message-Id: <20211220143031.919674681@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,163 +50,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-commit 6032046ec4b70176d247a71836186d47b25d1684 upstream.
+commit f35838a6930296fc1988764cfa54cb3f705c0665 upstream.
 
-Commit 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when
-not using GSO") introduced a security problem in netback, as an
-interface would only be regarded to be stalled if no slot is available
-in the rx queue ring page. In case the SKB at the head of the queued
-requests will need more than one rx slot and only one slot is free the
-stall detection logic will never trigger, as the test for that is only
-looking for at least one slot to be free.
+Line 1169 (#3) allocates a memory chunk for victim_name by kmalloc(),
+but  when the function returns in line 1184 (#4) victim_name allocated
+by line 1169 (#3) is not freed, which will lead to a memory leak.
+There is a similar snippet of code in this function as allocating a memory
+chunk for victim_name in line 1104 (#1) as well as releasing the memory
+in line 1116 (#2).
 
-Fix that by testing for the needed number of slots instead of only one
-slot being available.
+We should kfree() victim_name when the return value of backref_in_log()
+is less than zero and before the function returns in line 1184 (#4).
 
-In order to not have to take the rx queue lock that often, store the
-number of needed slots in the queue data. As all SKB dequeue operations
-happen in the rx queue kernel thread this is safe, as long as the
-number of needed slots is accessed via READ/WRITE_ONCE() only and
-updates are always done with the rx queue lock held.
+1057 static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
+1058 				  struct btrfs_root *root,
+1059 				  struct btrfs_path *path,
+1060 				  struct btrfs_root *log_root,
+1061 				  struct btrfs_inode *dir,
+1062 				  struct btrfs_inode *inode,
+1063 				  u64 inode_objectid, u64 parent_objectid,
+1064 				  u64 ref_index, char *name, int namelen,
+1065 				  int *search_done)
+1066 {
 
-Add a small helper for obtaining the number of free slots.
+1104 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+	// #1: kmalloc (victim_name-1)
+1105 	if (!victim_name)
+1106 		return -ENOMEM;
 
-This is part of XSA-392
+1112	ret = backref_in_log(log_root, &search_key,
+1113			parent_objectid, victim_name,
+1114			victim_name_len);
+1115	if (ret < 0) {
+1116		kfree(victim_name); // #2: kfree (victim_name-1)
+1117		return ret;
+1118	} else if (!ret) {
 
-Fixes: 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when not using GSO")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+1169 	victim_name = kmalloc(victim_name_len, GFP_NOFS);
+	// #3: kmalloc (victim_name-2)
+1170 	if (!victim_name)
+1171 		return -ENOMEM;
+
+1180 	ret = backref_in_log(log_root, &search_key,
+1181 			parent_objectid, victim_name,
+1182 			victim_name_len);
+1183 	if (ret < 0) {
+1184 		return ret; // #4: missing kfree (victim_name-2)
+1185 	} else if (!ret) {
+
+1241 	return 0;
+1242 }
+
+Fixes: d3316c8233bb ("btrfs: Properly handle backref_in_log retval")
+CC: stable@vger.kernel.org # 5.10+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netback/common.h |    1 
- drivers/net/xen-netback/rx.c     |   65 ++++++++++++++++++++++++---------------
- 2 files changed, 42 insertions(+), 24 deletions(-)
+ fs/btrfs/tree-log.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/xen-netback/common.h
-+++ b/drivers/net/xen-netback/common.h
-@@ -203,6 +203,7 @@ struct xenvif_queue { /* Per-queue data
- 	unsigned int rx_queue_max;
- 	unsigned int rx_queue_len;
- 	unsigned long last_rx_time;
-+	unsigned int rx_slots_needed;
- 	bool stalled;
- 
- 	struct xenvif_copy_state rx_copy;
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -33,28 +33,36 @@
- #include <xen/xen.h>
- #include <xen/events.h>
- 
--static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
-+/*
-+ * Update the needed ring page slots for the first SKB queued.
-+ * Note that any call sequence outside the RX thread calling this function
-+ * needs to wake up the RX thread via a call of xenvif_kick_thread()
-+ * afterwards in order to avoid a race with putting the thread to sleep.
-+ */
-+static void xenvif_update_needed_slots(struct xenvif_queue *queue,
-+				       const struct sk_buff *skb)
- {
--	RING_IDX prod, cons;
--	struct sk_buff *skb;
--	int needed;
--	unsigned long flags;
-+	unsigned int needed = 0;
- 
--	spin_lock_irqsave(&queue->rx_queue.lock, flags);
--
--	skb = skb_peek(&queue->rx_queue);
--	if (!skb) {
--		spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
--		return false;
-+	if (skb) {
-+		needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
-+		if (skb_is_gso(skb))
-+			needed++;
-+		if (skb->sw_hash)
-+			needed++;
- 	}
- 
--	needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
--	if (skb_is_gso(skb))
--		needed++;
--	if (skb->sw_hash)
--		needed++;
-+	WRITE_ONCE(queue->rx_slots_needed, needed);
-+}
- 
--	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
-+static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
-+{
-+	RING_IDX prod, cons;
-+	unsigned int needed;
-+
-+	needed = READ_ONCE(queue->rx_slots_needed);
-+	if (!needed)
-+		return false;
- 
- 	do {
- 		prod = queue->rx.sring->req_prod;
-@@ -80,6 +88,9 @@ void xenvif_rx_queue_tail(struct xenvif_
- 
- 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
- 
-+	if (skb_queue_empty(&queue->rx_queue))
-+		xenvif_update_needed_slots(queue, skb);
-+
- 	__skb_queue_tail(&queue->rx_queue, skb);
- 
- 	queue->rx_queue_len += skb->len;
-@@ -100,6 +111,8 @@ static struct sk_buff *xenvif_rx_dequeue
- 
- 	skb = __skb_dequeue(&queue->rx_queue);
- 	if (skb) {
-+		xenvif_update_needed_slots(queue, skb_peek(&queue->rx_queue));
-+
- 		queue->rx_queue_len -= skb->len;
- 		if (queue->rx_queue_len < queue->rx_queue_max) {
- 			struct netdev_queue *txq;
-@@ -474,27 +487,31 @@ void xenvif_rx_action(struct xenvif_queu
- 	xenvif_rx_copy_flush(queue);
- }
- 
--static bool xenvif_rx_queue_stalled(struct xenvif_queue *queue)
-+static RING_IDX xenvif_rx_queue_slots(const struct xenvif_queue *queue)
- {
- 	RING_IDX prod, cons;
- 
- 	prod = queue->rx.sring->req_prod;
- 	cons = queue->rx.req_cons;
- 
-+	return prod - cons;
-+}
-+
-+static bool xenvif_rx_queue_stalled(const struct xenvif_queue *queue)
-+{
-+	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
-+
- 	return !queue->stalled &&
--		prod - cons < 1 &&
-+		xenvif_rx_queue_slots(queue) < needed &&
- 		time_after(jiffies,
- 			   queue->last_rx_time + queue->vif->stall_timeout);
- }
- 
- static bool xenvif_rx_queue_ready(struct xenvif_queue *queue)
- {
--	RING_IDX prod, cons;
--
--	prod = queue->rx.sring->req_prod;
--	cons = queue->rx.req_cons;
-+	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
- 
--	return queue->stalled && prod - cons >= 1;
-+	return queue->stalled && xenvif_rx_queue_slots(queue) >= needed;
- }
- 
- bool xenvif_have_rx_work(struct xenvif_queue *queue, bool test_kthread)
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1109,6 +1109,7 @@ again:
+ 					     parent_objectid, victim_name,
+ 					     victim_name_len);
+ 			if (ret < 0) {
++				kfree(victim_name);
+ 				return ret;
+ 			} else if (!ret) {
+ 				ret = -ENOENT;
 
 

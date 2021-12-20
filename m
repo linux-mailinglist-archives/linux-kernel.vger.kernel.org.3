@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E3A47AFB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CF347AEBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238884AbhLTPRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S238328AbhLTPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239133AbhLTPQT (ORCPT
+        with ESMTP id S239748AbhLTO6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:16:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBCEC00FC46;
-        Mon, 20 Dec 2021 06:58:03 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FED2C06137C;
+        Mon, 20 Dec 2021 06:50:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1916119C;
-        Mon, 20 Dec 2021 14:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852FFC36AE9;
-        Mon, 20 Dec 2021 14:58:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C16B7B80EE3;
+        Mon, 20 Dec 2021 14:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3137C36AE8;
+        Mon, 20 Dec 2021 14:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012282;
-        bh=ak6wbrXCM3xjtt736sl2dCpqB7neM59EYJthWcbD9BM=;
+        s=korg; t=1640011836;
+        bh=3uYhQb3bWY54x9fRpOlW0W4fux/f2ZgTlxdNGkLbGnc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jfJOgk1zyi5/W2TLRoszt4G7L3H27ietKkLwprZKlsw0KqVpy+jmT8/ffVG7mTLCn
-         4XBRAe+6EtAdjtIupg/scfj2RB/ago0bFBQVZnhKmuDm3tq0r7JQeqhBJlN338NcDQ
-         DenzbT3yOIGHde1dEcJGtt9jzFHW+tf6TuLPogdE=
+        b=LHnc1d4eQVLhCoriIEMfGPwT3CBfjdUfS8YLjAZzOVBVSz0SRKmWo6tmpg1bgemI5
+         esSsb312Km0uCu30oqqP2AZHVHERX/5/4S1r/ZVxQa/r+u3Hd1AsaorW2u2rMn0zGS
+         EPHKxja9gLv9+veY4LJlySFSJRrxF4qoGRlSEhRU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        George Kennedy <george.kennedy@oracle.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.15 146/177] libata: if T_LENGTH is zero, dma direction should be DMA_NONE
-Date:   Mon, 20 Dec 2021 15:34:56 +0100
-Message-Id: <20211220143044.999517476@linuxfoundation.org>
+        stable@vger.kernel.org, George Makarov <georgemakarov1@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.10 84/99] ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
+Date:   Mon, 20 Dec 2021 15:34:57 +0100
+Message-Id: <20211220143032.227494408@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,46 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-commit 5da5231bb47864e5dd6c6731151e98b6ee498827 upstream.
+commit 737e65c7956795b3553781fb7bc82fce1c39503f upstream.
 
-Avoid data corruption by rejecting pass-through commands where
-T_LENGTH is zero (No data is transferred) and the dma direction
-is not DMA_NONE.
+According to the i.MX6ULL Reference Manual, pad CSI_DATA07 may
+have the ESAI_TX0 functionality, not ESAI_T0.
 
-Cc: <stable@vger.kernel.org>
-Reported-by: syzkaller<syzkaller@googlegroups.com>
-Signed-off-by: George Kennedy<george.kennedy@oracle.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Also, NXP's i.MX Config Tools 10.0 generates dtsi with the
+MX6ULL_PAD_CSI_DATA07__ESAI_TX0 naming, so fix it accordingly.
+
+There are no devicetree users in mainline that use the old name,
+so just remove the old entry.
+
+Fixes: c201369d4aa5 ("ARM: dts: imx6ull: add imx6ull support")
+Reported-by: George Makarov <georgemakarov1@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-scsi.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx6ull-pinfunc.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -2826,8 +2826,19 @@ static unsigned int ata_scsi_pass_thru(s
- 		goto invalid_fld;
- 	}
+--- a/arch/arm/boot/dts/imx6ull-pinfunc.h
++++ b/arch/arm/boot/dts/imx6ull-pinfunc.h
+@@ -82,6 +82,6 @@
+ #define MX6ULL_PAD_CSI_DATA04__ESAI_TX_FS                         0x01F4 0x0480 0x0000 0x9 0x0
+ #define MX6ULL_PAD_CSI_DATA05__ESAI_TX_CLK                        0x01F8 0x0484 0x0000 0x9 0x0
+ #define MX6ULL_PAD_CSI_DATA06__ESAI_TX5_RX0                       0x01FC 0x0488 0x0000 0x9 0x0
+-#define MX6ULL_PAD_CSI_DATA07__ESAI_T0                            0x0200 0x048C 0x0000 0x9 0x0
++#define MX6ULL_PAD_CSI_DATA07__ESAI_TX0                           0x0200 0x048C 0x0000 0x9 0x0
  
--	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
--		tf->protocol = ATA_PROT_NCQ_NODATA;
-+	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
-+		/*
-+		 * When T_LENGTH is zero (No data is transferred), dir should
-+		 * be DMA_NONE.
-+		 */
-+		if (scmd->sc_data_direction != DMA_NONE) {
-+			fp = 2 + cdb_offset;
-+			goto invalid_fld;
-+		}
-+
-+		if (ata_is_ncq(tf->protocol))
-+			tf->protocol = ATA_PROT_NCQ_NODATA;
-+	}
- 
- 	/* enable LBA */
- 	tf->flags |= ATA_TFLAG_LBA;
+ #endif /* __DTS_IMX6ULL_PINFUNC_H */
 
 

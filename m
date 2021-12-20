@@ -2,209 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F1347B2AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C10D47B2B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbhLTSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbhLTSOI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:14:08 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2B3C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 10:14:07 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id m21so14712088edc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 10:14:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yRCdjgadRWQtiaF5gGdusXinEGnEhFOjodc3u0xyUiE=;
-        b=ftXfdKfvysQePVy8XDBHU8ojcajbvbwuUhcrV3VK46nlMUboj8sdt4kzipzvNlkJAe
-         l0couRkMUHNajY1WblLcuyGIP7hukvW6plfzDzFYM77ivkGb9iyqfsGQhhMPO4nxB35X
-         v/urXY0r7qXfS+k4jIkgHBYvCgpBKFJtnQcehDuDu5YCS0YemvPoeDYsinJsIPBXWxna
-         HsV2DpSZyxFF/o1grCtXltPOjlH/cP78ejqk41gtkyBPtIlXw+/gCBK4ImqNKfdmGyPr
-         UO54K7gG5XxtsJsmmSJMFGgXM7znz3SigUp+/b6QoeTAHerWtik1kp0JF57/tWetpzGz
-         jFdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yRCdjgadRWQtiaF5gGdusXinEGnEhFOjodc3u0xyUiE=;
-        b=4P9UTlsmMBYM763xiA7C+LIZQNCXFfPPqrFmyhv0XeSwgTUBRQ/bEd4uy9/THyuTeU
-         PavD3APN/vPkpBfF7GOMF+/gwc7Qu04r79kA/bG86WiubJFM5KUxexYbHRx7W28OUyK3
-         pyHe5DfGcK3J2KysnpZcqXGJpV82DxB5PHkHQ0lm05FbQKkSIpK52E37CrROxRjxJADg
-         qAP+xGsxgYMVqyaKJZVuktWcPOtvnag8Sos1qHv5HhA4IHNn9CfJAyrYPNpnY2tMNKgj
-         ajTT9etlMCJz2R7owTSVtIL4k4bgMpmURZq1UG7UO/yFrG2s3MPqrqm8rvqoAKMQDH+a
-         BCoA==
-X-Gm-Message-State: AOAM530k1HYCDLTF9MzfkQqytLJiOlwoSJAlETj2fpnEt+0EXh0MmfEW
-        jRa9DZwSWGzI3A7hgfgoIXaOrFrBRAyqqvCM8ERiTg==
-X-Google-Smtp-Source: ABdhPJxxX45n7tG85VxWHrhfN9ZyQFRFFdcAHKSCUj57pbmSa9tajKCCzUloH+6Y+Luv6CvHCmD+d93F7UCdwHE+hDE=
-X-Received: by 2002:a17:906:e52:: with SMTP id q18mr13732450eji.278.1640024046224;
- Mon, 20 Dec 2021 10:14:06 -0800 (PST)
+        id S240321AbhLTSPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:15:20 -0500
+Received: from mga07.intel.com ([134.134.136.100]:35096 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232777AbhLTSPT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 13:15:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640024119; x=1671560119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xn3SfHAVBBxgPNY/hfMHHIDWLipvyx6cHeleLt7x/qI=;
+  b=ZLT1fuI6bUi4rFwLyKh5YnsUM6IOACWTQ69QIfG8TFS0H1XJOw8TwkoD
+   DafifOtphkympgkgdGi7lOliDHxt68MyPDF6sQ1PbtPWypZvXE1+Z4JGz
+   ByK+krBV42NymwnUnqGx1lAzRZL8kVib6wdXY4mBzNc1LYoZmyPhkpJUD
+   q9Gd8mmQCPYWvmQJfOYaeHJ4oXb3pAhCj29FKly4enhE0fsuz/csXLwDO
+   LSY4I3kLioneB039ezT9flMZs3iQmGIb5bPmif5fShyrSYVC8P0+RPRKw
+   k2M8rMWE5uZsb4HJ+rADVhynNyxkMm39/80TsOdBEWcy368yAiG5Avf2G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="303615285"
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="303615285"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 10:15:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,221,1635231600"; 
+   d="scan'208";a="684370606"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 10:15:15 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzNBr-00085W-6H; Mon, 20 Dec 2021 18:15:15 +0000
+Date:   Tue, 21 Dec 2021 02:14:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Wander Lairson Costa <wander@redhat.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Wander Lairson Costa <wander@redhat.com>
+Subject: Re: [PATCH v4 1/1] blktrace: switch trace spinlock to a raw spinlock
+Message-ID: <202112210258.y6u1AZpZ-lkp@intel.com>
+References: <20211220130357.8790-2-wander@redhat.com>
 MIME-Version: 1.0
-References: <20211215172349.388497-1-willmcvicker@google.com> <CAK7LNAT=U9xE5QTPThRTf3V=WEh3WmUh6w-89mm+APjnYp701Q@mail.gmail.com>
-In-Reply-To: <CAK7LNAT=U9xE5QTPThRTf3V=WEh3WmUh6w-89mm+APjnYp701Q@mail.gmail.com>
-From:   Will McVicker <willmcvicker@google.com>
-Date:   Mon, 20 Dec 2021 10:13:50 -0800
-Message-ID: <CABYd82YUpf5OCuE6q87UZ5+LiRtxqd2yiM25s85KQnxTFcyRzQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kbuild: install the modules.order for external modules
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220130357.8790-2-wander@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 5:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> (Cc: Lucas De Marchi)
->
-> On Thu, Dec 16, 2021 at 2:23 AM Will McVicker <willmcvicker@google.com> wrote:
-> >
-> > Add support to install the modules.order file for external modules
-> > during module_install in order to retain the Makefile ordering
-> > of external modules. This helps reduce the extra steps necessary to
-> > properly order loading of external modules when there are multiple
-> > kernel modules compiled within a given KBUILD_EXTMOD directory.
-> >
-> > To handle compiling multiple external modules within the same
-> > INSTALL_MOD_DIR, kbuild will append a suffix to the installed
-> > modules.order file defined like so:
-> >
-> >   echo ${KBUILD_EXTMOD} | sed 's:[./_]:_:g'
-> >
-> > Ex:
-> >   KBUILD_EXTMOD=/mnt/a.b/c-d/my_driver results in:
-> >   modules.order._mnt_a_b_c_d_my_driver
-> >
-> > The installed module.order.$(extmod_suffix) files can then be cat'd
-> > together to create a single modules.order file which would define the
-> > order to load all of the modules during boot.
->
->
-> So, the user must do this manually?
->
-> cat extra/modules.order._mnt_a_b_c_d_my_driver  \
->    extra/modules.order._mnt_e_f_g_h_my_driver \
->    >> modules.order
->
-> This is so ugly, and incomplete.
->
-> I cc'ed the kmod maintainer, who may have
-> comments or better approach.
->
->
->
->
->
->
-> > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > ---
-> >  scripts/Makefile.modinst | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> > index ff9b09e4cfca..2e2e31696fd6 100644
-> > --- a/scripts/Makefile.modinst
-> > +++ b/scripts/Makefile.modinst
-> > @@ -24,6 +24,10 @@ suffix-$(CONFIG_MODULE_COMPRESS_XZ)  := .xz
-> >  suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)  := .zst
-> >
-> >  modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
-> > +ifneq ($(KBUILD_EXTMOD),)
-> > +extmod_suffix := $(subst /,_,$(subst .,_,$(subst -,_,$(KBUILD_EXTMOD))))
-> > +modules += $(dst)/modules.order.$(extmod_suffix)
-> > +endif
-> >
-> >  __modinst: $(modules)
-> >         @:
-> > @@ -82,6 +86,12 @@ $(dst)/%.ko: $(extmod_prefix)%.ko FORCE
-> >         $(call cmd,strip)
-> >         $(call cmd,sign)
-> >
-> > +ifneq ($(KBUILD_EXTMOD),)
-> > +$(dst)/modules.order.$(extmod_suffix): $(MODORDER) FORCE
-> > +       $(call cmd,install)
-> > +       @sed -i "s:^$(KBUILD_EXTMOD):$(INSTALL_MOD_DIR):g" $@
-> > +endif
-> > +
-> >  else
-> >
-> >  $(dst)/%.ko: FORCE
-> > --
-> > 2.34.1.173.g76aa8bc2d0-goog
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+Hi Wander,
 
-Hi Masahiro,
+Thank you for the patch! Yet something to improve:
 
-Thanks for your response! I agree with you that this is ugly and would
-love feedback on the direction to take this. With regards to
-incompleteness, the existing kbuild implementation for external
-modules is already incomplete in the sense that it doesn't even
-attempt to install the already generated modules.order files to
-INSTALL_MOD_DIR. I believe this patch gets us a little closer to
-closing the gap, but agree it's nowhere complete. I would be happy to
-fully close the gap if I knew that it would be accepted or welcomed.
-Let me give you some insight on how we currently do this on Android
-and how this patch changes that.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linux/master linus/master v5.16-rc6 next-20211220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Currently, the Android build.sh script (which is used to compile the
-Android Common Kernel) supports the build variable EXT_MODULES which
-is a list of paths to external modules to be compiled. The build
-script loops through this list and calls "make modules" and "make
-modules_install" to compile and install the external modules. Then,
-the build script creates the modules.order file like this:
+url:    https://github.com/0day-ci/linux/commits/Wander-Lairson-Costa/blktrace-switch-trace-spinlock-to-a-raw-spinlock/20211220-210538
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: hexagon-randconfig-r045-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210258.y6u1AZpZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/b270731108ecba0d77a6db93d057290406c51a20
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Wander-Lairson-Costa/blktrace-switch-trace-spinlock-to-a-raw-spinlock/20211220-210538
+        git checkout b270731108ecba0d77a6db93d057290406c51a20
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/ kernel/trace/
 
-cd ${MODLIB}
-find extra -type f -name "*.ko" | sort >> modules.order
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sorting is used so that the modules.order file is deterministic. This
-proposed patch allows us to use the Makefile defined ordering instead
-of this sorted ordering. In Android the paths to external modules must
-be relative to the kernel repository. For example, the kernel and all
-external modules are all cloned within a root directory and the paths
-in EXT_MODULES are all relative to the root directory. So our build.sh
-script can use the relative path from the root directory as part of
-INSTALL_MOD_DIR to get rid of the suffix ugliness. For example, we can
-do this:
+All errors (new ones prefixed by >>):
 
-for EXT_MOD in ${EXT_MODULES}; do
-  # make modules
-  make -C ${EXT_MOD} ...
-  # make modules_install
-  make -C ${EXT_MOD} ...  INSTALL_MOD_DIR="extra/${EXT_MOD}" modules_install
-done
+   kernel/trace/blktrace.c:148:63: warning: parameter 'blkcg' set but not used [-Wunused-but-set-parameter]
+   void __trace_note_message(struct blk_trace *bt, struct blkcg *blkcg,
+                                                                 ^
+>> kernel/trace/blktrace.c:1611:17: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+                   spin_lock_irq(&running_trace_lock);
+                                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:372:55: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_lock_irq(spinlock_t *lock)
+                                                         ^
+   kernel/trace/blktrace.c:1613:19: error: incompatible pointer types passing 'raw_spinlock_t *' (aka 'struct raw_spinlock *') to parameter of type 'spinlock_t *' (aka 'struct spinlock *') [-Werror,-Wincompatible-pointer-types]
+                   spin_unlock_irq(&running_trace_lock);
+                                   ^~~~~~~~~~~~~~~~~~~
+   include/linux/spinlock.h:397:57: note: passing argument to parameter 'lock' here
+   static __always_inline void spin_unlock_irq(spinlock_t *lock)
+                                                           ^
+   1 warning and 2 errors generated.
 
-for EXT_MOD in ${EXT_MODULES}; do
-  modules_order_file=$(ls ${MODLIB}/extra/${EXT_MOD}/modules.order.*)
-  cat ${modules_order_file} >> ${MODLIB}/modules.order
-done
 
-Since kbuild doesn't know about how many external modules there are
-nor does it retain any information about each individual call to "make
-modules" or "make modules_install", we can't do the concatenation
-within the Makefile.modinst script. To close the gap, we could add an
-additional make target that one could call after all of the external
-modules have been installed to do this concatenation, but I wasn't
-sure how open everyone would be to accepting this. Let me know your
-thoughts on that.
+vim +1611 kernel/trace/blktrace.c
 
-Thanks,
-Will
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1599  
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1600  static int blk_trace_remove_queue(struct request_queue *q)
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1601  {
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1602  	struct blk_trace *bt;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1603  
+c3dbe541ef7775 kernel/trace/blktrace.c Jan Kara                 2020-06-05  1604  	bt = rcu_replace_pointer(q->blk_trace, NULL,
+85e0cbbb8a7953 kernel/trace/blktrace.c Luis Chamberlain         2020-06-19  1605  				 lockdep_is_held(&q->debugfs_mutex));
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1606  	if (bt == NULL)
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1607  		return -EINVAL;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1608  
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1609  	if (bt->trace_state == Blktrace_running) {
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1610  		bt->trace_state = Blktrace_stopped;
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23 @1611  		spin_lock_irq(&running_trace_lock);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1612  		list_del_init(&bt->running_list);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1613  		spin_unlock_irq(&running_trace_lock);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1614  		relay_flush(bt->rchan);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1615  	}
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1616  
+a6da0024ffc19e kernel/trace/blktrace.c Jens Axboe               2017-11-05  1617  	put_probe_ref();
+c780e86dd48ef6 kernel/trace/blktrace.c Jan Kara                 2020-02-06  1618  	synchronize_rcu();
+ad5dd5493a55e4 kernel/trace/blktrace.c Li Zefan                 2009-03-27  1619  	blk_trace_free(bt);
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1620  	return 0;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1621  }
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1622  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

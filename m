@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F92547B10E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F1E47B110
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237693AbhLTQZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbhLTQZ4 (ORCPT
+        id S237835AbhLTQ0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:26:36 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:58285 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232694AbhLTQ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:25:56 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFCCC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:25:56 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z29so40473291edl.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XvWrfQmxo92Vk35K9itPrk+v2drQqqMQXDgOVumXc0M=;
-        b=IQjsD21Pybi9GJfj8nuGID8c+mf9ejkusWwXaVWIkOWbq4mOETiVhbADSFAS5NHU2d
-         O7PTnLOuP1DMsk3SD/odO+cK9Ld+cYQXuJYvZbiBFZiR42ecGEe/orQVZ4Zd+MGn2fiS
-         mjI3dLibvSQJj9rAUjaCC7AUSrbs+HrbIDIGg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XvWrfQmxo92Vk35K9itPrk+v2drQqqMQXDgOVumXc0M=;
-        b=n0K0JKqATA+CNLo5iGkhNfT5VeOWCBCkB2WoW2a7E1rKbsLoDx+bafou3b8vBfCF5F
-         P+eD1b3OVJsnb2kFnj5XsNt1mSJwTpyuq6dKYHtuT7QG7o9IteMzYjKjUZLDYsqf6HXN
-         +kN6S13mhSQ8VpEwYjR5xVh2M3852gyj4sxMRnHjxDvODwUvlgqDKcjXdD04Sc2yjRcq
-         Jmr4ny/8SqO/FUVC8SPOJir00xNs0sajfJ/3C+cb+xTxj1WOSJQGcLm/3tZGr5lss0Cl
-         qrkfnktEGYTBzfzZAFgx0flJ83VplyWfCmeDVn/i/0N/BZpNaccyBkUZSrz/Yqxx4ikF
-         ssXA==
-X-Gm-Message-State: AOAM5335ZyafoRFDoQQKR9q+LSuxKGz/SMhCplrmAaBdmCKyyZ0Kr9KI
-        D5JZ7gBTaQ760Y4VI1ixyskhNm8GmdAKSzRe1Zg=
-X-Google-Smtp-Source: ABdhPJy12kvUn4Ffj26/tAxYcz/rP33sWjWOBjSaFDzvs2YSsqgpyA6x3MztqjUT7FJ9on5tdMlPbA==
-X-Received: by 2002:a05:6402:268a:: with SMTP id w10mr1628606edd.257.1640017554704;
-        Mon, 20 Dec 2021 08:25:54 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id 3sm5466063ejq.159.2021.12.20.08.25.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 08:25:54 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id j18so21290066wrd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:25:54 -0800 (PST)
-X-Received: by 2002:adf:8b0e:: with SMTP id n14mr13295335wra.281.1640017553811;
- Mon, 20 Dec 2021 08:25:53 -0800 (PST)
+        Mon, 20 Dec 2021 11:26:35 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MjSPq-1mbVvE0QTy-00kvTN; Mon, 20 Dec 2021 17:26:34 +0100
+Received: by mail-wm1-f53.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so253952wmd.5;
+        Mon, 20 Dec 2021 08:26:33 -0800 (PST)
+X-Gm-Message-State: AOAM530RcqF5pDNv/pc0dYzWMFSQfbrsMk2l2Vi4TNA9RpDNJYzXIXvP
+        pUpK6JQ3+UBm9ovL1lwMWcDb5u4E6FxTArupyDs=
+X-Google-Smtp-Source: ABdhPJzwLrcEdHroPABlE7IJDleIxx8hF8kMeanu6+6idToBCIFPiLRY1JmE/9PmnlEOMB7YuxOroFdtYAkUkDWN3xs=
+X-Received: by 2002:a7b:cc90:: with SMTP id p16mr4058397wma.98.1640017593504;
+ Mon, 20 Dec 2021 08:26:33 -0800 (PST)
 MIME-Version: 1.0
-References: <Yb82O5i2DVcK9nAJ@zn.tnic> <CAHk-=wiNMghi=nZc432_Sj4QwG+BtxGUtovnpVQk-LpDj8r3ZA@mail.gmail.com>
- <15b1a9af-f8ff-c3e2-ba3e-cdbd29ae38db@intel.com> <CAHk-=wgMEnZqKcUEH9ADg38ifSJa_Mui7FF=-L1-8=_MQfNFAw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgMEnZqKcUEH9ADg38ifSJa_Mui7FF=-L1-8=_MQfNFAw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Dec 2021 08:25:37 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgC3Q4+3Dc4FhQ6WopwZxoMMVxaA2TSJm-CH1CQ4hQWfw@mail.gmail.com>
-Message-ID: <CAHk-=wgC3Q4+3Dc4FhQ6WopwZxoMMVxaA2TSJm-CH1CQ4hQWfw@mail.gmail.com>
-Subject: Re: [GIT PULL] core/urgent for v5.16-rc6
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@suse.de>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20211220115405.30434-1-krzysztof.kozlowski@canonical.com> <20211220115405.30434-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211220115405.30434-2-krzysztof.kozlowski@canonical.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 20 Dec 2021 17:26:17 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
+Message-ID: <CAK8P3a1A+6f1OsJ-8-8kbmXXbbsrQZTQywOAy59tJoUmdDN49g@mail.gmail.com>
+Subject: Re: [GIT PULL 1/6] samsung: soc: drivers: for v5.17
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:eWOF60gc+LvbFpDhWKiA/GiiQT+oM6NriT55/Wr0+bkXD8ns8ir
+ GCIZd+t1nGwzfd7l1DPQZVGIKP7bcI3WaPbhgvbPHrEesXHRsyHaYtUhJrTP43nkv6aJNbD
+ FK9qilSiyi6ffP1xvkpnkVZBneThyuq6SA3H1QA2+ZA0/S3TV6ZXZjpOm8z2gyuK+iAEtbs
+ spvRTueMTfHBXC82LB2yA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uZCFLVqlupU=:ZWzRH0QDIgZnGVckRRNSYT
+ lteOKfSY4es1dRM+pZBpcPXKUX0YPj731Hu7x1eBIfzTECC0NcNd0K8UCaklMyIbuJnAdhC/T
+ cRpXNYn/giAvM4PexNWatiduU0WTjkKuIsOJ5xQiou+9fDy51N/+TYvLUjtbqrsoR0ocJWClX
+ RjdHN66fKmfjaV4sVNzXx/jQpkYyOZEG7HjdWIDoPKbQ/pqN6isMq/2OAwPVwO+UEzIozfwGm
+ L1jkEMmvkAWmBBV11dtzdG0naL6sTwskGBJSvUGQ/QuBPCoDaSYEMVnEhWEBlZ+t+/nZ+tOdD
+ G53ekIme1W1UIZGJPL4TqkQfZmmFsoImmFqyefbNwwxJgyH9hO0Zjww/gOd4UHWieFXno+bBm
+ TeINxiMF1VdD8se5vqCUkeVj5azS+bmvNYkd94J2ZcNTbw1r9nJ6MGENlJiBKhOnN9ro0uU5r
+ NdYscGNceXg2wuYw61IDjpT9uzvFBhkYAsQLr7TK8pf6VJ4ytbbSbaL4JJzyMkRzKTGjayzEm
+ vcUlZiEVV+yEbI8x0361KdynNrAOKEIQHJeZAuf8UK63fFyuPAdtS9PltK1pYQ6MSYBfLStOK
+ 6u9avEQ0nERESJODAh8p+ZW/H1+Saa8R4zZwlx7+tYXA6hHezGh7bpUl9ctSti0urHdP26jOF
+ qB7kVwqzT56eRyPg9K0zRqMCw8+gwYY/zZ3IC7/g2bEmcH+btfUK6a6vTtJtRWfPKK+bREm6p
+ kAVGsAr+bKva15wwNu27ODmCJZswI/1fcMUoRq1TJ810Er30u6j2M/dtL4r7rJHdngxLVusk3
+ ZmsGD/EvWcv8ECA/Yc96NhC2UvSsObT3iGcTavZ4K7YqZujGOY=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 8:20 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Dec 20, 2021 at 12:54 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> ----------------------------------------------------------------
+> Samsung SoC drivers changes for v5.17
 >
-> Whatever. I don't care that much, but this all smells like you just
-> dug your own hole for very questionable causes, and instead of a
-> "don't do that then" this all is doubling down on a bad idea.
+> 1. Exynos ChipID: add Exynos7885 support.
+> 2. Exynos PMU: add Exynos850 support.
+> 3. Minor bindings cleanup.
+> 4. Add Exynos USIv2 (Universal Serial Interface) driver. The USI block is
+>    a shared IP block between I2C, UART/serial and SPI. Basically one has
+>    to choose which feature the USI block will support and later the
+>    regular I2C/serial/SPI driver will bind and work.
+>    This merges also one commit with dt-binding headers from my dts64
+>    pull request.
+>
+>    Together with a future serial driver change, this will break the ABI.
+>
+>    Affected: Serial on ExynosAutov9 SADK and out-of-tree ExynosAutov9 boards
+>
+>    Why: To properly and efficiently support the USI with new hierarchy
+>    of USI-{serial,SPI,I2C} devicetree nodes.
+>
+>    Rationale:
+>    Recently added serial and USI support was short-sighted and did not
+>    allow to smooth support of other features (SPI and I2C). Adding
+>    support for USI-SPI and USI-I2C would effect in code duplication.
+>    Adding support for different USI versions (currently supported is
+>    USIv2 but support for v1 is planned) would cause even more code
+>    duplication and create a solution difficult to maintain.
+>    Since USI-serial and ExynosAutov9 have been added recently, are
+>    considered fresh development features and there are no supported
+>    products using them, the code/solution is being refactored in
+>    non-backwards compatible way.  The compatibility is not broken yet.
+>    It will be when serial driver changes are accepted.
+>    The ABI break was discussed with only known users of ExynosAutov9 and
+>    received their permission.
 
-It further looks like it's really only the sas_ss_size that is
-checked, so if people wan tto have a lock, make it clear that's the
-only thing that the lock is about.
+Thanks a lot for the detailed description, very helpful!
 
-So the actual "do I even need to lock" condition should likely just be
+I've applied pull requests 1 through 4, though it seems that once more
+the automated emails did not go out.
 
-        if (ss_size < t->sas_ss_size)
-                .. don't bother locking ..
+I can't find the two defconfig patches you mentioned in the introductory
+mail, neither in patchwork nor in my inbox, I assume these were
+numbered 5/6 and 6/6?
 
-but as mentioned, I don't really see much of a point in being so
-careful even about the growing case.
-
-If somebody is changing xstate features concurrently with another
-thread setting up their altstack, they can keep both pieces.
-
-                 Linus
+        Arnd

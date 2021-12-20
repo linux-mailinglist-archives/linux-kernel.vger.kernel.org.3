@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6054547A3EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 04:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0A547A3F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 04:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbhLTD2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 22:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbhLTD2v (ORCPT
+        id S237365AbhLTDje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 22:39:34 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:56276 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233995AbhLTDjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 22:28:51 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10440C061574;
-        Sun, 19 Dec 2021 19:28:51 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id x21so10316591lfa.5;
-        Sun, 19 Dec 2021 19:28:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fRcTObY/+9A4hixoekg+KAnW7I8Bz5CnTH8eOyUtBR8=;
-        b=llE/Xtta9p8PDPP2HjgM4E2Fdmz/7/XHPUSymjov1e3QjqtwtDcQHM1zauXoPq2o3E
-         Uh5NBEB5UlM2cw6vu4gU8kHtlcFZzceFQ2JuH0psRovlJSJU5zIXLE7Ai4nb0fvIDSoL
-         NQwxtw7jHRxvUkNAIxhurHOhZd41+mOpcHzintP82eG9pc3OEydxz+XJAAwYHT40amR3
-         kX7YRkc/Lap7oSZ+t0EyEh4bLIqlEwb7FCKDk0qUO0GMXUzq0WRJpdL+yiAbB+MIk8h2
-         WQLP7hiXfZDpljJq3jUGi8nTGZt9GMoxtcEquDmE2K1dGsLBnHEIlaw2NUkrXhYm8m+K
-         TMMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fRcTObY/+9A4hixoekg+KAnW7I8Bz5CnTH8eOyUtBR8=;
-        b=LVuTZfFqfW2APKC9lqhYaYsJjWhGZrHakQzSe0UXBE6nCHK3vNXOT6pyGI2ITdUYu3
-         uT2crPa/iKRjC40kQt9RNCCpmKAx2z/Y3P691RDK1a/94ziLoN8fVyYZZfWuHmGBslCQ
-         BGIFTDpC+I44ugSUyEScQTsmJp+dKXqD8gylQUHeiAoSoB0V/aSa6/eHtyF3N/YmwTXb
-         ZJ/mPzmzGU/jrcDzMX8CL+zgbdAKIxfCnDQMr2wx8OBE2PHLuT0VlFnpxyAekbesgVPH
-         QnoN9N+BF5c4vM65r/25GTLGVdG52w/muIflG474DR9Q9mFDhtNqe3oxbSIVpGZ6wIvt
-         SWWw==
-X-Gm-Message-State: AOAM533JzogozXziwaD38yjvnsal3Q7mNAyP6k0B+FU/7Q/o2JsXymfS
-        HQuFfMLoe1oa0v8pUH0tO5gVsD0Roxn8x6ovVx5PUz81
-X-Google-Smtp-Source: ABdhPJx2BwtN5YBznRrSXCI2e7hzjlnUteNBIeZR4uHN5mmQ2tL3lJA8R5TRygaRR22/4cLFWEr0EEQ9p+Rr5MGpvMo=
-X-Received: by 2002:a05:6512:a8d:: with SMTP id m13mr13938249lfu.638.1639970929272;
- Sun, 19 Dec 2021 19:28:49 -0800 (PST)
+        Sun, 19 Dec 2021 22:39:33 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V.5JYCF_1639971569;
+Received: from 30.43.68.48(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0V.5JYCF_1639971569)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 20 Dec 2021 11:39:30 +0800
+Message-ID: <c5c17989-4c1e-35d2-5a75-a27e58cf6673@linux.alibaba.com>
+Date:   Mon, 20 Dec 2021 11:39:26 +0800
 MIME-Version: 1.0
-References: <20211212115506.180629-1-gnurou@gmail.com> <9b20ae5d-be8f-59dd-3136-2a9f7ce216e9@suse.com>
- <CAAVeFu+sLzNUztnW4Vyr6ukCyjxTwCT-L4Y2xEWsRx=CPuarPw@mail.gmail.com> <c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com>
-In-Reply-To: <c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com>
-From:   Alexandre Courbot <gnurou@gmail.com>
-Date:   Mon, 20 Dec 2021 12:28:36 +0900
-Message-ID: <CAAVeFuJ+kSW9KNOwa_bTzbbeZ=-LfnvL4MR2hDqCsykkdqkKLQ@mail.gmail.com>
-Subject: Re: [usb-storage] Re: [PATCH] usb: storage: do not use UAS with
- Logitec LGB-4BNHUC
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH -next] SUNRPC: Clean XPRT_CONGESTED of xprt->state when
+ rpc task is killed
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+Cc:     bfields@fieldses.org, chuck.lever@oracle.com,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        davem@davemloft.net, kuba@kernel.org, pete.wl@alibaba-inc.com,
+        wenan.mwa@alibaba-inc.com, xiaoh.peixh@alibaba-inc.com,
+        weipu.zy@alibaba-inc.com
+References: <1639490018-128451-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <1639490018-128451-2-git-send-email-cuibixuan@linux.alibaba.com>
+From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
+In-Reply-To: <1639490018-128451-2-git-send-email-cuibixuan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:03 PM Oliver Neukum <oneukum@suse.com> wrote:
->
->
-> On 15.12.21 12:41, Alexandre Courbot wrote:
-> > Unfortunately I am not familiar with the storage subsystem so I'm not
-> > sure which quirks would be good candidates to try, would you have
-> > suggestions? As for the command, reproduction is rather random and I
-> > did not keep traces of all instances.
->
-> Hi,
->
->
-> could you try "fgkm" ?
+ping~
 
-Trying with this and will narrow down if it looks stable. Please
-expect a few weeks before the (hopefully more refined) patch.
-
-Cheers,
-Alex.
+在 2021/12/14 下午9:53, Bixuan Cui 写道:
+> When the values of tcp_max_slot_table_entries and
+> sunrpc.tcp_slot_table_entries are lower than the number of rpc tasks,
+> xprt_dynamic_alloc_slot() in xprt_alloc_slot() will return -EAGAIN, and
+> then set xprt->state to XPRT_CONGESTED:
+>    xprt_retry_reserve
+>      ->xprt_do_reserve
+>        ->xprt_alloc_slot
+>          ->xprt_dynamic_alloc_slot // return -EAGAIN and task->tk_rqstp is NULL
+>            ->xprt_add_backlog // set_bit(XPRT_CONGESTED, &xprt->state);
+>
+> When rpc task is killed, XPRT_CONGESTED bit of xprt->state will not be
+> cleaned up and nfs hangs:
+>    rpc_exit_task
+>      ->xprt_release // if (req == NULL) is true, then XPRT_CONGESTED
+> 		   // bit not clean
+>
+> Add xprt_wake_up_backlog(xprt) to clean XPRT_CONGESTED bit in
+> xprt_release().
+>
+> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+> Signed-off-by: Xiaohui Pei <xiaoh.peixh@alibaba-inc.com>
+> ---
+>   net/sunrpc/xprt.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+> index a02de2b..70d11ae 100644
+> --- a/net/sunrpc/xprt.c
+> +++ b/net/sunrpc/xprt.c
+> @@ -1952,6 +1952,7 @@ void xprt_release(struct rpc_task *task)
+>   	if (req == NULL) {
+>   		if (task->tk_client) {
+>   			xprt = task->tk_xprt;
+> +			xprt_wake_up_backlog(xprt);
+>   			xprt_release_write(xprt, task);
+>   		}
+>   		return;

@@ -2,70 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E30A147AC4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DE247AC72
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235698AbhLTOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbhLTOlc (ORCPT
+        id S235518AbhLTOnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:43:52 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:22974 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235503AbhLTOmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:32 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCDFC0613A5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:41:02 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id b188-20020a1c80c5000000b00345afe7e3c0so189592wmd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:41:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=UtoF0r4yG8U/T8UOLxn8dacSd49m7zi2Qvhr7fGOaoo=;
-        b=keW6P0RbCpoRsfn3xReLqcOtyi34ZTJa9l0vzZp7+m4HnGsU3C7lMbErZcG3UOTEz0
-         BcgV9nzudfIkuSLybOAWHVbuv4io5tSJL9/S8XgpTOhhiEZImozI9KMpT0Uxoa0zPT9V
-         bhcvDYthO5OfvPhqqkJSot1ICRErc7p2ioSPzYQvjPyA387uJniZimo4Y5rfn2jKgmj1
-         2sjvXsD5vLC5zLE0qckwst5ZloKVnQdyZ0qf8HBdRD+M9Ef1Dxkg+llH7COAsoCT7w11
-         D/0Dl8YEYVM419sycsbJgS8SdWi6Fg79VWeWfYpS9MkeWu+RjIv62Uz+4nC9KU1+yGWl
-         CBiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=UtoF0r4yG8U/T8UOLxn8dacSd49m7zi2Qvhr7fGOaoo=;
-        b=1iIX5ZBkq5nJ8QeW1JTQz9VbPjYP2z9zbgda6Q87l8/WQu0qD1lV5B6OnpT442uVzZ
-         2S7qOCWjJFvwEaaGs0hKmtuUm8uoY8zN1Zn5grs2u+TqqVbdw2HNSxH/VrOWjQrow/Tx
-         wC/AxpcZrdG8T2GrnQVB8uShZEtYXMmMmBEhCkG9bS1u3FLPMLfXjuc6borTvHHlPXWA
-         /DU58AVFPnposH5/2QKVknrYzd5F0mbwflT9faGVM3uZn5mz/h8lBoNIDiHjSwid3RxU
-         QvvWw+wSOfhnO/I360jCaVIAWWTGe240xFR7JyXKaz+vdXXzC63oJNUXLjndtLw+Wy+h
-         cuhA==
-X-Gm-Message-State: AOAM532Kd447mk1cxrXgc3k5/uRHTNebAbs6JnwcLFkpqhD+TECOo81m
-        1D+WgtRa+yBZhyWpJGT//nRY1oafDlDQag==
-X-Google-Smtp-Source: ABdhPJw/n/ntl5tb67zMT2iP5wtIZ9+VwNMS01axIfCLM6/M425NZagvrnOI9IZTdVSwvkyrfNlJpg==
-X-Received: by 2002:a05:600c:3b12:: with SMTP id m18mr3728976wms.54.1640011260973;
-        Mon, 20 Dec 2021 06:41:00 -0800 (PST)
-Received: from [192.168.9.102] ([129.205.112.56])
-        by smtp.gmail.com with ESMTPSA id f6sm1931036wmq.6.2021.12.20.06.40.57
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 20 Dec 2021 06:41:00 -0800 (PST)
-Message-ID: <61c095fc.1c69fb81.90088.96e1@mx.google.com>
-From:   Margaret Leung KO May-y <jogbodo12@gmail.com>
-X-Google-Original-From: Margaret Leung KO May-y
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 20 Dec 2021 09:42:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640011347; x=1671547347;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YNa8YHikRJ/OKzAGyD12kWBKv4tGn1WRMnt2QZArwnc=;
+  b=tlGF/QfuZowrxpAQO7cbJiRI6hRr3Z4dZdx1YzbxMVrCu5616FAQ8CJE
+   GD8/l25pWsYmu74OOAzGfX+f0dnRNVF7hac8+AM2iTWJaln+gIxcSYBJq
+   J24Jr6QZUVjKJYTCaGtvH92HVV7mc3QysZ6QhqSqgCL0wGeQibGEm7Ghn
+   9xoO5KmyYfYbbFpelqPfWuBiPMFFv3sDg+rcS++3SN+J40MUlf2lg5N02
+   P95Su0S80PnbsvYtgIPX2SAplEa1KLMCHN5xUKHtfcCyTjArf2lz3w954
+   N7gU5iWjx3LxGuiCpa3NFQVU9TBTesqt80TSEcLJtDbf6WJbNz1NdDpS/
+   w==;
+IronPort-SDR: 5gTeZxK3/JoYsKr5AUjMzhAxFNSCKxbe0kR5vEy+WK5GUC/DQ3loE4mYxdvIayukdfz8sqMuLB
+ dWSS2dEt26O/ROOdFHEHPu6YSfzYJIbs0VsjyXY0u/U0K1QjAcUqhyVM0sroXepfUUooeyRHDS
+ 2Ujl6+GfiIZU8XUtWrAMNeVlHbj+u9ODCOp5oHF0iWlUsURu9Z8gdk7+pr2uqk+apLLEVEubMF
+ isLeP4E3Vc7G0UUouZFb1BZLRBT+VOnYabxtTt6kAmO8jGFandBq/NYSxqsHLeUInBk+aMMP86
+ ViHr4q4X/EVzSIzLlKta3fhg
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="147245455"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Dec 2021 07:42:25 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 20 Dec 2021 07:42:23 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 20 Dec 2021 07:42:20 -0700
+From:   <conor.dooley@microchip.com>
+To:     <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <arnd@arndb.de>, <olof@lixom.net>,
+        <linux-riscv@lists.infradead.org>
+CC:     <cyril.jean@microchip.com>, <daire.mcnamara@microchip.com>,
+        <lewis.hanly@microchip.com>, <jassisinghbrar@gmail.com>,
+        <j.neuschaefer@gmx.net>, <sfr@canb.auug.org.au>,
+        <damien.lemoal@wdc.com>, <atishp@atishpatra.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <claudiu.beznea@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 0/1] soc: add polarfire soc system controller
+Date:   Mon, 20 Dec 2021 14:44:12 +0000
+Message-ID: <20211220144413.6798-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Gesch=C3=A4ftsvorschlag?=
-To:     Recipients <Margaret@vger.kernel.org>
-Date:   Mon, 20 Dec 2021 15:40:53 +0100
-Reply-To: la67737777@gmail.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bin Frau Margaret Leung Ich habe einen Gesch=E4ftsvorschlag f=FCr Sie, erre=
-ichen Sie mich unter: la67737777@gmail.com
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Margaret Leung
-Managing Director of Chong Hing Bank
+Changes since v1:
+- system controller is now an mfd
+- parentage is now used to get the device node on the system controller
+- mpfs_sys_controller_get() now updates the reference count
+- "polarfire-soc" in compat string changed to "mpfs"
+
+Depends on [0] to change the compat string in the dt-binding.
+
+@Arnd Bergmann:
+I sent the first version of this patch in November & you (along with
+requesting referencing counting) wanted me to check if the driver was
+bound to the specific device [1]. I have taken another look at this
+driver now and I am still none the wiser as to how I should do this.
+
+As I said in the previous thread, I checked other driver but was not
+able to find any examples of of_find_device_by_node() where the binding
+of the driver was checked. If you could point me towards an example
+that would be great.
+
+Thanks,
+Conor.
+
+For some extra context, the device tree entry for this driver will look
+like:
+
+syscontroller: syscontroller {
+	compatible = "microchip,mpfs-sys-controller", "simple-mfd";
+	mboxes = <&mbox 0>;
+
+	hwrandom: hwrandom {
+		compatible = "microchip,mpfs-rng";
+	};
+
+	sysserv: sysserv {
+		compatible = "microchip,mpfs-generic-service";
+	};
+};
+
+and the mpfs_sys_controller_get() function is called in, for example,
+the mpfs-rng driver:
+
+node_pointer = of_get_parent(dev->of_node);
+if (!node_pointer) {
+	dev_err(&pdev->dev,
+		"Failed to find mpfs system controller node\n");
+	return -ENODEV;
+}
+
+rng_priv->sys_controller =  mpfs_sys_controller_get(&pdev->dev, node_pointer);
+
+[0] https://lore.kernel.org/linux-riscv/CAMuHMdWTjrAiHosU0cGyJYkK=9JzNgHb=tjHXPdYxTWmkVzeYQ@mail.gmail.com/T/
+[1] https://lore.kernel.org/linux-riscv/CAK8P3a1m_LhOg5JGMqPz6sohJa2hPZ3GN-jQDPxigZ5DaqAGxQ@mail.gmail.com/
+
+Conor Dooley (1):
+  soc: add polarfire soc system controller
+
+ drivers/soc/Kconfig                         |   1 +
+ drivers/soc/Makefile                        |   1 +
+ drivers/soc/microchip/Kconfig               |  10 ++
+ drivers/soc/microchip/Makefile              |   1 +
+ drivers/soc/microchip/mpfs-sys-controller.c | 169 ++++++++++++++++++++
+ include/soc/microchip/mpfs.h                |   3 +-
+ 6 files changed, 184 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/soc/microchip/Kconfig
+ create mode 100644 drivers/soc/microchip/Makefile
+ create mode 100644 drivers/soc/microchip/mpfs-sys-controller.c
+
+-- 
+2.33.1
+

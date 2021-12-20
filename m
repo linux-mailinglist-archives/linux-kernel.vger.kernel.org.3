@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C9E47ACC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C42547ABAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236477AbhLTOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:46:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50512 "EHLO
+        id S234168AbhLTOiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:38:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46822 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbhLTOnh (ORCPT
+        with ESMTP id S234141AbhLTOhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:43:37 -0500
+        Mon, 20 Dec 2021 09:37:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 668F6B80EE0;
-        Mon, 20 Dec 2021 14:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E909C36AE9;
-        Mon, 20 Dec 2021 14:43:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3C2CB80EE1;
+        Mon, 20 Dec 2021 14:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1728CC36AF8;
+        Mon, 20 Dec 2021 14:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011415;
-        bh=h2b/hTO1DzvEMZkWj74z11Nn9usp8pUuk3bGiuDws5k=;
+        s=korg; t=1640011061;
+        bh=6QpwS/9Vb12Zo4I5wEAM8ZPeJpvINJqCzEKoMF6wWOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DFkE//mi8npT/FDLFChAJmsc8b0gvAKzLZZvbcDkD5VE1Us5OkEKCAKbC3u/WR5Yd
-         fVHAn9RW6jG2cYeRgeBy/xqhhqYd/EuJLTznWxsVrOlBMwfRm6nFDhQi9r6DdiLeKd
-         OiIFdyY9QFDx5KrNy6Dg/Z9UoeOF4HHtT88leKFA=
+        b=QebOVPCOR6G+7hJvAdsLBXL7iVG8/RFLClFwu/fP5BsBqTGatf5jClgZ/2dIwBxOA
+         ROlFRLuSB7Vj2GGDA/AL9MWgqTbARugsllNkAmu3WWtGNKu6mHos5WPVxCj4oI3TcQ
+         hjlDKjqP/jXfA0aqBzFkPNsLgzMdObD1887nFWlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Bee <knaerzche@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        kernel test robot <lkp@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 13/71] arm64: dts: rockchip: fix audio-supply for Rock Pi 4
-Date:   Mon, 20 Dec 2021 15:34:02 +0100
-Message-Id: <20211220143026.140372992@linuxfoundation.org>
+Subject: [PATCH 4.9 03/31] parisc/agp: Annotate parisc agp init functions with __init
+Date:   Mon, 20 Dec 2021 15:34:03 +0100
+Message-Id: <20211220143020.095365778@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
+References: <20211220143019.974513085@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,44 +46,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Bee <knaerzche@gmail.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 8240e87f16d17a9592c9d67857a3dcdbcb98f10d ]
+[ Upstream commit 8d88382b7436551a9ebb78475c546b670790cbf6 ]
 
-As stated in the schematics [1] and [2] P5 the APIO5 domain is supplied
-by RK808-D Buck4, which in our case vcc1v8_codec - i.e. a 1.8 V regulator.
-
-Currently only white noise comes from the ES8316's output, which - for
-whatever reason - came up only after the the correct switch from i2s0_8ch_bus
-to i2s0_2ch_bus for i2s0's pinctrl was done.
-
-Fix this by setting the correct regulator for audio-supply.
-
-[1] https://dl.radxa.com/rockpi4/docs/hw/rockpi4/rockpi4_v13_sch_20181112.pdf
-[2] https://dl.radxa.com/rockpi4/docs/hw/rockpi4/rockpi_4c_v12_sch_20200620.pdf
-
-Fixes: 1b5715c602fd ("arm64: dts: rockchip: add ROCK Pi 4 DTS support")
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
-Link: https://lore.kernel.org/r/20211027143726.165809-1-knaerzche@gmail.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/agp/parisc-agp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts
-index 1ae1ebd4efdd0..da3b031d4befa 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts
-@@ -452,7 +452,7 @@ &io_domains {
- 	status = "okay";
+diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
+index 15f2e7025b78e..1d5510cb6db4e 100644
+--- a/drivers/char/agp/parisc-agp.c
++++ b/drivers/char/agp/parisc-agp.c
+@@ -285,7 +285,7 @@ agp_ioc_init(void __iomem *ioc_regs)
+         return 0;
+ }
  
- 	bt656-supply = <&vcc_3v0>;
--	audio-supply = <&vcc_3v0>;
-+	audio-supply = <&vcc1v8_codec>;
- 	sdmmc-supply = <&vcc_sdio>;
- 	gpio1830-supply = <&vcc_3v0>;
- };
+-static int
++static int __init
+ lba_find_capability(int cap)
+ {
+ 	struct _parisc_agp_info *info = &parisc_agp_info;
+@@ -370,7 +370,7 @@ parisc_agp_setup(void __iomem *ioc_hpa, void __iomem *lba_hpa)
+ 	return error;
+ }
+ 
+-static int
++static int __init
+ find_quicksilver(struct device *dev, void *data)
+ {
+ 	struct parisc_device **lba = data;
+@@ -382,7 +382,7 @@ find_quicksilver(struct device *dev, void *data)
+ 	return 0;
+ }
+ 
+-static int
++static int __init
+ parisc_agp_init(void)
+ {
+ 	extern struct sba_device *sba_list;
 -- 
 2.33.0
 

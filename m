@@ -2,112 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9307A47B2A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F1347B2AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240358AbhLTSLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:11:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40550 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240368AbhLTSLS (ORCPT
+        id S233758AbhLTSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232777AbhLTSOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:11:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D1A0B80E4F;
-        Mon, 20 Dec 2021 18:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D017FC36AEA;
-        Mon, 20 Dec 2021 18:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640023875;
-        bh=tEPmTDL4AttPFhO9OdyUWkKX2oZMfoIsTqVVbMyvsso=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=L4TbCOntkXIQOmvOm61F5uEkVoFdjjN2RJjQC0XO5z8FS2UIBQbB0zXpPQIJ6ZnOC
-         wOL41PmtHsIi8AIkbQM57sVpycXCB4oiQROxd76gqT4evf4132+WFn/pARvzuLGUs3
-         I+eNu2lv/UDyL5OPSOQlPH1Tguv5WXyAEa44mJBWgacTkr5Ne04yZ7J9lhjFScJbyS
-         nxnLDiwSppR72QRpg0IkBNhecIL+jODwQab9lO7S8mLeeK+MaZgd3nuRh5qFH5zDoQ
-         mhDXPhXqzpp8g86Sjybjl3QvJHamQoMsdL2MhsJuFEw4WSwl5dKu9Nbjte2ZLfcyqQ
-         HP/x772+nRT0w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 904335C100E; Mon, 20 Dec 2021 10:11:15 -0800 (PST)
-Date:   Mon, 20 Dec 2021 10:11:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH RESEND] random: use correct memory barriers for
- crng_node_pool
-Message-ID: <20211220181115.GZ641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211219025139.31085-1-ebiggers@kernel.org>
- <CAHmME9pQ4vp0jHpOyQXHRbJ-xQKYapQUsWPrLouK=dMO56y1zA@mail.gmail.com>
+        Mon, 20 Dec 2021 13:14:08 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2B3C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 10:14:07 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id m21so14712088edc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 10:14:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yRCdjgadRWQtiaF5gGdusXinEGnEhFOjodc3u0xyUiE=;
+        b=ftXfdKfvysQePVy8XDBHU8ojcajbvbwuUhcrV3VK46nlMUboj8sdt4kzipzvNlkJAe
+         l0couRkMUHNajY1WblLcuyGIP7hukvW6plfzDzFYM77ivkGb9iyqfsGQhhMPO4nxB35X
+         v/urXY0r7qXfS+k4jIkgHBYvCgpBKFJtnQcehDuDu5YCS0YemvPoeDYsinJsIPBXWxna
+         HsV2DpSZyxFF/o1grCtXltPOjlH/cP78ejqk41gtkyBPtIlXw+/gCBK4ImqNKfdmGyPr
+         UO54K7gG5XxtsJsmmSJMFGgXM7znz3SigUp+/b6QoeTAHerWtik1kp0JF57/tWetpzGz
+         jFdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yRCdjgadRWQtiaF5gGdusXinEGnEhFOjodc3u0xyUiE=;
+        b=4P9UTlsmMBYM763xiA7C+LIZQNCXFfPPqrFmyhv0XeSwgTUBRQ/bEd4uy9/THyuTeU
+         PavD3APN/vPkpBfF7GOMF+/gwc7Qu04r79kA/bG86WiubJFM5KUxexYbHRx7W28OUyK3
+         pyHe5DfGcK3J2KysnpZcqXGJpV82DxB5PHkHQ0lm05FbQKkSIpK52E37CrROxRjxJADg
+         qAP+xGsxgYMVqyaKJZVuktWcPOtvnag8Sos1qHv5HhA4IHNn9CfJAyrYPNpnY2tMNKgj
+         ajTT9etlMCJz2R7owTSVtIL4k4bgMpmURZq1UG7UO/yFrG2s3MPqrqm8rvqoAKMQDH+a
+         BCoA==
+X-Gm-Message-State: AOAM530k1HYCDLTF9MzfkQqytLJiOlwoSJAlETj2fpnEt+0EXh0MmfEW
+        jRa9DZwSWGzI3A7hgfgoIXaOrFrBRAyqqvCM8ERiTg==
+X-Google-Smtp-Source: ABdhPJxxX45n7tG85VxWHrhfN9ZyQFRFFdcAHKSCUj57pbmSa9tajKCCzUloH+6Y+Luv6CvHCmD+d93F7UCdwHE+hDE=
+X-Received: by 2002:a17:906:e52:: with SMTP id q18mr13732450eji.278.1640024046224;
+ Mon, 20 Dec 2021 10:14:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pQ4vp0jHpOyQXHRbJ-xQKYapQUsWPrLouK=dMO56y1zA@mail.gmail.com>
+References: <20211215172349.388497-1-willmcvicker@google.com> <CAK7LNAT=U9xE5QTPThRTf3V=WEh3WmUh6w-89mm+APjnYp701Q@mail.gmail.com>
+In-Reply-To: <CAK7LNAT=U9xE5QTPThRTf3V=WEh3WmUh6w-89mm+APjnYp701Q@mail.gmail.com>
+From:   Will McVicker <willmcvicker@google.com>
+Date:   Mon, 20 Dec 2021 10:13:50 -0800
+Message-ID: <CABYd82YUpf5OCuE6q87UZ5+LiRtxqd2yiM25s85KQnxTFcyRzQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kbuild: install the modules.order for external modules
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:07:28PM +0100, Jason A. Donenfeld wrote:
-> Hi Eric,
-> 
-> This patch seems fine to me, and I'll apply it in a few days after
-> sitting on the list for comments, but:
-> 
-> > Note: READ_ONCE() could be used instead of smp_load_acquire(), but it is
-> > harder to verify that it is correct, so I'd prefer not to use it here.
-> > (https://lore.kernel.org/lkml/20200916233042.51634-1-ebiggers@kernel.org/T/#u),
-> > and though it's a correct fix, it was derailed by a debate about whether
-> > it's safe to use READ_ONCE() instead of smp_load_acquire() or not.
-> 
-> But holy smokes... I chuckled at your, "please explain in English." :)
-> 
-> Paul - if you'd like to look at this patch and confirm that this
-> specific patch and usage is fine to be changed into READ_ONCE()
-> instead of smp_load_acquire(), please pipe up here. And I really do
-> mean this specific patch and usage, not to be confused with any other
-> usage elsewhere in the kernel or question about general things, which
-> doubtlessly involve larger discussions like the one Eric linked to
-> above. If you're certain this patch here is READ_ONCE()able, I'd
-> appreciate your saying so with a simple, "it is safe; go for it",
-> since I'd definitely like the optimization if it's safe. If I don't
-> hear from you, I'll apply this as-is from Eric, as I'd rather be safe
-> than sorry.
+On Fri, Dec 17, 2021 at 5:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> (Cc: Lucas De Marchi)
+>
+> On Thu, Dec 16, 2021 at 2:23 AM Will McVicker <willmcvicker@google.com> wrote:
+> >
+> > Add support to install the modules.order file for external modules
+> > during module_install in order to retain the Makefile ordering
+> > of external modules. This helps reduce the extra steps necessary to
+> > properly order loading of external modules when there are multiple
+> > kernel modules compiled within a given KBUILD_EXTMOD directory.
+> >
+> > To handle compiling multiple external modules within the same
+> > INSTALL_MOD_DIR, kbuild will append a suffix to the installed
+> > modules.order file defined like so:
+> >
+> >   echo ${KBUILD_EXTMOD} | sed 's:[./_]:_:g'
+> >
+> > Ex:
+> >   KBUILD_EXTMOD=/mnt/a.b/c-d/my_driver results in:
+> >   modules.order._mnt_a_b_c_d_my_driver
+> >
+> > The installed module.order.$(extmod_suffix) files can then be cat'd
+> > together to create a single modules.order file which would define the
+> > order to load all of the modules during boot.
+>
+>
+> So, the user must do this manually?
+>
+> cat extra/modules.order._mnt_a_b_c_d_my_driver  \
+>    extra/modules.order._mnt_e_f_g_h_my_driver \
+>    >> modules.order
+>
+> This is so ugly, and incomplete.
+>
+> I cc'ed the kmod maintainer, who may have
+> comments or better approach.
+>
+>
+>
+>
+>
+>
+> > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > ---
+> >  scripts/Makefile.modinst | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> > index ff9b09e4cfca..2e2e31696fd6 100644
+> > --- a/scripts/Makefile.modinst
+> > +++ b/scripts/Makefile.modinst
+> > @@ -24,6 +24,10 @@ suffix-$(CONFIG_MODULE_COMPRESS_XZ)  := .xz
+> >  suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)  := .zst
+> >
+> >  modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
+> > +ifneq ($(KBUILD_EXTMOD),)
+> > +extmod_suffix := $(subst /,_,$(subst .,_,$(subst -,_,$(KBUILD_EXTMOD))))
+> > +modules += $(dst)/modules.order.$(extmod_suffix)
+> > +endif
+> >
+> >  __modinst: $(modules)
+> >         @:
+> > @@ -82,6 +86,12 @@ $(dst)/%.ko: $(extmod_prefix)%.ko FORCE
+> >         $(call cmd,strip)
+> >         $(call cmd,sign)
+> >
+> > +ifneq ($(KBUILD_EXTMOD),)
+> > +$(dst)/modules.order.$(extmod_suffix): $(MODORDER) FORCE
+> > +       $(call cmd,install)
+> > +       @sed -i "s:^$(KBUILD_EXTMOD):$(INSTALL_MOD_DIR):g" $@
+> > +endif
+> > +
+> >  else
+> >
+> >  $(dst)/%.ko: FORCE
+> > --
+> > 2.34.1.173.g76aa8bc2d0-goog
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
 
-First I would want to see some evidence that READ_ONCE() was really
-providing measurable performance benefit.  Such evidence would be
-easiest to obtain by running on a weakly ordered system such as ARM,
-ARMv8, or PowerPC.
+Hi Masahiro,
 
-If this does provide a measurable benefit, why not the following?
+Thanks for your response! I agree with you that this is ugly and would
+love feedback on the direction to take this. With regards to
+incompleteness, the existing kbuild implementation for external
+modules is already incomplete in the sense that it doesn't even
+attempt to install the already generated modules.order files to
+INSTALL_MOD_DIR. I believe this patch gets us a little closer to
+closing the gap, but agree it's nowhere complete. I would be happy to
+fully close the gap if I knew that it would be accepted or welcomed.
+Let me give you some insight on how we currently do this on Android
+and how this patch changes that.
 
-static inline struct crng_state *select_crng(void)
-{
-	struct crng_state **pool;
-	struct crng_state *pooln;
-	int nid = numa_node_id();
+Currently, the Android build.sh script (which is used to compile the
+Android Common Kernel) supports the build variable EXT_MODULES which
+is a list of paths to external modules to be compiled. The build
+script loops through this list and calls "make modules" and "make
+modules_install" to compile and install the external modules. Then,
+the build script creates the modules.order file like this:
 
-	/* pairs with cmpxchg_release() in do_numa_crng_init() */
-	pool = rcu_dereference(&crng_node_pool);
-	if (pool) {
-		pooln = rcu_dereference(pool[nid]);
-		if (pooln)
-			return pooln;
-	}
+cd ${MODLIB}
+find extra -type f -name "*.ko" | sort >> modules.order
 
-	return &primary_crng;
-}
+Sorting is used so that the modules.order file is deterministic. This
+proposed patch allows us to use the Makefile defined ordering instead
+of this sorted ordering. In Android the paths to external modules must
+be relative to the kernel repository. For example, the kernel and all
+external modules are all cloned within a root directory and the paths
+in EXT_MODULES are all relative to the root directory. So our build.sh
+script can use the relative path from the root directory as part of
+INSTALL_MOD_DIR to get rid of the suffix ugliness. For example, we can
+do this:
 
-This is in ignorance of the kfree() side of this code.  So another
-question is "Suppose that there was a long delay (vCPU preemption, for
-example) just before the 'return pooln'.  What prevents a use-after-free
-bug?"
+for EXT_MOD in ${EXT_MODULES}; do
+  # make modules
+  make -C ${EXT_MOD} ...
+  # make modules_install
+  make -C ${EXT_MOD} ...  INSTALL_MOD_DIR="extra/${EXT_MOD}" modules_install
+done
 
-Of course, this question applies equally to the smp_load_acquire()
-version.
+for EXT_MOD in ${EXT_MODULES}; do
+  modules_order_file=$(ls ${MODLIB}/extra/${EXT_MOD}/modules.order.*)
+  cat ${modules_order_file} >> ${MODLIB}/modules.order
+done
 
-							Thanx, Paul
+Since kbuild doesn't know about how many external modules there are
+nor does it retain any information about each individual call to "make
+modules" or "make modules_install", we can't do the concatenation
+within the Makefile.modinst script. To close the gap, we could add an
+additional make target that one could call after all of the external
+modules have been installed to do this concatenation, but I wasn't
+sure how open everyone would be to accepting this. Let me know your
+thoughts on that.
+
+Thanks,
+Will

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A9547AC71
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713C747AD6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbhLTOnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:43:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36026 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbhLTOmZ (ORCPT
+        id S237311AbhLTOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237219AbhLTOs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:42:25 -0500
+        Mon, 20 Dec 2021 09:48:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5B8C0617A2;
+        Mon, 20 Dec 2021 06:45:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE65A611A4;
-        Mon, 20 Dec 2021 14:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3672C36AE8;
-        Mon, 20 Dec 2021 14:42:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CE1E6119C;
+        Mon, 20 Dec 2021 14:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC79C36AE8;
+        Mon, 20 Dec 2021 14:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011344;
-        bh=zo0TFHE1R3q6uNTihJZ+WTdNxVaxcQ+dbIHGsNXD7p0=;
+        s=korg; t=1640011521;
+        bh=L+9fR+PGCBZHmH6eDdBT7bA7XtMjaWNwPL6qt/+IUsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c9PObK30f4qZeZIWeYxgyWKNRdwMJr3yQdDbveKd5zpPbLXDtHkeGEOYWA5AjMYlY
-         cDqLRKkd32fgzQuR1GFWO9kBtPHPmy/GGrZaIL0pe6q/VZ3mO6cKply81tVytdc7Oz
-         YQFcjtR5zn6JEFIaYe4i+fH9HFoSCDj3bvENmkO4=
+        b=g69TMgwCVQsu9D9GkG4cBnSduGekKgN6zB0zwa1Ka5slw4GwDgSMoVOULaSOX+Mml
+         83I3paOUHFLslW87pr3KddPcFqRsZPj7XvNARpWAgmZPZs6VTWTN/shzhnqfNb4FRp
+         uwTsATOqDEf6urKpI7gB+LUJwiMxsXCSC4/X5qQs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.19 45/56] Input: touchscreen - avoid bitwise vs logical OR warning
-Date:   Mon, 20 Dec 2021 15:34:38 +0100
-Message-Id: <20211220143024.930658758@linuxfoundation.org>
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.4 50/71] USB: serial: option: add Telit FN990 compositions
+Date:   Mon, 20 Dec 2021 15:34:39 +0100
+Message-Id: <20211220143027.368576666@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,78 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
+commit 2b503c8598d1b232e7fc7526bce9326d92331541 upstream.
 
-A new warning in clang points out a few places in this driver where a
-bitwise OR is being used with boolean types:
+Add the following Telit FN990 compositions:
 
-drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+0x1070: tty, adb, rmnet, tty, tty, tty, tty
+0x1071: tty, adb, mbim, tty, tty, tty, tty
+0x1072: rndis, tty, adb, tty, tty, tty, tty
+0x1073: tty, adb, ecm, tty, tty, tty, tty
 
-This use of a bitwise OR is intentional, as bitwise operations do not
-short circuit, which allows all the calls to touchscreen_get_prop_u32()
-to happen so that the last parameter is initialized while coalescing the
-results of the calls to make a decision after they are all evaluated.
-
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each touchscreen_get_prop_u32() call to data_present,
-which keeps the meaning of the code the same but makes it obvious that
-every one of these calls is expected to happen.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://lore.kernel.org/r/20211210100714.22587-1-dnlplm@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/touchscreen/of_touchscreen.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/usb/serial/option.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/input/touchscreen/of_touchscreen.c
-+++ b/drivers/input/touchscreen/of_touchscreen.c
-@@ -80,8 +80,8 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-x",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -91,8 +91,8 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-y",
- 						input_abs_get_max(input,
- 								  axis) + 1,
--						&maximum) |
--		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
- 						input_abs_get_fuzz(input, axis),
- 						&fuzz);
- 	if (data_present)
-@@ -102,11 +102,11 @@ void touchscreen_parse_properties(struct
- 	data_present = touchscreen_get_prop_u32(dev,
- 						"touchscreen-max-pressure",
- 						input_abs_get_max(input, axis),
--						&maximum) |
--		       touchscreen_get_prop_u32(dev,
--						"touchscreen-fuzz-pressure",
--						input_abs_get_fuzz(input, axis),
--						&fuzz);
-+						&maximum);
-+	data_present |= touchscreen_get_prop_u32(dev,
-+						 "touchscreen-fuzz-pressure",
-+						 input_abs_get_fuzz(input, axis),
-+						 &fuzz);
- 	if (data_present)
- 		touchscreen_set_params(input, axis, maximum, fuzz);
- 
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1219,6 +1219,14 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1063, 0xff),	/* Telit LN920 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1070, 0xff),	/* Telit FN990 (rmnet) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1071, 0xff),	/* Telit FN990 (MBIM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1072, 0xff),	/* Telit FN990 (RNDIS) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 
 

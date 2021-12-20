@@ -2,98 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C3C47B44E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FE147B457
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 21:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbhLTUZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 15:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S229622AbhLTU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 15:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhLTUZ3 (ORCPT
+        with ESMTP id S229573AbhLTU1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 15:25:29 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723C1C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:25:29 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id j6so22437160edw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:25:29 -0800 (PST)
+        Mon, 20 Dec 2021 15:27:01 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4626C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:27:01 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id v203so32270486ybe.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 12:27:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2AYLI7JdI7TbMwlaYryTUxSOZm+WGuEnbMb6+8ROGO4=;
-        b=Fnvq83+DsdfkVRSWhjEyhen1P7OhEyRFkwlKmJG3NrTis1dNBb6to4Sfn8+1TUPXzU
-         Dz6FGj43pmiLx3wO9RgIijSOto5BUFBq6W5Te9HIBgQIsdd1A495IAeC57RayheM65y4
-         cBzGxP1tEJxXhpKzFmlr6dcr6ErN5qkEaFhIUOXAyRDXFTN3yyuTh2gBJ5+JghBJO/6U
-         mxF0HF6MIF5QB/TOYJtRdD4Imdmwhh/XqenKfTejRLMQpM3H7TqQQ16KMKNoTQlE+2pz
-         14fcbQGRf6lY7ZeVUmippQ5kjB4eGH1d8Utt528KmWqLKH9XUYJTslI+DNvHxCdP/yCm
-         Hhig==
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=rRwMSlkH/R/Ejd2xR1IoVjCK03bMv+NXVLtTI3SMpA0=;
+        b=Y3Pau7LNCIr2y1Y9ghCCa3rQnyA9qj9XY5g5cGpj6ry+a9R7jHkNMjzotoebUINbzo
+         Fe0i1XsGFU0uLXNkeuwauwHBNgkgOopEg+LmSKXB3b4BUhILBpxlgzf8xZnqn3XBLfd5
+         3RuN9WvJdqrCxaDajDhefPsR1wHfooLNdE3ceZZyju8I3nmr0/2yXqwOuNSEEMUZ8uLb
+         GsZC2Su5Y5Ckc81BqSIAuAyZs17DrbhuENf6N466eTRwMsnocZ6tuEB1vMEvVfV/YfzN
+         DOwdQoSDm5zJdJ0+qhEg9qxRiWkbRR8TMw7Gkjx30vuEIfo+oUsZNPUWoVfSJjj4AR1e
+         ehHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2AYLI7JdI7TbMwlaYryTUxSOZm+WGuEnbMb6+8ROGO4=;
-        b=aSHwQHvH4uGj57j4xaiI/Uu7wx9Gt983CUhLmzmtguN363XSPKFBh3qfqPC+wUai8r
-         vFHZCNqBFuXt19lQJ4vl1s05VtjpFvdp4J3C0S6VqMdeuc3tqU+lMRvi5DVgZkXB4Xnb
-         RN8XC60GR9UV/hFUsw1GPKsuTHMNM7dcp2U4J0TCm9d64v3LYECyMTwKGZk+52TsgJDG
-         bdzSKHFIzWxT304UhbWb9vx9cC92QjHxA1CXnXIGSpptXfeyZGdTA+ZtkiOH20Kmqjog
-         7gv1Gxbuygu4XEFpSjMWiTXsHEuCINBShDT1n6pADCHIkw6u5LfuqWkJ7JTSuVhoFxht
-         1KhQ==
-X-Gm-Message-State: AOAM531pazLpWNbBHyTPqTCXIvt9JYdq5quPsRNLALfH3IQlHVkWCJmh
-        cT+Mc4fMSo4xrkiWPqReW34=
-X-Google-Smtp-Source: ABdhPJzDmYaOTUfFDV/rudT38TnvrnSN7mvowKXpxM4hKADww7K7BbIp+GIEo/E7ZI9cn0hSlEgGDA==
-X-Received: by 2002:a17:907:60c9:: with SMTP id hv9mr5154325ejc.681.1640031928052;
-        Mon, 20 Dec 2021 12:25:28 -0800 (PST)
-Received: from tom-desktop.station (net-93-151-129-173.cust.dsl.teletu.it. [93.151.129.173])
-        by smtp.gmail.com with ESMTPSA id ji16sm135681ejc.114.2021.12.20.12.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 12:25:27 -0800 (PST)
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     tomm.merciai@gmail.com, linuxfancy@googlegroups.com,
-        Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: vt6655: drop off byRxMode var in device.h
-Date:   Mon, 20 Dec 2021 21:25:20 +0100
-Message-Id: <20211220202523.21805-1-tomm.merciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=rRwMSlkH/R/Ejd2xR1IoVjCK03bMv+NXVLtTI3SMpA0=;
+        b=B7yehDjO2zPn9yU42LRSY6yp+PesXyiDnPjWI7Z/x5lIWpig+bR5nwwhmUqzFveFT+
+         yBBhtFMoQdo7T4lIoyqNgY3tFbs473V0KnTikb9wp0K4vKPIZJAodIFArmv1lanU8dpx
+         ed6b2F+U52aSLsl7Ic7PNjtzafjqp1nDEcR0cOJQuvYNZyk8hnR+ldoNY6Fnkna0vBPV
+         M3z09Gtn2tRaDtdS9UoEJQ7pCgAhct1aVy/fmzwwIOMBPp6HShS0je/cHxdO6dc40DWj
+         nv1HFrIhfWdKuG0tKMhCLVyrIxBJE7iCznGKkQ8WPkI//hrxj04Sd3xRZYvDvmAIQLL6
+         PVEQ==
+X-Gm-Message-State: AOAM533ELm+YCZMY72vH1sSGu7Bsf4mU8o6Cv9BaT6TacHVGnTbkqla3
+        dGIrc3yyDw10voUb2XvQZHOYdTF1SOZw7jTYZ5ibRw==
+X-Google-Smtp-Source: ABdhPJy5aQeVM5BTCDPW7ri/FhZ5zyL8WxXRrX2MYvSW/3GaHvFjpnNE8ZYr3gN2N2z+je57vIJCj3D7/pkMvWG6G+o=
+X-Received: by 2002:a25:d04d:: with SMTP id h74mr24451313ybg.266.1640032020723;
+ Mon, 20 Dec 2021 12:27:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a0d:c906:0:0:0:0:0 with HTTP; Mon, 20 Dec 2021 12:27:00
+ -0800 (PST)
+In-Reply-To: <YcCxUHSMnUJgXIJF@kroah.com>
+References: <20211216192222.127908-1-martin.fernandez@eclypsium.com>
+ <20211216192222.127908-4-martin.fernandez@eclypsium.com> <YcCxUHSMnUJgXIJF@kroah.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Mon, 20 Dec 2021 17:27:00 -0300
+Message-ID: <CAKgze5boi5h08ffpodqsKp5xNS=+u_zJWEVnExdbsXRgJ+eCTQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] x86/e820: Tag e820_entry with crypto capabilities
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop off unused variable byRxMode in device.h, this fix following
-checkpatch.pl check:
-CHECK: Avoid CamelCase: <byRxMode>
-131: FILE: drivers/staging/vt6655/device.h:131:
-unsigned char byRxMode
+On 12/20/21, Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Thu, Dec 16, 2021 at 04:22:20PM -0300, Martin Fernandez wrote:
+>> diff --git a/arch/x86/include/asm/e820/types.h
+>> b/arch/x86/include/asm/e820/types.h
+>> index 314f75d886d0..7b510dffd3b9 100644
+>> --- a/arch/x86/include/asm/e820/types.h
+>> +++ b/arch/x86/include/asm/e820/types.h
+>> @@ -56,6 +56,7 @@ struct e820_entry {
+>>  	u64			addr;
+>>  	u64			size;
+>>  	enum e820_type		type;
+>> +	u8			crypto_capable;
+>
+> Why isn't this a bool?
 
-Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
----
-Changes since v1:
- - Remove trailing whitespace in changelog as suggested by gregkh
+It was a bool initially, but Andy Shevchenko told me that it couldn't
+be that way because boolean may not be part of firmware ABIs.
 
- drivers/staging/vt6655/device.h | 2 --
- 1 file changed, 2 deletions(-)
+>> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+>> index bc0657f0deed..001d64686938 100644
+>> --- a/arch/x86/kernel/e820.c
+>> +++ b/arch/x86/kernel/e820.c
+>> @@ -163,7 +163,7 @@ int e820__get_entry_type(u64 start, u64 end)
+>>  /*
+>>   * Add a memory region to the kernel E820 map.
+>>   */
+>> -static void __init __e820__range_add(struct e820_table *table, u64 start,
+>> u64 size, enum e820_type type)
+>> +static void __init __e820__range_add(struct e820_table *table, u64 start,
+>> u64 size, enum e820_type type, u8 crypto_capable)
+>
+> Horrid api change, but it's internal to this file so oh well :(
+>
+> Hint, don't add flags to functions like this, it forces you to have to
+> always remember what those flags are when you read the code.  Right now
+> you stuck "0" and "1" in the function call, which is not instructional
+> at all.
+>
+> Heck, why not make it an enum to have it be self-describing?  Like the
+> type is here.  that would make it much better and easier to understand
+> and maintain over time.
+>
 
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 4706bde1ec1d..84b1dcf80e47 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -128,8 +128,6 @@ struct vnt_private {
- 	u32                         memaddr;
- 	u32                         ioaddr;
- 
--	unsigned char byRxMode;
--
- 	spinlock_t                  lock;
- 
- 	volatile int                iTDUsed[TYPE_MAXTD];
--- 
-2.25.1
+Yes, an enum will absolutely improve things. I'll do that.
 
+>> @@ -327,6 +330,7 @@ int __init e820__update_table(struct e820_table
+>> *table)
+>>  	unsigned long long last_addr;
+>>  	u32 new_nr_entries, overlap_entries;
+>>  	u32 i, chg_idx, chg_nr;
+>> +	u8 current_crypto, last_crypto;
+>>
+>>  	/* If there's only one memory region, don't bother: */
+>>  	if (table->nr_entries < 2)
+>> @@ -367,6 +371,7 @@ int __init e820__update_table(struct e820_table
+>> *table)
+>>  	new_nr_entries = 0;	 /* Index for creating new map entries */
+>>  	last_type = 0;		 /* Start with undefined memory type */
+>>  	last_addr = 0;		 /* Start with 0 as last starting address */
+>> +	last_crypto = 0;
+>>
+>>  	/* Loop through change-points, determining effect on the new map: */
+>>  	for (chg_idx = 0; chg_idx < chg_nr; chg_idx++) {
+>> @@ -388,13 +393,17 @@ int __init e820__update_table(struct e820_table
+>> *table)
+>>  		 * 1=usable, 2,3,4,4+=unusable)
+>>  		 */
+>>  		current_type = 0;
+>> +		current_crypto = 1;
+>>  		for (i = 0; i < overlap_entries; i++) {
+>> +			current_crypto = current_crypto && overlap_list[i]->crypto_capable;
+>
+> Is it a u8 or not?  You treat it as a boolean a lot :(
+>
+>>  			if (overlap_list[i]->type > current_type)
+>>  				current_type = overlap_list[i]->type;
+>>  		}
+>>
+>>  		/* Continue building up new map based on this information: */
+>> -		if (current_type != last_type || e820_nomerge(current_type)) {
+>> +		if (current_type != last_type ||
+>> +		    current_crypto != last_crypto ||
+>> +		    e820_nomerge(current_type)) {
+>
+> Why check it before calling e820_nomerge()?  Is that required?
+>
+
+I don't see how the order of the checks matter, am I missing something?
+
+>>  			if (last_type != 0)	 {
+>>  				new_entries[new_nr_entries].size = change_point[chg_idx]->addr -
+>> last_addr;
+>>  				/* Move forward only if the new size was non-zero: */
+>> @@ -406,9 +415,12 @@ int __init e820__update_table(struct e820_table
+>> *table)
+>>  			if (current_type != 0)	{
+>>  				new_entries[new_nr_entries].addr = change_point[chg_idx]->addr;
+>>  				new_entries[new_nr_entries].type = current_type;
+>> +				new_entries[new_nr_entries].crypto_capable = current_crypto;
+>> +
+>>  				last_addr = change_point[chg_idx]->addr;
+>>  			}
+>>  			last_type = current_type;
+>> +			last_crypto = current_crypto;
+>>  		}
+>>  	}
+>>
+>> @@ -459,14 +471,20 @@ static int __init append_e820_table(struct
+>> boot_e820_entry *entries, u32 nr_entr
+>>  	return __append_e820_table(entries, nr_entries);
+>>  }
+>>
+>> +/*
+>> + * Update a memory range.
+>> + *
+>> + * If old_type and new_type are the same then ignore the types and
+>> + * just change crypto_capable.
+>> + */
+>>  static u64 __init
+>> -__e820__range_update(struct e820_table *table, u64 start, u64 size, enum
+>> e820_type old_type, enum e820_type new_type)
+>> +__e820__range_update(struct e820_table *table, u64 start, u64 size, enum
+>> e820_type old_type, enum e820_type new_type, u8 crypto_capable)
+>
+> Same api comment here.
+>
+>>  {
+>>  	u64 end;
+>>  	unsigned int i;
+>>  	u64 real_updated_size = 0;
+>>
+>> -	BUG_ON(old_type == new_type);
+>
+> No more bug?
+>
+
+No,
+
+>> +	bool update_crypto = new_type == old_type;
+>
+> if statement?  This looks really odd and is easy to overlook.
+>
+
+because now I'm using those cases where new_type is equal to old_type
+to change crypto_capable, because I don't care about the type if I
+want to change crypto_capable. This is what I'm checking here, to
+ignore the types inside the for and just leave them as they are.
+
+I'm not really happy with this change, maybe a new function will be
+better, although it will be pretty similar to this one and its
+implementation is quite fragile, for checking the cases and
+adding/removing the regions, so I decided to just have only one ugly
+fragile function, instead of two fragile functions.
+
+I can do the new function if you prefer.
+
+>>
+>>  	if (size > (ULLONG_MAX - start))
+>>  		size = ULLONG_MAX - start;
+>> @@ -476,6 +494,8 @@ __e820__range_update(struct e820_table *table, u64
+>> start, u64 size, enum e820_ty
+>>  	e820_print_type(old_type);
+>>  	pr_cont(" ==> ");
+>>  	e820_print_type(new_type);
+>> +	if (crypto_capable)
+>> +		pr_cont("; crypto-capable");
+>>  	pr_cont("\n");
+>>
+>>  	for (i = 0; i < table->nr_entries; i++) {
+>> @@ -483,22 +503,27 @@ __e820__range_update(struct e820_table *table, u64
+>> start, u64 size, enum e820_ty
+>>  		u64 final_start, final_end;
+>>  		u64 entry_end;
+>>
+>> -		if (entry->type != old_type)
+>> +		if (entry->type != old_type && !update_crypto)
+>>  			continue;
+>>
+>> +		if (update_crypto)
+>> +			new_type = entry->type;
+>> +
+>>  		entry_end = entry->addr + entry->size;
+>>
+>>  		/* Completely covered by new range? */
+>>  		if (entry->addr >= start && entry_end <= end) {
+>>  			entry->type = new_type;
+>> +			entry->crypto_capable = crypto_capable;
+>>  			real_updated_size += entry->size;
+>>  			continue;
+>>  		}
+>>
+>>  		/* New range is completely covered? */
+>>  		if (entry->addr < start && entry_end > end) {
+>> -			__e820__range_add(table, start, size, new_type);
+>> -			__e820__range_add(table, end, entry_end - end, entry->type);
+>> +			__e820__range_add(table, start, size, new_type, crypto_capable);
+>> +			__e820__range_add(table, end, entry_end - end,
+>> +					  entry->type, entry->crypto_capable);
+>>  			entry->size = start - entry->addr;
+>>  			real_updated_size += size;
+>>  			continue;
+>> @@ -510,7 +535,8 @@ __e820__range_update(struct e820_table *table, u64
+>> start, u64 size, enum e820_ty
+>>  		if (final_start >= final_end)
+>>  			continue;
+>>
+>> -		__e820__range_add(table, final_start, final_end - final_start,
+>> new_type);
+>> +		__e820__range_add(table, final_start, final_end - final_start,
+>> +				  new_type, crypto_capable);
+>>
+>>  		real_updated_size += final_end - final_start;
+>>
+>> @@ -527,14 +553,19 @@ __e820__range_update(struct e820_table *table, u64
+>> start, u64 size, enum e820_ty
+>>  	return real_updated_size;
+>>  }
+>>
+>> +u64 __init e820__range_mark_as_crypto_capable(u64 start, u64 size)
+>> +{
+>> +	return __e820__range_update(e820_table, start, size, 0, 0, true);
+>> +}
+>> +
+>>  u64 __init e820__range_update(u64 start, u64 size, enum e820_type
+>> old_type, enum e820_type new_type)
+>>  {
+>> -	return __e820__range_update(e820_table, start, size, old_type,
+>> new_type);
+>> +	return __e820__range_update(e820_table, start, size, old_type, new_type,
+>> false);
+>
+> See, what does "false" here mean?  You have to now go look that up.
+>
+> thanks,
+>
+> greg k-h
+>

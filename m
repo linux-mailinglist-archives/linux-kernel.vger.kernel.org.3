@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7482147B358
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CB047B362
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240643AbhLTTCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S240665AbhLTTEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234357AbhLTTCE (ORCPT
+        with ESMTP id S235151AbhLTTEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:02:04 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01718C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:02:03 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id t184-20020a2546c1000000b006008b13c80bso21185092yba.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:02:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Tap7nBAM0h0L8VrB9lLDO+R7RMvpcS4S2PLyP50CL8w=;
-        b=UcUzIg+ZujUKm8Nx/UydFFi+uMvumbtNCxprjcJkB01d9AJrO6NJPDVVzuERlTxtoo
-         O0qsQou5K98cO5aXEfF7StBWN2OD2N2Ruy5v+ZsYRMvEagNADmvgQdir0ZW1D13+mle1
-         jrS33OHIGUH/+y3ah7lppcTv6FOZjU4gieOL9hEPdxCjiZKdeHaQBpua6b2XJCshuWD/
-         0TrRAV/tx7tDmDUo+GXyiZFehOJMqe7FwPbaRBkPAuG+AktfcTU+Z+zDOpvaUUK0aW3M
-         R8FJyCnv6fEkO+fiqyV0n8mBlyH9hM9PjUUscNVeD7G5HBY5M8QUDPt2NsTBRIk+zIsb
-         z9MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Tap7nBAM0h0L8VrB9lLDO+R7RMvpcS4S2PLyP50CL8w=;
-        b=tW8j8nRWNDPEZzeCFhUsrWNa4t9MhvytKJJz43XD5Y71v/FQ/+YACVNjfJHK9VJfJC
-         YbY9DLdAqClNlcO6JUZqxePvSgFII9Md7UhqsaeogLjFb2Gz9L+TZz7lf2t5V0+lYa/o
-         Zj4MmYx4/GGNyNpc1I49sCjRi1iRmA2/Oa3qadp1evoxwnpDbmQxtMeAElmQwj8jSllA
-         A8i1Et+4PyRR/RfJAkhPJKNdIZU3VTwwilc1qvQk+CSft/LYN+X0FChA1CS0ASmvvVqs
-         BZHVflj5Kge5xhGUWFB6jSfa8dOvfM5h7oxvYdoxRlSBoiqts2pkeLdPeA+BHiSHuciu
-         Yi6A==
-X-Gm-Message-State: AOAM532poeFmNv6ZKYqitcoi35yJZrdUjYKafxA7Db2xKi2Tz3kX4joX
-        3zoI/mQWLxn7c8t5HBYzk85yuRDRSA==
-X-Google-Smtp-Source: ABdhPJxZdayCcLgGEvMgK9ZDeJlqsTgjaZ1M/Le/NEE1z5TpUoR902tFNIT9OoDe4Yfw9al4vallvqy71g==
-X-Received: from tkjos-desktop.mtv.corp.google.com ([2620:15c:211:200:1cee:d72d:c926:e290])
- (user=tkjos job=sendgmr) by 2002:a25:850f:: with SMTP id w15mr26872987ybk.373.1640026923099;
- Mon, 20 Dec 2021 11:02:03 -0800 (PST)
-Date:   Mon, 20 Dec 2021 11:01:50 -0800
-Message-Id: <20211220190150.2107077-1-tkjos@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH] binder: fix async_free_space accounting for empty parcels
-From:   Todd Kjos <tkjos@google.com>
-To:     tkjos@google.com, gregkh@linuxfoundation.org, christian@brauner.io,
-        arve@android.com, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org, maco@google.com
-Cc:     joel@joelfernandes.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 20 Dec 2021 14:04:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C39CC061574;
+        Mon, 20 Dec 2021 11:04:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E4D7612C8;
+        Mon, 20 Dec 2021 19:04:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67500C36AE7;
+        Mon, 20 Dec 2021 19:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640027052;
+        bh=TcpK9u8Z+5d6+oiBVnBxvQlRqM4lFld8cf67xDqD7MY=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=qU6srJYklyy2gvRq0H/nlYf56OFU0Q5Y/14lK4w6D2gC9ZoUsqIT/N4284AutPjIt
+         MzWB1tOqw4Ycxu999x4ebJcrGXCqnqwTEK9BZnUr4UUnMEwNJ33BcJo5QX2nRl4rcW
+         DHyhmZZlOb2OLL7W7Yb3c0Ssq0WpbmchVxwqc3FiojJhkrE5XEHjec71rJ9OvVcekt
+         HIRcjf7blq9sQOd3t8GQshZLU0zUZweBT//IoN4o6G6inkM7p6j/0BvFbLETjQZBsj
+         K+Vs6+OeF9rfEriO98oQPWFe/PeVV6+u+AcxWjyFDquVAfvp8EOUFRO7O2+0bWZmQ0
+         lKpSm8K32qGmg==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] rtl8xxxu: Improve the A-MPDU retransmission rate with
+ RTS/CTS protection
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211215085819.729345-1-chris.chiu@canonical.com>
+References: <20211215085819.729345-1-chris.chiu@canonical.com>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     Jes.Sorensen@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org, code@reto-schneider.ch,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chris Chiu <chris.chiu@canonical.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164002704874.16553.13864758889503854388.kvalo@kernel.org>
+Date:   Mon, 20 Dec 2021 19:04:10 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
-fixed a kernel structure visibility issue. As part of that patch,
-sizeof(void *) was used as the buffer size for 0-length data payloads so
-the driver could detect abusive clients sending 0-length asynchronous
-transactions to a server by enforcing limits on async_free_size.
+Chris Chiu <chris.chiu@canonical.com> wrote:
 
-Unfortunately, on the "free" side, the accounting of async_free_space
-did not add the sizeof(void *) back. The result was that up to 8-bytes of
-async_free_space were leaked on every async transaction of 8-bytes or
-less.  These small transactions are uncommon, so this accounting issue
-has gone undetected for several years.
+> The A-MPDU TX retransmission rate is always high (> 20%) even in a very
+> clean environment. However, the vendor driver retransimission rate is
+> < 10% in the same test bed. The difference is the vendor driver starts
+> the A-MPDU TXOP with initial RTS/CTS handshake which is observed in the
+> air capture and the TX descriptor. Since the driver does not know how
+> many frames will be aggregated and the estimated duration, forcing the
+> RTS/CTS protection for A-MPDU helps to lower the retransmission rate
+> from > 20% to ~12% in the same test setup with the vendor driver.
+> 
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 
-The fix is to use "buffer_size" (the allocated buffer size) instead of
-"size" (the logical buffer size) when updating the async_free_space
-during the free operation. These are the same except for this
-corner case of asynchronous transactions with payloads < 8 bytes.
+Patch applied to wireless-drivers-next.git, thanks.
 
-Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
-Signed-off-by: Todd Kjos <tkjos@google.com>
----
- drivers/android/binder_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+b250200e2ee4 rtl8xxxu: Improve the A-MPDU retransmission rate with RTS/CTS protection
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 340515f54498..47bc74a8c7b6 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -671,7 +671,7 @@ static void binder_free_buf_locked(struct binder_alloc *alloc,
- 	BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
- 
- 	if (buffer->async_transaction) {
--		alloc->free_async_space += size + sizeof(struct binder_buffer);
-+		alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
- 
- 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
- 			     "%d: binder_free_buf size %zd async free %zd\n",
 -- 
-2.34.1.307.g9b7440fafd-goog
+https://patchwork.kernel.org/project/linux-wireless/patch/20211215085819.729345-1-chris.chiu@canonical.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

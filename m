@@ -2,126 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D73547B229
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B1747B224
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbhLTRbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:31:24 -0500
-Received: from mail-dm3nam07on2072.outbound.protection.outlook.com ([40.107.95.72]:40448
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S240223AbhLTRat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:30:49 -0500
+Received: from mail-bn1nam07on2057.outbound.protection.outlook.com ([40.107.212.57]:58668
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233438AbhLTRbQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:31:16 -0500
+        id S240216AbhLTRak (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 12:30:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U+C2C1DKSyQTFSONq5eeyb5fJaU/+nbbAnFEGYWEMYuB4AWodL+qVRx8RRB7RjcjgSIQ2lESXStIDwuoempWyxvk1N4ATGfp+lVwpKJm1a8ck0DLSaqE+VmlQwhfvN5mI+dPhqF1b9MgAFYXQfOYn0QUARDWkmaUYYlsF5E78tBwMuJ/0oCcx1A9hCoGhLhjismhUFoi9EgBwIYnYkOTAoZtLaiojYCDR72XQeK0kMAwe2zdJ02WVna2zJ6TX0ZjBRlmDSjXoasrE9psISHojjpjixV1ZSoDboYrH4wd8n0ER+SsKi5dhK56KCnE3sgwXe+pW6LBWIddatKuaZwZ8w==
+ b=cX8fLgLSvQwZgSMfPJnFuk/nkmT58p+CXUgfCjpT9xtZF1rdTCRClH2r2fNN5r/1wluTYeBZI9UyTuKWygKaBthUpk3V6sQBPBQk/Q2TNwV3UeWZnejxjV4f5YFobCi7q2ec1+pq1x+xTfec16smQAGZf202NAPuInvRy60t++OtkqyHbvLkckQc1203FcaXvae3BCpR/sv4BS7PFwZleN0a+dbFp7jvQIh3ZIoUvmhXvGv3VlzSFW3aNPiho4DByu0Swa1FounyyIuhNOPzp+t4M7xMO2BtDPV+JuCUlSvskQJYutQZ2vkLt5YAd6Za3RZZvewGn4N8dvPC+H1Gwg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tA1yM5hF2qHHoZcGrGqKT9d7LdX6enQT2g68t9Ey+cU=;
- b=OGXF+nVsiSNWLPQr4DJAVOChq6Kf6IlPCpnaZSEO7vyT9qufzq+XRRKg3XfTe7nUgsvdVMc3GUWBharoie7nksKmp0ivyCUa1pjAJ14uiLACz6sPOivVMWFQTm1yHADjTn7Q1k1+oL+HPWy5KUBDSKn06ldN1MeB+i6OPK5GV2YmfTKBETjeLiLXY3Pbu8ymlYeqtmtwb0GrCsOnY4pNmVaLWEjmGagTcte1uOSGbdte08mWxadgbpCI9+lLXZxhex9hmci4bFe8yjHUBvg8RiLmDgKC7y4mZIyHp6NoXwL93zzfvLgk4SAZpET6o1HIC1h/n+dpeEhsk4a+R0Jhxg==
+ bh=sBMj28G4lKaOP1IblIEhgKmSuZdjCAxJ9lk9/1VutR0=;
+ b=maNNmLNkDelc2sD+3YaSHGt0omEdtt9fqKCSW9asmZdot0Q0UgFR/O2UGSlbOBmfMCZpoIzP1JhvAehl1mWuSu/GRLtfgEtH8PURu6dMZBxJJLZn3MO/kjiEYZA/HmfboVCHtUznlipriEUVQ/dm2ej9nf+K8XW1DxMuPnMzLMoXcL//GdYYIfLY4y9XUdjWtlprcQxnPmuwru2sLzxWoHam4RuM2g5BSMvs90b1uqplROYLIt1RQvlenYdmnLQwiZxUU356abD9nyrqg7u0WTMpQN6T+iUQBCiMMC15ZEmBmoWvAaTbpQKkWfM1HUCgG9S//rXuJol/8BMrnkFTjA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com; dmarc=pass
+ 12.22.5.238) smtp.rcpttodomain=suse.com smtp.mailfrom=nvidia.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tA1yM5hF2qHHoZcGrGqKT9d7LdX6enQT2g68t9Ey+cU=;
- b=uifaMf/nTqzzo0K7reWhnR56/cR3zS9hTvsue6c0jJC69AgJUp8oqJVpaW9RamxJoZcv9XX02MShtmCPv6a6FjG+unhCLNOeJqUM7RB1rNR6ZshXB9HIRwM4vNuWDsP/WN/Ihw38SCF3WGSQ/hJT6BG7SczOfsTX8WHL8L5RPURiCV5aGXTVyxOeDKBzBVkjNdjUIrm0YD5no5BtRKYuWKrEEXmDABL9KgYAtcMbsU15++GDWIBDFCGft3aG3Med4yiyOJ4Hl6KefPy/cC9TC2L4lLd4WxuQgeqZR6YM4VWV09YzuAtoz2UMC1LiJoovqP8QPrnyHHlu8IFuxtflrQ==
-Received: from BN9PR03CA0620.namprd03.prod.outlook.com (2603:10b6:408:106::25)
- by BN7PR12MB2772.namprd12.prod.outlook.com (2603:10b6:408:26::28) with
+ bh=sBMj28G4lKaOP1IblIEhgKmSuZdjCAxJ9lk9/1VutR0=;
+ b=g9wVc9MmNotHcpakNO81+6PNCWak8IUnOYs75NhGpfoqaTw9wgZdDFKvceZrPnjjIsVk3sql5V/YiTbZEIJW0IsxGw0H28E6oEXazQU8D5PHeatwiAsD/ztQhIsQdFwzmqWEBhx7j/T0DEiS99xjq2MyY5f7yBzdFO82VQeBuO54NJSwLJBODjA0LlnJvOkQL2yn+FvR4OQxY8QeQ4qNZr3DhrLOaVepoHwso2QSTrECENGnP5iyEkjFAloC2D1rWwoEXusjNQo1FoihqYelDqoz3WfFDRL6DQmUQVT/2poLtQY7L39/e5geMJpq8PDvbH5ldQGVC+9aE5+i1+Mz8Q==
+Received: from BN9PR03CA0359.namprd03.prod.outlook.com (2603:10b6:408:f6::34)
+ by BL0PR12MB4961.namprd12.prod.outlook.com (2603:10b6:208:1c9::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Mon, 20 Dec
- 2021 17:31:14 +0000
-Received: from BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:106:cafe::1f) by BN9PR03CA0620.outlook.office365.com
- (2603:10b6:408:106::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
- Transport; Mon, 20 Dec 2021 17:31:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ 2021 17:30:37 +0000
+Received: from BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f6:cafe::5a) by BN9PR03CA0359.outlook.office365.com
+ (2603:10b6:408:f6::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15 via Frontend
+ Transport; Mon, 20 Dec 2021 17:30:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT050.mail.protection.outlook.com (10.13.177.5) with Microsoft SMTP
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT009.mail.protection.outlook.com (10.13.176.65) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4801.14 via Frontend Transport; Mon, 20 Dec 2021 17:31:14 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Dec
- 2021 17:30:32 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Dec
- 2021 17:30:32 +0000
+ 15.20.4801.14 via Frontend Transport; Mon, 20 Dec 2021 17:30:37 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Dec
+ 2021 17:30:36 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Dec
+ 2021 17:30:35 +0000
 Received: from audio.nvidia.com (172.20.187.6) by mail.nvidia.com
  (172.20.187.18) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Mon, 20 Dec 2021 17:30:28 +0000
+ Transport; Mon, 20 Dec 2021 17:30:32 +0000
 From:   Sameer Pujar <spujar@nvidia.com>
 To:     <tiwai@suse.com>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
         <robh+dt@kernel.org>, <thierry.reding@gmail.com>, <perex@perex.cz>
 CC:     <jonathanh@nvidia.com>, <digetx@gmail.com>, <mkumard@nvidia.com>,
         <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sameer Pujar <spujar@nvidia.com>
-Subject: [PATCH v2 0/3] Fix Tegra194 HDA regression
-Date:   Mon, 20 Dec 2021 23:00:05 +0530
-Message-ID: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
+        Sameer Pujar <spujar@nvidia.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2 1/3] ALSA: hda/tegra: Fix Tegra194 HDA reset failure
+Date:   Mon, 20 Dec 2021 23:00:06 +0530
+Message-ID: <1640021408-12824-2-git-send-email-spujar@nvidia.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
+References: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c3aee22-94c1-4c69-065e-08d9c3de85b4
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2772:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB2772486E6AA5AFBC67CF9A36A77B9@BN7PR12MB2772.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Office365-Filtering-Correlation-Id: e008a5a2-0118-4c3f-46cb-08d9c3de6fdd
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4961:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB496151AB2FD9319265A1B86FA77B9@BL0PR12MB4961.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pjZQaZgQJ+j/0bQdsO87htJcgZCoZyaJgPh4Vo2Llms5CRNy0zdxIUj+KLYYftq7mQFtUZUgBwhEKkKLpXRIC//uw1u9e47iHD5XfkY3p568VdfcHKOG7KVhz2RFRCk8w93h67gCAe9dfrGcm1peVnzfxYPVrK8VVQqtXx40hwtgwCYun+zYxiSJY34MdFKkO6tnWE3oOgm1cHmsrtofe33xSFcD/Lmg+Kp4zvGGaMvSQzwRjijVZRNhcbFyOt5uMNs1bmBHLC6QTgw4WuLCOZDz2rg6V2M5Vjx9J1FRdcqEn/YFBXPtPI5oPQXbcWbgRXFiKU5K3UPpvWcarG7NSEt2ZOsjNPFrn9hb8EJGlBrJdhChRrai3YcWQpWyyqRruKCyQN3Sx6A7qz9oobyyR2DVdRE1uI0ufOrXxmAQI666+h1hlD3wVTogJI9g1/BAs7IAjdRWngLdeG51PzWIHMx+krVR/7f9B18699SD1B4VcHfVJnqU7Q50z5vm+04+Tw9YTErrxnbFOunFLocSX2EzEDCfnDs0aVMol3qo7urn7fnS5Of6fbgtxUTipBcsHix5YXAW1zCh4UZPhGobSb8A+Id9Rj18EnQdrIXWYpJlBGsJ+nOmVsu9mdjQjI1fRrffZ49cLj6oYerFnTEf9MGGhNY8kgWKDMVTsXDo/+cgZdrLbKRNUbBrIlPNmqivxkHfvpuF3DZcuybJkP6RkpaElz9/pvV/dx12qhXGFlYK1ErJCZcVQETYwdAgyhcXK8vpwFx7nLIoxlVEiXR/G04rxobLLJpOsyEkLLLQOWr6NzWK8/5EfYq396nGeaxMOMUUc1w6OXvLlHOm+046Tg==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(4326008)(70586007)(34020700004)(36756003)(356005)(40460700001)(26005)(186003)(508600001)(47076005)(70206006)(81166007)(82310400004)(7696005)(336012)(316002)(6666004)(2616005)(36860700001)(2906002)(8676002)(83380400001)(426003)(5660300002)(8936002)(7416002)(107886003)(110136005)(54906003)(86362001)(4744005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: AvgF44KpK93M5L8dH9lxzcSLo02/fjszhXxV6z9/5HUqA85/BAsX2X3tqoemUzyPzXM/ZUC0fe8Qqo+OqUi6546IcNOUT3JLr7A9DY/w0gYodmO9zHBk86bZ6e+3acFckjpNbv9g+ZWN+Rovp0BlEDCZsiuxAnQD0rYF4vmz6w9Tok547nudykH+zQ76kkIt/EH6bkHlx02EJcKb0DioWbQrBpCwYVBuKqRLn7F7zg6KcgRnhcELdIP5opxDuHmK7syFGXktutsEJyUyQRpf9hdgRFYv2EvqnoOL3fgKlj6qh6p8MhKS7n5Co0isVlt+dXS1s3n4daMRpP/aZj0jnSGFp5NQA1zV6KivUu7UhUk3WSx5zbKrKn/LY0IEyzsBeSzK12PiCrfuP3aOUd1EXM4nS8sGNsVgL7DkIiPcxsXboff4fcNbfBqJ4SJm+4mdfFVO1RmVsGTX0sEpI1QEydag5Ib56IRobbwMxzDJiLOPV3INEsqwNNFc2S8LBJ2PHqL+l1/lsgm2ldkugMX88tyuMBxgXB/mSvmVILjxEURpZ296qW36Aq3vppLW/aCEiZLrxpKysXm0cdTTrpKO4KfYJNdP8QPFCOEFkfnaJ7k14PpwATIsIkin9PeaMGWJ+2dtT72bnwjfrRrGZO17NZ4SquUhdn4v2vvoqklmIuwOZY68kA/1gP5IYbNYBbopD/m7kMuHwaRBrnE+1vJwR65/IRPXzqjQRBMN5cI7Y4pybgI4gszw28IyuGbArpzNHkge3uIP8GFHhBl1pYJs9tsiZbBW8cSTqA9e9g0tata7+dkk5mUAHJGsRDSJ6767MqhBKBH+BrA/xl2CmILKRA==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(70586007)(36756003)(4326008)(356005)(34020700004)(40460700001)(47076005)(26005)(508600001)(186003)(70206006)(82310400004)(7696005)(81166007)(336012)(316002)(36860700001)(2616005)(83380400001)(2906002)(8676002)(426003)(6666004)(5660300002)(7416002)(8936002)(110136005)(54906003)(86362001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 17:31:14.1241
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 17:30:37.4845
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c3aee22-94c1-4c69-065e-08d9c3de85b4
+X-MS-Exchange-CrossTenant-Network-Message-Id: e008a5a2-0118-4c3f-46cb-08d9c3de6fdd
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2772
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4961
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HDA probe failure is observed on Tegra194 based platforms and this
-happens due to reset failure. This series fixes the problem by
-skipping the failing reset and DT bindings are updated accordingly.
+HDA regression is recently reported on Tegra194 based platforms.
+This happens because "hda2codec_2x" reset does not really exist
+in Tegra194 and it causes probe failure. All the HDA based audio
+tests fail at the moment. This underlying issue is exposed by
+commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
+response") which now checks return code of BPMP command response.
+Fix this issue by skipping unavailable reset on Tegra194.
 
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+Cc: stable@vger.kernel.org
+Depends-on: 87f0e46e7559 ("ALSA: hda/tegra: Reset hardware")
+---
+ sound/pci/hda/hda_tegra.c | 96 ++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 86 insertions(+), 10 deletions(-)
 
-Changelog
-=========
- v1 -> v2:
- ---------
-   * Updated HDA driver patch to skip the failing reset instead of
-     skipping resets in general for BPMP devices as per comment from
-     Dmitry.
-   * Used a better strucure name for SoC data as per comment from
-     Thierry.
-   * Dropped 'Fixes' tag in binding doc patch as per comment from
-     Dmitry.
-
-Sameer Pujar (3):
-  ALSA: hda/tegra: Fix Tegra194 HDA reset failure
-  dt-bindings: sound: tegra: Update HDA resets
-  arm64: tegra: Remove non existent Tegra194 reset
-
- .../bindings/sound/nvidia,tegra30-hda.yaml         | 13 ++-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  5 +-
- sound/pci/hda/hda_tegra.c                          | 96 +++++++++++++++++++---
- 3 files changed, 97 insertions(+), 17 deletions(-)
-
+diff --git a/sound/pci/hda/hda_tegra.c b/sound/pci/hda/hda_tegra.c
+index ea700395..be010cd 100644
+--- a/sound/pci/hda/hda_tegra.c
++++ b/sound/pci/hda/hda_tegra.c
+@@ -68,14 +68,21 @@
+  */
+ #define TEGRA194_NUM_SDO_LINES	  4
+ 
++struct hda_tegra_soc {
++	bool has_hda2codec_2x_reset;
++};
++
+ struct hda_tegra {
+ 	struct azx chip;
+ 	struct device *dev;
+-	struct reset_control *reset;
++	struct reset_control *reset_hda;
++	struct reset_control *reset_hda2hdmi;
++	struct reset_control *reset_hda2codec_2x;
+ 	struct clk_bulk_data clocks[3];
+ 	unsigned int nclocks;
+ 	void __iomem *regs;
+ 	struct work_struct probe_work;
++	const struct hda_tegra_soc *data;
+ };
+ 
+ #ifdef CONFIG_PM
+@@ -170,9 +177,26 @@ static int __maybe_unused hda_tegra_runtime_resume(struct device *dev)
+ 	int rc;
+ 
+ 	if (!chip->running) {
+-		rc = reset_control_assert(hda->reset);
+-		if (rc)
++		rc = reset_control_assert(hda->reset_hda);
++		if (rc) {
++			dev_err(dev, "hda reset assert failed, err: %d\n", rc);
++			return rc;
++		}
++
++		rc = reset_control_assert(hda->reset_hda2hdmi);
++		if (rc) {
++			dev_err(dev, "hda2hdmi reset assert failed, err: %d\n",
++				rc);
++			return rc;
++		}
++
++		rc = reset_control_assert(hda->reset_hda2codec_2x);
++		if (rc) {
++			dev_err(dev,
++				"hda2codec_2x reset assert failed, err: %d\n",
++				rc);
+ 			return rc;
++		}
+ 	}
+ 
+ 	rc = clk_bulk_prepare_enable(hda->nclocks, hda->clocks);
+@@ -187,9 +211,27 @@ static int __maybe_unused hda_tegra_runtime_resume(struct device *dev)
+ 	} else {
+ 		usleep_range(10, 100);
+ 
+-		rc = reset_control_deassert(hda->reset);
+-		if (rc)
++		rc = reset_control_deassert(hda->reset_hda);
++		if (rc) {
++			dev_err(dev, "hda reset deassert failed, err: %d\n",
++				rc);
+ 			return rc;
++		}
++
++		rc = reset_control_deassert(hda->reset_hda2hdmi);
++		if (rc) {
++			dev_err(dev, "hda2hdmi reset deassert failed, err: %d\n",
++				rc);
++			return rc;
++		}
++
++		rc = reset_control_deassert(hda->reset_hda2codec_2x);
++		if (rc) {
++			dev_err(dev,
++				"hda2codec_2x reset deassert failed, err: %d\n",
++				rc);
++			return rc;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -427,9 +469,17 @@ static int hda_tegra_create(struct snd_card *card,
+ 	return 0;
+ }
+ 
++static const struct hda_tegra_soc tegra30_data = {
++	.has_hda2codec_2x_reset = true,
++};
++
++static const struct hda_tegra_soc tegra194_data = {
++	.has_hda2codec_2x_reset = false,
++};
++
+ static const struct of_device_id hda_tegra_match[] = {
+-	{ .compatible = "nvidia,tegra30-hda" },
+-	{ .compatible = "nvidia,tegra194-hda" },
++	{ .compatible = "nvidia,tegra30-hda", .data = &tegra30_data },
++	{ .compatible = "nvidia,tegra194-hda", .data = &tegra194_data },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, hda_tegra_match);
+@@ -449,6 +499,10 @@ static int hda_tegra_probe(struct platform_device *pdev)
+ 	hda->dev = &pdev->dev;
+ 	chip = &hda->chip;
+ 
++	hda->data = of_device_get_match_data(&pdev->dev);
++	if (!hda->data)
++		return -EINVAL;
++
+ 	err = snd_card_new(&pdev->dev, SNDRV_DEFAULT_IDX1, SNDRV_DEFAULT_STR1,
+ 			   THIS_MODULE, 0, &card);
+ 	if (err < 0) {
+@@ -456,12 +510,34 @@ static int hda_tegra_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
+-	hda->reset = devm_reset_control_array_get_exclusive(&pdev->dev);
+-	if (IS_ERR(hda->reset)) {
+-		err = PTR_ERR(hda->reset);
++	hda->reset_hda = devm_reset_control_get_exclusive(&pdev->dev, "hda");
++	if (IS_ERR(hda->reset_hda)) {
++		err = PTR_ERR(hda->reset_hda);
+ 		goto out_free;
+ 	}
+ 
++	hda->reset_hda2hdmi = devm_reset_control_get_exclusive(&pdev->dev,
++							       "hda2hdmi");
++	if (IS_ERR(hda->reset_hda2hdmi)) {
++		err = PTR_ERR(hda->reset_hda2hdmi);
++		goto out_free;
++	}
++
++	/*
++	 * "hda2codec_2x" reset is not present on Tegra194. Though DT would
++	 * be updated to reflect this, but to have backward compatibility
++	 * below is necessary.
++	 */
++	if (hda->data->has_hda2codec_2x_reset) {
++		hda->reset_hda2codec_2x =
++			devm_reset_control_get_exclusive(&pdev->dev,
++							 "hda2codec_2x");
++		if (IS_ERR(hda->reset_hda2codec_2x)) {
++			err = PTR_ERR(hda->reset_hda2codec_2x);
++			goto out_free;
++		}
++	}
++
+ 	hda->clocks[hda->nclocks++].id = "hda";
+ 	hda->clocks[hda->nclocks++].id = "hda2hdmi";
+ 	hda->clocks[hda->nclocks++].id = "hda2codec_2x";
 -- 
 2.7.4
 

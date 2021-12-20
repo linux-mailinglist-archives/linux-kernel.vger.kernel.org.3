@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D15D47AE4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755A847AC3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbhLTPAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S235289AbhLTOmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbhLTO5Y (ORCPT
+        with ESMTP id S234640AbhLTOlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:57:24 -0500
+        Mon, 20 Dec 2021 09:41:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91151C061A72;
-        Mon, 20 Dec 2021 06:49:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC6C061399;
+        Mon, 20 Dec 2021 06:40:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A9FAB80EB3;
-        Mon, 20 Dec 2021 14:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C279C36AEA;
-        Mon, 20 Dec 2021 14:49:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F7F0B80EA3;
+        Mon, 20 Dec 2021 14:40:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63BFFC36AE7;
+        Mon, 20 Dec 2021 14:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011753;
-        bh=1KKZw59rn9/ClpSm9NOMsW0j3bZRjXko9Z6LEb3Y3bM=;
+        s=korg; t=1640011234;
+        bh=+2CORKnuWusfOSE29PywiLyWAt+P1S1QVvMxS69/RRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dnpJAqodzR1A/bYgc2tbcpA8RMblRbpZJ0M8kw0BUPuInOBGgQAHaJeA+M5BAlDHI
-         VXSw81BQ3otP2Ks9Yb/WZBLihlIMdN6HcUmjlcxVf+9DsvBwP+wgr/8o+uqwLKIWuW
-         CT1ObliyZBdI6rKq7r5rL4GkOAK8SQqzi+5tR+GU=
+        b=ba8VsxMd437J1weSNKye37SjzyskIWRfkOIRwqnL5qsObZMTW0KcZIEAKSNve4doF
+         r8QZSHCJ+N9N+0dkdaAaFs8p8+S84MeIPgtVv2u9jsgSHeEPp8Tq84iZI5rzk6R2XU
+         iP4Wm00SPDuQRx6GRBSWsH4k4w0lynlSCZbcQc1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 62/99] bpf, selftests: Fix racing issue in btf_skc_cls_ingress test
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 4.14 40/45] Input: touchscreen - avoid bitwise vs logical OR warning
 Date:   Mon, 20 Dec 2021 15:34:35 +0100
-Message-Id: <20211220143031.478287688@linuxfoundation.org>
+Message-Id: <20211220143023.608236590@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,98 +50,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin KaFai Lau <kafai@fb.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit c2fcbf81c332b42382a0c439bfe2414a241e4f5b ]
+commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
 
-The libbpf CI reported occasional failure in btf_skc_cls_ingress:
+A new warning in clang points out a few places in this driver where a
+bitwise OR is being used with boolean types:
 
-  test_syncookie:FAIL:Unexpected syncookie states gen_cookie:80326634 recv_cookie:0
-  bpf prog error at line 97
+drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-"error at line 97" means the bpf prog cannot find the listening socket
-when the final ack is received.  It then skipped processing
-the syncookie in the final ack which then led to "recv_cookie:0".
+This use of a bitwise OR is intentional, as bitwise operations do not
+short circuit, which allows all the calls to touchscreen_get_prop_u32()
+to happen so that the last parameter is initialized while coalescing the
+results of the calls to make a decision after they are all evaluated.
 
-The problem is the userspace program did not do accept() and went
-ahead to close(listen_fd) before the kernel (and the bpf prog) had
-a chance to process the final ack.
+To make this clearer to the compiler, use the '|=' operator to assign
+the result of each touchscreen_get_prop_u32() call to data_present,
+which keeps the meaning of the code the same but makes it obvious that
+every one of these calls is expected to happen.
 
-The fix is to add accept() call so that the userspace will wait for
-the kernel to finish processing the final ack first before close()-ing
-everything.
-
-Fixes: 9a856cae2217 ("bpf: selftest: Add test_btf_skc_cls_ingress")
-Reported-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211216191630.466151-1-kafai@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../bpf/prog_tests/btf_skc_cls_ingress.c         | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/input/touchscreen/of_touchscreen.c |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-index 86ccf37e26b3f..d16fd888230a5 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-@@ -90,7 +90,7 @@ static void print_err_line(void)
+--- a/drivers/input/touchscreen/of_touchscreen.c
++++ b/drivers/input/touchscreen/of_touchscreen.c
+@@ -79,8 +79,8 @@ void touchscreen_parse_properties(struct
+ 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-x",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-x",
+ 						input_abs_get_fuzz(input, axis),
+ 						&fuzz);
+ 	if (data_present)
+@@ -90,8 +90,8 @@ void touchscreen_parse_properties(struct
+ 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-size-y",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-fuzz-y",
+ 						input_abs_get_fuzz(input, axis),
+ 						&fuzz);
+ 	if (data_present)
+@@ -101,11 +101,11 @@ void touchscreen_parse_properties(struct
+ 	data_present = touchscreen_get_prop_u32(dev,
+ 						"touchscreen-max-pressure",
+ 						input_abs_get_max(input, axis),
+-						&maximum) |
+-		       touchscreen_get_prop_u32(dev,
+-						"touchscreen-fuzz-pressure",
+-						input_abs_get_fuzz(input, axis),
+-						&fuzz);
++						&maximum);
++	data_present |= touchscreen_get_prop_u32(dev,
++						 "touchscreen-fuzz-pressure",
++						 input_abs_get_fuzz(input, axis),
++						 &fuzz);
+ 	if (data_present)
+ 		touchscreen_set_params(input, axis, maximum, fuzz);
  
- static void test_conn(void)
- {
--	int listen_fd = -1, cli_fd = -1, err;
-+	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
- 	socklen_t addrlen = sizeof(srv_sa6);
- 	int srv_port;
- 
-@@ -112,6 +112,10 @@ static void test_conn(void)
- 	if (CHECK_FAIL(cli_fd == -1))
- 		goto done;
- 
-+	srv_fd = accept(listen_fd, NULL, NULL);
-+	if (CHECK_FAIL(srv_fd == -1))
-+		goto done;
-+
- 	if (CHECK(skel->bss->listen_tp_sport != srv_port ||
- 		  skel->bss->req_sk_sport != srv_port,
- 		  "Unexpected sk src port",
-@@ -134,11 +138,13 @@ static void test_conn(void)
- 		close(listen_fd);
- 	if (cli_fd != -1)
- 		close(cli_fd);
-+	if (srv_fd != -1)
-+		close(srv_fd);
- }
- 
- static void test_syncookie(void)
- {
--	int listen_fd = -1, cli_fd = -1, err;
-+	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
- 	socklen_t addrlen = sizeof(srv_sa6);
- 	int srv_port;
- 
-@@ -161,6 +167,10 @@ static void test_syncookie(void)
- 	if (CHECK_FAIL(cli_fd == -1))
- 		goto done;
- 
-+	srv_fd = accept(listen_fd, NULL, NULL);
-+	if (CHECK_FAIL(srv_fd == -1))
-+		goto done;
-+
- 	if (CHECK(skel->bss->listen_tp_sport != srv_port,
- 		  "Unexpected tp src port",
- 		  "listen_tp_sport:%u expected:%u\n",
-@@ -188,6 +198,8 @@ static void test_syncookie(void)
- 		close(listen_fd);
- 	if (cli_fd != -1)
- 		close(cli_fd);
-+	if (srv_fd != -1)
-+		close(srv_fd);
- }
- 
- struct test {
--- 
-2.33.0
-
 
 

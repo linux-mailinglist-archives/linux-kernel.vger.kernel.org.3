@@ -2,197 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D6747B546
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE8047B549
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhLTVfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbhLTVfm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:35:42 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F2AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:35:42 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id z26so15060428iod.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:35:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mHpnB8CgjO+Yms6LesT1nUtQhl96Ut7K5WNqbdqk9YA=;
-        b=qmMCnZ2CAKXnvSb1UcEQ07PxaRUHUSv9olfxSKSStbG9LRfse0miTWGzENPDnItdI/
-         Krwc5RMYjB6XsXzX3Uh7BBZqFKD2pB1kArzol8q5yvx2Od/QNdH/2Qp68dtH2xbKSssO
-         ADTFwp4ay8AgNvZG8LSZH3sMRqLEu/kNauVU1Rliup51knG4e0MeuDOzbgtajTmLW7Js
-         GCXLoEwi+HQWTF10FPgsbIGn+7ZlZqB3YKHswQ3Bea5Xsm4h5pU3VtWiLRpojLIhMkky
-         NUUa4/qtLpGfwm++QK2qZgHrpFOhJZGiAGzPehBN2nchntJvcuVVGPtXUE3TCeRCbN9l
-         DRYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mHpnB8CgjO+Yms6LesT1nUtQhl96Ut7K5WNqbdqk9YA=;
-        b=FQFBC+XO6XtD6ewpZopyTNhPVPk4n0xUBnRdWDu4vxhg0Ftnw2mnNuKyMCQBd85cVc
-         gYigT3zDk5SeXv90IbhQVpjm69QWiY30OFhBsFP4AhYIebO7eMjhc9oZrblk+kG6WKtw
-         B/v0XPYeAORbKg1n8SyZRsl5N0yriUOSVT7pJpVXnqxSzWhxWmh70fd86+tRvAVZorxe
-         SfE5NS5BXVw+2BjP+93jT70y0xiAxLjJX76Gbg+rck9HADeijE5/zE1917gnNx5RgLAn
-         b34BvxOY8jvw5RSuxj8Mz83kMM0J/6uE+FMKrzPJ2aMfZa4mSaLVlaou+r+6QYwhuTlB
-         rz3A==
-X-Gm-Message-State: AOAM530fFa7cXr2SvAvf9oH273/rnG5zFWH0yAh3I+HRcCF5HoR3t0W6
-        0FYVHcg42tJkIi7hdr67x71NFScHTPbcX2VtKeM=
-X-Google-Smtp-Source: ABdhPJxBTygb3u57J5jvVKsxH6KIELAKzWIk/6tVBq8E9yx8HJNdHuQJ51UZCO43e0irDMYSNF78NSGUu6AmfSOBB2c=
-X-Received: by 2002:a05:6638:3449:: with SMTP id q9mr84508jav.218.1640036141911;
- Mon, 20 Dec 2021 13:35:41 -0800 (PST)
+        id S231604AbhLTVhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:37:34 -0500
+Received: from mail-eopbgr80130.outbound.protection.outlook.com ([40.107.8.130]:63219
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229732AbhLTVhc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:37:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XASAVE/QVvCXMxDNYVgOzj2/tqkpWJ0kVZVXgsFwlmbC8gQWw+ofI46onFJha7qDFlq95fE0dYsMUw+/zg5AszbGoDOKeomvejnKXLkwX1ahde7CzGgr/jKGyN6Dm4pjtnRCWkhSghrC5r9kAeHwMozxZVwbaI8cD02X+Qst7pOfL1QSw1u2xcN/2lwCbI6nHxBvbgM/VeySf1M8NKUr7iZn5mxbQgprD0YdMN3+/e1RdKHkbP+gvS67iW7jBdBsiSIDkjpL9U6pGx6eFtbXbwYvGaykh2TKsf0w68o619Rljx2ap0MyZIVdLWh/vJFVKtpB4ps8KNZiPU0cBeYirQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PgB7iOo7wf7wf9nDPy9Ka4dKVYu3o232OvyQUPkQ1+w=;
+ b=awlFUWonYYrR3UU4fYCCGjZElXFd/OiLSHxaUCNsTNChVm4/mD2Gg3jZT+eI2MdIC5LWHQMK0Zv3ywwVAOM4XcfHc7BDCG2Ep78pP1sPgZVj/wKbumEFjlE4m5tC9NnZZxTHNDMKPFRAgzfMdLV0NvnB0IlNVNR0QU72nIGskNyV+C/dCDYWOTamlsY0GqJe0HchcZb+D8Mp2tmG83/7wGP2gLHgzjNy90LzkoBYFEn+ktTnxeBE6uHKCP+4Fcxy4mt2h1kJgA1Pdd8PeIhX1ROlWfPEjcj2jjQjlRx3gqLRQd8TPLp2ALChTO05im3Ur+80aHUi36wRBEiS8G95Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PgB7iOo7wf7wf9nDPy9Ka4dKVYu3o232OvyQUPkQ1+w=;
+ b=bSdMay5XFGl62sFZLAx/qUnPhPuaWtbyAo9inI7LLtj70rDzMK8jOvMLNuacc4t5b4/4ER0tuJqpRbq7l/iBDY1feB/81/xpoiWflStwxHyOMV0C4ayqS36te3vRmlk7Cqz4v29YhU+891Kg+kCugfvLqxtysTbj+W3Sh3afSic=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
+ by DB7PR02MB4475.eurprd02.prod.outlook.com (2603:10a6:10:68::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Mon, 20 Dec
+ 2021 21:37:29 +0000
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::7519:c72c:98b1:a39]) by DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::7519:c72c:98b1:a39%4]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
+ 21:37:29 +0000
+Message-ID: <898286f0-170e-633d-e924-a5703de468b1@axentia.se>
+Date:   Mon, 20 Dec 2021 22:37:26 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v10 00/14] iio: afe: add temperature rescaling support
+Content-Language: sv-SE
+To:     Liam Beguin <liambeguin@gmail.com>, jic23@kernel.org,
+        lars@metafoo.de
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+References: <20211219223953.16074-1-liambeguin@gmail.com>
+From:   Peter Rosin <peda@axentia.se>
+Organization: Axentia Technologies AB
+In-Reply-To: <20211219223953.16074-1-liambeguin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0094.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:8::7)
+ To DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <cd8667450f7a0daf6b4081276e11a5f7bed60128.1639432170.git.andreyknvl@google.com>
- <bf06044e10b5eae36c9ac6ad0d56c77b35ca8585.camel@mediatek.com>
-In-Reply-To: <bf06044e10b5eae36c9ac6ad0d56c77b35ca8585.camel@mediatek.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 20 Dec 2021 22:35:31 +0100
-Message-ID: <CA+fCnZe1Szu7V6PbWpBBiOJfUV0-YO03wpR_L6zn_nJ06-UfAQ@mail.gmail.com>
-Subject: Re: [PATCH mm v3 28/38] kasan, page_alloc: allow skipping memory init
- for HW_TAGS
-To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Cc:     "andrey.konovalov@linux.dev" <andrey.konovalov@linux.dev>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4365a537-8cf2-46de-f9a9-08d9c400ec21
+X-MS-TrafficTypeDiagnostic: DB7PR02MB4475:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR02MB44753CC66FDC6CD71E45AE67BC7B9@DB7PR02MB4475.eurprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a86sbql0GblOp8ZIjuweQem5W5SuD1Y4Ymm+DaUo9Dc0A2qAR+ND6tzTn6X5NfT6xxi/NSWRNs4+NkPQSHs56Qqyeqqm8UbWc1twVymw27doh5c0+RcdBmlXNCSQc0R//85Ntmi8W6u8VTPmv4zQgYfMGdOHuWsUNDZNapgrMoewQ9+b6CwP0w8AzQNd3/qF/s6QRMPl34pp+j1WkEYwrJpayT/VbFsyjpnDtHM1IlFLkd0FmQ9uCYTiqeSyVxJKjU2RWjIat9cyvM+h5HOrHvc7fr2NoLBX2pmdHB8K7CRqXTm6TMW+bVC8xR5gLerIrgqoib8uYiboO5wA4x7Rqeb9i0YmlJxPgKuzUexDAmPkmIZ2qO3TGKJnWqTcsI90YpogYC2ogAiy5FqSmem1sHvmwXGmJ0WLoroZVzYeIH9NsDCKB3MGk5/p3GmjaQAqJ4dYdPHTZB7u4H4FyUDw6SApWInKIrOMQkzIHd2g+emsAX8u1nxWvvPiG1P6AIj+lzbIWAtuFgyGCaicJrZ64qiZuT5nW/bFT81QJhxDBg+QUW4xJFacsu/ZsRtZkUyxaZ6C7pBiM9zpo6hRaySHEUaXWsKFOKdDEi51qd6Px2EmhkT0ePuVcaATZac5DkKTk7Z8cgY4BLn9KPz/PC0sC0MAuK/mttHwzuhdmFiN5fzhIGVR8A4dr1qWjLzLfnxlnad3gW+qU2dk6MsoYNZCiKF+XCl5SaM9eKrF2SZrKMQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(366004)(396003)(136003)(39840400004)(66556008)(2906002)(5660300002)(66946007)(36756003)(38100700002)(53546011)(31696002)(86362001)(31686004)(4744005)(66476007)(36916002)(2616005)(6512007)(6486002)(26005)(6506007)(186003)(4326008)(508600001)(8676002)(6666004)(8936002)(4001150100001)(83380400001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmRaYWMwQ0Zwa1hzZTZIM1RsSVM3U2owRUZrcGdScEQ4Wk5GS3NPOWdEN3Yx?=
+ =?utf-8?B?cWl0WE5nWVJRaG5pRTYwbU1ONGdYSjZPNG9qZ05KU1JMTS9EcW9Bc0RBOHBN?=
+ =?utf-8?B?SWpCbm10OHFPbmgrRktMNmQ1RWxuTTFmdWRpcitwMkZWY0k5NkIzRGRoSFd0?=
+ =?utf-8?B?T2hlQjI5dlNGUEkwdWx4enFwSTRicDIzbzFqV0lPeVNyVzg1U3ErOEc4TnBT?=
+ =?utf-8?B?Q3BPMEN0eUU3NnhlNERiUUVIU0UrcXJZMXZobFlwR0tjbUVmMWpFYmNMUmR1?=
+ =?utf-8?B?b3k0eWlkUVRMbXZLNnhzOGJFMUtkL0Jjc0FnNVJRbWR2SDIraWt6RkxkdmEv?=
+ =?utf-8?B?Y1JzN0NqdmVyNHlUSTM0VkRUWTlYaUFZTkFnUmNmUFI3bHZWdStXWDg5ZzNs?=
+ =?utf-8?B?Z0w3Q3FsOXdBdHcyTTBYdm5URWFidjJ3UTlnRnl5QmlTeC83a2srbXJrOGl4?=
+ =?utf-8?B?aVRZQU1OTVY0TTBUVXordWUvREN0ZllQWUEzdzNyUE5xQnpaK1VZTkl5YWlW?=
+ =?utf-8?B?RkRPRXV0NWxzZGVETmFvWWM4c2VSQytMNGdIRVp6SFZudmtLVHZPbnRlRnhz?=
+ =?utf-8?B?S3dpd2pFK3Q0bzh4dCtSSUV0WWI4NU1OQU4xbUdiakVNUVp1cU5GLzVKbzhH?=
+ =?utf-8?B?ZnFTU2ZsRFltdUtYODdBZmI1Rk9udjZVaDhOcHd6YllMenYyeTA4TlZyNUNq?=
+ =?utf-8?B?b0NZQ1EzTTQvaTJ0cVZXNEFrb0JKVGZYQVIwUmVMYlpobGFaWHVROGxZR09z?=
+ =?utf-8?B?VFlTemZ6cW5qa0N0RkJwQlh6dTRSNlpwWmswVElsUzdScDBFd1R0UW5hV25E?=
+ =?utf-8?B?V1V1dHNBblo0S1ZYbmNCZmtSN3hGQ2trYVlGYVZ6cldNSk1TcEtaL2pPK1ls?=
+ =?utf-8?B?S0RnWVZOL2FPR2QwM1BvdUdEamxmcGMrb3IyYTYvbHNRYU5YU2hvUUVhU0k0?=
+ =?utf-8?B?R1VqOW5jV1ZxdXR2QVVPNDhIYkRPYjFhRGdrVE94QjFHZWF2ZWhxM1F2VkJt?=
+ =?utf-8?B?RHZaK2M2cEUyaEc4WEszeSsvdWtyRTM4ZTdVSmxPc2JRcHRKalBnZ1ExNjNS?=
+ =?utf-8?B?TUlUN1JDd1Bxa05obFNkWDBjN09LS2Y1RjFwNXpaaG0yeStSVkU3K1NFclA2?=
+ =?utf-8?B?YWNqL0pvSXE1U3N3Qnd3RHl0SkpFVGVKTWNvOUxQeGc2Vlh1T0szY2N6a0t2?=
+ =?utf-8?B?NGRtU2E0bVBBZzBNRlZVb3I5Wm14N1pqdy9QU2Y0QXA2MjhvWWJyei9Ta21X?=
+ =?utf-8?B?MGMxQitYRU95c3BYVkI2ZUFZWUZFajJMSnJnaUx4OG5Vc3J0Y0Z3Y01aMnUy?=
+ =?utf-8?B?bGpNaUx4YnhNeXFYd3BuK1MxOFI5aWEyRGZHNzZ0R01nZVNMVFBTclFIa1Z3?=
+ =?utf-8?B?a3czS3dRT0VyZTMxK0lodWxZUGx5ZURTREZRR1k1QTk2S0VFUUszVzU5eElM?=
+ =?utf-8?B?UDVWUFhsZTVJNVBYNjZnZ21jY2xCNTFKMFU1aHVFSzFMSHdhdUI5dFRQdzc2?=
+ =?utf-8?B?R0dTVlVvSnhuWXBIaVdtSVNKVWdJa3ZWQ3l1MkpRUXNNK1lQc2EvcGg3enkz?=
+ =?utf-8?B?QXIraDdxVEFsRlBiK3MrZ0cvZVJJWnlveUxxN2RGQ0FnTGlyTEMvN1o0ZTdq?=
+ =?utf-8?B?bkhqMlJrYUFMbkFITGJkV3JCRnFvT01yckVmeThZenl0Q3NIbW9lLytzYXF0?=
+ =?utf-8?B?dmQxU2tlRnRqNlBUd0djMTRVcklOcXJkZG5JWnVncnRVUXF3Q1M4VnVsZ1Fo?=
+ =?utf-8?B?a3BpNnFnay90SGlvS0gyY1IrYXdOc3BiRS82b3lJRFAvYThld0NXOUtpUWhm?=
+ =?utf-8?B?Ym1UK3FQNlQ4RFdqWU5rWjJVcHk5MjZsTjlDaVRqejdvTFlLR3pkR2xOVVdP?=
+ =?utf-8?B?eVV5RUgwY25sdURJaThHZ2xpcXh3YVZacHlSMFFWQWRnYnRNSCtpRGQrb2NQ?=
+ =?utf-8?B?dGhXUHRoUVR0cXY0UTRmekpOa05FRmZRaUZjcURoQTM5WU9CdFg3SlBhRzFY?=
+ =?utf-8?B?UUFSTkpyZmR0UGoyOFBjZnlYQ2R0VUZObUxTTFEvU0VYRmlvUkhPVWx1MGJn?=
+ =?utf-8?B?WmJqMVVya0craGhhcGhoZWlVYWo0cHpORTMzb3BsdDQ0allRMXd5QUdONllt?=
+ =?utf-8?Q?ZJgs=3D?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4365a537-8cf2-46de-f9a9-08d9c400ec21
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 21:37:29.2668
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YgiU0PTUKhRUs1BhfeFpg4/86HLM45WCy+c7C/eQb6SyaXzv4/jbeB+Fv04rQUAY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB4475
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:50 AM Kuan-Ying Lee
-<Kuan-Ying.Lee@mediatek.com> wrote:
->
-> On Tue, 2021-12-14 at 05:54 +0800, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > Add a new GFP flag __GFP_SKIP_ZERO that allows to skip memory
-> > initialization. The flag is only effective with HW_TAGS KASAN.
-> >
-> > This flag will be used by vmalloc code for page_alloc allocations
-> > backing vmalloc() mappings in a following patch. The reason to skip
-> > memory initialization for these pages in page_alloc is because
-> > vmalloc
-> > code will be initializing them instead.
-> >
-> > With the current implementation, when __GFP_SKIP_ZERO is provided,
-> > __GFP_ZEROTAGS is ignored. This doesn't matter, as these two flags
-> > are
-> > never provided at the same time. However, if this is changed in the
-> > future, this particular implementation detail can be changed as well.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > ---
-> >
-> > Changes v2->v3:
-> > - Update patch description.
-> >
-> > Changes v1->v2:
-> > - Add this patch.
-> > ---
-> >  include/linux/gfp.h | 16 +++++++++++-----
-> >  mm/page_alloc.c     | 13 ++++++++++++-
-> >  2 files changed, 23 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> > index 6781f84345d1..b8b1a7198186 100644
-> > --- a/include/linux/gfp.h
-> > +++ b/include/linux/gfp.h
-> > @@ -54,10 +54,11 @@ struct vm_area_struct;
-> >  #define ___GFP_THISNODE              0x200000u
-> >  #define ___GFP_ACCOUNT               0x400000u
-> >  #define ___GFP_ZEROTAGS              0x800000u
-> > -#define ___GFP_SKIP_KASAN_UNPOISON   0x1000000u
-> > -#define ___GFP_SKIP_KASAN_POISON     0x2000000u
-> > +#define ___GFP_SKIP_ZERO     0x1000000u
-> > +#define ___GFP_SKIP_KASAN_UNPOISON   0x2000000u
-> > +#define ___GFP_SKIP_KASAN_POISON     0x4000000u
-> >  #ifdef CONFIG_LOCKDEP
-> > -#define ___GFP_NOLOCKDEP     0x4000000u
-> > +#define ___GFP_NOLOCKDEP     0x8000000u
-> >  #else
-> >  #define ___GFP_NOLOCKDEP     0
-> >  #endif
-> > @@ -230,7 +231,11 @@ struct vm_area_struct;
-> >   * %__GFP_ZERO returns a zeroed page on success.
-> >   *
-> >   * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the
-> > memory itself
-> > - * is being zeroed (either via __GFP_ZERO or via init_on_alloc).
-> > + * is being zeroed (either via __GFP_ZERO or via init_on_alloc,
-> > provided that
-> > + * __GFP_SKIP_ZERO is not set).
-> > + *
-> > + * %__GFP_SKIP_ZERO makes page_alloc skip zeroing memory.
-> > + * Only effective when HW_TAGS KASAN is enabled.
-> >   *
-> >   * %__GFP_SKIP_KASAN_UNPOISON makes KASAN skip unpoisoning on page
-> > allocation.
-> >   * Only effective in HW_TAGS mode.
-> > @@ -242,6 +247,7 @@ struct vm_area_struct;
-> >  #define __GFP_COMP   ((__force gfp_t)___GFP_COMP)
-> >  #define __GFP_ZERO   ((__force gfp_t)___GFP_ZERO)
-> >  #define __GFP_ZEROTAGS       ((__force gfp_t)___GFP_ZEROTAGS)
-> > +#define __GFP_SKIP_ZERO ((__force gfp_t)___GFP_SKIP_ZERO)
-> >  #define __GFP_SKIP_KASAN_UNPOISON ((__force
-> > gfp_t)___GFP_SKIP_KASAN_UNPOISON)
-> >  #define __GFP_SKIP_KASAN_POISON   ((__force
-> > gfp_t)___GFP_SKIP_KASAN_POISON)
-> >
-> > @@ -249,7 +255,7 @@ struct vm_area_struct;
-> >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
-> >
-> >  /* Room for N __GFP_FOO bits */
-> > -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
-> > +#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
-> >  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) -
-> > 1))
-> >
-> >  /**
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index f1d5b80591c4..af7516a2d5ea 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -2409,10 +2409,21 @@ static inline bool
-> > should_skip_kasan_unpoison(gfp_t flags, bool init_tags)
-> >       return init_tags || (flags & __GFP_SKIP_KASAN_UNPOISON);
-> >  }
-> >
-> > +static inline bool should_skip_init(gfp_t flags)
-> > +{
-> > +     /* Don't skip if a software KASAN mode is enabled. */
-> > +     if (!IS_ENABLED(CONFIG_KASAN_HW_TAGS))
-> > +             return false;
-> > +
->
-> Hi Andrey,
->
-> Should we use kasan_hw_tags_enabled() in should_skip_init() function
-> instead of checking the config?
->
-> I think we should handle the condition which is CONFIG_KASAN_HW_TAGS=y
-> and command line="kasan=off".
+Hi!
 
-Hi Kuan-Ying,
+On 2021-12-19 23:39, Liam Beguin wrote:
+> Hi Jonathan, Peter,
+> 
+> I left out IIO_VAL_INT overflows for now, so that I can focus on getting
+> the rest of these changes pulled in, but I don't mind adding a patch for
+> that later on.
+> 
+> This series focuses on adding temperature rescaling support to the IIO
+> Analog Front End (AFE) driver.
+> 
+> The first few patches address minor bugs in IIO inkernel functions, and
+> prepare the AFE driver for the additional features.
+> 
+> The main changes to the AFE driver include an initial Kunit test suite,
+> support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+> and temperature transducer sensors.
+> 
+> Thanks for your time,
+> Liam
 
-You are right! Will fix in v4.
+And thanks for your time and persistence!
 
-Thanks!
+This now looks in good order, so for the whole series:
+
+Reviewed-by: Peter Rosin <peda@axentia.se>
+
+Cheers,
+Peter

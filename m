@@ -2,110 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFA147B53B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1928947B534
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbhLTVbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
+        id S231342AbhLTV3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:29:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbhLTVbb (ORCPT
+        with ESMTP id S229957AbhLTV3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:31:31 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9A5C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:31:31 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id t83so10688367qke.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zj4Z1AB35wd1vTKNBKFRSR6CiKchENns4ZR0v8Fns04=;
-        b=GOR0MBa/Xmy00Aw3b2EieHWd7CevEII7rqbIH1TFVHaFKdc+fYX+8ELGhF9kBQtlPp
-         z0ZPRv2mu7C/hIKRpXtuSChBuzewZU5PA/E+WbUVDvS0Vbv+PlYrCXHXwV+0KE7VOjUv
-         BvFP75ohX2KULNxqsZtMK/IbRDn0q+xXgfL3zW26AgCdM4+c4042iC9UGvKARh1RdUjm
-         qFteVVxJEVQaRld6ohFMOt0yS6Bw65KMFIr8nOX2uyUsZhvfKAFzRh/VGOAAO/pear3x
-         iUVJKfQ3jmuTFf6MkSoD2SKUe+SzDE2BRv2JjKT37jhC6xChgxDbv6r8dt5BHDT8Ktya
-         DFQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zj4Z1AB35wd1vTKNBKFRSR6CiKchENns4ZR0v8Fns04=;
-        b=Yc4zW4w1bA+zHY74v+Kxx1EHDzFhW/nNRNntdvy6XysZfm4zp1p9VMR5CWkkw9Etmh
-         ZJAnXz3oR1qFKTRLpFwE2+ZMcWIOLgMHj31vJOYcaJyVSXB7WP2jahlQlBGSWTed3qvF
-         7eD780VC6GXRhd1MHy1PK9lMhplmdBWTCB+tkdl3BlXl+ytHPiurKm7hE7no/3MBB075
-         wHLASp2hOu74ebxZsX9NZeDLzp5hPuKzVNQxnMIUB+RkM4R+Vz9GhGfKLf8D1DLdSmQl
-         2iq5NbVKZM513hdj62U+LElTiTDKtAViIsnt/Bup7DUr1TnM5CqaX4q1BDVkIbPCgr6a
-         9DZA==
-X-Gm-Message-State: AOAM531frXs+XlYEkJTbgWxItqRjYwOY8cVw0jxmU8nahWxyKuuh+4Nw
-        pzj16xxTaaXlYgTYbEGrHrk=
-X-Google-Smtp-Source: ABdhPJwt6/EGrHzCkJ2tXvrtDivRehX0CRfFibm2LENvRbcLBNB+fSJskiTi96LHjFD+g7S7ssn5rQ==
-X-Received: by 2002:a37:9ed5:: with SMTP id h204mr76593qke.35.1640035890318;
-        Mon, 20 Dec 2021 13:31:30 -0800 (PST)
-Received: from localhost.localdomain ([181.23.83.92])
-        by smtp.gmail.com with ESMTPSA id s20sm16132210qtc.75.2021.12.20.13.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 13:31:30 -0800 (PST)
-From:   Gaston Gonzalez <gascoar@gmail.com>
-To:     linux-staging@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        juerg.haefliger@canonical.com, rdunlap@infradead.org,
-        dave.stevenson@raspberrypi.com, stefan.wahren@i2se.com,
-        unixbhaskar@gmail.com, mitaliborkar810@gmail.com,
-        phil@raspberrypi.com, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gascoar@gmail.com
-Subject: [PATCH 4/4] staging: vc04_services: update TODO file
-Date:   Mon, 20 Dec 2021 18:29:14 -0300
-Message-Id: <53c397198ee5f0294b88452cfe24321829a0837d.1639858361.git.gascoar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1639858361.git.gascoar@gmail.com>
-References: <cover.1639858361.git.gascoar@gmail.com>
+        Mon, 20 Dec 2021 16:29:51 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDB3C061574;
+        Mon, 20 Dec 2021 13:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b4VsKEVxRiocxv0ho2hY6jRiXvUKXHSPj+kI1fN6KGk=; b=B03R4zXp/Upwh6iy9ScGg8pT4L
+        n2GE8knuCMpHJvsVQQz+ijRlL9JSUZ12QG0vEHoKYLjOnDeu4HDIgIY8cjO+1dISL+DXlxQayxS1c
+        L6iG5eB0FvwDXPQZ6KKcFZcjafw8OoCp17yM/yskpHarvu1HetkoJ/Ax6wHGFbDDE7vGpbclIRVKn
+        Ck3rlOt7F6Cot2wkM15Rc/d7+ZuB2X878u1HZPJSSZrpanNk2ikSG2/kRcNO8H6j1tKC0pbFfGTqb
+        K2fLANNC0z3DW5P/IE05MD86lKkW1Rp69FgFCLBwNrpCzR4+mn7V3wwDptLbQwO4eiwkRdgGL+7rl
+        piQP4DiQ==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzQDt-004U2k-PP; Mon, 20 Dec 2021 21:29:34 +0000
+Message-ID: <c1726334d337de7d7a8361be27218b44784887f6.camel@infradead.org>
+Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
+        "luolongjun@huawei.com" <luolongjun@huawei.com>,
+        "hejingxian@huawei.com" <hejingxian@huawei.com>
+Date:   Mon, 20 Dec 2021 21:29:28 +0000
+In-Reply-To: <36cc857b-7331-8305-ee25-55f6ba733ca6@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+         <ca0751c864570015ffe4d8cccdc94e0a5ef3086d.camel@infradead.org>
+         <b13eac6c-ea87-aef9-437f-7266be2e2031@amd.com>
+         <721484e0fa719e99f9b8f13e67de05033dd7cc86.camel@infradead.org>
+         <20211217110906.5c38fe7b@redhat.com>
+         <d4cde50b4aab24612823714dfcbe69bc4bb63b60.camel@infradead.org>
+         <36cc857b-7331-8305-ee25-55f6ba733ca6@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-2Igd9u3AihLWKyYBnLpG"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no typedef remaining under vc04_services/. Hence, remove the
-task from the TODO file.
 
-While at it, fix the items sequential numbering.
+--=-2Igd9u3AihLWKyYBnLpG
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Gaston Gonzalez <gascoar@gmail.com>
----
- drivers/staging/vc04_services/interface/TODO | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+On Mon, 2021-12-20 at 12:54 -0600, Tom Lendacky wrote:
+> Took the tree back to commit df9726cb7178 and then applied this change.=
+=20
+> I'm unable to trigger any kind of failure with this change.
 
-diff --git a/drivers/staging/vc04_services/interface/TODO b/drivers/staging/vc04_services/interface/TODO
-index 39810ce017cd..241ca004735c 100644
---- a/drivers/staging/vc04_services/interface/TODO
-+++ b/drivers/staging/vc04_services/interface/TODO
-@@ -80,11 +80,7 @@ vchiq-core.ko and vchiq-dev.ko. This would also ease the upstreaming process.
- 
- The code in vchiq_bcm2835_arm.c should fit in the generic platform file.
- 
--12) Get rid of all the struct typedefs
--
--Most structs are typedefd, it's not encouraged in the kernel.
--
--13) Get rid of all non essential global structures and create a proper per
-+11) Get rid of all non essential global structures and create a proper per
- device structure
- 
- The first thing one generally sees in a probe function is a memory allocation
-@@ -92,6 +88,6 @@ for all the device specific data. This structure is then passed all over the
- driver. This is good practice since it makes the driver work regardless of the
- number of devices probed.
- 
--14) Clean up Sparse warnings from __user annotations. See
-+12) Clean up Sparse warnings from __user annotations. See
- vchiq_irq_queue_bulk_tx_rx(). Ensure that the address of "&waiter->bulk_waiter"
- is never disclosed to userspace.
--- 
-2.34.1
+Hm... I fired up an EC2 m6a.48xlarge instance (192 CPUs) to play with.
+
+I can reproduce your triple-fault on SMP bringup, but only with kexec.
+And I basically can't get *anything* to kexec without that triple-
+fault. Not a clean 5.16-rc2, not the Fedora stock 5.14.10 kernel.
+
+If I *boot* instead of kexec, I have not yet seen the problem at all.
+This is using Legacy BIOS not UEFI.
+
+
+
+--=-2Igd9u3AihLWKyYBnLpG
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjIwMjEyOTI4WjAvBgkqhkiG9w0BCQQxIgQg3N6YFPx8kUSKDIzqjvx4yIK6WHlgPYZHV00lMVXq
+HBcwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBAAW0A/ySSw65RrfT9nQMyontYtUFGZuDy2EWLoP/iy4wSsHWDr7vm45M/8AtG84v
+UjHsP/y3rTkqztx9OoFVnddMwPdKnmQGV3vk/Lo6MS4o98+pBHB3J0A/q/BkBTdvqO7v4ViXeNhp
+rdZF72xoXZ1Uo9h+w39sD1Dh35WppVHuRakgj6bxMb/oJWmSXenikYOtQjG18OpGuvZK0up3kg2x
+cjfbFp4sF5F2oSuqLNrzLleCopbfAu4OjOOffNuSq546kAVXwHLFgPGKH1hgBA5ay7ydMuN2YFc/
+4XivkKGL2sU+AjIVs1XGuj8jZlY9o6i0r/oLJPjmhZ6g+w0J9fEAAAAAAAA=
+
+
+--=-2Igd9u3AihLWKyYBnLpG--
 

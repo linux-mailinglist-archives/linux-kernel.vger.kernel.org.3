@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41E947A88F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4737647A891
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbhLTLYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:24:12 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54714 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbhLTLYM (ORCPT
+        id S231766AbhLTLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:25:51 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:37216 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230469AbhLTLZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:24:12 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9AAA41F395;
-        Mon, 20 Dec 2021 11:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639999450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wlTVl9ZK/wksVMHatLR7d5Sc5OZUko+D/2yNlrYuunk=;
-        b=WaPu+At9ZWDOgKK98/GxzQujaBbjzeQHm5ukEoTqa3FeB+5IbkkVae0HoWIO04tvUtKJcW
-        Uvy/VghxmMiPgtjaNAkvlmt+n/obUgC3H9q+ij2DNHybpv8ymvmvglbrO5FJwYNTGWz7eo
-        0CvZdsPt1vdlj8xl7aCYsNez02WWJuo=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6C688A3B81;
-        Mon, 20 Dec 2021 11:24:10 +0000 (UTC)
-Date:   Mon, 20 Dec 2021 12:24:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     David Vernet <void@manifault.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Subject: Re: [PATCH v2] Documentation: livepatch: Add livepatch API page
-Message-ID: <YcBn2mk2hUp4Zt0s@alley>
-References: <20211215174659.2332589-1-void@manifault.com>
- <YbsNcAKzRCxGqXUA@alley>
- <YbtUlkaWSQf4yCIb@dev0025.ash9.facebook.com>
+        Mon, 20 Dec 2021 06:25:51 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru D4AA2232DC0A
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <d7974f16-74b1-4d8a-2c28-8acb710d6310@omp.ru>
+Date:   Mon, 20 Dec 2021 14:25:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbtUlkaWSQf4yCIb@dev0025.ash9.facebook.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] usb: dwc3: qcom: Check for null irq pointer
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <p.zabel@pengutronix.de>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20211220101520.930658-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2021-12-16 07:00:38, David Vernet wrote:
-> Petr Mladek <pmladek@suse.com> wrote on Thu [2021-Dec-16 10:57:04 +0100]:
-> 
-> > This change is not good. The function releases all existing shadow
-> > variables with the given @id for any @obj. And it is not longer clear.
-> 
-> > A solution would be replace '*' with something else, for example, < , id>.
-> 
-> I think this is better than just obj, but in my opinion this may be confusing
-> for readers and look like a typo. I think I prefer your second suggestion,
-> though obj really makes more sense in the case where we're actually passing an
-> @obj to the function. I'll probably (deservedly?) get lambasted for suggesting
-> this, but what about taking a page out of rust's book and doing something like
-> this:
-> 
->   * klp_shadow_free_all() - detach and free all <_, id> shadow variables
->   *		with the given @id.
-> 
-> to indicate that in this case we don't care about the obj. Even for a reader
-> unfamiliar with rust, hopefully it would get the point across.
+On 20.12.2021 13:15, Jiasheng Jiang wrote:
 
-<_, id> looks good to me. And I not even familiar with rust ;-)
+> The return value of platform_get_irq() needs to be checked.
+> To avoid use of null pointer
 
-Best Regards,
-Petr
+   What null pointer, could you please clarify?
+
+in case that there is no irq.
+> 
+> Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>   drivers/usb/dwc3/dwc3-qcom.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 49e6ca94486d..f04fb3f2fb85 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -614,6 +614,11 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+>   		qcom->acpi_pdata->dwc3_core_base_size;
+>   
+>   	irq = platform_get_irq(pdev_irq, 0);
+> +	if (!irq) {
+
+    This is totally wrong! That function returns negative error codes in case 
+of failure.
+
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+>   	child_res[1].flags = IORESOURCE_IRQ;
+>   	child_res[1].start = child_res[1].end = irq;
+
+MBR, Sergey

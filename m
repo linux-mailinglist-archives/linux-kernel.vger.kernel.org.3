@@ -2,194 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E77747AA08
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6159D47AA0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbhLTNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:00:24 -0500
-Received: from first.geanix.com ([116.203.34.67]:37712 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231964AbhLTNAX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:00:23 -0500
-Received: from zen.. (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 9A8BBE1C31;
-        Mon, 20 Dec 2021 13:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1640005221; bh=hvwCkqPjGD5frgBR39knvzzCIahAUPKeCdgKyX7cVOQ=;
-        h=From:To:Cc:Subject:Date;
-        b=cqfJn+qW30EC3BAsTTNcCzSDvgyeyRsPHqWrXDvcYRy0y52FOsOo83CBD8rvusqff
-         mMxZ8LcDmaKuOYLcRQyByFkVeIhtOTQhYgUCnaDN4z4PGjEvdubXVT1KrPkTF0zOK4
-         7ix5/6taFXy+IOuMpAFfdWsH9bsjvUDHWAFvyknBkefOe1uZr0zWFF0N1jZNJ2rinO
-         ICszJRR4mkRTyOYjn6WE59WBcEbCrh1GSb1D1LI5W3YWFZF1HIzwzMq6BBUDkBcThW
-         YCW2ZzTj+mZ5IVCJ1A3vHR5QK9yk3DnEmkzVdWMpHuQ+mzX29C7Z3XPyOIw8EiHhI7
-         uMN5BkQa/w69w==
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>
-Cc:     Sean Nyekjaer <sean@geanix.com>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: rawnand: protect access to rawnand devices while in suspend
-Date:   Mon, 20 Dec 2021 14:00:15 +0100
-Message-Id: <20211220130015.3630975-1-sean@geanix.com>
-X-Mailer: git-send-email 2.34.1
+        id S232056AbhLTNBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:01:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230331AbhLTNBB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:01:01 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB4EC061574;
+        Mon, 20 Dec 2021 05:01:00 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id f186so28517934ybg.2;
+        Mon, 20 Dec 2021 05:01:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K61mIfvuHVmU9KiOE8RDo8L4C8Lhy+/HVjzbPLGh7Nw=;
+        b=KJGIrRzRD1D7h2pcI5uaYvzLLQPQJts3bB/0FxlDirtfQKbS1KzQiRrBx30cDxjxlz
+         9w+fuRNFIgrngKhRikznmnrmPdef/lynOMpcMEerwC9qJO70ENRsUzYhzmbFO6pT0iOC
+         3uQpmQXMftrwcpEtJ3YBQVyE93c/3zfzckP70LGHudlyAsLVVDP3fnW4zdgNG0nHg4Ao
+         RqvSVWxMBNPY2v/hO7EsD6m8pjdblsp3OLORZSaYwfJPL7c3LguHkYaRMzdTKjQL5yab
+         kCz2Zo+2lXun03PyQlc5SdSytvIFvA3YJliSb6LrtjrVOQHbc08cIrMy8wClkJJSt0jg
+         1dVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K61mIfvuHVmU9KiOE8RDo8L4C8Lhy+/HVjzbPLGh7Nw=;
+        b=g+2L+tN14eOWCyq1Rsnj79LIS8+siEPbomML1MmFQvcL3vZhg2xcM05BJVlp/zKFCS
+         pmXHrvtRAaWxjNKEaGt0HbTYo6wkaFzIkYMmWBxncDsd5gngb0Se9PmyYw1JLkTtyoYG
+         cKWd2EEawrMCacQmvRqd8lEPbpG1N69yU9lh6xwVa43T3D7BoQZoarly7rO+XAdzmhuC
+         IYlLcYZVjNA8hs6t7gHlYgLrVitcqll4QOPLCE7MGBopI3GOy4ZUbbztfyfUpHFQBIxu
+         xGiFRrA0oDX6RqkTDuCh1OCq/kN3gwMl1Nbo6rn+AyxNmAuoQHTVmqPbW3weZpff4zzQ
+         gXWw==
+X-Gm-Message-State: AOAM532QyQIcBRq1soI0Cv68Mssx3sPJmgWO4WknDNKT71nk4bS4X1q4
+        ELu/x8i9YmJlreEE29q0pl9aSmL9xG2WLBymD3w=
+X-Google-Smtp-Source: ABdhPJwAwHoY+v32HALWIlIqk9teSiddYPQ+zukC5upDGzwN5XRgj1FBRcSBc+Khq20lrVlYCC3YRpc0JQNog/8krGg=
+X-Received: by 2002:a25:cb97:: with SMTP id b145mr21405328ybg.186.1640005259752;
+ Mon, 20 Dec 2021 05:00:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
+ <CA+V-a8t7S2t94Tm7y8is1fJ2G0Es=xnKQQaj-7DJ53sF6zzJog@mail.gmail.com> <CAMuHMdVxcjJtcBoMCYAZyGCcLAmxeN=mWJSyJ+g9bHjJ1kYrPw@mail.gmail.com>
+In-Reply-To: <CAMuHMdVxcjJtcBoMCYAZyGCcLAmxeN=mWJSyJ+g9bHjJ1kYrPw@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 20 Dec 2021 13:00:33 +0000
+Message-ID: <CA+V-a8v3sUOA-MTttB-LqNT3Np0Q8FH9KOtyR6yiPnuWCCzVyA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent rawnend access while in a suspended state.
+Hi Geert,
 
-Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
-rawnand layer to return errors rather than waiting in a blocking wait.
+On Mon, Dec 20, 2021 at 12:54 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Dec 20, 2021 at 12:56 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Mon, Dec 20, 2021 at 10:18 AM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Sat, Dec 18, 2021 at 5:59 PM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > > > allocation of IRQ resources in DT core code, this causes an issue
+> > > > when using hierarchical interrupt domains using "interrupts" property
+> > > > in the node as this bypasses the hierarchical setup and messes up the
+> > > > irq chaining.
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > In preparation for removal of static setup of IRQ resource from DT core
+> > > > code use platform_get_irq_optional() for DT users only.
+> > >
+> > > Why only for DT users?
+> > > Plenty of driver code shared by Renesas ARM (DT-based) on SuperH
+> > > (non-DT) SoCs already uses platform_get_irq_optional(), so I expect
+> > > that to work for both.
+> > >
+> > For the non DT users the IRQ resource is passed as a range [0] and not
+> > a single interrupt so I went with this approach. Is there a way I'm
+> > missing where we could still use platform_get_irq_xyz() variants for
+> > such cases?
+>
+> Oh, I didn't realize it used a single resource with a range.
+> Is this common, i.e. would it make sense to add support for this to
+> platform_get_irq_optional()?
+>
+No this isn't common even non dt users should ideally be passing a
+single IRQ resource. There are very few such platforms which do this
+so I don't see any point in adding this support to
+platform_get_irq_optional() unless the IRQ maintainers think otherwise.
 
-Tested on a iMX6ULL.
+> > > > --- a/drivers/i2c/busses/i2c-sh_mobile.c
+> > > > +++ b/drivers/i2c/busses/i2c-sh_mobile.c
+>
+> > > > +                       if (irq <= 0 && irq != -ENXIO)
+> > > > +                               return irq ? irq : -ENXIO;
+> > >
+> > > Can irq == 0 really happen?
+> > >
+> > > All SuperH users of the "i2c-sh_mobile" platform device use an
+> > > evt2irq() value that is non-zero.
+> > >
+> > > I might have missed something, but it seems the only user of IRQ 0 on
+> > > SuperH is smsc911x Ethernet in arch/sh/boards/board-apsh4a3a.c and
+> > > arch/sh/boards/board-apsh4ad0a.c, which use evt2irq(0x200).
+> > >
+> > I'll keep that in mind if the Ethernet driver falls in the convection
+> > patch changes.
+>
+> The Ethernet driver was converted 6 years ago, cfr. commit
+> 965b2aa78fbcb831 ("net/smsc911x: fix irq resource allocation failure").
+>
+Thanks for the pointer.
 
-Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
----
-Follow-up on discussion in:
-https://lkml.org/lkml/2021/10/4/41
-https://lkml.org/lkml/2021/10/11/435
-https://lkml.org/lkml/2021/10/20/184
-https://lkml.org/lkml/2021/10/25/288
-https://lkml.org/lkml/2021/10/26/55
-https://lkml.org/lkml/2021/11/2/352
+Cheers,
+Prabhakar
 
- drivers/mtd/nand/raw/nand_base.c | 42 +++++++++++++++-----------------
- include/linux/mtd/rawnand.h      |  1 +
- 2 files changed, 20 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
-index b3a9bc08b4bb..eb4ec9a42d49 100644
---- a/drivers/mtd/nand/raw/nand_base.c
-+++ b/drivers/mtd/nand/raw/nand_base.c
-@@ -338,16 +338,19 @@ static int nand_isbad_bbm(struct nand_chip *chip, loff_t ofs)
-  *
-  * Return: -EBUSY if the chip has been suspended, 0 otherwise
-  */
--static int nand_get_device(struct nand_chip *chip)
-+static void nand_get_device(struct nand_chip *chip)
- {
--	mutex_lock(&chip->lock);
--	if (chip->suspended) {
-+	/* Wait until the device is resumed. */
-+	while (1) {
-+		mutex_lock(&chip->lock);
-+		if (!chip->suspended) {
-+			mutex_lock(&chip->controller->lock);
-+			return;
-+		}
- 		mutex_unlock(&chip->lock);
--		return -EBUSY;
--	}
--	mutex_lock(&chip->controller->lock);
- 
--	return 0;
-+		wait_event(chip->resume_wq, !chip->suspended);
-+	}
- }
- 
- /**
-@@ -576,9 +579,7 @@ static int nand_block_markbad_lowlevel(struct nand_chip *chip, loff_t ofs)
- 		nand_erase_nand(chip, &einfo, 0);
- 
- 		/* Write bad block marker to OOB */
--		ret = nand_get_device(chip);
--		if (ret)
--			return ret;
-+		nand_get_device(chip);
- 
- 		ret = nand_markbad_bbm(chip, ofs);
- 		nand_release_device(chip);
-@@ -3759,9 +3760,7 @@ static int nand_read_oob(struct mtd_info *mtd, loff_t from,
- 	    ops->mode != MTD_OPS_RAW)
- 		return -ENOTSUPP;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	if (!ops->datbuf)
- 		ret = nand_do_read_oob(chip, from, ops);
-@@ -4352,9 +4351,7 @@ static int nand_write_oob(struct mtd_info *mtd, loff_t to,
- 
- 	ops->retlen = 0;
- 
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	switch (ops->mode) {
- 	case MTD_OPS_PLACE_OOB:
-@@ -4414,9 +4411,7 @@ int nand_erase_nand(struct nand_chip *chip, struct erase_info *instr,
- 		return -EIO;
- 
- 	/* Grab the lock and see if the device is available */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	/* Shift to get first page */
- 	page = (int)(instr->addr >> chip->page_shift);
-@@ -4503,7 +4498,7 @@ static void nand_sync(struct mtd_info *mtd)
- 	pr_debug("%s: called\n", __func__);
- 
- 	/* Grab the lock and see if the device is available */
--	WARN_ON(nand_get_device(chip));
-+	nand_get_device(chip);
- 	/* Release it and go back */
- 	nand_release_device(chip);
- }
-@@ -4520,9 +4515,7 @@ static int nand_block_isbad(struct mtd_info *mtd, loff_t offs)
- 	int ret;
- 
- 	/* Select the NAND device */
--	ret = nand_get_device(chip);
--	if (ret)
--		return ret;
-+	nand_get_device(chip);
- 
- 	nand_select_target(chip, chipnr);
- 
-@@ -4593,6 +4586,8 @@ static void nand_resume(struct mtd_info *mtd)
- 			__func__);
- 	}
- 	mutex_unlock(&chip->lock);
-+
-+	wake_up_all(&chip->resume_wq);
- }
- 
- /**
-@@ -5370,6 +5365,7 @@ static int nand_scan_ident(struct nand_chip *chip, unsigned int maxchips,
- 	chip->cur_cs = -1;
- 
- 	mutex_init(&chip->lock);
-+	init_waitqueue_head(&chip->resume_wq);
- 
- 	/* Enforce the right timings for reset/detection */
- 	chip->current_interface_config = nand_get_reset_interface_config();
-diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
-index b2f9dd3cbd69..248054560581 100644
---- a/include/linux/mtd/rawnand.h
-+++ b/include/linux/mtd/rawnand.h
-@@ -1294,6 +1294,7 @@ struct nand_chip {
- 	/* Internals */
- 	struct mutex lock;
- 	unsigned int suspended : 1;
-+	wait_queue_head_t resume_wq;
- 	int cur_cs;
- 	int read_retries;
- 	struct nand_secure_region *secure_regions;
--- 
-2.34.1
-
+> > [0] https://elixir.bootlin.com/linux/v5.16-rc6/source/arch/sh/kernel/cpu/sh4a/setup-sh7724.c#L454
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

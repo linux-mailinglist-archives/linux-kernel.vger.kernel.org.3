@@ -2,148 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E230047B113
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436B747B119
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbhLTQ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:28:56 -0500
-Received: from foss.arm.com ([217.140.110.172]:58860 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235069AbhLTQ2z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:28:55 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05D251FB;
-        Mon, 20 Dec 2021 08:28:55 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 95F9A3F774;
-        Mon, 20 Dec 2021 08:28:53 -0800 (PST)
-Message-ID: <32307396-e364-7858-2b58-8419279d0597@arm.com>
-Date:   Mon, 20 Dec 2021 16:28:49 +0000
+        id S238074AbhLTQal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232726AbhLTQak (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 11:30:40 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D86C061574;
+        Mon, 20 Dec 2021 08:30:39 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id p8so16892830ljo.5;
+        Mon, 20 Dec 2021 08:30:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nK8wg+ThtsoRIQwEeu/rFUoiyE0C3jF2d8qNzRJpLtg=;
+        b=PVa6mW0XBS4KPJfueUBFvXIwYWZmvnmySIfaMqWEpB0lP6zy0Uc1f0yuHc0fc7zNGQ
+         a3nkiy50XW9M5moJt4JeFgvKGdTTc8TQbtuFz6BtR77XOdAIo0DcbzIjkCKbhYznk+dl
+         NATRsoEfZ+bHYsdbCrwwu80EuoZ/WNjnopXuwYSx3DD5VSr/yjsXSOylvhl+rkfwJLW2
+         eVfAYAJlDSeCxUsIEM9CufwTPGohPTm+S7MIhR58LB1RbbGkQX8wO838qB/CvdYSMYGT
+         PWMie9fFdAgFEx6RnWdpTPvSM6yunpyzPBaGvOc/6UZqvgDRYJiilzZ/V/ora8eNTiz0
+         mgSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nK8wg+ThtsoRIQwEeu/rFUoiyE0C3jF2d8qNzRJpLtg=;
+        b=c4P4mwlYEh/4dEiLAQe4a/2CrFbuDGllg7finWMUeJSQ+jBxPBY8/MaH9PP2cGQ5u6
+         KyCXlYU45bN9QOivCGvxh5zQqKlfHZwQYe1zEA7od2X6bdOr2gxXPWdOk664OtSq2bmX
+         CixAZWdvJho71/jJmVkxdiarcitBooJ62o6c5uTn9j21EuACgJVcFJsZvRFN3EXTAqHp
+         wX/WVIwI8Gsd+9udagLk+LtsPZQ3av53klZ+8bwsVv4AmmiOKeIGPVWsuFLLp3p/p3Zo
+         6d/5CqiVxjAgad/s2w3f8D+ikgKg9VkM9I9EHgl3atCRR/cRz2Ko98XTSPDVlBvJ4HLm
+         YhwQ==
+X-Gm-Message-State: AOAM533/VmS64aFAAIgbT6kCeSrIyJut+Rfi27YH276oDVqqD0pksY+T
+        UfcEzM2ULQ5DmpY0/kDsRZupu+e8X88=
+X-Google-Smtp-Source: ABdhPJwws576TxlN6hEqFkLDXPljO1c5WA7L1xawr9flrLIxu2o7FFQHQ2wlBv6l1HukG44jKfrVgw==
+X-Received: by 2002:a2e:2410:: with SMTP id k16mr15499339ljk.441.1640017838131;
+        Mon, 20 Dec 2021 08:30:38 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id o19sm1379904lfu.149.2021.12.20.08.30.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 08:30:37 -0800 (PST)
+Subject: Re: [PATCH v15 2/4] dmaengine: tegra: Add tegra gpcdma driver
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+References: <1639674720-18930-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639674720-18930-3-git-send-email-akhilrajeev@nvidia.com>
+ <45ba3abe-5e7e-4917-2b23-0616a758c4eb@gmail.com>
+ <BN9PR12MB52730121B2B01739DA52020EC07B9@BN9PR12MB5273.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6241cfa3-dd7e-012c-3687-daad0aa4631d@gmail.com>
+Date:   Mon, 20 Dec 2021 19:30:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH] iommu: alloc iommu group for pasid supported devices
-Content-Language: en-GB
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>, bhelgaas@google.com,
-        will@kernel.org, joro@8bytes.org
-Cc:     linux-kernel@vger.kernel.org,
-        alikernel-developer@linux.alibaba.com,
-        zhangliguang@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1639657018-39884-1-git-send-email-yaohongbo@linux.alibaba.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1639657018-39884-1-git-send-email-yaohongbo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <BN9PR12MB52730121B2B01739DA52020EC07B9@BN9PR12MB5273.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-16 12:16, Yao Hongbo wrote:
-> Fix a pci hotlug problem for PCI pasid enabled devices.
+20.12.2021 18:23, Akhil R пишет:
+>> 16.12.2021 20:11, Akhil R пишет:
+>>> +static int tegra_dma_terminate_all(struct dma_chan *dc) {
+>>> +     struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+>>> +     unsigned long wcount = 0;
+>>> +     unsigned long status;
+>>> +     unsigned long flags;
+>>> +     int err;
+>>> +
+>>> +     raw_spin_lock_irqsave(&tdc->lock, flags);
+>>> +
+>>> +     if (!tdc->dma_desc) {
+>>> +             raw_spin_unlock_irqrestore(&tdc->lock, flags);
+>>> +             return 0;
+>>> +     }
+>>> +
+>>> +     if (!tdc->busy)
+>>> +             goto skip_dma_stop;
+>>> +
+>>> +     if (tdc->tdma->chip_data->hw_support_pause)
+>>> +             err = tegra_dma_pause(tdc);
+>>> +     else
+>>> +             err = tegra_dma_stop_client(tdc);
+>>> +
+>>> +     if (err) {
+>>> +             raw_spin_unlock_irqrestore(&tdc->lock, flags);
+>>> +             return err;
+>>> +     }
+>>> +
+>>> +     status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
+>>> +     if (status & TEGRA_GPCDMA_STATUS_ISE_EOC) {
+>>> +             dev_dbg(tdc2dev(tdc), "%s():handling isr\n", __func__);
+>>> +             tegra_dma_xfer_complete(tdc);
+>>> +             status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
+>>> +     }
+>>> +
+>>> +     wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
+>>> +     tegra_dma_stop(tdc);
+>>> +
+>>> +     tdc->dma_desc->bytes_transferred +=
+>>> +                     tdc->dma_desc->bytes_requested - (wcount * 4);
+>>> +
+>>> +skip_dma_stop:
+>>> +     tegra_dma_sid_free(tdc);
+>>> +     vchan_free_chan_resources(&tdc->vc);
+>>> +     kfree(&tdc->vc);
+>>
+>> You really going to kfree the head of tegra_dma_channel here? Once again, this
+>> code was 100% untested :/
+> I did validate this using DMATEST which did not show any error.
+> https://www.kernel.org/doc/html/latest/driver-api/dmaengine/dmatest.html
+> Do you suggest something better?
 > 
-> We can probe PCI pasid enabled devices on boot normally,
-> but the following error is seen while we poweroff and poweron
-> this pci slot:
-> [  312.407485] nvme 0000:9c:00.0: cannot attach to incompatible domain
-> (0 SSID bits != 20)
-> [  312.415618] nvme 0000:9c:00.0: Failed to add to iommu group 11: -22
-> 
-> Each device would alloc an iommu group when the os starts.
-> But when we hot-plug the pcie device, the device may be added to the
-> parent iommu group. If the device supports pasid, master->ssid_bits
-> would be changed in arm_smmu_enable_pasid(), but smmu->domain is from
-> the parent iommu, which will result in the upon error in
-> arm_smmu_attach_dev().
-> 
-> Realloc a new iommu group if the device supports to enable pasid.
+>> You're not allowed to free channel from the dma_terminate_all() callback. This
+>> callback terminates submitted descs, that's it.
+>>
+> Sorry, I am relatively new to DMA framework (probably you get it from the patch 
+> version no. :)). I read your previous comment as to use tdc->vc instead of dma_desc.
+> I would learn a bit more and update with a change. Thanks for the inputs.
 
-I'm not sure I fully understand the circumstances of the issue, but the 
-code in the patch doesn't look right to me - it seems to be saying that 
-if we don't have ACS enabled, then the the mere fact that end-to-end 
-PASID support exists somehow guarantees peer-to-peer isolation anyway. 
-Surely that's not true?
-
-Is there something in the hotplug path which causes ACS and/or PASID 
-enablement in a different order from boot-time probing?
-
-Looking at the symptom, I also wonder whether the SMMU driver really 
-needs to be that strict (if the device can support more PASID bits than 
-the domain is configured for, couldn't we just... not use all of them?), 
-but we should definitely make sense of the fundamental group lookup 
-issue here before considering any other changes that might happen to 
-mask it.
-
-Robin.
-
-> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> ---
->   drivers/iommu/iommu.c   |  4 ++++
->   drivers/pci/ats.c       | 12 ++++++++++++
->   include/linux/pci-ats.h |  3 +++
->   3 files changed, 19 insertions(+)
-> 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index dd7863e..61b5360 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -21,6 +21,7 @@
->   #include <linux/notifier.h>
->   #include <linux/err.h>
->   #include <linux/pci.h>
-> +#include <linux/pci-ats.h>
->   #include <linux/bitops.h>
->   #include <linux/property.h>
->   #include <linux/fsl/mc.h>
-> @@ -1475,6 +1476,9 @@ struct iommu_group *pci_device_group(struct device *dev)
->   		if (pci_acs_path_enabled(bus->self, NULL, REQ_ACS_FLAGS))
->   			break;
->   
-> +		if (pci_pasid_supported(pdev))
-> +			break;
-> +
->   		pdev = bus->self;
->   
->   		group = iommu_group_get(&pdev->dev);
-> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-> index c967ad6..8fcca4f 100644
-> --- a/drivers/pci/ats.c
-> +++ b/drivers/pci/ats.c
-> @@ -349,6 +349,18 @@ void pci_pasid_init(struct pci_dev *pdev)
->   	pdev->pasid_cap = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_PASID);
->   }
->   
-> +bool pci_pasid_supported(struct pci_dev *pdev)
-> +{
-> +	if (!pdev->pasid_cap)
-> +		return false;
-> +
-> +	if (!pdev->eetlp_prefix_path)
-> +		return false;
-> +
-> +	return true;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_pasid_supported);
-> +
->   /**
->    * pci_enable_pasid - Enable the PASID capability
->    * @pdev: PCI device structure
-> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
-> index df54cd5b..623725b 100644
-> --- a/include/linux/pci-ats.h
-> +++ b/include/linux/pci-ats.h
-> @@ -35,11 +35,14 @@ static inline bool pci_pri_supported(struct pci_dev *pdev)
->   #endif /* CONFIG_PCI_PRI */
->   
->   #ifdef CONFIG_PCI_PASID
-> +bool pci_pasid_supported(struct pci_dev *dev);
->   int pci_enable_pasid(struct pci_dev *pdev, int features);
->   void pci_disable_pasid(struct pci_dev *pdev);
->   int pci_pasid_features(struct pci_dev *pdev);
->   int pci_max_pasids(struct pci_dev *pdev);
->   #else /* CONFIG_PCI_PASID */
-> +static inline bool pci_pasid_supported(struct pci_dev *d)
-> +{ return false; }
->   static inline int pci_enable_pasid(struct pci_dev *pdev, int features)
->   { return -EINVAL; }
->   static inline void pci_disable_pasid(struct pci_dev *pdev) { }
+Looks like DMATEST doesn't try to terminate in a middle of transfer and
+then check that further transfers work. You may try to extend DMATEST or
+simulate I2C error to test it, you should also test it with enabled KASAN.

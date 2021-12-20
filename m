@@ -2,162 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DC947A535
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 07:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0333F47A53E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 08:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237510AbhLTG52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 01:57:28 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:41884 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbhLTG51 (ORCPT
+        id S234330AbhLTHAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 02:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234269AbhLTHAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 01:57:27 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BK6vA69050155;
-        Mon, 20 Dec 2021 00:57:10 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639983430;
-        bh=34K0ObKN4Gi3tCKmWNs+0rWwZp0erVuQ1EhAy6igolA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=I1VOdzndFmrbvzIxVPBo2FWSqPD4O344Tpxix8iWvxSBsoquEdrcrhb43KELsv2TJ
-         EEfuaDM+74K+LRGmq9uj+gq2ikWLM0q7vqWAsrtjIBtNGyWy7KhuxIBNU3il0asFWk
-         3W+Ko+EdG+im/c9QfovqjKK8WoXfe+DSuuhOyl+o=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BK6v9hF121018
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Dec 2021 00:57:09 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 00:57:09 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 00:57:09 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BK6v6Pc118421;
-        Mon, 20 Dec 2021 00:57:07 -0600
-Subject: Re: [PATCH] mux: add missing mux_state_get
-To:     Peter Rosin <peda@axentia.se>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20211202124053.2835-1-a-govindraju@ti.com>
- <59c57ab7-a272-b925-befc-79f88c925e3c@axentia.se>
- <af642da8-a9e1-6d3a-a928-8a514f1c5eb0@axentia.se>
- <773b9424-a1c7-1955-886c-de36299a6873@axentia.se>
- <031e134d-dbe3-0f39-3e63-647d0efa1576@axentia.se>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <238c5e18-1b1e-9f9c-8c96-f25bd7f7f838@ti.com>
-Date:   Mon, 20 Dec 2021 12:27:06 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 20 Dec 2021 02:00:17 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2C8C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:00:16 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t19so14472868oij.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 23:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bOWHMfUqWgS66PgQYYet33MLKueM0ddFZqC4iawf0eo=;
+        b=EhTOwMFaKZI9Jc0S3FLUHeHgNZW+azpNir8KH/VrP5S/q0y/3AOZjr1zWLXrpNYBX2
+         Mzp+4L8bKsAjfPRlbONenEwbuhMhHOM6FO8qSMITDd+droYp+xnPV3k+06tJ976mZiJR
+         oF+qh6lCPn/+aDX3OxXe3P3blZXRd6QjiBE/l9NmSCQU/xcTi4ANTEMHJIedw3AEPOmY
+         YW7AfOEfldV2VkNhHXLclHAcJSzDb2LjogbFmEaRRz6BDFFtZP45zDURm/VRdiSuiHVR
+         3JrA/20ul6M6/yzgTLEtCMAT2ayYyphFIvO8s4H1G0DVT51A1nNF5mUkxhJ/mzK+KnNO
+         cVTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bOWHMfUqWgS66PgQYYet33MLKueM0ddFZqC4iawf0eo=;
+        b=hP6RqlEM29X4RUSgCiNpKHLYJ334dP5uUUeckmBE0qVmDP/oVhVxQ+anoMVdMeAwZp
+         Q+iJu0aYYAdiNPcEdcrXjZt78LT+Ascm+tA3PZHXHU8pifk2fVl6/+OVbuMH44pk55tm
+         c9jn1/l96CHYjVr4GJqtuy64udue5ntzpoE5NXKqoYISCBVtRbT33hNfCxMPnfsmtQLx
+         Cxw1/UCr7qwmQCWCDXtta/1jEYbtKH9mL4HFbTZHlDbS4d33EwpuGx6FJI/hYnSOhajb
+         l03LOFmHKY9OMMLX2cEPaBDWFWhjGNsLrKqKqBPJScnuAJ0344BxsH0n/FIzZteSAAiF
+         xmHA==
+X-Gm-Message-State: AOAM5305yAnIq58QNKoD7kWGNI3+tLbNgJ2W6FGI+eFppiSGM5Tt2FuR
+        3+ON0XJesp2bQ/gxndxozKw+qUDwOQuzByPWERfu2w==
+X-Google-Smtp-Source: ABdhPJx5Mh/dkzyGPzJF57IaS36QpKLdrS0B5NBIdJYTPkT2PN892GsWzomJqWkjhL/oqgJcA03tECRpPMH/GB+4WEk=
+X-Received: by 2002:aca:af50:: with SMTP id y77mr11164327oie.134.1639983616081;
+ Sun, 19 Dec 2021 23:00:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <031e134d-dbe3-0f39-3e63-647d0efa1576@axentia.se>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <YbHTKUjEejZCLyhX@elver.google.com> <20211209201616.GU614@gate.crashing.org>
+ <CANpmjNN4OAA_DM_KNLGJah3fk-PaZktGjziiu8ztf6fevZy5ug@mail.gmail.com>
+In-Reply-To: <CANpmjNN4OAA_DM_KNLGJah3fk-PaZktGjziiu8ztf6fevZy5ug@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 20 Dec 2021 08:00:00 +0100
+Message-ID: <CANpmjNM3eSd9sxi-1tV0cRthJ0hudrME8nYdhYP=ttcWDoPNfg@mail.gmail.com>
+Subject: Re: randomize_kstack: To init or not to init?
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 9 Dec 2021 at 21:33, Marco Elver <elver@google.com> wrote:
+> On Thu, 9 Dec 2021 at 21:19, Segher Boessenkool <segher@kernel.crashing.org> wrote:
+> > On Thu, Dec 09, 2021 at 10:58:01AM +0100, Marco Elver wrote:
+> > > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+> > > default since dcb7c0b9461c2, which is why this came on my radar. And
+> > > Clang also performs auto-init of allocas when auto-init is on
+> > > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+> > > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
+> > > allocas.
+> >
+> > The space allocated by alloca is not an automatic variable, so of course
+> > it is not affected by this compiler flag.  And it should not, this flag
+> > is explicitly for *small fixed-size* stack variables (initialising
+> > others can be much too expensive).
+> >
+> > >       C. Introduce a new __builtin_alloca_uninitialized().
+> >
+> > That is completely backwards.  That is the normal behaviour of alloca
+> > already.  Also you can get __builtin_alloca inserted by the compiler
+> > (for a variable length array for example), and you typically do not want
+> > those initialised either, for the same reasons.
+>
+> You're right, if we're strict about it, initializing allocas is
+> technically out-of-scope of that feature.
+>
+> So, option D: Add a param to control this, and probably it shouldn't
+> do it by default. Let's see how far that gets then.
 
-On 19/12/21 12:07 am, Peter Rosin wrote:
-> And implement devm_mux_state_get in terms of the new function.
-> 
-> Signed-off-by: Peter Rosin <peda@axentia.se>
+Just an update: after some discussion, the Clang side says that
+alloca() is in scope, because the intent is that trivially initialized
+"automatic stack storage" should be handled by ftrivial-auto-var-init.
+And alloca() is automatic stack storage:
+https://www.gnu.org/software/libc/manual/html_node/Variable-Size-Automatic.html
 
-Tested-by: Aswath Govindraju <a-govindraju@ti.com>
+So currently it looks like the builtin is the only solution in this case.
 
-Thanks,
-Aswath
-
-> ---
->  drivers/mux/core.c           | 41 ++++++++++++++++++++++++++----------
->  include/linux/mux/consumer.h |  1 +
->  2 files changed, 31 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
-> index 7d38e7c0c02e..90073ce01539 100644
-> --- a/drivers/mux/core.c
-> +++ b/drivers/mux/core.c
-> @@ -673,6 +673,33 @@ struct mux_control *devm_mux_control_get(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(devm_mux_control_get);
->  
-> +/**
-> + * mux_state_get() - Get the mux-state for a device.
-> + * @dev: The device that needs a mux-state.
-> + * @mux_name: The name identifying the mux-state.
-> + *
-> + * Return: A pointer to the mux-state, or an ERR_PTR with a negative errno.
-> + */
-> +struct mux_state *mux_state_get(struct device *dev, const char *mux_name)
-> +{
-> +	struct mux_state *mstate;
-> +
-> +	mstate = kzalloc(sizeof(*mstate), GFP_KERNEL);
-> +	if (!mstate)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mstate->mux = mux_get(dev, mux_name, &mstate->state);
-> +	if (IS_ERR(mstate->mux)) {
-> +		int err = PTR_ERR(mstate->mux);
-> +
-> +		kfree(mstate);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	return mstate;
-> +}
-> +EXPORT_SYMBOL_GPL(mux_state_get);
-> +
->  /**
->   * mux_state_put() - Put away the mux-state for good.
->   * @mstate: The mux-state to put away.
-> @@ -705,25 +732,17 @@ struct mux_state *devm_mux_state_get(struct device *dev,
->  				     const char *mux_name)
->  {
->  	struct mux_state **ptr, *mstate;
-> -	struct mux_control *mux_ctrl;
-> -	int state;
-> -
-> -	mstate = devm_kzalloc(dev, sizeof(struct mux_state), GFP_KERNEL);
-> -	if (!mstate)
-> -		return ERR_PTR(-ENOMEM);
->  
->  	ptr = devres_alloc(devm_mux_state_release, sizeof(*ptr), GFP_KERNEL);
->  	if (!ptr)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	mux_ctrl = mux_get(dev, mux_name, &state);
-> -	if (IS_ERR(mux_ctrl)) {
-> +	mstate = mux_state_get(dev, mux_name);
-> +	if (IS_ERR(mstate)) {
->  		devres_free(ptr);
-> -		return (struct mux_state *)mux_ctrl;
-> +		return mstate;
->  	}
->  
-> -	mstate->mux = mux_ctrl;
-> -	mstate->state = state;
->  	*ptr = mstate;
->  	devres_add(dev, ptr);
->  
-> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-> index babf2a744056..944678604549 100644
-> --- a/include/linux/mux/consumer.h
-> +++ b/include/linux/mux/consumer.h
-> @@ -54,6 +54,7 @@ int mux_control_deselect(struct mux_control *mux);
->  int mux_state_deselect(struct mux_state *mstate);
->  
->  struct mux_control *mux_control_get(struct device *dev, const char *mux_name);
-> +struct mux_state *mux_state_get(struct device *dev, const char *mux_name);
->  void mux_control_put(struct mux_control *mux);
->  void mux_state_put(struct mux_state *mstate);
->  
-> 
-
+Thanks.

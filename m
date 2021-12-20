@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA6147ACD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C58247AB50
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbhLTOrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:47:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52026 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbhLTOoL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:44:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04722B80EE8;
-        Mon, 20 Dec 2021 14:44:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3273BC36AE8;
-        Mon, 20 Dec 2021 14:44:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011448;
-        bh=GECggSW38Pnz+40L3lQkZa7Ir8a1uj8b/UgYQtskKXg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2MEdx+YzoeLO9+ycHAgBCytgpPX/nx4m3+0Lo6AudNJLuwKTMOThKfYAEsjFFyOgs
-         UFcKkqV+z8SLwbMGd6T90BrBsThfXrGUqlwb0fepjc5U5/fw3IgceyGugtZSHW5Plh
-         G2+34KFLbHgzHtkfoe6ZmOZQxpJpaxCT0ij+99sI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 24/71] selftests: Fix IPv6 address bind tests
-Date:   Mon, 20 Dec 2021 15:34:13 +0100
-Message-Id: <20211220143026.497628848@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S233682AbhLTOc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:32:58 -0500
+Received: from mga18.intel.com ([134.134.136.126]:26946 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233666AbhLTOc5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 09:32:57 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="227031371"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="227031371"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 06:32:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="616414489"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 06:32:54 -0800
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <3281618b-64df-711e-4360-c74e6165d7ed@linux.intel.com>
+Date:   Mon, 20 Dec 2021 16:34:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+On 17.12.2021 15.55, Peter Zijlstra wrote:
+> On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
+>> I can reproduce this.
+>> Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
+>>
+>> 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
+> 
+> I can confirm, reverting that solves the boot hang, things aren't quite
+> working for me though.
+> 
+>> Seems to hang when read_poll_timeout_atomic() calls ktime_* functions.
+>> Maybe  it's too early for ktime.
+> 
+> It certainly is, using ktime for delay loops sounds daft to me anyhow.
+> 
+>> After reverting that patch it works again for me.
+> 
+> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0-rc3+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc force_early_printk sched_verbose ftrace=nop mitigations=off nokaslr
+> ...
+> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> ...
+> [    3.161367] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
 
-[ Upstream commit 28a2686c185e84b6aa6a4d9c9a972360eb7ca266 ]
+Ok, this is some other issue. I got the boot messages over USB
+(running minicom at the other end, listening to ttyUSB0)
+  
+> 
+> The machine does boot.. but I *am* getting tons of:
+> 
+> [  485.546898] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
+> [  485.546963] usb usb4-port4: config error
 
-IPv6 allows binding a socket to a device then binding to an address
-not on the device (__inet6_bind -> ipv6_chk_addr with strict flag
-not set). Update the bind tests to reflect legacy behavior.
+This is expected when xhci driver takes over after the early dbc driver,
+xhci driver resets xHC controller, and all ports turn to normal host ports again.
 
-Fixes: 34d0302ab861 ("selftests: Add ipv6 address bind tests to fcnal-test")
-Reported-by: Li Zhijian <lizhijian@fujitsu.com>
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/fcnal-test.sh | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+Because of the special cable you now have two hosts connected to each other,
+both trying to enumerate a device.
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index c8f28e847ee9e..157822331954d 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -2891,11 +2891,14 @@ ipv6_addr_bind_novrf()
- 	run_cmd nettest -6 -s -l ${a} -d ${NSA_DEV} -t1 -b
- 	log_test_addr ${a} $? 0 "TCP socket bind to local address after device bind"
- 
-+	# Sadly, the kernel allows binding a socket to a device and then
-+	# binding to an address not on the device. So this test passes
-+	# when it really should not
- 	a=${NSA_LO_IP6}
- 	log_start
--	show_hint "Should fail with 'Cannot assign requested address'"
--	run_cmd nettest -6 -s -l ${a} -d ${NSA_DEV} -t1 -b
--	log_test_addr ${a} $? 1 "TCP socket bind to out of scope local address"
-+	show_hint "Tecnically should fail since address is not on device but kernel allows"
-+	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
-+	log_test_addr ${a} $? 0 "TCP socket bind to out of scope local address"
- }
- 
- ipv6_addr_bind_vrf()
-@@ -2936,10 +2939,15 @@ ipv6_addr_bind_vrf()
- 	run_cmd nettest -6 -s -l ${a} -d ${NSA_DEV} -t1 -b
- 	log_test_addr ${a} $? 0 "TCP socket bind to local address with device bind"
- 
-+	# Sadly, the kernel allows binding a socket to a device and then
-+	# binding to an address not on the device. The only restriction
-+	# is that the address is valid in the L3 domain. So this test
-+	# passes when it really should not
- 	a=${VRF_IP6}
- 	log_start
--	run_cmd nettest -6 -s -l ${a} -d ${NSA_DEV} -t1 -b
--	log_test_addr ${a} $? 1 "TCP socket bind to VRF address with device bind"
-+	show_hint "Tecnically should fail since address is not on device but kernel allows"
-+	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
-+	log_test_addr ${a} $? 0 "TCP socket bind to VRF address with device bind"
- 
- 	a=${NSA_LO_IP6}
- 	log_start
--- 
-2.33.0
+This whole transition from earlyprintk xdbc to normal xhci driver is 
+not very userfriendly.
 
+> 
+> However, when I do:
+> 
+> $ echo enable > /sys/bus/pci/devices/0000:00:14.0/dbc
+> 
 
+Yes, this works as it turns on the DbC feature on in xHC hardware,
+which turns the first USB port into a usb device.
 
+Thanks
+-Mathias

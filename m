@@ -2,145 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A5C47B122
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C491A47B124
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbhLTQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:33:27 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:57277 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237496AbhLTQd0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:33:26 -0500
-Received: by mail-io1-f72.google.com with SMTP id r199-20020a6b2bd0000000b005e234972ddfso7391801ior.23
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 08:33:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=OWl8IqkEe6OQ3NoMzT2jKNMg3ANYUfrpYcjnt7QOHjU=;
-        b=LCgyu/bvn3/vnwKQN72JfpyRhC8GNkxBK3yPK74i0uxRVgQ6EdxFxovQOQd2Rory5w
-         S3xb3ZOQR2d9j7wHOaVhZeolmlNSlYzarNtAGHK3d35d49Ro/d0qdckaAWVKC//ksGnJ
-         Y0KtIxjvP3g03ZZZBFE4agaq0vffFeTSeiUxB0R0xDvF6ybXl1VCFU5SuZN7zyE+GKqq
-         QTVEcaFplhfv9VNHbqSe2Tzx83JrwVNMKOEG1kad/bdqQt2l0sTMxp7pRp9IB3pHquSF
-         Fbma84vkkq+L+2+T8tMmT7g8u2YJ2SUhZ71Q6xcu0XLzYWLklkNbIc1/clSMLRvE5VEL
-         DgbA==
-X-Gm-Message-State: AOAM533+ydgQzVDWl9j8iO0GB8La3pH+1XoGmt7O6e8Mamhb4/VnKxuz
-        4KcBDyzSqlCYm76XtT7La4WW+3jrH+8xw6cACacU62BQmZw2
-X-Google-Smtp-Source: ABdhPJwEgVPP9VnoS1clFZZYGPSVttbjCw84l/MMrlPCl1pB4FM0f8NFdQeS4WukMV6Q+LaQ/li7XRRgRXkARL78CJsI3O4wJmUE
+        id S238319AbhLTQeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:34:11 -0500
+Received: from mout.gmx.net ([212.227.17.22]:39039 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232810AbhLTQeJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 11:34:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640018027;
+        bh=ZoGhci92Pzfv4A5imxxMOsvZDJ9MRBfoQGXiuCYauk0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ep0yjZgh6StG1uDzh72pPHSbdH7DwrCB0ibg6AwAqoMsaFcGlV5/ko0HmfhzQxRMI
+         HEq5N9fjJX7C5FGmtQERKgTPGl3nNrE8CFb9e45BEQOF/ZhYUzS/WGGmu4cuOW6UqE
+         79/gULrTdnmuCaSYoLQFQoCSvBEyGuSr6p2dgRwY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.144.120] ([217.61.144.120]) by web-mail.gmx.net
+ (3c-app-gmx-bap45.server.lan [172.19.172.115]) (via HTTP); Mon, 20 Dec 2021
+ 17:33:46 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:cac2:: with SMTP id m2mr9191921ilq.195.1640018005762;
- Mon, 20 Dec 2021 08:33:25 -0800 (PST)
-Date:   Mon, 20 Dec 2021 08:33:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a8a64205d39672b8@google.com>
-Subject: [syzbot] KMSAN: kernel-infoleak in move_addr_to_user (6)
-From:   syzbot <syzbot+cdbd40e0c3ca02cae3b7@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, glider@google.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Peter Geis <pgwipeout@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Aw: [PATCH v3] mfd: rk808: add reboot support to rk808.c
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 20 Dec 2021 17:33:46 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20211220144654.926112-1-pgwipeout@gmail.com>
+References: <20211220144654.926112-1-pgwipeout@gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:aN63Vhyi8qOQ1mrG500MQtjFKWLfORtmIw/m+CLwvNZ6YHqbPNyix4LT8W/d3cYs42HZD
+ 4YNIGfk43PtdXGS2zZvHeu9BI56Wi5P99XNI+RMrtVWHimHxpyUUDUbkiAIHBahuLjn1q647mpDS
+ 2V5fWc7j5DxdxEm8nDlvp8nl8b0SVsyV6Yzo3GXd8/pf5O0uAL+hLgu+7CVgb5us+EGlntSrCnlG
+ raantmj4zKiTZTiGQlAXuz5gmLG/R6/HmlGuZKjlXaNosFdzB/dbs0XUUtsSUCyIfDHwM6rgzQSw
+ /g=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fctntlAvfjQ=:kGkdc0OKd5+rGRtLmFteLt
+ o8/vObSJzeeVQIuhF5wDr7EQw61A6gMkmrJQ3teT8KdwZVpEAbc0+cYiDdeLCKsECs1QGRoyi
+ 8ehf8i4yoz3iqVCiPqMcItcZYVfcxGc9WcsJZXzqTJbH+dYcY/4uTV0CjAXY4rUJ2yLJuEVZE
+ 7UXBtJreMMefBeslNoVO0GEVv+IE53OPVXECbqQNLdCEO0phYWtge+mKIKE+a9uJHQ8K2Z2vU
+ TR2RIn1CpO+Feem/9osZVce7BLyilHtZCwCyeq8wToPDyXLWRdVDLa68pbr7ZXP5+dcD2qqpl
+ zAUIJ+jOPy4CvMpZBe2kfVxi8eKjlsrCxA25EQ8hIlH6hjV3O4WRr1wH5kxXOgI5uQEn6vs3B
+ 4lgjf+UXYuuvmPH5iF6RAoS5AeqzwwvUgmUWXbSihAmYlTEd+KuTeWtK6hnDj6Fg05HE88XIC
+ OoUT+TfKTJt36zm1tdyskk/QqaZ7vq/UtiKZSCtvJRaEPiIMr9+mtOmWENe2AxBWsPDUTk5Xd
+ WeiC9qhpQN4+Z+BzM1x+9Ox6/odHO4oAU+MN/dwacmQ/mvmz4e/SqHuyNKAh9AsL0NH47fybK
+ MynDS3bM1yjjPTptfFMP7KRtOT6Ar1kzv3N3e/LKT5jmQsFNNZWL1lsu/iinSuCe0KZwtbojv
+ XTnX2gtbVsMDidbnEmR9mjfdK6GYf4XHeVbiwi3QbkeoYeMYZHZ0VuGl6SITl9EfmBtX/OCVO
+ Ovnm3ILG8SjRzDmjyppS16M9Txj7SPaHd2WoLxZ8NrdeLFB+sy8rht24+tUcw9/MkwvscjWPY
+ CytY7nO
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi
 
-syzbot found the following issue on:
+> Gesendet: Montag, 20. Dezember 2021 um 15:46 Uhr
+> Von: "Peter Geis" <pgwipeout@gmail.com>
+> @@ -749,6 +791,9 @@ static int rk808_remove(struct i2c_client *client)
+>  	if (pm_power_off =3D=3D rk808_pm_power_off)
+>  		pm_power_off =3D NULL;
+>
+> +	if (of_property_read_bool(np, "rockchip,system-power-controller"))
+> +		unregister_restart_handler(&rk808_restart_handler);
+> +
+>  	return 0;
+>  }
 
-HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=14a45071b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-dashboard link: https://syzkaller.appspot.com/bug?extid=cdbd40e0c3ca02cae3b7
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343f443b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16efa493b00000
+this change misses a declaration
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cdbd40e0c3ca02cae3b7@syzkaller.appspotmail.com
+struct device_node *np =3D client->dev.of_node;
 
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline] lib/usercopy.c:33
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33 lib/usercopy.c:33
- instrument_copy_to_user include/linux/instrumented.h:121 [inline]
- instrument_copy_to_user include/linux/instrumented.h:121 [inline] lib/usercopy.c:33
- _copy_to_user+0x1c9/0x270 lib/usercopy.c:33 lib/usercopy.c:33
- copy_to_user include/linux/uaccess.h:209 [inline]
- copy_to_user include/linux/uaccess.h:209 [inline] net/socket.c:287
- move_addr_to_user+0x3f6/0x600 net/socket.c:287 net/socket.c:287
- __sys_getpeername+0x470/0x6b0 net/socket.c:1987 net/socket.c:1987
- __do_sys_getpeername net/socket.c:1997 [inline]
- __se_sys_getpeername net/socket.c:1994 [inline]
- __do_sys_getpeername net/socket.c:1997 [inline] net/socket.c:1994
- __se_sys_getpeername net/socket.c:1994 [inline] net/socket.c:1994
- __x64_sys_getpeername+0xda/0x120 net/socket.c:1994 net/socket.c:1994
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was stored to memory at:
- tipc_getname+0x575/0x5e0 net/tipc/socket.c:757 net/tipc/socket.c:757
- __sys_getpeername+0x3b3/0x6b0 net/socket.c:1984 net/socket.c:1984
- __do_sys_getpeername net/socket.c:1997 [inline]
- __se_sys_getpeername net/socket.c:1994 [inline]
- __do_sys_getpeername net/socket.c:1997 [inline] net/socket.c:1994
- __se_sys_getpeername net/socket.c:1994 [inline] net/socket.c:1994
- __x64_sys_getpeername+0xda/0x120 net/socket.c:1994 net/socket.c:1994
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Uninit was stored to memory at:
- msg_set_word net/tipc/msg.h:212 [inline]
- msg_set_destport net/tipc/msg.h:619 [inline]
- msg_set_word net/tipc/msg.h:212 [inline] net/tipc/socket.c:1486
- msg_set_destport net/tipc/msg.h:619 [inline] net/tipc/socket.c:1486
- __tipc_sendmsg+0x44fa/0x5890 net/tipc/socket.c:1486 net/tipc/socket.c:1486
- tipc_sendmsg+0xeb/0x140 net/tipc/socket.c:1402 net/tipc/socket.c:1402
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- sock_sendmsg_nosec net/socket.c:704 [inline] net/socket.c:2409
- sock_sendmsg net/socket.c:724 [inline] net/socket.c:2409
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- ___sys_sendmsg net/socket.c:2463 [inline] net/socket.c:2492
- __sys_sendmsg+0x704/0x840 net/socket.c:2492 net/socket.c:2492
- __do_sys_sendmsg net/socket.c:2501 [inline]
- __se_sys_sendmsg net/socket.c:2499 [inline]
- __do_sys_sendmsg net/socket.c:2501 [inline] net/socket.c:2499
- __se_sys_sendmsg net/socket.c:2499 [inline] net/socket.c:2499
- __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2499 net/socket.c:2499
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Local variable skaddr created at:
- __tipc_sendmsg+0x2d0/0x5890 net/tipc/socket.c:1419 net/tipc/socket.c:1419
- tipc_sendmsg+0xeb/0x140 net/tipc/socket.c:1402 net/tipc/socket.c:1402
-
-Bytes 4-7 of 16 are uninitialized
-Memory access of size 16 starts at ffff888113753e00
-Data copied to user address 0000000020000280
-
-CPU: 1 PID: 3479 Comm: syz-executor115 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+regards Frank

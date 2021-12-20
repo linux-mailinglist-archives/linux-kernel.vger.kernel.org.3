@@ -2,186 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD03947B2E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F11C47B2EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 19:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbhLTSee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 13:34:34 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54076 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236184AbhLTSe0 (ORCPT
+        id S240461AbhLTSfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 13:35:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48974 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236184AbhLTSfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:34:26 -0500
-X-UUID: 977b4c7051e54f368b980866f32bd4d2-20211221
-X-UUID: 977b4c7051e54f368b980866f32bd4d2-20211221
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1143960005; Tue, 21 Dec 2021 02:34:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 21 Dec 2021 02:34:19 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 21 Dec 2021 02:34:18 +0800
-From:   <sean.wang@mediatek.com>
-To:     <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?q?Re=3A=20=5BPATCH=20RESEND=201/3=5D=20Bluetooth=3A=20btmtksdio=3A=20add=20the=20support=20of=20wake=20on=20bluetooth?=
-Date:   Tue, 21 Dec 2021 02:34:17 +0800
-Message-ID: <1640025257-18029-1-git-send-email-sean.wang@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <67f062f9-293b-78aa-6474-f018d4bd269c@molgen.mpg.de--annotate>
-References: <67f062f9-293b-78aa-6474-f018d4bd269c@molgen.mpg.de--annotate>
+        Mon, 20 Dec 2021 13:35:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57FFEB8107D;
+        Mon, 20 Dec 2021 18:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890F7C36AE2;
+        Mon, 20 Dec 2021 18:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640025308;
+        bh=aGT6VJwp7juMll29rc2UMHesMInGQhBsInKsVt+pZtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZouLs5mlcrcEAv/5rd5gnF+3cU9Twn4ip++jLgXDblncw6/FoXS503mt4el5bIZVs
+         j1D6SvIJuCqsJF9mdUbhSv52U0r1wLlt98ovYCYtegPk8NBhiUiWpg5OXFkNlJ20pr
+         +QbMHhLYy/mQPqq+LIpQCkvCqM6ZM/k7nzHkh0tJZfcpvr1D010OpPxT1bwEitlshO
+         AuWDmUcYLFece0QGXTLh5amQJDIh5a2nF01k9OPy8EeCctBFXBghX8hcjSZmSSKHxm
+         ApDv5wVhqZg7rAJV1urPB+s0g5BdtpVopPihaGWzdfMLZNmz8Zp30IGJ9lIpmjm0QN
+         0ryK9TpL2Lrfw==
+Date:   Mon, 20 Dec 2021 12:35:05 -0600
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH RESEND] random: use correct memory barriers for
+ crng_node_pool
+Message-ID: <YcDM2cpwiGCb56Gp@quark>
+References: <20211219025139.31085-1-ebiggers@kernel.org>
+ <CAHmME9pQ4vp0jHpOyQXHRbJ-xQKYapQUsWPrLouK=dMO56y1zA@mail.gmail.com>
+ <20211220181115.GZ641268@paulmck-ThinkPad-P17-Gen-1>
+ <CAHmME9qZDNz2uxPa13ZtBMT2RR+sP1OU=b73tcZ9BTD1T_MJOg@mail.gmail.com>
+ <20211220183140.GC641268@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220183140.GC641268@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Mon, Dec 20, 2021 at 10:31:40AM -0800, Paul E. McKenney wrote:
+> On Mon, Dec 20, 2021 at 07:16:48PM +0100, Jason A. Donenfeld wrote:
+> > On Mon, Dec 20, 2021 at 7:11 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > First I would want
+> > 
+> > It looks like you've answered my question with four other questions,
+> > which seem certainly technically warranted, but also indicates we're
+> > probably not going to get to the nice easy resting place of, "it is
+> > safe; go for it" that I was hoping for. In light of that, it seems
+> > like merging Eric's patch is reasonable.
+> 
+> My hope would be that the questions can be quickly answered by the
+> developers and maintainers.  But yes, hope springs eternal.
+> 
+> 							Thanx, Paul
 
+I wouldn't expect READ_ONCE() to provide a noticable performance improvement
+here, as it would be lost in the noise of the other work done, especially
+chacha20_block().
 
->Dear Sean, dear Mark,
->
->
->Am 18.12.21 um 02:08 schrieb sean.wang@mediatek.com:
->> From: Mark Chen <mark-yw.chen@mediatek.com>
->
->Shorter summary: Bluetooth: btmtksdio: Support wake on bluetooth
+The data structures in question are never freed, so your other questions are
+irrelevant, if I understand correctly.
 
-seemed nice to me, will do in the next version
-
->
->> Add the support to enable wake on bluetooth
->
->Can you please list the datasheet name and revision used for the implementation.
-
-the datasheet is not released in public so Mark and I cannot provide the detail here, but we will make the patch easy to review and understand.
-
->Please document how you tested this.
-
-It was tested by setting up an HID or HOGP profile to connect a Bluetooth keyboard and mouse,  then putting the system to suspend, then trying to wake up the system by moving the Bluetooth keyboard or mouse, and then checking if the system can be waken up and be brought back to the normal state.
-
->
->> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
->> ---
->>   drivers/bluetooth/btmtk.h     |  8 ++++++++
->>   drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
->>   2 files changed, 38 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
->> index 6e7b0c7567c0..2be1d2680ad8 100644
->> --- a/drivers/bluetooth/btmtk.h
->> +++ b/drivers/bluetooth/btmtk.h
->> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
->>	u8 time_compensation;
->>   } __packed;
->>
->> +struct btmtk_wakeon {
->> +	u8 mode;
->> +	u8 gpo;
->> +	u8 active_high;
->> +	__le16 enable_delay;
->> +	__le16 wakeup_delay;
->> +} __packed;
->> +
->>   struct btmtk_hci_wmt_params {
->>	u8 op;
->>	u8 flag;
->> diff --git a/drivers/bluetooth/btmtksdio.c
->> b/drivers/bluetooth/btmtksdio.c index b5ea8d3bffaa..771733ce362b
->> 100644
->> --- a/drivers/bluetooth/btmtksdio.c
->> +++ b/drivers/bluetooth/btmtksdio.c
->> @@ -958,6 +958,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
->>	return 0;
->>   }
->>
->> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev) {
->> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
->> +	bool may_wakeup = device_may_wakeup(bdev->dev);
->> +	struct btmtk_wakeon bt_awake = {
->> +		.mode = 0x1,
->> +		.gpo = 0,
->> +		.active_high = 0x1,
->> +		.enable_delay = cpu_to_le16(0xc80),
->> +		.wakeup_delay = cpu_to_le16(0x20)
->> +	};
->> +	struct sk_buff *skb;
->> +
->> +	if (may_wakeup &&
->> +	    bdev->data->chipid == 0x7921) {
->
->Why the check for 0x7921? Is that device only supported? The commit message does not say anything about it.
-
-currently, wake on bt is only supported by mt7921, we will change the subject to "Bluetooth: mt7921s: Support wake on bluetooth"
-and refine the message body to reflect the fact.
-
->
->> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
->> +				      &bt_awake, HCI_CMD_TIMEOUT);
->> +		if (IS_ERR(skb))
->> +			may_wakeup = false;
->> +	}
->> +
->> +	return may_wakeup;
->> +}
->> +
->>   static int btmtksdio_probe(struct sdio_func *func,
->>			   const struct sdio_device_id *id)
->>   {
->> @@ -998,6 +1022,7 @@ static int btmtksdio_probe(struct sdio_func *func,
->>	hdev->shutdown = btmtksdio_shutdown;
->>	hdev->send     = btmtksdio_send_frame;
->>	hdev->set_bdaddr = btmtk_set_bdaddr;
->> +	hdev->wakeup = btmtk_sdio_wakeup;
->>
->>	SET_HCIDEV_DEV(hdev, &func->dev);
->>
->> @@ -1032,7 +1057,11 @@ static int btmtksdio_probe(struct sdio_func *func,
->>	 */
->>	pm_runtime_put_noidle(bdev->dev);
->>
->> -	return 0;
->> +	err = device_init_wakeup(bdev->dev, true);
->> +	if (err)
->> +		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
->
->Could the error message be extended, so normal users know what to do?
->Currently it’s only useful for developers.
-
-That is done by referring to btusb.c. I have willing to enhance the part along with btusb.c if Marcel has any idea about that.
-
->
->> +
->> +	return err;
->>   }
->>
->>   static void btmtksdio_remove(struct sdio_func *func)
->
->
->Kind regards,
->
->Paul
->
->
+- Eric

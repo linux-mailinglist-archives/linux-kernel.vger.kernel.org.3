@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 636B547AE17
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3777B47AB5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237749AbhLTO6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S233770AbhLTOgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238933AbhLTOys (ORCPT
+        with ESMTP id S233721AbhLTOgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:54:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7854DC08EC36;
-        Mon, 20 Dec 2021 06:48:15 -0800 (PST)
+        Mon, 20 Dec 2021 09:36:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F9AC06173E;
+        Mon, 20 Dec 2021 06:36:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1932F611BD;
-        Mon, 20 Dec 2021 14:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6A7C36AE7;
-        Mon, 20 Dec 2021 14:48:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3D93B80EE2;
+        Mon, 20 Dec 2021 14:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E60C36AE9;
+        Mon, 20 Dec 2021 14:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011694;
-        bh=PKyMA7TVCmgHt8RPJrq1wMBbzbnAuv+gvjER/I12yEc=;
+        s=korg; t=1640010965;
+        bh=icW+pePijLY/4SG+Flpe0LkKCBn6Op/2N8UGeKWVuS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFX29uyoeBBb56CgN9yTuoFr5g8rNWhzwof0obDl8rLc2isQpGWMORJ4BoQSXWQ5A
-         PQx7JGlm0CDHo4BNWsYjwVAN29xCtZn1+e3Km9jx6Q3uNLJMk/+LXw5MHhzkTcN9uy
-         HdN3H9cVKQaMZG5A+38rPtPEEBSJSssVJ6koa6qw=
+        b=IfhPLAenyY+nVCB7sVgdufJMFeGSnn0seVlPW2jtnjuQEJYGvYnuMp8us7v3ICf5o
+         fzRlExJG6Iw7VK/TMdJP2VMBVmd0kPwJPVcgusWKG/eWG84yzqW/tJtVFljYscMMN7
+         ihm14PviuPHN+vlGCD79luxXVrCXQnqgEJ5sJSRw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuang Li <shuali@redhat.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Szymon Heidrich <szymon.heidrich@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 40/99] net/sched: sch_ets: dont remove idle classes from the round-robin list
+Subject: [PATCH 4.4 12/23] USB: gadget: bRequestType is a bitfield, not a enum
 Date:   Mon, 20 Dec 2021 15:34:13 +0100
-Message-Id: <20211220143030.726002151@linuxfoundation.org>
+Message-Id: <20211220143018.254890645@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,108 +49,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Caratti <dcaratti@redhat.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit c062f2a0b04d86c5b8c9d973bea43493eaca3d32 ]
+[ Upstream commit f08adf5add9a071160c68bb2a61d697f39ab0758 ]
 
-Shuang reported that the following script:
+Szymon rightly pointed out that the previous check for the endpoint
+direction in bRequestType was not looking at only the bit involved, but
+rather the whole value.  Normally this is ok, but for some request
+types, bits other than bit 8 could be set and the check for the endpoint
+length could not stall correctly.
 
- 1) tc qdisc add dev ddd0 handle 10: parent 1: ets bands 8 strict 4 priomap 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
- 2) mausezahn ddd0  -A 10.10.10.1 -B 10.10.10.2 -c 0 -a own -b 00:c1:a0:c1:a0:00 -t udp &
- 3) tc qdisc change dev ddd0 handle 10: ets bands 4 strict 2 quanta 2500 2500 priomap 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+Fix that up by only checking the single bit.
 
-crashes systematically when line 2) is commented:
-
- list_del corruption, ffff8e028404bd30->next is LIST_POISON1 (dead000000000100)
- ------------[ cut here ]------------
- kernel BUG at lib/list_debug.c:47!
- invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 0 PID: 954 Comm: tc Not tainted 5.16.0-rc4+ #478
- Hardware name: Red Hat KVM, BIOS 1.11.1-4.module+el8.1.0+4066+0f1aadab 04/01/2014
- RIP: 0010:__list_del_entry_valid.cold.1+0x12/0x47
- Code: fe ff 0f 0b 48 89 c1 4c 89 c6 48 c7 c7 08 42 1b 87 e8 1d c5 fe ff 0f 0b 48 89 fe 48 89 c2 48 c7 c7 98 42 1b 87 e8 09 c5 fe ff <0f> 0b 48 c7 c7 48 43 1b 87 e8 fb c4 fe ff 0f 0b 48 89 f2 48 89 fe
- RSP: 0018:ffffae46807a3888 EFLAGS: 00010246
- RAX: 000000000000004e RBX: 0000000000000007 RCX: 0000000000000202
- RDX: 0000000000000000 RSI: ffffffff871ac536 RDI: 00000000ffffffff
- RBP: ffffae46807a3a10 R08: 0000000000000000 R09: c0000000ffff7fff
- R10: 0000000000000001 R11: ffffae46807a36a8 R12: ffff8e028404b800
- R13: ffff8e028404bd30 R14: dead000000000100 R15: ffff8e02fafa2400
- FS:  00007efdc92e4480(0000) GS:ffff8e02fb600000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000682f48 CR3: 00000001058be000 CR4: 0000000000350ef0
- Call Trace:
-  <TASK>
-  ets_qdisc_change+0x58b/0xa70 [sch_ets]
-  tc_modify_qdisc+0x323/0x880
-  rtnetlink_rcv_msg+0x169/0x4a0
-  netlink_rcv_skb+0x50/0x100
-  netlink_unicast+0x1a5/0x280
-  netlink_sendmsg+0x257/0x4d0
-  sock_sendmsg+0x5b/0x60
-  ____sys_sendmsg+0x1f2/0x260
-  ___sys_sendmsg+0x7c/0xc0
-  __sys_sendmsg+0x57/0xa0
-  do_syscall_64+0x3a/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7efdc8031338
- Code: 89 02 48 c7 c0 ff ff ff ff eb b5 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 8d 05 25 43 2c 00 8b 00 85 c0 75 17 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 41 54 41 89 d4 55
- RSP: 002b:00007ffdf1ce9828 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
- RAX: ffffffffffffffda RBX: 0000000061b37a97 RCX: 00007efdc8031338
- RDX: 0000000000000000 RSI: 00007ffdf1ce9890 RDI: 0000000000000003
- RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000078a940
- R10: 000000000000000c R11: 0000000000000246 R12: 0000000000000001
- R13: 0000000000688880 R14: 0000000000000000 R15: 0000000000000000
-  </TASK>
- Modules linked in: sch_ets sch_tbf dummy rfkill iTCO_wdt iTCO_vendor_support intel_rapl_msr intel_rapl_common joydev pcspkr i2c_i801 virtio_balloon i2c_smbus lpc_ich ip_tables xfs libcrc32c crct10dif_pclmul crc32_pclmul crc32c_intel serio_raw ghash_clmulni_intel ahci libahci libata virtio_blk virtio_console virtio_net net_failover failover sunrpc dm_mirror dm_region_hash dm_log dm_mod [last unloaded: sch_ets]
- ---[ end trace f35878d1912655c2 ]---
- RIP: 0010:__list_del_entry_valid.cold.1+0x12/0x47
- Code: fe ff 0f 0b 48 89 c1 4c 89 c6 48 c7 c7 08 42 1b 87 e8 1d c5 fe ff 0f 0b 48 89 fe 48 89 c2 48 c7 c7 98 42 1b 87 e8 09 c5 fe ff <0f> 0b 48 c7 c7 48 43 1b 87 e8 fb c4 fe ff 0f 0b 48 89 f2 48 89 fe
- RSP: 0018:ffffae46807a3888 EFLAGS: 00010246
- RAX: 000000000000004e RBX: 0000000000000007 RCX: 0000000000000202
- RDX: 0000000000000000 RSI: ffffffff871ac536 RDI: 00000000ffffffff
- RBP: ffffae46807a3a10 R08: 0000000000000000 R09: c0000000ffff7fff
- R10: 0000000000000001 R11: ffffae46807a36a8 R12: ffff8e028404b800
- R13: ffff8e028404bd30 R14: dead000000000100 R15: ffff8e02fafa2400
- FS:  00007efdc92e4480(0000) GS:ffff8e02fb600000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000682f48 CR3: 00000001058be000 CR4: 0000000000350ef0
- Kernel panic - not syncing: Fatal exception in interrupt
- Kernel Offset: 0x4e00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
- ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-
-we can remove 'q->classes[i].alist' only if DRR class 'i' was part of the
-active list. In the ETS scheduler DRR classes belong to that list only if
-the queue length is greater than zero: we need to test for non-zero value
-of 'q->classes[i].qdisc->q.qlen' before removing from the list, similarly
-to what has been done elsewhere in the ETS code.
-
-Fixes: de6d25924c2a ("net/sched: sch_ets: don't peek at classes beyond 'nbands'")
-Reported-by: Shuang Li <shuali@redhat.com>
-Signed-off-by: Davide Caratti <dcaratti@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 153a2d7e3350 ("USB: gadget: detect too-big endpoint 0 requests")
+Cc: Felipe Balbi <balbi@kernel.org>
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Link: https://lore.kernel.org/r/20211214184621.385828-1-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/sch_ets.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/composite.c    | 6 +++---
+ drivers/usb/gadget/legacy/dbgp.c  | 6 +++---
+ drivers/usb/gadget/legacy/inode.c | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
-index c34cb6e81d855..9c224872ef035 100644
---- a/net/sched/sch_ets.c
-+++ b/net/sched/sch_ets.c
-@@ -668,9 +668,9 @@ static int ets_qdisc_change(struct Qdisc *sch, struct nlattr *opt,
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 1f584d15a3ca4..580ba69f1e4a4 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1485,14 +1485,14 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u8				endp;
+ 
+ 	if (w_length > USB_COMP_EP0_BUFSIZ) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			goto done;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
+ 			w_length = USB_COMP_EP0_BUFSIZ;
++		} else {
++			goto done;
  		}
  	}
- 	for (i = q->nbands; i < oldbands; i++) {
--		qdisc_tree_flush_backlog(q->classes[i].qdisc);
--		if (i >= q->nstrict)
-+		if (i >= q->nstrict && q->classes[i].qdisc->q.qlen)
- 			list_del(&q->classes[i].alist);
-+		qdisc_tree_flush_backlog(q->classes[i].qdisc);
+ 
+diff --git a/drivers/usb/gadget/legacy/dbgp.c b/drivers/usb/gadget/legacy/dbgp.c
+index f1c5a22704b28..e8818ad973e4b 100644
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -345,14 +345,14 @@ static int dbgp_setup(struct usb_gadget *gadget,
+ 	u16 len = 0;
+ 
+ 	if (length > DBGP_REQ_LEN) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return err;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(DBGP_REQ_LEN);
+ 			length = DBGP_REQ_LEN;
++		} else {
++			return err;
+ 		}
  	}
- 	q->nstrict = nstrict;
- 	memcpy(q->prio2band, priomap, sizeof(priomap));
+ 
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index af0b34763326d..f2b4fdd1f49d5 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1335,14 +1335,14 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 	u16				w_length = le16_to_cpu(ctrl->wLength);
+ 
+ 	if (w_length > RBUF_SIZE) {
+-		if (ctrl->bRequestType == USB_DIR_OUT) {
+-			return value;
+-		} else {
++		if (ctrl->bRequestType & USB_DIR_IN) {
+ 			/* Cast away the const, we are going to overwrite on purpose. */
+ 			__le16 *temp = (__le16 *)&ctrl->wLength;
+ 
+ 			*temp = cpu_to_le16(RBUF_SIZE);
+ 			w_length = RBUF_SIZE;
++		} else {
++			return value;
+ 		}
+ 	}
+ 
 -- 
-2.33.0
+2.34.1
 
 
 

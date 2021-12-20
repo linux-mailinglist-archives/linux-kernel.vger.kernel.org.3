@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A440447AA6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D3647AA73
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbhLTNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:34:57 -0500
-Received: from mga09.intel.com ([134.134.136.24]:45558 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230176AbhLTNe4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:34:56 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="239972898"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="239972898"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:34:56 -0800
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="616398051"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:34:54 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mzInA-000501-1l;
-        Mon, 20 Dec 2021 15:33:28 +0200
-Date:   Mon, 20 Dec 2021 15:33:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Luke D. Jones" <luke@ljones.dev>,
-        acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/3] platform/x86: asus-wmi: Join string literals back
-Message-ID: <YcCGJ6Ikx1fyR/Vm@smile.fi.intel.com>
-References: <20211210163009.19894-1-andriy.shevchenko@linux.intel.com>
- <YcCALCOv46Y0TogB@smile.fi.intel.com>
- <e93265b9-7700-fa79-046d-70bb5ec990f1@redhat.com>
+        id S232974AbhLTNiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhLTNiO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:38:14 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A60C061574;
+        Mon, 20 Dec 2021 05:38:14 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id y22so38520683edq.2;
+        Mon, 20 Dec 2021 05:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GZ7XPuXV66Jqd4yktH2bq7HDzowfU96jgj/+7vaR+nY=;
+        b=MJzyq/LGmPIRQy0STlRjvtQdLjx8CIioY/mfkFOVgZUXM5aBzD2HhbRUrL1ZfwVv//
+         +4J3i6pssepGJXCAN06xHDMMWkFZidh9mJvvA41wiK+A3gRqvW88Zkj+lBU6YKeAoqz9
+         VKGVza7f+myoT5f6PkC6GjPmYgE5WGhnljNLMeO97b9biLwhaIT7vA7l9kpjxfDIN0Lv
+         ldFJ6eyYZPGOVW6uDqj8L+y8Pc/IVVPDad5CJLW+sLQBv3E38eHwRLYCb0nHDwJnfLSx
+         rlVAGyv3Hk2pqE7X1v9b4pXaL7BekDmMs8dtv+qjrSx1k2bJ3TlQzwGPkeMrDXNZpziP
+         2P8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GZ7XPuXV66Jqd4yktH2bq7HDzowfU96jgj/+7vaR+nY=;
+        b=cUFDmIN405NJVYyWvNuWIN34barMOZO104HsOliHgu+ZkdhG7XansJ/Fdzq+X3QfzQ
+         YFAIq4jfp+ytJY57RreztMdD2erdclyWAj+pz7rSIKm+4/OVIaO19n6n5ti1S5EVN5Z5
+         B41tu0CzwzwCA1kaKiVI7y+raOB37OJqD7+D8lhSeHj0lhZIb8+rgmW+MzXT3cRe+h0I
+         qUXZ7cMFTz5Q6O9PmnonVXgZnHeT5/4AaCEahmo0gX2eRSpCROwXO06SP2nM5tIcPsdK
+         /cSDuzJ4sZjIKNLYpmeowd+PkCn3CXeQD2CSj14iDxCalXzEhznx1mTLyysUiVYKKXiP
+         cMGA==
+X-Gm-Message-State: AOAM531o5NC457GtHF8QQidMhI03yCBO9fwLYCvF8ahvJiQMF/DPS92L
+        KLVeE/gxC581Y2R5puKQr1wWQm16+6RkfWSXllbuvwHerGMQrQ==
+X-Google-Smtp-Source: ABdhPJxZ0uY0+ofRoFHD/DKg7ZL0Ib40Gi3sN8JCT6HUd5ATa98YKaZeKEkZSA5hIyM1duQSb9aNJxzJVxIRNSw/MG8=
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr7499564ejc.132.1640007492838;
+ Mon, 20 Dec 2021 05:38:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e93265b9-7700-fa79-046d-70bb5ec990f1@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211213094036.1787950-1-daniel@0x0f.com> <CACRpkdaLt8O4ONZL0vY44gMbuSR_tT3Gkbh9f3sg7m23tUKO2g@mail.gmail.com>
+In-Reply-To: <CACRpkdaLt8O4ONZL0vY44gMbuSR_tT3Gkbh9f3sg7m23tUKO2g@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Dec 2021 15:36:13 +0200
+Message-ID: <CAHp75VfC6mED_yGrHR4Gv3ykL-ckC89s3to5MtW+WSbUPLT0KA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] gpio: msc313: Add gpio support for ssd20xd
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 02:30:20PM +0100, Hans de Goede wrote:
-> On 12/20/21 14:07, Andy Shevchenko wrote:
-> > On Fri, Dec 10, 2021 at 06:30:07PM +0200, Andy Shevchenko wrote:
-> >> For easy grepping on debug purposes join string literals back in
-> >> the messages.
-> >>
-> >> No functional change.
-> > 
-> > Hans, any comments on the series?
-> 
-> No comments, the series looks good to me. I plan to another round of
-> merging pdx86 patches tomorrow and then I plan to pick these up too.
+On Thu, Dec 16, 2021 at 11:05 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon, Dec 13, 2021 at 10:40 AM Daniel Palmer <daniel@0x0f.com> wrote:
+>
+> > As suggested by Linus I have dropped the DTS commits that were
+> > in the series to add a usage of this code to a target.
+> > If possible can you take the first 4 commits for the GPIO driver
+> > for me? The final DTS commit will go via our tree.
+>
+> Looks to me like patches 1-4 are good to go, but Bartosz
+> must decide if he wants to merge this late in the development
+> cycle.
 
-Thanks for good news!
+JFYI, it will be rc8.
 
 -- 
 With Best Regards,
 Andy Shevchenko
-
-

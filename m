@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CA347A950
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EE047A95C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbhLTMSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLTMS3 (ORCPT
+        id S232460AbhLTMSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:18:46 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:56954 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232433AbhLTMSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:18:29 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA84C061574;
-        Mon, 20 Dec 2021 04:18:29 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id y13so37369779edd.13;
-        Mon, 20 Dec 2021 04:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5MjoT1+0/DxfRaDrfHuq3G2Ro753TQHUQ3NJ1EInTB8=;
-        b=asURLhslDYv8u0hz6/SuebhiWI//nat9NpB5kq+pN2d/aqhC5+afz5SOacZPovSP66
-         7cY7zLIL7S7AZJ9Dwaqg01QDZNhcAVYpCgHycHZ5TuxttzMBSIzFB6s2OPqebRYKMte+
-         erBqtVDd3un7xI5DwnjGoqu/g2okL212HUGUlP46zHzdyPIKIUy5l+6JhnVwuYBFtb4c
-         6aqv2eAsnBdz3AMcxQfBCKSWAyF6A8wPSPOQ5bajcTPybLum+4mbNpsYEzAbLZBSP1D7
-         P0zQ6emNdMHp7ZnzrzI9nf1KViTJOB/jP/vNcWELh0W/UaNwf0CKe6dkLCKMH8H9RL9f
-         Yk9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=5MjoT1+0/DxfRaDrfHuq3G2Ro753TQHUQ3NJ1EInTB8=;
-        b=IixQTS0HHDwZFQde1KCsZV9NQIY5jKPEHNzQ9qZmDRSyAg7aH0H8MvU4bF2T83RYz+
-         1eFmYmuUSNwHlXSCAkykTsz+0DbcM63cXv7JDOSwvsF9xmLy92URlK3HWTs96OMHuFIh
-         11z8aGDWcui025U7yLLPKBh/RnKRoMlnvCIPuLIGdrONT17s4qNhphtdnaxUA6Q1SY1G
-         Ltxb3VVdysrmqKL9nymE7QMnK01+S2M48KE4aBYf8tzHjIYXDdiZ+yUKoUaxYaSbjuVZ
-         JBcrR6G2oglJdDUVEO4vsbmR4HRARsbSsrf2dBW2+WPe+X1igdyOKrLWyTAhjmrtbc9A
-         Lraw==
-X-Gm-Message-State: AOAM532AO+8ARaqCMtLsg7QHscqPTvmwewZjjKVQTc/XgS+kdN3oLf1w
-        pTClquxath3W0MpWwk/rk4g=
-X-Google-Smtp-Source: ABdhPJwLa4NjwySpR/porApfQAJrCybZbduz+D2HcKXFHEdJNYhPN4f3H+xMJ0pPM2T94UiqCR4raQ==
-X-Received: by 2002:a17:907:6d99:: with SMTP id sb25mr7780586ejc.540.1640002707716;
-        Mon, 20 Dec 2021 04:18:27 -0800 (PST)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id i22sm2549481ejw.75.2021.12.20.04.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 04:18:27 -0800 (PST)
-Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-To:     soc@kernel.org
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH -next] reset: starfive-jh7100: Fix 32bit compilation
-Date:   Mon, 20 Dec 2021 13:17:59 +0100
-Message-Id: <20211220121800.760846-1-kernel@esmil.dk>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Dec 2021 07:18:44 -0500
+X-UUID: a54850af568f49b685d2af8303344ea1-20211220
+X-UUID: a54850af568f49b685d2af8303344ea1-20211220
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 985129714; Mon, 20 Dec 2021 20:18:38 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 20 Dec 2021 20:18:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 20 Dec
+ 2021 20:18:37 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 20 Dec 2021 20:18:37 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <matthias.bgg@gmail.com>, <broonie@kernel.org>
+CC:     <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
+        <bayi.cheng@mediatek.com>, <gch981213@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v7 0/4] Add basic SoC support for mediatek mt8195
+Date:   Mon, 20 Dec 2021 20:18:21 +0800
+Message-ID: <20211220121825.6446-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to include linux/io-64-nonatomic-lo-hi.h or readq/writeq won't
-be defined when compiling on 32bit architectures:
+This series adds basic SoC support for Mediatek's SoC MT8195.
 
-On i386:
-
-../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
-../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
-  value = readq(reg_assert);
-           ^~~~~
-../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
-  writeq(value, reg_assert);
-  ^~~~~~
-
-On m68k:
-
-drivers/reset/reset-starfive-jh7100.c:81:17: error: implicit declaration of function 'readq'; did you mean 'readb'? [-Werror=implicit-function-declaration]
-drivers/reset/reset-starfive-jh7100.c:86:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-cc1: all warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:289: drivers/reset/reset-starfive-jh7100.o] Error 1
-make[2]: *** [scripts/Makefile.build:572: drivers/reset] Error 2
-make[1]: *** [Makefile:1969: drivers] Error 2
-make: *** [Makefile:226: __sub-make] Error 2
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Fixes: 0be3a1595bf8 ("reset: starfive-jh7100: Add StarFive JH7100 reset driver")
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 ---
- drivers/reset/reset-starfive-jh7100.c | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v7:
+  - refine title of spi-nor dt-bindings patch
+  - refine commit message of pinctrl dt-bindings patch
+  - update pinctrl-mt8195.yaml
+    - change property pattern from 'pins' to '^pins'
+    - update examples with new property in descriptions
+    - add new example
+  - drop '_' from node names of pinctrl subnodes in mt8195-evb.dts
+Changes in v6:
+  - rebase on 5.16-rc1
+  - add new clock name to spi-nor dt-bindings
+  - add "pins" property in pinctrl dt-bindings
+  - fix fails of dtbs_checks
+    - remove "arm,armv8" not matched in yaml from cpu compatile
+    - fix node name of xhci
+    - remvoe xhci upstreaming wakeup properties
+    - remove xhci unused properties address-cells and size-cells
+    - fix node name of ufs-phy 
+    - fix node name of spi-nor
+    - fix node name and sub-nodes of pinctrl
+    - fix mmc compatible
+Changes in v5:
+  - enable basic nodes in mt8195-evb.dts
+  - remove dedicated clock nodes
+  - add mmc2 node
+  - fix interrupt number of pinctrl node
+  - update clock nodes to apply internal fixes
+  - add dt-bindings for perficfg node
 
-diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/reset-starfive-jh7100.c
-index e28a19d271cb..fc44b2fb3e03 100644
---- a/drivers/reset/reset-starfive-jh7100.c
-+++ b/drivers/reset/reset-starfive-jh7100.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/bitmap.h>
- #include <linux/io.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/iopoll.h>
- #include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
+v4 thread:
+https://lore.kernel.org/all/20210922093303.23720-2-seiya.wang@mediatek.com/
+v3 thread:
+https://lore.kernel.org/all/20210601075350.31515-2-seiya.wang@mediatek.com/
+v2 thread:
+https://lore.kernel.org/all/20210319023427.16711-10-seiya.wang@mediatek.com/
+v1 thread:
+https://lore.kernel.org/all/20210316111443.3332-11-seiya.wang@mediatek.com/
+---
+
+Tinghan Shen (4):
+  dt-bindings: arm: mediatek: add mt8195 pericfg compatible
+  dt-bindings: spi: spi-mtk-nor: add new clock name 'axi' for spi nor
+  dt-bindings: pinctrl: mt8195: add wrapping node of pin configurations
+  arm64: dts: Add mediatek SoC mt8195 and evaluation board
+
+ .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
+ .../bindings/pinctrl/pinctrl-mt8195.yaml      |  336 +++---
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml    |    6 +-
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  209 ++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1034 +++++++++++++++++
+ 6 files changed, 1437 insertions(+), 150 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+
 -- 
-2.33.1
+2.18.0
 

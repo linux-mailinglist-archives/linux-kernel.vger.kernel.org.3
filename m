@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3D447ACF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676E747AD3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbhLTOru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S236680AbhLTOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237016AbhLTOpT (ORCPT
+        with ESMTP id S236753AbhLTOsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:45:19 -0500
+        Mon, 20 Dec 2021 09:48:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5066AC061377;
-        Mon, 20 Dec 2021 06:43:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE00DC07E5DF;
+        Mon, 20 Dec 2021 06:44:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E504B80EDF;
-        Mon, 20 Dec 2021 14:43:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D62C36AE9;
-        Mon, 20 Dec 2021 14:43:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66202B80EDE;
+        Mon, 20 Dec 2021 14:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B016DC36AE7;
+        Mon, 20 Dec 2021 14:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011400;
-        bh=u1Vlw4GkYZr3nZ3nYhnbENhD8m7I7UNV/8kI6p8XFHA=;
+        s=korg; t=1640011479;
+        bh=ntWbnLhnOcwCTUZJaM0mvpAkopqpVyVPfhCxiLyUdHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d+37dWo6Wl/GWOIo6gYMYS9IwtNkNZiRgI/dv9rD6+uw6hWFDOqCX/dil/asyphKo
-         xoC8vhJfkf4AJKFiUY06xs2AMK66aaeuBMfJiQSWN3yHNd/rVE2uYgm5eCFglTe1pB
-         bWgS3faMVX51IgLqRmuvpPxqjRvWhq2GvLJYLskg=
+        b=wjNxjG3ms29eZhe1wEbA+Rkj48EngeMBgcl1AqgTqvKWA1ktOdgQPRUA19bCWAtKp
+         ll10gE3p5D/Jkn/W42QwJK9nzmPcDpDAwIZyn7XDti2zMtdSun3h/ve0tmi7gYAeBE
+         7+3C7ZEddrXtjvQiC4JczvxVwOwwHSkEeucijqJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 4.19 32/56] PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 36/71] igbvf: fix double free in `igbvf_probe`
 Date:   Mon, 20 Dec 2021 15:34:25 +0100
-Message-Id: <20211220143024.496764056@linuxfoundation.org>
+Message-Id: <20211220143026.899039802@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,46 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Letu Ren <fantasquex@gmail.com>
 
-commit 94185adbfad56815c2c8401e16d81bdb74a79201 upstream.
+[ Upstream commit b6d335a60dc624c0d279333b22c737faa765b028 ]
 
-PCI_MSIX_FLAGS_MASKALL is set in the MSI-X control register at MSI-X
-interrupt setup time. It's cleared on success, but the error handling path
-only clears the PCI_MSIX_FLAGS_ENABLE bit.
+In `igbvf_probe`, if register_netdev() fails, the program will go to
+label err_hw_init, and then to label err_ioremap. In free_netdev() which
+is just below label err_ioremap, there is `list_for_each_entry_safe` and
+`netif_napi_del` which aims to delete all entries in `dev->napi_list`.
+The program has added an entry `adapter->rx_ring->napi` which is added by
+`netif_napi_add` in igbvf_alloc_queues(). However, adapter->rx_ring has
+been freed below label err_hw_init. So this a UAF.
 
-That's incorrect as the reset state of the PCI_MSIX_FLAGS_MASKALL bit is
-zero. That can be observed via lspci:
+In terms of how to patch the problem, we can refer to igbvf_remove() and
+delete the entry before `adapter->rx_ring`.
 
-        Capabilities: [b0] MSI-X: Enable- Count=67 Masked+
+The KASAN logs are as follows:
 
-Clear the bit in the error path to restore the reset state.
+[   35.126075] BUG: KASAN: use-after-free in free_netdev+0x1fd/0x450
+[   35.127170] Read of size 8 at addr ffff88810126d990 by task modprobe/366
+[   35.128360]
+[   35.128643] CPU: 1 PID: 366 Comm: modprobe Not tainted 5.15.0-rc2+ #14
+[   35.129789] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[   35.131749] Call Trace:
+[   35.132199]  dump_stack_lvl+0x59/0x7b
+[   35.132865]  print_address_description+0x7c/0x3b0
+[   35.133707]  ? free_netdev+0x1fd/0x450
+[   35.134378]  __kasan_report+0x160/0x1c0
+[   35.135063]  ? free_netdev+0x1fd/0x450
+[   35.135738]  kasan_report+0x4b/0x70
+[   35.136367]  free_netdev+0x1fd/0x450
+[   35.137006]  igbvf_probe+0x121d/0x1a10 [igbvf]
+[   35.137808]  ? igbvf_vlan_rx_add_vid+0x100/0x100 [igbvf]
+[   35.138751]  local_pci_probe+0x13c/0x1f0
+[   35.139461]  pci_device_probe+0x37e/0x6c0
+[   35.165526]
+[   35.165806] Allocated by task 366:
+[   35.166414]  ____kasan_kmalloc+0xc4/0xf0
+[   35.167117]  foo_kmem_cache_alloc_trace+0x3c/0x50 [igbvf]
+[   35.168078]  igbvf_probe+0x9c5/0x1a10 [igbvf]
+[   35.168866]  local_pci_probe+0x13c/0x1f0
+[   35.169565]  pci_device_probe+0x37e/0x6c0
+[   35.179713]
+[   35.179993] Freed by task 366:
+[   35.180539]  kasan_set_track+0x4c/0x80
+[   35.181211]  kasan_set_free_info+0x1f/0x40
+[   35.181942]  ____kasan_slab_free+0x103/0x140
+[   35.182703]  kfree+0xe3/0x250
+[   35.183239]  igbvf_probe+0x1173/0x1a10 [igbvf]
+[   35.184040]  local_pci_probe+0x13c/0x1f0
 
-Fixes: 438553958ba1 ("PCI/MSI: Enable and mask MSI-X early")
-Reported-by: Stefan Roese <sr@denx.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Stefan Roese <sr@denx.de>
-Cc: linux-pci@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/87tufevoqx.ffs@tglx
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d4e0fe01a38a0 (igbvf: add new driver to support 82576 virtual functions)
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/msi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/igbvf/netdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -850,7 +850,7 @@ out_free:
- 	free_msi_irqs(dev);
+diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c b/drivers/net/ethernet/intel/igbvf/netdev.c
+index 77cb2ab7dab40..1082e49ea0560 100644
+--- a/drivers/net/ethernet/intel/igbvf/netdev.c
++++ b/drivers/net/ethernet/intel/igbvf/netdev.c
+@@ -2887,6 +2887,7 @@ static int igbvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	return 0;
  
- out_disable:
--	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_ENABLE, 0);
-+	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL | PCI_MSIX_FLAGS_ENABLE, 0);
- 
- 	return ret;
- }
+ err_hw_init:
++	netif_napi_del(&adapter->rx_ring->napi);
+ 	kfree(adapter->tx_ring);
+ 	kfree(adapter->rx_ring);
+ err_sw_init:
+-- 
+2.33.0
+
 
 

@@ -2,189 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AE847B4B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2403047B4BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbhLTVHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:07:11 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:56041 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230203AbhLTVHI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:07:08 -0500
-Received: from localhost.localdomain (ip5f5aed30.dynamic.kabel-deutschland.de [95.90.237.48])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 6505961EA1927;
-        Mon, 20 Dec 2021 22:07:04 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Furquan Shaikh <furquan@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>,
-        coreboot@coreboot.org, Matt DeVillier <matt.devillier@gmail.com>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Felix Singer <felixsinger@posteo.net>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Furquan Shaikh <furquan@chromium.org>,
-        Justin TerAvest <teravest@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH] CHROMIUM: i2c: Add device property for probing
-Date:   Mon, 20 Dec 2021 22:06:42 +0100
-Message-Id: <20211220210643.47842-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.34.1
+        id S230246AbhLTVIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230120AbhLTVIP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:08:15 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5A4C061574;
+        Mon, 20 Dec 2021 13:08:15 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id v22-20020a9d4e96000000b005799790cf0bso1582698otk.5;
+        Mon, 20 Dec 2021 13:08:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q3PZVJSo3K5moB8cqKpexhdnP7Dl9gnH5q2mQZQj/Dg=;
+        b=SVAIos+NLdgiWDje7800YGBZ7Dstmx3Slww0isIeWDsXcW6dx5lykhwL9PBjUVlqQ4
+         dcK41zxHWDHffRdMwxWU3qALoxILTLzO8sI+HYZqBRFafMHxsVxqIr0AY1zIcG5kkBOQ
+         fyiCVOoh3EpUmyH0TCjKqXBlqQoP2XJ2fVmP9K4teV6Ur58kz6sE08FDbj4bLY1JBAwa
+         8Ryrkt7nO+Ew8ViqiV+W9qjxsBAvWhy1uJW4mcoGIq2NIZOsJOGKDUMsLRlvvaHz3J3M
+         QLCNf4xeWc7vPacL+y/DJiiFb9myOi72+QyU6illTdtq7oB9GOXLae6PpjwqKmiejY2W
+         BnqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q3PZVJSo3K5moB8cqKpexhdnP7Dl9gnH5q2mQZQj/Dg=;
+        b=JG98tPKBS2oAE6VJ2P5Jg3aQ9bB1/v1T/HNNTTzkfdH9D4rse57cUo9B5tNtaDarBI
+         S4Zvjsrm+s6cqQotZ5WtNSVxcVkguIet531yXmjxFrP4yv3eEPeNevFgDUid3kUKVLrV
+         MwcIK8Y+IIPQa5Eu/bkD5wF+qbHvPbWRyMX+hzbpPDGAP0AKgNo1sXa9KB2FVAFS3Lf8
+         AcDeVB9jrvW3T4Weesz/y9ALL6f10v2GAKjjukLAtGEfQyt6O70KWcw3sVtXwxz7GlES
+         JwbzbVZdCfiqCU6Jql/ymK12IQ8fyOK2OA10YwGOe4DiQfPthvctuqdyQVUHr7QIzapm
+         s6bQ==
+X-Gm-Message-State: AOAM53025Dar+MchkX/B8Y719kdHgYYlcZuu9i0XAFww7Cxu4BsNKByq
+        yBVvNaZ3EOOXKNajaz48dz0ZkQaIKSM=
+X-Google-Smtp-Source: ABdhPJx05JabQpq/ut8e8/5ioqnIN+RlsCKYp/ex9IygkcdWQUen1wpYPyvnQVZtVPKMiFCg5W3lOQ==
+X-Received: by 2002:a9d:6394:: with SMTP id w20mr12681958otk.248.1640034494688;
+        Mon, 20 Dec 2021 13:08:14 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e3sm3426950otk.71.2021.12.20.13.08.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 13:08:12 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Fix getting the optional clock
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212170247.30646-1-semen.protsenko@linaro.org>
+ <b618ff5b-ee41-2c29-5074-24fd4d0f0933@canonical.com>
+ <CAPLW+4=wcWv4P_M8kQDjB=QfT5N+mFKm0mUdSDjGSgLg=pRGSw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <4ad8719c-1476-3226-e426-a171b46ca568@roeck-us.net>
+Date:   Mon, 20 Dec 2021 13:08:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPLW+4=wcWv4P_M8kQDjB=QfT5N+mFKm0mUdSDjGSgLg=pRGSw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Furquan Shaikh <furquan@google.com>
+On 12/20/21 7:15 AM, Sam Protsenko wrote:
+> On Sun, 12 Dec 2021 at 19:50, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 12/12/2021 18:02, Sam Protsenko wrote:
+>>> "watchdog_src" clock is optional and may not be present for some SoCs
+>>> supported by this driver. Nevertheless, in case the clock is provided
+>>> but some error happens during its getting, that error should be handled
+>>> properly. Use devm_clk_get_optional() API for that. Also report possible
+>>> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+>>> clock provider is not ready by the time WDT probe function is executed).
+>>>
+>>> Fixes: a4f3dc8d5fbc ("watchdog: s3c2410: Support separate source clock")
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+>>> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+>>> ---
+>>>   drivers/watchdog/s3c2410_wdt.c | 22 ++++++++++++----------
+>>>   1 file changed, 12 insertions(+), 10 deletions(-)
+>>>
+>>
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+> 
+> Hi Guenter,
+> 
+> If there are no outstanding concerns, can you please apply this one?
+> Would be nice to see it in v5.17 if that's possible.
+> 
 
-Dear Linux folks,
+I added the patch to my watchdog-next tree, but Wim handles all pull
+requests.
 
+Thanks,
+Guenter
 
-Google Chromebooks are often built with devices sourced from different
-vendors. These need to be probed. To deal with this, the firmware – in
-this case coreboot – tags such optional devices accordingly – I think
-this is commit fbf2c79b (drivers/i2c/generic: Add config for marking
-device as probed) – and Chromium OS’ Linux kernel has the patch at hand
-applied to act accordingly. Right after the merge, Dmitry created a
-revert, which was actively discussed for two days but wasn’t applied.
-That means, millions of devices shipped with such a firmware and Linux
-kernel. To support these devices with upstream Linux kernel, is there an
-alternative to applying the patch to the Linux kernel, and to support
-the shipped devices?
-
-
-Kind regards,
-
-Paul
-
-
-[1]: https://review.coreboot.org/c/coreboot/+/16742/
-[2]: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/1104997
-
---------------- 8< -------------------------- >8 ---------------
-
-Add a new device property to indicate if an I2C device should be
-probed before being added.  If this property is present and set
-then the I2C core layer will use i2c_new_probed_device() instead
-of i2c_new_device().
-
-This can be used to provide devices in ACPI or DT that may not be
-present on the board.  For example, multiple trackpad vendors can
-be supported on a single board with a unified firmware image this
-way by having their device address be probed before being added.
-
-This property is styled after the PCI Host Bridge probe property
-(bindings/pci/host-generic-pci.txt:linuxk,pci-probe-only) and is
-a linux specific directive to alter device probing.
-
-BUG=b:110013532
-TEST=tested on soraka with 4.14 kernel:
-1) add "linux,probed=1" device property to the touchscreen ACPI device
-on soraka and ensure that the device is probed before being added.
-
-tested on yorp with 4.14 kernel:
-1) I2C devices without the "linux,probed=1" device property are still
-functional.
-
-Original-change-Id: I9cf689f7b75ef445c1f0e9f7ec143fa695eb398e
-Original-signed-off-by: Duncan Laurie <dlaurie@chromium.org>
-Original-reviewed-on: https://chromium-review.googlesource.com/388767
-Original-reviewed-by: Benson Leung <bleung@chromium.org>
-
-Change-Id: I54015fe102f2834f6a094d9e650c166a0cc0583b
-Signed-off-by: Furquan Shaikh <furquan@google.com>
-Reviewed-on: https://chromium-review.googlesource.com/1100544
-Commit-Ready: Furquan Shaikh <furquan@chromium.org>
-Tested-by: Furquan Shaikh <furquan@chromium.org>
-Reviewed-by: Justin TerAvest <teravest@chromium.org>
-
-Conflicts:
-	drivers/i2c/i2c-core-of.c
-
-[rebase419(groeck): Context conflicts]
-Signed-off-by: Guenter Roeck <groeck@chromium.org>
-[rebase510(groeck): Context conflicts]
-Signed-off-by: Guenter Roeck <groeck@chromium.org>
-Change-Id: Id10adae00b381e62813fd6b8ce7c6c50f140c31b
----
- Documentation/devicetree/bindings/i2c/i2c.txt |  5 +++++
- drivers/i2c/i2c-core-acpi.c                   | 12 +++++++++++-
- drivers/i2c/i2c-core-of.c                     | 10 +++++++++-
- 3 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-index b864916e087f..4921ee57f4c1 100644
---- a/Documentation/devicetree/bindings/i2c/i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-@@ -133,6 +133,11 @@ wants to support one of the below features, it should adapt these bindings.
- - wakeup-source
- 	device can be used as a wakeup source.
- 
-+- linux,probed
-+	If this property is present, then the I2C device will be
-+	probed before being added using i2c_new_scanned_device, else
-+	linux will instantiate the I2C device normally.
-+
- Binding may contain optional "interrupts" property, describing interrupts
- used by the device. I2C core will assign "irq" interrupt (or the very first
- interrupt if not using interrupt names) as primary interrupt for the slave.
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 92c1cc07ed46..c970d99e4438 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -254,10 +254,20 @@ static void i2c_acpi_register_device(struct i2c_adapter *adapter,
- 				     struct acpi_device *adev,
- 				     struct i2c_board_info *info)
- {
-+	struct i2c_client *client;
-+
- 	adev->power.flags.ignore_parent = true;
- 	acpi_device_set_enumerated(adev);
- 
--	if (IS_ERR(i2c_new_client_device(adapter, info)))
-+	if (!acpi_dev_get_property(adev, "linux,probed", ACPI_TYPE_ANY, NULL)) {
-+		unsigned short addrs[] = { info->addr, I2C_CLIENT_END };
-+
-+		client = i2c_new_scanned_device(adapter, info, addrs, NULL);
-+	} else {
-+		client = i2c_new_client_device(adapter, info);
-+	}
-+
-+	if (IS_ERR(client))
- 		adev->power.flags.ignore_parent = false;
- }
- 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index 3ed74aa4b44b..fd375ce38a9e 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -75,7 +75,15 @@ static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--	client = i2c_new_client_device(adap, &info);
-+	/* Allow device property to enable probing before init */
-+	if (of_get_property(node, "linux,probed", NULL)) {
-+		unsigned short addrs[] = { info.addr, I2C_CLIENT_END };
-+
-+		client = i2c_new_scanned_device(adap, &info, addrs, NULL);
-+	} else {
-+		client = i2c_new_client_device(adap, &info);
-+	}
-+
- 	if (IS_ERR(client))
- 		dev_err(&adap->dev, "of_i2c: Failure registering %pOF\n", node);
- 
--- 
-2.34.1
 

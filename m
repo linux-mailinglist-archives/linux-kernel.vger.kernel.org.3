@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C91847B0BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D122147B0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbhLTPzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S237644AbhLTPzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbhLTPzF (ORCPT
+        with ESMTP id S237485AbhLTPza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:55:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4544FC061574;
-        Mon, 20 Dec 2021 07:55:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D61E5611DF;
-        Mon, 20 Dec 2021 15:55:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B207DC36AE7;
-        Mon, 20 Dec 2021 15:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640015704;
-        bh=dUn/siHCed+00iFm6+pbfrfR17i6Fgn0zXZ5qKc0C9g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SPqciD3W7ys3TkAP7vRIEcOvkw/yVFTld83zJs9H67NGf+/y92yA4sRT6n5/ex7vk
-         OOC2FYgA/dVG65wUoL0/mLtPiHF0yX1gl295zBN6vPBD9+rPqbPVImHIkb4IEmAn2Q
-         I27qoKpzCP8WgIaJ1uHV05gnX/eFWbFkw45cU+F4=
-Date:   Mon, 20 Dec 2021 16:55:01 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
-Message-ID: <YcCnVfp2DWuVlXIw@kroah.com>
-References: <20211204195757.8600-1-semen.protsenko@linaro.org>
- <20211204195757.8600-4-semen.protsenko@linaro.org>
- <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
- <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
+        Mon, 20 Dec 2021 10:55:30 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BF6C061574;
+        Mon, 20 Dec 2021 07:55:29 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id i22so20964949wrb.13;
+        Mon, 20 Dec 2021 07:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9FPHt4xWJuyC6gdHJsu28XiwBLFa9d5usSSlTiDeCYw=;
+        b=c8IvuhTEtIBHwwXw3dX7LRmVixLdlxaYUGHybVAQVwwXG4eQf5J9X+YhrOyRL4UC6D
+         paFv3FscJAJQkAz95YljUdLLhbJgjoI+neVJzFFNvrzHWoHRR2I7dzn+VFC6C4BnehdG
+         alldIw57cUKc1XEoGWI5UOwFn9BnUG5oEoAf9gGbeKGzSwSC7HtAIeRBMmdKWq0X8cTB
+         GSKrT94y4n8EwBdtJ+qFhdLROCaG8RJHs7npZpsSO54NMrZRzTolMgmyuuwqBXxVqk2q
+         kQAe38bZkALupoYJH+oHaLJys8da9nGG3z/BuTUdQjmwrw/9ot35gWUCne0AekE+oPV6
+         0jPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9FPHt4xWJuyC6gdHJsu28XiwBLFa9d5usSSlTiDeCYw=;
+        b=Motu4rFJqh3mjuZ68FlMy7IH9Yl4tuYBTHj2WODL1NLeokrswU0dV6j+SZkn4QjiJ1
+         rxpBV+cLLazH/5kgAjCiobj6OdRVm6Qqszpjdz2ggfH/CzRGe/F1fYG1BUyEpyVGHkW4
+         VxiZ3vGYtR0spiYkEaJkAn+KRDltCoCiTf0hdwhJeALxOoqfztyVVtXgSUDoPuUmR2Bl
+         PPOlJ7brCZxrUXP3yL/3ZNE814m7343q2submd9dtmjBGsKQC3LgFg6qT5H+Ux5bTHW6
+         KKtMqJBv+IQ8F7TenE14Dom5fotsXc6GygLpAfBkcbrCAOMR2UwbrYa/XULyOL9SIZ8P
+         tJSg==
+X-Gm-Message-State: AOAM530blkJXwWxxVVR9aCK27Qu0XVE9KROR/hCk8DX00rS5RWbx81Td
+        1AVoDceV3nBd06iqVMJURF4=
+X-Google-Smtp-Source: ABdhPJzhHDlAtzMTkmgBhfZNL3YQOcg2PDhKP1f6lkVEeVqJ3mrcrGIKbbldJpB3rP45ucn6NZAhhA==
+X-Received: by 2002:a5d:47ab:: with SMTP id 11mr5624491wrb.249.1640015728498;
+        Mon, 20 Dec 2021 07:55:28 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id b19sm21053664wmb.38.2021.12.20.07.55.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 07:55:28 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] hwmon/pmbus: (ir38064): Fix spelling mistake "comaptible" -> "compatible"
+Date:   Mon, 20 Dec 2021 15:55:27 +0000
+Message-Id: <20211220155527.179125-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPLW+4m0vYZUujki6D4KHV3TjBCZvnO-cZuoOatefQpfTEV3Yw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 05:21:16PM +0200, Sam Protsenko wrote:
-> On Mon, 13 Dec 2021 at 13:35, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
-> >
-> > On 04/12/2021 20:57, Sam Protsenko wrote:
-> > > USI control is now extracted to the dedicated USI driver. Remove USI
-> > > related code from serial driver to avoid conflicts and code duplication.
-> > >
-> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > > ---
-> > > Changes in v3:
-> > >   - Spell check fixes in commit message
-> > >
-> > > Changes in v2:
-> > >   - (none)
-> > >
-> > >  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
-> > >  include/linux/serial_s3c.h       |  9 --------
-> > >  2 files changed, 4 insertions(+), 41 deletions(-)
-> > >
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >
-> > Greg,
-> > If you are fine with the changes, please take the serial driver changes
-> > via your tree.
-> >
-> 
-> Hi Greg,
-> 
-> If it's ok with you, can you please apply patches 3, 4 and 5 from this
-> series? If it's possible, would be nice to see those in v5.17.
+There is a spelling mistake in the module description, fix it.
 
-All now queued up, thanks.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/hwmon/pmbus/ir38064.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/hwmon/pmbus/ir38064.c b/drivers/hwmon/pmbus/ir38064.c
+index 07bdbb16f216..0ea7e1c18bdc 100644
+--- a/drivers/hwmon/pmbus/ir38064.c
++++ b/drivers/hwmon/pmbus/ir38064.c
+@@ -85,6 +85,6 @@ static struct i2c_driver ir38064_driver = {
+ module_i2c_driver(ir38064_driver);
+ 
+ MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
+-MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and comaptible chips");
++MODULE_DESCRIPTION("PMBus driver for Infineon IR38064 and compatible chips");
+ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS(PMBUS);
+-- 
+2.33.1
+

@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF52147AE0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615CC47ACA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238476AbhLTO5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:57:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46068 "EHLO
+        id S234458AbhLTOqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:46:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37592 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbhLTOzK (ORCPT
+        with ESMTP id S234533AbhLTOoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:55:10 -0500
+        Mon, 20 Dec 2021 09:44:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF6DA61183;
-        Mon, 20 Dec 2021 14:55:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22DAC36AE7;
-        Mon, 20 Dec 2021 14:55:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68B626118D;
+        Mon, 20 Dec 2021 14:44:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A4C0C36AE8;
+        Mon, 20 Dec 2021 14:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012109;
-        bh=DcS1kQu9uoZzMqnZFeyaO4n1fQSLk//0KGaisgS3BCY=;
+        s=korg; t=1640011459;
+        bh=b6NgPVRwfRgKLmvnSqpgc95a8jTgmREj3B5OR1Wry2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTUJ+nLjWk2D629HCHJ4quImELd3CQIjsLEu9lf1IGcuz10v4rVpOL8tzAT7NeXN1
-         og1UJvJFDSalDRw97bk4m2iVwAH6ayE7dOM9ypeCymqqcTgACrGRF5cIHUcp2x3ao2
-         J6sRJKrpU8WLAk0s1BqgGrGL78H2C/B7/wg9cyAc=
+        b=kA2apAX0GqK916el5u2lyNnpG++gCjiLAbFBmSKccYOR74TuG+Ef6RGEUbxrdHLOH
+         MlrlHczd8zoaU+cAwx6x6aR1tu2ZRz52lilPppISN7wZEwt2eNAfgp4hEohk/C0TVh
+         pe4eX+/apPTZxaRWLCQt7C7j162CMqIaECwJNu0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baowen Zheng <baowen.zheng@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 084/177] flow_offload: return EOPNOTSUPP for the unsupported mpls action type
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Steven Price <steven.price@arm.com>
+Subject: [PATCH 5.4 05/71] virtio_ring: Fix querying of maximum DMA mapping size for virtio device
 Date:   Mon, 20 Dec 2021 15:33:54 +0100
-Message-Id: <20211220143042.929564933@linuxfoundation.org>
+Message-Id: <20211220143025.859891849@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baowen Zheng <baowen.zheng@corigine.com>
+From: Will Deacon <will@kernel.org>
 
-[ Upstream commit 166b6a46b78bf8b9559a6620c3032f9fe492e082 ]
+commit 817fc978b5a29b039db0418a91072b31c9aab152 upstream.
 
-We need to return EOPNOTSUPP for the unsupported mpls action type when
-setup the flow action.
+virtio_max_dma_size() returns the maximum DMA mapping size of the virtio
+device by querying dma_max_mapping_size() for the device when the DMA
+API is in use for the vring. Unfortunately, the device passed is
+initialised by register_virtio_device() and does not inherit the DMA
+configuration from its parent, resulting in SWIOTLB errors when bouncing
+is enabled and the default 256K mapping limit (IO_TLB_SEGSIZE) is not
+respected:
 
-In the original implement, we will return 0 for the unsupported mpls
-action type, actually we do not setup it and the following actions
-to the flow action entry.
+  | virtio-pci 0000:00:01.0: swiotlb buffer is full (sz: 294912 bytes), total 1024 (slots), used 725 (slots)
 
-Fixes: 9838b20a7fb2 ("net: sched: take rtnl lock in tc_setup_flow_action()")
-Signed-off-by: Baowen Zheng <baowen.zheng@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Follow the pattern used elsewhere in the virtio_ring code when calling
+into the DMA layer and pass the parent device to dma_max_mapping_size()
+instead.
+
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Quentin Perret <qperret@google.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/r/20211201112018.25276-1-will@kernel.org
+Acked-by: Jason Wang <jasowang@redhat.com>
+Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/virtio/virtio_ring.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 2ef8f5a6205a9..e54f0a42270c1 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -3687,6 +3687,7 @@ int tc_setup_flow_action(struct flow_action *flow_action,
- 				entry->mpls_mangle.ttl = tcf_mpls_ttl(act);
- 				break;
- 			default:
-+				err = -EOPNOTSUPP;
- 				goto err_out_locked;
- 			}
- 		} else if (is_tcf_skbedit_ptype(act)) {
--- 
-2.33.0
-
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -263,7 +263,7 @@ size_t virtio_max_dma_size(struct virtio
+ 	size_t max_segment_size = SIZE_MAX;
+ 
+ 	if (vring_use_dma_api(vdev))
+-		max_segment_size = dma_max_mapping_size(&vdev->dev);
++		max_segment_size = dma_max_mapping_size(vdev->dev.parent);
+ 
+ 	return max_segment_size;
+ }
 
 

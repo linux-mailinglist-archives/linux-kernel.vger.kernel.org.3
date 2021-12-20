@@ -2,125 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C9647B1F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3618547B1F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240113AbhLTRQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbhLTRQH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:16:07 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F6C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:16:07 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id p23so14211290iod.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v5//0K87lk7Jc0WpZqUISoaFtZRXpKHfv2jyt4Plt/w=;
-        b=Za2uc0ZjTJ3p7WVdGb4nQkLZieOH7j/VDhp98Z9W+IYUofMP1w/JsWzlLKdizHQnGm
-         gUirx1Y05APskSBSeXCdqF5VSvcenrw31YK6F4yr5VBtvfZTezZHObxyLbAdF0EsCPVi
-         WrYh4uFoQr7T9bgwA928tLKaHMp2wOCGdDY4da8TJ6EM2tliWSSTPv/Nl1v2MTID7JJh
-         u7hwIzAxpmfcSAK2+lmGInyVDf9COj71UBT30VYGVJ2ZbJmwg3cbLCmDhQMIRODY4JZH
-         WvKNsLsNAwof/cm38B7oepvXWXJNxl+2rDIG4/RONshtwQ+v8iR8cJYejQ4cbBAU4Lw3
-         Bwtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v5//0K87lk7Jc0WpZqUISoaFtZRXpKHfv2jyt4Plt/w=;
-        b=2Jcv7SdossO3A2O9yOHCK0gZCK+9jba+3yqLExE2xdMn75ZFG8zhH5MbseNVwbGno/
-         KPZI4HRmm1oRSVLHv4jnt4zyWafhYlKyXNFz4eSU58Az6NZVhK1ZpW19dqNg85EN7mH4
-         CWcdvW6fJn88PaBmV6VemmYTGyoRzLencty4FnR+hbhV35IwRLx/zuDzL9yCocqQgFDV
-         R0QNQYDm/KTlLSWjmi8LDzsyrpVa+yQMho0Accl4lP/8Dxsq/ECWpo3kD+YyGbI+Hwch
-         0M66meaIovnYC5JtGsrECoENl8NKrf4TMAapV92CFpeRj4baja+cOxt8rh5L/Mqxqh7m
-         UB5g==
-X-Gm-Message-State: AOAM532BZE4do/+HWZQDnfwlQHsPw+9uR4PKpIQ3WwxRQ4fiQPqCK3gj
-        qA+Re1z4jw56djUTHVO292ENixgY/PYDGQIgEZ8=
-X-Google-Smtp-Source: ABdhPJzYaK1o82lVW6qc2Ewtyf3k01M4kblzuMz0WaRPqu4xRADToqCEQ3NmL5KgB9B9vJw2gUnJ9Z7VCUm+dC7xsv0=
-X-Received: by 2002:a02:864b:: with SMTP id e69mr11110608jai.9.1640020566762;
- Mon, 20 Dec 2021 09:16:06 -0800 (PST)
+        id S240117AbhLTRRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:17:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:59888 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233227AbhLTRRS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 12:17:18 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C6ACD6E;
+        Mon, 20 Dec 2021 09:17:17 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D723F774;
+        Mon, 20 Dec 2021 09:17:15 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, qperret@google.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: Re: [PATCH 1/3] sched/fair: Make cpu_overutilized() EAS dependent
+In-Reply-To: <20211220114323.22811-2-vincent.donnefort@arm.com>
+References: <20211220114323.22811-1-vincent.donnefort@arm.com> <20211220114323.22811-2-vincent.donnefort@arm.com>
+Date:   Mon, 20 Dec 2021 17:17:09 +0000
+Message-ID: <875yrj8acq.mognet@arm.com>
 MIME-Version: 1.0
-References: <a746b5baebbf79f8160c1fe09d6f8a5ab7bde1d7.1640017993.git.andreyknvl@google.com>
- <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com>
-In-Reply-To: <CANpmjNP11JKCEE328XomcReP7uBwZ=da=SD5OS09N4co-WPhMQ@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 20 Dec 2021 18:15:56 +0100
-Message-ID: <CA+fCnZcMWA_VT83dXqD-bFJGG073KWPnULAPYK1=BhQkGsHzUQ@mail.gmail.com>
-Subject: Re: [PATCH] kasan: fix quarantine conflicting with init_on_free
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 6:07 PM Marco Elver <elver@google.com> wrote:
+On 20/12/21 12:43, Vincent Donnefort wrote:
+> On a system with Energy Aware Scheduling (EAS), tasks are placed according
+> to their energy consumption estimation and load balancing is disabled to
+> not break that energy biased placement. If the system becomes
+> overutilized, i.e. one of the CPU has too much utilization, energy
+> placement would then be disabled, in favor of Capacity-Aware Scheduling
+> (CAS), including load balancing. This is the sole usage for
+> rd->overutilized. Hence, there is no need to raise it for !EAS systems.
 >
-> On Mon, 20 Dec 2021 at 17:37, <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > KASAN's quarantine might save its metadata inside freed objects. As
-> > this happens after the memory is zeroed by the slab allocator when
-> > init_on_free is enabled, the memory coming out of quarantine is not
-> > properly zeroed.
-> >
-> > This causes lib/test_meminit.c tests to fail with Generic KASAN.
-> >
-> > Zero the metadata when the object is removed from quarantine.
-> >
-> > Fixes: 6471384af2a6 ("mm: security: introduce init_on_alloc=1 and init_on_free=1 boot options")
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  mm/kasan/quarantine.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
-> > index 587da8995f2d..2e50869fd8e2 100644
-> > --- a/mm/kasan/quarantine.c
-> > +++ b/mm/kasan/quarantine.c
-> > @@ -132,11 +132,22 @@ static void *qlink_to_object(struct qlist_node *qlink, struct kmem_cache *cache)
-> >  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
-> >  {
-> >         void *object = qlink_to_object(qlink, cache);
-> > +       struct kasan_free_meta *meta = kasan_get_free_meta(cache, object);
-> >         unsigned long flags;
-> >
-> >         if (IS_ENABLED(CONFIG_SLAB))
-> >                 local_irq_save(flags);
-> >
-> > +       /*
-> > +        * If init_on_free is enabled and KASAN's free metadata is stored in
-> > +        * the object, zero the metadata. Otherwise, the object's memory will
-> > +        * not be properly zeroed, as KASAN saves the metadata after the slab
-> > +        * allocator zeroes the object.
-> > +        */
-> > +       if (slab_want_init_on_free(cache) &&
-> > +           cache->kasan_info.free_meta_offset == 0)
-> > +               memset(meta, 0, sizeof(*meta));
->
-> memzero_explicit()
->
-> although in this case it probably doesn't matter much, because AFAIK
-> memzero_explicit() only exists to prevent the compiler from eliding
-> the zeroing. Up to you.
+> Fixes: 2802bf3cd936 ("sched/fair: Add over-utilization/tipping point indicator")
 
-I've thought about using memzero_explicit(), but the rest of
-init_on_alloc/free code uses memset(0) so I decided to use it as well.
-If we decide to switch to memzero_explicit(), it makes sense to do it
-everywhere.
+I'm not sure a Fixes: is warranted, this does not fix any misbehaviour or
+performance regression (even if this might gain us a few extra IPS by not
+writing 1's to rd->overutilized on SMP systems, note that this still gives
+us writes of 0's).
 
-Thanks!
+Regardless:
+
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 095b0aa378df..e2f6fa14e5e7 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5511,7 +5511,8 @@ static inline void hrtick_update(struct rq *rq)
+>  #ifdef CONFIG_SMP
+>  static inline bool cpu_overutilized(int cpu)
+>  {
+> -	return !fits_capacity(cpu_util_cfs(cpu), capacity_of(cpu));
+> +	return sched_energy_enabled() &&
+> +	       !fits_capacity(cpu_util_cfs(cpu), capacity_of(cpu));
+>  }
+>
+>  static inline void update_overutilized_status(struct rq *rq)
+> --
+> 2.25.1

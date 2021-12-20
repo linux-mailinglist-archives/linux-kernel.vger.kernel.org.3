@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E4347AD94
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF5647AD0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237982AbhLTOxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:53:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56470 "EHLO
+        id S235840AbhLTOsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:48:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53698 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238056AbhLTOuL (ORCPT
+        with ESMTP id S236561AbhLTOq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:50:11 -0500
+        Mon, 20 Dec 2021 09:46:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC21B80EE2;
-        Mon, 20 Dec 2021 14:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398D0C36AE7;
-        Mon, 20 Dec 2021 14:50:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B4EFB80EF3;
+        Mon, 20 Dec 2021 14:46:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C00C36AE7;
+        Mon, 20 Dec 2021 14:46:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011808;
-        bh=+f6m40EZF7yZkfpitj3u4s0A5NywEtwm+E7ttWvfx+g=;
+        s=korg; t=1640011586;
+        bh=mPOXdywiNgez/cpj/HBA1FgW7l5G4gjtznryOfMHgnk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbA8yNtCeWv6rA5cDzYNLSc0udIBrMxDYMC+x20prDxKFO3CPP9kdcfmk6RLbekzt
-         /jWYL0TEUqfikBySoVkpMvGYozlMvtcWN6NcFKPVFIB1MsyVGYOfT9quRmpYzXFPKG
-         07lzXX2DyCJxxzw8+wCYRPRAorTLExYIcrafazlM=
+        b=HqQ9qc5Dg5dyEFYSwrFcyeeVkmHrsrj9Xx4/35HDCe68p0L/L0SB0+Y8e5seC/y28
+         bBVI3q1nzO3swFIKQYkE0oTf6Xej5iuferAxS7doe+5EnYYw1OgK2uK9P2Wq21+MYf
+         Q+LA2p5+f0d4O9LqAJVHiTWckbjlritEOtr0Bw/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.10 80/99] timekeeping: Really make sure wall_to_monotonic isnt positive
-Date:   Mon, 20 Dec 2021 15:34:53 +0100
-Message-Id: <20211220143032.099180083@linuxfoundation.org>
+        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 65/71] net: sched: Fix suspicious RCU usage while accessing tcf_tunnel_info
+Date:   Mon, 20 Dec 2021 15:34:54 +0100
+Message-Id: <20211220143027.866362426@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,65 +46,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Liao <liaoyu15@huawei.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit 4e8c11b6b3f0b6a283e898344f154641eda94266 upstream.
+commit d086a1c65aabb5a4e1edc580ca583e2964c62b44 upstream.
 
-Even after commit e1d7ba873555 ("time: Always make sure wall_to_monotonic
-isn't positive") it is still possible to make wall_to_monotonic positive
-by running the following code:
+The access of tcf_tunnel_info() produces the following splat, so fix it
+by dereferencing the tcf_tunnel_key_params pointer with marker that
+internal tcfa_liock is held.
 
-    int main(void)
-    {
-        struct timespec time;
+ =============================
+ WARNING: suspicious RCU usage
+ 5.9.0+ #1 Not tainted
+ -----------------------------
+ include/net/tc_act/tc_tunnel_key.h:59 suspicious rcu_dereference_protected() usage!
+ other info that might help us debug this:
 
-        clock_gettime(CLOCK_MONOTONIC, &time);
-        time.tv_nsec = 0;
-        clock_settime(CLOCK_REALTIME, &time);
-        return 0;
-    }
+ rcu_scheduler_active = 2, debug_locks = 1
+ 1 lock held by tc/34839:
+  #0: ffff88828572c2a0 (&p->tcfa_lock){+...}-{2:2}, at: tc_setup_flow_action+0xb3/0x48b5
+ stack backtrace:
+ CPU: 1 PID: 34839 Comm: tc Not tainted 5.9.0+ #1
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+ Call Trace:
+  dump_stack+0x9a/0xd0
+  tc_setup_flow_action+0x14cb/0x48b5
+  fl_hw_replace_filter+0x347/0x690 [cls_flower]
+  fl_change+0x2bad/0x4875 [cls_flower]
+  tc_new_tfilter+0xf6f/0x1ba0
+  rtnetlink_rcv_msg+0x5f2/0x870
+  netlink_rcv_skb+0x124/0x350
+  netlink_unicast+0x433/0x700
+  netlink_sendmsg+0x6f1/0xbd0
+  sock_sendmsg+0xb0/0xe0
+  ____sys_sendmsg+0x4fa/0x6d0
+  ___sys_sendmsg+0x12e/0x1b0
+  __sys_sendmsg+0xa4/0x120
+  do_syscall_64+0x2d/0x40
+  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+ RIP: 0033:0x7f1f8cd4fe57
+ Code: 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 89 54 24 1c 48 89 74 24 10
+ RSP: 002b:00007ffdc1e193b8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+ RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1f8cd4fe57
+ RDX: 0000000000000000 RSI: 00007ffdc1e19420 RDI: 0000000000000003
+ RBP: 000000005f85aafa R08: 0000000000000001 R09: 00007ffdc1e1936c
+ R10: 000000000040522d R11: 0000000000000246 R12: 0000000000000001
+ R13: 0000000000000000 R14: 00007ffdc1e1d6f0 R15: 0000000000482420
 
-The reason is that the second parameter of timespec64_compare(), ts_delta,
-may be unnormalized because the delta is calculated with an open coded
-substraction which causes the comparison of tv_sec to yield the wrong
-result:
-
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec =  -9, .tv_nsec = -900000000 }
-
-That makes timespec64_compare() claim that wall_to_monotonic < ts_delta,
-but actually the result should be wall_to_monotonic > ts_delta.
-
-After normalization, the result of timespec64_compare() is correct because
-the tv_sec comparison is not longer misleading:
-
-  wall_to_monotonic = { .tv_sec = -10, .tv_nsec =  900000000 }
-  ts_delta 	    = { .tv_sec = -10, .tv_nsec =  100000000 }
-
-Use timespec64_sub() to ensure that ts_delta is normalized, which fixes the
-issue.
-
-Fixes: e1d7ba873555 ("time: Always make sure wall_to_monotonic isn't positive")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211213135727.1656662-1-liaoyu15@huawei.com
+Fixes: 3ebaf6da0716 ("net: sched: Do not assume RTNL is held in tunnel key action helpers")
+Fixes: 7a47281439ba ("net: sched: lock action when translating it to flow_action infra")
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Acked-by: Cong Wang <xiyou.wangcong@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/time/timekeeping.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/net/tc_act/tc_tunnel_key.h |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -1310,8 +1310,7 @@ int do_settimeofday64(const struct times
- 	timekeeping_forward_now(tk);
+--- a/include/net/tc_act/tc_tunnel_key.h
++++ b/include/net/tc_act/tc_tunnel_key.h
+@@ -52,7 +52,10 @@ static inline struct ip_tunnel_info *tcf
+ {
+ #ifdef CONFIG_NET_CLS_ACT
+ 	struct tcf_tunnel_key *t = to_tunnel_key(a);
+-	struct tcf_tunnel_key_params *params = rtnl_dereference(t->params);
++	struct tcf_tunnel_key_params *params;
++
++	params = rcu_dereference_protected(t->params,
++					   lockdep_is_held(&a->tcfa_lock));
  
- 	xt = tk_xtime(tk);
--	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
--	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
-+	ts_delta = timespec64_sub(*ts, xt);
- 
- 	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
- 		ret = -EINVAL;
+ 	return &params->tcft_enc_metadata->u.tun_info;
+ #else
 
 

@@ -2,149 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA3F47AA9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 805C947AACB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbhLTNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:48:44 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15951 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbhLTNs1 (ORCPT
+        id S232529AbhLTOAp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Dec 2021 09:00:45 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:58469 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232320AbhLTOAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:48:27 -0500
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JHgnq29CyzZdgq;
-        Mon, 20 Dec 2021 21:45:19 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 21:48:25 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 20 Dec
- 2021 21:48:25 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>
-Subject: [PATCH v5 14/14] ubifs: ubifs_releasepage: Remove ubifs_assert(0) to valid this process
-Date:   Mon, 20 Dec 2021 21:59:51 +0800
-Message-ID: <20211220135951.4075801-15-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211220135951.4075801-1-chengzhihao1@huawei.com>
-References: <20211220135951.4075801-1-chengzhihao1@huawei.com>
+        Mon, 20 Dec 2021 09:00:44 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-106-ThBTv8hIOJK8PeJnyhEimg-1; Mon, 20 Dec 2021 14:00:42 +0000
+X-MC-Unique: ThBTv8hIOJK8PeJnyhEimg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 14:00:40 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 20 Dec 2021 14:00:40 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "woojung.huh@microchip.com" <woojung.huh@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ulli.kroll@googlemail.com" <ulli.kroll@googlemail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "amitkarwar@gmail.com" <amitkarwar@gmail.com>,
+        "nishants@marvell.com" <nishants@marvell.com>,
+        "gbhat@marvell.com" <gbhat@marvell.com>,
+        "huxinming820@gmail.com" <huxinming820@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andy Lavr <andy.lavr@gmail.com>
+Subject: RE: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+Thread-Topic: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
+ HostCmd_SET_SEQ_NO_BSS_INFO
+Thread-Index: AQHX9ZskhY8SD9NuYU2K0YFKH5iuIKw7ZcMg
+Date:   Mon, 20 Dec 2021 14:00:40 +0000
+Message-ID: <5797d1aff9034476afa6827af2bfbce7@AcuMS.aculab.com>
+References: <20211217144119.2538175-1-anders.roxell@linaro.org>
+         <20211217144119.2538175-4-anders.roxell@linaro.org>
+ <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
+In-Reply-To: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two states for ubifs writing pages:
-1. Dirty, Private
-2. Not Dirty, Not Private
+From: Joe Perches
+> Sent: 20 December 2021 12:13
+> 
+> On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
+> > From: Nathan Chancellor <natechancellor@gmail.com>
+> >
+> > commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+> >
+> > A new warning in clang points out when macro expansion might result in a
+> > GNU C statement expression. There is an instance of this in the mwifiex
+> > driver:
+> >
+> > drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
+> > ')' tokens terminating statement expression appear in different macro
+> > expansion contexts [-Wcompound-token-split-by-macro]
+> >         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
+> >                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> []
+> > diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
+> []
+> > @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
+> >
+> >  #define RF_ANTENNA_AUTO                 0xFFFF
+> >
+> > -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
+> > -	(((seq) & 0x00ff) |                             \
+> > -	 (((num) & 0x000f) << 8)) |                     \
+> > -	(((type) & 0x000f) << 12);                  }
+> > +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
+> > +	((((seq) & 0x00ff) |                        \
+> > +	 (((num) & 0x000f) << 8)) |                 \
+> > +	(((type) & 0x000f) << 12))
+> 
+> Perhaps this would be better as a static inline
+> 
+> static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
+> {
+> 	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
+> }
 
-The normal process cannot go to ubifs_releasepage() which means there
-exists pages being private but not dirty. Reproducer[1] shows that it
-could occur (which maybe related to [2]) with following process:
+Just writing in on one line helps readability!
+It is also used exactly twice, both with a cpu_to_le16().
+I wonder how well the compiler handles that on BE?
+The #define is more likely to be handled better.
 
-     PA                     PB                    PC
-lock(page)[PA]
-ubifs_write_end
-  attach_page_private         // set Private
-  __set_page_dirty_nobuffers  // set Dirty
-unlock(page)
+I've only made a cursory glance at the code, but I get splitting
+host_cmd->seq_num into two u8 fields would give better code!
 
-write_cache_pages[PA]
-  lock(page)
-  clear_page_dirty_for_io(page)	// clear Dirty
-  ubifs_writepage
+	David
 
-                        do_truncation[PB]
-			  truncate_setsize
-			    i_size_write(inode, newsize) // newsize = 0
-
-    i_size = i_size_read(inode)	// i_size = 0
-    end_index = i_size >> PAGE_SHIFT
-    if (page->index > end_index)
-      goto out // jump
-out:
-unlock(page)   // Private, Not Dirty
-
-						generic_fadvise[PC]
-						  lock(page)
-						  invalidate_inode_page
-						    try_to_release_page
-						      ubifs_releasepage
-						        ubifs_assert(c, 0)
-		                                        // bad assertion!
-						  unlock(page)
-
-Then we may get following assertion failed:
-  UBIFS error (ubi0:0 pid 1683): ubifs_assert_failed [ubifs]:
-  UBIFS assert failed: 0, in fs/ubifs/file.c:1513
-  UBIFS warning (ubi0:0 pid 1683): ubifs_ro_mode [ubifs]:
-  switched to read-only mode, error -22
-  CPU: 2 PID: 1683 Comm: aa Not tainted 5.16.0-rc5-00184-g0bca5994cacc-dirty #308
-  Call Trace:
-    dump_stack+0x13/0x1b
-    ubifs_ro_mode+0x54/0x60 [ubifs]
-    ubifs_assert_failed+0x4b/0x80 [ubifs]
-    ubifs_releasepage+0x67/0x1d0 [ubifs]
-    try_to_release_page+0x57/0xe0
-    invalidate_inode_page+0xfb/0x130
-    __invalidate_mapping_pages+0xb9/0x280
-    invalidate_mapping_pagevec+0x12/0x20
-    generic_fadvise+0x303/0x3c0
-    ksys_fadvise64_64+0x4c/0xb0
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=215373
-[2] https://linux-mtd.infradead.narkive.com/NQoBeT1u/patch-rfc-ubifs-fix-assert-failed-in-ubifs-set-page-dirty
-
-Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/ubifs/file.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ubifs/file.c b/fs/ubifs/file.c
-index 7cc2abcb70ae..4bafcb80d29c 100644
---- a/fs/ubifs/file.c
-+++ b/fs/ubifs/file.c
-@@ -1494,14 +1494,23 @@ static int ubifs_releasepage(struct page *page, gfp_t unused_gfp_flags)
- 	struct inode *inode = page->mapping->host;
- 	struct ubifs_info *c = inode->i_sb->s_fs_info;
- 
--	/*
--	 * An attempt to release a dirty page without budgeting for it - should
--	 * not happen.
--	 */
- 	if (PageWriteback(page))
- 		return 0;
-+
-+	/*
-+	 * Page is private but not dirty, weird? There is one condition
-+	 * making it happened. ubifs_writepage skipped the page because
-+	 * page index beyonds isize (for example. truncated by other
-+	 * process named A), then the page is invalidated by fadvise64
-+	 * syscall before being truncated by process A.
-+	 */
- 	ubifs_assert(c, PagePrivate(page));
--	ubifs_assert(c, 0);
-+	if (PageChecked(page))
-+		release_new_page_budget(c);
-+	else
-+		release_existing_page_budget(c);
-+
-+	atomic_long_dec(&c->dirty_pg_cnt);
- 	detach_page_private(page);
- 	ClearPageChecked(page);
- 	return 1;
--- 
-2.31.1
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

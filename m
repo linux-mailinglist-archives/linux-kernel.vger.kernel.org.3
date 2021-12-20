@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6150147A91D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8CF47A924
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbhLTLzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:55:55 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:47564 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbhLTLzy (ORCPT
+        id S231219AbhLTL60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:58:26 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53966 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLTL6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:55:54 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1640001352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 20 Dec 2021 06:58:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 41FF321116;
+        Mon, 20 Dec 2021 11:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640001504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/CUTvkF0ZJD/0bUX2KphRLF8+ED9CK1uoT06irTMlA8=;
-        b=HSeZ4MSHoOtA7+F6FETI6mp8k3+faOYIGAz2lfvwDy1sSASh6hTd2VQBM/xtD9dWQ6/+it
-        Xx1QiktSyrVJW+s/MoE14UBVxgCvvz4QKIShLntOLlYBJxOVA077qH2vgT/zKoawye+Uqx
-        snVV6hWDoQFRr82vrxuTiQA6fWGNWW8AQwrmHtXAqARcz5dCEF253M2O/8L7qxll49Y14E
-        5fSXcstjpAFKPqGx7Ea82OtzbwbxPCD/3HPgDpfoxqEWUh14UdrFA6upqctLwnFjwYbD3a
-        oi0s+ejfwagnJisgRBLJVVnUWCRjx+V6vSjMsZE6J9vLkzoXsCRI261DIG6qXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1640001352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=Lyu92K3KNUQI+miSQ0I6NCto7SdzSqFDwh12c/n/tyA=;
+        b=JvGdUX+E8HT3To2fRqgrKwt3CPvrj5pR4S7g4TQ4sCsK27gzgZHGyfPYBAh8bKhpvBjrsd
+        Yk1zF+vA2IibW3X5kFzHFKwGVKlW+TyurchWpoZqyDOxN7TeEMvtsb9ah4EvP7rNwms9QX
+        zEce2u13vqAjfGKS8rdSXp17W7uZLy0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640001504;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/CUTvkF0ZJD/0bUX2KphRLF8+ED9CK1uoT06irTMlA8=;
-        b=xrSZ1J5EcwueXFBw2+PxkXfD7FQuFpsVSXWU/APxdJHshmEM2RfAp9OAgcYlk78X64Avva
-        QQ/LsT2krF+p+kDg==
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 28/35] PCI/MSI: Simplify pci_irq_get_affinity()
-In-Reply-To: <ee5db32f-c21e-287f-2a19-94c1ba6e8217@kaod.org>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221814.900929381@linutronix.de>
- <Yb0PaCyo/6z3XOlf@archlinux-ax161> <87v8zm9pmd.ffs@tglx>
- <ee5db32f-c21e-287f-2a19-94c1ba6e8217@kaod.org>
-Date:   Mon, 20 Dec 2021 12:55:51 +0100
-Message-ID: <87pmpra3so.ffs@tglx>
+        bh=Lyu92K3KNUQI+miSQ0I6NCto7SdzSqFDwh12c/n/tyA=;
+        b=wd81YJ/ZaqTiPx57/r/zITbr8MA250oIhRsRTj50znOJ+06QuVtJc7zjc//YbrszfNUKLc
+        /4KvWXupviVQAxBg==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 07ED7A3B89;
+        Mon, 20 Dec 2021 11:58:23 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 93E841E1649; Mon, 20 Dec 2021 12:58:23 +0100 (CET)
+Date:   Mon, 20 Dec 2021 12:58:23 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        syzbot <syzbot+643e4ce4b6ad1347d372@syzkaller.appspotmail.com>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [loop] 322c4293ec: xfstests.xfs.049.fail
+Message-ID: <20211220115823.GB20005@quack2.suse.cz>
+References: <20211219150933.GJ14057@xsang-OptiPlex-9020>
+ <dd707dfd-6421-b1df-4820-e30787b84181@i-love.sakura.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd707dfd-6421-b1df-4820-e30787b84181@i-love.sakura.ne.jp>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18 2021 at 21:25, C=C3=A9dric Le Goater wrote:
+On Mon 20-12-21 00:45:46, Tetsuo Handa wrote:
+> On 2021/12/20 0:09, kernel test robot wrote:
+> >     @@ -13,3 +13,5 @@
+> >      --- clean
+> >      --- umount ext2 on xfs
+> >      --- umount xfs
+> >     +!!! umount xfs failed
+> >     +(see /lkp/benchmarks/xfstests/results//xfs/049.full for details)
+> >     ...
+> >     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/049.out /lkp/benchmarks/xfstests/results//xfs/049.out.bad'  to see the entire diff)
+> 
+> Yes, we know this race condition can happen.
+> 
+> https://lkml.kernel.org/r/16c7d304-60ef-103f-1b2c-8592b48f47c6@i-love.sakura.ne.jp
+> https://lkml.kernel.org/r/YaYfu0H2k0PSQL6W@infradead.org
+> 
+> Should we try to wait for autoclear operation to complete?
 
-> On 12/18/21 11:25, Thomas Gleixner wrote:
->> On Fri, Dec 17 2021 at 15:30, Nathan Chancellor wrote:
->>> On Fri, Dec 10, 2021 at 11:19:26PM +0100, Thomas Gleixner wrote:
->>> I just bisected a boot failure on my AMD test desktop to this patch as
->>> commit f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()") in
->>> -next. It looks like there is a problem with the NVMe drive after this
->>> change according to the logs. Given that the hard drive is not getting
->>> mounted for journald to write logs to, I am not really sure how to get
->>> them from the machine so I have at least taken a picture of what I see
->>> on my screen; open to ideas on that front!
->>=20
->> Bah. Fix below.
->
-> That's a fix for the issue I was seeing on pseries with NVMe.
->
-> Tested-by: C=C3=A9dric Le Goater <clg@kaod.org>
+So I think we should try to fix this because as Dave writes in the
+changelog for a1ecac3b0656 ("loop: Make explicit loop device destruction
+lazy") which started all this, having random EBUSY failures (either from
+losetup or umount) is annoying and you need to work it around it lots of
+unexpected places.
 
-I had a faint memory that I've seen that issue before, but couldn't find
-the mail in those massive threads.
+We cannot easily wait for work completion in the loop device code without
+reintroducing the deadlock - whole lo_release() is called under
+disk->open_mutex which you also need to grab in __loop_clr_fd(). So to
+avoid holding backing file busy longer than expected, we could use
+task_work instead of ordinary work as I suggested - but you were right that
+we need to be somewhat careful and in case we are running in a kthread, we
+would still need to offload to a normal work (but in that case we don't
+care about delaying file release anyway).
 
-Thanks for confirming!
-
-       tglx
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

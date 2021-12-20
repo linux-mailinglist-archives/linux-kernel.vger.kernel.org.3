@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9C47AA42
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A804147AA44
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbhLTNUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbhLTNUK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:20:10 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D68C061574;
-        Mon, 20 Dec 2021 05:20:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m21so11023734edc.0;
-        Mon, 20 Dec 2021 05:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KPcdrfLKkxhOvPXWy6bq391b76cEL5bWLUG4OI0ap0U=;
-        b=pUZLH/gRRsns4SZK3MVzCImWQYzN5LDb1Ix9/cuKjEcKBiMcDzFmxfPHWUv4gOXY4M
-         QYTizXBTcvDSL4xHlO5sHFvB41b3Q7XJY/H4yiODTytdQufSX/vHe+xDoblMGzw5+NFk
-         AKiJ8FULmSM+Xs0++6fS88sLzL1azjBJMOSvfut3l6fv//JQkcquylYPEYmg81n1Gq/U
-         QtH2V7PvK5NZEbvO8KX977MjMYuqvl95Ub08bGArwE7tEWk0O3kvAxyzE+FzRSOaXt3X
-         oOagw4X0QM0L+UrfZID2Xd1g84gevX2mzimfkd6hANY/NfYF//KCtf316oKN+pAmjLS6
-         lABw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KPcdrfLKkxhOvPXWy6bq391b76cEL5bWLUG4OI0ap0U=;
-        b=uVxtLEiFwSMWqmH93o11I9df0F3iBIL6J9y/WABmUqILqhkRBD9yx82/s/+YEYguT1
-         Hu18FaCsL0UonRZNbZ9tnJCpJvdTKA6IJnxypD+wrtQemL0mP/TgMXjvMLY7xN7rm3HA
-         qHH6fvFqG9JsjrqNaO1MQoRY3wCBWAJrl5oQ615CBpwHMyVftpQQYubla7/527ASkOfo
-         clYCoyzSjoTzQN8bj1mcHjR6iBBWJYqKNpvaxHFjbW5zoRin4eAePfE/GT1j627Jv0bF
-         HApeiVBy3kWjIIXCStSKenaTNavnMeWur6XxebC8JmaDjU7cVsTxNc1utrgs0W9myQfd
-         7ojA==
-X-Gm-Message-State: AOAM531wfrU+ZIjMemA/mwAQ7h8uCXDeVgbq6qZmXjWdpdhMW2XU+cu9
-        eJYrpfs5LmurrAbDxKAm6SA=
-X-Google-Smtp-Source: ABdhPJwp0q/5CsMXETdbjw47y2ioci+s6vdPbblFj/X6wh0r9+AVIIQMwNrjZcvSypDA2RGhMYV8zw==
-X-Received: by 2002:a17:906:9b8e:: with SMTP id dd14mr13407697ejc.337.1640006408406;
-        Mon, 20 Dec 2021 05:20:08 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id gb10sm365983ejc.49.2021.12.20.05.20.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 05:20:08 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <da09e079-23c3-4414-0c45-16413f704dbc@redhat.com>
-Date:   Mon, 20 Dec 2021 14:20:05 +0100
+        id S232834AbhLTNVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:21:10 -0500
+Received: from mga05.intel.com ([192.55.52.43]:42409 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231194AbhLTNVJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:21:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640006469; x=1671542469;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YThZBUEq0yAKsOgu78DkFbSC/NdCkyI0c/T5ERBRNlk=;
+  b=HgyIq7PNUORjeBQQqZHgt71YnMnGjqtUfwkNaO0/icL4o5CGAVvtvvua
+   MHZAphePoDH+pV7V/nKra6LO6+RtcscW+U0zg70sHw/UUJCykXsnfvwkf
+   Vi2XSGYIyl0mozZoyZGhyVSYyKeCXnPweYJWETem068JktpMmQestIjqI
+   /1nWKzIVQQB0lBW7bhAXj5THhxkDLZIt7NXpcyq7UZIehf+csoWnR/ZC5
+   /4CT9GwX3lueT83mvhj7AVMj/L9DgzuV9aIyJbS3PqeXWESH9v2s7N0q+
+   kAgI3R3hpXqgJKvQQNUmnH21iLbld7veTPAWr+d+yD3Z+HGAgfeiYuJNn
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="326459129"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="326459129"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:21:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="467385509"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2021 05:21:07 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzIbC-0007nC-U0; Mon, 20 Dec 2021 13:21:06 +0000
+Date:   Mon, 20 Dec 2021 21:20:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianyu Lan <Tianyu.Lan@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [hyperv:hyperv-next 1/5] swiotlb.c:undefined reference to `memremap'
+Message-ID: <202112202134.o20RMLOK-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 04/23] kvm: x86: Exclude unpermitted xfeatures at
- KVM_GET_SUPPORTED_CPUID
-Content-Language: en-US
-To:     Jing Liu <jing2.liu@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, guang.zeng@intel.com,
-        wei.w.wang@intel.com, yang.zhong@intel.com
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-5-jing2.liu@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211217153003.1719189-5-jing2.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 16:29, Jing Liu wrote:
->   
-> +Permissions must be set via prctl() for dynamically-enabled XSAVE
-> +features before calling this ioctl. Otherwise those feature bits are
-> +excluded.
-> +
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+head:   63cd06c67a2f46009da6e88ca46f9c7231ab8998
+commit: f16dc95481e2ef2c385008f8b7bd382ea6919ee2 [1/5] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20211220/202112202134.o20RMLOK-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=f16dc95481e2ef2c385008f8b7bd382ea6919ee2
+        git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+        git fetch --no-tags hyperv hyperv-next
+        git checkout f16dc95481e2ef2c385008f8b7bd382ea6919ee2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Dynamically-enabled feature bits need to be requested with 
-``arch_prctl()`` before calling this ioctl.  Feature bits that have not 
-been requested are excluded from the result.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
+All errors (new ones prefixed by >>):
 
-Paolo
+   s390-linux-ld: kernel/dma/swiotlb.o: in function `swiotlb_update_mem_attributes':
+>> swiotlb.c:(.init.text+0x146): undefined reference to `memremap'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

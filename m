@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF5C47ABF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1E547AC76
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235062AbhLTOka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S236123AbhLTOoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbhLTOj1 (ORCPT
+        with ESMTP id S235565AbhLTOmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:39:27 -0500
+        Mon, 20 Dec 2021 09:42:33 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A671C06137B;
-        Mon, 20 Dec 2021 06:39:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E92C0698CC;
+        Mon, 20 Dec 2021 06:41:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66B36B80EE2;
-        Mon, 20 Dec 2021 14:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDFBC36AFD;
-        Mon, 20 Dec 2021 14:39:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88F0DB80EF2;
+        Mon, 20 Dec 2021 14:41:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC85FC36AE8;
+        Mon, 20 Dec 2021 14:41:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011165;
-        bh=VhOrL/DH55XRMr5wXHlqUBaF5ME1VEu5G5uh3iurAS4=;
+        s=korg; t=1640011299;
+        bh=5XSKQ8g7F1h8jTOBQTqezki1VD4GMuPKUpFD6aWNz8s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pfrhFRtaMlBqrC0EhbUJiDjE1e6aM4r2Zj8+Ghmiaw6KVX/fL01MwmnixEhnJUjSr
-         fReyQYEuUqJoQNpzzwnui+ZBEf9m3cqRQWEhqKbG/nsbOLELYTjoTmsWV8ntD7XN7t
-         l2JNORaQl0SzVoGeDR0UusS1bZjnZB6F000bkhHI=
+        b=GNb78GwHyKEJZeCiwavnuMRLtw4j9pAfBDPsuGih3SZ7PsjORiDqY90jUVBUxkS7x
+         q/Zk6bMS4XmXbGy2gsVKAx6vJrqLk+KhDxFf3/HqGSJyWOpcXSObkL6i92HTqyqohj
+         SH+Ljsn7nsEkaDfkVmwtyyD3rD1n9vFGH+wnJUYI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 4.14 26/45] PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+        stable@vger.kernel.org,
+        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 28/56] net/packet: rx_owner_map depends on pg_vec
 Date:   Mon, 20 Dec 2021 15:34:21 +0100
-Message-Id: <20211220143023.146401248@linuxfoundation.org>
+Message-Id: <20211220143024.372268312@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+References: <20211220143023.451982183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,46 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Willem de Bruijn <willemb@google.com>
 
-commit 94185adbfad56815c2c8401e16d81bdb74a79201 upstream.
+[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
 
-PCI_MSIX_FLAGS_MASKALL is set in the MSI-X control register at MSI-X
-interrupt setup time. It's cleared on success, but the error handling path
-only clears the PCI_MSIX_FLAGS_ENABLE bit.
+Packet sockets may switch ring versions. Avoid misinterpreting state
+between versions, whose fields share a union. rx_owner_map is only
+allocated with a packet ring (pg_vec) and both are swapped together.
+If pg_vec is NULL, meaning no packet ring was allocated, then neither
+was rx_owner_map. And the field may be old state from a tpacket_v3.
 
-That's incorrect as the reset state of the PCI_MSIX_FLAGS_MASKALL bit is
-zero. That can be observed via lspci:
-
-        Capabilities: [b0] MSI-X: Enable- Count=67 Masked+
-
-Clear the bit in the error path to restore the reset state.
-
-Fixes: 438553958ba1 ("PCI/MSI: Enable and mask MSI-X early")
-Reported-by: Stefan Roese <sr@denx.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Stefan Roese <sr@denx.de>
-Cc: linux-pci@vger.kernel.org
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/87tufevoqx.ffs@tglx
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
+Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/msi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/packet/af_packet.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/pci/msi.c
-+++ b/drivers/pci/msi.c
-@@ -847,7 +847,7 @@ out_free:
- 	free_msi_irqs(dev);
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 8d9005019ef78..1309161032d50 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -4439,9 +4439,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
+ 	}
  
- out_disable:
--	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_ENABLE, 0);
-+	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL | PCI_MSIX_FLAGS_ENABLE, 0);
- 
- 	return ret;
+ out_free_pg_vec:
+-	bitmap_free(rx_owner_map);
+-	if (pg_vec)
++	if (pg_vec) {
++		bitmap_free(rx_owner_map);
+ 		free_pg_vec(pg_vec, order, req->tp_block_nr);
++	}
+ out:
+ 	return err;
  }
+-- 
+2.33.0
+
 
 

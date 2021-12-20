@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8AA47B5AC
+	by mail.lfdr.de (Postfix) with ESMTP id C79EE47B5AD
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbhLTWCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbhLTWCU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:02:20 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89441C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:02:20 -0800 (PST)
+        id S232376AbhLTWC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:02:26 -0500
+Received: from out1.migadu.com ([91.121.223.63]:42554 "EHLO out1.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232200AbhLTWCV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 17:02:21 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037739;
+        t=1640037740;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yh2u9z3tn4/Tg0QhiqtJYkJa7Ju7wNCufTpXT9TmOy4=;
-        b=Gs3TUW08KtRSzewfSYJGF2P9fRS4hS4FJfWB160u0Z1edchW+lmsnK4yQ9IGmHdtS/nzUN
-        Ni9DFZx9NBn8NTUmMAVXV99KplZRGaeemuhg5AXOvlATw31NuR/1v0jMHrqKHz7u2UYUyD
-        evVJCf4Gly8pEyu7EUf2nMULeylNjaM=
+        bh=nibMKNPOUfTfl0PGq9c+gFreyTXEodKWyYW93h99/Mc=;
+        b=djH7pQvL7MZZLdrGerzJMUQ9dM5DLZgq5H5wRBI72TGq8Y6owqz7+4Jfj0zYHKVYWArM/1
+        RYtudr8KkZ0026f/1Uq7XuRImlS3QfC0ryjjzBF1i6rbHOM8/wVV4qlm36NLDzponlEOL6
+        Usq1cij0phjCl16lmidJMMkrUKDSsSo=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v4 26/39] kasan, vmalloc: unpoison VM_ALLOC pages after mapping
-Date:   Mon, 20 Dec 2021 23:01:58 +0100
-Message-Id: <516dc726dc6311d8bb9f1a90258190f628a3b636.1640036051.git.andreyknvl@google.com>
+Subject: [PATCH mm v4 27/39] kasan, mm: only define ___GFP_SKIP_KASAN_POISON with HW_TAGS
+Date:   Mon, 20 Dec 2021 23:01:59 +0100
+Message-Id: <8e2ce1656dcd9fe47d04779ab359d18642ed7878.1640036051.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
 References: <cover.1640036051.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,121 +54,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Make KASAN unpoison vmalloc mappings after they have been mapped in
-when it's possible: for vmalloc() (indentified via VM_ALLOC) and
-vm_map_ram().
+Only define the ___GFP_SKIP_KASAN_POISON flag when CONFIG_KASAN_HW_TAGS
+is enabled.
 
-The reasons for this are:
-
-- For vmalloc() and vm_map_ram(): pages don't get unpoisoned in case
-  mapping them fails.
-- For vmalloc(): HW_TAGS KASAN needs pages to be mapped to set tags via
-  kasan_unpoison_vmalloc().
-
-As a part of these changes, the return value of __vmalloc_node_range()
-is changed to area->addr. This is a non-functional change, as
-__vmalloc_area_node() returns area->addr anyway.
+This patch it not useful by itself, but it prepares the code for
+additions of new KASAN-specific GFP patches.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
 ---
 
 Changes v3->v4:
-- Don't forget to save tagged addr to vm_struct->addr for VM_ALLOC
-  so that find_vm_area(addr)->addr == addr for vmalloc().
-- Reword comments.
-- Update patch description.
-
-Changes v2->v3:
-- Update patch description.
+- This is a new patch.
 ---
- mm/vmalloc.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ include/linux/gfp.h            |  8 +++++++-
+ include/trace/events/mmflags.h | 12 +++++++++---
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 388a17c01376..cc23e181b0ec 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2209,14 +2209,15 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
- 		mem = (void *)addr;
- 	}
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index d6a184523ca2..22709fcc4d3a 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -54,7 +54,11 @@ struct vm_area_struct;
+ #define ___GFP_THISNODE		0x200000u
+ #define ___GFP_ACCOUNT		0x400000u
+ #define ___GFP_ZEROTAGS		0x800000u
++#ifdef CONFIG_KASAN_HW_TAGS
+ #define ___GFP_SKIP_KASAN_POISON	0x1000000u
++#else
++#define ___GFP_SKIP_KASAN_POISON	0
++#endif
+ #ifdef CONFIG_LOCKDEP
+ #define ___GFP_NOLOCKDEP	0x2000000u
+ #else
+@@ -245,7 +249,9 @@ struct vm_area_struct;
+ #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
  
--	mem = kasan_unpoison_vmalloc(mem, size);
--
- 	if (vmap_pages_range(addr, addr + size, PAGE_KERNEL,
- 				pages, PAGE_SHIFT) < 0) {
- 		vm_unmap_ram(mem, count);
- 		return NULL;
- 	}
+ /* Room for N __GFP_FOO bits */
+-#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
++#define __GFP_BITS_SHIFT (24 +					\
++			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
++			  IS_ENABLED(CONFIG_LOCKDEP))
+ #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
  
-+	/* Mark the pages as accessible, now that they are mapped. */
-+	mem = kasan_unpoison_vmalloc(mem, size);
+ /**
+diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+index 30f492256b8c..414bf4367283 100644
+--- a/include/trace/events/mmflags.h
++++ b/include/trace/events/mmflags.h
+@@ -48,12 +48,18 @@
+ 	{(unsigned long)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
+ 	{(unsigned long)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
+ 	{(unsigned long)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
+-	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"},	\
+-	{(unsigned long)__GFP_SKIP_KASAN_POISON,"__GFP_SKIP_KASAN_POISON"}\
++	{(unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
 +
- 	return mem;
- }
- EXPORT_SYMBOL(vm_map_ram);
-@@ -2444,7 +2445,14 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
++#ifdef CONFIG_KASAN_HW_TAGS
++#define __def_gfpflag_names_kasan					      \
++	, {(unsigned long)__GFP_SKIP_KASAN_POISON, "__GFP_SKIP_KASAN_POISON"}
++#else
++#define __def_gfpflag_names_kasan
++#endif
  
- 	setup_vmalloc_vm(area, va, flags, caller);
+ #define show_gfp_flags(flags)						\
+ 	(flags) ? __print_flags(flags, "|",				\
+-	__def_gfpflag_names						\
++	__def_gfpflag_names __def_gfpflag_names_kasan			\
+ 	) : "none"
  
--	area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
-+	/*
-+	 * Mark pages for non-VM_ALLOC mappings as accessible. Do it now as a
-+	 * best-effort approach, as they can be mapped outside of vmalloc code.
-+	 * For VM_ALLOC mappings, the pages are marked as accessible after
-+	 * getting mapped in __vmalloc_node_range().
-+	 */
-+	if (!(flags & VM_ALLOC))
-+		area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
- 
- 	return area;
- }
-@@ -3049,7 +3057,7 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 			const void *caller)
- {
- 	struct vm_struct *area;
--	void *addr;
-+	void *ret;
- 	unsigned long real_size = size;
- 	unsigned long real_align = align;
- 	unsigned int shift = PAGE_SHIFT;
-@@ -3111,10 +3119,13 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 		prot = arch_vmap_pgprot_tagged(prot);
- 
- 	/* Allocate physical pages and map them into vmalloc space. */
--	addr = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
--	if (!addr)
-+	ret = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
-+	if (!ret)
- 		goto fail;
- 
-+	/* Mark the pages as accessible, now that they are mapped. */
-+	area->addr = kasan_unpoison_vmalloc(area->addr, real_size);
-+
- 	/*
- 	 * In this function, newly allocated vm_struct has VM_UNINITIALIZED
- 	 * flag. It means that vm_struct is not fully initialized.
-@@ -3126,7 +3137,7 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 	if (!(vm_flags & VM_DEFER_KMEMLEAK))
- 		kmemleak_vmalloc(area, size, gfp_mask);
- 
--	return addr;
-+	return area->addr;
- 
- fail:
- 	if (shift > PAGE_SHIFT) {
-@@ -3818,7 +3829,10 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
- 	}
- 	spin_unlock(&vmap_area_lock);
- 
--	/* mark allocated areas as accessible */
-+	/*
-+	 * Mark allocated areas as accessible. Do it now as a best-effort
-+	 * approach, as they can be mapped outside of vmalloc code.
-+	 */
- 	for (area = 0; area < nr_vms; area++)
- 		vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
- 							 vms[area]->size);
+ #ifdef CONFIG_MMU
 -- 
 2.25.1
 

@@ -2,80 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2B247A9B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7156647A9BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbhLTMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:31:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49070 "EHLO
+        id S230196AbhLTMeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:34:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50604 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLTMbU (ORCPT
+        with ESMTP id S229596AbhLTMet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:31:20 -0500
+        Mon, 20 Dec 2021 07:34:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CB2EB80E63;
-        Mon, 20 Dec 2021 12:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D67BC36AE8;
-        Mon, 20 Dec 2021 12:31:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9386B80E69;
+        Mon, 20 Dec 2021 12:34:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEEECC36AE8;
+        Mon, 20 Dec 2021 12:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640003477;
-        bh=i25KeYvLqv8bmnNiXOuTvfwiv8T+bOL5zwFzIAnI7yE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nYzm9Jmv9h4WIy0H423pWluJsb9rDkATgoPPgzOMwCEDNvcFh4ZS/YYWpHFIcxJJo
-         xANLCiA+d0H/u1UxIvTaZ8C2hZndQsbONXIThDFMJZ7A2Yu9U6DqaToGP5AAcubVvA
-         ANl6cPIT5egHtLjFrf/0yWPJqWdN0EOWWzMI2gwohEU5rXTqk8dfDhsfjc/kBkNmjk
-         QR+EGNwVjohV3qD8J+gSVU4+CNsGsHGSbQvi+pcMWAsmAYNkVFHPRTLMjmizAHA/E2
-         saO9DXoEPqq/1o8F56tuqfzLRatsPbtN54PR7nwxG2Q6T+sSop7+0+kYxdnnimU7gg
-         Y/8LfLSALIVtA==
-Date:   Mon, 20 Dec 2021 12:31:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: dts: Remove "spidev" nodes
-Message-ID: <YcB3kTelEHBvcsGA@sirena.org.uk>
-References: <20211217221400.3667133-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eQZIqh1wMxp77hgz"
-Content-Disposition: inline
-In-Reply-To: <20211217221400.3667133-1-robh@kernel.org>
-X-Cookie: Christ was born in 4 B.C.
+        s=k20201202; t=1640003686;
+        bh=wHYRaP1ocpqpomfYhnh1emifUMIY8omhOERwqVWiltY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SAz49+qgRMaMyDMqWL/AD1BX/b+0VQleZco3tZptaL9XlbzDbxZlEgSdjODDoXLUk
+         GbXLqXqldDGrq4RXnWb5iCN7VhC2oZxjut7lxRghMZYsf+u89k1U8uDdzOB1vw4y4g
+         0WnUlkdutasCa4MV5Zx0Oc+OhFHRgDuvzsrapltKTAV9VtNfLvOE/DqS0VWK/koV/T
+         VmkYEgZxepqq6pMx1rJ+8ntxbX9gqW/4IGPHudYPbUFZtQOW4CKdkP2dr08D/E+ncS
+         RHSeNy0Mn+W2p6U7cbueMrheb24CxfaQYcU63FONX8Ea/fgE0CUc5rflnbMDeg53y7
+         JYUGp8avjzKlQ==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mzHsK-00DHYB-Qk; Mon, 20 Dec 2021 12:34:44 +0000
+Date:   Mon, 20 Dec 2021 12:34:44 +0000
+Message-ID: <87bl1bwj2z.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] dt-bindings: interrupt-controller: Update STM32 EXTI interrupt controller
+In-Reply-To: <3f8acbb8-0b7e-2f47-eefc-67e5a7632445@foss.st.com>
+References: <20211215105847.2328-1-alexandre.torgue@foss.st.com>
+        <20211215105847.2328-2-alexandre.torgue@foss.st.com>
+        <YbueUmqyzwS9rOu5@robh.at.kernel.org>
+        <3f8acbb8-0b7e-2f47-eefc-67e5a7632445@foss.st.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: alexandre.torgue@foss.st.com, robh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 17 Dec 2021 13:39:11 +0000,
+Alexandre TORGUE <alexandre.torgue@foss.st.com> wrote:
+> 
+> On 12/16/21 9:15 PM, Rob Herring wrote:
+> > On Wed, Dec 15, 2021 at 11:58:43AM +0100, Alexandre Torgue wrote:
+> >> Document new entry "st,exti-mapping" which links EXTI lines with GIC
+> >> interrupt lines and add an include file to define EXTI interrupt type.
+> >> 
+> >> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> >> 
+> >> diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+> >> index d19c881b4abc..e08bb51e97a8 100644
+> >> --- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+> >> +++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+> >> @@ -41,6 +41,17 @@ properties:
+> >>       description:
+> >>         Interrupts references to primary interrupt controller
+> >>   +  st,exti-mapping:
+> >> +    $ref: "/schemas/types.yaml#/definitions/uint32-matrix"
+> >> +    description: |
+> >> +            Define mapping between EXTI lines and GIC irq lines. Should be:
+> >> +            st,exti-mapping = <EXTI_LINE GIC_IRQ EXTI_TYPE>, ...;
+> >> +            With:
+> >> +            - EXTI_LINE: EXTI line number.
+> >> +            - GIC_IRQ: GIC IRQ associated to the EXTI line.
+> >> +            - EXTI_TYPE: STM32_EXTI_TYPE_CONFIGURABLE or STM32_EXTI_TYPE_DIRECT.
+> >> +              Defined in include/dt-bindings/interrupt-controller/stm32-exti.h
+> > 
+> > No custom properties for this. See[1][2][3].
+> > 
+> 
+> Thanks for inputs. In my case the mapping consists to map an EXTI line
+> with a GIC irq line which could be done using interrupt-map (avoiding
+> to parse it in my driver).
 
---eQZIqh1wMxp77hgz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The problem is that 'interrupt-map' defines an interrupt mapping
+between an input and an output, and that mentioning the GIC in such a
+table will only result in your EXTI to be bypassed.
 
-On Fri, Dec 17, 2021 at 04:14:00PM -0600, Rob Herring wrote:
-> "spidev" is not a real device, but a Linux implementation detail. It has
-> never been documented either. The kernel has WARNed on the use of it for
-> over 6 years. Time to remove its usage from the tree.
+'interrupt-map' really is a dispatch table for targeting an interrupt
+controller (or multiple controllers, even), but really isn't the
+correct tool to carry configuration informations to an interrupt
+controller driver.
 
-Reviwed-by: Mark Brown <broonie@kernel.org>
+> But for each EXTI/GIC association I would
+> like also to describe the EXTI_TYPE (which actually describe the well
+> irqchip to use inside my exti driver) . This property is not generic
+> and so I assume I can't use a generic binding such "interrupt-map".
+> 
+> If the solution consists to use a common binding (i.e. interrupt-map)
+> plus a conversion table in exti driver to affect the well irq_chip to
+> the well EXTI line then we could envisage to keep the whole mapping
+> inside the driver (even if it's not the best solution).
 
-Thanks for cleaning these up.
+A possible solution would be to have:
 
---eQZIqh1wMxp77hgz
-Content-Type: application/pgp-signature; name="signature.asc"
+- A set of standard 'interrupts' properties describing the output
+signals
 
------BEGIN PGP SIGNATURE-----
+- A set of properties describing the input to output mapping (if
+relevant) and additional configuration information that for the
+interrupt controller driver.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHAd5AACgkQJNaLcl1U
-h9AmbQf9G/i81z0y9A3tciRvrblQ24v7aDb4HyS/CjCPbTIAvDwEY75F3UuSQdiX
-u66pm9EGC4x/cbRWdnf7slxhhevUGpv9WrxH1WvY9BDGo558GP0ApQd2bd5ifdFr
-zsrABMp7ee5dJeBq7zYtLY560AIgypoP3331L+kKiNkeoozARrHbUrtANG4SVaVD
-RkdKO1efkdyas9B0npaDBFQIFhFDBo2y8Wq+/e/CMEHNHflyKlEjVl5vHZ6OuOsS
-GdCAKCnyTnKbs9Wjckq0ibX42HKX9dxxcGxBvoK8TVMlUXoCIu/AOxN0t63DcarF
-wUv9MQWnRMXWZlEskQZ0Ym5tM5oqOw==
-=sdX5
------END PGP SIGNATURE-----
+	M.
 
---eQZIqh1wMxp77hgz--
+-- 
+Without deviation from the norm, progress is not possible.

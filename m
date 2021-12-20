@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FFB47B57E
+	by mail.lfdr.de (Postfix) with ESMTP id E131F47B57F
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbhLTV7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbhLTV7P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:59:15 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C487C061401
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:59:15 -0800 (PST)
+        id S232006AbhLTV7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:59:22 -0500
+Received: from out2.migadu.com ([188.165.223.204]:39370 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231705AbhLTV7R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:59:17 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037554;
+        t=1640037556;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aF/w+x0GM7OFXEFWoRiyjv8BJ7kPS/Lh2UMzxPnFpS8=;
-        b=n3qgP2Kwql5PJOXWDga39XJfJDwSn5Ws1RXS3NQqtcINXPkTL/dlMfu6/kR0LFjJZkD6aT
-        SGurSZDLBq7aIWTqUvkFMman0cJ55/71E4WMbntko/6xJCNU97aVZnwLSdvbnmUUCIbqQw
-        S2eLsStCNBajcbuKYEIH2H/w8JgaAfk=
+        bh=TniNgsonCV7N4x8CfBP962yTwJ3ZQbzv223ievd0EoQ=;
+        b=it34flvfcLOdcrRHxhWxGMiieuoHPAysd1PyKFeZzsg9OFhItE1PZdD8m920HC1c9CFCWe
+        Ft1EqF4lSlACrLPzEjGxBYnf3451QMngiL+YUwh4fal2CpV/Tk3rCjBg95r6Z/kcIjp2hI
+        MOE81wP1KiEYeNSmiTkoluN5dCcJOHk=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v4 07/39] mm: clarify __GFP_ZEROTAGS comment
-Date:   Mon, 20 Dec 2021 22:58:22 +0100
-Message-Id: <92f3029f3647ab355450ed5c8252bad8cfae1e09.1640036051.git.andreyknvl@google.com>
+Subject: [PATCH mm v4 08/39] kasan: only apply __GFP_ZEROTAGS when memory is zeroed
+Date:   Mon, 20 Dec 2021 22:58:23 +0100
+Message-Id: <705af53a07d789b2f139ff91fb7a18343e980989.1640036051.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
 References: <cover.1640036051.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,32 +54,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-__GFP_ZEROTAGS is intended as an optimization: if memory is zeroed during
-allocation, it's possible to set memory tags at the same time with little
-performance impact.
+__GFP_ZEROTAGS should only be effective if memory is being zeroed.
+Currently, hardware tag-based KASAN violates this requirement.
 
-Clarify this intention of __GFP_ZEROTAGS in the comment.
+Fix by including an initialization check along with checking for
+__GFP_ZEROTAGS.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 ---
- include/linux/gfp.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/kasan/hw_tags.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 0b2d2a636164..d6a184523ca2 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -228,8 +228,8 @@ struct vm_area_struct;
-  *
-  * %__GFP_ZERO returns a zeroed page on success.
-  *
-- * %__GFP_ZEROTAGS returns a page with zeroed memory tags on success, if
-- * __GFP_ZERO is set.
-+ * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
-+ * is being zeroed (either via __GFP_ZERO or via init_on_alloc).
-  *
-  * %__GFP_SKIP_KASAN_POISON returns a page which does not need to be poisoned
-  * on deallocation. Typically used for userspace pages. Currently only has an
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index 0b8225add2e4..c643740b8599 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -199,11 +199,12 @@ void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags)
+ 	 * page_alloc.c.
+ 	 */
+ 	bool init = !want_init_on_free() && want_init_on_alloc(flags);
++	bool init_tags = init && (flags & __GFP_ZEROTAGS);
+ 
+ 	if (flags & __GFP_SKIP_KASAN_POISON)
+ 		SetPageSkipKASanPoison(page);
+ 
+-	if (flags & __GFP_ZEROTAGS) {
++	if (init_tags) {
+ 		int i;
+ 
+ 		for (i = 0; i != 1 << order; ++i)
 -- 
 2.25.1
 

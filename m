@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D7C47AEAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DD347AEB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235943AbhLTPCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238064AbhLTO4Z (ORCPT
+        id S240902AbhLTPCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34030 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237542AbhLTO4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:56:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21F5C08EC8E;
-        Mon, 20 Dec 2021 06:48:37 -0800 (PST)
+        Mon, 20 Dec 2021 09:56:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42F22611A0;
-        Mon, 20 Dec 2021 14:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2599AC36AE9;
-        Mon, 20 Dec 2021 14:48:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1502B80EF2;
+        Mon, 20 Dec 2021 14:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E154C36AF8;
+        Mon, 20 Dec 2021 14:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011716;
-        bh=gwJvlpXtFRqrox1N+5P7JWc/NZSCEaUGn6YnT7b+liY=;
+        s=korg; t=1640012181;
+        bh=KbG2sf3M/w5o6lkbivBdu3cIy6jqTVRS6yXejm+KbIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1z3rw/OQCS7cXCDSPy5EyekPvIOMeiVJW+chHG4WhQUGoW2HWuiZZWKdfG1hbqF/
-         zKyLUunjKa7BbKVH55XuEMK75paR9cdzkkgG1BSDJkFOch8VRdTc9zVsf0N+Tz98ro
-         u52xrgQ9JWkcfGDO1LNt3gLHgSmtDJrU+TV68ggk=
+        b=Bh74io0nFtOhNIz1nh4on71SK2n1bf6LWyyDU2FUmfmFYk1rBWOqGwUtQYJlZWTmq
+         mWbkrIaE+73lijRBFGmBbXUXiPRqa7q7EFJlJVNMzELaiAUt1BxRFOL14mcx0ChLnb
+         zOxr+3a3nluBIEHgWK53Vv1/NkQXpQcVXX6G7LJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lang Yu <lang.yu@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 47/99] drm/amd/pm: fix a potential gpu_metrics_table memory leak
+Subject: [PATCH 5.15 110/177] bpf: Fix extable fixup offset.
 Date:   Mon, 20 Dec 2021 15:34:20 +0100
-Message-Id: <20211220143030.966462874@linuxfoundation.org>
+Message-Id: <20211220143043.773689575@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,36 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lang Yu <lang.yu@amd.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit aa464957f7e660abd554f2546a588f6533720e21 ]
+[ Upstream commit 433956e91200734d09958673a56df02d00a917c2 ]
 
-Memory is allocated for gpu_metrics_table in renoir_init_smc_tables(),
-but not freed in int smu_v12_0_fini_smc_tables(). Free it!
+The prog - start_of_ldx is the offset before the faulting ldx to the location
+after it, so this will be used to adjust pt_regs->ip for jumping over it and
+continuing, and with old temp it would have been fixed up to the wrong offset,
+causing crash.
 
-Fixes: 95868b85764a ("drm/amd/powerplay: add Renoir support for gpu metrics export")
-
-Signed-off-by: Lang Yu <lang.yu@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 4c5de127598e ("bpf: Emit explicit NULL pointer checks for PROBE_LDX instructions.")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-index 7907c9e0b5dec..b938fd12da4d5 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c
-@@ -187,6 +187,9 @@ int smu_v12_0_fini_smc_tables(struct smu_context *smu)
- 	kfree(smu_table->watermarks_table);
- 	smu_table->watermarks_table = NULL;
- 
-+	kfree(smu_table->gpu_metrics_table);
-+	smu_table->gpu_metrics_table = NULL;
-+
- 	return 0;
- }
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 9ea57389c554b..462d8e68b3f43 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1332,7 +1332,7 @@ st:			if (is_imm8(insn->off))
+ 				 * End result: x86 insn "mov rbx, qword ptr [rax+0x14]"
+ 				 * of 4 bytes will be ignored and rbx will be zero inited.
+ 				 */
+-				ex->fixup = (prog - temp) | (reg2pt_regs[dst_reg] << 8);
++				ex->fixup = (prog - start_of_ldx) | (reg2pt_regs[dst_reg] << 8);
+ 			}
+ 			break;
  
 -- 
 2.33.0

@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADFF47B048
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A16B247B056
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbhLTPaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S239880AbhLTPbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239571AbhLTPaY (ORCPT
+        with ESMTP id S239377AbhLTPbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:30:24 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA71C08ED8C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:24:49 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id h67so5437614vkh.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iip86zq9P3Go1eFxd9vhsnpCnr9ENJGNCNN0oeKnYNo=;
-        b=db54HA5CrsXkJZVeGvGc+cxUsT3tu0ElVuaQ4Zgp5LeNcZKgQ6Ce9PlSkNZseDqCgW
-         /RGfI9R00jArJR5dKlDVyWQuysXnPj+SkRn0fXJyiKF2oE7fTxl9+jmIROnJYWVdhZdt
-         Vg9J16NdLtu/VU5UcMg5zkwm5JbamgzjXLdck=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iip86zq9P3Go1eFxd9vhsnpCnr9ENJGNCNN0oeKnYNo=;
-        b=SRuK8E+PoRyU5kMm920enpNBa0sEQiIj1xwfmBpsN45xt35f5djylnr1YnEXiQ8vLX
-         MJydbh4SvjHyKZX8HSSnO0Ya8/zD5yPZeLwWdITXP3NFXh7PaXiF2NAL8/BDhcpeYZ/p
-         X0u5cAbz4e41vR4NjBOuVPvsIiH+axQy16hZmEcdCdM7W49orUAkFrk1kcvfGW22MUMc
-         eRt6jfvmalJEF6NRkmoKqCwqxBut0WZaGIm0EptFtBcLYQ2sy6pLiIyhkTbkv5ozjfwq
-         g8NWVr2lqbY3oBNjLvgWuA2aONKu6S9RmDlv0wasPaHrKrA4+u4i0qp+/ZTSDMy5a4v0
-         NVTg==
-X-Gm-Message-State: AOAM533BRwZKSlKhsFzgcqBPYkJ0VluQ6j/EISeXcHdwpqwipA4TJYod
-        /Es58jOctAG3ld5BiSD0Hf9aGUheXplqK+6gvj7pRQ==
-X-Google-Smtp-Source: ABdhPJwygBszde+O5n1dvD0oyqEewzFG5UE5ec4Uz0gp/WlwAx+iMlxg/xbf4a8wPtowlHNy7yZLvvUqlyQB43bgfp8=
-X-Received: by 2002:a1f:218e:: with SMTP id h136mr613155vkh.41.1640013888172;
- Mon, 20 Dec 2021 07:24:48 -0800 (PST)
+        Mon, 20 Dec 2021 10:31:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CA5C06175F;
+        Mon, 20 Dec 2021 07:29:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3272611E7;
+        Mon, 20 Dec 2021 15:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE22C36AE7;
+        Mon, 20 Dec 2021 15:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640014189;
+        bh=JSMsteKLUvTazhPFo/ZPr9o+AZtXZDArQosyGGdJtyo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HpocV6rEHoBhz35iaW9HS17zGJF5AAmGipdnkcRismpeIPDHYdY5TjRK+ozUceMiN
+         b9Y+gF1zX9HRjHxI0qZ7/m871hpFB/pdynzts0G5Pov9X7YA/356OzRUuPHt4J/ZXn
+         bdBVJxFvPOMaEGk3GZ+9T0pivq17YnNYlKYdGatU=
+Date:   Mon, 20 Dec 2021 16:29:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     ok@artecdesign.ee, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: host: Check for null res pointer
+Message-ID: <YcChajETF+S4lluY@kroah.com>
+References: <20211220151524.1001845-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20211213094036.1787950-1-daniel@0x0f.com> <20211213094036.1787950-5-daniel@0x0f.com>
- <CAMRc=Md_2b-sBnPQL-E59byYSv+Z0+d3V8JrbPqpGSMjGS+tgA@mail.gmail.com>
- <CAFr9PXkkp8B5Vv0eu+2gPF2S4CNaxZDwjPg+UXRgvyUkAZBFpA@mail.gmail.com> <CAMRc=MepS1rh13kYGvvsMmAec93fdtSHiddxqO1W4Bg+uy-dNg@mail.gmail.com>
-In-Reply-To: <CAMRc=MepS1rh13kYGvvsMmAec93fdtSHiddxqO1W4Bg+uy-dNg@mail.gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Tue, 21 Dec 2021 00:27:59 +0900
-Message-ID: <CAFr9PXnYKLLp9=sJFobrOg0S2-Y2Lnm30dorm1_vzSqQqGMnpg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] gpio: msc313: Add support for SSD201 and SSD202D
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220151524.1001845-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bartosz,
+On Mon, Dec 20, 2021 at 11:15:24PM +0800, Jiasheng Jiang wrote:
+> The return value of platform_get_resource() needs to be checked.
+> To avoid use of error pointer in case of the failure of alloc.
 
-On Tue, 21 Dec 2021 at 00:07, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> I took a closer look now and it got even worse. This is some major
-> obfuscation with those names being defined as macros defining partial
-> lists...
+Should be all one sentence, right?
 
-A bit of background because I guess we'll hit this again when I push
-the next part of this (interrupt support):
+> 
+> Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-There are lists of pin names and offsets that are put into arrays
-because these chips have different mixes of the same sets of pins
-with, mostly, the same register offsets for those pins. So it's easier
-to create the composite array for a specific chip if the sets of pins
-are defined as lists.
-It's not possible to have a linear range of gpios based on register
-offset and ignore the offsets that don't matter because someone
-thought it would be nice to put some clock registers, boot control
-registers etc in the unused registers in the gpio block. Hence the
-offset arrays to map out the registers that are actually GPIOs.
-This driver might need to be changed to use a syscon at some point...
+What driver is this?  That needs to be in the subject line at the very
+least.
 
-If anyone has any ideas to make it nicer I'll do that change as the
-first patch for the next series for this driver.
-
-> Anyway, it was already there when you got there so I guess we can
-> address it separately. Queued for v5.17.
-
-Thank you!
-
-Cheers,
-
-Daniel

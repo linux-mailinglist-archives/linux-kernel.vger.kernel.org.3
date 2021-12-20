@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240C747AABD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E4247AABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbhLTN4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:56:30 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:38678 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232365AbhLTN43 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:56:29 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAA3zqZ0i8BhvTxvBA--.40494S2;
-        Mon, 20 Dec 2021 21:56:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] sfc: Check null pointer of rx_queue->page_ring
-Date:   Mon, 20 Dec 2021 21:56:03 +0800
-Message-Id: <20211220135603.954944-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S233067AbhLTN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:57:24 -0500
+Received: from foss.arm.com ([217.140.110.172]:55256 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232475AbhLTN5Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:57:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93520D6E;
+        Mon, 20 Dec 2021 05:57:23 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D37F3F718;
+        Mon, 20 Dec 2021 05:57:21 -0800 (PST)
+Message-ID: <85c60ef4-e1af-c947-a2ed-b63c4fef36c3@arm.com>
+Date:   Mon, 20 Dec 2021 13:57:17 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAA3zqZ0i8BhvTxvBA--.40494S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw1UAw43XrW3CFWfXFWfAFb_yoWkCFcE9F
-        s7XF17tw4UK34Fvws3Ja1Sva42q34DuF4FqFZ2grZxt34xAr13J3WDZas3GwnxG34UAFnr
-        G3ZrC3W5Cw1UtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc2xSY4AK67AK6ry8MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
-        cVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUa385UUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 4/5] iommu: Separate IOVA rcache memories from iova_domain
+ structure
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, mst@redhat.com, jasowang@redhat.com
+Cc:     xieyongji@bytedance.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        virtualization@lists.linux-foundation.org, linuxarm@huawei.com,
+        thunder.leizhen@huawei.com, baolu.lu@linux.intel.com
+References: <1632477717-5254-1-git-send-email-john.garry@huawei.com>
+ <1632477717-5254-5-git-send-email-john.garry@huawei.com>
+ <2c58036f-d9aa-61f9-ae4b-f6938a135de5@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <2c58036f-d9aa-61f9-ae4b-f6938a135de5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of the possible failure of the kcalloc, it should be better to
-set rx_queue->page_ptr_mask to 0 when it happens in order to maintain
-the consistency.
+Hi John,
 
-Fixes: 5a6681e22c14 ("sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/ethernet/sfc/rx_common.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 2021-12-20 08:49, John Garry wrote:
+> On 24/09/2021 11:01, John Garry wrote:
+>> Only dma-iommu.c and vdpa actually use the "fast" mode of IOVA alloc and
+>> free. As such, it's wasteful that all other IOVA domains hold the rcache
+>> memories.
+>>
+>> In addition, the current IOVA domain init implementation is poor
+>> (init_iova_domain()), in that errors are ignored and not passed to the
+>> caller. The only errors can come from the IOVA rcache init, and fixing up
+>> all the IOVA domain init callsites to handle the errors would take some
+>> work.
+>>
+>> Separate the IOVA rache out of the IOVA domain, and create a new IOVA
+>> domain structure, iova_caching_domain.
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
+> 
+> Hi Robin,
+> 
+> Do you have any thoughts on this patch? The decision is whether we stick 
+> with a single iova domain structure or support this super structure for 
+> iova domains which support the rcache. I did not try the former - it 
+> would be do-able but I am not sure on how it would look.
 
-diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-index 68fc7d317693..0983abc0cc5f 100644
---- a/drivers/net/ethernet/sfc/rx_common.c
-+++ b/drivers/net/ethernet/sfc/rx_common.c
-@@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
- 					    efx->rx_bufs_per_page);
- 	rx_queue->page_ring = kcalloc(page_ring_size,
- 				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
--	rx_queue->page_ptr_mask = page_ring_size - 1;
-+	if (!rx_queue->page_ring)
-+		rx_queue->page_ptr_mask = 0;
-+	else
-+		rx_queue->page_ptr_mask = page_ring_size - 1;
- }
- 
- static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
--- 
-2.25.1
+TBH I feel inclined to take the simpler approach of just splitting the 
+rcache array to a separate allocation, making init_iova_rcaches() public 
+(with a proper return value), and tweaking put_iova_domain() to make 
+rcache cleanup conditional. A residual overhead of 3 extra pointers in 
+iova_domain doesn't seem like *too* much for non-DMA-API users to bear. 
+Unless you want to try generalising the rcache mechanism completely away 
+from IOVA API specifics, it doesn't seem like there's really enough to 
+justify the bother of having its own distinct abstraction layer.
 
+Cheers,
+Robin.

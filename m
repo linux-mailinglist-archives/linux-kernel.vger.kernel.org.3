@@ -2,148 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A110447A61F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DECE47A622
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbhLTIkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237968AbhLTIkS (ORCPT
+        id S232271AbhLTImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:42:44 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:46038 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229750AbhLTImo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:40:18 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32EEC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 00:40:17 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:54f5:6592:bba2:c506])
-        by laurent.telenet-ops.be with bizsmtp
-        id YYgD2600S2pAjSJ01YgEGB; Mon, 20 Dec 2021 09:40:14 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mzEDN-0064ih-M2
-        for linux-kernel@vger.kernel.org; Mon, 20 Dec 2021 09:40:13 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mzEDN-0011B8-4R
-        for linux-kernel@vger.kernel.org; Mon, 20 Dec 2021 09:40:13 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v5.16-rc6
-Date:   Mon, 20 Dec 2021 09:40:13 +0100
-Message-Id: <20211220084013.242754-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Dec 2021 03:42:44 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BK7oZZI032255;
+        Mon, 20 Dec 2021 09:42:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=l0M27Pg5aRg5jKkeU6qxLkvOfBGMZ6YuIXhdJdk8GDI=;
+ b=HrfhgK+/TVq02PONXaiJG9TpGlSCAB+Mf2xr8HiHAcd4NIO+DLPd2o4GxwFJ7qCFKwv4
+ 6XAEcChwjxna0XDmuCxidMR5W6kx2VEpGrojvljWAbl5itqwnci+/5NWrt+aTXiAzeFd
+ 221c9yY1sbsiXXiK54e6eCbakqRU5r0tZy2GXNbdHtYirpuLCEz6x3+BvO0G5FeZ+CzS
+ yTxhRmC0UbdjRP5fSD9ZtAHnU8NZhWEdp/UoFI6jIVt6aZlv/eC0XI3mddehByvhjWyf
+ cM0PWQguh8Y5VBh+NNwGhHEukIJdlzvVKlF9YWPMQRd9tA/jEThr+twLXDVt2E2O6JUw Xg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2nsxg9cy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 09:42:18 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3BD6B100034;
+        Mon, 20 Dec 2021 09:42:16 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 29ECA226972;
+        Mon, 20 Dec 2021 09:42:16 +0100 (CET)
+Received: from lmecxl0573.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 20 Dec
+ 2021 09:42:15 +0100
+Subject: Re: [PATCH v2 1/2] clk: st: clkgen-fsyn: search reg within node or
+ parent
+To:     Alain Volmat <avolmat@me.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211218211157.188214-1-avolmat@me.com>
+ <20211218211157.188214-2-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+Message-ID: <b7b31539-3752-a566-75b9-e94659d21c31@foss.st.com>
+Date:   Mon, 20 Dec 2021 09:42:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211218211157.188214-2-avolmat@me.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-20_04,2021-12-16_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v5.16-rc6[1] compared to v5.15[2].
+Hi Alain
 
-Summarized:
-  - build errors: +6/-13
-  - build warnings: +16/-29
+On 12/18/21 10:11 PM, Alain Volmat wrote:
+> In order to avoid having duplicated addresses within the DT,
+> only have one unit-address per clockgen and each driver within
+> the clockgen should look at the parent node (overall clockgen)
+> to figure out the reg property.  Such behavior is already in
+> place in other STi platform clock drivers such as clk-flexgen
+> and clkgen-pll.  Keep backward compatibility by first looking
+> at reg within the node before looking into the parent node.
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+> v2: add pr_err message when failing to get reg information
+> 
+>  drivers/clk/st/clkgen-fsyn.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/st/clkgen-fsyn.c b/drivers/clk/st/clkgen-fsyn.c
+> index 164285d6be97..582a22c04919 100644
+> --- a/drivers/clk/st/clkgen-fsyn.c
+> +++ b/drivers/clk/st/clkgen-fsyn.c
+> @@ -988,9 +988,18 @@ static void __init st_of_quadfs_setup(struct device_node *np,
+>  	void __iomem *reg;
+>  	spinlock_t *lock;
+>  
+> +	/*
+> +	 * First check for reg property within the node to keep backward
+> +	 * compatibility, then if reg doesn't exist look at the parent node
+> +	 */
+>  	reg = of_iomap(np, 0);
+> -	if (!reg)
+> -		return;
+> +	if (!reg) {
+> +		reg = of_iomap(of_get_parent(np), 0);
+> +		if (!reg) {
+> +			pr_err("%s: Failed to get base address\n", __func__);
+> +			return;
+> +		}
+> +	}
+>  
+>  	clk_parent_name = of_clk_get_parent_name(np, 0);
+>  	if (!clk_parent_name)
+> 
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-JFYI, when comparing v5.16-rc6[1] to v5.16-rc5[3], the summaries are:
-  - build errors: +1/-5
-  - build warnings: +0/-0
-
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/a7904a538933c525096ca2ccde1e60d0ee62c08e/ (all 90 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/8bb7eca972ad531c9b149c0a51ab43a417385813/ (all 90 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/2585cf9dfaaddf00b069673f27bb3f8530e2039c/ (all 90 configs)
-
-
-*** ERRORS ***
-
-6 error regressions:
-  + /kisskb/src/drivers/gpu/drm/ttm/ttm_module.c: error: 'struct cpuinfo_um' has no member named 'x86':  => 71:24
-  + /kisskb/src/drivers/mtd/nand/raw/mpc5121_nfc.c: error: unused variable 'mtd' [-Werror=unused-variable]:  => 294:19
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5040), (.head.text+0x5100)
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-  + error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0xc)
-  + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x28), (.fixup+0x4), (.fixup+0x10), (.fixup+0x1c), (.fixup+0x34)
-
-13 error improvements:
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_HIGH' undeclared (first use in this function): 151:20 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_LOW' undeclared (first use in this function): 152:35 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'base_address': 152:19 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'destid_0_7': 153:19 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: control reaches end of non-void function [-Werror=return-type]: 128:1 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: dereferencing pointer to incomplete type 'struct pci_sysdata': 751:4 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: field 'sysdata' has incomplete type: 117:21 => 
-  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_getc' defined but not used [-Werror=unused-function]: 1109:12 => 
-  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_putc' defined but not used [-Werror=unused-function]: 1095:13 => 
-  - /kisskb/src/drivers/tty/serial/sunzilog.c: error: 'sunzilog_putchar' defined but not used [-Werror=unused-function]: 1128:13 => 
-  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]: 1496:33, 1496:12, 842:13, 970:41, 970:13, 842:41 => 
-  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 843:56, 971:56, 971:28, 1497:27, 1497:48, 843:28 => 
-  - /kisskb/src/lib/xxhash.c: error: the frame size of 1624 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]: 236:1 => 
-
-
-*** WARNINGS ***
-
-16 warning regressions:
-  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for MCTP:  => 322
-  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for MCTP:  => 295
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_enter" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_exit" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_try" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_write_enter" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ashldi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ashrdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__copy_1page" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__divdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__lshrdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__muldi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ndelay" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__udelay" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "bzero_1page" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "empty_zero_page" [vmlinux] version ...:  => N/A
-
-29 warning improvements:
-  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memcpy' reading 6 bytes from a region of size 0 [-Wstringop-overread]: 72:25 => 
-  - /kisskb/src/block/genhd.c: warning: the frame size of 1640 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
-  - /kisskb/src/block/genhd.c: warning: the frame size of 1672 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
-  - /kisskb/src/lib/xxhash.c: warning: the frame size of 1616 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 236:1 => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3570): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3588): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35b8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3600): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3618): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3630): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3648): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3660): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3678): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3690): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36a8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36c0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36d8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x108): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x120): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x138): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x150): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x168): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x180): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x198): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: lib/find_bit_benchmark.o(.text.unlikely+0x0): Section mismatch in reference from the (unknown reference) (unknown) to the variable .init.data:bitmap2: N/A => 
-  - modpost: WARNING: modpost: lib/test_bitmap.o(.text.unlikely+0x58): Section mismatch in reference from the function bitmap_equal() to the variable .init.rodata:test_print: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+THanks
+Patrice

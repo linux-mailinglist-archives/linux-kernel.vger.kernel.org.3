@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF6D47AC60
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FF847AE4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235873AbhLTOnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbhLTOlx (ORCPT
+        id S239164AbhLTPAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:00:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48188 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238480AbhLTO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC8AC061376;
-        Mon, 20 Dec 2021 06:41:20 -0800 (PST)
+        Mon, 20 Dec 2021 09:57:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CC186119C;
-        Mon, 20 Dec 2021 14:41:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31380C36AE8;
-        Mon, 20 Dec 2021 14:41:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23EA6611A9;
+        Mon, 20 Dec 2021 14:57:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03627C36AE8;
+        Mon, 20 Dec 2021 14:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011279;
-        bh=T00b3qHIvJqSZfWRbcobjwdLWi4yChbMrZGbF2isnis=;
+        s=korg; t=1640012259;
+        bh=R+1YRwd50bG57XKa/UahOXwlLJ7q2NYiV8ao1IDnfug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YQALO+fSS+GD5CzLUHpy0haeTOA2JEPamyVwQlxZIbh0Y1sp868YPGqrId/amgJww
-         t4c0gIpd7ubZrgLJO4xG28bkDR13JG9IvHj2qSncZmwof3btxMleAglCYRZYnkj+QL
-         LdZ/pLc2VKHB1dtiywsg6ruz/SCkOA/UQGFgzk4k=
+        b=yEZ5gzWaO3SGoZReNvmO9/aqWFCWNFP6i4bSfgz/gSogh1hRWelKB6HouDP0VNZSh
+         xp7ystZ2RBY6V+iklW1GqzI56dwZxwZ/cPTcHZjKhVaQ4VuHWj9DJujH7yBVT2D1tp
+         bYwqz1yI88W6q4bbiY8cZP/XpgDQ3BsZGDKAJTtE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 21/56] dmaengine: st_fdma: fix MODULE_ALIAS
-Date:   Mon, 20 Dec 2021 15:34:14 +0100
-Message-Id: <20211220143024.141769083@linuxfoundation.org>
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Dust Li <dust.li@linux.alibaba.com>,
+        "D. Wythe" <alibuda@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 105/177] net/smc: Prevent smc_release() from long blocking
+Date:   Mon, 20 Dec 2021 15:34:15 +0100
+Message-Id: <20211220143043.621752348@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,31 +49,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alyssa Ross <hi@alyssa.is>
+From: D. Wythe <alibuda@linux.alibaba.com>
 
-[ Upstream commit 822c9f2b833c53fc67e8adf6f63ecc3ea24d502c ]
+[ Upstream commit 5c15b3123f65f8fbb1b445d9a7e8812e0e435df2 ]
 
-modprobe can't handle spaces in aliases.
+In nginx/wrk benchmark, there's a hung problem with high probability
+on case likes that: (client will last several minutes to exit)
 
-Fixes: 6b4cd727eaf1 ("dmaengine: st_fdma: Add STMicroelectronics FDMA engine driver support")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Link: https://lore.kernel.org/r/20211125154441.2626214-1-hi@alyssa.is
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+server: smc_run nginx
+
+client: smc_run wrk -c 10000 -t 1 http://server
+
+Client hangs with the following backtrace:
+
+0 [ffffa7ce8Of3bbf8] __schedule at ffffffff9f9eOd5f
+1 [ffffa7ce8Of3bc88] schedule at ffffffff9f9eløe6
+2 [ffffa7ce8Of3bcaO] schedule_timeout at ffffffff9f9e3f3c
+3 [ffffa7ce8Of3bd2O] wait_for_common at ffffffff9f9el9de
+4 [ffffa7ce8Of3bd8O] __flush_work at ffffffff9fOfeOl3
+5 [ffffa7ce8øf3bdfO] smc_release at ffffffffcO697d24 [smc]
+6 [ffffa7ce8Of3be2O] __sock_release at ffffffff9f8O2e2d
+7 [ffffa7ce8Of3be4ø] sock_close at ffffffff9f8ø2ebl
+8 [ffffa7ce8øf3be48] __fput at ffffffff9f334f93
+9 [ffffa7ce8Of3be78] task_work_run at ffffffff9flOlff5
+10 [ffffa7ce8Of3beaO] do_exit at ffffffff9fOe5Ol2
+11 [ffffa7ce8Of3bflO] do_group_exit at ffffffff9fOe592a
+12 [ffffa7ce8Of3bf38] __x64_sys_exit_group at ffffffff9fOe5994
+13 [ffffa7ce8Of3bf4O] do_syscall_64 at ffffffff9f9d4373
+14 [ffffa7ce8Of3bfsO] entry_SYSCALL_64_after_hwframe at ffffffff9fa0007c
+
+This issue dues to flush_work(), which is used to wait for
+smc_connect_work() to finish in smc_release(). Once lots of
+smc_connect_work() was pending or all executing work dangling,
+smc_release() has to block until one worker comes to free, which
+is equivalent to wait another smc_connnect_work() to finish.
+
+In order to fix this, There are two changes:
+
+1. For those idle smc_connect_work(), cancel it from the workqueue; for
+   executing smc_connect_work(), waiting for it to finish. For that
+   purpose, replace flush_work() with cancel_work_sync().
+
+2. Since smc_connect() hold a reference for passive closing, if
+   smc_connect_work() has been cancelled, release the reference.
+
+Fixes: 24ac3a08e658 ("net/smc: rebuild nonblocking connect")
+Reported-by: Tony Lu <tonylu@linux.alibaba.com>
+Tested-by: Dust Li <dust.li@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Link: https://lore.kernel.org/r/1639571361-101128-1-git-send-email-alibuda@linux.alibaba.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/st_fdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/smc/af_smc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/st_fdma.c b/drivers/dma/st_fdma.c
-index bfb79bd0c6de5..087d22ba8a2f6 100644
---- a/drivers/dma/st_fdma.c
-+++ b/drivers/dma/st_fdma.c
-@@ -886,4 +886,4 @@ MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("STMicroelectronics FDMA engine driver");
- MODULE_AUTHOR("Ludovic.barre <Ludovic.barre@st.com>");
- MODULE_AUTHOR("Peter Griffin <peter.griffin@linaro.org>");
--MODULE_ALIAS("platform: " DRIVER_NAME);
-+MODULE_ALIAS("platform:" DRIVER_NAME);
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 06e4a07bdcdc1..eea6d4a854e90 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -193,7 +193,9 @@ static int smc_release(struct socket *sock)
+ 	/* cleanup for a dangling non-blocking connect */
+ 	if (smc->connect_nonblock && sk->sk_state == SMC_INIT)
+ 		tcp_abort(smc->clcsock->sk, ECONNABORTED);
+-	flush_work(&smc->connect_work);
++
++	if (cancel_work_sync(&smc->connect_work))
++		sock_put(&smc->sk); /* sock_hold in smc_connect for passive closing */
+ 
+ 	if (sk->sk_state == SMC_LISTEN)
+ 		/* smc_close_non_accepted() is called and acquires
 -- 
 2.33.0
 

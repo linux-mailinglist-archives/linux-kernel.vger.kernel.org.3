@@ -2,206 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB88747ADAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3078D47AB54
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236685AbhLTOxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:53:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42350 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbhLTOuy (ORCPT
+        id S233695AbhLTOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233633AbhLTOfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:50:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C30A9611C8;
-        Mon, 20 Dec 2021 14:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D9EC36AE7;
-        Mon, 20 Dec 2021 14:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011853;
-        bh=WFmlfzG5I+MJq6rZvxF1F3bvPT8vxp1gXnAF6JdTpa8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n+AdqpvHuQ09I/F3ThfBEtjHhID+w2DsmpjPM+YaZ2Z8tVD+yvWZgzcTxfC4nfSgJ
-         a6C+rl8MnphaCs9HRccFVLPRdt2zurHTTkThmbFiPYvylltbr7ukIuhXvnwpKf9EnJ
-         /1J4tmk3r1LY0Js6TNQTz2GYKVypP2RLp9Cypxhk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 98/99] xen/netback: fix rx queue stall detection
-Date:   Mon, 20 Dec 2021 15:35:11 +0100
-Message-Id: <20211220143032.703346263@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 20 Dec 2021 09:35:50 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74793C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id q3so2099104qvc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
+        b=DiEjH6My8Ez1IQhVc6pvDrx8DdYBf5P9Q+clTviqtdAcGoyrz8O3Mm0QM1wUFrNkY0
+         erUGHvnkQdBzOobPRhQhMUs2tWFe8BqPjTGLGO7iDNYJjnvifWvJK0CZAwohnr/jSIgz
+         QpKt+Ew79In897TuLR2zRLivKaLe3tEQEONG8JVkG6PU0InE460sA5jq4dymMlHT8XSX
+         zg2DC/LWEyYpH62+sfMqlCvUH8ljGrMJB9GT5NpPjnlC3IZ7ST16PWtT0L8tFOZmLFjb
+         TIGp0qdZPmp5QBN5QRqIC1GTcIzUBcUI8b5RNxMVY+8vGRJeuba9qlq6VNmEPxlzglI1
+         v4Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
+        b=HhsuHToFCXEZa+Mh46clZvZZA6Sz6QLelzwHL10N8hYrcf4iVkEPcuwBox7g9z1Vu9
+         SRf+toCjMoJleg6+rCPLUm+raexwv2UjQrp5pgW8xVrLFmotO4sTpbbunvEe1eNQryPK
+         MFj/58yr6OxlD0YSU7vfkTTX8rc5V/yl+qZbmWhJ+rl8udxDcnC1eiAIN83NY94uICs5
+         jKT01FsziW1PlBaLfU65FuL2N795Dihokj5mqUwulMwl961hVM//FL591rrYcWtB9p13
+         l2mz1XXzH3/pZudrziJ9yBA9IsNHim+L/f2iQRNHU4EtIlcAedxSDbh4jWH55oI/6CX3
+         G+VQ==
+X-Gm-Message-State: AOAM533qOZMVibYtibSLULIUV1QjHfHJ+8EyxXR4A/zTq2fzxmuccbyE
+        JuPD/cP65DSVj22x35UM2HvKn/Cj/vYKuhE2Rd6pEg==
+X-Google-Smtp-Source: ABdhPJzaFRZE2AdeTnoG9pfGf1WQwZj1GmAFj8sa8rSd0l4vITphwUpgRq+6SCv0VHaU8fAW9eiqASykEX99MrCy/vM=
+X-Received: by 2002:a0c:8031:: with SMTP id 46mr13207207qva.126.1640010949396;
+ Mon, 20 Dec 2021 06:35:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-40-glider@google.com>
+ <87bl1ec32a.ffs@tglx>
+In-Reply-To: <87bl1ec32a.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 20 Dec 2021 15:35:13 +0100
+Message-ID: <CAG_fn=VTow8S-H8SQbDNmB8gj+QpBm3RFKeiYhH=CRo0yd_CKg@mail.gmail.com>
+Subject: Re: [PATCH 39/43] x86: kmsan: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+On Fri, Dec 17, 2021 at 10:51 PM Thomas Gleixner <tglx@linutronix.de> wrote=
+:
+>
+> Alexander,
+>
+> On Tue, Dec 14 2021 at 17:20, Alexander Potapenko wrote:
+> > When calling KMSAN-instrumented functions from non-instrumented
+> > functions, function parameters may not be initialized properly, leading
+> > to false positive reports. In particular, this happens all the time whe=
+n
+> > calling interrupt handlers from `noinstr` IDT entries.
+> >
+> > Fortunately, x86 code has instrumentation_begin() and
+>
+> It's not only x86 code:
+> >  kernel/entry/common.c           | 3 +++
 
-commit 6032046ec4b70176d247a71836186d47b25d1684 upstream.
+Shall this bit go into a separate patch?
 
-Commit 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when
-not using GSO") introduced a security problem in netback, as an
-interface would only be regarded to be stalled if no slot is available
-in the rx queue ring page. In case the SKB at the head of the queued
-requests will need more than one rx slot and only one slot is free the
-stall detection logic will never trigger, as the test for that is only
-looking for at least one slot to be free.
+> > @@ -76,6 +77,7 @@ __visible noinstr void do_syscall_64(struct pt_regs *=
+regs, int nr)
+> >       nr =3D syscall_enter_from_user_mode(regs, nr);
+> >
+> >       instrumentation_begin();
+> > +     kmsan_instrumentation_begin(regs);
+>
+> Can we please make this something like:
+>
+>        instrumentation_begin_at_entry(regs);
 
-Fix that by testing for the needed number of slots instead of only one
-slot being available.
+Fine, will do.
+Do you think it would make sense to hide it inside
+instrumentation_begin(), or is it ok to have both macros follow each
+other?
 
-In order to not have to take the rx queue lock that often, store the
-number of needed slots in the queue data. As all SKB dequeue operations
-happen in the rx queue kernel thread this is safe, as long as the
-number of needed slots is accessed via READ/WRITE_ONCE() only and
-updates are always done with the rx queue lock held.
-
-Add a small helper for obtaining the number of free slots.
-
-This is part of XSA-392
-
-Fixes: 1d5d48523900a4b ("xen-netback: require fewer guest Rx slots when not using GSO")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/xen-netback/common.h |    1 
- drivers/net/xen-netback/rx.c     |   65 ++++++++++++++++++++++++---------------
- 2 files changed, 42 insertions(+), 24 deletions(-)
-
---- a/drivers/net/xen-netback/common.h
-+++ b/drivers/net/xen-netback/common.h
-@@ -203,6 +203,7 @@ struct xenvif_queue { /* Per-queue data
- 	unsigned int rx_queue_max;
- 	unsigned int rx_queue_len;
- 	unsigned long last_rx_time;
-+	unsigned int rx_slots_needed;
- 	bool stalled;
- 
- 	struct xenvif_copy_state rx_copy;
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -33,28 +33,36 @@
- #include <xen/xen.h>
- #include <xen/events.h>
- 
--static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
-+/*
-+ * Update the needed ring page slots for the first SKB queued.
-+ * Note that any call sequence outside the RX thread calling this function
-+ * needs to wake up the RX thread via a call of xenvif_kick_thread()
-+ * afterwards in order to avoid a race with putting the thread to sleep.
-+ */
-+static void xenvif_update_needed_slots(struct xenvif_queue *queue,
-+				       const struct sk_buff *skb)
- {
--	RING_IDX prod, cons;
--	struct sk_buff *skb;
--	int needed;
--	unsigned long flags;
-+	unsigned int needed = 0;
- 
--	spin_lock_irqsave(&queue->rx_queue.lock, flags);
--
--	skb = skb_peek(&queue->rx_queue);
--	if (!skb) {
--		spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
--		return false;
-+	if (skb) {
-+		needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
-+		if (skb_is_gso(skb))
-+			needed++;
-+		if (skb->sw_hash)
-+			needed++;
- 	}
- 
--	needed = DIV_ROUND_UP(skb->len, XEN_PAGE_SIZE);
--	if (skb_is_gso(skb))
--		needed++;
--	if (skb->sw_hash)
--		needed++;
-+	WRITE_ONCE(queue->rx_slots_needed, needed);
-+}
- 
--	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
-+static bool xenvif_rx_ring_slots_available(struct xenvif_queue *queue)
-+{
-+	RING_IDX prod, cons;
-+	unsigned int needed;
-+
-+	needed = READ_ONCE(queue->rx_slots_needed);
-+	if (!needed)
-+		return false;
- 
- 	do {
- 		prod = queue->rx.sring->req_prod;
-@@ -80,6 +88,9 @@ void xenvif_rx_queue_tail(struct xenvif_
- 
- 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
- 
-+	if (skb_queue_empty(&queue->rx_queue))
-+		xenvif_update_needed_slots(queue, skb);
-+
- 	__skb_queue_tail(&queue->rx_queue, skb);
- 
- 	queue->rx_queue_len += skb->len;
-@@ -100,6 +111,8 @@ static struct sk_buff *xenvif_rx_dequeue
- 
- 	skb = __skb_dequeue(&queue->rx_queue);
- 	if (skb) {
-+		xenvif_update_needed_slots(queue, skb_peek(&queue->rx_queue));
-+
- 		queue->rx_queue_len -= skb->len;
- 		if (queue->rx_queue_len < queue->rx_queue_max) {
- 			struct netdev_queue *txq;
-@@ -487,27 +500,31 @@ void xenvif_rx_action(struct xenvif_queu
- 	xenvif_rx_copy_flush(queue);
- }
- 
--static bool xenvif_rx_queue_stalled(struct xenvif_queue *queue)
-+static RING_IDX xenvif_rx_queue_slots(const struct xenvif_queue *queue)
- {
- 	RING_IDX prod, cons;
- 
- 	prod = queue->rx.sring->req_prod;
- 	cons = queue->rx.req_cons;
- 
-+	return prod - cons;
-+}
-+
-+static bool xenvif_rx_queue_stalled(const struct xenvif_queue *queue)
-+{
-+	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
-+
- 	return !queue->stalled &&
--		prod - cons < 1 &&
-+		xenvif_rx_queue_slots(queue) < needed &&
- 		time_after(jiffies,
- 			   queue->last_rx_time + queue->vif->stall_timeout);
- }
- 
- static bool xenvif_rx_queue_ready(struct xenvif_queue *queue)
- {
--	RING_IDX prod, cons;
--
--	prod = queue->rx.sring->req_prod;
--	cons = queue->rx.req_cons;
-+	unsigned int needed = READ_ONCE(queue->rx_slots_needed);
- 
--	return queue->stalled && prod - cons >= 1;
-+	return queue->stalled && xenvif_rx_queue_slots(queue) >= needed;
- }
- 
- bool xenvif_have_rx_work(struct xenvif_queue *queue, bool test_kthread)
+> or some other sensible name which hides that kmsan gunk and avoids to
+> touch all of this again when KFOOSAN comes around?
+>
+> Thanks,
+>
+>         tglx
+>
+>
+>
 
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

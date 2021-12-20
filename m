@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEFF47AEB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134B147AF7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbhLTPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S239243AbhLTPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239200AbhLTO63 (ORCPT
+        with ESMTP id S238525AbhLTPMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A61C061396;
-        Mon, 20 Dec 2021 06:50:01 -0800 (PST)
+        Mon, 20 Dec 2021 10:12:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39C7C08E9AF;
+        Mon, 20 Dec 2021 06:56:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97402B80EE2;
-        Mon, 20 Dec 2021 14:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB06C36AE8;
-        Mon, 20 Dec 2021 14:49:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 543F1611E0;
+        Mon, 20 Dec 2021 14:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3431BC36AEA;
+        Mon, 20 Dec 2021 14:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011800;
-        bh=3cp1xpV7FD62VkDShfMHSubkHGbAzqWQyXlmC43hKb0=;
+        s=korg; t=1640012192;
+        bh=oaHS0BAFXeaga1D93lXRlFFtUqZXNAx5WkttJn3B8OM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CkKqt4R2TJxrQuYZt5rv1VMEfnyNnQ4VuMGFDvVwV2wssq0F7qfdjyUQRdezy6fIN
-         6hh1gRhBOQvzqvfSQcZDEfSWII6UbP8lLEYWTSc1JYFRTGB77zqDk0/2F3Y3SMfyCy
-         rf4Zvq5T/Ol9k7VnfH/cISlo7WjV+7eoc0EWaoU4=
+        b=hK9jbiQdcrN1EhzrWhH/0L2Z9iuCY9yzhUQbKZcxTifYmLLGTmAhikJRyqfWUASCG
+         fy3kuMgA8KTC++cug9+Ne6q2Fy4hVT3pSep8YnE1I9hCm/wbK3rwU7dIK0+BT7fCFE
+         +DEmWr9y5x9P0nmyi2H+3Kp0kdAcNPb9cxRRKV00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Letu Ren <fantasquex@gmail.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 51/99] igbvf: fix double free in `igbvf_probe`
+Subject: [PATCH 5.15 114/177] Revert "usb: early: convert to readl_poll_timeout_atomic()"
 Date:   Mon, 20 Dec 2021 15:34:24 +0100
-Message-Id: <20211220143031.100242099@linuxfoundation.org>
+Message-Id: <20211220143043.910474117@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,80 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Letu Ren <fantasquex@gmail.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit b6d335a60dc624c0d279333b22c737faa765b028 ]
+[ Upstream commit c4d936efa46d8ea183df16c0f3fa4423327da51d ]
 
-In `igbvf_probe`, if register_netdev() fails, the program will go to
-label err_hw_init, and then to label err_ioremap. In free_netdev() which
-is just below label err_ioremap, there is `list_for_each_entry_safe` and
-`netif_napi_del` which aims to delete all entries in `dev->napi_list`.
-The program has added an entry `adapter->rx_ring->napi` which is added by
-`netif_napi_add` in igbvf_alloc_queues(). However, adapter->rx_ring has
-been freed below label err_hw_init. So this a UAF.
+This reverts commit 796eed4b2342c9d6b26c958e92af91253a2390e1.
 
-In terms of how to patch the problem, we can refer to igbvf_remove() and
-delete the entry before `adapter->rx_ring`.
+This change causes boot lockups when using "arlyprintk=xdbc" because
+ktime can not be used at this point in time in the boot process.  Also,
+it is not needed for very small delays like this.
 
-The KASAN logs are as follows:
-
-[   35.126075] BUG: KASAN: use-after-free in free_netdev+0x1fd/0x450
-[   35.127170] Read of size 8 at addr ffff88810126d990 by task modprobe/366
-[   35.128360]
-[   35.128643] CPU: 1 PID: 366 Comm: modprobe Not tainted 5.15.0-rc2+ #14
-[   35.129789] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
-[   35.131749] Call Trace:
-[   35.132199]  dump_stack_lvl+0x59/0x7b
-[   35.132865]  print_address_description+0x7c/0x3b0
-[   35.133707]  ? free_netdev+0x1fd/0x450
-[   35.134378]  __kasan_report+0x160/0x1c0
-[   35.135063]  ? free_netdev+0x1fd/0x450
-[   35.135738]  kasan_report+0x4b/0x70
-[   35.136367]  free_netdev+0x1fd/0x450
-[   35.137006]  igbvf_probe+0x121d/0x1a10 [igbvf]
-[   35.137808]  ? igbvf_vlan_rx_add_vid+0x100/0x100 [igbvf]
-[   35.138751]  local_pci_probe+0x13c/0x1f0
-[   35.139461]  pci_device_probe+0x37e/0x6c0
-[   35.165526]
-[   35.165806] Allocated by task 366:
-[   35.166414]  ____kasan_kmalloc+0xc4/0xf0
-[   35.167117]  foo_kmem_cache_alloc_trace+0x3c/0x50 [igbvf]
-[   35.168078]  igbvf_probe+0x9c5/0x1a10 [igbvf]
-[   35.168866]  local_pci_probe+0x13c/0x1f0
-[   35.169565]  pci_device_probe+0x37e/0x6c0
-[   35.179713]
-[   35.179993] Freed by task 366:
-[   35.180539]  kasan_set_track+0x4c/0x80
-[   35.181211]  kasan_set_free_info+0x1f/0x40
-[   35.181942]  ____kasan_slab_free+0x103/0x140
-[   35.182703]  kfree+0xe3/0x250
-[   35.183239]  igbvf_probe+0x1173/0x1a10 [igbvf]
-[   35.184040]  local_pci_probe+0x13c/0x1f0
-
-Fixes: d4e0fe01a38a0 (igbvf: add new driver to support 82576 virtual functions)
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Letu Ren <fantasquex@gmail.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reported-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Reported-by: Peter Zijlstra <peterz@infradead.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Fixes: 796eed4b2342 ("usb: early: convert to readl_poll_timeout_atomic()")
+Link: https://lore.kernel.org/r/c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igbvf/netdev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/early/xhci-dbc.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c b/drivers/net/ethernet/intel/igbvf/netdev.c
-index 07c9e9e0546f5..fe8c0a26b7201 100644
---- a/drivers/net/ethernet/intel/igbvf/netdev.c
-+++ b/drivers/net/ethernet/intel/igbvf/netdev.c
-@@ -2873,6 +2873,7 @@ static int igbvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	return 0;
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index be4ecbabdd586..6c0434100e38c 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -14,7 +14,6 @@
+ #include <linux/pci_ids.h>
+ #include <linux/memblock.h>
+ #include <linux/io.h>
+-#include <linux/iopoll.h>
+ #include <asm/pci-direct.h>
+ #include <asm/fixmap.h>
+ #include <linux/bcd.h>
+@@ -136,9 +135,17 @@ static int handshake(void __iomem *ptr, u32 mask, u32 done, int wait, int delay)
+ {
+ 	u32 result;
  
- err_hw_init:
-+	netif_napi_del(&adapter->rx_ring->napi);
- 	kfree(adapter->tx_ring);
- 	kfree(adapter->rx_ring);
- err_sw_init:
+-	return readl_poll_timeout_atomic(ptr, result,
+-					 ((result & mask) == done),
+-					 delay, wait);
++	/* Can not use readl_poll_timeout_atomic() for early boot things */
++	do {
++		result = readl(ptr);
++		result &= mask;
++		if (result == done)
++			return 0;
++		udelay(delay);
++		wait -= delay;
++	} while (wait > 0);
++
++	return -ETIMEDOUT;
+ }
+ 
+ static void __init xdbc_bios_handoff(void)
 -- 
-2.33.0
+2.34.1
 
 
 

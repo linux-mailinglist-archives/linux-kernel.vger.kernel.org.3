@@ -2,135 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805C947AACB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568AE47AACE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbhLTOAp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Dec 2021 09:00:45 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:58469 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232320AbhLTOAo (ORCPT
+        id S233256AbhLTOAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:00:49 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48224 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232320AbhLTOAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:00:44 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-106-ThBTv8hIOJK8PeJnyhEimg-1; Mon, 20 Dec 2021 14:00:42 +0000
-X-MC-Unique: ThBTv8hIOJK8PeJnyhEimg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 14:00:40 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Mon, 20 Dec 2021 14:00:40 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Perches' <joe@perches.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "woojung.huh@microchip.com" <woojung.huh@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "ulli.kroll@googlemail.com" <ulli.kroll@googlemail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "amitkarwar@gmail.com" <amitkarwar@gmail.com>,
-        "nishants@marvell.com" <nishants@marvell.com>,
-        "gbhat@marvell.com" <gbhat@marvell.com>,
-        "huxinming820@gmail.com" <huxinming820@gmail.com>,
-        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andy Lavr <andy.lavr@gmail.com>
-Subject: RE: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
- HostCmd_SET_SEQ_NO_BSS_INFO
-Thread-Topic: [PATCH 4.19 3/6] mwifiex: Remove unnecessary braces from
- HostCmd_SET_SEQ_NO_BSS_INFO
-Thread-Index: AQHX9ZskhY8SD9NuYU2K0YFKH5iuIKw7ZcMg
-Date:   Mon, 20 Dec 2021 14:00:40 +0000
-Message-ID: <5797d1aff9034476afa6827af2bfbce7@AcuMS.aculab.com>
-References: <20211217144119.2538175-1-anders.roxell@linaro.org>
-         <20211217144119.2538175-4-anders.roxell@linaro.org>
- <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
-In-Reply-To: <bc4a4ba7c07a4077b9790be883fb4205d401804e.camel@perches.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 20 Dec 2021 09:00:48 -0500
+Date:   Mon, 20 Dec 2021 14:00:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1640008846;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WAcZAKtXFKtoDsVERA4s2WTs2X+uQUslzNXL6WnvQ+s=;
+        b=MHveO++m4e1v7k4QAq+/Y6J6e8kC3XJm/UfAaTvOAjRglvdfUapvA1hSP+M5NrBZ+lKpmL
+        817CGuTBDlneC+dxlz53/a2bF4lQHMFHXR2qnnw9yzUoVpMuL+mPV2f2dVsCIwFSirgu3B
+        q1GzLa9dsGERJMUsQxClonwGn5SHG0s1mRwaa2fygOPg52FWWM7fhzBJHrdEI8nAXxpHvm
+        12I56konBPrWGLW3X7L443uWue7U+6gKTZnp3++l47e9AzZEjxbeIJL6FuvlMh1N7cReJH
+        lXsLosNqfOsAfyEZnc9PoHrFOoHmu7YESYhkF59rmlucSPp82dTu9dUuoDznvg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1640008846;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WAcZAKtXFKtoDsVERA4s2WTs2X+uQUslzNXL6WnvQ+s=;
+        b=Y8RRCqL43L+ndGIuIJemJod38RCfXaJpewE99e05bXI+YKa7JdiacbnPkSVCD8uxWCtKEc
+        eUCrStBkYbtzpkCw==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] KVM: arm64: Rework kvm_pgtable initialisation
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20211129200150.351436-5-maz@kernel.org>
+References: <20211129200150.351436-5-maz@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Message-ID: <164000884510.23020.16603905522171609302.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Perches
-> Sent: 20 December 2021 12:13
-> 
-> On Fri, 2021-12-17 at 15:41 +0100, Anders Roxell wrote:
-> > From: Nathan Chancellor <natechancellor@gmail.com>
-> >
-> > commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
-> >
-> > A new warning in clang points out when macro expansion might result in a
-> > GNU C statement expression. There is an instance of this in the mwifiex
-> > driver:
-> >
-> > drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-> > ')' tokens terminating statement expression appear in different macro
-> > expansion contexts [-Wcompound-token-split-by-macro]
-> >         host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
-> >                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> []
-> > diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
-> []
-> > @@ -512,10 +512,10 @@ enum mwifiex_channel_flags {
-> >
-> >  #define RF_ANTENNA_AUTO                 0xFFFF
-> >
-> > -#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
-> > -	(((seq) & 0x00ff) |                             \
-> > -	 (((num) & 0x000f) << 8)) |                     \
-> > -	(((type) & 0x000f) << 12);                  }
-> > +#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-> > +	((((seq) & 0x00ff) |                        \
-> > +	 (((num) & 0x000f) << 8)) |                 \
-> > +	(((type) & 0x000f) << 12))
-> 
-> Perhaps this would be better as a static inline
-> 
-> static inline u16 HostCmd_SET_SEQ_NO_BSS_INFO(u16 seq, u8 num, u8 type)
-> {
-> 	return (type & 0x000f) << 12 | (num & 0x000f) << 8 | (seq & 0x00ff);
-> }
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Just writing in on one line helps readability!
-It is also used exactly twice, both with a cpu_to_le16().
-I wonder how well the compiler handles that on BE?
-The #define is more likely to be handled better.
+Commit-ID:     9d8604b28575ccab3afd8d6f56cab9a6c0d281ef
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/9d8604b28575ccab3afd8d6f56cab9a6c0d281ef
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Mon, 29 Nov 2021 20:00:45 
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Thu, 16 Dec 2021 17:01:05 
 
-I've only made a cursory glance at the code, but I get splitting
-host_cmd->seq_num into two u8 fields would give better code!
+KVM: arm64: Rework kvm_pgtable initialisation
 
-	David
+Ganapatrao reported that the kvm_pgtable->mmu pointer is more or
+less hardcoded to the main S2 mmu structure, while the nested
+code needs it to point to other instances (as we have one instance
+per nested context).
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Rework the initialisation of the kvm_pgtable structure so that
+this assumtion doesn't hold true anymore. This requires some
+minor changes to the order in which things are initialised
+(the mmu->arch pointer being the critical one).
 
+Reported-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Reviewed-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211129200150.351436-5-maz@kernel.org
+---
+ arch/arm64/include/asm/kvm_pgtable.h  |  9 ++++-----
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c |  4 ++--
+ arch/arm64/kvm/hyp/pgtable.c          |  6 +++---
+ arch/arm64/kvm/mmu.c                  |  4 ++--
+ 4 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 0277838..8b808e7 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -270,8 +270,7 @@ u64 kvm_get_vtcr(u64 mmfr0, u64 mmfr1, u32 phys_shift);
+ /**
+  * __kvm_pgtable_stage2_init() - Initialise a guest stage-2 page-table.
+  * @pgt:	Uninitialised page-table structure to initialise.
+- * @arch:	Arch-specific KVM structure representing the guest virtual
+- *		machine.
++ * @mmu:	S2 MMU context for this S2 translation
+  * @mm_ops:	Memory management callbacks.
+  * @flags:	Stage-2 configuration flags.
+  * @force_pte_cb: Function that returns true if page level mappings must
+@@ -279,13 +278,13 @@ u64 kvm_get_vtcr(u64 mmfr0, u64 mmfr1, u32 phys_shift);
+  *
+  * Return: 0 on success, negative error code on failure.
+  */
+-int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_arch *arch,
++int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_s2_mmu *mmu,
+ 			      struct kvm_pgtable_mm_ops *mm_ops,
+ 			      enum kvm_pgtable_stage2_flags flags,
+ 			      kvm_pgtable_force_pte_cb_t force_pte_cb);
+ 
+-#define kvm_pgtable_stage2_init(pgt, arch, mm_ops) \
+-	__kvm_pgtable_stage2_init(pgt, arch, mm_ops, 0, NULL)
++#define kvm_pgtable_stage2_init(pgt, mmu, mm_ops) \
++	__kvm_pgtable_stage2_init(pgt, mmu, mm_ops, 0, NULL)
+ 
+ /**
+  * kvm_pgtable_stage2_destroy() - Destroy an unused guest stage-2 page-table.
+diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+index c1a90dd..7d7b703 100644
+--- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
++++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+@@ -103,19 +103,19 @@ int kvm_host_prepare_stage2(void *pgt_pool_base)
+ 
+ 	prepare_host_vtcr();
+ 	hyp_spin_lock_init(&host_kvm.lock);
++	mmu->arch = &host_kvm.arch;
+ 
+ 	ret = prepare_s2_pool(pgt_pool_base);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = __kvm_pgtable_stage2_init(&host_kvm.pgt, &host_kvm.arch,
++	ret = __kvm_pgtable_stage2_init(&host_kvm.pgt, mmu,
+ 					&host_kvm.mm_ops, KVM_HOST_S2_FLAGS,
+ 					host_stage2_force_pte_cb);
+ 	if (ret)
+ 		return ret;
+ 
+ 	mmu->pgd_phys = __hyp_pa(host_kvm.pgt.pgd);
+-	mmu->arch = &host_kvm.arch;
+ 	mmu->pgt = &host_kvm.pgt;
+ 	WRITE_ONCE(mmu->vmid.vmid_gen, 0);
+ 	WRITE_ONCE(mmu->vmid.vmid, 0);
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index f8ceebe..8cdbc43 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -1116,13 +1116,13 @@ int kvm_pgtable_stage2_flush(struct kvm_pgtable *pgt, u64 addr, u64 size)
+ }
+ 
+ 
+-int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_arch *arch,
++int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_s2_mmu *mmu,
+ 			      struct kvm_pgtable_mm_ops *mm_ops,
+ 			      enum kvm_pgtable_stage2_flags flags,
+ 			      kvm_pgtable_force_pte_cb_t force_pte_cb)
+ {
+ 	size_t pgd_sz;
+-	u64 vtcr = arch->vtcr;
++	u64 vtcr = mmu->arch->vtcr;
+ 	u32 ia_bits = VTCR_EL2_IPA(vtcr);
+ 	u32 sl0 = FIELD_GET(VTCR_EL2_SL0_MASK, vtcr);
+ 	u32 start_level = VTCR_EL2_TGRAN_SL0_BASE - sl0;
+@@ -1135,7 +1135,7 @@ int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_arch *arch,
+ 	pgt->ia_bits		= ia_bits;
+ 	pgt->start_level	= start_level;
+ 	pgt->mm_ops		= mm_ops;
+-	pgt->mmu		= &arch->mmu;
++	pgt->mmu		= mmu;
+ 	pgt->flags		= flags;
+ 	pgt->force_pte_cb	= force_pte_cb;
+ 
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 326cdfe..9eec548 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -516,7 +516,8 @@ int kvm_init_stage2_mmu(struct kvm *kvm, struct kvm_s2_mmu *mmu)
+ 	if (!pgt)
+ 		return -ENOMEM;
+ 
+-	err = kvm_pgtable_stage2_init(pgt, &kvm->arch, &kvm_s2_mm_ops);
++	mmu->arch = &kvm->arch;
++	err = kvm_pgtable_stage2_init(pgt, mmu, &kvm_s2_mm_ops);
+ 	if (err)
+ 		goto out_free_pgtable;
+ 
+@@ -529,7 +530,6 @@ int kvm_init_stage2_mmu(struct kvm *kvm, struct kvm_s2_mmu *mmu)
+ 	for_each_possible_cpu(cpu)
+ 		*per_cpu_ptr(mmu->last_vcpu_ran, cpu) = -1;
+ 
+-	mmu->arch = &kvm->arch;
+ 	mmu->pgt = pgt;
+ 	mmu->pgd_phys = __pa(pgt->pgd);
+ 	WRITE_ONCE(mmu->vmid.vmid_gen, 0);

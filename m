@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDF847A37C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6604B47A397
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237194AbhLTCHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 21:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbhLTCHG (ORCPT
+        id S237233AbhLTCTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 21:19:12 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16831 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233948AbhLTCTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 21:07:06 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103CCC061574;
-        Sun, 19 Dec 2021 18:07:06 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso11408623pji.0;
-        Sun, 19 Dec 2021 18:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=44frKLBjDoKoXxQ8vCCuFrEW3887v3fISzPaK57VSks=;
-        b=FqSqP03FGGeduGfunQo2NNYyvLpJGhBnhUgZoy99T0F80I6aSZxy8biV9H1L/uKQXb
-         Zhukoz2Wd4f6Kb9FIrsvGfxwZw79tThdOJulHdM3+q6fBofjzvbbVo+4C0QCu33PFvu/
-         6gqUwtvf8g3WVt+XqtG1Nh4h7XueE+DtGYXYiZyUIVw2a5yzRVeILaqUZ/7Ti3o1hGfA
-         H7X/lA6u2LAUszzIzLpcbX76F3At6IVsjrVRv2YqrnbqCbSHKlNFkrP8vcGzwoZiy5Rj
-         sgkUNrsXZkPKra3B1kMxnQVpIF3I3gYi0NSOX6J2u/0agviuxr6rhjxx7HzCalfoXGky
-         RY/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=44frKLBjDoKoXxQ8vCCuFrEW3887v3fISzPaK57VSks=;
-        b=pzNaKelgV+nJQEyCjJm1IZeWYwK2yR0W+AEyQ3ils/B68voihzxWNp5VosocOL4acI
-         /kdA7iFUWP9CDtBSTKzwUvf48t0ca0JQQYwGfvJjCR/gLYidk5pS4OcZ2XdWU9bmJxbF
-         riVg8UC6zY+aTScisQWrGtK03UKTHyRe8Bcib9VR3KAmt4624Jzm5C/FH/s1PBWPvyFk
-         8jnXYzfkbNCpvDA7p9rqf/0+dO8PZhSnKmuMdS9qQQsDTYmROyx39Q8Ti2YHtBmnfzQU
-         iJ0L20yP69g2bj1hZY2Ifoi/FLhFa4L03O4Ic4Ilvy8j2QXM+Qb6DNPxAuKItgri3zmC
-         fR+g==
-X-Gm-Message-State: AOAM532tAod4AdHveRT2spXHwWQ/PxqpFdvGPK/vzZdJExiZWi5qHwqJ
-        bxz1uGt92lvlpSRJAsL0eMRrh8h7Ji0=
-X-Google-Smtp-Source: ABdhPJyvjwA2D67Iw4qitWQoguW24AqqOkqX1oH+5BaXzVO5p0vFM1e+/mgg4oC3lIbo8N5g7jnMgQ==
-X-Received: by 2002:a17:90b:33c8:: with SMTP id lk8mr25293962pjb.191.1639966025517;
-        Sun, 19 Dec 2021 18:07:05 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:3e2e:1228:8845:1f8d])
-        by smtp.gmail.com with ESMTPSA id 13sm16002162pfp.216.2021.12.19.18.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Dec 2021 18:07:04 -0800 (PST)
-Date:   Sun, 19 Dec 2021 18:07:01 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Xiang wangx <wangxiang@cdjrlc.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: byd - fix typo in a comment
-Message-ID: <Yb/lRVC4B7S0kANf@google.com>
-References: <20211216082735.11948-1-wangxiang@cdjrlc.com>
+        Sun, 19 Dec 2021 21:19:11 -0500
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHNY9470Xz91pm;
+        Mon, 20 Dec 2021 10:18:21 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 20 Dec 2021 10:19:09 +0800
+Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 20 Dec
+ 2021 10:19:09 +0800
+From:   Kai Ye <yekai13@huawei.com>
+To:     <herbert@gondor.apana.org.au>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <xuzaibo@huawei.com>,
+        <yekai13@huawei.com>
+Subject: [PATCH] MAINTAINERS: update SEC2 driver maintainers list
+Date:   Mon, 20 Dec 2021 10:14:18 +0800
+Message-ID: <20211220021418.2512-1-yekai13@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216082735.11948-1-wangxiang@cdjrlc.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 04:27:35PM +0800, Xiang wangx wrote:
-> The double `the' in a comment is repeated, thus it should be removed.
-> 
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+Adding Kai Ye as SEC2 maintainer.
 
-Applied, thank you.
+Signed-off-by: Kai Ye <yekai13@huawei.com>
+Signed-off-by: Zaibo Xu <xuzaibo@huawei.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00475646e3e3..81d8db03bac2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8628,6 +8628,7 @@ F:	drivers/scsi/hisi_sas/
+ 
+ HISILICON SECURITY ENGINE V2 DRIVER (SEC2)
+ M:	Zaibo Xu <xuzaibo@huawei.com>
++M:	Kai Ye <yekai13@huawei.com>
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/debugfs-hisi-sec
 -- 
-Dmitry
+2.33.0
+

@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A047B0EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393A147B0F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 17:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237362AbhLTQKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 11:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234155AbhLTQKU (ORCPT
+        id S232747AbhLTQM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 11:12:27 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51256 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232655AbhLTQM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:10:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3D2C061574;
-        Mon, 20 Dec 2021 08:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E25F4B80F4B;
-        Mon, 20 Dec 2021 16:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5B2C36AE2;
-        Mon, 20 Dec 2021 16:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640016617;
-        bh=7PXWoZ2KL+Ig9fI0vXCHFwz904irEuyU5Cq7Elp6Brs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=snS/I7FVuziSrqgP6ZfsuWLXBqwO3TFWdwCd4KlUP6kHrZWdPjZAlak431ccSc7f1
-         0xnqlXiaU+m0GPCfzw/4KCwQ459s/JxMMzdjDxIrMFLS5KEMefBAOKnyoZPgGN+57V
-         yZDDQP23LRiRQ/o/aZyzqYRdFaGRSf5VdUan7u8zkjnPHO8Cm1f0I1QKtnbzSOGUxu
-         NC67Go7+vGw+kXMpWvVJ8/SuItVhWPC3+ozfgBw1dgP2EPBocMzWN2YmpUspl4aOBt
-         z35OcWYjFQT47Rm0ZytD8ly2w/1ym3LoU/4GGMFkBYnX4YLXv22meHX9G/bmZIunHh
-         LV4S87CL0Kfvg==
-Date:   Mon, 20 Dec 2021 17:10:14 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, maz <maz@kernel.org>,
-        Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        kvmarm@lists.cs.columbia.edu,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
-Message-ID: <20211220161014.GC918551@lothringen>
-References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
- <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+        Mon, 20 Dec 2021 11:12:27 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BKAnu9H014865;
+        Mon, 20 Dec 2021 17:11:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=n8yRP6xOqGZhqk3DxX5FSPwv2mGGn+K5o3yLGj6OSu4=;
+ b=jgMH5to82aOey9qL+052rDPLywW+LfkbP4//IhuJRhJkUt9oCTX/YnVd8El9C60VNRy5
+ Ph+lODE4U5EzwJ28CBVvf/Na1F7Hzq7Svs6FIyTaK24S61hXacJfDYf2vFtFLfa+oUY3
+ Pw4A9vOPnPQIMOFf5QMA9Nlzgps2i290hpv2k9kfbbeNwOW64zV6Hyxmg1rL3cpU0MGI
+ YgmjVHpvTqQacdt1Kl5tEPWUW0SuH8MjJHGbZYILAm42Dx/zWSPwHF8YzFtiI/xZuUil
+ 1QMXHKMBvcJMMjFD2JN2/eFqIPz2qdFO5lxhZxapVeaJbFOl1JfHHloIoKf4i3ZVBGEr yQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2keau531-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 17:11:59 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9928A100034;
+        Mon, 20 Dec 2021 17:11:58 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 919A0209722;
+        Mon, 20 Dec 2021 17:11:58 +0100 (CET)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 20 Dec 2021 17:11:58
+ +0100
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v2] ARM: multi_v7_defconfig: Enable CONFIG_RPMSG_TTY
+Date:   Mon, 20 Dec 2021 17:11:55 +0100
+Message-ID: <20211220161155.32564-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-20_06,2021-12-20_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 01:21:39PM +0000, Mark Rutland wrote:
-> On Fri, Dec 17, 2021 at 12:51:57PM +0100, Nicolas Saenz Julienne wrote:
-> > Hi All,
-> 
-> Hi,
-> 
-> > arm64's guest entry code does the following:
-> > 
-> > int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
-> > {
-> > 	[...]
-> > 
-> > 	guest_enter_irqoff();
-> > 
-> > 	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
-> > 
-> > 	[...]
-> > 
-> > 	local_irq_enable();
-> > 
-> > 	/*
-> > 	 * We do local_irq_enable() before calling guest_exit() so
-> > 	 * that if a timer interrupt hits while running the guest we
-> > 	 * account that tick as being spent in the guest.  We enable
-> > 	 * preemption after calling guest_exit() so that if we get
-> > 	 * preempted we make sure ticks after that is not counted as
-> > 	 * guest time.
-> > 	 */
-> > 	guest_exit();
-> > 	[...]
-> > }
-> > 
-> > 
-> > On a nohz-full CPU, guest_{enter,exit}() delimit an RCU extended quiescent
-> > state (EQS). Any interrupt happening between local_irq_enable() and
-> > guest_exit() should disable that EQS. Now, AFAICT all el0 interrupt handlers
-> > do the right thing if trggered in this context, but el1's won't. Is it
-> > possible to hit an el1 handler (for example __el1_irq()) there?
-> 
-> I think you're right that the EL1 handlers can trigger here and won't exit the
-> EQS.
-> 
-> I'm not immediately sure what we *should* do here. What does x86 do for an IRQ
-> taken from a guest mode? I couldn't spot any handling of that case, but I'm not
-> familiar enough with the x86 exception model to know if I'm looking in the
-> right place.
+The RPMsg TTY implements an inter-processor communication with a standard
+TTY interface on top of the RPMsg framework.
+This driver is a generic RPMsg client that can run on different platforms.
 
-This is one of the purposes of rcu_irq_enter(). el1 handlers don't call irq_enter()?
+By enabling the RPMSG_TTY driver as module in multi_v7_defconfig, it makes
+possible to automatically probe the rpmsg_tty driver by the RPMsg bus,
+when the support of the RPMsg service is dynamically requested by the
+co-processor firmware.
 
-Thanks.
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
+delta vs V1:
+add
+---
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index c951aeed2138..370ca4ae3981 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -372,6 +372,7 @@ CONFIG_SERIAL_ST_ASC_CONSOLE=y
+ CONFIG_SERIAL_STM32=y
+ CONFIG_SERIAL_STM32_CONSOLE=y
+ CONFIG_SERIAL_OWL=y
++CONFIG_RPMSG_TTY=m
+ CONFIG_SERIAL_DEV_BUS=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_ASPEED_KCS_IPMI_BMC=m
+-- 
+2.17.1
+

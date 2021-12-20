@@ -2,128 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1785A47B23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB5347B240
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbhLTRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbhLTRiX (ORCPT
+        id S232319AbhLTRkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:40:16 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:41963 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229633AbhLTRkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:38:23 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD673C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:38:23 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id q17so8652939plr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TQtuQ3gg30av/1BnV1Nz1BY8O1mkFDNd4vZX+osFejo=;
-        b=JrwmM8/A3dGr/YDqXRzyWFYdA7CTGeznmZE2Bivn7g7l9+EIHPk4yrOD+gJV3WF3d6
-         ANImS8Prna+EfaKmftf5e8NIJzwllZ+JGIc4oyhqto1O5tt/PiF2+EzuUdB7gvlTQtz1
-         fFaG3G/sEO7hTkZpuDneFOTktvwbV38Hm98IsHINK3HF+dObIbxgFoZz2WC017P2MIpq
-         ncgX+VbCaWxWWjyulooEiplTI94u5kHdsjhK70vWvxGVXFym8pPROArT1JqM/8ou2QYl
-         K0slwNRlBjNJ6YGQYtRIeoSwpIrKS7gCsHh1nn3+HxACIqmVPYdXWtUYkj+RpSEZYZeb
-         smmQ==
+        Mon, 20 Dec 2021 12:40:15 -0500
+Received: by mail-wm1-f53.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so455932wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:40:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TQtuQ3gg30av/1BnV1Nz1BY8O1mkFDNd4vZX+osFejo=;
-        b=fVjY5HlXUY8EOWffihJp6A3xh+LbH6DatfEMcRpprJfGxcg0TrDKKdfG8iPonngEzE
-         WnlPBh9n9gmvNDJl8J6Mf6DhBAi7W7KZUagmDJk2e3or1O9GFKjNIpuVz1wFDvxhROuI
-         WTvaURM84tHwXCxI+AMW6J4gssXS5CtXJws6Dh4KWp3Q8fuLxElndDsajz222H02ZcIT
-         r1EhLZh3N/0yAKlcMt+5Xqb3wL/mLPO2m3beWNFP6Mnk4D9qQxVleZ51sTzZ7au3RETP
-         NiO8eOeL7wUZaJREryZlJBhljJZli+tvwll1XISErBI1zP0CIsrPHSp7sB7pqZiZ8ZHA
-         k3Cw==
-X-Gm-Message-State: AOAM532mtdS8oSfYecODD2GkoSb224Yya8mOd8eEH2hweN49jR4JX8V4
-        BH+opCTDuBz9eg+r9cFDe7MTrQ==
-X-Google-Smtp-Source: ABdhPJxuEVanEQhNMU+1PJ6HmFQxiBaH6JZNwsk/ijF57ZIJVjSwJxDRX/mgZa5ef4NZvfIH9rzsDg==
-X-Received: by 2002:a17:90a:d155:: with SMTP id t21mr14628pjw.29.1640021903194;
-        Mon, 20 Dec 2021 09:38:23 -0800 (PST)
-Received: from p14s.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id u2sm16794pjc.23.2021.12.20.09.38.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y7ZEZLqOw5Axnk14+9+aQfWjzNTQeqzG+GxBsOpdHy8=;
+        b=DjI1R5ZDvQYCYV0onlya2t/CB44x0SyMTXYRrSpnVzBi87CUpk4sMsZ1fiqGF2B9hm
+         Ig/fbMoOdUT8GeLNLMylxVvNjjuRL7Ldz8u4tj+uVFk2j30vUgMaAn20p3wLX+6GuFga
+         pcBNucdsMSTnifkN6H4YswMh8jqec6pwmv95/jX1zjFAMeL11mz4maAzwt3XFvWJmJat
+         zl/BSJudh4UJb5JMl0YEh0b5mFImNGmRT/QW/YBsqBtBFG6QAh8W4mdBmxpL7jdvUUCl
+         ZXvn79rR7SAqRifd34/KY7zmCfTB3Wlzkek4v5ICPK2ksH2sfWR6Ii4Uh70GD4qjhB47
+         GnWg==
+X-Gm-Message-State: AOAM531LD57VnWGBIUPNzj7cRBgPN+VFGVBBCNOBzTxZ1DoVZkO5j2vR
+        q2g2jX5OKUkPVgKwsoOp0erudRgB1pc=
+X-Google-Smtp-Source: ABdhPJxVRAvH4a/2UQjhQ/JiCOWaRGIj3pxVtF0X5slOe6NKP916IeOPxBXd85j6YNsgY/xXq6Hn5g==
+X-Received: by 2002:a05:600c:228d:: with SMTP id 13mr30219wmf.134.1640022014284;
+        Mon, 20 Dec 2021 09:40:14 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id p13sm492wms.41.2021.12.20.09.40.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 09:38:22 -0800 (PST)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Coresight changes for v5.17
-Date:   Mon, 20 Dec 2021 10:38:20 -0700
-Message-Id: <20211220173820.244995-1-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Dec 2021 09:40:13 -0800 (PST)
+Date:   Mon, 20 Dec 2021 17:40:12 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [hyperv:hyperv-next 1/5] swiotlb.c:undefined reference to
+ `memremap'
+Message-ID: <20211220174012.6noufkckz3bdwdzt@liuwe-devbox-debian-v2>
+References: <202112202134.o20RMLOK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112202134.o20RMLOK-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+On Mon, Dec 20, 2021 at 09:20:27PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+> head:   63cd06c67a2f46009da6e88ca46f9c7231ab8998
+> commit: f16dc95481e2ef2c385008f8b7bd382ea6919ee2 [1/5] swiotlb: Add swiotlb bounce buffer remap function for HV IVM
+> config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20211220/202112202134.o20RMLOK-lkp@intel.com/config)
+> compiler: s390-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=f16dc95481e2ef2c385008f8b7bd382ea6919ee2
+>         git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+>         git fetch --no-tags hyperv hyperv-next
+>         git checkout f16dc95481e2ef2c385008f8b7bd382ea6919ee2
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    s390-linux-ld: kernel/dma/swiotlb.o: in function `swiotlb_update_mem_attributes':
+> >> swiotlb.c:(.init.text+0x146): undefined reference to `memremap'
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+Hi Tianyu, can you take a look at this? It seems like the code is
+missing come ifdefs.
 
-are available in the Git repository at:
+Wei.
 
-  git@gitolite.kernel.org:pub/scm/linux/kernel/git/coresight/linux.git tags/coresight-next-v5.17
-
-for you to fetch changes up to efa56eddf5d5c03a90abe708431f16c12c291837:
-
-  coresight: core: Fix typo in a comment (2021-12-13 11:54:07 -0700)
-
-----------------------------------------------------------------
-Coresight changes for v5.17
-
-Hi Greg,
-
-I'm sending this a little early due to the holiday schedule.  There might be
-another pull request for rc8 in January - let's see when we get there. 
- 
-This pull request includes:
-
-- A patch that uses devm_bitmap_zalloc() instead of the open-coded
-equivalent.
-
-- Work to make coresight complex configuration loadable via modules.
-
-- Some coresight documentation updates.
-
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      coresight: Use devm_bitmap_zalloc when applicable
-
-Jason Wang (1):
-      coresight: core: Fix typo in a comment
-
-Mike Leach (7):
-      Documentation: coresight: Fix documentation issue
-      coresight: configuration: Update API to introduce load owner concept
-      coresight: configuration: Update API to permit dynamic load/unload
-      coresight: syscfg: Update load API for config loadable modules
-      coresight: syscfg: Example CoreSight configuration loadable module
-      coresight: configfs: Allow configfs to activate configuration
-      Documentation: coresight: Update coresight configuration docs
-
- Documentation/trace/coresight/coresight-config.rst |  78 ++++-
- MAINTAINERS                                        |   1 +
- .../hwtracing/coresight/coresight-cfg-preload.c    |   9 +-
- drivers/hwtracing/coresight/coresight-config.h     |   9 +-
- drivers/hwtracing/coresight/coresight-core.c       |   2 +-
- drivers/hwtracing/coresight/coresight-etm4x-core.c |  11 +-
- drivers/hwtracing/coresight/coresight-stm.c        |  10 +-
- .../coresight/coresight-syscfg-configfs.c          |  87 ++++++
- .../coresight/coresight-syscfg-configfs.h          |   4 +
- drivers/hwtracing/coresight/coresight-syscfg.c     | 315 +++++++++++++++++++--
- drivers/hwtracing/coresight/coresight-syscfg.h     |  39 ++-
- samples/Kconfig                                    |   9 +
- samples/Makefile                                   |   1 +
- samples/coresight/Makefile                         |   4 +
- samples/coresight/coresight-cfg-sample.c           |  73 +++++
- 15 files changed, 595 insertions(+), 57 deletions(-)
- create mode 100644 samples/coresight/Makefile
- create mode 100644 samples/coresight/coresight-cfg-sample.c
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

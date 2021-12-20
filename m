@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A16647AC4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB44747AD68
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbhLTOmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35270 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbhLTOl0 (ORCPT
+        id S236873AbhLTOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236709AbhLTOsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:26 -0500
+        Mon, 20 Dec 2021 09:48:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6571C0617A1;
+        Mon, 20 Dec 2021 06:44:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2A9E61183;
-        Mon, 20 Dec 2021 14:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5CAC36AEB;
-        Mon, 20 Dec 2021 14:41:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3E09B80EDF;
+        Mon, 20 Dec 2021 14:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB818C36AE7;
+        Mon, 20 Dec 2021 14:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011285;
-        bh=X5yn5buaL+D2wnVP9bOFsKWOVVwaNxH/7roCLFNAD8I=;
+        s=korg; t=1640011476;
+        bh=GUVxUKqGsmPmlMVDzYN75ySpwgaTHiahYc/G0qshb20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JKSIjqhk3F1TXtjF4Ga3/j/pGgljYgz7/LrBVzByKFlJfIeLyBRHOD1BrSJ1N5MTj
-         maocALCYkSaFNuC4CxrbULN84QAMTLWkozVOF/UtPPQBfFcsWJYmvQRdNGJ0Ox+bpQ
-         64MfYaLFAqPmAD5x3OC4q5xdaM8VKRy1guwbN2ss=
+        b=Er3MBsX0/d3ZBGZ7/ZU72YPwUsGKYr3NsLdTBeSd3d5rl8NzqQ0LoaKV3tHABB8xy
+         Sqt2gNbWSxuyHlPeG74npyh1OtWA3TejS+E3ookqlFuEB4K7/SUqzlNMHGOtcHhOLC
+         VfqOeqV2+wAR5tcHzB99memkc9zCcAfk1hl9mf2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thierry Reding <treding@nvidia.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 23/56] soc/tegra: fuse: Fix bitwise vs. logical OR warning
+Subject: [PATCH 5.4 27/71] mac80211: agg-tx: refactor sending addba
 Date:   Mon, 20 Dec 2021 15:34:16 +0100
-Message-Id: <20211220143024.211145672@linuxfoundation.org>
+Message-Id: <20211220143026.597565088@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,71 +51,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Mordechay Goodstein <mordechay.goodstein@intel.com>
 
-[ Upstream commit a7083763619f7485ccdade160deb81737cf2732f ]
+[ Upstream commit 31d8bb4e07f80935ee9bf599a9d99de7ca90fc5a ]
 
-A new warning in clang points out two instances where boolean
-expressions are being used with a bitwise OR instead of logical OR:
+We move the actual arming the timer and sending ADDBA to a function
+for the use in different places calling the same logic.
 
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both operands to int to silence this warning
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-                reg = tegra_fuse_read_spare(i) |
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-                                               ||
-drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both operands to int to silence this warning
-2 warnings generated.
-
-The motivation for the warning is that logical operations short circuit
-while bitwise operations do not.
-
-In this instance, tegra_fuse_read_spare() is not semantically returning
-a boolean, it is returning a bit value. Use u32 for its return type so
-that it can be used with either bitwise or boolean operators without any
-warnings.
-
-Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1488
-Suggested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20200326150855.58a337eb90a1.I75934e6464535fbf43969acc796bc886291e79a5@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
- drivers/soc/tegra/fuse/fuse.h       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/mac80211/agg-tx.c | 67 +++++++++++++++++++++++++------------------
+ 1 file changed, 39 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
-index 51625703399e4..52130ec8c9049 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-@@ -182,7 +182,7 @@ static struct platform_driver tegra_fuse_driver = {
- };
- builtin_platform_driver(tegra_fuse_driver);
+diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
+index 3d2af1851bdf9..1a5768ae5f515 100644
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -9,7 +9,7 @@
+  * Copyright 2007, Michael Wu <flamingice@sourmilk.net>
+  * Copyright 2007-2010, Intel Corporation
+  * Copyright(c) 2015-2017 Intel Deutschland GmbH
+- * Copyright (C) 2018 - 2019 Intel Corporation
++ * Copyright (C) 2018 - 2020 Intel Corporation
+  */
  
--bool __init tegra_fuse_read_spare(unsigned int spare)
-+u32 __init tegra_fuse_read_spare(unsigned int spare)
+ #include <linux/ieee80211.h>
+@@ -448,6 +448,43 @@ static void sta_addba_resp_timer_expired(struct timer_list *t)
+ 	ieee80211_stop_tx_ba_session(&sta->sta, tid);
+ }
+ 
++static void ieee80211_send_addba_with_timeout(struct sta_info *sta,
++					      struct tid_ampdu_tx *tid_tx)
++{
++	struct ieee80211_sub_if_data *sdata = sta->sdata;
++	struct ieee80211_local *local = sta->local;
++	u8 tid = tid_tx->tid;
++	u16 buf_size;
++
++	/* activate the timer for the recipient's addBA response */
++	mod_timer(&tid_tx->addba_resp_timer, jiffies + ADDBA_RESP_INTERVAL);
++	ht_dbg(sdata, "activated addBA response timer on %pM tid %d\n",
++	       sta->sta.addr, tid);
++
++	spin_lock_bh(&sta->lock);
++	sta->ampdu_mlme.last_addba_req_time[tid] = jiffies;
++	sta->ampdu_mlme.addba_req_num[tid]++;
++	spin_unlock_bh(&sta->lock);
++
++	if (sta->sta.he_cap.has_he) {
++		buf_size = local->hw.max_tx_aggregation_subframes;
++	} else {
++		/*
++		 * We really should use what the driver told us it will
++		 * transmit as the maximum, but certain APs (e.g. the
++		 * LinkSys WRT120N with FW v1.0.07 build 002 Jun 18 2012)
++		 * will crash when we use a lower number.
++		 */
++		buf_size = IEEE80211_MAX_AMPDU_BUF_HT;
++	}
++
++	/* send AddBA request */
++	ieee80211_send_addba_request(sdata, sta->sta.addr, tid,
++				     tid_tx->dialog_token,
++				     sta->tid_seq[tid] >> 4,
++				     buf_size, tid_tx->timeout);
++}
++
+ void ieee80211_tx_ba_session_handle_start(struct sta_info *sta, int tid)
  {
- 	unsigned int offset = fuse->soc->info->spare + spare * 4;
+ 	struct tid_ampdu_tx *tid_tx;
+@@ -462,7 +499,6 @@ void ieee80211_tx_ba_session_handle_start(struct sta_info *sta, int tid)
+ 		.timeout = 0,
+ 	};
+ 	int ret;
+-	u16 buf_size;
  
-diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
-index f355b9d549151..bf489d50e6687 100644
---- a/drivers/soc/tegra/fuse/fuse.h
-+++ b/drivers/soc/tegra/fuse/fuse.h
-@@ -62,7 +62,7 @@ struct tegra_fuse {
- void tegra_init_revision(void);
- void tegra_init_apbmisc(void);
+ 	tid_tx = rcu_dereference_protected_tid_tx(sta, tid);
  
--bool __init tegra_fuse_read_spare(unsigned int spare);
-+u32 __init tegra_fuse_read_spare(unsigned int spare);
- u32 __init tegra_fuse_read_early(unsigned int offset);
+@@ -501,32 +537,7 @@ void ieee80211_tx_ba_session_handle_start(struct sta_info *sta, int tid)
+ 		return;
+ 	}
  
- #ifdef CONFIG_ARCH_TEGRA_2x_SOC
+-	/* activate the timer for the recipient's addBA response */
+-	mod_timer(&tid_tx->addba_resp_timer, jiffies + ADDBA_RESP_INTERVAL);
+-	ht_dbg(sdata, "activated addBA response timer on %pM tid %d\n",
+-	       sta->sta.addr, tid);
+-
+-	spin_lock_bh(&sta->lock);
+-	sta->ampdu_mlme.last_addba_req_time[tid] = jiffies;
+-	sta->ampdu_mlme.addba_req_num[tid]++;
+-	spin_unlock_bh(&sta->lock);
+-
+-	if (sta->sta.he_cap.has_he) {
+-		buf_size = local->hw.max_tx_aggregation_subframes;
+-	} else {
+-		/*
+-		 * We really should use what the driver told us it will
+-		 * transmit as the maximum, but certain APs (e.g. the
+-		 * LinkSys WRT120N with FW v1.0.07 build 002 Jun 18 2012)
+-		 * will crash when we use a lower number.
+-		 */
+-		buf_size = IEEE80211_MAX_AMPDU_BUF_HT;
+-	}
+-
+-	/* send AddBA request */
+-	ieee80211_send_addba_request(sdata, sta->sta.addr, tid,
+-				     tid_tx->dialog_token, params.ssn,
+-				     buf_size, tid_tx->timeout);
++	ieee80211_send_addba_with_timeout(sta, tid_tx);
+ }
+ 
+ /*
 -- 
 2.33.0
 

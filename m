@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C67147B5BA
+	by mail.lfdr.de (Postfix) with ESMTP id C63DE47B5BB
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbhLTWDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbhLTWDi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232573AbhLTWDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:03:41 -0500
+Received: from out2.migadu.com ([188.165.223.204]:41598 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229970AbhLTWDi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Dec 2021 17:03:38 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9931C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:03:37 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037816;
+        t=1640037817;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XC1+Aytkcqzf1ileaTyJqJ/4yyuLy4mtp9hx3Zvq9co=;
-        b=bj5IzRHJSEVZd+L7QnXrQK2Ugd7rtLmlO5roVkqFzPNb9UqsvBcjRXZku703PrI7gvmgc+
-        ajV/wvUFdMsi4beyNjNfeJ/feTlXxRt1CckJAkweywBaAectZHTH3GEPTH/gUGgRdr2QDQ
-        pAuTUkTx5FKQK99vtKFK26zGlkB2n8Y=
+        bh=0eXVYJ52EHc8HK0ZSN9sLRNZTeyGfQSxFg+mIo8E7jc=;
+        b=E3LCMDVFWRPzQr/NvMp3jLZIaLOW7WwHtF9YuBfvqQRt1saFxOU+PeCw5kkYzQHZkIvvWR
+        lZOwmnc5PT//z9SlZOdjlncDTzr3xfH2tUIGgdxMyD7FgGwp+bmy4YajPeOGpSCqpIKe/j
+        993jjwi5Nku9XR+fkKznrpklyrxFZmU=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v4 36/39] kasan: allow enabling KASAN_VMALLOC and SW/HW_TAGS
-Date:   Mon, 20 Dec 2021 23:03:30 +0100
-Message-Id: <d391829df65888170df24e4577f7f0211db808c7.1640036051.git.andreyknvl@google.com>
+Subject: [PATCH mm v4 37/39] arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
+Date:   Mon, 20 Dec 2021 23:03:31 +0100
+Message-Id: <88439ce8afa1e794c561a098e7e1bcd735bdcdcf.1640036051.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
 References: <cover.1640036051.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,52 +54,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Allow enabling CONFIG_KASAN_VMALLOC with SW_TAGS and HW_TAGS KASAN
-modes.
+Generic KASAN already selects KASAN_VMALLOC to allow VMAP_STACK to be
+selected unconditionally, see commit acc3042d62cb9 ("arm64: Kconfig:
+select KASAN_VMALLOC if KANSAN_GENERIC is enabled").
 
-Also adjust CONFIG_KASAN_VMALLOC description:
+The same change is needed for SW_TAGS KASAN.
 
-- Mention HW_TAGS support.
-- Remove unneeded internal details: they have no place in Kconfig
-  description and are already explained in the documentation.
+HW_TAGS KASAN does not require enabling KASAN_VMALLOC for VMAP_STACK,
+they already work together as is. Still, selecting KASAN_VMALLOC still
+makes sense to make vmalloc() always protected. In case any bugs in
+KASAN's vmalloc() support are discovered, the command line kasan.vmalloc
+flag can be used to disable vmalloc() checking.
+
+Select KASAN_VMALLOC for all KASAN modes for arm64.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- lib/Kconfig.kasan | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index 879757b6dd14..1f3e620188a2 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -178,17 +178,17 @@ config KASAN_TAGS_IDENTIFY
- 	  memory consumption.
- 
- config KASAN_VMALLOC
--	bool "Back mappings in vmalloc space with real shadow memory"
--	depends on KASAN_GENERIC && HAVE_ARCH_KASAN_VMALLOC
-+	bool "Check accesses to vmalloc allocations"
-+	depends on HAVE_ARCH_KASAN_VMALLOC
- 	help
--	  By default, the shadow region for vmalloc space is the read-only
--	  zero page. This means that KASAN cannot detect errors involving
--	  vmalloc space.
--
--	  Enabling this option will hook in to vmap/vmalloc and back those
--	  mappings with real shadow memory allocated on demand. This allows
--	  for KASAN to detect more sorts of errors (and to support vmapped
--	  stacks), but at the cost of higher memory usage.
-+	  This mode makes KASAN check accesses to vmalloc allocations for
-+	  validity.
-+
-+	  With software KASAN modes, checking is done for all types of vmalloc
-+	  allocations. Enabling this option leads to higher memory usage.
-+
-+	  With hardware tag-based KASAN, only VM_ALLOC mappings are checked.
-+	  There is no additional memory usage.
- 
- config KASAN_KUNIT_TEST
- 	tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
+---
+
+Changes v2->v3:
+- Update patch description.
+
+Changes v1->v2:
+- Split out this patch.
+---
+ arch/arm64/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 508769fe5be5..0833b3e87724 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -205,7 +205,7 @@ config ARM64
+ 	select IOMMU_DMA if IOMMU_SUPPORT
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
+-	select KASAN_VMALLOC if KASAN_GENERIC
++	select KASAN_VMALLOC if KASAN
+ 	select MODULES_USE_ELF_RELA
+ 	select NEED_DMA_MAP_STATE
+ 	select NEED_SG_DMA_LENGTH
 -- 
 2.25.1
 

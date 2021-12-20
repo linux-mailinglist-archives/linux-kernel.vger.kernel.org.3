@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E535247AEB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE86147AE9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbhLTPCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S239287AbhLTPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239214AbhLTO63 (ORCPT
+        with ESMTP id S239286AbhLTO6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A4DC061398;
-        Mon, 20 Dec 2021 06:50:14 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580D0C06139B;
+        Mon, 20 Dec 2021 06:50:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB9EBB80EE9;
-        Mon, 20 Dec 2021 14:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037FDC36AE8;
-        Mon, 20 Dec 2021 14:50:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DA061185;
+        Mon, 20 Dec 2021 14:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F19C36AE8;
+        Mon, 20 Dec 2021 14:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011811;
-        bh=zat8Fgg0+Y3U75jkI7ROrh0ZOQFwGMD6qBUk0MvFat8=;
+        s=korg; t=1640011814;
+        bh=T0TxMKwaoVrOXXrVUWlYzijRlYnxq206fcvX1INbAco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HR6M1UL3VLCQkwQ7wOGLIk4H6u44XlbPkLR3d4cWinbfKQUa0gE6FGZUqjiG1Ap9l
-         AQdlOP0fcgSrN7nXwXWD+SuZQBcPC36Qt48yiZnwcvXGtvheX7QDLVTu4SlWfzwINQ
-         LhRANGFWT/UswBqhVyiCtP5t6KDYYtjp/E7Z/FO8=
+        b=RQAiQCkoOlZBDDKuOuelAvV0x95FEfAYzu+3E2JCRiGS+lgVl2q4pobMQkmD1/F+s
+         j3fXZp2zhynoIbr5uy6kLHr6NU6053Vvuggr89d2+vK/saTcidZeu1FfM5+YCA2RNn
+         sB34gW5Z2ZQzKJD/JqVkzd9ydJfcfGQsdMsLq3nQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        George Kennedy <george.kennedy@oracle.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.10 81/99] libata: if T_LENGTH is zero, dma direction should be DMA_NONE
-Date:   Mon, 20 Dec 2021 15:34:54 +0100
-Message-Id: <20211220143032.131224412@linuxfoundation.org>
+        stable@vger.kernel.org, Le Ma <le.ma@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.10 82/99] drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
+Date:   Mon, 20 Dec 2021 15:34:55 +0100
+Message-Id: <20211220143032.160264814@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 References: <20211220143029.352940568@linuxfoundation.org>
@@ -49,46 +49,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+From: Le Ma <le.ma@amd.com>
 
-commit 5da5231bb47864e5dd6c6731151e98b6ee498827 upstream.
+commit f3a8076eb28cae1553958c629aecec479394bbe2 upstream.
 
-Avoid data corruption by rejecting pass-through commands where
-T_LENGTH is zero (No data is transferred) and the dma direction
-is not DMA_NONE.
+should count on GC IP base address
 
-Cc: <stable@vger.kernel.org>
-Reported-by: syzkaller<syzkaller@googlegroups.com>
-Signed-off-by: George Kennedy<george.kennedy@oracle.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Le Ma <le.ma@amd.com>
+Signed-off-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-scsi.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -2870,8 +2870,19 @@ static unsigned int ata_scsi_pass_thru(s
- 		goto invalid_fld;
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -3002,8 +3002,8 @@ static void gfx_v9_0_init_pg(struct amdg
+ 			      AMD_PG_SUPPORT_CP |
+ 			      AMD_PG_SUPPORT_GDS |
+ 			      AMD_PG_SUPPORT_RLC_SMU_HS)) {
+-		WREG32(mmRLC_JUMP_TABLE_RESTORE,
+-		       adev->gfx.rlc.cp_table_gpu_addr >> 8);
++		WREG32_SOC15(GC, 0, mmRLC_JUMP_TABLE_RESTORE,
++			     adev->gfx.rlc.cp_table_gpu_addr >> 8);
+ 		gfx_v9_0_init_gfx_power_gating(adev);
  	}
- 
--	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
--		tf->protocol = ATA_PROT_NCQ_NODATA;
-+	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
-+		/*
-+		 * When T_LENGTH is zero (No data is transferred), dir should
-+		 * be DMA_NONE.
-+		 */
-+		if (scmd->sc_data_direction != DMA_NONE) {
-+			fp = 2 + cdb_offset;
-+			goto invalid_fld;
-+		}
-+
-+		if (ata_is_ncq(tf->protocol))
-+			tf->protocol = ATA_PROT_NCQ_NODATA;
-+	}
- 
- 	/* enable LBA */
- 	tf->flags |= ATA_TFLAG_LBA;
+ }
 
 

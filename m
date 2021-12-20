@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0E647A81B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A2347A81F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhLTK7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:59:40 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:37201 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229766AbhLTK7j (ORCPT
+        id S230145AbhLTLAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229766AbhLTLAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:59:39 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6BD435806B0;
-        Mon, 20 Dec 2021 05:59:38 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 20 Dec 2021 05:59:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=ZmOBdzc5KRY0yb6PF129oWRTs4g
-        SGAWR2I8msz7i93s=; b=MSBvzVlQ2DOGpUNDbRq6TkOaiDbnOfj0iRpTi+bXrN/
-        lq/XBZ4nhbr0UrBaOXTDwu0dVMq92HIjoIZzGjXdoYyV/kw2/Zg0UcHMTCHwxxj6
-        yhPG9dW7AODlbQqzVG5T/zqTK0xQ77+BhPq1bbpGSgdwn2yZs9l9RWEeSWnp2ojN
-        IDEoBKg7NBkITsdDmhscAmuOyATsCdpfYN3Bw4b6SsAEfuCbivS286IjRKNJc9Pq
-        OjA/RK7gEFOIb3NUCwfLjgiKi028o8a0IImM+NAdvH3LcvopHLNFkeIlyV7i3gFz
-        IJ8zVeyZaF9XPoYDue8icl2zJSNlvr568ePFoGbeKKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ZmOBdz
-        c5KRY0yb6PF129oWRTs4gSGAWR2I8msz7i93s=; b=n69vDfmztBUE6+EiH/CRpa
-        F5A4Xy1MtFrftd2hORn5pM/MIJhqL/M85wz7tIDSW9wKJ2D0i63EJIv13jWMX0NR
-        R1xlK6Q2c1YQUxNs9sTuDmo8z+Gyz5sW4PPqcVpExt9d8xzDb7mRzyLTg/tCIhNU
-        58IhEdMU+e9SGCXYfXVjw2OJAwS+ZW9wE71UeHKP7Z2265K28J1sHobC+bmMuB1J
-        8q80F2hsrtdbSizZSgtvI2k9OoOiE/7Cd++5I2z2v6uedQX2GTtXXW1XGyfn13Pf
-        vyZ2EOxZULqLj74F8bmXd3K6JLnyIxwsg59bGc4Z5SqodEmspRnxEJZbX533EBYA
-        ==
-X-ME-Sender: <xms:GWLAYcofNXoLjYKFElsgwmNasPLfLJL7yNeGPsuDh2aC0EwhlzGm8A>
-    <xme:GWLAYSohXIVt6VREATy4BN9vZNqe-j2KfhxdkJIdiqfVB6hLDJuy9eeX-Ogr7m1xM
-    mBFpZNxcFj-2A>
-X-ME-Received: <xmr:GWLAYRMzHoR1nXOyoahqEYkOVxgWnaXAd11gUmHuxWKvm1cV742ePLX622tm0bL-hktukTS66gZBVY8-IYoNMmvXSVnpKYPi>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtvddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
-    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
-    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:GWLAYT49JjfvdmIGaLIcT5-qHjRE6EfmcmcH6zHalkpRA87qSi4WiQ>
-    <xmx:GWLAYb6LuUvzZlzhTjjijU-3XZ-rKLjQTazrPIRl2Uv0QmEGwzyhfQ>
-    <xmx:GWLAYTjQmwnWChH06Hs6taD9V1dASEmnmkBmKf1Clog6tNAk39W72g>
-    <xmx:GmLAYeJ8a8fACbvHaFpncbIAzOfQaCGbBGbVfpSJ9dGAyg1HSmtcBw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Dec 2021 05:59:36 -0500 (EST)
-Date:   Mon, 20 Dec 2021 11:59:34 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, clang-built-linux@googlegroups.com,
-        ulli.kroll@googlemail.com, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, amitkarwar@gmail.com,
-        nishants@marvell.com, gbhat@marvell.com, huxinming820@gmail.com,
-        kvalo@codeaurora.org, linux-wireless@vger.kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, dmitry.torokhov@gmail.com,
-        ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH 4.19 6/6] Input: touchscreen - avoid bitwise vs logical
- OR warning
-Message-ID: <YcBiFomrxSw1eEUB@kroah.com>
-References: <20211217144119.2538175-1-anders.roxell@linaro.org>
- <20211217144119.2538175-7-anders.roxell@linaro.org>
+        Mon, 20 Dec 2021 06:00:10 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB510C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 03:00:09 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 17CF11EC0567;
+        Mon, 20 Dec 2021 12:00:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639998004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NVH+9Xv+mhJGrugUsoTinsKz21v2dpO7caEXunwTj4g=;
+        b=VgsHUwyOifCQpiR3cvL/hgK0X6tE2JBvQTuLOdR9LdDOOuGWs7/JnxvJMvgkOtZ6oiHb0Z
+        AE03A/omyUE/lLZMpgo/06bCgr+EM2B3qjftAsMUYsy7dXKd52allhqwL4axTUP36a+beI
+        L71ePkgkKAduC5cNNi3YL25LF0ITDmE=
+Date:   Mon, 20 Dec 2021 12:00:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     x86@kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, bfields@fieldses.org, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH] x86/mm: Prevent early boot triple-faults with instrumentation
+Message-ID: <YcBiNqhYrxBPZphJ@zn.tnic>
+References: <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+ <YbyIJYzqtHPKRMFt@zn.tnic>
+ <YbzRHXEMnZjyXzWa@archlinux-ax161>
+ <Yb2/QCOExDEsj47w@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211217144119.2538175-7-anders.roxell@linaro.org>
+In-Reply-To: <Yb2/QCOExDEsj47w@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 03:41:19PM +0100, Anders Roxell wrote:
-> From: Nathan Chancellor <nathan@kernel.org>
-> 
-> commit a02dcde595f7cbd240ccd64de96034ad91cffc40 upstream.
-> 
-> A new warning in clang points out a few places in this driver where a
-> bitwise OR is being used with boolean types:
-> 
-> drivers/input/touchscreen.c:81:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
->         data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
->                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This use of a bitwise OR is intentional, as bitwise operations do not
-> short circuit, which allows all the calls to touchscreen_get_prop_u32()
-> to happen so that the last parameter is initialized while coalescing the
-> results of the calls to make a decision after they are all evaluated.
-> 
-> To make this clearer to the compiler, use the '|=' operator to assign
-> the result of each touchscreen_get_prop_u32() call to data_present,
-> which keeps the meaning of the code the same but makes it obvious that
-> every one of these calls is expected to happen.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://lore.kernel.org/r/20211014205757.3474635-1-nathan@kernel.org
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->  drivers/input/touchscreen/of_touchscreen.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+From: Borislav Petkov <bp@suse.de>
 
-Also needed in 5.10.y and 5.4.y.
+Commit in Fixes added a global TLB flush on the early boot path, after
+the kernel switches off of the trampoline page table.
 
-Please be more careful next time.
+Compiler profiling options add additional measurement code
+which needs to be initialized prior to use. The global flush in
+x86_64_start_kernel() happens before those initializations can happen,
+leading to accessing invalid memory.
+
+The second issue this fixes is with KASAN: for a similar reason,
+kasan_early_init() needs to have happened before KASAN-instrumented
+functions are called.
+
+Therefore, reorder the flush to happen after the KASAN early init
+and prevent the compilers from adding profiling instrumentation to
+native_write_cr4().
+
+Fixes: f154f290855b ("x86/mm/64: Flush global TLB on boot and AP bringup")
+Reported-by: "J. Bruce Fields" <bfields@fieldses.org>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211209144141.GC25654@xsang-OptiPlex-9020
+---
+ arch/x86/kernel/cpu/common.c |  2 +-
+ arch/x86/kernel/head64.c     | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 0083464de5e3..79b3d67addcc 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
+ }
+ EXPORT_SYMBOL(native_write_cr0);
+ 
+-void native_write_cr4(unsigned long val)
++void __no_profile native_write_cr4(unsigned long val)
+ {
+ 	unsigned long bits_changed = 0;
+ 
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 75acb6027a87..f5e80a8377ad 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -483,10 +483,12 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+ 	/* Kill off the identity-map trampoline */
+ 	reset_early_page_tables();
+ 
+-	__native_tlb_flush_global(native_read_cr4());
+-
+ 	clear_bss();
+ 
++	/*
++	 * This needs to happen *before* kasan_early_init() because latter maps stuff
++	 * into that page.
++	 */
+ 	clear_page(init_top_pgt);
+ 
+ 	/*
+@@ -498,6 +500,16 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+ 
+ 	kasan_early_init();
+ 
++	/*
++	 * Flush global TLB entries which could be left over from the trampoline page
++	 * table.
++	 *
++	 * This needs to happen *after* kasan_early_init() as KASAN-enabled .configs
++	 * instrument native_write_cr4() so KASAN must be initialized for that
++	 * instrumentation to work.
++	 */
++	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
++
+ 	idt_setup_early_handler();
+ 
+ 	copy_bootdata(__va(real_mode_data));
+-- 
+2.29.2
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

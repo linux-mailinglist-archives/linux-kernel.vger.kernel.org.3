@@ -2,79 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A83D47B512
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5038447B51E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 22:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbhLTVUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 16:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbhLTVU3 (ORCPT
+        id S230523AbhLTVZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 16:25:00 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:33218 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231239AbhLTVYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:20:29 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A097BC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:20:28 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id y22so43797785edq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 13:20:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AG8LZjz52Sv3bsHubNvrikDmWB0tVzADFuwGdiqWvyo=;
-        b=22WHJSlCMTrpOAICG5PI5lyOLWmzi0uGmUfYBn7sj6sp5gibXCbtCafklaYzH9+GqJ
-         BH6TCQQSA7Fg4Clbdh+OmySsPyvtNAJvIMvklJwL3jLVqzX5iBjt5M/N0q64UDbDf+5F
-         /TS6OA1Oh/JhRFKXmFhFgJ7cXvXcrzA4ix5iR6pA+yW6GRC7+rt2hGmM3JYE+og0l3Qh
-         8jLmgbF5vekjC+rfKccTwd6CiO3rRiYjJEowrHH+GZNwzq29rCawHfsRl+F1OWppZQ4w
-         5jagWh0qPOWP0kBf8t9/UxXa8cp1pOxLYelCwpvOpprQU9nDUVJNVbJ6LkX4rnkhbg1H
-         rPDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AG8LZjz52Sv3bsHubNvrikDmWB0tVzADFuwGdiqWvyo=;
-        b=H/lQCIRT4daZnMvo/AvzV2+KUJ1gQVwPgEWiTgvi6WmXn0rFWErnoLZCdsI/EU+Qpr
-         BcgBADJ/dAbaqQG65IVsAieyZdaqCuxIAgaguNIhUx3mL44ChhYdP0sHYn57ywEnb96J
-         ZlGZWLdiXKrYRQ9lQp3MGBCg+exnJ439dMQs2xx/KLej9oNqFXl18imvAuUYjWUdud4k
-         A8avYPFdlLFREgHnhIRyrHp4nlWolpCDC+pvvtGZBl500HxpJKHaDj91Zsq3hwKgW/Dc
-         sja/EjDhR7CG9kDhWMdM7i75SpdsK0SwtIYWi7o6J06zf3G1MC8MCLCboJN1eDgy8O5O
-         uOCA==
-X-Gm-Message-State: AOAM533HjTeFoB/P48bTefiGhfhghL+VLGU9OA43j9AeX4App/RHEKHl
-        4FWznqGlAKw0MAOP0yaNX+j/kT/OPuBlhRI4VK6Q
-X-Google-Smtp-Source: ABdhPJxzBK00qdQqBlLshB1f8MtmoklomCDL2RS0BNvCZuGS/NNrdOTim0zxPybOFYWJlZNuUidGfMSIyMJptGcecn8=
-X-Received: by 2002:a17:907:1b0d:: with SMTP id mp13mr42794ejc.29.1640035227186;
- Mon, 20 Dec 2021 13:20:27 -0800 (PST)
+        Mon, 20 Dec 2021 16:24:52 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BKLOQng007278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 16:24:27 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 69CAE15C33A4; Mon, 20 Dec 2021 16:24:26 -0500 (EST)
+Date:   Mon, 20 Dec 2021 16:24:26 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+Message-ID: <YcD0itBAoOPNNKvX@mit.edu>
+References: <00000000000032992d05d370f75f@google.com>
+ <20211219023540.1638-1-hdanton@sina.com>
+ <Yb6zKVoxuD3lQMA/@casper.infradead.org>
 MIME-Version: 1.0
-References: <20211217010152.61796-1-xiujianfeng@huawei.com> <20211217010152.61796-2-xiujianfeng@huawei.com>
-In-Reply-To: <20211217010152.61796-2-xiujianfeng@huawei.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 20 Dec 2021 16:20:16 -0500
-Message-ID: <CAHC9VhRP_6XcAkuAv92uPaPuxO4TgSnXe_+o=q3uvni9kEndmA@mail.gmail.com>
-Subject: Re: [PATCH -next, v3 2/2] audit: replace zero-length array with
- flexible-array member
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     eparis@redhat.com, gustavoars@kernel.org, keescook@chromium.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yb6zKVoxuD3lQMA/@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 8:01 PM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
->
-> Zero-length arrays are deprecated and should be replaced with
-> flexible-array members.
->
-> Link: https://github.com/KSPP/linux/issues/78
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  include/uapi/linux/audit.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Dec 19, 2021 at 04:20:57AM +0000, Matthew Wilcox wrote:
+> > Hey Willy
+> > >
+> > >sched_setattr(0x0, &(0x7f0000000080)={0x38, 0x1, 0x0, 0x0, 0x1}, 0x0)
+> > >
+> > >so you've set a SCHED_FIFO priority and then are surprised that some
+> > >tasks are getting starved?
+> > 
+> > Can you speficy a bit more on how fifo could block journald waiting for
+> > IO completion more than 120 seconds?
+> 
+> Sure!  You can see from the trace below that jbd2/sda1-8 is in D state,
+> so we know nobody's called unlock_buffer() yet, which would have woken
+> it.  That would happen in journal_end_buffer_io_sync(), which is
+> the b_end_io for the buffer.
+> 
+> Learning more detail than that would require knowing the I/O path
+> for this particular test system.  I suspect that the I/O was submitted
+> and has even completed, but there's a kernel thread waiting to run which
+> will call the ->b_end_io that hasn't been scheduled yet, because it's
+> at a lower priority than all the threads which are running at
+> SCHED_FIFO.
+> 
+> I'm disinclined to look at this report much further because syzbot is
+> stumbling around trying things which are definitely in the category of
+> "if you do this and things break, you get to keep both pieces".  You
+> can learn some interesting things by playing with the various RT
+> scheduling classes, but mostly what you can learn is that you need to
+> choose your priorities carefully to have a functioning system.
 
-It doesn't look like this shouldn't impact the UAPI so I've also
-merged into audit/next, thanks!
+In general, real-time threads (anything scheduled with SCHED_FIFO or
+SCHED_RT) should never, *ever* try to do any kind of I/O.  After all,
+I/O can block, and if a real-time thread blocks, so much for any kind
+of real-time guarantee that you might have.
 
--- 
-paul moore
-www.paul-moore.com
+If you must use do I/O from soft real-time thread, one trick you *can*
+do is to some number of CPU's which are reserved for real-time
+threads, and a subset of threads which are reserved for non-real-time
+threads, enforced using CPU pinning.  It's still not prefect, since
+there are still priority inheritance issues, and while this protects
+against a non-real-time thread holding some lock which is needed by a
+real-time (SCHED_FIFO) thread, if there are two SCHED_FIFO running at
+different priorities it's still possible to deadlock the entire
+kernel.
+
+Can it be done?  Sure; I was part of an effort to make it work for the
+US Navy's DDG-1000 Zumwalt-class destroyer[1].  But it's tricky, and
+it's why IBM got paid the big bucks. :-)  Certainly it's going to be
+problematic for syzkaller if it's just going to be randomly trying to
+set some threads to be real-time without doing any kind of formal
+planning.
+
+[1] https://dl.acm.org/doi/10.1147/sj.472.0207
+
+Cheers,
+
+						- Ted

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4300E47ABCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8C447AD9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbhLTOjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234479AbhLTOi2 (ORCPT
+        id S238289AbhLTOx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:53:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42058 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238437AbhLTOub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:38:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09336C061746;
-        Mon, 20 Dec 2021 06:38:28 -0800 (PST)
+        Mon, 20 Dec 2021 09:50:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3C75B80EE9;
-        Mon, 20 Dec 2021 14:38:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF957C36AEC;
-        Mon, 20 Dec 2021 14:38:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92525611A4;
+        Mon, 20 Dec 2021 14:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B8CC36AE7;
+        Mon, 20 Dec 2021 14:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011106;
-        bh=TXe+KaHNUKrBU7Nyryd8JT47EDajbPzPMKyhrcV4Z1w=;
+        s=korg; t=1640011831;
+        bh=uY5ypyLGENVFu/AfdQ5m9JGp5nazfWqo3Onu1CXI8PI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XPTENStd607lL465q5f3sHpmzsM6j/VDZ077LswvhqNrH/zqOXHjhwRsPY5ZUnsfL
-         NOZeNgMR4gieVtWJ3gBBqNTV7r94oFAuZsQN1HzhdAaSeeU2jqFrB/JsBg3V5TpMDG
-         uYMjTIzmf6NLC9EMDs7fbAtUNE31M7V++et1R+PA=
+        b=fnYheI0fk6g/JBQedTw3vxEMuQo3wLTa8ZNB7lCLk5j+pDTrrglT01Vfa7MkAwodj
+         zUSuMy5swKeBmzevLQCXoZwLhE642wLDmpPx12pxLoyoVRRTaGPBVjH9N3ttQ80dkr
+         PHgeO9L+Ozqf6jzVLUY6wD12UmRVO++ZQyD1VYJk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 4.9 29/31] xen/console: harden hvc_xen against event channel storms
-Date:   Mon, 20 Dec 2021 15:34:29 +0100
-Message-Id: <20211220143020.903979196@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 57/99] sfc_ef100: potential dereference of null pointer
+Date:   Mon, 20 Dec 2021 15:34:30 +0100
+Message-Id: <20211220143031.308507794@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143019.974513085@linuxfoundation.org>
-References: <20211220143019.974513085@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,98 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit fe415186b43df0db1f17fa3a46275fd92107fe71 upstream.
+[ Upstream commit 407ecd1bd726f240123f704620d46e285ff30dd9 ]
 
-The Xen console driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using a lateeoi event
-channel.
+The return value of kmalloc() needs to be checked.
+To avoid use in efx_nic_update_stats() in case of the failure of alloc.
 
-For the normal domU initial console this requires the introduction of
-bind_evtchn_to_irq_lateeoi() as there is no xenbus device available
-at the time the event channel is bound to the irq.
-
-As the decision whether an interrupt was spurious or not requires to
-test for bytes having been read from the backend, move sending the
-event into the if statement, as sending an event without having found
-any bytes to be read is making no sense at all.
-
-This is part of XSA-391
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b593b6f1b492 ("sfc_ef100: statistics gathering")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/hvc/hvc_xen.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/sfc/ef100_nic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/tty/hvc/hvc_xen.c
-+++ b/drivers/tty/hvc/hvc_xen.c
-@@ -50,6 +50,8 @@ struct xencons_info {
- 	struct xenbus_device *xbdev;
- 	struct xencons_interface *intf;
- 	unsigned int evtchn;
-+	XENCONS_RING_IDX out_cons;
-+	unsigned int out_cons_same;
- 	struct hvc_struct *hvc;
- 	int irq;
- 	int vtermno;
-@@ -151,6 +153,8 @@ static int domU_read_console(uint32_t vt
- 	XENCONS_RING_IDX cons, prod;
- 	int recv = 0;
- 	struct xencons_info *xencons = vtermno_to_xencons(vtermno);
-+	unsigned int eoiflag = 0;
-+
- 	if (xencons == NULL)
- 		return -EINVAL;
- 	intf = xencons->intf;
-@@ -170,7 +174,27 @@ static int domU_read_console(uint32_t vt
- 	mb();			/* read ring before consuming */
- 	intf->in_cons = cons;
+diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
+index 3148fe7703564..cb6897c2193c2 100644
+--- a/drivers/net/ethernet/sfc/ef100_nic.c
++++ b/drivers/net/ethernet/sfc/ef100_nic.c
+@@ -597,6 +597,9 @@ static size_t ef100_update_stats(struct efx_nic *efx,
+ 	ef100_common_stat_mask(mask);
+ 	ef100_ethtool_stat_mask(mask);
  
--	notify_daemon(xencons);
-+	/*
-+	 * When to mark interrupt having been spurious:
-+	 * - there was no new data to be read, and
-+	 * - the backend did not consume some output bytes, and
-+	 * - the previous round with no read data didn't see consumed bytes
-+	 *   (we might have a race with an interrupt being in flight while
-+	 *   updating xencons->out_cons, so account for that by allowing one
-+	 *   round without any visible reason)
-+	 */
-+	if (intf->out_cons != xencons->out_cons) {
-+		xencons->out_cons = intf->out_cons;
-+		xencons->out_cons_same = 0;
-+	}
-+	if (recv) {
-+		notify_daemon(xencons);
-+	} else if (xencons->out_cons_same++ > 1) {
-+		eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+	}
++	if (!mc_stats)
++		return 0;
 +
-+	xen_irq_lateeoi(xencons->irq, eoiflag);
-+
- 	return recv;
- }
- 
-@@ -399,7 +423,7 @@ static int xencons_connect_backend(struc
- 	if (ret)
- 		return ret;
- 	info->evtchn = evtchn;
--	irq = bind_evtchn_to_irq(evtchn);
-+	irq = bind_interdomain_evtchn_to_irq_lateeoi(dev->otherend_id, evtchn);
- 	if (irq < 0)
- 		return irq;
- 	info->irq = irq;
-@@ -563,7 +587,7 @@ static int __init xen_hvc_init(void)
- 			return r;
- 
- 		info = vtermno_to_xencons(HVC_COOKIE);
--		info->irq = bind_evtchn_to_irq(info->evtchn);
-+		info->irq = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	}
- 	if (info->irq < 0)
- 		info->irq = 0; /* NO_IRQ */
+ 	efx_nic_copy_stats(efx, mc_stats);
+ 	efx_nic_update_stats(ef100_stat_desc, EF100_STAT_COUNT, mask,
+ 			     stats, mc_stats, false);
+-- 
+2.33.0
+
 
 

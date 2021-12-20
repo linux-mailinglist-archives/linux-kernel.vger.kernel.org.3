@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D447AD83
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF2B47AC1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbhLTOwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:52:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54486 "EHLO
+        id S235305AbhLTOle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:41:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49074 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236726AbhLTOt3 (ORCPT
+        with ESMTP id S234539AbhLTOkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:29 -0500
+        Mon, 20 Dec 2021 09:40:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 543E0B80EB3;
-        Mon, 20 Dec 2021 14:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852B0C36AE7;
-        Mon, 20 Dec 2021 14:49:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA770B80EF1;
+        Mon, 20 Dec 2021 14:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 013D1C36AE8;
+        Mon, 20 Dec 2021 14:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011767;
-        bh=R/fl/XWtezSMRY0BwaliBkDRbbav2JoWmpqKxKcBL5M=;
+        s=korg; t=1640011215;
+        bh=nih9dZrU8O63ScahyWDZ8/H1Eobq4ZvyR31ISJE4lLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OckjfUwZpXxvhockTDXL1JDyR4/lkD0S0kIb0gZ55kZ7vNI9U4JGsgEQtQ8Kd40wj
-         AYjv+juMqovZSggSrgZZbOyy+F5tEawF8Dd+546R/S8hmpuyOPj2g38Tv8uavpT5Ee
-         uJ/vXDPWuJooGz6hSxZckt3M0+g1O04r09pOxWeM=
+        b=BOfRrLjviXk4btxpp3ewXg2kFo1D0QgMNSn2hWrIFz5jOSrG2aeA+4sjYviWYqvX5
+         NeFHs70/NhuHpbw8jAgMx8H6W24vGGxnBZRKjy0rOrGZg/bNypqjK4Ysu/OjNKw6e3
+         OAz/Vv5YxlFHVtqXtOTPb0Zh9inzd9igZJC8RR/w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH 5.10 67/99] tty: n_hdlc: make n_hdlc_tty_wakeup() asynchronous
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 45/45] xen/netback: dont queue unlimited number of packages
 Date:   Mon, 20 Dec 2021 15:34:40 +0100
-Message-Id: <20211220143031.649396763@linuxfoundation.org>
+Message-Id: <20211220143023.766045595@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,116 +45,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+From: Juergen Gross <jgross@suse.com>
 
-commit 1ee33b1ca2b8dabfcc17198ffd049a6b55674a86 upstream.
+commit be81992f9086b230623ae3ebbc85ecee4d00a3d3 upstream.
 
-syzbot is reporting that an unprivileged user who logged in from tty
-console can crash the system using a reproducer shown below [1], for
-n_hdlc_tty_wakeup() is synchronously calling n_hdlc_send_frames().
+In case a guest isn't consuming incoming network traffic as fast as it
+is coming in, xen-netback is buffering network packages in unlimited
+numbers today. This can result in host OOM situations.
 
-----------
-  #include <sys/ioctl.h>
-  #include <unistd.h>
+Commit f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal
+queue and carrier flapping") meant to introduce a mechanism to limit
+the amount of buffered data by stopping the Tx queue when reaching the
+data limit, but this doesn't work for cases like UDP.
 
-  int main(int argc, char *argv[])
-  {
-    const int disc = 0xd;
+When hitting the limit don't queue further SKBs, but drop them instead.
+In order to be able to tell Rx packages have been dropped increment the
+rx_dropped statistics counter in this case.
 
-    ioctl(1, TIOCSETD, &disc);
-    while (1) {
-      ioctl(1, TCXONC, 0);
-      write(1, "", 1);
-      ioctl(1, TCXONC, 1); /* Kernel panic - not syncing: scheduling while atomic */
-    }
-  }
-----------
+It should be noted that the old solution to continue queueing SKBs had
+the additional problem of an overflow of the 32-bit rx_queue_len value
+would result in intermittent Tx queue enabling.
 
-Linus suspected that "struct tty_ldisc"->ops->write_wakeup() must not
-sleep, and Jiri confirmed it from include/linux/tty_ldisc.h. Thus, defer
-n_hdlc_send_frames() from n_hdlc_tty_wakeup() to a WQ context like
-net/nfc/nci/uart.c does.
+This is part of XSA-392
 
-Link: https://syzkaller.appspot.com/bug?extid=5f47a8cea6a12b77a876 [1]
-Reported-by: syzbot <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
-Cc: stable <stable@vger.kernel.org>
-Analyzed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Confirmed-by: Jiri Slaby <jirislaby@kernel.org>
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Link: https://lore.kernel.org/r/40de8b7e-a3be-4486-4e33-1b1d1da452f8@i-love.sakura.ne.jp
+Fixes: f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal queue and carrier flapping")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_hdlc.c |   23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ drivers/net/xen-netback/rx.c |   18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
---- a/drivers/tty/n_hdlc.c
-+++ b/drivers/tty/n_hdlc.c
-@@ -139,6 +139,8 @@ struct n_hdlc {
- 	struct n_hdlc_buf_list	rx_buf_list;
- 	struct n_hdlc_buf_list	tx_free_buf_list;
- 	struct n_hdlc_buf_list	rx_free_buf_list;
-+	struct work_struct	write_work;
-+	struct tty_struct	*tty_for_write_work;
- };
+--- a/drivers/net/xen-netback/rx.c
++++ b/drivers/net/xen-netback/rx.c
+@@ -88,16 +88,19 @@ void xenvif_rx_queue_tail(struct xenvif_
  
- /*
-@@ -153,6 +155,7 @@ static struct n_hdlc_buf *n_hdlc_buf_get
- /* Local functions */
+ 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
  
- static struct n_hdlc *n_hdlc_alloc(void);
-+static void n_hdlc_tty_write_work(struct work_struct *work);
+-	if (skb_queue_empty(&queue->rx_queue))
+-		xenvif_update_needed_slots(queue, skb);
+-
+-	__skb_queue_tail(&queue->rx_queue, skb);
+-
+-	queue->rx_queue_len += skb->len;
+-	if (queue->rx_queue_len > queue->rx_queue_max) {
++	if (queue->rx_queue_len >= queue->rx_queue_max) {
+ 		struct net_device *dev = queue->vif->dev;
  
- /* max frame size for memory allocations */
- static int maxframe = 4096;
-@@ -209,6 +212,8 @@ static void n_hdlc_tty_close(struct tty_
- 	wake_up_interruptible(&tty->read_wait);
- 	wake_up_interruptible(&tty->write_wait);
- 
-+	cancel_work_sync(&n_hdlc->write_work);
+ 		netif_tx_stop_queue(netdev_get_tx_queue(dev, queue->id));
++		kfree_skb(skb);
++		queue->vif->dev->stats.rx_dropped++;
++	} else {
++		if (skb_queue_empty(&queue->rx_queue))
++			xenvif_update_needed_slots(queue, skb);
 +
- 	n_hdlc_free_buf_list(&n_hdlc->rx_free_buf_list);
- 	n_hdlc_free_buf_list(&n_hdlc->tx_free_buf_list);
- 	n_hdlc_free_buf_list(&n_hdlc->rx_buf_list);
-@@ -240,6 +245,8 @@ static int n_hdlc_tty_open(struct tty_st
- 		return -ENFILE;
++		__skb_queue_tail(&queue->rx_queue, skb);
++
++		queue->rx_queue_len += skb->len;
  	}
  
-+	INIT_WORK(&n_hdlc->write_work, n_hdlc_tty_write_work);
-+	n_hdlc->tty_for_write_work = tty;
- 	tty->disc_data = n_hdlc;
- 	tty->receive_room = 65536;
+ 	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
+@@ -147,6 +150,7 @@ static void xenvif_rx_queue_drop_expired
+ 			break;
+ 		xenvif_rx_dequeue(queue);
+ 		kfree_skb(skb);
++		queue->vif->dev->stats.rx_dropped++;
+ 	}
+ }
  
-@@ -334,6 +341,20 @@ check_again:
- }	/* end of n_hdlc_send_frames() */
- 
- /**
-+ * n_hdlc_tty_write_work - Asynchronous callback for transmit wakeup
-+ * @work: pointer to work_struct
-+ *
-+ * Called when low level device driver can accept more send data.
-+ */
-+static void n_hdlc_tty_write_work(struct work_struct *work)
-+{
-+	struct n_hdlc *n_hdlc = container_of(work, struct n_hdlc, write_work);
-+	struct tty_struct *tty = n_hdlc->tty_for_write_work;
-+
-+	n_hdlc_send_frames(n_hdlc, tty);
-+}	/* end of n_hdlc_tty_write_work() */
-+
-+/**
-  * n_hdlc_tty_wakeup - Callback for transmit wakeup
-  * @tty: pointer to associated tty instance data
-  *
-@@ -343,7 +364,7 @@ static void n_hdlc_tty_wakeup(struct tty
- {
- 	struct n_hdlc *n_hdlc = tty->disc_data;
- 
--	n_hdlc_send_frames(n_hdlc, tty);
-+	schedule_work(&n_hdlc->write_work);
- }	/* end of n_hdlc_tty_wakeup() */
- 
- /**
 
 

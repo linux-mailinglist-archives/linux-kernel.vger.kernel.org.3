@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4585F47B24B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D8347B250
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbhLTRnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:43:07 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:53759 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbhLTRnG (ORCPT
+        id S240248AbhLTRok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:44:40 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:41860 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232037AbhLTRoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:43:06 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id B1262223ED;
-        Mon, 20 Dec 2021 18:43:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1640022184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wx3LrtaXSfVMg5DkRfr+bITD7CYJEQTXTjdrw+TkxiU=;
-        b=CZWxt1SBph3/prxmlscOHwg0K5NZst/0NW51/1ZwV+ycbDAQNDfqubQV3Jfl2uj8Il6AOD
-        UFkGSSuEDOfvPTGDy3fgrTN6pz2UJq7N0hUSQ4EIgQ80p15o1UnykGpw9NML7Z0cbIKQk9
-        6cnamI4TV390/SQ7MTG3zKOHX8+ec5k=
+        Mon, 20 Dec 2021 12:44:38 -0500
+Received: by mail-wr1-f48.google.com with SMTP id a9so21614366wrr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:44:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=COpSoZwmnRvBNoLHp+2DxbYAIb0dSgQ0tqkVz4IdVjY=;
+        b=1t9gqZ43iRXfn6B9k9biRCIz7g+AKV/nZ6DHiXjbjkyVpPENcjvyeSFLKZKC2eDmap
+         ToOkOGk68cwxvQ4iKr1d6jaGdpfvapOsPtoEDvYApmqBoEKTosL/H/2YUuPddyteZINs
+         U44cNw1Qj8yn/yRygkaglDEO7R1IzybfQdmZPR5QHeYPgdPV53sETZljU53aYwhucsJA
+         0K1tQqqWYhTv9RaJZq+WwRVT7jbcCu/lRy6xhIDoXbPes+2WsdFxNfKCbOxlGww7QxlO
+         z/0LfG6lAgl8jfPxQ5IcNQmmmJ6v6ezHL4nr2/Mi/ZkztpmywQH9SnTrLcZpqEvm2yjZ
+         Rf2A==
+X-Gm-Message-State: AOAM531bxELSr6ICcahkU2IAMxNUHxinvlOc0Z8oTNtCQTu3Z3KbDnwa
+        tNARW0tG/PQu4QCoEICi84E=
+X-Google-Smtp-Source: ABdhPJzRF+ZPpVA5NWW+LdDQ/fybqOOqa0SuF9Tqv5iH/rurEe4M3yMlfZN03Z4YyH6eXS2K7+uE8w==
+X-Received: by 2002:a5d:54c8:: with SMTP id x8mr13798439wrv.299.1640022277280;
+        Mon, 20 Dec 2021 09:44:37 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id k9sm6165763wro.80.2021.12.20.09.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 09:44:37 -0800 (PST)
+Date:   Mon, 20 Dec 2021 17:44:35 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Wei Liu <wei.liu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [hyperv:hyperv-next 4/5] drivers/hv/vmbus_drv.c:2082:29:
+ warning: shift count >= width of type
+Message-ID: <20211220174435.2mv4gna5eu7awzt5@liuwe-devbox-debian-v2>
+References: <202112181827.o3X7GmHz-lkp@intel.com>
+ <20211219122937.7zi3etrcl6rpob3t@liuwe-devbox-debian-v2>
+ <YcC1CobR/n0tJhdV@archlinux-ax161>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 20 Dec 2021 18:43:03 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH v2] PCI: Fix Intel i210 by avoiding overlapping of BARs
-In-Reply-To: <5d41bad0e0607e68d9189667a45f7519@walle.cc>
-References: <20210201222010.GA31234@bjorn-Precision-5520>
- <d2c7ec0e416dd6bb6818892750bff6d7@walle.cc>
- <5d41bad0e0607e68d9189667a45f7519@walle.cc>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <9303c33a8faa83597db807a8c418ef17@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcC1CobR/n0tJhdV@archlinux-ax161>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-08-20 17:12, schrieb Michael Walle:
-> Am 2021-03-15 22:51, schrieb Michael Walle:
->> Am 2021-02-01 23:20, schrieb Bjorn Helgaas:
->>> On Mon, Feb 01, 2021 at 08:49:16PM +0100, Michael Walle wrote:
->>>> Am 2021-01-17 20:27, schrieb Michael Walle:
->>>> > Am 2021-01-16 00:57, schrieb Bjorn Helgaas:
->>>> > > On Wed, Jan 13, 2021 at 12:32:32AM +0100, Michael Walle wrote:
->>>> > > > Am 2021-01-12 23:58, schrieb Bjorn Helgaas:
->>>> > > > > On Sat, Jan 09, 2021 at 07:31:46PM +0100, Michael Walle wrote:
->>>> > > > > > Am 2021-01-08 22:20, schrieb Bjorn Helgaas:
->>>> > >
->>>> > > > > > > 3) If the Intel i210 is defective in how it handles an Expansion ROM
->>>> > > > > > > that overlaps another BAR, a quirk might be the right fix. But my
->>>> > > > > > > guess is the device is working correctly per spec and there's
->>>> > > > > > > something wrong in how firmware/Linux is assigning things.  That would
->>>> > > > > > > mean we need a more generic fix that's not a quirk and not tied to the
->>>> > > > > > > Intel i210.
->>>> > > > > >
->>>> > > > > > Agreed, but as you already stated (and I've also found that in
->>>> > > > > > the PCI spec) the Expansion ROM address decoder can be shared by
->>>> > > > > > the other BARs and it shouldn't matter as long as the ExpROM BAR
->>>> > > > > > is disabled, which is the case here.
->>>> > > > >
->>>> > > > > My point is just that if this could theoretically affect devices
->>>> > > > > other than the i210, the fix should not be an i210-specific quirk.
->>>> > > > > I'll assume this is a general problem and wait for a generic PCI
->>>> > > > > core solution unless it's i210-specific.
->>>> > > >
->>>> > > > I guess the culprit here is that linux skips the programming of the
->>>> > > > BAR because of some broken Matrox card. That should have been a
->>>> > > > quirk instead, right? But I don't know if we want to change that, do
->>>> > > > we? How many other cards depend on that?
->>>> > >
->>>> > > Oh, right.  There's definitely some complicated history there that
->>>> > > makes me a little scared to change things.  But it's also unfortunate
->>>> > > if we have to pile quirks on top of quirks.
->>>> > >
->>>> > > > And still, how do we find out that the i210 is behaving correctly?
->>>> > > > In my opinion it is clearly not. You can change the ExpROM BAR value
->>>> > > > during runtime and it will start working (while keeping it
->>>> > > > disabled).  Am I missing something here?
->>>> > >
->>>> > > I agree; if the ROM BAR is disabled, I don't think it should matter at
->>>> > > all what it contains, so this does look like an i210 defect.
->>>> > >
->>>> > > Would you mind trying the patch below?  It should update the ROM BAR
->>>> > > value even when it is disabled.  With the current pci_enable_rom()
->>>> > > code that doesn't rely on the value read from the BAR, I *think* this
->>>> > > should be safe even on the Matrox and similar devices.
->>>> >
->>>> > Your patch will fix my issue:
->>>> >
->>>> > Tested-by: Michael Walle <michael@walle.cc>
->>>> 
->>>> any news on this?
->>> 
->>> Thanks for the reminder.  I was thinking this morning that I need to
->>> get back to this.  I'm trying to convince myself that doing this
->>> wouldn't break the problem fixed by 755528c860b0 ("Ignore disabled 
->>> ROM
->>> resources at setup").  So far I haven't quite succeeded.
->> 
->> ping #2 ;)
+On Mon, Dec 20, 2021 at 09:53:30AM -0700, Nathan Chancellor wrote:
+> Hi Wei,
 > 
-> ping #3, soon we can celebrate our first one year anniversary :p
+> On Sun, Dec 19, 2021 at 12:29:37PM +0000, Wei Liu wrote:
+> > On Sat, Dec 18, 2021 at 06:20:43PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+> > > head:   19fd7ca00201c0525452dcf5a490e4b01674ef4c
+> > > commit: 6327882f7b4a476ea902de4bee5657f1028d6859 [4/5] scsi: storvsc: Add Isolation VM support for storvsc driver
+> > > config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211218/202112181827.o3X7GmHz-lkp@intel.com/config)
+> > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4c9e31a4814592bbda7153833e46728dc7b21100)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git/commit/?id=6327882f7b4a476ea902de4bee5657f1028d6859
+> > >         git remote add hyperv https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git
+> > >         git fetch --no-tags hyperv hyperv-next
+> > >         git checkout 6327882f7b4a476ea902de4bee5657f1028d6859
+> > >         # save the config file to linux build tree
+> > >         mkdir build_dir
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hv/
+> > > 
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > >> drivers/hv/vmbus_drv.c:2082:29: warning: shift count >= width of type [-Wshift-count-overflow]
+> > >    static u64 vmbus_dma_mask = DMA_BIT_MASK(64);
+> > >                                ^~~~~~~~~~~~~~~~
+> > >    include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+> > >    #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> > >                                                         ^ ~~~
+> > 
+> > I don't think there is anything wrong with the code. When n is 64 the
+> > problematic expression is not evaluated.
+> 
+> Yes, unfortunately, this is an outstanding bug in clang where it does
+> not properly build a control flow graph for expressions at a global
+> scope:
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/92
+> 
+> We should absolutely fix that but it has not come up too often so other
+> fires have been prioritized. Now that -Werror is a thing, that issue's
+> priority should probably be upgraded, as this warning will break
+> allmodconfig for clang.
 
-ping #4
+Thanks for the explanation.
 
-In a few days this is a year old. Please have a look at it and either 
-add
-my quirk patch or apply your patch. This is still breaking i210 on
-my board.
+> 
+> If you were feeling generous, just changing that to ~0ULL directly would
+> solve the warning but I get that it is less documentation that way.
 
-TBH, this is really frustrating.
+I would actually like to keep the code as-is because it gives a clear
+idea what it is doing.
 
--michael
+Wei.
+
+> 
+> Cheers,
+> Nathan

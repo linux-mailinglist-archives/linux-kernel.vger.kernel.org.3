@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0412647AA93
+	by mail.lfdr.de (Postfix) with ESMTP id 5167147AA94
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbhLTNsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:48:23 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30148 "EHLO
+        id S233106AbhLTNsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:48:24 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30149 "EHLO
         szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbhLTNsT (ORCPT
+        with ESMTP id S233040AbhLTNsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Dec 2021 08:48:19 -0500
-Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JHgpb0C2Jz8vrl;
+Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JHgpb52r4z8vyD;
         Mon, 20 Dec 2021 21:45:59 +0800 (CST)
 Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
+ kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 21:48:17 +0800
+ 15.1.2308.20; Mon, 20 Dec 2021 21:48:18 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
  (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 20 Dec
- 2021 21:48:16 +0800
+ 2021 21:48:17 +0800
 From:   Zhihao Cheng <chengzhihao1@huawei.com>
 To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
         <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>
 CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <chengzhihao1@huawei.com>
-Subject: [PATCH v5 02/14] ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
-Date:   Mon, 20 Dec 2021 21:59:39 +0800
-Message-ID: <20211220135951.4075801-3-chengzhihao1@huawei.com>
+Subject: [PATCH v5 03/14] ubifs: Fix wrong number of inodes locked by ui_mutex in ubifs_inode comment
+Date:   Mon, 20 Dec 2021 21:59:40 +0800
+Message-ID: <20211220135951.4075801-4-chengzhihao1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211220135951.4075801-1-chengzhihao1@huawei.com>
 References: <20211220135951.4075801-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.127.227]
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemm600013.china.huawei.com (7.193.23.68)
@@ -45,112 +45,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following hung tasks:
-[   77.028764] task:kworker/u8:4    state:D stack:    0 pid:  132
-[   77.028820] Call Trace:
-[   77.029027]  schedule+0x8c/0x1b0
-[   77.029067]  mutex_lock+0x50/0x60
-[   77.029074]  ubifs_write_inode+0x68/0x1f0 [ubifs]
-[   77.029117]  __writeback_single_inode+0x43c/0x570
-[   77.029128]  writeback_sb_inodes+0x259/0x740
-[   77.029148]  wb_writeback+0x107/0x4d0
-[   77.029163]  wb_workfn+0x162/0x7b0
+Since 9ec64962afb1702f75b("ubifs: Implement RENAME_EXCHANGE") and
+9e0a1fff8db56eaaebb("ubifs: Implement RENAME_WHITEOUT") are applied,
+ubifs_rename locks and changes 4 ubifs inodes, correct the comment
+for ui_mutex in ubifs_inode.
 
-[   92.390442] task:aa              state:D stack:    0 pid: 1506
-[   92.390448] Call Trace:
-[   92.390458]  schedule+0x8c/0x1b0
-[   92.390461]  wb_wait_for_completion+0x82/0xd0
-[   92.390469]  __writeback_inodes_sb_nr+0xb2/0x110
-[   92.390472]  writeback_inodes_sb_nr+0x14/0x20
-[   92.390476]  ubifs_budget_space+0x705/0xdd0 [ubifs]
-[   92.390503]  do_rename.cold+0x7f/0x187 [ubifs]
-[   92.390549]  ubifs_rename+0x8b/0x180 [ubifs]
-[   92.390571]  vfs_rename+0xdb2/0x1170
-[   92.390580]  do_renameat2+0x554/0x770
-
-, are caused by concurrent rename whiteout and inode writeback processes:
-	rename_whiteout(Thread 1)	        wb_workfn(Thread2)
-ubifs_rename
-  do_rename
-    lock_4_inodes (Hold ui_mutex)
-    ubifs_budget_space
-      make_free_space
-        shrink_liability
-	  __writeback_inodes_sb_nr
-	    bdi_split_work_to_wbs (Queue new wb work)
-					      wb_do_writeback(wb work)
-						__writeback_single_inode
-					          ubifs_write_inode
-					            LOCK(ui_mutex)
-							   ↑
-	      wb_wait_for_completion (Wait wb work) <-- deadlock!
-
-Reproducer (Detail program in [Link]):
-  1. SYS_renameat2("/mp/dir/file", "/mp/dir/whiteout", RENAME_WHITEOUT)
-  2. Consume out of space before kernel(mdelay) doing budget for whiteout
-
-Fix it by doing whiteout space budget before locking ubifs inodes.
-BTW, it also fixes wrong goto tag 'out_release' in whiteout budget
-error handling path(It should at least recover dir i_size and unlock
-4 ubifs inodes).
-
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214733
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 ---
- fs/ubifs/dir.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ fs/ubifs/ubifs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-index cfa8881d8cca..2735ad1affed 100644
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1324,6 +1324,7 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 
- 	if (flags & RENAME_WHITEOUT) {
- 		union ubifs_dev_desc *dev = NULL;
-+		struct ubifs_budget_req wht_req;
- 
- 		dev = kmalloc(sizeof(union ubifs_dev_desc), GFP_NOFS);
- 		if (!dev) {
-@@ -1345,6 +1346,20 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 		whiteout_ui->data = dev;
- 		whiteout_ui->data_len = ubifs_encode_dev(dev, MKDEV(0, 0));
- 		ubifs_assert(c, !whiteout_ui->dirty);
-+
-+		memset(&wht_req, 0, sizeof(struct ubifs_budget_req));
-+		wht_req.dirtied_ino = 1;
-+		wht_req.dirtied_ino_d = ALIGN(whiteout_ui->data_len, 8);
-+		/*
-+		 * To avoid deadlock between space budget (holds ui_mutex and
-+		 * waits wb work) and writeback work(waits ui_mutex), do space
-+		 * budget before ubifs inodes locked.
-+		 */
-+		err = ubifs_budget_space(c, &wht_req);
-+		if (err) {
-+			iput(whiteout);
-+			goto out_release;
-+		}
- 	}
- 
- 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
-@@ -1419,16 +1434,6 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 	}
- 
- 	if (whiteout) {
--		struct ubifs_budget_req wht_req = { .dirtied_ino = 1,
--				.dirtied_ino_d = \
--				ALIGN(ubifs_inode(whiteout)->data_len, 8) };
--
--		err = ubifs_budget_space(c, &wht_req);
--		if (err) {
--			iput(whiteout);
--			goto out_release;
--		}
--
- 		inc_nlink(whiteout);
- 		mark_inode_dirty(whiteout);
- 
+diff --git a/fs/ubifs/ubifs.h b/fs/ubifs/ubifs.h
+index c38066ce9ab0..972e41daff01 100644
+--- a/fs/ubifs/ubifs.h
++++ b/fs/ubifs/ubifs.h
+@@ -372,7 +372,7 @@ struct ubifs_gced_idx_leb {
+  * @ui_mutex exists for two main reasons. At first it prevents inodes from
+  * being written back while UBIFS changing them, being in the middle of an VFS
+  * operation. This way UBIFS makes sure the inode fields are consistent. For
+- * example, in 'ubifs_rename()' we change 3 inodes simultaneously, and
++ * example, in 'ubifs_rename()' we change 4 inodes simultaneously, and
+  * write-back must not write any of them before we have finished.
+  *
+  * The second reason is budgeting - UBIFS has to budget all operations. If an
 -- 
 2.31.1
 

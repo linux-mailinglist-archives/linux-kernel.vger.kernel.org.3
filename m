@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE1D47A7CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B19247A7D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbhLTKiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:38:03 -0500
-Received: from mga05.intel.com ([192.55.52.43]:32231 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229502AbhLTKiC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:38:02 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="326437569"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="326437569"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 02:37:57 -0800
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="520750014"
-Received: from abaydur-mobl1.ccr.corp.intel.com (HELO [10.249.226.24]) ([10.249.226.24])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 02:37:51 -0800
-Message-ID: <90352f48-86a8-f8d9-2b74-b884b32d013d@linux.intel.com>
-Date:   Mon, 20 Dec 2021 13:37:48 +0300
+        id S231320AbhLTKkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229617AbhLTKkg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:40:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9A4C061574;
+        Mon, 20 Dec 2021 02:40:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B85C560F59;
+        Mon, 20 Dec 2021 10:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86337C36AE9;
+        Mon, 20 Dec 2021 10:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639996834;
+        bh=VjJdoxtEfB0kqCJWH6U+s0OWdAK8IYbNpe3HSLovq8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bNbHfu0xJXPtoEREu5sedDkjoC8CPHoWqDacoHwAfifup7kAurWxO7B+TIjgO2vGn
+         J7xvJSaR0MTHaffZrdFBNCu0yx/kj5NluPgomtzXe3xDAy6czLtYhlwwu+rZQlN4Iz
+         doHvgiw+ftHMdyqv4tVYZYJ8csE0ICgZunM1JFmI=
+Date:   Mon, 20 Dec 2021 11:40:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     wigin zeng <wigin.zeng@dji.com>
+Cc:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        First Light <xiaoguang.chen@dji.com>
+Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlA==?=
+ =?utf-8?B?5aSNOiDnrZTlpI06IOetlOWkjQ==?= =?utf-8?Q?=3A?= [PATCH] serial:
+ 8250: add lock for dma rx
+Message-ID: <YcBdnzfUceNqdVHb@kroah.com>
+References: <YbGygPtkz6ihyW51@kroah.com>
+ <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
+ <YbHBb2uB9JRP0tWc@kroah.com>
+ <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
+ <YbHVXwdCUCvmZrbS@kroah.com>
+ <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
+ <YcBEy9zi2G7UYErE@kroah.com>
+ <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
+ <YcBT/Vf41PWUYdxT@kroah.com>
+ <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v12 01/16] perf record: Introduce thread affinity and mmap
- masks
-Content-Language: en-GB
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-References: <cover.1637675515.git.alexey.v.bayduraev@linux.intel.com>
- <22ee51ee5430b51eee5f03301fb498d5d3e33d1e.1637675515.git.alexey.v.bayduraev@linux.intel.com>
- <YazXMuT+oQ9cFeTi@krava>
-From:   "Bayduraev, Alexey V" <alexey.v.bayduraev@linux.intel.com>
-Organization: Intel Corporation
-In-Reply-To: <YazXMuT+oQ9cFeTi@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.12.2021 18:13, Jiri Olsa wrote:
-> On Tue, Nov 23, 2021 at 05:07:57PM +0300, Alexey Bayduraev wrote:
+On Mon, Dec 20, 2021 at 10:25:51AM +0000, wigin zeng wrote:
+> On Mon, Dec 20, 2021 at 09:44:04AM +0000, wigin zeng wrote:
+> > > >That makes no sense, as what orders the data coming in?  The 2 bytes could be added to the tty buffer before the 512 bytes, or the other way around.
+> >
+> > > >What hardware are you using that is mixing dma and irq data like this?
+> > > >That feels very wrong.
+> >
+> > >It is not normal case, normally, the input size should smaller than DMA block size and DMA complete the whole copy.
+> > >However, there are some abnormal situations. The external input is unexpectedly larger than the data length of the DMA configuration. This situation in my example will appear, and it may cause the kernel to panic.
 > 
-> SNIP
+> >You did not answer my question about hardware type :(
 > 
->> +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
->> +{
->> +	int c;
->> +
->> +	for (c = 0; c < cpus->nr; c++)
->> +		set_bit(cpus->map[c], mask->bits);
->> +}
->> +
->> +static void record__free_thread_masks(struct record *rec, int nr_threads)
->> +{
->> +	int t;
->> +
->> +	if (rec->thread_masks)
->> +		for (t = 0; t < nr_threads; t++)
->> +			record__thread_mask_free(&rec->thread_masks[t]);
->> +
->> +	zfree(&rec->thread_masks);
->> +}
->> +
->> +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
->> +{
->> +	int t, ret;
->> +
->> +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
->> +	if (!rec->thread_masks) {
->> +		pr_err("Failed to allocate thread masks\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	for (t = 0; t < nr_threads; t++) {
->> +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
->> +		if (ret)
->> +			goto out_free;
->> +		record__thread_mask_clear(&rec->thread_masks[t]);
+> >And again, how is this happening?  If you use DMA, all data should be coming through DMA and not the irq.  Otherwise crazy stuff like this will happen in any type of driver, your hardware can not mix this type of stuff up.
 > 
-> nit, is this clear needed?
+> On our platform, UART connected to a MCU which will send data of variable length from time to time. There is no definition of a maximum transmission length.
+> We configured DMA block size is 4096bytes, however, there are more than 4100 bytes input, DMA just handled 4096bytes and left bytes in FIFO cannot trigger next DMA 
+> Transfer done interrupt(left bytes number < DMA block size ), so these data should be processed by UART IRQ.
 
-Hi,
+That is a broken hardware design and will not work with any operating
+system.
 
-You are right, since all elements of mask->bits is set to zero after
-bitmap_zalloc in record__thread_mask_alloc, calling
-record__thread_mask_clear after record__thread_mask_alloc
-is redundant.
-I will remove it here and in [PATCH v12 13/16].
+> In other word, if the external use UART "vulnerability" to attack the system, we need to ensure that the system not crash at least, right?
 
-Thanks,
-Alexey
+So you are saying that Linux now treat all hardware that has DMA
+functionality as a potential threat?  That is not a model that Linux, or
+any other operating system, has ever had to support before, please do
+not make up new rules here and expect Linux to automatically support
+them without a lot of redesign and work.
 
+If you wish to protect Linux from this type of untrusted hardware,
+please do the work to do so.  This patch is not that work.
+
+> >How can flow control handle this at all?  Flow control is at the serial data stream level.  This is confusing the PCI data stream order.
 > 
-> jirka
-> 
->> +	}
->> +
->> +	return 0;
->> +
->> +out_free:
->> +	record__free_thread_masks(rec, nr_threads);
->> +
->> +	return ret;
->> +}
->> +
-> 
-> SNIP
-> 
+> I just think more logic is needed to control the order of data processing by DMA and UART IRQ to keep the integrity of serial data. 
+> But the specific design, I haven't considered yet, the first goal is the keep the system alive.
+
+Again, this is a broken hardware design, please fix that first.
+
+thanks,
+
+greg k-h

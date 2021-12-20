@@ -2,39 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7892347A5A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3D447A5A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237799AbhLTICb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:02:31 -0500
-Received: from 8bytes.org ([81.169.241.247]:50310 "EHLO theia.8bytes.org"
+        id S234573AbhLTIDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:03:39 -0500
+Received: from 8bytes.org ([81.169.241.247]:50336 "EHLO theia.8bytes.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231402AbhLTICa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:02:30 -0500
+        id S231402AbhLTIDj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:03:39 -0500
 Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id B3DEF39A; Mon, 20 Dec 2021 09:02:28 +0100 (CET)
-Date:   Mon, 20 Dec 2021 09:02:25 +0100
+        id D90CF39A; Mon, 20 Dec 2021 09:03:37 +0100 (CET)
+Date:   Mon, 20 Dec 2021 09:03:36 +0100
 From:   Joerg Roedel <joro@8bytes.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/amd: Fix =?utf-8?Q?typo_?=
- =?utf-8?Q?in_*glues_=E2=80=A6?= together* in comment
-Message-ID: <YcA4kdl+ZzHvuOEh@8bytes.org>
-References: <20211217134916.43698-1-pmenzel@molgen.mpg.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     will@kernel.org, iommu@lists.linux-foundation.org,
+        suravee.suthikulpanit@amd.com, baolu.lu@linux.intel.com,
+        willy@infradead.org, linux-kernel@vger.kernel.org,
+        john.garry@huawei.com, linux-mm@kvack.org, hch@lst.de,
+        thierry.reding@gmail.com
+Subject: Re: [PATCH v3 0/9] iommu: refactor flush queues into iommu-dma
+Message-ID: <YcA42LtpISehG6O9@8bytes.org>
+References: <cover.1639753638.git.robin.murphy@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217134916.43698-1-pmenzel@molgen.mpg.de>
+In-Reply-To: <cover.1639753638.git.robin.murphy@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:49:16PM +0100, Paul Menzel wrote:
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/iommu/amd/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Dec 17, 2021 at 03:30:54PM +0000, Robin Murphy wrote:
+> Matthew Wilcox (Oracle) (2):
+>   iommu/amd: Use put_pages_list
+>   iommu/vt-d: Use put_pages_list
+> 
+> Robin Murphy (6):
+>   iommu/iova: Squash entry_dtor abstraction
+>   iommu/iova: Squash flush_cb abstraction
+>   iommu/amd: Simplify pagetable freeing
+>   iommu/iova: Consolidate flush queue code
+>   iommu/iova: Move flush queue code to iommu-dma
+>   iommu: Move flush queue data into iommu_dma_cookie
+> 
+> Xiongfeng Wang (1):
+>   iommu/iova: Fix race between FQ timeout and teardown
 
-Applied, thanks.
+Applied, thanks Robin.

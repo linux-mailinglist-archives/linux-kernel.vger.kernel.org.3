@@ -2,86 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6310A47A79A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3785447A7A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbhLTKPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbhLTKPj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:15:39 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6500C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 02:15:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=alHpGosBZG9KLUVJPord3i/tdWAv/gVYDukIQiUTKBI=;
-        t=1639995339; x=1641204939; b=K07fhTRDuBz1XJ0BQMX22xmeqPl28GvDtHtKt9WB0hTdrAo
-        TQp3rnz09ByihGkeoWRxCkipt7fOUOc36Dv3frJumpkZGk2t/U8btpW3q68sdsLsLj7VcA/NZBA+G
-        woRcK0gQturTSw2pTWNoEZ1Yr9OuFZJRvIN2NTVAipc1FH8nH6RZYCFIZrkhMIC9uUeAAg4nx+nkv
-        X75cVplkODtK5+HnMAElC7CcLW0CqG0Vy4263Tdpp5otfuUrWAIUjKL50yr65XHu1fHwFh1OvH/PQ
-        +1fSGACfS/o7xwy8WlUBaPb7H4GD78DRAC353S0Mb5ylrCNjqOE671fb7h4N9xkg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mzFhf-00E3ko-Uu;
-        Mon, 20 Dec 2021 11:15:36 +0100
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH] drm/ttm: fix compilation on ARCH=um
-Date:   Mon, 20 Dec 2021 11:15:22 +0100
-Message-Id: <20211220111519.a4c8c6eff702.Ie4cf4e68698f6a9f546b83379bc52c266504424f@changeid>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <CAMuHMdXTRYjtfyWTVN86pn4STO2EPR1B5+KHj=wAqguXt=hpHg@mail.gmail.com>
-References: <CAMuHMdXTRYjtfyWTVN86pn4STO2EPR1B5+KHj=wAqguXt=hpHg@mail.gmail.com>
+        id S230499AbhLTKQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:16:24 -0500
+Received: from www.zeus03.de ([194.117.254.33]:52752 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230475AbhLTKQX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:16:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=p0uMsr5IN+RkViSst4tj1wuGEytp
+        cXTD9HlPhFcokMw=; b=EvOsun+/22iM+Tu+w8Ec+UO8wpdiYXVqGV+f5dqSHwD1
+        t+kMXpgyCd8sDvhD85wLVadGrjTAY5SZ18qpGmEv7BG7IT/1wm0KTrnho0BaIVvF
+        2G1ZGG7MSsz2ATvqL1kAVpMp5WHA+jvItiksWyDp5dczNvhK2uw+YHm2L0ueOjY=
+Received: (qmail 913179 invoked from network); 20 Dec 2021 11:16:21 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2021 11:16:21 +0100
+X-UD-Smtp-Session: l3s3148p1@fQD1LZHTvuggAQnoAELRALGDYlCZA5dV
+Date:   Mon, 20 Dec 2021 11:16:18 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Chris Brandt <chris.brandt@renesas.com>,
+        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+Message-ID: <YcBX8iLzFaztwkeo@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Chris Brandt <chris.brandt@renesas.com>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0JWEgD6LQTZNclSx"
+Content-Disposition: inline
+In-Reply-To: <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
 
-Even if it's probably not really useful, it can get selected
-by e.g. randconfig builds, and then failing to compile is an
-annoyance. Unfortunately, it's hard to fix in Kconfig, since
-DRM_TTM is selected by many things that don't really depend
-on any specific architecture, and just depend on PCI (which
-is indeed now available in ARCH=um via simulation/emulation).
+--0JWEgD6LQTZNclSx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fix this in the code instead by just ifdef'ing the relevant
-two lines that depend on "real X86".
+Hi Prabhakar,
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
----
- drivers/gpu/drm/ttm/ttm_module.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +	if (!np) {
 
-diff --git a/drivers/gpu/drm/ttm/ttm_module.c b/drivers/gpu/drm/ttm/ttm_module.c
-index 0037eefe3239..a3ad7c9736ec 100644
---- a/drivers/gpu/drm/ttm/ttm_module.c
-+++ b/drivers/gpu/drm/ttm/ttm_module.c
-@@ -68,9 +68,11 @@ pgprot_t ttm_prot_from_caching(enum ttm_caching caching, pgprot_t tmp)
- #if defined(__i386__) || defined(__x86_64__)
- 	if (caching == ttm_write_combined)
- 		tmp = pgprot_writecombine(tmp);
-+#ifndef CONFIG_UML
- 	else if (boot_cpu_data.x86 > 3)
- 		tmp = pgprot_noncached(tmp);
--#endif
-+#endif /* CONFIG_UML */
-+#endif /* __i386__ || __x86_64__ */
- #if defined(__ia64__) || defined(__arm__) || defined(__aarch64__) || \
- 	defined(__powerpc__) || defined(__mips__)
- 	if (caching == ttm_write_combined)
--- 
-2.33.1
+Very minor nit: Maybe 'if (np)' and switch the blocks? Positive logic is
+a tad easier to read.
 
+> +		struct resource *res;
+> +		resource_size_t n;
+> +
+> +		while ((res = platform_get_resource(dev, IORESOURCE_IRQ, k))) {
+> +			for (n = res->start; n <= res->end; n++) {
+> +				ret = devm_request_irq(&dev->dev, n, sh_mobile_i2c_isr,
+> +						       0, dev_name(&dev->dev), pd);
+> +				if (ret) {
+> +					dev_err(&dev->dev, "cannot request IRQ %pa\n", &n);
+> +					return ret;
+> +				}
+> +			}
+> +			k++;
+> +		}
+
+Yeah, it is good to keep the legacy block as is.
+
+> +		do {
+> +			irq = platform_get_irq_optional(dev, k);
+> +			if (irq <= 0 && irq != -ENXIO)
+> +				return irq ? irq : -ENXIO;
+> +			if (irq == -ENXIO)
+> +				break;
+> +			ret = devm_request_irq(&dev->dev, irq, sh_mobile_i2c_isr,
+> +					       0, dev_name(&dev->dev), pd);
+>  			if (ret) {
+> -				dev_err(&dev->dev, "cannot request IRQ %pa\n", &n);
+> +				dev_err(&dev->dev, "cannot request IRQ %d\n", irq);
+>  				return ret;
+>  			}
+> -		}
+> -		k++;
+> +			k++;
+> +		} while (irq);
+
+In addition to the 'irq == 0' case from patch 1, I tried to shorten the
+block for the np-case. I only came up with this. The assigntment and
+comparison of the while-argument is not exactly pretty, but the block
+itself is easier to read. I'll let you decide.
+
+		while (irq = platform_get_irq_optional(dev, k) != -ENXIO) {
+			if (irq < 0)
+				return irq;
+
+			ret = devm_request_irq(&dev->dev, irq, sh_mobile_i2c_isr,
+					       0, dev_name(&dev->dev), pd);
+			if (ret) {
+				dev_err(&dev->dev, "cannot request IRQ %d\n", irq);
+				return ret;
+			}
+			k++;
+		}
+
+Only brainstorming, not even build tested.
+
+All the best,
+
+   Wolfram
+
+
+--0JWEgD6LQTZNclSx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHAV+4ACgkQFA3kzBSg
+KbbuchAAhJCF0GjgqtIqgwJLJo5A4+l9DFAo6idzSEnJteJwfryAEA3xiR48XCD7
+jWiGdFxglAtkPAYz/swax2Rr0j7qTVySoyUoBGf0Bro5t4N/VqVlF0u5BDESL8xR
+drolZSx8EDdH75ewl3ygGR1rvJtoerU6YluI2P3Vc8zfi8hWipduKqTKP52ziuQj
+CgKaD/TN5V2m/Z3JRyQq8Ycohmb+czWGn3q/6FKNFxmO2jeC8ccxcf9tI6BG4/nm
+B4YGZ2qjQfvAcfzDKwx8/uYuOrCVAx0+5Qvyp9DqCasNgNgUTrCXsEraDfACr7kb
+pQxXWzVyKN10MSE34MjxgAtBCeM0Q6lFJVFu+Ul05BoK9/vvyO32w61X39ndvtbn
+F/mQI5fiZM7ih3oB+J3yq8iKpKqF1iJc6HaIRo8MnudgTWTLbSR3jmnrwZ228BYS
+INi4PP8EvCfDAjtZbwYLRFDrPJmFXajxv2JqWKkEJBknELCHsa7ek0zy7y0aasrS
+baGLBTV/79znHC7fE/ftUIwES0pDVKPaWjOYn0yUQssnW6Z/uNP8IWIokuPQYxCQ
+Ecau+5ZR/i3rM2QPWlp5W1fmEMGiDF2Z1Eo4goTpu1tPvIBkw0HFneaMN27EeZTX
+mPBGwfEczLryFNqZrTG/WUSi1UhfSAzWRyJQPzUz+1WcVSciyjI=
+=oPoX
+-----END PGP SIGNATURE-----
+
+--0JWEgD6LQTZNclSx--

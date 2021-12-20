@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7D047AC1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240ED47ACAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbhLTOlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235029AbhLTOkQ (ORCPT
+        id S235647AbhLTOqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:46:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37882 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236503AbhLTOos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:40:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1A4C0619D8;
-        Mon, 20 Dec 2021 06:40:06 -0800 (PST)
+        Mon, 20 Dec 2021 09:44:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9812DB80EE8;
-        Mon, 20 Dec 2021 14:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4676C36AE7;
-        Mon, 20 Dec 2021 14:40:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 397F761141;
+        Mon, 20 Dec 2021 14:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B308C36AE7;
+        Mon, 20 Dec 2021 14:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011204;
-        bh=MpKbdgpzoYicN3MLPoNv8ll+NKZUFHOicyzxml4nvQ8=;
+        s=korg; t=1640011487;
+        bh=Cx7fiQV8TDvWr5DRBWGmOgB/tc7QSMtVQ4ojKugAxl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bbQ3j+HbrKAO6A3TiyozYBtufwe1FeFse6eViBZgYxn+3XLBOua5DsoJJWbho/yv0
-         8uVgIAIc0HdyJjs6OAh6x68UHcGU2SO4VdfzAWHzIGAJbnnnVt1WfZqApJatMAQt0n
-         bHWH0vogD/4Cxc1zA2QWjM/oYKbWRtPhLMmDWYLA=
+        b=a2WrgVmLox6aMieSSEGG5fJ3BGNiPXm8GhrVRhJhz2KIUFn5hqdZPcdgSepnjtHhH
+         NTj7RFRrcI+wPSDsz97EyjXT9yQgCf5rdwzv/8kxLYMOYVrkG1pVrdbCc+b/2Er855
+         GWzQw+5b4mGeFKEjn0J1HncIKp1CQHU4X/1LPWq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Makarov <georgemakarov1@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 4.14 33/45] ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
+        stable@vger.kernel.org,
+        Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 39/71] net/packet: rx_owner_map depends on pg_vec
 Date:   Mon, 20 Dec 2021 15:34:28 +0100
-Message-Id: <20211220143023.373802590@linuxfoundation.org>
+Message-Id: <20211220143026.991159980@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211220143025.683747691@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,37 +49,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Willem de Bruijn <willemb@google.com>
 
-commit 737e65c7956795b3553781fb7bc82fce1c39503f upstream.
+[ Upstream commit ec6af094ea28f0f2dda1a6a33b14cd57e36a9755 ]
 
-According to the i.MX6ULL Reference Manual, pad CSI_DATA07 may
-have the ESAI_TX0 functionality, not ESAI_T0.
+Packet sockets may switch ring versions. Avoid misinterpreting state
+between versions, whose fields share a union. rx_owner_map is only
+allocated with a packet ring (pg_vec) and both are swapped together.
+If pg_vec is NULL, meaning no packet ring was allocated, then neither
+was rx_owner_map. And the field may be old state from a tpacket_v3.
 
-Also, NXP's i.MX Config Tools 10.0 generates dtsi with the
-MX6ULL_PAD_CSI_DATA07__ESAI_TX0 naming, so fix it accordingly.
-
-There are no devicetree users in mainline that use the old name,
-so just remove the old entry.
-
-Fixes: c201369d4aa5 ("ARM: dts: imx6ull: add imx6ull support")
-Reported-by: George Makarov <georgemakarov1@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 61fad6816fc1 ("net/packet: tpacket_rcv: avoid a producer race condition")
+Reported-by: Syzbot <syzbot+1ac0994a0a0c55151121@syzkaller.appspotmail.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20211215143937.106178-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6ull-pinfunc.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/packet/af_packet.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/arm/boot/dts/imx6ull-pinfunc.h
-+++ b/arch/arm/boot/dts/imx6ull-pinfunc.h
-@@ -51,6 +51,6 @@
- #define MX6ULL_PAD_CSI_DATA04__ESAI_TX_FS                         0x01F4 0x0480 0x0000 0x9 0x0
- #define MX6ULL_PAD_CSI_DATA05__ESAI_TX_CLK                        0x01F8 0x0484 0x0000 0x9 0x0
- #define MX6ULL_PAD_CSI_DATA06__ESAI_TX5_RX0                       0x01FC 0x0488 0x0000 0x9 0x0
--#define MX6ULL_PAD_CSI_DATA07__ESAI_T0                            0x0200 0x048C 0x0000 0x9 0x0
-+#define MX6ULL_PAD_CSI_DATA07__ESAI_TX0                           0x0200 0x048C 0x0000 0x9 0x0
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 0ffbf3d17911a..6062bd5bf132b 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -4453,9 +4453,10 @@ static int packet_set_ring(struct sock *sk, union tpacket_req_u *req_u,
+ 	}
  
- #endif /* __DTS_IMX6ULL_PINFUNC_H */
+ out_free_pg_vec:
+-	bitmap_free(rx_owner_map);
+-	if (pg_vec)
++	if (pg_vec) {
++		bitmap_free(rx_owner_map);
+ 		free_pg_vec(pg_vec, order, req->tp_block_nr);
++	}
+ out:
+ 	return err;
+ }
+-- 
+2.33.0
+
 
 

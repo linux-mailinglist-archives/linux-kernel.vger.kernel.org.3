@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A169E47AEC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7554147AFD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239379AbhLTPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:03:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47940 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239883AbhLTO70 (ORCPT
+        id S239122AbhLTPUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239398AbhLTPSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:59:26 -0500
+        Mon, 20 Dec 2021 10:18:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F18EC019D80;
+        Mon, 20 Dec 2021 06:59:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2A3560F4E;
-        Mon, 20 Dec 2021 14:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C419CC36AE8;
-        Mon, 20 Dec 2021 14:59:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4CA8611D7;
+        Mon, 20 Dec 2021 14:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E375C36AE7;
+        Mon, 20 Dec 2021 14:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012365;
-        bh=VscA6re06IZiVuKiuB3/YSaZB08/xHaOqYDWWyb1dKY=;
+        s=korg; t=1640012368;
+        bh=bwvNNUl+dr3aYwHJw1i/kgznTEnkCAnyQpfCUiC3MCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WsFqlkBo6JDSWBv3+O2KlRPUGHYxGSrx752Bw9Arh3NVHNqsgMAFvf2tJQnwsuS0o
-         2Zh8xxNDYOjTrddmn0iSsr2kboaAP5irvcumVCYBZTaSwEvI9s1RgXHEOhsY4TIzqV
-         zKi8Y2Q1jHHgvwDzSbAfqE0Le7ul9Z44GlnCBsKA=
+        b=q1FJiNkctxnBG97aLUysB/dRksODJORqgZUoqBWtdldAQ0v0G1JgEbCKPksWX977Z
+         ZtKu21QbmMwnHUt/a7PFl+wGOAEeLTWSC7mdy+4MOeFrnyo8NBGHwBZXZE0gPPnVR/
+         vgLtilDDlBo8AurbTOyWgpHbO4oKexG9eSuQbnV4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Bin Meng <bin.meng@windriver.com>,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 142/177] riscv: dts: unleashed: Add gpio card detect to mmc-spi-slot
-Date:   Mon, 20 Dec 2021 15:34:52 +0100
-Message-Id: <20211220143044.865450214@linuxfoundation.org>
+Subject: [PATCH 5.15 143/177] riscv: dts: unmatched: Add gpio card detect to mmc-spi-slot
+Date:   Mon, 20 Dec 2021 15:34:53 +0100
+Message-Id: <20211220143044.897705621@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
 References: <20211220143040.058287525@linuxfoundation.org>
@@ -47,14 +50,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bin Meng <bin.meng@windriver.com>
 
-commit 6331b8765cd0634a4e4cdcc1a6f1a74196616b94 upstream.
+commit 298d03c2d7f1b5daacb6d4f4053fd3d677d67087 upstream.
 
-Per HiFive Unleashed schematics, the card detect signal of the
-micro SD card is connected to gpio pin #11, which should be
+Per HiFive Unmatched schematics, the card detect signal of the
+micro SD card is connected to gpio pin #15, which should be
 reflected in the DT via the <gpios> property, as described in
 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt.
 
-[1] https://sifive.cdn.prismic.io/sifive/c52a8e32-05ce-4aaf-95c8-7bf8453f8698_hifive-unleashed-a00-schematics-1.pdf
+[1] https://sifive.cdn.prismic.io/sifive/6a06d6c0-6e66-49b5-8e9e-e68ce76f4192_hifive-unmatched-schematics-v3.pdf
 
 Signed-off-by: Bin Meng <bin.meng@windriver.com>
 Fixes: d573b5558abb ("riscv: dts: add initial board data for the SiFive HiFive Unmatched")
@@ -62,16 +65,24 @@ Cc: stable@vger.kernel.org
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts |    1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
-+++ b/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
-@@ -80,6 +80,7 @@
+--- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
++++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2020 SiFive, Inc */
+ 
+ #include "fu740-c000.dtsi"
++#include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/interrupt-controller/irq.h>
+ 
+ /* Clock frequency (in Hz) of the PCB crystal for rtcclk */
+@@ -228,6 +229,7 @@
  		spi-max-frequency = <20000000>;
  		voltage-ranges = <3300 3300>;
  		disable-wp;
-+		gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
++		gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
  	};
  };
  

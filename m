@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2E047AB7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1E047ABF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbhLTOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbhLTOgv (ORCPT
+        id S234871AbhLTOja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:39:30 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53110 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234590AbhLTOiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:36:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9BFC061759;
-        Mon, 20 Dec 2021 06:36:50 -0800 (PST)
+        Mon, 20 Dec 2021 09:38:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6827CB80EE1;
-        Mon, 20 Dec 2021 14:36:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49936C36AE7;
-        Mon, 20 Dec 2021 14:36:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D464ACE1102;
+        Mon, 20 Dec 2021 14:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8B4C36AE8;
+        Mon, 20 Dec 2021 14:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011008;
-        bh=ibzImRuRBepV33vbOROgFRQL2cFVRjCvyVsFRL56eEs=;
+        s=korg; t=1640011123;
+        bh=OBqR1XEnRcNrzGcY/nxPAHYuBxxzV8Ik7lI797WSh4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g0dhlt3drPRo1B4/ZzmpMi8Q3NMJpMy2ve2HFuP+leunX805VtSeGHJpmo0QPchON
-         M8taxruE3FQ8REr7Sv0Kn8Y5hC3fo1058pxntJpkic6CnpLgkw/sJv54oVniABDMtR
-         d5HbJGp/vF4CSiB3/ZKcUnDJD7ne04UPhJTjvyyw=
+        b=PPYih6BO9a+NDj1Qn9Sgu7QSo9fJX3rNCaOxPjmTH93mwtQ4Tt3nnONLbg7GcoxuG
+         8NtktRrxwKj1Gp0jS3pJw0ApEPB/73RzMngtxtFd1StF0RJnldgZE571BF4fnZu/GK
+         +6WkJz0C2GafT+y6hePR6hn8Cri6NP+6iaFAfbPg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4.4 05/23] hwmon: (dell-smm) Fix warning on /proc/i8k creation error
-Date:   Mon, 20 Dec 2021 15:34:06 +0100
-Message-Id: <20211220143018.022697599@linuxfoundation.org>
+        stable@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>
+Subject: [PATCH 4.14 12/45] dm btree remove: fix use after free in rebalance_children()
+Date:   Mon, 20 Dec 2021 15:34:07 +0100
+Message-Id: <20211220143022.678962718@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-References: <20211220143017.842390782@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +45,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Joe Thornber <ejt@redhat.com>
 
-commit dbd3e6eaf3d813939b28e8a66e29d81cdc836445 upstream.
+commit 1b8d2789dad0005fd5e7d35dab26a8e1203fb6da upstream.
 
-The removal function is called regardless of whether
-/proc/i8k was created successfully or not, the later
-causing a WARN() on module removal.
-Fix that by only registering the removal function
-if /proc/i8k was created successfully.
+Move dm_tm_unlock() after dm_tm_dec().
 
-Tested on a Inspiron 3505.
-
-Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20211112171440.59006-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+Signed-off-by: Joe Thornber <ejt@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/dell-smm-hwmon.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/md/persistent-data/dm-btree-remove.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -551,15 +551,18 @@ static const struct file_operations i8k_
- 	.unlocked_ioctl	= i8k_ioctl,
- };
+--- a/drivers/md/persistent-data/dm-btree-remove.c
++++ b/drivers/md/persistent-data/dm-btree-remove.c
+@@ -423,9 +423,9 @@ static int rebalance_children(struct sha
  
-+static struct proc_dir_entry *entry;
-+
- static void __init i8k_init_procfs(void)
- {
- 	/* Register the proc entry */
--	proc_create("i8k", 0, NULL, &i8k_fops);
-+	entry = proc_create("i8k", 0, NULL, &i8k_fops);
- }
+ 		memcpy(n, dm_block_data(child),
+ 		       dm_bm_block_size(dm_tm_get_bm(info->tm)));
+-		dm_tm_unlock(info->tm, child);
  
- static void __exit i8k_exit_procfs(void)
- {
--	remove_proc_entry("i8k", NULL);
-+	if (entry)
-+		remove_proc_entry("i8k", NULL);
- }
+ 		dm_tm_dec(info->tm, dm_block_location(child));
++		dm_tm_unlock(info->tm, child);
+ 		return 0;
+ 	}
  
- #else
 
 

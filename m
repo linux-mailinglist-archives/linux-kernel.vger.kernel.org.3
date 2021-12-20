@@ -2,156 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8FC47B36A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872C347B36D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 20:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240677AbhLTTGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 14:06:03 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60766 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbhLTTGB (ORCPT
+        id S240690AbhLTTGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 14:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231667AbhLTTGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:06:01 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKJ5sku026183;
-        Mon, 20 Dec 2021 13:05:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640027154;
-        bh=UfAsvJvzGobRHWOzTq52zbMaISk7igct9boBOIHzTg8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=KEIsXT/xlC8/bM+CkvvlLnDfNxo1P2ywNq6L1ATSEfow0qZD2KAYAQINyeNKiynlh
-         0J8kfzoZDkdIwxv/ZHTmK/ehrcccnUs5wINzVz0C+tCg4FhD4VHJ3RRApYgDpelydg
-         oso6RPdvbT7os9p/WsgNc3AQl/VJPek2ERhAyY2I=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKJ5sOX080372
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Dec 2021 13:05:54 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 13:05:53 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 13:05:53 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKJ5qU7015235;
-        Mon, 20 Dec 2021 13:05:53 -0600
-Date:   Tue, 21 Dec 2021 00:35:52 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <zhuohao@chromium.org>, <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] mtd: core: Remove partid and partname debugfs files
-Message-ID: <20211220190550.rejayqmhem5gwq5d@ti.com>
-References: <20211217122636.474976-1-tudor.ambarus@microchip.com>
- <20211217122636.474976-3-tudor.ambarus@microchip.com>
- <20211220130743.jil62qbyb5lgds6p@ti.com>
- <25999218-8985-03fc-c53d-21bd2a25d365@microchip.com>
+        Mon, 20 Dec 2021 14:06:23 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D7EC06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:06:23 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g11so23967630lfu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 11:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6ih+OZifVnNfA/pSv3qRAPIHOXmc5ub5T4okFRSsryU=;
+        b=a1+ZPRgM0N04BQMXXDijj417WU8sL4jlUQ04ppDhgKjXom6+7Z4rwLXR6QX+tZ51RQ
+         DuaNhJ/Y5vmawfKm92tiIc7T5vIb3EuZ4KI9/jQdE9ghrS3ulZ6F57QAgDyDAhiEkkOE
+         s1jlUQF4u6FOMjWznVModYLHXbNyEaUD2hLX6Tp1d+Mgea6Eo340ovYW/g05KJ0FoZDa
+         eT+wTa3vfcD8xA3Kt8B5Apfar7SiuYKPXZQgid9kitBfA+jhy5kfWu8ZsBb5/m6qy6JX
+         jyeYrPVWHPk9HBw5BOnK/kThTrvF6xbtJBD5At+ZGvK037oe0gv7maiEF/pgjbyUn+or
+         2iPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6ih+OZifVnNfA/pSv3qRAPIHOXmc5ub5T4okFRSsryU=;
+        b=zDTKADw767zcdE7u1IU1G3C42jmSZZyTh6MWcil0FMDCjH2Hr87vAWHqFQ7IgWDs9d
+         ZyBIA5qhfbRNJlFFIUgDzG/zFf+tnYBL+YzzgC0Kdd0/0CSoFfzEJ2C0jkTCsgnw8A1I
+         JkpTAxUkWW375tp2es4I8JREAwcaUtwMwU/Fw2mTJzJ9Qt+Oomj53tq8FiqVluN3vCSG
+         lCM9yGE+EUPaoOUbNwTW6XrHxvbdG0SgT2sFbFjQ6/22CWkbjAOjkz2HNm6F/TMtB4gn
+         CVh1bm+lcZ6hyqpKMtaMabSjRfMEkp6DFy6o61YoWJSSnxqzaR7rQSL2rrPplLcJnjre
+         47GA==
+X-Gm-Message-State: AOAM532jwBSw71QRkEdkDAivX0y1mj89qKZcQtRiICaPIZys6m54Za24
+        VkZ9S/9UEkKJKTCZ83JqD2t4gBP2zL8gohgyqaNnTA==
+X-Google-Smtp-Source: ABdhPJxt/GrhGIBD3Rsq6dAv0bDvoKbp5GHKXPNxZ7Wv38eMaBgjqPj0v5gqgh0m8NKzYlAAyqnDqY/TB6zUFXJI2Bk=
+X-Received: by 2002:a05:6512:3047:: with SMTP id b7mr10551009lfb.424.1640027181280;
+ Mon, 20 Dec 2021 11:06:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <25999218-8985-03fc-c53d-21bd2a25d365@microchip.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211220190150.2107077-1-tkjos@google.com>
+In-Reply-To: <20211220190150.2107077-1-tkjos@google.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 20 Dec 2021 11:06:09 -0800
+Message-ID: <CAHRSSExTHHOdqEnRF0g435BrO5L-X6M3pxPg3OmLz8xUWDuNKA@mail.gmail.com>
+Subject: Re: [PATCH] binder: fix async_free_space accounting for empty parcels
+To:     tkjos@google.com, gregkh@linuxfoundation.org, christian@brauner.io,
+        arve@android.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, maco@google.com
+Cc:     joel@joelfernandes.org, kernel-team@android.com,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/21 01:23PM, Tudor.Ambarus@microchip.com wrote:
-> On 12/20/21 3:07 PM, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On 17/12/21 02:26PM, Tudor Ambarus wrote:
-> >> partid and partname debugfs file are no longer used in mtd, remove
-> 
-> s/file/files
-> 
-> >> dead code.
-> > 
-> > Hmm, spi-nor was the only user? Quick grepping does confirm that.
-> 
-> Yes.
-> 
-> > 
-> >>
-> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> >> ---
-> >>  drivers/mtd/mtdcore.c   | 35 +----------------------------------
-> >>  include/linux/mtd/mtd.h |  3 ---
-> >>  2 files changed, 1 insertion(+), 37 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> >> index 9186268d361b..1977755fc955 100644
-> >> --- a/drivers/mtd/mtdcore.c
-> >> +++ b/drivers/mtd/mtdcore.c
-> >> @@ -336,49 +336,16 @@ static const struct device_type mtd_devtype = {
-> >>       .release        = mtd_release,
-> >>  };
-> >>
-> >> -static int mtd_partid_debug_show(struct seq_file *s, void *p)
-> >> -{
-> >> -     struct mtd_info *mtd = s->private;
-> >> -
-> >> -     seq_printf(s, "%s\n", mtd->dbg.partid);
-> >> -
-> >> -     return 0;
-> >> -}
-> >> -
-> >> -DEFINE_SHOW_ATTRIBUTE(mtd_partid_debug);
-> >> -
-> >> -static int mtd_partname_debug_show(struct seq_file *s, void *p)
-> >> -{
-> >> -     struct mtd_info *mtd = s->private;
-> >> -
-> >> -     seq_printf(s, "%s\n", mtd->dbg.partname);
-> >> -
-> >> -     return 0;
-> >> -}
-> >> -
-> >> -DEFINE_SHOW_ATTRIBUTE(mtd_partname_debug);
-> >> -
-> >>  static struct dentry *dfs_dir_mtd;
-> >>
-> >>  static void mtd_debugfs_populate(struct mtd_info *mtd)
-> >>  {
-> >> -     struct mtd_info *master = mtd_get_master(mtd);
-> >>       struct device *dev = &mtd->dev;
-> >> -     struct dentry *root;
-> >>
-> >>       if (IS_ERR_OR_NULL(dfs_dir_mtd))
-> >>               return;
-> >>
-> >> -     root = debugfs_create_dir(dev_name(dev), dfs_dir_mtd);
-> >> -     mtd->dbg.dfs_dir = root;
-> >> -
-> >> -     if (master->dbg.partid)
-> >> -             debugfs_create_file("partid", 0400, root, master,
-> >> -                                 &mtd_partid_debug_fops);
-> >> -
-> >> -     if (master->dbg.partname)
-> >> -             debugfs_create_file("partname", 0400, root, master,
-> >> -                                 &mtd_partname_debug_fops);
-> >> +     mtd->dbg.dfs_dir = debugfs_create_dir(dev_name(dev), dfs_dir_mtd);
-> > 
-> > What is the point of having creating the directory if there is not going
-> > to be anything in it at all? I think we should drop the entire thing if
-> There will be files in it: mtdswap_stats, nandsim_wear_report, docg3 files.
-> 
-> $ git grep dbg.dfs_dir drivers/mtd/
-> drivers/mtd/devices/docg3.c:    struct dentry *root = floor->dbg.dfs_dir;
-> drivers/mtd/mtdcore.c:  mtd->dbg.dfs_dir = root;
-> drivers/mtd/mtdcore.c:          debugfs_remove_recursive(mtd->dbg.dfs_dir);
-> drivers/mtd/mtdswap.c:  struct dentry *root = d->mtd->dbg.dfs_dir;
-> drivers/mtd/nand/raw/nandsim.c: struct dentry *root = nsmtd->dbg.dfs_dir;
-> drivers/mtd/ubi/debug.c:                debugfs_remove_recursive(ubi->dbg.dfs_dir);
+On Mon, Dec 20, 2021 at 11:02 AM Todd Kjos <tkjos@google.com> wrote:
+>
+> In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+> fixed a kernel structure visibility issue. As part of that patch,
+> sizeof(void *) was used as the buffer size for 0-length data payloads so
+> the driver could detect abusive clients sending 0-length asynchronous
+> transactions to a server by enforcing limits on async_free_size.
+>
+> Unfortunately, on the "free" side, the accounting of async_free_space
+> did not add the sizeof(void *) back. The result was that up to 8-bytes of
+> async_free_space were leaked on every async transaction of 8-bytes or
+> less.  These small transactions are uncommon, so this accounting issue
+> has gone undetected for several years.
+>
+> The fix is to use "buffer_size" (the allocated buffer size) instead of
+> "size" (the logical buffer size) when updating the async_free_space
+> during the free operation. These are the same except for this
+> corner case of asynchronous transactions with payloads < 8 bytes.
+>
+> Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+> Signed-off-by: Todd Kjos <tkjos@google.com>
 
-Ok, I didn't see that. In that case,
+I forgot to CC stable. This applies to all stable branches back to 4.14.
+Cc: stable@vger.kernel.org # 4.14+
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+> ---
+>  drivers/android/binder_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 340515f54498..47bc74a8c7b6 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -671,7 +671,7 @@ static void binder_free_buf_locked(struct binder_alloc *alloc,
+>         BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
+>
+>         if (buffer->async_transaction) {
+> -               alloc->free_async_space += size + sizeof(struct binder_buffer);
+> +               alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
+>
+>                 binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
+>                              "%d: binder_free_buf size %zd async free %zd\n",
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>

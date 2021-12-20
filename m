@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3B547A8C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F9547A8C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 12:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbhLTLcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 06:32:03 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:52411 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbhLTLcC (ORCPT
+        id S231904AbhLTLeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 06:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230287AbhLTLeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 06:32:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHcr01TMHz4xPw;
-        Mon, 20 Dec 2021 22:32:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639999920;
-        bh=fopIFAbH6Vd8MvpqCjLGSpihFc035YHLl5HNoj9c59w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sbXGtpbG9a7vstaJ+zkOgu3YazzNVWZ8nQf2jk3Uy9Buo++qrFUBHotmUElrs0e2k
-         7RGblJJW4fAJKK9Z3BD+a59xarBMd1+PZi5ZV2pAJEsFr88ubqbFpyLacNrfRAfrax
-         s0M/hjLaaXDLaNAMIA8MhYlOiOiYnRf6tOAVyHKhljGz/9SVqyQGPPaggGkSEKnygw
-         LdfLuM9InK4vNUyMmIcCgFnFg17e1Sf1flez5hzxgPLeFvIKF6RPeKSbnmLVUJLspg
-         xNAHz+mrpw5H5HGBx8vszI8pUx+INF/dIQFteZRSt6K0uoFyMAiRq5zqMYPvmpCSUG
-         keewGv6S6S69Q==
-Date:   Mon, 20 Dec 2021 22:31:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Howard Chiu <howard.chiu@quantatw.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the hwmon-staging tree
-Message-ID: <20211220223159.2aa58c74@canb.auug.org.au>
+        Mon, 20 Dec 2021 06:34:11 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7465FC061574;
+        Mon, 20 Dec 2021 03:34:11 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso12625249pji.0;
+        Mon, 20 Dec 2021 03:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4Y60QO7rqLiN4h5yN+WKQNMkIqYNHIuW9x8bPi58DNo=;
+        b=LbeqF7wwSKDibul8FVgX5K2uk3fnQmTwOUYLLkhjIeOjv/pvn6mss7+jaSK3DH33Ed
+         BSrmTcKFtbJ5Ric+EYTkm6k/0Jp6NsnEeBa1z3X8+DM/Ckft7KL1xu5slF6i1w5s0j2q
+         hLjMYyrrK9RlgbXdvVr7UUSYDyscSaOatUXoEuUORaTzxDJTl6u30lrkKg73eHMVmidq
+         atwOn54scOp1/ZrmwaE8q/HKpZ2j03wqVqKj9ZjCiWUdXjzQyjIrFYqgs7bS5xUVkTOG
+         hLHFjfE3/V5kVY2vRDu4Tgo0XsTf8S8ZtrmGRtiRobCEC2+mzW/ra6MLjggcr/ptF81G
+         oq3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4Y60QO7rqLiN4h5yN+WKQNMkIqYNHIuW9x8bPi58DNo=;
+        b=2VT6kVDkHZ0ZIctBIpi9dyl+Zt9JpYBWyFsowLLDv0R7X6kh6/Q8o5DK/yykDH7Ab3
+         w/YpQ+TZ8O4GbZSCd5tWLIjxIfg/unOI6aXWAmbMh31F9JXNSW1JGNhWMsz5Gddso8MO
+         eSjrSlOWahBEFl0SJ8cNAXOQflRuE2/uoIkXQYrIO5q0lv4+2UytqIGnU7xBlmmJAXHZ
+         vIEMPuUYRZehXvFG5Nh99S9np5iu+Xrv4tKKHnPbov4IheVDJazBS/ckowfF/zx36JsI
+         PNNZJOjiKLQndCfyE8R6oWxwP+Sv92yJRkMM+MwsZq6CSoPvJosjscUieuEtv62ltUyy
+         wObw==
+X-Gm-Message-State: AOAM532BaEQpOt9m9qPGw3WtZE99E6IFuEFB2lJCzTehchilvL1U8lxS
+        xXk5s85iHMpu5MdoAsVQpo0=
+X-Google-Smtp-Source: ABdhPJyq3v2CF8Bvp/A+w6/slLlP4qI2gC86XTlf5Rxdur6B5QzxgySAt3oFFdZ/QwMLKmW1mdpkFg==
+X-Received: by 2002:a17:902:e751:b0:148:fb86:410a with SMTP id p17-20020a170902e75100b00148fb86410amr9028017plf.96.1640000050821;
+        Mon, 20 Dec 2021 03:34:10 -0800 (PST)
+Received: from localhost.localdomain (61-231-108-100.dynamic-ip.hinet.net. [61.231.108.100])
+        by smtp.gmail.com with ESMTPSA id 78sm16088152pgg.85.2021.12.20.03.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 03:34:10 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Mon, 20 Dec 2021 19:33:40 +0800
+Message-Id: <20211220113342.11437-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8s8f2Myafto98/E9hXOdZvZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8s8f2Myafto98/E9hXOdZvZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+DM9051 is a spi interface chip,
+need only cs/mosi/miso/clock with an interrupt gpio pin
 
-Hi all,
+Joseph CHAMG (1):
+  net: Add dm9051 driver
 
-After merging the hwmon-staging tree, today's linux-next build
-(htmldocs) produced this warning:
+JosephCHANG (1):
+  yaml: Add dm9051 SPI network yaml file
 
-Documentation/hwmon/mp5023.rst: WARNING: document isn't included in any toc=
-tree
+ .../bindings/net/davicom,dm9051.yaml          |  62 ++
+ drivers/net/ethernet/davicom/Kconfig          |  30 +
+ drivers/net/ethernet/davicom/Makefile         |   1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 998 ++++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         | 194 ++++
+ 5 files changed, 1285 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-Introduced by commit
 
-  883cb06f2553 ("hwmon: (pmbus) Add support for MPS Multi-phase mp5023")
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
+-- 
+2.20.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8s8f2Myafto98/E9hXOdZvZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHAaa8ACgkQAVBC80lX
-0GzDdwf9FKOuFte7+cpDaktx0UKhcGO/WozDEv93yUYdaQldkXT5M4ZvUgmF2J+b
-BHc7jWFo2do8GXOmfc4tejNBUqg3Sz6I/BYMg/izqHPl8SehenEkyMS6VTQ+mm7G
-Sp/BZGQLFDY5a3T462mn/ghgUu4js1w563f1aB56NR8W2ErLiWSKVFI3748/iB27
-CCpsJ2j+kAbSxIBOGCOii/BQxnzUHGcKGHfe4ZXmYtLSuuiWLcpdVayCPlPBOIr5
-qK+iUXLpJJTK407e68bm7JUgC7GiVHvVsTY2jiptVzQJDJMJ4e4fYh5i7ETtZYQ0
-0dIsQVQeDl56LQvU+L0f8FuNsqn+Bw==
-=IrSd
------END PGP SIGNATURE-----
-
---Sig_/8s8f2Myafto98/E9hXOdZvZ--

@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C11147AEC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043CC47AFF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbhLTPDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:03:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49682 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240040AbhLTO7v (ORCPT
+        id S239759AbhLTPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236118AbhLTPWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:59:51 -0500
+        Mon, 20 Dec 2021 10:22:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE01C08C5D9;
+        Mon, 20 Dec 2021 07:02:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7ABD6119E;
-        Mon, 20 Dec 2021 14:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1704C36AE8;
-        Mon, 20 Dec 2021 14:59:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BC8FB80ED3;
+        Mon, 20 Dec 2021 15:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B805C36AE8;
+        Mon, 20 Dec 2021 15:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012390;
-        bh=nih9dZrU8O63ScahyWDZ8/H1Eobq4ZvyR31ISJE4lLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0ZgnlxqHJVNCsvE325Gb6dB23vsUzii6m8LUtcTAgxnk6y9LXOhe6Pk4jSTz4sbGX
-         BKoxUv0KjIYZ1U2tSW1I+b1cSfrMeNjjgQ0e7rCLVa1PxkWdHTETxHSMalLw79tx5C
-         rpLODZguCl1ANXyA9VyYZn41wVI1+3erNnroQyVs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.15 177/177] xen/netback: dont queue unlimited number of packages
-Date:   Mon, 20 Dec 2021 15:35:27 +0100
-Message-Id: <20211220143046.021909815@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
-User-Agent: quilt/0.66
+        s=korg; t=1640012547;
+        bh=U7/RAfWf0ohq7ORVC8vlxJx5oX8ogjWmNdFAhAij1a8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jb6EtDnKl0D7MlYBdIl1SwNI3F0D5bA4co4UKnqdArAQnI9nygtrkovHKCgnD9EkD
+         hlxfywsll1k7vD4hSdS655BaeVg8+Aook5YySHWS6TVl4/KNtGsedcwTDBVSMTwyJO
+         BS4RjVO63gIeVSefC4q0+b6I1nsecer6Mi08pJO8=
+Date:   Mon, 20 Dec 2021 15:45:27 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     ok@artecdesign.ee, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: host: Check for null res pointer
+Message-ID: <YcCXB0QMkkFYXMIY@kroah.com>
+References: <20211220064946.817004-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220064946.817004-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+On Mon, Dec 20, 2021 at 02:49:46PM +0800, Jiasheng Jiang wrote:
+> The return value of platform_get_resource() needs to be checked.
+> To avoid use of error pointer in case of the failure of alloc.
+> 
+> Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/usb/host/isp116x-hcd.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+> index 8835f6bd528e..addd2b43a14c 100644
+> --- a/drivers/usb/host/isp116x-hcd.c
+> +++ b/drivers/usb/host/isp116x-hcd.c
+> @@ -1541,9 +1541,15 @@ static int isp116x_remove(struct platform_device *pdev)
+>  
+>  	iounmap(isp116x->data_reg);
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (!res)
+> +		return -EINVAL;
 
-commit be81992f9086b230623ae3ebbc85ecee4d00a3d3 upstream.
+You really can not fail a remove call.  If you do so here, memory will
+leak.
 
-In case a guest isn't consuming incoming network traffic as fast as it
-is coming in, xen-netback is buffering network packages in unlimited
-numbers today. This can result in host OOM situations.
+Please make this work no matter what.
 
-Commit f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal
-queue and carrier flapping") meant to introduce a mechanism to limit
-the amount of buffered data by stopping the Tx queue when reaching the
-data limit, but this doesn't work for cases like UDP.
+thanks,
 
-When hitting the limit don't queue further SKBs, but drop them instead.
-In order to be able to tell Rx packages have been dropped increment the
-rx_dropped statistics counter in this case.
-
-It should be noted that the old solution to continue queueing SKBs had
-the additional problem of an overflow of the 32-bit rx_queue_len value
-would result in intermittent Tx queue enabling.
-
-This is part of XSA-392
-
-Fixes: f48da8b14d04ca8 ("xen-netback: fix unlimited guest Rx internal queue and carrier flapping")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/xen-netback/rx.c |   18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
-
---- a/drivers/net/xen-netback/rx.c
-+++ b/drivers/net/xen-netback/rx.c
-@@ -88,16 +88,19 @@ void xenvif_rx_queue_tail(struct xenvif_
- 
- 	spin_lock_irqsave(&queue->rx_queue.lock, flags);
- 
--	if (skb_queue_empty(&queue->rx_queue))
--		xenvif_update_needed_slots(queue, skb);
--
--	__skb_queue_tail(&queue->rx_queue, skb);
--
--	queue->rx_queue_len += skb->len;
--	if (queue->rx_queue_len > queue->rx_queue_max) {
-+	if (queue->rx_queue_len >= queue->rx_queue_max) {
- 		struct net_device *dev = queue->vif->dev;
- 
- 		netif_tx_stop_queue(netdev_get_tx_queue(dev, queue->id));
-+		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
-+	} else {
-+		if (skb_queue_empty(&queue->rx_queue))
-+			xenvif_update_needed_slots(queue, skb);
-+
-+		__skb_queue_tail(&queue->rx_queue, skb);
-+
-+		queue->rx_queue_len += skb->len;
- 	}
- 
- 	spin_unlock_irqrestore(&queue->rx_queue.lock, flags);
-@@ -147,6 +150,7 @@ static void xenvif_rx_queue_drop_expired
- 			break;
- 		xenvif_rx_dequeue(queue);
- 		kfree_skb(skb);
-+		queue->vif->dev->stats.rx_dropped++;
- 	}
- }
- 
-
-
+greg k-h

@@ -2,173 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD4947A979
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72C47A97C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbhLTMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:23:58 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33875 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbhLTMX5 (ORCPT
+        id S232541AbhLTMYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:24:55 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:5339 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230218AbhLTMYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:23:57 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JHdzT6c8PzcbMg;
-        Mon, 20 Dec 2021 20:23:33 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 20:23:55 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 20 Dec
- 2021 20:23:55 +0800
-Subject: Re: [PATCH] asm-generic: introduce io_stop_wc() and add
- implementation for ARM64
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <will@kernel.org>, <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <moyufeng@huawei.com>,
-        <linux-arch@vger.kernel.org>
-References: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
- <Ybx7lEF4srH4vBmh@arm.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <b8245b7f-9c94-4715-6e9d-467b3a4cb5e1@huawei.com>
-Date:   Mon, 20 Dec 2021 20:23:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Mon, 20 Dec 2021 07:24:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640003095; x=1671539095;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7sbN8IGbQB2gnzro+dgzGKfUcYLtao5VZ814EIMlDic=;
+  b=r060cWcepUupLTecM5mlLcPX5Dore5M9ZcZjqRf2/+Qwm6RtthtxaR6W
+   6acYlnReyxXjhFc+xaW/OyUYVY2/NqT4BSUWcpSWbXVrLWY8LSXzqI++g
+   SH4BhWAYBW+zC0ra5ik6FW9uQji/VNU1IAhLYWziUKPPpa5zXhCFK7vyi
+   U=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 20 Dec 2021 04:24:54 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 04:24:53 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 20 Dec 2021 04:24:53 -0800
+Received: from [10.216.5.83] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 20 Dec
+ 2021 04:24:48 -0800
+Message-ID: <39d259cf-5663-5073-f16b-71a21f0e62e3@quicinc.com>
+Date:   Mon, 20 Dec 2021 17:54:42 +0530
 MIME-Version: 1.0
-In-Reply-To: <Ybx7lEF4srH4vBmh@arm.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] dt-bindings: qcom,pdc: convert to YAML
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20211213152208.290923-1-luca.weiss@fairphone.com>
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+In-Reply-To: <20211213152208.290923-1-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Catalin
+Hi Luca,
 
-On 2021/12/17 19:59, Catalin Marinas wrote:
-> On Fri, Dec 17, 2021 at 04:56:11PM +0800, Xiongfeng Wang wrote:
->> For memory accesses with Normal-Non Cacheable attributes, the CPU may do
-> 
-> You may want to mention "arm64 Normal Non-Cacheable" as other
-> architectures have a different meaning of NC.
-> 
->> write combining. But in some situation, this is bad for the performance
->> because the prior access may wait too long just to be merged.
->>
->> We introduce io_stop_wc() to prevent the Normal-NC memory accesses before
->> this instruction to be merged with memory accesses after this
->> instruction.
->>
->> We add implementation for ARM64 using DGH instruction and provide NOP
->> implementation for other architectures.
->>
->> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
->> ---
->>  Documentation/memory-barriers.txt |  9 +++++++++
->>  arch/arm64/include/asm/barrier.h  |  9 +++++++++
->>  include/asm-generic/barrier.h     | 11 +++++++++++
->>  3 files changed, 29 insertions(+)
->>
->> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
->> index 7367ada13208..b868b51b1801 100644
->> --- a/Documentation/memory-barriers.txt
->> +++ b/Documentation/memory-barriers.txt
->> @@ -1950,6 +1950,15 @@ There are some more advanced barrier functions:
->>       For load from persistent memory, existing read memory barriers are sufficient
->>       to ensure read ordering.
->>  
->> + (*) io_stop_wc();
->> +
->> +     For memory accesses with Normal-Non Cacheable attributes (e.g. those
->> +     returned by ioremap_wc()), the CPU may do write combining. But in some
->> +     situation, this is bad for the performance because the prior access may
->> +     wait too long just to be merged. io_stop_wc() can be used to prevent
->> +     merging memory accesses with Normal-Non Cacheable attributes before this
->> +     instruction with any memory accesses appearing after this instruction.
-> 
-> I'm fine with the patch in general but the comment here and in
-> asm-generic/barrier.h should avoid Normal Non-Cacheable as that's an
-> arm-specific term. Looking at Documentation/driver-api/device-io.rst, we
-> could simply say "write-combining". Something like:
-> 
->      For memory accesses with write-combining attributes (e.g. those
->      returned by ioremap_wc()), the CPU may wait for prior accesses to
->      be merged with subsequent ones. io_stop_wc() can be used to prevent
->      the merging of write-combining memory accesses before this macro
->      with those after it when such wait has performance implications.
-> 
-> (feel free to rephrase it but avoid Normal NC here)
+On 12/13/2021 8:52 PM, Luca Weiss wrote:
+> Convert the PDC interrupt controller bindings to YAML.
+>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> This patch depends on the following patch, which fixed sm8250 & sm8350
+> compatibles and adds sm6350.
+> https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.weiss@fairphone.com/
+>
+> Also, if somebody has a better suggestion for the register names,
+> the second one is pulled from downstream commit message which calls it
+> both "SPI config registers" and "interface registers":
+> https://source.codeaurora.org/quic/la/kernel/msm-4.19/commit/?id=cdefb63745e051a5bcf69663ac9d084d7da1eeec
 
-Thanks for your advice! I will send another version soon.
+Thanks for the patch. Please use "apss-shared-spi-cfg" name for the 
+second reg.
+
+It was intended in [1] to remove it since there are no user in upstream 
+for second reg. but it should be fine to convert existing to yaml first 
+and then look to fix that.
+
+[1] 
+https://patchwork.kernel.org/project/linux-arm-msm/list/?series=449725&state=%2A&archive=both
+
+[2] 
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1616409015-27682-1-git-send-email-mkshah@codeaurora.org/
 
 Thanks,
-Xiongfeng
-
-> 
->> +
->>  ===============================
->>  IMPLICIT KERNEL MEMORY BARRIERS
->>  ===============================
->> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
->> index 1c5a00598458..62217be36217 100644
->> --- a/arch/arm64/include/asm/barrier.h
->> +++ b/arch/arm64/include/asm/barrier.h
->> @@ -26,6 +26,14 @@
->>  #define __tsb_csync()	asm volatile("hint #18" : : : "memory")
->>  #define csdb()		asm volatile("hint #20" : : : "memory")
->>  
->> +/*
->> + * Data Gathering Hint:
->> + * This instruction prevents merging memory accesses with Normal-NC or
->> + * Device-GRE attributes before the hint instruction with any memory accesses
->> + * appearing after the hint instruction.
->> + */
->> +#define dgh()		asm volatile("hint #6" : : : "memory")
-> 
-> This is fine, arm-specific code.
-> 
->> +
->>  #ifdef CONFIG_ARM64_PSEUDO_NMI
->>  #define pmr_sync()						\
->>  	do {							\
->> @@ -46,6 +54,7 @@
->>  #define dma_rmb()	dmb(oshld)
->>  #define dma_wmb()	dmb(oshst)
->>  
->> +#define io_stop_wc()	dgh()
->>  
->>  #define tsb_csync()								\
->>  	do {									\
->> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
->> index 640f09479bdf..083be6d34cb9 100644
->> --- a/include/asm-generic/barrier.h
->> +++ b/include/asm-generic/barrier.h
->> @@ -251,5 +251,16 @@ do {									\
->>  #define pmem_wmb()	wmb()
->>  #endif
->>  
->> +/*
->> + * ioremap_wc() maps I/O memory as memory with Normal-Non Cacheable attributes.
->> + * The CPU may do write combining for this kind of memory access. io_stop_wc()
->> + * prevents merging memory accesses with Normal-Non Cacheable attributes
->> + * before this instruction with any memory accesses appearing after this
->> + * instruction.
-> 
-> Please change this as well along the lines of my comment above.
-> 
->> + */
->> +#ifndef io_stop_wc
->> +#define io_stop_wc do { } while (0)
->> +#endif
->> +
->>  #endif /* !__ASSEMBLY__ */
->>  #endif /* __ASM_GENERIC_BARRIER_H */
-> 
-> Thanks.
-> 
+Maulik
+>
+>   .../interrupt-controller/qcom,pdc.txt         | 77 -----------------
+>   .../interrupt-controller/qcom,pdc.yaml        | 86 +++++++++++++++++++
+>   2 files changed, 86 insertions(+), 77 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+>   create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+>

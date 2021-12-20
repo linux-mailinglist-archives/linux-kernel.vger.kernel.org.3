@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC4247B598
+	by mail.lfdr.de (Postfix) with ESMTP id 512BD47B597
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 23:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbhLTWAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 17:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbhLTWAX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 17:00:23 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A501CC06175A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 14:00:20 -0800 (PST)
+        id S232244AbhLTWAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 17:00:44 -0500
+Received: from out1.migadu.com ([91.121.223.63]:41473 "EHLO out1.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232158AbhLTWAW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 17:00:22 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640037618;
+        t=1640037620;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=clbwNiEdodHr8oU8gA1KlS9psTCZ+RadAtlc0DLpWew=;
-        b=gXn8zAPLf5bj4mxYf1/AcM8nVONG5Ga5LWtJHJo8Bxj6BdWwGPeR35Xdpq7NfK1AD4DCDT
-        di3wtNuimJLnbPo94vmN03RUx5bAG5gY/VpkVRLz9GpBCyX0W+iG2j9QjLYtTyz45YmrGJ
-        jWS7JpzSFM5BGqqjcdnPWtAPzEX1dbo=
+        bh=ETGtFPT9DSWIB4bf6pEH+UDYDV7ngicpRFQCLs3jhbs=;
+        b=UuQikHdqWZewk7h+PtZfk270bdsa0xNit3n3KMh7mWZ7Gx+B4+uvYgh6rVhggAVqpK77tE
+        l8lAsDN6weYM3Nl6KrYBxsx6XUJbl2OGddlS5BfF/42kaz650ijf4gn0q3BYmVU79uDKgy
+        /CDZN/dhBU+fd2y8irKAqjlFMtxgLbs=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v4 17/39] kasan, x86, arm64, s390: rename functions for modules shadow
-Date:   Mon, 20 Dec 2021 22:59:32 +0100
-Message-Id: <84de4863847a3aa21e2b6e9f64683d05a4f0c773.1640036051.git.andreyknvl@google.com>
+Subject: [PATCH mm v4 18/39] kasan, vmalloc: drop outdated VM_KASAN comment
+Date:   Mon, 20 Dec 2021 22:59:33 +0100
+Message-Id: <de7bc412ed4d04bb98a4c04dfd8873f35ad18db1.1640036051.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640036051.git.andreyknvl@google.com>
 References: <cover.1640036051.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,129 +54,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Rename kasan_free_shadow to kasan_free_module_shadow and
-kasan_module_alloc to kasan_alloc_module_shadow.
+The comment about VM_KASAN in include/linux/vmalloc.c is outdated.
+VM_KASAN is currently only used to mark vm_areas allocated for
+kernel modules when CONFIG_KASAN_VMALLOC is disabled.
 
-These functions are used to allocate/free shadow memory for kernel
-modules when KASAN_VMALLOC is not enabled. The new names better
-reflect their purpose.
-
-Also reword the comment next to their declaration to improve clarity.
+Drop the comment.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 ---
- arch/arm64/kernel/module.c |  2 +-
- arch/s390/kernel/module.c  |  2 +-
- arch/x86/kernel/module.c   |  2 +-
- include/linux/kasan.h      | 14 +++++++-------
- mm/kasan/shadow.c          |  4 ++--
- mm/vmalloc.c               |  2 +-
- 6 files changed, 13 insertions(+), 13 deletions(-)
+ include/linux/vmalloc.h | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index 309a27553c87..d3a1fa818348 100644
---- a/arch/arm64/kernel/module.c
-+++ b/arch/arm64/kernel/module.c
-@@ -58,7 +58,7 @@ void *module_alloc(unsigned long size)
- 				PAGE_KERNEL, 0, NUMA_NO_NODE,
- 				__builtin_return_address(0));
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index cde400a9fd87..34ac66a656d4 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -35,17 +35,6 @@ struct notifier_block;		/* in notifier.h */
+ #define VM_DEFER_KMEMLEAK	0
+ #endif
  
--	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
-+	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
- 		vfree(p);
- 		return NULL;
- 	}
-diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
-index d52d85367bf7..b16bebd9a8b9 100644
---- a/arch/s390/kernel/module.c
-+++ b/arch/s390/kernel/module.c
-@@ -45,7 +45,7 @@ void *module_alloc(unsigned long size)
- 	p = __vmalloc_node_range(size, MODULE_ALIGN, MODULES_VADDR, MODULES_END,
- 				 gfp_mask, PAGE_KERNEL_EXEC, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
- 				 __builtin_return_address(0));
--	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
-+	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
- 		vfree(p);
- 		return NULL;
- 	}
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 95fa745e310a..c9eb8aa3b7b8 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -78,7 +78,7 @@ void *module_alloc(unsigned long size)
- 				    MODULES_END, gfp_mask,
- 				    PAGE_KERNEL, VM_DEFER_KMEMLEAK, NUMA_NO_NODE,
- 				    __builtin_return_address(0));
--	if (p && (kasan_module_alloc(p, size, gfp_mask) < 0)) {
-+	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
- 		vfree(p);
- 		return NULL;
- 	}
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index b88ca6b97ba3..55f1d4edf6b5 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -454,17 +454,17 @@ static inline void kasan_populate_early_vm_area_shadow(void *start,
- 		!defined(CONFIG_KASAN_VMALLOC)
+-/*
+- * VM_KASAN is used slightly differently depending on CONFIG_KASAN_VMALLOC.
+- *
+- * If IS_ENABLED(CONFIG_KASAN_VMALLOC), VM_KASAN is set on a vm_struct after
+- * shadow memory has been mapped. It's used to handle allocation errors so that
+- * we don't try to poison shadow on free if it was never allocated.
+- *
+- * Otherwise, VM_KASAN is set for kasan_module_alloc() allocations and used to
+- * determine which allocations need the module shadow freed.
+- */
+-
+ /* bits [20..32] reserved for arch specific ioremap internals */
  
  /*
-- * These functions provide a special case to support backing module
-- * allocations with real shadow memory. With KASAN vmalloc, the special
-- * case is unnecessary, as the work is handled in the generic case.
-+ * These functions allocate and free shadow memory for kernel modules.
-+ * They are only required when KASAN_VMALLOC is not supported, as otherwise
-+ * shadow memory is allocated by the generic vmalloc handlers.
-  */
--int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask);
--void kasan_free_shadow(const struct vm_struct *vm);
-+int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask);
-+void kasan_free_module_shadow(const struct vm_struct *vm);
- 
- #else /* (CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS) && !CONFIG_KASAN_VMALLOC */
- 
--static inline int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask) { return 0; }
--static inline void kasan_free_shadow(const struct vm_struct *vm) {}
-+static inline int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask) { return 0; }
-+static inline void kasan_free_module_shadow(const struct vm_struct *vm) {}
- 
- #endif /* (CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS) && !CONFIG_KASAN_VMALLOC */
- 
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index 94136f84b449..e5c4393eb861 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -498,7 +498,7 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
- 
- #else /* CONFIG_KASAN_VMALLOC */
- 
--int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask)
-+int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
- {
- 	void *ret;
- 	size_t scaled_size;
-@@ -534,7 +534,7 @@ int kasan_module_alloc(void *addr, size_t size, gfp_t gfp_mask)
- 	return -ENOMEM;
- }
- 
--void kasan_free_shadow(const struct vm_struct *vm)
-+void kasan_free_module_shadow(const struct vm_struct *vm)
- {
- 	if (vm->flags & VM_KASAN)
- 		vfree(kasan_mem_to_shadow(vm->addr));
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index eb6e527a6b77..10011a07231d 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2525,7 +2525,7 @@ struct vm_struct *remove_vm_area(const void *addr)
- 		va->vm = NULL;
- 		spin_unlock(&vmap_area_lock);
- 
--		kasan_free_shadow(vm);
-+		kasan_free_module_shadow(vm);
- 		free_unmap_vmap_area(va);
- 
- 		return vm;
 -- 
 2.25.1
 

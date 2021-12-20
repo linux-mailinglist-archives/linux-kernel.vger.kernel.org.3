@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DD047AC46
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F67A47AB58
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbhLTOml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49752 "EHLO
+        id S233718AbhLTOgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:36:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44466 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234916AbhLTOlL (ORCPT
+        with ESMTP id S233633AbhLTOgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:11 -0500
+        Mon, 20 Dec 2021 09:36:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8209B80EEB;
-        Mon, 20 Dec 2021 14:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB584C36AE7;
-        Mon, 20 Dec 2021 14:41:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AB08B80EE0;
+        Mon, 20 Dec 2021 14:36:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71218C36AE8;
+        Mon, 20 Dec 2021 14:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011268;
-        bh=kG5sUjlVAIYU2TEAVKXxTJOfbZ9adhIXSrQqpqsDxqQ=;
+        s=korg; t=1640010960;
+        bh=qeYDfgAi1cFub+Mx6J2hMCIFnHqaNdeHpJo+CUF7t/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CsWXmdLow+xZOn0MSaoPMC7Y51jjQ75DAPLyX4L29szole1WbnkPuQ0hf1UPDDd4b
-         Cf7Da2IeSRX/jks6f+J9kDysWpRYDgiM+dXqu4NIFBSktJmPiKK9djSAKQk0TPzjeq
-         u6+48kad9ZzVMNh26aHV0JFQxoQ5t8HCuZ9odAps=
+        b=QPyBYNxgihq+Jld7hk6DYQ3iYwnrQDRhpitjC4S+KK32dwRcVOxjJMpOGKm1UKo4A
+         icpB/YHPyKy3bahlUFH1zigJ2sa2JcfD9hAqEW2wBDx/sSdEsHodarsswNJozuvkCq
+         ansuniB/I+TFJPSP+7ph9+MEWVx2/COoB7xy9oyE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 18/56] hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
+Subject: [PATCH 4.4 10/23] soc/tegra: fuse: Fix bitwise vs. logical OR warning
 Date:   Mon, 20 Dec 2021 15:34:11 +0100
-Message-Id: <20211220143024.049888083@linuxfoundation.org>
+Message-Id: <20211220143018.181562886@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
+References: <20211220143017.842390782@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +49,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 ]
+[ Upstream commit a7083763619f7485ccdade160deb81737cf2732f ]
 
-The hyperv utilities use PTP clock interfaces and should depend a
-a kconfig symbol such that they will be built as a loadable module or
-builtin so that linker errors do not happen.
+A new warning in clang points out two instances where boolean
+expressions are being used with a bitwise OR instead of logical OR:
 
-Prevents these build errors:
+drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+                reg = tegra_fuse_read_spare(i) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ||
+drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both operands to int to silence this warning
+drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+                reg = tegra_fuse_read_spare(i) |
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ||
+drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both operands to int to silence this warning
+2 warnings generated.
 
-ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
-hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
-ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
-hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
+The motivation for the warning is that logical operations short circuit
+while bitwise operations do not.
 
-Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Stephen Hemminger <sthemmin@microsoft.com>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: Dexuan Cui <decui@microsoft.com>
-Cc: linux-hyperv@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+In this instance, tegra_fuse_read_spare() is not semantically returning
+a boolean, it is returning a bit value. Use u32 for its return type so
+that it can be used with either bitwise or boolean operators without any
+warnings.
+
+Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1488
+Suggested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
+ drivers/soc/tegra/fuse/fuse.h       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-index 1c1a2514d6f31..b1c93441900ad 100644
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -16,6 +16,7 @@ config HYPERV_TSCPAGE
- config HYPERV_UTILS
- 	tristate "Microsoft Hyper-V Utilities driver"
- 	depends on HYPERV && CONNECTOR && NLS
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	help
- 	  Select this option to enable the Hyper-V Utilities.
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
+index c4f5e5bbb8dce..9397e8ba26469 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+@@ -176,7 +176,7 @@ static struct platform_driver tegra_fuse_driver = {
+ };
+ module_platform_driver(tegra_fuse_driver);
  
+-bool __init tegra_fuse_read_spare(unsigned int spare)
++u32 __init tegra_fuse_read_spare(unsigned int spare)
+ {
+ 	unsigned int offset = fuse->soc->info->spare + spare * 4;
+ 
+diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.h
+index 10c2076d5089a..f368bd5373088 100644
+--- a/drivers/soc/tegra/fuse/fuse.h
++++ b/drivers/soc/tegra/fuse/fuse.h
+@@ -62,7 +62,7 @@ struct tegra_fuse {
+ void tegra_init_revision(void);
+ void tegra_init_apbmisc(void);
+ 
+-bool __init tegra_fuse_read_spare(unsigned int spare);
++u32 __init tegra_fuse_read_spare(unsigned int spare);
+ u32 __init tegra_fuse_read_early(unsigned int offset);
+ 
+ #ifdef CONFIG_ARCH_TEGRA_2x_SOC
 -- 
 2.33.0
 

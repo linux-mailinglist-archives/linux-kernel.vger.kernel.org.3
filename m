@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D3C47A99E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E0D47A9A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 13:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbhLTMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 07:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S232679AbhLTMZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 07:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbhLTMZd (ORCPT
+        with ESMTP id S232648AbhLTMZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 07:25:33 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE751C06175B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:27 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id j6so16942154edw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:27 -0800 (PST)
+        Mon, 20 Dec 2021 07:25:37 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E1BC061763
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:28 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x15so37639131edv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 04:25:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9zZ2iIKjtnIzIajYT+GIxyKCjYpTcdEClasnE1DL9fE=;
-        b=XJM0sxVa1/NGRk+2y/djXlnvrrZCKLzZKv/OEwdWfk9Zyf38nXFnHeK2/nABe8KddQ
-         4FRg1oJlYYxpW1hr+jo/viX/2b6tcL8vXnWSK1XbslCAEg25em6JgGBd2f3zez4RxFu/
-         VSK47QNaR/I6j5zkyGdNcOkXiuZUSjScdWPVfbqbxZdDrLtqOsWrv5x4XYiRiXUoW5mM
-         1xp/KuZ+Lt1Z2heUWiEluqBRK0YIhb5NyPWJlru8/vDhW3py1TonTRW+La+q+ztkJDjN
-         GZAXgv+6znNMeG7yyGuAan6gTn46xzteUYvYx4Ojrxb27KceGZj6cihxSMm3s+Nc3URA
-         aVLw==
+        bh=Hl+ryow41wi2SaGEsd9ekcLiVIZ1XeLL/2x+u6A5DI4=;
+        b=ySXDbKpAQDvqd1KrQTCpKrrUdahL3ZhLdFVTEKN/Q2EKUyM05WYjpqrSUoJGpxmpjV
+         6IwEyq4mqK7OUfprSz7xlHYLVDBOanZrlb7dP0BqgCk1+mGUzrcChGv+KXCwGkV+5dm6
+         y3Rn78yADkPHO4MgtvQASZx53Ae6lGFDrEj+397ljnhlhvhsqeWZLv6/0xJ9aryUGN/q
+         RF/UR+BRbaCfazfb/NRQU8sJn2kzA5v6k1IAax8NCP6tIHxvkUHU1E1Sic8OKBBhf19H
+         nJu0cHsL9WM9sw6PCLhkR4i4cERgq1x4csGvShaKXZk+anad3qJcz/tz28LwHujjC08z
+         S6FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9zZ2iIKjtnIzIajYT+GIxyKCjYpTcdEClasnE1DL9fE=;
-        b=ZQRwA30bcDruIVn5ahBwWllmbAV9AZCEVlVTXHPgL9ySffhrzCxg6QxF7rW7XemEaG
-         sHC/rS8IZ2PfT/SkIXXxV79GsdLUKT8CFm8NPfIb10TQlpQTPMdjksWfxkoNfg5Fu0I+
-         MUQG+JEOaUfCDf9WbsfbOlVbhc2SkLqrRy/asosNQuNZ1xXZ/ks75MNEJ1mG79Sqy8L7
-         Zl/Nw0lYnRopy8n6AONKLiHHxgDW2vFlB5m+p0cvLSloqCWOjJtvZr2/6C+qMGQFR/c0
-         E6RABEDYRobPbzS9dd4VqdRBu1PXiq4O1QBPT5QPjaRuS5MZopN7SbTvg5xK9G1s3BZO
-         5ggg==
-X-Gm-Message-State: AOAM532WYjV9Z/XnhvNiWFizSCTLrGISyBXA4AC6orrmptYIG9x3W6z+
-        1i69FYVLBdlLDVvQF8XNnt15ag==
-X-Google-Smtp-Source: ABdhPJy1EpKyVaxwroCMhEoEILe7wDpRAzPVoYD0LdsyOvkVF7DZXv9DRuVZ3s6VPQm2ijVhVBlHhw==
-X-Received: by 2002:a17:906:dfea:: with SMTP id lc10mr4522007ejc.459.1640003126034;
-        Mon, 20 Dec 2021 04:25:26 -0800 (PST)
+        bh=Hl+ryow41wi2SaGEsd9ekcLiVIZ1XeLL/2x+u6A5DI4=;
+        b=1xy3NdSH5RxniXzy5Jq45zHV39Scj9MAsvLknkZw45H2u+7Sak180VDgofT9kyM5Q6
+         FyuAGK0XUxh/hhlmc3TJUw6mrm9WJPTuyvA9OIwFVYTcT0Ukv2r1AEvY/GbXbTop2e2h
+         HA2iTiqQUUXgTZp/dmdwYCqkZuXwPoyAlYUJ2WY/3bENqgRN/Bw8qkxcy/hOSPmU2IHq
+         CnBK9Wg+2VYY8XvOBJwlFbMlCVEpsoL7z7AiUh4/VCEDwc9WbEEPrbXun7V3bUVx3xyS
+         +8kzQq34fzLe79XPFfhjxjqneT2oB17frW4ioBAnpamzez/cST8NxYJ0eqv6k/4iq9hC
+         LdJQ==
+X-Gm-Message-State: AOAM533/pvPclGUR9AcW89G5iWyT/q5PnEZaML5AMhwQn/+5N7NJQiqh
+        WLqaFUXMzVNyZBcM2hdzJtpK9w==
+X-Google-Smtp-Source: ABdhPJz8Er9dgu/RM1Q8UYWfCgZhMuHYfuPV3UUY5O/KX+SXO9evYAOe/OrFlAxOKtfwPpm4d1c4Zg==
+X-Received: by 2002:a17:906:6996:: with SMTP id i22mr13335152ejr.293.1640003127203;
+        Mon, 20 Dec 2021 04:25:27 -0800 (PST)
 Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id e26sm6759811edr.82.2021.12.20.04.25.25
+        by smtp.gmail.com with ESMTPSA id y5sm3044716edm.39.2021.12.20.04.25.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 04:25:25 -0800 (PST)
+        Mon, 20 Dec 2021 04:25:26 -0800 (PST)
 From:   Anders Roxell <anders.roxell@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
@@ -60,13 +60,13 @@ Cc:     linux-kernel@vger.kernel.org, woojung.huh@microchip.com,
         linux-wireless@vger.kernel.org, rostedt@goodmis.org,
         mingo@redhat.com, dmitry.torokhov@gmail.com,
         ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
+        linux-input@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4.14 3/6] mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
-Date:   Mon, 20 Dec 2021 13:25:03 +0100
-Message-Id: <20211220122506.3631672-4-anders.roxell@linaro.org>
+Subject: [PATCH 4.14 4/6] ARM: 8800/1: use choice for kernel unwinders
+Date:   Mon, 20 Dec 2021 13:25:04 +0100
+Message-Id: <20211220122506.3631672-5-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220122506.3631672-1-anders.roxell@linaro.org>
 References: <20211220122506.3631672-1-anders.roxell@linaro.org>
@@ -76,75 +76,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Stefan Agner <stefan@agner.ch>
 
-commit 6a953dc4dbd1c7057fb765a24f37a5e953c85fb0 upstream.
+commit f9b58e8c7d031b0daa5c9a9ee27f5a4028ba53ac upstream.
 
-A new warning in clang points out when macro expansion might result in a
-GNU C statement expression. There is an instance of this in the mwifiex
-driver:
+While in theory multiple unwinders could be compiled in, it does
+not make sense in practise. Use a choice to make the unwinder
+selection mutually exclusive and mandatory.
 
-drivers/net/wireless/marvell/mwifiex/cmdevt.c:217:34: warning: '}' and
-')' tokens terminating statement expression appear in different macro
-expansion contexts [-Wcompound-token-split-by-macro]
-        host_cmd->seq_num = cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/net/wireless/marvell/mwifiex/fw.h:519:46: note: expanded from
-macro 'HostCmd_SET_SEQ_NO_BSS_INFO'
-        (((type) & 0x000f) << 12);                  }
-                                                    ^
+Already before this commit it has not been possible to deselect
+FRAME_POINTER. Remove the obsolete comment.
 
-This does not appear to be a real issue. Removing the braces and
-replacing them with parentheses will fix the warning and not change the
-meaning of the code.
+Furthermore, to produce a meaningful backtrace with FRAME_POINTER
+enabled the kernel needs a specific function prologue:
+    mov    ip, sp
+    stmfd    sp!, {fp, ip, lr, pc}
+    sub    fp, ip, #4
 
-Fixes: 5e6e3a92b9a4 ("wireless: mwifiex: initial commit for Marvell mwifiex driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1146
-Reported-by: Andy Lavr <andy.lavr@gmail.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+To get to the required prologue gcc uses apcs and no-sched-prolog.
+This compiler options are not available on clang, and clang is not
+able to generate the required prologue. Make the FRAME_POINTER
+config symbol depending on !clang.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- drivers/net/wireless/marvell/mwifiex/cmdevt.c | 4 ++--
- drivers/net/wireless/marvell/mwifiex/fw.h     | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/Kconfig.debug | 44 +++++++++++++++++++++++++++---------------
+ lib/Kconfig.debug      |  6 +++---
+ 2 files changed, 31 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/cmdevt.c b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-index 0edc5d621304..a9cee3dac97b 100644
---- a/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-+++ b/drivers/net/wireless/marvell/mwifiex/cmdevt.c
-@@ -323,9 +323,9 @@ static int mwifiex_dnld_sleep_confirm_cmd(struct mwifiex_adapter *adapter)
+diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+index b14f154919a5..d6cf18a0cb0a 100644
+--- a/arch/arm/Kconfig.debug
++++ b/arch/arm/Kconfig.debug
+@@ -16,30 +16,42 @@ config ARM_PTDUMP
+ 	  kernel.
+ 	  If in doubt, say "N"
  
- 	adapter->seq_num++;
- 	sleep_cfm_buf->seq_num =
--		cpu_to_le16((HostCmd_SET_SEQ_NO_BSS_INFO
-+		cpu_to_le16(HostCmd_SET_SEQ_NO_BSS_INFO
- 					(adapter->seq_num, priv->bss_num,
--					 priv->bss_type)));
-+					 priv->bss_type));
+-# RMK wants arm kernels compiled with frame pointers or stack unwinding.
+-# If you know what you are doing and are willing to live without stack
+-# traces, you can get a slightly smaller kernel by setting this option to
+-# n, but then RMK will have to kill you ;).
+-config FRAME_POINTER
+-	bool
+-	depends on !THUMB2_KERNEL
+-	default y if !ARM_UNWIND || FUNCTION_GRAPH_TRACER
++choice
++	prompt "Choose kernel unwinder"
++	default UNWINDER_ARM if AEABI && !FUNCTION_GRAPH_TRACER
++	default UNWINDER_FRAME_POINTER if !AEABI || FUNCTION_GRAPH_TRACER
++	help
++	  This determines which method will be used for unwinding kernel stack
++	  traces for panics, oopses, bugs, warnings, perf, /proc/<pid>/stack,
++	  livepatch, lockdep, and more.
++
++config UNWINDER_FRAME_POINTER
++	bool "Frame pointer unwinder"
++	depends on !THUMB2_KERNEL && !CC_IS_CLANG
++	select ARCH_WANT_FRAME_POINTERS
++	select FRAME_POINTER
+ 	help
+-	  If you say N here, the resulting kernel will be slightly smaller and
+-	  faster. However, if neither FRAME_POINTER nor ARM_UNWIND are enabled,
+-	  when a problem occurs with the kernel, the information that is
+-	  reported is severely limited.
++	  This option enables the frame pointer unwinder for unwinding
++	  kernel stack traces.
  
- 	mwifiex_dbg(adapter, CMD,
- 		    "cmd: DNLD_CMD: %#x, act %#x, len %d, seqno %#x\n",
-diff --git a/drivers/net/wireless/marvell/mwifiex/fw.h b/drivers/net/wireless/marvell/mwifiex/fw.h
-index 1d86d29b64cc..c802b73a15c5 100644
---- a/drivers/net/wireless/marvell/mwifiex/fw.h
-+++ b/drivers/net/wireless/marvell/mwifiex/fw.h
-@@ -498,10 +498,10 @@ enum mwifiex_channel_flags {
+-config ARM_UNWIND
+-	bool "Enable stack unwinding support (EXPERIMENTAL)"
++config UNWINDER_ARM
++	bool "ARM EABI stack unwinder"
+ 	depends on AEABI
+-	default y
++	select ARM_UNWIND
+ 	help
+ 	  This option enables stack unwinding support in the kernel
+ 	  using the information automatically generated by the
+ 	  compiler. The resulting kernel image is slightly bigger but
+ 	  the performance is not affected. Currently, this feature
+-	  only works with EABI compilers. If unsure say Y.
++	  only works with EABI compilers.
++
++endchoice
++
++config ARM_UNWIND
++	bool
++
++config FRAME_POINTER
++	bool
  
- #define RF_ANTENNA_AUTO                 0xFFFF
+ config OLD_MCOUNT
+ 	bool
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 428eaf16a1d2..f63a4faf244e 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1131,7 +1131,7 @@ config LOCKDEP
+ 	bool
+ 	depends on DEBUG_KERNEL && TRACE_IRQFLAGS_SUPPORT && STACKTRACE_SUPPORT && LOCKDEP_SUPPORT
+ 	select STACKTRACE
+-	select FRAME_POINTER if !MIPS && !PPC && !ARM_UNWIND && !S390 && !MICROBLAZE && !ARC && !SCORE && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !SCORE && !X86
+ 	select KALLSYMS
+ 	select KALLSYMS_ALL
  
--#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) {   \
--	(((seq) & 0x00ff) |                             \
--	 (((num) & 0x000f) << 8)) |                     \
--	(((type) & 0x000f) << 12);                  }
-+#define HostCmd_SET_SEQ_NO_BSS_INFO(seq, num, type) \
-+	((((seq) & 0x00ff) |                        \
-+	 (((num) & 0x000f) << 8)) |                 \
-+	(((type) & 0x000f) << 12))
+@@ -1566,7 +1566,7 @@ config FAULT_INJECTION_STACKTRACE_FILTER
+ 	depends on FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT
+ 	depends on !X86_64
+ 	select STACKTRACE
+-	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !SCORE && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !SCORE && !X86
+ 	help
+ 	  Provide stacktrace filter for fault-injection capabilities
  
- #define HostCmd_GET_SEQ_NO(seq)       \
- 	((seq) & HostCmd_SEQ_NUM_MASK)
+@@ -1575,7 +1575,7 @@ config LATENCYTOP
+ 	depends on DEBUG_KERNEL
+ 	depends on STACKTRACE_SUPPORT
+ 	depends on PROC_FS
+-	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !X86
++	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !X86
+ 	select KALLSYMS
+ 	select KALLSYMS_ALL
+ 	select STACKTRACE
 -- 
 2.34.1
 

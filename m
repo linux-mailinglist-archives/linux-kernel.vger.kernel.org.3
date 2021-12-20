@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4058A47AEBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C688B47AFC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236803AbhLTPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S238621AbhLTPSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:18:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238736AbhLTO7G (ORCPT
+        with ESMTP id S238501AbhLTPR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:59:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4047FC0698D9;
-        Mon, 20 Dec 2021 06:50:50 -0800 (PST)
+        Mon, 20 Dec 2021 10:17:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FDEC08EC90;
+        Mon, 20 Dec 2021 06:58:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2E88B80EB3;
-        Mon, 20 Dec 2021 14:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33347C36AF6;
-        Mon, 20 Dec 2021 14:50:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 645A0611AA;
+        Mon, 20 Dec 2021 14:58:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480FBC36AE8;
+        Mon, 20 Dec 2021 14:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011847;
-        bh=DKxiby6VTkpjRcIkVf70NF+KreoyQ0NK0gGmZjTD0yE=;
+        s=korg; t=1640012320;
+        bh=UqCWcFfa/BQABkZRB+kpl+Wp5gkCxwe/jLHj3rF9DDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A/ElrKuyl7TAE6IfboZ8kEUOH0q3ew50l8mFS2j7L7py2nMCRoOAYNdV8WQlNl7P3
-         B3920CjtJ6zFTR2OTgzJ0g1KPHTJSsCgg7WdWoW5ZKMfOKI/nhtL692r3WPeWJo/62
-         iN47NT2Zvsbg3NP+zVuA1d++jdeYf5XtWe17kZ4I=
+        b=vsKY14aAzs4rgkc4j7YnVk73l8O6ukz1WSYjw5H6XHNJxsz4RM/TeG0GoznfXIwve
+         Su3YmHveprJqL4rK9f7fXgu8Id46VbcTWzLtw9Pm7PAx+p1GfjLljsFOyqwRgLBIWO
+         gNPHTEq+eISb/LJSdWFcrGtlVCYnUJ/x1AaiJo0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH 5.10 96/99] xen/netfront: harden netfront against event channel storms
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 159/177] USB: core: Make do_proc_control() and do_proc_bulk() killable
 Date:   Mon, 20 Dec 2021 15:35:09 +0100
-Message-Id: <20211220143032.629957774@linuxfoundation.org>
+Message-Id: <20211220143045.435716834@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,293 +49,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit b27d47950e481f292c0a5ad57357edb9d95d03ba upstream.
+commit ae8709b296d80c7f45aa1f35c0e7659ad69edce1 upstream.
 
-The Xen netfront driver is still vulnerable for an attack via excessive
-number of events sent by the backend. Fix that by using lateeoi event
-channels.
+The USBDEVFS_CONTROL and USBDEVFS_BULK ioctls invoke
+usb_start_wait_urb(), which contains an uninterruptible wait with a
+user-specified timeout value.  If timeout value is very large and the
+device being accessed does not respond in a reasonable amount of time,
+the kernel will complain about "Task X blocked for more than N
+seconds", as found in testing by syzbot:
 
-For being able to detect the case of no rx responses being added while
-the carrier is down a new lock is needed in order to update and test
-rsp_cons and the number of seen unconsumed responses atomically.
+INFO: task syz-executor.0:8700 blocked for more than 143 seconds.
+      Not tainted 5.14.0-rc7-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.0  state:D stack:23192 pid: 8700 ppid:  8455 flags:0x00004004
+Call Trace:
+ context_switch kernel/sched/core.c:4681 [inline]
+ __schedule+0xc07/0x11f0 kernel/sched/core.c:5938
+ schedule+0x14b/0x210 kernel/sched/core.c:6017
+ schedule_timeout+0x98/0x2f0 kernel/time/timer.c:1857
+ do_wait_for_common+0x2da/0x480 kernel/sched/completion.c:85
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion_timeout+0x46/0x60 kernel/sched/completion.c:157
+ usb_start_wait_urb+0x167/0x550 drivers/usb/core/message.c:63
+ do_proc_bulk+0x978/0x1080 drivers/usb/core/devio.c:1236
+ proc_bulk drivers/usb/core/devio.c:1273 [inline]
+ usbdev_do_ioctl drivers/usb/core/devio.c:2547 [inline]
+ usbdev_ioctl+0x3441/0x6b10 drivers/usb/core/devio.c:2713
+...
 
-This is part of XSA-391
+To fix this problem, this patch replaces usbfs's calls to
+usb_control_msg() and usb_bulk_msg() with special-purpose code that
+does essentially the same thing (as recommended in the comment for
+usb_start_wait_urb()), except that it always uses a killable wait and
+it uses GFP_KERNEL rather than GFP_NOIO.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reported-and-tested-by: syzbot+ada0f7d3d9fd2016d927@syzkaller.appspotmail.com
+Suggested-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/20210903175312.GA468440@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netfront.c |  125 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 94 insertions(+), 31 deletions(-)
+ drivers/usb/core/devio.c |  144 ++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 111 insertions(+), 33 deletions(-)
 
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -148,6 +148,9 @@ struct netfront_queue {
- 	grant_ref_t gref_rx_head;
- 	grant_ref_t grant_rx_ref[NET_RX_RING_SIZE];
- 
-+	unsigned int rx_rsp_unconsumed;
-+	spinlock_t rx_cons_lock;
-+
- 	struct page_pool *page_pool;
- 	struct xdp_rxq_info xdp_rxq;
- };
-@@ -376,12 +379,13 @@ static int xennet_open(struct net_device
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -32,6 +32,7 @@
+ #include <linux/usb.h>
+ #include <linux/usbdevice_fs.h>
+ #include <linux/usb/hcd.h>	/* for usbcore internals */
++#include <linux/usb/quirks.h>
+ #include <linux/cdev.h>
+ #include <linux/notifier.h>
+ #include <linux/security.h>
+@@ -1102,14 +1103,55 @@ static int usbdev_release(struct inode *
  	return 0;
  }
  
--static void xennet_tx_buf_gc(struct netfront_queue *queue)
-+static bool xennet_tx_buf_gc(struct netfront_queue *queue)
- {
- 	RING_IDX cons, prod;
- 	unsigned short id;
- 	struct sk_buff *skb;
- 	bool more_to_do;
-+	bool work_done = false;
- 	const struct device *dev = &queue->info->netdev->dev;
- 
- 	BUG_ON(!netif_carrier_ok(queue->info->netdev));
-@@ -398,6 +402,8 @@ static void xennet_tx_buf_gc(struct netf
- 		for (cons = queue->tx.rsp_cons; cons != prod; cons++) {
- 			struct xen_netif_tx_response txrsp;
- 
-+			work_done = true;
-+
- 			RING_COPY_RESPONSE(&queue->tx, cons, &txrsp);
- 			if (txrsp.status == XEN_NETIF_RSP_NULL)
- 				continue;
-@@ -441,11 +447,13 @@ static void xennet_tx_buf_gc(struct netf
- 
- 	xennet_maybe_wake_tx(queue);
- 
--	return;
-+	return work_done;
- 
-  err:
- 	queue->info->broken = true;
- 	dev_alert(dev, "Disabled for further use\n");
-+
-+	return work_done;
- }
- 
- struct xennet_gnttab_make_txreq {
-@@ -836,6 +844,16 @@ static int xennet_close(struct net_devic
- 	return 0;
- }
- 
-+static void xennet_set_rx_rsp_cons(struct netfront_queue *queue, RING_IDX val)
++static void usbfs_blocking_completion(struct urb *urb)
 +{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&queue->rx_cons_lock, flags);
-+	queue->rx.rsp_cons = val;
-+	queue->rx_rsp_unconsumed = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
-+	spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
++	complete((struct completion *) urb->context);
 +}
 +
- static void xennet_move_rx_slot(struct netfront_queue *queue, struct sk_buff *skb,
- 				grant_ref_t ref)
++/*
++ * Much like usb_start_wait_urb, but returns status separately from
++ * actual_length and uses a killable wait.
++ */
++static int usbfs_start_wait_urb(struct urb *urb, int timeout,
++		unsigned int *actlen)
++{
++	DECLARE_COMPLETION_ONSTACK(ctx);
++	unsigned long expire;
++	int rc;
++
++	urb->context = &ctx;
++	urb->complete = usbfs_blocking_completion;
++	*actlen = 0;
++	rc = usb_submit_urb(urb, GFP_KERNEL);
++	if (unlikely(rc))
++		return rc;
++
++	expire = (timeout ? msecs_to_jiffies(timeout) : MAX_SCHEDULE_TIMEOUT);
++	rc = wait_for_completion_killable_timeout(&ctx, expire);
++	if (rc <= 0) {
++		usb_kill_urb(urb);
++		*actlen = urb->actual_length;
++		if (urb->status != -ENOENT)
++			;	/* Completed before it was killed */
++		else if (rc < 0)
++			return -EINTR;
++		else
++			return -ETIMEDOUT;
++	}
++	*actlen = urb->actual_length;
++	return urb->status;
++}
++
+ static int do_proc_control(struct usb_dev_state *ps,
+ 		struct usbdevfs_ctrltransfer *ctrl)
  {
-@@ -887,7 +905,7 @@ static int xennet_get_extras(struct netf
- 		xennet_move_rx_slot(queue, skb, ref);
- 	} while (extra.flags & XEN_NETIF_EXTRA_FLAG_MORE);
+ 	struct usb_device *dev = ps->dev;
+ 	unsigned int tmo;
+ 	unsigned char *tbuf;
+-	unsigned wLength;
++	unsigned int wLength, actlen;
+ 	int i, pipe, ret;
++	struct urb *urb = NULL;
++	struct usb_ctrlrequest *dr = NULL;
  
--	queue->rx.rsp_cons = cons;
-+	xennet_set_rx_rsp_cons(queue, cons);
- 	return err;
- }
+ 	ret = check_ctrlrecip(ps, ctrl->bRequestType, ctrl->bRequest,
+ 			      ctrl->wIndex);
+@@ -1122,51 +1164,63 @@ static int do_proc_control(struct usb_de
+ 			sizeof(struct usb_ctrlrequest));
+ 	if (ret)
+ 		return ret;
++
++	ret = -ENOMEM;
+ 	tbuf = (unsigned char *)__get_free_page(GFP_KERNEL);
+-	if (!tbuf) {
+-		ret = -ENOMEM;
++	if (!tbuf)
+ 		goto done;
+-	}
++	urb = usb_alloc_urb(0, GFP_NOIO);
++	if (!urb)
++		goto done;
++	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_NOIO);
++	if (!dr)
++		goto done;
++
++	dr->bRequestType = ctrl->bRequestType;
++	dr->bRequest = ctrl->bRequest;
++	dr->wValue = cpu_to_le16(ctrl->wValue);
++	dr->wIndex = cpu_to_le16(ctrl->wIndex);
++	dr->wLength = cpu_to_le16(ctrl->wLength);
++
+ 	tmo = ctrl->timeout;
+ 	snoop(&dev->dev, "control urb: bRequestType=%02x "
+ 		"bRequest=%02x wValue=%04x "
+ 		"wIndex=%04x wLength=%04x\n",
+ 		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
+ 		ctrl->wIndex, ctrl->wLength);
+-	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength) {
++
++	if ((ctrl->bRequestType & USB_DIR_IN) && wLength) {
+ 		pipe = usb_rcvctrlpipe(dev, 0);
+-		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
++		usb_fill_control_urb(urb, dev, pipe, (unsigned char *) dr, tbuf,
++				wLength, NULL, NULL);
++		snoop_urb(dev, NULL, pipe, wLength, tmo, SUBMIT, NULL, 0);
  
-@@ -1041,7 +1059,7 @@ next:
- 	}
- 
- 	if (unlikely(err))
--		queue->rx.rsp_cons = cons + slots;
-+		xennet_set_rx_rsp_cons(queue, cons + slots);
- 
- 	return err;
- }
-@@ -1095,7 +1113,8 @@ static int xennet_fill_frags(struct netf
- 			__pskb_pull_tail(skb, pull_to - skb_headlen(skb));
- 		}
- 		if (unlikely(skb_shinfo(skb)->nr_frags >= MAX_SKB_FRAGS)) {
--			queue->rx.rsp_cons = ++cons + skb_queue_len(list);
-+			xennet_set_rx_rsp_cons(queue,
-+					       ++cons + skb_queue_len(list));
- 			kfree_skb(nskb);
- 			return -ENOENT;
- 		}
-@@ -1108,7 +1127,7 @@ static int xennet_fill_frags(struct netf
- 		kfree_skb(nskb);
- 	}
- 
--	queue->rx.rsp_cons = cons;
-+	xennet_set_rx_rsp_cons(queue, cons);
- 
- 	return 0;
- }
-@@ -1231,7 +1250,9 @@ err:
- 
- 			if (unlikely(xennet_set_skb_gso(skb, gso))) {
- 				__skb_queue_head(&tmpq, skb);
--				queue->rx.rsp_cons += skb_queue_len(&tmpq);
-+				xennet_set_rx_rsp_cons(queue,
-+						       queue->rx.rsp_cons +
-+						       skb_queue_len(&tmpq));
- 				goto err;
+ 		usb_unlock_device(dev);
+-		i = usb_control_msg(dev, pipe, ctrl->bRequest,
+-				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
+-				    tbuf, ctrl->wLength, tmo);
++		i = usbfs_start_wait_urb(urb, tmo, &actlen);
+ 		usb_lock_device(dev);
+-		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE,
+-			  tbuf, max(i, 0));
+-		if ((i > 0) && ctrl->wLength) {
+-			if (copy_to_user(ctrl->data, tbuf, i)) {
++		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, tbuf, actlen);
++		if (!i && actlen) {
++			if (copy_to_user(ctrl->data, tbuf, actlen)) {
+ 				ret = -EFAULT;
+-				goto done;
++				goto recv_fault;
  			}
  		}
-@@ -1255,7 +1276,8 @@ err:
+ 	} else {
+-		if (ctrl->wLength) {
+-			if (copy_from_user(tbuf, ctrl->data, ctrl->wLength)) {
++		if (wLength) {
++			if (copy_from_user(tbuf, ctrl->data, wLength)) {
+ 				ret = -EFAULT;
+ 				goto done;
+ 			}
+ 		}
+ 		pipe = usb_sndctrlpipe(dev, 0);
+-		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT,
+-			tbuf, ctrl->wLength);
++		usb_fill_control_urb(urb, dev, pipe, (unsigned char *) dr, tbuf,
++				wLength, NULL, NULL);
++		snoop_urb(dev, NULL, pipe, wLength, tmo, SUBMIT, tbuf, wLength);
  
- 		__skb_queue_tail(&rxq, skb);
- 
--		i = ++queue->rx.rsp_cons;
-+		i = queue->rx.rsp_cons + 1;
-+		xennet_set_rx_rsp_cons(queue, i);
- 		work_done++;
+ 		usb_unlock_device(dev);
+-		i = usb_control_msg(dev, pipe, ctrl->bRequest,
+-				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
+-				    tbuf, ctrl->wLength, tmo);
++		i = usbfs_start_wait_urb(urb, tmo, &actlen);
+ 		usb_lock_device(dev);
+-		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE, NULL, 0);
++		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, NULL, 0);
  	}
- 	if (need_xdp_flush)
-@@ -1419,40 +1441,79 @@ static int xennet_set_features(struct ne
- 	return 0;
- }
- 
--static irqreturn_t xennet_tx_interrupt(int irq, void *dev_id)
-+static bool xennet_handle_tx(struct netfront_queue *queue, unsigned int *eoi)
+ 	if (i < 0 && i != -EPIPE) {
+ 		dev_printk(KERN_DEBUG, &dev->dev, "usbfs: USBDEVFS_CONTROL "
+@@ -1174,8 +1228,15 @@ static int do_proc_control(struct usb_de
+ 			   current->comm, ctrl->bRequestType, ctrl->bRequest,
+ 			   ctrl->wLength, i);
+ 	}
+-	ret = i;
++	ret = (i < 0 ? i : actlen);
++
++ recv_fault:
++	/* Linger a bit, prior to the next control message. */
++	if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
++		msleep(200);
+  done:
++	kfree(dr);
++	usb_free_urb(urb);
+ 	free_page((unsigned long) tbuf);
+ 	usbfs_decrease_memory_usage(PAGE_SIZE + sizeof(struct urb) +
+ 			sizeof(struct usb_ctrlrequest));
+@@ -1195,10 +1256,11 @@ static int do_proc_bulk(struct usb_dev_s
+ 		struct usbdevfs_bulktransfer *bulk)
  {
--	struct netfront_queue *queue = dev_id;
- 	unsigned long flags;
+ 	struct usb_device *dev = ps->dev;
+-	unsigned int tmo, len1, pipe;
+-	int len2;
++	unsigned int tmo, len1, len2, pipe;
+ 	unsigned char *tbuf;
+ 	int i, ret;
++	struct urb *urb = NULL;
++	struct usb_host_endpoint *ep;
  
--	if (queue->info->broken)
--		return IRQ_HANDLED;
-+	if (unlikely(queue->info->broken))
-+		return false;
- 
- 	spin_lock_irqsave(&queue->tx_lock, flags);
--	xennet_tx_buf_gc(queue);
-+	if (xennet_tx_buf_gc(queue))
-+		*eoi = 0;
- 	spin_unlock_irqrestore(&queue->tx_lock, flags);
- 
-+	return true;
-+}
+ 	ret = findintfep(ps->dev, bulk->ep);
+ 	if (ret < 0)
+@@ -1206,14 +1268,17 @@ static int do_proc_bulk(struct usb_dev_s
+ 	ret = checkintf(ps, ret);
+ 	if (ret)
+ 		return ret;
 +
-+static irqreturn_t xennet_tx_interrupt(int irq, void *dev_id)
-+{
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
++	len1 = bulk->len;
++	if (len1 < 0 || len1 >= (INT_MAX - sizeof(struct urb)))
++		return -EINVAL;
 +
-+	if (likely(xennet_handle_tx(dev_id, &eoiflag)))
-+		xen_irq_lateeoi(irq, eoiflag);
+ 	if (bulk->ep & USB_DIR_IN)
+ 		pipe = usb_rcvbulkpipe(dev, bulk->ep & 0x7f);
+ 	else
+ 		pipe = usb_sndbulkpipe(dev, bulk->ep & 0x7f);
+-	if (!usb_maxpacket(dev, pipe, !(bulk->ep & USB_DIR_IN)))
+-		return -EINVAL;
+-	len1 = bulk->len;
+-	if (len1 >= (INT_MAX - sizeof(struct urb)))
++	ep = usb_pipe_endpoint(dev, pipe);
++	if (!ep || !usb_endpoint_maxp(&ep->desc))
+ 		return -EINVAL;
+ 	ret = usbfs_increase_memory_usage(len1 + sizeof(struct urb));
+ 	if (ret)
+@@ -1223,17 +1288,29 @@ static int do_proc_bulk(struct usb_dev_s
+ 	 * len1 can be almost arbitrarily large.  Don't WARN if it's
+ 	 * too big, just fail the request.
+ 	 */
++	ret = -ENOMEM;
+ 	tbuf = kmalloc(len1, GFP_KERNEL | __GFP_NOWARN);
+-	if (!tbuf) {
+-		ret = -ENOMEM;
++	if (!tbuf)
+ 		goto done;
++	urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!urb)
++		goto done;
 +
- 	return IRQ_HANDLED;
- }
- 
--static irqreturn_t xennet_rx_interrupt(int irq, void *dev_id)
-+static bool xennet_handle_rx(struct netfront_queue *queue, unsigned int *eoi)
- {
--	struct netfront_queue *queue = dev_id;
--	struct net_device *dev = queue->info->netdev;
-+	unsigned int work_queued;
-+	unsigned long flags;
++	if ((ep->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) ==
++			USB_ENDPOINT_XFER_INT) {
++		pipe = (pipe & ~(3 << 30)) | (PIPE_INTERRUPT << 30);
++		usb_fill_int_urb(urb, dev, pipe, tbuf, len1,
++				NULL, NULL, ep->desc.bInterval);
++	} else {
++		usb_fill_bulk_urb(urb, dev, pipe, tbuf, len1, NULL, NULL);
+ 	}
 +
-+	if (unlikely(queue->info->broken))
-+		return false;
+ 	tmo = bulk->timeout;
+ 	if (bulk->ep & 0x80) {
+ 		snoop_urb(dev, NULL, pipe, len1, tmo, SUBMIT, NULL, 0);
  
--	if (queue->info->broken)
--		return IRQ_HANDLED;
-+	spin_lock_irqsave(&queue->rx_cons_lock, flags);
-+	work_queued = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
-+	if (work_queued > queue->rx_rsp_unconsumed) {
-+		queue->rx_rsp_unconsumed = work_queued;
-+		*eoi = 0;
-+	} else if (unlikely(work_queued < queue->rx_rsp_unconsumed)) {
-+		const struct device *dev = &queue->info->netdev->dev;
-+
-+		spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
-+		dev_alert(dev, "RX producer index going backwards\n");
-+		dev_alert(dev, "Disabled for further use\n");
-+		queue->info->broken = true;
-+		return false;
-+	}
-+	spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
+ 		usb_unlock_device(dev);
+-		i = usb_bulk_msg(dev, pipe, tbuf, len1, &len2, tmo);
++		i = usbfs_start_wait_urb(urb, tmo, &len2);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, len2, i, COMPLETE, tbuf, len2);
  
--	if (likely(netif_carrier_ok(dev) &&
--		   RING_HAS_UNCONSUMED_RESPONSES(&queue->rx)))
-+	if (likely(netif_carrier_ok(queue->info->netdev) && work_queued))
- 		napi_schedule(&queue->napi);
+@@ -1253,12 +1330,13 @@ static int do_proc_bulk(struct usb_dev_s
+ 		snoop_urb(dev, NULL, pipe, len1, tmo, SUBMIT, tbuf, len1);
  
-+	return true;
-+}
-+
-+static irqreturn_t xennet_rx_interrupt(int irq, void *dev_id)
-+{
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+
-+	if (likely(xennet_handle_rx(dev_id, &eoiflag)))
-+		xen_irq_lateeoi(irq, eoiflag);
-+
- 	return IRQ_HANDLED;
- }
- 
- static irqreturn_t xennet_interrupt(int irq, void *dev_id)
- {
--	xennet_tx_interrupt(irq, dev_id);
--	xennet_rx_interrupt(irq, dev_id);
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+
-+	if (xennet_handle_tx(dev_id, &eoiflag) &&
-+	    xennet_handle_rx(dev_id, &eoiflag))
-+		xen_irq_lateeoi(irq, eoiflag);
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -1770,9 +1831,10 @@ static int setup_netfront_single(struct
- 	if (err < 0)
- 		goto fail;
- 
--	err = bind_evtchn_to_irqhandler(queue->tx_evtchn,
--					xennet_interrupt,
--					0, queue->info->netdev->name, queue);
-+	err = bind_evtchn_to_irqhandler_lateeoi(queue->tx_evtchn,
-+						xennet_interrupt, 0,
-+						queue->info->netdev->name,
-+						queue);
- 	if (err < 0)
- 		goto bind_fail;
- 	queue->rx_evtchn = queue->tx_evtchn;
-@@ -1800,18 +1862,18 @@ static int setup_netfront_split(struct n
- 
- 	snprintf(queue->tx_irq_name, sizeof(queue->tx_irq_name),
- 		 "%s-tx", queue->name);
--	err = bind_evtchn_to_irqhandler(queue->tx_evtchn,
--					xennet_tx_interrupt,
--					0, queue->tx_irq_name, queue);
-+	err = bind_evtchn_to_irqhandler_lateeoi(queue->tx_evtchn,
-+						xennet_tx_interrupt, 0,
-+						queue->tx_irq_name, queue);
- 	if (err < 0)
- 		goto bind_tx_fail;
- 	queue->tx_irq = err;
- 
- 	snprintf(queue->rx_irq_name, sizeof(queue->rx_irq_name),
- 		 "%s-rx", queue->name);
--	err = bind_evtchn_to_irqhandler(queue->rx_evtchn,
--					xennet_rx_interrupt,
--					0, queue->rx_irq_name, queue);
-+	err = bind_evtchn_to_irqhandler_lateeoi(queue->rx_evtchn,
-+						xennet_rx_interrupt, 0,
-+						queue->rx_irq_name, queue);
- 	if (err < 0)
- 		goto bind_rx_fail;
- 	queue->rx_irq = err;
-@@ -1913,6 +1975,7 @@ static int xennet_init_queue(struct netf
- 
- 	spin_lock_init(&queue->tx_lock);
- 	spin_lock_init(&queue->rx_lock);
-+	spin_lock_init(&queue->rx_cons_lock);
- 
- 	timer_setup(&queue->rx_refill_timer, rx_refill_timeout, 0);
- 
+ 		usb_unlock_device(dev);
+-		i = usb_bulk_msg(dev, pipe, tbuf, len1, &len2, tmo);
++		i = usbfs_start_wait_urb(urb, tmo, &len2);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, len2, i, COMPLETE, NULL, 0);
+ 	}
+ 	ret = (i < 0 ? i : len2);
+  done:
++	usb_free_urb(urb);
+ 	kfree(tbuf);
+ 	usbfs_decrease_memory_usage(len1 + sizeof(struct urb));
+ 	return ret;
 
 

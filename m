@@ -2,127 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAC647A314
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 01:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164B447A32A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 01:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbhLTATW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 19:19:22 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:52192 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbhLTATV (ORCPT
+        id S236984AbhLTA6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 19:58:08 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:43797 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236961AbhLTA6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 19:19:21 -0500
-Received: by mail-io1-f72.google.com with SMTP id s199-20020a6b2cd0000000b005ed3e776ad0so6159862ios.18
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 16:19:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=l9fTUvv2W/zZfQTMkIdtNjjZgc0Pa7tFnb0ccwxYLoA=;
-        b=4i2AbfNh8fi4TydYQjvYIjnRMQBPGHaelxfHD5sKdKcPe/Ul/fKFzjd/UrRp9Q38Ry
-         /y3uLNG3BuIuXVvutg6be5dx2Mq5fmE+fI7+Teoy+93nbdG/Ax0yJiSyHF0pOQ0ibk62
-         jUmv4SbdzISwWlUMdOTvLt6/18/XHOAt7Cg2leOKk0xQS/zDB1Efy7f+TGMp0naN9hB0
-         1VYBj45epKMV2e7YWsQtPH7QwWV6mdyamMuYBe0bBNVwQDVKt+59pdxeTFu0i7KqLM2V
-         uTPGP4c42cfaY4dDeGnBhvWXjTZr4yEuDy2JlinRdpLzs9wYOigm0AbuWXS7HNopOsoO
-         0d5A==
-X-Gm-Message-State: AOAM532m/OhY6RbQPqLgodJUtAaz6UEBEX7iH2uq51hwbd5Jgu802dLw
-        00zChLXsVpHowe9yFxB0hlnK7gNLgWza4VHSo9U6BECFoX9P
-X-Google-Smtp-Source: ABdhPJxOGXB3IQKkBe2reRag0j8Rq6ERvZTRV6O7cNbr6KdgPOxJTSTD94OCKIG8rQvT1ZC7/hOsET7H6pUU7GB6/ETyoHXoyvHP
+        Sun, 19 Dec 2021 19:58:06 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211220005803epoutp0224fc8bb9c227c1035214d9e674f2cfad~CUKTjHAnn1865118651epoutp02a
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 00:58:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211220005803epoutp0224fc8bb9c227c1035214d9e674f2cfad~CUKTjHAnn1865118651epoutp02a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639961883;
+        bh=PfEF0NEowvhw7cuL2KLvpyJZ9rHxoweha2ZlVBIqHS0=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=KgszIMuiObmNt76sC7AlBZb6G13PGqoeSTv9CMsvQYxKxV6OWvWsOPxDq0EO3o1Oc
+         tQeXNvs5H15O7Pu2KMVb9zgNqNGjpaq2fACp1Co5DEoEKX/APtKDxQ3Z2rD468s/zU
+         KaB6OSJvwytUtfM4J8X23kZZNvUoqjbQ7iQfuPNE=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20211220005802epcas1p4a4253499bc47b6fa0e087424b36f8531~CUKTD0UGC0055000550epcas1p4S;
+        Mon, 20 Dec 2021 00:58:02 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JHLmP0ft0z4x9Pw; Mon, 20 Dec
+        2021 00:57:57 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0E.D3.08277.215DFB16; Mon, 20 Dec 2021 09:57:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211220005753epcas1p185cd04f933356e594959cf7a12aa56dc~CUKKEIYMS1037610376epcas1p1X;
+        Mon, 20 Dec 2021 00:57:53 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211220005753epsmtrp1a11ce64468792212539138bc3947a339~CUKKDHLjQ0168801688epsmtrp1a;
+        Mon, 20 Dec 2021 00:57:53 +0000 (GMT)
+X-AuditID: b6c32a36-203ff70000002055-d0-61bfd512faf3
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E8.82.29871.115DFB16; Mon, 20 Dec 2021 09:57:53 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211220005752epsmtip1bb20a189882ec8c765e94a10e3243901~CUKJu3sD01217712177epsmtip1j;
+        Mon, 20 Dec 2021 00:57:52 +0000 (GMT)
+Subject: Re: [PATCH v3] extcon: fix extcon_get_extcon_dev() error handling
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <e0adc445-ede3-171a-0c1b-8667792d4c3e@samsung.com>
+Date:   Mon, 20 Dec 2021 10:20:53 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:c265:: with SMTP id h5mr1891529ild.36.1639959560697;
- Sun, 19 Dec 2021 16:19:20 -0800 (PST)
-Date:   Sun, 19 Dec 2021 16:19:20 -0800
-In-Reply-To: <0000000000007ea16705d0cfbb53@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000fbea205d388d749@google.com>
-Subject: Re: [syzbot] kernel BUG in pskb_expand_head
-From:   syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>
-To:     anthony.l.nguyen@intel.com, davem@davemloft.net,
-        eric.dumazet@gmail.com, hawk@kernel.org,
-        intel-wired-lan-owner@osuosl.org, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211217062846.GA26548@kili>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmnq7Q1f2JBqe2CFoca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
+        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
+        FSZkZ9x/c5yt4JRPxeW2DUwNjE/tuhg5OCQETCTmPLTuYuTiEBLYwSjxbepqdgjnE6PEywVz
+        mboYOYGcb4wSyyawgdggDTMXfWCBKNrLKHHz7GdGCOc9o8Suvz9YQKqEBbwkft46ygaSEBE4
+        xCjRs3Qp2FxmgYNMEtdmNjGCVLEJaEnsf3EDbC6/gKLE1R+PweK8AnYS74/9A5vEIqAqMWv3
+        LnYQW1QgTOLkthaoGkGJkzOfgNVwAs05/us2WA2zgLjErSfzmSBseYntb+cwQ9z9hkPi4aJo
+        CNtFYm7PAXYIW1ji1fEtULaUxMv+NrBDJQSWMUr8mtzJBOGsB4bGrE6oScYS+5dOZgIFH7OA
+        psT6XfoQYUWJnb/nMkIs5pN497WHFRLCvBIdbUIQJcoSlx/cZYKwJSUWt3eyTWBUmoXknVlI
+        XpiF5IVZCMsWMLKsYhRLLSjOTU8tNiwwgkd3cn7uJkZwutYy28E46e0HvUOMTByMwNDnYFYS
+        4d0ye3+iEG9KYmVValF+fFFpTmrxIUZTYABPZJYSTc4HZoy8knhDE0sDEzMjYxMLQzNDJXHe
+        F/7TE4UE0hNLUrNTUwtSi2D6mDg4pRqYYo3ayxIW3D6x8FHUygV7JaP2ZjUlfzbU41/zMHna
+        xaez8/gr12yblx+3YY7B12nB/RIvtj/xckx4cPDdKz2t0+ujFvjqpCsZluRExkufiHQo/rLb
+        w7ZtWcX0ny/S753+zGZ+QOupwiFJ2ZZdRk/WiH5e8+niqyJB2Q0Lue8V7+mYM8dag9/t8fci
+        q8wvRSXbxEM7f4TG/zs88XxSc33n/bf71Z4bBEyeHleyne/6HmbBRYtjuL5r9s5Yd7E9fOKL
+        Q9smvLtZ8v7c68eNLbNu2htW993c8OF17+aCb7+zlePWuIisXB+4wCgm+rvwRc4Sr/5AuXWL
+        LR3VEi9VlfOUOwU+L/GYqLP36lTe6OzNxUosxRmJhlrMRcWJAOhHFeJgBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSnK7g1f2JBt8OSVsca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7hsUlJzMstSi/TtErgy7r85zlZwyqfictsGpgbGp3ZdjJwcEgImEjMXfWDpYuTiEBLY
+        zSjRNaePGSIhKTHt4lEgmwPIFpY4fLgYouYto8SFj+vZQWqEBbwkft46ygaSEBE4xChx+MQi
+        sEnMAoeZJB7//w02SUigVuJDyyQwm01AS2L/ixtsIDa/gKLE1R+PGUFsXgE7iffH/rGA2CwC
+        qhKzdu8C2yAqECaxc8ljJogaQYmTM5+A1XACzTn+6zZYDbOAusSfeZeYIWxxiVtP5jNB2PIS
+        29/OYZ7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZG
+        cORqae5g3L7qg94hRiYORqDvOZiVRHi3zN6fKMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJ
+        eCGB9MSS1OzU1ILUIpgsEwenVAPTHG/uxnNTpyx4Kpo0bc3MqROz9Uz2iyxdfv8wyxsltgr+
+        lbuYTi/j4p9pcivezoXhkmvVJfNOr1PGc2ymrUzbq/huRWfRmukfRW4tudPLo8XY/v3+pBeF
+        yirb5q/4ekP+kHnahO9rph7O5OZm/hGfInjgKJfuLcaJ/7Y07dk24W9haPzZpryZHH71b6Zl
+        HH9068r3YKab1/j3CL84qbI4b4LA2Wxm5Z6mzdf0Jx11Zi75HpXkZvt31sYSGz/XdYtNY68+
+        NtRIF2+aqMKv+rbt+mSzmRUPLHazS3UnHHjZHXTDTK7oxYMfX3K7tx7h53V7q+TkzL49nsvN
+        b+70f09Kve3XCLy8tWjPrtNep37NzVBiKc5INNRiLipOBAAs5fDaSwMAAA==
+X-CMS-MailID: 20211220005753epcas1p185cd04f933356e594959cf7a12aa56dc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211217062932epcas1p1b262f3dd17607f5e42b85c169729ce63
+References: <CGME20211217062932epcas1p1b262f3dd17607f5e42b85c169729ce63@epcas1p1.samsung.com>
+        <20211217062846.GA26548@kili>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Sebastian and Felipe,
 
-HEAD commit:    434ed2138994 Merge branch 'tc-action-offload'
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1722300db00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7488eea316146357
-dashboard link: https://syzkaller.appspot.com/bug?extid=4c63f36709a642f801c5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14141ca3b00000
+If Sebastian and Felipe don't have any additional opinion,
+could you please reply the review for this patch?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+And if Sebastian and Felipe agree, I'll merge it to extcon tree.
 
-skbuff: skb_over_panic: text:ffffffff88257728 len:4096 put:4096 head:ffff8880769c1400 data:ffff8880769c1400 tail:0x1000 end:0xc0 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:113!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113 net/core/skbuff.c:113
-Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 a0 82 ad 8a ff 74 24 10 ff 74 24 20 e8 13 20 c2 ff <0f> 0b e8 6c 3d 35 f8 4c 8b 64 24 18 e8 f2 9e 7c f8 48 c7 c1 40 8f
-RSP: 0018:ffffc90000d279e0 EFLAGS: 00010286
-RAX: 000000000000008b RBX: ffff88801c5b8640 RCX: 0000000000000000
-RDX: ffff888011938000 RSI: ffffffff815f21d8 RDI: fffff520001a4f2e
-RBP: ffffffff8aad8f80 R08: 000000000000008b R09: 0000000000000000
-R10: ffffffff815ebf7e R11: 0000000000000000 R12: ffffffff88257728
-R13: 0000000000001000 R14: ffffffff8aad8260 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f14858bf718 CR3: 0000000072e5c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:118 [inline]
- skb_over_panic net/core/skbuff.c:118 [inline] net/core/skbuff.c:1986
- skb_put.cold+0x24/0x24 net/core/skbuff.c:1986 net/core/skbuff.c:1986
- isotp_rcv_cf net/can/isotp.c:570 [inline]
- isotp_rcv_cf net/can/isotp.c:570 [inline] net/can/isotp.c:668
- isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668 net/can/isotp.c:668
- deliver net/can/af_can.c:574 [inline]
- deliver net/can/af_can.c:574 [inline] net/can/af_can.c:635
- can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635 net/can/af_can.c:635
- can_receive+0x31d/0x580 net/can/af_can.c:665 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5350 net/core/dev.c:5350
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5464 net/core/dev.c:5464
- process_backlog+0x2a5/0x6c0 net/core/dev.c:5796 net/core/dev.c:5796
- __napi_poll+0xaf/0x440 net/core/dev.c:6364 net/core/dev.c:6364
- napi_poll net/core/dev.c:6431 [inline]
- napi_poll net/core/dev.c:6431 [inline] net/core/dev.c:6518
- net_rx_action+0x801/0xb40 net/core/dev.c:6518 net/core/dev.c:6518
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd kernel/softirq.c:921 [inline] kernel/softirq.c:913
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164 kernel/smpboot.c:164
- kthread+0x405/0x4f0 kernel/kthread.c:327 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 076cfcb09686117c ]---
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113 net/core/skbuff.c:113
-Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 a0 82 ad 8a ff 74 24 10 ff 74 24 20 e8 13 20 c2 ff <0f> 0b e8 6c 3d 35 f8 4c 8b 64 24 18 e8 f2 9e 7c f8 48 c7 c1 40 8f
-RSP: 0018:ffffc90000d279e0 EFLAGS: 00010286
-RAX: 000000000000008b RBX: ffff88801c5b8640 RCX: 0000000000000000
-RDX: ffff888011938000 RSI: ffffffff815f21d8 RDI: fffff520001a4f2e
-RBP: ffffffff8aad8f80 R08: 000000000000008b R09: 0000000000000000
-R10: ffffffff815ebf7e R11: 0000000000000000 R12: ffffffff88257728
-R13: 0000000000001000 R14: ffffffff8aad8260 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f14858bf718 CR3: 0000000072e5c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Best Regards,
+Chanwoo Choi
+
+
+On 12/17/21 3:28 PM, Dan Carpenter wrote:
+> The extcon_get_extcon_dev() function returns error pointers on error,
+> NULL when it's a -EPROBE_DEFER defer situation, and ERR_PTR(-ENODEV)
+> when the CONFIG_EXTCON option is disabled.  This is very complicated for
+> the callers to handle and a number of them had bugs that would lead to
+> an Oops.
+> 
+> In real life, there are two things which prevented crashes.  First,
+> error pointers would only be returned if there was bug in the caller
+> where they passed a NULL "extcon_name" and none of them do that.
+> Second, only two out of the eight drivers will build when CONFIG_EXTCON
+> is disabled.
+> 
+> The normal way to write this would be to return -EPROBE_DEFER directly
+> when appropriate and return NULL when CONFIG_EXTCON is disabled.  Then
+> the error handling is simple and just looks like:
+> 
+> 	dev->edev = extcon_get_extcon_dev(acpi_dev_name(adev));
+> 	if (IS_ERR(dev->edev))
+> 		return PTR_ERR(dev->edev);
+> 
+> For the two drivers which can build with CONFIG_EXTCON disabled, then
+> extcon_get_extcon_dev() will now return NULL which is not treated as an
+> error and the probe will continue successfully.  Those two drivers are
+> "typec_fusb302" and "max8997-battery".  In the original code, the
+> typec_fusb302 driver had an 800ms hang in tcpm_get_current_limit() but
+> now that function is a no-op.  For the max8997-battery driver everything
+> should continue working as is.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> v2: return NULL when CONFIG_EXTCON is disabled
+> v3: Add a note to extcon_get_extcon_dev() to say that it may only be
+>     called from probe().
+> 
+>  drivers/extcon/extcon.c                |  4 +++-
+>  include/linux/extcon.h                 |  2 +-
+>  drivers/extcon/extcon-axp288.c         |  4 ++--
+>  drivers/power/supply/axp288_charger.c  | 17 ++++++++++-------
+>  drivers/power/supply/charger-manager.c |  7 ++-----
+>  drivers/power/supply/max8997_charger.c | 10 +++++-----
+>  drivers/usb/dwc3/drd.c                 |  9 ++-------
+>  drivers/usb/phy/phy-omap-otg.c         |  4 ++--
+>  drivers/usb/typec/tcpm/fusb302.c       |  4 ++--
+>  9 files changed, 29 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index e7a9561a826d..9eb92997f3ae 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -863,6 +863,8 @@ EXPORT_SYMBOL_GPL(extcon_set_property_capability);
+>   * @extcon_name:	the extcon name provided with extcon_dev_register()
+>   *
+>   * Return the pointer of extcon device if success or ERR_PTR(err) if fail.
+> + * NOTE: This function returns -EPROBE_DEFER so it may only be called from
+> + * probe() functions.
+>   */
+>  struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+>  {
+> @@ -876,7 +878,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+>  		if (!strcmp(sd->name, extcon_name))
+>  			goto out;
+>  	}
+> -	sd = NULL;
+> +	sd = ERR_PTR(-EPROBE_DEFER);
+>  out:
+>  	mutex_unlock(&extcon_dev_list_lock);
+>  	return sd;
+> diff --git a/include/linux/extcon.h b/include/linux/extcon.h
+> index 0c19010da77f..685401d94d39 100644
+> --- a/include/linux/extcon.h
+> +++ b/include/linux/extcon.h
+> @@ -296,7 +296,7 @@ static inline void devm_extcon_unregister_notifier_all(struct device *dev,
+>  
+>  static inline struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+>  {
+> -	return ERR_PTR(-ENODEV);
+> +	return NULL;
+>  }
+>  
+>  static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
+> diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
+> index 7c6d5857ff25..180be768c215 100644
+> --- a/drivers/extcon/extcon-axp288.c
+> +++ b/drivers/extcon/extcon-axp288.c
+> @@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
+>  		if (adev) {
+>  			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
+>  			put_device(&adev->dev);
+> -			if (!info->id_extcon)
+> -				return -EPROBE_DEFER;
+> +			if (IS_ERR(info->id_extcon))
+> +				return PTR_ERR(info->id_extcon);
+>  
+>  			dev_info(dev, "controlling USB role\n");
+>  		} else {
+> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+> index ec41f6cd3f93..4acfeb52a44e 100644
+> --- a/drivers/power/supply/axp288_charger.c
+> +++ b/drivers/power/supply/axp288_charger.c
+> @@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
+>  	info->regmap_irqc = axp20x->regmap_irqc;
+>  
+>  	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
+> -	if (info->cable.edev == NULL) {
+> -		dev_dbg(dev, "%s is not ready, probe deferred\n",
+> -			AXP288_EXTCON_DEV_NAME);
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(info->cable.edev)) {
+> +		dev_err_probe(dev, PTR_ERR(info->cable.edev),
+> +			      "extcon_get_extcon_dev(%s) failed\n",
+> +			      AXP288_EXTCON_DEV_NAME);
+> +		return PTR_ERR(info->cable.edev);
+>  	}
+>  
+>  	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
+>  		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
+> -		if (info->otg.cable == NULL) {
+> -			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(info->otg.cable)) {
+> +			dev_err_probe(dev, PTR_ERR(info->otg.cable),
+> +				      "extcon_get_extcon_dev(%s) failed\n",
+> +				      USB_HOST_EXTCON_NAME);
+> +			return PTR_ERR(info->otg.cable);
+>  		}
+>  		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
+>  	}
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+> index d67edb760c94..92db79400a6a 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
+>  	cable->nb.notifier_call = charger_extcon_notifier;
+>  
+>  	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
+> -	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
+> +	if (IS_ERR(cable->extcon_dev)) {
+>  		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
+>  			cable->extcon_name, cable->name);
+> -		if (cable->extcon_dev == NULL)
+> -			return -EPROBE_DEFER;
+> -		else
+> -			return PTR_ERR(cable->extcon_dev);
+> +		return PTR_ERR(cable->extcon_dev);
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
+> diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
+> index 25207fe2aa68..634658adf313 100644
+> --- a/drivers/power/supply/max8997_charger.c
+> +++ b/drivers/power/supply/max8997_charger.c
+> @@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_device *pdev)
+>  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+>  	}
+>  	charger->edev = extcon_get_extcon_dev("max8997-muic");
+> -	if (IS_ERR_OR_NULL(charger->edev)) {
+> -		if (!charger->edev)
+> -			return -EPROBE_DEFER;
+> -		dev_info(charger->dev, "couldn't get extcon device\n");
+> +	if (IS_ERR(charger->edev)) {
+> +		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
+> +			      "couldn't get extcon device: max8997-muic\n");
+> +		return PTR_ERR(charger->edev);
+>  	}
+>  
+> -	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
+> +	if (!IS_ERR(charger->reg)) {
+>  		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+>  		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
+>  		if (ret) {
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index d7f76835137f..a490f79131c1 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+>  	 * This device property is for kernel internal use only and
+>  	 * is expected to be set by the glue code.
+>  	 */
+> -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> -		edev = extcon_get_extcon_dev(name);
+> -		if (!edev)
+> -			return ERR_PTR(-EPROBE_DEFER);
+> -
+> -		return edev;
+> -	}
+> +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
+> +		return extcon_get_extcon_dev(name);
+>  
+>  	/*
+>  	 * Try to get an extcon device from the USB PHY controller's "port"
+> diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
+> index ee0863c6553e..6e6ef8c0bc7e 100644
+> --- a/drivers/usb/phy/phy-omap-otg.c
+> +++ b/drivers/usb/phy/phy-omap-otg.c
+> @@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  
+>  	extcon = extcon_get_extcon_dev(config->extcon);
+> -	if (!extcon)
+> -		return -EPROBE_DEFER;
+> +	if (IS_ERR(extcon))
+> +		return PTR_ERR(extcon);
+>  
+>  	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
+>  	if (!otg_dev)
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index 72f9001b0792..96c55eaf3f80 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -1708,8 +1708,8 @@ static int fusb302_probe(struct i2c_client *client,
+>  	 */
+>  	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+>  		chip->extcon = extcon_get_extcon_dev(name);
+> -		if (!chip->extcon)
+> -			return -EPROBE_DEFER;
+> +		if (IS_ERR(chip->extcon))
+> +			return PTR_ERR(chip->extcon);
+>  	}
+>  
+>  	chip->vbus = devm_regulator_get(chip->dev, "vbus");
+> 
+
 

@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24647A80F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AAA47A815
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbhLTK5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:57:48 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:52239 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229810AbhLTK5r (ORCPT
+        id S230108AbhLTK6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:58:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35846 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229810AbhLTK6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:57:47 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5BC325801A4;
-        Mon, 20 Dec 2021 05:57:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 20 Dec 2021 05:57:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=KuhQPJcPGkGOv91Y6afHIx9rUdF
-        GI8okUJ7zNSalflU=; b=nWJI7XVI5YIFchKfZ1TekjBbYfdPxHfaE23ESkVPY8F
-        ZDO4UUMfJeAeQJnK0cK5mH9coH9gRN2+Pt6BnR1jaJ6FILWZSy57bAL2EaGk3avN
-        8AAyUdUuFBKMVwUIukYI6K1H13CQUxe5kqLBG+wcn0xfmV8loTtNlgtMNGMI1ua9
-        1Tu5eRG0vPH5nN7Mwl13OohoOWBWDUO++CHkieOpoN6WXvjfpygDoB8f1J2FzL0c
-        e5Gm4Kg8tAEAwUCsCalaCW1rouQlrIolqnwYEOm3TYhgd+hVSbuRpG0NKWL08b/0
-        RDHBp6lfV6Hves8Jr8YneLCXe2rodbuxTnwg5bBvp0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=KuhQPJ
-        cPGkGOv91Y6afHIx9rUdFGI8okUJ7zNSalflU=; b=napt0aVxzC3L5ZZVEZNXGn
-        oG8Mk586SLucosFTD6AdtDnWx1LTYBoW2Hf23gDFIy2NUUtsk7Jf9N9GKydXXIpF
-        F7fnwi5wJLifVQVv4GHlloQIS1AY9/xBJ3icD/HlHTrutqFSQoarFNE0oE5kOIaQ
-        598rrCcmiHb0FeeSG7b/EfFURZySB+siy5AnuUtTgHLqHUeBxQJFULIxCbDTsAY+
-        R4M6AOQOod/tomeU8wrGzYi7m8dcAeAEWCurKoIDV738MAjfA3ftO98MqLpOiXW1
-        bTAf1EOQX1Dfh06E0LO9ACGE5klr73vwcsQISgYJx+N6dg7v6Eaz83+c89FcxbzA
-        ==
-X-ME-Sender: <xms:qmHAYVpPq8s52mpuWbreXJDrtb23RF-yaCQrDNOTyVBNknXnviJdhQ>
-    <xme:qmHAYXrBKRxtpZbSzyVQGuxjpTYlboUWERJHDe569iMYfDGnJv2g_ibZx7PY1AiHQ
-    DIWjdo4zOzN6A>
-X-ME-Received: <xmr:qmHAYSNVc6Fif7jSLeGBcm-vBEfCuu1mCJY1iv7wlzgOw8fLBbQmSxKY8QJxL6TSWhoF7ZKE3MW0ven9VB5mWI_S7LgCxd6k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtvddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:qmHAYQ4ewHehKtA_qm9PnK4f3ZKw-m9fpCGfcbydAgWeMPR_FPJR0Q>
-    <xmx:qmHAYU4k-ayhrh6yoFw8dD033gac8474E5IarGgGOkFEQd7zjnaFSw>
-    <xmx:qmHAYYglgRnaX4DE_Jrf4epwdUWpd9d1KiHoNlSiyQcb5_VOibE8Rg>
-    <xmx:qmHAYehLJ56pWSu8RP6j_9YdLy3zZ9LCtTKKXvWb1QaBXmRSbIZB4Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Dec 2021 05:57:45 -0500 (EST)
-Date:   Mon, 20 Dec 2021 11:57:44 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, clang-built-linux@googlegroups.com,
-        ulli.kroll@googlemail.com, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, amitkarwar@gmail.com,
-        nishants@marvell.com, gbhat@marvell.com, huxinming820@gmail.com,
-        kvalo@codeaurora.org, linux-wireless@vger.kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, dmitry.torokhov@gmail.com,
-        ndesaulniers@google.com, nathan@kernel.org,
-        linux-input@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Subject: Re: [PATCH 4.19 5/6] ARM: 8788/1: ftrace: remove old mcount support
-Message-ID: <YcBhqJMLdwieZa8X@kroah.com>
-References: <20211217144119.2538175-1-anders.roxell@linaro.org>
- <20211217144119.2538175-6-anders.roxell@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217144119.2538175-6-anders.roxell@linaro.org>
+        Mon, 20 Dec 2021 05:58:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C855B80E33;
+        Mon, 20 Dec 2021 10:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED81C36AE7;
+        Mon, 20 Dec 2021 10:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639997931;
+        bh=uMVbny482a4GErIaB2rNL6fXt7gYwZ5yxa8RbPh4iRw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PkIhmKQ7ZkvGfKDvV55XugE89mKzXzMOeatdjV+MRzPMd8ROPM1MmkEFpaHs7ZVRt
+         xctBSMYrrqdlrwpOhh3hGrmLtsT9XPvNzRQkG5gQgLnkj8VwaQTAQalmm9ezBss4OJ
+         fbEqcyagHQh7D1r1ifK1zWET0cMtBZVHD7HY/rmt8mhL0pPhgNGDOiY2l4FFXnmLZ1
+         xJ5lfDME0q3PWyThmwY95kjFJyr0CKFIOV/CMltA8EyRS5+BaLsEG7IAuKDXK0NC6Q
+         DJWTPNJ+wS4YrPsgs7FqR6IcbvD/KX38FIVQ79jGMSBgiaEcKWBiF8yy8kymWbxJWr
+         H6tfVdR96uHzw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mzGNV-00DGKY-7I; Mon, 20 Dec 2021 10:58:49 +0000
+Date:   Mon, 20 Dec 2021 10:58:48 +0000
+Message-ID: <87fsqnwniv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v7 0/2] PCI: hv: Hyper-V vPCI for arm64
+In-Reply-To: <1639767121-22007-1-git-send-email-sunilmut@linux.microsoft.com>
+References: <1639767121-22007-1-git-send-email-sunilmut@linux.microsoft.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sunilmut@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, sunilmut@microsoft.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 03:41:18PM +0100, Anders Roxell wrote:
-> From: Stefan Agner <stefan@agner.ch>
+On Fri, 17 Dec 2021 18:51:59 +0000,
+Sunil Muthuswamy <sunilmut@linux.microsoft.com> wrote:
 > 
-> commit d3c61619568c88d48eccd5e74b4f84faa1440652 upstream.
+> From: Sunil Muthuswamy <sunilmut@microsoft.com>
 > 
-> Commit cafa0010cd51 ("Raise the minimum required gcc version to 4.6")
-> raised the minimum GCC version to 4.6. Old mcount is only required for
-> GCC versions older than 4.4.0. Hence old mcount support can be dropped
-> too.
+> Current Hyper-V vPCI code only compiles and works for x86. There are some
+> hardcoded assumptions about the architectural IRQ chip and other arch
+> defines.
 > 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Add support for Hyper-V vPCI for arm64 by first breaking the current hard
+> coded dependency using a set of new interfaces and implementing those for
+> x86 first. That is in the first patch. The second patch adds support for
+> Hyper-V vPCI for arm64 by implementing the above mentioned interfaces. That
+> is done by introducing a Hyper-V vPCI specific MSI IRQ domain & chip for
+> allocating SPI vectors.
 
-Why is this needed for clang builds in 4.19? 
+For the series,
 
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

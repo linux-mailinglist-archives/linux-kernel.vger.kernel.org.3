@@ -2,232 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE4947AA48
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A63247AA4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 14:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbhLTNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 08:21:13 -0500
-Received: from mga12.intel.com ([192.55.52.136]:54603 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231194AbhLTNVK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 08:21:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640006470; x=1671542470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KrftgwmqGpASu9n773EB2jIrki8BrLG9a/R4i1j5A5o=;
-  b=Aw5cszvAsyRdGu8r0KJhe6mEUfTws3HOHS3yplYPYqqVlIQTjejXOHK4
-   RXWjBsAe1mpPUZmzKHhjBRUbw1X2VmNOzXTacwujnJ5Hwd8YFId+ZnZKy
-   wWtbxdxp3hfv7XB5tjbMFo2S3fvJUbnrLRnuKSfV+Wm4VztEl91nKHWA8
-   Q8JEr3x7YfIkbZ9/POXMdMAJoLc7G53/bdLirWz46WkyTWjDZQI5Sn2DJ
-   R/m1D6f7eMo4pZvfMFyUfeB3eyAi5YuEjv+q3qfW3ROcfeWgcwuIvTf41
-   kCcsQovnBhjN6j6jdpABXac0fXf1LA/zzVyyjvtMYlRNPqbT9eDfcTF8e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220174841"
+        id S232859AbhLTNXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 08:23:07 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:20267 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232745AbhLTNXG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 08:23:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640006586; x=1671542586;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=KV9UyJWGvTeGp8WSlFAg4k0LolWd6DahPykGswiywog=;
+  b=ps5SH6MOWeyvaZIdaA4zMvYRmC8iFvwpoTOBjLfKEXukfdNmQ7F2AjXy
+   jtSiWH3BN+jbiIFs4OEqG1ECk703KvfNXW33aVo9ZgwKtjzwVHGTpCPkz
+   aNfgXysoMCSy0Yw9I3qT/RJpkmugmm3lEtEuOlm7ooWtnOxt143WkfjCV
+   tASnpoLuM7XDAS+uueSBMyyVpIcvZDpijydudhd2w0eZUgRejRtjecH+7
+   kCpHEIcbmZc0BNS+/gxqxCnTUhIJrIHhOgyAl4oZx5MLEGub/eyCZnU5b
+   thfwCJ5Zj2qUVNWGgmoWWEIS9+8K3PvKFLwyTBv/xoMTsSTMp1895lMAP
+   Q==;
+IronPort-SDR: /hr+1eik5yALDQ5R2PiUwyC8k6QVWrjTJbNAk9zzrm2JaWW/hDlDenYhG4axgGmIQv+W6hXN4R
+ 4lLT8WO4zYHlw0o7IRLSnAQGEPParvfaPPaxIwxc8in8xvmYIRp99X6vypUVyZkahmtoC9Cm2p
+ 42rhUsW7H5mwxnTrxLvxjlUQjiAq1XOJqG1EZ8LtMOiGNiR0hFYQ2psF5JUPpa2SBLBgY3v0Ly
+ 4/m3SR6raqXZC3PoNTnCAHW4fQPJJRu4QC5auHR0eq2Ch9Xs704MT55chrV5aY4/AjMgf8bLaQ
+ s2gxpDG11/xPFqMbP/SqTiqX
 X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="220174841"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 05:21:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="547328990"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 20 Dec 2021 05:21:07 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzIbC-0007nK-VX; Mon, 20 Dec 2021 13:21:06 +0000
-Date:   Mon, 20 Dec 2021 21:20:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>, kraxel@redhat.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     kbuild-all@lists.01.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: Re: [PATCH] udmabuf: put dmabuf in case of get fd failed
-Message-ID: <202112202144.R9IV6eP2-lkp@intel.com>
-References: <20211220054333.3041893-1-xianting.tian@linux.alibaba.com>
+   d="scan'208";a="156102752"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Dec 2021 06:23:05 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 20 Dec 2021 06:23:05 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Mon, 20 Dec 2021 06:23:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oN+UIlehER2HfDeyAMPOx5PDbJbsv2IYSriZWC6BTo2g0wh1OWSqKnbw29TFFvOoa1hCQGf/d0d59RXNm7aQTGbEm6BXRPg1NYJPeiiUm4c8n6Cw/BaIpwIPO9xbwr+hxEg9wCY5N7NH+04GI+UC2OnYGZ3BK5yX2ru/BnGgMGcmfmaz55N1PpCCLb1mi/6PS6qpytDV5gouO7YRRT5yWHbGmqh0kJLQot/TMfSTapjzfREz+6lfN55MMZnbmwxFoc1ZWalcfT6DWXbmq2FjAu1rdd/isv1rY7QLRhn6BrOdlhztcyzmTvQlnDprgcpzuPfwA1Ji5A0sh1M0UGsxDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KV9UyJWGvTeGp8WSlFAg4k0LolWd6DahPykGswiywog=;
+ b=O8GcGDa43CO09RBYWLL35pBN5sGCjsujQttHixlaUhdk8sFNUoyshj+YItIVno+0Be1kXQ3TmnzS0ea9cgmaum8SxZTuOABOVki2YMxQvmeYO1m5viFI0pyxNEecFOtEtIkH30tTyeQZubUGqf13jzTaQOPHvulZx3brHyLZZDjUhhlJByyWTn4OMvyeBZrQz/lLWga953eXNPnyceUA6hXg1OvbMSd5Br1ALzzCwycQVD3Yqe3fvRjjD3zjXcG1KyaoUgFt8TQ83Es7SWSSKVbuWfde5+hI2SJtEMl1rS+9Tbwyq0oQign2Ltv1MZPKtbGZAjgUpuAbIctlEyO1kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KV9UyJWGvTeGp8WSlFAg4k0LolWd6DahPykGswiywog=;
+ b=fCruElRrDDTbpjYJVXAwZXD56saWm2bHrq4Y9AOSNfDHhSjL7mffJ3aBi6giMNoEOfPvwyFSOV4yYVbHjMk46+cR0tDnTjLNvqS0TqNOrmVApaYy6/8AHpfJfypKnIl1n0ep5kOAqsYbbViNWFwByDxzUeHz5u0u6+DTOKVga+k=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by SN6PR11MB3104.namprd11.prod.outlook.com (2603:10b6:805:cc::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Mon, 20 Dec
+ 2021 13:23:00 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1%9]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
+ 13:23:00 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <p.yadav@ti.com>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <zhuohao@chromium.org>, <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] mtd: core: Remove partid and partname debugfs files
+Thread-Topic: [PATCH 2/2] mtd: core: Remove partid and partname debugfs files
+Thread-Index: AQHX9aS1k6kqqdQxpESqT7d3Zxxaog==
+Date:   Mon, 20 Dec 2021 13:23:00 +0000
+Message-ID: <25999218-8985-03fc-c53d-21bd2a25d365@microchip.com>
+References: <20211217122636.474976-1-tudor.ambarus@microchip.com>
+ <20211217122636.474976-3-tudor.ambarus@microchip.com>
+ <20211220130743.jil62qbyb5lgds6p@ti.com>
+In-Reply-To: <20211220130743.jil62qbyb5lgds6p@ti.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 43f3d2b8-bb33-4ad5-d460-08d9c3bbd81b
+x-ms-traffictypediagnostic: SN6PR11MB3104:EE_
+x-microsoft-antispam-prvs: <SN6PR11MB3104B33A08F29B6DF0FEBCA6F07B9@SN6PR11MB3104.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1332;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0f9rIXbsv8O9IlFWgYJ6qSuRCh7Th60Eqj6IspmFVgD2n4zdgdSC3bo8HEBeQyUBJFTFz4E79ECVR1Xr2fIt6iQN8xQ5S4a2w5M6FNLqEghJcS0HDH9nSxUlCAl3C4Jku4J/uPUovuFb+WJ/kgxUeym9YGrT139VZpEIqxK5N0/UGeSntOpZ+pfde/5wDnYvuARqnsYObL2x1EbAgJ9Mae3JHY8MYwmJdtdwAaACYyIgB182Ir5a/1pafZ6DWXFnGe7OiwKi9o99gBpNDAvvw0/QYLpt2GWa0Jm0etYnnwL5qOGbQfMb3FFpYzKELkeLPZMhpX81mg9buwHre/+U2YcDmTGtsATZK2lLZqLHQk6/kG3zgIeQaTaZ0ozMDf7rYP9HU5lKC9z05LNLKIPbr4QHDk08BFQXiq3QoyT2MwbHO+QvI2byvaa1kDN5JGAtiaJuD8DJ3YSTQknLJCuyK7yw4OLEciaFqBIBGA2Nfbu3tfDkEBUKqoaAC6DYYJC2tUL5LIcjRO1+8AhzKVI/ogC7y8pIHwhwYT+K5EXQCz9qC/qQdKC6dPepaKCpM1MnGRZaMx6GaZm0IHXrPLMdd2q4vF2atAo14c5Iz2uXSAetV+aWhZTbbomZAQdaM/8pFm+xTf3jRgnu2jlTzDjgENOpmXB49KdHsy/kmkYElKEMDWiN11q+wlYhd3ZCmDlqkBD2fU365nVoi9P4melx64zVmkqzXUyY97Lsu+qnBALgAllATywVjue6NvqfMhadOvx+oCo8XXW+br8FbIJOvg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(71200400001)(122000001)(83380400001)(8936002)(31696002)(316002)(6486002)(53546011)(5660300002)(6916009)(38100700002)(2616005)(186003)(8676002)(508600001)(4326008)(38070700005)(26005)(36756003)(31686004)(6512007)(6506007)(91956017)(54906003)(76116006)(2906002)(66946007)(66476007)(66446008)(64756008)(86362001)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ykt0dTlQNDVWREJQZzQvOUM4SWh1S2NuTTUxY3prcWkvWW54LzBOam53a2Iw?=
+ =?utf-8?B?OE9iVUlyZ0VBTm1NNDB1MzBsRUluUlJaY1BEK2JsTDBTL2p1NUVIL0hpZkgv?=
+ =?utf-8?B?MjYrWVVPUUIyUStZek9pc3ozT0NITXQrZzhxakZ1NVdzdkhvWk1DQlJnNG9r?=
+ =?utf-8?B?eW9PS3JKTFBxWVQyT3lpTjhjNGVHUXJWRGZzWW9GOW1CMG9PMjFpNGlPS3Fp?=
+ =?utf-8?B?ZEhyb083ekQzQzFtbWpRT0M1UGNPdXhETUJUR0pPY0kyN21IczFEeG9zdUpC?=
+ =?utf-8?B?WWRueFVKcVFIQzVpU2NqQ3JDR0FHclR4cUs3Wmhlbk80aHNrWHRXNkxvSGYz?=
+ =?utf-8?B?UlBUcjFoUGdjK2M1WWxOVUdPbmd5TCtzaTRuRDBucjhCRHJxcFhiS1V1dnhE?=
+ =?utf-8?B?aC9KZ3dGZzFhK1dHL3N5UXV4aE56ODJzMjNzZjZPVnJaUEhTL2hVVGV3bUgw?=
+ =?utf-8?B?VzVGenB4VVhJL0hLeWdNUmhlVnk1c0lybnFXMnN3ank1bzBRMFkwbzAvUjA0?=
+ =?utf-8?B?NTRVN0phYndSb2JSUjVaaUNyeTV3WE50ak5XenMycXFCWXdxZDdBSUZnQkRq?=
+ =?utf-8?B?ZGxTcjlxV01jUjR2RUlpRnVESEVBMTFUcDRhRDkzZTJHUk1rMlFDZlNlS2t6?=
+ =?utf-8?B?MHJ4NWJOdmZoSGZTZDNtbGFnWWFUaHRYdjV2eEVoVCtDVDd2ZzZ0NFVHaVBH?=
+ =?utf-8?B?VlRYeXlPTjUwT0R3eGhYTkFBZlZ6b0dvMWpYR1Q0ZTVURDBXUU9mYjRKaGV0?=
+ =?utf-8?B?VVlCN0hzZnJiOUtwWGZiVE5ZclVObFdDR082MTdQcmliNmQxVThNUFJhYVBT?=
+ =?utf-8?B?Yk4zVGk2TXhhUGx4TlNTMzdwM3hMNjZuaExJTkZzZTd1TWVQSWJMbFowblNT?=
+ =?utf-8?B?TzFUK3UrS1RpRFdWTmZwTXJjVXRzTHpRYTA5RkJXNEloaDBURFNEUk4yTkRw?=
+ =?utf-8?B?SnA1T1RPRWFCMGlvc043c1VlSXFqWXF4M2ljVGxqa0FMZHVkSW93K09JdzFt?=
+ =?utf-8?B?OEp6QXc3WDZHR0ZnNkxZOEhuREx5cWo2WmpqcGpDVUFYYnI1SEtCc0s2L1RP?=
+ =?utf-8?B?SmlaM0J4VjFlNU9McUFaaVFwb3JkY1dDR2M3QjFXUlkvQUJVRW9MRUhhdURm?=
+ =?utf-8?B?ZTc4SjZMN1lkb2p0MDZXMmVjT3UxVEJLNWRrUXhsNzUxZ3EyNzNzWEpRWm16?=
+ =?utf-8?B?QmZuaWdzd212eGFUODhGMEM1a1YvMUo5STQ4Nis3d09INEY5aExKNFp6azF5?=
+ =?utf-8?B?OCtVWmRLSXVKRUFKZjRJY2t6cW80UjZBSmRocWpOV0ZGNktoQWQ5ZTZCaDNF?=
+ =?utf-8?B?bGhLYTZSVFdkcVVhc3VqVDhqQnVmclcvdHRzS1B1ekNja25BM3ZDbVJCK0ZF?=
+ =?utf-8?B?b3htRlpZT1FJRGVHbkJqUUNoWURDR2JOcEFVam5tTGREY0NwQzNxemcwT2x5?=
+ =?utf-8?B?NUpKbDNnYlBIK1V0ZFJJYkZ2UmJNK0hyOTlLc0VjbzQwQm1kdzdVc1A4T0gx?=
+ =?utf-8?B?Y1VqT0EwcG5Bb3ZYVUpMekhJMzZYSTFDREpsbVhENU5LMWFoY0RIWGFURHFt?=
+ =?utf-8?B?TXF2S2VSRVlabXJCcnpKdzhXZnQ0NjVVMzFaMHlseE9NcC91ZDlCYTZOcENv?=
+ =?utf-8?B?MEltK0tiOWxyRWNtNkxXVnY3cWxFUUZhaVJWczMvcG9kb2VvemQ4MUFhWjdL?=
+ =?utf-8?B?bjFVanB5bStkemZDZFdYQWtDOEVaaVZVeVFuZS9qUCtVZFRzZVFsSlRXRnBs?=
+ =?utf-8?B?Ti9YeDdsUzRLYk5KRnFKUDJKN05nTWl3Z2Ywa3ltOTdqWE1vdlVQZ3RoYWI3?=
+ =?utf-8?B?NVJNbnZSR3JlTk53c1FTYVdaV2R2LytyMkV3MkVncExrSGdZd2FORGJJNFQx?=
+ =?utf-8?B?N0RQY3BYUXR4aEdGYSs5TlZXSk9DeVd6WGUvdkZ3WXRaY2ZBUXhjL2psRExZ?=
+ =?utf-8?B?TVdoV0pUM0dha0xHTWs2ZWkxSUZjZGZiNEtIeHgxcU9IbHEvOGxxc2xyYlpR?=
+ =?utf-8?B?K0NNUS91cDNFdEQ5TnJQcGl6MmFEK2VGbHdjS0N5Qi8vUVA2L0xpYkx2OXFj?=
+ =?utf-8?B?ZHoxdlgrN2pUK3drYVJyRlVIQkV6NjBQUjJLaDY3akFkT2dlQjZMK2d6VGhH?=
+ =?utf-8?B?OHo4VFIzbHF3YUZJOUt6U3hBc3hJV1kxcGhDQzZkSmdtTU9pRHFRRjFEMDlN?=
+ =?utf-8?B?QWg2b1ZpUWNKdnBZTmNIbUZzamNwQkQyMW5naEk2OXdVMWc4eEFrbmpPT3Fq?=
+ =?utf-8?B?ektVekNvV25hSTdvanNYY3lwck1RPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3CA07E9FC629EE4A91F72212317EBCA9@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220054333.3041893-1-xianting.tian@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43f3d2b8-bb33-4ad5-d460-08d9c3bbd81b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2021 13:23:00.1061
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xbca9dex3e8kWOcwPsLE9lfJHV2mHRLwYqO3eULBibCj3SdS8nOapDoaeYS1pb4ae8tMLSAGM9ka6DpnI5VgUzZp1j3YiAjo7IySd9FK7zY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3104
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xianting,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc6 next-20211217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Xianting-Tian/udmabuf-put-dmabuf-in-case-of-get-fd-failed/20211220-134433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a7904a538933c525096ca2ccde1e60d0ee62c08e
-config: x86_64-randconfig-r032-20211220 (https://download.01.org/0day-ci/archive/20211220/202112202144.R9IV6eP2-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/322781a4da9de4a3057afd933108d23ca7f5282e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xianting-Tian/udmabuf-put-dmabuf-in-case-of-get-fd-failed/20211220-134433
-        git checkout 322781a4da9de4a3057afd933108d23ca7f5282e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/dma-buf/udmabuf.c: In function 'udmabuf_create':
-   drivers/dma-buf/udmabuf.c:292:13: error: invalid storage class for function 'udmabuf_ioctl_create'
-     292 | static long udmabuf_ioctl_create(struct file *filp, unsigned long arg)
-         |             ^~~~~~~~~~~~~~~~~~~~
->> drivers/dma-buf/udmabuf.c:292:1: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     292 | static long udmabuf_ioctl_create(struct file *filp, unsigned long arg)
-         | ^~~~~~
-   drivers/dma-buf/udmabuf.c:311:13: error: invalid storage class for function 'udmabuf_ioctl_create_list'
-     311 | static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:332:13: error: invalid storage class for function 'udmabuf_ioctl'
-     332 | static long udmabuf_ioctl(struct file *filp, unsigned int ioctl,
-         |             ^~~~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:353:20: error: initializer element is not constant
-     353 |  .unlocked_ioctl = udmabuf_ioctl,
-         |                    ^~~~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:353:20: note: (near initialization for 'udmabuf_fops.unlocked_ioctl')
-   drivers/dma-buf/udmabuf.c:355:20: error: initializer element is not constant
-     355 |  .compat_ioctl   = udmabuf_ioctl,
-         |                    ^~~~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:355:20: note: (near initialization for 'udmabuf_fops.compat_ioctl')
-   drivers/dma-buf/udmabuf.c:365:19: error: invalid storage class for function 'udmabuf_dev_init'
-     365 | static int __init udmabuf_dev_init(void)
-         |                   ^~~~~~~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:370:20: error: invalid storage class for function 'udmabuf_dev_exit'
-     370 | static void __exit udmabuf_dev_exit(void)
-         |                    ^~~~~~~~~~~~~~~~
-   In file included from include/linux/init.h:5,
-                    from include/linux/cred.h:12,
-                    from drivers/dma-buf/udmabuf.c:2:
-   include/linux/compiler.h:244:46: error: initializer element is not constant
-     244 |   __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)&sym;
-         |                                              ^
-   include/linux/init.h:236:2: note: in expansion of macro '__ADDRESSABLE'
-     236 |  __ADDRESSABLE(fn)
-         |  ^~~~~~~~~~~~~
-   include/linux/init.h:241:2: note: in expansion of macro '__define_initcall_stub'
-     241 |  __define_initcall_stub(__stub, fn)   \
-         |  ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/init.h:254:2: note: in expansion of macro '____define_initcall'
-     254 |  ____define_initcall(fn,     \
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/init.h:260:2: note: in expansion of macro '__unique_initcall'
-     260 |  __unique_initcall(fn, id, __sec, __initcall_id(fn))
-         |  ^~~~~~~~~~~~~~~~~
-   include/linux/init.h:262:35: note: in expansion of macro '___define_initcall'
-     262 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
-         |                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/init.h:291:30: note: in expansion of macro '__define_initcall'
-     291 | #define device_initcall(fn)  __define_initcall(fn, 6)
-         |                              ^~~~~~~~~~~~~~~~~
-   include/linux/init.h:296:24: note: in expansion of macro 'device_initcall'
-     296 | #define __initcall(fn) device_initcall(fn)
-         |                        ^~~~~~~~~~~~~~~
-   include/linux/module.h:88:24: note: in expansion of macro '__initcall'
-      88 | #define module_init(x) __initcall(x);
-         |                        ^~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:375:1: note: in expansion of macro 'module_init'
-     375 | module_init(udmabuf_dev_init)
-         | ^~~~~~~~~~~
-   In file included from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/key.h:14,
-                    from include/linux/cred.h:13,
-                    from drivers/dma-buf/udmabuf.c:2:
->> include/linux/build_bug.h:78:41: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                         ^~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ^~~~~~~~~~~~~~~
-   include/linux/init.h:246:2: note: in expansion of macro 'static_assert'
-     246 |  static_assert(__same_type(initcall_t, &fn));
-         |  ^~~~~~~~~~~~~
-   include/linux/init.h:254:2: note: in expansion of macro '____define_initcall'
-     254 |  ____define_initcall(fn,     \
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/init.h:260:2: note: in expansion of macro '__unique_initcall'
-     260 |  __unique_initcall(fn, id, __sec, __initcall_id(fn))
-         |  ^~~~~~~~~~~~~~~~~
-   include/linux/init.h:262:35: note: in expansion of macro '___define_initcall'
-     262 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
-         |                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/init.h:291:30: note: in expansion of macro '__define_initcall'
-     291 | #define device_initcall(fn)  __define_initcall(fn, 6)
-         |                              ^~~~~~~~~~~~~~~~~
-   include/linux/init.h:296:24: note: in expansion of macro 'device_initcall'
-     296 | #define __initcall(fn) device_initcall(fn)
-         |                        ^~~~~~~~~~~~~~~
-   include/linux/module.h:88:24: note: in expansion of macro '__initcall'
-      88 | #define module_init(x) __initcall(x);
-         |                        ^~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:375:1: note: in expansion of macro 'module_init'
-     375 | module_init(udmabuf_dev_init)
-         | ^~~~~~~~~~~
-   In file included from include/linux/cred.h:12,
-                    from drivers/dma-buf/udmabuf.c:2:
-   drivers/dma-buf/udmabuf.c:376:13: error: initializer element is not constant
-     376 | module_exit(udmabuf_dev_exit)
-         |             ^~~~~~~~~~~~~~~~
-   include/linux/init.h:299:50: note: in definition of macro '__exitcall'
-     299 |  static exitcall_t __exitcall_##fn __exit_call = fn
-         |                                                  ^~
-   drivers/dma-buf/udmabuf.c:376:1: note: in expansion of macro 'module_exit'
-     376 | module_exit(udmabuf_dev_exit)
-         | ^~~~~~~~~~~
-   include/linux/init.h:299:2: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     299 |  static exitcall_t __exitcall_##fn __exit_call = fn
-         |  ^~~~~~
-   include/linux/module.h:100:24: note: in expansion of macro '__exitcall'
-     100 | #define module_exit(x) __exitcall(x);
-         |                        ^~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:376:1: note: in expansion of macro 'module_exit'
-     376 | module_exit(udmabuf_dev_exit)
-         | ^~~~~~~~~~~
-   drivers/dma-buf/udmabuf.c:379:1: error: expected declaration or statement at end of input
-     379 | MODULE_LICENSE("GPL v2");
-         | ^~~~~~~~~~~~~~
-
-
-vim +292 drivers/dma-buf/udmabuf.c
-
-fbb0de79507819 Gerd Hoffmann   2018-08-27  291  
-fbb0de79507819 Gerd Hoffmann   2018-08-27 @292  static long udmabuf_ioctl_create(struct file *filp, unsigned long arg)
-fbb0de79507819 Gerd Hoffmann   2018-08-27  293  {
-fbb0de79507819 Gerd Hoffmann   2018-08-27  294  	struct udmabuf_create create;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  295  	struct udmabuf_create_list head;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  296  	struct udmabuf_create_item list;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  297  
-fbb0de79507819 Gerd Hoffmann   2018-08-27  298  	if (copy_from_user(&create, (void __user *)arg,
-33f35429fc49c0 Gerd Hoffmann   2018-09-11  299  			   sizeof(create)))
-fbb0de79507819 Gerd Hoffmann   2018-08-27  300  		return -EFAULT;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  301  
-fbb0de79507819 Gerd Hoffmann   2018-08-27  302  	head.flags  = create.flags;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  303  	head.count  = 1;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  304  	list.memfd  = create.memfd;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  305  	list.offset = create.offset;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  306  	list.size   = create.size;
-fbb0de79507819 Gerd Hoffmann   2018-08-27  307  
-c1bbed66899726 Gurchetan Singh 2019-12-02  308  	return udmabuf_create(filp->private_data, &head, &list);
-fbb0de79507819 Gerd Hoffmann   2018-08-27  309  }
-fbb0de79507819 Gerd Hoffmann   2018-08-27  310  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+T24gMTIvMjAvMjEgMzowNyBQTSwgUHJhdHl1c2ggWWFkYXYgd3JvdGU6DQo+IEVYVEVSTkFMIEVN
+QUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtu
+b3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gMTcvMTIvMjEgMDI6MjZQTSwgVHVkb3Ig
+QW1iYXJ1cyB3cm90ZToNCj4+IHBhcnRpZCBhbmQgcGFydG5hbWUgZGVidWdmcyBmaWxlIGFyZSBu
+byBsb25nZXIgdXNlZCBpbiBtdGQsIHJlbW92ZQ0KDQpzL2ZpbGUvZmlsZXMNCg0KPj4gZGVhZCBj
+b2RlLg0KPiANCj4gSG1tLCBzcGktbm9yIHdhcyB0aGUgb25seSB1c2VyPyBRdWljayBncmVwcGlu
+ZyBkb2VzIGNvbmZpcm0gdGhhdC4NCg0KWWVzLg0KDQo+IA0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6
+IFR1ZG9yIEFtYmFydXMgPHR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbT4NCj4+IC0tLQ0KPj4g
+IGRyaXZlcnMvbXRkL210ZGNvcmUuYyAgIHwgMzUgKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0NCj4+ICBpbmNsdWRlL2xpbnV4L210ZC9tdGQuaCB8ICAzIC0tLQ0KPj4gIDIgZmls
+ZXMgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDM3IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL210ZC9tdGRjb3JlLmMgYi9kcml2ZXJzL210ZC9tdGRjb3JlLmMNCj4+
+IGluZGV4IDkxODYyNjhkMzYxYi4uMTk3Nzc1NWZjOTU1IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVy
+cy9tdGQvbXRkY29yZS5jDQo+PiArKysgYi9kcml2ZXJzL210ZC9tdGRjb3JlLmMNCj4+IEBAIC0z
+MzYsNDkgKzMzNiwxNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGRldmljZV90eXBlIG10ZF9kZXZ0
+eXBlID0gew0KPj4gICAgICAgLnJlbGVhc2UgICAgICAgID0gbXRkX3JlbGVhc2UsDQo+PiAgfTsN
+Cj4+DQo+PiAtc3RhdGljIGludCBtdGRfcGFydGlkX2RlYnVnX3Nob3coc3RydWN0IHNlcV9maWxl
+ICpzLCB2b2lkICpwKQ0KPj4gLXsNCj4+IC0gICAgIHN0cnVjdCBtdGRfaW5mbyAqbXRkID0gcy0+
+cHJpdmF0ZTsNCj4+IC0NCj4+IC0gICAgIHNlcV9wcmludGYocywgIiVzXG4iLCBtdGQtPmRiZy5w
+YXJ0aWQpOw0KPj4gLQ0KPj4gLSAgICAgcmV0dXJuIDA7DQo+PiAtfQ0KPj4gLQ0KPj4gLURFRklO
+RV9TSE9XX0FUVFJJQlVURShtdGRfcGFydGlkX2RlYnVnKTsNCj4+IC0NCj4+IC1zdGF0aWMgaW50
+IG10ZF9wYXJ0bmFtZV9kZWJ1Z19zaG93KHN0cnVjdCBzZXFfZmlsZSAqcywgdm9pZCAqcCkNCj4+
+IC17DQo+PiAtICAgICBzdHJ1Y3QgbXRkX2luZm8gKm10ZCA9IHMtPnByaXZhdGU7DQo+PiAtDQo+
+PiAtICAgICBzZXFfcHJpbnRmKHMsICIlc1xuIiwgbXRkLT5kYmcucGFydG5hbWUpOw0KPj4gLQ0K
+Pj4gLSAgICAgcmV0dXJuIDA7DQo+PiAtfQ0KPj4gLQ0KPj4gLURFRklORV9TSE9XX0FUVFJJQlVU
+RShtdGRfcGFydG5hbWVfZGVidWcpOw0KPj4gLQ0KPj4gIHN0YXRpYyBzdHJ1Y3QgZGVudHJ5ICpk
+ZnNfZGlyX210ZDsNCj4+DQo+PiAgc3RhdGljIHZvaWQgbXRkX2RlYnVnZnNfcG9wdWxhdGUoc3Ry
+dWN0IG10ZF9pbmZvICptdGQpDQo+PiAgew0KPj4gLSAgICAgc3RydWN0IG10ZF9pbmZvICptYXN0
+ZXIgPSBtdGRfZ2V0X21hc3RlcihtdGQpOw0KPj4gICAgICAgc3RydWN0IGRldmljZSAqZGV2ID0g
+Jm10ZC0+ZGV2Ow0KPj4gLSAgICAgc3RydWN0IGRlbnRyeSAqcm9vdDsNCj4+DQo+PiAgICAgICBp
+ZiAoSVNfRVJSX09SX05VTEwoZGZzX2Rpcl9tdGQpKQ0KPj4gICAgICAgICAgICAgICByZXR1cm47
+DQo+Pg0KPj4gLSAgICAgcm9vdCA9IGRlYnVnZnNfY3JlYXRlX2RpcihkZXZfbmFtZShkZXYpLCBk
+ZnNfZGlyX210ZCk7DQo+PiAtICAgICBtdGQtPmRiZy5kZnNfZGlyID0gcm9vdDsNCj4+IC0NCj4+
+IC0gICAgIGlmIChtYXN0ZXItPmRiZy5wYXJ0aWQpDQo+PiAtICAgICAgICAgICAgIGRlYnVnZnNf
+Y3JlYXRlX2ZpbGUoInBhcnRpZCIsIDA0MDAsIHJvb3QsIG1hc3RlciwNCj4+IC0gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAmbXRkX3BhcnRpZF9kZWJ1Z19mb3BzKTsNCj4+IC0NCj4+
+IC0gICAgIGlmIChtYXN0ZXItPmRiZy5wYXJ0bmFtZSkNCj4+IC0gICAgICAgICAgICAgZGVidWdm
+c19jcmVhdGVfZmlsZSgicGFydG5hbWUiLCAwNDAwLCByb290LCBtYXN0ZXIsDQo+PiAtICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgJm10ZF9wYXJ0bmFtZV9kZWJ1Z19mb3BzKTsNCj4+
+ICsgICAgIG10ZC0+ZGJnLmRmc19kaXIgPSBkZWJ1Z2ZzX2NyZWF0ZV9kaXIoZGV2X25hbWUoZGV2
+KSwgZGZzX2Rpcl9tdGQpOw0KPiANCj4gV2hhdCBpcyB0aGUgcG9pbnQgb2YgaGF2aW5nIGNyZWF0
+aW5nIHRoZSBkaXJlY3RvcnkgaWYgdGhlcmUgaXMgbm90IGdvaW5nDQo+IHRvIGJlIGFueXRoaW5n
+IGluIGl0IGF0IGFsbD8gSSB0aGluayB3ZSBzaG91bGQgZHJvcCB0aGUgZW50aXJlIHRoaW5nIGlm
+DQpUaGVyZSB3aWxsIGJlIGZpbGVzIGluIGl0OiBtdGRzd2FwX3N0YXRzLCBuYW5kc2ltX3dlYXJf
+cmVwb3J0LCBkb2NnMyBmaWxlcy4NCg0KJCBnaXQgZ3JlcCBkYmcuZGZzX2RpciBkcml2ZXJzL210
+ZC8NCmRyaXZlcnMvbXRkL2RldmljZXMvZG9jZzMuYzogICAgc3RydWN0IGRlbnRyeSAqcm9vdCA9
+IGZsb29yLT5kYmcuZGZzX2RpcjsNCmRyaXZlcnMvbXRkL210ZGNvcmUuYzogIG10ZC0+ZGJnLmRm
+c19kaXIgPSByb290Ow0KZHJpdmVycy9tdGQvbXRkY29yZS5jOiAgICAgICAgICBkZWJ1Z2ZzX3Jl
+bW92ZV9yZWN1cnNpdmUobXRkLT5kYmcuZGZzX2Rpcik7DQpkcml2ZXJzL210ZC9tdGRzd2FwLmM6
+ICBzdHJ1Y3QgZGVudHJ5ICpyb290ID0gZC0+bXRkLT5kYmcuZGZzX2RpcjsNCmRyaXZlcnMvbXRk
+L25hbmQvcmF3L25hbmRzaW0uYzogc3RydWN0IGRlbnRyeSAqcm9vdCA9IG5zbXRkLT5kYmcuZGZz
+X2RpcjsNCmRyaXZlcnMvbXRkL3ViaS9kZWJ1Zy5jOiAgICAgICAgICAgICAgICBkZWJ1Z2ZzX3Jl
+bW92ZV9yZWN1cnNpdmUodWJpLT5kYmcuZGZzX2Rpcik7DQo=

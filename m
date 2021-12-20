@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0455E47ADAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D25747ADB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbhLTOxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:53:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42606 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbhLTOvL (ORCPT
+        id S235147AbhLTOx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:53:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57216 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237045AbhLTOvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:51:11 -0500
+        Mon, 20 Dec 2021 09:51:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80611611C3;
-        Mon, 20 Dec 2021 14:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDB3C36AE8;
-        Mon, 20 Dec 2021 14:51:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC01FB80EE8;
+        Mon, 20 Dec 2021 14:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF815C36AE8;
+        Mon, 20 Dec 2021 14:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011870;
-        bh=4h+g4xSZgIXa4FhHguCK+R4TFHJ4aat6ljWDBZtCnjU=;
+        s=korg; t=1640011875;
+        bh=jwHN2/ZmBVm7qZI+kBcHm1ag/+D7eHgTCbFvfHp9cZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bihOO0GjPVnZ2FbMj9Z5RR+r19nBPp4qZEVDO2NnbT2sqNzqfFlQWU+UTmZBlbSRU
-         38a/GN7GsHXMTmx+dhik94TrMOmfl39iHELw+mnt34vveZgecakXcgtduo/8fHMvNo
-         +b/JQrNNi5zpSeTZkFsfDqiPO5E9ctDZm8IAMZE0=
+        b=zukSQwO5aXC07mQ1RIq5caLCdPJXAfui8aCH7dBsW4q4meKXqZOA9NFuPUH6ClCOo
+         7SmjE2DDBCYfN/8KSq1kLqwaFHwKCIjkcmv9hnwhzuPE0yE8/AN5NAm1Dws9SKouHR
+         qROwEKTOU9RhF1UI8QB4V8tfChvx+chxi9EcAPus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,9 +33,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Douglas Gilbert <dgilbert@interlog.com>,
         George Kennedy <george.kennedy@oracle.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 89/99] scsi: scsi_debug: Dont call kcalloc() if size arg is zero
-Date:   Mon, 20 Dec 2021 15:35:02 +0100
-Message-Id: <20211220143032.398036697@linuxfoundation.org>
+Subject: [PATCH 5.10 91/99] scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
+Date:   Mon, 20 Dec 2021 15:35:04 +0100
+Message-Id: <20211220143032.460887714@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 References: <20211220143029.352940568@linuxfoundation.org>
@@ -49,86 +49,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: George Kennedy <george.kennedy@oracle.com>
 
-commit 3344b58b53a76199dae48faa396e9fc37bf86992 upstream.
+commit e0a2c28da11e2c2b963fc01d50acbf03045ac732 upstream.
 
-If the size arg to kcalloc() is zero, it returns ZERO_SIZE_PTR.  Because of
-that, for a following NULL pointer check to work on the returned pointer,
-kcalloc() must not be called with the size arg equal to zero. Return early
-without error before the kcalloc() call if size arg is zero.
+In resp_mode_select() sanity check the block descriptor len to avoid UAF.
 
-BUG: KASAN: null-ptr-deref in memcpy include/linux/fortify-string.h:191 [inline]
-BUG: KASAN: null-ptr-deref in sg_copy_buffer+0x138/0x240 lib/scatterlist.c:974
-Write of size 4 at addr 0000000000000010 by task syz-executor.1/22789
+BUG: KASAN: use-after-free in resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
+Read of size 1 at addr ffff888026670f50 by task scsicmd/15032
 
-CPU: 1 PID: 22789 Comm: syz-executor.1 Not tainted 5.15.0-syzk #1
-Hardware name: Red Hat KVM, BIOS 1.13.0-2
+CPU: 1 PID: 15032 Comm: scsicmd Not tainted 5.15.0-01d0625 #15
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:106
- __kasan_report mm/kasan/report.c:446 [inline]
- kasan_report.cold.14+0x112/0x117 mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x1a3/0x210 mm/kasan/generic.c:189
- memcpy+0x3b/0x60 mm/kasan/shadow.c:66
- memcpy include/linux/fortify-string.h:191 [inline]
- sg_copy_buffer+0x138/0x240 lib/scatterlist.c:974
- do_dout_fetch drivers/scsi/scsi_debug.c:2954 [inline]
- do_dout_fetch drivers/scsi/scsi_debug.c:2946 [inline]
- resp_verify+0x49e/0x930 drivers/scsi/scsi_debug.c:4276
- schedule_resp+0x4d8/0x1a70 drivers/scsi/scsi_debug.c:5478
- scsi_debug_queuecommand+0x8c9/0x1ec0 drivers/scsi/scsi_debug.c:7533
- scsi_dispatch_cmd drivers/scsi/scsi_lib.c:1520 [inline]
- scsi_queue_rq+0x16b0/0x2d40 drivers/scsi/scsi_lib.c:1699
- blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1639
+ <TASK>
+ dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:107
+ print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:257
+ kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:443
+ __asan_report_load1_noabort+0x14/0x20 mm/kasan/report_generic.c:306
+ resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
+ schedule_resp+0x4af/0x1a10 drivers/scsi/scsi_debug.c:5483
+ scsi_debug_queuecommand+0x8c9/0x1e70 drivers/scsi/scsi_debug.c:7537
+ scsi_queue_rq+0x16b4/0x2d10 drivers/scsi/scsi_lib.c:1521
+ blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1640
  __blk_mq_sched_dispatch_requests+0x28f/0x590 block/blk-mq-sched.c:325
  blk_mq_sched_dispatch_requests+0x105/0x190 block/blk-mq-sched.c:358
- __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1761
- __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1838
+ __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1762
+ __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1839
  blk_mq_run_hw_queue+0x18d/0x350 block/blk-mq.c:1891
  blk_mq_sched_insert_request+0x3db/0x4e0 block/blk-mq-sched.c:474
- blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:62
- blk_execute_rq+0xdb/0x360 block/blk-exec.c:102
- sg_scsi_ioctl drivers/scsi/scsi_ioctl.c:621 [inline]
- scsi_ioctl+0x8bb/0x15c0 drivers/scsi/scsi_ioctl.c:930
- sg_ioctl_common+0x172d/0x2710 drivers/scsi/sg.c:1112
- sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1165
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+ blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:63
+ sg_common_write.isra.18+0xeb3/0x2000 drivers/scsi/sg.c:837
+ sg_new_write.isra.19+0x570/0x8c0 drivers/scsi/sg.c:775
+ sg_ioctl_common+0x14d6/0x2710 drivers/scsi/sg.c:941
+ sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1166
+ __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:52
+ do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:50
+ entry_SYSCALL_64_after_hwframe+0x44/0xae arch/x86/entry/entry_64.S:113
 
-Link: https://lore.kernel.org/r/1636056397-13151-1-git-send-email-george.kennedy@oracle.com
+Link: https://lore.kernel.org/r/1637262208-28850-1-git-send-email-george.kennedy@oracle.com
 Reported-by: syzkaller <syzkaller@googlegroups.com>
 Acked-by: Douglas Gilbert <dgilbert@interlog.com>
 Signed-off-by: George Kennedy <george.kennedy@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_debug.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/scsi_debug.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
-@@ -4238,6 +4238,8 @@ static int resp_verify(struct scsi_cmnd
- 		mk_sense_invalid_opcode(scp);
+@@ -2501,11 +2501,11 @@ static int resp_mode_select(struct scsi_
+ 			    __func__, param_len, res);
+ 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
+ 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
+-	if (md_len > 2) {
++	off = bd_len + (mselect6 ? 4 : 8);
++	if (md_len > 2 || off >= res) {
+ 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
  		return check_condition_result;
  	}
-+	if (vnum == 0)
-+		return 0;	/* not an error */
- 	a_num = is_bytchk3 ? 1 : vnum;
- 	/* Treat following check like one for read (i.e. no write) access */
- 	ret = check_device_access_params(scp, lba, a_num, false);
-@@ -4301,6 +4303,8 @@ static int resp_report_zones(struct scsi
- 	}
- 	zs_lba = get_unaligned_be64(cmd + 2);
- 	alloc_len = get_unaligned_be32(cmd + 10);
-+	if (alloc_len == 0)
-+		return 0;	/* not an error */
- 	rep_opts = cmd[14] & 0x3f;
- 	partial = cmd[14] & 0x80;
- 
+-	off = bd_len + (mselect6 ? 4 : 8);
+ 	mpage = arr[off] & 0x3f;
+ 	ps = !!(arr[off] & 0x80);
+ 	if (ps) {
 
 

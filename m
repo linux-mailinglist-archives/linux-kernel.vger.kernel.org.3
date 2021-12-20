@@ -2,119 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8CA47A78F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C4B47A7DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhLTKFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:05:40 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:46984 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLTKFj (ORCPT
+        id S229768AbhLTKpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:45:42 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:14097 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhLTKpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:05:39 -0500
-Date:   Mon, 20 Dec 2021 11:05:36 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639994737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eb4FlXy5iNBTsYxMb6HKNk2awrPzuqjLQBf44LyIGYI=;
-        b=KCVR/kX4O48pNJ9g5bDGGNvupM9+voewbhLhngVZOMgyj6XbtGV+BN0PdhEXBl3kiRsrRo
-        wfhu8k+WZUQ6U4qugn9I2zxjpIKsro8XSphbroBTPY30LzQRBN11Q4JHOYSyG9C2jVSP9e
-        txPAo2ExiyYCHkTKxINyGQt5TYvKCKgkb02Zyq2kiB0ZI8vAOcPeImeZsLh7t8HHpbfBM4
-        JhSs8pHlFTVIvsti6n2bBUxW1M3lWBQDjoa1jcji1JWE+6iQh+1aFjaN4/QRK3C24BjQdg
-        Up0KOkEazoSPmyyhXMXh7uH3Lj+eKAZCZ6pFWL9BbRGvTOpean1QRzuOAEUCXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639994737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eb4FlXy5iNBTsYxMb6HKNk2awrPzuqjLQBf44LyIGYI=;
-        b=Pq6d57tihbT1nHZysmj5FVz84TEDFd6zd+iFGDcbzWcMtgrJpSNmmiXTOEQD1C5mAdCHZ9
-        SO/eSs9jy2hkwjAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3] blktrace: switch trace spinlock to a raw spinlock
-Message-ID: <YcBVcOkWumdpjtvI@linutronix.de>
-References: <20211217141656.8720-1-wander@redhat.com>
+        Mon, 20 Dec 2021 05:45:41 -0500
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211220104538epoutp0492419f6417decc5a38298fd5ee586a7d~CcLVonWv30883408834epoutp04P
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 10:45:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211220104538epoutp0492419f6417decc5a38298fd5ee586a7d~CcLVonWv30883408834epoutp04P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639997138;
+        bh=GHjPuRlN7lgYIOLxcLZS27/0oT5FoCuTmReZeO3YNto=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=pjYwEE/Ms/ut89btY3eziHWdaP59reSXZABm9Y5/3NAEIKS3BiseSuZjWtWo/Atnb
+         0g2sxfjXjonbnvHqQNRzFtrxP0z1f+ZTLVVCtU/iU8O74X/FraQbjLoBk5ZOZPrwij
+         qIt3cP001ICDibTolk7sRRiOTxU9QP8x2ChblFV4=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20211220104538epcas5p4cc756255b82de510b3d22f6933bad442~CcLVOtvfX1980019800epcas5p4K;
+        Mon, 20 Dec 2021 10:45:38 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        40.9C.06423.2DE50C16; Mon, 20 Dec 2021 19:45:38 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7~CbvmNJSEp2921429214epcas5p3W;
+        Mon, 20 Dec 2021 10:13:52 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211220101352epsmtrp26844d4a4b0b24f752bf589f58a696ba0~CbvmM31mq2927729277epsmtrp2i;
+        Mon, 20 Dec 2021 10:13:52 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-eb-61c05ed2b5d1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4A.07.08738.06750C16; Mon, 20 Dec 2021 19:13:52 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.44]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211220101351epsmtip10b77e35d320f460d0aee0cdca7202ccd~Cbvk52S5U2180221802epsmtip18;
+        Mon, 20 Dec 2021 10:13:50 +0000 (GMT)
+From:   Vishal Goel <vishal.goel@samsung.com>
+To:     casey@schaufler-ca.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     a.sahrawat@samsung.com, v.narang@samsung.com,
+        Vishal Goel <vishal.goel@samsung.com>
+Subject: [PATCH 1/1] Smack:- Fix the issue of wrong info printed in ptrace
+ error logs
+Date:   Mon, 20 Dec 2021 15:43:18 +0530
+Message-Id: <20211220101318.3538824-1-vishal.goel@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211217141656.8720-1-wander@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsWy7bCmuu6luAOJBjcfsFtc3J1qcW/bLzaL
+        y7vmsFl86HnEZnHo5FxGi3W3TzM6sHn0bVnF6HF0/yI2j8+b5AKYo7hsUlJzMstSi/TtErgy
+        7q38x1hwxqHi+YaJLA2Me427GDk5JARMJNbe38jaxcjFISSwm1Hi07HFjBDOJ0aJj1MbmCGc
+        z4wSs+ZNZIVp+fh0NlTLLkaJLX3vmSCcL4wSZ3/+YwSpYhPQluidd5cJxBYRSJT48GQHO4jN
+        LBAp8eTgOaA4B4ewQLjE5ouWIGEWAVWJKf0X2UBsXgE7ib/tq9ghlslLzLz0nR0iLihxcuYT
+        Fogx8hLNW2eDXSchsI1dYsW074wQDS4Sz74fhGoWlnh1fAuULSXx+d1eNoiGdkaJCbN+M0Mk
+        JgBd/VYSwraXeHJxISvIccwCmhLrd+lDhGUlpp5axwSxmE+i9/cTJog4r8SOeTC2qsTUSd1Q
+        u6QlDt84wwJhe0i8X9YDDjkhgViJza0dTBMY5Wch+WcWkn9mIWxewMi8ilEytaA4Nz212LTA
+        MC+1XK84Mbe4NC9dLzk/dxMjOHVoee5gvPvgg94hRiYOxkOMEhzMSiK8W2bvTxTiTUmsrEot
+        yo8vKs1JLT7EKM3BoiTOezp9Q6KQQHpiSWp2ampBahFMlomDU6qBidOnJDNGV+JhwM4lz9Y6
+        u5/qPnsmyfT0o9ZHevwW18W6/f28lRevX63Dt5vfOH4V23TVBXbMK1fn7BW9HbFk/sbCecwc
+        Qvv1lpyftk5JpV1t1X3xkJcuqc2Xbu28ueg9Q/nT6q4NDdW7Ndtb++S8zv5iSnbJT3e/e+1j
+        zZxDquavVBOMV1aZ/5mhGf9B+7pt5uYOPhGNyR1BF56ZfXE+PU/Sz8bIbsnl/MVa0TO0PfS4
+        dq/e/5gl4PrexdyzVLvi/628ru96OsSGKTo5wd5oTUxumyVHxaEl0k/uvyo4fedy/s0Aux0L
+        nttK3zrt6nghtuTMaquLtVGvLMLNOW0/el37tepwR7i3w4332zzSlFiKMxINtZiLihMBua4J
+        IowDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHLMWRmVeSWpSXmKPExsWy7bCSnG5C+IFEg1VfhSwu7k61uLftF5vF
+        5V1z2Cw+9Dxiszh0ci6jxbrbpxkd2Dz6tqxi9Di6fxGbx+dNcgHMUVw2Kak5mWWpRfp2CVwZ
+        91b+Yyw441DxfMNElgbGvcZdjJwcEgImEh+fzmbtYuTiEBLYwShxYv0bFoiEtMSSzjfsELaw
+        xMp/z8FsIYFPjBKLrnOC2GwC2hK98+4ygdgiAskSu5unM4LYzALREj3PV4HFhQVCJS5u3gXW
+        yyKgKjGl/yIbiM0rYCfxt30V1Hx5iZmXvrNDxAUlTs58wgIxR16ieets5gmMfLOQpGYhSS1g
+        ZFrFKJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iREchFpaOxj3rPqgd4iRiYPxEKMEB7OS
+        CO+W2fsThXhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamCS
+        Obho3pMQr8JeaYYGZc/iGm4dxZj+TLaNzMcWakXOclE0tp6RfyGtvyD/ldzUI4w7qgUXPLG6
+        cjsureR2SdLB0Ktf/G+ILNJZzdy7/czThi7ZR4E3X3tM69s4KfhD08M9ffptfd/F1GZ/17g4
+        cZPIhh2rPxdNkmy+5dHx3e3y0tnbXxXVmnKsPx3eenROLJvRgeQZAidWVsyY46SQ7MjZf3Pl
+        04qao8ezNPt2Wmk895feekd9C2vQ/SMdZ3kkDreuXzo5dn3H3H1t8xskU4xUTQ+Uegdtcf+S
+        xhHWpFeX9JUlZkKV/OHYiTMXTPVWmcUSeMcvNlHfzi9TYrXd4oXcG3X+9l9xWuBX3dOY8l2J
+        pTgj0VCLuag4EQCx6dMYsQIAAA==
+X-CMS-MailID: 20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7
+References: <CGME20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7@epcas5p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-17 11:16:56 [-0300], Wander Lairson Costa wrote:
+Currently tracer process info is printed in object field in
+smack error log for ptrace check which is wrong.
+Object process should print the tracee process info.
+Tracee info is not printed in the smack error logs.
+So it is not possible to debug the ptrace smack issues.
 
-Assuming neither Steven nor Jens object,
+Now changes has been done to print both tracer and tracee
+process info in smack error logs for ptrace scenarios
 
-> TRACE_EVENT disables preemption before calling the callback. Because of
-> that blktrace triggers the following bug under PREEMPT_RT:
+Old logs:-
+[  378.098330] audit: type=1400 audit(1637212273.300:2): lsm=SMACK fn=smack_ptrace_access_check action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= pid=9397 comm="tst_pt" opid=9397 ocomm="tst_pt"
+[  520.261605] audit: type=1400 audit(1637212415.464:3): lsm=SMACK fn=smack_ptrace_traceme action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= pid=12685 comm="tst_pt_me" opid=12563 ocomm="bash"
+[ 1445.259319] audit: type=1400 audit(1637213340.460:5): lsm=SMACK fn=smack_bprm_set_creds action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= pid=1778 comm="tst_bprm" opid=1776 ocomm="tst_bprm"
 
-The tracepoint is invoked with disabled preemption.
+New logs:-
+[  378.098330] audit: type=1400 audit(1637212273.300:2): lsm=SMACK fn=smack_ptrace_access_check action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= tracer-pid=5189 tracer-comm="tst_pt" pid=5189 comm="tst_pt" tracee-pid=962 tracee-comm="test_tracee"
+[  520.261605] audit: type=1400 audit(1637212415.464:3): lsm=SMACK fn=smack_ptrace_traceme action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= tracer-pid=6161 tracer-comm="bash" pid=6310 comm="tst_pt_me" tracee-pid=6310 tracee-comm="tst_pt_me"
+[ 1445.259319] audit: type=1400 audit(1637213340.460:5): lsm=SMACK fn=smack_bprm_set_creds action=denied subject="Tracer_lbl" object="Tracee_lbl" requested= tracer-pid=6435 tracer-comm="tst_bprm" pid=6436 comm="tst_bprm" tracee-pid=6436 tracee-comm="tst_bprm"
 
->  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:35
->  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 119, name: kworker/u2:2
->  5 locks held by kworker/u2:2/119:
->   #0: ffff8c2e4a88f538 ((wq_completion)xfs-cil/dm-0){+.+.}-{0:0}, at: process_one_work+0x200/0x450
->   #1: ffffab3840ac7e68 ((work_completion)(&cil->xc_push_work)){+.+.}-{0:0}, at: process_one_work+0x200/0x450
->   #2: ffff8c2e4a887128 (&cil->xc_ctx_lock){++++}-{3:3}, at: xlog_cil_push_work+0xb7/0x670 [xfs]
->   #3: ffffffffa6a63780 (rcu_read_lock){....}-{1:2}, at: blk_add_trace_bio+0x0/0x1f0
->   #4: ffffffffa6610620 (running_trace_lock){+.+.}-{2:2}, at: __blk_add_trace+0x3ef/0x480
->  Preemption disabled at:
->  [<ffffffffa4d35c05>] migrate_enable+0x45/0x140
->  CPU: 0 PID: 119 Comm: kworker/u2:2 Kdump: loaded Not tainted 5.14.0-25.rt21.25.light.el9.x86_64+debug #1
->  Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
->  Workqueue: xfs-cil/dm-0 xlog_cil_push_work [xfs]
->  Call Trace:
->   ? migrate_enable+0x45/0x140
->   dump_stack_lvl+0x57/0x7d
->   ___might_sleep.cold+0xe3/0xf7
->   rt_spin_lock+0x3a/0xd0
->   ? __blk_add_trace+0x3ef/0x480
->   __blk_add_trace+0x3ef/0x480
->   blk_add_trace_bio+0x18d/0x1f0
->   trace_block_bio_queue+0xb5/0x150
->   submit_bio_checks+0x1f0/0x520
->   ? sched_clock_cpu+0xb/0x100
->   submit_bio_noacct+0x30/0x1d0
->   ? bio_associate_blkg+0x66/0x190
->   xlog_cil_push_work+0x1b6/0x670 [xfs]
->   ? register_lock_class+0x43/0x4f0
->   ? xfs_swap_extents+0x5f0/0x5f0 [xfs]
->   process_one_work+0x275/0x450
->   ? process_one_work+0x200/0x450
->   worker_thread+0x55/0x3c0
->   ? process_one_work+0x450/0x450
->   kthread+0x188/0x1a0
->   ? set_kthread_struct+0x40/0x40
->   ret_from_fork+0x22/0x30
+Signed-off-by: Vishal Goel <vishal.goel@samsung.com>
+---
+ include/linux/lsm_audit.h     |  1 +
+ security/lsm_audit.c          | 15 +++++++++++++++
+ security/smack/smack.h        | 19 +++++++++++++++++++
+ security/smack/smack_access.c | 16 ++++++++++++++++
+ security/smack/smack_lsm.c    | 33 ++++++++++++++++++++++-----------
+ 5 files changed, 73 insertions(+), 11 deletions(-)
 
-The above fills 90% of my screen with _no_ additional information. What
-about:
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 17d02eda9..6d752ea16 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -76,6 +76,7 @@ struct common_audit_data {
+ #define LSM_AUDIT_DATA_IBENDPORT 14
+ #define LSM_AUDIT_DATA_LOCKDOWN 15
+ #define LSM_AUDIT_DATA_NOTIFICATION 16
++#define LSM_AUDIT_DATA_PTRACE   17
+ 	union 	{
+ 		struct path path;
+ 		struct dentry *dentry;
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 1897cbf6f..069e0282c 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -318,6 +318,21 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		}
+ 		break;
+ 	}
++	case LSM_AUDIT_DATA_PTRACE: {
++		struct task_struct *tsk = a->u.tsk;
++		if (tsk) {
++			pid_t pid = task_tgid_nr(tsk);
++
++			if (pid) {
++				char comm[sizeof(tsk->comm)];
++
++				audit_log_format(ab, " tracee-pid=%d tracee-comm=", pid);
++				audit_log_untrustedstring(ab,
++					memcpy(comm, tsk->comm, sizeof(comm)));
++			}
++		}
++		break;
++	}
+ 	case LSM_AUDIT_DATA_NET:
+ 		if (a->u.net->sk) {
+ 			const struct sock *sk = a->u.net->sk;
+diff --git a/security/smack/smack.h b/security/smack/smack.h
+index 99c342259..901228205 100644
+--- a/security/smack/smack.h
++++ b/security/smack/smack.h
+@@ -266,6 +266,7 @@ struct smack_audit_data {
+ 	char *object;
+ 	char *request;
+ 	int result;
++	struct task_struct *tracer_tsk;
+ };
+ 
+ /*
+@@ -497,6 +498,16 @@ static inline void smk_ad_setfield_u_net_sk(struct smk_audit_info *a,
+ {
+ 	a->a.u.net->sk = sk;
+ }
++static inline void smk_ad_setfield_u_tracer(struct smk_audit_info *a,
++                                        struct task_struct *t)
++{
++       a->a.smack_audit_data->tracer_tsk = t;
++}
++static inline void smk_ad_setfield_u_tracee(struct smk_audit_info *a,
++                                        struct task_struct *t)
++{
++       a->a.u.tsk = t;
++}
+ 
+ #else /* no AUDIT */
+ 
+@@ -524,6 +535,14 @@ static inline void smk_ad_setfield_u_net_sk(struct smk_audit_info *a,
+ 					    struct sock *sk)
+ {
+ }
++static inline void smk_ad_setfield_u_tracer(struct smk_audit_info *a,
++						struct task_struct *t)
++{
++}
++static inline void smk_ad_setfield_u_tracee(struct smk_audit_info *a,
++						struct task_struct *t)
++{
++}
+ #endif
+ 
+ #endif  /* _SECURITY_SMACK_H */
+diff --git a/security/smack/smack_access.c b/security/smack/smack_access.c
+index d2186e275..f39e3ac92 100644
+--- a/security/smack/smack_access.c
++++ b/security/smack/smack_access.c
+@@ -323,6 +323,22 @@ static void smack_log_callback(struct audit_buffer *ab, void *a)
+ 		audit_log_format(ab, " labels_differ");
+ 	else
+ 		audit_log_format(ab, " requested=%s", sad->request);
++
++        if (ad->type == LSM_AUDIT_DATA_PTRACE) {
++                struct task_struct *tsk = sad->tracer_tsk;
++
++                if (tsk) {
++                        pid_t pid = task_tgid_nr(tsk);
++
++                        if (pid) {
++                                char comm[sizeof(tsk->comm)];
++
++                                audit_log_format(ab, " tracer-pid=%d tracer-comm=", pid);
++                                audit_log_untrustedstring(ab,
++                                        memcpy(comm, tsk->comm, sizeof(comm)));
++                        }
++                }
++	}
+ }
+ 
+ /**
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index efd35b07c..47e8a9461 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -416,20 +416,13 @@ static inline unsigned int smk_ptrace_mode(unsigned int mode)
+  */
+ static int smk_ptrace_rule_check(struct task_struct *tracer,
+ 				 struct smack_known *tracee_known,
+-				 unsigned int mode, const char *func)
++				 unsigned int mode, struct smk_audit_info *saip)
+ {
+ 	int rc;
+-	struct smk_audit_info ad, *saip = NULL;
+ 	struct task_smack *tsp;
+ 	struct smack_known *tracer_known;
+ 	const struct cred *tracercred;
+ 
+-	if ((mode & PTRACE_MODE_NOAUDIT) == 0) {
+-		smk_ad_init(&ad, func, LSM_AUDIT_DATA_TASK);
+-		smk_ad_setfield_u_tsk(&ad, tracer);
+-		saip = &ad;
+-	}
+-
+ 	rcu_read_lock();
+ 	tracercred = __task_cred(tracer);
+ 	tsp = smack_cred(tracercred);
+@@ -480,10 +473,17 @@ static int smk_ptrace_rule_check(struct task_struct *tracer,
+ static int smack_ptrace_access_check(struct task_struct *ctp, unsigned int mode)
+ {
+ 	struct smack_known *skp;
++	struct smk_audit_info ad, *saip = NULL;
+ 
+ 	skp = smk_of_task_struct_obj(ctp);
++	if ((mode & PTRACE_MODE_NOAUDIT) == 0) {
++		smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_PTRACE);
++		smk_ad_setfield_u_tracer(&ad, current);
++		smk_ad_setfield_u_tracee(&ad, ctp);
++		saip = &ad;
++	}
+ 
+-	return smk_ptrace_rule_check(current, skp, mode, __func__);
++	return smk_ptrace_rule_check(current, skp, mode, saip);
+ }
+ 
+ /**
+@@ -498,10 +498,15 @@ static int smack_ptrace_traceme(struct task_struct *ptp)
+ {
+ 	int rc;
+ 	struct smack_known *skp;
++	struct smk_audit_info ad, *saip = NULL;
+ 
+ 	skp = smk_of_task(smack_cred(current_cred()));
++	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_PTRACE);
++	smk_ad_setfield_u_tracer(&ad, ptp);
++	smk_ad_setfield_u_tracee(&ad, current);
++	saip = &ad;
+ 
+-	rc = smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, __func__);
++	rc = smk_ptrace_rule_check(ptp, skp, PTRACE_MODE_ATTACH, saip);
+ 	return rc;
+ }
+ 
+@@ -897,15 +902,21 @@ static int smack_bprm_creds_for_exec(struct linux_binprm *bprm)
+ 
+ 	if (bprm->unsafe & LSM_UNSAFE_PTRACE) {
+ 		struct task_struct *tracer;
++		struct smk_audit_info ad, *saip = NULL;
+ 		rc = 0;
+ 
++		smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_PTRACE);
++		smk_ad_setfield_u_tracee(&ad, current);
++		saip = &ad;
++
+ 		rcu_read_lock();
+ 		tracer = ptrace_parent(current);
++		smk_ad_setfield_u_tracer(&ad, tracer);
+ 		if (likely(tracer != NULL))
+ 			rc = smk_ptrace_rule_check(tracer,
+ 						   isp->smk_task,
+ 						   PTRACE_MODE_ATTACH,
+-						   __func__);
++						   saip);
+ 		rcu_read_unlock();
+ 
+ 		if (rc != 0)
+-- 
+2.17.1
 
-   The running_trace_lock protects running_trace_list and is acquired
-   within the tracepoint which implies disabled preemption. The spinlock_t
-   typed lock can not be acquired with disabled preemption on PREEMPT_RT
-   because it becomes a sleeping lock.
-   The runtime of the tracepoint depends on the number of entries in
-   running_trace_list and has no limit. The blk-tracer is considered debug
-   code and higher latencies here are okay.
-   
-   Make running_trace_lock a raw_spinlock_t
-
-> To avoid this bug, we switch the trace lock to a raw spinlock.
-
-Basically I want to give rationale _why_ changing a lock to
-raw_spinlock_t _here_ is okay. I want to avoid that people slap a
-s/spinlock_t/raw_spinlock_t/ each time they see warning of this kind.
-
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-
-Sebastian

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 900A047AC42
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF3347AD73
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbhLTOmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbhLTOlO (ORCPT
+        id S236491AbhLTOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:52:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41132 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234933AbhLTOsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:41:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857D6C061D60;
-        Mon, 20 Dec 2021 06:40:46 -0800 (PST)
+        Mon, 20 Dec 2021 09:48:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D81D2CE1095;
-        Mon, 20 Dec 2021 14:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9573C36AE7;
-        Mon, 20 Dec 2021 14:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C52611B9;
+        Mon, 20 Dec 2021 14:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285FFC36AE7;
+        Mon, 20 Dec 2021 14:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011243;
-        bh=8GZUxbKs2oVAziEpKLCZHOFTP7mkuVlMcXbg9bnpeYI=;
+        s=korg; t=1640011730;
+        bh=I1A+h4ziB4zi/ZCYy64e12F78YSOdyopZYc6A40Dmd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RRjQwVTZ3/NXF5HiniVfYQnbyvd4h9myVAUvjmDmW9POGzZgQLCa73ykoBt/BbD25
-         613/Fc2NXW5tlodCp/gqkN2/f/940SKc+CViSumW0NfAvGYwioWgZhW2zGPs4hW0Ya
-         ZlkPHQppCl8szWc9r8uZ0c1Rph712jy9jW4yjMnk=
+        b=lZIFl3wSVEMDC5Ci3uULnT6aab31IVZychl7Y0cSR7arX17RLPBfXUsB86Ri+DeWN
+         wUon/SfBfeeTBiv+Zd/lJhQ4ML8hUnK8aze+Vb3KVFN7KKzp6m0yvobrc7XniOoB4j
+         E1ZHSJJHsY1zlIXWbQETV5F1eAIQOdCGVSGShjjI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 01/56] stable: clamp SUBLEVEL in 4.19
+        stable@vger.kernel.org, Alex Bee <knaerzche@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 21/99] arm64: dts: rockchip: fix audio-supply for Rock Pi 4
 Date:   Mon, 20 Dec 2021 15:33:54 +0100
-Message-Id: <20211220143023.499990463@linuxfoundation.org>
+Message-Id: <20211220143030.071786217@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
-References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,44 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Levin <sashal@kernel.org>
+From: Alex Bee <knaerzche@gmail.com>
 
-In a few months, SUBLEVEL will overflow, and some userspace may start
-treating 4.19.256 as 4.20. While out of tree modules have different ways
-of extracting the version number (and we're generally ok with breaking
-them), we do care about breaking userspace and it would appear that this
-overflow might do just that.
+[ Upstream commit 8240e87f16d17a9592c9d67857a3dcdbcb98f10d ]
 
-Our rules around userspace ABI in the stable kernel are pretty simple:
-we don't break it. Thus, while userspace may be checking major/minor, it
-shouldn't be doing anything with sublevel.
+As stated in the schematics [1] and [2] P5 the APIO5 domain is supplied
+by RK808-D Buck4, which in our case vcc1v8_codec - i.e. a 1.8 V regulator.
 
-This patch applies a big band-aid to the 4.19 kernel in the form of
-clamping the sublevel to 255.
+Currently only white noise comes from the ES8316's output, which - for
+whatever reason - came up only after the the correct switch from i2s0_8ch_bus
+to i2s0_2ch_bus for i2s0's pinctrl was done.
 
-The clamp is done for the purpose of LINUX_VERSION_CODE only, and
-extracting the version number from the Makefile or "make kernelversion"
-will continue to work as intended.
+Fix this by setting the correct regulator for audio-supply.
 
-We might need to do it later in newer trees, but maybe we'll have a
-better solution by then, so I'm ignoring that problem for now.
+[1] https://dl.radxa.com/rockpi4/docs/hw/rockpi4/rockpi4_v13_sch_20181112.pdf
+[2] https://dl.radxa.com/rockpi4/docs/hw/rockpi4/rockpi_4c_v12_sch_20200620.pdf
 
+Fixes: 1b5715c602fd ("arm64: dts: rockchip: add ROCK Pi 4 DTS support")
+Signed-off-by: Alex Bee <knaerzche@gmail.com>
+Link: https://lore.kernel.org/r/20211027143726.165809-1-knaerzche@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Makefile |    2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -1158,7 +1158,7 @@ endef
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+index 678a336010bf8..f121203081b97 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+@@ -459,7 +459,7 @@ &io_domains {
+ 	status = "okay";
  
- define filechk_version.h
- 	(echo \#define LINUX_VERSION_CODE $(shell                         \
--	expr $(VERSION) \* 65536 + 0$(PATCHLEVEL) \* 256 + 0$(SUBLEVEL)); \
-+	expr $(VERSION) \* 65536 + 0$(PATCHLEVEL) \* 256 + 255); \
- 	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))';)
- endef
- 
+ 	bt656-supply = <&vcc_3v0>;
+-	audio-supply = <&vcc_3v0>;
++	audio-supply = <&vcc1v8_codec>;
+ 	sdmmc-supply = <&vcc_sdio>;
+ 	gpio1830-supply = <&vcc_3v0>;
+ };
+-- 
+2.33.0
+
 
 

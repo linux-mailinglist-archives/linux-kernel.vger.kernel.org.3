@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE9347AD18
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE0147AE23
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236479AbhLTOtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236686AbhLTOrO (ORCPT
+        id S237280AbhLTO6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:58:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46558 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236543AbhLTOzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:47:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2096AC08EA3F;
-        Mon, 20 Dec 2021 06:43:50 -0800 (PST)
+        Mon, 20 Dec 2021 09:55:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B0C611AA;
-        Mon, 20 Dec 2021 14:43:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A1AC36AF0;
-        Mon, 20 Dec 2021 14:43:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CA93611A1;
+        Mon, 20 Dec 2021 14:55:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E825C36AE9;
+        Mon, 20 Dec 2021 14:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011429;
-        bh=nQodzaySB3e69utxvHFvdIqyYOS9x+WOF1zzhX5vv38=;
+        s=korg; t=1640012151;
+        bh=99w1peyaGwykk9PeJn/ROJuienI8h3lu0SZaw6T7AUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VMvc8m3r6y3DY0QrGwxYUd9BGqw7c9Prz3a11OFkqEOK4RAtN7v/PK8aru6A0euub
-         BykVskWMA5G/DuhJq5FoBatR+54kusovK3fQiaYQmdMIhJXRXFvXVTY/RZve2a/XyA
-         uC+DCpvMsTs/vC1fnNQuN7uo6QOv+J29ltrg88t4=
+        b=dA9hpBzs2n6ZVrs0aHzaD15LyFzE06jB4T2/p9MzTugU9KLjYZqDG8mbMIZKp9IQU
+         3qbBQD6ZLNbnsZdvSgRtmg+nw6GsCKq05prxJxkJqMhdJewQo5gkXcU5KaBrcEWjZe
+         od/zpeXVpvJXQ7M7XSoRf8iqpm10BskGicp7gCHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jie2x Zhou <jie2x.zhou@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Robert Schlabbach <robert_s@gmx.net>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 18/71] selftests: net: Correct ping6 expected rc from 2 to 1
+Subject: [PATCH 5.15 097/177] ixgbe: Document how to enable NBASE-T support
 Date:   Mon, 20 Dec 2021 15:34:07 +0100
-Message-Id: <20211220143026.301338222@linuxfoundation.org>
+Message-Id: <20211220143043.359776658@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
-References: <20211220143025.683747691@linuxfoundation.org>
+In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+References: <20211220143040.058287525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,43 +46,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie2x Zhou <jie2x.zhou@intel.com>
+From: Robert Schlabbach <robert_s@gmx.net>
 
-[ Upstream commit 92816e2629808726af015c7f5b14adc8e4f8b147 ]
+[ Upstream commit 271225fd57c2f1e0b3f8826df51be6c634affefe ]
 
-./fcnal-test.sh -v -t ipv6_ping
-TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
-TEST: ping out, VRF bind - multicast IP                                       [FAIL]
+Commit a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0
+Gbps support") introduced suppression of the advertisement of NBASE-T
+speeds by default, according to Todd Fujinaka to accommodate customers
+with network switches which could not cope with advertised NBASE-T
+speeds, as posted in the E1000-devel mailing list:
 
-ping6 is failing as it should.
-COMMAND: ip netns exec ns-A /bin/ping6 -c1 -w1 fe80::7c4c:bcff:fe66:a63a%red
-strace of ping6 shows it is failing with '1',
-so change the expected rc from 2 to 1.
+https://sourceforge.net/p/e1000/mailman/message/37106269/
 
-Fixes: c0644e71df33 ("selftests: Add ipv6 ping tests to fcnal-test")
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: David Ahern <dsahern@gmail.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
-Link: https://lore.kernel.org/r/20211209020230.37270-1-jie2x.zhou@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+However, the suppression was not documented at all, nor was how to
+enable NBASE-T support.
+
+Properly document the NBASE-T suppression and how to enable NBASE-T
+support.
+
+Fixes: a296d665eae1 ("ixgbe: Add ethtool support to enable 2.5 and 5.0 Gbps support")
+Reported-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/fcnal-test.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../device_drivers/ethernet/intel/ixgbe.rst      | 16 ++++++++++++++++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c    |  4 ++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 782a8da5d9500..475ac62373e92 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -1884,7 +1884,7 @@ ipv6_ping_vrf()
- 		log_start
- 		show_hint "Fails since VRF device does not support linklocal or multicast"
- 		run_cmd ${ping6} -c1 -w1 ${a}
--		log_test_addr ${a} $? 2 "ping out, VRF bind"
-+		log_test_addr ${a} $? 1 "ping out, VRF bind"
- 	done
+diff --git a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
+index f1d5233e5e510..0a233b17c664e 100644
+--- a/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
++++ b/Documentation/networking/device_drivers/ethernet/intel/ixgbe.rst
+@@ -440,6 +440,22 @@ NOTE: For 82599-based network connections, if you are enabling jumbo frames in
+ a virtual function (VF), jumbo frames must first be enabled in the physical
+ function (PF). The VF MTU setting cannot be larger than the PF MTU.
  
- 	for a in ${NSB_IP6} ${NSB_LO_IP6} ${NSB_LINKIP6}%${NSA_DEV} ${MCAST}%${NSA_DEV}
++NBASE-T Support
++---------------
++The ixgbe driver supports NBASE-T on some devices. However, the advertisement
++of NBASE-T speeds is suppressed by default, to accommodate broken network
++switches which cannot cope with advertised NBASE-T speeds. Use the ethtool
++command to enable advertising NBASE-T speeds on devices which support it::
++
++  ethtool -s eth? advertise 0x1800000001028
++
++On Linux systems with INTERFACES(5), this can be specified as a pre-up command
++in /etc/network/interfaces so that the interface is always brought up with
++NBASE-T support, e.g.::
++
++  iface eth? inet dhcp
++       pre-up ethtool -s eth? advertise 0x1800000001028 || true
++
+ Generic Receive Offload, aka GRO
+ --------------------------------
+ The driver supports the in-kernel software implementation of GRO. GRO has
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index 13c4782b920a7..750b02bb2fdc2 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -5526,6 +5526,10 @@ static int ixgbe_non_sfp_link_config(struct ixgbe_hw *hw)
+ 	if (!speed && hw->mac.ops.get_link_capabilities) {
+ 		ret = hw->mac.ops.get_link_capabilities(hw, &speed,
+ 							&autoneg);
++		/* remove NBASE-T speeds from default autonegotiation
++		 * to accommodate broken network switches in the field
++		 * which cannot cope with advertised NBASE-T speeds
++		 */
+ 		speed &= ~(IXGBE_LINK_SPEED_5GB_FULL |
+ 			   IXGBE_LINK_SPEED_2_5GB_FULL);
+ 	}
 -- 
 2.33.0
 

@@ -2,138 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB4747A7BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E2247A7BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 11:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbhLTKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 05:25:55 -0500
-Received: from mail.djicorp.com ([202.66.152.220]:61205 "EHLO mail.djicorp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231250AbhLTKZy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 05:25:54 -0500
-IronPort-SDR: K0X66Yie50VdUrKYFUJUFAOZTRZBZuXAeIQiiQgRyCl0VzWZnkWLb3bNZVQT0VZrN0fnbe9Ea3
- 73t7jMKalsew==
-X-IronPort-AV: E=Sophos;i="5.88,220,1635177600"; 
-   d="scan'208";a="13139988"
-From:   wigin zeng <wigin.zeng@dji.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        First Light <xiaoguang.chen@dji.com>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRD?=
- =?utf-8?Q?H]_serial:_8250:_add_lock_for_dma_rx?=
-Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiBbUEFUQ0hdIHNlcmlh?=
- =?utf-8?Q?l:_8250:_add_lock_for_dma_rx?=
-Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw//+PM4CAEXtykP//udeAABInGiD//4DlgP//eQnw
-Date:   Mon, 20 Dec 2021 10:25:51 +0000
-Message-ID: <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
-References: <20211209073339.21694-1-wigin.zeng@dji.com>
- <YbGygPtkz6ihyW51@kroah.com>
- <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
- <YbHBb2uB9JRP0tWc@kroah.com>
- <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
- <YbHVXwdCUCvmZrbS@kroah.com>
- <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
- <YcBEy9zi2G7UYErE@kroah.com>
- <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
- <YcBT/Vf41PWUYdxT@kroah.com>
-In-Reply-To: <YcBT/Vf41PWUYdxT@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [58.34.188.114]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S231261AbhLTK2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 05:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLTK2A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:28:00 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6538C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 02:27:59 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id l22so20520964lfg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 02:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iv9ezRnnrzcHGD7Zb6emmI6B8JBj8Iod8EtTwFfPyKk=;
+        b=IU9FCUD6ZbT12fwfcmTgP3229sxley+tDcIVfiXETS1ySJMlCZVXeXgEeOeGzctNDF
+         HTGwAdxc6B+Om9p/DoKu+Gxi/BH5dfqs3Rv2oMxKa5VwwNiHgnWjuUft/SIIfjDucfv5
+         QWAiyDkaztoWvwmuWj9yuWoqBZJ6sk6JkNf2gFR2KwsmEuFyJ5/wT14zJDfuJ4ypT0qB
+         VO4OdAUaPFbjQqK/10Icg/oOwuakFhZw9fyfhOkm+7hrP4Yh3HHPp4i8NZh4EpxD0TZV
+         67QqXRnMW+NNuo75gd5SofLtSy596jh87wufPBa93Ske/GFz2A/kLfaqdcEt1tUNpBqx
+         0STQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iv9ezRnnrzcHGD7Zb6emmI6B8JBj8Iod8EtTwFfPyKk=;
+        b=KczLN+ln5fKQrcDlWR74Xp0MLIe3fj8yxJjeq6GP0OGYbwJxSQcppWaQYv6atqRB04
+         3vgDNrkwDZNvdr3ZLWlXKsb0ZADVWFRz2vokIDZcRWPb1Ksk/brbF+E8LMI6sKtPftVl
+         D2RTSzM5Yira5EUtwswH4InpZhecdfxr3FbmFpaHmgGwVsPZgfMKAQLgt6eKXYID90Og
+         0BDeQnzi2XcqaTqYl+gSA1yM3+piVCwIbBup59a/WxHSBdAHS95FMmJI/LcUd95D20gC
+         qK7qYQ3KPNNz3Hn2FBhtHKrqCHvq9kYji77t91hS12reJEwuauG8sIrI6/UoiBHZrneK
+         zk0Q==
+X-Gm-Message-State: AOAM533m+4f4hAvQvRJfSwjazEyEZX4cPZs7aRdyI7XArag39EJd4LkO
+        EJt5NEDjcwuhQm5QL9h1AUkM41mJvDF2HsrM+Me2D27YV+c=
+X-Google-Smtp-Source: ABdhPJzVD42zDGhQBZQ8mnNcZi4O56hS1KMRBbiRJIrt2G1Xnxk7kGTcitYeIsKqM4Iy7AgW5gqkRCEPzUVCypeQjAs=
+X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr617624lfv.184.1639996078020;
+ Mon, 20 Dec 2021 02:27:58 -0800 (PST)
 MIME-Version: 1.0
+References: <c207948f590d4e88945a314bf8299f87@hyperstone.com> <aac0cdefbd2a43329b50a803b7c46959@hyperstone.com>
+In-Reply-To: <aac0cdefbd2a43329b50a803b7c46959@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 20 Dec 2021 11:27:21 +0100
+Message-ID: <CAPDyKFpoAwezgThhhWgApvfq0nfZFPV4mCJOWGF4ZFp27UhekA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: bus: Log bus width info when attaching card
+To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "linux@dominikbrodowski.net" <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSArMDAwMCwgd2lnaW4gemVuZyB3cm90
-ZToNCj4gPiA+VGhhdCBtYWtlcyBubyBzZW5zZSwgYXMgd2hhdCBvcmRlcnMgdGhlIGRhdGEgY29t
-aW5nIGluPyAgVGhlIDIgYnl0ZXMgY291bGQgYmUgYWRkZWQgdG8gdGhlIHR0eSBidWZmZXIgYmVm
-b3JlIHRoZSA1MTIgYnl0ZXMsIG9yIHRoZSBvdGhlciB3YXkgYXJvdW5kLg0KPg0KPiA+ID5XaGF0
-IGhhcmR3YXJlIGFyZSB5b3UgdXNpbmcgdGhhdCBpcyBtaXhpbmcgZG1hIGFuZCBpcnEgZGF0YSBs
-aWtlIHRoaXM/DQo+ID4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4NCj4gPkl0IGlzIG5vdCBu
-b3JtYWwgY2FzZSwgbm9ybWFsbHksIHRoZSBpbnB1dCBzaXplIHNob3VsZCBzbWFsbGVyIHRoYW4g
-RE1BIGJsb2NrIHNpemUgYW5kIERNQSBjb21wbGV0ZSB0aGUgd2hvbGUgY29weS4NCj4gPkhvd2V2
-ZXIsIHRoZXJlIGFyZSBzb21lIGFibm9ybWFsIHNpdHVhdGlvbnMuIFRoZSBleHRlcm5hbCBpbnB1
-dCBpcyB1bmV4cGVjdGVkbHkgbGFyZ2VyIHRoYW4gdGhlIGRhdGEgbGVuZ3RoIG9mIHRoZSBETUEg
-Y29uZmlndXJhdGlvbi4gVGhpcyBzaXR1YXRpb24gaW4gbXkgZXhhbXBsZSB3aWxsIGFwcGVhciwg
-YW5kIGl0IG1heSBjYXVzZSB0aGUga2VybmVsIHRvIHBhbmljLg0KDQo+WW91IGRpZCBub3QgYW5z
-d2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KPkFuZCBhZ2FpbiwgaG93
-IGlzIHRoaXMgaGFwcGVuaW5nPyAgSWYgeW91IHVzZSBETUEsIGFsbCBkYXRhIHNob3VsZCBiZSBj
-b21pbmcgdGhyb3VnaCBETUEgYW5kIG5vdCB0aGUgaXJxLiAgT3RoZXJ3aXNlIGNyYXp5IHN0dWZm
-IGxpa2UgdGhpcyB3aWxsIGhhcHBlbiBpbiBhbnkgdHlwZSBvZiBkcml2ZXIsIHlvdXIgaGFyZHdh
-cmUgY2FuIG5vdCBtaXggdGhpcyB0eXBlIG9mIHN0dWZmIHVwLg0KDQpPbiBvdXIgcGxhdGZvcm0s
-IFVBUlQgY29ubmVjdGVkIHRvIGEgTUNVIHdoaWNoIHdpbGwgc2VuZCBkYXRhIG9mIHZhcmlhYmxl
-IGxlbmd0aCBmcm9tIHRpbWUgdG8gdGltZS4gVGhlcmUgaXMgbm8gZGVmaW5pdGlvbiBvZiBhIG1h
-eGltdW0gdHJhbnNtaXNzaW9uIGxlbmd0aC4NCldlIGNvbmZpZ3VyZWQgRE1BIGJsb2NrIHNpemUg
-aXMgNDA5NmJ5dGVzLCBob3dldmVyLCB0aGVyZSBhcmUgbW9yZSB0aGFuIDQxMDAgYnl0ZXMgaW5w
-dXQsIERNQSBqdXN0IGhhbmRsZWQgNDA5NmJ5dGVzIGFuZCBsZWZ0IGJ5dGVzIGluIEZJRk8gY2Fu
-bm90IHRyaWdnZXIgbmV4dCBETUEgDQpUcmFuc2ZlciBkb25lIGludGVycnVwdChsZWZ0IGJ5dGVz
-IG51bWJlciA8IERNQSBibG9jayBzaXplICksIHNvIHRoZXNlIGRhdGEgc2hvdWxkIGJlIHByb2Nl
-c3NlZCBieSBVQVJUIElSUS4NCg0KSW4gb3RoZXIgd29yZCwgaWYgdGhlIGV4dGVybmFsIHVzZSBV
-QVJUICJ2dWxuZXJhYmlsaXR5IiB0byBhdHRhY2sgdGhlIHN5c3RlbSwgd2UgbmVlZCB0byBlbnN1
-cmUgdGhhdCB0aGUgc3lzdGVtIG5vdCBjcmFzaCBhdCBsZWFzdCwgcmlnaHQ/DQoNCj5Ib3cgY2Fu
-IGZsb3cgY29udHJvbCBoYW5kbGUgdGhpcyBhdCBhbGw/ICBGbG93IGNvbnRyb2wgaXMgYXQgdGhl
-IHNlcmlhbCBkYXRhIHN0cmVhbSBsZXZlbC4gIFRoaXMgaXMgY29uZnVzaW5nIHRoZSBQQ0kgZGF0
-YSBzdHJlYW0gb3JkZXIuDQoNCkkganVzdCB0aGluayBtb3JlIGxvZ2ljIGlzIG5lZWRlZCB0byBj
-b250cm9sIHRoZSBvcmRlciBvZiBkYXRhIHByb2Nlc3NpbmcgYnkgRE1BIGFuZCBVQVJUIElSUSB0
-byBrZWVwIHRoZSBpbnRlZ3JpdHkgb2Ygc2VyaWFsIGRhdGEuIA0KQnV0IHRoZSBzcGVjaWZpYyBk
-ZXNpZ24sIEkgaGF2ZW4ndCBjb25zaWRlcmVkIHlldCwgdGhlIGZpcnN0IGdvYWwgaXMgdGhlIGtl
-ZXAgdGhlIHN5c3RlbSBhbGl2ZS4NCg0KQlJzDQpXZWlqdW4NCiANCi0tLS0t6YKu5Lu25Y6f5Lu2
-LS0tLS0NCuWPkeS7tuS6ujogR3JlZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24u
-b3JnXSANCuWPkemAgeaXtumXtDogMjAyMeW5tDEy5pyIMjDml6UgMTc6NTkNCuaUtuS7tuS6ujog
-d2lnaW4gemVuZyA8d2lnaW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVs
-Lm9yZzsgbGludXgtc2VyaWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZzsgRmlyc3QgTGlnaHQgPHhpYW9ndWFuZy5jaGVuQGRqaS5jb20+DQrkuLvpopg6IFJl
-OiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRDSF0gc2VyaWFsOiA4MjUwOiBh
-ZGQgbG9jayBmb3IgZG1hIHJ4DQoNCuOAkEVYVEVSTkFMIEVNQUlM44CRIERPIE5PVCBDTElDSyBh
-bnkgbGlua3Mgb3IgYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gbWFrZSBzdXJlIGJvdGggdGhl
-IHNlbmRlciBhbmQgdGhlIGNvbnRlbnQgYXJlIHRydXN0d29ydGh5Lg0KDQoNCuOAkOWklumDqOmC
-ruS7tuaPkOmGkuOAkeS7peS4i+mCruS7tuadpea6kOS6juWFrOWPuOWklumDqO+8jOivt+WLv+eC
-ueWHu+mTvuaOpeaIlumZhOS7tu+8jOmZpOmdnuaCqOehruiupOmCruS7tuWPkeS7tuS6uuWSjOWG
-heWuueWPr+S/oeOAgg0KDQoNCg0KT24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSAr
-MDAwMCwgd2lnaW4gemVuZyB3cm90ZToNCj4gPlRoYXQgbWFrZXMgbm8gc2Vuc2UsIGFzIHdoYXQg
-b3JkZXJzIHRoZSBkYXRhIGNvbWluZyBpbj8gIFRoZSAyIGJ5dGVzIGNvdWxkIGJlIGFkZGVkIHRv
-IHRoZSB0dHkgYnVmZmVyIGJlZm9yZSB0aGUgNTEyIGJ5dGVzLCBvciB0aGUgb3RoZXIgd2F5IGFy
-b3VuZC4NCj4NCj4gPldoYXQgaGFyZHdhcmUgYXJlIHlvdSB1c2luZyB0aGF0IGlzIG1peGluZyBk
-bWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8NCj4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4N
-Cj4gSXQgaXMgbm90IG5vcm1hbCBjYXNlLCBub3JtYWxseSwgdGhlIGlucHV0IHNpemUgc2hvdWxk
-IHNtYWxsZXIgdGhhbiBETUEgYmxvY2sgc2l6ZSBhbmQgRE1BIGNvbXBsZXRlIHRoZSB3aG9sZSBj
-b3B5Lg0KPiBIb3dldmVyLCB0aGVyZSBhcmUgc29tZSBhYm5vcm1hbCBzaXR1YXRpb25zLiBUaGUg
-ZXh0ZXJuYWwgaW5wdXQgaXMgdW5leHBlY3RlZGx5IGxhcmdlciB0aGFuIHRoZSBkYXRhIGxlbmd0
-aCBvZiB0aGUgRE1BIGNvbmZpZ3VyYXRpb24uIFRoaXMgc2l0dWF0aW9uIGluIG15IGV4YW1wbGUg
-d2lsbCBhcHBlYXIsIGFuZCBpdCBtYXkgY2F1c2UgdGhlIGtlcm5lbCB0byBwYW5pYy4NCg0KWW91
-IGRpZCBub3QgYW5zd2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KQW5k
-IGFnYWluLCBob3cgaXMgdGhpcyBoYXBwZW5pbmc/ICBJZiB5b3UgdXNlIERNQSwgYWxsIGRhdGEg
-c2hvdWxkIGJlIGNvbWluZyB0aHJvdWdoIERNQSBhbmQgbm90IHRoZSBpcnEuICBPdGhlcndpc2Ug
-Y3Jhenkgc3R1ZmYgbGlrZSB0aGlzIHdpbGwgaGFwcGVuIGluIGFueSB0eXBlIG9mIGRyaXZlciwg
-eW91ciBoYXJkd2FyZSBjYW4gbm90IG1peCB0aGlzIHR5cGUgb2Ygc3R1ZmYgdXAuDQoNCj4gPklm
-IHRoZXkgYXJlIHJ1bm5pbmcgb24gZGlmZmVyZW50IGNvcmVzLCB0aGVuIHlvdSB3aWxsIGhhdmUg
-ZGF0YSBjb3JydXB0aW9uIGlzc3VlcyBubyBtYXR0ZXIgaWYgeW91IGhhdmUgYSBsb2NrIG9yIG5v
-dCwgc28gdGhpcyBpcyBub3QgdGhlIGNvcnJlY3Qgc29sdXRpb24gZm9yIHRoaXMgaGFyZHdhcmUg
-Y29uZmlndXJhdGlvbiBwcm9ibGVtLg0KPg0KPiBUaGUgcHVycG9zZSBvZiBhZGRpbmcgbG9jayBp
-cyB0byBlbnN1cmUgdGhhdCB0aGUga2VybmVsIHdpbGwgbm90IHBhbmljIA0KPiBpbiB0aGlzIGV4
-dHJlbWUgY2FzZSwgSWYgeW91IHdhbnQgdG8gZW5zdXJlIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIA0K
-PiBzZXJpYWwgcG9ydCBkYXRhLCB5b3UgbmVlZCB0byBhZGQgbW9yZSBmbG93IGNvbnRyb2wgbG9n
-aWMNCg0KSG93IGNhbiBmbG93IGNvbnRyb2wgaGFuZGxlIHRoaXMgYXQgYWxsPyAgRmxvdyBjb250
-cm9sIGlzIGF0IHRoZSBzZXJpYWwgZGF0YSBzdHJlYW0gbGV2ZWwuICBUaGlzIGlzIGNvbmZ1c2lu
-ZyB0aGUgUENJIGRhdGEgc3RyZWFtIG9yZGVyLg0KDQp0aGFua3MsDQoNCmdyZWcgay1oDQpUaGlz
-IGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0byBtYXkgY29udGFpbiBwcml2YXRlLCBj
-b25maWRlbnRpYWwsIGFuZCBwcml2aWxlZ2VkIG1hdGVyaWFsIGZvciB0aGUgc29sZSB1c2Ugb2Yg
-dGhlIGludGVuZGVkIHJlY2lwaWVudC4gQW55IHJldmlldywgY29weWluZywgb3IgZGlzdHJpYnV0
-aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFueSBhdHRhY2htZW50cyB0aGVyZXRvKSBieSBvdGhlcnMg
-aXMgc3RyaWN0bHkgcHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lw
-aWVudCwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBhbmQgcGVybWFuZW50
-bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBhbmQgYW55IGNvcGllcyBvZiB0aGlzIGVtYWlsIGFuZCBh
-bnkgYXR0YWNobWVudHMgdGhlcmV0by4NCg0K5q2k55S15a2Q6YKu5Lu25Y+K6ZmE5Lu25omA5YyF
-5ZCr5YaF5a655YW35pyJ5py65a+G5oCn77yM5LiU5LuF6ZmQ5LqO5o6l5pS25Lq65L2/55So44CC
-5pyq57uP5YWB6K6477yM56aB5q2i56ys5LiJ5Lq66ZiF6K+744CB5aSN5Yi25oiW5Lyg5pKt6K+l
-55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V5L+h5oGv44CC5aaC5p6c5oKo5LiN5bGe5LqO5Lul5LiK
-55S15a2Q6YKu5Lu255qE55uu5qCH5o6l5pS26ICF77yM6K+35oKo56uL5Y2z6YCa55+l5Y+R6YCB
-5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu5Lu25Y+K5YW255u45YWz55qE6ZmE5Lu244CCDQo=
+On Wed, 8 Dec 2021 at 14:03, Christian L=C3=B6hle <CLoehle@hyperstone.com> =
+wrote:
+>
+> Might seem unecessary to print the bus width and a bit confusing, but it =
+is the only 'bus info' that is not printed in that line.
+> So I suggest adding it.
+
+Well, I am not sure I agree with this.
+
+There is other information too, like the clock rate for example. But,
+I think it may be a bit too much to log everything. In particular as
+the information is already available via debugfs, for those that want
+more information.
+
+>
+> Regards,
+> Christian
+>
+
+Kind regards
+Uffe
+
+>
+>
+>
+> From: Christian L=C3=B6hle
+> Sent: Wednesday, December 8, 2021 2:02 PM
+> To: linux-kernel@vger.kernel.org; linux-mmc@vger.kernel.org; Ulf Hansson;=
+ Christian L=C3=B6hle
+> Cc: johan@kernel.org; sudeep.holla@arm.com; linux@dominikbrodowski.net
+> Subject: [PATCH] mmc: bus: Log bus width info when attaching card
+>
+> Add info about bus width of the attached card to the bring-up message
+>
+> For both MMC and SD cards the bus width that is used might
+> not be obvious to a user. For MMC this might be 1, 4 or 8,
+> for SD only 1 and 4. In both cases this would be a restriction
+> by the host (setup). Like using an MMC in an SD slot or an
+> eMMC to SD adapter.
+>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+>  drivers/mmc/core/bus.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
+> index f6b7a9c5bbff..71a675dcd9b7 100644
+> --- a/drivers/mmc/core/bus.c
+> +++ b/drivers/mmc/core/bus.c
+> @@ -358,7 +358,7 @@ int mmc_add_card(struct mmc_card *card)
+>                          mmc_card_ddr52(card) ? "DDR " : "",
+>                          type);
+>          } else {
+> -               pr_info("%s: new %s%s%s%s%s%s card at address %04x\n",
+> +               pr_info("%s: new %s%s%s%s%s%s %u-bit card at address %04x=
+\n",
+>                          mmc_hostname(card->host),
+>                          mmc_card_uhs(card) ? "ultra high speed " :
+>                          (mmc_card_hs(card) ? "high speed " : ""),
+> @@ -366,7 +366,8 @@ int mmc_add_card(struct mmc_card *card)
+>                          (mmc_card_hs200(card) ? "HS200 " : ""),
+>                          mmc_card_hs400es(card) ? "Enhanced strobe " : ""=
+,
+>                          mmc_card_ddr52(card) ? "DDR " : "",
+> -                       uhs_bus_speed_mode, type, card->rca);
+> +                       uhs_bus_speed_mode, type,
+> +                       1<<card->host->ios.bus_width, card->rca);
+>          }
+>
+>  #ifdef CONFIG_DEBUG_FS
+> --
+> 2.34.1
+>     =3D
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
+>

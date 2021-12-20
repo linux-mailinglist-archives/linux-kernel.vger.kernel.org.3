@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5FF47B01E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A19847AF16
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239676AbhLTPZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240249AbhLTPYg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:24:36 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8484DC08E849
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:05:39 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id u198so6291532vkb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 07:05:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6vFAc9SeeK/r1UH3ubCGIgjE+74yVGov3VoOpunaN8U=;
-        b=deuBeiuc5jIB1k0dnZzH/t6Cb+FxqwYRq6vwC2tMbtLnXCg9yRfQMLK1J2qbxpF/6K
-         zTdAahSI4r+jaIXvI4mxMRc+YI+fBUvPKx0ms401rIQKobU0y1J1QXJNDkt7IH5fqpto
-         ynOruk7fUjtVEmL4ZV6wmSgTddX6zAKtxPzem5cLwJpikP1TAXqtbFJiTzuC2z5bQllp
-         dyolXYX6oqiJowiONA70mNvT4QlUgVS3TD0ulVUECAVgPz/UWaq0N5c15Ws7UjYG6LVS
-         LfJM/QbR2kLaHqKZSPXCkrzppaZddXqJWi1z1AiKLH0coCMaM0X1T2a4deYpkBLSUw7X
-         2ovQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6vFAc9SeeK/r1UH3ubCGIgjE+74yVGov3VoOpunaN8U=;
-        b=SLYtk4tuWPjwrOg+SWrlpn3sNMjEI4k3kxeF3CgiDEe23m2w/7vBvrX2hIR7a7FAZo
-         9/iaImlTvFnR1gIrEtBia9j2cOTsKmAd9PhQQKHm6Qw98AKIw3II2vcmUW9v1+tHhwKl
-         ggYIWKwU2XpjE9wOcoDN6Mu3bH8RjCWxScNnLfHhtFfr5lz5E+bAaCfSgwgnT8+MHZii
-         SZqGXcwypQEaFM4hzvShXjmWAqBuQWPO9S/Yb1lEdvcy13e7BN+GuKYpLJVviPX06pW6
-         3LUb490JWbkKoRrcT5/OoCtuXqjjACWhhqH+be+Ah0SiqsXrTzHGBK3vQTO9STBg/NSE
-         uHtQ==
-X-Gm-Message-State: AOAM5301UxH7tbliMPtQPTcN+fnNOtL6ZiJkWyoTXHkGSW/eoNl60/yZ
-        EAQqPTfSKW0VKRMWONen1xK5AgumUK2kooCvthxstA==
-X-Google-Smtp-Source: ABdhPJxBe3GHXdjAd9DU5qWdRH7VeJlYsTnmv5IZKHDx4275EuQZE0M28lGfvIvAunUGVLazUctlDUSOvpsfpLbciLs=
-X-Received: by 2002:a1f:2849:: with SMTP id o70mr5722252vko.35.1640012738706;
- Mon, 20 Dec 2021 07:05:38 -0800 (PST)
+        id S237994AbhLTPI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:08:57 -0500
+Received: from mout.gmx.net ([212.227.17.22]:49909 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239460AbhLTPHH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:07:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640012819;
+        bh=ExqcfdSeorMvGLnSOWloYS8Zi49Z7vZRjhyfXFGBUvQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=ki6ZglJkBXGNDhH1DL2MepnpTq1ZldsmvUhJvaWo4tqABiQhBCYT7V96Xy1gwhLnE
+         lS2fIdP95sff+ES3r/Nn13QVihXe7AdOr/S0uM2mMZls2ql5Weok6Jgq3Lf58j9ki2
+         xk1WZmxMs2isE9foxsMP0CwSkg4VIxLdgPDTs2vo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MY68T-1myZiw1Xzx-00YRJE; Mon, 20
+ Dec 2021 16:06:59 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
+Subject: [PATCH v2] tpm: fix potential NULL pointer access in tpm_del_char_device
+Date:   Mon, 20 Dec 2021 16:06:35 +0100
+Message-Id: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211217161549.24836-1-semen.protsenko@linaro.org>
- <20211217161549.24836-4-semen.protsenko@linaro.org> <cc1c2906-60c2-7d4a-78c3-014f6712f9b2@canonical.com>
-In-Reply-To: <cc1c2906-60c2-7d4a-78c3-014f6712f9b2@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 20 Dec 2021 17:05:27 +0200
-Message-ID: <CAPLW+4mn24mfZmY2u-qs9mybPy2qSnffNWVPmX-Y-sLbMPejWA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/7] dt-bindings: Add vendor prefix for WinLink
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:VSpIHCjSucsOxWy7hG0cnMrBZMjWeQPXOCuFT7kbNWhNYgw+i0X
+ +CaUAC6eG6MOYpZO2RTbi6VG04Qs0myIADbBdMpcyIVMp7DyhCg/lkKgWv/Y6kdCbNcJRNy
+ 6GXdiutVvQapWqR47twaTVx6tudTQfhH6+3FQ7rLmrNlkHwF6FxyRCz9HtGdJX8OiMQ+d1/
+ 1FHXhg8EOqzfZiJR3TCng==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TctFUmfyLJY=:eLT2w9B4HdIdxDpih17snI
+ Kw/327TQhPfCfUDPlYBo/sNKjCXvpBrTeU7Hf/qFy7zqBloKfsIOmdciwkjbODARVvXwoFNd8
+ T64ICHmyPYJuBWwohgZd0BEZt/gnVQxbESWZtTYzYD2rsaWKtUtZFYDBWVMFyGzllbhOTkeYE
+ JXZq0JB7OU2BnQT5BZPHhnXX/8LbPesny6KqSFXheld463Wc5Us8HRDjlvsfwqF9D8iU8f/Am
+ y8OvKdEGW6xqgR2pJJ2lwnYZvCxxCqLiaVm6Q04k1Z4gUFwqY2sPoSj67Z0q8i1IKHUumuZhw
+ 2bJ5sdbr3S67WGxblzo7KMen85AuH1tCuSFfSS/lxLWPSBkqYla1vpSBnux82ifU94mSuEbsD
+ RWc1AdkI0QO523OcyMTFiEkoHIqEpJpox4mL5okmPDRi8isKp2PPYG01ZyWXUeqEcjefI0Tob
+ 7r8h3vZ96Q7e0a8B/fAPU8MWwtnF2+ZcBo/NY7mLoobioizud9QigSwhboRdt4B4nDyqJoOLD
+ rE3YwNVNrUGTEI9jH1ylJllYplhhSHX7lH89XhoVCyer+ArebEUSgm0YIS6B0OYwc9WvLu0Pf
+ hOTd/0UgapWrniar/FRbxtsJ66p+DgATq/peUMo6JB4pfnjust4IF73N0KSWJBf8XNxBXZZuf
+ aoBFtmFSCnxQqi81pYtJrIRn6BrUe8Xl1NU+t7ls21BkLXS1d7XJpkkjF6wsjnuPxT4i22V08
+ UmQVywGtvvA6xbPdNTmeSHmpzB6uBINzHUoQfp0XontgFpZItmgy1My4pwoWqwB9iIKiByWa3
+ XWfvvrdbajupHAQv5fJir2VuR5uEtyTqH1hprpTPE1rjA1vmQQI3AhxN4GJPtNdrIVC6xE7v6
+ NxckYr3pRAFNJw9wi2WNI6hu3sCvmKrjRVsSgd+m2GkhMvS5Eh9XHy4rsHzcCDw1exAPF18i8
+ xDoGeASVeOGWN0d3lsAMuu9RBhnIF7NmMS86Q8aL/m9Zm/YCsNkGRxeNRLhNIO7qP3blQ6Rjb
+ 2Mo105fdkYslT6nUdhU36CPg5zZvXPEFK+5q7muIABnwoxPbiHhNI6fz0hy+IR2i1euZT/iNT
+ fbZkdEdrCceDTo=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 11:36, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 17/12/2021 17:15, Sam Protsenko wrote:
-> > WinLink Co., Ltd is a hardware design and manufacturing company based in
-> > South Korea. Official web-site: [1].
-> >
-> > [1] http://win-link.net/
-> >
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
->
-> Ack goes after your SoB. First you create patch, sign it and then Rob
-> sees it and acks it.
->
-
-Sorry, just mixed that up. It's even documented in [1]. Anyway, I can
-see that you already fixed that and applied this patch, thanks!
-
-[1] Documentation/process/maintainer-tip.rst
-
->
-> Best regards,
-> Krzysztof
+U29tZSBTUEkgY29udHJvbGxlciBkcml2ZXJzIHVucmVnaXN0ZXIgdGhlIGNvbnRyb2xsZXIgaW4g
+dGhlIHNodXRkb3duCmhhbmRsZXIgKGUuZy4gQkNNMjgzNSkuIElmIHN1Y2ggYSBjb250cm9sbGVy
+IGlzIHVzZWQgd2l0aCBhIFRQTSAyIHNsYXZlCmNoaXAtPm9wcyBtYXkgYmUgYWNjZXNzZWQgd2hl
+biBpdCBpcyBhbHJlYWR5IE5VTEw6CgpBdCBzeXN0ZW0gc2h1dGRvd24gdGhlIHByZS1zaHV0ZG93
+biBoYW5kbGVyIHRwbV9jbGFzc19zaHV0ZG93bigpIHNodXRzIGRvd24KVFBNIDIgYW5kIHNldHMg
+Y2hpcC0+b3BzIHRvIE5VTEwuIFRoZW4gYXQgU1BJIGNvbnRyb2xsZXIgdW5yZWdpc3RyYXRpb24K
+dHBtX3Rpc19zcGlfcmVtb3ZlKCkgaXMgY2FsbGVkIGFuZCBldmVudHVhbGx5IGNhbGxzIHRwbV9k
+ZWxfY2hhcl9kZXZpY2UoKQp3aGljaCB0cmllcyB0byBzaHV0IGRvd24gVFBNIDIgYWdhaW4uIFRo
+ZXJlYnkgaXQgYWNjZXNzZXMgY2hpcC0+b3BzIGFnYWluOgoodHBtX2RlbF9jaGFyX2RldmljZSBj
+YWxscyB0cG1fY2hpcF9zdGFydCB3aGljaCBjYWxscyB0cG1fY2xrX2VuYWJsZSB3aGljaApjYWxs
+cyBjaGlwLT5vcHMtPmNsa19lbmFibGUpLgoKQXZvaWQgdGhlIE5VTEwgcG9pbnRlciBhY2Nlc3Mg
+YnkgdGVzdGluZyBpZiBjaGlwLT5vcHMgaXMgdmFsaWQgYW5kIHNraXBwaW5nCnRoZSBUUE0gMiBz
+aHV0ZG93biBwcm9jZWR1cmUgaW4gY2FzZSBpdCBpcyBOVUxMLgoKRml4ZXM6IGRjYmVhYjE5NDY0
+NTQgKCJ0cG06IGZpeCBjcmFzaCBpbiB0cG1fdGlzIGRlaW5pdGlhbGl6YXRpb24iKQpDYzogc3Rh
+YmxlQHZnZXIua2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBMaW5vIFNhbmZpbGlwcG8gPExpbm9T
+YW5maWxpcHBvQGdteC5kZT4KLS0tCgpDaGFuZ2VzIHRvIHYyOgotIHJlcGhyYXNlZCB0aGUgY29t
+bWl0IG1lc3NhZ2UgdG8gY2xhcmlmeSB0aGUgY2lyY3Vtc3RhbmNlcyB1bmRlciB3aGljaAogIHRo
+aXMgYnVnIHRyaWdnZXJzIChhcyByZXF1ZXN0ZWQgYnkgSmFya2tvKQoKCkkgd2FzIGFibGUgdG8g
+cmVwcm9kdWNlIHRoaXMgaXNzdWUgd2l0aCBhIFNMQiA5NjcwIFRQTSBjaGlwIGNvbnRyb2xsZWQg
+YnkgCmEgQkNNMjgzNSBTUEkgY29udHJvbGxlci4gCgpUaGUgYXBwcm9hY2ggdG8gZml4IHRoaXMg
+aXNzdWUgaW4gdGhlIEJDTTI4MzUgZHJpdmVyIHdhcyByZWplY3RlZCBhZnRlciBhCmRpc2N1c3Np
+b24gb24gdGhlIG1haWxpbmcgbGlzdDoKCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWludGVn
+cml0eSZtPTE2MzI4NTkwNjcyNTM2NyZ3PTIKClRoZSByZWFzb24gZm9yIHRoZSByZWplY3Rpb24g
+d2FzIHRoZSByZWFsaXphdGlvbiwgdGhhdCB0aGlzIGlzc3VlIHNob3VsZCByYXRoZXIKYmUgZml4
+ZWQgaW4gdGhlIFRQTSBjb2RlOgoKaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc3BpJm09MTYz
+MzExMDg3NDIzMjcxJnc9MgoKU28gdGhpcyBpcyB0aGUgcmV3b3JrZWQgdmVyc2lvbiBvZiBhIHBh
+dGNoIHRoYXQgaXMgc3VwcG9zZWQgdG8gZG8gdGhhdC4KCgogZHJpdmVycy9jaGFyL3RwbS90cG0t
+Y2hpcC5jIHwgMTYgKysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlv
+bnMoKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG0t
+Y2hpcC5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCmluZGV4IGRkYWVjZWI3ZTEwOS4u
+Nzk2MGRhNDkwZTcyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMKKysr
+IGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCkBAIC00NzQsMTMgKzQ3NCwxOSBAQCBzdGF0
+aWMgdm9pZCB0cG1fZGVsX2NoYXJfZGV2aWNlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogCS8q
+IE1ha2UgdGhlIGRyaXZlciB1bmNhbGxhYmxlLiAqLwogCWRvd25fd3JpdGUoJmNoaXAtPm9wc19z
+ZW0pOwotCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgewotCQlpZiAoIXRw
+bV9jaGlwX3N0YXJ0KGNoaXApKSB7Ci0JCQl0cG0yX3NodXRkb3duKGNoaXAsIFRQTTJfU1VfQ0xF
+QVIpOwotCQkJdHBtX2NoaXBfc3RvcChjaGlwKTsKKwkvKiBDaGVjayBpZiBjaGlwLT5vcHMgaXMg
+c3RpbGwgdmFsaWQ6IEluIGNhc2UgdGhhdCB0aGUgY29udHJvbGxlcgorCSAqIGRyaXZlcnMgc2h1
+dGRvd24gaGFuZGxlciB1bnJlZ2lzdGVycyB0aGUgY29udHJvbGxlciBpbiBpdHMKKwkgKiBzaHV0
+ZG93biBoYW5kbGVyIHdlIGFyZSBjYWxsZWQgdHdpY2UgYW5kIGNoaXAtPm9wcyB0byBOVUxMLgor
+CSAqLworCWlmIChjaGlwLT5vcHMpIHsKKwkJaWYgKGNoaXAtPmZsYWdzICYgVFBNX0NISVBfRkxB
+R19UUE0yKSB7CisJCQlpZiAoIXRwbV9jaGlwX3N0YXJ0KGNoaXApKSB7CisJCQkJdHBtMl9zaHV0
+ZG93bihjaGlwLCBUUE0yX1NVX0NMRUFSKTsKKwkJCQl0cG1fY2hpcF9zdG9wKGNoaXApOworCQkJ
+fQogCQl9CisJCWNoaXAtPm9wcyA9IE5VTEw7CiAJfQotCWNoaXAtPm9wcyA9IE5VTEw7CiAJdXBf
+d3JpdGUoJmNoaXAtPm9wc19zZW0pOwogfQogCgpiYXNlLWNvbW1pdDogYTc5MDRhNTM4OTMzYzUy
+NTA5NmNhMmNjZGUxZTYwZDBlZTYyYzA4ZQotLSAKMi4zNC4xCgo=

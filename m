@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B56547AD5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E315A47AC3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 15:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbhLTOvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 09:51:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38042 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbhLTOtQ (ORCPT
+        id S234926AbhLTOmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 09:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235292AbhLTOlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:49:16 -0500
+        Mon, 20 Dec 2021 09:41:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FB0C0698D6;
+        Mon, 20 Dec 2021 06:40:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74467611A4;
-        Mon, 20 Dec 2021 14:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C952C36AEA;
-        Mon, 20 Dec 2021 14:49:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5A241CE10FE;
+        Mon, 20 Dec 2021 14:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271E4C36AE8;
+        Mon, 20 Dec 2021 14:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640011755;
-        bh=1+ZTRF3+8NGjaT7/hkS3eY+fxbWr4+MMtKRkyA50sUY=;
+        s=korg; t=1640011237;
+        bh=6lCVY5COw0CEcv1f15jkDBnbfj3oEBGx3Usu2ezsoIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jhlff5uQEZtgVMqTv75+G5rRxyNTipuaSOEpBmkTSHz17CA7RzVYJAoVjHxpeLSTj
-         cLdDPFpzLryRkVu3ahZnHlNB6Ar8s2yMcJ5k4iG0Sf5X0BxnQZhfQK5c/N6tiaSc0V
-         Q1TLQFb2+gDJ2apjl4K8gYMY2WJUEB2YCrpp2auY=
+        b=jeC2DHkW0RjAeQGKSdDVBgtlB7v1ftF5XBopaY23C4xOPZvAXZHV0Mc0/s8NQMDJr
+         6mJhHm9d104I1nyQnR8kkmF0gYTaaTn+5B9VYp38YH5eRwDusWxbgGEY5HzNtxM9gW
+         BpcH9Kt1Yu+1THHUX6vaozPKNSOVar9BIXKNwkMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Kennedy <hurricos@gmail.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 63/99] powerpc/85xx: Fix oops when CONFIG_FSL_PMC=n
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH 4.14 41/45] xen/blkfront: harden blkfront against event channel storms
 Date:   Mon, 20 Dec 2021 15:34:36 +0100
-Message-Id: <20211220143031.515548548@linuxfoundation.org>
+Message-Id: <20211220143023.639041898@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+References: <20211220143022.266532675@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,68 +48,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoming Ni <nixiaoming@huawei.com>
+From: Juergen Gross <jgross@suse.com>
 
-[ Upstream commit 3dc709e518b47386e6af937eaec37bb36539edfd ]
+commit 0fd08a34e8e3b67ec9bd8287ac0facf8374b844a upstream.
 
-When CONFIG_FSL_PMC is set to n, no value is assigned to cpu_up_prepare
-in the mpc85xx_pm_ops structure. As a result, oops is triggered in
-smp_85xx_start_cpu().
+The Xen blkfront driver is still vulnerable for an attack via excessive
+number of events sent by the backend. Fix that by using lateeoi event
+channels.
 
-  smp: Bringing up secondary CPUs ...
-  kernel tried to execute user page (0) - exploit attempt? (uid: 0)
-  BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-  Faulting instruction address: 0x00000000
-  Oops: Kernel access of bad area, sig: 11 [#1]
-  ...
-  NIP [00000000] 0x0
-  LR [c0021d2c] smp_85xx_kick_cpu+0xe8/0x568
-  Call Trace:
-  [c1051da8] [c0021cb8] smp_85xx_kick_cpu+0x74/0x568 (unreliable)
-  [c1051de8] [c0011460] __cpu_up+0xc0/0x228
-  [c1051e18] [c0031bbc] bringup_cpu+0x30/0x224
-  [c1051e48] [c0031f3c] cpu_up.constprop.0+0x180/0x33c
-  [c1051e88] [c00322e8] bringup_nonboot_cpus+0x88/0xc8
-  [c1051eb8] [c07e67bc] smp_init+0x30/0x78
-  [c1051ed8] [c07d9e28] kernel_init_freeable+0x118/0x2a8
-  [c1051f18] [c00032d8] kernel_init+0x14/0x124
-  [c1051f38] [c0010278] ret_from_kernel_thread+0x14/0x1c
+This is part of XSA-391
 
-Fixes: c45361abb918 ("powerpc/85xx: fix timebase sync issue when CONFIG_HOTPLUG_CPU=n")
-Reported-by: Martin Kennedy <hurricos@gmail.com>
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
-Tested-by: Martin Kennedy <hurricos@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211126041153.16926-1-nixiaoming@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/85xx/smp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/block/xen-blkfront.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/platforms/85xx/smp.c b/arch/powerpc/platforms/85xx/smp.c
-index 83f4a6389a282..d7081e9af65c7 100644
---- a/arch/powerpc/platforms/85xx/smp.c
-+++ b/arch/powerpc/platforms/85xx/smp.c
-@@ -220,7 +220,7 @@ static int smp_85xx_start_cpu(int cpu)
- 	local_irq_save(flags);
- 	hard_irq_disable();
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -1566,9 +1566,12 @@ static irqreturn_t blkif_interrupt(int i
+ 	unsigned long flags;
+ 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
+ 	struct blkfront_info *info = rinfo->dev_info;
++	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
  
--	if (qoriq_pm_ops)
-+	if (qoriq_pm_ops && qoriq_pm_ops->cpu_up_prepare)
- 		qoriq_pm_ops->cpu_up_prepare(cpu);
+-	if (unlikely(info->connected != BLKIF_STATE_CONNECTED))
++	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
++		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
+ 		return IRQ_HANDLED;
++	}
  
- 	/* if cpu is not spinning, reset it */
-@@ -292,7 +292,7 @@ static int smp_85xx_kick_cpu(int nr)
- 		booting_thread_hwid = cpu_thread_in_core(nr);
- 		primary = cpu_first_thread_sibling(nr);
+ 	spin_lock_irqsave(&rinfo->ring_lock, flags);
+  again:
+@@ -1584,6 +1587,8 @@ static irqreturn_t blkif_interrupt(int i
+ 		unsigned long id;
+ 		unsigned int op;
  
--		if (qoriq_pm_ops)
-+		if (qoriq_pm_ops && qoriq_pm_ops->cpu_up_prepare)
- 			qoriq_pm_ops->cpu_up_prepare(nr);
++		eoiflag = 0;
++
+ 		RING_COPY_RESPONSE(&rinfo->ring, i, &bret);
+ 		id = bret.id;
  
- 		/*
--- 
-2.34.1
-
+@@ -1699,6 +1704,8 @@ static irqreturn_t blkif_interrupt(int i
+ 
+ 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
+ 
++	xen_irq_lateeoi(irq, eoiflag);
++
+ 	return IRQ_HANDLED;
+ 
+  err:
+@@ -1706,6 +1713,8 @@ static irqreturn_t blkif_interrupt(int i
+ 
+ 	spin_unlock_irqrestore(&rinfo->ring_lock, flags);
+ 
++	/* No EOI in order to avoid further interrupts. */
++
+ 	pr_alert("%s disabled for further use\n", info->gd->disk_name);
+ 	return IRQ_HANDLED;
+ }
+@@ -1745,8 +1754,8 @@ static int setup_blkring(struct xenbus_d
+ 	if (err)
+ 		goto fail;
+ 
+-	err = bind_evtchn_to_irqhandler(rinfo->evtchn, blkif_interrupt, 0,
+-					"blkif", rinfo);
++	err = bind_evtchn_to_irqhandler_lateeoi(rinfo->evtchn, blkif_interrupt,
++						0, "blkif", rinfo);
+ 	if (err <= 0) {
+ 		xenbus_dev_fatal(dev, err,
+ 				 "bind_evtchn_to_irqhandler failed");
 
 

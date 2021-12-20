@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB8647A385
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47A247A395
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 03:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237125AbhLTCSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Dec 2021 21:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbhLTCR7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Dec 2021 21:17:59 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF00C06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 18:17:58 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso10784125ots.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Dec 2021 18:17:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aG5VGMfjEwBxcEqJKcCuOxgIi7Tr/j0cb2sk5Mr+xUw=;
-        b=s5AsnHA5/z0u0lRo/s+E+/Ebjb6SPhtCUobB3Wrnwrd2SJSo1urKdq7cM/6itIX843
-         933inhV8nv/opbEdZyKAvEN1e0/kjbJEYgyqd5eOyb+purIJfCFvkYwJdVZPmBqobiDU
-         05xUquAX7VU8pg+9Ae+B86fcU+iLH+Ad3EBrfSeGJ395tp6kK+DAVUcBuYiLrC/b3Hql
-         qObb94kdxjWVM+kw3lskf3PoI+SqvCCdQK/f/WgWza+V0bPd57J080/dMCTscmclcpEo
-         c2b8Y08myyEiBXoCs9/e3mjg4NEX4qgrnYWGAxW5rWqNxjWHMU7f9CQyyo62hJOtq3me
-         2c/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aG5VGMfjEwBxcEqJKcCuOxgIi7Tr/j0cb2sk5Mr+xUw=;
-        b=zKdLVjL/T78qi9a4bGo6Kf4NzNCEjUiF2D8w+ZzLHznW87fES0fra4aHclho4zA/GR
-         NTTEhU5OnjOjx/WFqERYndCVOoX1NNXjx4671P2T+ZPzW72brnAgL6DbMqZjdp5Wd0aA
-         FthP4siXjPJqdNH2zkpNPPJpYccSLjprp4QZGU6QLtFaSCD4HqnKlGJ3qC83YQBLCVXY
-         8Io5F34EvlqB+Xo8mtHGuYs0IYNKytsj5ir9Kr5tgOnmQ0yPLH5R5urvrZXoFvF45aIh
-         FD50JnDzEbr98VbRbwtv0xpsihFEeumfRxEl+5ISwqjZqeMsXbnMxSOd+mxOx2bEL1W7
-         +xmg==
-X-Gm-Message-State: AOAM5320GgrryAIPFj2FtCDow55yJWeeqfNR7CQ20scZycufBHlpHZ4G
-        9KkkbWYv3Jz2AQCU/w5fQMHBz3FUsVk88v2jThEHFw==
-X-Google-Smtp-Source: ABdhPJxxJvk+yHINE0wrcM/rV+VNZPiyU625TM4lEnnb+xH8hP9z0tRrtIAr8P86IxhOOUYUaQXaJRdPxKSIQ147jXQ=
-X-Received: by 2002:a9d:ed6:: with SMTP id 80mr9875586otj.35.1639966678036;
- Sun, 19 Dec 2021 18:17:58 -0800 (PST)
+        id S237226AbhLTCS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Dec 2021 21:18:28 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:33028 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237200AbhLTCS0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 19 Dec 2021 21:18:26 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowADX3S3S579hCULiAw--.4507S2;
+        Mon, 20 Dec 2021 10:17:55 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] sfc: potential dereference null pointer of rx_queue->page_ring
+Date:   Mon, 20 Dec 2021 10:17:53 +0800
+Message-Id: <20211220021753.723161-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211218212512.196866-1-avolmat@me.com>
-In-Reply-To: <20211218212512.196866-1-avolmat@me.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 20 Dec 2021 03:17:46 +0100
-Message-ID: <CACRpkdaAefLm_SxtbryDdGopr8WfVZkJmg4y8-w-WJuJqE-u1w@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: st: fix comments compilation warnings
-To:     Alain Volmat <avolmat@me.com>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowADX3S3S579hCULiAw--.4507S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWUAw17KFWxJr1xJF1rXrb_yoW8ZFWkpa
+        1xK347ua1ktw45Xas7Cw4kZF98JasxtFWxWrySk3yrZwn5AF15ZrsrtFW5uF4vyrWDWF42
+        yrWUZFnIyF4DJwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUmLvtUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 10:25 PM Alain Volmat <avolmat@me.com> wrote:
+The return value of kcalloc() needs to be checked.
+To avoid dereference of null pointer in case of the failure of alloc,
+such as efx_fini_rx_recycle_ring().
+Therefore, it should be better to change the definition of page_ptr_mask
+to signed int and then assign the page_ptr_mask to -1 when page_ring is
+NULL, in order to avoid the use in the loop.
 
-> This commit fixes 2 compilation warnings due to comment starting with
-> /** while not being kernel-doc comments.
->
-> drivers/pinctrl/pinctrl-st.c:59: warning: This comment starts with '/**',
-> but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  *  Packed style retime configuration.
-> drivers/pinctrl/pinctrl-st.c:73: warning: This comment starts with '/**',
-> but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Dedicated style retime Configuration register
->
-> Signed-off-by: Alain Volmat <avolmat@me.com>
+Fixes: 3d95b884392f ("sfc: move more rx code")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-This does not apply on my "devel" branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
+v2 -> v3
 
-Please rebase and resend.
+*Change 1. Casade return -ENOMEM when alloc fails and deal with the
+error.
+*Change 2. Set size to -1 instead of return error.
+---
+ drivers/net/ethernet/sfc/net_driver.h | 2 +-
+ drivers/net/ethernet/sfc/rx_common.c  | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
+index 9b4b25704271..beba3e0a6027 100644
+--- a/drivers/net/ethernet/sfc/net_driver.h
++++ b/drivers/net/ethernet/sfc/net_driver.h
+@@ -407,7 +407,7 @@ struct efx_rx_queue {
+ 	unsigned int page_recycle_count;
+ 	unsigned int page_recycle_failed;
+ 	unsigned int page_recycle_full;
+-	unsigned int page_ptr_mask;
++	int page_ptr_mask;
+ 	unsigned int max_fill;
+ 	unsigned int fast_fill_trigger;
+ 	unsigned int min_fill;
+diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
+index 68fc7d317693..d9d0a5805f1c 100644
+--- a/drivers/net/ethernet/sfc/rx_common.c
++++ b/drivers/net/ethernet/sfc/rx_common.c
+@@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+ 					    efx->rx_bufs_per_page);
+ 	rx_queue->page_ring = kcalloc(page_ring_size,
+ 				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
+-	rx_queue->page_ptr_mask = page_ring_size - 1;
++	if (!rx_queue->page_ring)
++		rx_queue->page_ptr_mask = -1;
++	else
++		rx_queue->page_ptr_mask = page_ring_size - 1;
+ }
+ 
+ static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+-- 
+2.25.1
+

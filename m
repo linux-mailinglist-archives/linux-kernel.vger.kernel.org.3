@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5334347A60E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0901347A610
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 09:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbhLTIb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 03:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhLTIb1 (ORCPT
+        id S234693AbhLTIcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 03:32:02 -0500
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:40903 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231287AbhLTIcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 03:31:27 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83E7C061574;
-        Mon, 20 Dec 2021 00:31:27 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id r5so8755198pgi.6;
-        Mon, 20 Dec 2021 00:31:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Sxzh8vv+UDF1ozr4skh8dPpXzZBnoOuB4sgIDP3qnZc=;
-        b=lyzkvbefg3LK3OejbCJKGaiCJ8IP2bqb4NE6s3tUteH2fP6IOx8fQBCNScfbwLK+zu
-         Ae1iFgPPrGDIrTurycWjhFGmRXzzL6SrvACDBpLJWQhXnN1uCNTsXWqmoubuGSj3Tc5o
-         PUCXiRBQPr15u+doLAbMKdI4xTM6lq3rPoGs27SWyeT8NtRsaUGoz5ys0Ioszm7Ww87c
-         5pGerS5q/i6fZ2k7XneTCNrebgGQ1igr17Y3cGXSWtZcHNoEzH8QQLRY9nRN+3cHQ8s8
-         AngMl1hQUolxSjke73H7vPW3YIfBLXivVFy2oT0eaQM1djrZzrbl6TaRpgTCFzsF6C+U
-         h1KA==
+        Mon, 20 Dec 2021 03:32:00 -0500
+Received: by mail-ua1-f47.google.com with SMTP id y23so16283755uay.7;
+        Mon, 20 Dec 2021 00:31:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Sxzh8vv+UDF1ozr4skh8dPpXzZBnoOuB4sgIDP3qnZc=;
-        b=pnC0WxTlftRsavKA2Vg6qEQMxuvR4tLjE2BoxPX2xCH83g+aTPWhYg+eDW1lUS48Do
-         d758G5Qvi84KDOT9bTA2WplFKC49fVJd6OnLRCM0ETLqvRkiXzhLQEUbtani297RN6RX
-         HIunEguVHFKA/fbwkrao2/1Vss1CP5zhvwEZSlqb28FVGLV+hTY4v/LNUVkI7UseSl13
-         xMzU8KrM3ENaDaGQ76vtGL0I/hUXU1LbpuxuTbWy0DEn2ie1nuG1qVpMLpaI5OaXeKEe
-         NMXavdq5/PzZyz/54LD02JcNWDRzE6v3BRZJcuF1XONM0wpdu+EvG/kOdnq529WtVPvt
-         djUg==
-X-Gm-Message-State: AOAM533wuxu1vDrImz7/KJmEklgirf0z63UgsNQeiVzH/xrizHkzBSV+
-        ohP/MKBUgRigSCt8pGhSMWmKS9QATec=
-X-Google-Smtp-Source: ABdhPJzJVJN8fqxR1TBsbo2jyQreqtdnUPXezPHhgiIOE/Ndf22BeGYKLCs1dtF6WorWIM31o7pFPA==
-X-Received: by 2002:a63:1b0a:: with SMTP id b10mr14202344pgb.183.1639989087134;
-        Mon, 20 Dec 2021 00:31:27 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:3e2e:1228:8845:1f8d])
-        by smtp.gmail.com with ESMTPSA id me3sm2627335pjb.47.2021.12.20.00.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 00:31:25 -0800 (PST)
-Date:   Mon, 20 Dec 2021 00:31:23 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Johnny Chuang <johnny.chuang.emc@gmail.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Harry Cutts <hcutts@chromium.org>,
-        Johnny Chuang <johnny.chuang@emc.com.tw>,
-        James Chen <james.chen@emc.com.tw>,
-        Jennifer Tsai <jennifer.tsai@emc.com.tw>,
-        Paul Liang <paul.liang@emc.com.tw>,
-        Jeff Chuang <jeff.chuang@emc.com.tw>
-Subject: Re: [PATCH] Input: elants_i2c - fix to check the Remark ID of the
- updated firmware
-Message-ID: <YcA/W2wEk0wm7O8t@google.com>
-References: <1639619603-20616-1-git-send-email-johnny.chuang.emc@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EgjLQvrKGuGeCYHnkgESw4n2mOzkXtzgjSJa+/vyJgI=;
+        b=iJNu/vXH11pXz2aa+fzl7Q8mqkAXzQoCTrW5vMqiVB7TEpfdmcCb1Mq4FfDPz5OmTj
+         4tOlpcfUDoyaxYqw0oIBHdcq3c4tg8CQI4EQ/Kazz1StDkCG2To3gFk6CHermNZ0OwLx
+         BZqo05BPmGmcQD7aMD29zi9GI/ZyV0UJz4scRd9rsP9HKdg41P9f9eAktVyZ9gQkGnlo
+         JvO398e84pn2T5+CYjo+OzA/ppola7FD/5qvu5J5Z6hmyBGH/EgO15+yEi7Xfh9cDQzY
+         UfK6wak3+sIvaAIyYgAYAQ4I9qXzUzlx1n+vaJ4Nn3m4hOvhiT8tqD4I2ct+i2IUbfxN
+         GeLA==
+X-Gm-Message-State: AOAM532+rgFp6yp9syzc0rpGL4fkOXTYIjZSDiKsJVBkwfHnANI/OCJI
+        7uv2mzSeGm5wRPM+fAlPJ+8Mp3x9rOtCwA==
+X-Google-Smtp-Source: ABdhPJw417rxtNPSZg6m7k/o1pZCAYviPftsGzQn7e0RGN+WniR/Fkb2tujGSbTR17GWyNyeS/2UuQ==
+X-Received: by 2002:a05:6102:3907:: with SMTP id e7mr4475513vsu.39.1639989119130;
+        Mon, 20 Dec 2021 00:31:59 -0800 (PST)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id q185sm1658685vka.14.2021.12.20.00.31.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 00:31:58 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id 70so5633966vkx.7;
+        Mon, 20 Dec 2021 00:31:58 -0800 (PST)
+X-Received: by 2002:ac5:c853:: with SMTP id g19mr1252601vkm.20.1639989118527;
+ Mon, 20 Dec 2021 00:31:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639619603-20616-1-git-send-email-johnny.chuang.emc@gmail.com>
+References: <20211218180035.200552-1-liuzx@knownsec.com>
+In-Reply-To: <20211218180035.200552-1-liuzx@knownsec.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Dec 2021 09:31:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWfPG3tSJWGciDs3PoNguvdoGEM514TEcSQg3YL398_LA@mail.gmail.com>
+Message-ID: <CAMuHMdWfPG3tSJWGciDs3PoNguvdoGEM514TEcSQg3YL398_LA@mail.gmail.com>
+Subject: Re: [PATCH] matroxfb: set maxvram of vbG200eW to the same as vbG200
+ to avoid black screen
+To:     "Z. Liu" <liuzx@knownsec.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rich Felker <dalias@libc.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 09:53:23AM +0800, Johnny Chuang wrote:
-> The eKTH3900/eKTH5312 series do not support
-> the firmware update rules of Remark ID.
-> Exclude two series and keep the original rules to check the Remark ID.
-> 
-> Signed-off-by: Johnny Chuang <johnny.chuang.emc@gmail.com>
+CC Rich (author of commit in Fixes tag)
 
-Applied, with minor edits, thank you.
+On Sun, Dec 19, 2021 at 11:31 PM Z. Liu <liuzx@knownsec.com> wrote:
+> Start from commit 11be60bd66d54 "matroxfb: add Matrox MGA-G200eW board
+> support", when maxvram is 0x800000, monitor become black w/ error message
+> said: "The current input timing is not supported by the monitor display.
+> Please change your input timing to 1920x1080@60Hz ...".
+>
+> Fixes: 1be60bd66d54 ("matroxfb: add Matrox MGA-G200eW board support")
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Z. Liu <liuzx@knownsec.com>
+> ---
+>  drivers/video/fbdev/matrox/matroxfb_base.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
+> index 5c82611e93d9..236521b19daf 100644
+> --- a/drivers/video/fbdev/matrox/matroxfb_base.c
+> +++ b/drivers/video/fbdev/matrox/matroxfb_base.c
+> @@ -1377,7 +1377,7 @@ static struct video_board vbG200 = {
+>         .lowlevel = &matrox_G100
+>  };
+>  static struct video_board vbG200eW = {
+> -       .maxvram = 0x800000,
+> +       .maxvram = 0x100000,
+>         .maxdisplayable = 0x800000,
+>         .accelID = FB_ACCEL_MATROX_MGAG200,
+>         .lowlevel = &matrox_G100
 
--- 
-Dmitry
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,84 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AAF47B1C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B71C47B1C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 18:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239973AbhLTRCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 12:02:35 -0500
-Received: from mga17.intel.com ([192.55.52.151]:5251 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239926AbhLTRCa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:02:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640019750; x=1671555750;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nr0RyzS4So4IexhjbOwLJPNn/M4Hd8nuHZ5v80C4w8o=;
-  b=oAuFUXxD+NhEyBrhSNvroED9h++M9Fe6VE55AVEWL2OoEiDZQTp/Ljpx
-   0dTyLDx5JL8D5kr9bB3kiccWbwoFuWnLo2Rh0lBmThJMcBHcTdTcbVxIA
-   LcIrEMgAZMCW6HGIRskVY0qRdRgXN+B9y8TlhJvuIR8gJP5hwMPuFKpZO
-   ldf6RkD83XVcmRuAZNLEgvkL87u58H7mdvOl1ikmoIT0hpPnxog8G/j3m
-   No0pfdxt68EqX/uNmQONHg5AEGSnCB7exDuvjW00Wr5g+WOM0+1XepecA
-   rla1oBU15xhCMl9TazU/r464R3e8VqtLaJbtfqUYuiRlZ2koAoRgki/Uq
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220899788"
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="220899788"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 09:02:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
-   d="scan'208";a="484120413"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 09:02:13 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzM3B-00081H-1h; Mon, 20 Dec 2021 17:02:13 +0000
-Date:   Tue, 21 Dec 2021 01:01:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Error: failed to load BTF from
- /kbuild/obj/consumer/x86_64-rhel-8.3-kselftests/vmlinux: Invalid argument
-Message-ID: <202112210104.lQLxELOy-lkp@intel.com>
+        id S239923AbhLTRC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 12:02:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29920 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239881AbhLTRC0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 12:02:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640019745;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IMU+crRbPmjYFM4aE3gKGGI6VKsFtp6amlEI5UhnTVM=;
+        b=DLEhdh9DaaBuyO2mgjD1NDDVdMhJDvt7EPDmZznwIYGcKD6jng4qhGI3J7lTkytF1RmjWY
+        flIgfZSiveprPwLfsAy4LpQiZs1kv7kTWAN1eyKSqzFQhIbkzuMeEIWDD3ITRy6fD84PBW
+        5JAAv0PF1V6PlDfp3PUQZ7slPouIG9s=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-FIfPXNbAOa2f6u_dVsewhg-1; Mon, 20 Dec 2021 12:02:24 -0500
+X-MC-Unique: FIfPXNbAOa2f6u_dVsewhg-1
+Received: by mail-ed1-f70.google.com with SMTP id v19-20020a056402349300b003f7eba50675so8103310edc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 09:02:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IMU+crRbPmjYFM4aE3gKGGI6VKsFtp6amlEI5UhnTVM=;
+        b=7qEDyXYQwXMS+LXvZrVhyqzjRHQV1CgW8GJllj9e3yImQDZ9ChRFVNuhtQLjHDQFS+
+         FKtinoVNXG9IcyHBjXJu5qo35iRwThGnBZDtnulqiq1qy8jfNctHEKs7J9zqtltQykMg
+         7fCV8BYXmYKQq2bv9OlQMgALtXMZhGZVkH+EplYk4tO26X7zUqbPzhKCTtcMVAxAsyeD
+         CFMK73S1/iJJmklFTHK3Xt48YjPD+mu5N5bmKAo/yRWgLdiTqE3rVOodloKkOcAsLmwr
+         UTNzdrX8b6zHBzW8gdOSxQ9bPm7YPH4+OP/O7l4QxAnjriqj/IxRPoHlZ/Bnt8fYC2UE
+         j+FA==
+X-Gm-Message-State: AOAM531X6kbwesDrDgSNQOwuBH5oSNDWZ7Xy28Ou8nIsSosMxnuwSH6z
+        Gm6v+OV8iC0yn4UprtHeHNqwccecmSHWTSk379yIrS8YUu25z02qDMkH8fGjZY5P8aQtnTXpY8e
+        lyIq1qRtPy9fsnpryR9Lvxvr2DJl0ZRqChAGNsS/X
+X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr17171221edb.360.1640019743123;
+        Mon, 20 Dec 2021 09:02:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3uewW7dW2JUgtnmE5hrswtZYTJhzi+M3Hljl0JXA6W2KOd/ltCxASxmEBtTAIgQ7/+1mGgrxoW1uwmM7YFrg=
+X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr17171189edb.360.1640019742880;
+ Mon, 20 Dec 2021 09:02:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211104171734.137707-1-wander@redhat.com> <YcClBlhwp4arGWtw@kroah.com>
+In-Reply-To: <YcClBlhwp4arGWtw@kroah.com>
+From:   Wander Costa <wcosta@redhat.com>
+Date:   Mon, 20 Dec 2021 14:02:11 -0300
+Message-ID: <CAAq0SUmVmyALNYUbM5dy3D0=Bp=ukNoNdodc1yxYQjm1SnBgAQ@mail.gmail.com>
+Subject: Re: [PATCH v2] tty: serial: Use fifo in 8250 console driver
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a7904a538933c525096ca2ccde1e60d0ee62c08e
-commit: db16c1fe92d7ba7d39061faef897842baee2c887 bpf: Generate BTF_KIND_FLOAT when linking vmlinux
-date:   8 months ago
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20211221/202112210104.lQLxELOy-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db16c1fe92d7ba7d39061faef897842baee2c887
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout db16c1fe92d7ba7d39061faef897842baee2c887
-        # save the config file to linux build tree
-        make W=1 ARCH=x86_64 SHELL=/bin/bash tools/all
+On Mon, Dec 20, 2021 at 12:45 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Nov 04, 2021 at 02:17:31PM -0300, wander@redhat.com wrote:
+> > From: Wander Lairson Costa <wander@redhat.com>
+> >
+> > Note: I am using a small test app + driver located at [0] for the
+> > problem description. serco is a driver whose write function dispatches
+> > to the serial controller. sertest is a user-mode app that writes n bytes
+> > to the serial console using the serco driver.
+> >
+> > Recently I got a report of a soft lockup while loading a bunch a
+> > scsi_debug devices (> 500).
+> >
+> > While investigating it, I noticed that the serial console throughput
+> > (called by the printk code) is way below the configured speed of 115200
+> > bps in a HP Proliant DL380 Gen9 server. I was expecting something above
+> > 10KB/s, but I got 2.5KB/s. I then built a simple driver [0] to isolate
+> > the console from the printk code. Here it is:
+> >
+> > $ time ./sertest -n 2500 /tmp/serco
+> >
+> > real    0m0.997s
+> > user    0m0.000s
+> > sys     0m0.997s
+> >
+> > With the help of the function tracer, I then noticed the serial
+> > controller was taking around 410us seconds to dispatch one single byte:
+> >
+> > $ trace-cmd record -p function_graph -g serial8250_console_write \
+> >    ./sertest -n 1 /tmp/serco
+> >
+> > $ trace-cmd report
+> >
+> >             |  serial8250_console_write() {
+> >  0.384 us   |    _raw_spin_lock_irqsave();
+> >  1.836 us   |    io_serial_in();
+> >  1.667 us   |    io_serial_out();
+> >             |    uart_console_write() {
+> >             |      serial8250_console_putchar() {
+> >             |        wait_for_xmitr() {
+> >  1.870 us   |          io_serial_in();
+> >  2.238 us   |        }
+> >  1.737 us   |        io_serial_out();
+> >  4.318 us   |      }
+> >  4.675 us   |    }
+> >             |    wait_for_xmitr() {
+> >  1.635 us   |      io_serial_in();
+> >             |      __const_udelay() {
+> >  1.125 us   |        delay_tsc();
+> >  1.429 us   |      }
+> > ...
+> > ...
+> > ...
+> >  1.683 us   |      io_serial_in();
+> >             |      __const_udelay() {
+> >  1.248 us   |        delay_tsc();
+> >  1.486 us   |      }
+> >  1.671 us   |      io_serial_in();
+> >  411.342 us |    }
+> >
+> > In another machine, I measured a throughput of 11.5KB/s, with the serial
+> > controller taking between 80-90us to send each byte. That matches the
+> > expected throughput for a configuration of 115200 bps.
+> >
+> > This patch changes the serial8250_console_write to use the 16550 fifo
+> > if available. In my artificial benchmark I could get a throughput
+> > increase up to 100% in some cases, but in the real case described at the
+> > beginning the gain was of about 25%.
+> >
+> > [0] https://github.com/walac/serial-console-test
+> >
+> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> > ---
+> >  drivers/tty/serial/8250/8250.h      |  3 ++
+> >  drivers/tty/serial/8250/8250_port.c | 63 +++++++++++++++++++++++++----
+> >  2 files changed, 59 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+> > index 6473361525d1..c711bf118cc1 100644
+> > --- a/drivers/tty/serial/8250/8250.h
+> > +++ b/drivers/tty/serial/8250/8250.h
+> > @@ -83,6 +83,9 @@ struct serial8250_config {
+> >  #define UART_CAP_MINI        BIT(17) /* Mini UART on BCM283X family lacks:
+> >                                        * STOP PARITY EPAR SPAR WLEN5 WLEN6
+> >                                        */
+> > +#define UART_CAP_CWFIFO BIT(18) /* Use the UART Fifo in
+> > +                              * serial8250_console_write
+> > +                              */
+>
+> Why do you need a new bit?  Why can't you just do this change for all
+> devices that have a fifo?  Why would you _not_ want to do this for all
+> devices that have a fifo?
+>
+The v1 patch [1] didn't have this extra bit. Andy suggested [2] to add
+it so we only enabled this new code on tested controllers as a
+precaution.
+If it doesn't make sense to you, feel free to consider the v1 patch [1].
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[1] https://lore.kernel.org/all/20211029201402.428284-1-wander@redhat.com/
+[2] https://lore.kernel.org/all/CAHp75Vf6DjNcPWpE4Dh3SuzUMJbFQjq1UNCkrCa60uw35SpqKg@mail.gmail.com/
 
-All errors (new ones prefixed by >>):
+> thanks,
+>
+> greg k-h
+>
 
->> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-rhel-8.3-kselftests/vmlinux: Invalid argument
-   make[5]: *** [Makefile:140: /kbuild/worktree/build-ktools-consumer/tools/bpf/runqslower/.output/vmlinux.h] Error 22
-   make[4]: *** [Makefile:84: .output/sbin/bpftool] Error 2
-   make[3]: *** [Makefile:119: runqslower] Error 2
-   make[3]: *** Waiting for unfinished jobs....
->> Error: failed to load BTF from /kbuild/obj/consumer/x86_64-rhel-8.3-kselftests/vmlinux: Invalid argument
-   make[4]: *** [Makefile:140: /kbuild/obj/consumer/x86_64-rhel-8.3-kselftests/tools/bpf/bpftool/vmlinux.h] Error 22
-   make[3]: *** [Makefile:110: bpftool] Error 2
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

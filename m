@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4812847AF83
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D409147AEB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Dec 2021 16:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbhLTPOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 10:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S238252AbhLTPCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 10:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239936AbhLTPMS (ORCPT
+        with ESMTP id S239288AbhLTO6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:12:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEB7C08EB46;
-        Mon, 20 Dec 2021 06:56:42 -0800 (PST)
+        Mon, 20 Dec 2021 09:58:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B10C0613A1;
+        Mon, 20 Dec 2021 06:50:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A6A611A5;
-        Mon, 20 Dec 2021 14:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E55C36AE8;
-        Mon, 20 Dec 2021 14:56:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBC6DB80EE3;
+        Mon, 20 Dec 2021 14:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD71C36AE7;
+        Mon, 20 Dec 2021 14:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640012201;
-        bh=SjAkR+NME4WGUn56p1EBl/JMAMcfwv2MGfatFhERupU=;
+        s=korg; t=1640011822;
+        bh=4n8EdVgXsAbM/IvKUAZywoQNE0i2iBaOhhI3Kvjlls0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b2HeL2xT7jnQGCPjcGSU29ntyt4N5d55MuLmumhiY+DgiGRpHjku0H+cvERcqtiB9
-         UyWoYmlhWMJkx0LbVhSpfgCFB/tE6JEBaIL1QRe9yPu8AcQIq5jdOEsp1EE3u5Evbz
-         PB/kq/OLp0PDLU0qUnSFzHz1kwiuudi5DjFgpyiU=
+        b=08/ctcsX73z3aJ0WQnzWEEbc3MB7W8lzzWrXz9jZzPebN2PtlAxfo8u/Q5vfTSeDM
+         gR09TQvZN0+b/5wAe69QohJ/lJ0IDG4FQQ+lYZBFuBQsQkdE9tSaFlX26S5FG8A0Fx
+         TT8H6ha+h2oYazoLbr9Ya9ytetGrDBDsFs33Sr2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, markpearson@lenovo.com,
-        Jimmy Wang <wangjm221@gmail.com>
-Subject: [PATCH 5.15 117/177] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
+        stable@vger.kernel.org, Cyril Novikov <cnovikov@lynx.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 54/99] ixgbe: set X550 MDIO speed before talking to PHY
 Date:   Mon, 20 Dec 2021 15:34:27 +0100
-Message-Id: <20211220143044.013628971@linuxfoundation.org>
+Message-Id: <20211220143031.209726616@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-References: <20211220143040.058287525@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+References: <20211220143029.352940568@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,33 +50,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Wang <wangjm221@gmail.com>
+From: Cyril Novikov <cnovikov@lynx.com>
 
-commit 0ad3bd562bb91853b9f42bda145b5db6255aee90 upstream.
+[ Upstream commit bf0a375055bd1afbbf02a0ef45f7655da7b71317 ]
 
-This device doesn't work well with LPM, losing connectivity intermittently.
-Disable LPM to resolve the issue.
+The MDIO bus speed must be initialized before talking to the PHY the first
+time in order to avoid talking to it using a speed that the PHY doesn't
+support.
 
-Reviewed-by: <markpearson@lenovo.com>
-Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211214012652.4898-1-wangjm221@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This fixes HW initialization error -17 (IXGBE_ERR_PHY_ADDR_INVALID) on
+Denverton CPUs (a.k.a. the Atom C3000 family) on ports with a 10Gb network
+plugged in. On those devices, HLREG0[MDCSPD] resets to 1, which combined
+with the 10Gb network results in a 24MHz MDIO speed, which is apparently
+too fast for the connected PHY. PHY register reads over MDIO bus return
+garbage, leading to initialization failure.
+
+Reproduced with Linux kernel 4.19 and 5.15-rc7. Can be reproduced using
+the following setup:
+
+* Use an Atom C3000 family system with at least one X552 LAN on the SoC
+* Disable PXE or other BIOS network initialization if possible
+  (the interface must not be initialized before Linux boots)
+* Connect a live 10Gb Ethernet cable to an X550 port
+* Power cycle (not reset, doesn't always work) the system and boot Linux
+* Observe: ixgbe interfaces w/ 10GbE cables plugged in fail with error -17
+
+Fixes: e84db7272798 ("ixgbe: Introduce function to control MDIO speed")
+Signed-off-by: Cyril Novikov <cnovikov@lynx.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/quirks.c |    3 +++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c | 3 +++
  1 file changed, 3 insertions(+)
 
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -434,6 +434,9 @@ static const struct usb_device_id usb_qu
- 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
- 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
+index 5e339afa682a6..37f2bc6de4b65 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
+@@ -3405,6 +3405,9 @@ static s32 ixgbe_reset_hw_X550em(struct ixgbe_hw *hw)
+ 	/* flush pending Tx transactions */
+ 	ixgbe_clear_tx_pending(hw);
  
-+	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
-+	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
++	/* set MDIO speed before talking to the PHY in case it's the 1st time */
++	ixgbe_set_mdio_speed(hw);
 +
- 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
- 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
- 
+ 	/* PHY ops must be identified and initialized prior to reset */
+ 	status = hw->phy.ops.init(hw);
+ 	if (status == IXGBE_ERR_SFP_NOT_SUPPORTED ||
+-- 
+2.33.0
+
 
 

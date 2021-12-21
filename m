@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E4947BE03
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2093A47BE07
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbhLUKOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:14:47 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4311 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbhLUKOq (ORCPT
+        id S232467AbhLUKPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:15:20 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37362 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231745AbhLUKPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:14:46 -0500
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJC2L22JSz67Mww;
-        Tue, 21 Dec 2021 18:12:58 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Tue, 21 Dec 2021 11:14:43 +0100
-Received: from [10.195.32.222] (10.195.32.222) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 10:14:43 +0000
-Subject: Re: [PATCH] perf pmu: Fix event list for uncore PMUs
-To:     Jiri Olsa <jolsa@redhat.com>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <namhyung@kernel.org>, <irogers@google.com>,
-        <kan.liang@linux.intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1639670017-74918-1-git-send-email-john.garry@huawei.com>
- <YcGJJ2g+i5qWea7d@krava> <bbf9c0b4-c048-3adf-5282-2355aa648acf@huawei.com>
- <YcGf/d5PPqqyXxUW@krava>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <43e185f6-9fa7-6ae1-e4fd-c90c6a50f68f@huawei.com>
-Date:   Tue, 21 Dec 2021 10:14:42 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Tue, 21 Dec 2021 05:15:18 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 684282114D;
+        Tue, 21 Dec 2021 10:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640081717; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tw4XdfqKEnDXFIq4KJAkTaIZVJn1UjG86AxtNcsugP8=;
+        b=Hjyte8ENHdsPrBGaVKpNFn1mwcPxGe7gGmzQMk577eS/xg7Pz8BF7k5gk9VW2Sck6Eq61M
+        A6fT0Z6/hDxsTH4hAJdSSOKKZez+Hyn+fY03LdgZdjsuEArzOZYvCTAGFiwCzVGI68RGuw
+        aNqrAysr/+N8GWNpt7852Prl0Wd4DSA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640081717;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tw4XdfqKEnDXFIq4KJAkTaIZVJn1UjG86AxtNcsugP8=;
+        b=/iFnvAG4RtesCazLS7MFQDjGh3UnSiR0emxt3HUEhp0xgT6K6zgWlDSxErALSjimAWHqOo
+        WfH9FJNrpG9+C8BA==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 5309AA3B89;
+        Tue, 21 Dec 2021 10:15:17 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 2A3E41E14A1; Tue, 21 Dec 2021 11:15:17 +0100 (CET)
+Date:   Tue, 21 Dec 2021 11:15:17 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
+        jack@suse.cz, fchecconi@gmail.com, avanzini.arianna@gmail.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH 1/4] block, bfq: cleanup bfq_bfqq_to_bfqg()
+Message-ID: <20211221101517.GA24748@quack2.suse.cz>
+References: <20211221032135.878550-1-yukuai3@huawei.com>
+ <20211221032135.878550-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <YcGf/d5PPqqyXxUW@krava>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.32.222]
-X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221032135.878550-2-yukuai3@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2021 09:35, Jiri Olsa wrote:
-> On Tue, Dec 21, 2021 at 09:10:37AM +0000, John Garry wrote:
->> On 21/12/2021 07:58, Jiri Olsa wrote:
->>>> +	/* Different names -> never duplicates */
->>>> +	if (strcmp(alias_a->name, alias_b->name))
->>>> +		return false;
->>>> +	if (!alias_a->pmu)
->>>> +		return true;
->>>> +	if (!alias_b->pmu)
->>>> +		return true;
->>> nit could be:
->>>
->>> 	if (!alias_a->pmu || !alias_b->pmu)
->>> 		return true;
->>>
->>> would be great to have more comments explaining the check
->>>
->>
->> This is just a sanity check that both strings are non-NULL as we do a
->> strcmp() next. So would this be better:
->>
->> if (!alias_a->pmu || !alias_b->pmu || !strcmp(alias_a->pmu, alias_b->pmu))
->> 	return true
->>
->> ?
->>
->> It will spill a line.
+On Tue 21-12-21 11:21:32, Yu Kuai wrote:
+> Use bfq_group() instead, which do the same thing.
 > 
-> sure, it cought my eye because the is_cpu check later is done on
-> the same line, so I started wondering what's the difference ;-)
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+
+Nice. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  block/bfq-iosched.c |  4 ++--
+>  block/bfq-iosched.h |  1 -
+>  block/bfq-wf2q.c    | 15 ---------------
+>  3 files changed, 2 insertions(+), 18 deletions(-)
 > 
-
-Now thinking a bit more I am not confident that this patch is a full fix.
-
-arm have heterogeneous CPU systems as well - which are not "hybrid" - 
-and I need to ensure that aliasing is still working properly there, as I 
-think that this following check would stop removing duplicates there:
-
-+	/* uncore PMUs */
-+	if (!alias_a->is_cpu && !alias_b->is_cpu)
-+		return true;
-+	return false;
-
-Thanks,
-John
-
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 0c612a911696..2f2b97cad980 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -774,7 +774,7 @@ bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  	if (!bfqq->next_rq)
+>  		return;
+>  
+> -	bfqq->pos_root = &bfq_bfqq_to_bfqg(bfqq)->rq_pos_tree;
+> +	bfqq->pos_root = &bfqq_group(bfqq)->rq_pos_tree;
+>  	__bfqq = bfq_rq_pos_tree_lookup(bfqd, bfqq->pos_root,
+>  			blk_rq_pos(bfqq->next_rq), &parent, &p);
+>  	if (!__bfqq) {
+> @@ -2669,7 +2669,7 @@ static struct bfq_queue *bfqq_find_close(struct bfq_data *bfqd,
+>  					 struct bfq_queue *bfqq,
+>  					 sector_t sector)
+>  {
+> -	struct rb_root *root = &bfq_bfqq_to_bfqg(bfqq)->rq_pos_tree;
+> +	struct rb_root *root = &bfqq_group(bfqq)->rq_pos_tree;
+>  	struct rb_node *parent, *node;
+>  	struct bfq_queue *__bfqq;
+>  
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 07288b9da389..99949548896e 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -1051,7 +1051,6 @@ extern struct blkcg_policy blkcg_policy_bfq;
+>  	for (parent = NULL; entity ; entity = parent)
+>  #endif /* CONFIG_BFQ_GROUP_IOSCHED */
+>  
+> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq);
+>  struct bfq_queue *bfq_entity_to_bfqq(struct bfq_entity *entity);
+>  unsigned int bfq_tot_busy_queues(struct bfq_data *bfqd);
+>  struct bfq_service_tree *bfq_entity_service_tree(struct bfq_entity *entity);
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index b74cc0da118e..e1f5ca5c1fdb 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -142,16 +142,6 @@ static bool bfq_update_next_in_service(struct bfq_sched_data *sd,
+>  
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>  
+> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq)
+> -{
+> -	struct bfq_entity *group_entity = bfqq->entity.parent;
+> -
+> -	if (!group_entity)
+> -		group_entity = &bfqq->bfqd->root_group->entity;
+> -
+> -	return container_of(group_entity, struct bfq_group, entity);
+> -}
+> -
+>  /*
+>   * Returns true if this budget changes may let next_in_service->parent
+>   * become the next_in_service entity for its parent entity.
+> @@ -230,11 +220,6 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
+>  
+>  #else /* CONFIG_BFQ_GROUP_IOSCHED */
+>  
+> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq)
+> -{
+> -	return bfqq->bfqd->root_group;
+> -}
+> -
+>  static bool bfq_update_parent_budget(struct bfq_entity *next_in_service)
+>  {
+>  	return false;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,80 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D3B47C8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6F347C8D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbhLUV1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:27:12 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:10647 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236809AbhLUV1K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:27:10 -0500
-X-IronPort-AV: E=Sophos;i="5.88,224,1635174000"; 
-   d="scan'208";a="104266477"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 22 Dec 2021 06:27:10 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 490DA41082DB;
-        Wed, 22 Dec 2021 06:27:08 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Han Xu <han.xu@nxp.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] mtd: rawnand: gpmi: Use platform_get_irq_byname() to get the interrupt
-Date:   Tue, 21 Dec 2021 21:26:09 +0000
-Message-Id: <20211221212609.31290-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211221212609.31290-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211221212609.31290-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S236988AbhLUVbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:31:25 -0500
+Received: from mga14.intel.com ([192.55.52.115]:25967 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236944AbhLUVbY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 16:31:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640122284; x=1671658284;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dhM0n7DG5w61MtipLRwn2rzXYvDshX9u90IZfSWI7Yc=;
+  b=WZctKQCNJHRQ4/R8PTUkVHAUP+BO05se6jNzntg1HOZ+ipMFShMRNnna
+   tdn38AkWq1BpATspWgmCxCyqVcL4oMIQasDOrPiel85BwGRVwY8n+bG9J
+   4HNzBfAYbG0tqwVuelthFcS2nAGtS4VtulTbclQsdjjTU+lKAj6QO13YM
+   tSr33ZE86np4dCkUSUApzGlY2z4Dalb20DpSZ7hlHK7sKPZIjoqlE2Qg1
+   OXhxPfHfsFFZrIHkaHZpesRFhwYSWSnpDeSVExG4/dgi9mn1/xtBGwT/x
+   Gwb+RBACIWxGZifeaenzQyFCQUU+C24FxKT+khwjRfLlfJO3HgWszev2x
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240720790"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="240720790"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 13:31:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="616911736"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Dec 2021 13:31:18 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzmj7-0009ZN-Qz; Tue, 21 Dec 2021 21:31:17 +0000
+Date:   Wed, 22 Dec 2021 05:30:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ ab57c081e4ce39845d70ea9c8432d3f12d71d7c5
+Message-ID: <61c24776.Qye93OoeHgzkBZsX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource_byname(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: ab57c081e4ce39845d70ea9c8432d3f12d71d7c5  Merge branch into tip/master: 'core/entry'
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_byname().
+elapsed time: 729m
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+configs tested: 110
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+mips                     loongson1c_defconfig
+arm                        realview_defconfig
+powerpc                  storcenter_defconfig
+sh                        edosk7705_defconfig
+sh                             espt_defconfig
+m68k                       m5275evb_defconfig
+arm                              alldefconfig
+arm                         cm_x300_defconfig
+mips                malta_qemu_32r6_defconfig
+sh                           se7712_defconfig
+powerpc                 mpc832x_mds_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                      ppc44x_defconfig
+arm                     eseries_pxa_defconfig
+xtensa                          iss_defconfig
+mips                       capcella_defconfig
+sh                        dreamcast_defconfig
+mips                           ci20_defconfig
+sh                           se7206_defconfig
+mips                        jmr3927_defconfig
+m68k                            q40_defconfig
+arm                          pcm027_defconfig
+powerpc                      katmai_defconfig
+arm                         assabet_defconfig
+sh                            shmin_defconfig
+powerpc                   lite5200b_defconfig
+arm                  randconfig-c002-20211220
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a001-20211220
+x86_64               randconfig-a003-20211220
+x86_64               randconfig-a004-20211220
+x86_64               randconfig-a002-20211220
+x86_64               randconfig-a006-20211220
+x86_64               randconfig-a005-20211220
+i386                 randconfig-a002-20211220
+i386                 randconfig-a003-20211220
+i386                 randconfig-a001-20211220
+i386                 randconfig-a006-20211220
+i386                 randconfig-a004-20211220
+i386                 randconfig-a005-20211220
+arc                  randconfig-r043-20211221
+riscv                randconfig-r042-20211221
+s390                 randconfig-r044-20211221
+arc                  randconfig-r043-20211220
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64               randconfig-a013-20211220
+x86_64               randconfig-a015-20211220
+x86_64               randconfig-a014-20211220
+x86_64               randconfig-a012-20211220
+x86_64               randconfig-a011-20211220
+x86_64               randconfig-a016-20211220
+hexagon              randconfig-r041-20211221
+hexagon              randconfig-r045-20211221
+hexagon              randconfig-r041-20211220
+hexagon              randconfig-r045-20211220
+riscv                randconfig-r042-20211220
+s390                 randconfig-r044-20211220
+
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index feccff8bdd15..1b64c5a5140d 100644
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -991,16 +991,13 @@ static int acquire_bch_irq(struct gpmi_nand_data *this, irq_handler_t irq_h)
- {
- 	struct platform_device *pdev = this->pdev;
- 	const char *res_name = GPMI_NAND_BCH_INTERRUPT_RES_NAME;
--	struct resource *r;
- 	int err;
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ, res_name);
--	if (!r) {
--		dev_err(this->dev, "Can't get resource for %s\n", res_name);
--		return -ENODEV;
--	}
-+	err = platform_get_irq_byname(pdev, res_name);
-+	if (err < 0)
-+		return err;
- 
--	err = devm_request_irq(this->dev, r->start, irq_h, 0, res_name, this);
-+	err = devm_request_irq(this->dev, err, irq_h, 0, res_name, this);
- 	if (err)
- 		dev_err(this->dev, "error requesting BCH IRQ\n");
- 
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,230 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C0B47BF04
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100F647BF08
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237192AbhLULeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S237195AbhLULgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237180AbhLULeN (ORCPT
+        with ESMTP id S233765AbhLULgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:34:13 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA221C061401
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:34:12 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id v64so37846023ybi.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Z9+V1aGya/Hb+Ui2nvpmg7RECtXiIeunXU1isHEoQ8I=;
-        b=P7iHs7VoVN4MJoE59E1P1IPqLlbnoRpd/0/LTNRvi+7mdOj/gip8JIDzpNQvGOjR8i
-         fqz4Ll0FQPW6G6RASEo/9jKidxD8FIuX79rHUwdRhIp6D97zwTtG4qZAXHBkzU5d9USt
-         iAyL+Q0BO47cVW5QTu2Ro5ExYxPDBP2EwDADmbBZz4WkyTkvd8TwUD6i0gTxOZ5oIujN
-         ReWuPjR0E4Hibb3ntxhC+GjsHjfoJzIGgEchR1QLeUM+wgi2d01Rhsdsp5E0pbikXllr
-         CO+JVtsXDkFeYI568l0KBLn3cT3LH79/JA+rNBAHbYpg2OKsMl2anZ1S3lA899rcixzr
-         iCoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Z9+V1aGya/Hb+Ui2nvpmg7RECtXiIeunXU1isHEoQ8I=;
-        b=meyMsmC79js/NHfrn5jlF6xEgWkIFAkL05Cn/wkUrzCJrGaXMIPSlhlxOQMBmxhMK6
-         TBSYkkPLd4soHWUEHXqNpeu/gt033HaXUyWAj21o3BYpZeQ5fXA5tqDGEZJMD08URihh
-         /XZUEIiUd+V3ihUC3lteKJ6ZR0gj8IKt5X/tTT4TI+3+8aL1lGvpHI8e50lNFFGYbk4V
-         iOuI3LsgwaosGsk2k5yOux0gsELNfinnbQ2r/M4iaICuF/yWqzbyd1KdSPU/x/wGyM8K
-         tRHM3SCDvMjJH084l+Ytt0IjbhZvcs8DTNX2sTsM391eKveCBWVmywURgKYAjF6NTwA3
-         wQVA==
-X-Gm-Message-State: AOAM532ZYPAsi+jBmLHu7W0OodTj7t0cc/vSbn2wkmOLNn2gzzrlUFdC
-        BtyWaWSTSx637QyUTe3BEN4q5LKO5Yl0LYdtSLGx0g==
-X-Google-Smtp-Source: ABdhPJxzriEGE3qTmY8bhfS+uPzicxwSv+W0Keuw0kfQQ5beuYsAqJOyzjmC52LhnSihvltPAAt49a2fw87z0oXoIXs=
-X-Received: by 2002:a5b:18c:: with SMTP id r12mr3875829ybl.553.1640086451895;
- Tue, 21 Dec 2021 03:34:11 -0800 (PST)
+        Tue, 21 Dec 2021 06:36:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF983C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:36:42 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mzdRH-0001PR-5j; Tue, 21 Dec 2021 12:36:15 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mzdRF-005o83-Gu; Tue, 21 Dec 2021 12:36:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mzdRD-00072F-O5; Tue, 21 Dec 2021 12:36:11 +0100
+Date:   Tue, 21 Dec 2021 12:35:42 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        David Lechner <david@lechnology.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Patrick Havelange <patrick.havelange@essensium.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 0/8] counter: Remove struct counter_device::priv
+Message-ID: <20211221113542.rl4aburbzzrgs3km@pengutronix.de>
+References: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
+ <dadb79b2-ac21-1899-48b9-1c6723afb1b4@metafoo.de>
 MIME-Version: 1.0
-References: <20211220143029.352940568@linuxfoundation.org>
-In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Dec 2021 17:04:00 +0530
-Message-ID: <CA+G9fYuWtS83ZO8neLVby97Ux9_W1aAbhtvuAVfzPR2izmEQ+Q@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/99] 5.10.88-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="apqkyk5gu62tvk7i"
+Content-Disposition: inline
+In-Reply-To: <dadb79b2-ac21-1899-48b9-1c6723afb1b4@metafoo.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 20:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.88 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.88-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
+--apqkyk5gu62tvk7i
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Hello Lars,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Tue, Dec 21, 2021 at 12:12:12PM +0100, Lars-Peter Clausen wrote:
+> On 12/21/21 11:45 AM, Uwe Kleine-K=F6nig wrote:
+> > similar to patch
+> > https://lore.kernel.org/r/4bde7cbd9e43a5909208102094444219d3154466.1640=
+072891.git.vilhelm.gray@gmail.com
+> > the usage of struct counter_device::priv can be replaced by
+> > container_of which improves type safety and code size.
+> >=20
+> > This series depends on above patch, converts the remaining drivers and
+> > finally drops struct counter_device::priv.
+>=20
+> Not sure if this is such a good idea. struct counter_device should not be
+> embedded in the drivers state struct in the first place.
 
-## Build
-* kernel: 5.10.88-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 22ecdc9ddc3f790d7897c1c8bc1813fba064ec9c
-* git describe: v5.10.87-100-g22ecdc9ddc3f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.87-100-g22ecdc9ddc3f
+Just to mention it: My patch series didn't change this, this was already
+broken before.
 
-## No Test Regressions (compared to v5.10.84-128-g24961377099e)
+> struct counter_device contains a struct device, which is a reference coun=
+ted
+> object. But by embedding it in the driver state struct the life time of b=
+oth
+> the struct counter_device and and struct device are bound to the life time
+> of the driver state struct.
+>=20
+> Which means the struct device memory can get freed before the last refere=
+nce
+> is dropped, which leads to a use-after-free and undefined behavior.
 
-## No Test Fixes (compared to v5.10.84-128-g24961377099e)
+Well, the driver struct is allocated using devm_kzalloc for all drivers.
+So I think it's not *very* urgent to fix. Still you're right, this
+should be addressed.
+=20
+> The framework should be changed to rather then embedding the struct
+> counter_device in the state struct to just have a pointer to it. With the
+> struct counter_device having its own allocation that will be freed when t=
+he
+> last reference to the struct device is dropped.
 
-## Test result summary
-total: 92504, pass: 79026, fail: 519, skip: 12006, xfail: 953
+My favourite would be to implement a counter_device_alloc /
+counter_device_add approach, similar to what spi_alloc_controller and
+alloc_etherdev do. The downside is that this isn't typesafe either :-\
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 16 passed, 8 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
+Best regards
+Uwe
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---
-Linaro LKFT
-https://lkft.linaro.org
+--apqkyk5gu62tvk7i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHBvAsACgkQwfwUeK3K
+7AkKxwf/eZMlm5W7BNNqhbv4to+2ASYVEhk+7+b6u4plF+l3ew+B0i0uhOD7DQnP
+N520u6PRwJgIgIwVA12ciu6ohLlr7ObF2tkmcIZ2wka5HvY9xoWeR77cHmAtrS6e
+oziMIs2//n85stSzMskek5imJo0Ow9eLT3Ee+fJxadHns8pe0SxmPsZnYGvkNot4
+c0pLfLx4rEwZ6HDPCT/DvRCmRKFs0MEv9sTEYZV4x+EBMDmYfzSI8A+kxZe6mEKJ
+NIwRhObAX0t7NzsMF8+HjIIPCxwX/vsE1aXpIbQezpEzUCsJ1IORbGziByuceBAt
+G1O0rlMD5vtRt3Ey7EUFYY3XRaufJg==
+=4FJC
+-----END PGP SIGNATURE-----
+
+--apqkyk5gu62tvk7i--

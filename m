@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2714347C612
+	by mail.lfdr.de (Postfix) with ESMTP id B891E47C614
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241056AbhLUSNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:13:35 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42306 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbhLUSNe (ORCPT
+        id S241070AbhLUSNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241058AbhLUSNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:13:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A2BC0CE19C1;
-        Tue, 21 Dec 2021 18:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9324C36AE9;
-        Tue, 21 Dec 2021 18:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640110410;
-        bh=x1YRVFMWzmr2ZtU4EnrpvIEjFRjrcz6g9/oGEJwF/Kg=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=U73lhSIAeKNtXkPsSe1YJkQjAhXLN61P4332m7dmHyK1w0M02ljLDE4kTbkmhWDM7
-         IIuRuHeKwrPRGBD639HT+8TmNfS6ILJ+NN8bgHYIIiod17GLdp+xoRxEjOxnBvzDoz
-         dTeC1I+/cLwQ73D2PxvUhTw5kPG5ta7+WEiGbJVgo8Q+Aw8jadyIInbSaaGAv5FaCm
-         nThQ+eCxdMNV0JhWWLljRkxtJTV6D8AkTBYnXfpYTleUgMJfd6aGHctcTKPmR5eNvL
-         a+g7yvXllm6CiLriHsu0eGWSMdOJRk9kruy2XEpVWcD7KR1yOkkO2lCgjh+fVsL+RK
-         Q3G/b9f73tSfA==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Dec 2021 13:13:43 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AE3C061574;
+        Tue, 21 Dec 2021 10:13:43 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso2302094wmc.4;
+        Tue, 21 Dec 2021 10:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KkhoH6+A3+y/RK4E+6wgX4k5jzA+vrkcJUVCORNbtSo=;
+        b=Mj6vdHiFsDzeaIBFBNnKFpUWdLETR1MbAKVKzY9oBtojNCZB1rjtlLBQHBhPR+M37Z
+         gI0s/LF0f6qf5f9opvHxB4YLtMDaOc0alxsNEzg2dZkyy9B3cbBV5FAhdMK/M1FWpQ+e
+         ta4f4TuEbQuFFCEw8LOBP5RraKTgxWxTlRsxleUcViwBPvTh6kCZyPX3QA30m7laeOsE
+         lKgpPuM9KniuZn9TtTC0vWqb/vI1rZlQPCemSL9q1QE6mYfF0dsR6rBlGZ6p7RzpO+34
+         xdfnYQ7vVXw/bRt1IWI8JFiowfKD6kDeGY0xEH/OgTDH+k0vDIPdNaIwr5Rralz1Qf8G
+         xLbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KkhoH6+A3+y/RK4E+6wgX4k5jzA+vrkcJUVCORNbtSo=;
+        b=HlS10xWGYxStciawmWk0+m7XGDGwP3n9G3KE9SitiiM5vrU8YIpLenf88cQurQkyrG
+         3CLyJIyhzoCL7ZcM+YAojtg9/G1VpXnwTgJ0nS8nIx9j2Kd0SobD/WCa9f0klCYYlJTx
+         LBtdOTSAditgyPe2lcDWxiM7m+KPJbpmU1em8rCvZA1uywH1TGsJSEHAPnW1NPgeNYPz
+         FnJM5N1Xx0vQTNNhyjb0Gm8HCDq2g/pQoyv2Y+DfluBSkTe1SaOSjFjCXtZulW3XxdhK
+         QPtXF9wgLHV+En1Bt2Z9Ito5QFyHzsOMQKi4hmGUkDDKWO66WzITXD78WTlzrAbfOiMq
+         NPVA==
+X-Gm-Message-State: AOAM533bAG1gPbpG7lM74JoR4X+9ffMzF2QBml0DoDm0m0NsUzEftgjv
+        Rye0BeKmi4h6WAcbAOWWW0aPa/YAhs9PwW+1gsQ/9Q==
+X-Google-Smtp-Source: ABdhPJwoE6twfKQaGyivNwy6SByKI5P04Hv6OPekW5ZnN1vGmvjEL2idDW82hlnSVZe+AlL4DY/ZBw==
+X-Received: by 2002:a1c:a5c5:: with SMTP id o188mr3837273wme.22.1640110421576;
+        Tue, 21 Dec 2021 10:13:41 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id j13sm3276069wmq.11.2021.12.21.10.13.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 10:13:41 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: rawnand: omap_elm: remove redundant variable 'errors'
+Date:   Tue, 21 Dec 2021 18:13:40 +0000
+Message-Id: <20211221181340.524639-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wilc1000: use min() to make code cleaner
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211216091713.449841-1-deng.changcheng@zte.com.cn>
-References: <20211216091713.449841-1-deng.changcheng@zte.com.cn>
-To:     cgel.zte@gmail.com
-Cc:     ajay.kathat@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164011040619.7951.14619016402908057909.kvalo@kernel.org>
-Date:   Tue, 21 Dec 2021 18:13:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgel.zte@gmail.com wrote:
+The variable 'errors' is being used to sum the number of errors
+but it is never used afterwards. This can be considered a
+redundant set of operations and can be removed.
 
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
-> 
-> Use min() in order to make code cleaner.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/mtd/nand/raw/omap_elm.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Failed to compile:
-
-In file included from ./include/linux/kernel.h:17,
-                 from ./include/linux/clk.h:13,
-                 from drivers/net/wireless/microchip/wilc1000/spi.c:7:
-drivers/net/wireless/microchip/wilc1000/spi.c: In function 'wilc_spi_dma_rw':
-./include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast [-Werror]
-   20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-      |                                   ^~
-./include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'
-   26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
-      |                  ^~~~~~~~~~~
-./include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
-   36 |         __builtin_choose_expr(__safe_cmp(x, y), \
-      |                               ^~~~~~~~~~
-./include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cmp'
-   45 | #define min(x, y)       __careful_cmp(x, y, <)
-      |                         ^~~~~~~~~~~~~
-drivers/net/wireless/microchip/wilc1000/spi.c:677:26: note: in expansion of macro 'min'
-  677 |                 nbytes = min(sz, DATA_PKT_SZ);
-      |                          ^~~
-cc1: all warnings being treated as errors
-make[5]: *** [scripts/Makefile.build:287: drivers/net/wireless/microchip/wilc1000/spi.o] Error 1
-make[4]: *** [scripts/Makefile.build:549: drivers/net/wireless/microchip/wilc1000] Error 2
-make[3]: *** [scripts/Makefile.build:549: drivers/net/wireless/microchip] Error 2
-make[2]: *** [scripts/Makefile.build:549: drivers/net/wireless] Error 2
-make[1]: *** [scripts/Makefile.build:549: drivers/net] Error 2
-make: *** [Makefile:1846: drivers] Error 2
-
-Patch set to Changes Requested.
-
+diff --git a/drivers/mtd/nand/raw/omap_elm.c b/drivers/mtd/nand/raw/omap_elm.c
+index 8bab753211e9..0b6aeb269c33 100644
+--- a/drivers/mtd/nand/raw/omap_elm.c
++++ b/drivers/mtd/nand/raw/omap_elm.c
+@@ -282,7 +282,7 @@ static void elm_start_processing(struct elm_info *info,
+ static void elm_error_correction(struct elm_info *info,
+ 		struct elm_errorvec *err_vec)
+ {
+-	int i, j, errors = 0;
++	int i, j;
+ 	int offset;
+ 	u32 reg_val;
+ 
+@@ -312,8 +312,6 @@ static void elm_error_correction(struct elm_info *info,
+ 					/* Update error location register */
+ 					offset += 4;
+ 				}
+-
+-				errors += err_vec[i].error_count;
+ 			} else {
+ 				err_vec[i].error_uncorrectable = true;
+ 			}
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211216091713.449841-1-deng.changcheng@zte.com.cn/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.33.1
 

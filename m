@@ -2,335 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA9247C14B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D6347C155
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbhLUOR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:17:27 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:55020 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231443AbhLUOR0 (ORCPT
+        id S238387AbhLUOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:19:10 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58708 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235448AbhLUOTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:17:26 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V.LT0oR_1640096242;
-Received: from 30.39.136.247(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V.LT0oR_1640096242)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 21 Dec 2021 22:17:23 +0800
-Message-ID: <248bd960-39b8-bbe1-ac45-bc0893acc40f@linux.alibaba.com>
-Date:   Tue, 21 Dec 2021 22:18:06 +0800
+        Tue, 21 Dec 2021 09:19:08 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL9m9ri031016;
+        Tue, 21 Dec 2021 15:19:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Ne4xZt4WaaOmRccD8H/aG3fcyOqrhCzBoBiBiz/kLxU=;
+ b=WP82BkSGcyUjqemKGD/sOdvZqJuYhvXi7BzeXSSyMD6fbdk/6/BdYJAeHgFt7WZnMyU1
+ iXwbkoD3GowWXvX5IbCx+KuasiFvB+eVEoPm7mAnUKXoTQHLox/yD2dUaQW6lrhHy3up
+ 3+dTfiSIZFpGFM6YyMrkUYqqnyXrUjwMdfjoLWPFHfldoDeIjWdyqgqcfajRZsll4evJ
+ 25vuuXUlh4MxnuvKTm5+/V8KiMnxEjA/5EuX58Uxg3l2XNwObpe/zFkjaoEO6hm3tht6
+ 9qcb5L/u3iWHadCGm4lCqdxhKO9Vy5xUjeyRcV6DmrAvrjvnaHgMXFC9npnzvdow91en iQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d37emu4q0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Dec 2021 15:19:00 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6D12010002A;
+        Tue, 21 Dec 2021 15:18:59 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 60D7E20B85E;
+        Tue, 21 Dec 2021 15:18:59 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 21 Dec
+ 2021 15:18:58 +0100
+Subject: Re: [PATCH v3] tty: rpmsg: Fix race condition releasing tty port
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Jiri Slaby <jirislaby@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20211215153121.30010-1-arnaud.pouliquen@foss.st.com>
+ <YcGN0fDn2hqAdrP9@kroah.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <318a02fe-0317-d27e-06bc-61bdb8feec79@foss.st.com>
+Date:   Tue, 21 Dec 2021 15:18:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] mm/damon: Add a new scheme to support demotion on
- tiered memory system
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
-        dave.hansen@linux.intel.com, ziy@nvidia.com, shy828301@gmail.com,
-        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20211221132439.14997-1-sj@kernel.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211221132439.14997-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YcGN0fDn2hqAdrP9@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SeongJae,
+Hello Greg,
 
-On 12/21/2021 9:24 PM, SeongJae Park Wrote:
-> Hi Baolin,
-> 
-> 
-> Thank you for this great patch!  I left some comments below.
-> 
-> On Tue, 21 Dec 2021 17:18:04 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> On tiered memory system, the reclaim path in shrink_page_list() already
->> support demoting pages to slow memory node instead of discarding the
->> pages. However, at that time the fast memory node memory wartermark is
->> already tense, which will increase the memory allocation latency during
->> page demotion.
+
+On 12/21/21 9:18 AM, Greg Kroah-Hartman wrote:
+> On Wed, Dec 15, 2021 at 04:31:21PM +0100, Arnaud Pouliquen wrote:
+>> The tty_port struct is part of the rpmsg_tty_port structure.
+>> The issue is that the rpmsg_tty_port structure is freed on
+>> rpmsg_tty_remove while it is still referenced in the tty_struct.
+>> Its release is not predictable due to workqueues.
 >>
->> We can rely on the DAMON in user space to help to monitor the cold
->> memory on fast memory node, and demote the cold pages to slow memory
->> node proactively to keep the fast memory node in a healthy state.
->> Thus this patch introduces a new scheme named DAMOS_DEMOTE to support
->> this feature.
+>> For instance following ftrace shows that rpmsg_tty_close is called after
+>> rpmsg_tty_release_cport:
 >>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>      nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
+>> remove
+>>              cat-1191    [001] .....   212.095697: tty_release <-__fput
+>>       nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
+>> sg_tty_remove
+>>              cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
+>>              cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+>>
+>> As consequence, the port must be free only when user has released the TTY
+>> interface.
+>>
+>> This path :
+>> - Introduce the .destruct port ops function to release the allocated
+>>   rpmsg_tty_port structure.
+>> - Manages the tty port refcounting to trig the .destruct port ops,
+>> - Introduces the rpmsg_tty_cleanup function to ensure that the TTY is
+>>   removed before decreasing the port refcount.
+>> - Uses tty_vhangup and tty_port_hangup instead of tty_port_tty_hangup.
+> 
+> Shouldn't this hangup change be a separate change?
+
+Thanks for pointing this!
+
+My first answer was that this is part of the fix to make the hangup synchronous.
+But making more tests I'm not able to reproduce the reproduce the race issue
+using tty_port_tty_hangup.
+
+I don't master enough the TTY framework to know if using tty_vhangup is safer...
+The difference between tty_vhangup and tty_hangup seems only that __tty_hangup
+is directly called in tty_vhangup while a work is created in tty_hangup.
+
+But after that tty_kref_put calls queue_release_one_tty making the rest of the
+release asynchronous. And this last part of the release is the cause of the race
+condition i observed.
+
+So i propose to just drop this part and keep the use of tty_port_tty_hangup.
+
+The alternative is to add it in a separate patch as you propose. But from now I
+have not more rational.
+
+Any advice is welcome!
+
+> 
+>>
+>> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 >> ---
->>   include/linux/damon.h |   3 +
->>   mm/damon/dbgfs.c      |   1 +
->>   mm/damon/vaddr.c      | 156 ++++++++++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 160 insertions(+)
+>> delta vs V2: taking into account Jiri Slaby's comments:
+>>  - Inline rpmsg_tty_release_cport in rpmsg_tty_destruct_port,
+>>  - call tty_port_put in case of error in rpmsg_tty_probe,
+>>  - use tty_port_get port return in rpmsg_tty_install to take into account
+>>    NULL port return case.
 >>
->> diff --git a/include/linux/damon.h b/include/linux/damon.h
->> index af64838..da9957c 100644
->> --- a/include/linux/damon.h
->> +++ b/include/linux/damon.h
->> @@ -87,6 +87,8 @@ struct damon_target {
->>    * @DAMOS_PAGEOUT:	Call ``madvise()`` for the region with MADV_PAGEOUT.
->>    * @DAMOS_HUGEPAGE:	Call ``madvise()`` for the region with MADV_HUGEPAGE.
->>    * @DAMOS_NOHUGEPAGE:	Call ``madvise()`` for the region with MADV_NOHUGEPAGE.
->> + * @DAMOS_DEMOTE:	Migate cold pages from fast memory type (DRAM) to slow
->> + * memory type (persistent memory).
-> 
-> s/Migate/Migrate/
-> 
-> Also, could you make the second line of the description aligned with the first
-> line? e.g.,
-> 
->      + * @DAMOS_DEMOTE:	Migate cold pages from fast memory type (DRAM) to slow
->      + *                 memory type (persistent memory).
-
-Sure.
-
-> 
->>    * @DAMOS_STAT:		Do nothing but count the stat.
->>    */
->>   enum damos_action {
->> @@ -95,6 +97,7 @@ enum damos_action {
->>   	DAMOS_PAGEOUT,
->>   	DAMOS_HUGEPAGE,
->>   	DAMOS_NOHUGEPAGE,
->> +	DAMOS_DEMOTE,
->>   	DAMOS_STAT,		/* Do nothing but only record the stat */
-> 
-> This would make user space people who were using 'DAMOS_STAT' be confused.
-> Could you put 'DAMOS_DEMOTE' after 'DAMOS_STAT'?
-
-Ah, right, will do.
-
-> 
->>   };
->>   
->> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
->> index 58dbb96..43355ab 100644
->> --- a/mm/damon/dbgfs.c
->> +++ b/mm/damon/dbgfs.c
->> @@ -168,6 +168,7 @@ static bool damos_action_valid(int action)
->>   	case DAMOS_PAGEOUT:
->>   	case DAMOS_HUGEPAGE:
->>   	case DAMOS_NOHUGEPAGE:
->> +	case DAMOS_DEMOTE:
->>   	case DAMOS_STAT:
->>   		return true;
->>   	default:
->> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
->> index 9e213a1..b354d3e 100644
->> --- a/mm/damon/vaddr.c
->> +++ b/mm/damon/vaddr.c
->> @@ -14,6 +14,10 @@
->>   #include <linux/page_idle.h>
->>   #include <linux/pagewalk.h>
->>   #include <linux/sched/mm.h>
->> +#include <linux/migrate.h>
->> +#include <linux/mm_inline.h>
->> +#include <linux/swapops.h>
->> +#include "../internal.h"
->>   
->>   #include "prmtv-common.h"
->>   
->> @@ -693,6 +697,156 @@ static unsigned long damos_madvise(struct damon_target *target,
->>   }
->>   #endif	/* CONFIG_ADVISE_SYSCALLS */
->>   
->> +static bool damos_isolate_page(struct page *page, struct list_head *demote_list)
->> +{
->> +	struct page *head = compound_head(page);
->> +
->> +	/* Do not interfere with other mappings of this page */
->> +	if (page_mapcount(head) != 1)
->> +		return false;
->> +
->> +	/* No need migration if the target demotion node is empty. */
->> +	if (next_demotion_node(page_to_nid(head)) == NUMA_NO_NODE)
->> +		return false;
->> +
->> +	if (isolate_lru_page(head))
->> +		return false;
->> +
->> +	list_add_tail(&head->lru, demote_list);
->> +	mod_node_page_state(page_pgdat(head),
->> +			    NR_ISOLATED_ANON + page_is_file_lru(head),
->> +			    thp_nr_pages(head));
->> +	return true;
-> 
-> The return value is not used by callers.  If not needed, let's remove it.
-
-Yes.
-
-> 
+>> Applied and tested on fa55b7dcdc43 ("Linux 5.16-rc1", 2021-11-14)
+>> ---
+>>  drivers/tty/rpmsg_tty.c | 49 +++++++++++++++++++++++++++++------------
+>>  1 file changed, 35 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+>> index dae2a4e44f38..cdc590c63f03 100644
+>> --- a/drivers/tty/rpmsg_tty.c
+>> +++ b/drivers/tty/rpmsg_tty.c
+>> @@ -50,10 +50,21 @@ static int rpmsg_tty_cb(struct rpmsg_device *rpdev, void *data, int len, void *p
+>>  static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
+>>  {
+>>  	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
+>> +	struct tty_port *port = tty->port;
+>>  
+>>  	tty->driver_data = cport;
+>>  
+>> -	return tty_port_install(&cport->port, driver, tty);
+>> +	port = tty_port_get(&cport->port);
+>> +	return tty_port_install(port, driver, tty);
 >> +}
 >> +
->> +static int damos_migrate_pmd_entry(pmd_t *pmd, unsigned long addr,
->> +				   unsigned long end, struct mm_walk *walk)
+>> +static void rpmsg_tty_cleanup(struct tty_struct *tty)
 >> +{
->> +	struct vm_area_struct *vma = walk->vma;
->> +	struct list_head *demote_list = walk->private;
->> +	spinlock_t *ptl;
->> +	struct page *page;
->> +	pte_t *pte, *mapped_pte;
+>> +	struct tty_port *port = tty->port;
 >> +
->> +	if (!vma_migratable(vma))
->> +		return -EFAULT;
->> +
->> +	ptl = pmd_trans_huge_lock(pmd, vma);
->> +	if (ptl) {
->> +		/* Bail out if THP migration is not supported. */
->> +		if (!thp_migration_supported())
->> +			goto thp_out;
->> +
->> +		/* If the THP pte is under migration, do not bother it. */
->> +		if (unlikely(is_pmd_migration_entry(*pmd)))
->> +			goto thp_out;
->> +
->> +		page = damon_get_page(pmd_pfn(*pmd));
->> +		if (!page)
->> +			goto thp_out;
->> +
->> +		damos_isolate_page(page, demote_list);
->> +
->> +		put_page(page);
->> +thp_out:
->> +		spin_unlock(ptl);
->> +		return 0;
->> +	}
+>> +	WARN_ON(!port);
 > 
-> Could we wrap above THP handling code with '#ifdef CONFIG_TRANSPARENT_HUGEPAGE'?
+> How can this ever trigger?  Shouldn't you do something if it can?
 
-The pmd_trans_huge_lock() will return NULL if the 
-CONFIG_TRANSPARENT_HUGEPAGE is not defined, meanwhile I think the 
-compiler will optimize the code if the CONFIG_TRANSPARENT_HUGEPAGE is 
-not select. Se we can use it usually instead of adding annoying "#ifdef 
-CONFIG_XXX" in many places to handle THP, which looks simpler and more 
-readable for me.
+Over-protection i will suppress it.
+
+Thanks and Regards,
+Arnaud
 
 > 
->> +
->> +	/* regular page handling */
->> +	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
->> +		return -EINVAL;
->> +
->> +	mapped_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
->> +	for (; addr != end; pte++, addr += PAGE_SIZE) {
->> +		if (pte_none(*pte) || !pte_present(*pte))
->> +			continue;
->> +
->> +		page = damon_get_page(pte_pfn(*pte));
->> +		if (!page)
->> +			continue;
->> +
->> +		damos_isolate_page(page, demote_list);
->> +		put_page(page);
->> +	}
->> +	pte_unmap_unlock(mapped_pte, ptl);
->> +	cond_resched();
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct mm_walk_ops damos_migrate_pages_walk_ops = {
->> +	.pmd_entry              = damos_migrate_pmd_entry,
+> thanks,
 > 
-> The names are little bit confusing to me.  How about 's/migrate/isolate/'?
-
-Sure.
-
+> greg k-h
 > 
->> +};
->> +
->> +/*
->> + * damos_demote() - demote cold pages from fast memory to slow memory
->> + * @target:    the given target
->> + * @r:         region of the target
->> + *
->> + * On tiered memory system, if DAMON monitored cold pages on fast memory
->> + * node (DRAM), we can demote them to slow memory node proactively in case
->> + * accumulating much more cold memory on fast memory node (DRAM) to reclaim.
->> + *
->> + * Return:
->> + * = 0 means no pages were demoted.
->> + * > 0 means how many cold pages were demoted successfully.
->> + * < 0 means errors happened.
-> 
-> damon_va_apply_scheme(), which returns what this function returns when
-> DAMOS_DEMOTE action is given, should return bytes of the region that the action
-> is successfully applied.
-
-OK, I will change the return values as you suggested in next version.
-
->> + */
->> +static int damos_demote(struct damon_target *target, struct damon_region *r)
->> +{
->> +	struct mm_struct *mm;
->> +	LIST_HEAD(demote_pages);
->> +	LIST_HEAD(pagelist);
->> +	int target_nid, nr_pages, ret = 0;
->> +	unsigned int nr_succeeded, demoted_pages = 0;
->> +	struct page *page, *page2;
->> +
->> +	/* Validate if allowing to do page demotion */
->> +	if (!numa_demotion_enabled)
->> +		return -EINVAL;
->> +
->> +	mm = damon_get_mm(target);
->> +	if (!mm)
->> +		return -ENOMEM;
->> +
->> +	mmap_read_lock(mm);
->> +	walk_page_range(mm, PAGE_ALIGN(r->ar.start), PAGE_ALIGN(r->ar.end),
-> 
-> I guess PAGE_ALIGN()s are not necessary here?
-
-Yes, I think so too, will remove it.
-
-> 
->> +			&damos_migrate_pages_walk_ops, &demote_pages);
->> +	mmap_read_unlock(mm);
->> +
->> +	mmput(mm);
->> +	if (list_empty(&demote_pages))
->> +		return 0;
->> +
->> +	list_for_each_entry_safe(page, page2, &demote_pages, lru) {
-> 
-> I'd prefer 'next' or 'next_page' instead of 'page2'.
-
-Sure.
-
-> 
->> +		list_add(&page->lru, &pagelist);
->> +		target_nid = next_demotion_node(page_to_nid(page));
->> +		nr_pages = thp_nr_pages(page);
->> +
->> +		ret = migrate_pages(&pagelist, alloc_demote_page, NULL,
->> +				    target_nid, MIGRATE_SYNC, MR_DEMOTION,
->> +				    &nr_succeeded);
->> +		if (ret) {
->> +			if (!list_empty(&pagelist)) {
->> +				list_del(&page->lru);
->> +				mod_node_page_state(page_pgdat(page),
->> +						    NR_ISOLATED_ANON + page_is_file_lru(page),
->> +						    -nr_pages);
->> +				putback_lru_page(page);
->> +			}
->> +		} else {
->> +			__count_vm_events(PGDEMOTE_DIRECT, nr_succeeded);
->> +			demoted_pages += nr_succeeded;
->> +		}
-> 
-> Why should we do above work for each page on our own instead of exporting and
-> calling 'demote_page_list()'?
-
-Cuase demote_page_list() is used for demote cold pages which are from 
-one same fast memory node, they can have one same target demotion node.
-
-But for the regions for the process, we can get some cold pages from 
-different fast memory nodes (suppose we have mulptiple dram node on the 
-system), so its target demotion node may be different. Thus we should 
-migrate each cold pages with getting the correct target demotion node.
-
-Thanks for your comments.

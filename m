@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF92F47BCA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9E247BCA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236203AbhLUJPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbhLUJPd (ORCPT
+        id S236219AbhLUJQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:16:19 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:37335 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236205AbhLUJQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:15:33 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8E8C061574;
-        Tue, 21 Dec 2021 01:15:33 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q16so25518744wrg.7;
-        Tue, 21 Dec 2021 01:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=+limH/jUrjCPWSbz4amnM+QL6aX2y+zOR0FC6q29CV4=;
-        b=FCU2Sp1otauI/SYUaG0oRRMxG8vHnfPw64TxbSJUmjCD5FdczHy6GYzH4rA+hvdpu0
-         Bb+Rsr29lZxbMPXSiqvMDybTDmb/m1KGrxEeOIf4wBhKia4DtytI+u/JRuOsB5Y5Bt85
-         Joh08FEWyzlfvNRrxizK/ps4BKl8wiu4Rh/iUUvvFkyEJB5RQOPHLaAQOoIlcv4pfcdu
-         TTh9+4VV1Pg1ZPLoBv4HM64QViA4a+De0n/tfvA0DjeSEjAkYrMgTlNm1Z4L5yAazRM9
-         mwQG76shR0CcsfZS+ax89KcYcwC+1+Rqpr1rS85sIj51zVAak94NNXg3mnoHY11h+piR
-         flvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+limH/jUrjCPWSbz4amnM+QL6aX2y+zOR0FC6q29CV4=;
-        b=5VoXCnqq1gIdXiiCOkqM//PICdzXTlZZvaY7F468a5lH4DFuyMVavvAz82YiLR3U3A
-         NN/5YCx44hVNI9csqQbZPmnH93LfSt35Uha/sEAqZGtOq4CMXN1RZ12PCBhsNf14evhv
-         +f88r0M+n/6eTD3BZchVI1FHjmuZNALpKLveJe4W90tfW0K5ZuU60RRCuNghfFxu/hpy
-         lqF4GCJrroJ9fwu04xu9psZdrNLaFf0f0iwil7jpY5yJPC5vBNMmGPFXymckXJAaztIO
-         BMXnuEKGmqOof03Aw21dWgslhJy94QHhqtDD1xVp8xxYCTMZCq99IFiUnB8vlXkvVlf2
-         ALMg==
-X-Gm-Message-State: AOAM530MSDXhBcKWgDJDFTYj3XmLRz0oYGTc1NiVxsiAnB5hKi78amqR
-        Y0/WC0qnPtL5UXu/CahDQsmqB1N4p6k=
-X-Google-Smtp-Source: ABdhPJzsf2Dq+wB+TY+AzowkHMERAcpbTz0z51XtxHiOP+ZLsgxkuRuEneInYUXSZVTCwNhKCGF6JQ==
-X-Received: by 2002:adf:e6c9:: with SMTP id y9mr1830396wrm.697.1640078132082;
-        Tue, 21 Dec 2021 01:15:32 -0800 (PST)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id s1sm1686126wmh.35.2021.12.21.01.15.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 01:15:31 -0800 (PST)
-Subject: Re: [PATCH v1 1/1] software node: Update MAINTAINERS data base
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <35944dfd-a20a-f67b-5d34-a0e0a4cb7066@gmail.com>
-Date:   Tue, 21 Dec 2021 09:15:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 04:16:18 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MAORn-1nAteV1M3X-00Bppp; Tue, 21 Dec 2021 10:16:16 +0100
+Received: by mail-wr1-f49.google.com with SMTP id v7so18213114wrv.12;
+        Tue, 21 Dec 2021 01:16:16 -0800 (PST)
+X-Gm-Message-State: AOAM530fbHOl5il2ljn1FhA4COoKsuLIJDsLKyFwRHVX4esi6IpdtuIz
+        pxZ7S+m2H5CqNNYWEmdKbfxR/VyX/78c7+jDQlA=
+X-Google-Smtp-Source: ABdhPJx9Io4wbdq+1IzDizMc/1NQgxlt0NBkcspgb9PgBIVFPO0KlDZf3O7JLbMTa4+qFamZN9MU3ZDjBxCGAtpSd58=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr1797985wru.12.1640078175904;
+ Tue, 21 Dec 2021 01:16:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20211218085843.212497-1-cuigaosheng1@huawei.com>
+ <CAK8P3a1-0u4VCCfgc7tjmnANM0yr7oUrQX2y-ZSVvZHDN191BQ@mail.gmail.com> <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+In-Reply-To: <dfc25b22-2f66-4404-66c4-44c9c8c3bab4@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 21 Dec 2021 10:15:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+Message-ID: <CAK8P3a0aNoU693ft3pHCPJOcGubZ1dMFyOmWozO0N_8-F_JkLQ@mail.gmail.com>
+Subject: Re: [PATCH -next 0/3] replace open coded VA->PA calculation
+To:     cuigaosheng <cuigaosheng1@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        SoC Team <soc@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        gongruiqi1@huawei.com, wangweiyang2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:RXEaeH3nBegkLgZfgx9t7rLv38M8HHElpuZdzHblYHKxPP9a4OX
+ BBP1OSZ6a7tf3Iyc1vticcuiLajy/qzjxS0mtvJW6/rSxYdG7267ONfLaePEPi/NKPkjkVL
+ KxBqFev5ALDQ0QPgdTkmApRbaRTG2A5QGVUGtERp3AEnunyUpeH9z3z+1rOkaBHGwir4Sq4
+ HDIF/rXTSWb48a0CHD1vA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BqzGCKWClw4=:wNKDXLu15+S1DvrVALIeKB
+ KrNXXUahM8FWa4FlF2xZNmU4BJEA0nZMEkCoYN5Y2tGMutQNTDBqee+kni0eLLkh9KmRSKrg3
+ 9BpHjOrq+kxEnX+GjkNV3hK7IJJsHkJAD1gJbIvUe8ge2bTAsxNyRUh6Ec0Q1aoXYjrUeQUaD
+ 7BZP7SujEP++has03OTePNDikM2WX/s+6pYzna6sjWjbcVArX/fGfYk/lNAuo3iIWxosUTCaP
+ vttrT8Krc1S/M5aLNXlyfcGgHfVARtt69n2HQGx1VWLZl1hmjEC3lnzKCHECPsd+EkzXQlYCn
+ +PDbY74CqUmfp/QLG8slqqinz0gu5tfaIgwBarrQsAmPPnUMZ3E8O54KGfondtV78tt8l/ivk
+ tUnc08WsGTlCq6cPNjOQgoWevlTBybMj0wUzoIV9BRvmM0FKI8uIO41v80BPPfppY6ngI0ZOp
+ lERRJ8/Lluvb5QAdZvvzeP28UctvlneskNkoCml40kGzTdAd+/ULauIP0NyvYLVP0O+KM3Fzq
+ Cu3jVOm9BJoketLZR2DxRaEatABqq2hdg9fpEJmhZgX42EToBe1SC1jg5NV7HqA5zvmGdBaUX
+ UDa1eB2WVNAV+qGaCvLqAh9xRfupcyrUj6rNTlUjnjFbQMuD9Y9d45XHAlEOIvPBdLHLBfYox
+ tLE6E03u48xAGZsu78SWBtcbx1dHnm/vFabISe5P+HfRNriyEvgIGFlrHi+xGMjubNnjCXGrr
+ CUHWqQYE7mTt7pIsNReK+FRqVvL/nHMKS8b0KFOh/RQhfTmebeUVS2dzduHlRBXXzAAVhp1PZ
+ 9NBquEv0WrWkLlZTZ+V6dUtcqO1pymf5EsqDpN8wGW12LVQM+8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Morning
-
-On 21/12/2021 07:14, Andy Shevchenko wrote:
-> There are two updates to the MAINTAINERS regarding to software node API:
-> - add Dan Scally to be designated reviewer
-> - add rather tightly related device property files to the list
-> - adjust section name accordingly
+On Tue, Dec 21, 2021 at 2:41 AM cuigaosheng <cuigaosheng1@huawei.com> wrote:
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
+> > I could apply them directly with the maintainer Acks, but I don't understand
+> > the significance of you sending them now. Is something broken without the
+> > three patches? Are these the only ones missing from Ard's original series,
+> > or is this preparation? Would you expect the patches to get backported to
+> > stable kernels?
 >
-> Based on the latest Dan's involvement and amount of patches seen recently
-> I went ahead and added his name to the list. Dan, please tell me if it's
-> not appropriate.
-
-
-This is fine by me - I don't know if you need a tag from me for this but
-feel free to add whichever's appropriate
-
+> Thanks for your reply.
 >
->  MAINTAINERS | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8912b2c1260c..ccb4aa744540 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17666,12 +17666,16 @@ F:	drivers/firmware/arm_sdei.c
->  F:	include/linux/arm_sdei.h
->  F:	include/uapi/linux/arm_sdei.h
->  
-> -SOFTWARE NODES
-> +SOFTWARE NODES AND DEVICE PROPERTIES
->  R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->  R:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> +R:	Daniel Scally <djrscally@gmail.com>
->  L:	linux-acpi@vger.kernel.org
->  S:	Maintained
-> +F:	drivers/base/property.c
->  F:	drivers/base/swnode.c
-> +F:	include/linux/fwnode.h
-> +F:	include/linux/property.h
->  
->  SOFTWARE RAID (Multiple Disks) SUPPORT
->  M:	Song Liu <song@kernel.org>
+> This is preparation work for arm32 kaslr,and I want to continue to improve
+> the solution based on the work of Ard. These patches are relatively
+> independent, so I submit these patches first.
+
+The approach of merging support incrementally is good in principle, but in this
+case I think we first need to agree on the overall direction first.
+How far have you
+come rebasing Ard's patches, do you have KASLR working yet? This is information
+that should go into the [PATCH 0/3] cover letter.
+
+Do you have a particular target platform in mind?
+
+I think for CPUs that can use LPAE, we want to eventually move to the 4G:4G
+memory model, which in turn depends on having the kernel in vmalloc space, as
+implemented by Linus Walleij in
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/log/?h=kernel-in-vmalloc-v5.14-rc1
+
+With this work, the randomization will look quite different, on the one hand it
+leaves less room for relocating the kernel within the smaller 256MB vmalloc
+space, while on the other hand it does open the possibility of complete
+randomization by scrambling the virt-to-phys mapping in vmalloc space,
+using linear virtual addresses to refer to a randomized set of
+physical addresses.
+(this is just a wild idea that one could implement, nobody has actual plans for
+it at the moment, and it comes with additional runtime overhead).
+
+        Arnd

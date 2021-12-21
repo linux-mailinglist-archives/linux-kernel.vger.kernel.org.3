@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CD947BFB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0128C47BFBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237578AbhLUMae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhLUMad (ORCPT
+        id S237589AbhLUMbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:31:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60536 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229779AbhLUMbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:30:33 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D553C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 04:30:32 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so2014526wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 04:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FnZQfonqJQZhort/TdYz7jT5v9CBQGfdqTN7b6WIV6M=;
-        b=DIaobCcoV4E5Rq6yzTz5ISUWIz/FEL4XI+oHyCCeJVSuC/sJqfxlh8U+w47glc2s/J
-         BIpKUry8IN2/fseKXWKzyJXVoH41t7gjmDrB42mHOD9JjDctX7NUiK4Xg+96TgP+Pk/3
-         jTNDqKsmOX2X48qF+SjvJa1McgAIIh2xhL4kvVl0Y/4eKsqgJG7Z5FvL+guCMUqj3O9Z
-         l/a0LeHT26rnurlUNUf2oXAH5V/qFahax5bXstsyIPaYCbrAaxTkpH7Lkdffxrzs9tGA
-         SqxSwaCp5DD6b5iaGZT4PCs0KSRD7MZ7UrbS0o3+mo0g9d7mrVgYg8PscLtLpY0ZgWdi
-         scXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FnZQfonqJQZhort/TdYz7jT5v9CBQGfdqTN7b6WIV6M=;
-        b=02+6Qq8YV3p4Ma9U9Fx1xoYrKfaa2XxAdnY/2r+Sr9L0APjXMpeyfxg++ae8GUmpsD
-         Vq2FslKgAs/K5gHhN8WYH2hpKjs4Gwkw2iV54YCCfM93fQ/KGV/OWy0/Ntglvb7/39dx
-         AU7sPCGb7jaG8LcchijDSOQyKBFI+YKS3WI2gIv2s3Evc4Dlsy23aMTZXDThNMPFBZF2
-         aFu98R2RvDnD6CsFx8OuIdqoI0i2+gqzry5ngis56AJKIbz+JVsf0fNZzGA0Pqz4j7th
-         pWv7lRgUTVSG+v/gSi8X0QAwdndUzV/3hZzUs2/4UsEoXuP25Tcz29cHEmomUQHP97Cw
-         oL9A==
-X-Gm-Message-State: AOAM5303+0WObdeFV7c/r+vmgw7stKCeWZapk4pL6EzYCsrgwoUV/Gqe
-        Y13B2CYNmxPlZJ1kHL6MXIwzLg==
-X-Google-Smtp-Source: ABdhPJwlh4LBUDdueqH7tct/Z5sKTz90jWmM1dJy9ZBdB9HKd6S4SPiU5V4Is72wN8XRRHJz8/MQFw==
-X-Received: by 2002:a05:600c:24e:: with SMTP id 14mr2494370wmj.67.1640089831086;
-        Tue, 21 Dec 2021 04:30:31 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:87ff:799:2072:8808])
-        by smtp.gmail.com with ESMTPSA id 14sm584579wry.23.2021.12.21.04.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 04:30:30 -0800 (PST)
-Date:   Tue, 21 Dec 2021 13:30:23 +0100
-From:   Marco Elver <elver@google.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH mm v4 29/39] kasan, page_alloc: allow skipping memory
- init for HW_TAGS
-Message-ID: <YcHI34KT8Am4n45x@elver.google.com>
-References: <cover.1640036051.git.andreyknvl@google.com>
- <dea9eb126793544650ff433612016016070ceb52.1640036051.git.andreyknvl@google.com>
+        Tue, 21 Dec 2021 07:31:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81582B8167A;
+        Tue, 21 Dec 2021 12:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67246C36AE2;
+        Tue, 21 Dec 2021 12:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640089896;
+        bh=aRJ72Tt/74M53TxT2OxpczsMwM+tVhnGCLhStYmdK/k=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=IJBirJBSycKfJ4lUKJrrxZxSzLZkwUAq0ACEDvV8ExcILnan4u+0BBUTcLn9TFkqq
+         ROWCarGa1JebcuK58DHn/YEufZ/E4Wvk60GE+N/+7258YhqIs47Y9GyLzRwe+45EhO
+         hRcVP7brTIM078SJo4/Na1e67bK4dsLsVwruz0cT1DtUbVXzXq7l29Yz+/uKkNsBH0
+         9UEm6LIdF8DzY2qNsw/aE93856Vgj/FzYgwozsJqaCxaE1mJN2cZ1nzFFJwr4f8mtB
+         qby1l/K1PxCO+er7akG6mgi98NKtiyeRJ0ze949WgytylPmphYNY0oovS+JNemufHu
+         jUQn26FZbEwjA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Wen Gong <quic_wgong@quicinc.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mac80211-next tree
+References: <20211221115004.1cd6b262@canb.auug.org.au>
+Date:   Tue, 21 Dec 2021 14:31:31 +0200
+In-Reply-To: <20211221115004.1cd6b262@canb.auug.org.au> (Stephen Rothwell's
+        message of "Tue, 21 Dec 2021 11:50:04 +1100")
+Message-ID: <8735mmm95o.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dea9eb126793544650ff433612016016070ceb52.1640036051.git.andreyknvl@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:02PM +0100, andrey.konovalov@linux.dev wrote:
-[...]
->  /* Room for N __GFP_FOO bits */
->  #define __GFP_BITS_SHIFT (24 +					\
-> +			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
->  			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
->  			  IS_ENABLED(CONFIG_KASAN_HW_TAGS) +	\
->  			  IS_ENABLED(CONFIG_LOCKDEP))
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Does '3 * IS_ENABLED(CONFIG_KASAN_HW_TAGS)' work?
+> Hi all,
+>
+> After merging the mac80211-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/net/wireless/ath/ath10k/wmi.c: In function 'ath10k_wmi_event_mgmt_rx':
+> drivers/net/wireless/ath/ath10k/wmi.c:2626:12: error: too few
+> arguments to function 'cfg80211_get_ies_channel_number'
+>  2626 |   ies_ch = cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/net/mac80211.h:21,
+>                  from drivers/net/wireless/ath/ath10k/htt.h:16,
+>                  from drivers/net/wireless/ath/ath10k/core.h:18,
+>                  from drivers/net/wireless/ath/ath10k/wmi.c:11:
+> include/net/cfg80211.h:6421:5: note: declared here
+>  6421 | int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Caused by commit
+>
+>   7f599aeccbd2 ("cfg80211: Use the HE operation IE to determine a 6GHz BSS channel")
+>
+> interacting with commit
+>
+>   3bf2537ec2e3 ("ath10k: drop beacon and probe response which leak from other channel")
+>
+> from the net-next tree.
+>
+> I have applied the following merge fix patch for today (which, on
+> reflection, may not be correct, but builds).
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 21 Dec 2021 11:40:49 +1100
+> Subject: [PATCH] fixup for "cfg80211: Use the HE operation IE to determine a 6GHz BSS channel"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/net/wireless/ath/ath10k/wmi.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath10k/wmi.c b/drivers/net/wireless/ath/ath10k/wmi.c
+> index 4733fd7fb169..657bd6a32a36 100644
+> --- a/drivers/net/wireless/ath/ath10k/wmi.c
+> +++ b/drivers/net/wireless/ath/ath10k/wmi.c
+> @@ -2613,6 +2613,7 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struct sk_buff *skb)
+>  	if (ieee80211_is_beacon(hdr->frame_control) ||
+>  	    ieee80211_is_probe_resp(hdr->frame_control)) {
+>  		struct ieee80211_mgmt *mgmt = (void *)skb->data;
+> +		enum cfg80211_bss_frame_type ftype;
+>  		u8 *ies;
+>  		int ies_ch;
+>  
+> @@ -2623,9 +2624,14 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struct sk_buff *skb)
+>  
+>  		ies = mgmt->u.beacon.variable;
+>  
+> +		if (ieee80211_is_beacon(mgmt->frame_control))
+> +			ftype = CFG80211_BSS_FTYPE_BEACON;
+> +		else /* if (ieee80211_is_probe_resp(mgmt->frame_control)) */
+> +			ftype = CFG80211_BSS_FTYPE_PRESP;
+> +
+>  		ies_ch = cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
+>  							 skb_tail_pointer(skb) - ies,
+> -							 sband->band);
+> +							 sband->band, ftype);
+
+I would remove the commented out code '/* if
+(ieee80211_is_probe_resp(mgmt->frame_control)) */', otherwise looks good
+to me.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

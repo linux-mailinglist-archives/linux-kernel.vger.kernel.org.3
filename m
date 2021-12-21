@@ -2,186 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 454B547BEE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B3847BF0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbhLUL1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:27:25 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29275 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbhLUL1R (ORCPT
+        id S237202AbhLULj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:39:56 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37220 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232851AbhLULjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:27:17 -0500
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJDgc292gzbjVh;
-        Tue, 21 Dec 2021 19:26:52 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 19:27:14 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 21 Dec
- 2021 19:27:14 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <jack@suse.cz>, <gregkh@linuxfoundation.org>,
-        <paolo.valente@linaro.org>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH linux-4.19.y 5/5] block, bfq: fix use after free in bfq_bfqq_expire
-Date:   Tue, 21 Dec 2021 19:38:49 +0800
-Message-ID: <20211221113849.2219126-6-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211221113849.2219126-1-yukuai3@huawei.com>
-References: <20211221113849.2219126-1-yukuai3@huawei.com>
+        Tue, 21 Dec 2021 06:39:55 -0500
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1DE7C881;
+        Tue, 21 Dec 2021 12:39:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1640086794;
+        bh=+zx35ApipIwzpR2JUnKwmUzBhBtFhQVEcaXKQzBURZE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=qpbqBbV7mLRQ/LTYmZele+Jiaf5hSp3Mjt98byY3LnEv0TrgoJfVoe4yiWvmhYTut
+         ADnJaF5u8mSofPrJltGtoh9cxgvJnHT5CBO5oAAXf75f66TDvGMHBA15r8uFX2uQiN
+         iLxxCKcscRsF/K+f5hUMHVyAnwiPOhnai3Kb+3cY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
+References: <20211218182804.208906-1-antonio.borneo@foss.st.com> <164001209406.2512616.469307346369770543@Monstersaurus> <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
+Subject: Re: [PATCH] drm: adv7511: override i2c address of cec before accessing it
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+To:     Andrzej Hajda <a.hajda@samsung.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        dri-devel@lists.freedesktop.org
+Date:   Tue, 21 Dec 2021 11:39:51 +0000
+Message-ID: <164008679146.2512616.5965783147922289011@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Valente <paolo.valente@linaro.org>
+Quoting Antonio Borneo (2021-12-20 15:53:12)
+> On Mon, 2021-12-20 at 14:54 +0000, Kieran Bingham wrote:
+> > Hi Antonio,
+> >=20
+> > Quoting Antonio Borneo (2021-12-18 18:28:04)
+> > > Commit 680532c50bca ("drm: adv7511: Add support for
+> > > i2c_new_secondary_device") allows a device tree node to override
+> > > the default addresses of the secondary i2c devices. This is useful
+> > > for solving address conflicts on the i2c bus.
+> > >=20
+> > > In adv7511_init_cec_regmap() the new i2c address of cec device is
+> > > read from device tree and immediately accessed, well before it is
+> > > written in the proper register to override the default address.
+> > > This can cause an i2c error during probe and a consequent probe
+> > > failure.
+> >=20
+> > Ouch, it does seem that way. I guess no one has used the CEC for
+> > quite
+> > some time, as it must have been like this for a while?
+>=20
+> Using the default i2c address for cec works without problem; apparently
+> everyone is happy with such default. The issue appears only when you
+> have to override the default cec address.
+> The commit 680532c50bca landed in v4.18.
 
-commit eed47d19d9362bdd958e4ab56af480b9dbf6b2b6 upstream.
+Ok, phew - so the 'normal' case still worked. That makes sense.
 
-The function bfq_bfqq_expire() invokes the function
-__bfq_bfqq_expire(), and the latter may free the in-service bfq-queue.
-If this happens, then no other instruction of bfq_bfqq_expire() must
-be executed, or a use-after-free will occur.
+Sorry for getting it wrong, and I hope it didn't take too long to find
+and fix. I'm sure we'll see it percolate down the stable trees once
+integrated.
 
-Basing on the assumption that __bfq_bfqq_expire() invokes
-bfq_put_queue() on the in-service bfq-queue exactly once, the queue is
-assumed to be freed if its refcounter is equal to one right before
-invoking __bfq_bfqq_expire().
+--
+Kieran
 
-But, since commit 9dee8b3b057e ("block, bfq: fix queue removal from
-weights tree") this assumption is false. __bfq_bfqq_expire() may also
-invoke bfq_weights_tree_remove() and, since commit 9dee8b3b057e
-("block, bfq: fix queue removal from weights tree"), also
-the latter function may invoke bfq_put_queue(). So __bfq_bfqq_expire()
-may invoke bfq_put_queue() twice, and this is the actual case where
-the in-service queue may happen to be freed.
-
-To address this issue, this commit moves the check on the refcounter
-of the queue right around the last bfq_put_queue() that may be invoked
-on the queue.
-
-Fixes: 9dee8b3b057e ("block, bfq: fix queue removal from weights tree")
-Reported-by: Dmitrii Tcvetkov <demfloro@demfloro.ru>
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Dmitrii Tcvetkov <demfloro@demfloro.ru>
-Tested-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/bfq-iosched.c | 15 +++++++--------
- block/bfq-iosched.h |  2 +-
- block/bfq-wf2q.c    | 17 +++++++++++++++--
- 3 files changed, 23 insertions(+), 11 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index d22452fa2d5a..c2529dfda3e5 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2816,7 +2816,7 @@ static void bfq_dispatch_remove(struct request_queue *q, struct request *rq)
- 	bfq_remove_request(q, rq);
- }
- 
--static void __bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq)
-+static bool __bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq)
- {
- 	/*
- 	 * If this bfqq is shared between multiple processes, check
-@@ -2849,9 +2849,11 @@ static void __bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq)
- 	/*
- 	 * All in-service entities must have been properly deactivated
- 	 * or requeued before executing the next function, which
--	 * resets all in-service entites as no more in service.
-+	 * resets all in-service entities as no more in service. This
-+	 * may cause bfqq to be freed. If this happens, the next
-+	 * function returns true.
- 	 */
--	__bfq_bfqd_reset_in_service(bfqd);
-+	return __bfq_bfqd_reset_in_service(bfqd);
- }
- 
- /**
-@@ -3256,7 +3258,6 @@ void bfq_bfqq_expire(struct bfq_data *bfqd,
- 	bool slow;
- 	unsigned long delta = 0;
- 	struct bfq_entity *entity = &bfqq->entity;
--	int ref;
- 
- 	/*
- 	 * Check whether the process is slow (see bfq_bfqq_is_slow).
-@@ -3325,10 +3326,8 @@ void bfq_bfqq_expire(struct bfq_data *bfqd,
- 	 * reason.
- 	 */
- 	__bfq_bfqq_recalc_budget(bfqd, bfqq, reason);
--	ref = bfqq->ref;
--	__bfq_bfqq_expire(bfqd, bfqq);
--
--	if (ref == 1) /* bfqq is gone, no more actions on it */
-+	if (__bfq_bfqq_expire(bfqd, bfqq))
-+		/* bfqq is gone, no more actions on it */
- 		return;
- 
- 	bfqq->injected_service = 0;
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index 746bd570b85a..ca98c98a8179 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -993,7 +993,7 @@ bool __bfq_deactivate_entity(struct bfq_entity *entity,
- 			     bool ins_into_idle_tree);
- bool next_queue_may_preempt(struct bfq_data *bfqd);
- struct bfq_queue *bfq_get_next_queue(struct bfq_data *bfqd);
--void __bfq_bfqd_reset_in_service(struct bfq_data *bfqd);
-+bool __bfq_bfqd_reset_in_service(struct bfq_data *bfqd);
- void bfq_deactivate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 			 bool ins_into_idle_tree, bool expiration);
- void bfq_activate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq);
-diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-index 1301289b14aa..11ff5ceae02b 100644
---- a/block/bfq-wf2q.c
-+++ b/block/bfq-wf2q.c
-@@ -1600,7 +1600,8 @@ struct bfq_queue *bfq_get_next_queue(struct bfq_data *bfqd)
- 	return bfqq;
- }
- 
--void __bfq_bfqd_reset_in_service(struct bfq_data *bfqd)
-+/* returns true if the in-service queue gets freed */
-+bool __bfq_bfqd_reset_in_service(struct bfq_data *bfqd)
- {
- 	struct bfq_queue *in_serv_bfqq = bfqd->in_service_queue;
- 	struct bfq_entity *in_serv_entity = &in_serv_bfqq->entity;
-@@ -1624,8 +1625,20 @@ void __bfq_bfqd_reset_in_service(struct bfq_data *bfqd)
- 	 * service tree either, then release the service reference to
- 	 * the queue it represents (taken with bfq_get_entity).
- 	 */
--	if (!in_serv_entity->on_st)
-+	if (!in_serv_entity->on_st) {
-+		/*
-+		 * If no process is referencing in_serv_bfqq any
-+		 * longer, then the service reference may be the only
-+		 * reference to the queue. If this is the case, then
-+		 * bfqq gets freed here.
-+		 */
-+		int ref = in_serv_bfqq->ref;
- 		bfq_put_queue(in_serv_bfqq);
-+		if (ref == 1)
-+			return true;
-+	}
-+
-+	return false;
- }
- 
- void bfq_deactivate_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
--- 
-2.31.1
-
+> > > Once the new i2c address is read from the device tree, override
+> > > the default address before any attempt to access the cec.
+> >=20
+> > Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>=20
+> Thanks!
+> Antonio
+>=20
+> > > Tested with adv7533 and stm32mp157f.
+> > >=20
+> > > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> > > Fixes: 680532c50bca ("drm: adv7511: Add support for
+> > > i2c_new_secondary_device")
+> > > ---
+> > > To: Andrzej Hajda <a.hajda@samsung.com>
+> > > To: Neil Armstrong <narmstrong@baylibre.com>
+> > > To: Robert Foss <robert.foss@linaro.org>
+> > > To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> > > To: Jonas Karlman <jonas@kwiboo.se>
+> > > To: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > > To: David Airlie <airlied@linux.ie>
+> > > To: Daniel Vetter <daniel@ffwll.ch>
+> > > To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> > > To: dri-devel@lists.freedesktop.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: linux-stm32@st-md-mailman.stormreply.com
+> > > ---
+> > > =C2=A0drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
+> > > =C2=A01 file changed, 4 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > index 76555ae64e9c..629e05286fd9 100644
+> > > --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > @@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct
+> > > adv7511 *adv)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > > ADV7511_CEC_I2C_ADDR_DEFAULT);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(adv->i2c_cec))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(adv->i2c_cec);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(adv->regmap, ADV75=
+11_REG_CEC_I2C_ADDR,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv->i2c_cec->addr << 1);
+> > > +
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 i2c_set_clientdata(adv->i2=
+c_cec, adv);
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv->regmap_cec =3D devm_r=
+egmap_init_i2c(adv->i2c_cec,
+> > > @@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client
+> > > *i2c, const struct i2c_device_id *id)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 goto err_i2c_unregister_packet;
+> > > =C2=A0
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(adv7511->regmap, A=
+DV7511_REG_CEC_I2C_ADDR,
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv7511->i2c_cec->addr << =
+1);
+> > > -
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 INIT_WORK(&adv7511->hpd_wo=
+rk, adv7511_hpd_work);
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (i2c->irq) {
+> > >=20
+> > > base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
+> > > --=20
+> > > 2.34.1
+> > >=20
+>

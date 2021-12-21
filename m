@@ -2,230 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7816047C4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33DA47C4EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240367AbhLURWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240368AbhLURWq (ORCPT
+        id S240381AbhLURXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:23:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38395 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232738AbhLURXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:22:46 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B8C061401
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:22:46 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id x32so40773429ybi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=R3pCw4gmHP7nbUtLpCJSRrJ6QBuaaSPlAZfdmztAG9M=;
-        b=q+pUQswpzxshvmdojEBW/sD4WtIQjhaFUQbYKo5SWFMd8Zb3XglDJm+DELuZgLSYGv
-         wlaxyiq8SEOm7/BUfK7ha34aK+TMGJ82rKRwiU8XDUCYCEZ6jtu/VCoQjq00LWh1rKUu
-         m1THhz5cFsjKY392VCVc/K0nv81A5gwl7zZnVvWJd/jxY/t/43LaF04BD/TKC4ZUKr1h
-         M2MsoXHApCAbZfznd/wFit4vvrY2VFGAw52wNP8Tor6T7TCbOQx/gj6q/Q5FWHRnt4gn
-         QTPGCpzXSpir2aFt+u5QllkzynSQGZfu+P5d5CeXEnBJtjBQJoGj7S2dRSMTirUkNsIs
-         BXXw==
+        Tue, 21 Dec 2021 12:23:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640107393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cgNFiSHVPmozrMAwLoLE4jQsVCvOy69kXUCzJ2IDG40=;
+        b=K4655Xo552IOFcyt4IgJbqlrQF7AP6WJ810YvgDO9AwO1pXVFZRqiNlGPfgNKnlLOFZsv0
+        lJd9uLuLJ7LMStYakhgg3ZV9Fmb1pZnTsU9bLuxxqI/FiyzfdbB9ymOJWbDBZG546pBZ2e
+        VEcRVw96UpnlFltAikTYRCj9qOsU52s=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-JFqaKm8RNzin_pspVGPPeg-1; Tue, 21 Dec 2021 12:23:12 -0500
+X-MC-Unique: JFqaKm8RNzin_pspVGPPeg-1
+Received: by mail-wm1-f71.google.com with SMTP id g189-20020a1c20c6000000b00345bf554707so739788wmg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:23:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=R3pCw4gmHP7nbUtLpCJSRrJ6QBuaaSPlAZfdmztAG9M=;
-        b=tALAsUpssUbTFkZr1i5TrL4navOzVAoJ864+MgX6DwswQ5vtN7ucIQ7aS/2iG87vNA
-         NtTynp85XJiDiL6QQ6Zugx7Bz+NT5dT5QITh30g+ABE1n9WaiIY3eWIb1yT8YBMSmSoz
-         V7uHlX+0ZbIdCAgZ9VLvEsY/zw6T/solUAxcBHXYuvDtX4jwMaVcxpwfJgl44MEpMa2J
-         gRQ0kyPvMaEytajRNZp2my47FVIVow8IlrtVyHor79PHSxue7a0saFDOTLtFgmBTW4N0
-         riwE9cAnBW6cA59e4xxuCEf6dLGhitLFSYc919Nty55a9S1X6YUOgilc4jjo20vG/PfX
-         6zQw==
-X-Gm-Message-State: AOAM530R9lx2CiRYvG3XIvuGD9LoVlJepMUyzNlzvzEFwzla4TmR+Dr3
-        BDeHpukVrfmZTj8X1xQUf6m3AxAei9jKOfT24Sb1Zw==
-X-Google-Smtp-Source: ABdhPJxb8QTXqWwUuy1tqHwGZ8h99rMkG0dszNFGCs6GuxiUEBedOLQhW3yuezpECpmK4ZTcYluTK6SVSPx1ZfuhI00=
-X-Received: by 2002:a25:d68e:: with SMTP id n136mr6220237ybg.520.1640107365561;
- Tue, 21 Dec 2021 09:22:45 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cgNFiSHVPmozrMAwLoLE4jQsVCvOy69kXUCzJ2IDG40=;
+        b=cxxGpguMw2Y9CMEWZ1SPN9DS9NMsCjAJcb0cX85cGgX8z394m0n5y40ccUu1yetVMD
+         g8gDiv0Br9iPoCsBuRmkgwseY5zNcOxfBt4m0n6xlL99bnubrc4cRPdt5POXTMP/GLb3
+         BhWWnog+q30X55JW3/0Q75czDwAjf2vsPwcIvMTLoJWpZ01kAfcMksxpes9tf06nS259
+         myzNQSCjYRsDFgqdhd0nhRYEg46M0sr6xkBO9Z7Yl9nEWxUvFNxJokROWWSxGwyfdpXK
+         8h7VKfVUNOYEeWQ5IdmWS5CWToD2hj90Xp8CIIBRz1T9Wp/XVWll4tj0eX9mSD70L3WH
+         nPpQ==
+X-Gm-Message-State: AOAM532lw5XoohXd6vStzupcwjUubY96WtpFBmwNgBSo7RCOts4OlawA
+        6cPeVJOmy22kCjutZV6B4XcJ2S9huqdaKAE4LeyzQ7kkbwIxOswiV+OpputkAzUG5na8x3NBSfX
+        IZ0ps+HoTCyRy0SajUC4mEjpG
+X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr2939926wri.358.1640107389834;
+        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyI+sgOMHf0YSbgDUY4Hz0bbMnBZ39bzuZPfnty8IjP5PgtILbNjQUHQYlB5n/1B8EGxd5qNw==
+X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr2939904wri.358.1640107389571;
+        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id c8sm10962302wrp.40.2021.12.21.09.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
+Message-ID: <4d739c28-e07d-f921-8a8d-a5343139e234@redhat.com>
+Date:   Tue, 21 Dec 2021 18:23:06 +0100
 MIME-Version: 1.0
-References: <20211220143022.266532675@linuxfoundation.org>
-In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Dec 2021 22:52:34 +0530
-Message-ID: <CA+G9fYuZo2v6iyVbif40U8PpvsffKMjL2cXV5GjEZ9t9Mrm8og@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/45] 4.14.259-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: selftests: Fix compile error for non-x86
+ vm_compute_max_gfn()
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Anup Patel <anup.patel@wdc.com>, Shuah Khan <shuah@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20211221125617.932371-1-anup.patel@wdc.com>
+ <3e3b5295-f6fb-1ff9-acfe-1a4c47c6ba20@linuxfoundation.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <3e3b5295-f6fb-1ff9-acfe-1a4c47c6ba20@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 20:10, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.259 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.259-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
+On 12/21/21 18:22, Shuah Khan wrote:
+> On 12/21/21 5:56 AM, Anup Patel wrote:
+>> The inline version of vm_compute_max_gfn() in kvm_util.h directly
+>> access members of "struct kvm_vm" which causes compile errors for
+>> non-x86 architectures because lib/elf.c includes "kvm_util.h" before
+>> "kvm_util_internal.h".
+>>
+>> This patch fixes above described compile error by converting inline
+>> version of vm_compute_max_gfn() into a macro.
+> 
+> Thank you for the patch. Please include the actual compile error in the
+> change log and send v2,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Hi, a similar patch is already queued and should get to Linus today or 
+tomorrow.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Paolo
 
-## Build
-* kernel: 4.14.259-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 5b3e273408e5c9c7147eaa73e314267fd8e7c830
-* git describe: v4.14.258-46-g5b3e273408e5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.258-46-g5b3e273408e5
-
-## No Test Regressions (compared to v4.14.257-54-gcca31a2a7082)
-
-## No Test Fixes (compared to v4.14.257-54-gcca31a2a7082)
-
-## Test result summary
-total: 70666, pass: 57051, fail: 606, skip: 11219, xfail: 1790
-
-## Build Summary
-* arm: 254 total, 242 passed, 12 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 52 total, 0 passed, 52 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

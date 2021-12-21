@@ -2,91 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA6F47C827
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0F647C82E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbhLUUPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:15:20 -0500
-Received: from mga12.intel.com ([192.55.52.136]:3038 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231623AbhLUUPR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:15:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640117717; x=1671653717;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OJvqQorkXrS87WtDhS0TzCOphESf+W3KbpYX/JmpUog=;
-  b=D7ni8Q0J/SLr+0TRCfuGo/7UhoT9Q38XtjA/99k5oIl0fmjmfTuzuZQi
-   JsiXPZRmOAO9i9vYqcXtPc37zpeMYlBwLNoMuy2q4S+4O0r96q+9lRJiX
-   AG+ppUNnkQiYdE+Q48No+a9Hu1UTmT8Hy2+dzELGEz+fHHfELTxQPw3fu
-   JSK7qC7SQf/Jefthv/Fs9G2n/qhlAk8g49kzXi7RhmDu79IMo2xN9rZoA
-   bAoxmrF6Ont4aHYKCM8rt+L7XQYthZ5Er0+HdLcpKC8iX1AMvL/fYD/CO
-   gqQY59l8jbqJpT8vdyTQOD+Xs1JzLq2h3WNKp6s+qPXKGrlTSce41Ex9e
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="220496182"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="220496182"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 12:15:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="616890631"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Dec 2021 12:15:15 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzlXW-0009VY-8b; Tue, 21 Dec 2021 20:15:14 +0000
-Date:   Wed, 22 Dec 2021 04:14:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, tytso@mit.edu,
-        gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH] random: use BLAKE2s instead of SHA1 in extraction
-Message-ID: <202112220446.QXGU4ozn-lkp@intel.com>
-References: <20211221175047.341782-1-Jason@zx2c4.com>
+        id S233673AbhLUUTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231623AbhLUUTx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 15:19:53 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED45C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 12:19:53 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id t19so555920oij.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 12:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G9LWWkXvMjCHJdkHQwVy+G2bXdZtAb8HFnc0qRd88BI=;
+        b=hFET+5vcMNd615mcfJN7vFVMzrAXrTBawKighOZWDAmZlfxYXZWeszwGNB/yz7FFCe
+         IxEGOOYPfZA8OfCbqKt1sI2lPQpTcmVbDcVfD1xYMaemj2VJOJRlQCpHGt/1pqQlOdRA
+         um/hYeebSTwgjtCxCbtCJj9oBtP4M2VfbBP/PBphE9xmGkcQh8KOODlG2n7/a9bwfxqM
+         M8xAwq52kye29VGU/NNHBuuPjg1u5FzCR4lXFX7weXAWbNP8xGMweWYnCTIVsDUbx7al
+         YhajkgSvcUE+PsIbN2qGCwESdkKRyfLQt4ThOdGEiy2ruxZ0Ef+KseU33hmKDgrdAzfL
+         PnjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G9LWWkXvMjCHJdkHQwVy+G2bXdZtAb8HFnc0qRd88BI=;
+        b=2CHZPSkvrKrR+uqcyY9spOV7CLJqJ82TTXK+2Zc9UDhgeRI4AcvNzk/9x1mDelSPev
+         es9LFPCnKh0UJTDVb9snE+ZIzcvDwTb/tsA7VJsIfJCDy0hB68RrHSel1Sftzvmq0BN/
+         2kQcbuLOW+i1b8ImK1qGggqDMCivz3kwjPJP1DdBZjVrD7aIi2zH6DQj662baIZtD9Eb
+         V/M1wm2SyeFVtGe984zhrtDZW5vLAM3shJjcw90C2poR8RVZN4jvVxthLMgBMXjP2a7O
+         BTUOIy8OBwUJ0i3zbLdNY4+PoKgYAXCHO6aWWrSsEnj06dpHHpFw2ZpxVwWRtMM2+4lG
+         tqlQ==
+X-Gm-Message-State: AOAM531wueD7BgqrxHrah5hKIvnY8JOXtQoNWFGjE3QNns7qeto9wZOg
+        Q5HRFDEVjFytC/7KnOym93YvZWP0xr76qkdT2OwNww==
+X-Google-Smtp-Source: ABdhPJz4gEkYkVaiar7dW4USt98pbhc8tXG55zKbfu8xtSrolCnLAw3wWkIaoUD2rKs1OvfWaDtGu59cunZx3ne0h8M=
+X-Received: by 2002:aca:6245:: with SMTP id w66mr90879oib.134.1640117992657;
+ Tue, 21 Dec 2021 12:19:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221175047.341782-1-Jason@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211221170348.1113266-1-nogikh@google.com> <20211221170348.1113266-2-nogikh@google.com>
+In-Reply-To: <20211221170348.1113266-2-nogikh@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 21 Dec 2021 21:19:41 +0100
+Message-ID: <CANpmjNMAWuE0Y20ZuBUSRXkvWZd8NC1d=DDYYrEZytJz9ndxeA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kcov: split ioctl handling into locked and
+ unlocked parts
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, dvyukov@google.com,
+        andreyknvl@gmail.com, glider@google.com, tarasmadan@google.com,
+        bigeasy@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Jason,
+On Tue, 21 Dec 2021 at 18:04, Aleksandr Nogikh <nogikh@google.com> wrote:
+>
+> Currently all ioctls are de facto processed under a spin lock in order
+> to serialise them. This, however, prohibits the use of vmalloc and other
+> memory management functions in the implementation of those ioctls,
+> unnecessary complicating any further changes.
+>
+> Let all ioctls first be processed inside the kcov_ioctl_unlocked()
+> function which should execute the ones that are not compatible with
+> spinlock and pass control to kcov_ioctl_locked() for all other ones.
+>
+> Although it is still compatible with a spinlock, move KCOV_INIT_TRACE
+> handling to kcov_ioctl_unlocked(), so that its planned change is easier
+> to follow.
+>
+> Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
+> ---
+>  kernel/kcov.c | 64 +++++++++++++++++++++++++++++++--------------------
+>  1 file changed, 39 insertions(+), 25 deletions(-)
+>
+> diff --git a/kernel/kcov.c b/kernel/kcov.c
+> index 36ca640c4f8e..5d87b4e0126f 100644
+> --- a/kernel/kcov.c
+> +++ b/kernel/kcov.c
+> @@ -564,31 +564,12 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+>                              unsigned long arg)
+>  {
+>         struct task_struct *t;
+> -       unsigned long size, unused;
+> +       unsigned long flags, unused;
+>         int mode, i;
+>         struct kcov_remote_arg *remote_arg;
+>         struct kcov_remote *remote;
+> -       unsigned long flags;
+>
+>         switch (cmd) {
+> -       case KCOV_INIT_TRACE:
+> -               /*
+> -                * Enable kcov in trace mode and setup buffer size.
+> -                * Must happen before anything else.
+> -                */
+> -               if (kcov->mode != KCOV_MODE_DISABLED)
+> -                       return -EBUSY;
+> -               /*
+> -                * Size must be at least 2 to hold current position and one PC.
+> -                * Later we allocate size * sizeof(unsigned long) memory,
+> -                * that must not overflow.
+> -                */
+> -               size = arg;
+> -               if (size < 2 || size > INT_MAX / sizeof(unsigned long))
+> -                       return -EINVAL;
+> -               kcov->size = size;
+> -               kcov->mode = KCOV_MODE_INIT;
+> -               return 0;
+>         case KCOV_ENABLE:
+>                 /*
+>                  * Enable coverage for the current task.
+> @@ -685,6 +666,43 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+>         }
+>  }
+>
+> +static int kcov_ioctl_unlocked(struct kcov *kcov, unsigned int cmd,
+> +                            unsigned long arg)
+> +{
+> +       unsigned long size, flags;
+> +       int res;
+> +
+> +       switch (cmd) {
+> +       case KCOV_INIT_TRACE:
+> +               /*
+> +                * Enable kcov in trace mode and setup buffer size.
+> +                * Must happen before anything else.
+> +                */
+> +               if (kcov->mode != KCOV_MODE_DISABLED)
+> +                       return -EBUSY;
+> +               /*
+> +                * Size must be at least 2 to hold current position and one PC.
+> +                * Later we allocate size * sizeof(unsigned long) memory,
+> +                * that must not overflow.
+> +                */
+> +               size = arg;
+> +               if (size < 2 || size > INT_MAX / sizeof(unsigned long))
+> +                       return -EINVAL;
+> +               kcov->size = size;
+> +               kcov->mode = KCOV_MODE_INIT;
+> +               return 0;
 
-I love your patch! Yet something to improve:
+This patch should be a non-functional change, but it is not.
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on char-misc/char-misc-testing herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v5.16-rc6 next-20211221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+To do that, you'd have to add the locking around KCOV_INIT_TRACE here,
+and then do whatever else you're doing in patch 2/2.
 
-url:    https://github.com/0day-ci/linux/commits/Jason-A-Donenfeld/random-use-BLAKE2s-instead-of-SHA1-in-extraction/20211222-021452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20211222/202112220446.QXGU4ozn-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/79f40c8f3c427b4f4819dca21ea159bc3c0350f0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jason-A-Donenfeld/random-use-BLAKE2s-instead-of-SHA1-in-extraction/20211222-021452
-        git checkout 79f40c8f3c427b4f4819dca21ea159bc3c0350f0
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> +       default:
+> +               /*
+> +                * All other commands can be fully executed under a spin lock, so we
+> +                * obtain and release it here to simplify the code of kcov_ioctl_locked().
+> +                */
+> +               spin_lock_irqsave(&kcov->lock, flags);
+> +               res = kcov_ioctl_locked(kcov, cmd, arg);
+> +               spin_unlock_irqrestore(&kcov->lock, flags);
+> +               return res;
+> +       }
+> +}
+> +
+>  static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>  {
+>         struct kcov *kcov;
+> @@ -692,7 +710,6 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>         struct kcov_remote_arg *remote_arg = NULL;
+>         unsigned int remote_num_handles;
+>         unsigned long remote_arg_size;
+> -       unsigned long flags;
+>
+>         if (cmd == KCOV_REMOTE_ENABLE) {
+>                 if (get_user(remote_num_handles, (unsigned __user *)(arg +
+> @@ -713,10 +730,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>         }
+>
+>         kcov = filep->private_data;
+> -       spin_lock_irqsave(&kcov->lock, flags);
+> -       res = kcov_ioctl_locked(kcov, cmd, arg);
+> -       spin_unlock_irqrestore(&kcov->lock, flags);
+> -
+> +       res = kcov_ioctl_unlocked(kcov, cmd, arg);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Also, I find that kcov_ioctl_unlocked() isn't a very descriptive name,
+since now we have both locked and unlocked variants. What is it
+actually doing?
 
-All errors (new ones prefixed by >>):
+Perhaps kcov_ioctl_with_context()? Assuming that 'struct kcov' is some
+sort of context.
 
-   ld: lib/crypto/blake2s.o: in function `blake2s_mod_init':
->> blake2s.c:(.init.text+0x1): undefined reference to `blake2s_selftest'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>         kfree(remote_arg);
+>
+>         return res;
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>

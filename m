@@ -2,194 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F21247BB2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF3A47BB2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbhLUHeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbhLUHet (ORCPT
+        id S235294AbhLUHgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:36:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50558 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231382AbhLUHgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:34:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F9FC061574;
-        Mon, 20 Dec 2021 23:34:48 -0800 (PST)
+        Tue, 21 Dec 2021 02:36:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD799B80F79;
-        Tue, 21 Dec 2021 07:34:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83D8C36AE2;
-        Tue, 21 Dec 2021 07:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640072086;
-        bh=dsSQbAT1V4+2QpbUbARv7dXxnQ6C8Kb0uF8C7BfJ+08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d5cxkQ3tSPDMhdbJUR0SRb5m++JZlNF3uNA9QpyyfhrG35K37kwIlktQe5cMCCK5w
-         HIalXPRJyNXojT6zjtJulQ8Zae9F6UKVIkNV5cAOHSUTgsSOH/0E+PyIncU2VrVLGh
-         YpZ6UPlkvIIBW4EztidU15mOLNksZ5QmrvVcm42I=
-Date:   Tue, 21 Dec 2021 08:34:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH 3/3] tty: serial: meson: add UART driver compatible with
- S4 SoC on-chip
-Message-ID: <YcGDk3eC3sIstYjs@kroah.com>
-References: <20211221071634.25980-1-yu.tu@amlogic.com>
- <20211221071634.25980-4-yu.tu@amlogic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221071634.25980-4-yu.tu@amlogic.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 835D661166
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:36:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A321AC36AE2;
+        Tue, 21 Dec 2021 07:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640072170;
+        bh=/hzNCPNil+d2z+5t9HQNki6RxLHeexeIGFcMdgZDZmU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dIIQriIx4hqJQtZuOaZXhwa7y+MkXJKRybp5CkeqKsrRgFUk4o6XTJ7LokImN+sfm
+         KJkrjya6f1oKc8I8N18osWboo8J+nuOeXGSveTfJSOWCV68Gwdc8rS+kbZXL1OyPua
+         3wsinXgr6VAU7Tq2xPx6IYaXj65emApMlHG5ha9BZst7sCvkJ9ikI7VkEcYWP2GNRO
+         1EnsaAuG3Q4+CwS0GuoGlgCgJ8A+xB0td0NW1I///yiPQpbHGbN2VEo2h94/JXrPzI
+         cl6UijlOz85xx9pJz7G8oNvzkCYpOi8bxMnKP/JnbAyfgIOXSHVSXSPkAvO/7CtlOp
+         JxoxSoMaVuNew==
+Date:   Tue, 21 Dec 2021 16:36:06 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH v6 1/5] trace: Add trace any kernel object
+Message-Id: <20211221163606.be53698d89ce08a272810ae1@kernel.org>
+In-Reply-To: <CAEr6+EAn3+vWvp46mheO=MTetLyHXy-GDENtN8O6y+5T+Y-N7w@mail.gmail.com>
+References: <20211129164951.220511-1-xiehuan09@gmail.com>
+        <20211129164951.220511-2-xiehuan09@gmail.com>
+        <20211217135149.db5ee4b1b110c845739106d4@kernel.org>
+        <CAEr6+EAn3+vWvp46mheO=MTetLyHXy-GDENtN8O6y+5T+Y-N7w@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 03:16:34PM +0800, Yu Tu wrote:
-> The S4 SoC on-chip UART uses a 12M clock as the clock source for
-> calculating the baud rate of the UART. But previously, chips used 24M or
-> other clock sources. So add this change. The specific clock source is
-> determined by chip design.
+Hi Jeff,
+
+On Sat, 18 Dec 2021 00:32:57 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
+
+> > > +struct object_instance {
+> > > +     void *object;
+> > > +     struct freelist_node free_list;
+> > > +     struct list_head active_list;
+> > > +};
+> > > +
+> > > +struct obj_pool {
+> > > +     struct freelist_head free_list;
+> > > +     struct list_head active_list;
+> > > +};
+> > > +static struct obj_pool *obj_pool;
+> > > +
+> > > +static bool object_exist(void *obj)
+> > > +{
+> > > +     struct object_instance *inst;
+> > > +     bool ret = false;
+> > > +
+> > > +     list_for_each_entry_rcu(inst, &obj_pool->active_list, active_list) {
+> > > +             if (inst->object == obj) {
+> > > +                     ret = true;
+> > > +                     goto out;
+> > > +             }
+> > > +     }
+> > > +out:
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +static bool object_empty(void)
+> > > +{
+> > > +     return list_empty(&obj_pool->active_list);
+> > > +}
+> > > +
+> > > +static void set_trace_object(void *obj)
+> > > +{
+> > > +     struct freelist_node *fn;
+> > > +     struct object_instance *ins;
+> > > +     unsigned long flags;
+> > > +
+> > > +     if (in_nmi())
+> > > +             return;
+> > > +
+> > > +     if (!obj)
+> > > +             return;
+> > > +
+> > > +     if (object_exist(obj))
+> > > +             return;
+> > > +
+> > > +     fn = freelist_try_get(&obj_pool->free_list);
+> > > +     if (!fn) {
+> > > +             trace_printk("object_pool is full, can't trace object:0x%px\n", obj);
+> > > +             return;
+> > > +     }
+> > > +
+> > > +     ins = container_of(fn, struct object_instance, free_list);
+> > > +     ins->object = obj;
+> > > +
+> > > +     raw_spin_lock_irqsave(&object_spin_lock, flags);
+> > > +     list_add_rcu(&ins->active_list, &obj_pool->active_list);
+> > > +     raw_spin_unlock_irqrestore(&object_spin_lock, flags);
+> >
+> > Please add a comment that why this spinlock is needed here and why
+> > other operation doesn't need it.
 > 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->  drivers/tty/serial/meson_uart.c | 62 +++++++++++++++++++++++++++++----
->  1 file changed, 55 insertions(+), 7 deletions(-)
+> (Only this place has write operations, and it cannot be concurrent)
+> I agree, I will add it.
+
+BTW, I have another better solution for object pool. If the
+object pool size is fixed (of course to avoid performance overhead,
+it should be small enough) and it can not avoid using spinlock, 
+it is better to use fixed-size array. That makes the implementation
+much simpler.
+
+static struct object_instance {
+	void *obj;	/* trace object */
+	// add offset in the next patch	
+} traced_obj[MAX_TRACE_OBJECT];
+
+static atomic_t num_traced_obj;
+static DEFINE_RAW_SPINLOCK(trace_obj_lock);
+
+static void set_trace_object(void *obj)
+{
+	...
+
+	raw_spin_lock_irqsave(&trace_obj_lock, flags);
+	if (num_traced_obj == MAX_TRACED_OBJECT)
+		goto out;
+
+	traced_obj[num_traced_obj].obj = obj;
+	smp_wmb();	// make sure the num_traced_obj update always appears after trace_obj update. 
+	num_traced_obj++;
+out:
+	raw_spin_unlock_irqrestore(&trace_obj_lock, flags);
+}
+
+static bool object_exist(void *obj)
+{
+	...
+	max = num_traced_obj;
+	smp_rmb();	// then the num_traced_obj will cap the max.
+	for (i = 0; i < max; i++) {
+		if (traced_obj[i].obj == obj)
+			return true;
+	}
+	return false;
+}
+
+static inline void free_object_pool(void)
+{
+	num_traced_obj = 0;
+	memset(traced_obj, 0, sizeof(traced_obj));
+}
+
+Sorry if I confuse you but I think you shouldn't take a time on those unneeded
+complexity. :)
+
+
+> > > +static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
+> > > +                              unsigned long object)
+> > > +{
+> > > +
+> > > +     struct trace_buffer *buffer;
+> > > +     struct ring_buffer_event *event;
+> > > +     struct trace_object_entry *entry;
+> > > +     int pc;
+> > > +
+> > > +     pc = preempt_count();
+> > > +     event = trace_event_buffer_lock_reserve(&buffer, &event_trace_file,
+> > > +                     TRACE_OBJECT, sizeof(*entry), pc);
+> > > +     if (!event)
+> > > +             return;
+> > > +     entry   = ring_buffer_event_data(event);
+> > > +     entry->ip                       = ip;
+> > > +     entry->parent_ip                = parent_ip;
+> > > +     entry->object                   = object;
+> > > +
+> > > +     event_trigger_unlock_commit(&event_trace_file, buffer, event,
+> > > +             entry, pc);
+> > > +}
+> > > +
+> > > +static void
+> > > +trace_object_events_call(unsigned long ip, unsigned long parent_ip,
+> > > +             struct ftrace_ops *op, struct ftrace_regs *fregs)
+> > > +{
+> > > +     struct pt_regs *pt_regs = ftrace_get_regs(fregs);
+> > > +     unsigned long obj;
+> > > +     long disabled;
+> > > +     int cpu, n;
+> > > +
+> > > +     preempt_disable_notrace();
+> > > +
+> > > +     cpu = raw_smp_processor_id();
+> > > +     disabled = atomic_inc_return(&per_cpu(trace_object_event_disable, cpu));
+> >
+> > So what is the purpose of this check? (are there any issue if the same
+> > cpu reenter here?)
+> >
 > 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 69450a461c48..557c24d954a2 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -19,6 +19,7 @@
->  #include <linux/serial_core.h>
->  #include <linux/tty.h>
->  #include <linux/tty_flip.h>
-> +#include <linux/of_device.h>
->  
->  /* Register offsets */
->  #define AML_UART_WFIFO			0x00
-> @@ -68,6 +69,8 @@
->  #define AML_UART_BAUD_MASK		0x7fffff
->  #define AML_UART_BAUD_USE		BIT(23)
->  #define AML_UART_BAUD_XTAL		BIT(24)
-> +#define AML_UART_BAUD_XTAL_TICK		BIT(26)
-> +#define AML_UART_BAUD_XTAL_DIV2		BIT(27)
->  
->  #define AML_UART_PORT_NUM		12
->  #define AML_UART_PORT_OFFSET		6
-> @@ -80,6 +83,11 @@ static struct uart_driver meson_uart_driver;
->  
->  static struct uart_port *meson_ports[AML_UART_PORT_NUM];
->  
-> +struct meson_uart_data {
-> +	/*A clock source that calculates baud rates*/
+> There may be an interrupt context that can preempt it. I am not yet
+> sure whether the cpu reenter  will affect it.
+> I will debug and test it. (Referred from function_test_events_call())
 
-Please use spaces in your comments.
+Maybe you can use ftrace_test_recursion_trylock(), as kprobe_ftrace_handler()
+does.
 
-> +	unsigned int xtal_tick_en;
+Thank you,
 
-What is "_en" for?
-
-"enabled"?
-
-Spell it out please.
-
-And why an unsigned int for a boolean flag?
-
-> +};
-> +
->  static void meson_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
->  {
->  }
-> @@ -294,16 +302,29 @@ static int meson_uart_startup(struct uart_port *port)
->  
->  static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
->  {
-> +	struct meson_uart_data *uart_data = port->private_data;
->  	u32 val;
->  
->  	while (!meson_uart_tx_empty(port))
->  		cpu_relax();
->  
-> +	val = readl_relaxed(port->membase + AML_UART_REG5);
-> +	val &= ~AML_UART_BAUD_MASK;
-> +
->  	if (port->uartclk == 24000000) {
-> -		val = ((port->uartclk / 3) / baud) - 1;
-> -		val |= AML_UART_BAUD_XTAL;
-> +		if (uart_data->xtal_tick_en) {
-> +			val = (port->uartclk / 2 + baud / 2) / baud  - 1;
-> +			val |= (AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_DIV2);
-> +		} else {
-> +			val = ((port->uartclk / 3) + baud / 2) / baud  - 1;
-> +			val &= (~(AML_UART_BAUD_XTAL_TICK |
-> +				AML_UART_BAUD_XTAL_DIV2));
-> +			val |= AML_UART_BAUD_XTAL;
-> +		}
->  	} else {
->  		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
-> +		val &= (~(AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_TICK |
-> +			AML_UART_BAUD_XTAL_DIV2));
->  	}
->  	val |= AML_UART_BAUD_USE;
->  	writel(val, port->membase + AML_UART_REG5);
-> @@ -714,6 +735,7 @@ static int meson_uart_probe(struct platform_device *pdev)
->  {
->  	struct resource *res_mem, *res_irq;
->  	struct uart_port *port;
-> +	struct meson_uart_data *uart_data;
->  	int ret = 0;
->  	int id = -1;
->  
-> @@ -729,6 +751,10 @@ static int meson_uart_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	uart_data = of_device_get_match_data(&pdev->dev);
-> +	if (!uart_data)
-> +		return  -EINVAL;
-
-Wrong spacing.
-
-Always use checkpatch.pl on your patches before sending them out.
-
-And did you just break existing systems?  Do you know if all older ones
-will still work with that call?
-
-> +
->  	if (pdev->id < 0 || pdev->id >= AML_UART_PORT_NUM)
->  		return -EINVAL;
->  
-> @@ -770,6 +796,7 @@ static int meson_uart_probe(struct platform_device *pdev)
->  	port->x_char = 0;
->  	port->ops = &meson_uart_ops;
->  	port->fifosize = 64;
-> +	port->private_data = uart_data;
->  
->  	meson_ports[pdev->id] = port;
->  	platform_set_drvdata(pdev, port);
-> @@ -798,14 +825,35 @@ static int meson_uart_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct meson_uart_data meson_uart_data = {
-> +	.xtal_tick_en = 0,
-> +};
-> +
-> +static const struct meson_uart_data s4_meson_uart_data = {
-> +	.xtal_tick_en = 1,
-> +};
-
-As your whole structure just has one bit, why not just use that as the
-data value, instead of a structure?  No need to be complex here at all.
-
-thanks,
-
-greg k-h
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

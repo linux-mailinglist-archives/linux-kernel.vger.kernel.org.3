@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E19747C19A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC8D47C19E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbhLUOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:36:14 -0500
-Received: from mail-qv1-f54.google.com ([209.85.219.54]:39554 "EHLO
-        mail-qv1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbhLUOgM (ORCPT
+        id S238534AbhLUOgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:36:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238526AbhLUOgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:36:12 -0500
-Received: by mail-qv1-f54.google.com with SMTP id g15so11243446qvi.6;
-        Tue, 21 Dec 2021 06:36:11 -0800 (PST)
+        Tue, 21 Dec 2021 09:36:21 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DF3C06173F;
+        Tue, 21 Dec 2021 06:36:21 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id de30so12752988qkb.0;
+        Tue, 21 Dec 2021 06:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a4jATogAI/X/Ike2rZf+Yx9DRJFuDNaLWBLR/iU1PYg=;
+        b=isPNMdg1x+7jQ6kJvjFOGC1jmsQGsRxBai79shTWIoUJpy7B5MAb9HwOwPa13fG+y/
+         yCOJlIV0bukQ5NX1jafceyXqpxKTg5zHTldwdyeoEkdwAuO2db/SSLIf2x4Sh/29EBCu
+         R1RW71rjBH2XiRdAMuKwDXv+8I7MXtCDq0iY5Lw4c0ooz3QmLaGWyqNNwsCQVODO+gg2
+         R+hmFGwsYCFjfeHh7t6rvhNdum3egmHEZfZ6dGH4W7bGjdww7PGX8fi57ZVkQmlvEK+i
+         rVZm/r5GA/4yHX9FxsXgGK16Jyv+1m5yMJdkfGc1M07EzhR1lgO9B+NiiNavJpQlRcmN
+         UL5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=DAgxIL5+LfBMOUij7dixBA2kzok+uhqjW0YOVP3FJ64=;
-        b=iPqQbnlc5nFOllfSKi7vz2BQst5cYpXBWvcKH2KEQVbvvGNBfbr+wC0BXMaOBbw9Um
-         UyMfW2guV3g5SFzi4Xf8nar2CaS3crpjp1IAAL2FrmF8xwLnkLJf2zWmPna5MELV7PHz
-         +k3RCGkJFLhPc8wlQR4x6PV1EhNEiHrdiTvZVqhT4MVUNtxpnE1vXzfOarVFA+dPiCzO
-         i7S7qLgTTGh27JYGlwvzSlJH7xghu5w7FGKHGuJg/EYubAwu5Hv2O8wC4pka/djP58Mx
-         MpiEp9q9Vdopi3DLSDpOTJpIKwqmbrn77WJ7KQthDW5NZFZqKQgo37laEXnZ1zewMoC0
-         KK/g==
-X-Gm-Message-State: AOAM532vTVHO4fFFcIHdRgKp7fQgXmfW6zSPkvmefcyczcjVjfgxpT6A
-        QOoZ4Mm9inVrPILzKNq7hA==
-X-Google-Smtp-Source: ABdhPJylBXG4muz9ukCyJcRPgG5j/wh/YvvIRKT8d1OTxRKfi+lOHWdekpwKJ6hBomGZ8F/6CfNqsA==
-X-Received: by 2002:a05:6214:76a:: with SMTP id f10mr2246866qvz.80.1640097371373;
-        Tue, 21 Dec 2021 06:36:11 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id u7sm14864481qkp.17.2021.12.21.06.36.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a4jATogAI/X/Ike2rZf+Yx9DRJFuDNaLWBLR/iU1PYg=;
+        b=Pu3CHnxGQkoJaFkp4VQMS4pTcYQL+6+HyPi2sW+gYmE5DIBMGB8AEdTjA1U2MqxJue
+         heTgo3JLnrxeGxHuJj0Vv1nFRScPkxchc63rU9kKsjXkjsWcAkzPBuDb9DYbDO73ixtn
+         xT08K4DmfaQyKQXdzULxsvlplraPXNFSad3G+CalBXU5or3pPmlMnib99qT1T4z0cGNp
+         6Z3r+1hJF+t2BfzIweixj5mrTrL4HUMc1Sx4QU6tiB4/PL+k6iENocxfgc54MsLdx6YU
+         ncSUQ+H5v59UZuV2HGuxeHiicXsc40hrntq5Fs+xIUUc08cF0npseTLWC4D5o+OU7wIU
+         0z6Q==
+X-Gm-Message-State: AOAM5319uudJRmz7i6iKEGnqqBJ4Wti/AiioEeHFaiqpcZwWgLCED5T5
+        tM0x1gQT9tNZVq1v8IVA4CCGUHuma9k=
+X-Google-Smtp-Source: ABdhPJxiZSUF3StAEgxIAHWnZdRI8ppfUx3rQSlT/4DKU3VFMKiHsWGo6KDEgTyGtc+OIMIj2vWmKg==
+X-Received: by 2002:a05:620a:2989:: with SMTP id r9mr2134129qkp.630.1640097380278;
+        Tue, 21 Dec 2021 06:36:20 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id t15sm18246031qta.45.2021.12.21.06.36.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 06:36:10 -0800 (PST)
-Received: (nullmailer pid 1365872 invoked by uid 1000);
-        Tue, 21 Dec 2021 14:36:08 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-clk@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211221094717.16187-12-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221094717.16187-12-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 11/16] dt-bindings: pinctrl: renesas: Document RZ/V2L pinctrl
-Date:   Tue, 21 Dec 2021 10:36:08 -0400
-Message-Id: <1640097368.261963.1365871.nullmailer@robh.at.kernel.org>
+        Tue, 21 Dec 2021 06:36:19 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     jlayton@kernel.org
+Cc:     idryomov@gmail.com, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] ceph: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+Date:   Tue, 21 Dec 2021 14:36:14 +0000
+Message-Id: <20211221143614.480385-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 09:47:12 +0000, Lad Prabhakar wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
-> 
-> Document Renesas RZ/V2L pinctrl bindings. The RZ/V2L is package- and
-> pin-compatible with the RZ/G2L. No driver changes are required as RZ/G2L
-> compatible string "renesas,r9a07g044-pinctrl" will be used as a fallback.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml   | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Fix the following coccicheck warning:
+./fs/ceph/debugfs.c: 390: 0-23: WARNING: congestion_kb_fops should be
+defined with DEFINE_DEBUGFS_ATTRIBUTE
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml:26:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
+Use DEFINE_DEBUGFS_ATTRIBUTE rather than DEFINE_SIMPLE_ATTRIBUTE for
+debugfs files.
 
-dtschema/dtc warnings/errors:
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ fs/ceph/debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1571555
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/fs/ceph/debugfs.c b/fs/ceph/debugfs.c
+index 3cf7c9c1085b..64c4158c17c8 100644
+--- a/fs/ceph/debugfs.c
++++ b/fs/ceph/debugfs.c
+@@ -387,8 +387,8 @@ static int congestion_kb_get(void *data, u64 *val)
+ 	return 0;
+ }
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
+-			congestion_kb_set, "%llu\n");
++DEFINE_DEBUGFS_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
++			 congestion_kb_set, "%llu\n");
+ 
+ 
+ void ceph_fs_debugfs_cleanup(struct ceph_fs_client *fsc)
+-- 
+2.25.1
 

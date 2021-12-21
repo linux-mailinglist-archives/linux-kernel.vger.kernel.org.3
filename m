@@ -2,291 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B303C47C96C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C8347C978
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbhLUWzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 17:55:31 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:36828 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbhLUWza (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 17:55:30 -0500
-Received: by mail-io1-f71.google.com with SMTP id w16-20020a5d8a10000000b005e241c13c7bso234699iod.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 14:55:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=zHsXdqIvFrVgQVLAPvj5VEidrGCT2oN5pERfTO+cHbQ=;
-        b=5ZSxKE9C9PTWj9ffDreJPj2hXIELOaTFH7bjyJ+smca6HRZTIyNzaz9jMJ7l8FFqjv
-         1y4LJP2tyAWskXvqgRcyJ5TK2Mk2DYtG1s3oAz8FE5swlA4FtTAQIraJw2c5yEl2JoK4
-         UGYuJXWQ21WhMcIDIYBAldZDthYF06L4M9HNtKUafErRFijyw+p+SwTMwuwUl9Xs/jTC
-         h1o6e84VMVCVSWXRyUiAUqAePrIf39kISfwh/lG9ja9GL8x8lTiOTVJ5hgrpun9QWx2c
-         XDN2HOcQcxSeeKtgSCUByja1sWgdl6xkiSQkRXE5D4s0EGkqASyYpqPYndq3QiLcx0yc
-         DSTA==
-X-Gm-Message-State: AOAM530fAZT++C7Cz4xuzi+FllhWBnY1cIFOo0t+m7bfcp6MXLyn3nTN
-        1xwX2cVVrHaco9YMyQBPdwCK9hcyedLBEsPQ63UXR7oM0qwy
-X-Google-Smtp-Source: ABdhPJw1GhwZ+yUIBD2QIK0PP73uhyT9bUJDcxws4olfOFVoxzIfd66n06ONjYfE9RYpvZuJ1evN2lERCH8EJChU9K+WlHSAgxPW
+        id S235056AbhLUXFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:05:54 -0500
+Received: from mga18.intel.com ([134.134.136.126]:23598 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234752AbhLUXFx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 18:05:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640127953; x=1671663953;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=t2JBIIcxnFSJoQGa/ggKeSXRFBZ4JkKTw37IWmtxmTs=;
+  b=U8zT0PWoBX23zDoVNFmC15uJyrLLa623gbm4ZhRr6XI8LGsEH2z2Pj5P
+   RadSCzIIbssz/QPMFpPcNSJsoSD7vIXOElHDiZWCc4pczDv6JeKZpVUBo
+   O/+Zqun0XRnspuX7iGVgxgxZT5I5HNvwxb+4i/7uBIJ46TkF8PYjRRDp/
+   nblijJK3ArX5AsyFojQ/swv0ymKLFir/bcRcPklGy80JlGB3Ix6xeu1eW
+   EUzwp1T4ISrn8IyVnD+f+cRd0DgzyUaQe/zKvYDm384UJAMzL/hobNt8S
+   K1xIqoOOtxhwUBq6XTNNVW/UQY4O91cxPeM9gdR6gnqtZ8rSAbQSQJdJx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227357642"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="227357642"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 15:05:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="521445797"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2021 15:05:43 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 15:05:43 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 15:05:42 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 21 Dec 2021 15:05:42 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 21 Dec 2021 15:05:42 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gNXypQDmB70Wa6dJkRq76G46fULT5fZW2O1BNKUDAYLJYkaTA1iTLkmoduIjYzFqYUWayYZXvuyPLTdOZlkmhV9saT20cePBJDTLdNUxXFvoXB0aRyHPzkWHQjN2SX4Roxk+MSHTJyEjuM/Dm2MryGtoqXA+yiZvmib5Eh784DovX0UH3XEATGOyJULzpIvWpRo5PT3ECmmHsXTqEpoDno5wM363UL3nVToY4CnOEbMoQpSrqthW9c++V7UvrxQk3bXTofo0eiAGaefx/LA2jYXHWgk4lpBtqulVIF4rE7LBjKbi6oDs3nUe4Ov4zBAGhfm2azBNrSD5v49pcj+TrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s37vW40wURzRjY3SOFAH4EqhqHNlwHrHJ61L2m8N9Ss=;
+ b=hSudxnCZ3SXaSJ1qQXhMS07dAWyP4/L2mJ2gMjlDL4XywAcipbVCdmUt1bJXCjUgRH1N4vudtIPhXPCizmVeUtS12hF5s+Kx5LeaNpas4t7/35cM6d0gKn1Cr8lThNW2olCVWMHIPVsw8nTIm15Wvo4Zf7jGcxxPyEa6rketqloaLsXXO8nwh6vIQvekkuhq44eArHuK17FYY1JKr0ijD6PIYxQNJ569fmpewH6MOP3Yh7axuharB1gFMNK5bdvX3dQ1Z9ZqCSM1fFrqQDokhwzfYl03emWnoEkl/n+DDKSPVszYIF6X5OxB7j9nvBwKRe8M/o66nqyBkUX1lrAm/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB5170.namprd11.prod.outlook.com (2603:10b6:303:95::10)
+ by MWHPR11MB1376.namprd11.prod.outlook.com (2603:10b6:300:1d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 23:05:41 +0000
+Received: from CO1PR11MB5170.namprd11.prod.outlook.com
+ ([fe80::4c2a:62a1:d6e5:b67b]) by CO1PR11MB5170.namprd11.prod.outlook.com
+ ([fe80::4c2a:62a1:d6e5:b67b%6]) with mapi id 15.20.4801.022; Tue, 21 Dec 2021
+ 23:05:41 +0000
+From:   "Chen, Mike Ximing" <mike.ximing.chen@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+Subject: RE: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
+Thread-Topic: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
+Thread-Index: AQHX9jcKOP1y1O92CEC3pIeygh1pI6w8tNAAgACRSSCAADPkgIAABxag
+Date:   Tue, 21 Dec 2021 23:05:41 +0000
+Message-ID: <CO1PR11MB5170C1925DFB4BFE4B7819F5D97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
+References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
+ <20211221065047.290182-2-mike.ximing.chen@intel.com>
+ <YcGkILZxGLEUVVgU@lunn.ch>
+ <CO1PR11MB51705AE8B072576F31FEC18CD97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
+ <YcJJh9e2QCJOoEB/@lunn.ch>
+In-Reply-To: <YcJJh9e2QCJOoEB/@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-reaction: no-action
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0165319e-c816-441a-c5d8-08d9c4d668f4
+x-ms-traffictypediagnostic: MWHPR11MB1376:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <MWHPR11MB137640C7519973DE06B5F9BAD97C9@MWHPR11MB1376.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YGzZxoLCgszE0uG4Lx5golksh7DTbVOinn6qIDSQzkq88w0+dmP3sBaxlUiZOc4ywdU5KiFd1OVOEuSWzUseNvx7CbIavA3eSOx/T5N5OcUDO81IMAPCj3cMoY+t2fxhavUrSgMENfsEPAOhI+rMlKe+eihOG5NYvtmUg8SBPBk0/z/2gM1QVIG9U+20fOHJOBhzp6TCRl5x03AuOYd8FzN6c17f0U0tK11TF/iUQJe2kSude/2+zOEgvq1W2ysLxr6iEdNb9G6fqd3vKFrxLz6An7EvRQ+wJK4JYDgifglVOoHoWQjBt7LgIdmjWNwxXMEttlG/hpwU8VzBSBnmxWpB5tUcKmldkRHvl6BVS+IG4khSk+AE1b42lNMi7Jtg56TUKdY7t6S4pwsX4EHH8CTHpy9f85FckaZPaOQf15TufyKcpbPIXWjlJUlue92Wh5Gl8MURsQciTTpBYrw23MRGFVnDg7C95N7z7xlhMalT1wsvgPpr7gesVkfBFlGidA0zeRP9p8wLcEMVB8j4c4DBb7mHvgYhhxS8Reik8lD1D0a/bj3BB04hnFmqWGRfSRddC5xhm0hz+8V+WUgYgLU21+XNTg6LF7h/ahoJJfcPP3OjMDXcg6wKyai7UUzfu93j/EWZ9hW3d6CQVft4d9t4Jitwk/Ok9ywAdqASpCU737U2s5qkpG9SK8pSBrq13TVmZYXdbftsc5evOBMEhQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5170.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(7696005)(53546011)(52536014)(6916009)(508600001)(66556008)(122000001)(5660300002)(38100700002)(26005)(82960400001)(55016003)(66476007)(6506007)(9686003)(38070700005)(2906002)(66946007)(54906003)(71200400001)(83380400001)(186003)(4326008)(76116006)(64756008)(316002)(33656002)(8936002)(86362001)(8676002)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OJ3oVfJIj2dHCxb+h3Gj+cuqctz71580dYWLquPHpEHGHlaCMe6z+Nx7hPTQ?=
+ =?us-ascii?Q?leriTpVWQKZjUkLug2M0nppBSYu+UpAWt7pekloMtk99LFAG5Jsax01riyb/?=
+ =?us-ascii?Q?blbfSxr5+B0iP7hHU03f4UoLp9UIJpCLg/RYpP7OPBLht5lbWeXz3Ul01lvs?=
+ =?us-ascii?Q?+ySunZTCGK3S0mU/8o8BmMcBOKTO/M2QfiMsl1YqcMdfmW0lDU6g8g3SqNXb?=
+ =?us-ascii?Q?SyZx5D/jEMojI011hTDWODvTkprgsf0bTHnH3Gfd9wu/82BNjKoSSHOFPsZW?=
+ =?us-ascii?Q?lGu9uHynCPoqi7jU431nEu0KqmqM9riJhLou7c+rXGZHOc93ToWNkg/bhysU?=
+ =?us-ascii?Q?8DG7wNB1OWZiXKshzec+3ybjPWnGhvKNuY+1qRSmk4Bg46qsMzNTNNVYkFrp?=
+ =?us-ascii?Q?h/yNXoJLPvsV01t/5DkEaf2jMz1c/0lc3jWRkMFUE6nTEtC5/x3UeKlIhCgj?=
+ =?us-ascii?Q?OvUH2mIl4BEZbQahgarg46HyCFTqrIGsz8a/XQWOjIuyFdZws7wjospAUqGv?=
+ =?us-ascii?Q?LUufhix9B4ASLqU7XThAwO/x/QJD4qNuaOaNOx+/HDbGUj9i2glVJr/7OHvu?=
+ =?us-ascii?Q?HJogudxadJ5jGbEzNxOV5nP5aGlms4kRwBkVd4v9UpJpSTHMAVf7DRneCq1+?=
+ =?us-ascii?Q?NKziTw3NZ9a9eSh60A3i6ZWLR6q4Y8UZl5aX9RvjKQbuAdBPZBatw2qmM1Ol?=
+ =?us-ascii?Q?srx4Qxr3UymOxz8CLETGsWq0CoDr8hRsYh+Mkl0CTbnTOsta9YHrBQTFxadL?=
+ =?us-ascii?Q?7ZU7o4KcAwarS0qcRm1CzBvj03CvEvALgBAscEQnR+vCmlURWcgR48CPqQwV?=
+ =?us-ascii?Q?ZjQbs7RaZeVM8hyM9ZVScbGG5gdmXfIKuo29+9QFuWug+OU6nL7tw+dg1vJc?=
+ =?us-ascii?Q?lC73Ph0OpEmDUzTUbdVzAb4VDkv4d5lB8tZBi/YzDAM8YJZjbJp5OsqTJ04Q?=
+ =?us-ascii?Q?zHmH020eilTZ35UmP+4vpUEO2GeldIt8JpMaOpwqEqcT9kbzbGACRbRKBZ+s?=
+ =?us-ascii?Q?I09w9V8Xr5lM46lc/Pou8sbE+hgfvZh4E7NQ4kxeTHi+kGJGnkGx5+6kJuZ0?=
+ =?us-ascii?Q?pYODpzgvmB/ZNP1K1cXWI/K2+fy/egrmf+MfdZ9rQg4qbrKHjgQQv1woJNuC?=
+ =?us-ascii?Q?JYkSvJ7bsomNzudsw4enO7SYwqVXRVB8m0kZlMRx0t+knflYQ3U3/oMNxuXP?=
+ =?us-ascii?Q?KcYWQuPkBTqcyfu43vam7s1K6k5od/+D54JFGmorui8Epn7pRHOqu+pvqXWA?=
+ =?us-ascii?Q?hwLNb6Ymeb8GxjFXdxlIxTbAzywLsdk6zBifYEH4Mloek2D1t2spUvdc7gus?=
+ =?us-ascii?Q?iJb96ZTn+JSFs3Su8aZYjBH8psYDUiP365ih7iOghKJAY6pGl1kNHbLPOXHo?=
+ =?us-ascii?Q?JQL0cPTyJ50E/ph6/EzjgoRp2DDJt5dBNCzRspa0X8UrCytjEeNiIU8LCllo?=
+ =?us-ascii?Q?srwWP5WV1561kVtVH5EVmAqfOjLRsIN+no01b/9J4n6kF82gjohIDjuIZ9Vg?=
+ =?us-ascii?Q?HYMoGc407mbz7G9Zulzqzyp/lBLydR8L0Fjd4bm6Wi2wCiRH3paRaEs73CB3?=
+ =?us-ascii?Q?KkiqtGtbHPFnKqMmSozL+slpNt7UbRTNp8SujdtBnyf8lXUte6TlAj+Oo5UJ?=
+ =?us-ascii?Q?YY2LZSZe7XZIa+OLB6cqswObFOTWB3PX2sQmxAldhOMPwO6FsxxauD3GBxRg?=
+ =?us-ascii?Q?YNZVbg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20ce:: with SMTP id 14mr178084ilq.252.1640127330296;
- Tue, 21 Dec 2021 14:55:30 -0800 (PST)
-Date:   Tue, 21 Dec 2021 14:55:30 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e8a6f705d3afe604@google.com>
-Subject: [syzbot] INFO: task hung in filename_create (4)
-From:   syzbot <syzbot+72c5cf124089bc318016@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5170.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0165319e-c816-441a-c5d8-08d9c4d668f4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 23:05:41.1139
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4PPfZqsjtbDrV90nQXP4ZJAZhB5Zll+zno6wctkJsMChNexkgMM0Fdwk4c2fXtYSahpzmzl6H4Lx4l2gDiUGGmNVsvrjpqWf/3lpgIvKObM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1376
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    6441998e2e37 Merge tag 'audit-pr-20211216' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b88443b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=72c5cf124089bc318016
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160d179db00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17741243b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+72c5cf124089bc318016@syzkaller.appspotmail.com
-
-INFO: task syz-executor149:3707 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor149 state:D stack:23928 pid: 3707 ppid:  3685 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x634/0x1110 kernel/locking/rwsem.c:1151 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- __down_write_common kernel/locking/rwsem.c:1268 [inline] kernel/locking/rwsem.c:1634
- __down_write_common kernel/locking/rwsem.c:1265 [inline] kernel/locking/rwsem.c:1634
- __down_write kernel/locking/rwsem.c:1277 [inline] kernel/locking/rwsem.c:1634
- down_write_nested+0x139/0x150 kernel/locking/rwsem.c:1634 kernel/locking/rwsem.c:1634
- inode_lock_nested include/linux/fs.h:818 [inline]
- inode_lock_nested include/linux/fs.h:818 [inline] fs/namei.c:3654
- filename_create+0x158/0x480 fs/namei.c:3654 fs/namei.c:3654
- do_mkdirat+0x94/0x300 fs/namei.c:3898 fs/namei.c:3898
- __do_sys_mkdir fs/namei.c:3929 [inline]
- __se_sys_mkdir fs/namei.c:3927 [inline]
- __do_sys_mkdir fs/namei.c:3929 [inline] fs/namei.c:3927
- __se_sys_mkdir fs/namei.c:3927 [inline] fs/namei.c:3927
- __x64_sys_mkdir+0xf2/0x140 fs/namei.c:3927 fs/namei.c:3927
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8e02ef3b47
-RSP: 002b:00007f8e03098ca8 EFLAGS: 00000202 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8e02ef3b47
-RDX: 00007f8e03098cf3 RSI: 00000000000001ff RDI: 00007f8e03098ce0
-RBP: 00007f8e03098ee0 R08: 0000000000000000 R09: 00007f8e03098b40
-R10: 00007f8e030989f7 R11: 0000000000000202 R12: 0000000000000001
-R13: 00007f8e03098ce0 R14: 00007f8e03098d20 R15: 00007f8e03098ef0
- </TASK>
-INFO: task syz-executor149:3711 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor149 state:D stack:23928 pid: 3711 ppid:  3681 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- context_switch kernel/sched/core.c:4972 [inline] kernel/sched/core.c:6253
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x634/0x1110 kernel/locking/rwsem.c:1151 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- __down_write_common kernel/locking/rwsem.c:1268 [inline] kernel/locking/rwsem.c:1634
- __down_write_common kernel/locking/rwsem.c:1265 [inline] kernel/locking/rwsem.c:1634
- __down_write kernel/locking/rwsem.c:1277 [inline] kernel/locking/rwsem.c:1634
- down_write_nested+0x139/0x150 kernel/locking/rwsem.c:1634 kernel/locking/rwsem.c:1634
- inode_lock_nested include/linux/fs.h:818 [inline]
- inode_lock_nested include/linux/fs.h:818 [inline] fs/namei.c:3654
- filename_create+0x158/0x480 fs/namei.c:3654 fs/namei.c:3654
- do_mkdirat+0x94/0x300 fs/namei.c:3898 fs/namei.c:3898
- __do_sys_mkdir fs/namei.c:3929 [inline]
- __se_sys_mkdir fs/namei.c:3927 [inline]
- __do_sys_mkdir fs/namei.c:3929 [inline] fs/namei.c:3927
- __se_sys_mkdir fs/namei.c:3927 [inline] fs/namei.c:3927
- __x64_sys_mkdir+0xf2/0x140 fs/namei.c:3927 fs/namei.c:3927
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8e02ef3b47
-RSP: 002b:00007f8e03098ca8 EFLAGS: 00000202 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8e02ef3b47
-RDX: 00007f8e03098cf3 RSI: 00000000000001ff RDI: 00007f8e03098ce0
-RBP: 00007f8e03098ee0 R08: 0000000000000000 R09: 00007f8e03098b40
-R10: 00007f8e030989f7 R11: 0000000000000202 R12: 0000000000000001
-R13: 00007f8e03098ce0 R14: 00007f8e03098d20 R15: 00007f8e03098ef0
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/26:
- #0: ffffffff8bb83de0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458 kernel/locking/lockdep.c:6458
-2 locks held by kworker/u4:4/995:
- #0: ffff8880b9c39a98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:478 kernel/sched/core.c:478
- #1: ffff8880b9c279c8 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3a6/0x490 kernel/sched/psi.c:880 kernel/sched/psi.c:880
-2 locks held by kworker/1:3/3266:
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline] kernel/workqueue.c:2269
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline] kernel/workqueue.c:2269
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline] kernel/workqueue.c:2269
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline] kernel/workqueue.c:2269
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline] kernel/workqueue.c:2269
- #0: ffff888010c66538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269 kernel/workqueue.c:2269
- #1: ffffc90001a6fdb0 ((work_completion)(&rew.rew_work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273 kernel/workqueue.c:2273
-2 locks held by getty/3279:
- #0: ffff8880231c5098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252 drivers/tty/tty_ldisc.c:252
- #1: ffffc90002b962e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2113 drivers/tty/n_tty.c:2113
-1 lock held by syz-executor149/3706:
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:322 [inline]
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:322 [inline] kernel/rcu/tree_exp.h:836
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x2d5/0x620 kernel/rcu/tree_exp.h:836 kernel/rcu/tree_exp.h:836
-2 locks held by syz-executor149/3707:
- #0: ffff88801f07a460 (sb_writers#11){.+.+}-{0:0}, at: filename_create+0xf3/0x480 fs/namei.c:3649 fs/namei.c:3649
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline]
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline] fs/namei.c:3654
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: filename_create+0x158/0x480 fs/namei.c:3654 fs/namei.c:3654
-1 lock held by syz-executor149/3708:
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:322 [inline]
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:322 [inline] kernel/rcu/tree_exp.h:836
- #0: ffffffff8bb8d168 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x2d5/0x620 kernel/rcu/tree_exp.h:836 kernel/rcu/tree_exp.h:836
-2 locks held by syz-executor149/3709:
- #0: ffff88801f07a460 (sb_writers#11){.+.+}-{0:0}, at: filename_create+0xf3/0x480 fs/namei.c:3649 fs/namei.c:3649
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline]
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline] fs/namei.c:3654
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: filename_create+0x158/0x480 fs/namei.c:3654 fs/namei.c:3654
-2 locks held by syz-executor149/3711:
- #0: ffff88801f07a460 (sb_writers#11){.+.+}-{0:0}, at: filename_create+0xf3/0x480 fs/namei.c:3649 fs/namei.c:3649
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline]
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:818 [inline] fs/namei.c:3654
- #1: ffff88807533e9d0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: filename_create+0x158/0x480 fs/namei.c:3654 fs/namei.c:3654
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 26 Comm: khungtaskd Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline] kernel/hung_task.c:295
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline] kernel/hung_task.c:295
- watchdog+0xc1d/0xf50 kernel/hung_task.c:295 kernel/hung_task.c:295
- kthread+0x405/0x4f0 kernel/kthread.c:327 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295 arch/x86/entry/entry_64.S:295
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 8 Comm: kworker/u4:0 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bat_events batadv_nc_worker
-RIP: 0010:validate_chain kernel/locking/lockdep.c:3808 [inline]
-RIP: 0010:validate_chain kernel/locking/lockdep.c:3808 [inline] kernel/locking/lockdep.c:5027
-RIP: 0010:__lock_acquire+0xcaa/0x54a0 kernel/locking/lockdep.c:5027 kernel/locking/lockdep.c:5027
-Code: ff df 0f b6 04 02 49 89 cf 84 c0 74 08 3c 03 0f 8e 2b 34 00 00 41 8b 44 24 20 25 00 80 04 00 3d 00 00 04 00 0f 84 5e 09 00 00 <48> c7 c2 8c 6a 91 8d 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 0f
-RSP: 0018:ffffc90000cd7a60 EFLAGS: 00000087
-RAX: 0000000000000000 RBX: 00000000a623e6fc RCX: eeae28e815dd6c6b
-RDX: 1ffff110021cec3a RSI: 000000004cd55dcb RDI: ffffffff8ff76c60
-RBP: 0000000000000004 R08: 0000000000000000 R09: ffffffff8ff74a07
-R10: fffffbfff1fee940 R11: 0000000000000000 R12: ffff888010e761b0
-R13: ffff888010e75700 R14: 0000000000000000 R15: eeae28e815dd6c6b
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555555840848 CR3: 000000000b88e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5637 [inline]
- lock_acquire kernel/locking/lockdep.c:5637 [inline] kernel/locking/lockdep.c:5602
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602 kernel/locking/lockdep.c:5602
- rcu_lock_acquire include/linux/rcupdate.h:268 [inline]
- rcu_read_lock include/linux/rcupdate.h:688 [inline]
- batadv_nc_purge_orig_hash net/batman-adv/network-coding.c:412 [inline]
- rcu_lock_acquire include/linux/rcupdate.h:268 [inline] net/batman-adv/network-coding.c:723
- rcu_read_lock include/linux/rcupdate.h:688 [inline] net/batman-adv/network-coding.c:723
- batadv_nc_purge_orig_hash net/batman-adv/network-coding.c:412 [inline] net/batman-adv/network-coding.c:723
- batadv_nc_worker+0x12d/0xfa0 net/batman-adv/network-coding.c:723 net/batman-adv/network-coding.c:723
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295 arch/x86/entry/entry_64.S:295
- </TASK>
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	df 0f                	fisttps (%rdi)
-   2:	b6 04                	mov    $0x4,%dh
-   4:	02 49 89             	add    -0x77(%rcx),%cl
-   7:	cf                   	iret
-   8:	84 c0                	test   %al,%al
-   a:	74 08                	je     0x14
-   c:	3c 03                	cmp    $0x3,%al
-   e:	0f 8e 2b 34 00 00    	jle    0x343f
-  14:	41 8b 44 24 20       	mov    0x20(%r12),%eax
-  19:	25 00 80 04 00       	and    $0x48000,%eax
-  1e:	3d 00 00 04 00       	cmp    $0x40000,%eax
-  23:	0f 84 5e 09 00 00    	je     0x987
-* 29:	48 c7 c2 8c 6a 91 8d 	mov    $0xffffffff8d916a8c,%rdx <-- trapping instruction
-  30:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  37:	fc ff df
-  3a:	48 c1 ea 03          	shr    $0x3,%rdx
-  3e:	0f                   	.byte 0xf
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	df 0f                	fisttps (%rdi)
-   2:	b6 04                	mov    $0x4,%dh
-   4:	02 49 89             	add    -0x77(%rcx),%cl
-   7:	cf                   	iret
-   8:	84 c0                	test   %al,%al
-   a:	74 08                	je     0x14
-   c:	3c 03                	cmp    $0x3,%al
-   e:	0f 8e 2b 34 00 00    	jle    0x343f
-  14:	41 8b 44 24 20       	mov    0x20(%r12),%eax
-  19:	25 00 80 04 00       	and    $0x48000,%eax
-  1e:	3d 00 00 04 00       	cmp    $0x40000,%eax
-  23:	0f 84 5e 09 00 00    	je     0x987
-* 29:	48 c7 c2 8c 6a 91 8d 	mov    $0xffffffff8d916a8c,%rdx <-- trapping instruction
-  30:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  37:	fc ff df
-  3a:	48 c1 ea 03          	shr    $0x3,%rdx
-  3e:	0f                   	.byte 0xf
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Tuesday, December 21, 2021 4:39 PM
+> To: Chen, Mike Ximing <mike.ximing.chen@intel.com>
+> Cc: linux-kernel@vger.kernel.org; arnd@arndb.de; gregkh@linuxfoundation.o=
+rg; Williams, Dan J
+> <dan.j.williams@intel.com>; pierre-louis.bossart@linux.intel.com; netdev@=
+vger.kernel.org;
+> davem@davemloft.net; kuba@kernel.org
+> Subject: Re: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
+>=20
+> On Tue, Dec 21, 2021 at 08:56:42PM +0000, Chen, Mike Ximing wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Andrew Lunn <andrew@lunn.ch>
+> > > Sent: Tuesday, December 21, 2021 4:54 AM
+> > > To: Chen, Mike Ximing <mike.ximing.chen@intel.com>
+> > > Cc: linux-kernel@vger.kernel.org; arnd@arndb.de;
+> > > gregkh@linuxfoundation.org; Williams, Dan J
+> > > <dan.j.williams@intel.com>; pierre-louis.bossart@linux.intel.com;
+> > > netdev@vger.kernel.org; davem@davemloft.net; kuba@kernel.org
+> > > Subject: Re: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
+> > >
+> > > > +The following diagram shows a typical packet processing pipeline w=
+ith the Intel DLB.
+> > > > +
+> > > > +                              WC1              WC4
+> > > > + +-----+   +----+   +---+  /      \  +---+  /      \  +---+   +---=
+-+   +-----+
+> > > > + |NIC  |   |Rx  |   |DLB| /        \ |DLB| /        \ |DLB|   |Tx =
+ |   |NIC  |
+> > > > + |Ports|---|Core|---|   |-----WC2----|   |-----WC5----|   |---|Cor=
+e|---|Ports|
+> > > > + +-----+   -----+   +---+ \        / +---+ \        / +---+   +---=
+-+   ------+
+> > > > +                           \      /         \      /
+> > > > +                              WC3              WC6
+> > >
+> > > This is the only mention of NIC here. Does the application interface
+> > > to the network stack in the usual way to receive packets from the
+> > > TCP/IP stack up into user space and then copy it back down into the
+> > > MMIO block for it to enter the DLB for the first time? And at the end=
+ of the path, does the application
+> copy it from the MMIO into a standard socket for TCP/IP processing to be =
+send out the NIC?
+> > >
+> > For load balancing and distribution purposes, we do not handle packets
+> > directly in DLB. Instead, we only send QEs (queue events) to MMIO for
+> > DLB to process. In an network application, QEs (64 bytes each) can
+> > contain pointers to the actual packets. The worker cores can use these =
+pointers to process packets and
+> forward them to the next stage. At the end of the path, the last work cor=
+e can send the packets out to NIC.
+>=20
+> Sorry for asking so many questions, but i'm trying to understand the arch=
+itecture. As a network maintainer,
+> and somebody who reviews network drivers, i was trying to be sure there i=
+s not an actual network MAC
+> and PHY driver hiding in this code.
+>=20
+> So you talk about packets. Do you actually mean frames? As in Ethernet fr=
+ames? TCP/IP processing has not
+> occurred? Or does this plug into the network stack at some level? After T=
+CP reassembly has occurred? Are
+> these pointers to skbufs?
+>=20
+There is no network MAC or PHY driver in the code. Actually DLB and the dri=
+ver does not have any direct access to
+the network ports/sockets. In the above diagram, the Rx/Tx CPU core receive=
+s/transmits packet (or frames)
+from/to the NIC. These can be either L2 or L3 packets/frames. The Rx CPU co=
+re sends corresponding QEs with
+proper meta data (such as pointers to packets/frames) to DLB, which distrib=
+utes QEs to a set of worker cores.
+the worker cores receive QEs, process the corresponding packets/frames, and=
+ send QEs back to DLB for
+the next stage processing. After several stages of processing, the worker c=
+ores in the last stage send the QEs
+to Tx core, which then transmits the packets/frames to NIC ports. So betwee=
+n the Rx core and Tx core is where
+DLB and the driver operates. The DLB operation itself does not involve any =
+network access.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+I am not very familiar with skbufs, but they sound like queue buffers in th=
+e kernel. Most of the DLB applications
+are in user space. So these pointers can be for any buffers that an applica=
+tion uses. DLB does not process any
+packets/frames, it distributes QEs to worker cores which process the corres=
+ponding packets/frames.
+
+> > > Do you even needs NICs here? Could the data be coming of a video
+> > > camera and you are distributing image processing over a number of cor=
+es?
+> > No, the diagram is just an example for packet processing applications.
+> > The data can come from other sources such video cameras. The DLB can
+> > schedule up to 100 million packets/events per seconds. The frame rate f=
+rom a single camera is normally
+> much, much lower than that.
+>=20
+> So i'm trying to understand the scope of this accelerator. Is it just a n=
+etwork accelerator? If so, are you
+> pointing to skbufs? How are the lifetimes of skbufs managed? How do you g=
+et skbufs out of the NIC? Are
+> you using XDP?
+
+This is not a network accelerator in the sense that it does not have direct=
+ access to the network sockets/ports. We do not use XDP.
+What it does is to effectively distribute workloads (such as packet process=
+ing) among CPU cores and therefore
+increases the total packet/frame processing throughput of the CPU processor=
+s (such as Intel's Xeon processors).
+Imagine, for example, that the Rx core receives 1000 packets/frames in a bu=
+rst with random payloads, how to
+distribute the packet processing to (say) 16 CPU cores is the job of the DL=
+B hardware. The driver is responsible
+for the resource management, system configuration and reset, multiple user/=
+application support, and virtualization
+enablement.
+
+Thanks
+Mike
+

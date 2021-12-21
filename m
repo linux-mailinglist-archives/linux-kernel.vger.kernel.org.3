@@ -2,192 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A3547C49D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B027E47C4A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbhLURET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:04:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45481 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231747AbhLURES (ORCPT
+        id S231756AbhLUREt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:04:49 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:33719 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLUREs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:04:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640106258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yl3Vp8QjwavG3f+ohEPxYXZer5SzEY7eKto2Guu34dg=;
-        b=EJ7fuezrdgBu3bR0mbQ2NxNW7/e+IJto4muBEWvGLqaVo6MT/8qZ/3WPIzjCFD/TyOuBCS
-        1OGMp3jurM1EE5vA/UoUM3V1lpIfR+pg1fs74eaFxCqduwQzKmwSpGMo13DCI8ZUc8dxbU
-        FEwLMD8lPpGSWalJ8t1wF8eZIhfvYjs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-486-OojWRiN1NoO5BCwmP6kLSw-1; Tue, 21 Dec 2021 12:04:15 -0500
-X-MC-Unique: OojWRiN1NoO5BCwmP6kLSw-1
-Received: by mail-ed1-f69.google.com with SMTP id h22-20020a056402281600b003f839627a38so7079318ede.23
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:15 -0800 (PST)
+        Tue, 21 Dec 2021 12:04:48 -0500
+Received: by mail-qk1-f171.google.com with SMTP id de30so13240734qkb.0;
+        Tue, 21 Dec 2021 09:04:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yl3Vp8QjwavG3f+ohEPxYXZer5SzEY7eKto2Guu34dg=;
-        b=m+S1AxnfhMytLKZJe8+nxGQLpf9/lb3S9kjMKeakTc0SRl+6H2nWiapxY2YYPKw0K4
-         qhy4cPtWIFQSumuwzLEpLxLNNXZP8/di2iboTrEKQfPvuVRb38qxvHknZeg3Y89A3YdW
-         q3dLvHnEzMYVRxxYy9nHLuZbDVWgeg6W0SM95P3VGpZCSW3paJyWFgj2Iwah5BvzatwT
-         r6CKH5hMyUliEZxx4BYXFwaK3JP+iLWPSKKVaUGyey/rz91fOqhLEJDYFjaz/kaX8DdD
-         3nbdYs0flmJ8M1opGMlaMz6c4qrbXWgkNxFvEG+da6MYA2rBEgbEDXzf1ObFT+iFF/eW
-         AlJQ==
-X-Gm-Message-State: AOAM531veRGaupl0/H70EdbAtEhJMKGG9ydypJhwsiqC7yaLMqE4480a
-        ONugrYbAqZ7sOnK4qrMkPS3t77yAJ/wDljbPJfmNMKnLFBPzDCNsPeLEl4Hc6LkkZn2IeprNj2f
-        6KfgkmJr9V9M94np1oKfKtBbP
-X-Received: by 2002:a17:906:abc8:: with SMTP id kq8mr3305389ejb.643.1640106254745;
-        Tue, 21 Dec 2021 09:04:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJykzGfLApBGKkOJE2ylZ9A5UcRtimHTwwP3RPrPiKxQzVhnSXHE8vf9wsNFBRnLgzSevKdx6w==
-X-Received: by 2002:a17:906:abc8:: with SMTP id kq8mr3305365ejb.643.1640106254488;
-        Tue, 21 Dec 2021 09:04:14 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id cn8sm2564736edb.13.2021.12.21.09.04.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 09:04:12 -0800 (PST)
-Message-ID: <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
-Date:   Tue, 21 Dec 2021 18:04:11 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UkeG2f5bWgJA7egEwWasqjCslzwydExHXWSA5u3OJ+c=;
+        b=d6IT+Wr5YxKA6a96bC+Nkkqqtj5L9El49aHRAZNGyBaRl89Zzq3pbz9sdZzJSXQtSZ
+         ZTtPKjRnifu24YCNM0qMPgL8PV06hrTYpmUWoRuyBDYtJUuzc4TB4zVWqA/YeKBa/zyp
+         tE5X3SEtBapKGiQrJ7sZO7EB0twXz2gocP/VcBirYTSAEm3GIQGuagTvZ/zB919uvLT+
+         TlS3kYEjBTrCszOUOTXBOB+1ygtblweGcodPWNM8EidOJxJJ4N5wH+E6QX8AqOkutEx0
+         cxbfPIuqKNn6TSRpUTQcSNiXQl1QS/hioSxrFQ0N2oMiYyCVCn6H5D8gID6zYXAoKL+c
+         yO7w==
+X-Gm-Message-State: AOAM532TuGs7Eyr/gDXqKX9uvBBlo2oS0bCUzblRsY73yLju/pzG/iqM
+        5/yRMetsRYs7of7gjAj0ZjpAi8PKJezskCpwt4th7D0F
+X-Google-Smtp-Source: ABdhPJxAr1sXeGBqk5l8MAq3FGSsFjT5AwOQwnZE9tGzZ8TIYcKrcmP/2uN5PEkwLgM6ks+m5xWs/eWrdcgOf5OFcrA=
+X-Received: by 2002:a37:b182:: with SMTP id a124mr2726436qkf.135.1640106287644;
+ Tue, 21 Dec 2021 09:04:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from MFD
- to Auxiliary Bus
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "David E. Box" <david.e.box@linux.intel.com>
-Cc:     lee.jones@linaro.org, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-References: <20211208015015.891275-1-david.e.box@linux.intel.com>
- <20211208015015.891275-4-david.e.box@linux.intel.com>
- <YbDbql39x7Kw6iAC@kroah.com>
- <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
- <YbD1NsYHbU8FvtTN@kroah.com>
- <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
- <YbEFuN7fwdiNI8vW@kroah.com>
- <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
- <YcGEaH0oAAocziU2@kroah.com>
- <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
- <YcIGwZqm2sfIixkH@kroah.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YcIGwZqm2sfIixkH@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+In-Reply-To: <87wnk0s0tf.fsf@riseup.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Dec 2021 18:04:36 +0100
+Message-ID: <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Francisco Jerez <currojerez@riseup.net>
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
+>
+> Julia Lawall <julia.lawall@inria.fr> writes:
+>
+> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
 
-On 12/21/21 17:54, Greg KH wrote:
-> On Tue, Dec 21, 2021 at 08:44:57AM -0800, David E. Box wrote:
->> On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
->>> On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
->>>> On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
->>>>> On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
->>>>>> On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
->>>>>>> On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
->>>>>>>> On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
->>>>>>>>> On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box wrote:
->>>>>>>>>> +static struct pci_driver intel_vsec_pci_driver = {
->>>>>>>>>> +       .name = "intel_vsec",
->>>>>>>>>> +       .id_table = intel_vsec_pci_ids,
->>>>>>>>>> +       .probe = intel_vsec_pci_probe,
->>>>>>>>>> +};
->>>>>>>>>
->>>>>>>>> So when the PCI device is removed from the system you leak
->>>>>>>>> resources and
->>>>>>>>> have dangling devices?
->>>>>>>>
->>>>>>>> No.
->>>>>>>>
->>>>>>>>> Why no PCI remove driver callback?
->>>>>>>>
->>>>>>>> After probe all resources are device managed. There's nothing to
->>>>>>>> explicitly clean up. When
->>>>>>>> the
->>>>>>>> PCI
->>>>>>>> device is removed, all aux devices are automatically removed. This
->>>>>>>> is the case for the SDSi
->>>>>>>> driver
->>>>>>>> as well.
->>>>>>>
->>>>>>> Where is the "automatic cleanup" happening?  As this pci driver is
->>>>>>> bound
->>>>>>> to the PCI device, when the device is removed, what is called in this
->>>>>>> driver to remove the resources allocated in the probe callback?
->>>>>>>
->>>>>>> confused,
->>>>>>
->>>>>> devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev)
->>>>>
->>>>> Wow that is opaque.  Why not do it on remove instead?
->>>>
->>>> This code is common for auxdev cleanup. AFAICT most auxiliary bus code is
->>>> done by drivers that have
->>>> some other primary function. They clean up their primary function resources
->>>> in remove, but they
->>>> clean up the auxdev using the method above. In this case the sole purpose of
->>>> this driver is to
->>>> create the auxdev. There are no other resources beyond what the auxdev is
->>>> using.
->>>>
->>>> Adding runtime pm to the pci driver will change this. Remove will be needed
->>>> then.
->>>
->>> And who will notice that being required when that happens?
->>>
->>> Why is there no runtime PM for this driver?  Do you not care about power
->>> consumption?  :)
->>
->> Of course. :)
->>
->> There's a backlog of patches waiting for this series. One adds support for the
->> telemetry device (an auxdev) on the DG2 GPU. This device requires runtime pm in
->> order for the slot to go D3. But this also requires changes to the telemetry
->> driver in order for runtime pm to be handled correctly. These and other patches,
->> including a series to have all current aux drivers use the new drvdata helpers,
->> are waiting for this.
-> 
-> I can take the aux driver drvdata patch now, through my tree, if you
-> want, no need to make it wait for this tiny driver.
-> 
-> Feel free to send it independant of the existing patchset, and with the
-> cleanup patches at the same time, should be quite easy to get merged.
+[cut]
 
-If you're going to take that one, can you perhaps take patches
-1-3 for 5.17 through your tree as well (patch 3 depends on 2/it) ?
+> > I did some experiements with forcing different frequencies.  I haven't
+> > finished processing the results, but I notice that as the frequency goes
+> > up, the utilization (specifically the value of
+> > map_util_perf(sg_cpu->util) at the point of the call to
+> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+> > Is this expected?
+> >
+>
+> Actually, it *is* expected based on our previous hypothesis that these
+> workloads are largely latency-bound: In cases where a given burst of CPU
+> work is not parallelizable with any other tasks the thread needs to
+> complete subsequently, its overall runtime will decrease monotonically
+> with increasing frequency, therefore the number of instructions executed
+> per unit of time will increase monotonically with increasing frequency,
+> and with it its frequency-invariant utilization.
 
-Note there is a v4 of this series, see please use that :)
-
-I assume the follow up patches are also going to need patch 3
-(the actual conversion of the driver to aux-bus).
-
-Here is my Ack for the pdx86 bits in patch 3:
-
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-
-And patch 1 and 3 also have acks from the PCI resp. MFD subsys maintainers,
-so I guess taking this all upstream through your tree is fine.
-
-That leaves patches 4-6, 4 is the patching adding the new
-"Intel Software Defined Silicon driver" sysfs API and I would
-like to take some time to thoroughly review the new
-userspace API, which I don't see happening before the
-Christmas Holidays, so I don't plan to merge 4-6 (which
-depends on 3) until after 5.17-rc1.
-
-Regards,
-
-Hans
-
+But shouldn't these two effects cancel each other if the
+frequency-invariance mechanism works well?

@@ -2,69 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9423A47BC0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562A447BC0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235770AbhLUIqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234361AbhLUIqX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:46:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94677C061574;
-        Tue, 21 Dec 2021 00:46:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JhiAW2eWgEksdZBxQUfFNAk6gBj2wiZNzgvEleJmSD8=; b=QRDZxGxvDhUFMF+T6jxGx19J19
-        gn30wGZCsdBtv/+zgpSHb7K7Zsoi/o+KotPU4iLqHWww0LyIl7X1rQluihE/9O72XX8wjWJfx2MHR
-        dzJXGXfsrn/kLw/OLQAcDZpt0R60XE7Fu9U/wF5r2ErVfVoPT2ggfH2WK+tF6tO4U/FFhtRA5s+Ze
-        jdtApXdW94g09RdGKwTShLv7dAkbH5BLgkjJAyp3uT0OvbTdkxYVb3GyFikW4eqZp6Bkdb+8Lropw
-        7XOjyy905TLjPjvi55XQ+aIUYxfywuWdnqWGx35B4v+/C0WZyA21AyBpkg9OZyeSlRTkOLCwX8008
-        +dZr0Q8g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzamp-005y59-5I; Tue, 21 Dec 2021 08:46:19 +0000
-Date:   Tue, 21 Dec 2021 00:46:19 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/18] MM: Add AS_CAN_DIO mapping flag
-Message-ID: <YcGUWxqQts79Kv6B@infradead.org>
-References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
- <163969850302.20885.17124747377211907111.stgit@noble.brown>
+        id S235779AbhLUIqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:46:33 -0500
+Received: from ixit.cz ([94.230.151.217]:44690 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235774AbhLUIqb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 03:46:31 -0500
+Received: from [127.0.0.1] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 5B2CC2243C;
+        Tue, 21 Dec 2021 09:46:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640076389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eMCrwVedhww3XT7Zrx0zd1r8/n0TrPVz0TPWo4hKClc=;
+        b=EGeTGUsWAfnDLrFg1vnKYXCznCvum1KyPCYXUSpJkGqZM6Ye8Go1wDi2h2pfCYFIHNASH0
+        8cGzd87mo0xlrHzC+zQzUpm543rbpNVfyGogZi7xEFu+YjZ+beihpfKM2txAVIMFQU/zSg
+        m9Kogmx1mpSwIvzWHKJZ9xYja2q/7X8=
+Date:   Tue, 21 Dec 2021 08:46:28 +0000
+From:   David Heidelberg <david@ixit.cz>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_arm64=3A_dts=3A_qcom=3A_sdm845=3A_?= =?US-ASCII?Q?add_missing_power-controller_compatible?=
+In-Reply-To: <20211221065845.GC26872@thinkpad>
+References: <20211220211443.106754-1-david@ixit.cz> <20211221065845.GC26872@thinkpad>
+Message-ID: <231125F6-0A22-4042-969E-45347CBE8CB7@ixit.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163969850302.20885.17124747377211907111.stgit@noble.brown>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:48:23AM +1100, NeilBrown wrote:
-> Currently various places test if direct IO is possible on a file by
-> checking for the existence of the direct_IO address space operation.
-> This is a poor choice, as the direct_IO operation may not be used - it is
-> only used if the generic_file_*_iter functions are called for direct IO
-> and some filesystems - particularly NFS - don't do this.
-> 
-> Instead, introduce a new mapping flag: AS_CAN_DIO and change the various
-> places to check this (avoiding a pointer dereference).
-> unlock_new_inode() will set this flag if ->direct_IO is present, so
-> filesystems do not need to be changed.
-> 
-> NFS *is* changed, to set the flag explicitly and discard the direct_IO
-> entry in the address_space_operations for files.
+It's more about how documentation is written=2E Documentation expect "speci=
+fic compatible", "generic compatible" in that order=2E Of course it can be =
+changed to allow also  only specific compatible=2E
 
-For other can flags related to file operations we usuall stash them into
-file->f_mode.  Any reason to treat this different?
+Also this syntax ensure that older kernel (without implemented device comp=
+atible/support) will try to work when new dts is used=2E Kernel can fallbac=
+k to generic one compatible and code and device will still work, if the dri=
+ver is generic enough to provide at least some basic support without knowin=
+g which exact device is handled=2E
+
+If I missed some reason to use it, I guess Rob will correct me :)
+
+David
+
+
+-------- P=C5=AFvodn=C3=AD zpr=C3=A1va --------
+Odes=C3=ADlatel: Manivannan Sadhasivam <manivannan=2Esadhasivam@linaro=2Eo=
+rg>
+Odesl=C3=A1no: 21=2E prosince 2021 6:58:45 UTC
+Komu: David Heidelberg <david@ixit=2Ecz>
+Kopie: Andy Gross <agross@kernel=2Eorg>, Bjorn Andersson <bjorn=2Eandersso=
+n@linaro=2Eorg>, Rob Herring <robh+dt@kernel=2Eorg>, ~okias/devicetree@list=
+s=2Esr=2Eht, linux-arm-msm@vger=2Ekernel=2Eorg, devicetree@vger=2Ekernel=2E=
+org, linux-kernel@vger=2Ekernel=2Eorg
+P=C5=99edm=C4=9Bt: Re: [PATCH] arm64: dts: qcom: sdm845: add missing power=
+-controller compatible
+
+On Mon, Dec 20, 2021 at 10:14:43PM +0100, David Heidelberg wrote:
+> dt-schema expect to have fallback compatible, which is now in-place=2E
+>=20
+> Fixes warning generated by `make qcom/sdm845-oneplus-fajita=2Edtb`:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita=2Edt=2Eyaml: power-contro=
+ller@c300000: compatible: ['qcom,sdm845-aoss-qmp'] is too short
+>         From schema: Documentation/devicetree/bindings/soc/qcom/qcom,aos=
+s-qmp=2Eyaml
+>=20
+> Signed-off-by: David Heidelberg <david@ixit=2Ecz>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845=2Edtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845=2Edtsi b/arch/arm64/boot/dt=
+s/qcom/sdm845=2Edtsi
+> index 92ab4513a08b=2E=2Edbdb4243499c 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845=2Edtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845=2Edtsi
+> @@ -4619,7 +4619,7 @@ aoss_reset: reset-controller@c2a0000 {
+>  		};
+> =20
+>  		aoss_qmp: power-controller@c300000 {
+> -			compatible =3D "qcom,sdm845-aoss-qmp";
+> +			compatible =3D "qcom,sdm845-aoss-qmp", "qcom,aoss-qmp";
+
+"qcom,sdm845-aoss-qmp" compatible is supported by the driver=2E So ideally=
+ we
+don't need a fallback here=2E
+
+Is this something for DT backwards compatibility?
+
+Thanks,
+Mani
+
+>  			reg =3D <0 0x0c300000 0 0x100000>;
+>  			interrupts =3D <GIC_SPI 389 IRQ_TYPE_EDGE_RISING>;
+>  			mboxes =3D <&apss_shared 0>;
+> --=20
+> 2=2E34=2E1
+>=20

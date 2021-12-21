@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F4D47BF96
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006DE47BF9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbhLUMT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbhLUMT5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:19:57 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B9CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 04:19:57 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id 7so20568618oip.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 04:19:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BaXR+Sf/o4pHq2K7zFqOPHm0HQk54kBEfN6/GC5fgeM=;
-        b=DOY8PDnOLcMR8fY8k4rMeFeCw7xBBFK3OPAE/n+xtb8qDFv9JkNk3LZbYjMxSp9Kr/
-         LN+Kgfkxy81v9dusGxkmzUFNm8E70Ly1GdWreagXAuCygdufarJbRI0BYaGpKjyNtKVm
-         fcs6Nr4Dx4+k2Ft9cxJL8HkFmQSBrjkGt7mRlv+ODuxymPHHSAKkyo+d65Q5ur8dZtuR
-         c5pim4OMXxIgsJJmBOFqJJe6VYugNfMHha7zuSla8xEq1khHiCctmEw6R2vpPUfoR/0z
-         MLWB1XzrewUW/h8hIweXJDtWOqIalVXR+sc4Ky4KTcKSYKVVmRi3Oio8WbCCUpw3w2xb
-         5VRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BaXR+Sf/o4pHq2K7zFqOPHm0HQk54kBEfN6/GC5fgeM=;
-        b=N8o5ESfOvpq1R+T/2QFymKAs+CSsLB/qmDYylB8/sGJoeqhmwBVzwfvfCvYFi2Cbmy
-         wOrqk1nIep/B0hpPUwz48supzb+8gMzzU4NtIDztlfVyqGpjWWJSUD5auUeFPiDhZB4U
-         8KuMEwB7DxAd+sycZYECHmn5eS9e/LGXPincorCE5QL4Rx6MkAlVXS5j/ILq3pmt6yEY
-         DG5M0e1RveHMnPptU9mRQ7JlCv8owM/EzlYAAIIGy//mq16kaojoy2zOvVVZgIAnPjR/
-         kgA2qsMng0J763huZk4HpjQDOWj2QG9ezKPrSGchJb2psxlzXHHtf8bC5qMwKyCOEFyI
-         3iPQ==
-X-Gm-Message-State: AOAM530ywTLKVqAaIYOez/A3dGQNc5B8u8L93uoyyC2GxObXD42B5QWL
-        hKgkobK6pcItXhtcTOkTr7ILm7EnTBFkOuUWFEh8qQ==
-X-Google-Smtp-Source: ABdhPJxBX/Gkn5yNgs1quOEw+mGlZ7jRH4P8oW8i+xSqTHpBDQPz/PzlNjgclCi6wHGOYn03vA+wj3XaqwTIXkiJN/g=
-X-Received: by 2002:a05:6808:1903:: with SMTP id bf3mr2240565oib.7.1640089196762;
- Tue, 21 Dec 2021 04:19:56 -0800 (PST)
+        id S234819AbhLUMWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:22:36 -0500
+Received: from mga06.intel.com ([134.134.136.31]:20237 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230075AbhLUMWf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:22:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640089355; x=1671625355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KxjKTxfIDQIJ0L4wXu6WXYwtURw23ovXt86O0TxEARE=;
+  b=dBtO6WkMLA/W0Um2XmRJkrAfqCzVAH1PsdTbfOkl9kT0Lu2xx84nz2hs
+   8fggNaUeMfNeNj+4Zz56tUWu3qqmVgZxDWV1TnOROB1uiLVghzEg5mF9H
+   lryn730gmyNTAxlDmsJnHEvEnAzDUwJ37p4GK+Kn379dmCVZwrfPHUHvY
+   RfiICYGBn16+tKCAzj0D6VU7nNEo6lpUJIRHEKxHulEVewagy+woDt5Lk
+   LKl4AN/LgIBEqPBkiPxO8o3tVrVowYSSFlDQ4GeLcpu5kn90p8JFQgRBr
+   KfbSX6NkabvzYs850suFbVToj9EY3AnXw4CDek1n/PyJo9f0FOuGZT+mD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="301151824"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="301151824"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:22:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="663932038"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Dec 2021 04:22:31 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Dec 2021 14:22:31 +0200
+Date:   Tue, 21 Dec 2021 14:22:31 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>
+Subject: Re: [PATCH v1 1/1] software node: Update MAINTAINERS data base
+Message-ID: <YcHHB82r7qT/yJmg@kuha.fi.intel.com>
+References: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <cover.1640036051.git.andreyknvl@google.com> <73a0b47ec72a9c29e0efc18a9941237b3b3ad736.1640036051.git.andreyknvl@google.com>
- <YcHFKSNDI8KJKR7y@elver.google.com>
-In-Reply-To: <YcHFKSNDI8KJKR7y@elver.google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 21 Dec 2021 13:19:45 +0100
-Message-ID: <CANpmjNPDsr36JQ4y_nkBVgaEXp+oqxuG3th8Ftr5rXMNX7V6JQ@mail.gmail.com>
-Subject: Re: [PATCH mm v4 28/39] kasan, page_alloc: allow skipping unpoisoning
- for HW_TAGS
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 at 13:14, Marco Elver <elver@google.com> wrote:
->
-> On Mon, Dec 20, 2021 at 11:02PM +0100, andrey.konovalov@linux.dev wrote:
-> [...]
-> > +static inline bool should_skip_kasan_unpoison(gfp_t flags, bool init_tags)
-> > +{
-> > +     /* Don't skip if a software KASAN mode is enabled. */
-> > +     if (IS_ENABLED(CONFIG_KASAN_GENERIC) ||
-> > +         IS_ENABLED(CONFIG_KASAN_SW_TAGS))
-> > +             return false;
-> > +
-> > +     /* Skip, if hardware tag-based KASAN is not enabled. */
-> > +     if (!kasan_hw_tags_enabled())
-> > +             return true;
->
-> Same question here: why is IS_ENABLED(CONFIG_KASAN_{GENERIC,SW_TAGS})
-> check required if kasan_hw_tags_enabled() is always false if one of
-> those is configured?
+On Tue, Dec 21, 2021 at 09:14:09AM +0200, Andy Shevchenko wrote:
+> There are two updates to the MAINTAINERS regarding to software node API:
+> - add Dan Scally to be designated reviewer
+> - add rather tightly related device property files to the list
+> - adjust section name accordingly
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hmm, I pattern-matched too quickly. In this case there's probably no
-way around it because the return value is different, so not exactly
-like the should_skip_init().
+Another way would be to have a separate entry for the unified device
+property API, and that could then have you (Andy), Sakari and Daniel
+as the reviers. I don't think I have much to say about those parts -
+I'm only interested in the software nodes. But it's up to you. FWIW:
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> 
+> Based on the latest Dan's involvement and amount of patches seen recently
+> I went ahead and added his name to the list. Dan, please tell me if it's
+> not appropriate.
+> 
+>  MAINTAINERS | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8912b2c1260c..ccb4aa744540 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17666,12 +17666,16 @@ F:	drivers/firmware/arm_sdei.c
+>  F:	include/linux/arm_sdei.h
+>  F:	include/uapi/linux/arm_sdei.h
+>  
+> -SOFTWARE NODES
+> +SOFTWARE NODES AND DEVICE PROPERTIES
+>  R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>  R:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> +R:	Daniel Scally <djrscally@gmail.com>
+>  L:	linux-acpi@vger.kernel.org
+>  S:	Maintained
+> +F:	drivers/base/property.c
+>  F:	drivers/base/swnode.c
+> +F:	include/linux/fwnode.h
+> +F:	include/linux/property.h
+>  
+>  SOFTWARE RAID (Multiple Disks) SUPPORT
+>  M:	Song Liu <song@kernel.org>
+> -- 
+> 2.34.1
+
+thanks,
+
+-- 
+heikki

@@ -2,307 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CEB47B6F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB3147B6FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbhLUBxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 20:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbhLUBxP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:53:15 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8F1C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:53:15 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id p14so3033941plf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:53:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UKifyk4mnM2Yqu+DHF9A4ZQKh8AD3UzsDcB1i167Eiw=;
-        b=MaB1um+dYv2t6mjXCrJsFKlTMZbqdh/9n62tnx8pJE+h24nBSFYAs9RdvxUsrmE63/
-         GiRfYfME5IXTH79JPNx/yE6A3KmFIE3wIbS/9gjJmm5Wh/Lma/B1iHLRC2c8/vb+iNuU
-         KToY0L0svEZG3BTFCF/Ug68BwgzvyuYFdb9odRsESXJ7VVLQfJPAUxKCT28UtESBlqsO
-         niz5Tb2iNCiNZ84x/v+NmgFolirSgBL4hMiNerKgTlD9Yblk7ohIXbxSKGBamZtJaWon
-         YNoXFp58iaauv1VTbNaQmO90D1axttElWNWGunncNWQY5z6Hfz7z/fNr5Bdcfkzbskfd
-         J7Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UKifyk4mnM2Yqu+DHF9A4ZQKh8AD3UzsDcB1i167Eiw=;
-        b=bjrWhYRXFJSAHJHLPUKd7w5bH4ST2yfY1Hh+7iDFbJX517IL4CK9LdGz3ftbR45oj3
-         AM1cTvrx5sfqd1t6OMocIBsgTwVQWOA40iTOgY35Ianne4BJWHEK1fHdMfDVdSAvqxCj
-         45TNh2c8ZM/reB5LFSBk5UxCxKBbnvDl6rVg6vFRb01NgqSPDrEaUCoDhovqnyrDa1Hs
-         BYxbGX4SCyDD1jC16EUcDCe+dezeXouAO57wJurUBR/140PTUMaALJwPEpPVkEwzSN7i
-         hVqUpjYylp0fmrQlD4aICKlObMxLKCuw3wM20qk1THKgnu1E+5zwRhuqc8GpgySPAqHT
-         Gxfg==
-X-Gm-Message-State: AOAM531ac57ETyrCel4lj6fya4F2WTQwMfdHIBYtdtE4msl3e6ljbT7a
-        KfcvrX1ZCjDKr0SBAuOUB/dOBiVMdS6SjwNeyvUpuQ==
-X-Google-Smtp-Source: ABdhPJw1wGlebTO1Y/iJTrz3X12wTkdt7cSjE7BAWPIRZYlry0j+kWAUq5yqBlrqlRC3HhBqvTsqcFirQF44KF2itFs=
-X-Received: by 2002:a17:90a:d498:: with SMTP id s24mr1313595pju.46.1640051594509;
- Mon, 20 Dec 2021 17:53:14 -0800 (PST)
+        id S231299AbhLUByk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 20:54:40 -0500
+Received: from mga01.intel.com ([192.55.52.88]:46239 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229891AbhLUByk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 20:54:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640051680; x=1671587680;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=60cm8cQTeffTpKbWxgOJ9BjWJjk6sGD/4mWiOOSrwRs=;
+  b=XvHB2jUcF48gr3CkT6MWZ07G0J8vBStT95jQZJdYUEFyy3XN6nbWzeaY
+   Y/eVXt+dwbD1xNbxmSUJ5XbS3+vhj4AW8WnK6Hs4u14xIoRaaTv2afrAl
+   2sF/2Jl8vFzazhH8T0ixkprlvUarOFcBVTaYMN1/X6xvZT0ikBXydVH2Y
+   bxv8eAzymc00ITZJNZWxKQ38ZgqEi1CxWnOVGJ5S1Cg/tjmrOtNRNNGT5
+   sfsTdD2Ibo8bXeqUiMd80gs7DTUZILVpWkDDRrVTU7EzhRYFpN3YhC+mY
+   kXEe0eH3+3mddHHeWcbfIz4yda1F+3TT+vr49T/lU7WEcxpUrlIXmD0hm
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264491354"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="264491354"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 17:54:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="570053035"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 17:54:38 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzUMP-0008XS-UJ; Tue, 21 Dec 2021 01:54:37 +0000
+Date:   Tue, 21 Dec 2021 09:53:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ 1acd85feba81084fcef00b73fc1601e42b77c5d8
+Message-ID: <61c133b0.nVwN9YTFGAPY1/5z%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20211216172658.GA770781@bhelgaas> <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
-In-Reply-To: <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Mon, 20 Dec 2021 17:52:38 -0800
-Message-ID: <CACK8Z6Fs0zBZ252XLzBr3QKQd0kx1L=PBgO9qUzSYisM1YHitQ@mail.gmail.com>
-Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
-To:     david.e.box@linux.intel.com
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, nirmal.patel@linux.intel.com,
-        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: 1acd85feba81084fcef00b73fc1601e42b77c5d8  x86/mce: Check regs before accessing it
 
-On Thu, Dec 16, 2021 at 1:24 PM David E. Box
-<david.e.box@linux.intel.com> wrote:
->
-> On Thu, 2021-12-16 at 11:26 -0600, Bjorn Helgaas wrote:
-> > [+cc Rajat for LTR max latency write]
+elapsed time: 720m
 
-Thanks!
+configs tested: 167
+configs skipped: 3
 
-> >
-> > On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
-> > > From: Michael Bottini <michael.a.bottini@linux.intel.com>
-> > >
-> > > On Tiger Lake and Alder Lake platforms, VMD controllers do not have ASPM
-> > > enabled nor LTR values set by BIOS. This leads high power consumption on
-> > > these platforms when VMD is enabled as reported in bugzilla [1].  Enable
-> > > these features in the VMD driver using pcie_aspm_policy_override() to set
-> > > the ASPM policy for the root ports.
-> >
-> > s/leads high/leads to high/
-> >
-> > Does this depend on "Tiger Lake and Alder Lake platforms"
-> > specifically, or does it depend on a BIOS design choice, i.e., "don't
-> > configure ASPM or LTR for devices below a VMD"?
->
-> It was a BIOS design choice to have this done by the OS driver for both Tiger Lake and Alder Lake.
->
-> >
-> > The subject says "override ASPM on VMD devices," but it looks like
-> > this affects the ASPM configuration of devices *below* the VMD, not of
-> > the VMD itself.
->
-> Yes.
->
-> >
-> > It looks like this only affects *NVMe* devices, since
-> > vmd_enable_aspm() checks for PCI_CLASS_STORAGE_EXPRESS.  Why is that?
-> > Is there something special about NVMe?  I'd think you would want to do
-> > this for *all* devices below a VMD.
->
-> We need this for all devices under the PCIe root ports below VMD. Those will only be NVMe device
-> AFAICS.
->
-> >
-> > Since it only affects PCI_CLASS_STORAGE_EXPRESS devices, I don't think
-> > it actually "sets ASPM policy for the root ports".  vmd_enable_aspm()
-> > calls pcie_aspm_policy_override() on endpoints.  It's true that the
-> > link ASPM state happens to be attached to the upstream end of the
-> > link, but that's an ASPM implementation detail.
-> >
-> > This all needs to be clear in the subject and commit log.
->
-> Ack
->
-> >
-> > > To do this, add an additional flag in VMD features to specify devices that
-> > > must have their respective policies overridden.
-> >
-> > I'm not clear on why you want this to apply to only certain VMDs and
-> > not others.  Do some BIOSes configure ASPM for devices below some
-> > VMDs?
->
-> Not currently. But the plan is for future devices to move back to having BIOS do the programming.
->
-> >
-> > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
-> > >
-> > > Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > Tested-by: Adhitya Mohan <me@adhityamohan.in>
-> > > ---
-> > > V4
-> > >  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
-> > >    and more readable. Suggested by Christoph.
-> > > V3
-> > >  - No changes
-> > > V2
-> > >  - Use return status to print pci_info message if ASPM cannot be enabled.
-> > >  - Add missing static declaration, caught by lkp@intel.com
-> > >
-> > >  drivers/pci/controller/vmd.c | 43 +++++++++++++++++++++++++++++++++---
-> > >  1 file changed, 40 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> > > index a45e8e59d3d4..880afd450a14 100644
-> > > --- a/drivers/pci/controller/vmd.c
-> > > +++ b/drivers/pci/controller/vmd.c
-> > > @@ -20,6 +20,8 @@
-> > >
-> > >  #include <asm/irqdomain.h>
-> > >
-> > > +#include "../pci.h"
-> > > +
-> > >  #define VMD_CFGBAR     0
-> > >  #define VMD_MEMBAR1    2
-> > >  #define VMD_MEMBAR2    4
-> > > @@ -67,6 +69,12 @@ enum vmd_features {
-> > >          * interrupt handling.
-> > >          */
-> > >         VMD_FEAT_CAN_BYPASS_MSI_REMAP           = (1 << 4),
-> > > +
-> > > +       /*
-> > > +        * Device must have ASPM policy overridden, as its default policy is
-> > > +        * incorrect.
-> > > +        */
-> > > +       VMD_FEAT_QUIRK_OVERRIDE_ASPM            = (1 << 5),
-> >
-> > I think you specifically want to *enable* some ASPM link states, not
-> > just "override the default policy."  "Override" tells us nothing about
-> > whether you are enabling or disabling ASPM.  Applies to subject line
-> > as well.
->
-> Ack
->
-> >
-> > >  };
-> > >
-> > >  static DEFINE_IDA(vmd_instance_ida);
-> > > @@ -661,6 +669,30 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
-> > >         return 0;
-> > >  }
-> > >
-> > > +/*
-> > > + * Override the BIOS ASPM policy and set the LTR value for PCI storage
-> > > + * devices on the VMD bride.
-> >
-> > I don't think there's any BIOS "policy" here.  At this point BIOS is
-> > no longer involved at all, so all that's left is whatever ASPM config
-> > the BIOS did or did not do.
-> >
-> > Why only storage?
->
-> Only storage devices will be on these root ports.
->
-> >
-> > s/bride/bridge/
-> >
-> > > + */
-> > > +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
-> > > +{
-> > > +       int features = *(int *)userdata, pos;
-> > > +
-> > > +       if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
-> > > +           pdev->class != PCI_CLASS_STORAGE_EXPRESS)
-> > > +               return 0;
-> > > +
-> > > +       pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-> > > +       if (!pos)
-> > > +               return 0;
-> > > +
-> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, 0x1003);
-> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT, 0x1003);
-> >
-> > 1) Where did this magic 0x1003 value come from?  Does that depend on
-> > the VMD device?  The endpoint?  The circuit design?  The path between
-> > endpoint and VMD?  What if there are switches in the path?
->
-> The number comes from the BIOS team. They are tied to the SoC. I don't believe there can be switches
-> in the path but Nirmal and Jonathan should know for sure. From what I've seen these root ports are
-> wired directly to M.2 slots on boards that are intended for storage devices.
->
-> >
-> > 2) There exist broken devices where WORD config accesses don't work:
-> > https://lore.kernel.org/all/20211208000948.487820-1-rajatja@google.com/
-> >
-> > We might need a way to quirk config accesses to those devices, but we
-> > don't have one yet.  So for now this needs to be a single DWORD write.
->
-> Ack
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Sideband: Yes, I'm trying to work out such a quirk mechanism, but for
-now, yes, please do that as a single DWORD write access.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                         s3c6400_defconfig
+powerpc                      arches_defconfig
+arm                          badge4_defconfig
+arm                         s3c2410_defconfig
+sh                      rts7751r2d1_defconfig
+arc                     haps_hs_smp_defconfig
+sh                ecovec24-romimage_defconfig
+ia64                        generic_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                       maple_defconfig
+arm                       imx_v4_v5_defconfig
+sh                           se7712_defconfig
+arm                        vexpress_defconfig
+mips                       bmips_be_defconfig
+mips                             allmodconfig
+arm                        cerfcube_defconfig
+h8300                    h8300h-sim_defconfig
+xtensa                              defconfig
+arm                       spear13xx_defconfig
+powerpc                 mpc8313_rdb_defconfig
+powerpc                     sequoia_defconfig
+powerpc                      chrp32_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                          moxart_defconfig
+mips                      pic32mzda_defconfig
+riscv                             allnoconfig
+powerpc                      ppc40x_defconfig
+powerpc                 mpc832x_mds_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                           allnoconfig
+mips                           jazz_defconfig
+arc                         haps_hs_defconfig
+powerpc                          g5_defconfig
+arm                            xcep_defconfig
+powerpc                 mpc836x_mds_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                     tqm5200_defconfig
+arm                           omap1_defconfig
+arm                     davinci_all_defconfig
+sh                          rsk7269_defconfig
+arm                            mmp2_defconfig
+h8300                            alldefconfig
+arm                         hackkit_defconfig
+parisc                generic-64bit_defconfig
+powerpc                       eiger_defconfig
+sh                            hp6xx_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                             sh03_defconfig
+sh                           se7750_defconfig
+arm                         lubbock_defconfig
+alpha                               defconfig
+powerpc                   currituck_defconfig
+arm                          exynos_defconfig
+sh                     magicpanelr2_defconfig
+m68k                          amiga_defconfig
+arm                        mvebu_v5_defconfig
+arm                     am200epdkit_defconfig
+mips                          rb532_defconfig
+openrisc                 simple_smp_defconfig
+arm                        clps711x_defconfig
+m68k                         apollo_defconfig
+arm                          pcm027_defconfig
+mips                 decstation_r4k_defconfig
+arm                         nhk8815_defconfig
+powerpc                      ep88xc_defconfig
+arm                       versatile_defconfig
+arm                        neponset_defconfig
+s390                          debug_defconfig
+arm                          pxa3xx_defconfig
+sh                           se7724_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                   lite5200b_defconfig
+sparc                       sparc32_defconfig
+sh                         ecovec24_defconfig
+powerpc                      makalu_defconfig
+arm                  randconfig-c002-20211220
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a001-20211220
+x86_64               randconfig-a003-20211220
+x86_64               randconfig-a006-20211220
+x86_64               randconfig-a004-20211220
+x86_64               randconfig-a002-20211220
+i386                 randconfig-a004-20211220
+i386                 randconfig-a002-20211220
+i386                 randconfig-a003-20211220
+i386                 randconfig-a005-20211220
+i386                 randconfig-a006-20211220
+i386                 randconfig-a001-20211220
+x86_64               randconfig-a013-20211221
+x86_64               randconfig-a015-20211221
+x86_64               randconfig-a014-20211221
+x86_64               randconfig-a011-20211221
+x86_64               randconfig-a012-20211221
+x86_64               randconfig-a016-20211221
+x86_64               randconfig-a005-20211220
+i386                 randconfig-a015-20211219
+arc                  randconfig-r043-20211220
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
 
-Thanks,
+clang tested configs:
+x86_64               randconfig-a015-20211220
+x86_64               randconfig-a014-20211220
+x86_64               randconfig-a012-20211220
+x86_64               randconfig-a011-20211220
+x86_64               randconfig-a016-20211220
+x86_64               randconfig-a013-20211220
+i386                 randconfig-a011-20211220
+i386                 randconfig-a014-20211220
+i386                 randconfig-a012-20211220
+i386                 randconfig-a016-20211220
+i386                 randconfig-a015-20211220
+i386                 randconfig-a013-20211220
+hexagon              randconfig-r045-20211219
+s390                 randconfig-r044-20211220
+hexagon              randconfig-r045-20211220
+riscv                randconfig-r042-20211220
+hexagon              randconfig-r041-20211220
 
-Rajat
-
-> >
-> > > +       if (pcie_aspm_policy_override(pdev))
-> > > +               pci_info(pdev, "Unable of override ASPM policy\n");
-> >
-> > s/Unable of/Unable to/
-> >
-> > I think we might need a message about when we *do* override the
-> > policy.  A note in dmesg might be useful for debugging.  I'm worried
-> > about the LTR programming because I really don't understand how we
-> > should be doing that.
->
-> Sure.
->
-> >
-> > > +       return 0;
-> > > +}
-> > > +
-> > >  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
-> > >  {
-> > >         struct pci_sysdata *sd = &vmd->sysdata;
-> > > @@ -807,6 +839,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
-> > >         pci_scan_child_bus(vmd->bus);
-> > >         pci_assign_unassigned_bus_resources(vmd->bus);
-> > >
-> > > +       pci_walk_bus(vmd->bus, vmd_enable_aspm, &features);
-> >
-> > Do you support hotplug under VMD?  This will not happen for hot-added
-> > devices.
->
-> That I don't know. Nirmal, Jonathan?
->
-> David
->
-> >
-> > >         /*
-> > >          * VMD root buses are virtual and don't return true on pci_is_pcie()
-> > >          * and will fail pcie_bus_configure_settings() early. It can instead be
-> > > @@ -948,15 +982,18 @@ static const struct pci_device_id vmd_ids[] = {
-> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
-> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
-> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c3d),
-> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
-> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
-> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
-> > >         {0,}
-> > >  };
-> > >  MODULE_DEVICE_TABLE(pci, vmd_ids);
-> > > --
-> > > 2.25.1
-> > >
->
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

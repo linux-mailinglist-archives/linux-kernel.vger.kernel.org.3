@@ -2,174 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 436D847C8E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B338947C8EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbhLUVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
+        id S237376AbhLUV4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLUVxu (ORCPT
+        with ESMTP id S230251AbhLUV4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:53:50 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C202FC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 13:53:49 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id q2-20020a056a00084200b004a2582fcec1so267576pfk.15
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 13:53:49 -0800 (PST)
+        Tue, 21 Dec 2021 16:56:49 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51542C061574;
+        Tue, 21 Dec 2021 13:56:49 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id d10so613952ybn.0;
+        Tue, 21 Dec 2021 13:56:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ubsJbz4XTDj0Y8BVp+tyzvUQoOJ8p9o6eKqcemly/7o=;
-        b=cN60PblALTbqNU/fDADDM/JTRbZx6LxiU706eGsSoWw9mgARm1kVuelsKrgV+Dqcyd
-         xuOqqKM+yLG689hUnCvrrE4AEZKqY60WwsifQDci0DtqnpE13rVnj81Z7sE+rI+qXl47
-         F8vrDQREIceKqe2mi5xX4Qao7BTG29zt2btQWg+Ws0ea6pee8KXO+bEhvVx10gG2KJHC
-         EbG5ekDDHfBMF0kbIBZLzBV/lgvyDvNTLgm0LivY5CZRzTYG5I0htgUYw7bSM7y595NZ
-         kv20cpVlNcJQbHS1m5GXgJ7FC96sAJPYkepFIQnMJnwikBAKJnffPq0XwnqflD1RYgL1
-         EaSQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nH5deYnY1F+nFd2Y1Uyf515q7YwKeWK3mKwSxQWbEyc=;
+        b=b1kd8BudFlrruJSAJZ5gb3m3crA+JNARA6Iw+Mvqs+ksg5BPcU8ZCxuPE+Y6kDVNvM
+         cVX1Ili0M6zSt2zF8l/ZqqBZR0ZROyA78zYdfr0DGKf1P4tWhUAdPpfdiiUex3jd6woh
+         UUtSyko9ZW5SRC0H274qX11uPZZpyCJZLqBzgO0gshcoVtoHzNsaWnuIEN6DPzKIa3Dj
+         6LnV6SEmtV5/baKo1MaSx2+q8DxKf/2vJRV2+GQK5NOTkS48MYEvcKFGK1L6EbnHlT33
+         y7fLEu9rKjtVeyhCLo//wwERcJyaFWemz/Wk//PMEPO9ok4FK2ZWsLoMMk9VpU9XqJDv
+         TjyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ubsJbz4XTDj0Y8BVp+tyzvUQoOJ8p9o6eKqcemly/7o=;
-        b=s/M2q5RPY954iMqc0+NDi46cJMqlO+qc/ye40J1mviZqORjT+q0e1Fn7cT+tjWy9LU
-         JlZOQr6bhRhjw/Ryx+22do8h7yW8AmJnOb8PlKdA7XzvKhS7HTeEQagW31HCe8DRQ6br
-         5wbs4l8/RWN+XPNUQsvvDfLSfWgoch4ZoFL36PIBYyJcYDtHTttsXKS3r01NUVT1kkZW
-         p9xbtp/Hh2Jbe9IEoI3XV3bBlk73Bmm+d/3Ry0lJAQG3FBRqXylnkkWhkTgg530R3XBB
-         WajwNPJtKMZRvtXZICLAx/LZVKKH+XibEgz3qe43uRwNfIbxGSnUQxhNb8TYiQEgzEk9
-         Vzpg==
-X-Gm-Message-State: AOAM530b8+zRoLFg2yXmxytsME94muTCRcLEXdx8+JHluP37dOyvT2kt
-        2mveEUR5p9ePCgD5zFGO9xNlVtVlqqplqg==
-X-Google-Smtp-Source: ABdhPJwWQi4/qgSn1GBR6R+WRdImbaFdH+zC3nALV07H9X3SgI2Ua9OoL/cJh1NASCoZBq4z+v+SX11BJzWWsw==
-X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:fbbb:6368:35d1:5ac2])
- (user=shakeelb job=sendgmr) by 2002:a17:902:e843:b0:148:f219:afb7 with SMTP
- id t3-20020a170902e84300b00148f219afb7mr73688plg.81.1640123629026; Tue, 21
- Dec 2021 13:53:49 -0800 (PST)
-Date:   Tue, 21 Dec 2021 13:53:36 -0800
-Message-Id: <20211221215336.1922823-1-shakeelb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH] memcg: add per-memcg vmalloc stat
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nH5deYnY1F+nFd2Y1Uyf515q7YwKeWK3mKwSxQWbEyc=;
+        b=KAkK9YQOsgiKj0udFYt7MqwMBhQYNdFzim1Ig22SaQ7ysLTkqZMSZocXCABDATf5V9
+         SdXzLVwY9GKjXiimeOMxhL8/9kdX2/xuvqZrwIvtxSfTvPOUcUOVO0ONivv0ZdIrjUUG
+         SyxwChw+/8z4fP2TtVgp+vIkXxjKfVc44OklT1g54DyEDwgUl/PsY14jsBmoQaSjHFfm
+         oKm6qsxXauJbnN0ieAmC53j+H3T2P0TzSWAR0bFKyXOXIuKPjO55ZXh7/bj0r6P9sF+l
+         mYQEVJz01QJT0i2mpuX5wmrVuPAdOUPvQobKiWezzpIVJFBJF8womUgJUlDjT2fpj9cM
+         2VpQ==
+X-Gm-Message-State: AOAM530CIHg85u6Fk7wAR2Rk+vMk9fInKN9UjcXw1bPGW+PK9Z6SfBja
+        dsANJD/DiG9wUHAaKeOlv1nbVfPOK2k2Vuy3nNg=
+X-Google-Smtp-Source: ABdhPJyWp+tcos8RglvIuOvmkPeM/jkjRDtdU6lOBCtRSyS0bLAiW5Ii0Op2ac9aMWD7PIcmQXv3XuyrZjK5cimrh7k=
+X-Received: by 2002:a05:6902:722:: with SMTP id l2mr392530ybt.573.1640123808421;
+ Tue, 21 Dec 2021 13:56:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20211216044839.v9.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
+ <202112171439.KaggScQN-lkp@intel.com>
+In-Reply-To: <202112171439.KaggScQN-lkp@intel.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Tue, 21 Dec 2021 13:56:37 -0800
+Message-ID: <CABBYNZ+hvtsA=i2mgJnuzR3B6Byku8t+wHBuSW3_5eG4KSHy-w@mail.gmail.com>
+Subject: Re: [kbuild] Re: [PATCH v9 1/3] bluetooth: msft: Handle MSFT Monitor
+ Device Event
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, Manish Mandlik <mmandlik@google.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Miao-chen Chou <mcchou@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kvmalloc* allocation functions can fallback to vmalloc allocations
-and more often on long running machines. In addition the kernel does
-have __GFP_ACCOUNT kvmalloc* calls. So, often on long running machines,
-the memory.stat does not tell the complete picture which type of memory
-is charged to the memcg. So add a per-memcg vmalloc stat.
+Hi Manish,
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
----
- Documentation/admin-guide/cgroup-v2.rst |  3 +++
- include/linux/memcontrol.h              | 15 +++++++++++++++
- mm/memcontrol.c                         |  1 +
- mm/vmalloc.c                            |  5 +++++
- 4 files changed, 24 insertions(+)
+On Thu, Dec 16, 2021 at 11:18 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> Hi Manish,
+>
+> url:    https://github.com/0day-ci/linux/commits/Manish-Mandlik/bluetooth-msft-Handle-MSFT-Monitor-Device-Event/20211216-205227
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git  master
+> config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171439.KaggScQN-lkp@intel.com/config )
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> smatch warnings:
+> net/bluetooth/msft.c:757 msft_vendor_evt() warn: inconsistent returns '&hdev->lock'.
+>
+> vim +757 net/bluetooth/msft.c
+>
+> 3e54c5890c87a30 Luiz Augusto von Dentz 2021-12-01  714  void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buff *skb)
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  715  {
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  716          struct msft_data *msft = hdev->msft_data;
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  717          u8 *evt_prefix;
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  718          u8 *evt;
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  719
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  720          if (!msft)
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  721                  return;
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  722
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  723          /* When the extension has defined an event prefix, check that it
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  724           * matches, and otherwise just return.
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  725           */
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  726          if (msft->evt_prefix_len > 0) {
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  727                  evt_prefix = msft_skb_pull(hdev, skb, 0, msft->evt_prefix_len);
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  728                  if (!evt_prefix)
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  729                          return;
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  730
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  731                  if (memcmp(evt_prefix, msft->evt_prefix, msft->evt_prefix_len))
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  732                          return;
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  733          }
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  734
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  735          /* Every event starts at least with an event code and the rest of
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  736           * the data is variable and depends on the event code.
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  737           */
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  738          if (skb->len < 1)
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  739                  return;
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  740
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  741          hci_dev_lock(hdev);
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  742
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  743          evt = msft_skb_pull(hdev, skb, 0, sizeof(*evt));
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  744          if (!evt)
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  745                  return;
+>
+> Missing hci_dev_unlock(hdev);
+>
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  746
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  747          switch (*evt) {
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  748          case MSFT_EV_LE_MONITOR_DEVICE:
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  749                  msft_monitor_device_evt(hdev, skb);
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  750                  break;
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  751
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  752          default:
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  753                  bt_dev_dbg(hdev, "MSFT vendor event 0x%02x", *evt);
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  754                  break;
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  755          }
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16  756
+> e5af6a85decc8c1 Manish Mandlik         2021-12-16 @757          hci_dev_unlock(hdev);
+> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  758  }
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> _______________________________________________
+> kbuild mailing list -- kbuild@lists.01.org
+> To unsubscribe send an email to kbuild-leave@lists.01.org
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 82c8dc91b2be..5aa368d165da 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1314,6 +1314,9 @@ PAGE_SIZE multiple when read back.
- 	  sock (npn)
- 		Amount of memory used in network transmission buffers
- 
-+	  vmalloc (npn)
-+		Amount of memory used for vmap backed memory.
-+
- 	  shmem
- 		Amount of cached filesystem data that is swap-backed,
- 		such as tmpfs, shm segments, shared anonymous mmap()s
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index d76dad703580..000bfad6ff69 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -33,6 +33,7 @@ enum memcg_stat_item {
- 	MEMCG_SWAP = NR_VM_NODE_STAT_ITEMS,
- 	MEMCG_SOCK,
- 	MEMCG_PERCPU_B,
-+	MEMCG_VMALLOC,
- 	MEMCG_NR_STAT,
- };
- 
-@@ -944,6 +945,15 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
- 	local_irq_restore(flags);
- }
- 
-+static inline void mod_memcg_page_state(struct page *page,
-+					int idx, int val)
-+{
-+	struct mem_cgroup *memcg = page_memcg(page);
-+
-+	if (!mem_cgroup_disabled() && memcg)
-+		mod_memcg_state(memcg, idx, val);
-+}
-+
- static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
- {
- 	return READ_ONCE(memcg->vmstats.state[idx]);
-@@ -1399,6 +1409,11 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
- {
- }
- 
-+static inline void mod_memcg_page_state(struct page *page,
-+					int idx, int val)
-+{
-+}
-+
- static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
- {
- 	return 0;
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 7ae77608847e..7027a3cc416f 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1375,6 +1375,7 @@ static const struct memory_stat memory_stats[] = {
- 	{ "pagetables",			NR_PAGETABLE			},
- 	{ "percpu",			MEMCG_PERCPU_B			},
- 	{ "sock",			MEMCG_SOCK			},
-+	{ "vmalloc",			MEMCG_VMALLOC			},
- 	{ "shmem",			NR_SHMEM			},
- 	{ "file_mapped",		NR_FILE_MAPPED			},
- 	{ "file_dirty",			NR_FILE_DIRTY			},
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index eb6e527a6b77..af67ce4fd402 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -39,6 +39,7 @@
- #include <linux/uaccess.h>
- #include <linux/hugetlb.h>
- #include <linux/sched/mm.h>
-+#include <linux/memcontrol.h>
- #include <asm/tlbflush.h>
- #include <asm/shmparam.h>
- 
-@@ -2626,6 +2627,9 @@ static void __vunmap(const void *addr, int deallocate_pages)
- 		unsigned int page_order = vm_area_page_order(area);
- 		int i;
- 
-+		mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC,
-+				     -(int)area->nr_pages);
-+
- 		for (i = 0; i < area->nr_pages; i += 1U << page_order) {
- 			struct page *page = area->pages[i];
- 
-@@ -2964,6 +2968,7 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
- 		page_order, nr_small_pages, area->pages);
- 
- 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
-+	mod_memcg_page_state(area->pages[0], MEMCG_VMALLOC, area->nr_pages);
- 
- 	/*
- 	 * If not enough pages were obtained to accomplish an
+Are you working on fixing the above problems?
+
+
 -- 
-2.34.1.307.g9b7440fafd-goog
-
+Luiz Augusto von Dentz

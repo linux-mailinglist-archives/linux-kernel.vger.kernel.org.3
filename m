@@ -2,111 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A3D47B873
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A4C47B882
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbhLUCpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 21:45:51 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8199 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231833AbhLUCpu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 21:45:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640054750; x=1671590750;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=a9EAtYjMjgBhRqx9t80MptniHLo76DppyNXKRomGOUk=;
-  b=N4SUr9lUbRHoz9nt7J9U4T+LKGlh46oiD+41YBJZrAbatdmDpWgOk8co
-   G1k1O0Vy+31HbI6FjALZxpPGzbSGt+PGE9J1rcot6us+0Smjh2O7JNRhT
-   Ia5MIA0N/qc/87WUtidpqSzfharSNjSOLCZUX97dcvve6TOe0TQq6tFN5
-   oyq8pOLWShW7sirGdh6NXOVK+cdao6s742piLogKcJOJ7/9QKf6VpsuOe
-   cYRvU/tNyUKSH0nGnXbX4w8g3WVoUvddwC4ds32gHz4IanbxCHNklAPS4
-   BD5rd8I8D0lkpXNtb0vHVi3YTsvn6cAzf9qZN7gX++vfgfYYj5tbjzU64
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240533482"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="240533482"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 18:45:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="616620471"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 18:45:48 -0800
-Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 18:45:47 -0800
-Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
- SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 10:45:45 +0800
-Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
- SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
- Tue, 21 Dec 2021 10:45:45 +0800
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "seanjc@google.com" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: RE: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
-Thread-Topic: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
-Thread-Index: AQHX81r8L73y8adYV0a4DFLIQjWYRqw6lEwAgAGYYhA=
-Date:   Tue, 21 Dec 2021 02:45:45 +0000
-Message-ID: <e0fd378de64f44fd8becfe67b02cb635@intel.com>
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-19-jing2.liu@intel.com>
- <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
-In-Reply-To: <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S233827AbhLUCuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 21:50:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52842 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233671AbhLUCui (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 21:50:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53CC5B81113
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F9BC36AE8;
+        Tue, 21 Dec 2021 02:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640055036;
+        bh=9FyG3W5ip2zv6ci01ldf1DOdvGhwMGzdqpxjmFLSxxw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=drh8QKpzxuAT25mPaCSbOhqZK7c8+1M02Rvw3TLmlMOzg1ARUcZ9T/J8XxiYRiW03
+         IDmixepuqCaZX7Ufo5qYKU7qrr/XjLS27l3+y+h0fUe6IQcPXpdCDIls8Qx7Cr8qr6
+         5apcwzda1wtxxvt9JthZU3PWxA70TgOGaanGHi0owlBOW3qVydPON77ZbGBO4XZ03Z
+         3Q4vG3kIdqJEgFSrDIhakR9JDo4mJ/Kyr4TZnvfTGOqvhLt8cDVRZNvFl2KN+nm+Li
+         rDxCLMwnaL/f6B0NUvtKw2W5NV30I8HuwI7FUKTVTqoSQ6LDz7ZeMVVQdRSdQz5bcD
+         j4UtzYi6E/bbw==
+From:   Mark Brown <broonie@kernel.org>
+To:     matthias.bgg@gmail.com, Trevor Wu <trevor.wu@mediatek.com>,
+        tiwai@suse.com
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20211216022424.28470-1-trevor.wu@mediatek.com>
+References: <20211216022424.28470-1-trevor.wu@mediatek.com>
+Subject: Re: [PATCH] ASoC: mediatek: mt8195: correct default value
+Message-Id: <164005503431.2647762.14895672771692403341.b4-ty@kernel.org>
+Date:   Tue, 21 Dec 2021 02:50:34 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uZGF5LCBEZWNlbWJlciAyMCwgMjAyMSA1OjA0IFBNLCBQYW9sbyBCb256aW5pIHdyb3Rl
-Og0KPiBPbiAxMi8xNy8yMSAxNjoyOSwgSmluZyBMaXUgd3JvdGU6DQo+ID4gKy8qIGZvciBLVk1f
-Q0FQX1hTQVZFIGFuZCBLVk1fQ0FQX1hTQVZFMiAqLw0KPiA+ICAgc3RydWN0IGt2bV94c2F2ZSB7
-DQo+ID4gKwkvKg0KPiA+ICsJICogS1ZNX0dFVF9YU0FWRSBvbmx5IHVzZXMgdGhlIGZpcnN0IDQw
-OTYgYnl0ZXMuDQo+ID4gKwkgKg0KPiA+ICsJICogS1ZNX0dFVF9YU0FWRTIgbXVzdCBoYXZlIHRo
-ZSBzaXplIG1hdGNoIHdoYXQgaXMgcmV0dXJuZWQgYnkNCj4gPiArCSAqIEtWTV9DSEVDS19FWFRF
-TlNJT04oS1ZNX0NBUF9YU0FWRTIpLg0KPiA+ICsJICoNCj4gPiArCSAqIEtWTV9TRVRfWFNBVkUg
-dXNlcyB0aGUgZXh0cmEgZmllbGQgaWYgZ3Vlc3RfZnB1OjpmcHN0YXRlOjpzaXplDQo+ID4gKwkg
-KiBleGNlZWRzIDQwOTYgYnl0ZXMuDQo+IA0KPiBLVk1fR0VUX1hTQVZFMiBhbmQgS1ZNX1NFVF9Y
-U0FWRSByZXNwZWN0aXZlbHkgd3JpdGUgYW5kIHJlYWQgYXMgbWFueQ0KPiBieXRlcyBhcyBhcmUg
-cmV0dXJuZWQgYnkgS1ZNX0NIRUNLX0VYVEVOU0lPTihLVk1fQ0FQX1hTQVZFMiksIHdoZW4NCj4g
-aW52b2tlZCBvbiB0aGUgdm0gZmlsZSBkZXNjcmlwdG9yLiAgQ3VycmVudGx5LA0KPiBLVk1fQ0hF
-Q0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSB3aWxsIG9ubHkgcmV0dXJuIGEgdmFsdWUgdGhh
-dCBpcw0KPiBncmVhdGVyIHRoYW4gNDA5NiBieXRlcyBpZiBhbnkgZHluYW1pYyBmZWF0dXJlcyBo
-YXZlIGJlZW4gZW5hYmxlZCB3aXRoDQo+IGBgYXJjaF9wcmN0bCgpYGA7IHRoaXMgaG93ZXZlciBt
-YXkgY2hhbmdlIGluIHRoZSBmdXR1cmUuDQoNCldvdWxkIHRoaXMgbWFrZSBwZW9wbGUgdGhpbmsg
-dGhhdCBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSBkb2VzbuKAmXQNCnJldHVy
-biB0aGUgdmFsdWUgKGkuZS4gcmV0dXJuIDApIGlmIGl0IGlzIHNtYWxsZXIgdGhhbiA0MDk2Pw0K
-KGkuZS4gS1ZNX0dFVF9YU0FWRTIgZG9lc24ndCB3b3JrIHdpdGggc2l6ZSA8IDQwOTYsIHdoaWNo
-IGlzbuKAmXQgdHJ1ZSkNCg0KSSBwbGFuIHRvIGp1c3QgcmV3b3JkIGEgYml0Og0KQ3VycmVudGx5
-LCBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSB3aWxsIG9ubHkgcmV0dXJuIGEg
-c2l6ZSB2YWx1ZSwNCmFuZCB0aGUgdmFsdWUgaXMgZ3JlYXRlciB0aGFuIDQwOTYgYnl0ZXMgaWYg
-YW55IGR5bmFtaWMgZmVhdHVyZXMgaGF2ZSBiZWVuIGVuYWJsZWQgd2l0aA0KYGBhcmNoX3ByY3Rs
-KClgYC4gTW9yZSB0eXBlcyBvZiB2YWx1ZXMgY291bGQgYmUgcmV0dXJuZWQgaW4gdGhlIGZ1dHVy
-ZS4NCg0KVGhhbmtzLA0KV2VpDQo=
+On Thu, 16 Dec 2021 10:24:24 +0800, Trevor Wu wrote:
+> mt8195_cg_patch is used to reset the default value of audio cg, so the
+> register value could be consistent with CCF reference count.
+> Nevertheless, AUDIO_TOP_CON1[1:0] is used to control an internal mux,
+> and it's expected to keep the default value 0.
+> 
+> This patch corrects the default value in case an unexpected behavior
+> happens in the future.
+> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-linus
+
+Thanks!
+
+[1/1] ASoC: mediatek: mt8195: correct default value
+      commit: 30e693ee82d20361f2caacca3b68c79e1a7cb16c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

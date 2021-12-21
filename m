@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3967547C2C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918DC47C2C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239294AbhLUPXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S239309AbhLUPZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239283AbhLUPXc (ORCPT
+        with ESMTP id S239302AbhLUPZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:23:32 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB566C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:23:31 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id y13so53370657edd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:23:31 -0800 (PST)
+        Tue, 21 Dec 2021 10:25:07 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DC1C061401
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:25:07 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id q5so1580850ioj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:25:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rxf1NxPSo8s8xHVSSFeYT/Wi9LLJD3nqrr14uMo0HJM=;
-        b=Zm4Kr75mSPUtQUO+AhWnCSQqVqlvVgM0PUHxF2hlOuTBkAdOOsA0VdiUotNjeQ9IrA
-         7C6wz3tkc+pZbrUAXKhv91WelhZwKBZfG6bEEEbHALh5tZIBvxHc7ZnoFrk11sHyG9BJ
-         cCeO8U/UVSoq4mbBVkHvdShdFeDoz4gMRk9btQJLcbKEzAhcIJUfE1R2X5BuHsNN9lqT
-         O0U58vdRVkRF7HfiwjWlqZeEfN5FwtP9PuxGOd7OoU7aTNbTNmYG18bE/hIQoG39QQax
-         JfiIA+3d0zLFOhS3WIAQV1hqmWgdy/HFU3qfeg8Ht2847Zfy8gx6Cxei5WJNTFQra9VL
-         OTJw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1nswmIXvkrgdGsozU3iZx920lgYKsqE2KdHTmx1sEkY=;
+        b=tlEICRYnaczk+jXexMQbyT6UB86cUJhvbNq6yjDPnzv8/uG1ta2zkMxPBmL5I6ildh
+         /t8JmErPIszZfzjnxhOgktmM9nnSaLgUbHk5KmKEdQkc6KDfLBma4yBZpNwt0Hfvhtvc
+         smp2HPUxWngwO/s5rMo5kWXNMBcQCqWkZa2z6vH3VtdCrZbB17YdeZxrQdf9cdcLNSQ+
+         P+cQBs7uCSzQHKNNT3nwFl01CEN4Qlm6cq/rYnZ1Vprhd0daXmj0huImLelXjBVKE3Bj
+         1wBFKAE51b/Hpu5+LUs6vFASW3WJwgvhq3naazQLVNTQd9vFC2su+MiDs4SnOL+uZBpH
+         m6Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rxf1NxPSo8s8xHVSSFeYT/Wi9LLJD3nqrr14uMo0HJM=;
-        b=kNKoWL751L4+cm2moZ+hRWRRRUMPpmLUZQ3Bi/4pskA6qBHojTVJSBN7KUkGQC5Xm3
-         WLGXxrF0SGcTspeitTxy1k9Q6ZMeyMRz9WDspMwsCexBKE3yiGpxTcGZmkXtqbp9PZIz
-         7bAd3FqhGyFqIFLFarNE+hfL15wd4tYDjkzYtfkwDp8d/dxQ2Xa353+gK7qkaTvvlqAT
-         zBLJz4doWQL5vCiRqkCzV8kzp5h8bbCUOKXhgzqLY4YF7I/SFYVNbSVylV798rwBeg/K
-         tq/eSesIr2wTaJB8rNGHozHCqtr4862Iv1qfFFT7R9qrGTC+S0qiUL2aNgWPwsm8bMHO
-         3dqg==
-X-Gm-Message-State: AOAM533RrFQp07pxAFcfH+TE81IsiK7XYrXQwyOj6l2aETAHmNwu05mj
-        fBmiFKsbQprFkS8skZefO12PQ+zOVy9zWa2YmpzQ/UEpJZQ=
-X-Google-Smtp-Source: ABdhPJy+jIubI85s8a7viK5tSBmJqnt/uKumtZfv/Qds+UeGfXNu5/xBPFYJoQct46aedNtjT2044XfDnRYU039dp2o=
-X-Received: by 2002:a50:e611:: with SMTP id y17mr3845710edm.270.1640100210304;
- Tue, 21 Dec 2021 07:23:30 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1nswmIXvkrgdGsozU3iZx920lgYKsqE2KdHTmx1sEkY=;
+        b=2asRjv0hDW8I/cesyQ/bgdKrwjUBhe3ig4FKGhnud4hMn6U9r8KgW0iCxUGknugtk2
+         bgokeOp9voyrug0/ARrS6qLNfTQUfvRcl6hW8rIoeUcCmwaGjzx5EazAJWA5q71tgCCu
+         ywLMDWNMU4vqgK6Te5aOykLLT2MQF+tkeavV5fiW9as92GqdvYVbRbemala9vnGFovCQ
+         h4jBexfJ2W7UTiCQsBkcjHy1P36QBmc4tyfK0DEFAW8t2IMdA4PFSvIW5L5xEg6cTe+Y
+         l7/V8JuzyZ9NyVK+xSrOJF5p0pNKmo92o92Qxcscl1jvgIl5vgQiWrYQs5ysDJPG4h1u
+         nReQ==
+X-Gm-Message-State: AOAM531TKRYcr4zt+XgZgQGLHdYzdrS7hYAckaYAa1NPfVt7ejAqZHy9
+        D9PcnTTqkaB8OWKoV8kQXn9vow==
+X-Google-Smtp-Source: ABdhPJxK104GzhXJnT+gHzCxZmWtbC6T7ciYqYcYMTLp6Mxau8YEuA532kQe83FSc/UZ+crXL0wcPg==
+X-Received: by 2002:a05:6638:4129:: with SMTP id ay41mr2154729jab.23.1640100306190;
+        Tue, 21 Dec 2021 07:25:06 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id c22sm10425970ioz.15.2021.12.21.07.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 07:25:05 -0800 (PST)
+Subject: Re: [syzbot] general protection fault in set_task_ioprio
+To:     Eric Dumazet <edumazet@google.com>,
+        syzbot <syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     changbin.du@intel.com,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-block@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yajun Deng <yajun.deng@linux.dev>
+References: <000000000000c70eef05d39f42a5@google.com>
+ <00000000000066073805d3a4f598@google.com>
+ <CANn89i++5O_4_j3KO0wAiJHkEj=1zAeAHv=s9Lub_B6=cguwXQ@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <e3a30c8c-3f1a-47b5-57e7-1b456bbc8719@kernel.dk>
+Date:   Tue, 21 Dec 2021 08:25:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211220130656.16900-1-vincent.whitchurch@axis.com>
-In-Reply-To: <20211220130656.16900-1-vincent.whitchurch@axis.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 21 Dec 2021 16:23:19 +0100
-Message-ID: <CAMRc=Mcdo9WWX7U=AqwTite=JDEkoSCb-Lwwb+h_=vSFrKMmnQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: virtio: remove timeout
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>, kernel@axis.com,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CANn89i++5O_4_j3KO0wAiJHkEj=1zAeAHv=s9Lub_B6=cguwXQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 2:07 PM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> The driver imposes an arbitrary one second timeout on virtio requests,
-> but the specification doesn't prevent the virtio device from taking
-> longer to process requests, so remove this timeout to support all
-> systems and device implementations.
->
-> Fixes: 3a29355a22c0275fe86 ("gpio: Add virtio-gpio driver")
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/gpio/gpio-virtio.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-virtio.c b/drivers/gpio/gpio-virtio.c
-> index 84f96b78f32a..9f4941bc5760 100644
-> --- a/drivers/gpio/gpio-virtio.c
-> +++ b/drivers/gpio/gpio-virtio.c
-> @@ -100,11 +100,7 @@ static int _virtio_gpio_req(struct virtio_gpio *vgpio, u16 type, u16 gpio,
->         virtqueue_kick(vgpio->request_vq);
->         mutex_unlock(&vgpio->lock);
->
-> -       if (!wait_for_completion_timeout(&line->completion, HZ)) {
-> -               dev_err(dev, "GPIO operation timed out\n");
-> -               ret = -ETIMEDOUT;
-> -               goto out;
-> -       }
-> +       wait_for_completion(&line->completion);
->
->         if (unlikely(res->status != VIRTIO_GPIO_STATUS_OK)) {
->                 dev_err(dev, "GPIO request failed: %d\n", gpio);
-> --
-> 2.33.1
->
+On 12/21/21 3:44 AM, Eric Dumazet wrote:
+> On Tue, Dec 21, 2021 at 1:52 AM syzbot
+> <syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com> wrote:
+>>
+>> syzbot has bisected this issue to:
+>>
+>> commit e4b8954074f6d0db01c8c97d338a67f9389c042f
+>> Author: Eric Dumazet <edumazet@google.com>
+>> Date:   Tue Dec 7 01:30:37 2021 +0000
+>>
+>>     netlink: add net device refcount tracker to struct ethnl_req_info
+>>
+> 
+> Unfortunately this commit will be in the way of many bisections.
+> 
+> Real bug was added in
+> 
+> commit 5fc11eebb4a98df5324a4de369bb5ab7f0007ff7
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Thu Dec 9 07:31:29 2021 +0100
+> 
+>     block: open code create_task_io_context in set_task_ioprio
+> 
+>     The flow in set_task_ioprio can be simplified by simply open coding
+>     create_task_io_context, which removes a refcount roundtrip on the I/O
+>     context.
+> 
+>     Signed-off-by: Christoph Hellwig <hch@lst.de>
+>     Reviewed-by: Jan Kara <jack@suse.cz>
+>     Link: https://lore.kernel.org/r/20211209063131.18537-10-hch@lst.de
+>     Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-Applied, thanks!
+There are only really 5 patches in between the broken commit and the one
+that fixes it, and it only affects things trying to set the ioprio with
+a dead task. Is this a huge issue? I don't see why this would cause a
+lot of bisection headaches.
 
-Bart
+-- 
+Jens Axboe
+

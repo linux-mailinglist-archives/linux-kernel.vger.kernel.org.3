@@ -2,140 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9C247C2DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E66047C2DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239360AbhLUPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S239369AbhLUPeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbhLUPeo (ORCPT
+        with ESMTP id S239355AbhLUPep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:34:44 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD03C061574;
-        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id i63so21989822lji.3;
-        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
+        Tue, 21 Dec 2021 10:34:45 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30CC061574;
+        Tue, 21 Dec 2021 07:34:45 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso17047056ots.6;
+        Tue, 21 Dec 2021 07:34:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ENsWP3t0OEsvzi2ehFfWL5PLo9nbmRuKstEblytFSZk=;
-        b=du6prEqyy4VDh/9oQkaNuO9m1zQmEsrUQ+ezBUvmdM6CVHpRrysbEQkA9iSaS8HB+8
-         MMzGTQKeSwvJ/OMg2yhe7Yt1vapH1K108rr2fLquBGUMx0MpBRRQl2si/5hZffG4aFAG
-         N9jkNTT9MYa23a5A7VgGu7lS5uMTHDm1h7ZrmuXECkw8zkoH8pKFS0hF7MjLbTEFkOlN
-         gLOYbyWyTbW1YKBZlvHUA+8qaXAlZh0AzZB8Ig0kFWVbyqaJq+Q1T+FBmLBNfogkbfYs
-         4o7SJOOV18G/kAxQu0QoOel+dW83xDbMgHYW+3Zof+o1vsttA+tQNcM/eEesD1T9fSXC
-         yNww==
+        bh=3MV0ltKVU5aGiovL6mP/hE02wLbeXe6GiccWT7VEyLM=;
+        b=CygjRde86CXvQdW/9kK6zkk6ia8MJY0Uy+XAczhvIetNN5d+y2Mu1L66EtGC/82E87
+         eUXp6JnZIHr6v51hdP6Lq8HI054AAXYkma1buvIFvH2Y04E8YhGs/TxSGt3EuW3PxOUm
+         X96pnV2jQ0FKBD0UllB7s/CuYO7nhx1TksGrmRnnvJx3CEZ6HaM/rXkSU8DfUSsDwpFR
+         5Kgh6lFxbi8Y1SJ4gBrU1VvI7x/SZBLKNhUPX6h1YsE3EDSEcATUic5OPgaF3Y05kKF5
+         a6arYLSLZ00XLt4f42oOrQThdR2wePg5jKS/AyWLQKk538Ml+IIow4TqXUVUsE87E4/h
+         7RAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ENsWP3t0OEsvzi2ehFfWL5PLo9nbmRuKstEblytFSZk=;
-        b=TG+wOZKjktHQUjIAAkl55XtF3qlM1E/f8mdnXpeDoHyQBvs2E121VnesvZLf6xRWDQ
-         Tb+ln3H1dMD2jHBUo3aVr7M9MwpyEhMTf/STvCiT1nqfPaUY32XeBaPogAWcotaIbQyD
-         q1E5bdha/2eb7/+9oGm0sydjBApkG3rQvpdtpaCSD/nzAjIIpaO5c39yhFTCQS3/LRNZ
-         kVQwDUP+hlJ67qsSayZZ0ObhoRN+zQz3MQskuYL74pXx/CzuPg5gwNcu/Ax9+bg85SM1
-         Pa982juKAiobhF6OYgNYGLs/zTdgeDQA/I6pQxJr9cktPzhpoFmIH7cAWKy8vEnv+SRv
-         Rn8g==
-X-Gm-Message-State: AOAM530nYJjJOZan29nSxH0fd2o1WBQUH7ZWZ5ZBRVCqv1ipaVG0ywG/
-        oLjkRxdd6o+Iq5rs5XHHKkPZxEj+nVk=
-X-Google-Smtp-Source: ABdhPJyDx3MAzVctUS7978ihuhMpJuYGK9FEWO80QNPmP5CaKDEoqhisEbZErPGWxHz0QLZ7Rtf0oQ==
-X-Received: by 2002:a2e:7a11:: with SMTP id v17mr2727509ljc.33.1640100882577;
-        Tue, 21 Dec 2021 07:34:42 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id bf19sm2771177ljb.126.2021.12.21.07.34.41
+        bh=3MV0ltKVU5aGiovL6mP/hE02wLbeXe6GiccWT7VEyLM=;
+        b=RvZIIVNqO/iIc6VH6TgsN0eWuzQR+wy1PezsYvnv3CoE+Pu0nOnUu6bRWlU3qC5kXR
+         xsEEA+XKbWNijEE9zMf3O80votqiCmLBsnWCZaSJAIzCci2c2ReUvzYhqyN+v2nX9Y06
+         b2Bu2mhT7Z9pF9rjrbijf61mZzXDrpmd60GvxzQxkj94APpFs1I54NA3nxBLDv6lDvO7
+         kknw+WuHOVMd9p0y9FYij8ysHzT/+vy/KRHGx9eZv3RDjciejt8cr6+5K8NBl8Toa18T
+         owM5ZBPCFYqBqoGL0wS3hw2ujtv/afPUR547WeivGfCd4ZfnIpnwSMK9cyie9jOQlZnq
+         IX4A==
+X-Gm-Message-State: AOAM530B1d4Wui38nuzXJKi3bJrcxfAdjcWrrC6KxTcsVvCbSKjELCtc
+        gBBJFq+j+0TR1t3HreEbW2KmfMhyoFY=
+X-Google-Smtp-Source: ABdhPJxl9DTMybpYm1Ogu0bm4PEwfZNvP96siDes7hTrMy3PHVURoscfqPeplPOYgenMXh1LDNVr5g==
+X-Received: by 2002:a9d:6190:: with SMTP id g16mr2605685otk.54.1640100884458;
+        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q5sm114441oiv.2.2021.12.21.07.34.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:34:42 -0800 (PST)
-Subject: Re: [PATCH v1] memory: tegra30-emc: Print additional memory info
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20211217234711.8353-1-digetx@gmail.com>
- <fc5601e7-40e7-03c5-a433-859539f82144@canonical.com>
- <03a09ff5-fe2d-3ce2-a93b-4e44fd030ffb@gmail.com>
- <84487ed8-2f9d-c178-012b-8407e5083b87@canonical.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f775891b-12c4-ae6c-364c-abaa7ea3f249@gmail.com>
-Date:   Tue, 21 Dec 2021 18:34:41 +0300
+        Tue, 21 Dec 2021 07:34:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211221123944.2683245-1-demonsingur@gmail.com>
+ <20211221123944.2683245-9-demonsingur@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 09/10] hwmon: adt7x10: use
+ devm_hwmon_device_register_with_info
+Message-ID: <3532ca31-55e9-b000-ec18-910197f13c4f@roeck-us.net>
+Date:   Tue, 21 Dec 2021 07:34:42 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <84487ed8-2f9d-c178-012b-8407e5083b87@canonical.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211221123944.2683245-9-demonsingur@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-21.12.2021 11:14, Krzysztof Kozlowski пишет:
->>>> +static void emc_read_lpddr_sdram_info(struct tegra_emc *emc,
->>>> +				      unsigned int emem_dev)
->>>> +{
->>>> +	union lpddr2_basic_config4 basic_conf4;
->>>> +	unsigned int manufacturer_id;
->>>> +	unsigned int revision_id1;
->>>> +	unsigned int revision_id2;
->>>> +
->>>> +	/* these registers are standard for all LPDDR JEDEC memory chips */
->>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 5, &manufacturer_id);
->>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 6, &revision_id1);
->>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 7, &revision_id2);
->>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 8, &basic_conf4.value);
->>>> +
->>>> +	dev_info(emc->dev, "SDRAM[dev%u]: manufacturer: 0x%x (%s) rev1: 0x%x rev2: 0x%x prefetch: S%u density: %uMbit iowidth: %ubit\n",
->>>> +		 emem_dev, manufacturer_id,
->>>> +		 lpddr2_jedec_manufacturer(manufacturer_id),
->>>> +		 revision_id1, revision_id2,
->>>> +		 4 >> basic_conf4.arch_type,
->>>> +		 64 << basic_conf4.density,
->>>> +		 32 >> basic_conf4.io_width);
->>>> +}
->>>> +
->>> Quickly looking, these two functions are exactly the same as ones in
->>> tegra20-emc.c
->>> . Later you might come up with another set for other SoCs, so it looks
->>> it is worth to share these.
->> Should be too much trouble for not much gain, IMO. How many bytes will
->> be shared in the end? There is no much code here, we may lose more than
->> win. All these Tegra EMC drivers can be compiled as a loadable modules,
->> that's what distro kernels usually do. There are no plans for other SoCs
->> for today.
-> It's not about the bytes but source code lines to maintain and fix (if
-> there is something to fix). But if you don't plan to make a third copy
-> of it, it is okay.
+On 12/21/21 4:39 AM, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> 
+> To simplify core driver remove function.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>   drivers/hwmon/adt7x10.c | 12 +++---------
+>   1 file changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
+> index dd4901299590..c03805c72906 100644
+> --- a/drivers/hwmon/adt7x10.c
+> +++ b/drivers/hwmon/adt7x10.c
+> @@ -54,7 +54,6 @@
+>   /* Each client has this additional data */
+>   struct adt7x10_data {
+>   	const struct adt7x10_ops *ops;
+> -	struct device		*hwmon_dev;
+>   	struct device		*bus_dev;
+>   	struct mutex		update_lock;
+>   	u8			config;
+> @@ -430,8 +429,8 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+>   	if (ret)
+>   		goto exit_restore;
+>   
+> -	hdev = hwmon_device_register_with_info(dev, name, data,
+> -					       &adt7x10_chip_info, NULL);
+> +	hdev = devm_hwmon_device_register_with_info(dev, name, data,
+> +						    &adt7x10_chip_info, NULL);
+>   
+>   	if (IS_ERR(hdev)) {
+>   		ret = PTR_ERR(hdev);
+> @@ -445,15 +444,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+>   						IRQF_ONESHOT,
+>   						dev_name(dev), hdev);
+>   		if (ret)
+> -			goto exit_hwmon_device_unregister;
+> +			goto exit_restore;
+>   	}
+>   
+> -	data->hwmon_dev = hdev;
+> -
+>   	return 0;
+>   
+> -exit_hwmon_device_unregister:
+> -	hwmon_device_unregister(hdev);
+>   exit_restore:
+>   	adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+>   	return ret;
+> @@ -464,7 +459,6 @@ void adt7x10_remove(struct device *dev, int irq)
+>   {
+>   	struct adt7x10_data *data = dev_get_drvdata(dev);
+>   
+> -	hwmon_device_unregister(data->hwmon_dev);
+>   	if (data->oldconfig != data->config)
+>   		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
 
-Only Tegra114 SoC potentially supports LPDDR2, later SoCs dropped LPDDR2
-support. We don't even have memory driver for T114 at all in the today's
-mainline. I also doubt that there were any consumer T114 devices sold
-with LPDDR2. Hence we shouldn't have a need for the third copy anytime
-soon, likely ever.
+This doesn't work as-is because the hwmon device still exists at this point
+and at least in theory userspace could still write into the device
+after the old configuration was restored.
 
->> I don't see how that sharing could be done easily and nicely. Please
->> tell if you see.
-> Since it is not about duplicated object code, but code for review, it is
-> pretty straightforward:
-> 
-> 1. Create tegra-emc-common.[ch]
-> 2. In Makefile:
-> 
-> +tegra20_emc-y += tegra20-emc.o tegra-emc-common.o
-> 
-> +obj-$(CONFIG_TEGRA20_EMC)  += tegra20_emc.o
-> 
-> +
-> 
-> +tegra30_emc-y += tegra30-emc.o tegra-emc-common.o
-> 
-> +obj-$(CONFIG_TEGRA30_EMC)  += tegra30_emc.o
-> 
+To fix this, you'll need a preceding patch to introduce adt7x10_restore_config()
+or similar, and call it through devm_add_action_or_reset() after updating the
+chip configuration. You can then drop the restore code from here and from
+the exist_restore code in the probe function.
+After that, you can use devm_hwmon_device_register_with_info() and drop the
+remove function entirely.
 
-The problem that struct tegra_emc isn't shareable and this common code
-should introduce messiness to the Tegra EMC drivers. I'd prefer not to
-share anything for now and get back to this option with sharing later
-on, if will be another good reason.
+Guenter

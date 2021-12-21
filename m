@@ -2,469 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 718C947C6AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D70C47C6B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241392AbhLUSdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:33:17 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:10598 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233866AbhLUSdQ (ORCPT
+        id S236235AbhLUSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:38:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54846 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241405AbhLUSin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:33:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640111596; x=1671647596;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=MKC1cRMVuKLOEQhZCVNw99vbmhu8dXfH/KpzNgh9m+Y=;
-  b=MQtsWkvrAtRfjn8HJ38t/R2KIiXdVRyTj1EVBMfrzRSVcnr4VKgc8Iop
-   RT5yysE9xCiVO2uO8W5+BVTaS+HAf1gx4Ulm1NJjGZW2CmJOekV7snrZ/
-   PDnHC152uRpOX4/GLVqB9UfkkaW+BAERIM2uLYLBgThLO1/r39EVxD6QX
-   4=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Dec 2021 10:33:16 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 10:33:15 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 10:33:15 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 10:33:14 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 2/2] drm/msm/dp: do not initialize phy until plugin interrupt received
-Date:   Tue, 21 Dec 2021 10:33:07 -0800
-Message-ID: <1640111587-30200-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 21 Dec 2021 13:38:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640111922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ay+hHPn3ZbkucnHux9lLB/ZyzbzyXlY5HPlEik2yfME=;
+        b=UHQnh62RYd6uWd86aSweqviGgPJBqnQmAbXgRWg5Zd+esTAUYpoXhIy0q1sY/8B0VfjkgO
+        0yhmy4vLMmCMyF4G4sMTXdZeAdEBeR9BFogT0DB3BglIN3FONwEwVDTBy5cjVtN2QOCtVw
+        6kdu0V8ZObNSiDmJ4hxPPietxqOy7bc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-_9etlqA8MU2QLp8Z7As2Uw-1; Tue, 21 Dec 2021 13:38:41 -0500
+X-MC-Unique: _9etlqA8MU2QLp8Z7As2Uw-1
+Received: by mail-ed1-f70.google.com with SMTP id h22-20020a056402281600b003f839627a38so7275305ede.23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:38:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ay+hHPn3ZbkucnHux9lLB/ZyzbzyXlY5HPlEik2yfME=;
+        b=tb/aZT56XWHpEy/mg69j3mwVdHWBPXwOYnvE4Kzyx19Tv/kS3milGQ2mY8XokK5kXl
+         4Q6t8ecrAMQLG3kU5r0eMC6aZYnHpGD+H+06kfmVj/UfplYoEHS7WC382R+x476l8ypI
+         qM8pamB1aYwYFfUwRrKP27LqjGRdMPTlEC831QBGEp28ikzCI7KB55UTpQ1gk73xEdba
+         AlEvh3oAq4aWMXwF8E8zr7IcS+itDUJtDEAMdMhjoIypcobUjNpiB51GNJp88QcTRyOr
+         vlsxgK51ReHvPvFKEa/hHGL1WJ2z+q0V6nbzQ7T1ARPwVN4rERpGfb25D9HSyPe6XAl3
+         yT7w==
+X-Gm-Message-State: AOAM5300l25c44lRpRHnnOPR2zbhfjj9kKegOaefgYvEhiXXJGHuFF6M
+        a6R/NZda5PJpZrEdNu27OiMCCFd3Q1K+GTGO6lLGibNO5AjHyOgHyt1WadJeF1wQPD67IAlMt+K
+        LwBNBHS/2cA5xHa+4nTlaQQxo
+X-Received: by 2002:a17:906:c110:: with SMTP id do16mr2763158ejc.625.1640111920034;
+        Tue, 21 Dec 2021 10:38:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxmK2zX/ZNwqmdTy7V2hyclXI/2mnVzG9TwQNXBlrGUsBDzKS/mDQx2Gts3xnsNqEOBwO1Tlg==
+X-Received: by 2002:a17:906:c110:: with SMTP id do16mr2763139ejc.625.1640111919801;
+        Tue, 21 Dec 2021 10:38:39 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id zh8sm5055872ejb.21.2021.12.21.10.38.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:38:39 -0800 (PST)
+Message-ID: <8c9d0a86-cbbb-be1b-41b1-61f27890b77d@redhat.com>
+Date:   Tue, 21 Dec 2021 19:38:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from MFD
+ to Auxiliary Bus
+Content-Language: en-US
+To:     david.e.box@linux.intel.com, Greg KH <gregkh@linuxfoundation.org>
+Cc:     lee.jones@linaro.org, bhelgaas@google.com,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+References: <20211208015015.891275-1-david.e.box@linux.intel.com>
+ <20211208015015.891275-4-david.e.box@linux.intel.com>
+ <YbDbql39x7Kw6iAC@kroah.com>
+ <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
+ <YbD1NsYHbU8FvtTN@kroah.com>
+ <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
+ <YbEFuN7fwdiNI8vW@kroah.com>
+ <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
+ <YcGEaH0oAAocziU2@kroah.com>
+ <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
+ <YcIGwZqm2sfIixkH@kroah.com>
+ <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
+ <be2a1cce5691e5dc7fb875f46d5f2085b6a55542.camel@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <be2a1cce5691e5dc7fb875f46d5f2085b6a55542.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current DP drivers have regulators, clocks, irq and phy are grouped
-together within a function and executed not in a symmetric manner.
-This increase difficulty of code maintenance and limited code scalability.
-This patch divides the driver life cycle of operation into four states,
-resume (including booting up), dongle plugin, dongle unplugged and suspend.
-Regulators, core clocks and irq are grouped together and enabled at resume
-(or booting up) so that the DP controller is armed and ready to receive HPD
-plugin interrupts. HPD plugin interrupt is generated when a dongle plugs
-into DUT (device under test). Once HPD plugin interrupt is received, DP
-controller will initialize phy so that dpcd read/write will function and
-following link training can be proceeded successfully. DP phy will be
-disabled after main link is teared down at end of unplugged HPD interrupt
-handle triggered by dongle unplugged out of DUT. Finally regulators, code
-clocks and irq are disabled at corresponding suspension.
+Hi,
 
-Changes in V2:
--- removed unnecessary dp_ctrl NULL check
--- removed unnecessary phy init_count and power_count DRM_DEBUG_DP logs
--- remove flip parameter out of dp_ctrl_irq_enable()
--- add fixes tag
+On 12/21/21 19:16, David E. Box wrote:
+> On Tue, 2021-12-21 at 18:04 +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 12/21/21 17:54, Greg KH wrote:
+>>> On Tue, Dec 21, 2021 at 08:44:57AM -0800, David E. Box wrote:
+>>>> On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
+>>>>> On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
+>>>>>> On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
+>>>>>>> On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
+>>>>>>>> On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
+>>>>>>>>> On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
+>>>>>>>>>> On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
+>>>>>>>>>>> On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box
+>>>>>>>>>>> wrote:
+>>>>>>>>>>>> +static struct pci_driver intel_vsec_pci_driver = {
+>>>>>>>>>>>> +       .name = "intel_vsec",
+>>>>>>>>>>>> +       .id_table = intel_vsec_pci_ids,
+>>>>>>>>>>>> +       .probe = intel_vsec_pci_probe,
+>>>>>>>>>>>> +};
+>>>>>>>>>>>
+>>>>>>>>>>> So when the PCI device is removed from the system you leak
+>>>>>>>>>>> resources and
+>>>>>>>>>>> have dangling devices?
+>>>>>>>>>>
+>>>>>>>>>> No.
+>>>>>>>>>>
+>>>>>>>>>>> Why no PCI remove driver callback?
+>>>>>>>>>>
+>>>>>>>>>> After probe all resources are device managed. There's nothing
+>>>>>>>>>> to
+>>>>>>>>>> explicitly clean up. When
+>>>>>>>>>> the
+>>>>>>>>>> PCI
+>>>>>>>>>> device is removed, all aux devices are automatically removed.
+>>>>>>>>>> This
+>>>>>>>>>> is the case for the SDSi
+>>>>>>>>>> driver
+>>>>>>>>>> as well.
+>>>>>>>>>
+>>>>>>>>> Where is the "automatic cleanup" happening?  As this pci driver
+>>>>>>>>> is
+>>>>>>>>> bound
+>>>>>>>>> to the PCI device, when the device is removed, what is called in
+>>>>>>>>> this
+>>>>>>>>> driver to remove the resources allocated in the probe callback?
+>>>>>>>>>
+>>>>>>>>> confused,
+>>>>>>>>
+>>>>>>>> devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux,
+>>>>>>>> auxdev)
+>>>>>>>
+>>>>>>> Wow that is opaque.  Why not do it on remove instead?
+>>>>>>
+>>>>>> This code is common for auxdev cleanup. AFAICT most auxiliary bus code
+>>>>>> is
+>>>>>> done by drivers that have
+>>>>>> some other primary function. They clean up their primary function
+>>>>>> resources
+>>>>>> in remove, but they
+>>>>>> clean up the auxdev using the method above. In this case the sole
+>>>>>> purpose of
+>>>>>> this driver is to
+>>>>>> create the auxdev. There are no other resources beyond what the auxdev
+>>>>>> is
+>>>>>> using.
+>>>>>>
+>>>>>> Adding runtime pm to the pci driver will change this. Remove will be
+>>>>>> needed
+>>>>>> then.
+>>>>>
+>>>>> And who will notice that being required when that happens?
+>>>>>
+>>>>> Why is there no runtime PM for this driver?  Do you not care about power
+>>>>> consumption?  :)
+>>>>
+>>>> Of course. :)
+>>>>
+>>>> There's a backlog of patches waiting for this series. One adds support for
+>>>> the
+>>>> telemetry device (an auxdev) on the DG2 GPU. This device requires runtime
+>>>> pm in
+>>>> order for the slot to go D3. But this also requires changes to the
+>>>> telemetry
+>>>> driver in order for runtime pm to be handled correctly. These and other
+>>>> patches,
+>>>> including a series to have all current aux drivers use the new drvdata
+>>>> helpers,
+>>>> are waiting for this.
+>>>
+>>> I can take the aux driver drvdata patch now, through my tree, if you
+>>> want, no need to make it wait for this tiny driver.
+>>>
+>>> Feel free to send it independant of the existing patchset, and with the
+>>> cleanup patches at the same time, should be quite easy to get merged.
+>>
+>> If you're going to take that one, can you perhaps take patches
+>> 1-3 for 5.17 through your tree as well (patch 3 depends on 2/it) ?
+>>
+>> Note there is a v4 of this series, see please use that :)
+>>
+>> I assume the follow up patches are also going to need patch 3
+>> (the actual conversion of the driver to aux-bus).
+> 
+> Yes.
+> 
+>>
+>> Here is my Ack for the pdx86 bits in patch 3:
+>>
+>> Acked-by: Hans de Goede <hdegoede@redhat.com>
+>>
+>> And patch 1 and 3 also have acks from the PCI resp. MFD subsys maintainers,
+>> so I guess taking this all upstream through your tree is fine.
+> 
+> Should I send 1-3 plus the drvdata cleanup patches I have to Grep? V5?
 
-Changes in V3:
--- call dp_display_host_phy_init() instead of dp_ctrl_phy_init() at
-        dp_display_host_init() for eDP
+No there is no need for that v4 is fine, since no changes have been
+requested there is no need to send out a new version.
 
-Changes in V4:
--- rewording commit text to match this commit changes
+Regards,
 
-Changes in V5:
--- rebase on top of msm-next branch
-
-Changes in V6:
--- delete flip variable
-
-Changes in V7:
--- dp_ctrl_irq_enable/disabe() merged into dp_ctrl_reset_irq_ctrl()
-
-Changes in V8:
--- add more detail comment regrading dp phy at dp_display_host_init()
-
-Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 77 ++++++++++++--------------------
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  8 ++--
- drivers/gpu/drm/msm/dp/dp_display.c | 87 +++++++++++++++++++++++++++----------
- 3 files changed, 95 insertions(+), 77 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index c724cb0..39558a2 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1365,60 +1365,44 @@ static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl)
- 	return ret;
- }
- 
--int dp_ctrl_host_init(struct dp_ctrl *dp_ctrl, bool flip, bool reset)
-+void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
-+{
-+	struct dp_ctrl_private *ctrl;
-+
-+	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-+
-+	dp_catalog_ctrl_reset(ctrl->catalog);
-+
-+	if (enable)
-+		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-+}
-+
-+void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
- {
- 	struct dp_ctrl_private *ctrl;
- 	struct dp_io *dp_io;
- 	struct phy *phy;
- 
--	if (!dp_ctrl) {
--		DRM_ERROR("Invalid input data\n");
--		return -EINVAL;
--	}
--
- 	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
- 	dp_io = &ctrl->parser->io;
- 	phy = dp_io->phy;
- 
--	ctrl->dp_ctrl.orientation = flip;
--
--	if (reset)
--		dp_catalog_ctrl_reset(ctrl->catalog);
--
--	DRM_DEBUG_DP("flip=%d\n", flip);
- 	dp_catalog_ctrl_phy_reset(ctrl->catalog);
- 	phy_init(phy);
--	dp_catalog_ctrl_enable_irq(ctrl->catalog, true);
--
--	return 0;
- }
- 
--/**
-- * dp_ctrl_host_deinit() - Uninitialize DP controller
-- * @dp_ctrl: Display Port Driver data
-- *
-- * Perform required steps to uninitialize DP controller
-- * and its resources.
-- */
--void dp_ctrl_host_deinit(struct dp_ctrl *dp_ctrl)
-+void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl)
- {
- 	struct dp_ctrl_private *ctrl;
- 	struct dp_io *dp_io;
- 	struct phy *phy;
- 
--	if (!dp_ctrl) {
--		DRM_ERROR("Invalid input data\n");
--		return;
--	}
--
- 	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
- 	dp_io = &ctrl->parser->io;
- 	phy = dp_io->phy;
- 
--	dp_catalog_ctrl_enable_irq(ctrl->catalog, false);
-+	dp_catalog_ctrl_phy_reset(ctrl->catalog);
- 	phy_exit(phy);
--
--	DRM_DEBUG_DP("Host deinitialized successfully\n");
- }
- 
- static bool dp_ctrl_use_fixed_nvid(struct dp_ctrl_private *ctrl)
-@@ -1893,8 +1877,14 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
- 		return ret;
- 	}
- 
-+	DRM_DEBUG_DP("Before, phy=%x init_count=%d power_on=%d\n",
-+		(u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-+
- 	phy_power_off(phy);
- 
-+	DRM_DEBUG_DP("After, phy=%x init_count=%d power_on=%d\n",
-+		(u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-+
- 	/* aux channel down, reinit phy */
- 	phy_exit(phy);
- 	phy_init(phy);
-@@ -1903,23 +1893,6 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
- 	return ret;
- }
- 
--void dp_ctrl_off_phy(struct dp_ctrl *dp_ctrl)
--{
--	struct dp_ctrl_private *ctrl;
--	struct dp_io *dp_io;
--	struct phy *phy;
--
--	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
--	dp_io = &ctrl->parser->io;
--	phy = dp_io->phy;
--
--	dp_catalog_ctrl_reset(ctrl->catalog);
--
--	phy_exit(phy);
--
--	DRM_DEBUG_DP("DP off phy done\n");
--}
--
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
- {
- 	struct dp_ctrl_private *ctrl;
-@@ -1947,10 +1920,14 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
- 		DRM_ERROR("Failed to disable link clocks. ret=%d\n", ret);
- 	}
- 
-+	DRM_DEBUG_DP("Before, phy=%x init_count=%d power_on=%d\n",
-+		(u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-+
- 	phy_power_off(phy);
--	phy_exit(phy);
- 
--	DRM_DEBUG_DP("DP off done\n");
-+	DRM_DEBUG_DP("After, phy=%x init_count=%d power_on=%d\n",
-+		(u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-+
- 	return ret;
- }
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 2363a2d..2433edb 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -19,12 +19,9 @@ struct dp_ctrl {
- 	u32 pixel_rate;
- };
- 
--int dp_ctrl_host_init(struct dp_ctrl *dp_ctrl, bool flip, bool reset);
--void dp_ctrl_host_deinit(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
--void dp_ctrl_off_phy(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
- void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
-@@ -34,4 +31,9 @@ struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
- 			struct dp_power *power, struct dp_catalog *catalog,
- 			struct dp_parser *parser);
- 
-+void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable);
-+void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl);
-+void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl);
-+void dp_ctrl_irq_phy_exit(struct dp_ctrl *dp_ctrl);
-+
- #endif /* _DP_CTRL_H_ */
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 0766752..3449d3f 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -83,6 +83,7 @@ struct dp_display_private {
- 
- 	/* state variables */
- 	bool core_initialized;
-+	bool phy_initialized;
- 	bool hpd_irq_on;
- 	bool audio_supported;
- 
-@@ -371,21 +372,49 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	return rc;
- }
- 
--static void dp_display_host_init(struct dp_display_private *dp, int reset)
-+static void dp_display_host_phy_init(struct dp_display_private *dp)
- {
--	bool flip = false;
-+	DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
-+			dp->core_initialized, dp->phy_initialized);
- 
-+	if (!dp->phy_initialized) {
-+		dp_ctrl_phy_init(dp->ctrl);
-+		dp->phy_initialized = true;
-+	}
-+}
-+
-+static void dp_display_host_phy_exit(struct dp_display_private *dp)
-+{
-+	DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
-+			dp->core_initialized, dp->phy_initialized);
-+
-+	if (dp->phy_initialized) {
-+		dp_ctrl_phy_exit(dp->ctrl);
-+		dp->phy_initialized = false;
-+	}
-+}
-+
-+static void dp_display_host_init(struct dp_display_private *dp)
-+{
- 	DRM_DEBUG_DP("core_initialized=%d\n", dp->core_initialized);
- 	if (dp->core_initialized) {
- 		DRM_DEBUG_DP("DP core already initialized\n");
- 		return;
- 	}
- 
--	if (dp->usbpd->orientation == ORIENTATION_CC2)
--		flip = true;
-+	dp_power_init(dp->power, false);
-+	dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
-+
-+	/*
-+	 * eDP is the embedded primary display and has its own phy
-+	 * so initialize phy immediately.
-+	 * Sice DP share phy with usb, to avoid any phy initialization
-+	 * confliction, DP phy will be initialized when dongle/cable
-+	 * plugged in.
-+	 */
-+	if (dp->dp_display.connector_type == DRM_MODE_CONNECTOR_eDP)
-+		dp_display_host_phy_init(dp);
- 
--	dp_power_init(dp->power, flip);
--	dp_ctrl_host_init(dp->ctrl, flip, reset);
- 	dp_aux_init(dp->aux);
- 	dp->core_initialized = true;
- }
-@@ -397,7 +426,7 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
- 		return;
- 	}
- 
--	dp_ctrl_host_deinit(dp->ctrl);
-+	dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
- 	dp_aux_deinit(dp->aux);
- 	dp_power_deinit(dp->power);
- 
-@@ -408,7 +437,7 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
- {
- 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
- 
--	dp_display_host_init(dp, false);
-+	dp_display_host_phy_init(dp);
- 
- 	return dp_display_process_hpd_high(dp);
- }
-@@ -532,7 +561,7 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
- 		dp->hpd_state = ST_DISCONNECTED;
- 
- 		if (ret == -ECONNRESET) { /* cable unplugged */
--			dp->core_initialized = false;
-+			dp->phy_initialized = false;
- 		}
- 
- 	} else {
-@@ -604,8 +633,7 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 	if (state == ST_DISCONNECTED) {
- 		/* triggered by irq_hdp with sink_count = 0 */
- 		if (dp->link->sink_count == 0) {
--			dp_ctrl_off_phy(dp->ctrl);
--			dp->core_initialized = false;
-+			dp_display_host_phy_exit(dp);
- 		}
- 		mutex_unlock(&dp->event_mutex);
- 		return 0;
-@@ -698,9 +726,8 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
- 	 */
- 	if (dp->core_initialized) {
- 		ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
--		if (ret == -ECONNRESET) { /* cable unplugged */
--			dp->core_initialized = false;
--		}
-+		if (ret == -ECONNRESET)	/* cable unplugged */
-+			dp->phy_initialized = false;
- 	}
- 	DRM_DEBUG_DP("hpd_state=%d\n", state);
- 
-@@ -892,12 +919,19 @@ static int dp_display_disable(struct dp_display_private *dp, u32 data)
- 
- 	dp_display->audio_enabled = false;
- 
--	/* triggered by irq_hpd with sink_count = 0 */
- 	if (dp->link->sink_count == 0) {
-+		/*
-+		 * irq_hpd with sink_count = 0
-+		 * hdmi unplugged out of dongle
-+		 */
- 		dp_ctrl_off_link_stream(dp->ctrl);
- 	} else {
-+		/*
-+		 * unplugged interrupt
-+		 * dongle unplugged out of DUT
-+		 */
- 		dp_ctrl_off(dp->ctrl);
--		dp->core_initialized = false;
-+		dp_display_host_phy_exit(dp);
- 	}
- 
- 	dp_display->power_on = false;
-@@ -1027,7 +1061,7 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp)
- static void dp_display_config_hpd(struct dp_display_private *dp)
- {
- 
--	dp_display_host_init(dp, true);
-+	dp_display_host_init(dp);
- 	dp_catalog_ctrl_hpd_config(dp->catalog);
- 
- 	/* Enable interrupt first time
-@@ -1306,20 +1340,23 @@ static int dp_pm_resume(struct device *dev)
- 	dp->hpd_state = ST_DISCONNECTED;
- 
- 	/* turn on dp ctrl/phy */
--	dp_display_host_init(dp, true);
-+	dp_display_host_init(dp);
- 
- 	dp_catalog_ctrl_hpd_config(dp->catalog);
- 
--	/*
--	 * set sink to normal operation mode -- D0
--	 * before dpcd read
--	 */
--	dp_link_psm_config(dp->link, &dp->panel->link_info, false);
- 
- 	if (dp_catalog_link_is_connected(dp->catalog)) {
-+		/*
-+		 * set sink to normal operation mode -- D0
-+		 * before dpcd read
-+		 */
-+		dp_display_host_phy_init(dp);
-+		dp_link_psm_config(dp->link, &dp->panel->link_info, false);
- 		sink_count = drm_dp_read_sink_count(dp->aux);
- 		if (sink_count < 0)
- 			sink_count = 0;
-+
-+		dp_display_host_phy_exit(dp);
- 	}
- 
- 	dp->link->sink_count = sink_count;
-@@ -1366,6 +1403,8 @@ static int dp_pm_suspend(struct device *dev)
- 		dp_display_host_deinit(dp);
- 	}
- 
-+	dp_display_host_phy_exit(dp);
-+
- 	dp->hpd_state = ST_SUSPENDED;
- 
- 	/* host_init will be called at pm_resume */
-@@ -1523,7 +1562,7 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
- 	state =  dp_display->hpd_state;
- 
- 	if (state == ST_DISPLAY_OFF)
--		dp_display_host_init(dp_display, true);
-+		dp_display_host_phy_init(dp_display);
- 
- 	dp_display_enable(dp_display, 0);
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Hans
 

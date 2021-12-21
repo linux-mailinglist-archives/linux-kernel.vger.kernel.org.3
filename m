@@ -2,272 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BB147C7CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627B747C7D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241919AbhLUTwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 14:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhLUTwh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 14:52:37 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC397C061574;
-        Tue, 21 Dec 2021 11:52:36 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id bk14so394350oib.7;
-        Tue, 21 Dec 2021 11:52:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=G8xwXNs0/A4OcQxmIObsZEJvT3yBUuKYO/Na1Gfo+IE=;
-        b=i4iaNxxgQ5957L++RTush1h/d2j8s0RCoDpYBVwKE4Eo1Lisva6Mkb/6ijUqa7SXTY
-         Hh+nIk5+iIqSN88OMMbb7OOAxotfqSeAOHStq5eFmnlJBSnVSGPpPEnCZKqgmWP6OSm8
-         +NhQKa0ett9iidBvhuFYcm0IjJXbxyOJyMN51bGnjUHTmm+Ey/g5p+V0k/2Ysyr1gWS9
-         IgtZFDRy5bD6yFua1SErYIJ2JlERYt4J1VqkjX+hGZUT317QLRQ2TwaS1NDeCd7neJdr
-         n919dad/WbTfsnyaJ8HOnzQA4WyuGhbL31AbDF9FOZvfhKnPF09RfcF/gCcX5iuv5Op4
-         ahBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=G8xwXNs0/A4OcQxmIObsZEJvT3yBUuKYO/Na1Gfo+IE=;
-        b=hlVp11kyXZUAvrAsGDzxap5AEZ3ak5OCQ7W7a8m3Ms/6sHFJ5PooegEdxa1uSdn4x2
-         Bb+Q1uHtn+9JDjTw7pdq03cbzKNltPcbDnhfDY9l2ofYVACYRPpCnR/FRJcb2GGPItJX
-         Nv3alzb3E5FzTE9hsFbGzahIG3qcKkjJi/46ZsBSB6rX8orIxCk+crFG+HmftqIX6P1o
-         U/xeWL9ZveMfMZuoXmyUOGNR48RBDk/NgOMRq7XTFzun0ImB4LeENJb15LFMOUDai3Xn
-         /UaMvATkSnfV5Dgyvzv2QDkGsM6CqX5UuoY1Fc7rYGl5poQUjqpMpDr3xlxRsCl4kTJJ
-         0q7Q==
-X-Gm-Message-State: AOAM533yOi9+0NukeSt0VlfQ67AeuDFBk4Re2llgZfUt0batnXjQ8r9g
-        37C/lOJ47cXA9h9ePpIT7CoTD8Gv0ap0QpYeFwo=
-X-Google-Smtp-Source: ABdhPJz9v9lcv80djuxVUaYbEIuNjEIWYVy+nW+16fjTwvNdkNKCi7KGIPZKat8fMEtKoaCJJFpBnEuWLUXqCMDGncA=
-X-Received: by 2002:aca:ea55:: with SMTP id i82mr25609oih.96.1640116356248;
- Tue, 21 Dec 2021 11:52:36 -0800 (PST)
+        id S241935AbhLUTyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 14:54:18 -0500
+Received: from mga11.intel.com ([192.55.52.93]:3774 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241930AbhLUTyR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 14:54:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640116457; x=1671652457;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KqyXKHG7JsPgxEKwB6VpV/smJwmPoEUQbrSxZ2bCCV0=;
+  b=McwmaTZ5ytP6YQPtrCnNBYpu+c3QqjgV2Kbw97+KPn+lQw4vFWOPD/MO
+   RpQyHTe60D7kDE8hDAgj1g7ljEaByrc9OA5DagzK7JGQv17Fymv/Hua61
+   18B7rDji9Fa/XMZQy5rCarnuWLc7nurOaqc4p0qPQ6CqQ2wB4QpuxQ8oj
+   XVY7sctN6k2RPJtpdw75MQ/Wr78c6OQDJcLuzVap671hrIoczxGjPQ97K
+   Z9jjpf+FOr8KzFP5tpg9INZAyhEHa4o3jqFDI4Fv1Pk+9TTK76vvIseET
+   c6Doaf6aaMjrnxYfdne3QdJH1Y8WeDov0i5dj1ebyKVffTPVQYUBPmPul
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238017031"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="238017031"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 11:54:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="548317016"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 21 Dec 2021 11:54:14 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzlDB-0009U5-NV; Tue, 21 Dec 2021 19:54:13 +0000
+Date:   Wed, 22 Dec 2021 03:54:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: [davidhildenbrand:unshare_new 3/4] mm/gup.c:39:6: error: conflicting
+ types for 'gup_must_unshare'
+Message-ID: <202112220333.iWZqSzKw-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
- <Ybtrs56tSBbmyt5c@google.com> <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
- <Ybtzr5ZmD/IKjycz@google.com> <Ybtz/0gflbkG5Q/0@google.com>
- <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
- <CADvbK_cxMbYwkuN_ZUvHY-7ahc9ff+jbuPkKn6CA=yqMk=SKVw@mail.gmail.com>
- <YbuNZtV/pjDszTad@google.com> <CADvbK_f7wY_tknw5wTo369-2aRSvhhkETwmdu9tRbgfeyyTQng@mail.gmail.com>
- <YcBFSo/4WsMOls8Y@google.com>
-In-Reply-To: <YcBFSo/4WsMOls8Y@google.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 21 Dec 2021 14:52:24 -0500
-Message-ID: <CADvbK_dF-+3J5HOGsmmvA4by=STNLEaWszZjNOOAdEkrstpYEQ@mail.gmail.com>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>, Hui Huang <hui.huang@nokia.com>,
-        network dev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 3:56 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Sun, 19 Dec 2021, Xin Long wrote:
->
-> > On Thu, Dec 16, 2021 at 2:03 PM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > >
-> > > > (
-> > > >
-> > > > On Thu, Dec 16, 2021 at 1:12 PM Xin Long <lucien.xin@gmail.com> wro=
-te:
-> > > > >
-> > > > > On Thu, Dec 16, 2021 at 12:14 PM Lee Jones <lee.jones@linaro.org>=
- wrote:
-> > > > > >
-> > > > > > On Thu, 16 Dec 2021, Lee Jones wrote:
-> > > > > >
-> > > > > > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > > > > > >
-> > > > > > > > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linar=
-o.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > > > > > > > >
-> > > > > > > > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@ke=
-rnel.org> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
-> > > > > > > > > > > > The cause of the resultant dump_stack() reported be=
-low is a
-> > > > > > > > > > > > dereference of a freed pointer to 'struct sctp_endp=
-oint' in
-> > > > > > > > > > > > sctp_sock_dump().
-> > > > > > > > > > > >
-> > > > > > > > > > > > This race condition occurs when a transport is cach=
-ed into its
-> > > > > > > > > > > > associated hash table followed by an endpoint/sock =
-migration to a new
-> > > > > > > > > > > > association in sctp_assoc_migrate() prior to their =
-subsequent use in
-> > > > > > > > > > > > sctp_diag_dump() which uses sctp_for_each_transport=
-() to walk the hash
-> > > > > > > > > > > > table calling into sctp_sock_dump() where the deref=
-erence occurs.
-> > > > > > > > >
-> > > > > > > > > > in sctp_sock_dump():
-> > > > > > > > > >         struct sock *sk =3D ep->base.sk;
-> > > > > > > > > >         ... <--[1]
-> > > > > > > > > >         lock_sock(sk);
-> > > > > > > > > >
-> > > > > > > > > > Do you mean in [1], the sk is peeled off and gets freed=
- elsewhere?
-> > > > > > > > >
-> > > > > > > > > 'ep' and 'sk' are both switched out for new ones in sctp_=
-sock_migrate().
-> > > > > > > > >
-> > > > > > > > > > if that's true, it's still late to do sock_hold(sk) in =
-your this patch.
-> > > > > > > > >
-> > > > > > > > > No, that's not right.
-> > > > > > > > >
-> > > > > > > > > The schedule happens *inside* the lock_sock() call.
-> > > > > > > > Sorry, I don't follow this.
-> > > > > > > > We can't expect when the schedule happens, why do you think=
- this
-> > > > > > > > can never be scheduled before the lock_sock() call?
-> > > > > > >
-> > > > > > > True, but I've had this running for hours and it hasn't repro=
-duced.
-> > > > > I understand, but it's a crash, we shouldn't take any risk that i=
-t
-> > > > > will never happen.
-> > > > > you may try to add a usleep() before the lock_sock call to reprod=
-uce it.
-> > > > >
-> > > > > > >
-> > > > > > > Without this patch, I can reproduce this in around 2 seconds.
-> > > > > > >
-> > > > > > > The C-repro for this is pretty intense!
-> > > > > > >
-> > > > > > > If you want to be *sure* that a schedule will never happen, w=
-e can
-> > > > > > > take a reference directly with:
-> > > > > > >
-> > > > > > >      ep =3D sctp_endpoint_hold(tsp->asoc->ep);
-> > > > > > >      sk =3D sock_hold(ep->base.sk);
-> > > > > > >
-> > > > > > > Which was my original plan before I soak tested this submitte=
-d patch
-> > > > > > > for hours without any sign of reproducing the issue.
-> > > > > we tried to not export sctp_obj_hold/put(), that's why we had
-> > > > > sctp_for_each_transport().
-> > > > >
-> > > > > ep itself holds a reference of sk when it's alive, so it's weird =
-to do
-> > > > > these 2 together.
-> > > > >
-> > > > > > >
-> > > > > > > > If the sock is peeled off or is being freed, we shouldn't d=
-ump this sock,
-> > > > > > > > and it's better to skip it.
-> > > > > > >
-> > > > > > > I guess we can do that too.
-> > > > > > >
-> > > > > > > Are you suggesting sctp_sock_migrate() as the call site?
-> > > > > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> > > > > index 85ac2e901ffc..56ea7a0e2add 100644
-> > > > > --- a/net/sctp/socket.c
-> > > > > +++ b/net/sctp/socket.c
-> > > > > @@ -9868,6 +9868,7 @@ static int sctp_sock_migrate(struct sock *o=
-ldsk,
-> > > > > struct sock *newsk,
-> > > > >                 inet_sk_set_state(newsk, SCTP_SS_ESTABLISHED);
-> > > > >         }
-> > > > >
-> > > > > +       sock_set_flag(oldsk, SOCK_RCU_FREE);
-> > > > >         release_sock(newsk);
-> > > > >
-> > > > >         return 0;
-> > > > >
-> > > > > SOCK_RCU_FREE is set to the previous sk, so that this sk will not
-> > > > > be freed between rcu_read_lock() and rcu_read_unlock().
-> > > > >
-> > > > > >
-> > > > > > Also, when are you planning on testing the flag?
-> > > > > SOCK_RCU_FREE flag is used when freeing sk in sk_destruct(),
-> > > > > and if it's set, it will be freed in the next grace period of RCU=
-.
-> > > > >
-> > > > > >
-> > > > > > Won't that suffer with the same issue(s)?
-> > > > > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-> > > > > index 7970d786c4a2..b4c4acd9e67e 100644
-> > > > > --- a/net/sctp/diag.c
-> > > > > +++ b/net/sctp/diag.c
-> > > > > @@ -309,16 +309,21 @@ static int sctp_tsp_dump_one(struct
-> > > > > sctp_transport *tsp, void *p)
-> > > > >
-> > > > >  static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
-> > > > >  {
-> > > > > -       struct sctp_endpoint *ep =3D tsp->asoc->ep;
-> > > > >         struct sctp_comm_param *commp =3D p;
-> > > > > -       struct sock *sk =3D ep->base.sk;
-> > > > >         struct sk_buff *skb =3D commp->skb;
-> > > > >         struct netlink_callback *cb =3D commp->cb;
-> > > > >         const struct inet_diag_req_v2 *r =3D commp->r;
-> > > > >         struct sctp_association *assoc;
-> > > > > +       struct sctp_endpoint *ep;
-> > > > > +       struct sock *sk;
-> > > > >         int err =3D 0;
-> > > > >
-> > > > > +       rcu_read_lock();
-> > > > > +       ep =3D tsp->asoc->ep;
-> > > > > +       sk =3D ep->base.sk;
-> > > > >         lock_sock(sk);
-> > > > Unfortunately, this isn't going to work, as lock_sock() may sleep,
-> > > > and is not allowed to be called understand rcu_read_lock() :(
-> > >
-> > > Ah!
-> > >
-> > > How about my original solution of taking:
-> > >
-> > >   tsp->asoc->ep
-> > >
-> > > ... directly?
-> > >
-> > > If it already holds the sk, we should be golden?
-> > Both ep and sk could be destroyed at this moment.
-> > you can't try to hold an object that has already been destroyed.
-> > It holds the sk only when ep is still alive.
-> >
-> > I don't see a way to get this fix with the current transport hashtable.
-> > I will change to use port hashtable to dump sock/asocs for this.
->
-> Right.  Cache invalidation is hard!
->
-> Sure, if there is a better way, please go ahead.
-Hi, Jones,
+tree:   git://github.com/davidhildenbrand/linux unshare_new
+head:   0b0d58f51fe2675e4dcfb11263ad4cbec053711f
+commit: d3eb6d68346c3d9e89ae68461e0eabb5bc7def17 [3/4] mm: gup: trigger unsharing via FAULT_FLAG_UNSHARE when required (!hugetlb)
+config: hexagon-randconfig-r045-20211220 (https://download.01.org/0day-ci/archive/20211222/202112220333.iWZqSzKw-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 555eacf75f21cd1dfc6363d73ad187b730349543)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/davidhildenbrand/linux/commit/d3eb6d68346c3d9e89ae68461e0eabb5bc7def17
+        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
+        git fetch --no-tags davidhildenbrand unshare_new
+        git checkout d3eb6d68346c3d9e89ae68461e0eabb5bc7def17
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Port hashtable doesn't work either as lock_sock can not be called
-under spin_lock().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I posted another patch where this issue can be fixed by moving ep free
-to call_rcu().
-It will be great if you are able to test it.
+All error/warnings (new ones prefixed by >>):
 
-Thanks.
+   In file included from mm/gup.c:7:
+   include/linux/mm.h:1384:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+           if (PageAnon(page) && PageAnonUnshared(page)) {
+                                 ^
+   include/linux/mm.h:1386:4: error: implicit declaration of function 'ClearPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                           ClearPageAnonUnshared(page);
+                           ^
+   include/linux/mm.h:1386:4: note: did you mean 'PageAnonUnshared'?
+   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
+           if (PageAnon(page) && PageAnonUnshared(page)) {
+                                 ^
+>> mm/gup.c:39:6: error: conflicting types for 'gup_must_unshare'
+   bool gup_must_unshare(unsigned int flags, struct page *page)
+        ^
+   include/linux/mm.h:3086:13: note: previous declaration is here
+   extern bool gup_must_unshare(unsigned int flags, struct page *page,
+               ^
+>> mm/gup.c:593:34: error: too few arguments to function call, expected 3, have 2
+           if (gup_must_unshare(flags, page)) {
+               ~~~~~~~~~~~~~~~~            ^
+   include/linux/mm.h:3086:13: note: 'gup_must_unshare' declared here
+   extern bool gup_must_unshare(unsigned int flags, struct page *page,
+               ^
+>> mm/gup.c:595:7: error: implicit declaration of function 'mark_anon_page_exclusive' [-Werror,-Wimplicit-function-declaration]
+                   if (mark_anon_page_exclusive(page, pte_write(pte))) {
+                       ^
+   5 errors generated.
+--
+   In file included from mm/memory.c:43:
+   include/linux/mm.h:1384:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+           if (PageAnon(page) && PageAnonUnshared(page)) {
+                                 ^
+   include/linux/mm.h:1386:4: error: implicit declaration of function 'ClearPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                           ClearPageAnonUnshared(page);
+                           ^
+   include/linux/mm.h:1386:4: note: did you mean 'PageAnonUnshared'?
+   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
+           if (PageAnon(page) && PageAnonUnshared(page)) {
+                                 ^
+   mm/memory.c:3018:3: error: implicit declaration of function '__SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                   __SetPageAnonUnshared(new_page);
+                   ^
+   mm/memory.c:3191:24: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                   if (PageKsm(page) || PageAnonUnshared(page))
+                                        ^
+   mm/memory.c:3207:4: error: implicit declaration of function 'SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                           SetPageAnonUnshared(page);
+                           ^
+   mm/memory.c:3207:4: note: did you mean 'PageAnonUnshared'?
+   include/linux/mm.h:1384:24: note: 'PageAnonUnshared' declared here
+           if (PageAnon(page) && PageAnonUnshared(page)) {
+                                 ^
+   mm/memory.c:3215:10: error: implicit declaration of function 'wp_page_unshare' [-Werror,-Wimplicit-function-declaration]
+                   return wp_page_unshare(vmf);
+                          ^
+   mm/memory.c:3215:10: note: did you mean 'do_wp_page_unshare'?
+   mm/memory.c:3177:19: note: 'do_wp_page_unshare' declared here
+   static vm_fault_t do_wp_page_unshare(struct vm_fault *vmf)
+                     ^
+>> mm/memory.c:3247:3: error: implicit declaration of function 'SetPageExclusive' [-Werror,-Wimplicit-function-declaration]
+                   SetPageExclusive(page);
+                   ^
+   mm/memory.c:3247:3: note: did you mean 'SetPageAnonExclusive'?
+   include/linux/page-flags.h:952:29: note: 'SetPageAnonExclusive' declared here
+   static __always_inline void SetPageAnonExclusive(struct page *page)
+                               ^
+   mm/memory.c:3255:3: error: implicit declaration of function 'SetPageExclusive' [-Werror,-Wimplicit-function-declaration]
+                   SetPageExclusive(page);
+                   ^
+>> mm/memory.c:3240:5: warning: no previous prototype for function 'mark_anon_page_exclusive' [-Wmissing-prototypes]
+   int mark_anon_page_exclusive(struct page *page, bool mapped_writable)
+       ^
+   mm/memory.c:3240:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mark_anon_page_exclusive(struct page *page, bool mapped_writable)
+   ^
+   static 
+   mm/memory.c:3376:29: error: use of undeclared identifier 'page'
+                   return do_wp_page_unshare(page);
+                                             ^
+   mm/memory.c:3415:7: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                   if (PageAnonUnshared(page))
+                       ^
+   mm/memory.c:4591:8: error: implicit declaration of function 'PageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                           if (PageAnonUnshared(page))
+                               ^
+   mm/memory.c:4591:25: error: use of undeclared identifier 'page'
+                           if (PageAnonUnshared(page))
+                                                ^
+   mm/memory.c:4593:19: error: use of undeclared identifier 'page'
+                           if (page_count(page) == 1) {
+                                          ^
+   mm/memory.c:4594:5: error: implicit declaration of function 'SetPageAnonUnshared' [-Werror,-Wimplicit-function-declaration]
+                                   SetPageAnonUnshared(page);
+                                   ^
+   mm/memory.c:4594:25: error: use of undeclared identifier 'page'
+                                   SetPageAnonUnshared(page);
+                                                       ^
+   1 warning and 15 errors generated.
 
->
-> Thanks.
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Senior Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+
+vim +/gup_must_unshare +39 mm/gup.c
+
+    31	
+    32	/*
+    33	 * Indicates for which pages we have to trigger unsharing first to make
+    34	 * anonymous pages exclusive to the MM. Once exlusive, only fork() can
+    35	 * turn the pages !exclusive -- and only if there are no additional references.
+    36	 *
+    37	 * This function is safe to be called in IRQ context.
+    38	 */
+  > 39	bool gup_must_unshare(unsigned int flags, struct page *page)
+    40	{
+    41		if (flags & FOLL_NOUNSHARE)
+    42			return false;
+    43		else if (!(flags & FOLL_UNSHARE)) {
+    44			/*
+    45			 * As a default, unshare only for FOLL_PIN. The corner cases
+    46			 * that cannot use FOLL_PIN right now and have to use FOLL_GET
+    47			 * (i.e., O_DIRECT), although they are reading/writing page
+    48			 * content should manually set FOLL_UNSHARE with FOLL_GET.
+    49			 */
+    50			if (!(flags & FOLL_PIN))
+    51				return false;
+    52		}
+    53		/*
+    54		 * All of the following properties should be stable also during
+    55		 * gup-fast-only, whereby we hold a reference to the compound page.
+    56		 * (similarly to the page_is_secretmem() check) and require a proper
+    57		 * sync on unmap from the page table to avoid use-after-free.
+    58		 */
+    59		if (!PageAnon(page))
+    60			return false;
+    61		if (PageKsm(page))
+    62			return false;
+    63		if (PageHuge(page))
+    64			/* TODO: handle hugetlb as well. */
+    65			return false;
+    66		/*
+    67		 * Without the mmap_lock, this can change during fork(). gup-fast-only
+    68		 * is handled properly via the mm->write_protect_seq and undos the
+    69		 * pinning in case we detect that fork() might have changed this.
+    70		 */
+    71		return !PageAnonExclusive(page);
+    72	}
+    73	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

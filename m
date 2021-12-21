@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04ED47BCE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C6D47BCE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbhLUJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:30:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37672 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232603AbhLUJay (ORCPT
+        id S236384AbhLUJb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232603AbhLUJb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:30:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640079054;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MDP731re5DMtQOApW41TGX/daqIlWGEhnQrLBNbi7cU=;
-        b=UJ1G9+aC/wLQj6TtCQu/frP4WdqRKcc9qbxvhTdn1RDqW3N86TQro2KmbfLRqvAhcGTAt6
-        JRnlbQeRBcuCRWadJwTJsZUr4PCEh7r0/7x25YjXzzk9RJ+yej/SSLt52T3OUsAibrNkv/
-        Ac4CzuHCiXhE+FQBl/Qx9VKKvE65FAU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-VWnp8ExyPGWVsOcK2XHS_w-1; Tue, 21 Dec 2021 04:30:52 -0500
-X-MC-Unique: VWnp8ExyPGWVsOcK2XHS_w-1
-Received: by mail-wr1-f69.google.com with SMTP id v6-20020adfa1c6000000b001a26d0c3e32so3081733wrv.14
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:30:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MDP731re5DMtQOApW41TGX/daqIlWGEhnQrLBNbi7cU=;
-        b=UAlaMWwVz5u/WiVJGu7+j+RtQPLBCRCH17FK242NhHfCshqubot312uQ5nLlOdo2f7
-         NJGE5+2lyBcFSAnhBAxUmoP4ygj9+J/auvi2mpr60IbWZ1H/lrd0D93IDcH3g6Jm/dZt
-         1IBLd+MsXw8cmnVoYavz5BJOIfAGdtnk906IyWQFACtsIgeDAFxl4eyW2/WyM/iGEoP2
-         XGLsGDjFLQkiaN2oZTC9wpFBXeY8pcm4g1mT3xT2cUvJynvjxo/EZpn1Arqiepx3fbpg
-         kL40uo5dQ4JPEhxDWGPUMARJkN0O9sHaFQ2QTEIWXzHu4pKeTVJzDar62D3YeWGFnHLN
-         vftQ==
-X-Gm-Message-State: AOAM531QP3Bpe1ynMMwrOzx9FcaLYv6WsWMONVldELFyiBEYJlRyZ0OE
-        ebqF3AafT77VhiIxocCk618arT1G6LT4q73z1f7Gb6A+rVDP5n5oFzbe7V8WZKngRNph5D/4ZJx
-        zXmAZRzGag7aZhxTIJ13EiqyV
-X-Received: by 2002:a05:6000:1866:: with SMTP id d6mr1820860wri.704.1640079051269;
-        Tue, 21 Dec 2021 01:30:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy4OPUY2kgWsIwpXa/+dQUUQY5BJbjatdV1r5w+V9wm4oetQS+1VJTpTYIkBdnpO2hY/PhkRg==
-X-Received: by 2002:a05:6000:1866:: with SMTP id d6mr1820839wri.704.1640079051075;
-        Tue, 21 Dec 2021 01:30:51 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id j17sm10390448wrp.68.2021.12.21.01.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 01:30:50 -0800 (PST)
-Message-ID: <34ad15d6-d525-1fe0-8aa7-92a52a19861c@redhat.com>
-Date:   Tue, 21 Dec 2021 10:30:47 +0100
+        Tue, 21 Dec 2021 04:31:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF1AC061574;
+        Tue, 21 Dec 2021 01:31:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 900E26149F;
+        Tue, 21 Dec 2021 09:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727F5C36AE2;
+        Tue, 21 Dec 2021 09:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640079085;
+        bh=yvxQ4XoLsMIX+Y8XPJ7+rWyqlktIq865SJFV9MrUjMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0AESIwz7hKmjvdcscuowBfcbmlkCyOmIh8p/yvzZhhxcCb+qE23Y5FHXiIbRsqc7t
+         u5Q84KA0u48A/KK2dJo1ELvYhriAwI7ZfnGmvT0ZNLjtLIlT+wr7b5sxqs1jlRGupf
+         7oMl8kHKhTksuXTrlCVSfOXYocmwcZFhrBJTZ4Sc=
+Date:   Tue, 21 Dec 2021 10:31:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 0/6] cacheinfo: CPU affinity and Devicetree 'id' support
+Message-ID: <YcGe6prlqTknbYj6@kroah.com>
+References: <20211216233125.1130793-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
-Content-Language: en-US
-To:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "seanjc@google.com" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-19-jing2.liu@intel.com>
- <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
- <e0fd378de64f44fd8becfe67b02cb635@intel.com>
- <219a751e-ac2d-9ce1-9db7-7d5b1edd6bdd@redhat.com>
- <c06fdc4f3b4d4346ae80801a6c3a6ff2@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <c06fdc4f3b4d4346ae80801a6c3a6ff2@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216233125.1130793-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 10:06, Wang, Wei W wrote:
->> (I'm not sure if the first sentence is true in the code, but if not it is a bug that
->> has to be fixed :)).
-> For the implementation, KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2) always return kvm->vcpus[0]->arch.guest_fpu.uabi_size.
-> Do you want to change it to below?
+On Thu, Dec 16, 2021 at 05:31:19PM -0600, Rob Herring wrote:
+> For upcoming Arm MPAM support in resctrl, it is necessary to have the
+> cacheinfo 'id' for MPAM enabled caches. The 'id' is part of the resctrl
+> ABI. While this support already exists for ACPI based systems, it is
+> missing for DT. This series adds the support.
 > 
-> If (kvm->vcpus[0]->arch.guest_fpu.uabi_size < 4096)
-> 	return 0;
-
-return 4096;
-
-since the minimum size of struct kvm_xsave2 (with no extra) is 4096.
-
-Paolo
-
-> else
-> 	return kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+> The 'id' value used is the smallest CPU h/w id value associated with a
+> cache. This requires walking the cache hierarchy from every CPU node to
+> get all CPUs associated with a cache. As MPAM also needs to know this,
+> the CPU affinity is also saved to avoid reimplementing and walking the
+> firmware tables again.
 > 
-> If the size is less than 4096 (e.g. no dynamic xfeatures enabled),
-> userspace should use the old KVM_GET_XSAVE (instead of KVM_GET_XSAVE2)?
-> (KVM_GET_XSAVE2 supports to work with size less than 4096, so I think this isn't necessary)
+> Patches 1 and 2 are v2 from the prior series[1]. The rest are new.
+> 
+> Tested on arm64 with DT. ACPI changes are untested. I don't have a
+> system with an appropriate PPTT nor do I know how to modify ACPI tables.
+> 
+> Rob
+> 
+> [1] https://lore.kernel.org/all/20211006164332.1981454-1-robh@kernel.org/
+> 
+> Rob Herring (6):
+>   cacheinfo: Allow for >32-bit cache 'id'
+>   cacheinfo: Set cache 'id' based on DT data
+>   cacheinfo: Add cpu_affinity_map to store affinity for all CPUs
+>   ACPI / PPTT: Populate the cacheinfo.cpu_affinity_map
+>   cacheinfo: Use cpu_affinity_map for populating shared_cpu_map
+>   cacheinfo: Add cacheinfo_get_cache_affinity() function
+> 
+>  drivers/acpi/pptt.c       | 29 +++++++++++++++--
+>  drivers/base/cacheinfo.c  | 65 ++++++++++++++++++++++++++-------------
+>  include/linux/cacheinfo.h | 29 +++++++++++++++--
+>  3 files changed, 97 insertions(+), 26 deletions(-)
+> 
+> -- 
+> 2.32.0
+> 
 
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

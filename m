@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C98547BB15
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DA147BB1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbhLUHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbhLUHbz (ORCPT
+        id S235238AbhLUHcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:32:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48962 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbhLUHcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:31:55 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D66C061746
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 23:31:54 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id b187so16511534iof.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 23:31:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lfcbJbX5oTLP8SxjC643FL/N5klp3yLw7FLZvzxTOfM=;
-        b=PYYcED9tTsUBGZhLA9L1msyWdfuz+ClrVyAt7aiRI/xl1JSA1m+7LS2FqxKfMDcRQt
-         3yhVFcMo5vLBRiUaShc8uJQ4zbs1m/ex989tuJvvA1ooaVwGtQUNdXVg/0pmBb9gvUqH
-         bJW6F1gycSWfNHT3jqSzLJ6NO6z4gPo6JAwW6N0U5F8SPz2kJ0JniHNMEzmlYJxM12tn
-         ItbJYEIQZIIBwlI5Xj7eWozP5zHZ/s0ha7gGqM/vq7//AlMDMeF0WOInX5/ykc3YcPqM
-         UQamSJhLFaHpgSQlUN1uQrvQoFHgKbi6EhlafG1mitwkaUIkYtLxxJ+pg8GfnQop83lC
-         4RLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lfcbJbX5oTLP8SxjC643FL/N5klp3yLw7FLZvzxTOfM=;
-        b=CR1mrCVjVhpoGE0HyVAzqg1GHYG6zCqG2fjS4TM8DIJtCROs0bJZMnmc7ot1hX+di+
-         VeEkwA2xdtMU7EsdBg8mbhAKhFOkHQCLvjF4WVlQbh5qllaXQNQgq2J8D/CTt/pM44cu
-         oWrU4tOENWM3yO5z9o2zjvGQp4RXoCmxDoVZiyw8KY7vXBWOZnoMwEw714wV7IBMHe6I
-         uoPr+sNctVervFU6iU2FnWrSXA4LzueFLtkgVw0rqkdPimU/C9fWrQFFQzNhw5oGlxqM
-         n2Fig8Mde/EIhX0TciiXm50gAKC0VfoPBAPaUwvkaXLAM5VNOneshiWkUo9VSJce5JXm
-         2JWQ==
-X-Gm-Message-State: AOAM532zGNTLneGxE7SHZrefgyCq38R3xG73OFRO5wb0RYve7/tDMedF
-        gPMAOn6hVSKTcwPzzPW9USJZt0+zca56/7PiZ8w=
-X-Google-Smtp-Source: ABdhPJyEP1mxvBRMDuroTXDqndg6rzhE79CqUqtkf1AMB0dPxcMuxXUiniL437WqmQsWlggOdXwC13omtZz3oVyS9sY=
-X-Received: by 2002:a05:6638:3043:: with SMTP id u3mr1150930jak.234.1640071914240;
- Mon, 20 Dec 2021 23:31:54 -0800 (PST)
+        Tue, 21 Dec 2021 02:32:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C5F861466;
+        Tue, 21 Dec 2021 07:32:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F25C36AE7;
+        Tue, 21 Dec 2021 07:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640071924;
+        bh=siOKuI9TLZ2SagEvBuHZINAGCpcztazaYp56jX0A6YI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cszWef5TdMj2NWbcOPxb6AA7YxTfIKDZ0f5HXy7SiH4dSnXIGJqCEwdyeqbvQlok0
+         vS8ekrt/teFFkefOYbeaUS97CNQ1cjUOJ5qcM6r996zEwcEVK0ynO+Kznx6kNv+iT3
+         /5aQNDXpZ46ltorzMW2Wteh84rHV+2l2n3bbnROY=
+Date:   Tue, 21 Dec 2021 08:32:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yu Tu <yu.tu@amlogic.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH 2/3] tty: serial: meson: meson_uart_shutdown omit clear
+ AML_UART_TX_EN bit
+Message-ID: <YcGC8hlOEbzH8rc8@kroah.com>
+References: <20211221071634.25980-1-yu.tu@amlogic.com>
+ <20211221071634.25980-3-yu.tu@amlogic.com>
 MIME-Version: 1.0
-Received: by 2002:a4f:f1c2:0:0:0:0:0 with HTTP; Mon, 20 Dec 2021 23:31:53
- -0800 (PST)
-Reply-To: christinemuller959@gmail.com
-From:   Christine <judith443.uriah@gmail.com>
-Date:   Tue, 21 Dec 2021 08:31:53 +0100
-Message-ID: <CAGOAMFpN_adOVfxCYNdYrnh6WH2LxyFqUsvw3gGDS5LpvBt-1g@mail.gmail.com>
-Subject: MESSAGGIO DELL'OSPEDALE / HOSPITAL MESSAGE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221071634.25980-3-yu.tu@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-I miei umili saluti
+On Tue, Dec 21, 2021 at 03:16:33PM +0800, Yu Tu wrote:
+> The meson_uart_shutdown function should have the opposite operation to
+> the meson_uart_startup function, so the shutdown of AML_UART_TX_EN is
+> logically missing.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 
-Mio buon amico, come stai, ho un fondo di beneficenza che doner=C3=B2 con
-il tuo aiuto. Prova a contattarmi per maggiori informazioni. Ti dir=C3=B2
-di pi=C3=B9 su di me e sui miei piani con questi soldi quando avr=C3=B2 tue
-notizie.
+What commit does this fix?  Should it go to stable kernels?  Please put
+that in here if needed.
 
-Aspetto una tua risposta per darti maggiori dettagli.
+thanks,
 
-
-----------------------------
-
-my humble regards,
-
-Dear friend how are you, I have a charitable donation fund that I want
-to donate by helping you. Please try to get back to me for more
-information. I will tell you more about myself and my plans with this
-money when I hear from you.
-
-Awaiting your reply to give me more details.
+greg k-h

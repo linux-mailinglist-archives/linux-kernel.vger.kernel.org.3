@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2460C47C23F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B6A47C247
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237791AbhLUPGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238934AbhLUPGl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:06:41 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D733C06173F;
-        Tue, 21 Dec 2021 07:06:41 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so17021019otl.3;
-        Tue, 21 Dec 2021 07:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ndnr4OCryfcect7aYGHe18tbwXIs5dkNZfE/W0ByRm4=;
-        b=oIEL4JlnTZJ+EeTOqom3SfS47lUV+G6xfpIQvytVQgCmumyFI4W+D6uvJ5oD8lzZN/
-         pDipWEolYya3XvsIcLunnvTWWUxY7tjB3V2F7GSDHOlBaqSl6jkEOYUPEJm7gwon+7bn
-         HlCHldFS9bj4M/lXdbgYrJFgzvRPDvRz7QxjQ4vDgEXEsD8t4Bxwhw+apMdl5Etq6E4m
-         T6c1Xi5asUnPSiiDjX5dZu2GlLADB7FN2FLf8sQkXk2746uAaCljjSTG8nO95OfeAZHC
-         rYXRcsTzi/uw8yoa53+wwrPUK/2jRNCACS6yFLAtOuTbF0dYC1BKj3TzqBct8IJheCQR
-         YbVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ndnr4OCryfcect7aYGHe18tbwXIs5dkNZfE/W0ByRm4=;
-        b=EDRBhRlAJTOebkkrFslBkI3YNS21Kg9OjxGzVju+pp7otD4Y5qetY/tWs9/9ONSoMy
-         ihbUMJ3+fy5nbKqbM/5AknbuIc3rBWNvmfnjUvRKEqt6QQTTMer4QkpFTqkKk3z8jR5m
-         EGazR6Bu1barZ5y5Q8eib0UprKtzj2ggwtwtSPrfog1Z0M1hhjLizXJNERXOux9AikUX
-         K/MraZ7Q179OfNYIWUDUE2AWszzcUbEPBDeByzsBJQOmN/5c/WY7wewmTApVJkvGGfdx
-         spSdVYRnbAPoV3C/n3QCkLLaQ9ckwe2x6SeDqHEGGvHNLFfYW/QW9iGSMYkJpY6eUTO4
-         TVEA==
-X-Gm-Message-State: AOAM533CS5+XBk5Bg6sFuynHdPVbDXA387nvZmwQPoWqeVTnHQHkpSBl
-        yL+WV9Off90aZLeemgVNeE0=
-X-Google-Smtp-Source: ABdhPJzz0MoI++eGJVGGlfXwB8apYvOaL9+csbvoZhP7p6USdxQEBCGqwOdXTrDjR8yw/DqKPqS5bg==
-X-Received: by 2002:a05:6830:1397:: with SMTP id d23mr2505927otq.68.1640099200419;
-        Tue, 21 Dec 2021 07:06:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j5sm3627661oou.23.2021.12.21.07.06.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:06:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 8/9] watchdog: max77620: add comment to clarify
- set_timeout procedure
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <20211211203432.32446-1-luca@lucaceresoli.net>
- <20211211203432.32446-2-luca@lucaceresoli.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <9ef37bd7-0bb5-d9ee-6643-47aac9870a67@roeck-us.net>
-Date:   Tue, 21 Dec 2021 07:06:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S238964AbhLUPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:10:10 -0500
+Received: from mga02.intel.com ([134.134.136.20]:9532 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235683AbhLUPKI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 10:10:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640099408; x=1671635408;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P3XoF6yKs58kRefwZIbHOEan+69dqpkFZ2rWnl4oE7c=;
+  b=RPO9O5aiZmmEwEHzQeXA+TwjZBsnrSAAZ8fVovKKjvf9xkfdEEhqINSA
+   DW8iPX82wbXe545PzFMgnKFLMG1CWcx5MqhQnOWUPAtY4NDpHe5kb9utw
+   OmRoJThj7TkV7faVOWoFitK2eD5LVo1PVfGOhaiPZhtS8qlSHuAY4M/ku
+   oeQbmJxwm1cC7A/ihySldIEhOntjkhEVSmRg9B3EJex1hjQnZ2vYBslZs
+   RoycSREzX0vZ24HS6FSz8fgfbRwBtskHY0hi33M9ITk7gjUeqIaxIw8w+
+   ZuLgvIg3P6Vv3ZYjNGkge2qxMVrqDmOqfHquWCxRrbO0YD13xV05cufLy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227703433"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="227703433"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 07:09:58 -0800
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="548094670"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 07:09:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mzgkf-000T09-Ak;
+        Tue, 21 Dec 2021 17:08:29 +0200
+Date:   Tue, 21 Dec 2021 17:08:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Peter Tyser <ptyser@xes-inc.com>,
+        hdegoede@redhat.com, henning.schild@siemens.com
+Subject: Re: [PATCH v1 7/7] i2c: i801: convert to use common P2SB accessor
+Message-ID: <YcHt7YWCjFaNPBw9@smile.fi.intel.com>
+References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
+ <20210308122020.57071-8-andriy.shevchenko@linux.intel.com>
+ <20210310155145.513a7165@endymion>
 MIME-Version: 1.0
-In-Reply-To: <20211211203432.32446-2-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210310155145.513a7165@endymion>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21 12:34 PM, Luca Ceresoli wrote:
-> Clarify why we need to ping the watchdog before changing the timeout by
-> quoting the MAX77714 datasheet.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
+On Wed, Mar 10, 2021 at 03:51:45PM +0100, Jean Delvare wrote:
+> On Mon,  8 Mar 2021 14:20:20 +0200, Andy Shevchenko wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+...
+
+> > -	res->end = res->start + 3;
+> > -	res->flags = IORESOURCE_MEM;
+> > +		res->start += SBREG_SMBCTRL;
+> 
+> I can't see why you no longer set res->end and res->flags here. I can
+> imagine that pci_p2sb_bar() may have set the flags for us, but not that
+> ->end is still correct after you fixed up ->start. Am I missing
+> something?
+
+Good catch of the res->end! But flags actually may be MEM64, which the
+original code doesn't properly handle.
+
+...
+
+> >  static const struct x86_cpu_id p2sb_cpu_ids[] = {
+> >  	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	PCI_DEVFN(13, 0)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,	PCI_DEVFN(31, 1)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT_D,	PCI_DEVFN(31, 1)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		PCI_DEVFN(31, 1)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,		PCI_DEVFN(31, 1)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE,		PCI_DEVFN(31, 1)),
+> > +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L,		PCI_DEVFN(31, 1)),
+> >  	{}
+> >  };
+> 
+> Any reason why this is added in this patch instead of [3/7] (PCI: New
+> Primary to Sideband (P2SB) bridge support library)?
+
+Filling this on demand, no user no entry. I think it's how we assume the code
+to be applied in the kernel.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 678F347C3DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B25947C3DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239830AbhLUQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 11:36:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53700 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237679AbhLUQgB (ORCPT
+        id S239846AbhLUQgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 11:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239856AbhLUQgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:36:01 -0500
+        Tue, 21 Dec 2021 11:36:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8F0C061401;
+        Tue, 21 Dec 2021 08:36:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEC3BB8173F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA799B81722;
+        Tue, 21 Dec 2021 16:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486E2C36AE8;
         Tue, 21 Dec 2021 16:35:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F804C36AEA;
-        Tue, 21 Dec 2021 16:35:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640104558;
-        bh=KjgCin2hved0yaQS5eqq61a1K9YAgWp53QVssgFiofs=;
+        s=k20201202; t=1640104562;
+        bh=cBmBjJqc39uhGxOHQbIuz8go+AJACz6x34Rsmj9vtKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KAMXmW+9ncaDlFiRY4Lu9smDgU9x99exzCHsw+o2vczL0324mWSFYYv5PAXG/ZPLN
-         9d7zDmqmDrQTdMg8R2ghmbtJ/o69N28Mu/oyE23MJqo5fYXilmTNhIh36jtjfBadKr
-         n/AZZcIWDG+UtvxioqVkFGLSl5wPhFNnmLoeSLU5I3/hsPkGSBBfsmaUxlQzzUstMS
-         7O8kGq6DbluITpSdP+86yiDc59L+CXPg1naFSoVcUCKYsDxEbIkNk0YlbcL2s1Nr/+
-         T0oIYAskxuifci9B66VXa2OXlPRzTiz3dwWBp79cYhjn7wrcnYJq6+Nw74haD2+ccb
-         r5YAumnfjQI1w==
+        b=Z20TRxowOiWW5Y8Oy0qdAA/PB8BLdrgphbD5xpDZ4vwY7/XrQvUQEjpjzQJM5/pO2
+         kQ43LXYB1Chei/6vua5YzYwz7FUN7ypTomA9MxNYkl8luch/MRkHaXrI+7/x2p7Uoy
+         5lycFkaR2DyJSZPh8b9/BZf8TfaFYdN0Sz+SKUpt55qca4j/sCgUA12uqXUD07HfUz
+         GAZupTGtlG22DBcWHypaX3FCH9UCE+Ac24uwIIovEgLgvoM8GLWCpryNvuFC2+1dMu
+         GsD6HNUTkiFtiqnwEVEUbkGKEBer+YA7dI/5cNOT2ZqwU5HEz9nST8gybQPQUZO5Hf
+         UYzd0UXoxypgw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         anup.patel@wdc.com, gregkh@linuxfoundation.org,
@@ -36,9 +39,9 @@ To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         wangjunqiang@iscas.ac.cn, lazyparser@gmail.com
 Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
-Date:   Wed, 22 Dec 2021 00:35:22 +0800
-Message-Id: <20211221163532.2636028-4-guoren@kernel.org>
+Subject: [PATCH 04/13] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
+Date:   Wed, 22 Dec 2021 00:35:23 +0800
+Message-Id: <20211221163532.2636028-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211221163532.2636028-1-guoren@kernel.org>
 References: <20211221163532.2636028-1-guoren@kernel.org>
@@ -50,293 +53,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Implement asm/compat.h for struct compat_xxx, RLIM_INFINITY,
-OFF_T_MAX, is_compat_task, compat_user_regset, regset convert.
+Make TASK_SIZE from const to dynamic detect TIF_32BIT flag
+function. Refer to arm64 to implement DEFAULT_MAP_WINDOW_64 for
+efi-stub.
+
+Limit 32-bit compatible process in 0-2GB virtual address range
+(which is enough for real scenarios), because it could avoid
+address sign extend problem when 32-bit enter 64-bit and ease
+software design.
+
+The standard 32-bit TASK_SIZE is 0x9dc00000:FIXADDR_START, and
+compared to a compatible 32-bit, it increases 476MB for the
+application's virtual address.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/riscv/include/asm/compat.h      | 259 +++++++++++++++++++++++++++
- arch/riscv/include/asm/thread_info.h |   1 +
- 2 files changed, 260 insertions(+)
- create mode 100644 arch/riscv/include/asm/compat.h
+ arch/riscv/include/asm/pgtable.h        | 11 ++++++++++-
+ arch/riscv/include/asm/processor.h      |  6 ++++++
+ drivers/firmware/efi/libstub/efi-stub.c |  2 +-
+ 3 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/compat.h b/arch/riscv/include/asm/compat.h
-new file mode 100644
-index 000000000000..8e9777811f3b
---- /dev/null
-+++ b/arch/riscv/include/asm/compat.h
-@@ -0,0 +1,259 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_COMPAT_H
-+#define __ASM_COMPAT_H
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index bf204e7c1f74..2dd5b8674380 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -663,7 +663,16 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+  * Note that PGDIR_SIZE must evenly divide TASK_SIZE.
+  */
+ #ifdef CONFIG_64BIT
+-#define TASK_SIZE (PGDIR_SIZE * PTRS_PER_PGD / 2)
++#define TASK_SIZE_64	(PGDIR_SIZE * PTRS_PER_PGD / 2)
 +
-+#define compat_mode_t	compat_mode_t
-+typedef u16		compat_mode_t;
++#ifdef CONFIG_COMPAT
++#define TASK_SIZE_32	(_AC(0x80000000, UL) - PAGE_SIZE)
++#define TASK_SIZE	(test_thread_flag(TIF_32BIT) ? \
++			 TASK_SIZE_32 : TASK_SIZE_64)
++#else
++#define TASK_SIZE	TASK_SIZE_64
++#endif
 +
-+/*
-+ * Architecture specific compatibility types
-+ */
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <linux/sched/task_stack.h>
-+#include <asm-generic/compat.h>
-+
-+#define COMPAT_USER_HZ		100
-+#define COMPAT_UTS_MACHINE	"riscv\0\0"
-+
-+typedef compat_uint_t	__compat_uid_t;
-+typedef compat_uint_t	__compat_gid_t;
-+typedef compat_uint_t	compat_dev_t;
-+typedef compat_int_t	compat_ipc_pid_t;
-+
-+struct compat_stat {
-+	compat_ulong_t	st_dev;
-+	compat_ulong_t	st_ino;
-+	compat_uint_t	st_mode;
-+	compat_uint_t	st_nlink;
-+	compat_uint_t	st_uid;
-+	compat_uint_t	st_gid;
-+	compat_ulong_t	st_rdev;
-+	compat_ulong_t	__pad1;
-+	compat_long_t	st_size;
-+	compat_int_t	st_blksize;
-+	compat_int_t	__pad2;
-+	compat_long_t	st_blocks;
-+	compat_long_t	st_atime;
-+	compat_ulong_t	st_atime_nsec;
-+	compat_long_t	st_mtime;
-+	compat_ulong_t	st_mtime_nsec;
-+	compat_long_t	st_ctime;
-+	compat_ulong_t	st_ctime_nsec;
-+	compat_uint_t	__unused4;
-+	compat_uint_t	__unused5;
-+};
-+
-+struct compat_flock {
-+	compat_short_t	l_type;
-+	compat_short_t	l_whence;
-+	compat_off_t	l_start;
-+	compat_off_t	l_len;
-+	compat_pid_t	l_pid;
-+	/* No __ARCH_FLOCK_PAD in riscv */
-+};
-+
-+#define F_GETLK64	12
-+#define F_SETLK64	13
-+#define F_SETLKW64	14
-+
-+struct compat_flock64 {
-+	compat_short_t	l_type;
-+	compat_short_t	l_whence;
-+	compat_loff_t	l_start;
-+	compat_loff_t	l_len;
-+	compat_pid_t	l_pid;
-+	/* No __ARCH_FLOCK64_PAD in riscv */
-+};
-+
-+struct compat_statfs {
-+	compat_uint_t	f_type;
-+	compat_uint_t	f_bsize;
-+	compat_uint_t	f_blocks;
-+	compat_uint_t	f_bfree;
-+	compat_uint_t	f_bavail;
-+	compat_uint_t	f_files;
-+	compat_uint_t	f_ffree;
-+	__kernel_fsid_t	f_fsid;
-+	compat_uint_t	f_namelen;
-+	compat_uint_t	f_frsize;
-+	compat_uint_t	f_flags;
-+	compat_uint_t	f_spare[4];
-+};
-+
-+#define COMPAT_RLIM_INFINITY	0x7fffffff
-+#define COMPAT_OFF_T_MAX	COMPAT_RLIM_INFINITY
-+
-+struct compat_ipc64_perm {
-+	compat_key_t key;
-+	__compat_uid32_t uid;
-+	__compat_gid32_t gid;
-+	__compat_uid32_t cuid;
-+	__compat_gid32_t cgid;
-+	compat_mode_t	mode;
-+	unsigned char	__pad1[4 - sizeof(compat_mode_t)];
-+	compat_ushort_t	seq;
-+	compat_ushort_t	__pad2;
-+	compat_ulong_t	unused1;
-+	compat_ulong_t	unused2;
-+};
-+
-+struct compat_semid64_ds {
-+	struct compat_ipc64_perm sem_perm;
-+	compat_ulong_t sem_otime;
-+	compat_ulong_t sem_otime_high;
-+	compat_ulong_t sem_ctime;
-+	compat_ulong_t sem_ctime_high;
-+	compat_ulong_t sem_nsems;
-+	compat_ulong_t __unused3;
-+	compat_ulong_t __unused4;
-+};
-+
-+struct compat_msqid64_ds {
-+	struct compat_ipc64_perm msg_perm;
-+	compat_ulong_t msg_stime;
-+	compat_ulong_t msg_stime_high;
-+	compat_ulong_t msg_rtime;
-+	compat_ulong_t msg_rtime_high;
-+	compat_ulong_t msg_ctime;
-+	compat_ulong_t msg_ctime_high;
-+	compat_ulong_t msg_cbytes;
-+	compat_ulong_t msg_qnum;
-+	compat_ulong_t msg_qbytes;
-+	compat_pid_t   msg_lspid;
-+	compat_pid_t   msg_lrpid;
-+	compat_ulong_t __unused4;
-+	compat_ulong_t __unused5;
-+};
-+
-+struct compat_shmid64_ds {
-+	struct compat_ipc64_perm shm_perm;
-+	compat_size_t  shm_segsz;
-+	compat_ulong_t shm_atime;
-+	compat_ulong_t shm_atime_high;
-+	compat_ulong_t shm_dtime;
-+	compat_ulong_t shm_dtime_high;
-+	compat_ulong_t shm_ctime;
-+	compat_ulong_t shm_ctime_high;
-+	compat_pid_t   shm_cpid;
-+	compat_pid_t   shm_lpid;
-+	compat_ulong_t shm_nattch;
-+	compat_ulong_t __unused4;
-+	compat_ulong_t __unused5;
-+};
-+
-+static inline int is_compat_task(void)
-+{
-+	return test_thread_flag(TIF_32BIT);
-+}
-+
-+struct compat_user_regs_struct {
-+	compat_ulong_t pc;
-+	compat_ulong_t ra;
-+	compat_ulong_t sp;
-+	compat_ulong_t gp;
-+	compat_ulong_t tp;
-+	compat_ulong_t t0;
-+	compat_ulong_t t1;
-+	compat_ulong_t t2;
-+	compat_ulong_t s0;
-+	compat_ulong_t s1;
-+	compat_ulong_t a0;
-+	compat_ulong_t a1;
-+	compat_ulong_t a2;
-+	compat_ulong_t a3;
-+	compat_ulong_t a4;
-+	compat_ulong_t a5;
-+	compat_ulong_t a6;
-+	compat_ulong_t a7;
-+	compat_ulong_t s2;
-+	compat_ulong_t s3;
-+	compat_ulong_t s4;
-+	compat_ulong_t s5;
-+	compat_ulong_t s6;
-+	compat_ulong_t s7;
-+	compat_ulong_t s8;
-+	compat_ulong_t s9;
-+	compat_ulong_t s10;
-+	compat_ulong_t s11;
-+	compat_ulong_t t3;
-+	compat_ulong_t t4;
-+	compat_ulong_t t5;
-+	compat_ulong_t t6;
-+};
-+
-+static inline void regs_to_cregs(struct compat_user_regs_struct *cregs,
-+				 struct pt_regs *regs)
-+{
-+	cregs->pc = (compat_ulong_t) regs->epc;
-+	cregs->ra = (compat_ulong_t) regs->ra;
-+	cregs->sp = (compat_ulong_t) regs->sp;
-+	cregs->gp = (compat_ulong_t) regs->gp;
-+	cregs->tp = (compat_ulong_t) regs->tp;
-+	cregs->t0 = (compat_ulong_t) regs->t0;
-+	cregs->t1 = (compat_ulong_t) regs->t1;
-+	cregs->t2 = (compat_ulong_t) regs->t2;
-+	cregs->s0 = (compat_ulong_t) regs->s0;
-+	cregs->s1 = (compat_ulong_t) regs->s1;
-+	cregs->a0 = (compat_ulong_t) regs->a0;
-+	cregs->a1 = (compat_ulong_t) regs->a1;
-+	cregs->a2 = (compat_ulong_t) regs->a2;
-+	cregs->a3 = (compat_ulong_t) regs->a3;
-+	cregs->a4 = (compat_ulong_t) regs->a4;
-+	cregs->a5 = (compat_ulong_t) regs->a5;
-+	cregs->a6 = (compat_ulong_t) regs->a6;
-+	cregs->a7 = (compat_ulong_t) regs->a7;
-+	cregs->s2 = (compat_ulong_t) regs->s2;
-+	cregs->s3 = (compat_ulong_t) regs->s3;
-+	cregs->s4 = (compat_ulong_t) regs->s4;
-+	cregs->s5 = (compat_ulong_t) regs->s5;
-+	cregs->s6 = (compat_ulong_t) regs->s6;
-+	cregs->s7 = (compat_ulong_t) regs->s7;
-+	cregs->s8 = (compat_ulong_t) regs->s8;
-+	cregs->s9 = (compat_ulong_t) regs->s9;
-+	cregs->s10 = (compat_ulong_t) regs->s10;
-+	cregs->s11 = (compat_ulong_t) regs->s11;
-+	cregs->t3 = (compat_ulong_t) regs->t3;
-+	cregs->t4 = (compat_ulong_t) regs->t4;
-+	cregs->t5 = (compat_ulong_t) regs->t5;
-+	cregs->t6 = (compat_ulong_t) regs->t6;
-+};
-+
-+static inline void cregs_to_regs(struct compat_user_regs_struct *cregs,
-+				 struct pt_regs *regs)
-+{
-+	regs->epc = (unsigned long) cregs->pc;
-+	regs->ra = (unsigned long) cregs->ra;
-+	regs->sp = (unsigned long) cregs->sp;
-+	regs->gp = (unsigned long) cregs->gp;
-+	regs->tp = (unsigned long) cregs->tp;
-+	regs->t0 = (unsigned long) cregs->t0;
-+	regs->t1 = (unsigned long) cregs->t1;
-+	regs->t2 = (unsigned long) cregs->t2;
-+	regs->s0 = (unsigned long) cregs->s0;
-+	regs->s1 = (unsigned long) cregs->s1;
-+	regs->a0 = (unsigned long) cregs->a0;
-+	regs->a1 = (unsigned long) cregs->a1;
-+	regs->a2 = (unsigned long) cregs->a2;
-+	regs->a3 = (unsigned long) cregs->a3;
-+	regs->a4 = (unsigned long) cregs->a4;
-+	regs->a5 = (unsigned long) cregs->a5;
-+	regs->a6 = (unsigned long) cregs->a6;
-+	regs->a7 = (unsigned long) cregs->a7;
-+	regs->s2 = (unsigned long) cregs->s2;
-+	regs->s3 = (unsigned long) cregs->s3;
-+	regs->s4 = (unsigned long) cregs->s4;
-+	regs->s5 = (unsigned long) cregs->s5;
-+	regs->s6 = (unsigned long) cregs->s6;
-+	regs->s7 = (unsigned long) cregs->s7;
-+	regs->s8 = (unsigned long) cregs->s8;
-+	regs->s9 = (unsigned long) cregs->s9;
-+	regs->s10 = (unsigned long) cregs->s10;
-+	regs->s11 = (unsigned long) cregs->s11;
-+	regs->t3 = (unsigned long) cregs->t3;
-+	regs->t4 = (unsigned long) cregs->t4;
-+	regs->t5 = (unsigned long) cregs->t5;
-+	regs->t6 = (unsigned long) cregs->t6;
-+};
-+
-+#endif /* __ASM_COMPAT_H */
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 60da0dcacf14..9392e35c689d 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -91,6 +91,7 @@ struct thread_info {
- #define TIF_SECCOMP		8	/* syscall secure computing */
- #define TIF_NOTIFY_SIGNAL	9	/* signal notifications exist */
- #define TIF_UPROBE		10	/* uprobe breakpoint or singlestep */
-+#define TIF_32BIT		11	/* 32bit process */
+ #else
+ #define TASK_SIZE FIXADDR_START
+ #endif
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index 0749924d9e55..8649436b8fcf 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -61,6 +61,12 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+ extern void start_thread(struct pt_regs *regs,
+ 			unsigned long pc, unsigned long sp);
  
- #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
- #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
++#ifdef CONFIG_COMPAT
++#define DEFAULT_MAP_WINDOW_64 TASK_SIZE_64
++#else
++#define DEFAULT_MAP_WINDOW_64 TASK_SIZE
++#endif
++
+ /* Free all resources held by a thread. */
+ static inline void release_thread(struct task_struct *dead_task)
+ {
+diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
+index 26e69788f27a..4075fd19d219 100644
+--- a/drivers/firmware/efi/libstub/efi-stub.c
++++ b/drivers/firmware/efi/libstub/efi-stub.c
+@@ -38,7 +38,7 @@
+ #define EFI_RT_VIRTUAL_BASE	SZ_512M
+ #define EFI_RT_VIRTUAL_SIZE	SZ_512M
+ 
+-#ifdef CONFIG_ARM64
++#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
+ # define EFI_RT_VIRTUAL_LIMIT	DEFAULT_MAP_WINDOW_64
+ #else
+ # define EFI_RT_VIRTUAL_LIMIT	TASK_SIZE
 -- 
 2.25.1
 

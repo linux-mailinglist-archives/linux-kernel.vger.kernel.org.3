@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4493047BBF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA1647BC04
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbhLUIge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbhLUIgd (ORCPT
+        id S235735AbhLUIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:44:24 -0500
+Received: from mail.globalbizbuy.pl ([217.61.121.138]:40230 "EHLO
+        mail.globalbizbuy.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231251AbhLUIoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:36:33 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B008C061574;
-        Tue, 21 Dec 2021 00:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Bev5UwUDySNtcXZ7IbUg3yOmocPFGSISGcvag7Sq58Q=; b=HAPbiOL2hqJaqg/4Wb6uKUEuOb
-        Htg78H8fB44s1S4lq7nQQbrNItf7oqgP7CnnX8VCmQ7nmATKnAY4mfiYeshBLINj8dUY+gGOKksg8
-        y7/eeXHqTE/fywSrKbKvxH/tN61lfWCznBMkbvDAvjio/Y5xToFGn0Y3UaoHTstQ2tE9WHzVW3f4B
-        RdfSm8zmmybWDTcniynbcCziNP2Gs15CLRnkF/heHehNo97n9wnxEVl4wxbBKwMmdWG5XcunEtQ+V
-        zx2bk5wp8zWlG8IMpYRO3l69PsX74PB9iPcriFgZ6YsIqxAE9cSpHCih17A3cigW6xBT1gCq5U28H
-        TuVITm9Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzadH-005xM6-Uk; Tue, 21 Dec 2021 08:36:27 +0000
-Date:   Tue, 21 Dec 2021 00:36:27 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/18] MM: create new mm/swap.h header file.
-Message-ID: <YcGSC9QITsBUbuDr@infradead.org>
-References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
- <163969850279.20885.7172996032577523902.stgit@noble.brown>
+        Tue, 21 Dec 2021 03:44:23 -0500
+Received: by mail.globalbizbuy.pl (Postfix, from userid 1001)
+        id A6013A391F; Tue, 21 Dec 2021 08:37:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=globalbizbuy.pl;
+        s=mail; t=1640076273;
+        bh=keciCK/Bg4sJmGUq5pgzLAbvC1lwGkAxKqnASfuHvcc=;
+        h=Date:From:To:Subject:From;
+        b=PHOUNpzTu7AHe72M6g7L2aT1eIjJ2I/19lC/KBXy9au6FIInlHIriBS+h6nDD9yC6
+         7qQsxmPAZciAMx3Djx+0U3IGEsNC2hpowzWBTPBX64mO726gEUr3CdvDzDfQchC02s
+         ppcT11Xs9jn7mBpmLYmNQWRQollKQ9fYsn0xcvX+9klabQjqpcv0tXhWO6/w1IZSmn
+         np/7GLKUuBfbnjH8bbfiflk1RUz8/jJltU1q6eHBCpefujTOLRcql4rTkAOvvTJNHe
+         wq4Fqsg0ZIck2U1Fylrr8/4AsOuwRlxuIcEuVP3ThrjamynYiiKuaW0Axd8b8G9dsn
+         inAqyEujlO4iA==
+Received: by mail.globalbizbuy.pl for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:37:25 GMT
+Message-ID: <20211221074500-0.1.5k.k1hx.0.78xlga46gn@globalbizbuy.pl>
+Date:   Tue, 21 Dec 2021 08:37:25 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@globalbizbuy.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.globalbizbuy.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163969850279.20885.7172996032577523902.stgit@noble.brown>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:48:22AM +1100, NeilBrown wrote:
-> Many functions declared in include/linux/swap.h are only used within mm/
-> 
-> Create a new "mm/swap.h" and move some of these declarations there.
-> Remove the redundant 'extern' from the function declarations.
+Dzie=C5=84 dobry,
 
-Good idea!  Looks good modulo the extra includes that the buildbot asks
-for:
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
+
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
+
+
+Pozdrawiam,
+Arkadiusz Soko=C5=82owski

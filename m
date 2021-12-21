@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3D047C0B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A01347C0B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbhLUNVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbhLUNVo (ORCPT
+        id S238149AbhLUNUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:20:47 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30087 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234517AbhLUNUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:21:44 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20AAC061574;
-        Tue, 21 Dec 2021 05:21:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B/oDToJjF+9MzhiotE5SBO6bEHgGlfnze/KNPpAHsCg=; b=SfQyc19jT/JZHSai2UnntFDszE
-        dHXubqLDm2OtdY+7lByHgwHoqZv5IkGbAbEqeONpa6hu5tS8N2Fk/5x1B+aB4TlkCHoY7FQ4fKb5d
-        fCmrRWtxPOcJVp2OyTmyMq5mxuavxsyrcrhutLwB0905JlF6NwGi1Eq8qOC0SQqV+23s3ezCVK8GQ
-        qdAaPpEM23eAPsR/2hqZI7bJ32V+qYe5eixsRzCGEviLjVtEvoBkHH2Lp+uXWD0AZpVxY4hjl2bhR
-        cqojP2dzXmKesKtM+SNwap1S7kIA7njOKiAiDTI2Aa3THkrBARxKYFudRpw4uZMgZ/3TADlJBvQo6
-        TbsMRdmA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzf55-002jwx-KO; Tue, 21 Dec 2021 13:21:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D41533002AE;
-        Tue, 21 Dec 2021 14:21:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BE30C206E66FD; Tue, 21 Dec 2021 14:21:26 +0100 (CET)
-Date:   Tue, 21 Dec 2021 14:21:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-Cc:     Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, kernel@openvz.org
-Subject: Re: [PATCH/RFC v2 1/3] tlb: mmu_gather: introduce
- CONFIG_MMU_GATHER_TABLE_FREE_COMMON
-Message-ID: <YcHU1maQkp4VXZvS@hirez.programming.kicks-ass.net>
-References: <20211218185205.1744125-1-nikita.yushchenko@virtuozzo.com>
- <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
+        Tue, 21 Dec 2021 08:20:46 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JJH7P1mYCz1DJw0;
+        Tue, 21 Dec 2021 21:17:37 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 21:20:44 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] sched: Use struct_size() helper in task_numa_group()
+Date:   Tue, 21 Dec 2021 21:21:38 +0800
+Message-ID: <20211221132138.49464-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 09:52:04PM +0300, Nikita Yushchenko wrote:
-> For architectures that use free_page_and_swap_cache() as their
-> __tlb_remove_table(), place that common implementation into
-> mm/mmu_gather.c, ifdef'ed by CONFIG_MMU_GATHER_TABLE_FREE_COMMON.
-> 
-> Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-> ---
->  arch/Kconfig                 |  3 +++
->  arch/arm/Kconfig             |  1 +
->  arch/arm/include/asm/tlb.h   |  5 -----
->  arch/arm64/Kconfig           |  1 +
->  arch/arm64/include/asm/tlb.h |  5 -----
->  arch/x86/Kconfig             |  1 +
->  arch/x86/include/asm/tlb.h   | 14 --------------
->  include/asm-generic/tlb.h    |  5 +++++
->  mm/mmu_gather.c              | 10 ++++++++++
->  9 files changed, 21 insertions(+), 24 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index d3c4ab249e9c..9eba553cd86f 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -415,6 +415,9 @@ config HAVE_ARCH_JUMP_LABEL_RELATIVE
->  config MMU_GATHER_TABLE_FREE
->  	bool
->  
-> +config MMU_GATHER_TABLE_FREE_COMMON
-> +	bool
+Make use of struct_size() helper instead of an open-coded calculation.
+There is no functional change in this patch.
 
-I don't like that name... The point isn't that it's common, the point is
-that the page-table's are backed by pages.
+Link: https://github.com/KSPP/linux/issues/160
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ kernel/sched/fair.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 095b0aa378df..265e37be0c92 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -2437,11 +2437,8 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
+ 	int i;
+ 
+ 	if (unlikely(!deref_curr_numa_group(p))) {
+-		unsigned int size = sizeof(struct numa_group) +
+-				    NR_NUMA_HINT_FAULT_STATS *
+-				    nr_node_ids * sizeof(unsigned long);
+-
+-		grp = kzalloc(size, GFP_KERNEL | __GFP_NOWARN);
++		grp = kzalloc(struct_size(grp, faults, NR_NUMA_HINT_FAULT_STATS * nr_node_ids),
++			      GFP_KERNEL | __GFP_NOWARN);
+ 		if (!grp)
+ 			return;
+ 
+-- 
+2.17.1
+

@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0341347BA8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C4947BA90
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234856AbhLUHOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:14:10 -0500
-Received: from mga07.intel.com ([134.134.136.100]:48744 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234839AbhLUHOJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:14:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640070849; x=1671606849;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VYviMeFO7+oLhFygQ1gEtw8dSLzuqgoRJEipX58modk=;
-  b=LqoR0Rpb2r6kRuSdwVp6+kJyC6eDwz4s/VUpdsUIPK3mrTjjTRnrJnn6
-   CVzd88cXpMPGKne+Wwt9ItFkJMlsaRv1oJuLBAmJEK19dMXwy+dAeEXQk
-   Lco2a6QjCdzzjZnLzqSlR4PkkTGHCDwx++SI30spoPdS0DVenLS0q6PnV
-   YM1y1Y0cO/Xijqe0IOLFXmqw496jsPuz5RqyYS/exGk6TRydZAzzmjtdD
-   VNIo4JqDThFWGLfrHRF2pUSh+ugOPYQ39WSOvsaZxjS9NtOyK8a7KAdBy
-   IAZWLBGMAUen60jSuk5+JD7GXSawYiJCoU2s7hqMZcNlebaxzEeMYZxVY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="303712213"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="303712213"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 23:14:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="757678063"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Dec 2021 23:14:06 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 01FAD190; Tue, 21 Dec 2021 09:14:14 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] software node: Update MAINTAINERS data base
-Date:   Tue, 21 Dec 2021 09:14:09 +0200
-Message-Id: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
+        id S234881AbhLUHOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:14:53 -0500
+Received: from smtpbg128.qq.com ([106.55.201.39]:54429 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229999AbhLUHOw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 02:14:52 -0500
+X-QQ-mid: bizesmtp42t1640070871txh3hbcu
+Received: from localhost.localdomain (unknown [118.121.67.96])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Tue, 21 Dec 2021 15:14:29 +0800 (CST)
+X-QQ-SSF: 01000000002000D0K000B00A0000000
+X-QQ-FEAT: Lg5IqoGaTUhVQ2PxsNgh24m9G4JSUp6rcIlsD2Oot6qF+nC9j4GJ6erQryVdw
+        hJrJdwy67hmHc4b6Hz833B2nlD0BLoXntdwuTcL66KrdrqIuG8/NYO/Ry8TX2fqXRf6ttCm
+        oHQIvnCAUx0MZV+Jt2FV6TLRFwNGOF7FT5GQju90xxrXPWcUgkvTAlSrNJ/NtpDkYxBYhro
+        NAvipqhD/LHO23bcub/aGAChkq7Upcip2LAC9ieLjDQ4H6dRMkwzM1BTSPyiidMpA2sUvzJ
+        9wfhtU5NQElgZ62VxIC3BQp3eGEu8x6jpZTtccKbSr7zK26y/tHb7kqw6B+KWXinQx3fBUJ
+        fwa04gk6cgkTi0e8VJOBDAHdZ0gGFAK8IQncC4gDjI9WOwoljQ=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, arnd@arndb.de, wangborong@cdjrlc.com,
+        jgg@ziepe.ca, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: dl2k: replace strlcpy with strscpy
+Date:   Tue, 21 Dec 2021 15:14:26 +0800
+Message-Id: <20211221071426.733023-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two updates to the MAINTAINERS regarding to software node API:
-- add Dan Scally to be designated reviewer
-- add rather tightly related device property files to the list
-- adjust section name accordingly
+The strlcpy should not be used because it doesn't limit the source
+length. So that it will lead some potential bugs.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+But the strscpy doesn't require reading memory from the src string
+beyond the specified "count" bytes, and since the return value is
+easier to error-check than strlcpy()'s. In addition, the implementation
+is robust to the string changing out from underneath it, unlike the
+current strlcpy() implementation.
+
+Thus, replace strlcpy with strscpy.
+
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
+ drivers/net/ethernet/dlink/dl2k.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Based on the latest Dan's involvement and amount of patches seen recently
-I went ahead and added his name to the list. Dan, please tell me if it's
-not appropriate.
-
- MAINTAINERS | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8912b2c1260c..ccb4aa744540 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17666,12 +17666,16 @@ F:	drivers/firmware/arm_sdei.c
- F:	include/linux/arm_sdei.h
- F:	include/uapi/linux/arm_sdei.h
+diff --git a/drivers/net/ethernet/dlink/dl2k.c b/drivers/net/ethernet/dlink/dl2k.c
+index a301f7e6a440..2c67a857a42f 100644
+--- a/drivers/net/ethernet/dlink/dl2k.c
++++ b/drivers/net/ethernet/dlink/dl2k.c
+@@ -1235,8 +1235,8 @@ static void rio_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info
+ {
+ 	struct netdev_private *np = netdev_priv(dev);
  
--SOFTWARE NODES
-+SOFTWARE NODES AND DEVICE PROPERTIES
- R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- R:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+R:	Daniel Scally <djrscally@gmail.com>
- L:	linux-acpi@vger.kernel.org
- S:	Maintained
-+F:	drivers/base/property.c
- F:	drivers/base/swnode.c
-+F:	include/linux/fwnode.h
-+F:	include/linux/property.h
+-	strlcpy(info->driver, "dl2k", sizeof(info->driver));
+-	strlcpy(info->bus_info, pci_name(np->pdev), sizeof(info->bus_info));
++	strscpy(info->driver, "dl2k", sizeof(info->driver));
++	strscpy(info->bus_info, pci_name(np->pdev), sizeof(info->bus_info));
+ }
  
- SOFTWARE RAID (Multiple Disks) SUPPORT
- M:	Song Liu <song@kernel.org>
+ static int rio_get_link_ksettings(struct net_device *dev,
 -- 
 2.34.1
 

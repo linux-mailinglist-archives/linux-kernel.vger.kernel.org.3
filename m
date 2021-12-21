@@ -2,120 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB70447C5AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A2647C518
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbhLUSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:03:56 -0500
-Received: from mga01.intel.com ([192.55.52.88]:3719 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232088AbhLUSD4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:03:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640109836; x=1671645836;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oi41HYlIbq01fjKNWy/Z7i7pvCOJnN47rmSuUs724Ps=;
-  b=E9aCmc05yMGIZ1x/WTdAU/NMU+ggBFll+3FeR7r/V+PX6A2VZx5f3Hd4
-   z52wXQBK36np5zQ6+dZ3I2C7J/k6SnAGR66OLSmlLVzTAD0NneNvG56MS
-   4Q9Rn6VcR9BNVt6kN4+kqISfcqcPQcTAZzgcfOIzalcmbgmIb3ca3qosS
-   J/gKefsRrIevcUGCvbE+5bamHpnd/tqXa0Y6vWH07RODddUE3X7SV13HJ
-   rkxPelWv2vduVTEvuKglwvZ+IAkqrkYbUZ6Hh2fwJtZD1XcopQvtQTWmU
-   JN70aegZjCME5zrlAYQkq+50wERF+v7KN2q+bBBn6++HAitujjT9ixEXq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="264647664"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="264647664"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:36:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="508158184"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 09:36:02 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzj3R-0009Fw-AZ; Tue, 21 Dec 2021 17:36:01 +0000
-Date:   Wed, 22 Dec 2021 01:35:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@protonmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sven Peter <sven@svenpeter.dev>
-Subject: [asahilinux:asahi-with-new-nvme 9/34]
- drivers/clk/clk-apple-nco.c:95:16: error: implicit declaration of function
- 'FIELD_PREP'
-Message-ID: <202112220119.mQPJa9jt-lkp@intel.com>
+        id S240443AbhLURgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:36:07 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:40538 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240435AbhLURgH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 12:36:07 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:44578)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mzj3V-009677-7v; Tue, 21 Dec 2021 10:36:05 -0700
+Received: from ip68-227-161-49.om.om.cox.net ([68.227.161.49]:54094 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mzj3U-0048xo-5Q; Tue, 21 Dec 2021 10:36:04 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Waiman Long <longman@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Vivier <laurent@vivier.eu>,
+        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
+        Willy Tarreau <w@1wt.eu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211221021744.864115-1-longman@redhat.com>
+        <87lf0e7y0k.fsf@email.froward.int.ebiederm.org>
+        <4f67dc4c-7038-7dde-cad9-4feeaa6bc71b@redhat.com>
+Date:   Tue, 21 Dec 2021 11:35:57 -0600
+In-Reply-To: <4f67dc4c-7038-7dde-cad9-4feeaa6bc71b@redhat.com> (Waiman Long's
+        message of "Tue, 21 Dec 2021 11:41:27 -0500")
+Message-ID: <87czlp7tdu.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-XM-SPF: eid=1mzj3U-0048xo-5Q;;;mid=<87czlp7tdu.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.161.49;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX180lGSi0e9hseN5KMysEPq9tcqjvvxHmw4=
+X-SA-Exim-Connect-IP: 68.227.161.49
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=3.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong,
+        XMSubMetaSxObfu_03,XMSubMetaSx_00,XM_B_SpammyWords autolearn=disabled
+        version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4710]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  1.2 XMSubMetaSxObfu_03 Obfuscated Sexy Noun-People
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  1.0 XMSubMetaSx_00 1+ Sexy Words
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Waiman Long <longman@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 484 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.7 (1.0%), b_tie_ro: 3.3 (0.7%), parse: 1.18
+        (0.2%), extract_message_metadata: 13 (2.6%), get_uri_detail_list: 3.3
+        (0.7%), tests_pri_-1000: 4.2 (0.9%), tests_pri_-950: 1.08 (0.2%),
+        tests_pri_-900: 0.85 (0.2%), tests_pri_-90: 71 (14.6%), check_bayes:
+        69 (14.3%), b_tokenize: 7 (1.3%), b_tok_get_all: 9 (1.9%),
+        b_comp_prob: 2.3 (0.5%), b_tok_touch_all: 48 (9.9%), b_finish: 0.75
+        (0.2%), tests_pri_0: 375 (77.3%), check_dkim_signature: 0.47 (0.1%),
+        check_dkim_adsp: 2.4 (0.5%), poll_dns_idle: 0.79 (0.2%), tests_pri_10:
+        1.67 (0.3%), tests_pri_500: 10 (2.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] exec: Make suid_dumpable apply to SUID/SGID binaries irrespective of invoking users
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi-with-new-nvme
-head:   675e4ce8d8355827d6ee1f2fadff9fd9598348c7
-commit: 4c12a1771a86a4e324e793617cc40c498c054fb6 [9/34] clk: clk-apple-nco: Add driver for Apple NCO
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211222/202112220119.mQPJa9jt-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/4c12a1771a86a4e324e793617cc40c498c054fb6
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi-with-new-nvme
-        git checkout 4c12a1771a86a4e324e793617cc40c498c054fb6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Adding a couple of other people who have expressed opinions on how
+to mitigate this issue in the kernel.
 
-All errors (new ones prefixed by >>):
+Waiman Long <longman@redhat.com> writes:
 
-   drivers/clk/clk-apple-nco.c: In function 'nco_div_translate':
->> drivers/clk/clk-apple-nco.c:95:16: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-      95 |         return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
-         |                ^~~~~~~~~~
-   drivers/clk/clk-apple-nco.c: In function 'nco_div_translate_inv':
->> drivers/clk/clk-apple-nco.c:103:27: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-     103 |         coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
-         |                           ^~~~~~~~~
-   cc1: some warnings being treated as errors
+> On 12/21/21 10:55, Eric W. Biederman wrote:
+>> Waiman Long <longman@redhat.com> writes:
+>>
+>>> The begin_new_exec() function checks for SUID or SGID binaries by
+>>> comparing effective uid and gid against real uid and gid and using
+>>> the suid_dumpable sysctl parameter setting only if either one of them
+>>> differs.
+>>>
+>>> In the special case that the uid and/or gid of the SUID/SGID binaries
+>>> matches the id's of the user invoking it, the suid_dumpable is not
+>>> used and SUID_DUMP_USER will be used instead. The documentation for the
+>>> suid_dumpable sysctl parameter does not include that exception and so
+>>> this will be an undocumented behavior.
+>>>
+>>> Eliminate this undocumented behavior by adding a flag in the linux_binprm
+>>> structure to designate a SUID/SGID binary and use it for determining
+>>> if the suid_dumpable setting should be applied or not.
+>> I see that you are making the code match the documentation.
+>> What harm/problems does this mismatch cause in practice?
+>> What is the motivation for this change?
+>>
+>> I am trying to see the motivation but all I can see is that
+>> in the case where suid and sgid do nothing in practice the code
+>> does not change dumpable.  The point of dumpable is to refuse to
+>> core dump when it is not safe.  In this case since nothing happened
+>> in practice it is safe.
+>>
+>> So how does this matter in practice.  If there isn't a good
+>> motivation my feel is that it is the documentation that needs to be
+>> updated rather than the code.
+>>
+>> There are a lot of warts to the suid/sgid handling during exec.  This
+>> just doesn't look like one of them
+>
+> This patch is a minor mitigation in response to the security
+> vulnerability as posted in
+> https://www.openwall.com/lists/oss-security/2021/10/20/2 (aka
+> CVE-2021-3864). In particular, the Su PoC (tested on CentOS 7) showing
+> that the su invokes /usr/sbin/unix_chkpwd which is also a SUID
+> binary. The initial su invocation won't generate a core dump because
+> the real uid and euid differs, but the second unix_chkpwd invocation
+> will. This patch eliminates this hole by making sure that all SUID
+> binaries follow suid_dumpable setting.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
-   Depends on SOUND && !UML && SND && SND_SOC && SND_SOC_ACPI
-   Selected by
-   - SND_SOC_SOF_AMD_COMMON && SOUND && !UML && SND && SND_SOC && SND_SOC_SOF_TOPLEVEL && SND_SOC_SOF_AMD_TOPLEVEL
+All that is required to take advantage of this vulnerability is
+for an suid program to exec something that will coredump.  That
+exec resets the dumpability.
+
+While the example exploit is execing a suid program it is not required
+that the exec'd program be suid.
+
+This makes your proposed change is not a particularly effective mitigation.
 
 
-vim +/FIELD_PREP +95 drivers/clk/clk-apple-nco.c
+The best idea I have seen to mitigate this from the kernel side is:
 
-    87	
-    88	static u32 nco_div_translate(struct nco_tables *tbl, int div)
-    89	{
-    90		int coarse = div / 4;
-    91	
-    92		if (WARN_ON(!nco_div_check(div)))
-    93			return 0;
-    94	
-  > 95		return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
-    96				FIELD_PREP(DIV_FINE, div % 4);
-    97	}
-    98	
-    99	static int nco_div_translate_inv(struct nco_tables *tbl, int regval)
-   100	{
-   101		int coarse, fine;
-   102	
- > 103		coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
-   104		fine = FIELD_GET(DIV_FINE, regval);
-   105	
-   106		return coarse * 4 + fine;
-   107	}
-   108	
+1) set RLIMIT_CORE to 0 during an suid exec
+2) update do_coredump to honor an rlimit of 0 for pipes
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Anecdotally this should not effect the common systems that pipe
+coredumps into programs as those programs are reported to honor
+RLIMIT_CORE of 0.  This needs to be verified.
+
+If those programs do honor RLIMIT_CORE of 0 we won't have any user
+visible changes if they never see coredumps from a program with a
+RLIMIT_CORE of 0.
+
+
+I have been meaning to audit userspace and see if the common coredump
+catchers truly honor an RLIMIT_CORE of 0.  Unfortunately I have not
+found time to do that yet.
+
+
+Eric

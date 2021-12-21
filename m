@@ -2,103 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5DB47C4F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE4047C4F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240387AbhLURYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:24:06 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:53604 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbhLURYF (ORCPT
+        id S240397AbhLURYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:24:22 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:39838 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240390AbhLURYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:24:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=6RE2t3Nrh37PIF515dZ3u+BHHExtd6YU1HsGcK2dnu4=; b=eXXVACeUXdlIB1/KjWu9GhcS1t
-        xrekSWq8RR2HCh+ekHLaiG+FIMaBYGfJYe5FGYP48P0GSRb0k+4RcTErCcOt9jBFo1Ig9Sjj3Kmoe
-        tYncC6lDUuP1bBmukDNNGvuJU7dzQGVanoWl4myv8s/QCXLVm72hdiY9G793ucRM2CiViDyHuRKK1
-        7i04q7Rmc1PbF/nOuxVTO3/I4ww8EecYfZPpNo9Hs1p8QOcgmTzxATUwvQhora8iHePLymjF6XC09
-        IIUeWkGtVQTpxCWH7uDR7kLmDT2i93+1oUQMtFpv4hoHCiA3m8EbXPaWgvrA4OrO2Fuj1hJ76ySdm
-        ndk5VOCg==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1mzirJ-00AX1V-OI; Tue, 21 Dec 2021 10:23:31 -0700
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20211117215410.3695-1-logang@deltatee.com>
- <20211117215410.3695-2-logang@deltatee.com> <20211221090003.GA7949@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <05095125-464e-4e85-f609-c7bc93d2f479@deltatee.com>
-Date:   Tue, 21 Dec 2021 10:23:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 12:24:21 -0500
+Received: by mail-io1-f71.google.com with SMTP id m6-20020a0566022e8600b005ec18906edaso9441855iow.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:24:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=NR2r2axULjweOgBCAvolqftShAH89P7hUZxF3KCl6ZI=;
+        b=YmKk7Cu4zDjqXYDNgwh7xwymMJsNv/5B60TbM7wjxqHmmQ7Mk/fdxl+meC1fH9KUnL
+         8GIC7lsP/Vn0mrYT+Uwhi4rZ57ElkL1xaPf5IRtPXmKpa0uqWLpYrsm4bArbT+l/A/jY
+         fqj+4ah4Isywof1A3JsISyG5dN/zU5wNyHU+L8VbONK2niQPdg10oIc6LJ/KRTxIsKjM
+         E1HQvsv6r5LaNkfroQ1agOkikQfcV37S6GqoURPGwyn+park57BRGk8Xh1y6I/MIbMfQ
+         CdfVaiv8yjxW4ZGReemuN6+/d4YIlkA/31iM5dhWk8TwBZ2DHSrI1o+FHqx7ZEd1QdTN
+         KNyQ==
+X-Gm-Message-State: AOAM530FvvdEmkUA7hwyoXA46OyP/l1JU1fKU23vZ3jahc0hM8v5fOwS
+        j2mltK/bYcqzAlhOMd4h9T0y1scSduvo/dxLrAs9lMQoSPiW
+X-Google-Smtp-Source: ABdhPJyA4yEg0OFko1dn0BPJP+DPmZi62d05HfP0iJCDTKr40FizNsqIOUeZbK47sQGxlXjEH/vGThBhZDl9JHKRqeEiu4o4NWSi
 MIME-Version: 1.0
-In-Reply-To: <20211221090003.GA7949@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: jgg@nvidia.com, ckulkarnilinux@gmail.com, martin.oliveira@eideticom.com, robin.murphy@arm.com, ira.weiny@intel.com, helgaas@kernel.org, jianxin.xiong@intel.com, dave.hansen@linux.intel.com, jason@jlekstrand.net, dave.b.minturn@intel.com, andrzej.jakowski@intel.com, daniel.vetter@ffwll.ch, willy@infradead.org, ddutile@redhat.com, jhubbard@nvidia.com, christian.koenig@amd.com, jgg@ziepe.ca, dan.j.williams@intel.com, sbates@raithlin.com, iommu@lists.linux-foundation.org, linux-mm@kvack.org, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, hch@lst.de
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 01/23] lib/scatterlist: cleanup macros into static
- inline functions
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+X-Received: by 2002:a05:6602:140c:: with SMTP id t12mr2230992iov.187.1640107460529;
+ Tue, 21 Dec 2021 09:24:20 -0800 (PST)
+Date:   Tue, 21 Dec 2021 09:24:20 -0800
+In-Reply-To: <00000000000017977605c395a751@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009411bb05d3ab468f@google.com>
+Subject: Re: [syzbot] kernel BUG in __page_mapcount
+From:   syzbot <syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, apopple@nvidia.com,
+        chinwen.chang@mediatek.com, fgheet255t@gmail.com, jannh@google.com,
+        khlebnikov@yandex-team.ru, kirill.shutemov@linux.intel.com,
+        kirill@shutemov.name, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        peterx@redhat.com, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
+        vbabka@suse.cz, walken@google.com, willy@infradead.org,
+        ziy@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    6e0567b73052 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c192b3b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ae22d1ee4fbca18
+dashboard link: https://syzkaller.appspot.com/bug?extid=1f52b3a18d5633fa7f82
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133200fdb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c3102db00000
 
-On 2021-12-21 2:00 a.m., Christoph Hellwig wrote:
-> On Wed, Nov 17, 2021 at 02:53:48PM -0700, Logan Gunthorpe wrote:
->> Convert the sg_is_chain(), sg_is_last() and sg_chain_ptr() macros
->> into static inline functions. There's no reason for these to be macros
->> and static inline are generally preferred these days.
->>
->> Also introduce the SG_PAGE_LINK_MASK define so the P2PDMA work, which is
->> adding another bit to this mask, can do so more easily.
->>
->> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> 
-> Looks fine:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> scatterlist.h doesn't have a real maintainer, do you want me to pick
-> this up through the DMA tree?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
 
-Sure, that would be great!
+ __mmput+0x122/0x4b0 kernel/fork.c:1113
+ mmput+0x56/0x60 kernel/fork.c:1134
+ exit_mm kernel/exit.c:507 [inline]
+ do_exit+0xb27/0x2b40 kernel/exit.c:819
+ do_group_exit+0x125/0x310 kernel/exit.c:929
+ get_signal+0x47d/0x2220 kernel/signal.c:2852
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+------------[ cut here ]------------
+kernel BUG at include/linux/page-flags.h:785!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ page_mapcount include/linux/mm.h:837 [inline]
+ smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+ smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+ smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+ walk_pmd_range mm/pagewalk.c:128 [inline]
+ walk_pud_range mm/pagewalk.c:205 [inline]
+ walk_p4d_range mm/pagewalk.c:240 [inline]
+ walk_pgd_range mm/pagewalk.c:277 [inline]
+ __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+ walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+ smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+ smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+ show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+ seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+ seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+ vfs_read+0x1b5/0x600 fs/read_write.c:479
+ ksys_read+0x12d/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faa2af6c969
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 24ec93ff95e4ac3d ]---
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Thanks,
-
-Logan

@@ -2,215 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D5147C85E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD8B47C861
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbhLUUnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S234888AbhLUUrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbhLUUno (ORCPT
+        with ESMTP id S234161AbhLUUrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:43:44 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95125C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 12:43:44 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id t11so51373qtw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 12:43:44 -0800 (PST)
+        Tue, 21 Dec 2021 15:47:20 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD38C061574;
+        Tue, 21 Dec 2021 12:47:20 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so18106968oto.13;
+        Tue, 21 Dec 2021 12:47:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QKiPZyIkoZhEjEDCqZ1DtyFgXU8NshvCITLb8EMLKaI=;
-        b=CYFfDlLIU66KdQFysHb+R2290xq5I394wVK4oN+LvtUSA5Z28tPjPcdmiak3N9lX0r
-         O2TKLX75rMy8ohumQRS6S3tRnIqzeAsVKNXfSYxbSJ1I8/MOOXOJ6lKmutSX4GXEDqvY
-         4f+dqalG18NBriuneMdo+HwNPGcu2uoNivpfbiJJVbAooL/fFfPlSAXhgqAGH/mo/PFH
-         mbspLQ9LjDFiarjVTkmEEEKvgNcFcsDGnNHlL5Y92rVa/y3TYV1/APeSqZT369sBmkiP
-         Vh8ltOh/k+dAara+WkhVsdxNbmImSrukp7c4Sc4UccmwnFtrTXtkjkbfEDa3kj4CHybv
-         W0mA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cvOxguznUbHexkyxaKFJR7WlpPIGqcRKsIAcNubdzxg=;
+        b=qsnh65m4RmON7ca0eSK+zmg2zTgGQKUyZ8NynD3xBPdC2KRcB8gjUkAurj4hE3VPtA
+         pSru+Ru4ai62/7YJVeCkDR448wO/WWxwf4bQj2pWRFHXFGmCM4t+vtdaxpeAHI9bVGWs
+         1X6XT+fm4iewIA0AX4UI4VhEvqua4J+MZIcHT2CPQ93A2qsyXLYf09GVqQWiM+IvjiCL
+         mFqZscnnKAwW7zT9dCLKDjJgHSx0c/l/5BHVp99EW5CsjBE0G0Fbv82ThspEkvRWhk7o
+         FLvQ3/tGDsOrIAdl9Z9U81lpTnzKUohO79C3/CJVaHOBq5U8Yqxn7GNv7gJRqmPcCQVm
+         fSsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QKiPZyIkoZhEjEDCqZ1DtyFgXU8NshvCITLb8EMLKaI=;
-        b=4fXy5/vvJVa9nRz9lDFnjcjIfImmCwOnhj+I9xQNZ6k4OwdVrZtZx0gsVgZUoI2l+2
-         SpTwfkapaP1ZZ0SHw1XupL/p8lPfV8qI341hKo2u5/r1EfYWgsdII2totcdYCejjIUdQ
-         fT+n4hnMMh6SiWqGAS3fOSRyJ/fCeApzY7S1TrMjX4Sze+3vIO7BtPOYetYN6Kd+GRqa
-         fPxSG3ZUmpXjcH/q2ljPFWX/8yqkz1fc5Eg1swaY3Wj5QHzj0Grzho4WZrdeaRcM30q8
-         XXg+Eb8qW6mavMJekS3qhL4yiXmCoQIZhFWPl+vhaKZX/lPwzd9Ym2VLehIuykN5hk+Q
-         wP1Q==
-X-Gm-Message-State: AOAM531LU6BS83ydEyKwX9U7EJNfHJ1GJOOzg98qFtdLdOW9cs+TPjB8
-        bQG11eyy1SFKXJW9g1G7TR8=
-X-Google-Smtp-Source: ABdhPJzGvtMrKNtgAJPQ/tiMnVAROthZ8TxUxb1fUIMtfUksE/JZwFkkX3E0wt1YNg204OfGICLP/Q==
-X-Received: by 2002:a05:622a:3cc:: with SMTP id k12mr3784308qtx.412.1640119423538;
-        Tue, 21 Dec 2021 12:43:43 -0800 (PST)
-Received: from debianG ([190.191.20.243])
-        by smtp.gmail.com with ESMTPSA id y10sm37914qkp.128.2021.12.21.12.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 12:43:43 -0800 (PST)
-Date:   Tue, 21 Dec 2021 17:43:42 -0300
-From:   Gaston Gonzalez <gascoar@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, nsaenz@kernel.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        juerg.haefliger@canonical.com, rdunlap@infradead.org,
-        dave.stevenson@raspberrypi.com, stefan.wahren@i2se.com,
-        unixbhaskar@gmail.com, mitaliborkar810@gmail.com,
-        phil@raspberrypi.com, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gascoar@gmail.com
-Subject: Re: [PATCH 3/4] staging: vc04_services: avoid the use of typedef for
- function pointers
-Message-ID: <YcI8fiPib2VNSO2w@debianG>
-References: <cover.1639858361.git.gascoar@gmail.com>
- <a218f1bd092d874ccd96e3a94c1174ad41fffebc.1639858361.git.gascoar@gmail.com>
- <YcFyjXOfGz9GwPAD@kroah.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cvOxguznUbHexkyxaKFJR7WlpPIGqcRKsIAcNubdzxg=;
+        b=IRTLc6ZRd0/LNdwLz0SsMysF3kgwt1XI3xynw/YvaWhF7e04XJgHyMccft+Vi+GJXH
+         8t03nTmklC8ncFEOExU7gd2uYWxEUPUX+snqEheU8Kbgnff54XNhVTzpBltTY0eOS/Jg
+         p9tJ9MOHAvHWalX1Dm+eFVVKIbr5lt4IPEcLg41i3D5ER121p5pIn+khxVNubXulvb29
+         sN3fYZz3s370T4w4MImu7tgsAYKahIIF6y3rehyOHOVoIVwCVEUfj6yepu9TQaOIqvRi
+         rVsJRyXaJ+cpoi54oa3vn3qIsmtMj68xt1J+qgmD+FupFzrdbRHSyGwGlG97COtsRiT4
+         KWRA==
+X-Gm-Message-State: AOAM5308KBCJzHrMwACpsjrMgb+pqjsQDEp7LIAf/hkm2JEg+RhVvvz2
+        txxgh/KG20vuTRXCKwf+PnoMPzTZWWs=
+X-Google-Smtp-Source: ABdhPJywBzhOeIKY1vMLUn4LJmbaYOHYRHRV000GypvDuo4/W8m4rz65WZvpFAJlpy5LPXtP1gskRg==
+X-Received: by 2002:a9d:63d8:: with SMTP id e24mr56748otl.345.1640119639264;
+        Tue, 21 Dec 2021 12:47:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 66sm90665otu.55.2021.12.21.12.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 12:47:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v1 1/8] hwmon: (adt7410) Pass name to core driver
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211221201113.752827-1-demonsingur@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c5effd54-df4d-c7aa-47a2-f7fdcee5354a@roeck-us.net>
+Date:   Tue, 21 Dec 2021 12:47:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcFyjXOfGz9GwPAD@kroah.com>
+In-Reply-To: <20211221201113.752827-1-demonsingur@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 07:22:05AM +0100, Greg KH wrote:
-> On Mon, Dec 20, 2021 at 06:29:13PM -0300, Gaston Gonzalez wrote:
-> > Replace the function pointer typedef vchiq_mmal_buffer_cb with
-> > equivalent declaration to better align with the linux kernel coding
-> > style.
-> > 
-> > While at it, realignments were done in some touched lines.
-> > 
-> > Signed-off-by: Gaston Gonzalez <gascoar@gmail.com>
-> > ---
-> >  .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 24 +++++++++----------
-> >  .../vc04_services/vchiq-mmal/mmal-vchiq.h     | 13 +++++-----
-> >  2 files changed, 18 insertions(+), 19 deletions(-)
+On 12/21/21 12:11 PM, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > 
-> Same subject line as patch 1/4 :(
+> It will later be used to register hwmon device using
+> hwmon_device_register_with_info.
 > 
-> > 
-> > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> > index 76d3f0399964..54e5ce245ae7 100644
-> > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> > @@ -269,10 +269,10 @@ static void buffer_work_cb(struct work_struct *work)
-> >  
-> >  	atomic_dec(&msg_context->u.bulk.port->buffers_with_vpu);
-> >  
-> > -	msg_context->u.bulk.port->buffer_cb(msg_context->u.bulk.instance,
-> > -					    msg_context->u.bulk.port,
-> > -					    msg_context->u.bulk.status,
-> > -					    msg_context->u.bulk.buffer);
-> > +	msg_context->u.bulk.port->vchiq_mmal_buffer_cb(msg_context->u.bulk.instance,
-> > +						       msg_context->u.bulk.port,
-> > +						       msg_context->u.bulk.status,
-> > +						       msg_context->u.bulk.buffer);
-> >  }
-> >  
-> >  /* workqueue scheduled callback to handle receiving buffers
-> > @@ -1327,13 +1327,12 @@ static int port_disable(struct vchiq_mmal_instance *instance,
-> >  			mmalbuf = list_entry(buf_head, struct mmal_buffer,
-> >  					     list);
-> >  			list_del(buf_head);
-> > -			if (port->buffer_cb) {
-> > +			if (port->vchiq_mmal_buffer_cb) {
-> >  				mmalbuf->length = 0;
-> >  				mmalbuf->mmal_flags = 0;
-> >  				mmalbuf->dts = MMAL_TIME_UNKNOWN;
-> >  				mmalbuf->pts = MMAL_TIME_UNKNOWN;
-> > -				port->buffer_cb(instance,
-> > -						port, 0, mmalbuf);
-> > +				port->vchiq_mmal_buffer_cb(instance, port, 0, mmalbuf);
-> >  			}
-> >  		}
-> >  
-> > @@ -1363,7 +1362,7 @@ static int port_enable(struct vchiq_mmal_instance *instance,
-> >  
-> >  	port->enabled = 1;
-> >  
-> > -	if (port->buffer_cb) {
-> > +	if (port->vchiq_mmal_buffer_cb) {
-> >  		/* send buffer headers to videocore */
-> >  		hdr_count = 1;
-> >  		list_for_each_safe(buf_head, q, &port->buffers) {
-> > @@ -1454,9 +1453,10 @@ EXPORT_SYMBOL_GPL(vchiq_mmal_port_parameter_get);
-> >   * enables a port and queues buffers for satisfying callbacks if we
-> >   * provide a callback handler
-> >   */
-> > -int vchiq_mmal_port_enable(struct vchiq_mmal_instance *instance,
-> > -			   struct vchiq_mmal_port *port,
-> > -			   vchiq_mmal_buffer_cb buffer_cb)
-> > +int vchiq_mmal_port_enable(struct vchiq_mmal_instance *instance, struct vchiq_mmal_port *port,
-> > +			   void (*vchiq_mmal_buffer_cb)(struct vchiq_mmal_instance  *instance,
-> > +							struct vchiq_mmal_port *port, int status,
-> > +							struct mmal_buffer *buffer))
-> >  {
-> >  	int ret;
-> >  
-> > @@ -1469,7 +1469,7 @@ int vchiq_mmal_port_enable(struct vchiq_mmal_instance *instance,
-> >  		goto unlock;
-> >  	}
-> >  
-> > -	port->buffer_cb = buffer_cb;
-> > +	port->vchiq_mmal_buffer_cb = vchiq_mmal_buffer_cb;
-> >  
-> >  	ret = port_enable(instance, port);
-> >  
-> > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-> > index 1dc81ecf9268..39615ce6584a 100644
-> > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-> > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-> > @@ -42,11 +42,6 @@ struct vchiq_mmal_port_buffer {
-> >  
-> >  struct vchiq_mmal_port;
-> >  
-> > -typedef void (*vchiq_mmal_buffer_cb)(
-> > -		struct vchiq_mmal_instance  *instance,
-> > -		struct vchiq_mmal_port *port,
-> > -		int status, struct mmal_buffer *buffer);
-> > -
-> >  struct vchiq_mmal_port {
-> >  	u32 enabled:1;
-> >  	u32 handle;
-> > @@ -76,7 +71,9 @@ struct vchiq_mmal_port {
-> >  	/* Count of buffers the VPU has yet to return */
-> >  	atomic_t buffers_with_vpu;
-> >  	/* callback on buffer completion */
-> > -	vchiq_mmal_buffer_cb buffer_cb;
-> > +	void (*vchiq_mmal_buffer_cb)(struct vchiq_mmal_instance  *instance,
-> > +				     struct vchiq_mmal_port *port, int status,
-> > +				     struct mmal_buffer *buffer);
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>   drivers/hwmon/adt7410.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> There is no need to rename the function pointer at all.
+> diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
+> index 973db057427b..ef4b5af865e9 100644
+> --- a/drivers/hwmon/adt7410.c
+> +++ b/drivers/hwmon/adt7410.c
+> @@ -45,7 +45,7 @@ static int adt7410_i2c_probe(struct i2c_client *client)
+>   			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
+>   		return -ENODEV;
+>   
+> -	return adt7x10_probe(&client->dev, NULL, client->irq, &adt7410_i2c_ops);
+> +	return adt7x10_probe(&client->dev, client->name, client->irq, &adt7410_i2c_ops);
+>   }
+>   
+>   static int adt7410_i2c_remove(struct i2c_client *client)
 > 
-> >  	/* callback context */
-> >  	void *cb_ctx;
-> >  };
-> > @@ -126,7 +123,9 @@ int vchiq_mmal_component_disable(
-> >  int vchiq_mmal_port_enable(
-> >  		struct vchiq_mmal_instance *instance,
-> >  		struct vchiq_mmal_port *port,
-> > -		vchiq_mmal_buffer_cb buffer_cb);
-> > +		void (*vchiq_mmal_buffer_cb)(struct vchiq_mmal_instance  *instance,
-> > +					     struct vchiq_mmal_port *port, int status,
-> > +					     struct mmal_buffer *buffer));
-> >  
-> 
-> Here is where using a typedef is ok.  Again, typedefs for function
-> pointers is normal and keeps code smaller and easier to follow.
->
 
-Ok, I had my doubts about this one just because that lines.
+This series looks very similar to the previous series, yet there is
+no change log, and it again claims to be v1 of a patch series. Either
+explain why this series is so different to the similar looking patch
+series starting with "hwmon: adt7x10: store bus_dev in private data",
+that it doesn't deserve to be called v2, or provide change logs and
+version your series.
 
-Will drop it.
+If you expect me to figure out what changed, sorry, that is not how
+it works. I won't even look at this series.
 
-thanks,
-
-Gaston
-
-
-> thanks,
-> 
-> greg k-h
+Guenter

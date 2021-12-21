@@ -2,239 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4026147C3EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF2947C3EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239932AbhLUQgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 11:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S236533AbhLUQhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 11:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239959AbhLUQgo (ORCPT
+        with ESMTP id S231744AbhLUQhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:36:44 -0500
+        Tue, 21 Dec 2021 11:37:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7E1C061747;
-        Tue, 21 Dec 2021 08:36:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22128C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:37:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7FBCB817BB;
-        Tue, 21 Dec 2021 16:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466E5C36AEA;
-        Tue, 21 Dec 2021 16:36:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E062CB816D8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41791C36AE9;
+        Tue, 21 Dec 2021 16:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640104601;
-        bh=Raa20oTo55bW6fRnesFHj7YQjLtEnX8esLtzywI76A4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=twN39g170uyrsJj31r1hpC5+M6PPY8IcmqdvVkc8SoPSfZTBEXteJdbJ27bBEl7Kt
-         ++4Lbva4Wpgqy6J8NKPBYpJqlxjaZLPaN0F4ZNz1tzxOH6G+y7Cq3Jhr1wIUJrd7qI
-         tLPOzYMnXbux8ZXrT/5+FxqIgL1AjuE6a0gk/6Dq8H1mM3u0yvTFd1MoV2U4JTUyfH
-         jT5CR0lR43+5hSrhqiuozecY4WQsEvv9jjzTvQTn98U6GK5XeQtOfbYOzZfnefVtP9
-         reicZKmyhx7GAZb87b8nIi8jP9tL1RKHjRuCJngFNyOS9kNN6n+h55rWQzafemUgZa
-         OqWE3XUOQYbvQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup.patel@wdc.com, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, lazyparser@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 13/13] riscv: compat: ptrace: Add compat_arch_ptrace implement
-Date:   Wed, 22 Dec 2021 00:35:32 +0800
-Message-Id: <20211221163532.2636028-14-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211221163532.2636028-1-guoren@kernel.org>
-References: <20211221163532.2636028-1-guoren@kernel.org>
+        s=k20201202; t=1640104648;
+        bh=/2QdsJ4aOSotVXYGkHkh4VCzzsPM9XdShE24gwxfsOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CC9cG3lBfzZoWTVa7wFP2d+F9Tx6CZ6YQ5MPhtoBIi4WcvQtiwNjcXFJ3MpMPvwdX
+         bY+Tea8P842ynpBqEZKGwupW4Pj6fY/yt+jP3B4REtzTKxGlFPbpUV8RLXkI7lQ/oI
+         9AzPnl87SsFIzqTulVIcjwcXWe9SWnsACTUrqehshDdbFhAfRuS9TX/9+7MjnpGPkf
+         DH7yK7N7X/BdaS2eFNFPR1CyrcwhXB3fqYoQX+g9TzXSIyEkb9E8ohvuAFAWHSjPoQ
+         NCfmkCPUq9+wEGKj3OpNGFlKvGCpJihiu3GQG5oPw3olD3N5O2TvZWHyaSCAU2jHId
+         moAs8Rta0UTbA==
+Date:   Tue, 21 Dec 2021 16:37:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
+        Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@intel.com>,
+        =?iso-8859-1?Q?P=E9ter?= Ujfalusi 
+        <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Bard Liao <bard.liao@intel.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] ASoC: SOF: AMD: simplify return status handling
+Message-ID: <YcICwuOpBjuDNipC@sirena.org.uk>
+References: <20211221161814.236318-1-AjitKumar.Pandey@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J7/dWMoLwRCr9/a+"
+Content-Disposition: inline
+In-Reply-To: <20211221161814.236318-1-AjitKumar.Pandey@amd.com>
+X-Cookie: knowledge, n.:
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
 
-Now, you can use native gdb on riscv64 for rv32 app debugging.
+--J7/dWMoLwRCr9/a+
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-$ uname -a
-Linux buildroot 5.16.0-rc4-00036-gbef6b82fdf23-dirty #53 SMP Mon Dec 20 23:06:53 CST 2021 riscv64 GNU/Linux
-$ cat /proc/cpuinfo
-processor       : 0
-hart            : 0
-isa             : rv64imafdcsuh
-mmu             : sv48
+On Tue, Dec 21, 2021 at 09:48:07PM +0530, Ajit Kumar Pandey wrote:
+> Just return 0; on success.
+>=20
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@intel.com>
+> Reviewed-by: P=E9ter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> ---
 
-$ file /bin/busybox
-/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
-$ file /usr/bin/gdb
-/usr/bin/gdb: ELF 32-bit LSB shared object, UCB RISC-V, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
-$ /usr/bin/gdb /bin/busybox
-GNU gdb (GDB) 10.2
-Copyright (C) 2021 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-...
-Reading symbols from /bin/busybox...
-(No debugging symbols found in /bin/busybox)
-(gdb) b main
-Breakpoint 1 at 0x8ddc
-(gdb) r
-Starting program: /bin/busybox
-Failed to read a valid object file image from memory.
+You've not provided a Signed-off-by for this so I can't do anything with
+it, please see Documentation/process/submitting-patches.rst for details
+on what this is and why it's important.
 
-Breakpoint 1, 0x555a8ddc in main ()
-(gdb) i r
-ra             0x77df0b74       0x77df0b74
-sp             0x7fdd3d10       0x7fdd3d10
-gp             0x5567e800       0x5567e800 <bb_common_bufsiz1+160>
-tp             0x77f64280       0x77f64280
-t0             0x0      0
-t1             0x555a6fac       1431990188
-t2             0x77dd8db4       2011008436
-fp             0x7fdd3e34       0x7fdd3e34
-s1             0x7fdd3e34       2145205812
-a0             0xffffffff       -1
-a1             0x2000   8192
-a2             0x7fdd3e3c       2145205820
-a3             0x0      0
-a4             0x7fdd3d30       2145205552
-a5             0x555a8dc0       1431997888
-a6             0x77f2c170       2012397936
-a7             0x6a7c7a2f       1786542639
-s2             0x0      0
-s3             0x0      0
-s4             0x555a8dc0       1431997888
-s5             0x77f8a3a8       2012783528
-s6             0x7fdd3e3c       2145205820
-s7             0x5567cecc       1432866508
---Type <RET> for more, q to quit, c to continue without paging--
-s8             0x1      1
-s9             0x0      0
-s10            0x55634448       1432568904
-s11            0x0      0
-t3             0x77df0bb8       2011106232
-t4             0x42fc   17148
-t5             0x0      0
-t6             0x40     64
-pc             0x555a8ddc       0x555a8ddc <main+28>
-(gdb) si
-0x555a78f0 in mallopt@plt ()
-(gdb) c
-Continuing.
-BusyBox v1.34.1 (2021-12-19 22:39:48 CST) multi-call binary.
-BusyBox is copyrighted by many authors between 1998-2015.
-Licensed under GPLv2. See source distribution for detailed
-copyright notices.
+--J7/dWMoLwRCr9/a+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Usage: busybox [function [arguments]...]
-   or: busybox --list[-full]
-...
-[Inferior 1 (process 107) exited normally]
-(gdb) q
+-----BEGIN PGP SIGNATURE-----
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/riscv/kernel/ptrace.c | 80 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 74 insertions(+), 6 deletions(-)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHCArwACgkQJNaLcl1U
+h9Bnkgf/R8VlhUYZw6VQS/5uDmJ/934PiphVvshWFpwsNAtInZRH2cmASDgUM495
+6Xp4uSX4fn/NlNjQuRbuRWIWrO8/+c9cIMRugogtFNsYHrfj7nVdUdEu1Hi4KwnP
+kRWyTIaf+ESCBnvgLbk+6Bvy4/3sc3Vb5z1H9HtZoFkG8RCNDTKk5p0IqdSsf2Ub
+sqtQ1XY6eHbNtWnYszt8yr2bSzhyYqebzjKcfFIUxw4GpTtlxaXPBIV1l/104nca
+CyurCNiv8u3mFx9hWiNa/4LnpbAMYEPgUK5QaIsIf50b+tOSBaiYTmRdBbsBeB7t
+HZQITiJKyI2xYhR/q0i9IApJtS5Dqg==
+=GxDx
+-----END PGP SIGNATURE-----
 
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 55dd50f8a5cc..76042ed861a3 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -114,11 +114,6 @@ static const struct user_regset_view riscv_user_native_view = {
- 	.n = ARRAY_SIZE(riscv_user_regset),
- };
- 
--const struct user_regset_view *task_user_regset_view(struct task_struct *task)
--{
--	return &riscv_user_native_view;
--}
--
- struct pt_regs_offset {
- 	const char *name;
- 	int offset;
-@@ -278,9 +273,82 @@ __visible void do_syscall_trace_exit(struct pt_regs *regs)
- }
- 
- #ifdef CONFIG_COMPAT
-+static int compat_riscv_gpr_get(struct task_struct *target,
-+				const struct user_regset *regset,
-+				struct membuf to)
-+{
-+	struct compat_user_regs_struct cregs;
-+
-+	regs_to_cregs(&cregs, task_pt_regs(target));
-+
-+	return membuf_write(&to, &cregs,
-+			    sizeof(struct compat_user_regs_struct));
-+}
-+
-+static int compat_riscv_gpr_set(struct task_struct *target,
-+				const struct user_regset *regset,
-+				unsigned int pos, unsigned int count,
-+				const void *kbuf, const void __user *ubuf)
-+{
-+	int ret;
-+	struct compat_user_regs_struct cregs;
-+
-+	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &cregs, 0, -1);
-+
-+	cregs_to_regs(&cregs, task_pt_regs(target));
-+
-+	return ret;
-+}
-+
-+static const struct user_regset compat_riscv_user_regset[] = {
-+	[REGSET_X] = {
-+		.core_note_type = NT_PRSTATUS,
-+		.n = ELF_NGREG,
-+		.size = sizeof(compat_elf_greg_t),
-+		.align = sizeof(compat_elf_greg_t),
-+		.regset_get = compat_riscv_gpr_get,
-+		.set = compat_riscv_gpr_set,
-+	},
-+#ifdef CONFIG_FPU
-+	[REGSET_F] = {
-+		.core_note_type = NT_PRFPREG,
-+		.n = ELF_NFPREG,
-+		.size = sizeof(elf_fpreg_t),
-+		.align = sizeof(elf_fpreg_t),
-+		.regset_get = riscv_fpr_get,
-+		.set = riscv_fpr_set,
-+	},
-+#endif
-+};
-+
-+static const struct user_regset_view compat_riscv_user_native_view = {
-+	.name = "riscv",
-+	.e_machine = EM_RISCV,
-+	.regsets = compat_riscv_user_regset,
-+	.n = ARRAY_SIZE(compat_riscv_user_regset),
-+};
-+
- long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
- 			compat_ulong_t caddr, compat_ulong_t cdata)
- {
--	return 0;
-+	long ret = -EIO;
-+
-+	switch (request) {
-+	default:
-+		ret = compat_ptrace_request(child, request, caddr, cdata);
-+		break;
-+	}
-+
-+	return ret;
- }
-+#endif /* CONFIG_COMPAT */
-+
-+const struct user_regset_view *task_user_regset_view(struct task_struct *task)
-+{
-+#ifdef CONFIG_COMPAT
-+	if (test_tsk_thread_flag(task, TIF_32BIT))
-+		return &compat_riscv_user_native_view;
-+	else
- #endif
-+		return &riscv_user_native_view;
-+}
--- 
-2.25.1
-
+--J7/dWMoLwRCr9/a+--

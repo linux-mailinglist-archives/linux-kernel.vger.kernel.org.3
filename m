@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D3147C2B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C5647C2BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbhLUPWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S239276AbhLUPXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239259AbhLUPWf (ORCPT
+        with ESMTP id S235958AbhLUPXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:22:35 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678DC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:22:34 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id bm14so40555259edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:22:34 -0800 (PST)
+        Tue, 21 Dec 2021 10:23:20 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F50DC061574;
+        Tue, 21 Dec 2021 07:23:20 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso17115854otf.0;
+        Tue, 21 Dec 2021 07:23:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NXqZoCi6bFzrtVtfX7brMYS+xGEp73oZA5ti3zFyQHs=;
-        b=Di2qnlX38KdMWngxFVbSDFQfjq/BigeQIN75VnyGhGL88sn2N8bWzoZt1G5JN20YyW
-         6VOuVAfyh12OGwZx8fSN3MJEAofIXI/pBDvGad3HFaARAbuQQbanJx744HGNPiETjKyC
-         //Px55seoFD5lqHAdUYxkE7M3giUf+znX0082+zbVRrNH8mGkWsPerV2w2SifpvAGuXE
-         mf7nr65PcIWpvqxuqVQspyqB0hmBt7uqb+Q0P7OIBqECz2e5bnig3jYOTxRewml/fFHA
-         yoMBz5UfCg8IQYGel2BTWfQjzNTeA3I4/+5q8hlHlx5/2R+QLUSwNhVSLWiBWP0Q4mO2
-         s8zg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1i6caAzqA+gvrfiTEd1QuqpmIPOfQlX1D5IVEqe+W3k=;
+        b=EUBO1lv+2YSXzIUoQfX5QZ4Yg5lMJQaOFNl/6SUs+gzgRJrQ+/RRx0Sx3GBgFxDn32
+         gTJf7r2FPH8uVEvUfYSRrhMe1KgTxSvGVq/nqKnO+1hoaCusTHIFMyc0mf61V4jRLBgo
+         XcoDk+1uOqROa4gokF+H70vr/VXrZkvntMXIiDhJSC4+kgN+0gF+9k2pZsh8ZmXhTOor
+         QJ+EXz28B7OC6IEzmCyG3MNtS4hG2XO97kN6SsPRvMgsrYC6rcIriTfRBQQkvN0KreI9
+         pz33uf6e2/lGzqZwO++VkXze/33RdsktJH84ckbUBiiNAA2tHvSUoZxCBBGQ+RRFhvs+
+         7RjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NXqZoCi6bFzrtVtfX7brMYS+xGEp73oZA5ti3zFyQHs=;
-        b=ctLoYKjGXr3r7z7AzqGKV0FOC7wnOdZDNYFrxgkV0xAhzjT33JKiORYU4gstSEu1kM
-         pFWs8VXzcncD4u2cCAzvb7YFDkgsBm3I9kIempILikh+M8/8clwJB5sVOp2Z5p6BmFvd
-         JLOSirSp5ZOT/t8/PdAG6f44HKfovuZ4yd27syxIj3qdllcbgkwOLE7UnOyc83WNr1w3
-         oXZHk+RLaf7C/e58zJx6vcSUsH5RJ6R+/j7T62drks6OfD9aTD70JRBOEzh8PQGx553f
-         c/r967vqziG+COdfnDAU24zD+K5kxR0z9a9uxj40S1P7qVi/6rB3v/BIET+PLgeQgaso
-         As+w==
-X-Gm-Message-State: AOAM530LU4xFJpnqOil66gx7yIY83lwa5bV4Gp0aoPTsPaGNJOVtFLJj
-        anBcajzrt5tIawbr+kUWdg+lCJuqkZNXSKMIu1sF2Q==
-X-Google-Smtp-Source: ABdhPJxC8jMk+u361VafMW+SAgJhdjljhacITgcBclmQ37kVkk1G/wIdZPndCGxJ4zNkvuTNnXEIxtopJ73Hi1pUg/s=
-X-Received: by 2002:a17:906:4c8f:: with SMTP id q15mr3197240eju.736.1640100153188;
- Tue, 21 Dec 2021 07:22:33 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=1i6caAzqA+gvrfiTEd1QuqpmIPOfQlX1D5IVEqe+W3k=;
+        b=YxWAwQ+Hi9dvicWyuK+4+QFhe1Ww8lNmntkv9Lfg5UTAp7KOIjI5UwFMD06Qavdomh
+         UE2mJ3dhAoTJSMRGwq1XzkjilD8ig/44kMkcHUzqsr52bhCuzHNTIvcUZ0stNpCIBH+5
+         T1iMudmXnGJhBLPPX7J9zpZKee9XYtrZvReJfLhqF/9rs1JOnxyujnViZwKLe26Pocwg
+         wRTGgO5c5hyKMDgjmzidT8j6BOouI7SvLqUlYO2kMs1FPRbMbpNqh8oyxfiMG1NVXLJT
+         cQJ17g0C2vs33aq11OBZ6t171vNOuWrcCMpqbimYMUJkW9qUs6yIHS4X2Nlg8uxhqm0d
+         Hwww==
+X-Gm-Message-State: AOAM532r/iNENmN75G7aFsTxqHOOVi6bvx92uRCMRinYmlX2KmKZh5p1
+        gl/7o7R/TBo3PPfHTlFLnkQ=
+X-Google-Smtp-Source: ABdhPJxAi5GmDc8UzWdGKu/Em8Ha/Btk/L36nGvU801rqR+eHNBHrXTHNbMr+Lt3V34AcSqYawEFPg==
+X-Received: by 2002:a9d:2216:: with SMTP id o22mr2439986ota.78.1640100199739;
+        Tue, 21 Dec 2021 07:23:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n26sm3530159ooq.36.2021.12.21.07.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 07:23:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 21 Dec 2021 07:23:17 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 07/10] hwmon: adt7x10: remove attrs
+Message-ID: <20211221152317.GC2753412@roeck-us.net>
+References: <20211221123944.2683245-1-demonsingur@gmail.com>
+ <20211221123944.2683245-7-demonsingur@gmail.com>
 MIME-Version: 1.0
-References: <20211221113825.334782-1-yangyingliang@huawei.com>
-In-Reply-To: <20211221113825.334782-1-yangyingliang@huawei.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 21 Dec 2021 16:22:22 +0100
-Message-ID: <CAMRc=Md7xfn5-XtbVs_sEWt7YtdzMF0eUCqUME4_W6Bxv4d84g@mail.gmail.com>
-Subject: Re: [PATCH -next] gpio: sim: add missing fwnode_handle_put() in gpio_sim_probe()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221123944.2683245-7-demonsingur@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 12:32 PM Yang Yingliang
-<yangyingliang@huawei.com> wrote:
->
-> Calling fwnode_handle_put() when break out of device_for_each_child_node(),
-> or the device node reference will be leakd.
->
-> Fixes: 83960fcf4818 ("gpio: sim: new testing module")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/gpio/gpio-sim.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index ef6145f51c8a..520ee923b516 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -444,8 +444,10 @@ static int gpio_sim_probe(struct platform_device *pdev)
->
->         device_for_each_child_node(dev, swnode) {
->                 ret = gpio_sim_add_bank(swnode, dev);
-> -               if (ret)
-> +               if (ret) {
-> +                       fwnode_handle_put(swnode);
->                         return ret;
-> +               }
->         }
->
->         return 0;
-> --
-> 2.25.1
->
+On Tue, Dec 21, 2021 at 02:39:41PM +0200, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> 
+> These will be replaced by hwmon read and write callbacks.
+> 
 
-Applied, thanks!
+Again, this is a no-go. The driver is no longer operational
+after this patch was applied.
 
-Bart
+The split into multiple patches is interesting, but it is confusing,
+adds a lot of complexity, and makes it impossible to review the series.
+
+Please combine all patches related to the with_info conversion into
+a single patch.
+
+Thanks,
+Guenter

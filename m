@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E33DA47C4EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5DB47C4F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240381AbhLURXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:23:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38395 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232738AbhLURXN (ORCPT
+        id S240387AbhLURYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:24:06 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:53604 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232694AbhLURYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:23:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640107393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cgNFiSHVPmozrMAwLoLE4jQsVCvOy69kXUCzJ2IDG40=;
-        b=K4655Xo552IOFcyt4IgJbqlrQF7AP6WJ810YvgDO9AwO1pXVFZRqiNlGPfgNKnlLOFZsv0
-        lJd9uLuLJ7LMStYakhgg3ZV9Fmb1pZnTsU9bLuxxqI/FiyzfdbB9ymOJWbDBZG546pBZ2e
-        VEcRVw96UpnlFltAikTYRCj9qOsU52s=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-JFqaKm8RNzin_pspVGPPeg-1; Tue, 21 Dec 2021 12:23:12 -0500
-X-MC-Unique: JFqaKm8RNzin_pspVGPPeg-1
-Received: by mail-wm1-f71.google.com with SMTP id g189-20020a1c20c6000000b00345bf554707so739788wmg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:23:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cgNFiSHVPmozrMAwLoLE4jQsVCvOy69kXUCzJ2IDG40=;
-        b=cxxGpguMw2Y9CMEWZ1SPN9DS9NMsCjAJcb0cX85cGgX8z394m0n5y40ccUu1yetVMD
-         g8gDiv0Br9iPoCsBuRmkgwseY5zNcOxfBt4m0n6xlL99bnubrc4cRPdt5POXTMP/GLb3
-         BhWWnog+q30X55JW3/0Q75czDwAjf2vsPwcIvMTLoJWpZ01kAfcMksxpes9tf06nS259
-         myzNQSCjYRsDFgqdhd0nhRYEg46M0sr6xkBO9Z7Yl9nEWxUvFNxJokROWWSxGwyfdpXK
-         8h7VKfVUNOYEeWQ5IdmWS5CWToD2hj90Xp8CIIBRz1T9Wp/XVWll4tj0eX9mSD70L3WH
-         nPpQ==
-X-Gm-Message-State: AOAM532lw5XoohXd6vStzupcwjUubY96WtpFBmwNgBSo7RCOts4OlawA
-        6cPeVJOmy22kCjutZV6B4XcJ2S9huqdaKAE4LeyzQ7kkbwIxOswiV+OpputkAzUG5na8x3NBSfX
-        IZ0ps+HoTCyRy0SajUC4mEjpG
-X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr2939926wri.358.1640107389834;
-        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyI+sgOMHf0YSbgDUY4Hz0bbMnBZ39bzuZPfnty8IjP5PgtILbNjQUHQYlB5n/1B8EGxd5qNw==
-X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr2939904wri.358.1640107389571;
-        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id c8sm10962302wrp.40.2021.12.21.09.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 09:23:09 -0800 (PST)
-Message-ID: <4d739c28-e07d-f921-8a8d-a5343139e234@redhat.com>
-Date:   Tue, 21 Dec 2021 18:23:06 +0100
+        Tue, 21 Dec 2021 12:24:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=6RE2t3Nrh37PIF515dZ3u+BHHExtd6YU1HsGcK2dnu4=; b=eXXVACeUXdlIB1/KjWu9GhcS1t
+        xrekSWq8RR2HCh+ekHLaiG+FIMaBYGfJYe5FGYP48P0GSRb0k+4RcTErCcOt9jBFo1Ig9Sjj3Kmoe
+        tYncC6lDUuP1bBmukDNNGvuJU7dzQGVanoWl4myv8s/QCXLVm72hdiY9G793ucRM2CiViDyHuRKK1
+        7i04q7Rmc1PbF/nOuxVTO3/I4ww8EecYfZPpNo9Hs1p8QOcgmTzxATUwvQhora8iHePLymjF6XC09
+        IIUeWkGtVQTpxCWH7uDR7kLmDT2i93+1oUQMtFpv4hoHCiA3m8EbXPaWgvrA4OrO2Fuj1hJ76ySdm
+        ndk5VOCg==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1mzirJ-00AX1V-OI; Tue, 21 Dec 2021 10:23:31 -0700
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20211117215410.3695-1-logang@deltatee.com>
+ <20211117215410.3695-2-logang@deltatee.com> <20211221090003.GA7949@lst.de>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <05095125-464e-4e85-f609-c7bc93d2f479@deltatee.com>
+Date:   Tue, 21 Dec 2021 10:23:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: selftests: Fix compile error for non-x86
- vm_compute_max_gfn()
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Anup Patel <anup.patel@wdc.com>, Shuah Khan <shuah@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20211221125617.932371-1-anup.patel@wdc.com>
- <3e3b5295-f6fb-1ff9-acfe-1a4c47c6ba20@linuxfoundation.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <3e3b5295-f6fb-1ff9-acfe-1a4c47c6ba20@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20211221090003.GA7949@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: jgg@nvidia.com, ckulkarnilinux@gmail.com, martin.oliveira@eideticom.com, robin.murphy@arm.com, ira.weiny@intel.com, helgaas@kernel.org, jianxin.xiong@intel.com, dave.hansen@linux.intel.com, jason@jlekstrand.net, dave.b.minturn@intel.com, andrzej.jakowski@intel.com, daniel.vetter@ffwll.ch, willy@infradead.org, ddutile@redhat.com, jhubbard@nvidia.com, christian.koenig@amd.com, jgg@ziepe.ca, dan.j.williams@intel.com, sbates@raithlin.com, iommu@lists.linux-foundation.org, linux-mm@kvack.org, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, hch@lst.de
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-8.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 01/23] lib/scatterlist: cleanup macros into static
+ inline functions
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 18:22, Shuah Khan wrote:
-> On 12/21/21 5:56 AM, Anup Patel wrote:
->> The inline version of vm_compute_max_gfn() in kvm_util.h directly
->> access members of "struct kvm_vm" which causes compile errors for
->> non-x86 architectures because lib/elf.c includes "kvm_util.h" before
->> "kvm_util_internal.h".
+
+
+On 2021-12-21 2:00 a.m., Christoph Hellwig wrote:
+> On Wed, Nov 17, 2021 at 02:53:48PM -0700, Logan Gunthorpe wrote:
+>> Convert the sg_is_chain(), sg_is_last() and sg_chain_ptr() macros
+>> into static inline functions. There's no reason for these to be macros
+>> and static inline are generally preferred these days.
 >>
->> This patch fixes above described compile error by converting inline
->> version of vm_compute_max_gfn() into a macro.
+>> Also introduce the SG_PAGE_LINK_MASK define so the P2PDMA work, which is
+>> adding another bit to this mask, can do so more easily.
+>>
+>> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 > 
-> Thank you for the patch. Please include the actual compile error in the
-> change log and send v2,
+> Looks fine:
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+> scatterlist.h doesn't have a real maintainer, do you want me to pick
+> this up through the DMA tree?
 
-Hi, a similar patch is already queued and should get to Linus today or 
-tomorrow.
+Sure, that would be great!
 
-Paolo
+Thanks,
 
+Logan

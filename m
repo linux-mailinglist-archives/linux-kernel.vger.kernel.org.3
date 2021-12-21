@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 720B547C190
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4695347C18D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238503AbhLUOeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:34:17 -0500
-Received: from mga03.intel.com ([134.134.136.65]:21968 "EHLO mga03.intel.com"
+        id S238497AbhLUOcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:32:09 -0500
+Received: from foss.arm.com ([217.140.110.172]:54272 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234548AbhLUOeQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:34:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640097256; x=1671633256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OcNRIgcgXZ7GQYAfSBs5DkjQzI4mhLNysLq43pD7LA4=;
-  b=SiENDTsparnfLWYlnVaSzSwnesgcrjtq2XB2I821nmpbt245oZrYcrku
-   W3nwmMrDROq0BbI5XChEDvhqWLOiD8NsKaa9LJfxqUXA5E/MbT4J1T3GY
-   6RzmznXgZXAD7dAr6c4EfuHAXKGnVgBpz6QsYxKARxdYrB5puXba98dT9
-   AlDWJYtl/Hxgcrid3iENBiG5K3qjLjGOt8pOxVq8ZqGtpOMPn1EBNQs7a
-   WeQir0Ae3nR7AH3J4m0/U4jib/aqOhb94dtNDDIo1a/ykWn0Szv/ggJkl
-   kxxVT2XBIvLukqQwk4cBt4UTxHSNzIzwcPx+cH5nFQZiJDB/NFiyveEEJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240357413"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="240357413"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:15 -0800
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="616779165"
-Received: from carel.sh.intel.com (HELO linux.intel.com) ([10.239.158.92])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:13 -0800
-Date:   Tue, 21 Dec 2021 22:31:54 +0800
-From:   Carel Si <beibei.si@intel.com>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
- BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
-Message-ID: <20211221143153.GA4676@linux.intel.com>
-References: <20211209144141.GC25654@xsang-OptiPlex-9020>
- <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
- <20211216115838.GA23522@linux.intel.com>
- <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
- <YbyIJYzqtHPKRMFt@zn.tnic>
+        id S234548AbhLUOcI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:32:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F4FE6D;
+        Tue, 21 Dec 2021 06:32:08 -0800 (PST)
+Received: from [10.57.37.41] (unknown [10.57.37.41])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F36F3F774;
+        Tue, 21 Dec 2021 06:32:05 -0800 (PST)
+Message-ID: <bd25fae8-c78d-3c42-01e3-c7d9237ce50c@arm.com>
+Date:   Tue, 21 Dec 2021 14:31:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbyIJYzqtHPKRMFt@zn.tnic>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "acme@kernel.org" <acme@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <48437bee-9c39-38ba-e990-ba9a6a5378b4@huawei.com>
+From:   Andrew Kilroy <andrew.kilroy@arm.com>
+In-Reply-To: <48437bee-9c39-38ba-e990-ba9a6a5378b4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
 
-On Fri, Dec 17, 2021 at 08:52:53PM +0800, Borislav Petkov wrote:
-> ---
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 0083464de5e3..79b3d67addcc 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
->  }
->  EXPORT_SYMBOL(native_write_cr0);
->  
-> -void native_write_cr4(unsigned long val)
-> +void __no_profile native_write_cr4(unsigned long val)
->  {
->  	unsigned long bits_changed = 0;
->  
-> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> index 75acb6027a87..68d2b7f9a913 100644
-> --- a/arch/x86/kernel/head64.c
-> +++ b/arch/x86/kernel/head64.c
-> @@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
->  	/* Kill off the identity-map trampoline */
->  	reset_early_page_tables();
->  
-> -	__native_tlb_flush_global(native_read_cr4());
-> +	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
->  
->  	clear_bss();
->  
 
-We tested your patch, it can fix the issue, thanks.
+On 17/12/2021 10:19, John Garry wrote:
+> On 14/12/2021 18:42, Andrew Kilroy wrote:
+>> This patch implements the --topdown option by making use of metrics to
+>> dictate what counters are obtained in order to show the various topdown
+>> columns, e.g.  Frontend Bound, Backend Bound, Retiring and Bad
+>> Speculation.
+>>
+>> The MetricGroup name is used to identify which set of metrics are to be
+>> shown.  For the moment use TopDownL1 and enable for arm64
+>>
+>> Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
+> 
+> This works in that it gives results, but does not supply the same output 
+> format as for x86 nor has same restrictions in usage (-a commandline 
+> required, for example, below).
+> 
+> For my x86 broadwell:
+> 
+> john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown  sleep 1
+> top down event configuration requires system-wide mode (-a)
+> 
+> john@localhost:~/linux/tools/perf> sudo ./perf stat --topdown -a sleep 1
+> Performance counter stats for 'system wide':
+> 
+>                                     retiring      bad speculation 
+> frontend bound        backend bound
+> S0-D0-C0           2                29.2%                 6.3%      
+> 37.4%                27.1%
+> S0-D0-C1           2                20.4%                 6.2%      
+> 42.1%                31.3%
+> 
+>        0.998007338 seconds time elapsed
+> 
+> john@localhost:~/linux/tools/perf>
+> 
 
-=========================================================================================
-compiler/kconfig/rootfs/sleep/tbox_group/testcase:
-  clang-14/x86_64-randconfig-a013-20211207/debian-10.4-x86_64-20200603.cgz/1/vm-snb/boot
+Judging by comments in commits 44b1e60ab576c, 55c36a9fc2aaa, whether -a 
+is required or not differs depending on the cpu.  As to why, I'm not 
+sure.  The requirement was relaxed in 55c36a9fc2aaa, but I guess that 
+doesn't affect the broadwell.
 
-commit: 
-  9de4999050 ("x86/realmode: Add comment for Global bit usage in trampoline_pgd")
-  f154f29085 ("x86/mm/64: Flush global TLB on boot and AP bringup") 
-  d12ddfe498 ("fixup-for-f154f29085")
+The stats are printed per cpu because on your broadwell, the existing 
+code is forcing per-core mode.  Hence why -a is required.  See 
+builtin-stat.c lines 1885-1890 on commit 8ff4f20f3eb55.
 
-9de4999050b5f2e8 f154f290855b070cc94dd44ad25 d12ddfe498329a0967c008d8183 
----------------- --------------------------- --------------------------- 
-       fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
-           |             |             |             |             |    
-           :27         100%          27:27           0%            :27    dmesg.BUG:kernel_reboot-without-warning_in_boot_stage
+My patch wasn't forcing per-core, hence it didn't require -a.
+
+
+Andrew

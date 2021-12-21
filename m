@@ -2,152 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E452647C5AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61E347C5A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240840AbhLUSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240821AbhLUSFz (ORCPT
+        id S240802AbhLUSBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:01:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26283 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236545AbhLUSBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:05:55 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C36C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:54 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id j6so34512768edw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VIbA3tyKRgvmJRKKTWC54hBhDnm0QxqACXVEDucCono=;
-        b=hi49HjIoBTBvSXG2A2+cFTDsRuJjpXTbXPT2YO0B5WLC6WmWLV13V5z0TR/SlDr/63
-         iOmlX+Uu844DfzR1WbHs0Qw1BOG13MhIrY+PoLF4H5qxGf8+AMW/UNirqtZtyPp4EF02
-         DRy+25A1pXY0epijI8EyJvK8QbbP7eNmzrRr8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VIbA3tyKRgvmJRKKTWC54hBhDnm0QxqACXVEDucCono=;
-        b=sMvSrB2KHY6aGzV59t3BDG2U6y5V6LUqmXwcJPnFszk/Lb+gzUgfF/bKFEGlPv5ijb
-         hwX9jh5AQKuykabyE/vrBioNophjjAiu3j5/Ve5dypUiQ9Ecah4BK3A6gAVKCe5Uz+q4
-         XNbx+AaPctZ6ZtdV1BiZsgOWDRNqB3D4Lcu6uZYJOlfoX37BGTiSymtavl6573/NWbud
-         iFVmry+RdQCXpLwmih7rG10MZXcS3cCzpIHSrJkSx9r7EJHmb4kQMp2NiVaBDBLZDvXs
-         qw32QnvVIQPUKBwFUWVmxcrM8IQyEm30v48KCRcl2NRW5LworSOJx3NRlPSVlzPBOP1u
-         OQpQ==
-X-Gm-Message-State: AOAM530YuuADDdINahwGlSvf8LvP1rGYK8bQSP77qALE+mHTqQAYtTyA
-        Vd9O/bbMYKI7oitdPEKZ91awk/Avv6yq0XRExc4=
-X-Google-Smtp-Source: ABdhPJx23p3rxyQxmqlGMRo0zdr9ln5LHRsrQCJ+p4N3APsTQcgZybBTwedaV6riNAKcH2wBCVXwaQ==
-X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr3476152ejc.313.1640109953140;
-        Tue, 21 Dec 2021 10:05:53 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id gt7sm5497856ejc.180.2021.12.21.10.05.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 10:05:52 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id l4so169507wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:52 -0800 (PST)
-X-Received: by 2002:a7b:cb17:: with SMTP id u23mr3769746wmj.155.1640109639062;
- Tue, 21 Dec 2021 10:00:39 -0800 (PST)
+        Tue, 21 Dec 2021 13:01:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640109698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zdQUxA4IWUHrYu4e+fUkTkyaddFqElt05hSeiqm5Sro=;
+        b=QzcTR3LYHViblFPgzl4qRkpk4fZ3eQM+bByigG7rVHaUmexMVrTf47nXOJY7fX18RcC9P+
+        3RWJG5766F2GJYYDW7gxH48eGwZmOE5mb84BckYZddrPwmsqbZ9Gkj/3xg9FbjQAIHO6T4
+        XEJovVPh0pWPZ3adrMrwZL2+trWNvdo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-RJ2pbKEkNpikbFvNFtmNVw-1; Tue, 21 Dec 2021 13:01:34 -0500
+X-MC-Unique: RJ2pbKEkNpikbFvNFtmNVw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 03DA68042E0;
+        Tue, 21 Dec 2021 18:01:32 +0000 (UTC)
+Received: from [10.22.33.162] (unknown [10.22.33.162])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0189B4E2CC;
+        Tue, 21 Dec 2021 18:01:29 +0000 (UTC)
+Message-ID: <e78085e4-74cd-52e1-bc0e-4709fac4458a@redhat.com>
+Date:   Tue, 21 Dec 2021 13:01:29 -0500
 MIME-Version: 1.0
-References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com> <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
-In-Reply-To: <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Dec 2021 10:00:22 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
-Message-ID: <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] exec: Make suid_dumpable apply to SUID/SGID binaries
+ irrespective of invoking users
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Vivier <laurent@vivier.eu>,
+        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
+        Willy Tarreau <w@1wt.eu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211221021744.864115-1-longman@redhat.com>
+ <87lf0e7y0k.fsf@email.froward.int.ebiederm.org>
+ <4f67dc4c-7038-7dde-cad9-4feeaa6bc71b@redhat.com>
+ <87czlp7tdu.fsf@email.froward.int.ebiederm.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <87czlp7tdu.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 9:40 AM David Hildenbrand <david@redhat.com> wrote:
+On 12/21/21 12:35, Eric W. Biederman wrote:
+> Adding a couple of other people who have expressed opinions on how
+> to mitigate this issue in the kernel.
 >
-> > I do think the existing "maybe_pinned()" logic is fine for that. The
-> > "exclusive to this VM" bit can be used to *help* that decision -
-> > because only an exclusive page can be pinned - bit I don't think it
-> > should _replace_ that logic.
+> Waiman Long <longman@redhat.com> writes:
 >
-> The issue is that O_DIRECT uses FOLL_GET and cannot easily be changed to
-> FOLL_PIN unfortunately. So I'm *trying* to make it more generic such
-> that such corner cases can be handled as well correctly. But yeah, I'll
-> see where this goes ... O_DIRECT has to be fixed one way or the other.
+>> On 12/21/21 10:55, Eric W. Biederman wrote:
+>>> Waiman Long <longman@redhat.com> writes:
+>>>
+>>>> The begin_new_exec() function checks for SUID or SGID binaries by
+>>>> comparing effective uid and gid against real uid and gid and using
+>>>> the suid_dumpable sysctl parameter setting only if either one of them
+>>>> differs.
+>>>>
+>>>> In the special case that the uid and/or gid of the SUID/SGID binaries
+>>>> matches the id's of the user invoking it, the suid_dumpable is not
+>>>> used and SUID_DUMP_USER will be used instead. The documentation for the
+>>>> suid_dumpable sysctl parameter does not include that exception and so
+>>>> this will be an undocumented behavior.
+>>>>
+>>>> Eliminate this undocumented behavior by adding a flag in the linux_binprm
+>>>> structure to designate a SUID/SGID binary and use it for determining
+>>>> if the suid_dumpable setting should be applied or not.
+>>> I see that you are making the code match the documentation.
+>>> What harm/problems does this mismatch cause in practice?
+>>> What is the motivation for this change?
+>>>
+>>> I am trying to see the motivation but all I can see is that
+>>> in the case where suid and sgid do nothing in practice the code
+>>> does not change dumpable.  The point of dumpable is to refuse to
+>>> core dump when it is not safe.  In this case since nothing happened
+>>> in practice it is safe.
+>>>
+>>> So how does this matter in practice.  If there isn't a good
+>>> motivation my feel is that it is the documentation that needs to be
+>>> updated rather than the code.
+>>>
+>>> There are a lot of warts to the suid/sgid handling during exec.  This
+>>> just doesn't look like one of them
+>> This patch is a minor mitigation in response to the security
+>> vulnerability as posted in
+>> https://www.openwall.com/lists/oss-security/2021/10/20/2 (aka
+>> CVE-2021-3864). In particular, the Su PoC (tested on CentOS 7) showing
+>> that the su invokes /usr/sbin/unix_chkpwd which is also a SUID
+>> binary. The initial su invocation won't generate a core dump because
+>> the real uid and euid differs, but the second unix_chkpwd invocation
+>> will. This patch eliminates this hole by making sure that all SUID
+>> binaries follow suid_dumpable setting.
+> All that is required to take advantage of this vulnerability is
+> for an suid program to exec something that will coredump.  That
+> exec resets the dumpability.
 >
-> John H. mentioned that he wants to look into converting that to
-> FOLL_PIN. So maybe that will work eventually.
+> While the example exploit is execing a suid program it is not required
+> that the exec'd program be suid.
+>
+> This makes your proposed change is not a particularly effective mitigation.
 
-I'd really prefer that as the plan.
+Yes, I am aware of that. That is why I said it is just a minor 
+mitigation. This patch was inspired after investigating this problem, 
+but I do think it is good to make the code consistent with the 
+documentation. Of course, we can go either way. I prefer my approach to 
+use a flag to indicate a suid binary instead of just comparing ruid and 
+euid.
 
-What exactly is the issue with O_DIRECT? Is it purely that it uses
-"put_page()" instead of "unpin", or what?
 
-I really think that if people look up pages and expect those pages to
-stay coherent with the VM they looked it up for, they _have_ to
-actively tell the VM layer - which means using FOLL_PIN.
+>
+> The best idea I have seen to mitigate this from the kernel side is:
+>
+> 1) set RLIMIT_CORE to 0 during an suid exec
+> 2) update do_coredump to honor an rlimit of 0 for pipes
+>
+> Anecdotally this should not effect the common systems that pipe
+> coredumps into programs as those programs are reported to honor
+> RLIMIT_CORE of 0.  This needs to be verified.
+>
+> If those programs do honor RLIMIT_CORE of 0 we won't have any user
+> visible changes if they never see coredumps from a program with a
+> RLIMIT_CORE of 0.
+>
+>
+> I have been meaning to audit userspace and see if the common coredump
+> catchers truly honor an RLIMIT_CORE of 0.  Unfortunately I have not
+> found time to do that yet.
 
-Note that this is in absolutely no way a "new" issue. It has *always*
-been true. If some O_DIORECT path depends on pinning behavior, it has
-never worked correctly, and it is entirely on O_DIRECT, and not at all
-a VM issue. We've had people doing GUP games forever, and being burnt
-by those games not working reliably.
+Default RLIMIT_CORE to 0 will likely mitigate this vulnerability. 
+However, there are still some userspace impacts as existing behavior 
+will be modified. For instance, we may need to modify su to restore a 
+proper value for RLIMIT_CORE after successful authentication.
 
-GUP (before we even had the notion of pinning) would always just take
-a reference to the page, but it would not guarantee that that exact
-page then kept an association with the VM.
+Cheers,
+Longman
 
-Now, in *practice* this all works if:
-
- (a) the GUP user had always written to the page since the fork
-(either explicitly, or with FOLL_WRITE obviously acting as such)
-
- (b) the GUP user never forks afterwards until the IO is done
-
- (c) the GUP user plays no other VM games on that address
-
-and it's also very possible that it has worked by pure luck (ie we've
-had a lot of random code that actively mis-used things and it would
-work in practice just because COW would happen to cut the right
-direction etc).
-
-Is there some particular GUP user you happen to care about more than
-others? I think it's a valid option to try to fix things up one by
-one, even if you don't perhaps fix _all_ cases.
-
-              Linus

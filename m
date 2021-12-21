@@ -2,63 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A3D47BA0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC0347BA1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbhLUGe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:34:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35844 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbhLUGeZ (ORCPT
+        id S233992AbhLUGnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231449AbhLUGnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:34:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Dec 2021 01:43:42 -0500
+X-Greylist: delayed 544 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Dec 2021 22:43:41 PST
+Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5FEC061574;
+        Mon, 20 Dec 2021 22:43:41 -0800 (PST)
+Received: from [10.36.2.165] (unknown [178.17.145.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B64ADB81197
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 06:34:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4D1C36AE7;
-        Tue, 21 Dec 2021 06:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640068463;
-        bh=GqKv6SsDMyKQjlyuqv5ooOgCJHNhIUkebCCrAMLW5cw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=esqt9rPISh9ARptMMTKSJIn4DxJlXS8cfqNbruvlA1YFo3r99zqrwloD7dbJk5iLC
-         vdc/IV9g4Tc2sK9YqSFNtTaDuB5zEhV9vTt2FcR0IV7aZXNQ/c9gjaPnYMFHW1JpXv
-         5dP+d3VVn2CxdpQVO87kRI6fTWI9ZuKgbe/5NMM8=
-Date:   Tue, 21 Dec 2021 07:34:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     linuxfancy@googlegroups.com,
-        Forest Bond <forest@alittletooquiet.net>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Aldas =?utf-8?B?VGFyYcWha2V2acSNaXVz?= <aldas60@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: vt6655: drop off byRxMode var in device.h
-Message-ID: <YcF1baxVvP3j8Q/8@kroah.com>
-References: <20211220202523.21805-1-tomm.merciai@gmail.com>
+        by mail.turbocat.net (Postfix) with ESMTPSA id 52E65260245;
+        Tue, 21 Dec 2021 07:34:33 +0100 (CET)
+Message-ID: <ce0bf57c-7d96-5c33-6ab5-a64d772dee21@selasky.org>
+Date:   Tue, 21 Dec 2021 07:34:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220202523.21805-1-tomm.merciai@gmail.com>
+User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 0/3] Fix streaming on/off logic
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com, pb@linuxtv.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+References: <cover.1632689033.git.mchehab+huawei@kernel.org>
+From:   Hans Petter Selasky <hps@selasky.org>
+In-Reply-To: <cover.1632689033.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 09:25:20PM +0100, Tommaso Merciai wrote:
-> Drop off unused variable byRxMode in device.h, this fix following
-> checkpatch.pl check:
-> CHECK: Avoid CamelCase: <byRxMode>
-> 131: FILE: drivers/staging/vt6655/device.h:131:
-> unsigned char byRxMode
+On 9/26/21 22:51, Mauro Carvalho Chehab wrote:
+> As discussed on:
+> 	https://github.com/hselasky/webcamd/issues/16
+> 
+> the dib0700 had a regression on Kernel 2.6.39. Such regression didn't
+> affect most devices, in practice, as it seems to happen only under
+> certain circunstances.
+> 
+> Michael came up with a solution for the issue (already submitted to
+> the ML) but let's take the opportunity to do a cleanup, as the resulting
+> code was still touching both adapters when an stream off command
+> was issued to one adapter, turning on the other one.
+> 
+> After the change, each adapter is idependently controlled by
+> a separate bit, as can be shown when its debug message
+> is turned on (tested on a dual-adapter device: Hauppauge
+> WinTV Nova TD):
+> 
+> [608855.124780] adapter 1, streaming ON: 0f 10 12
+> [608868.189827] adapter 0, streaming ON: 0f 10 13
+> [608879.584330] adapter 1, streaming OFF: 0f 00 11
+> [608887.014772] adapter 0, streaming OFF: 0f 00 10
+> 
+> Mauro Carvalho Chehab (2):
+>    media: dib0700: cleanup start/stop streaming logic
+>    media: dib0700: Only touch one bit when start/stop an adapter
+> 
+> Michael Kuron (1):
+>    media: dib0700: fix undefined behavior in tuner shutdown
+> 
+>   drivers/media/usb/dvb-usb/dib0700_core.c | 28 +++++++++++-------------
+>   1 file changed, 13 insertions(+), 15 deletions(-)
+> 
 
-No need to line-wrap this.
+Were these patches upstreamed yet?
 
-But this "problem" is not the real thing you are fixing.  The real thing
-is the issue that this variable is not needed at all.  Just say that, no
-need to justify it with a checkpatch warning, right?
-
-thanks,
-
-greg k-h
+--HPS

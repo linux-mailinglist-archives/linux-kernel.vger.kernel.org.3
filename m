@@ -2,87 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18E647C18A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720B547C190
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238482AbhLUObl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:31:41 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:40168 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238478AbhLUObk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:31:40 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BLD4UTY032089;
-        Tue, 21 Dec 2021 15:31:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=I880/oBhiEsXpazbj7JBRXbXm3Rb2zoCfk+AqE1NF9E=;
- b=TsyI8HTxTG5PL2FLAobWZd3l1hnygBzxmWdWjFfDE32DUFkzEzyEUE8RVtHwW5bZd5pV
- X0KMVyJWkU8vBhuM3sI0Ned7G5/dEl983swCovvfVLzefXxHe06YtzVr0Dh1tJd+Mup7
- 9T9Fp8PYQl5bqFg9Ci6to06c+QCBEcs1IfUELwBOQMU8UdyoaxRDLaXp89/ScJjMwebT
- T8ij1RgYXWCwad8/gYvsBu2iOdptKqASFieiHRx40D2I1tPwbP4l969Sp92MWkj+/7t2
- sK2uUnZKhLj6/g4/lGfIM7emphn7YalrBzjCJCHQQQVs8fnHwfzgcPPs/2kYYW8pN0k+ lA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2nsxqk17-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 15:31:37 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 68B93100034;
-        Tue, 21 Dec 2021 15:31:37 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 61E8420C8E6;
-        Tue, 21 Dec 2021 15:31:37 +0100 (CET)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 21 Dec 2021 15:31:36
- +0100
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH] remoteproc: stm32: Improve crash recovery time
-Date:   Tue, 21 Dec 2021 15:31:29 +0100
-Message-ID: <20211221143129.18415-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        id S238503AbhLUOeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:34:17 -0500
+Received: from mga03.intel.com ([134.134.136.65]:21968 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234548AbhLUOeQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:34:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640097256; x=1671633256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OcNRIgcgXZ7GQYAfSBs5DkjQzI4mhLNysLq43pD7LA4=;
+  b=SiENDTsparnfLWYlnVaSzSwnesgcrjtq2XB2I821nmpbt245oZrYcrku
+   W3nwmMrDROq0BbI5XChEDvhqWLOiD8NsKaa9LJfxqUXA5E/MbT4J1T3GY
+   6RzmznXgZXAD7dAr6c4EfuHAXKGnVgBpz6QsYxKARxdYrB5puXba98dT9
+   AlDWJYtl/Hxgcrid3iENBiG5K3qjLjGOt8pOxVq8ZqGtpOMPn1EBNQs7a
+   WeQir0Ae3nR7AH3J4m0/U4jib/aqOhb94dtNDDIo1a/ykWn0Szv/ggJkl
+   kxxVT2XBIvLukqQwk4cBt4UTxHSNzIzwcPx+cH5nFQZiJDB/NFiyveEEJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240357413"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="240357413"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:15 -0800
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="616779165"
+Received: from carel.sh.intel.com (HELO linux.intel.com) ([10.239.158.92])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:34:13 -0800
+Date:   Tue, 21 Dec 2021 22:31:54 +0800
+From:   Carel Si <beibei.si@intel.com>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+Message-ID: <20211221143153.GA4676@linux.intel.com>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+ <YbyIJYzqtHPKRMFt@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbyIJYzqtHPKRMFt@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a stop is requested on a crash, it is useless to try to shutdown it
-gracefully, it is crashed.
+Hi Boris,
 
-In this case don't send the STM32_MBX_SHUTDOWN mailbox message that
-will block the recovery during 500 ms, waiting an answer from the
-coprocessor.
+On Fri, Dec 17, 2021 at 08:52:53PM +0800, Borislav Petkov wrote:
+> ---
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 0083464de5e3..79b3d67addcc 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -384,7 +384,7 @@ void native_write_cr0(unsigned long val)
+>  }
+>  EXPORT_SYMBOL(native_write_cr0);
+>  
+> -void native_write_cr4(unsigned long val)
+> +void __no_profile native_write_cr4(unsigned long val)
+>  {
+>  	unsigned long bits_changed = 0;
+>  
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 75acb6027a87..68d2b7f9a913 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -483,7 +483,7 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+>  	/* Kill off the identity-map trampoline */
+>  	reset_early_page_tables();
+>  
+> -	__native_tlb_flush_global(native_read_cr4());
+> +	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+>  
+>  	clear_bss();
+>  
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/remoteproc/stm32_rproc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We tested your patch, it can fix the issue, thanks.
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index b643efcf995a..7d782ed9e589 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -494,7 +494,7 @@ static int stm32_rproc_stop(struct rproc *rproc)
- 	int err, idx;
- 
- 	/* request shutdown of the remote processor */
--	if (rproc->state != RPROC_OFFLINE) {
-+	if (rproc->state != RPROC_OFFLINE && rproc->state != RPROC_CRASHED) {
- 		idx = stm32_rproc_mbox_idx(rproc, STM32_MBX_SHUTDOWN);
- 		if (idx >= 0 && ddata->mb[idx].chan) {
- 			err = mbox_send_message(ddata->mb[idx].chan, "detach");
--- 
-2.17.1
+=========================================================================================
+compiler/kconfig/rootfs/sleep/tbox_group/testcase:
+  clang-14/x86_64-randconfig-a013-20211207/debian-10.4-x86_64-20200603.cgz/1/vm-snb/boot
 
+commit: 
+  9de4999050 ("x86/realmode: Add comment for Global bit usage in trampoline_pgd")
+  f154f29085 ("x86/mm/64: Flush global TLB on boot and AP bringup") 
+  d12ddfe498 ("fixup-for-f154f29085")
+
+9de4999050b5f2e8 f154f290855b070cc94dd44ad25 d12ddfe498329a0967c008d8183 
+---------------- --------------------------- --------------------------- 
+       fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
+           |             |             |             |             |    
+           :27         100%          27:27           0%            :27    dmesg.BUG:kernel_reboot-without-warning_in_boot_stage

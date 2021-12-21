@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D4847BC21
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB0A47BC23
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbhLUIre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:47:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58058 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbhLUIrc (ORCPT
+        id S235804AbhLUIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:48:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38576 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232545AbhLUIsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:47:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1807B81211;
-        Tue, 21 Dec 2021 08:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29483C36AE7;
-        Tue, 21 Dec 2021 08:47:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640076449;
-        bh=z+hWLz9eeYZRs6D3BG6fArBnZ7wr2Rh1s9m2i6WbG8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cDzIu2g9SuwaZPs5b1Pd4gxYHd/Mgpt/Wo662d8GXD2H19BbQJi5YNA7R7wNn3LK1
-         czEaugp5uTg5DXI7aVIiF9w/LxW2dEEEaw4imLIvgSqFhNTwF3N5NPexO60Ixpe8NQ
-         RkjgwFRxssPH8amrZfly6vB7GCpM7qsZnTkvQBq80nvLi2hBQzsohOsxeqBZAjDPDj
-         ebdPAK5SYJpLYMcWpIyOzNfoWD7BC0TDxZ+6SxIYdQ6y5czKCuLqZxVNCH6/XwFX+h
-         rgOQPMcV3UsjL7Y1O2BEHQ9VdLkXiAzLm8CGx/j9YSbLW5VS/YUrgt1ZmJp/szIWTA
-         OKfzYlA6k9/NA==
-Date:   Tue, 21 Dec 2021 10:47:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, pavrampu@in.ibm.com,
-        Korrapati.Likhitha@ibm.com, gcwilson@us.ibm.com
-Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
- (powerpc)
-Message-ID: <YcGUoJCtmqfCWER0@iki.fi>
-References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+        Tue, 21 Dec 2021 03:48:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640076521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LHQemFwUsyba3tEe/uU9t9ytypWsDi32CVKu/T0ntzE=;
+        b=KTIAzMcxvUsyJ/5POP6cqTqb33QL2DWZZYQ1Txfnb7Db7fo8ndl7/Yt/rM/viHgB2U/hA5
+        /L5TJMU1NAVRnv2qLs88slQTZMIWaKfmryxhs+lsLF4Cswgjd1EIkaPNF8Zi3ez8MxcEdX
+        6vx5aFmI3aXBZrHfuCqnxjzQ6WS62d8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-7ZoModMMMPCx9hHh1z9rJg-1; Tue, 21 Dec 2021 03:48:40 -0500
+X-MC-Unique: 7ZoModMMMPCx9hHh1z9rJg-1
+Received: by mail-wr1-f71.google.com with SMTP id r9-20020adfb1c9000000b001a2981d9356so653561wra.20
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 00:48:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LHQemFwUsyba3tEe/uU9t9ytypWsDi32CVKu/T0ntzE=;
+        b=U5dNCd4lAPFYF6ks1xlrA7XLOu5UDBPKYiUI/A3kAJzVVOQugcT7U+LRLq8zkEaGwr
+         K2i7/WK4KOxYKC0NriKfXC9ADf9GHEF9aSZbC0wzJjZTKPbjINPMSVgKHxnZLOMdBdsa
+         pVqnwKFyr9HPVZ+2LIFr7GYlexG+/HSeIS/KN8fTsM/+AYy9/1MWRwM3BTw7WkSGCNCO
+         sq9jNSwJJsbPNdnxl4q3uhEMJnP48kGdUIiepb9cK1zO+yfVG9DB2gpZ+JpilNn9QanD
+         FJJeiDAgLt6v5XPuoBVYZr8vjFk0BQ9YKXoo/IVbS4niChmYoyY+UVPlu8exr+kJMixa
+         yhbw==
+X-Gm-Message-State: AOAM530jSleviEXcvDRBhPQbUar2JwCVvV6DJyu97A4aK2/BMUm8MNEW
+        H3vCytILAbTPXtQWq2rxJUDJvCI5XTHrkDL1kuw7QQHhYhY/zh+ltQ6KIb9NfPK2lHe7+KII4kW
+        LWTYcKBUj6AHO+/+SZUqE2hGY
+X-Received: by 2002:a05:600c:24e:: with SMTP id 14mr1680066wmj.67.1640076518892;
+        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzwoFpkxSW2a19mn7IJx5TJLZ8ottBYNreEq0GyobJqU6TMBQiB92uGZAeSMuNqN7vG0KHRvw==
+X-Received: by 2002:a05:600c:24e:: with SMTP id 14mr1680050wmj.67.1640076518685;
+        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id p13sm1796863wmq.19.2021.12.21.00.48.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
+Message-ID: <f465ec18-4a0d-2e1c-239e-cc93aa43226f@redhat.com>
+Date:   Tue, 21 Dec 2021 09:48:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 23/23] kvm: x86: Disable RDMSR interception of
+ IA32_XFD_ERR
+Content-Language: en-US
+To:     "Liu, Jing2" <jing2.liu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+References: <20211217153003.1719189-1-jing2.liu@intel.com>
+ <20211217153003.1719189-24-jing2.liu@intel.com>
+ <e6fd3fc5-ea06-30a5-29ce-1ffd6b815b47@redhat.com>
+ <MWHPR11MB12451924FE9189E4B69E78A4A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <MWHPR11MB12451924FE9189E4B69E78A4A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 08:28:04PM -0500, Stefan Berger wrote:
-> Fix the following crash on kexec by checking chip->ops for a NULL pointer
-> in tpm_chip_start() and returning an error code if this is the case.
+On 12/21/21 07:29, Liu, Jing2 wrote:
+>>
+> Thanks for reviewing the patches.
 > 
-> BUG: Kernel NULL pointer dereference on read at 0x00000060
-> Faulting instruction address: 0xc00000000099a06c
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> ...
-> NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
->  LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> Call Trace:
-> [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
-> [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
-> [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
-> [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
-> [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
+> If disable unconditionally in vmx_create_vcpu, it means even guest has
+> no cpuid, the msr read is passthrough to guest and it can read a value, which
+> seems strange, though spec doesn't mention the read behaviour w/o cpuid.
 > 
-> The referenced patch below introduced a function to shut down the VIO bus.
-> The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
-> after a call to tpm_class_shutdown, which already set chip->ops to NULL.
-> The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
-> chip->ops NULL pointer.
+> How about disabling read interception at vmx_vcpu_after_set_cpuid?
 > 
-> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/tpm-chip.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index ddaeceb7e109..cca1bde296ee 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
->  {
->  	int ret;
->  
-> +	if (!chip->ops)
-> +		return -EINVAL;
+> if (boot_cpu_has(X86_FEATURE_XFD) && guest_cpuid_has(vcpu, X86_FEATURE_XFD))
+>          vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R, false);
 
-This triggers to all drivers, not just tpm_ibmvtpm, i.e. the fix has
-side-effects.
+Even better:
 
-/Jarkko
+	if (boot_cpu_has(X86_FEATURE_XFD))
+		vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R,
+					  !guest_cpuid_has(vcpu, X86_FEATURE_XFD));
+
+Thanks,
+
+Paolo
 

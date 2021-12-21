@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C8147C609
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A7547C60C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241033AbhLUSNB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Dec 2021 13:13:01 -0500
-Received: from aposti.net ([89.234.176.197]:40256 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241027AbhLUSNA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:13:00 -0500
-Date:   Tue, 21 Dec 2021 18:12:50 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] dt-bindings: display: Add SPI peripheral schema to SPI
- based displays
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <E99H4R.USZAFSZ7ENW71@crapouillou.net>
-In-Reply-To: <20211221125209.1195932-1-robh@kernel.org>
-References: <20211221125209.1195932-1-robh@kernel.org>
+        id S241038AbhLUSNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:13:14 -0500
+Received: from mail-qk1-f175.google.com ([209.85.222.175]:37543 "EHLO
+        mail-qk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240915AbhLUSNN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:13:13 -0500
+Received: by mail-qk1-f175.google.com with SMTP id m186so13393544qkb.4;
+        Tue, 21 Dec 2021 10:13:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FgGg2+AitqaP56Vm5YjQbOGniqdnRT3Htjx11pTGsHI=;
+        b=Da7tFk/6tYiRshAfP61sYreV1E/+BbSJNkMnGtPtKU0wNFw11NXZ/igXaqyqSWFFBK
+         sWb3NsVAj7Qifkyte18rLu5++QAMRKpOZ667Usam2zDrBTWXT/GwxP8FISB7qW/rHjD/
+         zut5GLlaFGAzU0fxSxIZnfljHVzqGpzyIJvub5/F0BskLp7cRMrWDPfLWAyMBMmx92P2
+         uazpVdsg2CIZbFiSD2vlUpegax2WQeUOKP84oD2L8V+ikIW9aRgq2/4b0PKuMafxkaiT
+         NxdOXEWVzUbXzbx7i7dJ0FmnQtdO0BtYV2nTgjYBlR6wcpQRjzmRePizn5gDSRBn6ZDf
+         e8gA==
+X-Gm-Message-State: AOAM532EFPldzYsAxAgaudZJSkq3BZ3b7wcF9+6NCGk7VEAaSB9TAonI
+        X4VDKVZTBXWJDi967GM9Hw==
+X-Google-Smtp-Source: ABdhPJzQOQFLlDsziLyuvLEMaPbhJnT/tO8cXDb76gkkArdTN7ToTzKDvDS0PliXy7FOIxJcAUWOrg==
+X-Received: by 2002:a05:620a:f12:: with SMTP id v18mr3010095qkl.720.1640110392914;
+        Tue, 21 Dec 2021 10:13:12 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id t18sm18368027qtw.64.2021.12.21.10.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 10:13:12 -0800 (PST)
+Received: (nullmailer pid 1519162 invoked by uid 1000);
+        Tue, 21 Dec 2021 18:13:09 -0000
+Date:   Tue, 21 Dec 2021 14:13:09 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-omap@vger.kernel.org,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH] dt-bindings: clock: Add binding for TI clksel
+Message-ID: <YcIZNfTn37uNbj0F@robh.at.kernel.org>
+References: <20211217113640.59840-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217113640.59840-1-tony@atomide.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-Le mar., déc. 21 2021 at 08:52:09 -0400, Rob Herring <robh@kernel.org> 
-a écrit :
-> With 'unevaluatedProperties' support enabled, several SPI based 
-> display
-> binding examples have warnings:
+On Fri, Dec 17, 2021 at 01:36:40PM +0200, Tony Lindgren wrote:
+> In order to prepare for fixing lots of devicetree unique_unit_address
+> warnings for the TI clock nodes, let's add a binding for the clksel
+> clocks. This allows us to move the overlapping devicetree clocks to be
+> children of the related clksel nodes. And then we need the reg property
+> only for the parent clksel node.
 > 
-> Documentation/devicetree/bindings/display/panel/samsung,ld9040.example.dt.yaml: 
-> lcd@0: Unevaluated properties are not allowed ('#address-cells', 
-> '#size-cells', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were 
-> unexpected)
-> Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
-> 'spi-3wire' were unexpected)
-> Documentation/devicetree/bindings/display/panel/ilitek,ili9322.example.dt.yaml: 
-> display@0: Unevaluated properties are not allowed ('reg' was 
-> unexpected)
-> Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.example.dt.yaml: 
-> display@0: Unevaluated properties are not allowed 
-> ('spi-max-frequency' was unexpected)
-> Documentation/devicetree/bindings/display/panel/abt,y030xx067a.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('spi-max-frequency' 
-> was unexpected)
-> Documentation/devicetree/bindings/display/panel/sony,acx565akm.example.dt.yaml: 
-> panel@2: Unevaluated properties are not allowed ('spi-max-frequency', 
-> 'reg' were unexpected)
-> Documentation/devicetree/bindings/display/panel/tpo,td.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
-> 'spi-cpol', 'spi-cpha' were unexpected)
-> Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('reg', 
-> 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
-> Documentation/devicetree/bindings/display/panel/innolux,ej030na.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('spi-max-frequency' 
-> was unexpected)
-> Documentation/devicetree/bindings/display/panel/sitronix,st7789v.example.dt.yaml: 
-> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
-> 'spi-cpol', 'spi-cpha' were unexpected)
+> We want to set #clock-cells = <1> in case we ever start parsing the clkcsel
+> clocks directly using a clksel driver rather than using the existing
+> component clock drivers and child nodes. We also need to update the clock
+> drivers to get the IO address from the parent clksel node before updating
+> the dts files. These will be posted as separate patches.
 > 
-> Fix all of these by adding a reference to spi-peripheral-props.yaml.
-> With this, the description that the binding must follow
-> spi-controller.yaml is both a bit out of date and redundant, so remove
-> it.
+> Cc: Tero Kristo <kristo@kernel.org>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>  .../bindings/clock/ti/ti,clksel.yaml          | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
+> new file mode 100644
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/ti/ti,clksel.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Binding for TI clksel clock
+> +
+> +maintainers:
+> +  - Tony Lindgren <tony@atomide.com>
+> +
+> +description: |
+> +  The TI CLKSEL clocks consist of consist of a mux, divider, multiplier and
+> +  gate bits.
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,clksel
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: The CLKSEL register
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +
+> +additionalProperties: true
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Like what properties?
 
-Cheers,
--Paul
+true is only used for common, incomplete schemas referenced by device 
+schemas.
 
-
+> +
+> +examples:
+> +  - |
+> +    clksel_gfx_fclk: clock@52c {
+> +      compatible = "ti,clksel";
+> +      reg = <0x25c 0x4>;
+> +      #clock-cells = <1>;
+> +    };
+> +...
+> -- 
+> 2.34.1
+> 

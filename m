@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B3847BF0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FC847BF0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbhLULj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:39:56 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:37220 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbhLULjz (ORCPT
+        id S237212AbhLULkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:40:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53772 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237206AbhLULj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:39:55 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1DE7C881;
-        Tue, 21 Dec 2021 12:39:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1640086794;
-        bh=+zx35ApipIwzpR2JUnKwmUzBhBtFhQVEcaXKQzBURZE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=qpbqBbV7mLRQ/LTYmZele+Jiaf5hSp3Mjt98byY3LnEv0TrgoJfVoe4yiWvmhYTut
-         ADnJaF5u8mSofPrJltGtoh9cxgvJnHT5CBO5oAAXf75f66TDvGMHBA15r8uFX2uQiN
-         iLxxCKcscRsF/K+f5hUMHVyAnwiPOhnai3Kb+3cY=
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Dec 2021 06:39:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38C4F6153C;
+        Tue, 21 Dec 2021 11:39:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FABC36AF4;
+        Tue, 21 Dec 2021 11:39:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640086798;
+        bh=FZveIUfSLfCEZ1y0HfpyCoozxsgZmMxrhPNBuggw9dc=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=YyaC04+iHm3HCJGC9E2C40+3bVu/qLLlAVy5b7+loiUEADd9jUwQU0LmJ48GBdpAG
+         gBNdD4v0wlsMufOeHD+LPNdN4Sau/5okchAnLgZuSADk0SXd8W9zV+fElH0yhJymz7
+         6vW6Q/MXj1r1FGIhctGFQv/gYpa26friD4MAkdwmBJgKMGO5kkjjyJBuTBGfU2p/+O
+         S8nhXBEVe7FZtbQVQZlNtebh4Xm5u6nSlaL10UUpYi3y13hsCqd2sTDPbIM7pAfspq
+         1JHl94PgI/IUGlTlca8QCAv7RstUxHcuwRsVqBbvH4mwUfUQcpYQuPieaJUYA8pjAD
+         dVsh0ULUW7s4A==
+Received: by mail-ot1-f53.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso16353021otf.0;
+        Tue, 21 Dec 2021 03:39:58 -0800 (PST)
+X-Gm-Message-State: AOAM533lRAWy3ATzxzyyKu0/4V/jcrFynG6QqRE4dh4T5A8HbMuIAivl
+        YbeAv5jDEHJeuzUbG/mP8PzYJD3kYVNAWnvohp4=
+X-Google-Smtp-Source: ABdhPJwcUhvpKWIr2DIfWcBlHa2apSuyJ0A17Xaah/Z1k9S/dtSf0z1WUHPmahfEPQDvYBZmR7Ln+0ZhtSPwCQXL3tE=
+X-Received: by 2002:a9d:43:: with SMTP id 61mr1855862ota.18.1640086797831;
+ Tue, 21 Dec 2021 03:39:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
-References: <20211218182804.208906-1-antonio.borneo@foss.st.com> <164001209406.2512616.469307346369770543@Monstersaurus> <210c1e7c333b42702ac0c3ba0da639e82327d035.camel@foss.st.com>
-Subject: Re: [PATCH] drm: adv7511: override i2c address of cec before accessing it
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-To:     Andrzej Hajda <a.hajda@samsung.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        dri-devel@lists.freedesktop.org
-Date:   Tue, 21 Dec 2021 11:39:51 +0000
-Message-ID: <164008679146.2512616.5965783147922289011@Monstersaurus>
-User-Agent: alot/0.10
+Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Tue, 21 Dec 2021 03:39:57
+ -0800 (PST)
+In-Reply-To: <20211221090714.122543-2-yang.lee@linux.alibaba.com>
+References: <20211221090714.122543-1-yang.lee@linux.alibaba.com> <20211221090714.122543-2-yang.lee@linux.alibaba.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 21 Dec 2021 20:39:57 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_5M6Wajx2Zqv9vaAs1oRLO7YCv4iKxzoqpZ4UqVc+oPA@mail.gmail.com>
+Message-ID: <CAKYAXd_5M6Wajx2Zqv9vaAs1oRLO7YCv4iKxzoqpZ4UqVc+oPA@mail.gmail.com>
+Subject: Re: [PATCH -next 2/4] ksmbd: Fix smb2_set_info_file() kernel-doc comment
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     senozhatsky@chromium.org, sfrench@samba.org, hyc.lee@gmail.com,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Antonio Borneo (2021-12-20 15:53:12)
-> On Mon, 2021-12-20 at 14:54 +0000, Kieran Bingham wrote:
-> > Hi Antonio,
-> >=20
-> > Quoting Antonio Borneo (2021-12-18 18:28:04)
-> > > Commit 680532c50bca ("drm: adv7511: Add support for
-> > > i2c_new_secondary_device") allows a device tree node to override
-> > > the default addresses of the secondary i2c devices. This is useful
-> > > for solving address conflicts on the i2c bus.
-> > >=20
-> > > In adv7511_init_cec_regmap() the new i2c address of cec device is
-> > > read from device tree and immediately accessed, well before it is
-> > > written in the proper register to override the default address.
-> > > This can cause an i2c error during probe and a consequent probe
-> > > failure.
-> >=20
-> > Ouch, it does seem that way. I guess no one has used the CEC for
-> > quite
-> > some time, as it must have been like this for a while?
->=20
-> Using the default i2c address for cec works without problem; apparently
-> everyone is happy with such default. The issue appears only when you
-> have to override the default cec address.
-> The commit 680532c50bca landed in v4.18.
+2021-12-21 18:07 GMT+09:00, Yang Li <yang.lee@linux.alibaba.com>:
+> Fix argument list that the kdoc format and script verified in
+> smb2_set_info_file().
+>
+> The warnings were found by running scripts/kernel-doc, which is
+> caused by using 'make W=1'.
+> fs/ksmbd/smb2pdu.c:5862: warning: Function parameter or member 'req' not
+> described in 'smb2_set_info_file'
+> fs/ksmbd/smb2pdu.c:5862: warning: Excess function parameter 'info_class'
+> description in 'smb2_set_info_file'
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Fixes: 9496e268e3af ("ksmbd: add request buffer validation in
+> smb2_set_info")
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  fs/ksmbd/smb2pdu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index ee2bcd02d0d7..2d55a186b825 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -5850,7 +5850,7 @@ static int set_file_mode_info(struct ksmbd_file *fp,
+>   * smb2_set_info_file() - handler for smb2 set info command
+>   * @work:	smb work containing set info command buffer
+>   * @fp:		ksmbd_file pointer
+> - * @info_class:	smb2 set info class
+> + * @req:        request buffer validation
+I will directly update it to "request buffer pointer".
 
-Ok, phew - so the 'normal' case still worked. That makes sense.
+About your 4 patches, Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 
-Sorry for getting it wrong, and I hope it didn't take too long to find
-and fix. I'm sure we'll see it percolate down the stable trees once
-integrated.
-
---
-Kieran
-
-> > > Once the new i2c address is read from the device tree, override
-> > > the default address before any attempt to access the cec.
-> >=20
-> > Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->=20
-> Thanks!
-> Antonio
->=20
-> > > Tested with adv7533 and stm32mp157f.
-> > >=20
-> > > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-> > > Fixes: 680532c50bca ("drm: adv7511: Add support for
-> > > i2c_new_secondary_device")
-> > > ---
-> > > To: Andrzej Hajda <a.hajda@samsung.com>
-> > > To: Neil Armstrong <narmstrong@baylibre.com>
-> > > To: Robert Foss <robert.foss@linaro.org>
-> > > To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> > > To: Jonas Karlman <jonas@kwiboo.se>
-> > > To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > > To: David Airlie <airlied@linux.ie>
-> > > To: Daniel Vetter <daniel@ffwll.ch>
-> > > To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > > To: dri-devel@lists.freedesktop.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: linux-stm32@st-md-mailman.stormreply.com
-> > > ---
-> > > =C2=A0drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 7 ++++---
-> > > =C2=A01 file changed, 4 insertions(+), 3 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > > b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > > index 76555ae64e9c..629e05286fd9 100644
-> > > --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > > +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-> > > @@ -1048,6 +1048,10 @@ static int adv7511_init_cec_regmap(struct
-> > > adv7511 *adv)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > ADV7511_CEC_I2C_ADDR_DEFAULT);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(adv->i2c_cec))
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(adv->i2c_cec);
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(adv->regmap, ADV75=
-11_REG_CEC_I2C_ADDR,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv->i2c_cec->addr << 1);
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 i2c_set_clientdata(adv->i2=
-c_cec, adv);
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv->regmap_cec =3D devm_r=
-egmap_init_i2c(adv->i2c_cec,
-> > > @@ -1252,9 +1256,6 @@ static int adv7511_probe(struct i2c_client
-> > > *i2c, const struct i2c_device_id *id)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 goto err_i2c_unregister_packet;
-> > > =C2=A0
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regmap_write(adv7511->regmap, A=
-DV7511_REG_CEC_I2C_ADDR,
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 adv7511->i2c_cec->addr << =
-1);
-> > > -
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 INIT_WORK(&adv7511->hpd_wo=
-rk, adv7511_hpd_work);
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (i2c->irq) {
-> > >=20
-> > > base-commit: fc74881c28d314b10efac016ef49df4ff40b8b97
-> > > --=20
-> > > 2.34.1
-> > >=20
+Thanks!
+>   * @share:	ksmbd_share_config pointer
+>   *
+>   * Return:	0 on success, otherwise error
+> --
+> 2.20.1.7.g153144c
+>
 >

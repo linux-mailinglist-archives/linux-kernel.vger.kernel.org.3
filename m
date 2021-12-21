@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D4E47C95E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6D547C963
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbhLUWq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 17:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S234314AbhLUWsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 17:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbhLUWq5 (ORCPT
+        with ESMTP id S229732AbhLUWst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 17:46:57 -0500
+        Tue, 21 Dec 2021 17:48:49 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B571AC061574;
-        Tue, 21 Dec 2021 14:46:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4272C061574;
+        Tue, 21 Dec 2021 14:48:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=h90gh4tcJW1V6SNXPxKfbHdkwYNTgO5Pfs3QrMt4cfI=; b=jlkprZSBA0/TzLU+ihi32lUFm6
-        E56aTPhkdc+bB+P33zBxsHHEyi348mPILu7I3GymDwe+nvRGg4izF3/g948Jr9mWsbMEHypbOBktv
-        SaI5QOZFsfPwIQMtMh3PmsQjY3z6hOAzMF+dKtF99GpIwFYUgSC3Ln+dtHElXnl+PpfI72gNRXUCR
-        nn46hWLbMpSxz0qHxV2hTZMc+90RWbIL4M2eTBHylVB+rtt+FzzGi7q/2HMryX6tamrVgLLAfNwrO
-        mmnB6MzgTDe3+s9bxJf2YCv9OTqQkpia0s+P8tz9w1NWp7qHYZSknu7nypYSkntLi6MkFCTklESDv
-        3FQRQukA==;
+        bh=BKkXw7MNjVkk1g8b0s54kNVZ35EPgyCnfbympk+YPxE=; b=AXDzERoWGiE0lRhCAL7w33D0Hc
+        4qfgoSdM6kkZeBjGDA4kZGNHvBUpus5urBM3L9uUcgpWWeMP/bkQ3//48cpiF6Ts9dKbX49lstFlA
+        sk4nL9BU2TKHqZtCWpwj7Mkj3o3JyMpzRTmjHTzz6I8KZzThJNptXuoS3FCcnvMJpA0XiNgiGn/vH
+        tGqc5C3anHnVNujWmVwiYarNTlXPoQfpHR/Xv40tXsnu13ckiX9Ftx9MnMKNvLuo+JeBQ6com+VyE
+        aWes0334RbzjRtw8zcjUuZXb25VvEo5XSJJfZ2BIWSDz5aezyEzJNGb8ZNTogtW8PSpzdph2t+e3s
+        Af8T9A7A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mznuE-008f53-RB; Tue, 21 Dec 2021 22:46:50 +0000
-Date:   Tue, 21 Dec 2021 14:46:50 -0800
+        id 1mznw2-008fAd-Ld; Tue, 21 Dec 2021 22:48:42 +0000
+Date:   Tue, 21 Dec 2021 14:48:42 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Vimal Agrawal <avimalin@gmail.com>
-Cc:     Vimal Agrawal <Vimal.Agrawal@sophos.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jan Beulich <JBeulich@suse.com>, Jeff Mahoney <jeffm@suse.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kernel/module.c: fix for symbol decode in stack trace
- for stripped modules
-Message-ID: <YcJZWiQ407ZxMM+y@bombadil.infradead.org>
-References: <LO2P265MB2671DF8D82C0C6A1504D85D6939F9@LO2P265MB2671.GBRP265.PROD.OUTLOOK.COM>
- <LO2P265MB267173F563B0A2CA5995FA2C939F9@LO2P265MB2671.GBRP265.PROD.OUTLOOK.COM>
- <106F23FD-3768-4CF0-893D-EDFE4A0BA2BF@sophos.com>
- <YbEIe+jxzQTFPHwk@bombadil.infradead.org>
- <DB2D69B2-B523-4626-BDCE-CE7DEFCD9268@sophos.com>
- <YbJpvT/zRBuyuNxT@bombadil.infradead.org>
- <DFAD7F0E-4D95-40FC-8FB6-D488EB81A530@sophos.com>
- <YcDXrwXDw7nI6u2b@bombadil.infradead.org>
- <CALkUMdSPZ2Qr8CYMpckRsjizyPapcOcd77_JOcj=73nervwOEg@mail.gmail.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        linux-fsdevel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH][next] kernel/sysctl.c: remove unused variable
+ ten_thousand
+Message-ID: <YcJZyiUrlsPYExZ/@bombadil.infradead.org>
+References: <20211221184501.574670-1-colin.i.king@gmail.com>
+ <YcJLFQh9IA2XzXu3@bombadil.infradead.org>
+ <CAKwvOdnK2Zc72tw6CdQkz=VxoRC0voWpda8Tgo38LaiRukDfKA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALkUMdSPZ2Qr8CYMpckRsjizyPapcOcd77_JOcj=73nervwOEg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnK2Zc72tw6CdQkz=VxoRC0voWpda8Tgo38LaiRukDfKA@mail.gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 02:36:48PM +0530, Vimal Agrawal wrote:
-> Hi Luis,
+On Tue, Dec 21, 2021 at 02:17:41PM -0800, Nick Desaulniers wrote:
+> On Tue, Dec 21, 2021 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Tue, Dec 21, 2021 at 06:45:01PM +0000, Colin Ian King wrote:
+> > > The const variable ten_thousand is not used, it is redundant and can
+> > > be removed.
+> > >
+> > > Cleans up clang warning:
+> > > kernel/sysctl.c:99:18: warning: unused variable 'ten_thousand' [-Wunused-const-variable]
+> > > static const int ten_thousand = 10000;
+> > >
+> > > Fixes: c26da54dc8ca ("printk: move printk sysctl to printk/sysctl.c")
+> > > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> >
+> > Acked-by: Andrew Morton <akpm@linux-foundation.org>
 > 
-> Please see https://github.com/crash-utility/crash/commit/03e3937ec7d1b356039433137cc6e531379ca454
-> ( function store_module_symbols_v2  in file symbols.c). This was one
-> of the initial commit for crash utility.
+> Just double checking; I don't think I've seen someone supply someone
+> else's Acked by tag in a reply before. Was there some discussion off
+> thread that I missed? If so, do you mind linking to it?  Was this a
+> typo, perhaps, and you meant to supply your own Acked by tag? Are
+> "Luis Chamberlain" and "Andrew Morton" aliases? :^P
 
-OK then I see no good reason to follow that convetion.
-I'd much prefer if we use our own and make it mean something a bit more
-obvious and clear as I had suggested.
+Haha sorry I copied and paste error.
 
-> I will work on linux-next and update you.
-
-Great.
+Acked-by: Luis Chamberlain <mcgrof@kernel.org> 
 
   Luis

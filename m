@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB15F47C7A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E7647C7A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241860AbhLUTkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 14:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241842AbhLUTkJ (ORCPT
+        id S241867AbhLUTmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 14:42:13 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]:40857 "EHLO
+        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231959AbhLUTmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 14:40:09 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEA2C061574;
-        Tue, 21 Dec 2021 11:40:09 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id p8so21510ljo.5;
-        Tue, 21 Dec 2021 11:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/uKyyOqK31yVvTxepIWf3C0/nG0qY+9vHEVmcazif6A=;
-        b=mDwpKytDas5WfYtyTNm4aXCVrv1Kd6hSyQs6O1BA538BAsxZY8NtZgVeZShQZSi+PL
-         Upe8i69lpPviyuHiY8D+DBnvF45fWgVNKhIaOoqnVWBmnEBhIFw1VyqZRNzTFRW/rlwH
-         DrB1ZGxIIs+29C99QacgeQpeqpl/C12yHB6hwrs990lx2fx8yAfoCt1W1R86Q+7foYM9
-         D9jcfsfW2gohC/FVxcAP58zLL/JuSN+Kn6YVcQKuizG00o187cNbD11I7AD7puhIhFNK
-         6A5IgcYpjyI4bc262CsymBb3DoBZhILlrNaRnWA0jiVI2EB4yr7asIFLCPCAjqY5czRl
-         7H4Q==
+        Tue, 21 Dec 2021 14:42:12 -0500
+Received: by mail-qt1-f172.google.com with SMTP id l17so1440932qtk.7;
+        Tue, 21 Dec 2021 11:42:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/uKyyOqK31yVvTxepIWf3C0/nG0qY+9vHEVmcazif6A=;
-        b=Q1Yi4VXEW5XO1+QFtcKN0XZ8Q0SlSsa0l4T++C9mIEZyNnm/UigWih7WIPrd8lcnYh
-         C6rwie5ybMgBdg/COgksTyAJqTTNmODY4oOr0rpAgtMIw+hGRjCIrG/77m3YhLSEGi9f
-         /fTgq3yQH4hhcEfJBgVGDPwYtrEMliNfaGjKQyvcKmOo6cN+mSsZbKsCs6bRsUGotz0c
-         6YMXV+3L/YM9PNmQ8VFmbnojHQE1wiBpsgK1XACilLreXkXeC89bJkHtCmbd9jTVjaUa
-         RZtwC+MzoaLhuXKrlKUvHIAF6FX/UAidKbi9yRsHNijxDJ8yhOvY6yt4+lrB/dzMMWgx
-         Vqow==
-X-Gm-Message-State: AOAM530SJevlhxgdw792XijLWTm3MdMCwQhoFVTuJ0jGmjXzTYpWLsaQ
-        zwBJQ28GdC088MwfwOsCz7M=
-X-Google-Smtp-Source: ABdhPJxCT5s/kKAWn+YxAhCAhMXMP3dAl+/J/UAgVhopQojePuKy41uetIeiPF5CNpqFiUhXZIUnUg==
-X-Received: by 2002:a2e:8e88:: with SMTP id z8mr3540873ljk.197.1640115607420;
-        Tue, 21 Dec 2021 11:40:07 -0800 (PST)
-Received: from localhost.localdomain ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id j21sm2819061lji.88.2021.12.21.11.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 11:40:07 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, robert.foss@collabora.com, freddy@asix.com.tw
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH 2/2] asix: fix wrong return value in asix_check_host_enable()
-Date:   Tue, 21 Dec 2021 22:40:05 +0300
-Message-Id: <989915c5f8887e4a0281ed87325277aa8c997291.1640115493.git.paskripkin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <bd6a7e1779ba97a300650e8e23b69ecffb3b4236.1640115493.git.paskripkin@gmail.com>
-References: <bd6a7e1779ba97a300650e8e23b69ecffb3b4236.1640115493.git.paskripkin@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JPgPrPFVEIjf6OyDG4aeszuhlVMNt4/l0JdoVf4Nvng=;
+        b=BkILyB1Imscz9LLSRC+YAu+ApmTw3YdFIgQ81gtvIHj5LjPdh7L9CfLIUhZSA9Zr59
+         2jXZm9lR8fLu41bKb8qDvp2HQ2DpF113rJdHb54JizqZndfXAJwEN8Htn/bR59EX6BhA
+         ygrYxEFCg1Oinr2iHAaxdXhcN3lje77dwPwT7H3dfSSIZVjv7fPTFreK1btv0epI2D8Z
+         0VPOrSEKQH3duf9E74O7D/XDFgvWsBOw/Z1y5dbQT6YHro2mVzPCQSCqLr45cVUha+P7
+         PiAfWMTcUSFcFmVv/Q/2z24iT3087F+EwPl64o54eiHKsSjVzP3pFGpBhGON5lMJ5i7R
+         t35Q==
+X-Gm-Message-State: AOAM530Ay9xf/8QHMx7aTQt+ZNAeFnzmuJQ3ATWXMIZto//YWkBTtalx
+        yM6jfu0UEyreGX+fyO/D/b2PLnP/WLNzpbY0ijBCApWreHc=
+X-Google-Smtp-Source: ABdhPJwFsCNFcSELY8NLAo0c1hYknUwTujNgEcq/0+Davb5kk9RkbGJeC/wrtwRXJsvyW4itJIYZJc6NQ4AHp2YnXbU=
+X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr3624634qtv.80.1640115731864;
+ Tue, 21 Dec 2021 11:42:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Dec 2021 20:42:00 +0100
+Message-ID: <CAJZ5v0hCi7TM+WsaW+DFjwxtgvpJSFe10yCwg1yug8Sn_+4TPg@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v5.16-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If asix_read_cmd() returns 0 on 30th interation, 0 will be returned from
-asix_check_host_enable(), which is logically wrong. Fix it by returning
--ETIMEDOUT explicitly if we have exceeded 30 iterations
+Hi Linus,
 
-Fixes: a786e3195d6a ("net: asix: fix uninit value bugs")
-Reported-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
- drivers/net/usb/asix_common.c | 2 +-
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.16-rc7
+
+with top-most commit 544e737dea5ad1a457f25dbddf68761ff25e028b
+
+ PM: sleep: Fix error handling in dpm_prepare()
+
+on top of commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c
+
+ Linux 5.16-rc5
+
+to receive a power management fix for 5.16-rc7.
+
+This fixes a recent regression causing the loop in dpm_prepare()
+to become infinite if one of the device ->prepare() callbacks
+returns an error.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (1):
+      PM: sleep: Fix error handling in dpm_prepare()
+
+---------------
+
+ drivers/base/power/main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index 06823d7141b6..8c61d410a123 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -83,7 +83,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 			break;
- 	}
- 
--	return ret;
-+	return i >= 30? -ETIMEDOUT: ret;
- }
- 
- static void reset_asix_rx_fixup_info(struct asix_rx_fixup_info *rx)
--- 
-2.34.1
-

@@ -2,80 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7422D47BC37
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E6B47BC38
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbhLUIxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:53:01 -0500
-Received: from verein.lst.de ([213.95.11.211]:45923 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235860AbhLUIxA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:53:00 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 58D8768AFE; Tue, 21 Dec 2021 09:52:56 +0100 (CET)
-Date:   Tue, 21 Dec 2021 09:52:56 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, corbet@lwn.net, hch@lst.de, cl@linux.com
-Subject: Re: [PATCH 2/2] dma-pool: allow user to disable atomic pool
-Message-ID: <20211221085256.GB7439@lst.de>
-References: <20211217090827.101938-1-bhe@redhat.com> <20211217090827.101938-3-bhe@redhat.com>
+        id S235878AbhLUIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:54:52 -0500
+Received: from mail-m973.mail.163.com ([123.126.97.3]:25832 "EHLO
+        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233654AbhLUIyv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 03:54:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=gPtm4
+        1ZRhN2hM6/uWkxP17bgJY7N8owgKDTDBYkkLEE=; b=HZqm69xsMl/M5Z2ptYTtS
+        QMPPcI1giHMnW1Gm7D3H4LHkGM/D8XfdusdOH3ASlOxgVzYWGHmn4g209yyKdrhB
+        rXT9Ayyo+h9X5UbBC1gUYxvTN9ab/w6K0KI+y3VxHptmPd0K3ZKLffQW618wcadX
+        rINiKkHhHOsa/Wv5vxvEm4=
+Received: from localhost.localdomain (unknown [36.112.214.113])
+        by smtp3 (Coremail) with SMTP id G9xpCgB3W+8ulsFheyJVCQ--.60164S4;
+        Tue, 21 Dec 2021 16:54:18 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
+Date:   Tue, 21 Dec 2021 16:54:04 +0800
+Message-Id: <20211221085404.6769-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217090827.101938-3-bhe@redhat.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgB3W+8ulsFheyJVCQ--.60164S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJw18Ww1kWF15GryxurykXwb_yoW5GF4DpF
+        ZxKF1UZFWagry7Ary7JF4Svr1Ska98Gr47KwsrW39rGasxJFsxtFy7Ar4YgrnrAFWfKw15
+        ZF4qvFWUWrWqqwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhKsUUUUUU=
+X-Originating-IP: [36.112.214.113]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbB3Q9wjGBHLhNxswAAs2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 05:08:27PM +0800, Baoquan He wrote:
-> In the current code, three atomic memory pools are always created,
-> atomic_pool_kernel|dma|dma32, even though 'coherent_pool=0' is
-> specified in kernel command line. In fact, atomic pool is only
-> necessary when CONFIG_DMA_DIRECT_REMAP=y or mem_encrypt_active=y
-> which are needed on few ARCHes.
-> 
-> So change code to allow user to disable atomic pool by specifying
-> 'coherent_pool=0'.
-> 
-> Meanwhile, update the relevant document in kernel-parameter.txt.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 3 ++-
->  kernel/dma/pool.c                               | 7 +++++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ec4d25e854a8..d7015309614b 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -664,7 +664,8 @@
->  
->  	coherent_pool=nn[KMG]	[ARM,KNL]
->  			Sets the size of memory pool for coherent, atomic dma
-> -			allocations. Otherwise the default size will be scaled
-> +			allocations. A value of 0 disables the three atomic
-> +			memory pool. Otherwise the default size will be scaled
->  			with memory capacity, while clamped between 128K and
->  			1 << (PAGE_SHIFT + MAX_ORDER-1).
->  
-> diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
-> index 5f84e6cdb78e..5a85804b5beb 100644
-> --- a/kernel/dma/pool.c
-> +++ b/kernel/dma/pool.c
-> @@ -21,7 +21,7 @@ static struct gen_pool *atomic_pool_kernel __ro_after_init;
->  static unsigned long pool_size_kernel;
->  
->  /* Size can be defined by the coherent_pool command line */
-> -static size_t atomic_pool_size;
-> +static unsigned long atomic_pool_size = -1;
+Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
+it is never freed through the function, which will lead to a memory
+leak.
 
-Using UINT_MAX instead of -1 here and below would probably be more
-descriptive.
+We should kfree() scratch before the function returns (#2, #3 and #4).
 
-Otherwise looks good:
+31 static int tpm2_key_encode(struct trusted_key_payload *payload,
+32			   struct trusted_key_options *options,
+33			   u8 *src, u32 len)
+34 {
+36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+      	// #1: kmalloc space
+50	if (!scratch)
+51		return -ENOMEM;
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+56	if (options->blobauth_len == 0) {
+60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+61			return PTR_ERR(w); // #2: missing kfree
+63	}
+
+71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+72		 "BUG: scratch buffer is too small"))
+73		return -EINVAL; // #3: missing kfree
+
+  	// #4: missing kfree: scratch is never used afterwards.
+82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+83		return PTR_ERR(work1);
+
+85	return work1 - payload->blob;
+86 }
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 0165da386289..7bb1119b1dea 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 		unsigned char bool[3], *w = bool;
+ 		/* tag 0 is emptyAuth */
+ 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+-		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
++		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
++			kfree(scratch);
+ 			return PTR_ERR(w);
++		}
+ 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+ 	}
+ 
+@@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	 * trigger, so if it does there's something nefarious going on
+ 	 */
+ 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+-		 "BUG: scratch buffer is too small"))
++		 "BUG: scratch buffer is too small")) {
++		kfree(scratch);
+ 		return -EINVAL;
++	}
+ 
+ 	work = asn1_encode_integer(work, end_work, options->keyhandle);
+ 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+@@ -79,6 +83,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	work1 = payload->blob;
+ 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+ 				     scratch, work - scratch);
++	kfree(scratch);
+ 	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+ 		return PTR_ERR(work1);
+ 
+-- 
+2.25.1
+

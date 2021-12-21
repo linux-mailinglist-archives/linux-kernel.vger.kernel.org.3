@@ -2,285 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2770147BFE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B9647BFEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbhLUMm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbhLUMm1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:42:27 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFF0C061574;
-        Tue, 21 Dec 2021 04:42:26 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so28380559edq.6;
-        Tue, 21 Dec 2021 04:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k4hxvy8pqf+gc09rPwYSGhnBkUTuFNvjBCA7sQpk+bU=;
-        b=EVEQvhInNWRB798PhHgKi7vkuwJb2Axyp0wR4E5KfodISQ0yQGlOtzTkBZVZpsgmE5
-         E58S4sQOD5BQQsnTmICphq5+ODZ+ao/bfF/g/QkJLKxqyWSeszHyTwVHAwzy9j2bDnkB
-         l4nLJiuu6sz07aV6Xpj0901Ye/JqT1cmQ+m4Pu0pBWJZ2KNdOQLC4OJjIpNMgtLXrzMw
-         TRZerQbv4yB+pGFXNGPRuGYkpr7REImF98ZJbREjbiAuC1wEhW0LjRbIVt2tfPp/pf/e
-         AWn+ykXsJfRC6B9MYjQ4Ueu/9ceGULcXj+2TcLjo3dOm/ooVvLsw2eKigZfubdZ2drlp
-         UEUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k4hxvy8pqf+gc09rPwYSGhnBkUTuFNvjBCA7sQpk+bU=;
-        b=Oyg61X/af4ey0nbp6p1WzmdVne/ZkfTvx638csc5ry/Z+ybmTi7mxprxpwOE/BOA55
-         dMssE0g15mpoq9z0iT3tGBzTkzvkTsFsAqauPXsnsf3KubD06PgY6AJ4D3cJVFJJuY0U
-         JhmeWhz3ZTh2ZofqcZpPy82U1uGswddB9TKdEDkXZhIbhiWWzDJbo6/saQRDVTjnPNrI
-         WHKqzKmhPDoMJIUbOjtkmZqKfkVB6FBMg/6Z12vMHwPbWISH23a3uU3q1BawX4A7a0L8
-         sXoyAc01jnDVqUzDh8fzoeuh8+AUQxpY9fPt4HYmWbgKFk7Ep8BMygO3ddmDMdEJsfa4
-         B3/Q==
-X-Gm-Message-State: AOAM532LbyQm7OJNEwqiTSGyg0jlWUwPByxNQ4P/qEomDXC9S60954gy
-        BAMbUpZJsNp62jY3ewj0yjg=
-X-Google-Smtp-Source: ABdhPJxx9wHDPwSooBfGIlXW5cqW0FDdC1aznegR+cLjBDQ4rWo7BgGP03C3YkgbjDrLbDJFXDPf3w==
-X-Received: by 2002:a17:907:720d:: with SMTP id dr13mr2458963ejc.271.1640090545489;
-        Tue, 21 Dec 2021 04:42:25 -0800 (PST)
-Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id eg12sm2756179edb.25.2021.12.21.04.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 04:42:25 -0800 (PST)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] hwmon: add debugfs register access
-Date:   Tue, 21 Dec 2021 14:42:21 +0200
-Message-Id: <20211221124221.2684214-1-demonsingur@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S234875AbhLUMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:46:05 -0500
+Received: from foss.arm.com ([217.140.110.172]:52192 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230326AbhLUMqE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:46:04 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01B421FB;
+        Tue, 21 Dec 2021 04:46:04 -0800 (PST)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E5B33F774;
+        Tue, 21 Dec 2021 04:46:02 -0800 (PST)
+Subject: Re: [PATCH 2/4] sched/fair: Decay task PELT values during migration
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, valentin.schneider@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, lukasz.luba@arm.com
+References: <20211209161159.1596018-1-vincent.donnefort@arm.com>
+ <20211209161159.1596018-3-vincent.donnefort@arm.com>
+ <daa01574-5d7b-c125-48a9-d1ec7bd1fb64@arm.com>
+ <20211220155735.GA51378@ubiquitous>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <2551684c-c987-b143-ba69-4fb0c55f61c7@arm.com>
+Date:   Tue, 21 Dec 2021 13:46:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20211220155735.GA51378@ubiquitous>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+On 20.12.21 17:09, Vincent Donnefort wrote:
+> On Mon, Dec 20, 2021 at 12:26:23PM +0100, Dietmar Eggemann wrote:
+>> On 09.12.21 17:11, Vincent Donnefort wrote:
 
-Similar to IIO, create a device directory inside debugfs
-mount point, and create a direct_reg_access file inside
-that directory, if debugfs_reg_access callback is defined
-inside hwmon_ops.
+[...]
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
- drivers/hwmon/hwmon.c | 122 ++++++++++++++++++++++++++++++++++++++++++
- include/linux/hwmon.h |  12 +++++
- 2 files changed, 134 insertions(+)
+>> Why do you use `avg.last_update_time` (lut) of the root cfs_rq here?
+>>
+>> p's lut was just synced to cfs_rq_of(se)'s lut in
+>>
+>> migrate_task_rq_fair() (1) -> remove_entity_load_avg() ->
+>> sync_entity_load_avg(se) (2)
+> 
+> Huum, indeed, the estimation is an offset on top of the se's last_update_time,
+> which I suppose could be different from the rq's cfs_rq.
+> 
+> I'll add a sched_entity argument for this function, to use either cfs_rq_of(se)
+> or se last_update_time
 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 3501a3ead4ba..a3dc785cd885 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -10,6 +10,7 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/bitops.h>
-+#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/gfp.h>
-@@ -35,6 +36,12 @@ struct hwmon_device {
- 	struct list_head tzdata;
- 	struct attribute_group group;
- 	const struct attribute_group **groups;
-+#if defined(CONFIG_DEBUG_FS)
-+	struct dentry *debugfs_dentry;
-+	unsigned int cached_reg_addr;
-+	char read_buf[20];
-+	unsigned int read_buf_len;
-+#endif
- };
- 
- #define to_hwmon_device(d) container_of(d, struct hwmon_device, dev)
-@@ -64,6 +71,113 @@ struct hwmon_thermal_data {
- 	struct thermal_zone_device *tzd;/* thermal zone device */
- };
- 
-+static struct dentry *hwmon_debugfs_dentry;
-+
-+#if defined(CONFIG_DEBUG_FS)
-+static ssize_t hwmon_debugfs_read_reg(struct file *file, char __user *userbuf,
-+				      size_t count, loff_t *ppos)
-+{
-+	struct hwmon_device *hwdev = file->private_data;
-+	struct device *hdev = &hwdev->dev;
-+	unsigned int val = 0;
-+	int ret;
-+
-+	if (*ppos > 0)
-+		return simple_read_from_buffer(userbuf, count, ppos,
-+					       hwdev->read_buf,
-+					       hwdev->read_buf_len);
-+
-+	ret = hwdev->chip->ops->debugfs_reg_access(hdev, hwdev->cached_reg_addr,
-+						   0, &val);
-+	if (ret) {
-+		dev_err(hdev->parent, "%s: read failed\n", __func__);
-+		return ret;
-+	}
-+
-+	hwdev->read_buf_len = snprintf(hwdev->read_buf, sizeof(hwdev->read_buf),
-+				       "0x%X\n", val);
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, hwdev->read_buf,
-+				       hwdev->read_buf_len);
-+}
-+
-+static ssize_t hwmon_debugfs_write_reg(struct file *file,
-+				       const char __user *userbuf,
-+				       size_t count, loff_t *ppos)
-+{
-+	struct hwmon_device *hwdev = file->private_data;
-+	struct device *hdev = &hwdev->dev;
-+	unsigned int reg, val;
-+	char buf[80];
-+	int ret;
-+
-+	count = min_t(size_t, count, sizeof(buf) - 1);
-+	if (copy_from_user(buf, userbuf, count))
-+		return -EFAULT;
-+
-+	buf[count] = 0;
-+
-+	ret = sscanf(buf, "%i %i", &reg, &val);
-+
-+	switch (ret) {
-+	case 1:
-+		hwdev->cached_reg_addr = reg;
-+		break;
-+	case 2:
-+		hwdev->cached_reg_addr = reg;
-+		ret = hwdev->chip->ops->debugfs_reg_access(hdev, reg, val,
-+							   NULL);
-+		if (ret) {
-+			dev_err(hdev->parent, "%s: write failed\n", __func__);
-+			return ret;
-+		}
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations hwmon_debugfs_reg_fops = {
-+	.open = simple_open,
-+	.read = hwmon_debugfs_read_reg,
-+	.write = hwmon_debugfs_write_reg,
-+};
-+
-+static void hwmon_device_register_debugfs(struct hwmon_device *hwdev)
-+{
-+	if (IS_ERR(hwmon_debugfs_dentry))
-+		return;
-+
-+	if (!hwdev->chip || !hwdev->chip->ops ||
-+		!hwdev->chip->ops->debugfs_reg_access)
-+		return;
-+
-+	hwdev->debugfs_dentry = debugfs_create_dir(dev_name(&hwdev->dev),
-+						   hwmon_debugfs_dentry);
-+
-+	if (IS_ERR(hwdev->debugfs_dentry))
-+		return;
-+
-+	debugfs_create_file("direct_reg_access", 0644, hwdev->debugfs_dentry,
-+			    hwdev, &hwmon_debugfs_reg_fops);
-+}
-+
-+static void hwmon_device_unregister_debugfs(struct hwmon_device *hwdev)
-+{
-+	debugfs_remove_recursive(hwdev->debugfs_dentry);
-+}
-+#else
-+static void hwmon_device_register_debugfs(struct hwmon_device *hwdev)
-+{
-+}
-+
-+static void hwmon_device_unregister_debugfs(struct hwmon_device *hwdev)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
- static ssize_t
- name_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
-@@ -114,6 +228,8 @@ static void hwmon_dev_release(struct device *dev)
- {
- 	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 
-+	hwmon_device_unregister_debugfs(hwdev);
-+
- 	if (hwdev->group.attrs)
- 		hwmon_free_attrs(hwdev->group.attrs);
- 	kfree(hwdev->groups);
-@@ -817,6 +933,8 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 		}
- 	}
- 
-+	hwmon_device_register_debugfs(hwdev);
-+
- 	return hdev;
- 
- free_hwmon:
-@@ -1062,12 +1180,16 @@ static int __init hwmon_init(void)
- 		pr_err("couldn't register hwmon sysfs class\n");
- 		return err;
- 	}
-+
-+	hwmon_debugfs_dentry = debugfs_create_dir("hwmon", NULL);
-+
- 	return 0;
- }
- 
- static void __exit hwmon_exit(void)
- {
- 	class_unregister(&hwmon_class);
-+	debugfs_remove(hwmon_debugfs_dentry);
- }
- 
- subsys_initcall(hwmon_init);
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index fad1f1df26df..4cbbc1ed2d7b 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -390,6 +390,16 @@ enum hwmon_intrusion_attributes {
-  *			Channel number
-  *		@val:	Value to write
-  *		The function returns 0 on success or a negative error number.
-+ * @debugfs_reg_access:
-+ *		Callback to read or write register values.
-+ *		Parameters are:
-+ *		@dev:	Pointer to hardware monitoring device
-+ *		@reg:	Register address to read or write
-+ *		@writeval:
-+ *			Value to write to register. 0 when reading.
-+ *		@readval:
-+ *			Pointer to value read from register. NULL when writing.
-+ *		The function returns 0 on success or a negative error number.
-  */
- struct hwmon_ops {
- 	umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
-@@ -400,6 +410,8 @@ struct hwmon_ops {
- 		    u32 attr, int channel, const char **str);
- 	int (*write)(struct device *dev, enum hwmon_sensor_types type,
- 		     u32 attr, int channel, long val);
-+	int (*debugfs_reg_access)(struct device *dev, unsigned int reg,
-+				  unsigned int writeval, unsigned int *readval);
- };
- 
- /**
--- 
-2.34.1
+OK, or an `u64 now or lut`.
 
+[...]
+
+>>>  	} else {
+>>> +		remove_entity_load_avg(se);
+>>> +
+>>>  		/*
+>>> -		 * We are supposed to update the task to "current" time, then
+>>> -		 * its up to date and ready to go to new CPU/cfs_rq. But we
+>>> -		 * have difficulty in getting what current time is, so simply
+>>> -		 * throw away the out-of-date time. This will result in the
+>>> -		 * wakee task is less decayed, but giving the wakee more load
+>>> -		 * sounds not bad.
+>>> +		 * Here, the task's PELT values have been updated according to
+>>> +		 * the current rq's clock. But if that clock hasn't been
+>>> +		 * updated in a while, a substantial idle time will be missed,
+>>> +		 * leading to an inflation after wake-up on the new rq.
+>>> +		 *
+>>> +		 * Estimate the PELT clock lag, and update sched_avg to ensure
+>>> +		 * PELT continuity after migration.
+>>>  		 */
+>>> -		remove_entity_load_avg(&p->se);
+>>> +		__update_load_avg_blocked_se(rq_clock_pelt_estimator(rq), se);
+>>
+>> We do __update_load_avg_blocked_se() now twice for p, 1. in (2) and then
+>> in (1) again.
+> 
+> the first __update_load_avg_blocked_se() ensures the se is aligned with the
+> cfs_rq's clock and then, update the "removed" struct accordingly. We couldn't
+> use the estimator there, it would break that structure.
+
+You're right. I missed this bit.
+
+Related to this: Looks like on CAS/EAS we don't rely on
+remove_entity_load_avg()->sync_entity_load_avg(se) since it is already
+called during  select_task_rq().

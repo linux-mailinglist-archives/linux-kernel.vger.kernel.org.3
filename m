@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D5147C680
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD68947C5E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241312AbhLUS1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:27:44 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:57841 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbhLUS1n (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:27:43 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M3lgJ-1mzT0n0c1j-000rN3; Tue, 21 Dec 2021 19:27:42 +0100
-Received: by mail-wr1-f44.google.com with SMTP id v7so21371833wrv.12;
-        Tue, 21 Dec 2021 10:27:42 -0800 (PST)
-X-Gm-Message-State: AOAM530t98g5HXwcRIsBlqBE2l1Ez9+V3qFuQHb+eteU6pDQRNKylJnY
-        4qeaZcCnj1SexybhtNjuRORBWr1uDN74QPACRO8=
-X-Google-Smtp-Source: ABdhPJznn56uiIqEQGonQeMXabHARNb1MKKouJb7pEiJqRUGi0z4LrTZSA40EkADjYddnL79plKTAJq+Gzpiid35E7s=
-X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr3598547wrq.407.1640108340516;
- Tue, 21 Dec 2021 09:39:00 -0800 (PST)
+        id S240981AbhLUSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:09:19 -0500
+Received: from mga18.intel.com ([134.134.136.126]:63849 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240940AbhLUSJN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:09:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640110153; x=1671646153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4k4x29Qb+0v8l+0y3SmwpANCykxqEpDNAkQhk4vCpjE=;
+  b=kLsrcbriaaN2AA9LlhV6P98QGP2cSy/I+p96H6S6gvwboR6MHAqsJ+AJ
+   Sj+9Miwp14gUs1SC+n3w4pStmICY7tP9yepqEeUiW6KGmg97/A4kMBz5f
+   kogTQszBwQhhAlty3sPwHxUeGBtVUk6s3PFoGvnrWJrkyUKmUix/Rk0dS
+   NpWJT/CcApRQbiGU4gwe71ASmHDvX0nuvm2xUbNXKnhuN1Z7UL1Nekxm1
+   U1S59rsFwgNPSQraGmmW7VSZ54f/IF7vYf42V5rJkURsCye6jmFXYaLlA
+   CjWa8tnNWOxHRMaCX6DBvRBF/PqfzF41TCekAc6oUcQd5OYIjhw0u0cur
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227306802"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="227306802"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:41:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="521338928"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2021 09:41:01 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 872F8190; Tue, 21 Dec 2021 19:41:09 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v2 1/8] PCI: Introduce pci_bus_*() printing macros when device is not available
+Date:   Tue, 21 Dec 2021 19:39:38 +0200
+Message-Id: <20211221173945.53674-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org>
-In-Reply-To: <20211221163532.2636028-1-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 18:38:44 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
-Message-ID: <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
-Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, wefu@redhat.com,
-        Drew Fustini <drew@beagleboard.org>, wangjunqiang@iscas.ac.cn,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UViDA59wo0S+JsDByocl07FN0iybuFgyTypYXB/iY5vHr2mBvR0
- lOl9K7841JZXIUyBWaRiLNOJoqm/RcottcwAsUQi+I+GkWY6ruD2l21RVFOubLsVtPytdjK
- OZRZEnvX5rBTqXAjItaulel/cEKI25LXhxEyiu7VZJyvojKGeXfrvAYwR+3aiRYei2bTZaw
- rPLwnnnsMuKeYOGC3ibpQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lrO5q1wt7OE=:t9Zqj/dmTSDfzdJkyN1luX
- aJsUpvnTN90/4oaaH9vpy7hvsntSuvIO3I623+nypeqh6hfd3U5+vhCcVMCAcrK69fuyrPl0e
- iEHwqBkabn8jIgPOVnRN75xHyCbkUC1kk/sCS4BoheWRefMpyZ37AJmwEBsDAbD/vWUZ8pE0s
- 9sCQnLEl6Db/8AHXUIlk7uVIai7yppkKlpSLeXEccJEpKZ6UV7yEO5EvbTwI7nodGVcFJgZVE
- Hh0bhbOD6i08dhBCHGU2qIwOZQA1Iy8Lg+QkrDSFuH5VXSSO4WjIVcXgizMckIMmY3O1IaNnp
- 3zfIcBywP+rq3k/8mW6MYoXI62SwyOU5UtFeMC1oRKx8Dk6W9kbH876O3DXs2SzqWTN45iDHv
- dpbRh7smgupF/j7jqGh9sELC+WbWPJxmOuZKQ0XNqaHEdGlKt5gEuq92TbOVcj5gJWyteCHR/
- hbA/tnVov3I0JDPgcE8YHfzw4yHrwqRzCjzdKMpzQqZG1K8EdUrrivina3br4k6ZOu/7f/HTl
- IvHuTGz98oPG8OJeB1hXG26spuc3lQnkmMY9/5by0LvUi1dC5ENZTCbof7KecIOi+zqx0eygn
- hK7OJIsAa/WYN+JJempIOYWz/4jcrujcwvQ+9wiGTR2sdmBtsqwfFZMxeAMTRA0edkmvT3/gS
- NNCyfU1KeLZpz2/80J9fuHknjXmUjlpI5t0VcikZpma3C1akIQtHe0V3qZte12iqIifn+bNOd
- DNHkm9GgVFepw1+YKjg35uh8bna4p6uRnny06ubJaAxJ0Qur2capHAW1wC7AYQ05GdZGTDuuL
- MPXv17kCfYVmmhj6kdJnj4BE2oHkWtXd7ZuHo8dKHC0/0x/Oag=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> s390, mips, sparc) have supported COMPAT mode. But they all have
-> history issues and can't use standard linux unistd.h. RISC-V would
-> be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> /unistd.h.
->
-> The patchset are based on v5.16-rc6, you can compare rv64-compat32
-> v.s. rv32-whole in qemu with following step:
+In some cases PCI device structure is not available and we want to print
+information based on the bus and devfn parameters. For this cases introduce
+pci_bus_*() printing macros and replace in existing users.
 
-Looks good overall, see my individual replies for minor comments I had.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+ drivers/pci/probe.c | 12 +++---------
+ include/linux/pci.h |  8 ++++++++
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-I think there is a bigger question to answer though, which is whether this is
-actually a useful feature for rv64. In general, there are two reasons for
-wanting compat mode:
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 78962652f5bf..82014b248f4d 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2333,16 +2333,12 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	 */
+ 	while (pci_bus_crs_vendor_id(*l)) {
+ 		if (delay > timeout) {
+-			pr_warn("pci %04x:%02x:%02x.%d: not ready after %dms; giving up\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_warn(bus, devfn, "not ready after %dms; giving up\n", delay - 1);
+ 
+ 			return false;
+ 		}
+ 		if (delay >= 1000)
+-			pr_info("pci %04x:%02x:%02x.%d: not ready after %dms; waiting\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_info(bus, devfn, "not ready after %dms; waiting\n", delay - 1);
+ 
+ 		msleep(delay);
+ 		delay *= 2;
+@@ -2352,9 +2348,7 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	}
+ 
+ 	if (delay >= 1000)
+-		pr_info("pci %04x:%02x:%02x.%d: ready after %dms\n",
+-			pci_domain_nr(bus), bus->number,
+-			PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++		pci_bus_info(bus, devfn, "ready after %dms\n", delay - 1);
+ 
+ 	return true;
+ }
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index d4308f847e58..e3c9edd103df 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2484,4 +2484,12 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+ 	WARN_ONCE(condition, "%s %s: " fmt, \
+ 		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+ 
++#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
++	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
++	       pci_domain_nr(bus), (bus)->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
++
++#define pci_bus_err(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_ERR, (bus), devfn, fmt, ##arg)
++#define pci_bus_warn(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_WARNING, (bus), devfn, fmt, ##arg)
++#define pci_bus_info(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_INFO, (bus), devfn, fmt, ##arg)
++
+ #endif /* LINUX_PCI_H */
+-- 
+2.34.1
 
-a) compatibility with existing binaries and distros
-
-b) reducing the memory footprint of user space in a memory constrained
-environment, either deeply embedded or in a container.
-
-For the other architectures, a) is clearly the main driver, but equally so
-this is not the case on riscv, which does not have any legacy 32-bit
-code. Without that, adding compat mode would mainly introduce a
-second ABI to a lot of environments that at the moment only need to
-support one, and that adds complexity to the implementation and
-the extra attack surface of the second syscall ABI when an exploit
-may be possible only in compat mode.
-
-There is still some benefit in b), but it would need to be weighed
-against the downsides above. Can you explain in more detail what
-use cases you have in mind, and which CPU cores actually support
-this mode?
-
-         Arnd

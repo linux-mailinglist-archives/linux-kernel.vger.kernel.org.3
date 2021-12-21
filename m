@@ -2,107 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2627847B830
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF7347B840
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbhLUCFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 21:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S229916AbhLUCI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 21:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbhLUCFG (ORCPT
+        with ESMTP id S229558AbhLUCI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 21:05:06 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8DDC0698D8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 18:04:31 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v16so11093838pjn.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 18:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nWPde3tzt7xylrW1USSXNq+Y9DG8jtidKkwOW3Iawog=;
-        b=SqLXukmGnFMqbNvJgW5kr7H1Tt1i/SO0zeEbFh3eBmN/l0/V8IAEGpa23IXqENHOyW
-         K0IQzsb29u8LuhYEfN0EHs0BnAUHLl7mfZ3Pbg3+ye2L0pugZBSCYJqWSbKZFckGu2F1
-         zQVmka8s6d06GmQ7cU2yg+z/n2wJTT8Op2PAYbB/Use516Mc/H5SVmWTojyd1mtNfify
-         abGyiDOG+mDnjXkQ5pSPlDPr8j4jK4cXy3yWbM9200+FSkGYQj9p4zdIBmn0A3RC+M/x
-         MJWLHfBPNc+0bhjzS4vJj6qmjTJuTYnMkcPj9uk4Rp0y6JUsyiMO9pBDjDkrUjflPeRm
-         xFMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nWPde3tzt7xylrW1USSXNq+Y9DG8jtidKkwOW3Iawog=;
-        b=Hfakeqbj1nJ7WSynv/Rax0sm/vO9XaiVQ/uVZwKzulB72LBCEmFvoZBALqdzW2ARzq
-         CSgIt31WYhh9jHgoeO+kDAViXKSl5k0lrvQS35G4DrWKNbLmj1G4kGKMXZ45lHBUfFJc
-         ZYnEmOu4lNVxOk7Te9UG2Z8KUmyyflnCw8DFllm/PqvlJltae6iCMGo2D84zf7DbC2+V
-         WQEV+pjFEHzJ1eIp5JHUeGaUA0dzism4hqVQ9LOmpdhh8iS/udjg35nk5SesFKDqtLVO
-         WqPY+fvUUewtMnsaV4BCpBxaDpMwbXMiwWiL3sBEQ2Pue7DiATu1gVphXc/YiW6k/kDx
-         p1Gw==
-X-Gm-Message-State: AOAM531HzdNxeAKZlVRW2nCpl8UpiAudo/b1yLTbSb9ezaV/FogD6tmI
-        Wtpw86luEe8W5qIFlUJDiyijTl4bZ7s=
-X-Google-Smtp-Source: ABdhPJzkauxcOzwk0IMiwMCRFlxdCRzOXRCL1D4kZkmlWmG9iSqUzTtw+vW95c3bDTxnlGwHkF7kLg==
-X-Received: by 2002:a17:902:b08f:b0:148:b5d3:96d9 with SMTP id p15-20020a170902b08f00b00148b5d396d9mr748493plr.66.1640052271008;
-        Mon, 20 Dec 2021 18:04:31 -0800 (PST)
-Received: from FLYINGPENG-MB0.tencent.com ([103.7.29.30])
-        by smtp.gmail.com with ESMTPSA id s24sm19002594pfm.100.2021.12.20.18.04.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 Dec 2021 18:04:30 -0800 (PST)
-From:   Peng Hao <flyingpenghao@gmail.com>
-X-Google-Original-From: Peng Hao <flyingpeng@tencent.com>
-To:     phillip@squashfs.org.uk
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH]  fs/squashfs: handle possible null pointer
-Date:   Tue, 21 Dec 2021 10:03:47 +0800
-Message-Id: <20211221020347.46021-1-flyingpeng@tencent.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Mon, 20 Dec 2021 21:08:56 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA74C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 18:08:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1640052534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dzgw+SXsH3WnSRNjasJTdlXPAi0tser+CNOzsg0LQ/s=;
+        b=hIYZpFpFqxlJkiMlU+kX/s4HOBiVfvxewooJLgLKw+ikMnop0M44lRPGYW400hHZPrxtXA
+        wHCrB935cGzGdMVwBhERdbx0VxwP4qJYKVtzUNwdfwjGcTVA7kYeauBNCaGE9IQz3MjRtP
+        D3sAaftjBTJo6EOFSQL3LGAj4+bcqIk=
+Date:   Tue, 21 Dec 2021 02:08:54 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   yajun.deng@linux.dev
+Message-ID: <56d8e86231eec9f46abf9117596ffe07@linux.dev>
+Subject: Re: [PATCH] init: fix the wrong __setup_param() definition
+To:     "Marco Elver" <elver@google.com>
+Cc:     keescook@chromium.org, samitolvanen@google.com, ojeda@kernel.org,
+        masahiroy@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <CANpmjNPsCVkq7SsVL-xpktGe3RsJnRGTJxEPZ60VUt1w_5QgPQ@mail.gmail.com>
+References: <CANpmjNPsCVkq7SsVL-xpktGe3RsJnRGTJxEPZ60VUt1w_5QgPQ@mail.gmail.com>
+ <20211220035448.12054-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- in squashfs_fill_super:
-
-        msblk->decompressor = supported_squashfs_filesystem(
-                        fc,
-                        le16_to_cpu(sblk->s_major),
-                        le16_to_cpu(sblk->s_minor),
-                        le16_to_cpu(sblk->compression));
-        if (msblk->decompressor == NULL)
-                goto failed_mount;
-        ...
-
-failed_mount:
-	...
-	squashfs_decompressor_destroy(msblk);
-
-in squashfs_decompressor_destroy:
-	if (stream) {
-        	msblk->decompressor->free(stream->stream);
-msblk->decompressor is NULL.
-
-so add a judgment whether a null pointer.
-
-Signed-off-by: Peng Hao <flyingpeng@tencent.com>
----
- fs/squashfs/decompressor_single.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/squashfs/decompressor_single.c b/fs/squashfs/decompressor_single.c
-index 4eb3d083d45e..a155452bbc54 100644
---- a/fs/squashfs/decompressor_single.c
-+++ b/fs/squashfs/decompressor_single.c
-@@ -54,7 +54,8 @@ void squashfs_decompressor_destroy(struct squashfs_sb_info *msblk)
- 	struct squashfs_stream *stream = msblk->stream;
- 
- 	if (stream) {
--		msblk->decompressor->free(stream->stream);
-+		if (msblk->decompressor)
-+			msblk->decompressor->free(stream->stream);
- 		kfree(stream);
- 	}
- }
--- 
-2.27.0
-
+December 20, 2021 7:20 PM, "Marco Elver" <elver@google.com> wrote:=0A=0A>=
+ On Mon, 20 Dec 2021 at 04:55, Yajun Deng <yajun.deng@linux.dev> wrote:=
+=0A> =0A>> The parameters in __setup_param() should be four rather than t=
+hree when=0A>> MODULE isn't definited.=0A> =0A> This is actually "when MO=
+DULE is defined". __setup_param() becomes a=0A> nop when compiling as a m=
+odule.=0A> =0A> But that begs the question: why hasn't this been caught b=
+efore?=0A> Probably because nobody should be using __setup_param() if som=
+ething=0A> can also be compiled as a module, in which case module_param()=
+ and=0A> friends should be used. But perhaps there are valid usecases whe=
+re i=0A> t's meant to become a nop if MODULE.=0A> =0A> I don't object thi=
+s fix, since the !MODULE __setup_param() seems like=0A> it was meant to b=
+e defined.=0A> =0A> Just curious: did you actually encounter a problem wi=
+th some new code=0A> using __setup_param()?=0A=0ANO, it is just code insp=
+ection. But for the current code, it's really a bug.=0Avim drivers/clk/im=
+x/clk.c  +161=0A=0A#ifndef MODULE=0A=0A...=0A__setup_param("earlycon", im=
+x_keep_uart_earlycon,=0A              imx_keep_uart_clocks_param, 0); =0A=
+__setup_param("earlyprintk", imx_keep_uart_earlyprintk,=0A              i=
+mx_keep_uart_clocks_param, 0); =0A=0A=0A> =0A>> Fixes: 1da177e4c3f4 ("Lin=
+ux-2.6.12-rc2")=0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A>=
+> ---=0A>> include/linux/init.h | 2 +-=0A>> 1 file changed, 1 insertion(+=
+), 1 deletion(-)=0A>> =0A>> diff --git a/include/linux/init.h b/include/l=
+inux/init.h=0A>> index d82b4b2e1d25..62a77850f10e 100644=0A>> --- a/inclu=
+de/linux/init.h=0A>> +++ b/include/linux/init.h=0A>> @@ -355,7 +355,7 @@ =
+void __init parse_early_options(char *cmdline);=0A>> =0A>> #else /* MODUL=
+E */=0A>> =0A>> -#define __setup_param(str, unique_id, fn) /* nothing */=
+=0A>> +#define __setup_param(str, unique_id, fn, early)/* nothing */=0A>>=
+ #define __setup(str, func) /* nothing */=0A>> #endif=0A>> =0A>> --=0A>> =
+2.32.0

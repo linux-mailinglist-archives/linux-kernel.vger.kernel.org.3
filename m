@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CED47C9D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CAA47C9DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbhLUXsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbhLUXsT (ORCPT
+        id S238170AbhLUXuy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Dec 2021 18:50:54 -0500
+Received: from mail-4018.proton.ch ([185.70.40.18]:43797 "EHLO
+        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236449AbhLUXux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:48:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37768C061574;
-        Tue, 21 Dec 2021 15:48:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 928CE617CD;
-        Tue, 21 Dec 2021 23:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80971C36AE9;
-        Tue, 21 Dec 2021 23:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1640130497;
-        bh=nkeYhgSpZg8GwUUiGealAh8ivf01200zRJ3+PYAI5F8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Lh6ssbN33FYDgwbEi+9vBxlu2T+MOua02MEpGQyzfKN01ZRCBbrE/do8B3o+73fsR
-         Z/47DiCxrv85LJV0vBqhK6XzEiveRpNugmpuo7OJzQI7cDSCI3pIIXZ/g+p5kHEyEm
-         GljPIXcmGYGWNt9J0C6wHsaoV3BaRvcQ9SyvolDo=
-Date:   Tue, 21 Dec 2021 15:48:16 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        keescook@chromium.org, yzaikin@google.com, siglesias@igalia.com,
-        kernel@gpiccoli.net
-Subject: Re: [PATCH 2/3] panic: Add option to dump all CPUs backtraces in
- panic_print
-Message-Id: <20211221154816.4a7472c55073d06df0c25f74@linux-foundation.org>
-In-Reply-To: <911e81d3-5ffe-b936-f668-bf1f6a9b6cfb@igalia.com>
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
-        <20211109202848.610874-3-gpiccoli@igalia.com>
-        <20211130051206.GB89318@shbuild999.sh.intel.com>
-        <6f269857-2cbe-b4dd-714a-82372dc3adfc@igalia.com>
-        <Yb+R/OVeBkdYLWeH@bombadil.infradead.org>
-        <911e81d3-5ffe-b936-f668-bf1f6a9b6cfb@igalia.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 21 Dec 2021 18:50:53 -0500
+Date:   Tue, 21 Dec 2021 23:50:47 +0000
+Authentication-Results: mail-4018.proton.ch; dkim=none
+To:     Rob Herring <robh@kernel.org>
+From:   conor dooley <mail@conchuod.ie>
+Cc:     conor.dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atish.patra@wdc.com
+Reply-To: conor dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v2 03/17] dt-bindings: soc/microchip: make systemcontroller a mfd
+Message-ID: <YfGEPBe6qV6ieFoD_Xk-rEkBwvyWlVDCxk1PNycMfHsRYK1zMpawiDI25G1EZorczGJGj8e-epWgPs_UB8_-DP4keo1ivgfrLOXJNliFRxE=@conchuod.ie>
+In-Reply-To: <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-4-conor.dooley@microchip.com> <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 09:38:23 -0300 "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 
-> On 19/12/2021 17:11, Luis Chamberlain wrote:
-> > mcgrof@sumo ~/linux-next (git::master)$ ./scripts/get_maintainer.pl
-> > kernel/printk/
-> > Petr Mladek <pmladek@suse.com> (maintainer:PRINTK)
-> > Sergey Senozhatsky <senozhatsky@chromium.org> (maintainer:PRINTK)
-> > Steven Rostedt <rostedt@goodmis.org> (reviewer:PRINTK)
-> > John Ogness <john.ogness@linutronix.de> (reviewer:PRINTK)
-> > linux-kernel@vger.kernel.org (open list)    
-> > 
-> > So I suggest you email the patches to those.
-> > 
-> >   Luis
-> > 
-> 
-> Hi Luis, thank you! But I confess I'm very confused with this series. I
-> saw emails from Andrew that the patches had been accepted and were
-> available in -mm tree ([0] for example) but I'm not seeing them in
-> linux-next nor mmotm/mmots (although I saw them in mmotm directory for a
-> while before).
-> 
-> Andrew, could you clarify the state of them?
+On Tuesday, December 21st, 2021 at 17:55, Rob Herring <robh@kernel.org> wrote:
 
-They'll turn up on ozlabs after I've tested it all then uploaded.  I do
-this a couple of times a week, approx.
+>On Fri, Dec 17, 2021 at 09:33:11AM +0000, conor.dooley@microchip.com wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Make the system controller on the Polarfire SoC
+>> a "simple,mfd" so that the services can be child
+>> nodes of the system controller node.
+>>
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>>  .../microchip,mpfs-sys-controller.yaml        | 33 +++++++++++++++++--
+>>  1 file changed, 30 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/>Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> index f699772fedf3..014cb44b8f31 100644
+>> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>> @@ -13,13 +13,34 @@ description: |
+>>    The PolarFire SoC system controller is communicated with via a mailbox.
+>>    This document describes the bindings for the client portion of that mailbox.
+>>
+>> -
+>>  properties:
+>>    mboxes:
+>>      maxItems: 1
+>>
+>>    compatible:
+>> -    const: microchip,mpfs-sys-controller
+>> +    items:
+>> +      - const: microchip,mpfs-sys-controller
+>> +      - const: simple-mfd
+>
+>'simple-mfd' means there is zero dependency on the parent for the child
+>nodes. Isn't 'mboxes' a dependency?
+
+I suppose it is. I was going off what had been done for the bcm2835
+firmware for the rpi its also a mailbox providing "services".
+(arm/bcm/raspberrypi,bcm2835-firmware.yaml)
+>
+>> +
+>> +  hwrandom:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        const: microchip,mpfs-rng
+>> +
+>> +    required:
+>> +      - compatible
+>> +
+>> +  sysserv:
+>> +    type: object
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        const: microchip,mpfs-generic-service
+>> +
+>> +    required:
+>> +      - compatible
+>
+>There's not really any need to have child nodes which have no resources.
+>The driver for microchip,mpfs-sys-controller can create child devices.
+
+I am assuming by this you mean say, take a list of boolean properties and
+convert those into child devices? There's a fairly decent number of services
+provided by the system controller and these children just represent the
+subset that we've implemented so far.
+
+Conor
+>
+>Rob
+

@@ -2,132 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B60E547C0DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B4A47C0E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbhLUNfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbhLUNfW (ORCPT
+        id S235336AbhLUNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:40:27 -0500
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:59372 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235298AbhLUNk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:35:22 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE35BC061574;
-        Tue, 21 Dec 2021 05:35:21 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 956B71B00228;
-        Tue, 21 Dec 2021 15:35:17 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1640093717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a4U6yBFb6S+4Mj+TP2XrOxpUbUb18nMOKdkGXhstUyc=;
-        b=pQHByr+QOHYHsL7GmKznfluOaNIhFkq9lUeSJK4VakHKn8uCU5k7fS9n0Qmphy2bcRk3BJ
-        oAMkyIY4ebiSu4rSogHhiaaHADD8N2ApwdcjO6WB/oeXs4LjqSLz+3LFKg7HyAlqoC8WKa
-        b9QZ6WTXivzu1vsk3hPzAVef/Z/pTHVAg62VwrhAph9kkKO27rjL8iXit7DxgeQ63TS3R8
-        pv0G/3JYKtvnm+7E15pbAHBqbBEc5hk1kWHQiNnFKo/OHcA+twaD4AYUdcS1FDdvoQJZfV
-        1n3aAyR68Zp9dZzC2dF5P4BM275g/goZF+w8ZRt5ncRqGJ5rnhQHwd3+PmuozQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 27C45634C90;
-        Tue, 21 Dec 2021 15:35:17 +0200 (EET)
-Date:   Tue, 21 Dec 2021 15:35:17 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>
-Subject: Re: [PATCH v2 1/1] software node: Update MAINTAINERS data base
-Message-ID: <YcHYFTAoS5ghYWkD@valkosipuli.retiisi.eu>
-References: <20211221133215.8447-1-andriy.shevchenko@linux.intel.com>
+        Tue, 21 Dec 2021 08:40:26 -0500
+Date:   Tue, 21 Dec 2021 13:40:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1640094022;
+        bh=rYqfDiHlulYQXemXIb0YDv6taNEoMdef/ERSb8A+0vQ=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=EBKc0r5ECanLCUWiSVOZAzzKguV4OfG3YjImTJAtAIKtXi0UbSArF8q6ih1tqkRLY
+         EYXFOfLXTnZw04MANyXvw8A6YJXrdF+jsnaDd9iTpiFgrOLu4GrvKhBBRUAR+uK3ga
+         vAfBrJKZFOoMnSoZdDoUJhRYi24SB/RjOCvIlO2DtK/EtQHu/TdFL6XQfABXbhEEu6
+         qzKK/W1+mKVo1i9imTFKMmSrtCx1v516gH0bqpAjb3nc5LBZ3BvcfJpCcbKh8bAsOn
+         RkcUsbteUw5iAPpeFLZ2US7KsaAcCQTMaC440JVBclmfyqtH6zswwDdpseI69mEEqQ
+         EevO165NlpO7g==
+To:     Rob Herring <robh+dt@kernel.org>, Niklas Cassel <nks@flawful.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH] dt-bindings: power: avs: qcom,cpr: Convert to DT schema
+Message-ID: <20211221133937.173618-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221133215.8447-1-andriy.shevchenko@linux.intel.com>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1640093717; a=rsa-sha256;
-        cv=none;
-        b=i79pLTTMFBOaqyfbgMxidGqx8Qselwf9E8ANKNt+KYr2wy7TR7g5ZzbMk9wSbWzh/gWcxn
-        uROPNr3VPuEfVhdeS478u39kfBaGCjuqPOtno7psAZbTPn0vNrQtTiiJLq5p9rLysikKFJ
-        rN+NjPGs2vMgqrgbgyThn2BCnXLUGUiLXYei8ydf355ImEngAiCjTHuu+TvPPuWyv0J6DI
-        J4d1FPRuOziQrrpIUOqrmCTmnanlFWuwft3Sy7g6Bb9jsQtDpyiFISG+StIhucS/67M0Sd
-        bzP4vhqYIJiwktq/Ycpj1ckU3YowspFjv5ZiG2iEpVG4U0uymEvC0PrvQsEr9A==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1640093717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a4U6yBFb6S+4Mj+TP2XrOxpUbUb18nMOKdkGXhstUyc=;
-        b=Qtiy14fnKsjZ8ZwW1gGFWOqy4PCGEKPLcZBKmEWdZwalYwMjwVUABgThOYGIvkPSAaPRrp
-        W7yk9RfCHAd5rj2EAyNtGHBD2b1oP87LPdJ1PcUfFHxrFu5jS/oZDCjUjtaunOqxM7kWDX
-        Md0DfoiWp3dVoTvwKydehmv+C1OZWTDe9soLNgswk/ep73uZmtqWTYnlu6zVerKhlOnPyv
-        h9XNSe+9dlMEZT9mx2CNnWRMABZrG7nSoh74REoOO2p1doBo5+aM/iL7kW9jpfFHmCAU7a
-        MLQ3sFNIZu0+2YhI1eDOHYIkw6ikRPbDiOghKAQVyDNzTbctzl1nULWsipgyOg==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 03:32:15PM +0200, Andy Shevchenko wrote:
-> There are two updates to the MAINTAINERS regarding to software node API:
-> - add Daniel Scally to be designated reviewer
-> - add Sakari Ailus to be designated reviewer
-> - add rather tightly related device property files to the list
-> - due to above adjust section name accordingly
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Acked-by: Daniel Scally <djrscally@gmail.com>
+Convert qcom,cpr.txt to DT schema format.
 
-Thanks, Andy!
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ .../bindings/power/avs/qcom,cpr.txt           | 130 --------------
+ .../bindings/power/avs/qcom,cpr.yaml          | 161 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 162 insertions(+), 131 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.tx=
+t
+ create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.ya=
+ml
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt b/Doc=
+umentation/devicetree/bindings/power/avs/qcom,cpr.txt
+deleted file mode 100644
+index ab0d5ebbad4e..000000000000
+--- a/Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
++++ /dev/null
+@@ -1,130 +0,0 @@
+-QCOM CPR (Core Power Reduction)
+-
+-CPR (Core Power Reduction) is a technology to reduce core power on a CPU
+-or other device. Each OPP of a device corresponds to a "corner" that has
+-a range of valid voltages for a particular frequency. While the device is
+-running at a particular frequency, CPR monitors dynamic factors such as
+-temperature, etc. and suggests adjustments to the voltage to save power
+-and meet silicon characteristic requirements.
+-
+-- compatible:
+-=09Usage: required
+-=09Value type: <string>
+-=09Definition: should be "qcom,qcs404-cpr", "qcom,cpr" for qcs404
+-
+-- reg:
+-=09Usage: required
+-=09Value type: <prop-encoded-array>
+-=09Definition: base address and size of the rbcpr register region
+-
+-- interrupts:
+-=09Usage: required
+-=09Value type: <prop-encoded-array>
+-=09Definition: should specify the CPR interrupt
+-
+-- clocks:
+-=09Usage: required
+-=09Value type: <prop-encoded-array>
+-=09Definition: phandle to the reference clock
+-
+-- clock-names:
+-=09Usage: required
+-=09Value type: <stringlist>
+-=09Definition: must be "ref"
+-
+-- vdd-apc-supply:
+-=09Usage: required
+-=09Value type: <phandle>
+-=09Definition: phandle to the vdd-apc-supply regulator
+-
+-- #power-domain-cells:
+-=09Usage: required
+-=09Value type: <u32>
+-=09Definition: should be 0
+-
+-- operating-points-v2:
+-=09Usage: required
+-=09Value type: <phandle>
+-=09Definition: A phandle to the OPP table containing the
+-=09=09    performance states supported by the CPR
+-=09=09    power domain
+-
+-- acc-syscon:
+-=09Usage: optional
+-=09Value type: <phandle>
+-=09Definition: phandle to syscon for writing ACC settings
+-
+-- nvmem-cells:
+-=09Usage: required
+-=09Value type: <phandle>
+-=09Definition: phandle to nvmem cells containing the data
+-=09=09    that makes up a fuse corner, for each fuse corner.
+-=09=09    As well as the CPR fuse revision.
+-
+-- nvmem-cell-names:
+-=09Usage: required
+-=09Value type: <stringlist>
+-=09Definition: should be "cpr_quotient_offset1", "cpr_quotient_offset2",
+-=09=09    "cpr_quotient_offset3", "cpr_init_voltage1",
+-=09=09    "cpr_init_voltage2", "cpr_init_voltage3", "cpr_quotient1",
+-=09=09    "cpr_quotient2", "cpr_quotient3", "cpr_ring_osc1",
+-=09=09    "cpr_ring_osc2", "cpr_ring_osc3", "cpr_fuse_revision"
+-=09=09    for qcs404.
+-
+-Example:
+-
+-=09cpr_opp_table: cpr-opp-table {
+-=09=09compatible =3D "operating-points-v2-qcom-level";
+-
+-=09=09cpr_opp1: opp1 {
+-=09=09=09opp-level =3D <1>;
+-=09=09=09qcom,opp-fuse-level =3D <1>;
+-=09=09};
+-=09=09cpr_opp2: opp2 {
+-=09=09=09opp-level =3D <2>;
+-=09=09=09qcom,opp-fuse-level =3D <2>;
+-=09=09};
+-=09=09cpr_opp3: opp3 {
+-=09=09=09opp-level =3D <3>;
+-=09=09=09qcom,opp-fuse-level =3D <3>;
+-=09=09};
+-=09};
+-
+-=09power-controller@b018000 {
+-=09=09compatible =3D "qcom,qcs404-cpr", "qcom,cpr";
+-=09=09reg =3D <0x0b018000 0x1000>;
+-=09=09interrupts =3D <0 15 IRQ_TYPE_EDGE_RISING>;
+-=09=09clocks =3D <&xo_board>;
+-=09=09clock-names =3D "ref";
+-=09=09vdd-apc-supply =3D <&pms405_s3>;
+-=09=09#power-domain-cells =3D <0>;
+-=09=09operating-points-v2 =3D <&cpr_opp_table>;
+-=09=09acc-syscon =3D <&tcsr>;
+-
+-=09=09nvmem-cells =3D <&cpr_efuse_quot_offset1>,
+-=09=09=09<&cpr_efuse_quot_offset2>,
+-=09=09=09<&cpr_efuse_quot_offset3>,
+-=09=09=09<&cpr_efuse_init_voltage1>,
+-=09=09=09<&cpr_efuse_init_voltage2>,
+-=09=09=09<&cpr_efuse_init_voltage3>,
+-=09=09=09<&cpr_efuse_quot1>,
+-=09=09=09<&cpr_efuse_quot2>,
+-=09=09=09<&cpr_efuse_quot3>,
+-=09=09=09<&cpr_efuse_ring1>,
+-=09=09=09<&cpr_efuse_ring2>,
+-=09=09=09<&cpr_efuse_ring3>,
+-=09=09=09<&cpr_efuse_revision>;
+-=09=09nvmem-cell-names =3D "cpr_quotient_offset1",
+-=09=09=09"cpr_quotient_offset2",
+-=09=09=09"cpr_quotient_offset3",
+-=09=09=09"cpr_init_voltage1",
+-=09=09=09"cpr_init_voltage2",
+-=09=09=09"cpr_init_voltage3",
+-=09=09=09"cpr_quotient1",
+-=09=09=09"cpr_quotient2",
+-=09=09=09"cpr_quotient3",
+-=09=09=09"cpr_ring_osc1",
+-=09=09=09"cpr_ring_osc2",
+-=09=09=09"cpr_ring_osc3",
+-=09=09=09"cpr_fuse_revision";
+-=09};
+diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml b/Do=
+cumentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+new file mode 100644
+index 000000000000..852eb36eea93
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+@@ -0,0 +1,161 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/avs/qcom,cpr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Core Power Reduction (CPR) bindings
++
++maintainers:
++  - Niklas Cassel <nks@flawful.org>
++
++description: |
++  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
++  or other device. Each OPP of a device corresponds to a "corner" that has
++  a range of valid voltages for a particular frequency. While the device i=
+s
++  running at a particular frequency, CPR monitors dynamic factors such as
++  temperature, etc. and suggests adjustments to the voltage to save power
++  and meet silicon characteristic requirements.
++
++properties:
++  compatible:
++    allOf:
++      - items:
++          - enum:
++              - qcom,qcs404-cpr
++          - const: qcom,cpr
++
++  reg:
++    description: Base address and size of the RBCPR register region.
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Reference clock.
++
++  clock-names:
++    items:
++      - const: ref
++
++  vdd-apc-supply:
++    description: APC regulator supply.
++
++  '#power-domain-cells':
++    const: 0
++
++  operating-points-v2:
++    description: |
++      A phandle to the OPP table containing the performance states
++      supported by the CPR power domain.
++
++  acc-syscon:
++    description: A phandle to the syscon used for writing ACC settings.
++
++  nvmem-cells:
++    items:
++      - description: Corner 1 quotient offset
++      - description: Corner 2 quotient offset
++      - description: Corner 3 quotient offset
++      - description: Corner 1 initial voltage
++      - description: Corner 2 initial voltage
++      - description: Corner 3 initial voltage
++      - description: Corner 1 quotient
++      - description: Corner 2 quotient
++      - description: Corner 3 quotient
++      - description: Corner 1 ring oscillator
++      - description: Corner 2 ring oscillator
++      - description: Corner 3 ring oscillator
++      - description: Fuse revision
++
++  nvmem-cell-names:
++    items:
++      - const: cpr_quotient_offset1
++      - const: cpr_quotient_offset2
++      - const: cpr_quotient_offset3
++      - const: cpr_init_voltage1
++      - const: cpr_init_voltage2
++      - const: cpr_init_voltage3
++      - const: cpr_quotient1
++      - const: cpr_quotient2
++      - const: cpr_quotient3
++      - const: cpr_ring_osc1
++      - const: cpr_ring_osc2
++      - const: cpr_ring_osc3
++      - const: cpr_fuse_revision
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - vdd-apc-supply
++  - '#power-domain-cells'
++  - operating-points-v2
++  - nvmem-cells
++  - nvmem-cell-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    cpr_opp_table: cpr-opp-table {
++        compatible =3D "operating-points-v2-qcom-level";
++
++        cpr_opp1: opp1 {
++            opp-level =3D <1>;
++            qcom,opp-fuse-level =3D <1>;
++        };
++        cpr_opp2: opp2 {
++            opp-level =3D <2>;
++            qcom,opp-fuse-level =3D <2>;
++        };
++        cpr_opp3: opp3 {
++            opp-level =3D <3>;
++            qcom,opp-fuse-level =3D <3>;
++        };
++    };
++
++    power-controller@b018000 {
++        compatible =3D "qcom,qcs404-cpr", "qcom,cpr";
++        reg =3D <0x0b018000 0x1000>;
++        interrupts =3D <0 15 IRQ_TYPE_EDGE_RISING>;
++        clocks =3D <&xo_board>;
++        clock-names =3D "ref";
++        vdd-apc-supply =3D <&pms405_s3>;
++        #power-domain-cells =3D <0>;
++        operating-points-v2 =3D <&cpr_opp_table>;
++        acc-syscon =3D <&tcsr>;
++
++        nvmem-cells =3D <&cpr_efuse_quot_offset1>,
++            <&cpr_efuse_quot_offset2>,
++            <&cpr_efuse_quot_offset3>,
++            <&cpr_efuse_init_voltage1>,
++            <&cpr_efuse_init_voltage2>,
++            <&cpr_efuse_init_voltage3>,
++            <&cpr_efuse_quot1>,
++            <&cpr_efuse_quot2>,
++            <&cpr_efuse_quot3>,
++            <&cpr_efuse_ring1>,
++            <&cpr_efuse_ring2>,
++            <&cpr_efuse_ring3>,
++            <&cpr_efuse_revision>;
++        nvmem-cell-names =3D "cpr_quotient_offset1",
++            "cpr_quotient_offset2",
++            "cpr_quotient_offset3",
++            "cpr_init_voltage1",
++            "cpr_init_voltage2",
++            "cpr_init_voltage3",
++            "cpr_quotient1",
++            "cpr_quotient2",
++            "cpr_quotient3",
++            "cpr_ring_osc1",
++            "cpr_ring_osc2",
++            "cpr_ring_osc3",
++            "cpr_fuse_revision";
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a7d86182fa6b..9ebbccb0494e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15746,7 +15746,7 @@ M:=09Niklas Cassel <nks@flawful.org>
+ L:=09linux-pm@vger.kernel.org
+ L:=09linux-arm-msm@vger.kernel.org
+ S:=09Maintained
+-F:=09Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
++F:=09Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+ F:=09drivers/soc/qcom/cpr.c
+=20
+ QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
+--=20
+2.34.1
 
-> ---
-> 
-> v2: added tags (Daniel, Heikki), added Sakari to the reviewers (Sakari)
-> 
-> Rafael, I guess it's the best if you can pick this up.
-> 
->  MAINTAINERS | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8912b2c1260c..e36497cb7f40 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17666,12 +17666,17 @@ F:	drivers/firmware/arm_sdei.c
->  F:	include/linux/arm_sdei.h
->  F:	include/uapi/linux/arm_sdei.h
->  
-> -SOFTWARE NODES
-> +SOFTWARE NODES AND DEVICE PROPERTIES
->  R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> +R:	Daniel Scally <djrscally@gmail.com>
->  R:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> +R:	Sakari Ailus <sakari.ailus@linux.intel.com>
->  L:	linux-acpi@vger.kernel.org
->  S:	Maintained
-> +F:	drivers/base/property.c
->  F:	drivers/base/swnode.c
-> +F:	include/linux/fwnode.h
-> +F:	include/linux/property.h
->  
->  SOFTWARE RAID (Multiple Disks) SUPPORT
->  M:	Song Liu <song@kernel.org>
-> -- 
-> 2.34.1
-> 
 
--- 
-Sakari Ailus

@@ -2,81 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C7B47C077
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54E647C079
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbhLUNJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbhLUNJ2 (ORCPT
+        id S233774AbhLUNJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:09:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49494 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhLUNJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:09:28 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91EDC061574;
-        Tue, 21 Dec 2021 05:09:27 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id b13so23255926edd.8;
-        Tue, 21 Dec 2021 05:09:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:cc:from:in-reply-to:content-transfer-encoding;
-        bh=Uq8IV/vR053QBD6hYLBqEnUX85fdvDITWbIvV01Indk=;
-        b=KSskiG/TN40r3LzDh/BZL4qMm1a3z/3ndHN3ze3ustQ5WWgOK2tbgySD1MiAijy8Wh
-         2srwpc/XRQ3Ue5i/jM1HNbuhCiOCI9PoGvREo4RuG0w7UOQZ0Viq3bhQ3GsTNoODGlN/
-         NUf6E+vOycJOY7/3x3oO+tnYJ+8D3sA/RAU81h91yVajkLkiC6Pnhz94RDS1LJ3Yxlhs
-         5qZztcqABOLQezEmrPBIrW3QJI6b6iNgdgj0EL7tsEawuXSzuCZu7sSDlukHFsfMkdOk
-         QVxARiQfrxsUreURdrjV/DqSGPIV8v+QLv/TWYtRSexmmpdXKQfDtSY4g4rZwhy4sg8k
-         baMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Uq8IV/vR053QBD6hYLBqEnUX85fdvDITWbIvV01Indk=;
-        b=eEub3XzHrv64yomtETaj4mSBGyS2dyYlm3CleVPM25U4u5uNrFcLKkDuIn/m1byJw8
-         zX1ZEvvlHPdAKkR9DMOcms/rLFJ9VvWUhaxoGGWB7H63+p7XIMOqCt81pwBzYYcOo+iW
-         lh800m2DXnopKz8WtTf/DKRJ3LRsCWYGn2dfqBqkMNLHVgBqCstjrFXP7kL0cT2Nq0j6
-         kGXpOEXOjjALtifBAGJzBMdpYX33mmkFvfXgwWE2nlptkJszZXB3St08OInaigugPQiH
-         vkwzdcGsEt4Op2bpFMe9QQLINoUtwTBSceAzk8cglbPzKwEDyLykrxapIUfhdU2Lfz6L
-         MO6Q==
-X-Gm-Message-State: AOAM530GCE0c6DhJXxs+Iba5SLMr9zyUWCn44neTSOxA82sy6USgU57d
-        tihlN2tU697f1QUPRt6quUo=
-X-Google-Smtp-Source: ABdhPJxRB094bKfPUHHe9F1mJhyX59qTuR7H7HSdqBWHRA01P8YuRgAyG1AEpJsrJKlHhfQVkGw+DQ==
-X-Received: by 2002:a17:907:96a6:: with SMTP id hd38mr2577069ejc.479.1640092166420;
-        Tue, 21 Dec 2021 05:09:26 -0800 (PST)
-Received: from [192.168.123.240] (static.235.156.203.116.clients.your-server.de. [116.203.156.235])
-        by smtp.gmail.com with ESMTPSA id a18sm8283525eds.42.2021.12.21.05.09.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 05:09:25 -0800 (PST)
-Message-ID: <c7ee3d19-3365-9aa0-c3ae-762108060cb2@gmail.com>
-Date:   Tue, 21 Dec 2021 21:09:08 +0800
+        Tue, 21 Dec 2021 08:09:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81BEBB816A7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 13:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6E5C36AE2;
+        Tue, 21 Dec 2021 13:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640092181;
+        bh=WDj7Vrm6eFos1wObBBHfJhDW1MHaJV2gA1VBjCUNvsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S89CQo5UjteTqTmwyvyjP/c+N+wqfKZ9QyLkosuL/xS93oqWnPyz9fgVzf+ipspg/
+         IdeyaJEVy+dSsTADRHdOKssmm68/vdk97OuitF5Ils8c14GubYyZy5+kW3c9qDAf0z
+         npQsEE6u3zXc7TVt23LbLX2Rbz4eWQIKGKhvamsAa44ZienfKMByorOnBGh1pNdlzs
+         yfQzidiS9nqsihHZjEJNIPYxDWpiwFku7biWlTIOJd/jsMswFAVzdLWE7Oditu072v
+         My+8GoGxs0hovjOKVb1BlKVI8JqnsII9VVaeUveVEzO+yBhuyOgm+a396tMn0sN7Kj
+         bFM17H0duv9HA==
+Date:   Tue, 21 Dec 2021 14:09:37 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>, Yu Zhao <yuzhao@google.com>,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: BUG: KASAN: use-after-free in dec_rlimit_ucounts
+Message-ID: <20211221130937.yokn25stgjpzax7n@example.org>
+References: <YZV7Z+yXbsx9p3JN@fixkernel.com>
+ <875ysptfgi.fsf@email.froward.int.ebiederm.org>
+ <YZa4YbcOyjtD3+pL@fixkernel.com>
+ <87k0h5rxle.fsf@email.froward.int.ebiederm.org>
+ <YZ6zXEZf9qHLFyIp@fixkernel.com>
+ <YaBxzDGyWxU/836N@fixkernel.com>
+ <8735mnakby.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v2 0/4] page table check
-Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-References: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        rientjes@google.com, pjt@google.com, weixugc@google.com,
-        gthelen@google.com, mingo@redhat.com, corbet@lwn.net,
-        will@kernel.org, rppt@kernel.org, keescook@chromium.org,
-        tglx@linutronix.de, peterz@infradead.org, masahiroy@kernel.org,
-        samitolvanen@google.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, frederic@kernel.org, hpa@zytor.com,
-        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com
-From:   Fusion Future <qydwhotmail@gmail.com>
-In-Reply-To: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735mnakby.fsf@email.froward.int.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can confirm this patch resolved my issue. My system has been running 
-three days with page table check enabled and is very stable.
+On Sun, Dec 19, 2021 at 11:58:41PM -0600, Eric W. Biederman wrote:
+> Qian Cai <quic_qiancai@quicinc.com> writes:
+> 
+> > On Wed, Nov 24, 2021 at 04:49:19PM -0500, Qian Cai wrote:
+> >> Hmm, I don't know if that or it is just this platfrom is lucky to trigger
+> >> the race condition quickly, but I can't reproduce it on x86 so far. I am
+> >> Cc'ing a few arm64 people to see if they have spot anything I might be
+> >> missing. The original bug report is here:
+> >> 
+> >> https://lore.kernel.org/lkml/YZV7Z+yXbsx9p3JN@fixkernel.com/
+> >
+> > Okay, I am finally able to reproduce this on x86_64 with the latest
+> > mainline as well by setting CONFIG_USER_NS and KASAN on the top of
+> > defconfig (I did not realize it did not select CONFIG_USER_NS in the first
+> > place). Anyway, it still took less than 5-minute by running:
+> >
+> > $ trinity -C 48
+> 
+> It took me a while to get to the point of reproducing this but I can
+> confirm I see this with 2 core VM, running 5.16.0-rc4.
+> 
+> Running trinity 2019.06 packaged in debian 11.
 
-Thank you very much!
+I still can't reproduce :(
+
+> I didn't watch so I don't know if it was 5 minutes but I do know it took
+> less than an hour.
+
+--- a/kernel/ucount.c
++++ b/kernel/ucount.c
+@@ -209,6 +209,7 @@ void put_ucounts(struct ucounts *ucounts)
+
+        if (atomic_dec_and_lock_irqsave(&ucounts->count, &ucounts_lock, flags)) {
+                hlist_del_init(&ucounts->node);
++               ucounts->ns = NULL;
+                spin_unlock_irqrestore(&ucounts_lock, flags);
+                kfree(ucounts);
+        }
+
+Does the previous hack increase the likelihood of an error being
+triggered?
+
+> Now I am puzzled why there are not other reports of problems.
+> 
+> Now to start drilling down to figure out why the user namespace was
+> freed early.
+> ----
+> 
+> The failure I got looked like:
+> > BUG: KASAN: use-after-free in dec_rlimit_ucounts+0x7b/0xb0
+> > Read of size 8 at addr ffff88800b7dd018 by task trinity-c3/67982
+> > 
+> > CPU: 1 PID: 67982 Comm: trinity-c3 Tainted: G  O 5.16.0-rc4 #1
+> > Hardware name: Xen HVM domU, BIOS 4.8.5-35.fc25 08/25/2021
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x48/0x5e
+> >  print_address_descrtion.constprop.0+0x1f/0x140
+> >  ? dec_rlimit_ucounts+0x7b/0xb0
+> >  ? dec_rlimit_ucounts+0x7b/0xb0
+> >  kasan_report.cold+0x7f/0xe0
+> >  ? _raw_spin_lock+0x7f/0x11b
+> >  ? dec_rlimit_ucounts+0x7b/0xb0
+> >  dec_rlimit_ucounts+0x7b/0xb0
+> >  mqueue_evict_inode+0x417/0x590
+> >  ? perf_trace_global_dirty_state+0x350/0x350
+> >  ? __x64_sys_mq_unlink+0x250/0x250
+> >  ? _raw_spin_lock_bh+0xe0/0xe0
+> >  ? _raw_spin_lock_bh+0xe0/0xe0
+> >  evict+0x155/0x2a0
+> >  __x64_sys_mq_unlink+0x1a7/0x250
+> >  do_syscall_64+0x3b/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > RIP: 0033:0x7f0505ebc9b9
+> > Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 00 0f 1f 44 00 00 48 89 ....
+> > 
+> > Allocated by task 67717
+> > Freed by task 6027
+> > 
+> > The buggy address belongs to the object at ffff88800b7dce38
+> >  which belongs to the cache user_namespace of size 600
+> > The buggy address is located 480 bytes inside of
+> >  600-byte region [ffff88800b7dce38, ffff88800b7dd090]
+> > The buggy address belongs to the page:
+> > 
+> > trinity: Detected kernel tainting. Last seed was 1891442794
+> 
+> Eric
+> 
+
+-- 
+Rgrds, legion
+

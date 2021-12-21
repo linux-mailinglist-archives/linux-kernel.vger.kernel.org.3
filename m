@@ -2,142 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D579F47BA15
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18FA47BA16
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbhLUGj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S233862AbhLUGkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhLUGj2 (ORCPT
+        with ESMTP id S231137AbhLUGkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:39:28 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B04BC061574;
-        Mon, 20 Dec 2021 22:39:28 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id k2so19798248lji.4;
-        Mon, 20 Dec 2021 22:39:28 -0800 (PST)
+        Tue, 21 Dec 2021 01:40:20 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88A2C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 22:40:20 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id y68so35980037ybe.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 22:40:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=SUQwpbEDG4wooG3TH+qMYo2cWZdsgJDH2qErzH0dtmY=;
-        b=WOMvlrDPKMyZMTKlg2iIfE4X3yrfotNQdxzqoMjg2TboVWBAZPoWshDAhNfgqiWjJI
-         iWOdNuG+Z8oRVdg9yRMOMn0O9N0NlOa7sYUkeXXtpq2uCGlrGHYmJlGkbICjOXiHzW7Y
-         ca388RbWLDss60zyHTJP361FPJzGVU5N4XjMHJnyH545NsD0w3V3EidTKqEs0cFfBu/S
-         SVN4AywYFot8+ZE3L9iZ5+a9KRvnymICbAYGeP+FdniWpkcr6yB33/C+29EUNlD4oVRo
-         RZ6+CtmEoF1Nbw5N6OwVh+fzk6GiSI/m83jDm9phs4r0lyZlZMP0PWGJm1vgI717KElI
-         kwqA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xiBQlIWJs7qn3PIv/A7i+q2gzD9oONLTL4gj6Rgv41I=;
+        b=lFRINakQQIAz1WKu8jhafPyWP58lnia4fRXtG1E4qolQKVqt9sDwr5vyke4Z0qFrBS
+         BusPXjI8snsgf9HKAsS2ZmQttkpPnmx6PQ4l7RXKE60M1JXl4X1JAoIrWVad7kKt3w5d
+         EL0mV0zKKLX240oYPuYVFspG45VdYJ9ermCPvajf5ifGm0RBxo5rDusJ7s/qlqqQN6hv
+         QTsVGrjcijpaeVJs9JVF4OcONglJHosWDXk/U8AvGrxTyWHRKaNS+AsQ0ocJuWfcJoDY
+         7+blpuP/++0vXzun+U+pSjBSh1/wdr9JTUQ8goNQmgd+8FUuP45c8pE3P/h6whLOvdd4
+         6OfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SUQwpbEDG4wooG3TH+qMYo2cWZdsgJDH2qErzH0dtmY=;
-        b=Il1plcZPZuU8HCLbPyCflLX1fBM7PXCxikuzARlfbDhTNFTcdrE0fQc+SYqjcFTOJZ
-         XhNjgxMsWm1m+UQVjWw2ISipk4JO1dkzQNk/pHkNpgrw7VC3PJr3xz+1CVeahV9Of0vK
-         vursY+I8R939WcuE4Z47bLLspf+GxPwLf2T1+4XRrMtpCE0243B7nqQrxlh2pOoslc8b
-         /Z93p2uliYo3q40IXzdJSNGBJbotk2iBcYUd/vyGRtl67cgOAS8rD042hkNPXUyxKLNM
-         Mv4C1RKdM5weKZcsvPrWVk423NI2dtDMETonAIWCKq1P2MlxPotG2SuR6kZFbocoTfdH
-         hIRA==
-X-Gm-Message-State: AOAM530ReVdUctVB+1TNme2gKR0PBLxBxY0kJBBn4pgahSlh8Cg/pOKz
-        MT3clDvlUJhPJ9co4PN3Qxg=
-X-Google-Smtp-Source: ABdhPJwk4W7p4zSce4OzLtvntoM/tPru8YfRKkWa9nVkDbHqjyakqERf9ueHEXUaoZxM4UcxwXMFvA==
-X-Received: by 2002:a2e:8558:: with SMTP id u24mr431468ljj.309.1640068766400;
-        Mon, 20 Dec 2021 22:39:26 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id w10sm1742603lfu.173.2021.12.20.22.39.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 22:39:26 -0800 (PST)
-Message-ID: <d68ba301-7877-a8d8-8700-c601a4996818@gmail.com>
-Date:   Tue, 21 Dec 2021 07:39:24 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xiBQlIWJs7qn3PIv/A7i+q2gzD9oONLTL4gj6Rgv41I=;
+        b=TsL+th7sTTXd/z1Z/bAZdP5NokYaSRIxRIhrkTJZUdSB+xQ1y356vooDhsfPruOSke
+         bzvt9rUCoTcyAWrbiZD34oDAsrIzzkXYtGLEoTomisL+H6qWvOX9hJ5a05Ky4uNPyUek
+         BA7VXiwFAHsfaEmzNHviioPMstqZojSfsL0pgQ/Aw+QLpSkaE5Vn5p+/9VS8fcqoe9qU
+         s0VDHJG6DiRxTHcDT9tnoRBLGPW1Q8vR9ZBld2JKssPlNnrgc9sXf1sljEvXFtLvrBAV
+         Q/edM6UBFHspiaapC7AH4Ai++hdnZWwKnSjdaFNGTw+rsf2SKkuVm0ADclx/VrGBCoCL
+         c8eA==
+X-Gm-Message-State: AOAM533LK4Dm+cKu2TmkBX3EQAT8yex/4vQBY4RN3MG6kKDaGFnWE23D
+        Z4ElHQbt6E4rcnWI54fPn9K5XrfBEZbtwWhvVvvbZQ==
+X-Google-Smtp-Source: ABdhPJw8IU9vBjM9RNmfi+otDAYSI0HHz8cFHE6vGL0vVYU8zikb9FY+TcImB3jDkP9hXv3Kt7AXm9fg0gv1hauxmDQ=
+X-Received: by 2002:a25:610d:: with SMTP id v13mr2443912ybb.1.1640068819259;
+ Mon, 20 Dec 2021 22:40:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 2/2] nvmem: expose NVMEM cells in sysfs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211220064730.28806-1-zajec5@gmail.com>
- <20211220064730.28806-2-zajec5@gmail.com> <YcA4ArALDTjUedrb@kroah.com>
- <c49f2d6d-7974-5bc7-9bc1-ac265a23c2c0@gmail.com> <YcF1Kizcvgqa9ZT4@kroah.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <YcF1Kizcvgqa9ZT4@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <1639721264-12294-1-git-send-email-huangzhaoyang@gmail.com>
+ <CAGWkznGdvLobshPvg2KY+D71Zh0625+V=WsAS9uExRspRFFjVQ@mail.gmail.com>
+ <CAJuCfpF9tJupcyWVeDHyEBnQqTZTnoyKVcKLqB1wWXyks6Z0Cw@mail.gmail.com>
+ <CAGWkznG8ipn96YgyOatF=i5acLGoLp9G8E4jD7vHKMw9aOV1ZA@mail.gmail.com>
+ <CAJuCfpEmvVVQGso4bKeigdJwNG4aqViay_P3oXo2Tu4sm-HKXw@mail.gmail.com>
+ <CAGWkznGk07jkuA8rftR0f5upq-7B6tkybSb_DMJYau0HjhYUnQ@mail.gmail.com>
+ <CAJuCfpFT9odS7jON-D2npd4V3e8bkZw+tzdpMDFmddY-YbiGFg@mail.gmail.com>
+ <CAGWkznEevE4=8EezkhAwJzz+vd-tscT+6=_t0pq3FJPk=vLqkA@mail.gmail.com> <CAJuCfpFn_TJbOp69wR26jsqDquM+5EASr7giJWSHVQ2gvRcCHw@mail.gmail.com>
+In-Reply-To: <CAJuCfpFn_TJbOp69wR26jsqDquM+5EASr7giJWSHVQ2gvRcCHw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 20 Dec 2021 22:40:08 -0800
+Message-ID: <CAJuCfpGU+6WZMuAwPu9S09qithKmpm2aqHSRxXfuXNDwjYUpHw@mail.gmail.com>
+Subject: Re: [PATCH] psi: fix possible trigger missing in the window
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.2021 07:33, Greg Kroah-Hartman wrote:
-> On Mon, Dec 20, 2021 at 09:39:43PM +0100, Rafał Miłecki wrote:
->> Hi Greg,
->>
->> On 20.12.2021 09:00, Greg Kroah-Hartman wrote:
->>> On Mon, Dec 20, 2021 at 07:47:30AM +0100, Rafał Miłecki wrote:
->>>>    static void nvmem_cell_entry_add(struct nvmem_cell_entry *cell)
->>>>    {
->>>> +	struct device *dev = &cell->nvmem->dev;
->>>> +	int err;
->>>> +
->>>>    	mutex_lock(&nvmem_mutex);
->>>>    	list_add_tail(&cell->node, &cell->nvmem->cells);
->>>>    	mutex_unlock(&nvmem_mutex);
->>>> +
->>>> +	sysfs_attr_init(&cell->battr.attr);
->>>> +	cell->battr.attr.name = cell->name;
->>>> +	cell->battr.attr.mode = 0400;
->>>> +	cell->battr.read = nvmem_cell_attr_read;
->>>> +	err = sysfs_add_bin_file_to_group(&dev->kobj, &cell->battr,
->>>> +					  nvmem_cells_group.name);
->>>
->>> Why not just use the is_bin_visible attribute instead to determine if
->>> the attribute should be shown or not instead of having to add it
->>> after-the-fact which will race with userspace and loose?
->>
->> I'm sorry I really don't see how you suggest to get it done.
->>
->> I can use .is_bin_visible() callback indeed to respect nvmem->root_only.
-> 
-> Great.
-> 
->> I don't understand addig-after-the-fact part. How is .is_bin_visible()
->> related to adding attributes for newly created cells?
-> 
-> You are adding a sysfs attribute to a device that is already registered
-> in the driver core, and so the creation of that attribute is never seen
-> by userspace.  The attribute needs to be attached to the device _BEFORE_
-> it is registered.
-> 
-> Also, huge hint, if a driver has to call as sysfs_*() call, something is
-> wrong.
-> 
->> Do you mean I can
->> avoid calling sysfs_add_bin_file_to_group()?
-> 
-> Yes.
-> 
->> Do you recall any existing example of such solution?
-> 
-> Loads.
-> 
-> Just add this attribute group to your driver as a default attribute
-> group and the driver core will create it for you if needed.
-> 
-> Or if you always need it, no need to mess sith is_bin_visible() at all,
-> I can't really understand what you are trying to do here at all.
+On Mon, Dec 20, 2021 at 10:37 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Mon, Dec 20, 2021 at 7:08 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> >
+> > On Tue, Dec 21, 2021 at 11:00 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Mon, Dec 20, 2021 at 6:51 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > > >
+> > > > On Tue, Dec 21, 2021 at 10:30 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > >
+> > > > > On Mon, Dec 20, 2021 at 5:57 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > > > > >
+> > > > > > On Tue, Dec 21, 2021 at 3:58 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, Dec 17, 2021 at 10:03 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > loop Suren
+> > > > > > >
+> > > > > > > Thanks.
+> > > > > > >
+> > > > > > >
+> > > > > > > >
+> > > > > > > > On Fri, Dec 17, 2021 at 2:08 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+> > > > > > > > >
+> > > > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > > > >
+> > > > > > > > > There could be missing wake up if the rest of the window remain the
+> > > > > > > > > same stall states as the polling_total updates for every polling_min_period.
+> > > > > > >
+> > > > > > > Could you please expand on this description? I'm unclear what the
+> > > > > > > problem is. I assume "polling_min_period" in this description refers
+> > > > > > > to the group->poll_min_period.
+> > > > > > >
+> > > > > > > From the code, looks like the change results in update_triggers()
+> > > > > > > calling window_update() once there was a new stall recorded for the
+> > > > > > > trigger state and until the tracking window is complete. I don't see
+> > > > > > > the point of calling window_update() if there was no stall change
+> > > > > > > since the last call to window_update(). The resulting growth will not
+> > > > > > > increase if there is no new stall.
+> > > > > > > Maybe what you want to achieve here is more than one trigger per
+> > > > > > > window if the stall limit was breached? If so, then this goes against
+> > > > > > > the design for psi triggers in which we want to rate-limit the number
+> > > > > > > of generated triggers per tracking window (see:
+> > > > > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L545).
+> > > > > > > Please clarify the issue and the intentions here.
+> > > > > > > Thanks!
+> > > > > > Please correct me if I am wrong. Imagine that there is a new stall
+> > > > > > during the 1st polling_min_period among 10 of them in the window and
+> > > > > > group->polling_total will be updated to total without trigger. If the
+> > > > > > rest of 9 polling_min_periods remain the same states, the trigger will
+> > > > > > be missed when window timing is reached.
+> > > > >
+> > > > > I don't see why updating group->polling_total after the first
+> > > > > registered stall is an issue here. window_update() calculates growth
+> > > > > using current group->total[] and win->start_value (see:
+> > > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L483)
+> > > > > which is set at the beginning of the window (see:
+> > > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L462).
+> > > > > If the calculated growth did not reach t->threshold then the trigger
+> > > > > should not be fired (see:
+> > > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L542).
+> > > > > We fire the trigger only if growth within a given window is higher
+> > > > > than the threshold.
+> > > > >
+> > > > > In your scenario if the stall recorded in the 1st polling_min_period
+> > > > > was less than the threshold and in the other 9 polling_min_periods no
+> > > > > new stalls were registered then there should be no triggers fired in
+> > > > > that window. This is intended behavior. Trigger is fired only when the
+> > > > The stall in the 1st polling_min_period was *LARGE* then the threshold
+> > > > will also be ignored here.
+> > >
+> > > Ok, in that case is it ignored due to this condition:
+> > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L546
+> > > ?
+> > > If so then I see what the problem might be. Please confirm.
+> > Yes.
+>
+> Ok, I understand the issue now. Couple problems with your approach, see inline:
+>
+> > Actually, we found LMKD is driven by the inside polling_intervals
+> > which lose the trigger from PSI.
+> > >
+> > > >
+> > > > > recorded stall within the window breaches the threshold. And there
+> > > > > will be only one trigger generated per window, no matter how much
+> > > > > stall is being recorded after the threshold was breached.
+> > > > > Hopefully this clarifies the behavior?
+> > > >
+> > > > I don't think so. According to your opinion, if the total keeps no
+> > > > change in the last polling_min_period, then the growth during the 1-9
+> > > > min_periods which is much larger than the threshold will also be
+> > > > ignored. It does not make sense.
+> > > >
+> > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L529
+> > > > >
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > > > > ---
+> > > > > > > > >  include/linux/psi_types.h |  2 ++
+> > > > > > > > >  kernel/sched/psi.c        | 30 ++++++++++++++++++------------
+> > > > > > > > >  2 files changed, 20 insertions(+), 12 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> > > > > > > > > index 0a23300..9533d2e 100644
+> > > > > > > > > --- a/include/linux/psi_types.h
+> > > > > > > > > +++ b/include/linux/psi_types.h
+> > > > > > > > > @@ -132,6 +132,8 @@ struct psi_trigger {
+> > > > > > > > >
+> > > > > > > > >         /* Refcounting to prevent premature destruction */
+> > > > > > > > >         struct kref refcount;
+> > > > > > > > > +
+> > > > > > > > > +       bool new_stall;
+> > > > > > > > >  };
+> > > > > > > > >
+> > > > > > > > >  struct psi_group {
+> > > > > > > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > > > > > > > > index 1652f2b..402718c 100644
+> > > > > > > > > --- a/kernel/sched/psi.c
+> > > > > > > > > +++ b/kernel/sched/psi.c
+> > > > > > > > > @@ -458,9 +458,12 @@ static void psi_avgs_work(struct work_struct *work)
+> > > > > > > > >  static void window_reset(struct psi_window *win, u64 now, u64 value,
+> > > > > > > > >                          u64 prev_growth)
+> > > > > > > > >  {
+> > > > > > > > > +       struct psi_trigger *t = container_of(win, struct psi_trigger, win);
+> > > > > > > > > +
+> > > > > > > > >         win->start_time = now;
+> > > > > > > > >         win->start_value = value;
+> > > > > > > > >         win->prev_growth = prev_growth;
+> > > > > > > > > +       t->new_stall = false;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > >  /*
+> > > > > > > > > @@ -515,7 +518,6 @@ static void init_triggers(struct psi_group *group, u64 now)
+> > > > > > > > >  static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > > > >  {
+> > > > > > > > >         struct psi_trigger *t;
+> > > > > > > > > -       bool new_stall = false;
+> > > > > > > > >         u64 *total = group->total[PSI_POLL];
+> > > > > > > > >
+> > > > > > > > >         /*
+> > > > > > > > > @@ -523,19 +525,26 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > > > >          * watchers know when their specified thresholds are exceeded.
+> > > > > > > > >          */
+> > > > > > > > >         list_for_each_entry(t, &group->triggers, node) {
+> > > > > > > > > -               u64 growth;
+> > > > > > > > > -
+> > > > > > > > >                 /* Check for stall activity */
+> > > > > > > > >                 if (group->polling_total[t->state] == total[t->state])
+> > > > > > > > >                         continue;
+> > > > > > > > >
+> > > > > > > > >                 /*
+> > > > > > > > > -                * Multiple triggers might be looking at the same state,
+> > > > > > > > > -                * remember to update group->polling_total[] once we've
+> > > > > > > > > -                * been through all of them. Also remember to extend the
+> > > > > > > > > -                * polling time if we see new stall activity.
+> > > > > > > > > +                * update the trigger if there is new stall which will be
+> > > > > > > > > +                * reset when run out of the window
+> > > > > > > > >                  */
+> > > > > > > > > -               new_stall = true;
+> > > > > > > > > +               t->new_stall = true;
+> > > > > > > > > +
+> > > > > > > > > +               memcpy(&group->polling_total[t->state], &total [t->state],
+> > > > > > > > > +                               sizeof(group->polling_total[t->state]));
+>
+> If you reset group->polling_total[t->state] here then if there is
+> another trigger t2 in the group->triggers so that t->state ==
+> t2->state then t2->new_stall will never be set. That's what the
+> "Multiple triggers..." comment which you deleted was warning about.
+> BTW, the above memcpy() can be replaced with a simple assignment:
+>                group->polling_total[t->state] = total[t->state];
+>
+>
+> > > > > > > > > +       }
+> > > > > > > > > +
+> > > > > > > > > +       list_for_each_entry(t, &group->triggers, node) {
+> > > > > > > > > +               u64 growth;
+> > > > > > > > > +
+> > > > > > > > > +               /* check if new stall happened during this window*/
+> > > > > > > > > +               if (!t->new_stall)
+> > > > > > > > > +                       continue;
+>
+> With this check, once t->new_stall was set to true, window_update()
+> will be called every time update_triggers() is called, even if there
+> is no new stall for multiple periods. This is suboptimal. I would
+> rather remember that we skipped event generation here
+> https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L546
+> and catch up later. Something like this (untested):
+>
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -130,6 +130,9 @@ struct psi_trigger {
+>   */
+>   u64 last_event_time;
+>
+> + /* Flag set when threshold is breached but event was rate-limited */
+> + bool threshold_breach;
+> +
+>   /* Refcounting to prevent premature destruction */
+>   struct kref refcount;
+>  };
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 1652f2bb54b7..301b31e860ef 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -524,23 +524,29 @@ static u64 update_triggers(struct psi_group
+> *group, u64 now)
+>   */
+>   list_for_each_entry(t, &group->triggers, node) {
+>   u64 growth;
+> + bool trigger_stalled =
+> + group->polling_total[t->state] != total[t->state];
+>
+> - /* Check for stall activity */
+> - if (group->polling_total[t->state] == total[t->state])
+> + /* Check for stall activity or a previous threshold breach */
+> + if (!trigger_stalled && !t->threshold_breach)
+>   continue;
+>
+> - /*
+> - * Multiple triggers might be looking at the same state,
+> - * remember to update group->polling_total[] once we've
+> - * been through all of them. Also remember to extend the
+> - * polling time if we see new stall activity.
+> - */
+> - new_stall = true;
+> -
+> - /* Calculate growth since last update */
+> - growth = window_update(&t->win, now, total[t->state]);
+> - if (growth < t->threshold)
+> - continue;
+> + if (trigger_stalled) {
+> + /*
+> + * Multiple triggers might be looking at the same state,
+> + * remember to update group->polling_total[] once we've
+> + * been through all of them. Also remember to extend the
+> + * polling time if we see new stall activity.
+> + */
+> + new_stall = true;
+> +
+> + /* Calculate growth since last update */
+> + growth = window_update(&t->win, now, total[t->state]);
+> + if (growth < t->threshold)
+> + continue;
+> +
+> + t->threshold_breach = true;
+> + }
+>
+>   /* Limit event signaling to once per window */
+>   if (now < t->last_event_time + t->win.size)
+> @@ -550,6 +556,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>   if (cmpxchg(&t->event, 0, 1) == 0)
+>   wake_up_interruptible(&t->event_wait);
+>   t->last_event_time = now;
+> + /* Reset threshold breach flag once event got generated */
+> + t->threshold_breach = false;
+>   }
+>
+>   if (new_stall)
+> @@ -1150,6 +1158,7 @@ struct psi_trigger *psi_trigger_create(struct
+> psi_group *group,
+>
+>   t->event = 0;
+>   t->last_event_time = 0;
+> + t->threshold_breach = false;
+>   init_waitqueue_head(&t->event_wait);
+>   kref_init(&t->refcount);
+>
 
-Thanks a lot! In nvmem_register() first there is a call to the
-device_register() and only later cells get added. I suppose I just have
-to rework nvmem_register() order so that:
-1. Cells are collected earlier. For each cell I allocate group attribute
-2. device_register() gets called
+Damn! I forgot that gmail loses all the tabs. Hopefully this
+illustrates the idea but if not I can post it as a separate patch.
 
-Thank you for explaining that with patience.
+>
+> > > > > > > > >
+> > > > > > > > >                 /* Calculate growth since last update */
+> > > > > > > > >                 growth = window_update(&t->win, now, total[t->state]);
+> > > > > > > > > @@ -552,10 +561,6 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > > > >                 t->last_event_time = now;
+> > > > > > > > >         }
+> > > > > > > > >
+> > > > > > > > > -       if (new_stall)
+> > > > > > > > > -               memcpy(group->polling_total, total,
+> > > > > > > > > -                               sizeof(group->polling_total));
+> > > > > > > > > -
+> > > > > > > > >         return now + group->poll_min_period;
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > @@ -1152,6 +1157,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+> > > > > > > > >         t->last_event_time = 0;
+> > > > > > > > >         init_waitqueue_head(&t->event_wait);
+> > > > > > > > >         kref_init(&t->refcount);
+> > > > > > > > > +       t->new_stall = false;
+> > > > > > > > >
+> > > > > > > > >         mutex_lock(&group->trigger_lock);
+> > > > > > > > >
+> > > > > > > > > --
+> > > > > > > > > 1.9.1
+> > > > > > > > >

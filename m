@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B750C47C927
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF6747C92E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237773AbhLUWSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 17:18:40 -0500
-Received: from out0.migadu.com ([94.23.1.103]:21823 "EHLO out0.migadu.com"
+        id S237817AbhLUWXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 17:23:44 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:57506 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230085AbhLUWSj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 17:18:39 -0500
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640125115;
+        id S230085AbhLUWXn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 17:23:43 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B21A51EC04F0;
+        Tue, 21 Dec 2021 23:23:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640125417;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EgmW49Z3ZTrdtWHxdLVspzEiN24/kyfRtc2wPbWe+OM=;
-        b=qsJ/ykDiJ586wkrQiCFe8yf9I416MTx1DKNji7Z0C0qHzfOKmFoWdVC3df9o2od+jFsjie
-        BrGmcaYlfTEVV1osqcOclR286tYTQFCuV+KFzwr1z8fqQyR3jIFWU6zPBIuBNWhdfcuZOq
-        BNX2EYM0pw2S9ILLERhWJvhC+xQveyM=
-Date:   Tue, 21 Dec 2021 22:18:34 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Konstantin Ryabitsev" <konstantin.ryabitsev@linux.dev>
-Message-ID: <f8459dd30802e4da915c63f6b70263e6@linux.dev>
-Subject: Re: [PATCH] nfs: check nf pointer for validity before use
-To:     "Chuck Lever III" <chuck.lever@oracle.com>,
-        "Muhammad Usama Anjum" <usama.anjum@collabora.com>
-Cc:     "Bruce Fields" <bfields@fieldses.org>,
-        "Vasily Averin" <vvs@virtuozzo.com>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org
-In-Reply-To: <05877B02-900A-4B22-9460-D2F0D20931DC@oracle.com>
-References: <05877B02-900A-4B22-9460-D2F0D20931DC@oracle.com>
- <YcIjJ4jN3ax1rqaE@debian-BULLSEYE-live-builder-AMD64>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+O0s3awTUfaTqDNJAoHb8Lz3/d+d4qogTrV38e7gPeU=;
+        b=kddB+2HJyC5J7VPL8ewYZNG1hXr1cSXKktuPdANFMEbNIeSgiD9ofyZCV+bUP9p3m3DnBu
+        DjVmGIWcSRqLhvIWxyZlqXgOiqvbmMIyi1EAgX4LaOgQ5PuJ5XInOgK3ZpudFnUiCCKlF6
+        eSiy/61yh0Fvks9pB7VdYQXcMaphCcg=
+Date:   Tue, 21 Dec 2021 23:23:38 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
+ functions reserve_crashkernel()
+Message-ID: <YcJT6lylm1KZ6Hdc@zn.tnic>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-4-thunder.leizhen@huawei.com>
+ <YbntdtQo2jfbO4cO@zn.tnic>
+ <20211216011040.GG3023@MiWiFi-R3L-srv>
+ <9513d74c-d4c7-babd-f823-8999e195d96d@huawei.com>
+ <YbseAX6X1VHUF12f@zn.tnic>
+ <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
+ <YbtRs3Tq1UpCOpg8@zn.tnic>
+ <d2b199b7-584e-8ad4-9626-09bb86cf92c5@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d2b199b7-584e-8ad4-9626-09bb86cf92c5@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-December 21, 2021 3:00 PM, "Chuck Lever III" <chuck.lever@oracle.com> wro=
-te:=0A> Btw, b4 complained about collabora.com's DKIM:=0A> =0A> [cel@bazi=
-lle linux]$ b4 am=0A> https://lore.kernel.org/linux-nfs/YcIjJ4jN3ax1rqaE@=
-debian-BULLSEYE-live-builder-AMD64/raw=0A> Grabbing thread from=0A> lore.=
-kernel.org/linux-nfs/YcIjJ4jN3ax1rqaE%40debian-BULLSEYE-live-builder-AMD6=
-4/t.mbox.gz=0A> Analyzing 1 messages in the thread=0A> Checking attestati=
-on on all messages, may take a moment...=0A> ---=0A> =E2=9C=97 [PATCH] nf=
-s: check nf pointer for validity before use=0A> ---=0A> =E2=9C=97 BADSIG:=
- DKIM/collabora.com=0A=0AThis is because collabora.com has DKIM canonical=
-ization configured as "c=3Dsimple/simple". See my previous message to int=
-el.com for why this should be changed to c=3Drelaxed/simple:=0A=0Ahttps:/=
-/lore.kernel.org/lkml/20211214150032.nioelgvmase7yyus@meerkat.local/=0A=
-=0AHope this helps.=0A=0A-K
+On Fri, Dec 17, 2021 at 10:51:04AM +0800, Leizhen (ThunderTown) wrote:
+> [KNL, X86-64], This doc is for X86-64, not for X86-32
+
+reserve_crashkernel() runs on both.
+
+> If there is no such restriction, we can make CRASH_ADDR_LOW_MAX equal
+> to (1ULL << 32) minus 1 on X86_32.
+
+Again, the 4G limit check is relevant only for 64-bit kernels - not
+32-bit ones.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

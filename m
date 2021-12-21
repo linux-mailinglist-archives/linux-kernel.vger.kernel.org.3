@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C9347BC79
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F6147BC78
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbhLUJGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:06:32 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:50886 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234859AbhLUJG3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236058AbhLUJGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:06:31 -0500
+Received: from mga18.intel.com ([134.134.136.126]:59830 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234454AbhLUJG3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Dec 2021 04:06:29 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL7oPg3032255;
-        Tue, 21 Dec 2021 10:05:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=CAmc1Bi3mzR0s+Ko4SmTLfKaNp1Te5JIP1nFylL+8Ig=;
- b=SaJ3sUSUSk6SWAuXS3El7GytvghEwsitSLo9vr/NWSDPLZLI/qrDa3Qdh75xcuBAUduk
- ABJ2NdDmD+2Dhaa4E8sEBXicHE6M78uylWadw0jHMP5fOc+a6S54GfPP7e9Z+4v/ToQf
- uIqzcTbElkkvfVctFrcYAf4TqhJ5/2fB2sPr8Hzq2mYm9TdFMdUUM6h8pAxNHcLcIqqS
- a0t3KXNf3YjFLyd3hy4AREjRQBQ29I1B42afdWUSPL/6bbpRaqrxaGDHlWyPAm0/I4c7
- 7fV8e5RC94SLjy6dVveSGJ/T6Uwu47O2wxTtksATuWUbGXlGX6/l3Ed2tfv1jG/YQr+L zA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d2nsxny6k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 10:05:59 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 39E8C10002A;
-        Tue, 21 Dec 2021 10:05:57 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 309A82221D6;
-        Tue, 21 Dec 2021 10:05:57 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 21 Dec
- 2021 10:05:56 +0100
-Subject: Re: [PATCH v2] ARM: multi_v7_defconfig: Enable CONFIG_RPMSG_TTY
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211220161155.32564-1-arnaud.pouliquen@foss.st.com>
- <YcC2M/QseKewXDGw@kroah.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <214788db-6774-5501-bc12-67d3135b50ec@foss.st.com>
-Date:   Tue, 21 Dec 2021 10:05:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YcC2M/QseKewXDGw@kroah.com>
-Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640077589; x=1671613589;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=c8yHioLgX+giyIh16+OiSjIl4N67UmUFHNBIbnU3k6k=;
+  b=jGq/LFSAlSit5gvb3Tvgi9iT6lYqN8yuMxKBufUsG6kdIS7/0OhJiit9
+   Tm6xQO+Ghs25rLMFf/7cKn3JgkRUkenbjycUwPBjyrjwBQJeoS6anXH2P
+   /FQMQfqXQrgUTt8RVx22a/yggo7XV2QOusiWGB+rxsi4XVH8dIUlwmORl
+   sVyZueMoJJEys843XkC3SS0RhzDJekzQ6IgZggyrA/Y+ZcB696bpiFq0q
+   ug6sAt9p1nHGqiqmCtynXYPz4oD6hN6WuuPLB3fb7UeaOoTLiiTw3JFGQ
+   ZlMeSYcqPb++Ni7iDpILcqbtnga5O2zJCAwcespRZTzrgtF3e2IWNNrrj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227208769"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="227208769"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 01:06:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="684598517"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 01:06:29 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 01:06:28 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX601.ccr.corp.intel.com (10.109.6.141) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 17:06:26 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Tue, 21 Dec 2021 17:06:26 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: RE: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
+Thread-Topic: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
+Thread-Index: AQHX81r8L73y8adYV0a4DFLIQjWYRqw6lEwAgAGYYhD///SwAIAAiGog
+Date:   Tue, 21 Dec 2021 09:06:26 +0000
+Message-ID: <c06fdc4f3b4d4346ae80801a6c3a6ff2@intel.com>
+References: <20211217153003.1719189-1-jing2.liu@intel.com>
+ <20211217153003.1719189-19-jing2.liu@intel.com>
+ <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
+ <e0fd378de64f44fd8becfe67b02cb635@intel.com>
+ <219a751e-ac2d-9ce1-9db7-7d5b1edd6bdd@redhat.com>
+In-Reply-To: <219a751e-ac2d-9ce1-9db7-7d5b1edd6bdd@redhat.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_03,2021-12-21_01,2021-12-02_01
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/20/21 5:58 PM, Greg Kroah-Hartman wrote:
-> On Mon, Dec 20, 2021 at 05:11:55PM +0100, Arnaud Pouliquen wrote:
->> The RPMsg TTY implements an inter-processor communication with a standard
->> TTY interface on top of the RPMsg framework.
->> This driver is a generic RPMsg client that can run on different platforms.
->>
->> By enabling the RPMSG_TTY driver as module in multi_v7_defconfig, it makes
->> possible to automatically probe the rpmsg_tty driver by the RPMsg bus,
->> when the support of the RPMsg service is dynamically requested by the
->> co-processor firmware.
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
->> delta vs V1:
->> add
->> ---
-> 
-> "add"?  What does that mean?
-
-Oops, sorry, part of my sentence has disappeared
-"Add more description in commit message to detail the objective ".
-
-> 
-> Do all v7 chips have this hardware?
-
-I would say yes and no
-
-No - As mainly used today for hardware system integrating a main and a
-coprocessor in a single chip.
-
-Yes - as that depends on the RPMsg back-end
-
-The RPMsg is divided in 3 layers
- - the service layer that implement a service on top of the RPmsg
-	A parallel could be done between this layer and the Virtio devices such
-	as the "Virtio-Console".
-	=> the rpmsg _tty is part of this layer
-	=> rpmsg_char is another one ( already enabled in some configs)
-
- - the transport layer in charge of the RPmsg protocol
- - the back-end layer that is the hardware abstraction layer
-	- The main back-end used is the RPMsg VirtIO back-end which implements
-	  the RPMSg over VirtIO.
-	- There are also some platform specific backends (e.g. QCOM, MediaTek)
-	- We have also some demos that implement the RPMsg protocol on top of a
-	  serial link back-end allowing communication with an external
-	  processor. Not up-streamed yet.
-
-Thanks,
-Arnaud
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
+T24gVHVlc2RheSwgRGVjZW1iZXIgMjEsIDIwMjEgNDo0NSBQTSwgUGFvbG8gQm9uemluaSB3cm90
+ZToNCj4gT24gMTIvMjEvMjEgMDM6NDUsIFdhbmcsIFdlaSBXIHdyb3RlOg0KPiA+PiBLVk1fR0VU
+X1hTQVZFMiBhbmQgS1ZNX1NFVF9YU0FWRSByZXNwZWN0aXZlbHkgd3JpdGUgYW5kIHJlYWQgYXMN
+Cj4gbWFueQ0KPiA+PiBieXRlcyBhcyBhcmUgcmV0dXJuZWQgYnkgS1ZNX0NIRUNLX0VYVEVOU0lP
+TihLVk1fQ0FQX1hTQVZFMiksDQo+IHdoZW4NCj4gPj4gaW52b2tlZCBvbiB0aGUgdm0gZmlsZSBk
+ZXNjcmlwdG9yLiAgQ3VycmVudGx5LA0KPiA+PiBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBf
+WFNBVkUyKSB3aWxsIG9ubHkgcmV0dXJuIGEgdmFsdWUgdGhhdCBpcw0KPiA+PiBncmVhdGVyIHRo
+YW4gNDA5NiBieXRlcyBpZiBhbnkgZHluYW1pYyBmZWF0dXJlcyBoYXZlIGJlZW4gZW5hYmxlZA0K
+PiA+PiB3aXRoIGBgYXJjaF9wcmN0bCgpYGA7IHRoaXMgaG93ZXZlciBtYXkgY2hhbmdlIGluIHRo
+ZSBmdXR1cmUuDQo+ID4gV291bGQgdGhpcyBtYWtlIHBlb3BsZSB0aGluayB0aGF0DQo+IEtWTV9D
+SEVDS19FWFRFTlNJT04oS1ZNX0NBUF9YU0FWRTIpDQo+ID4gZG9lc27igJl0IHJldHVybiB0aGUg
+dmFsdWUgKGkuZS4gcmV0dXJuIDApIGlmIGl0IGlzIHNtYWxsZXIgdGhhbiA0MDk2Pw0KPiA+IChp
+LmUuIEtWTV9HRVRfWFNBVkUyIGRvZXNuJ3Qgd29yayB3aXRoIHNpemUgPCA0MDk2LCB3aGljaCBp
+c27igJl0IHRydWUpDQo+ID4NCj4gPiBJIHBsYW4gdG8ganVzdCByZXdvcmQgYSBiaXQ6DQo+ID4g
+Q3VycmVudGx5LCBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSB3aWxsIG9ubHkg
+cmV0dXJuIGENCj4gc2l6ZQ0KPiA+IHZhbHVlLCBhbmQgdGhlIHZhbHVlIGlzIGdyZWF0ZXIgdGhh
+biA0MDk2IGJ5dGVzIGlmIGFueSBkeW5hbWljDQo+ID4gZmVhdHVyZXMgaGF2ZSBiZWVuIGVuYWJs
+ZWQgd2l0aCBgYGFyY2hfcHJjdGwoKWBgLiBNb3JlIHR5cGVzIG9mIHZhbHVlcyBjb3VsZA0KPiBi
+ZSByZXR1cm5lZCBpbiB0aGUgZnV0dXJlLg0KPiANCj4gTmV4dCByZWZpbmVtZW50Og0KPiANCj4g
+VGhlIHNpemUgdmFsdWUgcmV0dXJuZWQgYnkgS1ZNX0NIRUNLX0VYVEVOU0lPTihLVk1fQ0FQX1hT
+QVZFMikgd2lsbA0KPiBhbHdheXMgYmUgYXQgbGVhc3QgNDA5Ni4gIEN1cnJlbnRseSwgaXQgaXMg
+b25seSBncmVhdGVyIHRoYW4gNDA5NiBpZiBhIGR5bmFtaWMNCj4gZmVhdHVyZSBoYXMgYmVlbiBl
+bmFibGVkIHdpdGggYGBhcmNoX3ByY3RsKClgYCwgYnV0IHRoaXMgbWF5IGNoYW5nZSBpbiB0aGUN
+Cj4gZnV0dXJlLg0KDQo+IChJJ20gbm90IHN1cmUgaWYgdGhlIGZpcnN0IHNlbnRlbmNlIGlzIHRy
+dWUgaW4gdGhlIGNvZGUsIGJ1dCBpZiBub3QgaXQgaXMgYSBidWcgdGhhdA0KPiBoYXMgdG8gYmUg
+Zml4ZWQgOikpLg0KDQpGb3IgdGhlIGltcGxlbWVudGF0aW9uLCBLVk1fQ0hFQ0tfRVhURU5TSU9O
+KEtWTV9DQVBfWFNBVkUyKSBhbHdheXMgcmV0dXJuIGt2bS0+dmNwdXNbMF0tPmFyY2guZ3Vlc3Rf
+ZnB1LnVhYmlfc2l6ZS4NCkRvIHlvdSB3YW50IHRvIGNoYW5nZSBpdCB0byBiZWxvdz8NCg0KSWYg
+KGt2bS0+dmNwdXNbMF0tPmFyY2guZ3Vlc3RfZnB1LnVhYmlfc2l6ZSA8IDQwOTYpDQoJcmV0dXJu
+IDA7DQplbHNlDQoJcmV0dXJuIGt2bS0+dmNwdXNbMF0tPmFyY2guZ3Vlc3RfZnB1LnVhYmlfc2l6
+ZTsNCg0KSWYgdGhlIHNpemUgaXMgbGVzcyB0aGFuIDQwOTYgKGUuZy4gbm8gZHluYW1pYyB4ZmVh
+dHVyZXMgZW5hYmxlZCksDQp1c2Vyc3BhY2Ugc2hvdWxkIHVzZSB0aGUgb2xkIEtWTV9HRVRfWFNB
+VkUgKGluc3RlYWQgb2YgS1ZNX0dFVF9YU0FWRTIpPw0KKEtWTV9HRVRfWFNBVkUyIHN1cHBvcnRz
+IHRvIHdvcmsgd2l0aCBzaXplIGxlc3MgdGhhbiA0MDk2LCBzbyBJIHRoaW5rIHRoaXMgaXNuJ3Qg
+bmVjZXNzYXJ5KQ0KDQpUaGFua3MsDQpXZWkNCg==

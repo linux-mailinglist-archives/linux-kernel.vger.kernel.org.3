@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A0847BB6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006F047BB77
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbhLUIDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:03:53 -0500
-Received: from mga02.intel.com ([134.134.136.20]:43348 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235383AbhLUIDv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:03:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640073831; x=1671609831;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=41Ve57LH9vKZVkmrFdgNEo5ROhFavgNxMAwyZUJAA3g=;
-  b=ReRiju6WMjirNb7Fwpa5QPqzc94UL3DpNgVC6aFqv6tEbx6Dc/VTd30d
-   jKn7tTI8nwiOZuzeaOyRhEY/jNezBwb4HFa0zWPnNTIvIJbkdfu9FFGZm
-   MMVTeXkbSPJwX0us+5gKfWqdnIFm2gHvDpfhKWm0rOmAl7FUt6ZCoYAjv
-   dCxi3hU67HTjwYTceWntGkGs+lR9qWsOVbSvW3wdbjQIEAuibiP6Ickhg
-   Anh02Ui/lP/xsJn7Sc2pQCtxvERnrGXWb/5G/IJJXG+7CP6BuzUGgZ53N
-   EziCa88U0ogE72VHM9lrjS4w6OdqZs4uA3Hi1nBpG0XNaL4kJnIs8OCPc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227640800"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="227640800"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 00:03:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="684580945"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 00:03:49 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mza7g-0008qw-HR; Tue, 21 Dec 2021 08:03:48 +0000
-Date:   Tue, 21 Dec 2021 16:03:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liam Beguin <liambeguin@gmail.com>, peda@axentia.se,
-        jic23@kernel.org, lars@metafoo.de
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v10 10/14] iio: test: add basic tests for the iio-rescale
- driver
-Message-ID: <202112211530.JHHCLDOr-lkp@intel.com>
-References: <20211219223953.16074-11-liambeguin@gmail.com>
+        id S235412AbhLUIGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:06:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34278 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235383AbhLUIGp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 03:06:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640074005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9bw88l3NHmiaTt/a1Fx/Og6tPlXiHJAJaUCru5jyB0I=;
+        b=gWC1kBqcxy8tey4bmN4xkpVXXuCSdN3ZxXcEzdri9qZ1AG2gfk61RKVlcdoaAkfG5Jr/C/
+        AQ01UG8ZGeg9dIrVB2w4VD/zmLbn6pkAXjpo9zkpagP3+Y478A6fu8ghXt0dGtg9rtkNtN
+        M/0bOgHmOi6RQz/w3fDmY3/gr3L9jNo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-cR91BW0sP-6B7qCjNn-KXA-1; Tue, 21 Dec 2021 03:06:42 -0500
+X-MC-Unique: cR91BW0sP-6B7qCjNn-KXA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3AA8B34891;
+        Tue, 21 Dec 2021 08:06:40 +0000 (UTC)
+Received: from localhost (ovpn-12-118.pek2.redhat.com [10.72.12.118])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 819D17EA4E;
+        Tue, 21 Dec 2021 08:06:29 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 16:06:26 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        akpm@linux-foundation.org
+Cc:     Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
+        kexec@lists.infradead.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Convert vmcore to use an iov_iter
+Message-ID: <20211221080626.GB7986@MiWiFi-R3L-srv>
+References: <20211213143927.3069508-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211219223953.16074-11-liambeguin@gmail.com>
+In-Reply-To: <20211213143927.3069508-1-willy@infradead.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liam,
+On 12/13/21 at 02:39pm, Matthew Wilcox (Oracle) wrote:
+> For some reason several people have been sending bad patches to fix
+> compiler warnings in vmcore recently.  Here's how it should be done.
+> Compile-tested only on x86.  As noted in the first patch, s390 should
+> take this conversion a bit further, but I'm not inclined to do that
+> work myself.
 
-Thank you for the patch! Yet something to improve:
+Ack this series of patches.
 
-[auto build test ERROR on 2b6bff0b122785f09cfbdc34b1aa9edceea6e4c1]
+Acked-by: Baoquan He <bhe@redhat.com>
 
-url:    https://github.com/0day-ci/linux/commits/Liam-Beguin/iio-afe-add-temperature-rescaling-support/20211220-064048
-base:   2b6bff0b122785f09cfbdc34b1aa9edceea6e4c1
-config: mips-randconfig-r026-20211220 (https://download.01.org/0day-ci/archive/20211221/202112211530.JHHCLDOr-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/833188fad2d37f1e40f56eb7286d6dd2e1a2ced5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Liam-Beguin/iio-afe-add-temperature-rescaling-support/20211220-064048
-        git checkout 833188fad2d37f1e40f56eb7286d6dd2e1a2ced5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+> 
+> v3:
+>  - Send the correct patches this time
+> v2:
+>  - Removed unnecessary kernel-doc
+>  - Included uio.h to fix compilation problems
+>  - Made read_from_oldmem_iter static to avoid compile warnings during the
+>    conversion
+>  - Use iov_iter_truncate() (Christoph)
+> 
+> Matthew Wilcox (Oracle) (3):
+>   vmcore: Convert copy_oldmem_page() to take an iov_iter
+>   vmcore: Convert __read_vmcore to use an iov_iter
+>   vmcore: Convert read_from_oldmem() to take an iov_iter
+> 
+>  arch/arm/kernel/crash_dump.c     |  27 +------
+>  arch/arm64/kernel/crash_dump.c   |  29 +------
+>  arch/ia64/kernel/crash_dump.c    |  32 +-------
+>  arch/mips/kernel/crash_dump.c    |  27 +------
+>  arch/powerpc/kernel/crash_dump.c |  35 ++-------
+>  arch/riscv/kernel/crash_dump.c   |  26 +------
+>  arch/s390/kernel/crash_dump.c    |  13 ++--
+>  arch/sh/kernel/crash_dump.c      |  29 ++-----
+>  arch/x86/kernel/crash_dump_32.c  |  29 +------
+>  arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
+>  fs/proc/vmcore.c                 | 129 +++++++++++++------------------
+>  include/linux/crash_dump.h       |  19 ++---
+>  12 files changed, 122 insertions(+), 321 deletions(-)
+> 
+> -- 
+> 2.33.0
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mipsel-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_offset':
->> iio-test-rescale.c:(.text+0x48): undefined reference to `kunit_kmalloc_array'
->> mipsel-linux-ld: iio-test-rescale.c:(.text+0xc4): undefined reference to `kunit_binary_assert_format'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0xc8): undefined reference to `kunit_binary_assert_format'
->> mipsel-linux-ld: iio-test-rescale.c:(.text+0x13c): undefined reference to `kunit_do_assertion'
->> mipsel-linux-ld: iio-test-rescale.c:(.text+0x15c): undefined reference to `kunit_binary_str_assert_format'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x160): undefined reference to `kunit_binary_str_assert_format'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x1b0): undefined reference to `kunit_do_assertion'
-   mipsel-linux-ld: drivers/iio/test/iio-test-rescale.o: in function `iio_rescale_test_scale':
-   iio-test-rescale.c:(.text+0x40c): undefined reference to `kunit_kmalloc_array'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x490): undefined reference to `kunit_binary_assert_format'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x4c0): undefined reference to `kunit_binary_assert_format'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x4f0): undefined reference to `kunit_do_assertion'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x6a4): undefined reference to `kunit_do_assertion'
-   mipsel-linux-ld: iio-test-rescale.c:(.text+0x718): undefined reference to `kunit_do_assertion'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

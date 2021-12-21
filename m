@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1151447BEC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D976247BECA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbhLULUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S237048AbhLULVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbhLULUn (ORCPT
+        with ESMTP id S230391AbhLULVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:20:43 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD488C061574;
-        Tue, 21 Dec 2021 03:20:42 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso1438417wmd.2;
-        Tue, 21 Dec 2021 03:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A5VmHeK4a1YbrsJfhZ9m+7CzigXVHiNjupNeCq7BdgA=;
-        b=adKXF+uU9R2/GLmLmvrIRm6GfGmjGGpbIboCM1X2LGnprMQIROvAygtZO3H3CTvEh3
-         w4m21LIDQG0LoUNmNp8WJ4g9B3hNsaN8Ry6mTwhVAwXsWJaasnJE0pZDG5U25B2i1BkN
-         isecd5PxUOUvdhYtrVM7j/2hxjoAH14LkiiJxd7e06XXXrpTNYh1RfXGioJJhsXlkbNa
-         GsC5DAzMwni5MaRoNbYsjzvUroTGC0gDKypGmDBT4rStU4ZjNJ8DsL6xJDhrcoZTVpX3
-         v7hKDsjjCbo8oWbPsaHwWUNGRo9E0/UGPpDrok7zdd2xa8LRs0/XKUUYzLTjogUJwm2+
-         2AcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A5VmHeK4a1YbrsJfhZ9m+7CzigXVHiNjupNeCq7BdgA=;
-        b=F4U6Ugs9uODojyQkfgZIcgjcjySGN3B3wEq9zThVp65xJGnedrU8FttKp7Auatlcbw
-         ATlWXVCCx/AVKp5xEeTvZc/KjMWEWKPGYdgrkiSXAFEtMna7Ly39zPfvWT65ypxv8m7e
-         4/FQ82tP4t/LL4VI+sDxa/HdWPioJEAgCMh40QAbjVQV53eGWG58cwmOjGqrYy4kxf1z
-         q2zXJX1QPDrWn7fmfPymSgis68xgKmcPPygzk/qWfPQf+EnGyF98lGLtPEZfZ6YXzLvd
-         15tg1yfsCOoOhom9LZ6zrO65c2e7frcpmu3fm8E7EA2xsLzS3Fd5Skfu48SSLWYH89xN
-         RWtw==
-X-Gm-Message-State: AOAM530yEc2gbOofnf2pk0+lg12NRGFAxRDQT2mNXge0/+jUbheAT/Cg
-        0MJd3G2+yIrzqrrFdcqHEg8=
-X-Google-Smtp-Source: ABdhPJwr9w2UUZrBvUeIB+mRDvojgbMcazHUP8KlAU7k8Q0CvZ/p8j+dR78N4jywxn0tn3xPNBOqUg==
-X-Received: by 2002:a05:600c:3c8a:: with SMTP id bg10mr2358826wmb.106.1640085641346;
-        Tue, 21 Dec 2021 03:20:41 -0800 (PST)
-Received: from debian (host-2-99-153-109.as13285.net. [2.99.153.109])
-        by smtp.gmail.com with ESMTPSA id b197sm2086906wmb.24.2021.12.21.03.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 03:20:40 -0800 (PST)
-Date:   Tue, 21 Dec 2021 11:20:39 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.4 00/71] 5.4.168-rc1 review
-Message-ID: <YcG4h+QGy40HYiwj@debian>
-References: <20211220143025.683747691@linuxfoundation.org>
+        Tue, 21 Dec 2021 06:21:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DFDC061574;
+        Tue, 21 Dec 2021 03:21:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B907B81598;
+        Tue, 21 Dec 2021 11:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC0CC36AE8;
+        Tue, 21 Dec 2021 11:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640085667;
+        bh=2Js6OTOXgFjZQ1/Lt3+P5V8TaO+a3gMLZqFbquMp14Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iVdODdQ68+cl2SvyTjTWHZWCgF5P1beevj8zl109X5gvxDsANovGoelcL63S64yv2
+         zyrkTdulnS+oTBWNTeSdDvqME4uWwpmeyQZxIrdJ3AUU+P5WMW9o5uoL5FzNnYWCT5
+         Xs/kTWQQpPsAYofyg6+ObLSXdVcoMYD3S8cGRUMQ9UGppNBHZ6/ryaZAjfL+Qd3scb
+         S73nLoOHD73xnwetr+SUzeqDjcJtxXkH4mWBED7DAkPPYHseFFIi9Cthpx8kMybiV3
+         jYLvghlFKdSIKuyOyzq/LKMLSaLsBcH16FRapKshUQM8x3Ng7uqszufG1kpnmea7Y3
+         BZUbNrWayQu6g==
+Received: by mail-ed1-f42.google.com with SMTP id bm14so37777607edb.5;
+        Tue, 21 Dec 2021 03:21:06 -0800 (PST)
+X-Gm-Message-State: AOAM530iB/KjXr2VlHz/kPSvbq2+l9Y9LRCoRmMFTC9S7yPj26L8M5J1
+        lcYH0YnBEX7pntSy4ksOJcRjSU3pYHggjgCvXA==
+X-Google-Smtp-Source: ABdhPJxtSfpFlcxoNW0PrKICsU544S4NNvZ9OMkYeWI1nGxS3sU0RB46zKSlkFovH0Ucw4Yb3SuI8F4kwZj8Wct39UU=
+X-Received: by 2002:aa7:d6d5:: with SMTP id x21mr2698366edr.201.1640085665181;
+ Tue, 21 Dec 2021 03:21:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220143025.683747691@linuxfoundation.org>
+References: <20211221092830.680839-1-yinxiujiang@kylinos.cn>
+In-Reply-To: <20211221092830.680839-1-yinxiujiang@kylinos.cn>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 21 Dec 2021 07:20:53 -0400
+X-Gmail-Original-Message-ID: <CAL_JsqLtQanbiC4egB8d5quQRZNq0V6q2s+=qhBeypBqLH-pgA@mail.gmail.com>
+Message-ID: <CAL_JsqLtQanbiC4egB8d5quQRZNq0V6q2s+=qhBeypBqLH-pgA@mail.gmail.com>
+Subject: Re: [PATCH] of: unittest: Fix out of bounds array access when id < 0
+To:     Yin Xiujiang <yinxiujiang@kylinos.cn>
+Cc:     frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, Dec 21, 2021 at 5:34 AM Yin Xiujiang <yinxiujiang@kylinos.cn> wrote:
+>
+> In of_unittest_untrack_overlay if id is less than 0 then
+> overlay_id_bits will be out of bounds. And it is also mentioned
+> in bugzilla as a bug report:
+> https://bugzilla.kernel.org/show_bug.cgi?id=214867
+>
+> Fix this bug by tiggering WARN_ON()
 
-On Mon, Dec 20, 2021 at 03:33:49PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.168 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
+If id shouldn't be less than 0, can we make it unsigned instead as
+discussed here[1].
 
-Build test:
-mips (gcc version 11.2.1 20211214): 65 configs -> no new failure
-arm (gcc version 11.2.1 20211214): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+Rob
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/534
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+[1] https://lore.kernel.org/all/c474a371-b524-1da8-4a67-e72cf8f2b0f7@gmail.com/

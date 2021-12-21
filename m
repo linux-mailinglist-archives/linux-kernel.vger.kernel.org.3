@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB0A47BC23
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C5247BC25
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbhLUIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:48:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38576 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232545AbhLUIsm (ORCPT
+        id S235829AbhLUIss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235817AbhLUIsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:48:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640076521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LHQemFwUsyba3tEe/uU9t9ytypWsDi32CVKu/T0ntzE=;
-        b=KTIAzMcxvUsyJ/5POP6cqTqb33QL2DWZZYQ1Txfnb7Db7fo8ndl7/Yt/rM/viHgB2U/hA5
-        /L5TJMU1NAVRnv2qLs88slQTZMIWaKfmryxhs+lsLF4Cswgjd1EIkaPNF8Zi3ez8MxcEdX
-        6vx5aFmI3aXBZrHfuCqnxjzQ6WS62d8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-7ZoModMMMPCx9hHh1z9rJg-1; Tue, 21 Dec 2021 03:48:40 -0500
-X-MC-Unique: 7ZoModMMMPCx9hHh1z9rJg-1
-Received: by mail-wr1-f71.google.com with SMTP id r9-20020adfb1c9000000b001a2981d9356so653561wra.20
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 00:48:39 -0800 (PST)
+        Tue, 21 Dec 2021 03:48:47 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AA0C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 00:48:47 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 185-20020a1c01c2000000b00345b7a50a7bso736697wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 00:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1i5pKI1yaREcKWwm6ZJnOKOfClamYbFLkl1l05ao+P8=;
+        b=HQm25Al+ByvO5NoxVLT6E2bOaIW00vE1JmEXCieAXBxovaFIyAYZfOTy/dfzM8wCor
+         2LzCgJRBDePMbyMT7vJh1HejDv+didIEK83TpaMo8K1PMHNmNSO/zsc/C3+iXMyqSdi5
+         862caE7jCLOYHd8d0UvKgyOvqQH3siuYAmAD7nUVzEhmpnqpTSHf0E5DTB8VcwlZT8cK
+         XKEQyhdc1Szz+LjctphbTSUyyUyXdP94E94SL+75PejtPoSOU3gP9SLjNnL4hr3N2xDD
+         hS/+zFa307qcAJhjwZLgSr7jh/9b5mdLHRnqIY4SbTBtHsi14frXjshWNfWMRZ6mj2cJ
+         gAIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LHQemFwUsyba3tEe/uU9t9ytypWsDi32CVKu/T0ntzE=;
-        b=U5dNCd4lAPFYF6ks1xlrA7XLOu5UDBPKYiUI/A3kAJzVVOQugcT7U+LRLq8zkEaGwr
-         K2i7/WK4KOxYKC0NriKfXC9ADf9GHEF9aSZbC0wzJjZTKPbjINPMSVgKHxnZLOMdBdsa
-         pVqnwKFyr9HPVZ+2LIFr7GYlexG+/HSeIS/KN8fTsM/+AYy9/1MWRwM3BTw7WkSGCNCO
-         sq9jNSwJJsbPNdnxl4q3uhEMJnP48kGdUIiepb9cK1zO+yfVG9DB2gpZ+JpilNn9QanD
-         FJJeiDAgLt6v5XPuoBVYZr8vjFk0BQ9YKXoo/IVbS4niChmYoyY+UVPlu8exr+kJMixa
-         yhbw==
-X-Gm-Message-State: AOAM530jSleviEXcvDRBhPQbUar2JwCVvV6DJyu97A4aK2/BMUm8MNEW
-        H3vCytILAbTPXtQWq2rxJUDJvCI5XTHrkDL1kuw7QQHhYhY/zh+ltQ6KIb9NfPK2lHe7+KII4kW
-        LWTYcKBUj6AHO+/+SZUqE2hGY
-X-Received: by 2002:a05:600c:24e:: with SMTP id 14mr1680066wmj.67.1640076518892;
-        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzwoFpkxSW2a19mn7IJx5TJLZ8ottBYNreEq0GyobJqU6TMBQiB92uGZAeSMuNqN7vG0KHRvw==
-X-Received: by 2002:a05:600c:24e:: with SMTP id 14mr1680050wmj.67.1640076518685;
-        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id p13sm1796863wmq.19.2021.12.21.00.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 00:48:38 -0800 (PST)
-Message-ID: <f465ec18-4a0d-2e1c-239e-cc93aa43226f@redhat.com>
-Date:   Tue, 21 Dec 2021 09:48:30 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1i5pKI1yaREcKWwm6ZJnOKOfClamYbFLkl1l05ao+P8=;
+        b=BfVxFbNakMwEfbqKYzKhrIpcHkw83LmHLXocB/MU7A4tqwRCpWTxIldDisJsdFBNCU
+         hmOFW+CKLJgyZWQIYsUPcFrmqvCTPiUoa4Bt09kHP7VJ+SnpvRLaJu3ldhuOhDyZvHQY
+         zAydoRaRA36KI480OC7cRYJWaPifF2oadhXCmV8Av6x7UYAgt1jiOZ1e8LF5GjyPL3L5
+         d9AsbUKDCuSejqkV64tbQS6emdOKulHwXcAtrrN47wzN2neZUf9m48fsjFo3BGN4eRua
+         TVFbi8oBp1+J1ZRfNZv9JWMOZBzVdUChkpvwstj1EibkHxx/K9eLShF3LK0auaPEZXRT
+         xUMg==
+X-Gm-Message-State: AOAM531ZIfIltpo/mLaRf6V09U8CA6hemVv96wrbRHruViCGsDxwzBvZ
+        8c90sSZWW5qBY7mRyujPxIg6gg==
+X-Google-Smtp-Source: ABdhPJxvds/JbvO7IudFfvfu5aJ1k1xE1AzlajsT7HSscMA4YfLFPB7yjLj0mUO3zC46G30PkUhW1A==
+X-Received: by 2002:a1c:1b8c:: with SMTP id b134mr1700891wmb.44.1640076525242;
+        Tue, 21 Dec 2021 00:48:45 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id n4sm18317859wrc.1.2021.12.21.00.48.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 00:48:44 -0800 (PST)
+Date:   Tue, 21 Dec 2021 08:48:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mfd: rk808: add reboot support to rk808.c
+Message-ID: <YcGU6pQqfEPBqjrO@google.com>
+References: <20211220144654.926112-1-pgwipeout@gmail.com>
+ <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 23/23] kvm: x86: Disable RDMSR interception of
- IA32_XFD_ERR
-Content-Language: en-US
-To:     "Liu, Jing2" <jing2.liu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-24-jing2.liu@intel.com>
- <e6fd3fc5-ea06-30a5-29ce-1ffd6b815b47@redhat.com>
- <MWHPR11MB12451924FE9189E4B69E78A4A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <MWHPR11MB12451924FE9189E4B69E78A4A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <trinity-c54ecce4-7a39-4143-b136-f53c9b40ffd1-1640018026851@3c-app-gmx-bap45>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 07:29, Liu, Jing2 wrote:
->>
-> Thanks for reviewing the patches.
+On Mon, 20 Dec 2021, Frank Wunderlich wrote:
+
+> Hi
 > 
-> If disable unconditionally in vmx_create_vcpu, it means even guest has
-> no cpuid, the msr read is passthrough to guest and it can read a value, which
-> seems strange, though spec doesn't mention the read behaviour w/o cpuid.
+> > Gesendet: Montag, 20. Dezember 2021 um 15:46 Uhr
+> > Von: "Peter Geis" <pgwipeout@gmail.com>
+> > @@ -749,6 +791,9 @@ static int rk808_remove(struct i2c_client *client)
+> >  	if (pm_power_off == rk808_pm_power_off)
+> >  		pm_power_off = NULL;
+> >
+> > +	if (of_property_read_bool(np, "rockchip,system-power-controller"))
+> > +		unregister_restart_handler(&rk808_restart_handler);
+> > +
+> >  	return 0;
+> >  }
 > 
-> How about disabling read interception at vmx_vcpu_after_set_cpuid?
+> this change misses a declaration
 > 
-> if (boot_cpu_has(X86_FEATURE_XFD) && guest_cpuid_has(vcpu, X86_FEATURE_XFD))
->          vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R, false);
+> struct device_node *np = client->dev.of_node;
 
-Even better:
+How did this compile when you tested it?
 
-	if (boot_cpu_has(X86_FEATURE_XFD))
-		vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R,
-					  !guest_cpuid_has(vcpu, X86_FEATURE_XFD));
-
-Thanks,
-
-Paolo
-
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

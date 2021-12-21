@@ -2,104 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8528747BF5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813C047BF5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237408AbhLUMGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:06:14 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9984 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231465AbhLUMGM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:06:12 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BLBUa3H003298;
-        Tue, 21 Dec 2021 12:06:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=/NmlB8WtA95C16z+XV5kpgZwtnKCGF+0mPiPBFfVRxs=;
- b=sRl0Rmezc7TIPGFmxgK7vey3dtw3i5Zg0h381mC7LcFw5+DWiF5v/TLOCXKsdtiy3xCE
- z3fPXsVkIQrUO/N0Agd/4pLqF6KTMdFMM5HkrMbp39A36FUlR2/1Rhpn+n4yRgXYjwcR
- h7hQ/kSbBsZ4haZJR25nORcW+CEgOHx4t2m9NvA7U+b6xHtF9xGZUo+JTwGQWPYPH4ZL
- gqQLUEZP/fa4Q5LF4dRqTjA+IHPqVRm6I/1eEtzajGWOERA3lcOBo7eoYi2l0ivfYHd+
- mKFQ5uaZemjMjM8EZQ2M+IZ8f1dPoYmNs2gp4lWqkslgLpKUgi63xzIZTDYS/G2sBgkV xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1s7quf3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 12:06:00 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BLC0mpi006648;
-        Tue, 21 Dec 2021 12:06:00 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1s7quf39-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 12:05:59 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BLBxhBQ016872;
-        Tue, 21 Dec 2021 12:05:57 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3d16wjv4h0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 12:05:57 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BLC5tig37028314
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Dec 2021 12:05:55 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BE49AE057;
-        Tue, 21 Dec 2021 12:05:55 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91F6CAE055;
-        Tue, 21 Dec 2021 12:05:53 +0000 (GMT)
-Received: from sig-9-65-69-22.ibm.com (unknown [9.65.69.22])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Dec 2021 12:05:53 +0000 (GMT)
-Message-ID: <58e2dbed22d07b9bc381554ada2f14ae655a2f31.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] Instantiate key with user-provided decrypted data.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Yael Tiomkin <yaelt@google.com>
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 21 Dec 2021 07:05:53 -0500
-In-Reply-To: <YcGQMScGMvBd+0+L@iki.fi>
-References: <20211213192030.125091-1-yaelt@google.com>
-         <YcGQMScGMvBd+0+L@iki.fi>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vQYBL5cME9gL9Q8-6eWJduBHOUA9Jm0T
-X-Proofpoint-ORIG-GUID: 1lKwsPkWtbvgERbfllU33Gh2f7d5OrRG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- malwarescore=0 mlxlogscore=946 priorityscore=1501 adultscore=0
- suspectscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112210054
+        id S237414AbhLUMGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:06:39 -0500
+Received: from mga18.intel.com ([134.134.136.126]:39565 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234070AbhLUMGi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:06:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640088398; x=1671624398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U/WOkGr5BYeL7TPyqZEIOXMu2gqejtYukgr7Rxu83DU=;
+  b=OhL+my49Jk36HdTIMTckeiEX+IQSHVMslfRO5WHkAlInTbeJV+b6nx0T
+   MsgtgkUP+yiJirlCVkmt126xC1PqygGLKj8r+FqTzq2AuWsaDOXaepXpA
+   VsHCCEDcAhFGG73h9FEDfqfdpRDGds/Zv/SKFk3OzoOlhiZohyJBUXjvs
+   5VenQasxSpCjhd1Q+8hI7lwXYDdRPadqZ4pLNUlHD3Py5OLoJACAOZcke
+   X0rcv23P+YxiURV0UHuaWFNlbN6+c2zfDVWNvVmUGQNBuSkGQaFLV9Br9
+   W85z2OdMH6HZVdO57I+w+BjAzNCBdPd7CSQAA5BAgX9th6be8wafRJOct
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227231644"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="227231644"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:06:33 -0800
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="570193030"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 04:06:29 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 7FA4F203BA;
+        Tue, 21 Dec 2021 14:06:27 +0200 (EET)
+Date:   Tue, 21 Dec 2021 14:06:27 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     hugues.fruchet@st.com, Eugen.Hristev@microchip.com
+Cc:     prabhakar.mahadev-lad.rj@bp.renesas.com, jacopo+renesas@jmondi.org,
+        laurent.pinchart@ideasonboard.com, slongerbeam@gmail.com,
+        paul.kocialkowski@bootlin.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        biju.das.jz@bp.renesas.com, prabhakar.csengg@gmail.com,
+        mchehab@kernel.org
+Subject: Re: [PATCH v4 1/6] media: i2c: ov5640: Remain in power down for DVP
+ mode unless streaming
+Message-ID: <YcHDQ1hwPLNnH0CN@paasikivi.fi.intel.com>
+References: <20200904201835.5958-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200904201835.5958-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <8b5d4928-2921-b876-7d1e-04bb42eff4fa@st.com>
+ <3b54ab9b-4ffd-ab32-d495-fad6132ea504@microchip.com>
+ <5c56c87d-ca48-5573-0606-da1441fab7ff@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c56c87d-ca48-5573-0606-da1441fab7ff@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 10:28 +0200, Jarkko Sakkinen wrote:
-> On Mon, Dec 13, 2021 at 02:20:30PM -0500, Yael Tiomkin wrote:
-> > The encrypted.c class supports instantiation of encrypted keys with
+Hi Hugues, Eugen,
+
+On Tue, Dec 21, 2021 at 07:37:47AM +0000, Eugen.Hristev@microchip.com wrote:
+> On 6/29/21 1:47 PM, Eugen Hristev - M18282 wrote:
+> > On 9/9/20 7:16 PM, Hugues FRUCHET wrote:
+> >> Hi Prabhakar,
+> >>
+> >> As discussed separately I would prefer to better understand issue before
+> >> going to this patch.
+> >> Nevertheless I have some remarks in code in case we'll need it at the end.
+> >>
+> >> On 9/4/20 10:18 PM, Lad Prabhakar wrote:
+> >>> Keep the sensor in software power down mode and wake up only in
+> >>> ov5640_set_stream_dvp() callback.
+> >>>
+> >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> >>> Tested-by: Jacopo Mondi <jacopo@jmondi.org>
+> >>> ---
+> >>>     drivers/media/i2c/ov5640.c | 19 ++++++++++++++++---
+> >>>     1 file changed, 16 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> >>> index 2fe4a7ac0592..880fde73a030 100644
+> >>> --- a/drivers/media/i2c/ov5640.c
+> >>> +++ b/drivers/media/i2c/ov5640.c
+> >>> @@ -34,6 +34,8 @@
+> >>>     #define OV5640_REG_SYS_RESET02              0x3002
+> >>>     #define OV5640_REG_SYS_CLOCK_ENABLE02       0x3006
+> >>>     #define OV5640_REG_SYS_CTRL0                0x3008
+> >>> +#define OV5640_REG_SYS_CTRL0_SW_PWDN 0x42
+> >>> +#define OV5640_REG_SYS_CTRL0_SW_PWUP 0x02
+> >>
+> >> For the time being this section was only referring to registers
+> >> addresses and bit details was explained into a comment right before
+> >> affectation, see OV5640_REG_IO_MIPI_CTRL00 for example.
+> >>
+> >>>     #define OV5640_REG_CHIP_ID          0x300a
+> >>>     #define OV5640_REG_IO_MIPI_CTRL00   0x300e
+> >>>     #define OV5640_REG_PAD_OUTPUT_ENABLE01      0x3017
+> >>> @@ -1120,6 +1122,12 @@ static int ov5640_load_regs(struct ov5640_dev *sensor,
+> >>>                 val = regs->val;
+> >>>                 mask = regs->mask;
+> >>>
+> >>> +             /* remain in power down mode for DVP */
+> >>> +             if (regs->reg_addr == OV5640_REG_SYS_CTRL0 &&
+> >>> +                 val == OV5640_REG_SYS_CTRL0_SW_PWUP &&
+> >>> +                 sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
+> >>> +                     continue;
+> >>> +
+> >>
+> >> I understand that more or less register OV5640_REG_SYS_CTRL0 (0x3008)
+> >> has been partially removed from big init sequence: for power-up part,
+> >> but power-dwn remains at very beginning of sequence.
+> >> We should completely remove 0x3008 from init sequence, including
+> >> power-dwn, and introduce a new function ov5640_sw_powerdown(on/off) that
+> >> should be called at the right place instead.
+> >>
+> >>
+> >>>                 if (mask)
+> >>>                         ret = ov5640_mod_reg(sensor, reg_addr, mask, val);
+> >>>                 else
+> >>> @@ -1297,9 +1305,14 @@ static int ov5640_set_stream_dvp(struct ov5640_dev *sensor, bool on)
+> >>>          * PAD OUTPUT ENABLE 02
+> >>>          * - [7:2]:     D[5:0] output enable
+> >>>          */
+> >>> -     return ov5640_write_reg(sensor,
+> >>> -                             OV5640_REG_PAD_OUTPUT_ENABLE02,
+> >>> -                             on ? 0xfc : 0);
+> >>> +     ret = ov5640_write_reg(sensor, OV5640_REG_PAD_OUTPUT_ENABLE02,
+> >>> +                            on ? 0xfc : 0);
+> >>> +     if (ret)
+> >>> +             return ret;
+> >>> +
+> >>> +     return ov5640_write_reg(sensor, OV5640_REG_SYS_CTRL0, on ?
+> >>> +                             OV5640_REG_SYS_CTRL0_SW_PWUP :
+> >>> +                             OV5640_REG_SYS_CTRL0_SW_PWDN);
+> >>>     }
+> >>>
+> >>>     static int ov5640_set_stream_mipi(struct ov5640_dev *sensor, bool on)
+> >>>
+> >>
+> >>
+> >> BR,
+> >> Hugues.
+> >>
+> > 
+> > 
+> > Hello everyone,
+> > 
+> > When I updated driver in my tree with this patch, I noticed that my
+> > setup using the ATMEL isc platform + ov5640 in parallel bus mode stopped
+> > working.
+> > 
+> > It looks like the culprit is this patch.
+> > I am not sure which is the best way to fix it.
+> > It looks like initially things work fine when probing the driver, but
+> > when we want to start streaming at a later point, the register SYS_CTRL0
+> > cannot be written anymore.
+> > Here is an output of the log:
+> > 
+> >    --- Opening /dev/video0...
+> >       Trying source module v4l2...
+> >       /dev/video0 opened.
+> >       No input was specified, using the first.
+> >       ov5640 1-003c: ov5640_write_reg: error: reg=3008, val=2
+> >       atmel-sama5d2-isc f0008000.isc: stream on failed in subdev -121
+> >       Error starting stream.
+> >       VIDIOC_STREAMON: Remote I/O error
+> >       Unable to use mmap. Using read instead.
+> >       Unable to use read.
+> > 
+> > I am using a simple application to read from /dev/video0 (which is
+> > registered by the atmel-isc once the sensor probed)
+> > 
+> > I have a feeling that something is wrong related to power, but I cannot
+> > tell for sure.
+> > 
+> > Reverting this patch makes it work fine again.
+> > 
+> > Help is appreciated,
+> > Thanks,
+> > Eugen
+> > 
 > 
-> What is "the encrypted.c class"?
+> 
+> Gentle ping.
+> 
+> I would like to send a revert patch if nobody cares about this 
+> driver/patch except me.
 
-This is the other key type as described in
-Documentation/security/keys/trusted-encrypted.rst, which is not
-dependent on a TPM.  This patch adds support for userspace provided key
-data, when the key is created.
+Hugues: any thoughts on this?
 
-thanks,
+Without knowing much about the sensor, the stated intent of the patch seems
+reasonable. But if it breaks things, then reverting it sounds like a good
+idea until a proper fix is available.
 
-Mimi
+-- 
+Kind regards,
 
+Sakari Ailus

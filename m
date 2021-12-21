@@ -2,277 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEBF47C522
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D1A47C525
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbhLURkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:40:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33450 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234411AbhLURkf (ORCPT
+        id S240468AbhLURmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231764AbhLURmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:40:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640108435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bTn6ty+kzmeA4UQ1/Ws+T/26zaoQLtQZsZ4DV9Wnbqs=;
-        b=I4nqaFynur+1l0SVL/QQ0fkhH1q/ufiOofQcOeARs1t7ayyRct+CMlOEZOIrLaygtFUMos
-        WeWVXjL6N4bObCOaF0Dga8/kDaYLBqrLRH9BfHS3WDe+0ldTyXyz7XAJNRRz5F1gb5lp95
-        A/0fEbGURPPTj0PPH6A75nANgjGiGUI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-iXDNHjCgNVGoagqqKsrmTQ-1; Tue, 21 Dec 2021 12:40:34 -0500
-X-MC-Unique: iXDNHjCgNVGoagqqKsrmTQ-1
-Received: by mail-wr1-f71.google.com with SMTP id q21-20020adfab15000000b001a24b36e47eso4856053wrc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:40:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=bTn6ty+kzmeA4UQ1/Ws+T/26zaoQLtQZsZ4DV9Wnbqs=;
-        b=CuuDQCZCbNdCuOMPg6I6xj3ereH9EHKLfDLzIj03nShepaPSty1il9Dl7MVD6Aj6Fi
-         n3NSJRUgEPAHFqtuJ0svgieQRXQ+w78u08JVIOmuyjARjdMuj4Hcu3WgegD4guChgBFQ
-         +ZhKtp4Jhx11YEvM47r6UjyVLSJsqT0CwMY7dn83jCQT1imtwuon9tyjd2lMYA5kOzdS
-         u9ErQE1KE6jB8jLsJWmxZNe4KIn0fUjieXiw5exqBOYxi8NYncNTnvRj1VndHNE9MUmx
-         +FCbcsUhLNRFqK24NXgZIjfYJ4uUrGhxHgfdwyePVTEGsk71mvU4e6WewCVIBVHhzwHR
-         u9LQ==
-X-Gm-Message-State: AOAM533wXh++8j2GqNg4FAPdSbIHilDEVJNnmSTT80M/CTDHSD1micB+
-        olEFz+WWfdYLA6UTZx8q5DFJFEMsXjWLe8K+MKBwq7Qr1qLLwE8j17A3mZCDTuMVV2F/CxqVUHA
-        aTx2BJVC3GSz0jAEZpClmqO7t
-X-Received: by 2002:a5d:4646:: with SMTP id j6mr3414576wrs.485.1640108432790;
-        Tue, 21 Dec 2021 09:40:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw6TrC3opWBpA4xtsU2Ox1SfYvwNj8ZwSQFSsgH0d9atBHHNIQ/OB02i/QZee6YXZQjbzilkQ==
-X-Received: by 2002:a5d:4646:: with SMTP id j6mr3414546wrs.485.1640108432439;
-        Tue, 21 Dec 2021 09:40:32 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c64a4.dip0.t-ipconnect.de. [91.12.100.164])
-        by smtp.gmail.com with ESMTPSA id h204sm3200668wmh.33.2021.12.21.09.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 09:40:31 -0800 (PST)
-Message-ID: <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
-Date:   Tue, 21 Dec 2021 18:40:30 +0100
+        Tue, 21 Dec 2021 12:42:39 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E8C061574;
+        Tue, 21 Dec 2021 09:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
+        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
+        :Content-Description; bh=TupUKF0VK4vg65WIuMQBgabCl7SjWqeiUzuXaaiefOE=; b=Dxjv
+        ii8l2A9scfMMOd9FBIcBR+gfXLs7mW//0vJRA5kk6lDnWpVDWNdhgJzeguEYF8vNlI7s/ATdwlk31
+        aTsyuZN9Xy0P9PCpR5BzPbrd48ITEdT5UKqmnbYSqP+yL1d+U6q7WiqFeJTB00gcU7x+wvnFDO9G9
+        JzZdmxN0OfMBzv14Iqxga/bebByPQ3RmFf1YbR512JMzsRz249stHj/AUlvHAB2r24p6VWdOXSEnw
+        fmBZLDDpJPNIkG8IBEoV/mpwn0LpehpIJ0RTj+FCeS/QPi7R5a1ihljVNw2D+zz6FlOvaUJoWeotw
+        jekNb8LStw9vRIRa23hbPJQWYL6ZtQ==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mzj9W-0006jB-Jy; Tue, 21 Dec 2021 17:42:18 +0000
+Date:   Tue, 21 Dec 2021 17:42:15 +0000
+From:   John Keeping <john@metanate.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+Message-ID: <20211221174215.04b07f31.john@metanate.com>
+In-Reply-To: <87wnjx7u05.mognet@arm.com>
+References: <Yb3vXx3DcqVOi+EA@donbot>
+        <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
+        <87zgou6iq1.mognet@arm.com>
+        <20211221164528.3c84543f.john@metanate.com>
+        <87wnjx7u05.mognet@arm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
- <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.21 18:05, Linus Torvalds wrote:
-> On Tue, Dec 21, 2021 at 12:58 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> On 21.12.21 02:03, Jason Gunthorpe wrote:
->>
->>> I'm having a hard time imagining how gup_fast can maintain any sort of
->>> bit - it lacks all forms of locks so how can we do an atomic test and
->>> set between two pieces of data?
->>
->> And exactly that is to be figured out.
+On Tue, 21 Dec 2021 17:22:34 +0000
+Valentin Schneider <valentin.schneider@arm.com> wrote:
+
+> On 21/12/21 16:45, John Keeping wrote:
+> > On Tue, 21 Dec 2021 16:11:34 +0000
+> > Valentin Schneider <valentin.schneider@arm.com> wrote:
+> >  
+> >> On 20/12/21 18:35, Dietmar Eggemann wrote:  
+> >> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> >> > index ef8228d19382..798887f1eeff 100644
+> >> > --- a/kernel/sched/rt.c
+> >> > +++ b/kernel/sched/rt.c
+> >> > @@ -1895,9 +1895,17 @@ static int push_rt_task(struct rq *rq, bool pull)
+> >> >                 struct task_struct *push_task = NULL;
+> >> >                 int cpu;
+> >> >
+> >> > +               if (WARN_ON_ONCE(!rt_task(rq->curr))) {
+> >> > +                       printk("next_task=[%s %d] rq->curr=[%s %d]\n",
+> >> > +                              next_task->comm, next_task->pid, rq->curr->comm, rq->curr->pid);
+> >> > +               }
+> >> > +
+> >> >                 if (!pull || rq->push_busy)
+> >> >                         return 0;
+> >> >
+> >> > +               if (!rt_task(rq->curr))
+> >> > +                       return 0;
+> >> > +    
+> >> 
+> >> If current is a DL/stopper task, why not; if that's CFS (which IIUC is your
+> >> case), that's buggered: we shouldn't be trying to pull RT tasks when we
+> >> have queued RT tasks and a less-than-RT current, we should be rescheduling
+> >> right now.
+> >> 
+> >> I'm thinking this can happen via rt_mutex_setprio() when we demote an RT-boosted
+> >> CFS task (or straight up sched_setscheduler()):
+> >> check_class_changed()->switched_from_rt() doesn't trigger a resched_curr(),
+> >> so I suspect we get to the push/pull callback before getting a
+> >> resched (I actually don't see where we'd get a resched in that case other
+> >> than at the next tick).
+> >> 
+> >> IOW, feels like we want the below. Unfortunately I can't reproduce the
+> >> issue locally (yet), so that's untested.  
+> >
+> > This patch doesn't make any difference for me - I hit the BUG on the
+> > first boot with this applied.
+> >  
 > 
-> So my preference would be to just always maintain the "exclusive to
-> this VM" bit in the 'struct page', because that makes things easier to
-> think about.
+> Thanks for the swift testing!
 > 
-> [ Of course - the bit could be reversed, and be a 'not exclusive to
-> this VM' bit, semantically the set-or-cleared issue doesn't matter.
-> Also, when I talk about some "exclusive to this VM" bit, I'm purely
-> talking about pages that are marked PageAnon(), so the bit may or may
-> not even exist for other pager types ]
+> Did you give Dietmar's patch a try? ITSM it lacks a resched_curr(), but if
+> we can somehow get to the push IRQ work before rescheduling (which I think
+> might happen if we try to resched_curr(this_rq)), then we need his
+> bailout.
 
-Yes, whatever I say applies to PageAnon() only -- including the
-(overloaded bit), called PG_anon_exclusive now.
+With Dietmar's patch I hit the added WARN_ON_ONCE with:
 
-> 
-> And then all GUP-fast would need to do is to refuse to look up a page
-> that isn't exclusive to that VM. We already have the situation that
-> GUP-fast can fail for non-writable pages etc, so it's just another
-> test.
+	next_task=[rcu_preempt 11] rq->curr=[ksoftirqd/1 21]
+	next_task=[rcu_preempt 11] rq->curr=[ksoftirqd/1 21]
 
-Right, the simplest way is simply failing GUP fast if the bit isn't set,
-forcing it into the slow path. If that would primarily happens for R/O
-pins after fork(), fine with me.
+	# ps -eTo comm,pid,lwp,pri,rtprio,nice,class
+	...
+	rcu_preempt        11    11  41      1   - FF
+	...
+	ksoftirqd/1        21    21  19      -   0 TS
 
-> 
->> Note that I am trying to make also any kind of R/O pins on an anonymous
->> page work as expected as well, to fix any kind of GUP after fork() and
->> GUP before fork(). So taking a R/O pin on an !PageAnonExclusive() page
->> similarly has to make sure that the page is exclusive -- even if it's
->> mapped R/O (!).
-> 
-> I do think the existing "maybe_pinned()" logic is fine for that. The
-> "exclusive to this VM" bit can be used to *help* that decision -
-> because only an exclusive page can be pinned - bit I don't think it
-> should _replace_ that logic.
+Out of three reproductions, rcu_preempt as next_task is consistent, but
+I've seen three different tasks in rq->curr (although all with
+SCHED_OTHER).
 
-The issue is that O_DIRECT uses FOLL_GET and cannot easily be changed to
-FOLL_PIN unfortunately. So I'm *trying* to make it more generic such
-that such corner cases can be handled as well correctly. But yeah, I'll
-see where this goes ... O_DIRECT has to be fixed one way or the other.
-
-John H. mentioned that he wants to look into converting that to
-FOLL_PIN. So maybe that will work eventually.
-
-> 
-> There's a quite fundamental difference between
-> 
->  (a) COW and GUP: these two operations _have_ to know that they get an
-> exclusive page in order to re-use or look up the page respectively
-> 
->  (b) the pre-cow logic in fork() or the "add this to the swap cache"
-> logic in vmscan that decides whether a page can be turned into a COW
-> page by adding a reference coutn to it (whether due to fork or swap
-> cache doesn't matter - the end result is the same).
-> 
-> The difference is that in (a) the thing we *have* to get right is
-> whether a page is exclusively owned by that VM or not. We can COW too
-> much, but we can never share a page unless it's exclusive. That's true
-> whether it's pinned or not.
-
-Exactly. Once a page is "exclusive" it must not get shared *unless* we
-can turn it into a "shared" page during fork().
-
-There are some ugly corner cases that will require some thought.
-
-> 
-> In (b), the "have to get right" is different. In (b), it's perfectly
-> ok to COW an exclusive page and turn it non-exclusive. But we must
-> never COW a pinned page.
-> 
-> So (a) and (b) are very different situations, and have different logic.
-> 
-> If we always maintain an exclusive bit for AnonPage pages, then both
-> (a) and (b) can use that bit, but they'll use it very differently. In
-> (a) we'll refuse to look it up and will force a 'handle_mm_fault()' to
-> get an exclusive copy. And in (b), we just use it as a "we know only
-> exclusive pages can be pinned", so it's just another check for
-> page_needs_cow_for_dma(), the same way we currently check
-> "MMF_HAS_PINNED" to narrow down the whole "page count indicates this
-> may be a pinned page" question.
-
-If we use page_needs_cow_for_dma() for that purpose we can still have
-other references from our process referencing the page, including right
-now O_DIRECT ones. So the safest thing to do would be relying on the
-same logic as we do in the COW path regarding the pagecount ... but that
-might result in unnecessary copies as I mentioned.
-
-It would be perfect if just anything that modifies page content would be
-using FOLL_PIN, unfortunately that's not reality ...
-
-
-> 
-> And the "page is exclusive" would actually be the *common* case for
-> almost all pages. Any time you've written to a page and you haven't
-> forked after the write (and it hasn't been turned into a swap page),
-> that page would be exclusive to that VM.
-
-Yes. Essentially every time we create a new anonymous page it would end
-up as exclusive. Or if we're in a fault and can convert the "exclusive"
-page into a "shared" page (essentially the COW reuse logic).
-
-> 
-> Doesn't this seem like really straightforward semantics to maintain
-> (and think about)?
-> 
-> I'd like the exclusive page bit to *not* be directly about "has this
-> page been pinned" exactly because we already have too many special
-> cases for GUP. It would be nicer to have a page bit that has very
-> clear semantics even in the absence of GUP.
-
-What adds complexity to correctly maintain the "exclusive" state are at
-least:
-* KSM (might be harder, have to think about it)
-* migration (might be easy to just copy the bit)
-* fork() with migration/swap entries that reference a page that is
-  "exclusive". I'll have to think about that more.
-
-So I have plenty of stuff to look into.
-
-
-Just so we're on the same page what I'd like to achieve with anonymous
-pages:
-
-1) If we take a R/W pin on an anonymous page, we will always pin an
-"exclusive page".
-
-2) If we take a R/O pin on an anonymous page, we will always pin an
-"exclusive page", even if the page is mapped R/O.
-
-3) "Exclusive" pages cannot be turned "shared" during fork (and ksm? :/
-) if pinned.
-
-4) "Exclusive" pages can be turned "shared" during fork if not pinned.
-
-5) "Exclusive" pages will never be COWed but remain there for all
-eternity, until unmapped ... well or until converted into "shared" again
-if possible
-
-
-Ideally we'd handle O_DIRECT ... :(
-
-
-2) is certainly the cherry on top. But it just means that R/O pins don't
-have to be the weird kid. And yes, achieving 2) would require
-FAULT_FLAG_EXCLUSIVE / FAULT_FLAG_UNSHARED, but it would really 99% do
-what existing COW logic does, just bypass the "map writable" and
-"trigger write fault" semantics.
-
-I hope we agree that R/O pins don't have to have weird kid if we can
-"get it right" with the same approach.
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+And as expected, the added early return does stop the BUG.

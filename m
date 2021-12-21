@@ -2,246 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D66547BF4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2274F47BF53
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbhLUMEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:04:42 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:42982 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230184AbhLUMEl (ORCPT
+        id S237397AbhLUMFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:05:07 -0500
+Received: from www381.your-server.de ([78.46.137.84]:59816 "EHLO
+        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230184AbhLUMFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:04:41 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jkchen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V.KzN23_1640088278;
-Received: from localhost(mailfrom:jkchen@linux.alibaba.com fp:SMTPD_---0V.KzN23_1640088278)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 21 Dec 2021 20:04:38 +0800
-From:   Jay Chen <jkchen@linux.alibaba.com>
-To:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, alexander.shishkin@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhangliguang@linux.alibaba.com
-Subject: [RFC V3 PATCH] coresight: change tmc from misc device to cdev device
-Date:   Tue, 21 Dec 2021 20:04:37 +0800
-Message-Id: <20211221120437.4781-1-jkchen@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Dec 2021 07:05:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=piV6SIE1+0IdMSZ7ySmRFXOklhct4UYro/BH75s56m4=; b=ErsanGshiTquvyXPP+8A3aoOk5
+        TeyCHba9dP5FJUKQSq6ww37eXKqdfcpezwnDqa9hJtrLaWSv7mgeNTxKmeZ9nCJfrHAHqOgwNb+zU
+        MAADUl2azg16xuh15qya0Ur1t/E45uup7IYGlM6qW/qKmabUy3iL/YpQekwqkQt0gr6G4m6+Me5Os
+        PoupNivAQmB7eP2tIygJmF/80LdzU0o+ve7wqwXhbiRK452MjeSJaH2mGJZAvYY9Mz0hFJQYm6r/S
+        yGGwrRk8HQQffgZqr0Yr3l624lfN6yydiZQLPfv5mpNGQE0ENxdLIxzIo0UlkUHZqWBB+mu6eUXg6
+        5xzKK3/g==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1mzdsx-0006fC-6V; Tue, 21 Dec 2021 13:04:51 +0100
+Received: from [2001:a61:2bc8:8501:9e5c:8eff:fe01:8578]
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1mzdsw-000FnK-Po; Tue, 21 Dec 2021 13:04:50 +0100
+Subject: Re: [PATCH 0/8] counter: Remove struct counter_device::priv
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        David Lechner <david@lechnology.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Patrick Havelange <patrick.havelange@essensium.com>,
+        Syed Nayyar Waris <syednwaris@gmail.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
+ <dadb79b2-ac21-1899-48b9-1c6723afb1b4@metafoo.de>
+ <20211221113542.rl4aburbzzrgs3km@pengutronix.de>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+Message-ID: <65009237-7e61-21aa-60cd-b7f7e0bb2f91@metafoo.de>
+Date:   Tue, 21 Dec 2021 13:04:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211221113542.rl4aburbzzrgs3km@pengutronix.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26395/Tue Dec 21 10:18:41 2021)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, there are 130 etr and etf on our machine,
-but the current coresight tmc driver uses misc_register
-to register the device, which leads to the error that
-the device number is not enough.
+On 12/21/21 12:35 PM, Uwe Kleine-König wrote:
+> Hello Lars,
+>
+> On Tue, Dec 21, 2021 at 12:12:12PM +0100, Lars-Peter Clausen wrote:
+>> On 12/21/21 11:45 AM, Uwe Kleine-König wrote:
+>>> similar to patch
+>>> https://lore.kernel.org/r/4bde7cbd9e43a5909208102094444219d3154466.1640072891.git.vilhelm.gray@gmail.com
+>>> the usage of struct counter_device::priv can be replaced by
+>>> container_of which improves type safety and code size.
+>>>
+>>> This series depends on above patch, converts the remaining drivers and
+>>> finally drops struct counter_device::priv.
+>> Not sure if this is such a good idea. struct counter_device should not be
+>> embedded in the drivers state struct in the first place.
+> Just to mention it: My patch series didn't change this, this was already
+> broken before.
+I know, but this series has to be reverted when the framework is fixed.
+>
+>> struct counter_device contains a struct device, which is a reference counted
+>> object. But by embedding it in the driver state struct the life time of both
+>> the struct counter_device and and struct device are bound to the life time
+>> of the driver state struct.
+>>
+>> Which means the struct device memory can get freed before the last reference
+>> is dropped, which leads to a use-after-free and undefined behavior.
+> Well, the driver struct is allocated using devm_kzalloc for all drivers.
 
-coresight-tmc: probe of xxxxx failed with error -16
+devm_kzalloc() doesn't make a difference. The managed memory is freed 
+when the parent device is unbound/removed. There may very well be 
+reference to the counter_device at this point.
 
-This patch changes the device registration method
-to cdev's dynamic registration method to solve the
-problem of insufficient device numbers.
+> So I think it's not *very* urgent to fix. Still you're right, this
+> should be addressed.
 
-Signed-off-by: Jay Chen <jkchen@linux.alibaba.com>
----
- .../hwtracing/coresight/coresight-tmc-core.c  | 91 +++++++++++++++----
- drivers/hwtracing/coresight/coresight-tmc.h   | 10 +-
- 2 files changed, 83 insertions(+), 18 deletions(-)
+Yes and no, this can trivially be used for privilege escalation, but 
+then again on systems with a counter_device probably everything runs as 
+root anyway.
 
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-index d0276af82494..0d51071e9f88 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-@@ -31,6 +31,12 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
- DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
- DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
- 
-+static DEFINE_IDA(tmc_ida);
-+static dev_t tmc_major;
-+static struct class *tmc_class;
-+
-+#define TMC_DEV_MAX	(MINORMASK + 1)
-+
- void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
- {
- 	struct coresight_device *csdev = drvdata->csdev;
-@@ -147,7 +153,7 @@ static int tmc_open(struct inode *inode, struct file *file)
- {
- 	int ret;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 
- 	ret = tmc_read_prepare(drvdata);
- 	if (ret)
-@@ -179,7 +185,7 @@ static ssize_t tmc_read(struct file *file, char __user *data, size_t len,
- 	char *bufp;
- 	ssize_t actual;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 	actual = tmc_get_sysfs_trace(drvdata, *ppos, len, &bufp);
- 	if (actual <= 0)
- 		return 0;
-@@ -200,7 +206,7 @@ static int tmc_release(struct inode *inode, struct file *file)
- {
- 	int ret;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 
- 	ret = tmc_read_unprepare(drvdata);
- 	if (ret)
-@@ -451,6 +457,7 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
- {
- 	int ret = 0;
- 	u32 devid;
-+	dev_t devt;
- 	void __iomem *base;
- 	struct device *dev = &adev->dev;
- 	struct coresight_platform_data *pdata = NULL;
-@@ -546,14 +553,32 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
- 		goto out;
- 	}
- 
--	drvdata->miscdev.name = desc.name;
--	drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
--	drvdata->miscdev.fops = &tmc_fops;
--	ret = misc_register(&drvdata->miscdev);
-+	ret = ida_simple_get(&tmc_ida, 0, TMC_DEV_MAX, GFP_KERNEL);
-+	if (ret < 0)
-+		goto err_coresight_unregister;
-+
-+	cdev_init(&drvdata->cdev.cdev, &tmc_fops);
-+	drvdata->cdev.cdev.owner = THIS_MODULE;
-+	devt = MKDEV(MAJOR(tmc_major), ret);
-+	ret = cdev_add(&drvdata->cdev.cdev, devt, 1);
- 	if (ret)
--		coresight_unregister(drvdata->csdev);
--	else
-+		goto err_free_tmc_ida;
-+
-+	drvdata->cdev.dev = device_create(tmc_class, NULL, devt, &drvdata->cdev, desc.name);
-+	if (IS_ERR(drvdata->cdev.dev)) {
-+		ret = PTR_ERR(drvdata->cdev.dev);
-+		goto err_delete_cdev;
-+	} else
- 		pm_runtime_put(&adev->dev);
-+
-+	return 0;
-+
-+err_delete_cdev:
-+	cdev_del(&drvdata->cdev.cdev);
-+err_free_tmc_ida:
-+	ida_simple_remove(&tmc_ida, MINOR(devt));
-+err_coresight_unregister:
-+	coresight_unregister(drvdata->csdev);
- out:
- 	return ret;
- }
-@@ -583,13 +608,11 @@ static void tmc_shutdown(struct amba_device *adev)
- static void tmc_remove(struct amba_device *adev)
- {
- 	struct tmc_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-+	struct device *dev = drvdata->cdev.dev;
- 
--	/*
--	 * Since misc_open() holds a refcount on the f_ops, which is
--	 * etb fops in this case, device is there until last file
--	 * handler to this device is closed.
--	 */
--	misc_deregister(&drvdata->miscdev);
-+	ida_simple_remove(&tmc_ida, dev->devt);
-+	device_destroy(tmc_class, dev->devt);
-+	cdev_del(&drvdata->cdev.cdev);
- 	coresight_unregister(drvdata->csdev);
- }
- 
-@@ -618,7 +641,43 @@ static struct amba_driver tmc_driver = {
- 	.id_table	= tmc_ids,
- };
- 
--module_amba_driver(tmc_driver);
-+static int __init tmc_init(void)
-+{
-+	int ret;
-+
-+	ret = alloc_chrdev_region(&tmc_major, 0, TMC_DEV_MAX, "tmc");
-+	if (ret < 0) {
-+		pr_err("tmc: failed to allocate char dev region\n");
-+		return ret;
-+	}
-+
-+	tmc_class = class_create(THIS_MODULE, "tmc");
-+	if (IS_ERR(tmc_class)) {
-+		pr_err("tmc: failed to create class\n");
-+		ret = PTR_ERR(tmc_class);
-+		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+		return ret;
-+	}
-+
-+	ret = amba_driver_register(&tmc_driver);
-+	if (ret) {
-+		pr_err("tmc: error registering amba driver\n");
-+		class_destroy(tmc_class);
-+		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+	}
-+
-+	return ret;
-+}
-+
-+static void __exit tmc_exit(void)
-+{
-+	amba_driver_unregister(&tmc_driver);
-+	class_destroy(tmc_class);
-+	unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+}
-+
-+module_init(tmc_init);
-+module_exit(tmc_exit);
- 
- MODULE_AUTHOR("Pratik Patel <pratikp@codeaurora.org>");
- MODULE_DESCRIPTION("Arm CoreSight Trace Memory Controller driver");
-diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-index 6bec20a392b3..b65ac363f9e4 100644
---- a/drivers/hwtracing/coresight/coresight-tmc.h
-+++ b/drivers/hwtracing/coresight/coresight-tmc.h
-@@ -7,6 +7,7 @@
- #ifndef _CORESIGHT_TMC_H
- #define _CORESIGHT_TMC_H
- 
-+#include <linux/cdev.h>
- #include <linux/dma-mapping.h>
- #include <linux/idr.h>
- #include <linux/miscdevice.h>
-@@ -163,11 +164,16 @@ struct etr_buf {
- 	void				*private;
- };
- 
-+struct tmc_cdev {
-+	struct cdev cdev;
-+	struct device *dev;
-+};
-+
- /**
-  * struct tmc_drvdata - specifics associated to an TMC component
-  * @base:	memory mapped base address for this component.
-  * @csdev:	component vitals needed by the framework.
-- * @miscdev:	specifics to handle "/dev/xyz.tmc" entry.
-+ * @tmc_cdev:	specifics to handle "/dev/xyz.tmc" entry.
-  * @spinlock:	only one at a time pls.
-  * @pid:	Process ID of the process being monitored by the session
-  *		that is using this component.
-@@ -191,7 +197,7 @@ struct etr_buf {
- struct tmc_drvdata {
- 	void __iomem		*base;
- 	struct coresight_device	*csdev;
--	struct miscdevice	miscdev;
-+	struct tmc_cdev		cdev;
- 	spinlock_t		spinlock;
- 	pid_t			pid;
- 	bool			reading;
--- 
-2.27.0
+>   
+>> The framework should be changed to rather then embedding the struct
+>> counter_device in the state struct to just have a pointer to it. With the
+>> struct counter_device having its own allocation that will be freed when the
+>> last reference to the struct device is dropped.
+> My favourite would be to implement a counter_device_alloc /
+> counter_device_add approach, similar to what spi_alloc_controller and
+> alloc_etherdev do. The downside is that this isn't typesafe either :-\
+
 

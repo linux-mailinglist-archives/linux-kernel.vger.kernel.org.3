@@ -2,213 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B1847BCEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B77D47BCEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbhLUJc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:32:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44332 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236388AbhLUJcz (ORCPT
+        id S236402AbhLUJdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:33:08 -0500
+Received: from relay029.a.hostedemail.com ([64.99.140.29]:6834 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236388AbhLUJdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:32:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640079175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mCyMBqsx0+T4QPyEd7ZrYXkaRKnsvvoRPD3qaSvMqhM=;
-        b=Drqb6D5UDG2ACy2FGn5Ucy7XxA+EGV+SMAibhM4pxKVLTglFlOZrCQYkyEw8CIZ/tQzSMd
-        USZKjHK1z5XMOMxcr4hLNYdzze8fTrgOQ4v9vMsVQPLiths/gFGchtorxEY81KPxtFs1Qr
-        ZIXJaFsBxhdoZc99OlV/ihuC6mJe4hQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-5tlogO5yNXO5BJNo_QmsBg-1; Tue, 21 Dec 2021 04:32:54 -0500
-X-MC-Unique: 5tlogO5yNXO5BJNo_QmsBg-1
-Received: by mail-wr1-f72.google.com with SMTP id d6-20020adfa346000000b001a262748c6fso3562443wrb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:32:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mCyMBqsx0+T4QPyEd7ZrYXkaRKnsvvoRPD3qaSvMqhM=;
-        b=peZSU85oqfdXJGFapOlxxNOhhwEIp+mqqjCGrz0sCmECai3acIpL1M9h0z00xaG93y
-         L72EOffVw2YAjCkTOIh98rkxzhDXystLzfGRbZ1pPXS9YktY/YZS3l2ZbOpLeGAXHJaI
-         vi4CxWW3rmZpYAdJDcPCfD9IwoYyjkO9vMJoOfxN6DadhHPuiaDUx61qCBcEfI2P3du7
-         cviS/XN5LitLN8F9aig3eG1/qX280ebijDNYkRPqGqTAU8M3AYZaQnSHUvGfcxolf7rc
-         cZQPgDnCOfUmLAUtidqvD9R2lW1tD+OqDcxExjRoJJLEZaZpgxnbj9t8X1EjsL/CZ75i
-         NPTw==
-X-Gm-Message-State: AOAM53204g3/pF6g6gge3Osmb8dR3HsHOcBIt+IIqrFFWyaxHE0/xXdE
-        z6i4NtUuXFnM/kH43NSqAUpaeg4bmKeVZX33sKG7wMWndjtUnZQB2Qiy/TJVcl7jUHa3AQQnYaT
-        NiM2r6sx8/aL7tYYweNO0eukL
-X-Received: by 2002:adf:dcd2:: with SMTP id x18mr1852400wrm.173.1640079172357;
-        Tue, 21 Dec 2021 01:32:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw29r3qkxa9w0B+yxSrJLReP5KQO3o4hOC/ypoOMuLMXQBGmoYWNMIbo1P2Y3OJrR5jfeFQyQ==
-X-Received: by 2002:adf:dcd2:: with SMTP id x18mr1852377wrm.173.1640079172099;
-        Tue, 21 Dec 2021 01:32:52 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id d4sm8881844wrx.102.2021.12.21.01.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 01:32:51 -0800 (PST)
-Date:   Tue, 21 Dec 2021 10:32:50 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Alexandre Truong <alexandre.truong@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 6/6] perf arm64: inject missing frames if perf-record
- used "--call-graph=fp"
-Message-ID: <YcGfQr43ChIgtacC@krava>
-References: <20211217154521.80603-1-german.gomez@arm.com>
- <20211217154521.80603-7-german.gomez@arm.com>
+        Tue, 21 Dec 2021 04:33:07 -0500
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 9EF95221EE;
+        Tue, 21 Dec 2021 09:33:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 6ACA72000E;
+        Tue, 21 Dec 2021 09:32:57 +0000 (UTC)
+Message-ID: <b71570d5bc14181c656f8dd7ba69a397fd775495.camel@perches.com>
+Subject: Re: [PATCH v2 1/2] zram: zram_drv: add SPDX license identifiers
+From:   Joe Perches <joe@perches.com>
+To:     Miko Larsson <mikoxyzzz@gmail.com>, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     hch@infradead.org
+Date:   Tue, 21 Dec 2021 01:33:00 -0800
+In-Reply-To: <20211217063224.3474-2-mikoxyzzz@gmail.com>
+References: <20211217063224.3474-1-mikoxyzzz@gmail.com>
+         <20211217063224.3474-2-mikoxyzzz@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217154521.80603-7-german.gomez@arm.com>
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: xghxrfynbxtywuk5yfuxjo55arppk9gg
+X-Spam-Status: No, score=-4.77
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 6ACA72000E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX194+gRph/lCIo+3NsrWZgT6X0FHyRuXw9Y=
+X-HE-Tag: 1640079177-862073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 03:45:20PM +0000, German Gomez wrote:
-
-SNIP
-
-> +}
-> +
-> +u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int usr_idx)
-> +{
-> +	int ret;
-> +	struct entries entries = {};
-> +	struct regs_dump old_regs = sample->user_regs;
-> +
-> +	if (!get_leaf_frame_caller_enabled(sample))
-> +		return 0;
-> +
-> +	/*
-> +	 * If PC and SP are not recorded, get the value of PC from the stack
-> +	 * and set its mask. SP is not used when doing the unwinding but it
-> +	 * still needs to be set to prevent failures.
-> +	 */
-> +
-> +	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_PC))) {
-> +		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_PC);
-> +		sample->user_regs.cache_regs[PERF_REG_ARM64_PC] = sample->callchain->ips[usr_idx+1];
-> +	}
-> +
-> +	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_SP))) {
-> +		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_SP);
-> +		sample->user_regs.cache_regs[PERF_REG_ARM64_SP] = 0;
-> +	}
-> +
-> +	ret = unwind__get_entries(add_entry, &entries, thread, sample, 2);
-
-just curious, did you try this with both unwinders libunwind/libdw?
-
-any chance you could add arm specific test for this?
-
-otherwise it looks good to me
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-
-> +	sample->user_regs = old_regs;
-> +
-> +	if (ret || entries.length != 2)
-> +		return ret;
-> +
-> +	return callchain_param.order == ORDER_CALLER ? entries.stack[0] : entries.stack[1];
-> +}
-> diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.h b/tools/perf/util/arm64-frame-pointer-unwind-support.h
-> new file mode 100644
-> index 000000000000..32af9ce94398
-> --- /dev/null
-> +++ b/tools/perf/util/arm64-frame-pointer-unwind-support.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
-> +#define __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
-> +
-> +#include "event.h"
-> +#include "thread.h"
-> +
-> +u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int user_idx);
-> +
-> +#endif /* __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H */
-> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> index 3eddad009f78..a00fd6796b35 100644
-> --- a/tools/perf/util/machine.c
-> +++ b/tools/perf/util/machine.c
-> @@ -34,6 +34,7 @@
->  #include "bpf-event.h"
->  #include <internal/lib.h> // page_size
->  #include "cgroup.h"
-> +#include "arm64-frame-pointer-unwind-support.h"
->  
->  #include <linux/ctype.h>
->  #include <symbol/kallsyms.h>
-> @@ -2710,10 +2711,13 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
->  	return err;
->  }
->  
-> -static u64 get_leaf_frame_caller(struct perf_sample *sample __maybe_unused,
-> -		struct thread *thread __maybe_unused, int usr_idx __maybe_unused)
-> +static u64 get_leaf_frame_caller(struct perf_sample *sample,
-> +		struct thread *thread, int usr_idx)
->  {
-> -	return 0;
-> +	if (machine__normalize_is(thread->maps->machine, "arm64"))
-> +		return get_leaf_frame_caller_aarch64(sample, thread, usr_idx);
-> +	else
-> +		return 0;
->  }
->  
->  static int thread__resolve_callchain_sample(struct thread *thread,
-> @@ -3114,14 +3118,19 @@ int machine__set_current_tid(struct machine *machine, int cpu, pid_t pid,
->  }
->  
->  /*
-> - * Compares the raw arch string. N.B. see instead perf_env__arch() if a
-> - * normalized arch is needed.
-> + * Compares the raw arch string. N.B. see instead perf_env__arch() or
-> + * machine__normalize_is() if a normalized arch is needed.
->   */
->  bool machine__is(struct machine *machine, const char *arch)
->  {
->  	return machine && !strcmp(perf_env__raw_arch(machine->env), arch);
->  }
->  
-> +bool machine__normalize_is(struct machine *machine, const char *arch)
-> +{
-> +	return machine && !strcmp(perf_env__arch(machine->env), arch);
-> +}
-> +
->  int machine__nr_cpus_avail(struct machine *machine)
->  {
->  	return machine ? perf_env__nr_cpus_avail(machine->env) : 0;
-> diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-> index a143087eeb47..665535153411 100644
-> --- a/tools/perf/util/machine.h
-> +++ b/tools/perf/util/machine.h
-> @@ -208,6 +208,7 @@ static inline bool machine__is_host(struct machine *machine)
->  }
->  
->  bool machine__is(struct machine *machine, const char *arch);
-> +bool machine__normalize_is(struct machine *machine, const char *arch);
->  int machine__nr_cpus_avail(struct machine *machine);
->  
->  struct thread *__machine__findnew_thread(struct machine *machine, pid_t pid, pid_t tid);
-> -- 
-> 2.25.1
+On Fri, 2021-12-17 at 07:32 +0100, Miko Larsson wrote:
+> zram_drv lacks an SPDX license identifier in both its source and in its
+> header, so we should add license identifiers based on the copyright info
+> provided by the initial comment block.
 > 
+> Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+> ---
+>  drivers/block/zram/zram_drv.c | 9 ++-------
+>  drivers/block/zram/zram_drv.h | 9 ++-------
+>  2 files changed, 4 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+[]
+> @@ -1,15 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+
+GPL v2 is a permissive license and this SPDX tag should probably be
+
+// SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause
+
+> +
+>  /*
+>   * Compressed RAM block device
+>   *
+>   * Copyright (C) 2008, 2009, 2010  Nitin Gupta
+>   *               2012, 2013 Minchan Kim
+> - *
+> - * This code is released using a dual license strategy: BSD/GPL
+> - * You can choose the licence that better fits your requirements.
+> - *
+> - * Released under the terms of 3-clause BSD License
+> - * Released under the terms of GNU General Public License Version 2.0
+
+
 

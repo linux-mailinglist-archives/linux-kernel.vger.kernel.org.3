@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCDA47BEC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB2347BEC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237024AbhLULSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S237032AbhLULTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbhLULSO (ORCPT
+        with ESMTP id S232127AbhLULTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:18:14 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BCDC061574;
-        Tue, 21 Dec 2021 03:18:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m+04Hoi1CUS7niYirGQM4HsP6LZhQAse0zu7VHlCC9k=; b=hQ+7r2ejEarybIgiFRYrLBFBwj
-        ICQ4I1FnzIAaNZz/GaJgkeBTB9d294bVSpHC3NcCOngdGVrH3DNJoPXEERX5ScHUGUi4pPHnY5Yco
-        We+0xfa9ADUGItbceK4HzhwYvxwyOrDcoHKTx40AZld08Z4zJQXmodPopHtb8jNb8iRg2LJ1/9pQU
-        Uxcef9kE4GfRVjrKS1FhyPBZBB6p83sCGsY/O4GPj6zdAm6svfM+BNpi4PDspMA0CVWgw1tpcDucT
-        d4vG+yaQD+3KFcFF/YDGCPfTbKevmD940OPAayp/WYg4eO22FN8NIEGj2Lx/EQloaH6YtzbZ7kYqB
-        pVHRmoPg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzd9Q-002Phv-Pu; Tue, 21 Dec 2021 11:17:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B34C300129;
-        Tue, 21 Dec 2021 12:17:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A6DE730A54BB6; Tue, 21 Dec 2021 12:17:45 +0100 (CET)
-Date:   Tue, 21 Dec 2021 12:17:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, posk@posk.io
-Subject: Re: [RFC][PATCH 2/3] x86/uaccess: Implement unsafe_try_cmpxchg_user()
-Message-ID: <YcG32Ytj0zUAW/B2@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <20211214205358.643980924@infradead.org>
- <YcC9nSbknJuODqq9@google.com>
+        Tue, 21 Dec 2021 06:19:12 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1414C061574;
+        Tue, 21 Dec 2021 03:19:11 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso1853379wme.1;
+        Tue, 21 Dec 2021 03:19:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9VEVIxWootkLFdHlqMO79BwCcniF3kvSEBlxJFgQGGI=;
+        b=QiIQdXavPUWWP9Sr/EovjzkqFYr9iy1bFUlsTZv5CjzCXu+RfCoZpcEMkDGAZhl9Nw
+         OxccapTlQnefpsCHyk9G1gtOGj6sTSlQbrYQ4XKtoQZW8+wEQRNTJepB6jfVcyHVJKL4
+         LxqufSjvhEk1QEwY77z6DDthS8xJo+3HYfUni0iU7WeY4vUp6nOvR0EBre4JCINhgFGU
+         eti/lKzXJQOXZxHgqa2CIx0n+PrMnMkih4xWPlX8YrkdlTYQ1LipXuuyrK06vTlLc+pO
+         WBHsRgUspEwx/kIuC+2ra8I9p9xCS1m5jtBn7zCSeJxI/RgI+GtCpkjEmOTnZ5d3pbVB
+         D7xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9VEVIxWootkLFdHlqMO79BwCcniF3kvSEBlxJFgQGGI=;
+        b=v0RwM/3JqLD6lnKmLK18l1nf84M2zgDnULg0Zx7DAjKWWrGyasDLeF6F9VxI3PXPW/
+         V6OZmPcKMWv6OY0HsGnX/dMIM26t+Z1m+uStxPXRhxZxEeiPu0BE7/ptWH8h4JAg4Rzz
+         G3iDcbaILEN/KuB36i+NKY6LGu/CaPbQNCYtgrShh87gcoVSBfyArp7+u8xNGDn+kZvx
+         0iKaHKhMe356WGiMAjiTLCREzTE1bm/4nxeYRpSuoPGc0AhoQlrCAZuzS7/JCPi6PzBq
+         Z7CzEcIf0uOJPHWxDpJ03b3KommtS3N7Q/5454KC6SYGAX4mnGoz4nKHblCfKLHpRXKF
+         W1mg==
+X-Gm-Message-State: AOAM531INHU6hIV59ZeXy8E342mt4XvnWCFNyqVdexaTMbRI0iCEaFIY
+        7jkcTYhlu0leYHsLO8/gZarfjWbHFRg=
+X-Google-Smtp-Source: ABdhPJyR1a2t3zWsVlPnrUquVAxvSmgzUIIcqXtxS84YM6BQcD6LMe5ZXDLHbSeM01Zf1gIYAOFdMg==
+X-Received: by 2002:a05:600c:3657:: with SMTP id y23mr2253741wmq.160.1640085550326;
+        Tue, 21 Dec 2021 03:19:10 -0800 (PST)
+Received: from debian (host-2-99-153-109.as13285.net. [2.99.153.109])
+        by smtp.gmail.com with ESMTPSA id bd19sm1955046wmb.23.2021.12.21.03.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 03:19:10 -0800 (PST)
+Date:   Tue, 21 Dec 2021 11:19:08 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 00/99] 5.10.88-rc1 review
+Message-ID: <YcG4LPJtT1GkX07s@debian>
+References: <20211220143029.352940568@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YcC9nSbknJuODqq9@google.com>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 05:30:05PM +0000, Sean Christopherson wrote:
-> On Tue, Dec 14, 2021, Peter Zijlstra wrote:
-> > Do try_cmpxchg() loops on userspace addresses.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> > @@ -501,6 +543,21 @@ do {										\
-> >  } while (0)
-> >  #endif // CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-> >  
-> > +extern void __try_cmpxchg_user_wrong_size(void);
-> > +
-> > +#define unsafe_try_cmpxchg_user(_ptr, _oldp, _nval, _label) ({		\
-> > +	__typeof__(*(_ptr)) __ret;					\
-> > +	switch (sizeof(__ret)) {					\
-> > +	case 4:	__ret = __try_cmpxchg_user_asm("l", (_ptr), (_oldp),	\
-> > +					       (_nval), _label);	\
-> > +		break;							\
-> > +	case 8:	__ret = __try_cmpxchg_user_asm("q", (_ptr), (_oldp),	\
-> > +					       (_nval), _label);	\
-> > +		break;							\
-> 
-> Can we add support for 1-byte and 2-byte cmpxchg, and for using cmpxchg8b to handle
-> 8-byte operations in 32-bit mode?  Support for all the flavors (except 16-byte)
-> would allow KVM to use this in an emulator path that currently kmaps the target.
-> I'd be more than happy to help test the result.
+Hi Greg,
 
-Sure, no problem. I currently still need to audit parts of mm/ and
-do the smp-wake-idle bits before I repost -- that and take a xmas break
-ofcourse :-) So it'll be a while before I repost this.
+On Mon, Dec 20, 2021 at 03:33:33PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.88 release.
+> There are 99 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
+
+Build test:
+mips (gcc version 11.2.1 20211214): 63 configs -> no new failure
+arm (gcc version 11.2.1 20211214): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20211214): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/535
+[2]. https://openqa.qa.codethink.co.uk/tests/532
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

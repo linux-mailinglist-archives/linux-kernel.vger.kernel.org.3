@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E331E47BCD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A475A47BCD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbhLUJX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:23:57 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:48457 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbhLUJX4 (ORCPT
+        id S236357AbhLUJYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236335AbhLUJX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:23:56 -0500
-Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N4A1h-1mHILL3et7-0103h9; Tue, 21 Dec 2021 10:23:54 +0100
-Received: by mail-wm1-f53.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so813387wmb.1;
-        Tue, 21 Dec 2021 01:23:54 -0800 (PST)
-X-Gm-Message-State: AOAM532vQkbbxFoMchKoE2YDv0ctIyZExlrp1xM7AcBLnwJXkhf8YZCv
-        Yj1NE+WNYEYb3sm1va3/RftZO5obmDWSbTn8olU=
-X-Google-Smtp-Source: ABdhPJxu4IIGUAJNFiVsKRHmu5Fm1WfAFFV+LIjz5QIC1dQeqlZKZlfsQpcmI+Ykki0QMCXpv+QkW4e8nyXrisyOwUQ=
-X-Received: by 2002:a7b:cc90:: with SMTP id p16mr1841210wma.98.1640078634500;
- Tue, 21 Dec 2021 01:23:54 -0800 (PST)
+        Tue, 21 Dec 2021 04:23:58 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B92AC061574;
+        Tue, 21 Dec 2021 01:23:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t18so25496850wrg.11;
+        Tue, 21 Dec 2021 01:23:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=JiSwgynY0ouiHxxDkFiTGE0SJCUuFbNuV7MjwRTSqx8=;
+        b=G9KdN3kIbKGbFnEUHUKsZsEBRWvDzMfCDjA1eNlyu+dg/UadRUlcSWYcIa7ur/JyzV
+         nOCtW2KFmLKkoGmxM+qjR78FiMWgg01Re6PZGhIIkUWoKDQm4evbjb3l2MWydLPs8m2O
+         Ypk6qHoNwi0oM0cPPanOD6ywONHDLE3KBp7SyAwNj4gVv33kFw2qSEunUEY6r311rUup
+         ubmixjP3v1HV2mreWahW/pitNCbfjMM9q4kUagsoLTtGn0QoHpPbkdlOEzyMmjJKF52j
+         FW23As3WT9bA/xqkxVNxHogPoavg1YilCUQbaXI4gWAIVhW2TxYvC0p1Ry96FTnBBz15
+         hs7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=JiSwgynY0ouiHxxDkFiTGE0SJCUuFbNuV7MjwRTSqx8=;
+        b=AmM8kkmYEqKVokFHcDwUEbl5fWsBgNHB9llCTH4RqnX3bun5hhfewjTMPySZZcscMz
+         wCtk255Z7SwcTvnA0qep6zHHQb4RgIhhAhqqUDGu5Nxb9jWgkiswdQRNsxajE8XjK8mJ
+         DoYrWvK1aoidvisK8t+p48nhBBYnnjifSY0SoT5sYHptKFeDVrUSXQ1H9E6Bm3tmbGwg
+         Yk9WjgjqxhKwYhC/vsT43Zll3S4TdB16EIhY9AR6Jq8Gr4zM1h+ZC/0SsmFAkg4lqt+M
+         JxB069GscV1PA1La1Xo3qrN92f8g7/szqWEB0xQEipA0kvnuX/qEKfclhbfAtWTVW559
+         aCbw==
+X-Gm-Message-State: AOAM531P4yuN98fkkLoXdfjzz675anNDWzXrp6LhyuLY3zeILUT7q0UT
+        iLM8QWFUv/+zImAABXRBViE=
+X-Google-Smtp-Source: ABdhPJyH8hD2Cy5Eeat0R99gvXMgY2SSGQgDObew5sNwwTli/MvTT7g29JPJ5Buw5qbmBCljoc0j5g==
+X-Received: by 2002:adf:9d82:: with SMTP id p2mr1877317wre.414.1640078636757;
+        Tue, 21 Dec 2021 01:23:56 -0800 (PST)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id p22sm3585656wms.2.2021.12.21.01.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 01:23:56 -0800 (PST)
+Subject: Re: [PATCH v1 1/1] software node: Update MAINTAINERS data base
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+References: <20211221071409.14361-1-andriy.shevchenko@linux.intel.com>
+ <35944dfd-a20a-f67b-5d34-a0e0a4cb7066@gmail.com>
+ <YcGbidqy+rgiY1vf@smile.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <605c8f7b-599c-1644-686d-8b94d8f05e87@gmail.com>
+Date:   Tue, 21 Dec 2021 09:23:55 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211221071426.733023-1-wangborong@cdjrlc.com>
-In-Reply-To: <20211221071426.733023-1-wangborong@cdjrlc.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 10:23:38 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3zQm7zJWprcYq47VZD0ZZsuOTR3w7a8k78VH=3he2Fdw@mail.gmail.com>
-Message-ID: <CAK8P3a3zQm7zJWprcYq47VZD0ZZsuOTR3w7a8k78VH=3he2Fdw@mail.gmail.com>
-Subject: Re: [PATCH] net: dl2k: replace strlcpy with strscpy
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9Jrpw3QjTo4hxhWFiFBXUAzRrXEZkyoHhbGRIoY1m4nASCg6EcF
- ZOODLhQK9cIt3r3wTu/LmQRYoCcPKhTmP2qiQibZ8vUx36LKuVBn5ItvlKd+SH6PcqCgyqY
- 7bhY9Dp23pNg/nwvFSpPJXWAt5QUxjCU3KYB2MYCGEwXN4oOtokFXI+yEQdZdBeDvYO8QGt
- RRLHRkMSvmmArE0bvr2gA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UmxuFodIhxM=:MGaX4wsZkCV9MqhDsbfaMn
- gF0cnMQgzdej7XWOs8iYeK40EvIH+ERCn4hCkga9x4z0GQZU3+afcPtZkqspG9LyzFc+0GocX
- AVyWsb5oJhelLjsDOc26P5dbXjYAJAiwHeoq+3ptGJEAL7qj7qJiEM9wLHuu/DTR11tNQd/li
- LqXlamnDlmH63h6jygNyfrGLFXhFjOlXtEPrORQyZcyNETm5fmYTJ6l7SLwb0MPeNa4T076Tj
- kPWHzOk4FjSqIYSGsSKk4zirKu+6HpwkIVmfPmxJOyiz3NN4a3BHcHfHqmQ56v2ZjZbBYDBhz
- SH86uhSWi++KVcBkFoLl8cQ5be9GFSvOHoz+PGKbS4EQ2mlsjs7clC8/sh9nPpaPPxBG/BiNT
- R8hvKXQR1wBm4cNXcf5aq3Wuh4FNTVot0XtWA4y4F33X5dymaHdPCZPzM5216N81xwtx9IB8t
- d4pJdq1BlQ+892/yngKUXDeSg6IFZjVFeyIp7lEvl9jt7ng91dECT6vbZ/Ya2+Y/z9gEPyW3X
- PeGFAE3OwXZwWZbIcfKpx7mBmWgu+v0SCNdiLsVTM8o9aLqzq2xvZpwAzJsWOIDp1HHzYnudW
- bXowfCc+DW6L3T7VXPkmD/q0DpaUY9rHX1nU6WolF/2F9RCoFQSWQoJtofZyIOrCoS0Igtg1Y
- 35lumcp2P1IzN0HO3M0Gqe0MoLJtARE3UX2vh3Ya8O5ZohAi1odwix3eCBWxH6/Q2gf5px0OX
- zg9h7l7XGeZinid1YgZLFuNV45cQNcGdWlzZIIkhXp07oP5ElIoHZA3t+gOPHN/1ssP2YJC74
- 5KgUdMI/0Dtk8g2n7uTtZXdHccDXlq4SZRDKkBAntBlqTD+0b0=
+In-Reply-To: <YcGbidqy+rgiY1vf@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 8:14 AM Jason Wang <wangborong@cdjrlc.com> wrote:
->
-> The strlcpy should not be used because it doesn't limit the source
-> length. So that it will lead some potential bugs.
->
-> But the strscpy doesn't require reading memory from the src string
-> beyond the specified "count" bytes, and since the return value is
-> easier to error-check than strlcpy()'s. In addition, the implementation
-> is robust to the string changing out from underneath it, unlike the
-> current strlcpy() implementation.
->
-> Thus, replace strlcpy with strscpy.
->
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-Are you trying to eliminate strlcpy() from all 800 files using it
-completely? If not, I don't see a need to fix individual drivers
-that use a constant source string and don't use the return
-code, as the behavior should be the same.
-
-While it seems reasonable to converge towards a more robust
-string copy, none of the points you list in the changelog apply to
-the function you patch here.
-
-        Arnd
+On 21/12/2021 09:16, Andy Shevchenko wrote:
+> On Tue, Dec 21, 2021 at 09:15:30AM +0000, Daniel Scally wrote:
+>> Morning
+>>
+>> On 21/12/2021 07:14, Andy Shevchenko wrote:
+>>> There are two updates to the MAINTAINERS regarding to software node API:
+>>> - add Dan Scally to be designated reviewer
+>>> - add rather tightly related device property files to the list
+>>> - adjust section name accordingly
+>>>
+>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>> ---
+>>>
+>>> Based on the latest Dan's involvement and amount of patches seen recently
+>>> I went ahead and added his name to the list. Dan, please tell me if it's
+>>> not appropriate.
+>> This is fine by me - I don't know if you need a tag from me for this but
+>> feel free to add whichever's appropriate
+> Yep, please give a formal tag (usually Acked-by in this kind of cases).
+>
+Acked-by: Daniel Scally <djrscally@gmail.com>

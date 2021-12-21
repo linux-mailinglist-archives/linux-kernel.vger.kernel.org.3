@@ -2,134 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED98D47B9DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDA447B9E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbhLUGIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:08:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43858 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbhLUGIM (ORCPT
+        id S233162AbhLUGRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:17:04 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48652 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229698AbhLUGRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:08:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF7F861459;
-        Tue, 21 Dec 2021 06:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F68C36AEE;
-        Tue, 21 Dec 2021 06:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640066891;
-        bh=1+pdq3KVkpWxLeSEJSOc8Gje3z/xJVmfhMBaGDIU3ck=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h6U7snWKmDHMF4rceeQUqMSMQjsYHVk/L9TbHz1pZVcNRcsSc2nCOkethuRL45XSn
-         zfHEEsFTPzMgQq0qbEJViDMQpIt21KA93KHWGaiFtVhhgj98gcAGhDtyNEipGOf/2Y
-         Pd6ba8e8dJQrxQGbf7DcBfLyzWbQ1jO2Ys05ca+LXfyoFy7AZXrrbbM1K9mCtwd99+
-         C0cg7mdahuwYnWz5/2kcYQM9dx3BCCRffn6lm1BmxeHji+ZYwe6PuMDUtIpFDtSVR8
-         JgEFlU62JgBonJ5mZyvcDLKqtvx520N9LS3uXcwXpEKpwKFLWpoJj7HLyWg4/cjG/s
-         IHVaFvq2NfwWA==
-Received: by mail-yb1-f174.google.com with SMTP id q74so35532999ybq.11;
-        Mon, 20 Dec 2021 22:08:11 -0800 (PST)
-X-Gm-Message-State: AOAM533Xeh/hQHuHi5BWioG+76D7HJJcev1zBDjHcmslJQ6L+A0yDrbY
-        IZ9q0pLxTov0+JYvz5Tv0c2VSHgfXJWLHGePCr0=
-X-Google-Smtp-Source: ABdhPJwVF0i69IklA109HppW9xClsaOPWV/8F4VKxROC6V7DTCTfoxyZ/y8mV+y+bKIbK6FlJpACeoT+PxqKslHGcOQ=
-X-Received: by 2002:a25:b187:: with SMTP id h7mr2487968ybj.445.1640066890269;
- Mon, 20 Dec 2021 22:08:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20211217121148.6753-1-sam.shih@mediatek.com> <bf78ebdf10bcff21dfe844e619ead13162534d97.camel@mediatek.com>
- <CA+SzRW5PeNurT5rNoGpcLcPE9nu4XFnrPOxq7a1dcV905FC++Q@mail.gmail.com>
-In-Reply-To: <CA+SzRW5PeNurT5rNoGpcLcPE9nu4XFnrPOxq7a1dcV905FC++Q@mail.gmail.com>
-From:   Ryder Lee <ryder.lee@kernel.org>
-Date:   Mon, 20 Dec 2021 22:07:59 -0800
-X-Gmail-Original-Message-ID: <CA+SzRW6=C3X-i3kOqzhRZ-At49103L-dDi5dm70jbWEuVKjufA@mail.gmail.com>
-Message-ID: <CA+SzRW6=C3X-i3kOqzhRZ-At49103L-dDi5dm70jbWEuVKjufA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/3] Mediatek MT7986 basic clock support
-To:     Sam Shih <sam.shih@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        YH Chen <yh.chen@mediatek.com>
+        Tue, 21 Dec 2021 01:17:03 -0500
+X-UUID: 725fb2254b3a4a2a839744d8b17270c5-20211221
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fsqmCiRK++ZH7UUg/8t/S1vZ6GLSXPgcsopcYXVP/ho=;
+        b=pwASkwYOHFOnDKboNRTvkeuzPJujkQGEdDqa8akb/tbdZSkwwFSFw4AYBzX6Uju5PmpA2YPF3tmHlcEBdnGanNrwi1l/v+721LnawWoT4uXo/apCDrTrDcWdfnOZTqBh80QMOSkSgu4KBxbvRHq93eLpVwjp7cXejdD0AImHKxo=;
+X-UUID: 725fb2254b3a4a2a839744d8b17270c5-20211221
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 944519692; Tue, 21 Dec 2021 14:16:59 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 21 Dec 2021 14:16:58 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 21 Dec
+ 2021 14:16:58 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 21 Dec 2021 14:16:57 +0800
+Message-ID: <37fc793f6b544f46cb214f7ed14034a1934bfe32.camel@mediatek.com>
+Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>,
+        Yuwen Ng <yuwen.ng@mediatek.com>
+Date:   Tue, 21 Dec 2021 14:16:58 +0800
+In-Reply-To: <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
+References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
+         <20211218095749.6250-3-chunfeng.yun@mediatek.com>
+         <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com>
+         <Yb8MM2zL2Ecfzv1/@kroah.com>
+         <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:01 PM Ryder Lee <ryder.lee@kernel.org> wrote:
->
-> On Fri, 2021-12-17 at 20:11 +0800, Sam Shih wrote:
-> > This patch series add basic clock support for mediatek mt7986 SoC.
-> > It is based on patch series "Add basic SoC support for mediatek
-> > mt7986"
-> >
-> https://lore.kernel.org/all/20211018114009.13350-1-sam.shih@mediatek.com/
-> > and "clk: mediatek: Add API for clock resource recycle"
-> >
-> https://lore.kernel.org/linux-arm-kernel/20210914021633.26377-5-chun-jie.=
-chen@mediatek.com/
-> > ---
-> > v7: exclude DTS changes in the patch series
-> > v5: used builtin_platform_driver instead of CLK_OF_DECLARE
-> >     follow recent clk-mt8195 clock patch series:
-> >
-> > https://lore.kernel.org/linux-arm-kernel/20210914021633.26377-1-chun-ji=
-e.chen@mediatek.com/
-> >
-> > v4:
-> > According to the maintainer=C2=A1=C2=A6s suggestion, this patch splits =
-the
-> > previous
-> > thread into independent patch series.
-> > This patch include clock driver and device tree update
-> >
-> > Original thread:
-> >
-> https://lore.kernel.org/all/20210914085137.31761-1-sam.shih@mediatek.com/
-> >
-> https://lore.kernel.org/linux-arm-kernel/20210914085137.31761-2-sam.shih@=
-mediatek.com/
-> > ---
-> >
-> > Sam Shih (3):
-> >   dt-bindings: clock: mediatek: document clk bindings for mediatek
-> >     mt7986 SoC
-> >   clk: mediatek: add mt7986 clock IDs
-> >   clk: mediatek: add mt7986 clock support
-> >
-> >  .../arm/mediatek/mediatek,apmixedsys.txt      |   1 +
-> >  .../bindings/arm/mediatek/mediatek,ethsys.txt |   1 +
-> >  .../arm/mediatek/mediatek,infracfg.txt        |   1 +
-> >  .../arm/mediatek/mediatek,sgmiisys.txt        |   2 +
-> >  .../arm/mediatek/mediatek,topckgen.txt        |   1 +
-> >  drivers/clk/mediatek/Kconfig                  |  17 +
-> >  drivers/clk/mediatek/Makefile                 |   4 +
-> >  drivers/clk/mediatek/clk-mt7986-apmixed.c     | 100 +++++
-> >  drivers/clk/mediatek/clk-mt7986-eth.c         | 132 +++++++
-> >  drivers/clk/mediatek/clk-mt7986-infracfg.c    | 224 ++++++++++++
-> >  drivers/clk/mediatek/clk-mt7986-topckgen.c    | 342
-> > ++++++++++++++++++
-> >  include/dt-bindings/clock/mt7986-clk.h        | 169 +++++++++
-> >  12 files changed, 994 insertions(+)
-> >  create mode 100644 drivers/clk/mediatek/clk-mt7986-apmixed.c
-> >  create mode 100644 drivers/clk/mediatek/clk-mt7986-eth.c
-> >  create mode 100644 drivers/clk/mediatek/clk-mt7986-infracfg.c
-> >  create mode 100644 drivers/clk/mediatek/clk-mt7986-topckgen.c
-> >  create mode 100644 include/dt-bindings/clock/mt7986-clk.h
-> >
+T24gU3VuLCAyMDIxLTEyLTE5IGF0IDE0OjAwICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
+DQo+IE9uIDE5LjEyLjIwMjEgMTM6NDAsIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gWy4u
+Ll0NCj4gDQo+ID4gPiA+IFRoaXMgaXMgY2F1c2VkIGJ5IHVuaW5pdGlhbGl6YXRpb24gb2YgbGlz
+dF9oZWFkLg0KPiA+ID4gDQo+ID4gPiAgICAgQWdhaW4sIHRoZXJlJ3Mgbm8gc3VjaCB3b3JkIGFz
+ICJ1bmluaXRpYWxpemF0aW9uIiAoZXZlbiBpZiBpdA0KPiA+ID4gZXhpc3RlZCwgaXQNCj4gPiA+
+IHdvdWxkbid0IG1lYW4gd2hhdCB5b3Ugd2FudGVkIHRvIHNheSk7IHBsZWFzZSByZXBsYWNlIGJ5
+ICJub3QNCj4gPiA+IGluaXRpYWxpemluZyIuDQo+ID4gDQo+ID4gV2UgYXJlIG5vdCBFbmdsaXNo
+IGxhbmd1YWdlIHNjaG9sYXJzLCBtb3N0IG9mIHVzIGRvIG5vdCBoYXZlDQo+ID4gRW5nbGlzaCBh
+cw0KPiA+IHRoZWlyIG5hdGl2ZSBsYW5ndWFnZS4gIFdlIGFsbCBjYW4gdW5kZXJzdGFuZCB3aGF0
+IGlzIGJlaW5nIHNhaWQNCj4gPiBoZXJlLA0KPiA+IHRoZXJlJ3Mgbm8gbmVlZCBmb3IgYW55IGNo
+YW5nZSwgcGxlYXNlIGRvIG5vdCBiZSBzbyBjcml0aWNhbC4NCj4gDQo+ICAgICBPSywgbm90ZWQu
+Li4NCj4gICAgIEkgd2FzIGp1c3Qgc29tZXdoYXQgdXBzZXQgdGhhdCBteSAxc3QgY29tbWVudCB3
+YXMgaWdub3JlZC4gOi0vDQpWZXJ5IHNvcnJ5LCBJIHBsYW5uZWQgdG8gZml4IGl0LCBidXQgZm9y
+Z290IGl0Ow0KDQpQbGVhc2UgZmVlbCBmcmVlIHRvIHBvaW50IG91dCBteSBtaXN0YWtlczsNCg0K
+VGhhbmtzIGEgbG90DQoNCj4gDQo+ID4gdGhhbmtzLA0KPiA+IA0KPiA+IGdyZWcgay1oDQo+IA0K
+PiBNQlIsIFNlcmdleQ0K
 
-ugh. Should be plain text mode for the previous mail.
-
-For the series -
-Reviewed-by: Ryder Lee <ryder.lee@kernel.org>

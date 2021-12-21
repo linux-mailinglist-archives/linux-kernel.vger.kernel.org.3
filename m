@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BD447C457
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057F947C465
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbhLURAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:00:37 -0500
-Received: from mail-qk1-f169.google.com ([209.85.222.169]:37513 "EHLO
-        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbhLURAg (ORCPT
+        id S240111AbhLURBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240104AbhLURBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:00:36 -0500
-Received: by mail-qk1-f169.google.com with SMTP id m186so13173261qkb.4;
-        Tue, 21 Dec 2021 09:00:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hppWg+GP3gWKz2SnHpLcfxKFRiULg/7tXUCt9Pb6Dtw=;
-        b=YhNfGJqvR7HmU+SZuRaiqqA3BwOqnDcRKhfrqyVwCsSZ7po+iuOYSKq9NfBx+MlX9w
-         9JntaGYgW0gxakjb17ST6xGalt+yNpffwEqgketLSleSijNp4Cql1kgZhWjvmRybcmmi
-         8zN7SddQjneAh1LzxucLtNDX9wSZB+JVvHWKsdf9O8BQJ6wvP1i3olFfpAZIsd9kpQxN
-         YRB6Cssb5NByluYNoGcH/PXOfyJ0CjfHid8GxsA4ixXRjAYNT0HPx0mKYefFlG99pGse
-         k1ADOCANqlXMKM2xxxwhwrb/RD6VArm3OnFVtU7IfPszwyZQMvI4AFBMOBkzfT56/LN7
-         OGdA==
-X-Gm-Message-State: AOAM531AgzmauqSMsiy7IRt+aEyL7IVsagcotLK9sKW0gkGX2NcAduue
-        S5kG1CDK4UWG0pgTywNOog==
-X-Google-Smtp-Source: ABdhPJy9Ijw3JTHq6M8l2dQq/+DijjJRegt9T5f4n4IacLZGw6vjlaabB9NNgyBoqSHkr1oDMj4OHw==
-X-Received: by 2002:a05:620a:301:: with SMTP id s1mr2645982qkm.771.1640106035583;
-        Tue, 21 Dec 2021 09:00:35 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id h9sm14412295qkp.106.2021.12.21.09.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 09:00:35 -0800 (PST)
-Received: (nullmailer pid 1450837 invoked by uid 1000);
-        Tue, 21 Dec 2021 17:00:32 -0000
-Date:   Tue, 21 Dec 2021 13:00:32 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: mfd: Fix typo "DA9093" -> "DA9063"
-Message-ID: <YcIIMGHA5E2FS2M5@robh.at.kernel.org>
-References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+        Tue, 21 Dec 2021 12:01:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA615C061574;
+        Tue, 21 Dec 2021 09:01:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FE53B817C6;
+        Tue, 21 Dec 2021 17:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5408C36AE8;
+        Tue, 21 Dec 2021 17:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640106066;
+        bh=7d8LhHNqF8chXHYwnQCba3+BVf9M2vb5t0LpTpOXl3I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dEgydiYrKTv4MoEpX8HEQPqxS6hcDAYv3fewK7fRHlYo1CHlD/jbRbllFF0F8kZJR
+         7Ol7HU29iOHWoMgGNtsqJUJCM5S4W0bgP/zIGIS5hDslGvSBAcnMkOveiGKJ3RC9in
+         phVRHxd7jJND527OgA3JMqshWfpLFVLj3H6JoZQlMlYklclMYaZz0Kb7LD+CmhEWua
+         uKrgpIgE7bEmoNRS3EL88iGk+rcBxqSBw196mkCKvdSsMMYIldXUa3jUAkYsmHra4o
+         ZYOiY88ri24LqnBH+ncTH+nICWwBRbCrgyo/8AjbwLlOdXvXLXKKZdbHKtkvqkpvAZ
+         +r/YN5cJ3971w==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
+        benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.or,
+        linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 0/8] sched: Remove unused TASK_SIZE_OF
+Date:   Wed, 22 Dec 2021 01:00:49 +0800
+Message-Id: <20211221170057.2637763-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 17:40:36 +0100, Alexandre Ghiti wrote:
-> The device described is the "DA9063", not "DA9093", so fix this typo.
-> 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  Documentation/devicetree/bindings/mfd/da9063.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+This macro isn't used in Linux, now. Delete in include/linux/sched.h
+and arch's include/asm. This would confuse people who are
+implementing the COMPAT feature for architecture.
+
+Guo Ren (8):
+  sched: Remove unused TASK_SIZE_OF
+  sched: x86: Remove unused TASK_SIZE_OF
+  sched: sparc: Remove unused TASK_SIZE_OF
+  sched: powerpc: Remove unused TASK_SIZE_OF
+  sched: s390: Remove unused TASK_SIZE_OF
+  sched: parisc: Remove unused TASK_SIZE_OF
+  sched: arm64: Remove unused TASK_SIZE_OF
+  sched: mips: Remove unused TASK_SIZE_OF
+
+ arch/arm64/include/asm/processor.h      | 2 --
+ arch/mips/include/asm/processor.h       | 3 ---
+ arch/parisc/include/asm/processor.h     | 3 +--
+ arch/powerpc/include/asm/task_size_64.h | 6 ++----
+ arch/s390/include/asm/processor.h       | 3 +--
+ arch/sparc/include/asm/processor_64.h   | 3 ---
+ arch/x86/include/asm/page_64_types.h    | 2 --
+ include/linux/sched.h                   | 4 ----
+ 8 files changed, 4 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
+

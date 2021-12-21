@@ -2,83 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75D647B671
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285CF47B678
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbhLUA2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 19:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S233376AbhLUAhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 19:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbhLUA2x (ORCPT
+        with ESMTP id S231365AbhLUAhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 19:28:53 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A075C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 16:28:53 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id js9so10916146qvb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 16:28:53 -0800 (PST)
+        Mon, 20 Dec 2021 19:37:53 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DCBC061574;
+        Mon, 20 Dec 2021 16:37:52 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id a9so23364455wrr.8;
+        Mon, 20 Dec 2021 16:37:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HyMTClXKcOmtIsZExXjZqaWJL6q3mx1fJZYSYSwBgL0=;
-        b=ZeNjH18h1W0khX97cOeS74ickSGmTFUNJoGkIfAtYtOCji5wS0uGZRkb5pgVwhazkC
-         WJvBLdM3rMZSjQ92bmgdShE9LJagkNF2epAKOU3AxDgs0eokcmgfX5gsn2gqHP5L61NB
-         F3GjvO9C0IYi6+c/28XKp1kOo5paipS6iVD1jMMhqyJIp4NlXJlyU0v4rOCHga/bbW7/
-         fVSYoKmHQdM1EfKSwx31H5CgBE+gmab9mPaEMC6InBrS5/gHtB+JdLzW/UXsSdRnx+fQ
-         dasyEgndUlz/xiCOfgWBC8TH1cGp4AEQsiQTphc2SBg8JX0LJiJxbwOO4R8VHICEMuwf
-         H6Pg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sai+FRfLAC21RqeotQwmM4g5WhkYih1zY7k6TbpD9zY=;
+        b=kNoHaBd3f9H8CMTsuX4XMcvg5XPS24FVMpg50J34YDqUMAqZeL6q+ogSoX34noPHen
+         evp9pm01M2Z3zSUjwVx4r1wl/ilOIiWxfQ/3/NFb4hHl4Evl1/ElDOFQ6Y+zDSQ52Bsn
+         qSNeDR4+sGsLBSqknHU0vCt0gwepuHarLn7AWAFaiArf09AqVmPos8ycSV+3WPQ6Tq7z
+         DoBv/KwJCvno9ifzM7hNLcJYd4mZHGnl4Rdak5BLjmrn+2a/yLyFGx+PrmyJAUvVAtch
+         d6cNaAWO6f89fbXaywWQrQ2uWpktl+MO+G2AZ1+MGAV5/GUqKXf3Y+fhl+Ws6E+al8OD
+         ugzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HyMTClXKcOmtIsZExXjZqaWJL6q3mx1fJZYSYSwBgL0=;
-        b=vJV6NOxIxAeIVQg+lGfpc4GYFFhToZxfJy9dH8gttOqXdqPXdNtVccdsPDB7BykHIh
-         DuVYIRQyaBD/r852hnQigjJ56RgYoDlYoRV/vxnu4hOIy0UzJi3SLdcYwSa9cFFoLz1h
-         HZ/OKMELpoEyRceJHwF/Hui1ljcTqmosKLWJlcIpjlZhRgMUG/RD3U0nvRgw5EM614nH
-         G0SRFtTxMC/5y56v/FUa7UpjEJeawmGW74sDEw0cCE8nQta6h4lMg4NbjG1ulik5KjbI
-         3CoSgan1AdaF9co3eKa41ZgMIupbj4tNSZd9NfxbfFVp9S3KnPHn0T0ZPXJVXcnSVHvv
-         uFLA==
-X-Gm-Message-State: AOAM530xtFWccrH7+f1QN3kZ+TK2iiJY3LBeq2siNqmlGDrhS8s6+1iE
-        niWouBQa+INV7PThFLtkgucRLfd6was+wx15nXSVTg==
-X-Google-Smtp-Source: ABdhPJwd9DGlMNrAW6gI7tM4340jxQj9pjQVaDEX2Q4hWtzzx8HXNZ7pxFXsx6Wo1HozXJdq0KKkggPoNqN1xeVn2lo=
-X-Received: by 2002:a05:6214:260b:: with SMTP id gu11mr610476qvb.55.1640046532043;
- Mon, 20 Dec 2021 16:28:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sai+FRfLAC21RqeotQwmM4g5WhkYih1zY7k6TbpD9zY=;
+        b=WBqFOowC3HTK+dg9UFKBVoyXC08yiR+l7R15Qkfronljp8NFnEjlHxDdzuY2FaeFno
+         ozj0YYyV6EuH9lEd6/ngIXzSUgHQbtwJUdv4cLMfOF7dVIDJyoiJljgm9pbo4PYCk6QL
+         fDFos26g2OpgtGQddAw8ddhgVa2+V1H2ph+gSUqfi5vGlOD4EbJDonr3YNOuk+T6G/uS
+         3jEe/sRkjt7JfAgA7dKcrooTKvmrnJfa2c1rMK8nDop0xcmEQparkYZHR00nK2bT8dZR
+         SKgazFnG2U/D+ewVjUPTxw0wnCKuS8Y9z7nOsk4e4c0EwnLA6j1TLh1cSRl9y2t7+t8b
+         Wd3w==
+X-Gm-Message-State: AOAM531pXlFndKnxKw56EyMDalH/jHutULXWbEEJxkCY4qjFxtICWHtj
+        7ZznbLPaz63f7SJupMzCf3E=
+X-Google-Smtp-Source: ABdhPJxvi0e4X2XdsQLBIXx6pFktoqT/w0kwFYA9p9ld4UjhtwaDzdnTR2jgLA7QxuJzKU3F3pbwPg==
+X-Received: by 2002:adf:de84:: with SMTP id w4mr446612wrl.67.1640047071228;
+        Mon, 20 Dec 2021 16:37:51 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g198sm899965wme.23.2021.12.20.16.37.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 16:37:50 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: socfpga: remove redundant assignment on division
+Date:   Tue, 21 Dec 2021 00:37:50 +0000
+Message-Id: <20211221003750.212780-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211217002643.2305526-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20211217002643.2305526-1-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 21 Dec 2021 03:28:41 +0300
-Message-ID: <CAA8EJprTe2sN_vTBXMsxbM6rzuDsUXTe9FjQUAjRcOgqWPxRQg@mail.gmail.com>
-Subject: Re: [PATCH v6] drm/msm/dp: Add sc8180x DP controllers
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Dec 2021 at 03:25, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> The sc8180x has 2 DP and 1 eDP controllers, add support for these to the
-> DP driver.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+The variable parent_rate is being divided by div and the result
+is re-assigned to parent_rate before being returned. The assignment
+is redundant, replace /= operator with just / operator.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/clk/socfpga/clk-pll-s10.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->
-> Changes since v5:
-> - Dropped DPU hw catalog change from the patch
-> - Rebased the patch
->
+diff --git a/drivers/clk/socfpga/clk-pll-s10.c b/drivers/clk/socfpga/clk-pll-s10.c
+index 70076a80149d..e444e4a0ee53 100644
+--- a/drivers/clk/socfpga/clk-pll-s10.c
++++ b/drivers/clk/socfpga/clk-pll-s10.c
+@@ -113,7 +113,7 @@ static unsigned long clk_boot_clk_recalc_rate(struct clk_hw *hwclk,
+ 		SWCTRLBTCLKSEL_MASK) >>
+ 		SWCTRLBTCLKSEL_SHIFT);
+ 	div += 1;
+-	return parent_rate /= div;
++	return parent_rate / div;
+ }
+ 
+ 
 -- 
-With best wishes
-Dmitry
+2.32.0
+

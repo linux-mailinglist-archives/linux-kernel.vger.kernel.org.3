@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C127547C158
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8635947C161
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238404AbhLUOUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S235554AbhLUOWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238398AbhLUOUC (ORCPT
+        with ESMTP id S232440AbhLUOWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:20:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE424C061574;
-        Tue, 21 Dec 2021 06:20:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 41E93CE17AD;
-        Tue, 21 Dec 2021 14:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C1BC36AE9;
-        Tue, 21 Dec 2021 14:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640096398;
-        bh=w+0W4nazN2afM86/V/3t4u41Se18DBzL91myJaMCIXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N5DzwXYvjIUHQ4NKGXFKmXQ3Gd5ieCrivd3hXeP0bYbG5FyfLC5UhI/ovQIXoDq3S
-         CXKv+QEWPQAky7OhnG2lbSd9njlFYgFapqaW7xtr2TSlfos3upLy+OKqvyu1qfiFYZ
-         iTJe3xq/ZSBy3jTwsPacvhiF0q8GtUZQ4qSmfurhIkmLM6lXd4pojUCpUz8fZMpGi4
-         eBoD8/daxaneuaXln2Hr/FG6eOFPuwr3Q+tTw/+lGXa6bk5PW/vLumSJ2gupKYgdAM
-         jblozaZLU0x/iA3UZcO3oV48BGuGHcqpSAszKx8u5nUxG8K3wTEeih8PKgKdJKt4zX
-         dockSPk4juyqw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B055A40DC5; Tue, 21 Dec 2021 11:19:55 -0300 (-03)
-Date:   Tue, 21 Dec 2021 11:19:55 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] perf expr: Fix return value of ids__new
-Message-ID: <YcHii0u6dusZFt6E@kernel.org>
-References: <20211214011030.20200-1-linmq006@gmail.com>
+        Tue, 21 Dec 2021 09:22:21 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DC4C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 06:22:20 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id f9so942470qtk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 06:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yqzH7iHpoKe60vr6KOoVUYsNEptHbcvizk4re1JPTdE=;
+        b=jV5Jbe2GBFu8oyTJx4ZHnaWzgAyun7fl4S4epfttsEyTUBciPs7eWLbG2e7hQdUySS
+         WS1cor/eUzz2QFRvS1Wg0WRwtO9prjpnCHaxVp1Zl1WKJuQ2brvLR8en+Vl1LvgS4rFm
+         9Bd+gSTB7+f6lV3S2Rm7pNYUQWRh1SewpNSMg4mMe0ednhWiJoYz5bjl8SQ2kisQHVaK
+         ulcBGFD0P/jWcJhofcOWqMQ5RemmhcIWIhziLlQvNdHalbzwEf36wOZBS4hUb5JMxG0X
+         ltJKuk2SPw+WQOjgm8nL2mFqMrtF9yg+nT1sfe4ZsOZVnSI+IP9cJbWj5wKB7axGzf1L
+         ZBfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yqzH7iHpoKe60vr6KOoVUYsNEptHbcvizk4re1JPTdE=;
+        b=rarJedAef+qJ9/rSSx2vROi5mX/IVTAFnuZgSkFkprXrGi5YTeEuve1HGKwBwVu9ZN
+         J47I3DBYm8vf5fV1oR/WRm7yVowVt5VZXDFNX/mDVL4pbnYw192yjPRgZjWDNWZiyZWq
+         znAWn1SoXFo7fXI0gCpcbhA8+1w8Q8q8+a4f1sgcdXhsnSfC8ceB2LXdY10JijXvh3wT
+         HKIEfQ+7xwrgJiYJIQ04Uky1rdSb30NvlRPaKdbiPlY7G+N++Ky7WH4OYu1elOU9Er7Y
+         2toSmiuPvzCGwS5okEKgC1/1tsw5fXxMUJHTDQLsRQOHEjGZ0kxc+pv5EiHAsGhgW/g/
+         wPKw==
+X-Gm-Message-State: AOAM531Zw/rWEkGNhYWXfSW5LiDI8UeFidfY+FGzUJgfttzWTwfB1rKN
+        jQ0oodPWqG2lVmUawT55H2D/Mfr9KzCz0xDM6W0ZNA==
+X-Google-Smtp-Source: ABdhPJyIRj+X7Pfcx9pnvQ/OB+zKcWDtxTmLwHZ8fuFXxhN0JmK16o+uPCMMP0szgBHw1ZAC0Sip5mirgZQ/gQ8PaEg=
+X-Received: by 2002:ac8:7fc5:: with SMTP id b5mr2375326qtk.492.1640096539840;
+ Tue, 21 Dec 2021 06:22:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214011030.20200-1-linmq006@gmail.com>
-X-Url:  http://acmel.wordpress.com
+References: <cover.1640036051.git.andreyknvl@google.com> <f69174e2f6196fb502afa5785612e3a30e6a71c7.1640036051.git.andreyknvl@google.com>
+In-Reply-To: <f69174e2f6196fb502afa5785612e3a30e6a71c7.1640036051.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 21 Dec 2021 15:21:43 +0100
+Message-ID: <CAG_fn=WUEDxwSRP5U+3ybXLfWUtHDb66_GVabNWrxKLSD3sZ7w@mail.gmail.com>
+Subject: Re: [PATCH mm v4 20/39] kasan: add wrappers for vmalloc hooks
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 14, 2021 at 01:10:27AM +0000, Miaoqian Lin escreveu:
-> callers of ids__new() function only do NULL checking for the return
-> value. ids__new() calles hashmap__new(), which may return
-> ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
-> return NULL instead of ERR_PTR(-ENOMEM) to keep
-> consistent.
-
-Please don't use --- as a separator inside the commit message, it breaks
-scripts that expect it to be a separator from the commit log message to
-the diffstat + patch.
-
-Applying after fixing this.
-
-- Arnaldo
- 
-> ---
-> Changes in v3:
-> fix compilation error and add tags.
-> ---
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> Tested-by: German Gomez <german.gomez@arm.com>
-> Reviewed-by: German Gomez <german.gomez@arm.com>
-> ---
->  tools/perf/util/expr.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-> index 1d532b9fed29..f225247acc01 100644
-> --- a/tools/perf/util/expr.c
-> +++ b/tools/perf/util/expr.c
-> @@ -12,6 +12,7 @@
->  #include "expr-bison.h"
->  #include "expr-flex.h"
->  #include "smt.h"
-> +#include <linux/err.h>
->  #include <linux/kernel.h>
->  #include <linux/zalloc.h>
->  #include <ctype.h>
-> @@ -65,7 +66,12 @@ static bool key_equal(const void *key1, const void *key2,
->  
->  struct hashmap *ids__new(void)
->  {
-> -	return hashmap__new(key_hash, key_equal, NULL);
-> +	struct hashmap *hash;
-> +
-> +	hash = hashmap__new(key_hash, key_equal, NULL);
-> +	if (IS_ERR(hash))
-> +		return NULL;
-> +	return hash;
->  }
->  
->  void ids__free(struct hashmap *ids)
-> -- 
-> 2.17.1
-
--- 
-
-- Arnaldo
+On Mon, Dec 20, 2021 at 11:00 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Add wrappers around functions that [un]poison memory for vmalloc
+> allocations. These functions will be used by HW_TAGS KASAN and
+> therefore need to be disabled when kasan=off command line argument
+> is provided.
+>
+> This patch does no functional changes for software KASAN modes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>

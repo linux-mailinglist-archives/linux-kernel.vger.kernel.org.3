@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB83C47BD1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC6347BD23
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236525AbhLUJqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:46:45 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37616 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhLUJqo (ORCPT
+        id S236542AbhLUJrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236538AbhLUJrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:46:44 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 721921F3A6;
-        Tue, 21 Dec 2021 09:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1640080002; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eDV7ojDA9yacpuD6gn5NMBRe3pB+4RNyWvrkYopERAw=;
-        b=dTcPNyHMy+oRw4ZZNWd43dMs3L8hWRFoTNmNp6rLJI6/04ZPa/sP6/Tl4XTh0DW8mrdD8x
-        emio+RvyJMV6/Ti/de/ivBqgVbFExD1Y7W0ihpgeLG54YTJizPyVAPnHeKyytZYBIm6XJ9
-        DKKLmt1H32lauo8V73CchSC6viDE+tg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 51A2CA3B83;
-        Tue, 21 Dec 2021 09:46:42 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 10:46:42 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YcGignpJgdvy9Vnu@dhcp22.suse.cz>
-References: <77BCF61E-224F-435D-8620-670C9E874A9A@vmware.com>
- <YbHCT1r7NXyIvpsS@dhcp22.suse.cz>
- <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
- <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
- <B5B3BCE0-853B-444E-BAD8-823CEE8A3E59@vmware.com>
- <YbIEqflrP/vxIsXZ@dhcp22.suse.cz>
- <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
- <YbMZsczMGpChaWz0@dhcp22.suse.cz>
- <YbyIVPAc2A2sWO8/@dhcp22.suse.cz>
- <FD8165E2-E17E-458E-B4EE-8C4DB21BA3B6@vmware.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <FD8165E2-E17E-458E-B4EE-8C4DB21BA3B6@vmware.com>
+        Tue, 21 Dec 2021 04:47:18 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779C3C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:47:18 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id c4so25689323wrd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:47:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=gnb5xXTow6QOQxr546IJxnYGdzln0ObDHEG7LPQA7DQ=;
+        b=OJWO/HC+qStbfbAkBxRMuF8vTG781NR0zJTJ1GbfZHq+aLDAkXq/vsEWPj2baGlBbF
+         HpMPsXY7jNwroukWwYxuAqETWVn3B7p8e5YIza6TsZrv+iclVNkP5UFoIPtRh7cIUE5i
+         wBl04jGtsEZ3EvkWOFaxoDxV6nYUmv62YF9+YQqrILUxJTAIsKgJneLd1LCa/cLZNtc0
+         iYqt4Vd3utYKdnidIYo+KkdN4inxLBAkp/j2kdRr5KH/H0S+grmrFNMboUlvegMmJ2SJ
+         hiBKb9o37Xez/F1xJzfXZ2d3Pz1vwzLl+mFX+UBigFsRScuTHSHSSLOrtCwkderKhxRy
+         80sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gnb5xXTow6QOQxr546IJxnYGdzln0ObDHEG7LPQA7DQ=;
+        b=IZexTlJLHF4LWoCUxUjsiFHbzEYZ1Zi1KYcr8w9a8xahuXVpHUKXsCxdMHc8M4oTtx
+         JMdxyHjdkc9ub0gYUZHvd6bd3Y30RDwR1Y+BQ3+ZnsL74IZjB9uGIonKQu8Re9IPMoAz
+         kzxJsQUEuVQFwAyxTFekZ2hkkqmqy4PkilC8Dxpw6J716qvwTvPhn4kGotOlv9MgFate
+         FWjE8EKXAgDHB1vvBja5tmOtPJs0zPf2oZ3Hj18dIgvME9Dlhp8QTJkBzTlLHYZbMsDD
+         HeopdilByi79Au8YqL6YWUufWhiukdCm413v7tgsjw9Yz/JjNCpxbaNUtuppYdz/VSE6
+         GSCA==
+X-Gm-Message-State: AOAM531g4RIkwSIHNa9dIdEfdE4wR9Hrrpg8KMuNbdxqsD48hhmVZnvA
+        GGFVylksALwk5tnUhePYze31NEXoRbxuUQ==
+X-Google-Smtp-Source: ABdhPJw3yf3mlNcfvlDfWg4gLjXSP3PFKQ2aK2UvR+VKHmogmW7IIB6ozC7IbRrG+JvtAcsrX9rShA==
+X-Received: by 2002:adf:fb06:: with SMTP id c6mr1871341wrr.625.1640080036969;
+        Tue, 21 Dec 2021 01:47:16 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:d88d:8149:7104:fe7f])
+        by smtp.gmail.com with ESMTPSA id l36sm2094926wms.16.2021.12.21.01.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 01:47:16 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        rickyiu@google.com, odin@uged.al
+Cc:     sachinp@linux.vnet.ibm.com, naresh.kamboju@linaro.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH 0/3] sched/pelt: Don't sync hardly *_sum with *_avg
+Date:   Tue, 21 Dec 2021 10:46:50 +0100
+Message-Id: <20211221094653.10776-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-12-21 05:46:16, Alexey Makhalov wrote:
-> Hi Michal,
-> 
-> The patchset looks good to me. I didn’t find any issues during the testing.
+Rick reported performance regressions in bugzilla because of cpu
+frequency being lower than before:
+    https://bugzilla.kernel.org/show_bug.cgi?id=215045
 
-Thanks a lot. Can I add your Tested-by: tag?
+He bisected the problem to:
+commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
 
-> I have one concern regarding dmesg output. Do you think this messaging is
-> valid if possible node is not yet present?
-> Or is it only the issue for virtual machines?
-> 
->   Node XX uninitialized by the platform. Please report with boot dmesg.
->   Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
+More details are available in commit message of patch 1.
 
-AFAIU the Initmem part of the output is what concerns you, right? Yeah,
-that really is more cryptic than necessary. Does this look any better?
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 34743dcd2d66..7e18a924be7e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -7618,9 +7618,14 @@ static void __init free_area_init_node(int nid)
- 	pgdat->node_start_pfn = start_pfn;
- 	pgdat->per_cpu_nodestats = NULL;
- 
--	pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
--		(u64)start_pfn << PAGE_SHIFT,
--		end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
-+	if (start_pfn != end_pfn) {
-+		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
-+			(u64)start_pfn << PAGE_SHIFT,
-+			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
-+	} else {
-+		pr_info("Initmem setup node %d as memoryless\n", nid);
-+	}
-+
- 	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
- 
- 	alloc_node_mem_map(pgdat);
+This patchset reverts the commit above and adds several checks when
+propagating the changes in the hierarchy to make sure that we still have
+coherent util_avg and util_sum.
+
+Dietmar found a simple way to reproduce the WARN fixed by 
+commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
+by looping on hackbench in several different sched group levels.
+
+This patchset as run on the reproducer with success but it probably needs
+more tests by people who faced the WARN before.
+
+The changes done on util_sum have been also applied to runnable_sum and
+load_sum which faces the same rounding problem although this has not been
+reflected in measurable performance impact.
+
+Vincent Guittot (3):
+  sched/pelt: Don't sync hardly util_sum with uti_avg
+  sched/pelt: Don't sync hardly runnable_sum with runnable_avg
+  sched/pelt: Don't sync hardly runnable_sum with runnable_avg
+
+ kernel/sched/fair.c | 113 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 75 insertions(+), 38 deletions(-)
+
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+

@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C2D47C228
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8303947C22A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238859AbhLUPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbhLUPCq (ORCPT
+        id S238867AbhLUPCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:02:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40964 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234288AbhLUPCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:02:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9131CC061574;
-        Tue, 21 Dec 2021 07:02:46 -0800 (PST)
+        Tue, 21 Dec 2021 10:02:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DFF461639;
-        Tue, 21 Dec 2021 15:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B5BC36AEB;
-        Tue, 21 Dec 2021 15:02:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D60DDB8168A;
+        Tue, 21 Dec 2021 15:02:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 231C4C36AEA;
+        Tue, 21 Dec 2021 15:02:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640098965;
-        bh=PNKSsW6U222Ve/AYah5qTkiRKKA3jh4SZumvMFaxkuA=;
+        s=korg; t=1640098968;
+        bh=1t9qj7e3Z95P0zEiXesN2Vc0H7GLvLh5b4UtFAPW0n4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XsXRLJB0NYW7K779m/cF/pjwQbm9wE8X+JvXfR29QrNqsTiC53T0A1MQLHsRc1Pb1
-         NrVX+JIq9r/yJU1mhIIzYXhBXzG6wPSXqbWXe8fNdfpl14DZzY7qUns8qSjmmCSgz7
-         cOsKUJLc+dg57ue61fJ40bbcYTS0bQymV2qqIX+M=
-Date:   Tue, 21 Dec 2021 15:27:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH 2/2] nvmem: expose NVMEM cells in sysfs
-Message-ID: <YcHkS0iDUhplbqUc@kroah.com>
-References: <YcF1Kizcvgqa9ZT4@kroah.com>
- <d68ba301-7877-a8d8-8700-c601a4996818@gmail.com>
- <YcF4E82M89huIbSD@kroah.com>
- <3cb1d0a4-6e20-f751-6d66-c1487ef31f30@gmail.com>
- <YcF+g0ra5tttXOQF@kroah.com>
- <0527135c-35f5-bc63-edb3-81cb03eb03f6@gmail.com>
- <YcHPGQ0FH0kTzpbq@kroah.com>
- <ab52292c-3065-789b-d5ae-ef24bab5fc90@gmail.com>
- <YcHWVMa6vjz3Gp51@kroah.com>
- <d626c2c2-5071-522f-330f-688254087d74@gmail.com>
+        b=fDAo3jyDmER1ygquBEqbhCacRdr2IvNgM10of2izQhWVJ92P91C1K60Ww9VdK14Kv
+         Ri8retngaNKxJ5iaZDSBLUZiHb/Bf9YKg/VcqeTz2V6/pP2YKzoB+O/lSOWAA0WUka
+         LwLFSG5e1j5KC0Sp4WNHkaELl+y8d1TTmBPiIPzw=
+Date:   Tue, 21 Dec 2021 15:31:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Chen, Mike Ximing" <mike.ximing.chen@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+Subject: Re: [RFC PATCH v12 00/17] dlb: introduce DLB device driver
+Message-ID: <YcHlQH0gXTHh4cjV@kroah.com>
+References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
+ <YcF9rRTVzrbCyOtq@kroah.com>
+ <CO1PR11MB51700037C8A23B19C0DCF5CAD97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d626c2c2-5071-522f-330f-688254087d74@gmail.com>
+In-Reply-To: <CO1PR11MB51700037C8A23B19C0DCF5CAD97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 02:52:05PM +0100, Rafał Miłecki wrote:
-> > How are nvmem devices named?
+On Tue, Dec 21, 2021 at 02:03:38PM +0000, Chen, Mike Ximing wrote:
 > 
-> $ ls /sys/bus/nvmem/devices/
-> brcm-nvram0
-> mtd0
-> mtd1
-> u-boot-envvar0
-
-So no naming scheme at all.
-
-{sigh}
-
-> > > Example:
-> > > $ cat /sys/bus/nvmem/devices/foo/cells/bootcmd
-> > > tftp
-> > > $ cat /sys/bus/nvmem/devices/foo/cells/bootdelay
-> > > 5
-> > > 
-> > > As you can see above NVMEM cells are not known at compilation time.
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Tuesday, December 21, 2021 2:10 AM
+> > To: Chen, Mike Ximing <mike.ximing.chen@intel.com>
+> > Cc: linux-kernel@vger.kernel.org; arnd@arndb.de; Williams, Dan J <dan.j.williams@intel.com>; pierre-
+> > louis.bossart@linux.intel.com; netdev@vger.kernel.org; davem@davemloft.net; kuba@kernel.org
+> > Subject: Re: [RFC PATCH v12 00/17] dlb: introduce DLB device driver
 > > 
-> > Why do you want to expose these in a way that forces the kernel to parse
-> > these key/value pairs?  Why not just do it all in userspace like you can
-> > today?  What forces the kernel to do it and not a perl script?
+> > On Tue, Dec 21, 2021 at 12:50:30AM -0600, Mike Ximing Chen wrote:
+> > > v12:
 > > 
-> > > So I believe the question is: how can I expose cells in sysfs?
+> > <snip>
 > > 
-> > You can do this by dynamically creating the attributes on the fly, but
-> > your show function is going to be rough and it's not going to be simple
-> > to do so.  One example will be the code that creates the
-> > /sys/devices/system/machinecheck/machinecheckXX/bank* files.
-> > 
-> > But I will push back again, why not just do it all in userspace?  What
-> > userspace tool is requiring the kernel to do this work for it?
+> > How is a "RFC" series on version 12?  "RFC" means "I do not think this should be merged, please give me
+> > some comments on how this is all structured" which I think is not the case here.
 > 
-> Environment data contains info that may be required by kernel.
+> Hi Greg,
 > 
-> For example some home routers store two firmwares on flash. Kernel needs
-> to read index of currently booted firmware to make sure MTD subsystem
-> creates partitions correctly.
+> "RFC" here means exactly what you referred to. As you know we have made many changes since your
+> last review of the patch set (which was v10).  At this point we are not sure if we are on the right track in
+> terms of some configfs implementation, and would like some comments from the community. I stated
+> this in the cover letter before the change log: " This submission is still a work in progress.... , a couple of
+> issues that we would like to get help and suggestions from reviewers and community". I presented two
+> issues/questions we are facing, and would like to get comments. 
+> 
+> The code on the other hand are tested and validated on our hardware platforms. I kept the version number
+> in series (using v12, instead v1) so that reviewers can track the old submissions and have a better
+> understanding of the patch set's history.
 
-You are talking about a kernel<->kernel api here, that's not what sysfs
-is for at all.
+"RFC" means "I have no idea if this is correct, I am throwing it out
+there and anyone who also cares about this type of thing, please
+comment".
 
-> Another example: MAC address. Ethernet subsystem supports reading MAC
-> from NVMEM cell.
+A patch that is on "RFC 12" means, "We all have no clue how to do this,
+we give up and hope you all will do it for us."
 
-Again, internal kernel api, nothing sysfs is ever involved in.
+I almost never comment on RFC patch series, except for portions of the
+kernel that I really care about.  For a brand-new subsystem like this,
+that I still do not understand who needs it, that is not the case.
 
-> One could argue those tasks could be handled from userspace but that
-> would get tricky. Sure - we have API for setting MAC address. However
-> other cases (like setting active firmware partition and asking MTD to
-> parse it into subpartitions) would require new user <-> kernel
-> interfaces.
+I'm going to stop reviewing this patch series until you at least follow
+the Intel required rules for sending kernel patches like this out.  To
+not do so would be unfair to your coworkers who _DO_ follow the rules.
 
-Ok, but again, sysfs is for userspace to get access to these values.
-That's what I'm concerned about.  If you want to make an in-kernel api
-for other subsystems to get these key/value pairs, wonderful, that has
-nothing to do with sysfs.
+> > > - The following coding style changes suggested by Dan will be implemented
+> > >   in the next revision
+> > > -- Replace DLB_CSR_RD() and DLB_CSR_WR() with direct ioread32() and
+> > >    iowrite32() call.
+> > > -- Remove bitmap wrappers and use linux bitmap functions directly.
+> > > -- Use trace_event in configfs attribute file update.
+> > 
+> > Why submit a patch series that you know will be changed?  Just do the work, don't ask anyone to review
+> > stuff you know is incorrect, that just wastes our time and ensures that we never want to review it again.
+> >
+> Since this is a RFC, and is not for merging or a full review, we though it was OK to log the pending coding
+> style changes. The patch set was submitted and reviewed by the community before, and there was no
+> complains on using macros like DLB_CSR_RD(), etc, but we think we can replace them for better
+> readability of the code.
 
-So I ask again, why do you want to expose these to userspace through
-sysfs in a new format from what you have today.  Who is going to use
-that information and what is it going to be used for.
+Coding style changes should NEVER be ignored and put off for later.
+To do so means you do not care about the brains of anyone who you are
+wanting to read this code.  We have a coding style because of brains and
+pattern matching, not because we are being mean.
 
-thanks,
+good luck,
 
 greg k-h

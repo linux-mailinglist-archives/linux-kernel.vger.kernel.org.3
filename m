@@ -2,277 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92BE47BA4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C20E47BA52
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhLUGwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:52:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41722 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229721AbhLUGwd (ORCPT
+        id S231327AbhLUGxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229721AbhLUGxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:52:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640069552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2yD916/h8up9wxshnuCprdFf9EbxTiB8RWRE9+mpT/4=;
-        b=ZMJPnLIvf0JMY+TrI91R3tiQKgL5kdCEx9LwAuzSm5LBgFJV6iAC4N1QYCHbPW6uBxQC8v
-        3slsc1EtUtwyP5g+IU8NMzWMPJ/9T30j2+kewJFlT/mQFoRmWNEB251/OSDvuSz/0Ktn18
-        iRTJxjjPU/dcSIuNQ9aQT/QU3r9pQ00=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-bLfoejczN8uKO9MW2Ozr2A-1; Tue, 21 Dec 2021 01:52:29 -0500
-X-MC-Unique: bLfoejczN8uKO9MW2Ozr2A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72A391800D50;
-        Tue, 21 Dec 2021 06:52:27 +0000 (UTC)
-Received: from localhost (ovpn-12-118.pek2.redhat.com [10.72.12.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BD7DA34D5E;
-        Tue, 21 Dec 2021 06:52:22 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 14:52:16 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-        kexec@lists.infradead.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] vmcore: Convert __read_vmcore to use an iov_iter
-Message-ID: <20211221065216.GA7986@MiWiFi-R3L-srv>
-References: <20211213143927.3069508-1-willy@infradead.org>
- <20211213143927.3069508-3-willy@infradead.org>
+        Tue, 21 Dec 2021 01:53:36 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8941C061574;
+        Mon, 20 Dec 2021 22:53:35 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id i31so11876201lfv.10;
+        Mon, 20 Dec 2021 22:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=cO0AZX2AEbC41+edQsP4DX2F8uJPdb36kh+HVoQalZE=;
+        b=B3KHBherlNOq/A8c7BdmSANYuvQHvEZ/rVrJLdVtJQF/2PemkEijvp7hIZLg5lz4s1
+         uVW+Z127CSvN41CDNktbHzj9WesU0vPzdvFMzgq9ewcF4Cp9UWBC3vHeJihvP2hraCNh
+         ElxygrZdovUoH5xId6wzs8TKr5s/LVIsA8IK+jZqmSRj0H4ewS+RxttrrTq1cntjxYGb
+         21Hy6USiB28ZaBj4q2gmXqlQvGJcEUNaj8jmuNJ3ssP8jMWxKC1Lk2jxHWMI/ArCpOdP
+         hoFMHH887tXxUNYMJDVCDW/Iyr91ouxTS61JTtnoD6tSAPvHdXGGHnPC8ZrzG97TPrIA
+         h3jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cO0AZX2AEbC41+edQsP4DX2F8uJPdb36kh+HVoQalZE=;
+        b=31/teKIgDvRDQfsxOPxvSll3OrQaFz8r+8aYVjcEsX688C62GDQtehR0C4yMN4IsPP
+         06l6LeGglY76KFb/BHLXA7P4onoD9EEmv8wZJZCc+M00byD38rkZ+FDGMRbGVG1LbBFG
+         mdpvZWaO/9vPqvie1p/Pji1ZJAhms8w+zpRV4ysxFK34Zwl86+pr/q3+2yg+1uQ2doch
+         7omh5kutgD1NGHvyqMRQnqQTsLqFb2eZaZCMTFCeYKtv15JpA+WNjW7sLqlER0c8ABLd
+         +YEVHNfLGQ9fpR6+Uo2K136bXkr/CGszz7TBiqBzKNC91uelz53ZaGfsI5Ptgq1KyRvv
+         zdig==
+X-Gm-Message-State: AOAM53047/e/65V4b7ODeTybpgOsdJsJxbOm2eX6OC7BaRhCf6KZeFeL
+        jyJQ08Agz5nlw4ZV5unlvz0=
+X-Google-Smtp-Source: ABdhPJxc1OG1bhSK+QmgLyelQDIXejld1MHXT7hCZK1AO2ZX/zL0dpRRhBmZ+DmW62seSjbgzmVlOw==
+X-Received: by 2002:a19:380e:: with SMTP id f14mr1940987lfa.612.1640069614230;
+        Mon, 20 Dec 2021 22:53:34 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id d3sm2661444ljl.93.2021.12.20.22.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 22:53:34 -0800 (PST)
+Message-ID: <3cb1d0a4-6e20-f751-6d66-c1487ef31f30@gmail.com>
+Date:   Tue, 21 Dec 2021 07:53:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213143927.3069508-3-willy@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 2/2] nvmem: expose NVMEM cells in sysfs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211220064730.28806-1-zajec5@gmail.com>
+ <20211220064730.28806-2-zajec5@gmail.com> <YcA4ArALDTjUedrb@kroah.com>
+ <c49f2d6d-7974-5bc7-9bc1-ac265a23c2c0@gmail.com> <YcF1Kizcvgqa9ZT4@kroah.com>
+ <d68ba301-7877-a8d8-8700-c601a4996818@gmail.com> <YcF4E82M89huIbSD@kroah.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <YcF4E82M89huIbSD@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 at 02:39pm, Matthew Wilcox (Oracle) wrote:
-> This gets rid of copy_to() and let us use proc_read_iter() instead
-> of proc_read().
+On 21.12.2021 07:45, Greg Kroah-Hartman wrote:
+> On Tue, Dec 21, 2021 at 07:39:24AM +0100, Rafał Miłecki wrote:
+>> On 21.12.2021 07:33, Greg Kroah-Hartman wrote:
+>>> On Mon, Dec 20, 2021 at 09:39:43PM +0100, Rafał Miłecki wrote:
+>>>> Hi Greg,
+>>>>
+>>>> On 20.12.2021 09:00, Greg Kroah-Hartman wrote:
+>>>>> On Mon, Dec 20, 2021 at 07:47:30AM +0100, Rafał Miłecki wrote:
+>>>>>>     static void nvmem_cell_entry_add(struct nvmem_cell_entry *cell)
+>>>>>>     {
+>>>>>> +	struct device *dev = &cell->nvmem->dev;
+>>>>>> +	int err;
+>>>>>> +
+>>>>>>     	mutex_lock(&nvmem_mutex);
+>>>>>>     	list_add_tail(&cell->node, &cell->nvmem->cells);
+>>>>>>     	mutex_unlock(&nvmem_mutex);
+>>>>>> +
+>>>>>> +	sysfs_attr_init(&cell->battr.attr);
+>>>>>> +	cell->battr.attr.name = cell->name;
+>>>>>> +	cell->battr.attr.mode = 0400;
+>>>>>> +	cell->battr.read = nvmem_cell_attr_read;
+>>>>>> +	err = sysfs_add_bin_file_to_group(&dev->kobj, &cell->battr,
+>>>>>> +					  nvmem_cells_group.name);
+>>>>>
+>>>>> Why not just use the is_bin_visible attribute instead to determine if
+>>>>> the attribute should be shown or not instead of having to add it
+>>>>> after-the-fact which will race with userspace and loose?
+>>>>
+>>>> I'm sorry I really don't see how you suggest to get it done.
+>>>>
+>>>> I can use .is_bin_visible() callback indeed to respect nvmem->root_only.
+>>>
+>>> Great.
+>>>
+>>>> I don't understand addig-after-the-fact part. How is .is_bin_visible()
+>>>> related to adding attributes for newly created cells?
+>>>
+>>> You are adding a sysfs attribute to a device that is already registered
+>>> in the driver core, and so the creation of that attribute is never seen
+>>> by userspace.  The attribute needs to be attached to the device _BEFORE_
+>>> it is registered.
+>>>
+>>> Also, huge hint, if a driver has to call as sysfs_*() call, something is
+>>> wrong.
+>>>
+>>>> Do you mean I can
+>>>> avoid calling sysfs_add_bin_file_to_group()?
+>>>
+>>> Yes.
+>>>
+>>>> Do you recall any existing example of such solution?
+>>>
+>>> Loads.
+>>>
+>>> Just add this attribute group to your driver as a default attribute
+>>> group and the driver core will create it for you if needed.
+>>>
+>>> Or if you always need it, no need to mess sith is_bin_visible() at all,
+>>> I can't really understand what you are trying to do here at all.
+>>
+>> Thanks a lot! In nvmem_register() first there is a call to the
+>> device_register() and only later cells get added. I suppose I just have
+>> to rework nvmem_register() order so that:
+>> 1. Cells are collected earlier. For each cell I allocate group attribute
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> No, add all of the attributes to the device at the beginning before you
+> register it, there's no need to allocate anything.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+If you mean static structures I can't do that, because cells almost
+never are static. They are not known in advance. nvmem allows cells to
+be:
+1. Specified in OF
+2. Submitted as list while registering a NVMEM device
 
-> ---
->  fs/proc/vmcore.c | 81 +++++++++++++++++-------------------------------
->  1 file changed, 29 insertions(+), 52 deletions(-)
+So every cells gets its own structure allocated dynamically. My plan is
+to put bin_attribute in that struct and then create a group collecting
+all those cells.
+
+
+>> 2. device_register() gets called
 > 
-> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> index 958cad6476e6..7b25f568d20d 100644
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -252,22 +252,8 @@ ssize_t __weak copy_oldmem_page_encrypted(struct iov_iter *iter,
->  	return copy_oldmem_page(iter, pfn, csize, offset);
->  }
->  
-> -/*
-> - * Copy to either kernel or user space
-> - */
-> -static int copy_to(void *target, void *src, size_t size, int userbuf)
-> -{
-> -	if (userbuf) {
-> -		if (copy_to_user((char __user *) target, src, size))
-> -			return -EFAULT;
-> -	} else {
-> -		memcpy(target, src, size);
-> -	}
-> -	return 0;
-> -}
-> -
->  #ifdef CONFIG_PROC_VMCORE_DEVICE_DUMP
-> -static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
-> +static int vmcoredd_copy_dumps(struct iov_iter *iter, u64 start, size_t size)
->  {
->  	struct vmcoredd_node *dump;
->  	u64 offset = 0;
-> @@ -280,14 +266,13 @@ static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
->  		if (start < offset + dump->size) {
->  			tsz = min(offset + (u64)dump->size - start, (u64)size);
->  			buf = dump->buf + start - offset;
-> -			if (copy_to(dst, buf, tsz, userbuf)) {
-> +			if (copy_to_iter(buf, tsz, iter) < tsz) {
->  				ret = -EFAULT;
->  				goto out_unlock;
->  			}
->  
->  			size -= tsz;
->  			start += tsz;
-> -			dst += tsz;
->  
->  			/* Leave now if buffer filled already */
->  			if (!size)
-> @@ -343,33 +328,28 @@ static int vmcoredd_mmap_dumps(struct vm_area_struct *vma, unsigned long dst,
->  /* Read from the ELF header and then the crash dump. On error, negative value is
->   * returned otherwise number of bytes read are returned.
->   */
-> -static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
-> -			     int userbuf)
-> +static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
->  {
->  	ssize_t acc = 0, tmp;
->  	size_t tsz;
->  	u64 start;
->  	struct vmcore *m = NULL;
->  
-> -	if (buflen == 0 || *fpos >= vmcore_size)
-> +	if (iter->count == 0 || *fpos >= vmcore_size)
->  		return 0;
->  
-> -	/* trim buflen to not go beyond EOF */
-> -	if (buflen > vmcore_size - *fpos)
-> -		buflen = vmcore_size - *fpos;
-> +	iov_iter_truncate(iter, vmcore_size - *fpos);
->  
->  	/* Read ELF core header */
->  	if (*fpos < elfcorebuf_sz) {
-> -		tsz = min(elfcorebuf_sz - (size_t)*fpos, buflen);
-> -		if (copy_to(buffer, elfcorebuf + *fpos, tsz, userbuf))
-> +		tsz = min(elfcorebuf_sz - (size_t)*fpos, iter->count);
-> +		if (copy_to_iter(elfcorebuf + *fpos, tsz, iter) < tsz)
->  			return -EFAULT;
-> -		buflen -= tsz;
->  		*fpos += tsz;
-> -		buffer += tsz;
->  		acc += tsz;
->  
->  		/* leave now if filled buffer already */
-> -		if (buflen == 0)
-> +		if (iter->count == 0)
->  			return acc;
->  	}
->  
-> @@ -390,35 +370,31 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
->  		/* Read device dumps */
->  		if (*fpos < elfcorebuf_sz + vmcoredd_orig_sz) {
->  			tsz = min(elfcorebuf_sz + vmcoredd_orig_sz -
-> -				  (size_t)*fpos, buflen);
-> +				  (size_t)*fpos, iter->count);
->  			start = *fpos - elfcorebuf_sz;
-> -			if (vmcoredd_copy_dumps(buffer, start, tsz, userbuf))
-> +			if (vmcoredd_copy_dumps(iter, start, tsz))
->  				return -EFAULT;
->  
-> -			buflen -= tsz;
->  			*fpos += tsz;
-> -			buffer += tsz;
->  			acc += tsz;
->  
->  			/* leave now if filled buffer already */
-> -			if (!buflen)
-> +			if (!iter->count)
->  				return acc;
->  		}
->  #endif /* CONFIG_PROC_VMCORE_DEVICE_DUMP */
->  
->  		/* Read remaining elf notes */
-> -		tsz = min(elfcorebuf_sz + elfnotes_sz - (size_t)*fpos, buflen);
-> +		tsz = min(elfcorebuf_sz + elfnotes_sz - (size_t)*fpos, iter->count);
->  		kaddr = elfnotes_buf + *fpos - elfcorebuf_sz - vmcoredd_orig_sz;
-> -		if (copy_to(buffer, kaddr, tsz, userbuf))
-> +		if (copy_to_iter(kaddr, tsz, iter) < tsz)
->  			return -EFAULT;
->  
-> -		buflen -= tsz;
->  		*fpos += tsz;
-> -		buffer += tsz;
->  		acc += tsz;
->  
->  		/* leave now if filled buffer already */
-> -		if (buflen == 0)
-> +		if (iter->count == 0)
->  			return acc;
->  	}
->  
-> @@ -426,19 +402,17 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
->  		if (*fpos < m->offset + m->size) {
->  			tsz = (size_t)min_t(unsigned long long,
->  					    m->offset + m->size - *fpos,
-> -					    buflen);
-> +					    iter->count);
->  			start = m->paddr + *fpos - m->offset;
-> -			tmp = read_from_oldmem(buffer, tsz, &start,
-> -					       userbuf, cc_platform_has(CC_ATTR_MEM_ENCRYPT));
-> +			tmp = read_from_oldmem_iter(iter, tsz, &start,
-> +					cc_platform_has(CC_ATTR_MEM_ENCRYPT));
->  			if (tmp < 0)
->  				return tmp;
-> -			buflen -= tsz;
->  			*fpos += tsz;
-> -			buffer += tsz;
->  			acc += tsz;
->  
->  			/* leave now if filled buffer already */
-> -			if (buflen == 0)
-> +			if (iter->count == 0)
->  				return acc;
->  		}
->  	}
-> @@ -446,15 +420,14 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
->  	return acc;
->  }
->  
-> -static ssize_t read_vmcore(struct file *file, char __user *buffer,
-> -			   size_t buflen, loff_t *fpos)
-> +static ssize_t read_vmcore(struct kiocb *iocb, struct iov_iter *iter)
->  {
-> -	return __read_vmcore((__force char *) buffer, buflen, fpos, 1);
-> +	return __read_vmcore(iter, &iocb->ki_pos);
->  }
->  
->  /*
->   * The vmcore fault handler uses the page cache and fills data using the
-> - * standard __vmcore_read() function.
-> + * standard __read_vmcore() function.
->   *
->   * On s390 the fault handler is used for memory regions that can't be mapped
->   * directly with remap_pfn_range().
-> @@ -464,9 +437,10 @@ static vm_fault_t mmap_vmcore_fault(struct vm_fault *vmf)
->  #ifdef CONFIG_S390
->  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
->  	pgoff_t index = vmf->pgoff;
-> +	struct iov_iter iter;
-> +	struct kvec kvec;
->  	struct page *page;
->  	loff_t offset;
-> -	char *buf;
->  	int rc;
->  
->  	page = find_or_create_page(mapping, index, GFP_KERNEL);
-> @@ -474,8 +448,11 @@ static vm_fault_t mmap_vmcore_fault(struct vm_fault *vmf)
->  		return VM_FAULT_OOM;
->  	if (!PageUptodate(page)) {
->  		offset = (loff_t) index << PAGE_SHIFT;
-> -		buf = __va((page_to_pfn(page) << PAGE_SHIFT));
-> -		rc = __read_vmcore(buf, PAGE_SIZE, &offset, 0);
-> +		kvec.iov_base = page_address(page);
-> +		kvec.iov_len = PAGE_SIZE;
-> +		iov_iter_kvec(&iter, READ, &kvec, 1, PAGE_SIZE);
-> +
-> +		rc = __read_vmcore(&iter, &offset);
->  		if (rc < 0) {
->  			unlock_page(page);
->  			put_page(page);
-> @@ -725,7 +702,7 @@ static int mmap_vmcore(struct file *file, struct vm_area_struct *vma)
->  
->  static const struct proc_ops vmcore_proc_ops = {
->  	.proc_open	= open_vmcore,
-> -	.proc_read	= read_vmcore,
-> +	.proc_read_iter	= read_vmcore,
->  	.proc_lseek	= default_llseek,
->  	.proc_mmap	= mmap_vmcore,
->  };
-> -- 
-> 2.33.0
-> 
+> Yes.
 

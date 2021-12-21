@@ -2,172 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F4E47B8D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB0847B8CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhLUDHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 22:07:47 -0500
-Received: from mx0a-00622301.pphosted.com ([205.220.163.205]:15836 "EHLO
-        mx0a-00622301.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229502AbhLUDHq (ORCPT
+        id S229645AbhLUDET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 22:04:19 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:54111 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhLUDER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 22:07:46 -0500
-X-Greylist: delayed 460 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Dec 2021 22:07:46 EST
-Received: from pps.filterd (m0241924.ppops.net [127.0.0.1])
-        by mx0a-00622301.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL2si7A028353;
-        Mon, 20 Dec 2021 18:59:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ambarella.com; h=from : to :
- subject : date : message-id : content-transfer-encoding : mime-version :
- content-type; s=com20210415pp;
- bh=Q9kgE7vuxKRIJtFK3m4RAdSJ5PDTufKcnsw7wpLcyaQ=;
- b=E1xBSPTq7RmCKSa8InOXD1rCHGJ4gybB2K7Nce+LDGd1+5w39tssi/57D+qP0j232Q30
- X51FYRV//h5eZLiNdTRuBWZFE1iaUu6+wzIENTQQy7BW88tWJZtMfCiHUwsopysTlncZ
- r0goDXFQZtCKeBgTlHuz10a0we/XcIQN0L0n6SZ5IinWf8x0RZfQ4kk2iYBcVeTGWkCn
- hhigECOS1905xeOTBWDuSYRvpaGGljYZQCvRRJeW/ak3WUH5KZ3ma22sasZ4hIatiaEF
- hGksDM3JOoruJ241qbY10dtmVPxcJnEqJ/RuaXaH5b96CIkr4XjQz5cNckEhQCFMB0b3 Ig== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
-        by mx0a-00622301.pphosted.com (PPS) with ESMTPS id 3d2hx10egs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 18:59:58 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y85WK98BFTC1p21utsL4yeI8rkWmnNFduy+k1JBEH+EbnxXKbpanDwQwM9tL6k+1iLicsUkRdtZH8jJw5mJYBfxIR1cwLuF/+nIvIzhn/HM++O25rLVo4Zp875gNmz4XjZuDsjoKnOKvpuVIdVWim1++SaE5ONDtIMUOnmOF++Y8rebLYt18ePqn3XBUAJnjg9n8/lC8QNlbzKOJ1m0iamQefOVAZ0eiDetSIxJufx1wMXCELiKs5S6x5OuzpBvceJnn7WEC4LoAP86hoEslxwfSciM4y+Y7pJn91jpV1CDYK05FbPv5XRvgLxMI0q/FGV0FBkZ8rYjqxxrZhph/dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aPCO75iWv5AI9n0xqP/n9G3B39O0G0RAMKGUelSdHJA=;
- b=ZbsOGNF0ir31/HsIM0iQfi4/wgtGxQlnmX9+c56bx3JI4CwJ11XVpihi8Si2LUfj5RmwrbT9neilYfzzwrZwPSfplgd6JT6nFji56SNaTJrZ64YFOvOBMRSYkUtJOUCRyi/j3BGBQTf2+K7WSC+JUNktOk+6+h0bnjzSM86pKd0rg6uAXS/bqaiBr9E2erCPAeiaYkbm8psIp/G03zqhU4ylCCXrITgQ0MVTbQU+UvbEqhNNZ1CybUOvnR9NJeoMUGrjNhyPkUCgTcjSbCoPm5EgwUlpIHlXL8T6zhMQfw7GjcOD4O+vEp4NeGfy75wG6ve6rDc6AH4Swc/cKLNcmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ambarella.com; dmarc=pass action=none
- header.from=ambarella.com; dkim=pass header.d=ambarella.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ambarella.onmicrosoft.com; s=selector1-ambarella-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aPCO75iWv5AI9n0xqP/n9G3B39O0G0RAMKGUelSdHJA=;
- b=hj+FVgaUnfK5BVzn0+ToXsYEF0qewT1rud+2g0eKl8GLp4+9jehAG22d4VdZv0s8tj/gJhC/U6MIHOA10WOr7MThx27O7fptMO0hA21mhzQpZdhW7pq9f2GIRy8PoBDguoqNfDVf/JSd8zC1q7E8esqXDlzrON6hwvqvNY1agsg=
-Received: from CH2PR19MB4024.namprd19.prod.outlook.com (2603:10b6:610:92::22)
- by CH2PR19MB3909.namprd19.prod.outlook.com (2603:10b6:610:9f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Tue, 21 Dec
- 2021 02:59:56 +0000
-Received: from CH2PR19MB4024.namprd19.prod.outlook.com
- ([fe80::3c65:8b89:ca42:d828]) by CH2PR19MB4024.namprd19.prod.outlook.com
- ([fe80::3c65:8b89:ca42:d828%6]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
- 02:59:56 +0000
-From:   Li Chen <lchen@ambarella.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>
-Subject: [PATCH] PCI: endpoint: set_msi: return -EINVAL when interrupts num is
- smaller than 1
-Thread-Topic: [PATCH] PCI: endpoint: set_msi: return -EINVAL when interrupts
- num is smaller than 1
-Thread-Index: Adf2FiFmswPDWB/WQWCvxXrOLCbdxA==
-Date:   Tue, 21 Dec 2021 02:59:56 +0000
-Message-ID: <CH2PR19MB402491B9E503694DBCAC6005A07C9@CH2PR19MB4024.namprd19.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1e161b2d-7518-4493-f644-08d9c42df835
-x-ms-traffictypediagnostic: CH2PR19MB3909:EE_
-x-microsoft-antispam-prvs: <CH2PR19MB3909590E68545041FE50E3A4A07C9@CH2PR19MB3909.namprd19.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:331;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dWg9e1q/Hj/rWd+Of29vUcbAqtR7MuLbCru4xNLfK1iVVfEPHIuE1WBxZIHwv8yWj0DP1E3qnDxGg/RTjCbucQJaXJCKDTa3wk3Xw/HWVHfv3tYmhSYXpLkS1cwHIgH60/XqaLQHmYGQupveIVSwdRTLVDcrLo52Yh9jGhNiw9Uc521KY6RvGxqUqMJuYiatISVkbdAJF5/UI7bT0HZ2mIEd2SCPxyjTxKUtRG3B3k055J1g3yJnUouUdM3yBw+iKopO34nSMXPjIHhdwIuiqcSBQV6NckWSitlfVr9OIpYvOzTUkGgjfT/rwvxrsi1rX6hUNSApwjmbyBOo/B1NAgzXUwtOM5fjHFdfefztko//7yLfR1GCXyCfmnKsBnm05Zr4sVe9h0jv3kl1Iqz2v5UPkoy/sJRTyJvPwmeuxRo3fiL/7uSnykoXAdAzxWFZUAKvVQ+CZjs99iJs1lZ728Nkk8YrmnS49N9RDgcZQHyUp5wochRntgp3LgsahBnIVpNS+Vhe9YlupiZNyPFKOIKa9vTuw5ns4logkhUFXdUmnYZCEhUauJTJxvTP69sRAhS2O15TMr7tOMdv+5X0FrqcZyuF/lqJutdiH/XpIbRiKkOoPEX7SGQTU6H+fXzUtLl2KVzkUkNT3fqXpgzBzw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR19MB4024.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(88996005)(83380400001)(66556008)(64756008)(5660300002)(66946007)(86362001)(55016003)(71200400001)(66446008)(52536014)(4744005)(66476007)(8676002)(9686003)(33656002)(508600001)(7696005)(8936002)(6506007)(316002)(38100700002)(122000001)(110136005)(2906002)(26005)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?jX4FuxxvCcmV3Ilm05djkB5EHwvy6kvBYeqyLLyqy4tQrp5ormnvadaqg2?=
- =?iso-8859-2?Q?gYtgJOlnDFMh6ynmaQ0dTn5DdvAmWElCnWhwaR3FkOYsAbJxEKDxYFNnH/?=
- =?iso-8859-2?Q?S2FKo4VvLUhoFb15MjF9EIMEh8AltnXXtZkYUCuo3G8lrBLvGdMNHrqZZP?=
- =?iso-8859-2?Q?o9UMk29PaTaqnypmQa/WZhhFnEVyenCy2i+m8kGlNfoT3E+W/jmxpYHNG2?=
- =?iso-8859-2?Q?ttSqpWptNPB1i50qXqH+Vd5wtsIL8zFMXYtoB9OG4t22vOLQYFS/NfNpox?=
- =?iso-8859-2?Q?ppQV2fwJHHixxwSrXG8o+9N5/QaEBUOtRG0L3AqVimS1CWWchxGSOXpKJa?=
- =?iso-8859-2?Q?Y53Xdx5lqvgSnEM0aVqOORGNJsJzzI8DU23N7Gap6mBAotQvntAqxD92L7?=
- =?iso-8859-2?Q?PlplGaZHToXULmlN2FCiWvR817heIFiYyx9U6a8jZ6K1kEUR1iH90Lcq1T?=
- =?iso-8859-2?Q?ud/TIGv3CB/4lDkJ5EKYj0IC3vB6KIL/vGWVEg2W35fClKaqLheHxIi7tB?=
- =?iso-8859-2?Q?IimkcSZJCi5c/HX3E8EsZGbNNluxUFkMe2TyAP5mZGR4m23WGmGCFaZcr9?=
- =?iso-8859-2?Q?5Je3BnhH92w76mz07/ud1TmYuXImY6MNUC7T4eetQGk7GK5lyK/FyTUqtv?=
- =?iso-8859-2?Q?fsQdVEzGxeSSBKYpYm63+v+LxZ7ZsAyGaRjgUdSuqSAOFlE6qK0V8kwSKh?=
- =?iso-8859-2?Q?dtxqVrpDcSDqI/4GupVuwq/DllpWHKvNywxuRmwXo8Qag7ptqsdyEW9t8+?=
- =?iso-8859-2?Q?SpODsSInAVUfp1B+sjne5qFpBBIVMVOh8FREVhqk6e+1/znaA9LLQWVqWC?=
- =?iso-8859-2?Q?79yayO7kYzbCNKzlEzq6OweL3zaOHL4/E6f4qpE49CEDUuW1/lQ7uj4IAA?=
- =?iso-8859-2?Q?vHsw7NPC+ixRRRwFTo4TRCNdK37ixSVgOiJZWYqMncgyjQiU86ZO9zYj4X?=
- =?iso-8859-2?Q?UnckcrJV8WQpK4B0Fly2PyEI/kGAZTMVtd8+2VUlcytmR2gJqpL5lrzTe8?=
- =?iso-8859-2?Q?bXmC7LdGOfkJZb3nV4ZUYaLQN15V+sRtAn3nvbH7ntp19E5ZEETyu9vjE8?=
- =?iso-8859-2?Q?RZPtwWGsu7ntI53GKP7ejXcEn1bcHRz9QD1zFsfE9eRnWUvQiIZHTCsc06?=
- =?iso-8859-2?Q?ij8g0um/JMeP+KYn5k4O0d4Jz93gel+WHbD5neFJpACGZAXukxDZvSGVyv?=
- =?iso-8859-2?Q?AdKxxDhI+OLu9OppdH9fPLAE2/tM8IMduDtOCoqGDsCENNt1rsPlh5lN6G?=
- =?iso-8859-2?Q?Y3NT8WWTixdksykMEBeF6FsoahZdrC6jmTG+gfVN4r4tLPl0qcUwMUVdQB?=
- =?iso-8859-2?Q?nZDzUoI/09eVoNGp4QlipUipRmtqFu7qB9Ae/e+X5y4iu9WIBsOVpmoYOQ?=
- =?iso-8859-2?Q?i+iFK6VJQSn7xkqu5NMxKIXOsR43QEkCEdOMPxAQzsX5rKQIjifGC1qYbJ?=
- =?iso-8859-2?Q?hAzwFRSB2K8hwjbDd9dKOxSvBgnHtzTD1QVJm8nHq+oUSQBKtlKjX/qXk8?=
- =?iso-8859-2?Q?Q3zlcGDbCZ/E3QPvokJIpvp3e8ECktFE0ecCK7QNc+ZtJnIqpLRETmHwih?=
- =?iso-8859-2?Q?nN4wC9zMEbkvDbXYQKBBF84c9d99zbyuYUs9VJiBs0dg5rZn49bTsmKTls?=
- =?iso-8859-2?Q?t8jJACSDv/DaCvyekGO8j7RgGqp+Rn7b/Jh6XWT692dtI/4q9AeW4wZe9m?=
- =?iso-8859-2?Q?hPAxht0s+4P1cnBtUbQ=3D?=
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Dec 2021 22:04:17 -0500
+Received: by mail-io1-f69.google.com with SMTP id a12-20020a056602148c00b005e7052734adso8301711iow.20
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:04:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=bPntceHNT95Aah71cxJ2P7hO9EuIXRWFNPHwhOu7JVw=;
+        b=SGtQrJ9ZHDC1G+IfbpA48TuUqUD506ukAeDU07LYuKIQqVt3Q3huQaFC6/UtsiX4bx
+         IcWgH8i0NRqvtl2CZsgqTfJqKqAynZd3t5RoPffDVfYVvhWExmFV8SRfakjVTZsLSjjF
+         auKy1M+rLrAGs+5UPEkH3DTGihjFM6u2x+rcmgbOCKqDtRIffVoBHWf2RfnR0ZbtnFqo
+         MBfhiNJwIvs+5HmwEAKw/gZ8ioqlQtm9faeDdhMSDZH1PPCaPhjeJg8/hj8iBgkrd80v
+         E3RtWlnUzARQ7EN12aoOqbak2aL+4UuGruEKUahez9jPV+DdiVw557+YJ9DLY7UQbiTb
+         XuuQ==
+X-Gm-Message-State: AOAM533W6ZYgEU0RGmaj4uJ39V1m56kGqAzz8NFwh9GMGF/D7gptEi1o
+        yUut58htRvqDw+OSxleUavZibnrSh9QRdjQAxwDPD6c2DiBO
+X-Google-Smtp-Source: ABdhPJzvSPjqAafFCwwsXf55qpKdQLKypYl2Z1FLUmJ4ebvkUWDhxD+C4HTlXIUquvxEbSLbPrY9QTaHrsc+thc48wro0+jDG/8u
 MIME-Version: 1.0
-X-OriginatorOrg: ambarella.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR19MB4024.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e161b2d-7518-4493-f644-08d9c42df835
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 02:59:56.4619
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3ccd3c8d-5f7c-4eb4-ae6f-32d8c106402c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uDGrV0C69S8Ri1XmM79l7wu/fM7nDcrfezMl6Kg/kW3T7pqVOocgITDRCuoo7EoFWP2OMdilLrw8mmj3zoEdIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR19MB3909
-X-Proofpoint-GUID: v6aGGrZw4PwudfGdi52h8YnsdEPZw_MI
-X-Proofpoint-ORIG-GUID: v6aGGrZw4PwudfGdi52h8YnsdEPZw_MI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_01,2021-12-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 phishscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 mlxlogscore=660 adultscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112210011
-Content-Type: text/plain; charset="iso-8859-2"
+X-Received: by 2002:a05:6602:134a:: with SMTP id i10mr633428iov.147.1640055857152;
+ Mon, 20 Dec 2021 19:04:17 -0800 (PST)
+Date:   Mon, 20 Dec 2021 19:04:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c70eef05d39f42a5@google.com>
+Subject: [syzbot] general protection fault in set_task_ioprio
+From:   syzbot <syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no sense to go further if we have no interrupts.
+Hello,
 
-Signed-off-by: Li Chen <lchen@ambarella.com>
+syzbot found the following issue on:
+
+HEAD commit:    07f8c60fe60f Add linux-next specific files for 20211220
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1355d295b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2060504830b9124a
+dashboard link: https://syzkaller.appspot.com/bug?extid=8836466a79f4175961b0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12058fcbb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17141adbb00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 1 PID: 3602 Comm: syz-executor484 Not tainted 5.16.0-rc5-next-20211220-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:set_task_ioprio+0x2de/0x620 block/blk-ioc.c:289 block/blk-ioc.c:289
+Code: 4c 8b ab 18 12 00 00 4d 85 ed 0f 84 9b 01 00 00 e8 d7 1e a4 fd 49 8d 7d 0c 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ef
+RSP: 0018:ffffc90001b1fe90 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: ffff88801f888000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff83d3f779 RDI: 000000000000000c
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffaf957
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88801f888948 R15: ffff88801f889218
+FS:  0000555556a34300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2155cab01d CR3: 00000000149ed000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __do_sys_ioprio_set+0x586/0xae0 block/ioprio.c:124 block/ioprio.c:124
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f2155c67cf9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc6f0f50c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000fb
+RAX: ffffffffffffffda RBX: 000000000000cbcf RCX: 00007f2155c67cf9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffc6f0f5268 R09: 00007ffc6f0f5268
+R10: ffffffffffffffff R11: 0000000000000246 R12: 00007ffc6f0f50dc
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:set_task_ioprio+0x2de/0x620 block/blk-ioc.c:289 block/blk-ioc.c:289
+Code: 4c 8b ab 18 12 00 00 4d 85 ed 0f 84 9b 01 00 00 e8 d7 1e a4 fd 49 8d 7d 0c 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ef
+RSP: 0018:ffffc90001b1fe90 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: ffff88801f888000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff83d3f779 RDI: 000000000000000c
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffaf957
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88801f888948 R15: ffff88801f889218
+FS:  0000555556a34300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2155cab01d CR3: 00000000149ed000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	4c 8b ab 18 12 00 00 	mov    0x1218(%rbx),%r13
+   7:	4d 85 ed             	test   %r13,%r13
+   a:	0f 84 9b 01 00 00    	je     0x1ab
+  10:	e8 d7 1e a4 fd       	callq  0xfda41eec
+  15:	49 8d 7d 0c          	lea    0xc(%r13),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 01             	add    $0x1,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85 ef                	test   %ebp,%edi
+----------------
+Code disassembly (best guess):
+   0:	4c 8b ab 18 12 00 00 	mov    0x1218(%rbx),%r13
+   7:	4d 85 ed             	test   %r13,%r13
+   a:	0f 84 9b 01 00 00    	je     0x1ab
+  10:	e8 d7 1e a4 fd       	callq  0xfda41eec
+  15:	49 8d 7d 0c          	lea    0xc(%r13),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 01             	add    $0x1,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85 ef                	test   %ebp,%edi
+
+
 ---
- drivers/pci/endpoint/pci-epc-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci=
--epc-core.c
-index 38621558d3975..3bc9273d0a082 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -334,7 +334,7 @@ int pci_epc_set_msi(struct pci_epc *epc, u8 func_no, u8=
- vfunc_no, u8 interrupts)
- 	u8 encode_int;
-=20
- 	if (IS_ERR_OR_NULL(epc) || func_no >=3D epc->max_functions ||
--	    interrupts > 32)
-+	    interrupts < 1 || interrupts > 32)
- 		return -EINVAL;
-=20
- 	if (vfunc_no > 0 && (!epc->max_vfs || vfunc_no > epc->max_vfs[func_no]))
---=20
-2.34.1
-
-**********************************************************************
-This email and attachments contain Ambarella Proprietary and/or Confidentia=
-l Information and is intended solely for the use of the individual(s) to wh=
-om it is addressed. Any unauthorized review, use, disclosure, distribute, c=
-opy, or print is prohibited. If you are not an intended recipient, please c=
-ontact the sender by reply email and destroy all copies of the original mes=
-sage. Thank you.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

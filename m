@@ -2,57 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E7547BCC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BF547BCCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbhLUJUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:20:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42588 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbhLUJUM (ORCPT
+        id S236330AbhLUJXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232251AbhLUJXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:20:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51B02B8122D;
-        Tue, 21 Dec 2021 09:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C04C36AE2;
-        Tue, 21 Dec 2021 09:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640078410;
-        bh=P1yCCErD4lYWu0EijWCZ4FDcQAXFbefAwLxWZZoGCyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hs9Q/TkC/LQxeWIhrP+QGH0wT//ifVTvZ8zutDvv/3S0EFcP3/b91tttMUGsxDwgF
-         2sg0bnBwJfURz6LbptKTJX7t+jbuZaOpHg52F4OKK9vc2QHpWpCRn98/qqN7mZw0+b
-         5ab3vh9tZCWkCwKNk0ADZG9pZj1dhmT4td6xi1eU=
-Date:   Tue, 21 Dec 2021 10:20:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH V4 2/6] driver core: auxiliary bus: Add driver data
- helpers
-Message-ID: <YcGcR7dLDD7avsnn@kroah.com>
-References: <20211216023146.2361174-1-david.e.box@linux.intel.com>
- <20211216023146.2361174-3-david.e.box@linux.intel.com>
+        Tue, 21 Dec 2021 04:23:40 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CFC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:23:39 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id m186so11960207qkb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xzwisqb1Sy2od8aWgP/bz4IaYgTJ8bQBQSdhNAj9vNM=;
+        b=VyLPgc+N3ejMZB5IuZpuMhrPHt40i6UgHuVzvVUlYzns/vLh7SllYTfzOm95Ydu08d
+         bx7Ijb4zr3t69OAIEg9m0V6YlE33teplPktDpkPw0gG63SHbfd16CU+wVWw+Oef1tcku
+         P/vcm1/Ru/jSA5g0tcErfFLo7NpZdN66pUoNO53kYQf3CiY4BMfHPfNhbFjVvTFOKqWp
+         iaGgdXRexxwOQKTIM3+EhOj9fgBa4giaI8mSMwEdsb5MTMgEUJDkb8OulUL+3ClUD/Ub
+         AZVUBHrqVyBimX6Rl6yaNdzGUI1dm7GgJgbXeDKaxqHBSAY0bTYqzWr9wU6738yOmXy5
+         IWDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xzwisqb1Sy2od8aWgP/bz4IaYgTJ8bQBQSdhNAj9vNM=;
+        b=RI6XN4VweUkMwjxF3XQ+FyOAdyyUt5rYVnZMoeGVkpvnSoNgvXxgRMxdoXfhEcIpC8
+         IePNudxWX2cGT+NVtLw7UXXkS2PB+qx4Krjxu4dUN5O/TH3YJrBWxnPaI6oP9n5P3LeU
+         l+7TKAkN9X7UszwVMnCtxkXyk1ElsDQJy2Nu9Q4w1mw6fwTK272NhoA7Mxk2KBop8W1N
+         9QiivtdArpY1wHn4rZJmPETUMXsQiAMrcpr2FRz/hJOhNwYE59pb+bEokyUPvgQHNgad
+         ixLWVnlhBcRQTOxg5JQv4TKLUBaLdciL8zAxlmLpnia+RrRV3TslU7KCXL2R28H7GSY6
+         BmbQ==
+X-Gm-Message-State: AOAM532FAVqPQs4sN6Ry+xS6Qw7G3kYjWcDthSWKdjs50HXqJRjYTsvH
+        vYtj3fjdAfKD11wW2B4H9C69AzPohCFVVTALUgcx8w==
+X-Google-Smtp-Source: ABdhPJwUQwtUA7ETB7iiXK+EgRxi4jixcxQLCwfTNYX/jDe2+vsavoXHf7aXOqIotNdigbbLBx3ZmfbySHD7LauTBvM=
+X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr1353598qkp.610.1640078618621;
+ Tue, 21 Dec 2021 01:23:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216023146.2361174-3-david.e.box@linux.intel.com>
+References: <cover.1640036051.git.andreyknvl@google.com> <b929882627e19a4a2d02c13788bd2d343f3e5573.1640036051.git.andreyknvl@google.com>
+In-Reply-To: <b929882627e19a4a2d02c13788bd2d343f3e5573.1640036051.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 21 Dec 2021 10:23:02 +0100
+Message-ID: <CAG_fn=W_6j08zxpgWeCX_uxN+Jqi93XYtQ_GY-Gjs_Ru2Hb2aQ@mail.gmail.com>
+Subject: Re: [PATCH mm v4 16/39] kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:31:42PM -0800, David E. Box wrote:
-> Adds get/set driver data helpers for auxiliary devices.
-> 
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> Reviewed-by: Mark Gross <markgross@kernel.org>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Mon, Dec 20, 2021 at 11:00 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> In preparation for adding vmalloc support to SW_TAGS KASAN,
+> provide a KASAN_VMALLOC_INVALID definition for it.
+>
+> HW_TAGS KASAN won't be using this value, as it falls back onto
+> page_alloc for poisoning freed vmalloc() memory.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>

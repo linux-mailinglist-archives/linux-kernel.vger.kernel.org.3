@@ -2,98 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B9647BFEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA3447BFF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbhLUMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:46:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:52192 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230326AbhLUMqE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:46:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01B421FB;
-        Tue, 21 Dec 2021 04:46:04 -0800 (PST)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E5B33F774;
-        Tue, 21 Dec 2021 04:46:02 -0800 (PST)
-Subject: Re: [PATCH 2/4] sched/fair: Decay task PELT values during migration
-To:     Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, valentin.schneider@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, lukasz.luba@arm.com
-References: <20211209161159.1596018-1-vincent.donnefort@arm.com>
- <20211209161159.1596018-3-vincent.donnefort@arm.com>
- <daa01574-5d7b-c125-48a9-d1ec7bd1fb64@arm.com>
- <20211220155735.GA51378@ubiquitous>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <2551684c-c987-b143-ba69-4fb0c55f61c7@arm.com>
-Date:   Tue, 21 Dec 2021 13:46:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234955AbhLUMuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:50:40 -0500
+Received: from mail-4323.proton.ch ([185.70.43.23]:41403 "EHLO
+        mail-4323.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230326AbhLUMuj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:50:39 -0500
+X-Greylist: delayed 7221 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Dec 2021 07:50:39 EST
+Date:   Tue, 21 Dec 2021 12:50:31 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail; t=1640091033;
+        bh=7gcclE6TcAlSC7JYqTkNySi57ryYwSWINX7R0nMpD5E=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=Ycmm3GUESwV8+w92bwSyXIx+xNsupOHp+UUSmUkGWEXjPLaR8ta356CiC3fpkFx2f
+         3xY2lvgVc4ThL7SnL8bCLwvCVhySBU6MADv6nVptNJCAu4Vi7AAGiJeZXv8rUgbh60
+         +71YiClgMCfBVGyPX7KfcP/fpeRBiUK38QDOkaSQND9WZojaubve1m5sF2cieb0YVj
+         hoolDm34LJ1Qvc1y+vX5tIS9JavXfN+mJj5VFHCTP9pXRV0QO2C2GuhoGUOXHGQ7UN
+         OmTQ7oJMg74pvc1t+lM+jU7atn49HZVegSX+pKMtl+cLaitSQDxhS5v2RniVIworeL
+         T/9X4GR1NmanQ==
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        freedreno@lists.freedesktop.org, jernej.skrabec@gmail.com,
+        airlied@linux.ie, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, wens@csie.org,
+        linux-kernel@vger.kernel.org, maxime@cerno.tech,
+        tzimmermann@suse.de, sean@poorly.run, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH 1/3] drm/plane: Mention format_mod_supported in IN_FORMATS docs
+Message-ID: <zEXvJPFVMVjCARLW_PC1SWMnWn5sbkbHy6SPAyG_sv-iWXEcFIagb59MZorV_yjb7WYPlwcnNeKky4vTnnAHdDe8pY7UVNd-y8pN21TSdtY=@emersion.fr>
+In-Reply-To: <CAA8EJpphECjTnr=EPaToxeqoQshSt-aF_41mEjO41GukZqbvTA@mail.gmail.com>
+References: <20211221101319.7980-1-jose.exposito89@gmail.com> <20211221101319.7980-2-jose.exposito89@gmail.com> <CAA8EJppMsqot1isnMYeSWVJm4tC-PoqUDL9jwd5HJ72tca0HQQ@mail.gmail.com> <9_OAfk8h0URTETEHMPKLX0zP7-pirLOCmv0iAiOCuRRcuuVRBjYBXk2YWAAogEANzumyffgjeRZD0nGtKTk5AeGdTLsN5Q7gVnQzr_x45WA=@emersion.fr> <CAA8EJpphECjTnr=EPaToxeqoQshSt-aF_41mEjO41GukZqbvTA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211220155735.GA51378@ubiquitous>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.12.21 17:09, Vincent Donnefort wrote:
-> On Mon, Dec 20, 2021 at 12:26:23PM +0100, Dietmar Eggemann wrote:
->> On 09.12.21 17:11, Vincent Donnefort wrote:
+On Tuesday, December 21st, 2021 at 13:33, Dmitry Baryshkov <dmitry.baryshko=
+v@linaro.org> wrote:
 
-[...]
+> I'd still suggest to fix create_in_format_blob()
 
->> Why do you use `avg.last_update_time` (lut) of the root cfs_rq here?
->>
->> p's lut was just synced to cfs_rq_of(se)'s lut in
->>
->> migrate_task_rq_fair() (1) -> remove_entity_load_avg() ->
->> sync_entity_load_avg(se) (2)
-> 
-> Huum, indeed, the estimation is an offset on top of the se's last_update_time,
-> which I suppose could be different from the rq's cfs_rq.
-> 
-> I'll add a sched_entity argument for this function, to use either cfs_rq_of(se)
-> or se last_update_time
-
-OK, or an `u64 now or lut`.
-
-[...]
-
->>>  	} else {
->>> +		remove_entity_load_avg(se);
->>> +
->>>  		/*
->>> -		 * We are supposed to update the task to "current" time, then
->>> -		 * its up to date and ready to go to new CPU/cfs_rq. But we
->>> -		 * have difficulty in getting what current time is, so simply
->>> -		 * throw away the out-of-date time. This will result in the
->>> -		 * wakee task is less decayed, but giving the wakee more load
->>> -		 * sounds not bad.
->>> +		 * Here, the task's PELT values have been updated according to
->>> +		 * the current rq's clock. But if that clock hasn't been
->>> +		 * updated in a while, a substantial idle time will be missed,
->>> +		 * leading to an inflation after wake-up on the new rq.
->>> +		 *
->>> +		 * Estimate the PELT clock lag, and update sched_avg to ensure
->>> +		 * PELT continuity after migration.
->>>  		 */
->>> -		remove_entity_load_avg(&p->se);
->>> +		__update_load_avg_blocked_se(rq_clock_pelt_estimator(rq), se);
->>
->> We do __update_load_avg_blocked_se() now twice for p, 1. in (2) and then
->> in (1) again.
-> 
-> the first __update_load_avg_blocked_se() ensures the se is aligned with the
-> cfs_rq's clock and then, update the "removed" struct accordingly. We couldn't
-> use the estimator there, it would break that structure.
-
-You're right. I missed this bit.
-
-Related to this: Looks like on CAS/EAS we don't rely on
-remove_entity_load_avg()->sync_entity_load_avg(se) since it is already
-called during  select_task_rq().
+Yeah, I agree. I thought there were a good reason why create_in_format_blob=
+()
+behaves this way but can't find anything in the Git history, so fixing it t=
+o
+behave as the documentation says would be best.

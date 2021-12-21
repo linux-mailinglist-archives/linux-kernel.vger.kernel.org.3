@@ -2,143 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F040747C11D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7414247C121
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbhLUOBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:01:25 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24518 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229453AbhLUOBY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:01:24 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BLDe0Cd007258;
-        Tue, 21 Dec 2021 14:01:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Y2f1JQNiS0TkECCmHkDm6yIUjMCDTlb5T57vxkzTkfw=;
- b=NzgLPNLHcmIx4YuA5k/SH/RKRK1Z7XuLM1O63eg/eZpzQGqQCw7ni63kJTvpUKWTxcDj
- CaZZOoqzz8IfKk9oknUJ8FrKL9/PC0pG16viZOobfPRMzDxs9yrEzybyZ59quOwQ0Azt
- ULy+VwhwTRdbCqnRO1fX3m9TED82UW0s8nM2uPEH5gJfuzfXfQA/kCIJPUCixmqzmokn
- nkBZZ2Gbm0Xks3Ln3bOTT3mpf4twdjvoZwr3GkvG4CQ9h0v2KB3UWuUpkGF4LnQw0j4o
- b/PfjsfkgjYzbfedX83Z/ontygBgH0zyPqPwSuRtKEeHsOAqhxq89QSNFz1vsaNWGb39 EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3g0u8emv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 14:01:14 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BLDehno008320;
-        Tue, 21 Dec 2021 14:01:14 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3g0u8emf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 14:01:14 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BLDwHRb012382;
-        Tue, 21 Dec 2021 14:01:13 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma02wdc.us.ibm.com with ESMTP id 3d179ahx1r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 14:01:13 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BLE19dV11075864
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Dec 2021 14:01:09 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9ED297805C;
-        Tue, 21 Dec 2021 14:01:09 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB41878098;
-        Tue, 21 Dec 2021 14:01:07 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Dec 2021 14:01:07 +0000 (GMT)
-Message-ID: <8b0c9683-d29b-38a2-8dfe-8f47db6544f2@linux.ibm.com>
-Date:   Tue, 21 Dec 2021 09:01:06 -0500
+        id S237617AbhLUODY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:03:24 -0500
+Received: from mga14.intel.com ([192.55.52.115]:50587 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229453AbhLUODX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:03:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640095403; x=1671631403;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ew0G8WM+VTpwrJE101MQQ+KB69Q+us1//I+VQV9XUtY=;
+  b=Ew0MXoC6gbPq7izMH/M3cktA3xiR6L2wHiWxmluOvQNro6emS4sLtqxe
+   FAJYCu3tvOwJuHjW2DicdS8jpRUO8qZD/N7YYxWwT0SwYR7QaaQ2zcayw
+   y29hhejQPiB4OsH4u4gxnJcUuPv3z1MqH9RqfikKYB8bFqh8CKQwCaFDs
+   SHm06aud9GR4LDpweV8TStUzwz1e1ZWB9DiqgS1pvc1ZDA4rBtQBEgFG9
+   W6El2KepS17G7RWJE56Jyev3buz2tt9lNxTj6OAHtdmnaKm2tjCfCC0Hc
+   idrAofDoI9VHa8cBJPG6LYco4244uDi6ZZ9+nfjGOf+XPq746l+hZlc1+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240621163"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="240621163"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:03:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="684669415"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.20.192]) ([10.209.20.192])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:03:22 -0800
+Message-ID: <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
+Date:   Tue, 21 Dec 2021 06:03:15 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
- (powerpc)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, pavrampu@in.ibm.com,
-        Korrapati.Likhitha@ibm.com, gcwilson@us.ibm.com
-References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
- <YcGUoJCtmqfCWER0@iki.fi>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YcGUoJCtmqfCWER0@iki.fi>
+To:     Andrew Kilroy <andrew.kilroy@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+ <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+ <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YHJNSFTPngVAQ5P_j1u33_1jnTL2ToE9
-X-Proofpoint-ORIG-GUID: RMqKfdeYynsKsm3JE-UXzhEFk2o4fXi2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 clxscore=1015
- impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112210065
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/21/21 03:47, Jarkko Sakkinen wrote:
-> On Sat, Dec 11, 2021 at 08:28:04PM -0500, Stefan Berger wrote:
->> Fix the following crash on kexec by checking chip->ops for a NULL pointer
->> in tpm_chip_start() and returning an error code if this is the case.
+On 12/20/2021 9:21 AM, Andrew Kilroy wrote:
+>
+> On 15/12/2021 10:52, John Garry wrote:
+>> Hi Andrew,
 >>
->> BUG: Kernel NULL pointer dereference on read at 0x00000060
->> Faulting instruction address: 0xc00000000099a06c
->> Oops: Kernel access of bad area, sig: 11 [#1]
->> ...
->> NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
->>   LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
->> Call Trace:
->> [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
->> [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
->> [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
->> [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
->> [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
->> [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
+>>>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
+>>>>                                                   const struct 
+>>>> pmu_events_map *map);
+>>>>   int metricgroup__parse_groups_test(struct evlist *evlist,
+>>>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+>>>> index 1081b20f9891..57c0c5f2c6bd 100644
+>>>> --- a/tools/perf/util/topdown.c
+>>>> +++ b/tools/perf/util/topdown.c
+>>>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
+>>>> *leader __maybe_unused)
+>>>>   {
+>>>>          return false;
+>>>>   }
+>>>> +
+>>>> +__weak bool arch_topdown_use_json_metrics(void)
+>>>> +{
 >>
->> The referenced patch below introduced a function to shut down the VIO bus.
->> The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
->> after a call to tpm_class_shutdown, which already set chip->ops to NULL.
->> The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
->> chip->ops NULL pointer.
+>> AFAICS, only x86 supports topdown today and that is because they have 
+>> special kernel topdown events exposed for the kernel CPU PMU driver. 
+>> So other architectures - not only arm - would need rely on 
+>> metricgroups for topdown support. So let's make this generic for all 
+>> archs.
 >>
->> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   drivers/char/tpm/tpm-chip.c | 3 +++
->>   1 file changed, 3 insertions(+)
+>>> I like this extension! I've ranted in the past about weak symbols
+>>> breaking with archives due to lazy loading [1]. In this case
+>>> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
+>>> and so the weak symbol has an extra chance of being linked
+>>> incorrectly. We could add a new command line of --topdown-json to
+>>> avoid this, but there seems little difference in doing this over just
+>>> doing '-M TopDownL1'.
 >>
->> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> index ddaeceb7e109..cca1bde296ee 100644
->> --- a/drivers/char/tpm/tpm-chip.c
->> +++ b/drivers/char/tpm/tpm-chip.c
->> @@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
->>   {
->>   	int ret;
->>   
->> +	if (!chip->ops)
->> +		return -EINVAL;
-> This triggers to all drivers, not just tpm_ibmvtpm, i.e. the fix has
-> side-effects.
+>>
+>>> Is it possible to use the json metric approach
+>>> for when the CPU version fails?
+>>
+>> I think that's a good idea.
+>>
+>
+>
+> While looking into using the json metrics approach as a fallback to 
+> the original, I noticed  there are two json metricgroups 'TopdownL1' 
+> and 'TopDownL1' (note the case difference) on x86. Not sure if the 
+> case difference is intentional.
+>
+> On skylake, 'TopdownL1' contains the four json metrics Retiring, 
+> Bad_Speculation, Frontend_Bound, and Backend_Bound.  'TopDownL1' has 
+> 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 'Instructions'.  I think its a 
+> similar situation on other x86 chips.
 
-What are those side-effects?
 
-   Stefan
+There's also SMT metrics.
+
+
+We don't want to include CoreIPC etc. by default because it would cause 
+multiplexing in common situations.
 
 >
-> /Jarkko
+> The search for those metrics by metricgroup name is case insensitive, 
+> so it's picking up all 8 metrics when using the lookup string 
+> 'TopDownL1'.  So the extra 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 
+> 'Instructions' metrics would be printed as well.
 >
+> Not sure what the significance of the case difference might be.
+>
+> Should we use a different string than 'TopDownL1' as the metric group 
+> name to search for?
+
+
+We should probably fix the case (or just make the match case insensitive)
+
+Can we just keep x86 at using the kernel metrics? On Skylake and earlier 
+it needs different formulas and other options depending whether SMT is 
+on or off, so it's not straight forward to express it as json directly.
+
+
+-Andi
+

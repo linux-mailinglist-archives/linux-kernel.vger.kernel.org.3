@@ -2,121 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E6B47BC38
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3471047BC3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbhLUIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:54:52 -0500
-Received: from mail-m973.mail.163.com ([123.126.97.3]:25832 "EHLO
-        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233654AbhLUIyv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:54:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=gPtm4
-        1ZRhN2hM6/uWkxP17bgJY7N8owgKDTDBYkkLEE=; b=HZqm69xsMl/M5Z2ptYTtS
-        QMPPcI1giHMnW1Gm7D3H4LHkGM/D8XfdusdOH3ASlOxgVzYWGHmn4g209yyKdrhB
-        rXT9Ayyo+h9X5UbBC1gUYxvTN9ab/w6K0KI+y3VxHptmPd0K3ZKLffQW618wcadX
-        rINiKkHhHOsa/Wv5vxvEm4=
-Received: from localhost.localdomain (unknown [36.112.214.113])
-        by smtp3 (Coremail) with SMTP id G9xpCgB3W+8ulsFheyJVCQ--.60164S4;
-        Tue, 21 Dec 2021 16:54:18 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
-Date:   Tue, 21 Dec 2021 16:54:04 +0800
-Message-Id: <20211221085404.6769-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S235887AbhLUI43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:56:29 -0500
+Received: from verein.lst.de ([213.95.11.211]:45942 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233874AbhLUI42 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 03:56:28 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A0D3868AFE; Tue, 21 Dec 2021 09:56:23 +0100 (CET)
+Date:   Tue, 21 Dec 2021 09:56:23 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        cl@linux.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, stable@vger.kernel.org,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no
+ managed pages in DMA zone
+Message-ID: <20211221085623.GA7733@lst.de>
+References: <20211213122712.23805-1-bhe@redhat.com> <20211213122712.23805-6-bhe@redhat.com> <20211213134319.GA997240@odroid> <20211214053253.GB2216@MiWiFi-R3L-srv> <Ybx2szXEgl1tN4MD@ip-172-31-30-232.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgB3W+8ulsFheyJVCQ--.60164S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJw18Ww1kWF15GryxurykXwb_yoW5GF4DpF
-        ZxKF1UZFWagry7Ary7JF4Svr1Ska98Gr47KwsrW39rGasxJFsxtFy7Ar4YgrnrAFWfKw15
-        ZF4qvFWUWrWqqwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhKsUUUUUU=
-X-Originating-IP: [36.112.214.113]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbB3Q9wjGBHLhNxswAAs2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ybx2szXEgl1tN4MD@ip-172-31-30-232.ap-northeast-1.compute.internal>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
-it is never freed through the function, which will lead to a memory
-leak.
+On Fri, Dec 17, 2021 at 11:38:27AM +0000, Hyeonggon Yoo wrote:
+> My understanding is any buffer requested from kmalloc (without
+> GFP_DMA/DMA32) can be used by device driver because it allocates
+> continuous physical memory. It doesn't mean that buffer allocated
+> with kmalloc is free of addressing limitation.
 
-We should kfree() scratch before the function returns (#2, #3 and #4).
+Yes.
 
-31 static int tpm2_key_encode(struct trusted_key_payload *payload,
-32			   struct trusted_key_options *options,
-33			   u8 *src, u32 len)
-34 {
-36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-      	// #1: kmalloc space
-50	if (!scratch)
-51		return -ENOMEM;
+> 
+> the addressing limitation comes from the capability of device, not
+> allocation size. if you allocate memory using alloc_pages() or kmalloc(),
+> the device has same limitation. and vmalloc can't be used for
+> devices because they have no MMU.
 
-56	if (options->blobauth_len == 0) {
-60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-61			return PTR_ERR(w); // #2: missing kfree
-63	}
+vmalloc can be used as well, it just needs to be setup as a scatterlist
+and needs a little lover for DMA challenged platforms with the
+invalidate_kernel_vmap_range and flush_kernel_vmap_range helpers.
 
-71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-72		 "BUG: scratch buffer is too small"))
-73		return -EINVAL; // #3: missing kfree
+> But we can map memory outside DMA zone into bounce buffer (which resides
+> in DMA zone) using DMA API.
 
-  	// #4: missing kfree: scratch is never used afterwards.
-82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-83		return PTR_ERR(work1);
-
-85	return work1 - payload->blob;
-86 }
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 0165da386289..7bb1119b1dea 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		unsigned char bool[3], *w = bool;
- 		/* tag 0 is emptyAuth */
- 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
--		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-+		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-+			kfree(scratch);
- 			return PTR_ERR(w);
-+		}
- 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
- 	}
- 
-@@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	 * trigger, so if it does there's something nefarious going on
- 	 */
- 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
--		 "BUG: scratch buffer is too small"))
-+		 "BUG: scratch buffer is too small")) {
-+		kfree(scratch);
- 		return -EINVAL;
-+	}
- 
- 	work = asn1_encode_integer(work, end_work, options->keyhandle);
- 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-@@ -79,6 +83,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	work1 = payload->blob;
- 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
- 				     scratch, work - scratch);
-+	kfree(scratch);
- 	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
- 		return PTR_ERR(work1);
- 
--- 
-2.25.1
+Yes, although in a few specific cases the bounce buffer could also come
+from somewhere else.
 

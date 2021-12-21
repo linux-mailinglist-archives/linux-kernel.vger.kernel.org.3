@@ -2,129 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D1A47C525
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195FC47C527
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240468AbhLURmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S240476AbhLURnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbhLURmj (ORCPT
+        with ESMTP id S232502AbhLURnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:42:39 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E8C061574;
-        Tue, 21 Dec 2021 09:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
-        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
-        :Content-Description; bh=TupUKF0VK4vg65WIuMQBgabCl7SjWqeiUzuXaaiefOE=; b=Dxjv
-        ii8l2A9scfMMOd9FBIcBR+gfXLs7mW//0vJRA5kk6lDnWpVDWNdhgJzeguEYF8vNlI7s/ATdwlk31
-        aTsyuZN9Xy0P9PCpR5BzPbrd48ITEdT5UKqmnbYSqP+yL1d+U6q7WiqFeJTB00gcU7x+wvnFDO9G9
-        JzZdmxN0OfMBzv14Iqxga/bebByPQ3RmFf1YbR512JMzsRz249stHj/AUlvHAB2r24p6VWdOXSEnw
-        fmBZLDDpJPNIkG8IBEoV/mpwn0LpehpIJ0RTj+FCeS/QPi7R5a1ihljVNw2D+zz6FlOvaUJoWeotw
-        jekNb8LStw9vRIRa23hbPJQWYL6ZtQ==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mzj9W-0006jB-Jy; Tue, 21 Dec 2021 17:42:18 +0000
-Date:   Tue, 21 Dec 2021 17:42:15 +0000
-From:   John Keeping <john@metanate.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-Message-ID: <20211221174215.04b07f31.john@metanate.com>
-In-Reply-To: <87wnjx7u05.mognet@arm.com>
-References: <Yb3vXx3DcqVOi+EA@donbot>
-        <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
-        <87zgou6iq1.mognet@arm.com>
-        <20211221164528.3c84543f.john@metanate.com>
-        <87wnjx7u05.mognet@arm.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Tue, 21 Dec 2021 12:43:32 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79909C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:43:32 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so2244154wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:43:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qBE12b8vdnqtstGHFEJZcs6qFoeauTfFcVbXgvgPULA=;
+        b=hdnPfbv2sNQLuRXnuw3LxzsfrfuuQFSEWMWM2+xryiMjdQgWpY+182PYMMRSHmx1Er
+         nAwTgZUrFPRo6u3h7IlgkxLPRxFQ3WeJmpeDmQZThimeADQEc5nnyD+7nAblN+8x1+iQ
+         IHzaz0tFFOdBP2SSJnKGV4VulYnyJ4WYyuXZWUwAbSuV9CKba/SOQnS7I4+uYbSaIWP+
+         +z1cnJK9c2U/GmMc2hy5ax2p2DlTf95ykYwNhFWMHby/8O4RpHI++ftH0zVwgak9G321
+         lTctF/xGdd4wLFGTOqzh4MkRm8/ycK2+4ZFtwlYSXMx4AD4gMmhrre6mrE/faUTOl5gn
+         d89Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qBE12b8vdnqtstGHFEJZcs6qFoeauTfFcVbXgvgPULA=;
+        b=pGtkMBTDsOB2Ii9Bm8+bB5heWmVvDBrcD841o1MkQXnf9/YXhUrBR7NBDCSnwBLOpu
+         1b3/jcGhy8826iVvYoyr5NSWT7ZdMphT4oltxlTe2EFLsln3cWUf4iRoiljxMUwSr0ai
+         +vWOVVfr5XsDK+lotGniQ0ipqeIKRGUh+RVYJp9toZHuFmhsty/kIq9uvEODxv5M5PHy
+         phE4ngFKorDMqVjUy0o9O3VzVitPRTMEIxEKifwBNaCjI/99ecYV5MEBqR1qUkWxmE7U
+         nMYYjwEp1lI9rGpbgQko5hl7joldho7YjAepTqACtJq8av+YAroJASczL/U7UGKLcDh4
+         THOw==
+X-Gm-Message-State: AOAM530uO+i4kUwjda7/gaW6amSVmjiu1N3RDryked9J8GbfxHEqUrvq
+        fD81gWGi6k/OyU6cTAjXTgTPgw==
+X-Google-Smtp-Source: ABdhPJxr9epBEjiveABhSyTbxZrFLQQ1wVGQ2VrDZrrOrzDb25Cwi8Vbsjqw1O7zBByQHEU7Y8b2VA==
+X-Received: by 2002:a1c:e909:: with SMTP id q9mr3597321wmc.184.1640108610904;
+        Tue, 21 Dec 2021 09:43:30 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:4a23:42ad:dc71:62e9])
+        by smtp.gmail.com with ESMTPSA id a1sm19123717wru.113.2021.12.21.09.43.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 09:43:30 -0800 (PST)
+Date:   Tue, 21 Dec 2021 17:43:26 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: firmware: Add Open Profile for DICE
+Message-ID: <YcISPrm/R8QIqkMb@google.com>
+References: <20211213195833.772892-1-dbrazdil@google.com>
+ <20211213195833.772892-2-dbrazdil@google.com>
+ <YbpPYG4rzPmJmwA6@robh.at.kernel.org>
+ <YbpZTSpmnieCNZ9a@google.com>
+ <CAL_JsqJRpNr7McM9OJcPs095ZfAqGJfN7FhGhy7i6pN+tx1MGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJRpNr7McM9OJcPs095ZfAqGJfN7FhGhy7i6pN+tx1MGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 17:22:34 +0000
-Valentin Schneider <valentin.schneider@arm.com> wrote:
-
-> On 21/12/21 16:45, John Keeping wrote:
-> > On Tue, 21 Dec 2021 16:11:34 +0000
-> > Valentin Schneider <valentin.schneider@arm.com> wrote:
-> >  
-> >> On 20/12/21 18:35, Dietmar Eggemann wrote:  
-> >> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> >> > index ef8228d19382..798887f1eeff 100644
-> >> > --- a/kernel/sched/rt.c
-> >> > +++ b/kernel/sched/rt.c
-> >> > @@ -1895,9 +1895,17 @@ static int push_rt_task(struct rq *rq, bool pull)
-> >> >                 struct task_struct *push_task = NULL;
-> >> >                 int cpu;
-> >> >
-> >> > +               if (WARN_ON_ONCE(!rt_task(rq->curr))) {
-> >> > +                       printk("next_task=[%s %d] rq->curr=[%s %d]\n",
-> >> > +                              next_task->comm, next_task->pid, rq->curr->comm, rq->curr->pid);
-> >> > +               }
-> >> > +
-> >> >                 if (!pull || rq->push_busy)
-> >> >                         return 0;
-> >> >
-> >> > +               if (!rt_task(rq->curr))
-> >> > +                       return 0;
-> >> > +    
-> >> 
-> >> If current is a DL/stopper task, why not; if that's CFS (which IIUC is your
-> >> case), that's buggered: we shouldn't be trying to pull RT tasks when we
-> >> have queued RT tasks and a less-than-RT current, we should be rescheduling
-> >> right now.
-> >> 
-> >> I'm thinking this can happen via rt_mutex_setprio() when we demote an RT-boosted
-> >> CFS task (or straight up sched_setscheduler()):
-> >> check_class_changed()->switched_from_rt() doesn't trigger a resched_curr(),
-> >> so I suspect we get to the push/pull callback before getting a
-> >> resched (I actually don't see where we'd get a resched in that case other
-> >> than at the next tick).
-> >> 
-> >> IOW, feels like we want the below. Unfortunately I can't reproduce the
-> >> issue locally (yet), so that's untested.  
+On Thu, Dec 16, 2021 at 09:21:00AM -0600, Rob Herring wrote:
+> On Wed, Dec 15, 2021 at 3:08 PM David Brazdil <dbrazdil@google.com> wrote:
 > >
-> > This patch doesn't make any difference for me - I hit the BUG on the
-> > first boot with this applied.
-> >  
+> > Hi Rob,
+> >
+> > > > +        dice_reserved: dice@12340000 {
+> > > > +            reg = <0x00 0x12340000 0x2000>;
+> > > > +            no-map;
+> > > > +        };
+> > > > +    };
+> > > > +
+> > > > +    dice {
+> > > > +        compatible = "google,open-dice";
+> > > > +        memory-region = <&dice_reserved>;
+> > >
+> > > There's no need for this indirection. Just add the compatible to the
+> > > dice@12340000 node. You can bind drivers to /reserved-memory nodes.
+> >
+> > I have not found a way to make that work for kernel modules. Built-in
+> > drivers can bind with RESERVEDMEM_OF_DECLARE, which puts an entry in
+> > __reservedmem_of_table and __reserved_mem_init_node() iterates find it
+> > there. A good case study might be CONFIG_TEGRA210_EMC, where the driver
+> > itself can be a module but the rmem parsing is always built-in under
+> > CONFIG_TEGRA210_EMC_TABLE. I don't think that's worth the trouble with
+> > this driver.
 > 
-> Thanks for the swift testing!
-> 
-> Did you give Dietmar's patch a try? ITSM it lacks a resched_curr(), but if
-> we can somehow get to the push IRQ work before rescheduling (which I think
-> might happen if we try to resched_curr(this_rq)), then we need his
-> bailout.
+> I forgot you have to add the compatible to reserved_mem_matches in
+> drivers/of/platform.c.
 
-With Dietmar's patch I hit the added WARN_ON_ONCE with:
+Oh nice! Exactly what I was looking for, thanks. I'll respin shortly.
 
-	next_task=[rcu_preempt 11] rq->curr=[ksoftirqd/1 21]
-	next_task=[rcu_preempt 11] rq->curr=[ksoftirqd/1 21]
-
-	# ps -eTo comm,pid,lwp,pri,rtprio,nice,class
-	...
-	rcu_preempt        11    11  41      1   - FF
-	...
-	ksoftirqd/1        21    21  19      -   0 TS
-
-Out of three reproductions, rcu_preempt as next_task is consistent, but
-I've seen three different tasks in rq->curr (although all with
-SCHED_OTHER).
-
-And as expected, the added early return does stop the BUG.
+David

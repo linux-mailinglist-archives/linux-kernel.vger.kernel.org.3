@@ -2,542 +2,439 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1003847C22E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE6647C22F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238893AbhLUPD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238869AbhLUPD5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:03:57 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C25C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:03:57 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso2829100pjf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8qfgQvdP56sgjDm9aV8GjlehdbK+Wn1j18ufpGY0Bks=;
-        b=bLBMjDxs5nKc4z7kW/XymEBxFNx3y+66XtbDaajc8gAVW4knyK32a1mV59V9o8SmI6
-         tVTFlljOoUjNM35jETavGc0iJxM/HjNqXqUGPaJ1UzF3dtJrXQW38cuZ7s95mEWd8peP
-         VVQW4lllzl4ZCeHDQ50YdbMYh/dnTbSKu8OvL6rjy/WFh+J6pEsdmyvX26dpfCzGzCnW
-         NwUF8t40KC5eN8KEePhEpVN0E1IXgoJT5ZhmL3NihXLA1E8Fnd2cpWQutPOzS2DunuWX
-         us6xmsL+ZCqDDeYftC4RIHmfrpdRmVbXv0DESo1x9vYBoRTdKwcehrigQOIhREHOnxQH
-         PjZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8qfgQvdP56sgjDm9aV8GjlehdbK+Wn1j18ufpGY0Bks=;
-        b=gX6Wu6gpgXFqC2OeOcbe9H6qrO09EFQ5KV7pTjGmuz9b9bBIoqLS7B/SLIBIaMzP91
-         N6VKGrho1Z1yqy+/vWWTraT6+AMsGt18GjTMjFDVwKD8M5OQgxXTTRI6b/5L+FIW3u5U
-         tEzNf50lSWforM5Ch8NwbeY7UZ+kMoT1IRb6wrEeh0HcOACOYyWpTrKuvzdqk333osmv
-         PJP5RG+glGHjqzJzZ0uaQTWJpsg8Zabd4n/2j/CZVlBs1N4vrJfeOaQuI+fLz3Y0BXlM
-         RbDLCnPzvXFHxxLbMzqdbjLEv2OXqzQwHYwzR3QqQwAeKOAPgUSntHIkmB9G+zmcEzvW
-         LwaA==
-X-Gm-Message-State: AOAM530wVFv/a9xsAEpaPHN+L3xwjYq/2ONEGSX9oiPOF8EgV7qsoKpM
-        5fO/tw9zEGE2kSImJF1DpbpihQ==
-X-Google-Smtp-Source: ABdhPJw9XUFoi0sgYJPzE1I7Bqb+snbguefx9I5TxFtYo4VD1S8D0sbW36wS1rvTiGlaF6I+CFy6PA==
-X-Received: by 2002:a17:90a:eb08:: with SMTP id j8mr4598951pjz.68.1640099036399;
-        Tue, 21 Dec 2021 07:03:56 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id f15sm2928154pjt.18.2021.12.21.07.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 07:03:55 -0800 (PST)
-Date:   Tue, 21 Dec 2021 23:03:49 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     carsten.haitzler@foss.arm.com
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, inux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: Re: [PATCH 04/12] perf test: Add beginning of test infra + test to
- exercise coresight
-Message-ID: <20211221150349.GB41974@leoy-ThinkPad-X240s>
-References: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
- <20211215160403.69264-4-carsten.haitzler@foss.arm.com>
-MIME-Version: 1.0
+        id S238895AbhLUPEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:04:21 -0500
+Received: from mail-bn8nam11on2080.outbound.protection.outlook.com ([40.107.236.80]:47552
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238890AbhLUPET (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 10:04:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hyihPHxBH5jxDYUqPLQ/MEqm2zdy6z/ylP6J/svlFyhWsor8ojij/ViNCrqP1p4lsZHow+rbDXJ7IWV2dD55whm35MkV6iMjZikAR8Bz/iCsJ9QUXcDhb4TPh4i8rVqNX3GoAKogjYNfems+VoRtDX57KNseuYY+8StY/36UmYVjBMwE7Cgrn8zmKA7tj/o3Lqy0kV7hjin1iyeuMFzCmAM9h1i75TCkGMKyeuzroYpO6QJp/hfvvKQw0zselCUwrj+PT2LejhEAP046rtcKB0azwaQdkqgo5V4+x6mFKVlz51FvXkBEzuJ5J2oo0VOV7SsWvAjS1XDLFvoHaiCoow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SYdUC+YKuXi0lhM4leA8GnIe7uTxNgt/7ApMPVypZFg=;
+ b=aJxYte4MQnxmBZEc4NiFBXtSUmfHEtZ3tkR+DRkOUZ7piXzWHK5G2ZsbXvPB7MOgb0Ahz/xpaSOBXdtyUO8G1bgjxT1x8wl4Nfi9lTlpb1sFzhmYkSYFJid/ltEvcIDPrDdsFKZ8i2RMpfWW4/Zf5u2Pbt5h+pPIKbwBThDxCSCc10UWFzaUnftMDw/Z29dbhYa5dCDe/Fc8qbW9lcOrxW7kvg/CqhyKXux12pj1tVvoo3CVVmkF4ZT7PbQZKT9VHmKNd0WAd7HKrgF+0bVVJY9crpPRmKRrNQ3J92W+7GkrJ7DrNvRFwkzSpuRGyRSLCGfnvJ75gVS9F6QLscZkBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SYdUC+YKuXi0lhM4leA8GnIe7uTxNgt/7ApMPVypZFg=;
+ b=Rg/XiXHN2J92lTJTtfusWx1WIvnT7LA8L+iAEiEl6EdGOH/29EcPqhvMrSOdU1uV2wGnZgQ2cgRFIeCtaKSgAN+wjtvV2gAAPuJZMhjkO2xwg2R3+727X8/M+Vgcdtjv3ck154GXuPfbYXn+H2njBu8bvXmtKwVtnsLP9SNBrLI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by BY5PR12MB5000.namprd12.prod.outlook.com (2603:10b6:a03:1d7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 15:04:16 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::4899:90ea:bb12:518]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::4899:90ea:bb12:518%7]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
+ 15:04:16 +0000
+Date:   Tue, 21 Dec 2021 20:33:59 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
+ SD_NUMA spans multiple LLCs
+Message-ID: <YcHs37STv71n4erJ@BLR-5CG11610CF.amd.com>
+References: <20211210093307.31701-1-mgorman@techsingularity.net>
+ <20211210093307.31701-3-mgorman@techsingularity.net>
+ <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
+ <20211213130131.GQ3366@techsingularity.net>
+ <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
+ <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com>
+ <20211215122550.GR3366@techsingularity.net>
+ <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com>
+ <20211220111243.GS3366@techsingularity.net>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215160403.69264-4-carsten.haitzler@foss.arm.com>
+In-Reply-To: <20211220111243.GS3366@techsingularity.net>
+X-ClientProxiedBy: BMXPR01CA0088.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:54::28) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e777b7c9-742c-4111-5a82-08d9c49327d6
+X-MS-TrafficTypeDiagnostic: BY5PR12MB5000:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB50006FC3A59AA526122DFCDA967C9@BY5PR12MB5000.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YeLodM/K7v7Ivhd3UEo7ksam+wDEq8+o2eqNU5T3xNHSKWY+VmxR2PwSw5x9U0UG4uuDfT4n4HBN+qiaYA+ag55Wv5WcjQjhX4bQjXt745ZlscQn2iq//AAxzRQGOAqkn2KPd3nUKol0v3Fif3Q/GzfeZDGJw+3efQsjRno0a73yqv6FlV+4VwR3V1lrBkQBfAGYLF7AklUIgQj3ZEOkcdjYthUur+Y4CNwcOhTbBHQzCeJR1UiIcGulU0/chrequZzWxn7NeD9wBmeZAngYgji/bo6Z/ix+5bi6hJc7punlj3IyNulQtX9KTLMB0QzERtgVIubywdFucQa2P7Pyvn4KsglN7Qaytbu9wJQcjrVSoDQ0TnSL7VxPU5Um8rFAQq1Ou5c//hi82yOZp7tMZpqcKleLsqex9EcPR7HlsRLxyckKcEfM+LX372SCiCdkoCUH/iVNp9yImNd874yJqoFLK5ulL8FS8ELeU+GlSBotxbTFTPeRuspeOhJ32zQhspFnIf4JviMHEsm12aTGh5ncirgDt2/EG/MqcAAAthnwoReTPenv5m/3OZ6nHCfmyEKq64FBvnXuo+69CRshBvn9jthLhGtEHyK40COtcRK8tk4cP/1a5niut6sltI6d2/w1fxFayCvmNHTGsnUZTDVp4zMGx7BK8s0EpX7ULZnI5S/8dj/kGdhgsN9Di5TWISowX0un6h86NMxoHtzBUwJ0k3JaSOqPyzZwLziQwZZTNgGyo6Q8mlhEophlld0ycn/xzAkc7Hi6RfoLxbOaVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(6512007)(316002)(5660300002)(66476007)(66946007)(966005)(8936002)(6486002)(66556008)(26005)(6916009)(8676002)(83380400001)(38100700002)(2906002)(54906003)(7416002)(4326008)(6506007)(508600001)(186003)(30864003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w+AsXdLERAVkTcZKEwLoiYyeVgiWjwOhfS4iiNG+A3+At6P8YhvQWm+euyzV?=
+ =?us-ascii?Q?RIzSJDSxMoSgMsaPGwk3YydZhGHkNOHbxlWFjOAFXGeDRf17I89wDoC/sQ/f?=
+ =?us-ascii?Q?Ww3+txB0cMaKuefv6jqHpd8dr7L4NfZs3gAvyZGmnuTBfLLjZor9xtTM7Zjw?=
+ =?us-ascii?Q?EeC9hIVDQU+7FWyT8/5BL8mADDm+bBj3Pc4qNXpXQN3bu0NeUtZZ9qQ7ei7Y?=
+ =?us-ascii?Q?WFFPCZszjCzp05XpfzflSA/Y5bGZ8WUwvLBn3jsF3m8UWnwYuIyBefa/4r3C?=
+ =?us-ascii?Q?qvbcabdLSbW00UAvUq3kaSP4kscRLxqiTFzkBs0F2xnx+wXRLCmTQYf0AW92?=
+ =?us-ascii?Q?BKfi9uSSQPxZqaa9hyejrKOK+TMsEWX4GXzhq2rkSiETzg3iNQbnxfuSfpD6?=
+ =?us-ascii?Q?mVVseKTMnvxArdwfsC9zbzwFfBQxjpBBld8sjTALq2yxbssHUU1EXpk7IPEm?=
+ =?us-ascii?Q?G4AummB9GqzDJYI0s4F+1iN+k8mRvRtNwDBld+pUTZVyW8Jsg9nyE2js7WnI?=
+ =?us-ascii?Q?GGsdmg7+nA1BUQEJ0w+koF+vhYQ0PYty0us3t9gqheT24O7MP0/w/OhnfqSb?=
+ =?us-ascii?Q?JzYkFDz+DjA+fi3cSBMY9gVhyYNTsJFnJarDWfTVCQA6Xvk0n8l1tZlOM3c6?=
+ =?us-ascii?Q?2Ofz0kCJ1H6UBMm0fJ+ghocEvR/tRFUXlYopxUUTHd7B3PU4VHK6JP0lgwu7?=
+ =?us-ascii?Q?regQDHJeoU/b/RwDc3df3u6syboaXQ3rZuiEtAvMFgM+iFKfcXYYcmLQn9Bu?=
+ =?us-ascii?Q?bViWkD8mKyItA88SdNNUM1/GNjbHVLNLDas+MZsY9uvUfeOYcr+eCTFP6D1v?=
+ =?us-ascii?Q?FtHfi0fu31pBpyAKDSECeSkwC5NAUhEVEd7GbtiOo4FcKdWWZPs+qJVGKxj0?=
+ =?us-ascii?Q?/X0ktfXfUshtYtK+FA1JWdxhZV4tEV4PO7gfqmC6SD5ORc8n04TGURD0v4m9?=
+ =?us-ascii?Q?gS3sgRCINWNZMe/3gz86aZreV1pK0a7jdmeKhG6Qhl7+/k+kg3Zpl0QjaemY?=
+ =?us-ascii?Q?O9P9Xp7RqPtO9emZ5bJmmbPAQye/rEDLfHohEEqK/bDXlIbAnlZCq33tYOqp?=
+ =?us-ascii?Q?eCtJ6KT2U7ChtQB/VkpF8KpgvgU+7rYl0/tlCRm76L7vmLc0ZDtQG+Yhnela?=
+ =?us-ascii?Q?QguyRsb1Fj+PdVVWRcJDyVEnTsJdli5YaBqDv2P+lVVd5Kcr/ehNjxJqi82B?=
+ =?us-ascii?Q?xcLOrih87zytRwB0rJDykpDZPGr5oLTxZxQ7OaW89UJUPrx5SolVt+4KXiT1?=
+ =?us-ascii?Q?a1UWkWQhPAzAA/J/3w5sqmDnWPVqERIJ1nQU7AoyIw8Ly/wE7PpL1S8wO9C7?=
+ =?us-ascii?Q?Wm8Mh05Ky4hhN/hAkB5aFdp7XGLhcyMVwGHvaI+vSQY9mhWj4eiJUd0Ku0a7?=
+ =?us-ascii?Q?174YjTXEmmsWPpqI3S3ppGC03ulCA2zOTNgBiVdIRO25/DECWMvUp0AOVOuU?=
+ =?us-ascii?Q?U9Dv5Ydw76YkSQ+tk0EmI7bzw3qu605uKrdnRkrud4bjjdZSR8yFZ9zjZUf4?=
+ =?us-ascii?Q?JMpWWCCLEcXMQiqboOkacaSbJ5A6ci7TUUCClRzh5MlmCVLkQOMGNpiUVC1V?=
+ =?us-ascii?Q?OJaPYlRrocQNN6KbvQZ0jozfGwaxNv+603ebcbFU0AHMrg3Cz/Evb7iuPJ3y?=
+ =?us-ascii?Q?Y94JD+KjPCR7CjrP54L5Xl4=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e777b7c9-742c-4111-5a82-08d9c49327d6
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 15:04:16.0200
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /YFhmxd9qnEw3lLdwZr+CixTI5Fe0jG9siNnQfrFoWVykD38BpDaC/rN38tid9nwG7kvFylssbydT6GF0hJQYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5000
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Carsten,
-
-On Wed, Dec 15, 2021 at 04:03:55PM +0000, carsten.haitzler@foss.arm.com wrote:
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
+On Mon, Dec 20, 2021 at 11:12:43AM +0000, Mel Gorman wrote:
+> (sorry for the delay, was offline for a few days)
 > 
-> This adds the initial test harness to run perf record and examine the
-> resuling output when coresight is enabled on arm64 and check the
-> resulting quality of the output as part of perf test.
+> On Fri, Dec 17, 2021 at 12:03:06AM +0530, Gautham R. Shenoy wrote:
+> > Hello Mel,
+> > 
+> > On Wed, Dec 15, 2021 at 12:25:50PM +0000, Mel Gorman wrote:
+> > > On Wed, Dec 15, 2021 at 05:22:30PM +0530, Gautham R. Shenoy wrote:
+> > 
+> > [..SNIP..]
+> > 
+> > > > On a 2 Socket Zen3:
+> > > > 
+> > > > NPS=1
+> > > >    child=MC, llc_weight=16, sd=DIE. sd->span_weight=128 imb=max(2U, (16*16/128) / 4)=2
+> > > >    top_p = NUMA, imb_span = 256.
+> > > > 
+> > > >    NUMA: sd->span_weight =256; sd->imb_numa_nr = 2 * (256/256) = 2
+> > > > 
+> > > > NPS=2
+> > > >    child=MC, llc_weight=16, sd=NODE. sd->span_weight=64 imb=max(2U, (16*16/64) / 4) = 2
+> > > >    top_p = NUMA, imb_span = 128.
+> > > > 
+> > > >    NUMA: sd->span_weight =128; sd->imb_numa_nr = 2 * (128/128) = 2
+> > > >    NUMA: sd->span_weight =256; sd->imb_numa_nr = 2 * (256/128) = 4
+> > > > 
+> > > > NPS=4:
+> > > >    child=MC, llc_weight=16, sd=NODE. sd->span_weight=32 imb=max(2U, (16*16/32) / 4) = 2
+> > > >    top_p = NUMA, imb_span = 128.
+> > > > 
+> > > >    NUMA: sd->span_weight =128; sd->imb_numa_nr = 2 * (128/128) = 2
+> > > >    NUMA: sd->span_weight =256; sd->imb_numa_nr = 2 * (256/128) = 4
+> > > > 
+> > > > Again, we will be more aggressively load balancing across the two
+> > > > sockets in NPS=1 mode compared to NPS=2/4.
+> > > > 
+> > > 
+> > > Yes, but I felt it was reasonable behaviour because we have to strike
+> > > some sort of balance between allowing a NUMA imbalance up to a point
+> > > to prevent communicating tasks being pulled apart and v3 broke that
+> > > completely. There will always be a tradeoff between tasks that want to
+> > > remain local to each other and others that prefer to spread as wide as
+> > > possible as quickly as possible.
+> > 
+> > I agree with this argument that we want to be conservative while
+> > pulling tasks across NUMA domains. My point was that the threshold at
+> > the NUMA domain that spans the 2 sockets is lower for NPS=1
+> > (imb_numa_nr = 2) when compared to the threshold for the same NUMA
+> > domain when NPS=2/4 (imb_numa_nr = 4).
+> > 
 > 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-> ---
->  MAINTAINERS                                   |   3 +
->  tools/perf/Makefile.perf                      |  14 +-
->  .../tests/shell/coresight_asm_pure_loop.sh    |  18 +++
->  tools/perf/tests/shell/lib/coresight.sh       | 130 ++++++++++++++++++
->  tools/perf/tests/shell/tools/Makefile         |  26 ++++
->  .../perf/tests/shell/tools/coresight/Makefile |  27 ++++
->  .../shell/tools/coresight/Makefile.miniconfig |  23 ++++
->  .../tools/coresight/asm_pure_loop/Makefile    |  30 ++++
->  .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 ++++
->  9 files changed, 297 insertions(+), 2 deletions(-)
->  create mode 100755 tools/perf/tests/shell/coresight_asm_pure_loop.sh
->  create mode 100644 tools/perf/tests/shell/lib/coresight.sh
->  create mode 100644 tools/perf/tests/shell/tools/Makefile
->  create mode 100644 tools/perf/tests/shell/tools/coresight/Makefile
->  create mode 100644 tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
->  create mode 100644 tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
->  create mode 100644 tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
+> Is that a problem though? On an Intel machine with sub-numa clustering,
+> the distances are 11 and 21 for a "node" that is the split cache and the
+> remote node respectively.
 
-The folder naming is okay for me, but it is cyclic with the format:
-"tools/.../tools/".  So I am wandering if below two pathes are better?
+So, my question was, on an Intel machine, with sub-numa clustering
+enabled vs disabled, is the value of imb_numa_nr for the NUMA domain
+which spans the remote nodes (distance=21) the same or different. And
+if it is different, what is the rationale behind that. I am totally
+on-board with the idea that for the different NUMA levels, the
+corresponding imb_numa_nr should be different.
 
-  tools/perf/tests/shell/prog/coresight/
-  or
-  tools/perf/tests/shell/coresight/
+Just in case, I was not making myself clear earlier, on Zen3, the
+NUMA-A sched-domain, in the figures below, has groups where each group
+spans a socket in all the NPS configurations. However, only on NPS=1
+we have sd->imb_numa_nr=2 for NUMA-A, while on NPS=2/4, the value of
+sd->imb_numa_nr=4 for NUMA-A domain. Thus if we had 4 tasks sharing
+data, on NPS=2/4, they would reside on the same socket, while on
+NPS=1, we will have 2 tasks on one socket, and the other 2 will
+migrated to the other socket.
 
-I'd like to leave this question for Arnaldo / Jiri for the folder
-layout.
+That said, I have not been able to observe any significiant difference
+with a real-world workload like Mongodb run on NPS=1 with imb_numa_nr
+set to 2 vs 4.
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 13f9a84a617e..d46e8469c467 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1894,6 +1894,9 @@ F:	tools/perf/arch/arm/util/auxtrace.c
->  F:	tools/perf/arch/arm/util/cs-etm.c
->  F:	tools/perf/arch/arm/util/cs-etm.h
->  F:	tools/perf/arch/arm/util/pmu.c
-> +F:	tools/perf/tests/shell/coresight_*
-> +F:	tools/perf/tests/shell/tools/Makefile
-> +F:	tools/perf/tests/shell/tools/coresight/*
->  F:	tools/perf/util/cs-etm-decoder/*
->  F:	tools/perf/util/cs-etm.*
->  
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 80522bcfafe0..26467a2c71f4 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -630,7 +630,15 @@ sync_file_range_tbls := $(srctree)/tools/perf/trace/beauty/sync_file_range.sh
->  $(sync_file_range_arrays): $(linux_uapi_dir)/fs.h $(sync_file_range_tbls)
->  	$(Q)$(SHELL) '$(sync_file_range_tbls)' $(linux_uapi_dir) > $@
->  
-> -all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS)
-> +TESTS_TOOLS_DIR := $(srctree)/tools/perf/tests/shell/tools
-> +
-> +tests-tools-targets: FORCE
-> +	$(Q)$(MAKE) -C $(TESTS_TOOLS_DIR)
-> +
-> +tests-tools-targets-clean:
-> +	$(Q)$(MAKE) -C $(TESTS_TOOLS_DIR) clean
-> +
-> +all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS) tests-tools-targets
->  
->  # Create python binding output directory if not already present
->  _dummy := $(shell [ -d '$(OUTPUT)python' ] || mkdir -p '$(OUTPUT)python')
-> @@ -1020,6 +1028,7 @@ install-tests: all install-gtk
->  		$(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
->  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
->  		$(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
-> +	$(Q)$(MAKE) -C tests/shell/tools install-tests
->  
->  install-bin: install-tools install-tests install-traceevent-plugins
->  
-> @@ -1088,7 +1097,7 @@ endif # BUILD_BPF_SKEL
->  bpf-skel-clean:
->  	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
->  
-> -clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean
-> +clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-tools-targets-clean
->  	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-with-kcore $(OUTPUT)perf-iostat $(LANG_BINDINGS)
->  	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
->  	$(Q)$(RM) $(OUTPUT).config-detected
-> @@ -1155,5 +1164,6 @@ FORCE:
->  .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
->  .PHONY: $(GIT-HEAD-PHONY) TAGS tags cscope FORCE prepare
->  .PHONY: libtraceevent_plugins archheaders
-> +.PHONY: $(TESTS_TOOLS_TARGETS)
->  
->  endif # force_fixdep
-> diff --git a/tools/perf/tests/shell/coresight_asm_pure_loop.sh b/tools/perf/tests/shell/coresight_asm_pure_loop.sh
-> new file mode 100755
-> index 000000000000..542d4a37e349
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/coresight_asm_pure_loop.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/sh -e
-> +# Coresight / ASM Pure Loop
-> +
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +
-> +TEST="asm_pure_loop"
-> +. $(dirname $0)/lib/coresight.sh
-> +ARGS=""
-> +DATV="out"
-> +DATA="$DATD/perf-$TEST-$DATV.data"
-> +
-> +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 
-Is $ARGS redundant and can be removed?
 
-> +perf_dump_aux_verify "$DATA" 2601 334 334
+Zen3, NPS=1
+------------------------------------------------------------------
+|                                                                |
+|  NUMA-A : sd->imb_numa_nr = 2   			     	 |
+|     ------------------------     ------------------------  	 |
+|     |DIE                   |     |DIE                   |  	 |
+|     |                      |     |                      |  	 |
+|     |    ------   ------   |     |    ------   ------   |  	 |
+|     |    |MC  |   |MC  |   |     |    |MC  |   |MC  |   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |    |MC  |   |MC  |   |	   |    |MC  |   |MC  |   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |                      |	   |                      |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |    |MC  |   |MC  |   |	   |    |MC  |   |MC  |   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |    |MC  |   |MC  |   |     |    |MC  |   |MC  |   |  	 |
+|     |    ------   ------   |	   |    ------   ------   |  	 |
+|     |                      |	   |                      |  	 |
+|     ------------------------	   ------------------------  	 |
+|							     	 |
+------------------------------------------------------------------
 
-These three magic numbers "2601 334 334" would be hard to understand.
-One way is the code can dynamically calculate these values based on the
-loop times (the loop is is predefined in asm_pure_loop.S), or it's
-good to give explanation in comments for these values.
 
-> +
-> +err=$?
-> +exit $err
-> diff --git a/tools/perf/tests/shell/lib/coresight.sh b/tools/perf/tests/shell/lib/coresight.sh
-> new file mode 100644
-> index 000000000000..cd6c1283e6f5
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/lib/coresight.sh
-> @@ -0,0 +1,130 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +
-> +# This is sourced from a driver script so no need for #!/bin... etc. at the
-> +# top - the assumption below is that it runs as part of sourcing after the
-> +# test sets up some basic env vars to say what it is.
-> +
-> +# perf record options for the perf tests to use
-> +PERFRECMEM="-m ,128M"
 
-We must use 128Mb for the AUX trace buffer?  The big buffer size is
-not friendly for embedded system.
+Zen3, NPS=2
+------------------------------------------------------------------
+|                                                                |
+|  NUMA-A: sd->imb_numa_nr = 4   				 |
+|    ---------------------------  --------------------------- 	 |
+|    |NUMA-B :sd->imb_numa_nr=2|  |NUMA-B :sd->imb_numa_nr=2|	 |
+|    | ----------- ----------- |  | ----------- ----------- |	 |
+|    | |NODE     | |NODE     | |  | |NODE     | |NODE     | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |         | |         | |  | |         | |         | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | ----------- ----------- |  | ----------- ----------- |	 |
+|    |                         |  |                         |	 |
+|    ---------------------------  ---------------------------	 |
+|							     	 |
+------------------------------------------------------------------
 
-> +PERFRECOPT="$PERFRECMEM -e cs_etm//u"
-> +
-> +# These tests need to be run as root or coresight won't allow large buffers
-> +# and will not collect proper data
-> +UID=`id -u`
-> +if test "$UID" -ne 0; then
-> +	echo "Not running as root... skip"
-> +	exit 2
-> +fi
-> +
-> +TOOLS=$(dirname $0)/tools
-> +DIR="$TOOLS/coresight/$TEST"
-> +BIN="$DIR/$TEST"
-> +# If the test tool/binary does not exist and is executable then skip the test
-> +if ! test -x "$BIN"; then exit 2; fi
-> +DATD="."
 
-It's blur to set DATD and STATD to ".".  If the user doesn't specify
-the envs, it's not clear it will point to which folder.
+Zen3, NPS=4
+------------------------------------------------------------------
+|                                                                |
+|  NUMA-A: sd->imb_numa_nr = 4   				 |
+|    ---------------------------  --------------------------- 	 |
+|    |NUMA-B :sd->imb_numa_nr=2|  |NUMA-B :sd->imb_numa_nr=2|	 |
+|    | ----------- ----------- |  | ----------- ----------- |	 |
+|    | |NODE     | |NODE     | |  | |NODE     | |NODE     | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | ----------- ----------- |  | ----------- ----------- |    |
+|    | ----------- ----------- |  | ----------- ----------- |    |
+|    | |NODE     | |NODE     | |  | |NODE     | |NODE     | |    |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | |  |MC  | | |  |MC  | | |  | |  |MC  | | |  |MC  | | |	 |
+|    | |  ------ | |  ------ | |  | |  ------ | |  ------ | |	 |
+|    | ----------- ----------- |  | ----------- ----------- |	 |
+|    |                         |  |                         |	 |
+|    ---------------------------  ---------------------------	 |
+|							     	 |
+------------------------------------------------------------------
 
-> +# If the data dir env is set then make the data dir use that instead of ./
-> +if test -n "$PERF_TEST_CORESIGHT_DATADIR"; then
-> +	DATD="$PERF_TEST_CORESIGHT_DATADIR";
-> +fi
-> +# If the stat dir env is set then make the data dir use that instead of ./
-> +STATD="."
-> +if test -n "$PERF_TEST_CORESIGHT_STATDIR"; then
-> +	STATD="$PERF_TEST_CORESIGHT_STATDIR";
-> +fi
-> +
-> +# Called if the test fails - error code 2
-> +err() {
-> +	echo "$1"
-> +	exit 1
-> +}
-> +
-> +# Check that some statistics from our perf
-> +check_val_min() {
-> +	STATF="$4"
-> +	if test "$2" -lt "$3"; then
-> +		echo ", FAILED" >> "$STATF"
-> +		err "Sanity check number of $1 is too low ($2 < $3)"
-> +	fi
-> +}
-> +
-> +perf_dump_aux_verify() {
-> +	# Some basic checking that the AUX chunk contains some sensible data
-> +	# to see that we are recording something and at least a minimum
-> +	# amount of it. We should almost always see F3 atoms in just about
-> +	# anything but certainly we will see some trace info and async atom
-> +	# chunks.
-> +	DUMP="$DATD/perf-tmp-aux-dump.txt"
-> +	perf report --stdio --dump -i "$1" | \
-> +		grep -o -e I_ATOM_F3 -e I_ASYNC -e I_TRACE_INFO > "$DUMP"
-> +	# Simply count how many of these atoms we find to see that we are
-> +	# producing a reasonable amount of data - exact checks are not sane
-> +	# as this is a lossy  process where we may lose some blocks and the
-> +	# compiler may produce different code depending on the compiler and
-> +	# optimization options, so this is rough  just to see if we're
-> +	# either missing almost all the data or all of it
-> +	ATOM_F3_NUM=`grep I_ATOM_F3 "$DUMP" | wc -l`
-> +	ATOM_ASYNC_NUM=`grep I_ASYNC "$DUMP" | wc -l`
-> +	ATOM_TRACE_INFO_NUM=`grep I_TRACE_INFO "$DUMP" | wc -l`
-> +	rm -f "$DUMP"
-> +
-> +	# Arguments provide minimums for a pass
-> +	CHECK_F3_MIN="$2"
-> +	CHECK_ASYNC_MIN="$3"
-> +	CHECK_TRACE_INFO_MIN="$4"
-> +
-> +	# Write out statistics, so over time you can track results to see if
-> +	# there is a pattern - for example we have less "noisy" results that
-> +	# produce more consistent amounts of data each run, to see if over
-> +	# time any techinques to  minimize data loss are having an effect or
-> +	# not
-> +	STATF="$STATD/stats-$TEST-$DATV.csv"
-> +	if ! test -f "$STATF"; then
-> +		echo "ATOM F3 Count, Minimum, ATOM ASYNC Count, Minimum, TRACE INFO Count, Minimum" > "$STATF"
-> +	fi
-> +	echo -n "$ATOM_F3_NUM, $CHECK_F3_MIN, $ATOM_ASYNC_NUM, $CHECK_ASYNC_MIN, $ATOM_TRACE_INFO_NUM, $CHECK_TRACE_INFO_MIN" >> "$STATF"
-> +
-> +	# Actually check to see if we passed or failed.
-> +	check_val_min "ATOM_F3" "$ATOM_F3_NUM" "$CHECK_F3_MIN" "$STATF"
-> +	check_val_min "ASYNC" "$ATOM_ASYNC_NUM" "$CHECK_ASYNC_MIN" "$STATF"
-> +	check_val_min "TRACE_INFO" "$ATOM_TRACE_INFO_NUM" "$CHECK_TRACE_INFO_MIN" "$STATF"
-> +	echo ", Ok" >> "$STATF"
-> +}
-> +
-> +perf_dump_aux_tid_verify() {
 
-This function is not used in the test contained in this patch.
 
-> +	# Specifically crafted test will produce a list of Tread ID's to
-> +	# stdout that need to be checked to  see that they have had trace
-> +	# info collected in AUX blocks in the perf data. This will go
-> +	# through all the TID's that are listed as CID=0xabcdef and see
-> +	# that all the Thread IDs the test tool reports are  in the perf
-> +	# data AUX chunks
-> +
-> +	# The TID test tools will print a TID per stdout line that are being
-> +	# tested
-> +	TIDS=`cat "$2"`
-> +	# Scan the perf report to find the TIDs that are actually CID in hex
-> +	# and build a list of the ones found
-> +	FOUND_TIDS=`perf report --stdio --dump -i "$1" | \
-> +			grep -o "CID=0x[0-9a-z]\+" | sed 's/CID=//g' | \
-> +			uniq | sort | uniq`
-> +
-> +	# Iterate over the list of TIDs that the test says it has and find
-> +	# them in the TIDs found in the perf report
-> +	MISSING=""
-> +	for TID2 in $TIDS; do
-> +		FOUND=""
-> +		for TIDHEX in $FOUND_TIDS; do
-> +			TID=`printf "%i" $TIDHEX`
-> +			if test "$TID" -eq "$TID2"; then
-> +				FOUND="y"
-> +				break
-> +			fi
-> +		done
-> +		if test -z "$FOUND"; then
-> +			MISSING="$MISSING $TID"
-> +		fi
-> +	done
-> +	if test -n "$MISSING"; then
-> +		err "Thread IDs $MISSING not found in perf AUX data"
-> +	fi
-> +}
-> diff --git a/tools/perf/tests/shell/tools/Makefile b/tools/perf/tests/shell/tools/Makefile
-> new file mode 100644
-> index 000000000000..c7ada20922fd
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/tools/Makefile
-> @@ -0,0 +1,26 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +include ../../../../../tools/scripts/Makefile.include
-> +include ../../../../../tools/scripts/Makefile.arch
-> +include ../../../../../tools/scripts/utilities.mak
 
-To be honest, I don't understand well for perf's build and config
-system.  Seems to me, a good example for building program is jevents.
+> > Irrespective of what NPS mode we are operating in, the NUMA distance
+> > between the two sockets is 32 on Zen3 systems. Hence shouldn't the
+> > thresholds be the same for that level of NUMA? 
+> > 
+> 
+> Maybe, but then it is not a property of the sched_domain and instead
+> needs to account for distance when balancing between two nodes that may
+> be varying distances from each other.
+> 
+> > Would something like the following work ?
+> > 
+> > if (sd->flags & SD_NUMA) {
+> > 
+> >    /* We are using the child as a proxy for the group. */
+> >    group_span = sd->child->span_weight;
+> >    sd_distance = /* NUMA distance at this sd level */
+> > 
+> 
+> NUMA distance relative to what? On Zen, the distance to a remote node may
+> be fixed but on topologies with multiple nodes that are not fully linked
+> to every other node by one hop, the same is not true.
 
-Please take a look for the code:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/Makefile.perf#n667
+Fair enough. The "sd_distance" I was referring to the node_distance()
+between the CPUs of any two groups in this NUMA domain. However, this
+was assuming that the node_distance() between the CPUs of any two
+groups would be the same, which is not the case for certain
+platforms. So this wouldn't work.
 
-If follow the same method with jevents for building test programs,
-I can see one benefit is we don't need to create a Makefile, on the
-other hand, we can reuse the perf's build system and simply create a
-Build file under the folder tools/perf/tests/shell/.../coresight/.
 
-> +
-> +SUBDIRS = \
-> +	coresight
-> +
-> +all: $(SUBDIRS)
-> +$(SUBDIRS):
-> +	$(Q)$(MAKE) -C $@
-> +
-> +INSTALLDIRS = $(SUBDIRS:%=install-%)
-> +
-> +install-tests: all $(INSTALLDIRS)
-> +$(INSTALLDIRS):
-> +	$(Q)$(MAKE) -C $(@:install-%=%) install-tests
-> +
-> +CLEANDIRS = $(SUBDIRS:%=clean-%)
-> +
-> +clean: $(CLEANDIRS)
-> +$(CLEANDIRS):
-> +	$(Q)$(MAKE) -C $(@:clean-%=%) O=$(OUTPUT) clean >/dev/null
-> +
-> +.PHONY: all clean install-tests $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
-> diff --git a/tools/perf/tests/shell/tools/coresight/Makefile b/tools/perf/tests/shell/tools/coresight/Makefile
-> new file mode 100644
-> index 000000000000..723006ea827c
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/tools/coresight/Makefile
-> @@ -0,0 +1,27 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +include ../../../../../../tools/scripts/Makefile.include
-> +include ../../../../../../tools/scripts/Makefile.arch
-> +include ../../../../../../tools/scripts/utilities.mak
-> +
-> +SUBDIRS = \
-> +	asm_pure_loop
-> +
-> +all: $(SUBDIRS)
-> +$(SUBDIRS):
-> +	$(Q)$(MAKE) -C $@
-> +
-> +INSTALLDIRS = $(SUBDIRS:%=install-%)
-> +
-> +install-tests: $(INSTALLDIRS)
-> +$(INSTALLDIRS):
-> +	$(Q)$(MAKE) -C $(@:install-%=%) install-tests
-> +
-> +CLEANDIRS = $(SUBDIRS:%=clean-%)
-> +
-> +clean: $(CLEANDIRS)
-> +$(CLEANDIRS):
-> +	$(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
-> +
-> +.PHONY: all clean $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
-> +
-> diff --git a/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig b/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
-> new file mode 100644
-> index 000000000000..cedd26c6a0eb
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
-> @@ -0,0 +1,23 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +
-> +ifndef DESTDIR
-> +prefix ?= $(HOME)
-> +endif
-> +
-> +DESTDIR_SQ = $(subst ','\'',$(DESTDIR))
-> +perfexecdir = libexec/perf-core
-> +perfexec_instdir = $(perfexecdir)
-> +
-> +ifneq ($(filter /%,$(firstword $(perfexecdir))),)
-> +perfexec_instdir = $(perfexecdir)
-> +else
-> +perfexec_instdir = $(prefix)/$(perfexecdir)
-> +endif
-> +
-> +perfexec_instdir_SQ = $(subst ','\'',$(perfexec_instdir))
-> +INSTALL = install
-> +
-> +include ../../../../../../scripts/Makefile.include
-> +include ../../../../../../scripts/Makefile.arch
-> +include ../../../../../../scripts/utilities.mak
 
-As suggested above, if we refer the building method of jevent, I think
-this Makefile.miniconfig is not needed anymore.
+> 
+> >    /* By default we set the threshold to 1/4th the sched-group span. */
+> >    imb_numa_shift = 2;
+> > 
+> >    /*
+> >     * We can be a little aggressive if the cost of migrating tasks
+> >     * across groups of this NUMA level is not high.
+> >     * Assuming 
+> >     */
+> >    
+> >    if (sd_distance < REMOTE_DISTANCE)
+> >       imb_numa_shift++;
+> > 
+> 
+> The distance would have to be accounted for elsewhere because here we
+> are considering one node in isolation, not relative to other nodes.
+> 
+> >    /*
+> >     * Compute the number of LLCs in each group.
+> >     * More the LLCs, more aggressively we migrate across
+> >     * the groups at this NUMA sd.
+> >     */
+> >     nr_llcs = group_span/llc_size;
+> > 
+> >     sd->imb_numa_nr = max(2U, (group_span / nr_llcs) >> imb_numa_shift);
+> > }
+> > 
+> 
+> Same, any adjustment would have to happen during load balancing taking
+> into account the relatively NUMA distances. I'm not necessarily opposed
+> but it would be a separate patch.
 
-> diff --git a/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
-> new file mode 100644
-> index 000000000000..10c5a60cb71c
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-> +
-> +include ../Makefile.miniconfig
-> +
-> +BIN=asm_pure_loop
-> +LIB=
-> +
-> +all: $(BIN)
-> +
-> +$(BIN): $(BIN).S
-> +ifdef CORESIGHT
-> +ifeq ($(ARCH),arm64)
-> +	$(Q)$(CC) $(BIN).S -nostdlib -static -o $(BIN) $(LIB)
-> +endif
-> +endif
-> +
-> +install-tests: all
-> +ifdef CORESIGHT
-> +ifeq ($(ARCH),arm64)
-> +	$(call QUIET_INSTALL, tests) \
-> +		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)'; \
-> +		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)/$(BIN)'
-> +endif
-> +endif
-> +
-> +clean:
-> +	$(Q)$(RM) -f $(BIN)
-> +
-> +.PHONY: all clean install-tests
-> diff --git a/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
-> new file mode 100644
-> index 000000000000..262876451021
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Tamas Zsoldos <tamas.zsoldos@arm.com>, 2021 */
-> +
-> +.globl _start
-> +_start:
-> +	mov	x0, 0x000fffff
-> +	mov	x1, xzr
-> +loop:
-> +	nop
-> +	nop
-> +	cbnz	x1, noskip
-> +	nop
-> +	nop
-> +	adrp	x2, skip
-> +	add 	x2, x2, :lo12:skip
-> +	br	x2
-> +	nop
-> +	nop
-> +noskip:
-> +	nop
-> +	nop
-> +skip:
-> +	sub	x0, x0, 1
-> +	cbnz	x0, loop
-> +
-> +	mov	x0, #0
-> +	mov	x8, #93 // __NR_exit syscall
-> +	svc	#0
 
-I verified this code on Arm64 machine and it works!
+Sure, we can look into this separately.
 
-I am a bit worry about the code for using the hard code number for
-system call.  Another option is to use the inline assembly
-in C code, I think you have considered for this approach, this might
-introduce noise for extra branch instructions during the testing,
-but it can allow us to program standard C program (and don't worry
-about the program exiting).
 
-If you think using assembly code is better than inline assembly, it
-would be fine for me.  Eventually, the system call number is very
-seldomly to be changed.
+> 
+> > > > <SNIP>
+> > > > If we retain the (2,4) thresholds from v4.1 but use them in
+> > > > allow_numa_imbalance() as in v3 we get
+> > > > 
+> > > > NPS=4
+> > > > Test:	 mel-v4.2
+> > > >  Copy:	 225860.12 (498.11%)
+> > > > Scale:	 227869.07 (572.58%)
+> > > >   Add:	 278365.58 (624.93%)
+> > > > Triad:	 264315.44 (596.62%)
+> > > > 
+> > > 
+> > > The potential problem with this is that it probably will work for
+> > > netperf when it's a single communicating pair but may not work as well
+> > > when there are multiple communicating pairs or a number of communicating
+> > > tasks that exceed numa_imb_nr.
+> > 
+> > 
+> > Yes that's true. I think what you are doing in v4 is the right thing.
+> > 
+> > In case of stream in NPS=4, it just manages to hit the corner case for
+> > this heuristic which results in a suboptimal behaviour. Description
+> > follows:
+> > 
+> 
+> To avoid the corner case, we'd need to explicitly favour spreading early
+> and assume wakeup will pull communicating tasks together and NUMA
+> balancing migrate the data after some time which looks like
 
-Thanks,
-Leo
+
+Actually I was able to root-cause the reason behind the drop in the
+performance of stream on NPS-4. I have already responded earlier in
+another thread : https://lore.kernel.org/lkml/Ybzq%2FA+HS%2FGxGYha@BLR-5CG11610CF.amd.com/
+Appending the patch here:
+
+
+---
+ kernel/sched/fair.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index ec354bf88b0d..c1b2a422a877 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9191,13 +9191,14 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 				return idlest;
+ #endif
+ 			/*
+-			 * Otherwise, keep the task on this node to stay local
+-			 * to its wakeup source if the number of running tasks
+-			 * are below the allowed imbalance. If there is a real
+-			 * need of migration, periodic load balance will take
+-			 * care of it.
++			 * Otherwise, keep the task on this node to
++			 * stay local to its wakeup source if the
++			 * number of running tasks (including the new
++			 * one) are below the allowed imbalance. If
++			 * there is a real need of migration, periodic
++			 * load balance will take care of it.
+ 			 */
+-			if (local_sgs.sum_nr_running <= sd->imb_numa_nr)
++			if (local_sgs.sum_nr_running + 1 <= sd->imb_numa_nr)
+ 				return NULL;
+ 		}
+ 
+-- 
+
+With this fix on top of your fix to compute the imb_numa_nr at the
+relevant level (v4.1:
+https://lore.kernel.org/lkml/20211213130131.GQ3366@techsingularity.net/),
+the stream regression for NPS4 is no longer there.
+
+
+Test:	tip-core	    v4		       v4.1		    v4.1-find_idlest_group_fix
+ Copy:	 37762.14 (0.00%)   48748.60 (29.09%)  164765.83 (336.32%)  205963.99 (445.42%)
+Scale:	 33879.66 (0.00%)   48317.66 (42.61%)  159641.67 (371.20%)  218136.57 (543.85%)
+  Add:	 38398.90 (0.00%)   54259.56 (41.30%)  184583.70 (380.70%)  257857.90 (571.52%)
+Triad:	 37942.38 (0.00%)   54503.74 (43.64%)  181250.80 (377.70%)  251410.28 (562.61%)
+
+--
+Thanks and Regards
+gautham.
+
+
+

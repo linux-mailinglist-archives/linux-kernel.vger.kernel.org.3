@@ -2,91 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD6C47C709
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E32847C705
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241598AbhLUSxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbhLUSxe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241587AbhLUSxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 21 Dec 2021 13:53:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E09BC061574;
-        Tue, 21 Dec 2021 10:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gwpHtrzIOugNZWMQx41hhR0OAIjfgE+ZuqRIceukEmM=; b=D2vhuElqYArhg+AijxsJfFAeR2
-        vJUS7dqklDDbRCMIMKSh692SjhB+K3ojUs6yc/MOqv0Vvqm5SL/6mKIny/YTKoQ1oAPrGeo5lXL4G
-        UGnlNN9hcnihZPnDPi6wqtBYamemWq5vLO8LL8ceJemx0mssL8uqI7GlgMalOEgV/d8jpGp9/B5c5
-        BmasU8LCDE+edfezHWrdAcbnrAu8cfEA23mnjgr8XcTJA4tZ8Wfaqe6H3TaRWm2ojGQ2MuiTATRwq
-        GeLi4YZQyXLY1ry1iUBoyVJpoTcPiy6rWAJ5p8xmrr52E/J2JcDUdTPwDnDXDbC6LmBwaaXD4XKBT
-        LChGTR9w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzkGL-002jVn-Tw; Tue, 21 Dec 2021 18:53:25 +0000
-Date:   Tue, 21 Dec 2021 18:53:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: iomap-folio & nvdimm merge
-Message-ID: <YcIipecYCUrqbRBu@casper.infradead.org>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-17-willy@infradead.org>
- <YcIIbtKhOulAL4s4@casper.infradead.org>
- <20211221184115.GY27664@magnolia>
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58627 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241559AbhLUSxd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:53:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640112812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RaxEfKPsvW2G/7TOdhBfY5WrgkaW6Nyc3UL395DMCcQ=;
+        b=IYQVz7v/zid4wRERult49/YbYH9wSgVf6peVDZ/e2kwlTXSQujsfIJ8PxnWYH2xfClRWQq
+        eaZ3gZp3s2xGrqts8KvF3TeBcqhjVpGucd7GR0ndReFsM0q9ss+8dah5fXprDyGwLtqwmc
+        KOoddTvvHEbYmd1XZ9k0Vq9SYSaBqAk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-HS-j5457MMGLlPHIdEWsBw-1; Tue, 21 Dec 2021 13:53:31 -0500
+X-MC-Unique: HS-j5457MMGLlPHIdEWsBw-1
+Received: by mail-ed1-f72.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so3504001edd.15
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:53:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RaxEfKPsvW2G/7TOdhBfY5WrgkaW6Nyc3UL395DMCcQ=;
+        b=XGvqLmDg2gfYT7YTmo5j/U1cVSe/7rum1Ehgjm7DKePpfTPsSjiJqPnKGivV0b1uqs
+         YntXekKVepuf1eGvMXTWH0GtYNGZWmhrDb9EN4QEdS91TvbiCkvR/P9o2+je7FXABNTy
+         blFmVqARPd/pAQL8zZNDzELnj1VTx/CXh0YoXOOGLI4uu4WTzta/3D3ukUzYwFwM2q1h
+         IBrS9K56g36GsZEzx/CJ+bLiN4/PdY42dlyf6pI9aP67ovKVXQdI7Tl8q9wJZFX2qhhC
+         ykYJA8Qup9UweNoCJBQkCf/pZ1ymtNfBx4dkgTeuc7zvo6kKBLl4I4vHyTJrXZUhdRcU
+         qVSg==
+X-Gm-Message-State: AOAM530n9OKRMyhkeWi6NlbvAl1/NmRup0wwnb5QsRYrnVuaJ8c6p10Q
+        ftc19vPzpTCkO3XaLD18Spd9xwxtoZunRb8qo5zJccb144zImqPJDuPWosO1GDY3j9TdFWepaev
+        W//29YL9ZRTTLS8lOTk4yrTxE
+X-Received: by 2002:a17:906:2802:: with SMTP id r2mr3940487ejc.172.1640112810372;
+        Tue, 21 Dec 2021 10:53:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRqLy4pcUlbMjBepIrlRH0zBM2jdr2lBOYDmUXU8Typ0GYIlXRJZrjUnh4K1UqEUq6499rUA==
+X-Received: by 2002:a17:906:2802:: with SMTP id r2mr3940454ejc.172.1640112810048;
+        Tue, 21 Dec 2021 10:53:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id i6sm5695402edx.46.2021.12.21.10.53.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:53:29 -0800 (PST)
+Message-ID: <c6abc6df-6e66-38e3-d934-e71467d71f88@redhat.com>
+Date:   Tue, 21 Dec 2021 19:53:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221184115.GY27664@magnolia>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 3/3] drm/privacy_screen_x86: Add entry for ChromeOS
+ privacy-screen
+Content-Language: en-US
+To:     Rajat Jain <rajatja@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benson Leung <bleung@chromium.org>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, gwendal@google.com,
+        seanpaul@google.com, marcheu@google.com, dtor@google.com
+Cc:     rajatxjain@gmail.com
+References: <20211220222828.2625444-1-rajatja@google.com>
+ <20211220222828.2625444-3-rajatja@google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211220222828.2625444-3-rajatja@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:41:15AM -0800, Darrick J. Wong wrote:
-> >     iomap: Inline __iomap_zero_iter into its caller
-> > 
-> >     To make the merge easier, replicate the inlining of __iomap_zero_iter()
-> >     into iomap_zero_iter() that is currently in the nvdimm tree.
-> > 
-> >     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
-> Looks like a reasonable function promotion to me...
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Hi,
 
-Thanks, applied that to the commit.
-
-> > Shall I push out a version of this patch series which includes the
-> > "iomap: Inline __iomap_zero_iter into its caller" patch I pasted above?
+On 12/20/21 23:28, Rajat Jain wrote:
+> Add a static entry in the x86 table, to detect and wait for
+> privacy-screen on some ChromeOS platforms.
 > 
-> Yes.
+> Please note that this means that if CONFIG_CHROMEOS_PRIVACY_SCREEN is
+> enabled, and if "GOOG0010" device is found in ACPI, then the i915 probe
+> shall return EPROBE_DEFER until a platform driver actually registers the
+> privacy-screen: https://hansdegoede.livejournal.com/25948.html
 > 
-> I've been distracted for months with first a Huge Customer Escalation
-> and now a <embargoed>, which means that I've been and continue to be
-> very distracted.  I /think/ there are no other iomap patches being
-> proposed for inclusion -- Andreas' patches were applied as fixes during
-> 5.16-rc, Christoph's DAX refactoring is now in the nvdimm tree, and that
-> leaves Matthew's folios refactoring.
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> ---
+> v3: * Remove the pr_info() from detect_chromeos_privacy_screen(), instead
+>       enhance the one already present in drm_privacy_screen_lookup_init()
+> v2: * Use #if instead of #elif
+>     * Reorder the patches in the series.
+>     * Rebased on drm-tip
 > 
-> So seeing as (I think?) there are no other iomap patches for 5.17, if
-> Matthew wants to add his branch to for-next and push directly to Linus
-> (rather than pushing to me to push the exact same branch to Linus) I
-> think that would be ... better than letting it block on me.  IIRC I've
-> RVB'd everything in the folios branch. :(
+>  drivers/gpu/drm/drm_privacy_screen_x86.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
 > 
-> FWIW I ran the 5.17e branch through my fstests cloud and nothing fell
-> out, so I think it's in good enough shape to merge to for-next.
+> diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> index a2cafb294ca6..0fdd2b500e6d 100644
+> --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
+> +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
+> @@ -47,6 +47,16 @@ static bool __init detect_thinkpad_privacy_screen(void)
+>  }
+>  #endif
+>  
+> +#if IS_ENABLED(CONFIG_CHROMEOS_PRIVACY_SCREEN)
+> +static bool __init detect_chromeos_privacy_screen(void)
+> +{
+> +	if (!acpi_dev_present("GOOG0010", NULL, -1))
+> +		return false;
+> +
+> +	return true;
 
-Glad to hear it passed that thorough testing.  Stephen, please pick
-up a new tree (hopefully just temporarily until Darrick can swim to
-the surface):
+This can be simplified to just:
 
- git://git.infradead.org/users/willy/linux.git folio-iomap
+	return acpi_dev_present("GOOG0010", NULL, -1);
 
-Hopefully the previous message will give you enough context for
-the merge conflict resolution.
+> +}
+> +#endif
+> +
+>  static const struct arch_init_data arch_init_data[] __initconst = {
+>  #if IS_ENABLED(CONFIG_THINKPAD_ACPI)
+>  	{
+> @@ -58,6 +68,16 @@ static const struct arch_init_data arch_init_data[] __initconst = {
+>  		.detect = detect_thinkpad_privacy_screen,
+>  	},
+>  #endif
+> +#if IS_ENABLED(CONFIG_CHROMEOS_PRIVACY_SCREEN)
+> +	{
+> +		.lookup = {
+> +			.dev_id = NULL,
+> +			.con_id = NULL,
+> +			.provider = "privacy_screen-GOOG0010:00",
+> +		},
+> +		.detect = detect_chromeos_privacy_screen,
+> +	},
+> +#endif
+>  };
+>  
+>  void __init drm_privacy_screen_lookup_init(void)
+> @@ -68,7 +88,8 @@ void __init drm_privacy_screen_lookup_init(void)
+>  		if (!arch_init_data[i].detect())
+>  			continue;
+>  
+> -		pr_info("Found '%s' privacy-screen provider\n",
+> +		pr_info("Found '%s' privacy-screen provider."
+> +			"Might have to defer probe for it...\n",
+>  			arch_init_data[i].lookup.provider);
+
+I'm afraid this change in the log message will only confuse users,
+and for your goal of checking if a privacy-screen provider has
+been detected, the original message is good enough.
+
+Please drop this part of the patch.
+
+Regards,
+
+Hans
+
+
+
+>  
+>  		/* Make a copy because arch_init_data is __initconst */
+> 
+

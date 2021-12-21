@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EC147BE62
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20D747BE6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbhLUKru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:47:50 -0500
-Received: from relay036.a.hostedemail.com ([64.99.140.36]:13133 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230089AbhLUKrt (ORCPT
+        id S234841AbhLUKs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236034AbhLUKs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:47:49 -0500
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id BE3F320C16;
-        Tue, 21 Dec 2021 10:47:47 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id AACBC60016;
-        Tue, 21 Dec 2021 10:47:43 +0000 (UTC)
-Message-ID: <3f89cfece748d661cc0dc32b29704a3c0fa17fe4.camel@perches.com>
-Subject: Re: [PATCH -next] net/sched: use min() macro instead of doing it
- manually
-From:   Joe Perches <joe@perches.com>
-To:     patchwork-bot+netdevbpf@kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
-Date:   Tue, 21 Dec 2021 02:47:44 -0800
-In-Reply-To: <164008201003.19926.3019516223695943322.git-patchwork-notify@kernel.org>
-References: <20211221011455.10163-1-yang.lee@linux.alibaba.com>
-         <164008201003.19926.3019516223695943322.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Tue, 21 Dec 2021 05:48:27 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403DCC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:48:27 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id t11so12441582qtw.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cVpCMMIi1tjA4OyGU3rx8gElgVfE4GySRfg8ryIMmN8=;
+        b=DHZFqLHpwwECYpmpjSbAFv2g/RJz3+GU0X5y2BawrdsD77J66lM/hvG7zCuLm4XP9D
+         Om/bxxHq1rH/77o3J5bQwIFROdoO/zsgpFgTwFXDIrJ07Zo3uV1EuRgSk6+SQiL/AwdN
+         3mmCQCL1ewUNvC1z1SE3qIUT/vpZ6WEFR53g2sq5ob8QSmRUNYSdYE3C7XmTU4O945Db
+         nRFV8gm6NBQesTjgBgqHkyd7KeXItxc1QJQ/LDYUVQXR0TEAEolCw+xA5jGTV3ud3Nb+
+         0PhM72i1NCGntNKZaqImwJvM8yrA0U1mQ7xlAfx9FF69eD8ZM2FfSUxDihF3moKM0jEv
+         KA2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cVpCMMIi1tjA4OyGU3rx8gElgVfE4GySRfg8ryIMmN8=;
+        b=vH0ttmqciIyTNSEgOl0H/FVW5ZAz0/fPcn9B1QdH9qzzKkDvtPGz0zir7pmPY9Fn1e
+         G4Runb4UkknalXkrq+KQdOFEI9JEUJE8tSLaosrNq3bQXKHYTyE/6bcSkD8TS/uMPKtr
+         udG2k3JMZGmMw4+N5SnQCAIiPf68MUtdj9uSz5dOooYqoZlyY1PBWetv3Jf6fh8r1kbQ
+         wrYtI8ZrYdlQReU77mSxi9p7Bfe/DALy9uOGWkU19uHj9CUbkQkZrcJf9gBzDZnDqbyb
+         kB9Vw3g6D5AQs3bMqONO9wF6DEbLcBJ/P3FxLe1kqTElwGInLAYHD9qH7vMuR4hBM6td
+         jemg==
+X-Gm-Message-State: AOAM532fSq/TN7rwLJt1QtasqmN+bFgzczSuzsjNQmSlmmc9I+3tIKzH
+        twgQcnIRDbbuMI+Ut+bJaup7Lqwu36L1kt8LrttzQA==
+X-Google-Smtp-Source: ABdhPJy5w19aks3xmmYqzkFSMv593adNRGFMJdwvmZYgaWKN4laOQIB1b5WBGEwlb18pBRmgHk1a22fe2/49SigiVcI=
+X-Received: by 2002:a05:622a:3ca:: with SMTP id k10mr1644590qtx.130.1640083706051;
+ Tue, 21 Dec 2021 02:48:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: i4qetnwc3jkcpp1wzyjjdbkwiy1bhoxh
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: AACBC60016
-X-Spam-Status: No, score=-3.38
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19PyI4ue8fD55pNeJGQd5g2Br5l0PF3sps=
-X-HE-Tag: 1640083663-484633
+References: <20211221101319.7980-1-jose.exposito89@gmail.com> <20211221101319.7980-2-jose.exposito89@gmail.com>
+In-Reply-To: <20211221101319.7980-2-jose.exposito89@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 21 Dec 2021 13:48:15 +0300
+Message-ID: <CAA8EJppMsqot1isnMYeSWVJm4tC-PoqUDL9jwd5HJ72tca0HQQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] drm/plane: Mention format_mod_supported in IN_FORMATS docs
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     robdclark@gmail.com, maarten.lankhorst@linux.intel.com,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        tzimmermann@suse.de, maxime@cerno.tech, mripard@kernel.org,
+        wens@csie.org, jernej.skrabec@gmail.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 10:20 +0000, patchwork-bot+netdevbpf@kernel.org
-wrote:
-> Hello:
-> 
-> This patch was applied to netdev/net-next.git (master)
-> by David S. Miller <davem@davemloft.net>:
-> 
-> On Tue, 21 Dec 2021 09:14:55 +0800 you wrote:
-> > Fix following coccicheck warnings:
-> > ./net/sched/cls_api.c:3333:17-18: WARNING opportunity for min()
-> > ./net/sched/cls_api.c:3389:17-18: WARNING opportunity for min()
-> > ./net/sched/cls_api.c:3427:17-18: WARNING opportunity for min()
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> > 
-> > [...]
-> 
-> Here is the summary with links:
->   - [-next] net/sched: use min() macro instead of doing it manually
->     https://git.kernel.org/netdev/net-next/c/c48c94b0ab75
-> 
-> You are awesome, thank you!
+On Tue, 21 Dec 2021 at 13:13, Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmai=
+l.com> wrote:
+>
+> Adding format modifiers without implementing the function
+> "drm_plane_funcs.format_mod_supported" exposes an invalid IN_FORMATS
+> blob with modifiers but no formats to user-space.
 
-The patch contained instances like:
+I think the fix should be applied to the generic code. The docs at
+drm_plane.h clearly state that this callback is optional:
 
----
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-[]
-@@ -3333,7 +3333,7 @@ int tc_setup_cb_add(struct tcf_block *block, struct tcf_proto *tp,
- 	up_read(&block->cb_lock);
- 	if (take_rtnl)
- 		rtnl_unlock();
--	return ok_count < 0 ? ok_count : 0;
-+	return min(ok_count, 0);
- }
----
+         * This optional hook is used for the DRM to determine if the given
+         * format/modifier combination is valid for the plane. This allows =
+the
+         * DRM to generate the correct format bitmask (which formats apply =
+to
+         * which modifier), and to valdiate modifiers at atomic_check time.
+         *
+         * If not present, then any modifier in the plane's modifier
+         * list is allowed with any of the plane's formats.
 
-I think all of these min uses are somewhat obfuscating and not the
-typically used kernel pattern.
+So, one should fix the core code in create_in_format_blob() to include
+all combinations.
 
-If count is negative, it's an error return.
+>
+> This breaks the latest Weston [1]. For testing purposes, I extracted the
+> affected code to a standalone program [2].
+>
+> Make clear in the IN_FORMATS documentation that implementing
+> "format_mod_supported" is mandatory.
 
-I believe the code would be clearer and more typical if written as:
+format_mod_supported() being optional or mandatory should be
+documented in the format_mod_supported() docs, not in the IN_FORMAT
+docs.
 
-	if (ok_count < 0)
-		return ok_count;
+>
+> [1] https://gitlab.freedesktop.org/wayland/weston/-/blob/9.0/libweston/ba=
+ckend-drm/kms.c#L431
+> [2] https://github.com/JoseExposito/drm-sandbox/blob/main/in_formats.c
+>
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> ---
+>  drivers/gpu/drm/drm_plane.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
+> index 82afb854141b..347571f8909a 100644
+> --- a/drivers/gpu/drm/drm_plane.c
+> +++ b/drivers/gpu/drm/drm_plane.c
+> @@ -126,8 +126,11 @@
+>   * IN_FORMATS:
+>   *     Blob property which contains the set of buffer format and modifie=
+r
+>   *     pairs supported by this plane. The blob is a struct
+> - *     drm_format_modifier_blob. Without this property the plane doesn't
+> - *     support buffers with modifiers. Userspace cannot change this prop=
+erty.
+> + *     drm_format_modifier_blob and the drm_plane_funcs.format_mod_suppo=
+rted
+> + *     function must be implemented by the driver to determine if the gi=
+ven
+> + *     format/modifier combination is valid for the plane. Without this =
+property
+> + *     the plane doesn't support buffers with modifiers. Userspace canno=
+t change
+> + *     this property.
+>   *
+>   *     Note that userspace can check the &DRM_CAP_ADDFB2_MODIFIERS drive=
+r
+>   *     capability for general modifier support. If this flag is set then=
+ every
+> --
+> 2.25.1
+>
 
-	return 0;
-}
 
-The compiler should produce the same object code.
-
-
+--=20
+With best wishes
+Dmitry

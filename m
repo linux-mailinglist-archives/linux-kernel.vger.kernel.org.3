@@ -2,255 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1491E47B6CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D746F47B6D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbhLUBV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 20:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLUBV2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:21:28 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2281C061574;
-        Mon, 20 Dec 2021 17:21:27 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id k37so25729405lfv.3;
-        Mon, 20 Dec 2021 17:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nkRfs6Jq6Yr/a/t9OO2egmqloXCmD4IcdPxGpgHonb8=;
-        b=eF1G2y2TjCAkFUrBHcdwf3AbiSiwCXaA2g7IKISK3lq1/wtP150oj9nLjun2CQ+h1R
-         vot0D+gAcqRR647Zq81AI3CvVtcy3qDvnFMgCF4DHHFLLiEhLrLdpLz1gGyWi7JqjsMq
-         Q5XPxpn2JAkCLZfvmuz8D1aMmD/Bp5QBWMX+MGVw72KvpunSLbk+ZeKop5LvmtvU2n97
-         5CsfKyuXgPWnKXIlltWovD4O1uQy3ssLCHpROmBnMqq4e6sbAe5zm8UC2DTyXOTkglGX
-         EUt8rMwVdQ90IX6gxggPtLDeknNwu3LogfS0J0irajS7bExPTNK/MTUro5ZETcIatvCq
-         UFlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nkRfs6Jq6Yr/a/t9OO2egmqloXCmD4IcdPxGpgHonb8=;
-        b=7rcyIkUoI9NraJrNWxDJHsjbW2MNT1HlFOtD8VP1REmS7Qh6ndSLxLU+c1CS8dYYIg
-         RQdnel7r0SjlCnaHqrSGrUZzsFsEi6kYpkWOa0HBbzA3JchhirukkyvP6IGkMJkG7zLS
-         7FqbQKtqgip3L8SS4jRYKf8fiVoy6tEoiVwKa+kQ7ipjFZC4uxqAYmSoPrptf2p4nxJe
-         179jvUk48t0i4OVJfUr55gPEbSv0VLLT/ghVTGFtnCRxD1c+dEBTBellU/JuwaW4M3P1
-         wI0VrrcQqfAwlS3Ex0RN/uTdU5Ta/mMK5FtmJ6JjB7TPZQD+onhnrNacBJBOjl34xmZB
-         IOhA==
-X-Gm-Message-State: AOAM531tAOnar56Xr0bx2fzfbt1R027T3/J7hQdwe6NV4tA0LYk/qldo
-        6bRuY1ByRdNqOq1r9BdK/yx1bjr0B6k=
-X-Google-Smtp-Source: ABdhPJziuxKcVGxUkjz2c00kkrTen8rOkYs71ofy6F7odPfZ42R/oI6ztDoz6894QXV2I32c3yKg8w==
-X-Received: by 2002:ac2:51bc:: with SMTP id f28mr842680lfk.222.1640049685857;
-        Mon, 20 Dec 2021 17:21:25 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id h18sm2637460ljh.133.2021.12.20.17.21.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 17:21:25 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] ALSA: hda/tegra: Fix Tegra194 HDA reset failure
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, perex@perex.cz
-Cc:     jonathanh@nvidia.com, mkumard@nvidia.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
- <1640021408-12824-2-git-send-email-spujar@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f859559c-abf1-ae37-6a0f-80329e6f747f@gmail.com>
-Date:   Tue, 21 Dec 2021 04:21:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230116AbhLUBZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 20:25:44 -0500
+Received: from mail-bn8nam08on2063.outbound.protection.outlook.com ([40.107.100.63]:6241
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229596AbhLUBZn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 20:25:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SaEg0OPbVW+BkjavblKNOF4pN2fz8r8OCQaLkWCYVhzVFuZgrco8W3jltZoqEEZVGCH30aN62/Bu4JKk6vtPkuQ9fR8pPG1z0Uv6WnTbRSrBfH82+y2vIXEeSjmP8G8yuhCeYBJleln2ywjhMwU1x4/P6kCRDaM/0qAHv7vyzHxDmdqya/zDWjPWDXOS1LiK45Bc1uMtcw2w17iACCa6eCscC83MJ8dr9VxiTWq8ETp4ShG81q0FcUkox7eOMFuOBQhZSlxTXKtEExeDAH5nEMKyKvEPfdnlA+Q1ZtfDU2QC/4FlsfttwKpPEE0P/OEajuvbokVH91iFPLVhdgqjdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G78txVDzL/UTsiRKmKxUHzeAfCLRnhqThboYwn48l4Y=;
+ b=nAa5CCHC7Hq2jCmXZSWCnzMbPAHjS+zokUALNIATLa/O4BKsZJ0bcVfxM/to/F95rt38OcXRP6HC3IY7pMVFxrrn2PGKBoIcj42N7ceOVih7A4CDZ1Y3hKssQITHnAwIlc9OTg9NhM7qlgxztme+n9gjRw7CaBtLqTUeHnSOmBmYpXnIo8I6T2FJUknxX4vjCC6riELxJgwC0OyeKc3jIcQhN4bURpu6ujXc5Jcnz73975LfOCvwDapcjUiRcgwuZ0eT8VqhQb08FfabM1CoQN56XXLWxIb3RgO2l8ycav0AsYzXmfpBp5FPRwxO765XZtTDT9mmrUKZlwodRsdmcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G78txVDzL/UTsiRKmKxUHzeAfCLRnhqThboYwn48l4Y=;
+ b=DrCoaGpB3p/1W3ODyhFxbCtoURIWDneDG9aDdlR7O8xqV8o0U+WT4xPTnvWzkjvN0BZFm0rwjUP05yePEPqQTwPXcIRUmKTdjLWqpgf2IjAiWCYJxiImqmvV4AEhylQ/U16XWiHFO/AbVmnSaWwDegbnQdhJz2mgVqUwqOa4hRoQiDWNgighogpHBN7IlMPaxdfI3k1yY6Pj0ZPlrK66FGkZ8+AyA9ZKU1XMud5i53jRjDS9ewdlm/B9SxhotIN2Hbdo0ANRTnNRUPv2QoKcc9PuIgzojU5buc1OVCHZqMtU4zP8W/T9Tm56FzAD3AJ4KygD3KP00zWTPnYWK3uzBw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5096.namprd12.prod.outlook.com (2603:10b6:208:316::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 01:25:41 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%8]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
+ 01:25:41 +0000
+Date:   Mon, 20 Dec 2021 21:25:40 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <20211221012540.GA1665423@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQksG6bCIzRHxTLp"
+Content-Disposition: inline
+X-ClientProxiedBy: MN2PR08CA0017.namprd08.prod.outlook.com
+ (2603:10b6:208:239::22) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-In-Reply-To: <1640021408-12824-2-git-send-email-spujar@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 746fc7db-1bc4-4fbf-b7b6-08d9c420cd65
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5096:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB509651EB76C3C04BEA5D9E2FC27C9@BL1PR12MB5096.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:669;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pCW8v53PYrBpLcF2WnaXIjldOuhD0HB0iSGHZvaatJM/z3rgOGzRQ3+g0aucyZvo3gXA2e7g+bXICJozjeezbHaMaGSsO+c6t4/NptSXKpU7rEZgnU2/sIS0p5CD5vI9DBeAFD5Zt2Et9TxvpplCOcyiVPfW/0FX5nG63dX50w7+xhj1wLP74Hq8pN5gCDws4mdPjI1XBYzQh2RL419UNVUHc1WGJXpkEOxoqXGeLq4jXn0hXlbcGn6cyiiSTagNFONHau7L7Pt/FePEvQx09FJEB71hP/3IVpqzULj4ZSL3uf3wgumQGhMnomoisdkN0or12pb7X0w/DeMByXSiPgI6EPsqwOn/vgeVVM+m79pV+oAEG66Yz0IaYF8evZbOWBfJUnp50h8WWtfyVZEfAYy/HUiKVM3q02VFtv4yK48H1ciAACag1WizMzPUp2KM1gwvSW2+JZJDuoA7SnRwbvnP9ySQfJWUp5AA94BVscJZfuF4MgfglzLKkhGw04PMXU2AxOgdRpk9b0OoWKa9zwtpZIpqWSiHXiH62Q44J2+Xgg31SWLZHdk2cQFGRnhzwzHg4foG15Sx5pi3y3FDpWnedbibn7CbdTnL20dnPBPTGfqLEMRrsMZ1ZA9rgIGpvQ3v1jqiqUCYdM/DN4NnRQ6U9iVvbc9qTj9uNS0yk2hGhr2Byh9GwxDk9EeerfgQNFbdB6PpnrfJm33Cy8gX7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(6512007)(21480400003)(2616005)(26005)(66946007)(2906002)(6486002)(6916009)(508600001)(6506007)(33964004)(4001150100001)(86362001)(33656002)(36756003)(316002)(44144004)(1076003)(66574015)(5660300002)(66556008)(4326008)(83380400001)(8676002)(8936002)(66476007)(38100700002)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ly9CM2xpZWtEd2gyZS80c0RPb2ZJd3JMV0JUb09sTzJoeGR0UDA3R0JkMzVZ?=
+ =?utf-8?B?ck9SWGFLc2UyNlVnd0gxNXZtdFNKM2ZPR2Y1dExwcjBXc3g0L1k2dUNsMkYx?=
+ =?utf-8?B?SXBIM3hONy9GcXdadWNiSStUT0dSdFdJNXZRM01xV1FJTzhxbzQ3UzJIbzFi?=
+ =?utf-8?B?L1VUUWQ0aTh1dGNoQUlUbHppWndWVktrK05ybjdGNzdKOTNoYTcvRWtXZnMy?=
+ =?utf-8?B?ZWtrRkxqRUpGSVNOdUhRZWQ1c1NHQUVTVFJFdkluMlRQUE5RRm41TUJHbWRl?=
+ =?utf-8?B?RjJOQ1FsNCtIenBUd3I2bTNhV2svRGVxT0tUWkhIelVycUZoMTQ3VU9FTk04?=
+ =?utf-8?B?Q29QYjg2Z0h2bGFDc1prek5IRUdaYUZubXBoMUQ2eHZ1QktGeFdPMG1UWUps?=
+ =?utf-8?B?UU5kc05NOGVRaEY4c2xsZE9KVmNleHZmZlR2VW1NL2QyREFLekZNOTdTRG9P?=
+ =?utf-8?B?Q1E5MzhzdnB5UDFNakE4VlBsK0RWb0lHdDRvTGI0MmlpRmQxY1JLTjJ4Tjgx?=
+ =?utf-8?B?aWdRSWlyZG8rUCtROFNNVHNTc1hIUzF1VmhVbW1yY1pTUEUyZ1IvRXNLMUNE?=
+ =?utf-8?B?L3VGOGUyd2htWjhCb21LQVhWc0Y4dG8vbHRuNERkVVZYeE1oWnNSQzBCeVRR?=
+ =?utf-8?B?cHZGSkw0Rjc4MFg4eFgzZ1FER3ZLNXFHbWhzQTkxQ0xjdldSTmR1SHJ0NGU5?=
+ =?utf-8?B?R3RIT09jQlhWY2lJQnRqTkxlZTJCdFZHZzEvaFdtR3RreUY1VkVaYVNNeTZo?=
+ =?utf-8?B?dm8rQ1FSZnZwUTBCcHpsYitHcUtnbWhta3hEZk53b0lFbnpsSURyUkRuTmVW?=
+ =?utf-8?B?dUlsZTNJeS9vcVdaMlpza3ovaHZCcVAvRmlPN3FjTFl6dkY2VTIva29ZUjdM?=
+ =?utf-8?B?KzZ5dGM2OGdqYWxwdDhYSzJHQlhERVNUc1JURlZHUWh4bkM0a2FWakw5UFRF?=
+ =?utf-8?B?dnZpb0ZwTDFOUyt3RzNYR0JRb3BCYURhTitycXJ3bGwwbjE2OWdXdmhmTlRi?=
+ =?utf-8?B?eFk4cTJZNVczVTBsNDZSckwzcHNDc09GZlAweHF3Y3NaK0RrUkg0WFUyU09v?=
+ =?utf-8?B?L3JrSDZZdVc3enQ2Mmxzd0tLTTBpNm1SRUN6dThhNjM4aWJ0enRmTDV4bmxm?=
+ =?utf-8?B?MlJkTjAxWXRvdGFWNEhPcm9HaHFOMW55Q20zYTNEeC9XNURFblVrQzA4RXJo?=
+ =?utf-8?B?a1lJTlNLZk9LWUZzNkh0VFBzVXQxRGlWZ0dvSVpVdTR3eTZpSHBwZHF0MTNB?=
+ =?utf-8?B?RUs4ZS82ZTQ3eklxZ2l5ekd3UGhtVXpOWmx1UFRkeVo4VDhNV1VDMzYyZEFh?=
+ =?utf-8?B?bVVBVmVRTnNUTWRET0xuTkFaTTBSbVZMbXlseHVBWFc0K3UwcUNadjN6bTZu?=
+ =?utf-8?B?eFlQa2YzSXpoNytwWisxSTNkSmx3TWowM3dFSVFpQU9NdkNpK2V6SXJ6RkY3?=
+ =?utf-8?B?eVVOVThIRkJBVTUyUEd0eVRuS2NxR3JndUlwYXhPU0M1SDZBUUJuQTJxVVdu?=
+ =?utf-8?B?OFpjTHFmWThIRTJPcVh4Vk8xdEN2c3R2VVVmWlFXclhoZk9BanF5R3hKUmxJ?=
+ =?utf-8?B?dXh4MXd3WjJJZzkwZHljcHBUWGpFWmQ5NzdmL2tITlJDTjZ5dDBMdEVNUnVR?=
+ =?utf-8?B?L2lBSm42bWFqRTlKcnd3QnpUM0FqVmw0VFJaK2RuNjNYRUZxUXhlR3J3d1p2?=
+ =?utf-8?B?cGE1UXR4aU1MaFZvWWJFSjd3dkwyK0Q1Nis0UmRUQ2ZuMWluTEVrd2NtYnJr?=
+ =?utf-8?B?T1ZsYWh1cmQ1V3ZPL3lIYTIvcXhDN3NRWXA3TW52UThCVHZyRUJ1OVBnanR2?=
+ =?utf-8?B?YmhzaXRhSW1KSWNmTXh6VWtnekZibjV5eHFLME0xQUg0OFRuY2RZL0Frd3lT?=
+ =?utf-8?B?OHRkM01VaENodVRrOCtTbWZnNGRlM1hCMXF2NmhhSWJlNGZSOXYxeDVINzlU?=
+ =?utf-8?B?OTFiWW5yYlZvZWR3Q0x0eFFZTUlUYVdNTWxyY0pvc01uZEZrK3pvZFdRbzZt?=
+ =?utf-8?B?eDRvUTcxckJjdHUzSGhkUTFuNy80YlFXaVpDWUJRWGlsZHBUQ3BWNTMwZXlH?=
+ =?utf-8?B?VEJUcTl1eFNKRTB6WGx1QVRFK0VLa1k3YUpaUTFqN29DSHZZQ2VheS94K28z?=
+ =?utf-8?Q?MbeY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 746fc7db-1bc4-4fbf-b7b6-08d9c420cd65
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 01:25:41.4254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zns85N+YIncc4v84jEs8rj/cY/ozEqTNnQgtkX9hSdWJzfrMDD0l7qVdT3Fpx21O
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5096
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-20.12.2021 20:30, Sameer Pujar пишет:
-> HDA regression is recently reported on Tegra194 based platforms.
-> This happens because "hda2codec_2x" reset does not really exist
-> in Tegra194 and it causes probe failure. All the HDA based audio
-> tests fail at the moment. This underlying issue is exposed by
-> commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
-> response") which now checks return code of BPMP command response.
-> Fix this issue by skipping unavailable reset on Tegra194.
-> 
-> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> Cc: stable@vger.kernel.org
-> Depends-on: 87f0e46e7559 ("ALSA: hda/tegra: Reset hardware")
-> ---
->  sound/pci/hda/hda_tegra.c | 96 ++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 86 insertions(+), 10 deletions(-)
-> 
-> diff --git a/sound/pci/hda/hda_tegra.c b/sound/pci/hda/hda_tegra.c
-> index ea700395..be010cd 100644
-> --- a/sound/pci/hda/hda_tegra.c
-> +++ b/sound/pci/hda/hda_tegra.c
-> @@ -68,14 +68,21 @@
->   */
->  #define TEGRA194_NUM_SDO_LINES	  4
->  
-> +struct hda_tegra_soc {
-> +	bool has_hda2codec_2x_reset;
-> +};
-> +
->  struct hda_tegra {
->  	struct azx chip;
->  	struct device *dev;
-> -	struct reset_control *reset;
-> +	struct reset_control *reset_hda;
-> +	struct reset_control *reset_hda2hdmi;
-> +	struct reset_control *reset_hda2codec_2x;
->  	struct clk_bulk_data clocks[3];
->  	unsigned int nclocks;
->  	void __iomem *regs;
->  	struct work_struct probe_work;
-> +	const struct hda_tegra_soc *data;
->  };
->  
->  #ifdef CONFIG_PM
-> @@ -170,9 +177,26 @@ static int __maybe_unused hda_tegra_runtime_resume(struct device *dev)
->  	int rc;
->  
->  	if (!chip->running) {
-> -		rc = reset_control_assert(hda->reset);
-> -		if (rc)
-> +		rc = reset_control_assert(hda->reset_hda);
-> +		if (rc) {
-> +			dev_err(dev, "hda reset assert failed, err: %d\n", rc);
-> +			return rc;
-> +		}
-> +
-> +		rc = reset_control_assert(hda->reset_hda2hdmi);
-> +		if (rc) {
-> +			dev_err(dev, "hda2hdmi reset assert failed, err: %d\n",
-> +				rc);
-> +			return rc;
-> +		}
-> +
-> +		rc = reset_control_assert(hda->reset_hda2codec_2x);
-> +		if (rc) {
-> +			dev_err(dev,
-> +				"hda2codec_2x reset assert failed, err: %d\n",
-> +				rc);
->  			return rc;
-> +		}
->  	}
->  
->  	rc = clk_bulk_prepare_enable(hda->nclocks, hda->clocks);
-> @@ -187,9 +211,27 @@ static int __maybe_unused hda_tegra_runtime_resume(struct device *dev)
->  	} else {
->  		usleep_range(10, 100);
->  
-> -		rc = reset_control_deassert(hda->reset);
-> -		if (rc)
-> +		rc = reset_control_deassert(hda->reset_hda);
-> +		if (rc) {
-> +			dev_err(dev, "hda reset deassert failed, err: %d\n",
-> +				rc);
->  			return rc;
-> +		}
-> +
-> +		rc = reset_control_deassert(hda->reset_hda2hdmi);
-> +		if (rc) {
-> +			dev_err(dev, "hda2hdmi reset deassert failed, err: %d\n",
-> +				rc);
-> +			return rc;
-> +		}
-> +
-> +		rc = reset_control_deassert(hda->reset_hda2codec_2x);
-> +		if (rc) {
-> +			dev_err(dev,
-> +				"hda2codec_2x reset deassert failed, err: %d\n",
-> +				rc);
-> +			return rc;
-> +		}
->  	}
->  
->  	return 0;
-> @@ -427,9 +469,17 @@ static int hda_tegra_create(struct snd_card *card,
->  	return 0;
->  }
->  
-> +static const struct hda_tegra_soc tegra30_data = {
-> +	.has_hda2codec_2x_reset = true,
-> +};
-> +
-> +static const struct hda_tegra_soc tegra194_data = {
-> +	.has_hda2codec_2x_reset = false,
-> +};
-> +
->  static const struct of_device_id hda_tegra_match[] = {
-> -	{ .compatible = "nvidia,tegra30-hda" },
-> -	{ .compatible = "nvidia,tegra194-hda" },
-> +	{ .compatible = "nvidia,tegra30-hda", .data = &tegra30_data },
-> +	{ .compatible = "nvidia,tegra194-hda", .data = &tegra194_data },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, hda_tegra_match);
-> @@ -449,6 +499,10 @@ static int hda_tegra_probe(struct platform_device *pdev)
->  	hda->dev = &pdev->dev;
->  	chip = &hda->chip;
->  
-> +	hda->data = of_device_get_match_data(&pdev->dev);
-> +	if (!hda->data)
-> +		return -EINVAL;
-> +
->  	err = snd_card_new(&pdev->dev, SNDRV_DEFAULT_IDX1, SNDRV_DEFAULT_STR1,
->  			   THIS_MODULE, 0, &card);
->  	if (err < 0) {
-> @@ -456,12 +510,34 @@ static int hda_tegra_probe(struct platform_device *pdev)
->  		return err;
->  	}
->  
-> -	hda->reset = devm_reset_control_array_get_exclusive(&pdev->dev);
-> -	if (IS_ERR(hda->reset)) {
-> -		err = PTR_ERR(hda->reset);
-> +	hda->reset_hda = devm_reset_control_get_exclusive(&pdev->dev, "hda");
-> +	if (IS_ERR(hda->reset_hda)) {
-> +		err = PTR_ERR(hda->reset_hda);
->  		goto out_free;
->  	}
->  
-> +	hda->reset_hda2hdmi = devm_reset_control_get_exclusive(&pdev->dev,
-> +							       "hda2hdmi");
-> +	if (IS_ERR(hda->reset_hda2hdmi)) {
-> +		err = PTR_ERR(hda->reset_hda2hdmi);
-> +		goto out_free;
-> +	}
-> +
-> +	/*
-> +	 * "hda2codec_2x" reset is not present on Tegra194. Though DT would
-> +	 * be updated to reflect this, but to have backward compatibility
-> +	 * below is necessary.
-> +	 */
-> +	if (hda->data->has_hda2codec_2x_reset) {
-> +		hda->reset_hda2codec_2x =
-> +			devm_reset_control_get_exclusive(&pdev->dev,
-> +							 "hda2codec_2x");
-> +		if (IS_ERR(hda->reset_hda2codec_2x)) {
-> +			err = PTR_ERR(hda->reset_hda2codec_2x);
-> +			goto out_free;
-> +		}
-> +	}
-> +
->  	hda->clocks[hda->nclocks++].id = "hda";
->  	hda->clocks[hda->nclocks++].id = "hda2hdmi";
->  	hda->clocks[hda->nclocks++].id = "hda2codec_2x";
-> 
+--LQksG6bCIzRHxTLp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All stable kernels affected by this problem that don't support the bulk
-reset API are EOL now. Please use bulk reset API like I suggested in the
-comment to v1, it will allow us to have a cleaner and nicer code.
+Hi Linus,
 
-The bulk reset code will look similar to the bulk clk API already used
-by the HDA driver, you'll only need to skip adding the hda2codec_2x to
-resets[3] and switch to use reset_control_bulk_reset_*() variants of the
-functions.
+Getting RC patches out of the way before the holidays. Nothing very
+exciting.
+
+Regards,
+Jason
+
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to 12d3bbdd6bd2780b71cc466f3fbc6eb7d43bbc2a:
+
+  RDMA/hns: Replace kfree() with kvfree() (2021-12-14 20:13:29 -0400)
+
+----------------------------------------------------------------
+RDMA v5.16 third rc pull request
+
+Last fixes before holidays:
+
+- Work around a HW bug in HNS HIP08
+
+- Recent memory leak regression in qib
+
+- Incorrect use of kfree() for vmalloc memory in hns
+
+----------------------------------------------------------------
+Jiacheng Shi (1):
+      RDMA/hns: Replace kfree() with kvfree()
+
+Jos=C3=A9 Exp=C3=B3sito (1):
+      IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
+
+Yangyang Li (1):
+      RDMA/hns: Fix RNR retransmission issue for HIP08
+
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 64 ++++++++++++++++++++++++++=
+----
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.h |  8 ++++
+ drivers/infiniband/hw/hns/hns_roce_srq.c   |  2 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c  |  2 +-
+ 4 files changed, 67 insertions(+), 9 deletions(-)
+
+--LQksG6bCIzRHxTLp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfB7FMLh+8QxL+6i3OG33FX4gmxoFAmHBLRAACgkQOG33FX4g
+mxqgxQ/7BRmIRxmDXoGqZpXvoyikvukDzStenpzBrFSeI4cjoXhXNHV3/IkzpNhI
+M/1V8S94PZ31ZYZvj0qg0oca2MhCSoYTQNYQC4xo7Smn4Am9e58906j5uEEtJyC+
+XZaAhsaLwzeA+7fot9dQgVKrsIz+dxDgJP+fIKVxtsrolG4ycPCkeDKtrEYVF6gB
+ZWsa5NXe0dBAucMgaGhfDGi40ePWVVWyxO+4oj+9tLDWM6b56CYkVjLSrLANKGXr
+VWBJK1rTqYRV0LCB+PuIWA1In7j4ApyY4sn2AzlhrG5Q1NK+n3eluaKuGrFeAegZ
+/EGCDiPjApFCjsbEDDC2ujZwtgJkUtChB+laow2tOxlLKS3hs7dvEVtTcntFzdHn
+M71u3UAgvuMkQc4ZDFPqx6tebyyp0AeryW9PpAQEJDe4+OtFGS4ROrtZta67gyek
+cD0607S8eQkOelfIWY7NHxKwkKDtrvtEPhFQ9zumI/o8ogWBQ+iGditsrLof4dqm
+UI/tY1f7zOa1ux9r2F+hkXSTkZf9n3mPsUVg0Q7tF/O/pOODb/pTcaF9R6mv4kkD
+FGfj03IFB5jehKLpdogaltoq7ot+Elc0zNHbVprrcj5glIu7/P1XVQwqJRBvAAqz
+SsZs20fX4kaaUHRshqHGMkaDKciO9O3qP7rE2dtfPEAWY3LaqcA=
+=v1dX
+-----END PGP SIGNATURE-----
+
+--LQksG6bCIzRHxTLp--

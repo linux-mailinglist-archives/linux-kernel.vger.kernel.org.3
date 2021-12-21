@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5083A47BFE5
+	by mail.lfdr.de (Postfix) with ESMTP id E201A47BFE7
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbhLUMkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:40:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S237806AbhLUMkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbhLUMkC (ORCPT
+        with ESMTP id S237766AbhLUMkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:40:02 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9E3C061747;
-        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f5so28352980edq.6;
-        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
+        Tue, 21 Dec 2021 07:40:03 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E64C061748;
+        Tue, 21 Dec 2021 04:40:02 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id b13so22921026edd.8;
+        Tue, 21 Dec 2021 04:40:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IyNVKXDWR36ykQcClTsSbztRleUEblizENFlHFdt5IA=;
-        b=TbmZ3FEnJJhfZTBC2nxDLfieJ/gZf8DFoEe4NTn0luMUu9vG5m9hM4HfxGeRsxn3aL
-         hXDAjSQ0HqNZ6r3zuS9FVw8REsS1G/q/Y69ECCD1YXlt5f2e/sDRo8SAvcakw3+iKZFJ
-         9zB+Zju2zwnsmp+6G00plfdfyofSmECNX/Vy5crFqOKdiFUuzQP6+3D27Xrb8BTcGQ0L
-         o6RQa3kIr/5erkedjn1EooC1rjXaMCmy4BX8/mYBljPvgnBZDHwMS8lpFE2nKlEABGVj
-         qjve7xyDXbNH6LeI96F3VCVh4/ghs0C1PkARC+xuXeKhCb5xOBxpCNpHhXTf2SxR4X3+
-         jkZA==
+        bh=+fSw3aeBsQx4xHt3HVrtz0g005ZmrGJREKdBB2cH2X4=;
+        b=MtmcEKI8cC5idJ79i5BqiKloiR5o/Q0cRSsSYbjLFnfyLfzF6itgj2AyQ6p4s1YdPE
+         UaZPLo8hq6LzrJ3Rw+XUK8Lg5c91uaao8B7MbgGNCFwujexN03DkLmTk1kjymqPxkWRv
+         PZ5l0/WKrjzn64I6cZSs60YbF3LzcSNqhkWu4bQH3tn+thalP6bQUxLPXtX3KdvgnJAg
+         Pv069O76miMCRVmuQfa5NjLeUycKr5voQ78lr1WiukOlKuUbd6H7zwU/hd+lkhJS/i/p
+         nlNZc8ApDQZq2ACbGn1aFK+ZHrxXqZiuL7NC1GT4ZFFqYdSFKnWkrX8Z5dWtGfr5shAh
+         ry7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IyNVKXDWR36ykQcClTsSbztRleUEblizENFlHFdt5IA=;
-        b=ACmnG3nPbPhAxKIMTO9xNjVGcuOoHG7liAK72H6E8cqFx9AfH4ZbbZiqOkeyctQWCY
-         us2uDyFqXzEGr2zkb0jXMe2jAGkRAxbqlTQUzIr/xmJ5MHqLwuWBJRcs/7tve25xmqez
-         kh5SiDC3tfheAahxgsAsbnA/QcZWFMuBVBMgz3vo5IRGsKje2Q5fxqNm6L9/An78BOU5
-         BlFEVOUVGoFDGiUOadsD55yphMwErj2hPZAEsoEU/S+8vOcn7zhPi+p8uF6RTq+3DW1f
-         T9nE9TZC24v2bB87FAEk3Htr//JeIgRwpomtmrY+mmcTdWTD93K0BSEwyZM/dCwy6fsB
-         I29g==
-X-Gm-Message-State: AOAM530vFG/F5BovQyvb6WS1IeNLc7OgKL2Nottws1gl7l9FtF3b+KBq
-        q6tgUpH8IAoL9pA5dqD5uAE=
-X-Google-Smtp-Source: ABdhPJxDfYl3wI6S0e0cy8glih1BjFWnHK50u77PY7PQxb/u7j+1hcF3tZnMmzLxT5yH3qWzfzR8gg==
-X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr3117833edb.360.1640090400452;
-        Tue, 21 Dec 2021 04:40:00 -0800 (PST)
+        bh=+fSw3aeBsQx4xHt3HVrtz0g005ZmrGJREKdBB2cH2X4=;
+        b=yk2CFHVYlul5NdFfJ9eRnNtBbLr4KYX78//JRzF9ZFq07b1q2Iq9reNf0mu0b09rXy
+         PY8cWCemXuW/f4mh3WQ3mW1bT+XTR52nrpxu885MzbxR/6tLlvvx/FMPVPcbv0jJ9+3M
+         Z9FdkxrUziLWUhexYmNnfUwL1wcrqxEuzsE1D+D4j1kxwP0+KByPkwMmI7UPOEd7+OD5
+         RHgP7TlxUxPQ93MMmKG7QTxD8QRgbRqfWe1Ix6ssre7wRoonOgU0uZFEnn8OUBkXnPGk
+         cj0NiWezlE9AXkAErem0GNYR4bt55rLbSgVbbJ2bIfeOHBTZzkuO3ikmTFJDc+nSJUvA
+         YMTA==
+X-Gm-Message-State: AOAM532Ltd/AAYOJxfVIuSJMQatTn0wmFu1wUDUav4cy8InYvBAZtoOr
+        W0bgPwtZ8bgpltWCs0QLkP8=
+X-Google-Smtp-Source: ABdhPJwvlurP56Bp5BBsbroOfW+6MYGEuJe02XFaboGtQnxI7w06JmAUCdrOf+ImtYbfoi1X0DR1wA==
+X-Received: by 2002:aa7:c0d2:: with SMTP id j18mr3102268edp.281.1640090401482;
+        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id bx6sm2849438edb.78.2021.12.21.04.39.59
+        by smtp.gmail.com with ESMTPSA id bx6sm2849438edb.78.2021.12.21.04.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 04:40:00 -0800 (PST)
+        Tue, 21 Dec 2021 04:40:01 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 08/10] hwmon: adt7x10: use hwmon_device_register_with_info
-Date:   Tue, 21 Dec 2021 14:39:42 +0200
-Message-Id: <20211221123944.2683245-8-demonsingur@gmail.com>
+Subject: [PATCH v1 09/10] hwmon: adt7x10: use devm_hwmon_device_register_with_info
+Date:   Tue, 21 Dec 2021 14:39:43 +0200
+Message-Id: <20211221123944.2683245-9-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221123944.2683245-1-demonsingur@gmail.com>
 References: <20211221123944.2683245-1-demonsingur@gmail.com>
@@ -68,125 +68,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-Describe the only available channel, implement read, write
-and is_visible callbacks.
+To simplify core driver remove function.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/hwmon/adt7x10.c | 93 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 92 insertions(+), 1 deletion(-)
+ drivers/hwmon/adt7x10.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 2d36088e1a07..dd4901299590 100644
+index dd4901299590..c03805c72906 100644
 --- a/drivers/hwmon/adt7x10.c
 +++ b/drivers/hwmon/adt7x10.c
-@@ -297,6 +297,95 @@ static int adt7x10_alarm_read(struct adt7x10_data *data, unsigned int index,
- 	return 0;
- }
- 
-+static umode_t adt7x10_is_visible(const void *data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	umode_t mode = 0444;
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+	case hwmon_temp_min:
-+	case hwmon_temp_crit:
-+	case hwmon_temp_max_hyst:
-+		mode |= 0200;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return mode;
-+}
-+
-+static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct adt7x10_data *data = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return adt7x10_temp_read(data, 0, val);
-+	case hwmon_temp_max:
-+		return adt7x10_temp_read(data, 1, val);
-+	case hwmon_temp_min:
-+		return adt7x10_temp_read(data, 2, val);
-+	case hwmon_temp_crit:
-+		return adt7x10_temp_read(data, 3, val);
-+	case hwmon_temp_max_hyst:
-+		return adt7x10_hyst_read(data, 1, val);
-+	case hwmon_temp_min_hyst:
-+		return adt7x10_hyst_read(data, 2, val);
-+	case hwmon_temp_crit_hyst:
-+		return adt7x10_hyst_read(data, 3, val);
-+	case hwmon_temp_min_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_LOW, val);
-+	case hwmon_temp_max_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_HIGH, val);
-+	case hwmon_temp_crit_alarm:
-+		return adt7x10_alarm_read(data, ADT7X10_STAT_T_CRIT, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int adt7x10_write(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long val)
-+{
-+	struct adt7x10_data *data = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		return adt7x10_temp_write(data, 1, val);
-+	case hwmon_temp_min:
-+		return adt7x10_temp_write(data, 2, val);
-+	case hwmon_temp_crit:
-+		return adt7x10_temp_write(data, 3, val);
-+	case hwmon_temp_max_hyst:
-+		return adt7x10_hyst_write(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_channel_info *adt7x10_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
-+			   HWMON_T_CRIT | HWMON_T_MAX_HYST | HWMON_T_MIN_HYST |
-+			   HWMON_T_CRIT_HYST | HWMON_T_MIN_ALARM |
-+			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops adt7x10_hwmon_ops = {
-+	.is_visible = adt7x10_is_visible,
-+	.read = adt7x10_read,
-+	.write = adt7x10_write,
-+};
-+
-+static const struct hwmon_chip_info adt7x10_chip_info = {
-+	.ops = &adt7x10_hwmon_ops,
-+	.info = adt7x10_info,
-+};
-+
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 		  const struct adt7x10_ops *ops)
- {
-@@ -341,7 +430,9 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+@@ -54,7 +54,6 @@
+ /* Each client has this additional data */
+ struct adt7x10_data {
+ 	const struct adt7x10_ops *ops;
+-	struct device		*hwmon_dev;
+ 	struct device		*bus_dev;
+ 	struct mutex		update_lock;
+ 	u8			config;
+@@ -430,8 +429,8 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
  	if (ret)
  		goto exit_restore;
  
--	hdev = hwmon_device_register(dev);
-+	hdev = hwmon_device_register_with_info(dev, name, data,
-+					       &adt7x10_chip_info, NULL);
-+
+-	hdev = hwmon_device_register_with_info(dev, name, data,
+-					       &adt7x10_chip_info, NULL);
++	hdev = devm_hwmon_device_register_with_info(dev, name, data,
++						    &adt7x10_chip_info, NULL);
+ 
  	if (IS_ERR(hdev)) {
  		ret = PTR_ERR(hdev);
- 		goto exit_restore;
+@@ -445,15 +444,11 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 						IRQF_ONESHOT,
+ 						dev_name(dev), hdev);
+ 		if (ret)
+-			goto exit_hwmon_device_unregister;
++			goto exit_restore;
+ 	}
+ 
+-	data->hwmon_dev = hdev;
+-
+ 	return 0;
+ 
+-exit_hwmon_device_unregister:
+-	hwmon_device_unregister(hdev);
+ exit_restore:
+ 	adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+ 	return ret;
+@@ -464,7 +459,6 @@ void adt7x10_remove(struct device *dev, int irq)
+ {
+ 	struct adt7x10_data *data = dev_get_drvdata(dev);
+ 
+-	hwmon_device_unregister(data->hwmon_dev);
+ 	if (data->oldconfig != data->config)
+ 		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+ }
 -- 
 2.34.1
 

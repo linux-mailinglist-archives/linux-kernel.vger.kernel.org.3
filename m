@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0E547C883
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B5847C888
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbhLUU7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235545AbhLUU7C (ORCPT
+        id S235645AbhLUVAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:00:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39355 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234156AbhLUVAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:59:02 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFADFC061574;
-        Tue, 21 Dec 2021 12:59:01 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id k21so673113lfu.0;
-        Tue, 21 Dec 2021 12:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EMjej9HUtAXOcAMoyZw+nimK8vBoVTGCydufGYxXW3A=;
-        b=QBxyUvO5aXbxIR0XthlyHePXA11I979yfrf++6Y0YXUqD3swGqlQJM6N0SK/yeSF+N
-         oPD03Rnl39x+aXv/H/sdi+RAKmXkUy/P7qzmBLNwphVzzxjXMF2uhCvotIV9ESDHgQHu
-         SF8BPoPlscsudtTMuzetF1bNB+QRvQJzVOxCgUe2mVVbMlcoMvzYfM9GeHQyuEVNdsro
-         3u8bS2UuxWFsWIKF9oOCdJgkiptAxYRerVHbNFcYYTuAHFFyttwtE/I9WiYnIpH5Az1N
-         kkKHi4GRLrufxZTanpKnTmHxuoB0gY4w/VSml3M4Vauilk8+gRLJHbMrGLiVdQdsDjBh
-         QwjA==
+        Tue, 21 Dec 2021 16:00:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640120411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=opHhr7eJomY1CIR2KI4V/ZHUiBD46mZi8UhoJAWs9bo=;
+        b=Zf8GQVKC/bSg2qbywQPm1OCl2ynUrYhn3P3t4gOZR9kQvdjQtC7AWIGGS165RAaSrbn6lD
+        OXg73I4eg+L1CdlVeOZEvPZTTFRS57rp7it88ZePzBQdK7nvzthbllQM1gKtxfZ3DP16as
+        BIYPljJmhJNZuxJyN3tK28IXoMfo4DU=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-e9HQ82jBNY6dphXjTGUeAg-1; Tue, 21 Dec 2021 16:00:09 -0500
+X-MC-Unique: e9HQ82jBNY6dphXjTGUeAg-1
+Received: by mail-oi1-f199.google.com with SMTP id 6-20020aca0b06000000b002bcd1c33ae3so187827oil.20
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 13:00:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=EMjej9HUtAXOcAMoyZw+nimK8vBoVTGCydufGYxXW3A=;
-        b=frv/BPzhdduZY0cCYvTinDekmVgJFc5K17/JthK+pudbVeYg/HQkIIsh80335+3K+Z
-         ciMT5Wgp1VmbCkf1wT3ufTgLHzaxROouVNjg5S/A5NCOk88Ql7jh2wCk1Sr5bUXB2Qzf
-         tEqwlMJHDTT/KESFVFiFBmF5lHT+5tryt11Uwf2ggTdxsl3xGZ137Qk2hHEmiNAvGlvW
-         vZyXqHfvkveTlVMBwUjipBVqfTdcrr0fuueTysxPueHLtLhXgNiV1EvirWJRDMfRyjS7
-         Rr61N+/unlChxYQjjXwI1MiN4ySdLP7jPMm/KFvnEDSBGCgH6ZOy2ZrxPhKe9OwrzEHh
-         DAnw==
-X-Gm-Message-State: AOAM531/wzcZ2ronBMktNKDU8wYVHVnNfXQfyc2cMHmOn+jpfKNdU5Nv
-        ZiQ+OdgfTTAsn2hXIPx2K2o=
-X-Google-Smtp-Source: ABdhPJyQqGTd/AQR3V4qGYEJ+lnA9nHyBoOuC+0UYbMfak9DWTHgpUTRFKkjLQB10viCSl/8d/IXNw==
-X-Received: by 2002:a05:6512:691:: with SMTP id t17mr125939lfe.55.1640120340186;
-        Tue, 21 Dec 2021 12:59:00 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id bj11sm200ljb.62.2021.12.21.12.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 12:58:59 -0800 (PST)
-Subject: Re: [PATCH v16 08/40] gpu: host1x: Add initial runtime PM and OPP
- support
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-9-digetx@gmail.com>
- <21212ddb-205f-71d6-0199-d75768eaf32c@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <41edc53b-5ed1-d524-2546-c3d1ee6cdea4@gmail.com>
-Date:   Tue, 21 Dec 2021 23:58:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=opHhr7eJomY1CIR2KI4V/ZHUiBD46mZi8UhoJAWs9bo=;
+        b=G4HOZI7ECnGENFVNZsO4AObsszjo2flSvF6wThEMZcTwW1JjPx1lLTNvuIkfcWd31M
+         rSaIsS0fWt2mBEV3mzqagzOp21YJAdvbDYRQDhgKFlE4b5ueHoAI0UmqW/846S/8Iw3u
+         3MsTijDZtq2CyZ/d6iM+e4bcbcgRjQAcWxigB9t+afPDnV+ADjYTg5Vvni0n/QjpH0NW
+         kB7FW5Vf7whscXFcBcgw2oSXEyDqDlnGrKYFRcL6wZnhTOgTIC71PxEj2iwvhJNWAVlE
+         AAUY8QEY6Ujyb5tW+URA+KuHhHQ1ZHNkXxIpcpHjMi+jx25XvgCDOVS400Up2ubbepgp
+         53oA==
+X-Gm-Message-State: AOAM530mUYvKL/jmahjPQclku04j2Zjw8Ceq5RcbJuHJ0x5MzIZjvjdo
+        XCxvvv2HY0Qlg8k6j5YZoCTtbt/FfkW2UTbRhxQUpAtfDCYRkOb5w67Fvb2J4Wf1Vkns3msmQw2
+        6x69WNBt3u8cPRgq3nPC5z+vQ
+X-Received: by 2002:aca:aa49:: with SMTP id t70mr9910oie.85.1640120408915;
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJziVncuYfrfE+RPUGyGvApAs6V4DsQA0c2MP2vr+q3FzM7aw2hm+pPGcEc53t9Jy+88JOV4pw==
+X-Received: by 2002:aca:aa49:: with SMTP id t70mr9890oie.85.1640120408439;
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id f59sm2021otf.9.2021.12.21.13.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 13:00:08 -0800 (PST)
+From:   trix@redhat.com
+To:     wangzhou1@hisilicon.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] crypto: cleanup warning in qm_get_qos_value()
+Date:   Tue, 21 Dec 2021 12:59:53 -0800
+Message-Id: <20211221205953.3128923-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <21212ddb-205f-71d6-0199-d75768eaf32c@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Tom Rix <trix@redhat.com>
 
-Thank you for testing it all.
+Building with clang static analysis returns this warning:
 
-21.12.2021 21:55, Jon Hunter пишет:
-> Hi Dmitry, Thierry,
-> 
-> On 30/11/2021 23:23, Dmitry Osipenko wrote:
->> Add runtime PM and OPP support to the Host1x driver. For the starter we
->> will keep host1x always-on because dynamic power management require a
->> major
->> refactoring of the driver code since lot's of code paths are missing the
->> RPM handling and we're going to remove some of these paths in the future.
-> 
-> 
-> Unfortunately, this change is breaking boot on Tegra186. Bisect points
-> to this and reverting on top of -next gets the board booting again.
-> Sadly, there is no panic or error reported, it is just a hard hang. I
-> will not have time to look at this this week and so we may need to
-> revert for the moment.
+qm.c:4382:11: warning: The left operand of '==' is a garbage value
+        if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
+            ~~~~ ^
 
-Only T186 broken? What about T194?
+The call to qm_qos_value_init() can return an error without setting
+*val.  So check ret before checking *val.
 
-Which board model fails to boot? Is it running in hypervisor mode?
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/crypto/hisilicon/qm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Do you use any additional patches?
-
-Could you please test the below diff? I suspect that
-host1x_syncpt_save/restore may be entirely broken for T186 since we
-never used these funcs before.
-
---- >8 ---
-
-diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-index f5b4dcded088..fd5dfb875422 100644
---- a/drivers/gpu/host1x/dev.c
-+++ b/drivers/gpu/host1x/dev.c
-@@ -580,7 +580,6 @@ static int __maybe_unused
-host1x_runtime_suspend(struct device *dev)
- 	int err;
-
- 	host1x_intr_stop(host);
--	host1x_syncpt_save(host);
-
- 	err = reset_control_bulk_assert(host->nresets, host->resets);
- 	if (err) {
-@@ -596,9 +595,8 @@ static int __maybe_unused
-host1x_runtime_suspend(struct device *dev)
- 	return 0;
-
- resume_host1x:
--	host1x_setup_sid_table(host);
--	host1x_syncpt_restore(host);
- 	host1x_intr_start(host);
-+	host1x_setup_sid_table(host);
-
- 	return err;
- }
-@@ -626,9 +624,8 @@ static int __maybe_unused
-host1x_runtime_resume(struct device *dev)
- 		goto disable_clk;
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index b1fe9c7b8cc89..c906f2e59277b 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
+ 		return -EINVAL;
+ 
+ 	ret = qm_qos_value_init(val_buf, val);
+-	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
++	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
+ 		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
+ 		return -EINVAL;
  	}
-
--	host1x_setup_sid_table(host);
--	host1x_syncpt_restore(host);
- 	host1x_intr_start(host);
-+	host1x_setup_sid_table(host);
-
- 	return 0;
+-- 
+2.26.3
 

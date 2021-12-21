@@ -2,199 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B06A747C24F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D713347C24C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238995AbhLUPMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:12:12 -0500
-Received: from mga18.intel.com ([134.134.136.126]:45583 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238974AbhLUPML (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:12:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640099531; x=1671635531;
-  h=from:to:cc:subject:date:message-id;
-  bh=bhiBZIBPUvq8tNjFZYJrVCRkahxll9ZU4gU5+TYg0gQ=;
-  b=ZC5NfSsf31t7XUFVAFX+QIMUdFZH2+blNulPZ7um0g5ji4P4jq0UhjxF
-   bn5e9YfbY+fssBdtx8RM/3orIDI0Jfu5Qpiwh45hbZ7uckpgzOL0/AsYZ
-   CN+rZZpQc0+/oI+ZG4Or/nBP8N1o7ceNsY1atlpkUhHwZgdaaB8TlAoBy
-   NAzaGAUJcJscn7tlAoZ6cFZ3/cRQOsHxIKsYu5Eu8tdG+ZfD9ZGNWBg8F
-   v+nw/Qz0oDTyoyNe3Gen+BHcYsBxn9/+SPe4GIchK3Act9pKMgiTT9t4f
-   4WjmpzWu44uAnD6RzRRbZrleuK9phCMdBRl9gxv+Fd+wPPQlKIm9mLJ1d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="227259260"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="227259260"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 07:12:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="684688254"
-Received: from chaop.bj.intel.com ([10.240.192.101])
-  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 07:12:03 -0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        id S238978AbhLUPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238979AbhLUPLv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 10:11:51 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBADC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:11:51 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id t6so12828424qkg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=inKnCrxjiVlEFGg7TNsjz8T66oFLFowuMdP2ABAhDNw=;
+        b=ZXXoTFFpFceomVCNZbiSunDDkt4OnlItu8mtU+NMmTOEcfg0gxBDShl1sSnVt/nLm8
+         x2YmJ/p+osB3SadllEUVUcn9Pt/IfJyQHd9cxW+VxL7ytT24/D9PkhyZM9vHpr8q9kBQ
+         QVeD7D8f1QPckG3DjhGcEc7GHW5rDNW+b8VeFwlxyMlErdA6UsDQvAPrqXni9eITkLEl
+         r+bYnT3mgV2uljc7gH/N3+Gh8waibfzvtq0GtTBV3/9s5Irju2R49+xQezhFPH/jGiNK
+         5Cb7c9GkaFLc1c570g8Z9qv3cYgKJzmtBqEYCP6bDbebH5ABNRqp0Tu0yKkJI2q6v+Mm
+         iFRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=inKnCrxjiVlEFGg7TNsjz8T66oFLFowuMdP2ABAhDNw=;
+        b=X5aALgM669te53EiBwD5a5ZtzePWGJvpGWSi3Sh4r1ZTI20KmkL1aXjf8RlZYMygrB
+         Z7m+sDuHFZwIrvKsehgkqQZJpZz3I3QDlYfAFQ1EHYbYgMM7R9WC6NnuEzaLj43Asgwa
+         3rPTLw+zRS1mJYHp+T7sE8KjrjcRKOXNVwhPm5A4gOQws9CMv2eufMGwfhbR7BZ6PCd2
+         icsaNNcp9WYPgmUsDcjJp95qYd8MHs6TkWgdE+4ZchgTcRpH8mXrjwNLQiXKQirxpJP3
+         FDaeO7qiZIekk9WOX83KZkkTdjLlL6juaxBqeDYZoNsFRCWSsBTD/tqpRm91F3i9w+mf
+         3v2g==
+X-Gm-Message-State: AOAM530dxaMfAYKEFewaTDXCLfskck4KN92BT1p1GTWRk+hVXrHJPvsf
+        WIw7ZhpjP6PrYbJtySoM66T4G17/0EezMqilPGmPMg==
+X-Google-Smtp-Source: ABdhPJxUCH5aZo8HNcHbdUS06B2iz7YpO0Z5RJr0Phvi1i+pX2K7NddgPRzWHHeZmi01iZghm7e3vWM7VMUd7b8x8go=
+X-Received: by 2002:a05:620a:e0c:: with SMTP id y12mr2303562qkm.109.1640099508387;
+ Tue, 21 Dec 2021 07:11:48 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1640036051.git.andreyknvl@google.com> <c3fa42da7337bc46a4b7a1e772e87bed5ff89850.1640036051.git.andreyknvl@google.com>
+In-Reply-To: <c3fa42da7337bc46a4b7a1e772e87bed5ff89850.1640036051.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 21 Dec 2021 16:11:11 +0100
+Message-ID: <CAG_fn=UHZe+9sSkpc0=2HWP9ZeVNWU0jR2tEVS-4FP5+zRB6sA@mail.gmail.com>
+Subject: Re: [PATCH mm v4 22/39] kasan, fork: reset pointer tags of vmapped stacks
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: [PATCH v3 00/15] KVM: mm: fd-based approach for supporting KVM guest private memory 
-Date:   Tue, 21 Dec 2021 23:11:10 +0800
-Message-Id: <20211221151125.19446-1-chao.p.peng@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the third version of this series which try to implement the
-fd-based KVM guest private memory.
-
-In general this patch series introduce fd-based memslot which provide
-guest memory through a memfd file descriptor fd[offset,size] instead of
-hva/size. The fd then can be created from a supported memory filesystem
-like tmpfs/hugetlbfs etc which we refer as memory backend. KVM and the
-memory backend exchange some callbacks when such memslot gets created.
-At runtime KVM will call into callbacks provided by backend to get the
-pfn with the fd+offset. Memory backend will also call into KVM callbacks
-when userspace fallocate/punch hole on the fd to notify KVM to map/unmap
-secondary MMU page tables.
-
-Comparing to existing hva-based memslot, this new type of memslot allow
-guest memory unmapped from host userspace like QEMU and even the kernel
-itself, therefore reduce attack surface and prevent userspace bugs.
-
-Based on this fd-based memslot, we can build guest private memory that
-is going to be used in confidential computing environments such as Intel
-TDX and AMD SEV. When supported, the memory backend can provide more
-enforcement on the fd and KVM can use a single memslot to hold both the
-private and shared part of the guest memory. 
-
-Memfd/shmem extension
----------------------
-Introduces new MFD_INACCESSIBLE flag for memfd_create(), the file
-created with this flag cannot read(), write() or mmap() etc.
-
-In addition, two sets of callbacks are introduced as new MEMFD_OPS:
-  - memfd_falloc_notifier: memfd -> KVM notifier when memory gets
-    allocated/invalidated through fallocate().
-  - memfd_pfn_ops: kvm -> memfd to get a pfn with the fd+offset.
-
-Memslot extension
------------------
-Add the private fd and the offset into the fd to existing 'shared' memslot
-so that both private/shared guest memory can live in one single memslot.
-A page in the memslot is either private or shared. A page is private only
-when it's already allocated in the backend fd, all the other cases it's
-treated as shared, this includes those already mapped as shared as well as
-those having not been mapped. This means the memory backend is the place
-which tells the truth of which page is private.
-
-Private memory map/unmap and conversion
----------------------------------------
-Userspace's map/unmap operations are done by fallocate() ioctl on the
-backend fd.
-  - map: default fallocate() with mode=0.
-  - unmap: fallocate() with FALLOC_FL_PUNCH_HOLE.
-The map/unmap will trigger above memfd_falloc_notifier to let KVM
-map/unmap second MMU page tables.
-
-Test
-----
-This code has been tested with latest TDX code patches hosted at
-(https://github.com/intel/tdx/tree/kvm-upstream) with minimal TDX
-adaption and QEMU support.
-
-Example QEMU command line:
--object tdx-guest,id=tdx \
--object memory-backend-memfd-private,id=ram1,size=2G \
--machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
-
-Changelog
-----------
-v3:
-  - Added locking protection when calling
-    invalidate_page_range/fallocate callbacks.
-  - Changed memslot structure to keep use useraddr for shared memory.
-  - Re-organized F_SEAL_INACCESSIBLE and MEMFD_OPS.
-  - Added MFD_INACCESSIBLE flag to force F_SEAL_INACCESSIBLE.
-  - Commit message improvement.
-  - Many small fixes for comments from the last version.
-
-Links of previous discussions
------------------------------
-[1]
-https://lkml.kernel.org/kvm/51a6f74f-6c05-74b9-3fd7-b7cd900fb8cc@redhat.com/
-[2]
-https://lkml.kernel.org/linux-fsdevel/20211111141352.26311-1-chao.p.peng@linux.intel.com/
+On Mon, Dec 20, 2021 at 11:01 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Once tag-based KASAN modes start tagging vmalloc() allocations,
+> kernel stacks start getting tagged if CONFIG_VMAP_STACK is enabled.
+>
+> Reset the tag of kernel stack pointers after allocation in
+> alloc_thread_stack_node().
+>
+> For SW_TAGS KASAN, when CONFIG_KASAN_STACK is enabled, the
+> instrumentation can't handle the SP register being tagged.
+>
+> For HW_TAGS KASAN, there's no instrumentation-related issues. However,
+> the impact of having a tagged SP register needs to be properly evaluated,
+> so keep it non-tagged for now.
+>
+> Note, that the memory for the stack allocation still gets tagged to
+> catch vmalloc-into-stack out-of-bounds accesses.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
+>
+> ---
+>
+> Changes v2->v3:
+> - Update patch description.
+> ---
+>  kernel/fork.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 403b9dbbfb62..4125373dba4e 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -254,6 +254,7 @@ static unsigned long *alloc_thread_stack_node(struct =
+task_struct *tsk, int node)
+>          * so cache the vm_struct.
+>          */
+>         if (stack) {
+> +               stack =3D kasan_reset_tag(stack);
+>                 tsk->stack_vm_area =3D find_vm_area(stack);
+>                 tsk->stack =3D stack;
+>         }
+> --
+> 2.25.1
+>
 
 
-Chao Peng (13):
-  mm/memfd: Introduce MFD_INACCESSIBLE flag
-  KVM: Extend the memslot to support fd-based private memory
-  KVM: Implement fd-based memory using MEMFD_OPS interfaces
-  KVM: Refactor hva based memory invalidation code
-  KVM: Special handling for fd-based memory invalidation
-  KVM: Split out common memory invalidation code
-  KVM: Implement fd-based memory invalidation
-  KVM: Add kvm_map_gfn_range
-  KVM: Implement fd-based memory fallocation
-  KVM: Add KVM_EXIT_MEMORY_ERROR exit
-  KVM: Handle page fault for private memory
-  KVM: Use kvm_userspace_memory_region_ext
-  KVM: Register/unregister private memory slot to memfd
+--=20
+Alexander Potapenko
+Software Engineer
 
-Kirill A. Shutemov (2):
-  mm/shmem: Introduce F_SEAL_INACCESSIBLE
-  mm/memfd: Introduce MEMFD_OPS
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
- arch/arm64/kvm/mmu.c               |  14 +-
- arch/mips/kvm/mips.c               |  14 +-
- arch/powerpc/include/asm/kvm_ppc.h |  28 ++--
- arch/powerpc/kvm/book3s.c          |  14 +-
- arch/powerpc/kvm/book3s_hv.c       |  14 +-
- arch/powerpc/kvm/book3s_pr.c       |  14 +-
- arch/powerpc/kvm/booke.c           |  14 +-
- arch/powerpc/kvm/powerpc.c         |  14 +-
- arch/riscv/kvm/mmu.c               |  14 +-
- arch/s390/kvm/kvm-s390.c           |  14 +-
- arch/x86/kvm/Kconfig               |   1 +
- arch/x86/kvm/Makefile              |   3 +-
- arch/x86/kvm/mmu/mmu.c             | 112 +++++++++++++-
- arch/x86/kvm/mmu/paging_tmpl.h     |  11 +-
- arch/x86/kvm/x86.c                 |  16 +-
- include/linux/kvm_host.h           |  57 +++++--
- include/linux/memfd.h              |  22 +++
- include/linux/shmem_fs.h           |  16 ++
- include/uapi/linux/fcntl.h         |   1 +
- include/uapi/linux/kvm.h           |  27 ++++
- include/uapi/linux/memfd.h         |   1 +
- mm/Kconfig                         |   4 +
- mm/memfd.c                         |  33 +++-
- mm/shmem.c                         | 195 ++++++++++++++++++++++-
- virt/kvm/kvm_main.c                | 239 +++++++++++++++++++++--------
- virt/kvm/memfd.c                   | 100 ++++++++++++
- 26 files changed, 822 insertions(+), 170 deletions(-)
- create mode 100644 virt/kvm/memfd.c
-
--- 
-2.17.1
-
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

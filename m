@@ -2,106 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B9E47B92B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 05:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3D847B92D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 05:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbhLUE0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 23:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbhLUE0P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 23:26:15 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04279C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 20:26:14 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id z6so10548186pfe.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 20:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=o5xgDMJ+wA2AyFoIMAcbqy3DgLh40+fFYdFo8qBjJE8=;
-        b=fkWX4FE2fKrGc6jIjzKBmNKopUVPnx18uxX1pok12ZjhvxhROZb1GWoV7T1MvpBudt
-         6LHtXXg3Dpq54L43Wbbh0IFlLECarR9vn4gzWVGlxCL+05x4ZUchsuSf3HtjEwXEchJs
-         wT7cfIKPEEchrPfwStWJcDb16pM6OULVQjtxnhl1hCls1CblwwWetho8UJoQwN/7K52j
-         teHRSPOW+R8nb61KTxIg/N8XuATrU4Mikrjzst6vSYHd/ixBwH27C4ih/CH+CvTDWPoi
-         aCQGd31zo9gDEYXil4snjCsnNhQUDrRrTevLWe2cnYL1SEus0alZW3o1AHN+QGcuodXS
-         DAtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=o5xgDMJ+wA2AyFoIMAcbqy3DgLh40+fFYdFo8qBjJE8=;
-        b=8Ntuvd+74demhFfRrJh0WOkUL57KnCeHXwb6WCJStidr4Tv1r8PKq53vO+0YcH6zsv
-         5mXb+Qx450qGJaVjRJ1IzfXticLfmpmDklLRXyiwe7j4YoBf4w8l0WcNPFaHFUSOy9Di
-         NvXTVAgwyN5Em/iXQ/DRfmOJ0FnsPnXXgr6tqu4weuK8cejMA+b4CdRlGJtgb8ceL4CT
-         6uJPu/MCwsYWIQvV350giTQips5NWbkQGTPvZkRzueaXZWFkVmlRNPhMHMrnJEY99D2M
-         o94Vf+keGNmPZxAu915DIDKzpTXbKyQYvkiTJlm2Bii3W/m5vDrC6C4jkTS5HcccByT2
-         Y6MA==
-X-Gm-Message-State: AOAM532eSTa4Pr27WnZ6yixChptJbYaTBNoojKlrTADGpcL/dqZHdyhX
-        JcNgtl+dptLFykSqZzW8BcLIZQ==
-X-Google-Smtp-Source: ABdhPJztA7MLr2E6odObLfxQK6j2NDLvXaQUVbwCfwZV8inZmomln2BM1g3CwJ4xazgwkg1+6VwdeQ==
-X-Received: by 2002:a05:6a00:1792:b0:4ba:c60b:a63a with SMTP id s18-20020a056a00179200b004bac60ba63amr1422411pfg.0.1640060774320;
-        Mon, 20 Dec 2021 20:26:14 -0800 (PST)
-Received: from localhost ([106.201.42.111])
-        by smtp.gmail.com with ESMTPSA id ls6sm986959pjb.33.2021.12.20.20.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 20:26:13 -0800 (PST)
-Date:   Tue, 21 Dec 2021 09:56:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@axis.com,
-        mst@redhat.com, Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gpio: virtio: remove timeout
-Message-ID: <20211221042609.zeo6ci45sxzjxgrt@vireshk-i7>
-References: <20211220130656.16900-1-vincent.whitchurch@axis.com>
-MIME-Version: 1.0
+        id S232072AbhLUE2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 23:28:48 -0500
+Received: from mail-eopbgr30096.outbound.protection.outlook.com ([40.107.3.96]:18239
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231983AbhLUE2r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 23:28:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E9B8BbtOMMCWgl07bkB+LL9xEmzNM63dCIBJvJXprk7tUPCLJCnTWdrEgnZI9OiQzSFB1w+YWlCQrV823KXt0QnupvtBASzC5ITksmW8ZtkcG2x52+cw2qHxUuQRRsZL0n1FkZ7LASxmSXkp0NK+6v3wxy7q9hgEn30ApdDft33rZ8plaYH6iwVkf59BAI84lu8IY8buoNwAV842n6smiJhnEAPgKX7oFeaBn8P4nZatbp2mGJiinwGEt43Y5yt/Wxrjq2GBSwci8rhr1j8N6ou6EgTQNELeJknsm0SjXmoYoASzHhHUZU1mgCeIrfoVSLOXUxwqXTv91QC01Rul4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yvvmlDJoJp06RvIUxasxibRagO5yDg5zdOrh9jvJAFw=;
+ b=kH9lfVOSoXz42d8N5xDZT3WlNIFSk+ow2LGm65/NMKGpzRSsxkXOblnf7FDpVuL30ThaP1xSo3qWeo869exQQREq4slMZjnV9eXSHyjU1QJR6Nw8r3R8KE3jRhclP1bXNibOp22QlJ9xzQ7QRELWJ2YPODGMJo36F5aRh0zoF1U/DZJ2rlKgZXhTOR15Fw5HKn2kQgbl4cw0d5KN1KqLoBwg/mb18ddZlsSiNE78iZEiWTOik5xRT6HJnMpNy7D3uWgb4Xw2PoSc0TF347eip72DDcugfXda2udcwPt2jX0ylZfgVOmUqPFMAyAqu0c1KVXFMvcS1kZrn/w7eN4Ckg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yvvmlDJoJp06RvIUxasxibRagO5yDg5zdOrh9jvJAFw=;
+ b=CbPC2R72VQgStweOooMIcmGgM36BHa+7yLLtHIjRgOcpYrYFFk8kpunnHW8qwz7ONpdzW+SM1mKrA8LBwCik6M8OOdoYbqUbbjGGLma3hLiXQbznCDEG0v/2SP8HLi4ZB8KEFbLKS6RZZI+jmFA+1WYCFV/bbc34p3zQOEbhaHg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:262::24)
+ by AM0P190MB0642.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:197::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Tue, 21 Dec
+ 2021 04:28:45 +0000
+Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ ([fe80::b93b:8d91:d56a:8256]) by AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ ([fe80::b93b:8d91:d56a:8256%5]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
+ 04:28:45 +0000
+Date:   Tue, 21 Dec 2021 06:28:42 +0200
+From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/6] prestera: add basic router driver support
+Message-ID: <YcFX+mDgMZFS+d7L@yorlov.ow.s>
+References: <20211217195440.29838-1-yevhen.orlov@plvision.eu>
+ <Yb4R55w1mq+NXOwO@lunn.ch>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220130656.16900-1-vincent.whitchurch@axis.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <Yb4R55w1mq+NXOwO@lunn.ch>
+X-ClientProxiedBy: FR3P281CA0020.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::21) To AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:262::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d34c86ce-53c7-4a4e-0c70-08d9c43a601e
+X-MS-TrafficTypeDiagnostic: AM0P190MB0642:EE_
+X-Microsoft-Antispam-PRVS: <AM0P190MB064259F889FD2B6756F6C6D4937C9@AM0P190MB0642.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nYjUNqP7tkLvykVxcl/4SAiizyP4bgmHxYR/TkD2JhCTErMpkKntdDL9baMWCXJB3xrn2bLRQM+d9ojcUYkjs6bjKjIMbHAR3B2rNCQZndc3PJ24FxJwymRyrTLjjni9wjtRT/MMeYBEAd5SE5ch6MeNl0W7xkIHbB4r3gNUM1k5/Yz222qDfSsZbfZf07GxLX8xf1gCtZ45YDr/T9E8YRXoqo4pu3XTN2NKmD2BHhBboGbgJ6CF2w/V3dS077mEA3SUS+bJn4G4/2hgKyG1mo8qpTtQNd8iTm/KoUKvV71xvlSzK6ptjtdwPbM8dvca9Cli+lRL2pyAKB5GEWfMyQULosukq+NwN8ZYXVRdff2CDGTDSp76WYzi4fIqcpG+cKcpFLG39h7+tA21ThPXgQAtDwgTHVG3fV7j2+H7Ul0cF0GFlgxy/pyWGb/mpEqJY2pJOWBPVfQ8jZjYHKHNPx1ykfPUEvx2vOgI08yu9mMciZvwOGI/Xb2RGaO2D4miiiuj0g8dlBBh8E5JhYYUPtPqiSo4vTunjGjPn2SWuLinCdKmxg7BhEOS/ZZJOt0TPwwntqj551JFH44fkAsu47lIvnFLlmFhbHr+pciNpvKEzJFrFSWHw9+QzmT1H6FxGWt/EV4+0JmrgWCJhDt/lHevvocFLWQTPdvl24klz6IKSGqFOfBgtv8Amk4VkI04
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P190MB1122.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(366004)(396003)(136003)(39830400003)(376002)(346002)(6512007)(44832011)(66476007)(66556008)(2906002)(9686003)(54906003)(316002)(6486002)(8676002)(186003)(26005)(66946007)(508600001)(6666004)(4326008)(6916009)(5660300002)(66574015)(38350700002)(52116002)(38100700002)(86362001)(6506007)(83380400001)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?igIgENbSf1ooMX7ZcC52J2qxBN55TFRELckip7tMOOegGp0CcrLwOvtHf4cw?=
+ =?us-ascii?Q?qBSGFJcbyFUeXlDvJMbb/dAAEHEuNlgrwdZOBVRclwVxSpm7U265NDMytrCg?=
+ =?us-ascii?Q?3QY7Nz27TrK2QCakRb0RDEnvrK9BKDIBThZidLj8EL1iGi3FekbJnpUNEQR7?=
+ =?us-ascii?Q?7dIiPRqa73ZHjt0qi/CYGR7igZHRXoUKF/BCvN33qHTiQOEXNd5w5Z8gfGLo?=
+ =?us-ascii?Q?FpFTO4u5WeV58OtCZ8hVPVklDCKLdWnnhFi09pZC7ROG9bN6Fcg+2jyjdbMh?=
+ =?us-ascii?Q?yKCt+A+agcI0oWbH1WcBZHG99b7iQAO5425MurYl70w3UZtHKdV3uRsypQPf?=
+ =?us-ascii?Q?QpIrkOIPKVD4dH1lBpvuVbFwJgW32vp0W58XbVZZIUrt9ffrpTAcc1vtCFcp?=
+ =?us-ascii?Q?vYfOYY+T+zweHZYWaAjHxvvNagrpDV0Tm+pUWmrV3zgLmtTbLkbQJm79oYX+?=
+ =?us-ascii?Q?bOfoX09h4/nYZPgILnEwlk30LUYolFiN+nOoBNCwUo1djWX2LUgu+TLXMm3+?=
+ =?us-ascii?Q?z87XI3sCQ69al1mglUbq/tl9LlcMsv7G37RuDDKBzAaup9KklcHjBGPGpS6w?=
+ =?us-ascii?Q?GsZdRrhpKbIqYavY2lskBZDXeIt42RsexcWHmXQiA5Cn4ZrZSevcYQpBu+ra?=
+ =?us-ascii?Q?isxRtWYkzLQNkld0SZlMS7V+072BsiubDyNEcAqpv/d9u/gORg4NNbJkT3lI?=
+ =?us-ascii?Q?omkHcfLlg2Um2xwFb5aGN/oTAzONJrB90OJ6Ktw8q5f7Dvs7en9Pv174K9k0?=
+ =?us-ascii?Q?lMCKcitzBmJRO3L9Mm7PqEx7DXAlsvKfBwy+CVz8zJpIHAJJCSKpqRzFyu13?=
+ =?us-ascii?Q?3m/tlmMNVUcwApl4OjM9KO0kDOxdoS6o74ZO3JDM4p3KQSuKvYbPuKfpfBAH?=
+ =?us-ascii?Q?o30COOvBhC0YK6l4l269yUD2wrqhi5WHTX4kWF2gSOAik+bRgFwm6Ct0ZAel?=
+ =?us-ascii?Q?rp4XbzwCOQ+IyyQaSfei+V+AlziFTVXBbdC8AZBRByR1XLxWnaacNC6jR15m?=
+ =?us-ascii?Q?3rKlaVsjyQJdPcRymp1EaTFWjmVw6B86vxPok9CmlPXxKtA1FmYtb4NIv2Vy?=
+ =?us-ascii?Q?jDy8VNG3IoEB51SjartNRBXlOAtQWE6fkXm/cI0aK5FZR8ZB+6oT4+386Wla?=
+ =?us-ascii?Q?MFwVxlOf5mmVBEIJsCIXkCP3LjGiFTvSv1lDHITUxYScPOz1XE6nq5np43VI?=
+ =?us-ascii?Q?rmjdu5QOwW86UOxoL0mfW4nx9v99esfEamkes7TNIo8Bg8BacaRTr2p3KBI2?=
+ =?us-ascii?Q?ISOCSxDnEw6Pa4AAJURnXP7gy1bw8eXqeMfa8LRt17JfuJ4Jn/1PuAXVIym5?=
+ =?us-ascii?Q?tM+FcVvfoGgoVAb082IGCL1dfae1/Ogmmp+pv2sepz88Ad5GuYCE5pi1eJ7K?=
+ =?us-ascii?Q?I/wholsSQtIHmlfZcNklHRikTYd5bkcZTrymM0acRur9WjrI+8lJBC7dwtpe?=
+ =?us-ascii?Q?IZCuYwL2T1wXntmxnN4RU18BNT224fDNaN9/jpnj+3kn8ikIPLX9oKLGiiKN?=
+ =?us-ascii?Q?dkGtBnoRbZ33kw7IMGf10yH3RlqWgf6O4cgCNdtkXabKqD9iSMb2zXYBZE6c?=
+ =?us-ascii?Q?gOfQ/dPC6tiq7dkcAURbY6NnlX22nbL1mPkJdAOSVopTc0t6BIF1R8lpGQHi?=
+ =?us-ascii?Q?s+I0o5GRIcCkkWXZktq5vaGh63VtOGJDq5seWwCjmpqAu0kxPf4rej6RL7AW?=
+ =?us-ascii?Q?QS7dNg=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: d34c86ce-53c7-4a4e-0c70-08d9c43a601e
+X-MS-Exchange-CrossTenant-AuthSource: AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 04:28:45.1864
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lga582zcn6c9DsXiM4/JQzX8hGJ4UTnUyqkOokdWJJd0FYdKzHnHEZiS5zyOLnHBkL4KzctzxFWYwDgqCUWIeeP6UvH46t1vrbg/VAcJSFU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P190MB0642
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-12-21, 14:06, Vincent Whitchurch wrote:
-> The driver imposes an arbitrary one second timeout on virtio requests,
-> but the specification doesn't prevent the virtio device from taking
-> longer to process requests, so remove this timeout to support all
-> systems and device implementations.
+On Sat, Dec 18, 2021 at 05:52:55PM +0100, Andrew Lunn wrote:
+> On Fri, Dec 17, 2021 at 09:54:32PM +0200, Yevhen Orlov wrote:
+> > Add initial router support for Marvell Prestera driver.
+> > Subscribe on inetaddr notifications. TRAP packets, that has to be routed
+> > (if packet has router's destination MAC address).
 > 
-> Fixes: 3a29355a22c0275fe86 ("gpio: Add virtio-gpio driver")
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/gpio/gpio-virtio.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+> I must be missing something here. Why do you need to tell it the IP
+> address in order to perform software routing? All the switch needs to
+> know is the MAC address. Any packets for that MAC address should be
+> trapped to the host. The host can then decide what to do with it,
+> router, bridge, or consume it itself.
+
+You are right. We don't pass IP address. Subscription is only needed
+to enable rif. IP address is not used here.
+
 > 
-> diff --git a/drivers/gpio/gpio-virtio.c b/drivers/gpio/gpio-virtio.c
-> index 84f96b78f32a..9f4941bc5760 100644
-> --- a/drivers/gpio/gpio-virtio.c
-> +++ b/drivers/gpio/gpio-virtio.c
-> @@ -100,11 +100,7 @@ static int _virtio_gpio_req(struct virtio_gpio *vgpio, u16 type, u16 gpio,
->  	virtqueue_kick(vgpio->request_vq);
->  	mutex_unlock(&vgpio->lock);
->  
-> -	if (!wait_for_completion_timeout(&line->completion, HZ)) {
-> -		dev_err(dev, "GPIO operation timed out\n");
-> -		ret = -ETIMEDOUT;
-> -		goto out;
-> -	}
-> +	wait_for_completion(&line->completion);
->  
->  	if (unlikely(res->status != VIRTIO_GPIO_STATUS_OK)) {
->  		dev_err(dev, "GPIO request failed: %d\n", gpio);
+> > Add features:
+> >  - Support ip address adding on port.
+> >    e.g.: "ip address add PORT 1.1.1.1/24"
+> 
+> This should just work already. If it does not, you have something
+> wrong in your current support.
+> 
+> 	Andrew
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+Yes. For now we has just enabled TRAP's for every port. This is good for
+software routing. But in order to implement routes offloading - we need
+to control, on which port packets is routed. So, this patchset
+prepares infrastructure for future routes offloading implementation.

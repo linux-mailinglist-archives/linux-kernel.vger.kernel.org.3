@@ -2,173 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D6347C155
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A346547C157
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238387AbhLUOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:19:10 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58708 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235448AbhLUOTI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:19:08 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL9m9ri031016;
-        Tue, 21 Dec 2021 15:19:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Ne4xZt4WaaOmRccD8H/aG3fcyOqrhCzBoBiBiz/kLxU=;
- b=WP82BkSGcyUjqemKGD/sOdvZqJuYhvXi7BzeXSSyMD6fbdk/6/BdYJAeHgFt7WZnMyU1
- iXwbkoD3GowWXvX5IbCx+KuasiFvB+eVEoPm7mAnUKXoTQHLox/yD2dUaQW6lrhHy3up
- 3+dTfiSIZFpGFM6YyMrkUYqqnyXrUjwMdfjoLWPFHfldoDeIjWdyqgqcfajRZsll4evJ
- 25vuuXUlh4MxnuvKTm5+/V8KiMnxEjA/5EuX58Uxg3l2XNwObpe/zFkjaoEO6hm3tht6
- 9qcb5L/u3iWHadCGm4lCqdxhKO9Vy5xUjeyRcV6DmrAvrjvnaHgMXFC9npnzvdow91en iQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3d37emu4q0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 15:19:00 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6D12010002A;
-        Tue, 21 Dec 2021 15:18:59 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 60D7E20B85E;
-        Tue, 21 Dec 2021 15:18:59 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 21 Dec
- 2021 15:18:58 +0100
-Subject: Re: [PATCH v3] tty: rpmsg: Fix race condition releasing tty port
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20211215153121.30010-1-arnaud.pouliquen@foss.st.com>
- <YcGN0fDn2hqAdrP9@kroah.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <318a02fe-0317-d27e-06bc-61bdb8feec79@foss.st.com>
-Date:   Tue, 21 Dec 2021 15:18:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S238393AbhLUOUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:20:01 -0500
+Received: from mga09.intel.com ([134.134.136.24]:50888 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234213AbhLUOUA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:20:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640096400; x=1671632400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2jc9rhBb6jVW67VHv6/2nS5oRjaeExlRDPRSyBv0DeA=;
+  b=fW37JtROHxNTS579KNwtL7IJycPT7toCuLPI+ccnljt/fQPIoFFjQInW
+   aYknl+RjycAc93BSgDbcF4/mPlMwqDc36YUb68plItHykDYec6esAqNEA
+   yUjrd3KaXe6r5VgsrfpVX1mVF8dEMim2zFnXnzl5V2Vjv9GwUak9DPZzT
+   9gfAm1TBHQOIMcXHvwU8dL3yCtp7kPAAdPpwSD/4Lt6W4IaAlUvkYudmr
+   e7mNgpHc6jECzDFF/vo2mTkJ75wc+lV8VllzYfMuHsAcwxJxRFThOz2cY
+   rTjeyTpMIPZMobOXb2IwAbGpOrRfswkRtRli0VHgIpTriGDwERjOaGTzM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240206848"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="240206848"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:19:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="508086329"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 06:19:58 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzfzi-00098q-0O; Tue, 21 Dec 2021 14:19:58 +0000
+Date:   Tue, 21 Dec 2021 22:19:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sm8350-next-20211215 33/35] dp_debug.c:undefined
+ reference to `dp_panel_tpg_config'
+Message-ID: <202112212258.GaBWCstq-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YcGN0fDn2hqAdrP9@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
+head:   525164cde506e9a9353b07816e50e26685e57fe4
+commit: 78d97ba5fc73e3d73729d57551fb7b4521a94755 [33/35] drm/msm/dp: Make it possible to enable the test pattern
+config: arm-randconfig-c002-20211220 (https://download.01.org/0day-ci/archive/20211221/202112212258.GaBWCstq-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/78d97ba5fc73e3d73729d57551fb7b4521a94755
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sm8350-next-20211215
+        git checkout 78d97ba5fc73e3d73729d57551fb7b4521a94755
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On 12/21/21 9:18 AM, Greg Kroah-Hartman wrote:
-> On Wed, Dec 15, 2021 at 04:31:21PM +0100, Arnaud Pouliquen wrote:
->> The tty_port struct is part of the rpmsg_tty_port structure.
->> The issue is that the rpmsg_tty_port structure is freed on
->> rpmsg_tty_remove while it is still referenced in the tty_struct.
->> Its release is not predictable due to workqueues.
->>
->> For instance following ftrace shows that rpmsg_tty_close is called after
->> rpmsg_tty_release_cport:
->>
->>      nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
->> remove
->>              cat-1191    [001] .....   212.095697: tty_release <-__fput
->>       nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
->> sg_tty_remove
->>              cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
->>              cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
->>
->> As consequence, the port must be free only when user has released the TTY
->> interface.
->>
->> This path :
->> - Introduce the .destruct port ops function to release the allocated
->>   rpmsg_tty_port structure.
->> - Manages the tty port refcounting to trig the .destruct port ops,
->> - Introduces the rpmsg_tty_cleanup function to ensure that the TTY is
->>   removed before decreasing the port refcount.
->> - Uses tty_vhangup and tty_port_hangup instead of tty_port_tty_hangup.
-> 
-> Shouldn't this hangup change be a separate change?
+All errors (new ones prefixed by >>):
 
-Thanks for pointing this!
+   arm-linux-gnueabi-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_write':
+>> dp_debug.c:(.text+0x398): undefined reference to `dp_panel_tpg_config'
 
-My first answer was that this is part of the fix to make the hangup synchronous.
-But making more tests I'm not able to reproduce the reproduce the race issue
-using tty_port_tty_hangup.
-
-I don't master enough the TTY framework to know if using tty_vhangup is safer...
-The difference between tty_vhangup and tty_hangup seems only that __tty_hangup
-is directly called in tty_vhangup while a work is created in tty_hangup.
-
-But after that tty_kref_put calls queue_release_one_tty making the rest of the
-release asynchronous. And this last part of the release is the cause of the race
-condition i observed.
-
-So i propose to just drop this part and keep the use of tty_port_tty_hangup.
-
-The alternative is to add it in a separate patch as you propose. But from now I
-have not more rational.
-
-Any advice is welcome!
-
-> 
->>
->> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
->> delta vs V2: taking into account Jiri Slaby's comments:
->>  - Inline rpmsg_tty_release_cport in rpmsg_tty_destruct_port,
->>  - call tty_port_put in case of error in rpmsg_tty_probe,
->>  - use tty_port_get port return in rpmsg_tty_install to take into account
->>    NULL port return case.
->>
->> Applied and tested on fa55b7dcdc43 ("Linux 5.16-rc1", 2021-11-14)
->> ---
->>  drivers/tty/rpmsg_tty.c | 49 +++++++++++++++++++++++++++++------------
->>  1 file changed, 35 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
->> index dae2a4e44f38..cdc590c63f03 100644
->> --- a/drivers/tty/rpmsg_tty.c
->> +++ b/drivers/tty/rpmsg_tty.c
->> @@ -50,10 +50,21 @@ static int rpmsg_tty_cb(struct rpmsg_device *rpdev, void *data, int len, void *p
->>  static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
->>  {
->>  	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
->> +	struct tty_port *port = tty->port;
->>  
->>  	tty->driver_data = cport;
->>  
->> -	return tty_port_install(&cport->port, driver, tty);
->> +	port = tty_port_get(&cport->port);
->> +	return tty_port_install(port, driver, tty);
->> +}
->> +
->> +static void rpmsg_tty_cleanup(struct tty_struct *tty)
->> +{
->> +	struct tty_port *port = tty->port;
->> +
->> +	WARN_ON(!port);
-> 
-> How can this ever trigger?  Shouldn't you do something if it can?
-
-Over-protection i will suppress it.
-
-Thanks and Regards,
-Arnaud
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

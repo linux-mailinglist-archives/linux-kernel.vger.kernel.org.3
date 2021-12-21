@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCCF47C9B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708A547C9B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbhLUX2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237140AbhLUX2g (ORCPT
+        id S237268AbhLUX2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:28:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31020 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237379AbhLUX2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:28:36 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1C0C061574;
-        Tue, 21 Dec 2021 15:28:36 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id u8so606391iol.5;
-        Tue, 21 Dec 2021 15:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+Y9qNhArsQ0y20VLdp6J5wDm7XykoFJAUNYk5IaM9hU=;
-        b=ffbFCTx9cfBHU9hVLoh1EuPKDfCbDkzePVspueec6ve0wQOxK3Dy3UTajDENOBWcQp
-         3acuN4AJC4/cQfOHUVm4rfZcCEB79xPSQ/1Xs2knQPKSppIUuMp6Z9YEmznMypkZC/Lw
-         qxavyX1+ZR82xuusqd1+l3ejhhDRBSv43dksVNIN38QVBOnIF+x+wb51eGNR+44o84zt
-         v49Za90vVKeECaz59prHRMf/PDtQJoW/PneufPYykMW+81S8JAfNM02zxwGvxNQ41qrN
-         7r2cIEMBO0N5xS+DtmB2TNA1yiKJ2uAicO9L9LmDqulNhKn/WChLbYTRiJbw6D3I0khq
-         gOWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+Y9qNhArsQ0y20VLdp6J5wDm7XykoFJAUNYk5IaM9hU=;
-        b=7KfPTOiOs2Mfo8UMe+IkH15PuGX/FbbOPAVBoooSfHDGQ0BymOmLd9/u45knJEHYti
-         SY85JslEZz/a52h/+kq1ZqKZMo8mYmHURkBuogZFasIhX5rttVb7SbV+0jqzMPjsuypl
-         DP8Wk3jXXRAXPJPc7BNTFJpSqtcxK41+9y4rAvQ8TZbVGDuQqhLoqHehgyUiHgtOO7Us
-         7Bn7X71RIf39R8Bwk3dILhYc+STal/+BpGsvnpfoyOImZXVD1HRqWIQ/ORV69f89tJkb
-         6OpqClFwdfczCW5B6yFLRXPFIN0OD0ts/G1ded9NXVVdrudRJ9xEgaOC0WkLq7V5mEjf
-         Md3Q==
-X-Gm-Message-State: AOAM5304ntmPT2n1if852H2EeSyYc9V11E5JZ4nFDlbT8H0CMBds9DV/
-        3UVMlK/E9TKM2DJHK/AZsUPraPQ4Tn2zuxEmfm2fmp12ZuoINgHQEWbVHw==
-X-Google-Smtp-Source: ABdhPJxEqu9uWtwLGTXTaastqfzijEJ++BtgObWTVb3g45BTyAIZLFBFjCN3lj09MdocSmg5U6Aq/GG7aq42sEeGSjs=
-X-Received: by 2002:a05:6602:204e:: with SMTP id z14mr212310iod.90.1640129316028;
- Tue, 21 Dec 2021 15:28:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20211103114830.62711-1-alistair@alistair23.me>
- <20211103114830.62711-2-alistair@alistair23.me> <YYYk/uisKqPNgRu0@google.com>
- <CAKmqyKOFZOLpjMY+kj2CLibFhYJ3-tL+9+cKEVzgSn9Mzq30gw@mail.gmail.com>
- <YbbeDFJERtP0mAIQ@google.com> <20211218231823.49a72256@aktux>
-In-Reply-To: <20211218231823.49a72256@aktux>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Wed, 22 Dec 2021 09:28:10 +1000
-Message-ID: <CAKmqyKOtZ5AfVtNPYDNTMUjMRobZUwP7coTgEt94uze35Zxb7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] Input: Add driver for Cypress Generation 5 touchscreen
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mylene Josserand <mylene.josserand@free-electrons.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Myl=C3=A8ne_Josserand?= <mylene.josserand@bootlin.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 21 Dec 2021 18:28:44 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BLLg29G030372;
+        Tue, 21 Dec 2021 23:28:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=5Q5nX0xPxlbdmfm+TOYaEU9eV542ne1Rzw3ZwZVZQxc=;
+ b=CP4BTk2rtNfZu1903JoSu98tig09Q+D+AdboHDxMHotziaSWttdGvJd+72xlz1888FCm
+ n3DUNdjrF5tl82eUQTp4jDXA8sOcT/mZu5pHNYshiLo2ZJhBYTYQ4Q24a48m8XhSlH9n
+ CQWLtP+A6NRIIiOasJ52O38I9dLGtCefrSzPVbIyelHP1Q557N4v4cn7/KvucwdmT7iZ
+ 9kLTH7ZHjZi53D/1wp/CLBGIjf6ZN2QIXZAIH/EfxRiSqJMFkwbxUtC2sZy9KKF9HsgX
+ 5GpVEdB1fvbHd5V0k/cVdNAMVgc4p0ZVSkxqXYU2ztx7mHVZvFqudMNu1j4VFyedk3Gy Pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3f0auh6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Dec 2021 23:28:38 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BLNSbET000958;
+        Tue, 21 Dec 2021 23:28:38 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3f0auh6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Dec 2021 23:28:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BLNMk3U007083;
+        Tue, 21 Dec 2021 23:28:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3d16wjsmku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Dec 2021 23:28:35 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BLNSXCN26804562
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Dec 2021 23:28:33 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B3FBA4054;
+        Tue, 21 Dec 2021 23:28:33 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 012CAA405B;
+        Tue, 21 Dec 2021 23:28:32 +0000 (GMT)
+Received: from sig-9-65-67-220.ibm.com (unknown [9.65.67.220])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Dec 2021 23:28:31 +0000 (GMT)
+Message-ID: <9b93e099fc6ee2a56d70ed338cd79f2c1ddcffa5.camel@linux.ibm.com>
+Subject: Re: [PATCH] integrity: Do not load MOK and MOKx when secure boot be
+ disabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        James Morris <jmorris@namei.org>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Lee, Chun-Yi" <jlee@suse.com>
+Date:   Tue, 21 Dec 2021 18:28:31 -0500
+In-Reply-To: <20211218020905.7187-1-jlee@suse.com>
+References: <20211218020905.7187-1-jlee@suse.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uQeJ8f_8ZN-B_o8ZQ_exHqD5LVj-hBYw
+X-Proofpoint-GUID: Tc_s0b3RL0D8sWFFCGoJoXmr8vfhRfAO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-21_07,2021-12-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=823 phishscore=0
+ clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112210115
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 8:18 AM Andreas Kemnade <andreas@kemnade.info> wrote:
->
-> Hi,
->
-> On Sun, 12 Dec 2021 21:45:48 -0800
-> Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
->
-> [...]
-> > > > This is also likely unsafe if controller is not completely shut off and
-> > > > is capable of generating interrupts given input device is not yet
-> > > > allocated.
-> > >
-> > > I have dropped the `IRQF_TRIGGER_FALLING |`
-> > >
-> > > I have tried to use level interrupts, but I can't get the device
-> > > working with them.
-> >
-> > That is weird, does the interrupt controller support level interrupts?
-> >
-> I have set level interrupts via the devicetree,
-> things seem to work on Kobo Clara HD:
-> /proc/interrupts
-> 203:      37402  gpio-mxc   6 Level     tt21000
->
->        touchscreen@24 {
->                 compatible = "cypress,tt21000";
->                 reg = <0x24>;
->                 pinctrl-names = "default","sleep";
->                 pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
->                 pinctrl-1 = <&pinctrl_cyttsp5_gpio_sleep>;
->                 interrupt-parent = <&gpio5>;
->                 interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
->                 reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
->         };
+On Sat, 2021-12-18 at 10:09 +0800, Lee, Chun-Yi wrote:
+> The security of Machine Owner Key (MOK) relies on secure boot. When
+> secure boot is disabled, EFI firmware will not verify binary code. Then
+> arbitrary efi binary code can modify MOK when rebooting.
+> 
+> This patch prevents MOK/MOKx be loaded when secure boot be disabled.
+> 
+> Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
 
-I have tried using IRQ_TYPE_LEVEL_LOW as well, but the device doesn't
-start correctly and the commands time out.
+Thanks, Joey!
 
-It works fine with IRQ_TYPE_EDGE_FALLING though.
+This patch is now queued in the next-integrity-testing branch waiting
+further review/tags.
 
-Alistair
+Mimi
 
->
-> Regards,
-> Andreas

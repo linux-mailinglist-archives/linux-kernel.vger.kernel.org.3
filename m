@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 019DD47B997
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D209447B99E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbhLUFit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 00:38:49 -0500
-Received: from mga03.intel.com ([134.134.136.65]:50036 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229690AbhLUFis (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 00:38:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640065128; x=1671601128;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zs0dPTi+r3Qe7mJ4MIOg1p3jf9i/MVTyETUJag0lPxI=;
-  b=HIiy09ljumEDhQ0mjKCjTrpTrjStPAqSOzVFS2T5PM+6KGESmtreks8k
-   lOYKrCh3d2fjqlI4u/u7udJmHagLc54ijiZfkzxY994r/zPrpWB8KVQUn
-   b8+GEUEbtiIQCVJU1yr4VvU1w8RGQONfcIhCFozQ+aQeoQbgy0kaDj2IN
-   HyOzhQ1aKX7teK2BSB3u/FAtWxl4clZoDyOmf0DpDbwXeeb8YM6jr2005
-   Hmu6hLrQum7vapQDS7hL23jcVd1iA/tsoclJq67n3i/XM0xT3FGVGR5H6
-   +WBB3aRf34xSl7B5qY6gvWa+uYRIRllmlb4NmftaVb9eb5nvIhA9jTWvl
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240284722"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="240284722"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 21:38:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="684541923"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 Dec 2021 21:38:46 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzXrJ-0008jh-Rf; Tue, 21 Dec 2021 05:38:45 +0000
-Date:   Tue, 21 Dec 2021 13:37:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Manish Narani <manish.narani@xilinx.com>
-Subject: [jic23-iio:togreg 100/103] drivers/iio/adc/xilinx-ams.c:621
- ams_get_pl_scale() warn: inconsistent indenting
-Message-ID: <202112211357.E8JZJON6-lkp@intel.com>
+        id S232975AbhLUFnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 00:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229964AbhLUFnJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 00:43:09 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F843C061574;
+        Mon, 20 Dec 2021 21:43:08 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j6so26660582edw.12;
+        Mon, 20 Dec 2021 21:43:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fmR/2OqeSaL3bwGQc4psClXM2rn7wapRvk/2x0G98Bk=;
+        b=kMJ+8JEuQLWCtM+aB5Q7fBKeOV1O86YhY5W6RTmLIu3Cuj3DAIgJMgcawjkXBM/D6P
+         avagRnhGCMzImCaW2ZurdZwcB706B7GXU0HAHvaE10paBFfSz2Wqbkwua3z7ToSF25P0
+         L+L/jcTrWi0grB0hxIGl/FOqCUQbVI+c+AoC1y1nl4rd8tbKxT93h4cYmgeKOa//q3KR
+         ccc9lPMWXCDAihLwTDTOMCHksfBhtOLTe4OQ1+vIUUVHH78+a3P7/VChnJMS9ihooqhd
+         m5APEiD/w4Bllo0exdPDHiQOoNpvBDaUkkdO7oF8MDL/fieWHpE72jP1uRsoWtDQ3crw
+         tBXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fmR/2OqeSaL3bwGQc4psClXM2rn7wapRvk/2x0G98Bk=;
+        b=4VvYZianW4hfZ16hUNsR/Zaxp20MPqY+mK/dPLGR+ksA87AtLiuB9t96klHL5NshBj
+         mvJUJkSZS+szQZJl4xAkV1xymxoqLu4IZMjLPBitKCAoYK/l5lo0Wd1USfODFoJaXnqG
+         zPwhTj1xliyGAdWkMpgxY3yf767cqBCk6EO8WDNSXGiUtOtLgCXFH5MFy3MtRW5rRzHU
+         eYkjFc053AQdZqOLllK52HDBJQZUGMH/hZg7z08lnyAhm1nXCeFlbsbp9I3sTVTdErNI
+         DBEHWFhdbFVkJRXz87Ly5YWAztbn3FCwzY8/CXSDkUkNmOuyDC+GiamtEsjVy5owVJsl
+         pfUQ==
+X-Gm-Message-State: AOAM531fBenV2cjghWchq4iAZgE5HBEq6fk+jMdg8emqZZjyHlZ/Yoab
+        o2C/r8C0PT+r1NF0dk0u/LozLRYDj2mWyjRXIjJYEttOrBvwRr3AVQw=
+X-Google-Smtp-Source: ABdhPJx2rCF5AgXg3IpCeewR26zJGoR08zWvV5Ra54dOuM/nVn/uXtBS32YFrWIkXGogA3I6yqszzVkOonVvjRQ7ClI=
+X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr1279777ejb.639.1640065387201;
+ Mon, 20 Dec 2021 21:43:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211219223953.16074-1-liambeguin@gmail.com> <20211219223953.16074-4-liambeguin@gmail.com>
+In-Reply-To: <20211219223953.16074-4-liambeguin@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 21 Dec 2021 07:42:31 +0200
+Message-ID: <CAHp75Ve_vv619-UxdBN+xhWGm32tCJkkN3epVRgCiLF7p6xMOw@mail.gmail.com>
+Subject: Re: [PATCH v10 03/14] iio: inkern: make a best effort on offset calculation
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-head:   d37e6bb10a086d7d7695122e03e6431eb0ea503a
-commit: 18834cbc79f73f2814d8388de9eea5bbaddcc3d6 [100/103] iio: adc: Add Xilinx AMS driver
-config: s390-randconfig-m031-20211220 (https://download.01.org/0day-ci/archive/20211221/202112211357.E8JZJON6-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
+On Mon, Dec 20, 2021 at 11:17 AM Liam Beguin <liambeguin@gmail.com> wrote:
+>
+> From: Liam Beguin <lvb@xiphos.com>
+>
+> iio_convert_raw_to_processed_unlocked() assumes the offset is an
+> integer. Make a best effort to get a valid offset value for fractional
+> cases without breaking implicit truncations.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+...
 
-smatch warnings:
-drivers/iio/adc/xilinx-ams.c:621 ams_get_pl_scale() warn: inconsistent indenting
+> +                       offset_val /= (1 << offset_val2);
 
-vim +621 drivers/iio/adc/xilinx-ams.c
+Besides potentially being problematic (if arg is 31 for the left
+shift) why not simply
 
-   591	
-   592	static int ams_get_pl_scale(struct ams *ams, int address)
-   593	{
-   594		int val, regval;
-   595	
-   596		switch (address) {
-   597		case AMS_SUPPLY1:
-   598		case AMS_SUPPLY2:
-   599		case AMS_SUPPLY3:
-   600		case AMS_SUPPLY4:
-   601		case AMS_SUPPLY5:
-   602		case AMS_SUPPLY6:
-   603		case AMS_VCCAMS:
-   604		case AMS_VREFP:
-   605		case AMS_VREFN:
-   606			val = AMS_SUPPLY_SCALE_3VOLT_mV;
-   607			break;
-   608		case AMS_SUPPLY7:
-   609			regval = readl(ams->pl_base + AMS_REG_CONFIG4);
-   610			if (FIELD_GET(AMS_VUSER0_MASK, regval))
-   611				val = AMS_SUPPLY_SCALE_6VOLT_mV;
-   612			else
-   613				val = AMS_SUPPLY_SCALE_3VOLT_mV;
-   614			break;
-   615		case AMS_SUPPLY8:
-   616			regval = readl(ams->pl_base + AMS_REG_CONFIG4);
-   617			if (FIELD_GET(AMS_VUSER1_MASK, regval))
-   618				val = AMS_SUPPLY_SCALE_6VOLT_mV;
-   619			else
-   620				val = AMS_SUPPLY_SCALE_3VOLT_mV;
- > 621						break;
-   622		case AMS_SUPPLY9:
-   623			regval = readl(ams->pl_base + AMS_REG_CONFIG4);
-   624			if (FIELD_GET(AMS_VUSER2_MASK, regval))
-   625				val = AMS_SUPPLY_SCALE_6VOLT_mV;
-   626			else
-   627				val = AMS_SUPPLY_SCALE_3VOLT_mV;
-   628			break;
-   629		case AMS_SUPPLY10:
-   630			regval = readl(ams->pl_base + AMS_REG_CONFIG4);
-   631			if (FIELD_GET(AMS_VUSER3_MASK, regval))
-   632				val = AMS_SUPPLY_SCALE_6VOLT_mV;
-   633			else
-   634				val = AMS_SUPPLY_SCALE_3VOLT_mV;
-   635			break;
-   636		case AMS_VP_VN:
-   637		case AMS_REG_VAUX(0) ... AMS_REG_VAUX(15):
-   638			val = AMS_SUPPLY_SCALE_1VOLT_mV;
-   639			break;
-   640		default:
-   641			val = AMS_SUPPLY_SCALE_1VOLT_mV;
-   642			break;
-   643		}
-   644	
-   645		return val;
-   646	}
-   647	
+_val >>= _val2;
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+?
+
+-- 
+With Best Regards,
+Andy Shevchenko

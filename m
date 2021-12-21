@@ -2,147 +2,892 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CC647B930
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 05:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C0647B933
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 05:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbhLUEcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 23:32:13 -0500
-Received: from mail-eopbgr80095.outbound.protection.outlook.com ([40.107.8.95]:21319
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229441AbhLUEcM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 23:32:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BlTo08zWuzrZpUaHqKstplBZjsWER4GsY9/JnzKYSvfBqaT6Xgu71is/Jj+FDuQ0DMD7I/6jFHYmsIdP+UuiKII/FZVIpyvukv4p6gNkj2/3QjL+rDThmgKRp4MrgW7/F1GSX41YTuhJbq5FaSb+BRVnz+ftG1ZQoLgcwp4Y1sRrYwnkX4McL9WA7WxcraHzq0Yty6/UuDu9KL7kVvTbJ8qy4k92SnFXihIyhVz0F3pYSDedr6RPyHLBcMy5rtDh4+kTCVSdtm4MV8lSoUoCcGa++hF3RhwRYSU9lfJzT9PsgpD73q8Cb3/F6jKLcVOWYpJ4tZgbgJPhcl7SDsFdcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Gyv+gTd0AaUWtLvFmEtzmSFXyVaueDOzgJRZFE9Vz4=;
- b=UnQg0tEAlAQtNaR5ku5ymxKSLAdnGxFhRU31JCrZpGN2PCrWp+nMhBAlQ8Y1X3z9005kzjPOAIgYrVv8hGUmVQGzkeTmrMbG6Qx6HosKtK0Ct6GPAVKlBxkaZ0rot0es9y3Uy7rWi8p5Ymw41kt1xh/i+D+U/+khc1x++5iA12hzxRmhAmHyWgQikkpo5xRjYxwTQ+U9Aj0SwmJ8KWTIDf6XwU4ZVL5xGdFmBUoCPFg2B66ZWLfS98EmC1rrv0Ae5YnhGTq8MGtT0biLSWcRRDpGuAwmi97bp4rxBRZMniNAcs53HtXCocHNzp2k/TlbMrbmLL+O5yaLeoTxXmHpQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Gyv+gTd0AaUWtLvFmEtzmSFXyVaueDOzgJRZFE9Vz4=;
- b=ey7VEyyRlw/K219QRXovr9QI/4mzqJmvGDsgkKJupAYk7zhrTiW4JkIOy+QBEQpJSPZojhnOM9mCsQH0k181mMBOsmMq3b3pDsNArL6MFW6RUvv11kNgJD1Z9wn1sYb5sy4cteZHZrF0E2tQt/jYNp29DZR1QCHPNNMKMWXQsCE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:262::24)
- by AM9P190MB1156.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:26b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Tue, 21 Dec
- 2021 04:32:08 +0000
-Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
- ([fe80::b93b:8d91:d56a:8256]) by AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
- ([fe80::b93b:8d91:d56a:8256%5]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
- 04:32:08 +0000
-Date:   Tue, 21 Dec 2021 06:32:05 +0200
-From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     netdev@vger.kernel.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 6/6] net: marvell: prestera: Implement initial
- inetaddr notifiers
-Message-ID: <YcFYxW2aeTnVVapz@yorlov.ow.s>
-References: <20211217195440.29838-1-yevhen.orlov@plvision.eu>
- <20211217195440.29838-7-yevhen.orlov@plvision.eu>
- <20211217130325.305961eb@hermes.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217130325.305961eb@hermes.local>
-X-ClientProxiedBy: FR0P281CA0054.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:48::16) To AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:262::24)
+        id S232241AbhLUEiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 23:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhLUEiK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 23:38:10 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920A8C061574;
+        Mon, 20 Dec 2021 20:38:09 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id t11so11824576qtw.3;
+        Mon, 20 Dec 2021 20:38:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RsxagQNVjAlOWZkFF0z6G9kSXib57m9FjMdPpgdXvNY=;
+        b=hOcLQa1XcNU+Ih5GiogFhvO2jIoMeutd20hrzV/o0vW18Z2lbhjdo2NA3vleC08r4V
+         s21hG1unZAigUUFF1Ov7eg8hr5AejdvW0c3ocFS49FHdiKKmpb+wiX6abC57B29U+iZh
+         2EzuZQFqqVhTYc5W5zqkpul67IGFMJJnVAMd8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RsxagQNVjAlOWZkFF0z6G9kSXib57m9FjMdPpgdXvNY=;
+        b=bf3jGw0Law1va0gmvwFlaBhdrv9fgreOPt2dhBcx6OiL7UbLyL0ZB+ScyX4JXdJklK
+         9Cdq2wjvtph/Tw+vaNOiaTdM76dOY6RoNLka+W5yg9fKnDDHdMMf+clS3ZFgHNgtY59S
+         f+XMmczgY8OhxorAi9DC8E0xExWUB9YQ9fhz84LDeNXysMzw0O9xo9jFpebcn7y93lIK
+         scPNSkn8tj77NU0HfRVPRvjlTjCioCfVkwOZFK3kPxXVQ3QzYxFRQGFhD3CYZH2rWEWw
+         Iogn2qMfATCBJJ4f0ACRUvLYlZ6TquFUuLz8tBC/JT4rGN6aHBh8tUKKwwXzHC60zdGy
+         nobg==
+X-Gm-Message-State: AOAM5310wmbspRlyzyRNLy9oOj/oRiCfg0bJ16eJhw75Q6bPutfnIXUD
+        jAMglzUbKGcWU8I8YWe85RDuV9yoDqdvzo6gQNU=
+X-Google-Smtp-Source: ABdhPJy8usOx70sN6kErEx6hvRM9cmMn2UTVkbBPu20sEnZAyjeAOdkS45tQjZJP4WddNHhGez6YYbZsl56LqrfRjRg=
+X-Received: by 2002:a05:622a:38d:: with SMTP id j13mr924071qtx.159.1640061487409;
+ Mon, 20 Dec 2021 20:38:07 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3cca0340-2776-42a9-072f-08d9c43ad934
-X-MS-TrafficTypeDiagnostic: AM9P190MB1156:EE_
-X-Microsoft-Antispam-PRVS: <AM9P190MB11566F6D644E3AA02DBD5E28937C9@AM9P190MB1156.EURP190.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:169;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D+FmT2c+O++28sahFmvcdjM154/CZN5Shnt/pI0QRxrMzamXiyApWjF/8pnuOM6fymssbggqamEmJnwahAvVYwj0MB6bjCeT+02Hnm6Bw7+Gt12FL7764nAFbqZL6imZz90LWcItR5/4Z01sN4iUrRq8b2DPLsfuKL9HEV8dB2CSyBjmsoWxy6/KvU3nvopuGhSM0incdi9fxlOb+RlZUAQ1OtwoyVnPXvLmTR8OdSsBddSpVr3BjaW9RbBocHy63WNBuZa/0NvWVVVsKtDCjiiB4xhVZxplsSAFLvskkhYzh9kG8fIpqJRFPkOVYv01Btj05tsjVQG0eAiU/AZOJFFrxt2ikZWPwn1INH6Pq4PuFfD8m1/W7ltkmr0KG/L+dlEtjOa2898J6zY+tS2KsN8y7Kzf6uPtGr3rhR68GqWTd4653bueYEu+Eq/gTBGf41eGMXyMqFrZGrtT+P/r1VnNEXTMIWqWgOi1zWy1I1mbvsNmB74TGWvlBz4JdA6VPoyGLbi42nfbJLES1jRWPrEDcBUZPFG3vhhKx0i3c8ABgwK5k7UjBucN6/FKLuHmcv01666CCnQ3J5lgzz9DWeVnJ6mFnxeMbHmX1ix4Xcc8s2Jzk7jRaYttB3TD/rWsX8G8qbE8/A5x4NUDrAZHQY20E5qlwXMAYwxL12DpQ+0Uyz7Nm85bWNhKUnNyliGwwkoFLLWPfgw9DIrm/Le0dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P190MB1122.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(366004)(136003)(39830400003)(376002)(396003)(26005)(6506007)(186003)(52116002)(86362001)(6916009)(8676002)(54906003)(83380400001)(5660300002)(6486002)(316002)(4744005)(8936002)(38100700002)(38350700002)(4326008)(66476007)(66556008)(9686003)(6512007)(44832011)(66946007)(508600001)(6666004)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o8hhHwddl+ZyyXcKl3YJv/u7LLQ3XAY1K1EPQZ9BqT+VVXKgxW1wJ8kLp1tF?=
- =?us-ascii?Q?2WghngmYeLEZgyjBp/b71nxqr96cj7D5KtEbuwcs8EfdLTmjBYIxyCVlw1XP?=
- =?us-ascii?Q?KS3bn+xArFnqRSyWQYKUNYqd3r9Q5uNIgt0y53JgmbXFRYnNPFYWWc9ba5lN?=
- =?us-ascii?Q?uL2ia5ku58Prj2oPLj+5wYogC2/Z58JOnM7qxI1KXvqHSktaeFglKreOwhrj?=
- =?us-ascii?Q?I0tNAL3yqsEw8SnM/NpnTTFs4xrzSkya0DxFaExIF8sutpjGqt0QyNYSg0W+?=
- =?us-ascii?Q?jfpsxWlw/+J6+nmE7yaxqkTSler+Wi7TJnRFrmUI2fq1Zkk1GHuefe5q1dDN?=
- =?us-ascii?Q?9cG5xNHueeximQXGdomGYdf2Hnw3GIB2E2Ty7exMWxB17T110BFOojO+4S/D?=
- =?us-ascii?Q?JgihZDzw+ecJbTVs+6W4eLTgbMJbMhnCwbE3JqVs8+lH1sEUOsa+52A6Gp/n?=
- =?us-ascii?Q?VI7G5ymTl4z+dbDMY88HhF1NG4y/Uhj/w99O2FIFsHJuO3fuMJv44S7vk6Xk?=
- =?us-ascii?Q?uT/GmD2sif172KMr9HzVwnNR4u6rQ6kjP4vuRV9nxJld4cKgsF3B6VabuFXQ?=
- =?us-ascii?Q?qCefL+TklUyodpAyuwwEFnCmVJ2q/bFje0+KR6n341l9b/Xssr965yzdJ9/d?=
- =?us-ascii?Q?52l5UlgdvnW7rT8TmywWcOZZ9yCk9BsJM+uXJpJiTQyD03FyCgF6v9JkLIHy?=
- =?us-ascii?Q?jpiKpC6gEX1tMTB4r8IryfG8hmLJRQ4JN2Ha+EwwXdpuhE8O1lyngfiSAIz9?=
- =?us-ascii?Q?w6Gueaqh0AheLNQZZVjWKjQMBkKUUp6eRRmIQC7LxoQzIucFXBnEefJwohdo?=
- =?us-ascii?Q?DLNfSKa3YjXaBzhjayEra9wisWdu+5yIHQqV79+sJpb8bKMISJSrSJY3xQUQ?=
- =?us-ascii?Q?3foB8f+LuvjdqfIL1jDJsqgaOwLz7bjTsb/eLO189dxh1N9S1bKkaLknd8Xz?=
- =?us-ascii?Q?Q53D0pGuQTe2zCpj2kkQ9I7JxOiAJE/63s4QUf5q2B9BG7Hzxm0gFBjHNwKv?=
- =?us-ascii?Q?cH5UIYi4HOy7yTuj9K74KPYQOAB6mO0Ari4gHX9r8mueqsVFYQ/KX9Y6Wgo8?=
- =?us-ascii?Q?wUhrvmCNsyy1GLG3V41cFRLRPvdHw+nysp2A1jswm7gS5AQNc6EclXQ/L9WO?=
- =?us-ascii?Q?XCqStjauN8D28kOSIfFqDWq4iZFuvU1HhSSKdDXRyRBEHUKhwJnzRORBhcHx?=
- =?us-ascii?Q?0qm5Xv4BTDpo/xbiNFLfOhT6sUIaiPUTStpHsrlw/GbI1liQ7LRlzJQHjAS8?=
- =?us-ascii?Q?B1IUoOzAnfDr3IpuISggEL1zsTXoOVIcxGjJDrdRyJwhXFkeEaqA0oppiH6L?=
- =?us-ascii?Q?3mBAUs+45WiQ+PuZQOJYk3V8SZNl9c9RvdEx1yXst525ne4yhNLYV4Y+n3OI?=
- =?us-ascii?Q?H88RVWYl1uXWH/U7x4xgZ0eOaRVBFOrGmXSP9k+kWWXN0GoIWDCfkhxnSS8D?=
- =?us-ascii?Q?GniVf89FEcluYa1o6tWudlmmdAsN6Dmx9ZV6aXAAD/LvjSY1iadmRuZJygkQ?=
- =?us-ascii?Q?6c36m/6cvL85Jo7MrpgMPsg6ve17xnYInP4LRdni/ygKBeNXcLRb0S7xFUCo?=
- =?us-ascii?Q?KueBAcYhqdKJ0PGYIYghb3ZjQ1CKWphkttNX4BzIBOql4a0vaNUOSo2b6cuE?=
- =?us-ascii?Q?DSlVWdixOm/4nIOUjefdXTJDW4aM8sc7Tj3cV8X8q6o2TZjqKUpffGvUZY3h?=
- =?us-ascii?Q?Nhm0UY31zA5m1FouHxbM/2qJ39w=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cca0340-2776-42a9-072f-08d9c43ad934
-X-MS-Exchange-CrossTenant-AuthSource: AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 04:32:08.2411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1hqQHOi94FnyVUVhe1DV2m8geWdn+ZKTe+xOSLmFMlj7xwH1ICjmTcWLIAiXsz36L+CRGdQPRIQPpmpn+LYrt8Xn7pRWnRlTZ6LiZJ0lRL0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P190MB1156
+References: <20211207094923.422422-1-howard.chiu@quantatw.com>
+In-Reply-To: <20211207094923.422422-1-howard.chiu@quantatw.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 21 Dec 2021 04:37:55 +0000
+Message-ID: <CACPK8XddhFn3PreJM3D=djkREgqGD7yZhS7YoqxxXsNfhZpLhQ@mail.gmail.com>
+Subject: Re: [PATCH v8] ARM: dts: aspeed: Adding Facebook Bletchley BMC
+To:     Howard Chiu <howard10703049@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        =?UTF-8?B?UG90aW4gTGFpICjos7Tmn4/lu7cp?= <Potin.Lai@quantatw.com>,
+        Howard Chiu <howard.chiu@quantatw.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 01:03:25PM -0800, Stephen Hemminger wrote:
-> How are these device references cleaned up on module removal?
+Hi Patrick,
 
-Removing the module removes the port, and clears all addresses:
+On Tue, 7 Dec 2021 at 09:52, Howard Chiu <howard10703049@gmail.com> wrote:
+>
+> Initial introduction of Facebook Bletchley equipped with
+> Aspeed 2600 BMC SoC.
+>
+> Signed-off-by: Howard Chiu <howard.chiu@quantatw.com>
 
-    __prestera_inetaddr_event.part.0+0x190/0x3b0 [prestera]
-    __prestera_inetaddr_cb+0x94/0xb0 [prestera]
-    blocking_notifier_call_chain+0x98/0xd0
-    __inet_del_ifa+0x2e4/0x4e0
-    inetdev_event+0x260/0xa20
-    raw_notifier_call_chain+0x74/0xa0
-    call_netdevice_notifiers_info+0x68/0xc0
-    unregister_netdevice_many+0x4f4/0xa20
-    unregister_netdevice_queue+0x13c/0x180
-    unregister_netdev+0x24/0x40
-    prestera_port_destroy+0x44/0xe0 [prestera]
-    prestera_device_unregister+0x6c/0x110 [prestera]
-    prestera_pci_remove+0x28/0x80 [prestera_pci]
-    pci_device_remove+0x68/0x130
-    __device_release_driver+0x228/0x320
-    driver_detach+0x12c/0x1c0
-    bus_remove_driver+0x88/0x120
-    driver_unregister+0x44/0x80
-    pci_unregister_driver+0x2c/0xe0
-    prestera_pci_driver_exit+0x18/0x30 [prestera_pci]
-    __arm64_sys_delete_module+0x20c/0x310
-    invoke_syscall+0x60/0x190
+Are you ok for this one to go in for v5.17?
 
+> ---
+> Change since v7:
+> - Add switchphy mode back due to unknown failure
+>
+> Change since v6:
+> - Fix FUSB302 node warnings
+> - Remove switchphy node.
+> - Remvoe status property from spi-gpio node
+> - Remove interrupt pin of FUSB302 temporally due to hardware issue
+> - Add more gpio-line-name
+> - Replace MP5023 device drivr with "mps,mp5023"
+>
+> Change since v5:
+> - Add an EEPROM on i2c-7
+> - Change address of FUSB302 to 0x22
+> - Assign interrupt pin to FUSB302
+> - Rework pin assignment of pca9539
+>
+> Change since v4:
+> - Change address of TMP421 on i2c-12 to 0x4d
+>
+> Change since v3:
+> - Add a TMP421 on i2c-10
+>
+> Change since v2:
+> - Remove uart5 workaround
+> - Remove gpio nodes of pca9552/pca9539
+> - Modify gpio-line-name of led/power/presence pins with openbmc pattern
+> - Add MP5023 devices
+>
+> Change since v1:
+> - Keep sorted in Makefile
+> - Change baudrate to 57600 from 115200
+> - Rename node *-ember to *-amber
+> - Use openbmc-flash-layout-128.dtsi
+>
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/aspeed-bmc-facebook-bletchley.dts     | 756 ++++++++++++++++++
+>  2 files changed, 757 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+>
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 0de64f237cd8..b804b577010a 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1482,6 +1482,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>         aspeed-bmc-arm-stardragon4800-rep2.dtb \
+>         aspeed-bmc-asrock-e3c246d4i.dtb \
+>         aspeed-bmc-bytedance-g220a.dtb \
+> +       aspeed-bmc-facebook-bletchley.dtb \
+>         aspeed-bmc-facebook-cloudripper.dtb \
+>         aspeed-bmc-facebook-cmm.dtb \
+>         aspeed-bmc-facebook-elbert.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> new file mode 100644
+> index 000000000000..f973ea883b97
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> @@ -0,0 +1,756 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +// Copyright (c) 2021 Facebook Inc.
+> +/dts-v1/;
+> +
+> +#include "aspeed-g6.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/usb/pd.h>
+> +
+> +/ {
+> +       model = "Facebook Bletchley BMC";
+> +       compatible = "facebook,bletchley-bmc", "aspeed,ast2600";
+> +
+> +       aliases {
+> +               serial4 = &uart5;
+> +       };
+> +
+> +       chosen {
+> +               bootargs = "console=ttyS4,57600n8";
+> +       };
+> +
+> +       memory@80000000 {
+> +               device_type = "memory";
+> +               reg = <0x80000000 0x80000000>;
+> +       };
+> +
+> +       iio-hwmon {
+> +               compatible = "iio-hwmon";
+> +               io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> +                       <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> +                       <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
+> +                       <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
+> +       };
+> +
+> +       spi_gpio: spi-gpio {
+> +               compatible = "spi-gpio";
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               gpio-sck = <&gpio0 ASPEED_GPIO(Z, 3) GPIO_ACTIVE_HIGH>;
+> +               gpio-mosi = <&gpio0 ASPEED_GPIO(Z, 4) GPIO_ACTIVE_HIGH>;
+> +               gpio-miso = <&gpio0 ASPEED_GPIO(Z, 5) GPIO_ACTIVE_HIGH>;
+> +               num-chipselects = <1>;
+> +               cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+> +
+> +               tpmdev@0 {
+> +                       compatible = "tcg,tpm_tis-spi";
+> +                       spi-max-frequency = <33000000>;
+> +                       reg = <0>;
+> +               };
+> +       };
+> +
+> +       switchphy: ethernet-phy@0 {
+> +               // Fixed link
+> +       };
+> +
+> +       leds {
+> +               compatible = "gpio-leds";
+> +
+> +               sys_log_id {
+> +                       retain-state-shutdown;
+> +                       default-state = "keep";
+> +                       gpios = <&front_leds 0 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan0_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "on";
+> +                       gpios = <&fan_ioexp 8 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan1_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "on";
+> +                       gpios = <&fan_ioexp 9 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan2_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "on";
+> +                       gpios = <&fan_ioexp 10 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan3_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "on";
+> +                       gpios = <&fan_ioexp 11 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan0_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&fan_ioexp 12 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan1_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&fan_ioexp 13 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan2_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&fan_ioexp 14 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               fan3_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&fan_ioexp 15 GPIO_ACTIVE_HIGH>;
+> +               };
+> +               sled0_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled0_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled0_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled0_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled1_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled1_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled1_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled1_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled2_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled2_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled2_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled2_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled3_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled3_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled3_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled3_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled4_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled4_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled4_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled4_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled5_amber {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled5_leds 0 GPIO_ACTIVE_LOW>;
+> +               };
+> +               sled5_blue {
+> +                       retain-state-shutdown;
+> +                       default-state = "off";
+> +                       gpios = <&sled5_leds 1 GPIO_ACTIVE_LOW>;
+> +               };
+> +       };
+> +};
+> +
+> +&mac2 {
+> +       status = "okay";
+> +       phy-mode = "rgmii";
+> +       phy-handle = <&switchphy>;
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_rgmii3_default>;
+> +
+> +       fixed-link {
+> +               speed = <1000>;
+> +               full-duplex;
+> +       };
+> +};
+> +
+> +&rtc {
+> +       status = "okay";
+> +};
+> +
+> +&fmc {
+> +       status = "okay";
+> +       flash@0 {
+> +               status = "okay";
+> +               m25p,fast-read;
+> +               label = "bmc";
+> +               spi-max-frequency = <50000000>;
+> +#include "openbmc-flash-layout-128.dtsi"
+> +       };
+> +};
+> +
+> +&spi2 {
+> +       status = "okay";
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_spi2_default>;
+> +
+> +       flash@0 {
+> +               status = "okay";
+> +               m25p,fast-read;
+> +               label = "pnor";
+> +               spi-max-frequency = <100000000>;
+> +       };
+> +};
+> +
+> +&i2c0 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled0_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED0_MS_DETECT1","SLED0_VBUS_BMC_EN","SLED0_INA230_ALERT","SLED0_P12V_STBY_ALERT",
+> +               "SLED0_SSD_ALERT","SLED0_MS_DETECT0","SLED0_RST_CCG5","SLED0_FUSB302_INT",
+> +               "SLED0_MD_STBY_RESET","SLED0_MD_IOEXP_EN_FAULT","SLED0_MD_DIR","SLED0_MD_DECAY",
+> +               "SLED0_MD_MODE1","SLED0_MD_MODE2","SLED0_MD_MODE3","power-host0";
+> +       };
+> +
+> +       sled0_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled0-amber","led-sled0-blue","SLED0_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled0_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c1 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled1_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED1_MS_DETECT1","SLED1_VBUS_BMC_EN","SLED1_INA230_ALERT","SLED1_P12V_STBY_ALERT",
+> +               "SLED1_SSD_ALERT","SLED1_MS_DETECT0","SLED1_RST_CCG5","SLED1_FUSB302_INT",
+> +               "SLED1_MD_STBY_RESET","SLED1_MD_IOEXP_EN_FAULT","SLED1_MD_DIR","SLED1_MD_DECAY",
+> +               "SLED1_MD_MODE1","SLED1_MD_MODE2","SLED1_MD_MODE3","power-host1";
+> +       };
+> +
+> +       sled1_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled1-amber","led-sled1-blue","SLED1_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled1_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c1 {
+> +       status = "okay";
+> +};
+> +
+> +&i2c2 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled2_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED2_MS_DETECT1","SLED2_VBUS_BMC_EN","SLED2_INA230_ALERT","SLED2_P12V_STBY_ALERT",
+> +               "SLED2_SSD_ALERT","SLED2_MS_DETECT0","SLED2_RST_CCG5","SLED2_FUSB302_INT",
+> +               "SLED2_MD_STBY_RESET","SLED2_MD_IOEXP_EN_FAULT","SLED2_MD_DIR","SLED2_MD_DECAY",
+> +               "SLED2_MD_MODE1","SLED2_MD_MODE2","SLED2_MD_MODE3","power-host2";
+> +       };
+> +
+> +       sled2_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled2-amber","led-sled2-blue","SLED2_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled2_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c3 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled3_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED3_MS_DETECT1","SLED3_VBUS_BMC_EN","SLED3_INA230_ALERT","SLED3_P12V_STBY_ALERT",
+> +               "SLED3_SSD_ALERT","SLED3_MS_DETECT0","SLED3_RST_CCG5","SLED3_FUSB302_INT",
+> +               "SLED3_MD_STBY_RESET","SLED3_MD_IOEXP_EN_FAULT","SLED3_MD_DIR","SLED3_MD_DECAY",
+> +               "SLED3_MD_MODE1","SLED3_MD_MODE2","SLED3_MD_MODE3","power-host3";
+> +       };
+> +
+> +       sled3_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled3-amber","led-sled3-blue","SLED3_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled3_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c4 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled4_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED4_MS_DETECT1","SLED4_VBUS_BMC_EN","SLED4_INA230_ALERT","SLED4_P12V_STBY_ALERT",
+> +               "SLED4_SSD_ALERT","SLED4_MS_DETECT0","SLED4_RST_CCG5","SLED4_FUSB302_INT",
+> +               "SLED4_MD_STBY_RESET","SLED4_MD_IOEXP_EN_FAULT","SLED4_MD_DIR","SLED4_MD_DECAY",
+> +               "SLED4_MD_MODE1","SLED4_MD_MODE2","SLED4_MD_MODE3","power-host4";
+> +       };
+> +
+> +       sled4_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled4-amber","led-sled4-blue","SLED4_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled4_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c5 {
+> +       status = "okay";
+> +       /* TODO: Add ADC INA230 */
+> +
+> +       mp5023@40 {
+> +               compatible = "mps,mp5023";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       sled5_ioexp: pca9539@76 {
+> +               compatible = "nxp,pca9539";
+> +               reg = <0x76>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "SLED5_MS_DETECT1","SLED5_VBUS_BMC_EN","SLED5_INA230_ALERT","SLED5_P12V_STBY_ALERT",
+> +               "SLED5_SSD_ALERT","SLED5_MS_DETECT0","SLED5_RST_CCG5","SLED5_FUSB302_INT",
+> +               "SLED5_MD_STBY_RESET","SLED5_MD_IOEXP_EN_FAULT","SLED5_MD_DIR","SLED5_MD_DECAY",
+> +               "SLED5_MD_MODE1","SLED5_MD_MODE2","SLED5_MD_MODE3","power-host5";
+> +       };
+> +
+> +       sled5_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-sled5-amber","led-sled5-blue","SLED5_RST_IOEXP","",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +
+> +       sled5_fusb302: typec-portc@22 {
+> +               compatible = "fcs,fusb302";
+> +               reg = <0x22>;
+> +
+> +               connector {
+> +                       compatible = "usb-c-connector";
+> +                       label = "USB-C";
+> +                       power-role = "dual";
+> +                       try-power-role = "sink";
+> +                       data-role = "dual";
+> +                       source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +                       sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                                       PDO_VAR(3000, 12000, 3000)
+> +                                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +                       op-sink-microwatt = <10000000>;
+> +               };
+> +       };
+> +};
+> +
+> +&i2c6 {
+> +       status = "okay";
+> +
+> +       eeprom@56 {
+> +               compatible = "atmel,24c64";
+> +               reg = <0x56>;
+> +       };
+> +
+> +       rtc@51 {
+> +               compatible = "nxp,pcf85263";
+> +               reg = <0x51>;
+> +       };
+> +};
+> +
+> +&i2c7 {
+> +       status = "okay";
+> +
+> +       eeprom@54 {
+> +               compatible = "atmel,24c64";
+> +               reg = <0x54>;
+> +       };
+> +};
+> +
+> +&i2c9 {
+> +       status = "okay";
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +};
+> +
+> +&i2c10 {
+> +       status = "okay";
+> +
+> +       tmp421@4f {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4f>;
+> +       };
+> +
+> +       hdc1080@40 {
+> +               compatible = "ti,hdc1080";
+> +               reg = <0x40>;
+> +       };
+> +
+> +       front_leds: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "led-fault-identify","power-p5v-stby-good",
+> +               "power-p1v0-dvdd-good","power-p1v0-avdd-good",
+> +               "","","","",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +};
+> +
+> +&i2c12 {
+> +       status = "okay";
+> +
+> +       adm1278@11 {
+> +               compatible = "adi,adm1278";
+> +               reg = <0x11>;
+> +       };
+> +
+> +       tmp421@4c {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4c>;
+> +       };
+> +
+> +       tmp421@4d {
+> +               compatible = "ti,tmp421";
+> +               reg = <0x4d>;
+> +       };
+> +
+> +       fan_ioexp: pca9552@67 {
+> +               compatible = "nxp,pca9552";
+> +               reg = <0x67>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +
+> +               gpio-line-names =
+> +               "presence-fan0","presence-fan1",
+> +               "presence-fan2","presence-fan3",
+> +               "power-fan0-good","power-fan1-good",
+> +               "power-fan2-good","power-fan3-good",
+> +               "","","","",
+> +               "","","","";
+> +       };
+> +};
+> +
+> +&i2c13 {
+> +       multi-master;
+> +       aspeed,hw-timeout-ms = <1000>;
+> +       status = "okay";
+> +};
+> +
+> +&gpio0 {
+> +       gpio-line-names =
+> +       /*A0-A7*/       "","","","","","","","",
+> +       /*B0-B7*/       "","","SEL_SPI2_MUX","SPI2_MUX1",
+> +                       "SPI2_MUX2","SPI2_MUX3","","",
+> +       /*C0-C7*/       "","","","","","","","",
+> +       /*D0-D7*/       "","","","","","","","",
+> +       /*E0-E7*/       "","","","","","","","",
+> +       /*F0-F7*/       "","","","","","","","",
+> +       /*G0-G7*/       "","SWITCH_FRU_MUX","","","","","","",
+> +       /*H0-H7*/       "presence-riser1","presence-riser2",
+> +                       "presence-sled0","presence-sled1",
+> +                       "presence-sled2","presence-sled3",
+> +                       "presence-sled4","presence-sled5",
+> +       /*I0-I7*/       "REV_ID0","","REV_ID1","REV_ID2",
+> +                       "","","","",
+> +       /*J0-J7*/       "","","","","","","","",
+> +       /*K0-K7*/       "","","","","","","","",
+> +       /*L0-L7*/       "","","","","","","","",
+> +       /*M0-M7*/       "ALERT_SLED0","ALERT_SLED1",
+> +                       "ALERT_SLED2","ALERT_SLED3",
+> +                       "ALERT_SLED4","ALERT_SLED5",
+> +                       "P12V_AUX_ALERT1","",
+> +       /*N0-N7*/       "","","","","","","","",
+> +       /*O0-O7*/       "","","","",
+> +                       "","BOARD_ID0","BOARD_ID1","BOARD_ID2",
+> +       /*P0-P7*/       "","","","","","","","",
+> +       /*Q0-Q7*/       "","","","","","","","",
+> +       /*R0-R7*/       "","","","","","","","",
+> +       /*S0-S7*/       "","","","BAT_DETECT",
+> +                       "BMC_BT_WP0","BMC_BT_WP1","","",
+> +       /*T0-T7*/       "","","","","","","","",
+> +       /*U0-U7*/       "","","","","","","","",
+> +       /*V0-V7*/       "","RST_BMC_MVL","","",
+> +                       "USB2_SEL0_A","USB2_SEL1_A",
+> +                       "USB2_SEL0_B","USB2_SEL1_B",
+> +       /*W0-W7*/       "RST_FRONT_IOEXP","","","","","","","",
+> +       /*X0-X7*/       "","","","","","","","",
+> +       /*Y0-Y7*/       "","","BSM_FLASH_LATCH","","","","","",
+> +       /*Z0-Z7*/       "","","","","","","","";
+> +};
+> +
+> +&adc0 {
+> +       vref = <1800>;
+> +       status = "okay";
+> +
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
+> +               &pinctrl_adc2_default &pinctrl_adc3_default
+> +               &pinctrl_adc4_default &pinctrl_adc5_default
+> +               &pinctrl_adc6_default &pinctrl_adc7_default>;
+> +};
+> +
+> +&adc1 {
+> +       vref = <2500>;
+> +       status = "okay";
+> +
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
+> +               &pinctrl_adc10_default &pinctrl_adc11_default
+> +               &pinctrl_adc12_default &pinctrl_adc13_default
+> +               &pinctrl_adc14_default &pinctrl_adc15_default>;
+> +};
+> --
+> 2.25.1
+>

@@ -2,128 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CC047C320
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4C047C325
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239667AbhLUPhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        id S233125AbhLUPjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239742AbhLUPgq (ORCPT
+        with ESMTP id S233117AbhLUPjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:36:46 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA239C061394
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:36:34 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id e8so1547864ilm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:36:34 -0800 (PST)
+        Tue, 21 Dec 2021 10:39:39 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EE0C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:39:39 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x15so53720185edv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=D6U5n1tpzp8Gl3D3iIJXPOKJi/MwcEuN5g8chsyJzdI=;
-        b=o58nCgcawpLnL4E0qEwWzxPc5FwGIeLp5F7sfcMwAKLzGjVWAvi/kAtR3tsbRthOjv
-         4nr7dGsh78i4yE4QJeYLyVdPMfSLnt0ea6Mryt+obR+2NMGMIw9s5/UXinON38Zm8GfJ
-         1X2o+eZ+AGdF//UW5uSJ6B38D49LdTZtwulN4yZ0anLhqZ/f4rm1K5v7P6Z45lwvAqpT
-         fQ8OCbKnWHjdCGR1/U4AOBO1lkwTkeEovP79sqCMmD/RfRV8YaWcD69eWfbZEQILRAE/
-         PAg8p9pCM97gjP3WbRkFRw8isVlrd4SM9UP6/oaoVZadmp+y0BDCDAmFTv0j5pyVLJNP
-         iECg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uSqWNkHxbVwKCbDHC8yN7zuqOQ59lZe9HAWIQq3Vxck=;
+        b=JbuVzx9BqufnHCKfRXraovVupj/FC+CBviF/LLdZ6MZWhoNK2DCnhO7DBoE3LVLBjF
+         Q0mcoxLCqz2ssGUgc7ey+1wf2SzonyZerdhTmPbAzGaWxmPaBsjQ7QZeXC4qLnulBpru
+         +zp850nAUvRIDEANIQW84c0Iv+t43SgvbaaSm/D8/S5W6kyxo7vNVnUC2XDpJIqugtWI
+         q4ePENactm2GnXwWgzSwkgkhFZoUtIW4Q2bYsXFG5nJb/GeWdwuF4MGgV4X41MtDsfiD
+         zcRVORFyw32zVGHj2LlxyPV4EhWDckXyaMDdXRJyBg2ZJCSErp2TG9XOwsGfXGQFCjnm
+         +AfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=D6U5n1tpzp8Gl3D3iIJXPOKJi/MwcEuN5g8chsyJzdI=;
-        b=nIjCSvJNKXYb6YFq2uo0wuAqBVC7NChulEaPn+1s166zURrR/eBjtSqZUb9ljD28Rz
-         7t8ZS5d1SXLFZS3OSDeufjeTefkE7rgTgz6fNSuANUNiBp/VuJeomEvOt8UkRAfsq1pe
-         B9RTh+qMqGLVkNMJsfHGvB5HmaRlHbzD8Q27SR8NOwOECSkwkELSjtj7OJHQ4zYiJGwD
-         ZnlPOyYtx+dmUfHOCATum0jVJPtpw9xJ+mV6FvOpVG9Lf/TBsCEBmuTgHtuaNDSDLiAV
-         6NzsClLzs2GdeRkos+EMmI3hhpzvjbpP78n++C1iBK5PMV2BMISnNmW2V9Di8GDiFohS
-         gmPw==
-X-Gm-Message-State: AOAM532Q5FYc9l6EouL4EbsGNJXCepvgQMXl1PLATNLWtXARyQxuoYdY
-        GC5TaYVVhRuqOrF4AbOOv5RrIw==
-X-Google-Smtp-Source: ABdhPJxSttCDfaRZ22MnO3/Ib9Pc2GN0BwXtg2JhUPaWirS+54tVsp6LzgtxxA1XHNUzncbZaQOYrw==
-X-Received: by 2002:a05:6e02:148c:: with SMTP id n12mr1914426ilk.89.1640100994116;
-        Tue, 21 Dec 2021 07:36:34 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id m7sm7739249ild.25.2021.12.21.07.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:36:33 -0800 (PST)
-Subject: Re: [PATCH AUTOSEL 5.15 20/29] block: reduce
- kblockd_mod_delayed_work_on() CPU consumption
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Cc:     Dexuan Cui <decui@microsoft.com>, Ming Lei <ming.lei@redhat.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-References: <20211221015751.116328-1-sashal@kernel.org>
- <20211221015751.116328-20-sashal@kernel.org>
- <MWHPR21MB1593141494C76CF5A0BDDB11D77C9@MWHPR21MB1593.namprd21.prod.outlook.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <ad76826e-73b2-b2f0-3cd4-8481645a6568@kernel.dk>
-Date:   Tue, 21 Dec 2021 08:36:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uSqWNkHxbVwKCbDHC8yN7zuqOQ59lZe9HAWIQq3Vxck=;
+        b=FE2FbkT97W+Gf+Qk1Q52SfgUjVDVqYVys1e9VTE9NnV6Ac+/DjJIrsLjbk7W6dlOvl
+         X2wofL1zIcgNVeoZn7UdTIL8EgdheNl7ewyCLenSKrv5b+1x+2qJb2kRdGodrUV4OH6X
+         J7NCuv+/S+xI/xrKHe9ogGqgQEWeFFMrX3cyMMbG9kPqn95XCVTqCuCkNFd5AvSS7xzK
+         pgfmab263osavg2wS/GaSmaNujUPyE2Xh9y7oq0YpS5TVW5lmVo7CE/ivDt7sLLXJibx
+         SziS93sw6hyoypOqSRxUXUxe+d7Phzi/tDiEnz8g8OPOaUmsg8qhPH+wH1bdsIHWHdYY
+         pHVQ==
+X-Gm-Message-State: AOAM5317e9p5wzHrvbnF1tQPWsD8TaxMNmaIejxz3VtIcHBJLhg4tRSd
+        rXsO7riXf84/ZGaUTXvJylet+rRGdv5hpRBXrMOfAg==
+X-Google-Smtp-Source: ABdhPJy03PRylskn2yDhgwNfF4XVE3q4LGy/AIaCadb6RXhONO7P2mFQh/4YJFdQXmhvc4/cVW6NYUNaGSGELAtzoJk=
+X-Received: by 2002:a05:6402:22f9:: with SMTP id dn25mr3812567edb.403.1640101177757;
+ Tue, 21 Dec 2021 07:39:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <MWHPR21MB1593141494C76CF5A0BDDB11D77C9@MWHPR21MB1593.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211221095326.383055-1-zhuohao@chromium.org>
+In-Reply-To: <20211221095326.383055-1-zhuohao@chromium.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 21 Dec 2021 07:39:26 -0800
+Message-ID: <CABXOdTc46PUFYgt3dRGAk2N7Vf1=7jm763G=pXUMMJE_MCSVRw@mail.gmail.com>
+Subject: Re: [PATCH v2] media: platform: Add brask to the match table
+To:     Zhuohao Lee <zhuohao@chromium.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alex Levin <levinale@chromium.org>,
+        linux-media@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 8:35 AM, Michael Kelley (LINUX) wrote:
-> From: Sasha Levin <sashal@kernel.org> Sent: Monday, December 20, 2021 5:58 PM
->>
->> From: Jens Axboe <axboe@kernel.dk>
->>
->> [ Upstream commit cb2ac2912a9ca7d3d26291c511939a41361d2d83 ]
->>
->> Dexuan reports that he's seeing spikes of very heavy CPU utilization when
->> running 24 disks and using the 'none' scheduler. This happens off the
->> sched restart path, because SCSI requires the queue to be restarted async,
->> and hence we're hammering on mod_delayed_work_on() to ensure that the work
->> item gets run appropriately.
->>
->> Avoid hammering on the timer and just use queue_work_on() if no delay
->> has been specified.
->>
->> Reported-and-tested-by: Dexuan Cui <decui@microsoft.com>
->> Link: https://lore.kernel.org/linux-block/BYAPR21MB1270C598ED214C0490F47400BF719@BYAPR21MB1270.namprd21.prod.outlook.com/
->> Reviewed-by: Ming Lei <ming.lei@redhat.com>
->> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  block/blk-core.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/block/blk-core.c b/block/blk-core.c
->> index c2d912d0c976c..a728434fcff87 100644
->> --- a/block/blk-core.c
->> +++ b/block/blk-core.c
->> @@ -1625,6 +1625,8 @@ EXPORT_SYMBOL(kblockd_schedule_work);
->>  int kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork,
->>  				unsigned long delay)
->>  {
->> +	if (!delay)
->> +		return queue_work_on(cpu, kblockd_workqueue, &dwork->work);
->>  	return mod_delayed_work_on(cpu, kblockd_workqueue, dwork, delay);
->>  }
->>  EXPORT_SYMBOL(kblockd_mod_delayed_work_on);
->> --
->> 2.34.1
-> 
-> Sasha -- there are reports of this patch causing performance problems.
-> See
-> https://lore.kernel.org/lkml/1639853092.524jxfaem2.none@localhost/. I
-> would suggest *not* backporting it to any of the stable branches until
-> the issues are fully sorted out.
+On Tue, Dec 21, 2021 at 1:53 AM Zhuohao Lee <zhuohao@chromium.org> wrote:
+>
+> The Google Brask device uses the same approach as the Google Fizz
+> which enables the HDMI CEC via the cros-ec-cec driver.
+>
+> Signed-off-by: Zhuohao Lee <zhuohao@chromium.org>
 
-Both this and the revert were backported. Which arguably doesn't make a
-lot of sense, but at least it's consistent and won't cause any issues...
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
--- 
-Jens Axboe
+> ---
 
+Side note: Change log goes here. Don't expect maintainers to know what
+changed in v2.
+
+>  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> index 2d95e16cd248..8c8d8fc5e63e 100644
+> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> @@ -215,6 +215,8 @@ struct cec_dmi_match {
+>  static const struct cec_dmi_match cec_dmi_match_table[] = {
+>         /* Google Fizz */
+>         { "Google", "Fizz", "0000:00:02.0", "Port B" },
+> +       /* Google Brask */
+> +       { "Google", "Brask", "0000:00:02.0", "Port B" },
+>  };
+>
+>  static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>

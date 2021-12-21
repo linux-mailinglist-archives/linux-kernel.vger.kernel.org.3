@@ -2,138 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A79B47B8FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202A547B8FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhLUD2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 22:28:22 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:45882 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229602AbhLUD2V (ORCPT
+        id S230441AbhLUD3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 22:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229602AbhLUD3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 22:28:21 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V.IKuwn_1640057298;
-Received: from 30.225.24.98(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V.IKuwn_1640057298)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 21 Dec 2021 11:28:19 +0800
-Message-ID: <dd3bc361-20d6-ea89-c8d7-39a692be01bd@linux.alibaba.com>
-Date:   Tue, 21 Dec 2021 11:28:17 +0800
+        Mon, 20 Dec 2021 22:29:50 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D607C061574;
+        Mon, 20 Dec 2021 19:29:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4/ofnA93MB0dtNJDnD1hlkEoHaSdJsk2n9FUm5M/5P4=; b=jhNWENbQ7taimgHAwhZK+qk4O/
+        B0SrrJQsLG31HJBXTkSiLOYCGMEz38WndNA2sLzuqm4pnZ3fsnMtYQrXD7oa3gDYQV+2/bE6aCZqJ
+        di+T2/wvtz6CotoytzvKvjuiwzsN2wh8iGnrexn0njrRIcc6iKLggwF18gEHWSvMXReRsD5zu19li
+        +dQdybF1DCY1lGff19sXOK8dyQJB/TY7z7Eg2btAzScGrXGefOwOpR1ZXLe3FR1Dbcgzj4oGJV2hi
+        WzK2YXlMvojWbc88kRurNY3+M43ngGye/j3WHnOH/C7RAGSnmB3HRuuUOBPAt/ICwMnX0e4Rvsy5U
+        7hpnFIAA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzVqJ-0028lH-RV; Tue, 21 Dec 2021 03:29:35 +0000
+Date:   Tue, 21 Dec 2021 03:29:35 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <YcFKH2kXFec9/pyn@casper.infradead.org>
+References: <20211218184233.GB1432915@nvidia.com>
+ <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [RFC PATCH] iommu: alloc iommu group for pasid supported devices
-To:     Robin Murphy <robin.murphy@arm.com>, bhelgaas@google.com,
-        will@kernel.org, joro@8bytes.org
-Cc:     linux-kernel@vger.kernel.org,
-        alikernel-developer@linux.alibaba.com,
-        zhangliguang@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1639657018-39884-1-git-send-email-yaohongbo@linux.alibaba.com>
- <32307396-e364-7858-2b58-8419279d0597@arm.com>
-From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
-In-Reply-To: <32307396-e364-7858-2b58-8419279d0597@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221010312.GC1432915@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 20, 2021 at 09:03:12PM -0400, Jason Gunthorpe wrote:
+> That just leave the THP splitting.. I suppose we get the PTL, then
+> compute the current value of the new bit based on refcount and diffuse
+> it to all tail pages, then update the PMD and release the PTL. Safe
+> against concurrent WP - don't need DoubleMap horrors because it isn't
+> a counter.
 
-
-在 2021/12/21 上午12:28, Robin Murphy 写道:
-> On 2021-12-16 12:16, Yao Hongbo wrote:
->> Fix a pci hotlug problem for PCI pasid enabled devices.
->>
->> We can probe PCI pasid enabled devices on boot normally,
->> but the following error is seen while we poweroff and poweron
->> this pci slot:
->> [  312.407485] nvme 0000:9c:00.0: cannot attach to incompatible domain
->> (0 SSID bits != 20)
->> [  312.415618] nvme 0000:9c:00.0: Failed to add to iommu group 11: -22
->>
->> Each device would alloc an iommu group when the os starts.
->> But when we hot-plug the pcie device, the device may be added to the
->> parent iommu group. If the device supports pasid, master->ssid_bits
->> would be changed in arm_smmu_enable_pasid(), but smmu->domain is from
->> the parent iommu, which will result in the upon error in
->> arm_smmu_attach_dev().
->>
->> Realloc a new iommu group if the device supports to enable pasid.
-> 
-> I'm not sure I fully understand the circumstances of the issue, but the code in the patch doesn't look right to me - it seems to be saying that if we don't have ACS enabled, then the the mere fact that end-to-end PASID support exists somehow guarantees peer-to-peer isolation anyway. Surely that's not true?
-> 
-> Is there something in the hotplug path which causes ACS and/or PASID enablement in a different order from boot-time probing?
-> 
-> Looking at the symptom, I also wonder whether the SMMU driver really needs to be that strict (if the device can support more PASID bits than the domain is configured for, couldn't we just... not use all of them?), but we should definitely make sense of the fundamental group lookup issue here before considering any other changes that might happen to mask it.
-
-Maybe it can be modified in the pcie path. If it is in a hot-plug process and the iommu of the parent node does not support pasid, then alloc an iommu group for the endpoint.
-
-> Robin.
-> 
->> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
->> ---
->>   drivers/iommu/iommu.c   |  4 ++++
->>   drivers/pci/ats.c       | 12 ++++++++++++
->>   include/linux/pci-ats.h |  3 +++
->>   3 files changed, 19 insertions(+)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index dd7863e..61b5360 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -21,6 +21,7 @@
->>   #include <linux/notifier.h>
->>   #include <linux/err.h>
->>   #include <linux/pci.h>
->> +#include <linux/pci-ats.h>
->>   #include <linux/bitops.h>
->>   #include <linux/property.h>
->>   #include <linux/fsl/mc.h>
->> @@ -1475,6 +1476,9 @@ struct iommu_group *pci_device_group(struct device *dev)
->>           if (pci_acs_path_enabled(bus->self, NULL, REQ_ACS_FLAGS))
->>               break;
->>   +        if (pci_pasid_supported(pdev))
->> +            break;
->> +
->>           pdev = bus->self;
->>             group = iommu_group_get(&pdev->dev);
->> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
->> index c967ad6..8fcca4f 100644
->> --- a/drivers/pci/ats.c
->> +++ b/drivers/pci/ats.c
->> @@ -349,6 +349,18 @@ void pci_pasid_init(struct pci_dev *pdev)
->>       pdev->pasid_cap = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_PASID);
->>   }
->>   +bool pci_pasid_supported(struct pci_dev *pdev)
->> +{
->> +    if (!pdev->pasid_cap)
->> +        return false;
->> +
->> +    if (!pdev->eetlp_prefix_path)
->> +        return false;
->> +
->> +    return true;
->> +}
->> +EXPORT_SYMBOL_GPL(pci_pasid_supported);
->> +
->>   /**
->>    * pci_enable_pasid - Enable the PASID capability
->>    * @pdev: PCI device structure
->> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
->> index df54cd5b..623725b 100644
->> --- a/include/linux/pci-ats.h
->> +++ b/include/linux/pci-ats.h
->> @@ -35,11 +35,14 @@ static inline bool pci_pri_supported(struct pci_dev *pdev)
->>   #endif /* CONFIG_PCI_PRI */
->>     #ifdef CONFIG_PCI_PASID
->> +bool pci_pasid_supported(struct pci_dev *dev);
->>   int pci_enable_pasid(struct pci_dev *pdev, int features);
->>   void pci_disable_pasid(struct pci_dev *pdev);
->>   int pci_pasid_features(struct pci_dev *pdev);
->>   int pci_max_pasids(struct pci_dev *pdev);
->>   #else /* CONFIG_PCI_PASID */
->> +static inline bool pci_pasid_supported(struct pci_dev *d)
->> +{ return false; }
->>   static inline int pci_enable_pasid(struct pci_dev *pdev, int features)
->>   { return -EINVAL; }
->>   static inline void pci_disable_pasid(struct pci_dev *pdev) { }
+One of the things I've been trying to figure out is how we do
+can_split_huge_page().  Maybe an rmap walk to figure out how many
+refcounts we would subtract if we did unmap it from everywhere it's
+currently mapped?  (just to be clear, we call unmap_page() as the
+next thing, so I don't mind warming up the rbtree cachelines
+if it's mapped anywhere)

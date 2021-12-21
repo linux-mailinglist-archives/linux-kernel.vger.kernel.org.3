@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BC647BDC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD2E47BE28
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbhLUJ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbhLUJ4Z (ORCPT
+        id S233233AbhLUKcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:32:14 -0500
+Received: from bosmailout07.eigbox.net ([66.96.185.7]:56987 "EHLO
+        bosmailout07.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232972AbhLUKcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:56:25 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96886C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S0BQZTMwuXJKwBE41rMQETrlaUpB9DgVGX/MSnAdwYs=; b=O5whduXDU1UKYQY5xzxMYmecMJ
-        I0K9o0WXX46mn0IZwQZXTMPToILfrxG6OoYSeZtgfyi57q1RmLdB0qQCgX8Ivbiv515gv0eE6B26Z
-        5AGAuCUS7TPkveh40UuLV5m74Eq8dAsVdi5rlLddpLibBhbD59DWnOzyZW2W+4IvKbbsQvdy1Wqva
-        Y7vbASn/aif+EUX/aZnA5dY6KPREtytRJ1jViGGqpG0zkt3mAzpIwdNZe3JSMgchznxyLBTMeFnq5
-        XTNdyDt6yH1rMYs+rU5MIobjLtZwOMy8qn/6ezSwFU9WbWNraCSJ8GxaQvDcFw/f0FvX15OgtDR0C
-        sy0sRnBA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56388)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mzbsZ-0004Hy-Vp; Tue, 21 Dec 2021 09:56:20 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mzbsX-0002RS-Vr; Tue, 21 Dec 2021 09:56:17 +0000
-Date:   Tue, 21 Dec 2021 09:56:17 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thierry Reding <treding@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] asm/sections: fix memory object end check
-Message-ID: <YcGkwf0WSmfmOQXB@shell.armlinux.org.uk>
-References: <20211221070624.1541842-1-agordeev@linux.ibm.com>
+        Tue, 21 Dec 2021 05:32:13 -0500
+X-Greylist: delayed 1910 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Dec 2021 05:32:12 EST
+Received: from bosmailscan06.eigbox.net ([10.20.15.6])
+        by bosmailout07.eigbox.net with esmtp (Exim)
+        id 1mzbwT-0005Kn-Kl; Tue, 21 Dec 2021 05:00:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ewhac.org;
+         s=dkim; h=Sender:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=QmIfXa1NBe8IJtHxid2eGpNQ6Y3+/izj4TL3vJvfmsw=; b=1Le0rbkkmya3wAd04OmIRUoA0N
+        B3vP824S9Ov7KtRWs2wq2OFijy2h0OGZumO4ysYAjID5Mi1HX2805H2HORivpJ9N70xDL1SY9wmoe
+        boOlzicxpXSSDbCFMxcMehgENLLUKJo+fhmyHy47gRr/2yV/QvoPY5WdI52KpjY5CBgjYHKbAuz6P
+        +KwWGTi8VyOSi9xlhk9fCA9S68+60/8jr4Fg34AeUlZ1XslDz72c4RjCKeYdmzdUYzCcMqLnTRkzn
+        3Z1NKYgveRqWEG5OZ7aEyqtAlIwU4hT2h/GSSmriFfxtrgAsj4xVjOsiz/sNneq0jW+OGiv4oRstJ
+        ly7e4fow==;
+Received: from [10.115.3.32] (helo=bosimpout12)
+        by bosmailscan06.eigbox.net with esmtp (Exim)
+        id 1mzbwT-0004Io-Cc; Tue, 21 Dec 2021 05:00:21 -0500
+Received: from bosauthsmtp10.yourhostingaccount.com ([10.20.18.10])
+        by bosimpout12 with 
+        id Yy0J260030D2CUy01y0Mzb; Tue, 21 Dec 2021 05:00:21 -0500
+X-Authority-Analysis: v=2.3 cv=d4VuNSrE c=1 sm=1 tr=0
+ a=Kpo39fPXdbgqDwiI3/AEUA==:117 a=lOZ7gjDonWBvovu+dU3iMA==:17
+ a=kj9zAlcOel0A:10 a=IOMw9HtfNCkA:10 a=ltsmEuTAGloA:10 a=fmD_JHji_u0A:10
+ a=1-s5akKHueuDfA8f6AsA:9 a=CjuIK1q_8ugA:10 a=Ixuhb_GfD2BeaOSowo0a:22
+ a=HH7FIXwXL_sUf1zzYxQd:22
+Received: from [135.180.175.56] (port=64548 helo=walkies.ewhac.org)
+        by bosauthsmtp10.eigbox.net with esmtpa (Exim)
+        id 1mzbwQ-0006eH-3n; Tue, 21 Dec 2021 05:00:18 -0500
+Received: from ewhac by walkies.ewhac.org with local (Exim 4.95)
+        (envelope-from <ewhac@ewhac.org>)
+        id 1mzbwP-002hI5-1b;
+        Tue, 21 Dec 2021 02:00:17 -0800
+Date:   Tue, 21 Dec 2021 02:00:17 -0800
+From:   "Leo L. Schwab" <ewhac@ewhac.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: spaceball - fix parsing of movement data packets
+Message-ID: <YcGlsVKeJi7E0dWj@ewhac.org>
+References: <20210727040625.2159196-1-ewhac@ewhac.org>
+ <YcBF6bnRjYRMp2Cq@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221070624.1541842-1-agordeev@linux.ibm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <YcBF6bnRjYRMp2Cq@google.com>
+X-EN-UserInfo: a76222b247b80e113a63936ffdc903eb:931c98230c6409dcc37fa7e93b490c27
+X-EN-AuthUser: ewhac@ewhac.org
+Sender:  "Leo L. Schwab" <ewhac@ewhac.org>
+X-EN-OrigIP: 135.180.175.56
+X-EN-OrigHost: unknown
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 08:06:24AM +0100, Alexander Gordeev wrote:
-> Function memory_contains() checks whether a memory object is
-> entirely contained within a memory region. The condition that
-> checks the upper bound of the object against the upper bound
-> of the region is inclusive. That does not correspond to the
-> similar checks in memory_intersects() friend function, nor
-> to the actual regions memory_contains() is called against.
+On Mon, Dec 20, 2021 at 12:59:21AM -0800, Dmitry Torokhov wrote:
+> Could we write
 > 
-> In particular, __init_end address assumed do not belong to
-> the init section itself. Similarly, on ARM __idmap_text_end
-> and __entry_text_end are affected.
+> 			for (i == 0; i < ARRAY_SIZE(spaceball_axes); i++)
+> 				input_report_abs(dev, spaceball_axes[i],
+> 					(__s16)(get_unaligned_be16(&data[i * 2]);
+> 
+> instead?
+>
+	It's not as readable, but sure, I could do that.
 
-__init_end is exclusive as are the other symbols you mention here.
-They point at the byte immediately following the area.
+> 			for (i == 0; i < ARRAY_SIZE(spaceball_axes); i++)
+  			       ^^
+	Pretty sure you didn't mean that :-).
 
-When testing an virt + size, the resulting address of "virt + size" is
-always exclusive - this also points at the byte immediately following
-the range of addresses. The preceeding byte is part of the object.
+> 				input_report_abs(dev, spaceball_axes[i],
+> 					(__s16)(get_unaligned_be16(&data[i * 2]);
+  					                                ^^^^^^^
+	I'm new here, but it seems odd that an array index (shift plus add
+to the base pointer) is preferred over a direct pointer reference.
 
-For example, if size is one, then we have a single byte, which is at
-address "virt". "virt + 1" is not part of the object. Therefore, if
-size is 1MiB, then "virt + 1048576" is similarly not part of the
-object.
+> 					(__s16)(get_unaligned_be16(&data[i * 2]);
+  					        ^^^^^^^^^^^^^^^^^^
+	Ooo!  Didn't know about this; thank you!
 
-Hence, we _do_ want to test address + size <= end.
-
-This code appears to me to be correct, and this patch _introduces_ a
-bug.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+					Schwab

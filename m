@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D209447B99E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EED47B9A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbhLUFnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 00:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S233017AbhLUFoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 00:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbhLUFnJ (ORCPT
+        with ESMTP id S229964AbhLUFoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 00:43:09 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F843C061574;
-        Mon, 20 Dec 2021 21:43:08 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j6so26660582edw.12;
-        Mon, 20 Dec 2021 21:43:08 -0800 (PST)
+        Tue, 21 Dec 2021 00:44:30 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF447C061574;
+        Mon, 20 Dec 2021 21:44:29 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id o20so47352852eds.10;
+        Mon, 20 Dec 2021 21:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fmR/2OqeSaL3bwGQc4psClXM2rn7wapRvk/2x0G98Bk=;
-        b=kMJ+8JEuQLWCtM+aB5Q7fBKeOV1O86YhY5W6RTmLIu3Cuj3DAIgJMgcawjkXBM/D6P
-         avagRnhGCMzImCaW2ZurdZwcB706B7GXU0HAHvaE10paBFfSz2Wqbkwua3z7ToSF25P0
-         L+L/jcTrWi0grB0hxIGl/FOqCUQbVI+c+AoC1y1nl4rd8tbKxT93h4cYmgeKOa//q3KR
-         ccc9lPMWXCDAihLwTDTOMCHksfBhtOLTe4OQ1+vIUUVHH78+a3P7/VChnJMS9ihooqhd
-         m5APEiD/w4Bllo0exdPDHiQOoNpvBDaUkkdO7oF8MDL/fieWHpE72jP1uRsoWtDQ3crw
-         tBXg==
+        bh=WfyePfmL/6PbMkdAx5m1eRPoPiYBO22Uo7YSKjpNtg0=;
+        b=DN4ocdvcqRWfd4BtTStwvsWXV1Ef+YaOqc2YBW94VIXnsawllCyZN16fLuA2dYRML6
+         yo+IjiDON2TkCiH3v+dEtoigb5JZYQZ7Ra7PLuC5+8I9Zc0hRUQYVLARj7vSDFbIbZeJ
+         ibVMkr+1q7tlYr6HqLb4XKHw1VrgBAVsAJIVI+J+l/9QS6h/ItC/jlTZl4HC248+mGRo
+         Eny/irrpyc3gunkiZjdvHullxPFrEVIOD2WuJ4FKlXSmWdlIOqGOHSdNkMk+jBEQTsy8
+         GIGbUYef564QFgLFxnCwACj3QjvYSDPudwWpfn5ZxPF8D2v/v/7EV2yKBbJnHB/3c82O
+         dJRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fmR/2OqeSaL3bwGQc4psClXM2rn7wapRvk/2x0G98Bk=;
-        b=4VvYZianW4hfZ16hUNsR/Zaxp20MPqY+mK/dPLGR+ksA87AtLiuB9t96klHL5NshBj
-         mvJUJkSZS+szQZJl4xAkV1xymxoqLu4IZMjLPBitKCAoYK/l5lo0Wd1USfODFoJaXnqG
-         zPwhTj1xliyGAdWkMpgxY3yf767cqBCk6EO8WDNSXGiUtOtLgCXFH5MFy3MtRW5rRzHU
-         eYkjFc053AQdZqOLllK52HDBJQZUGMH/hZg7z08lnyAhm1nXCeFlbsbp9I3sTVTdErNI
-         DBEHWFhdbFVkJRXz87Ly5YWAztbn3FCwzY8/CXSDkUkNmOuyDC+GiamtEsjVy5owVJsl
-         pfUQ==
-X-Gm-Message-State: AOAM531fBenV2cjghWchq4iAZgE5HBEq6fk+jMdg8emqZZjyHlZ/Yoab
-        o2C/r8C0PT+r1NF0dk0u/LozLRYDj2mWyjRXIjJYEttOrBvwRr3AVQw=
-X-Google-Smtp-Source: ABdhPJx2rCF5AgXg3IpCeewR26zJGoR08zWvV5Ra54dOuM/nVn/uXtBS32YFrWIkXGogA3I6yqszzVkOonVvjRQ7ClI=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr1279777ejb.639.1640065387201;
- Mon, 20 Dec 2021 21:43:07 -0800 (PST)
+        bh=WfyePfmL/6PbMkdAx5m1eRPoPiYBO22Uo7YSKjpNtg0=;
+        b=2VN/RtPLPvKBGojPK6UjsRpn6bJYpn9kZtbfKF8acOrq2Cv6O9thTOf7kHb/jxCpLr
+         iIyhH+W+Lit5RrM7zC0RKbQY1b13ZVuSXI+oV1I7Xx3SPKTrOMQOehgfm5uqC3+0efub
+         jvIdUP3gsfWkhqW5escUaAsg4RSv8qlwDR+8oxXT9/0mYB4BcYyuryb20gz6YEh28kw3
+         p7IvAN5HNjKiWkPIWYsbP0DcEOX1SPX+afx7Sj2TeNNV9ML0cwxii9EnH1yGYJN+YRdg
+         9Ji0FG5QMd2bC/PtaDDSqfpxE74DXLr+xsU2sRuMIu0wtJYMNj6DXz5iNwyPFXAK1284
+         tCVQ==
+X-Gm-Message-State: AOAM532LoCBrvBvBN1jtnfCN+chvU0XlxnEgpgfhZvtAog8a64znUerz
+        xY3z2Pyh0ZkKXKiNzer8yvWSgX+XBXWpmKZM3uw=
+X-Google-Smtp-Source: ABdhPJx01YuM+vDoRrnr94fj7HEejrUTqnANmRsQyM0CMN6f/DIpqDqckGRVXJERLi+UTYsC8AfscSN8xsIyewd3hsc=
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr1293197ejj.636.1640065468348;
+ Mon, 20 Dec 2021 21:44:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20211219223953.16074-1-liambeguin@gmail.com> <20211219223953.16074-4-liambeguin@gmail.com>
-In-Reply-To: <20211219223953.16074-4-liambeguin@gmail.com>
+References: <20211219223953.16074-1-liambeguin@gmail.com> <20211219223953.16074-5-liambeguin@gmail.com>
+ <CAHp75VdfPf6FMvkGqhhQg5e5XE1cgE-K8seobe5n0yGarnPGtQ@mail.gmail.com>
+In-Reply-To: <CAHp75VdfPf6FMvkGqhhQg5e5XE1cgE-K8seobe5n0yGarnPGtQ@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Dec 2021 07:42:31 +0200
-Message-ID: <CAHp75Ve_vv619-UxdBN+xhWGm32tCJkkN3epVRgCiLF7p6xMOw@mail.gmail.com>
-Subject: Re: [PATCH v10 03/14] iio: inkern: make a best effort on offset calculation
+Date:   Tue, 21 Dec 2021 07:43:52 +0200
+Message-ID: <CAHp75VcRH9ZGYuXteT2WQWqr8sch3EsSYu_AYtNx2jEJY76tow@mail.gmail.com>
+Subject: Re: [PATCH v10 04/14] iio: afe: rescale: expose scale processing function
 To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
+Cc:     "peda@axentia.se" <peda@axentia.se>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:17 AM Liam Beguin <liambeguin@gmail.com> wrote:
->
-> From: Liam Beguin <lvb@xiphos.com>
->
-> iio_convert_raw_to_processed_unlocked() assumes the offset is an
-> integer. Make a best effort to get a valid offset value for fractional
-> cases without breaking implicit truncations.
+On Tue, Dec 21, 2021 at 7:20 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Monday, December 20, 2021, Liam Beguin <liambeguin@gmail.com> wrote:
 
 ...
 
-> +                       offset_val /= (1 << offset_val2);
+>> +               tmp = *val * 1000000000LL;
+>
+> I see this is the original code, but perhaps use proper SI multipliers here and there?
 
-Besides potentially being problematic (if arg is 31 for the left
-shift) why not simply
+I mean in a separate change.
 
-_val >>= _val2;
-
-?
+>> +               do_div(tmp, 1000000000LL);
 
 -- 
 With Best Regards,

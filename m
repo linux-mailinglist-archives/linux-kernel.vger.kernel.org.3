@@ -2,159 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB0847B8CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B38547B8D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbhLUDET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 22:04:19 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:54111 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbhLUDER (ORCPT
+        id S233314AbhLUDIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 22:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhLUDID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 22:04:17 -0500
-Received: by mail-io1-f69.google.com with SMTP id a12-20020a056602148c00b005e7052734adso8301711iow.20
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:04:17 -0800 (PST)
+        Mon, 20 Dec 2021 22:08:03 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3441DC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:08:03 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id a11so11264450qkh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=coMBlCfqWF7WeWHw2fT21t9p/mbep3AtkUZuiCBf3PU=;
+        b=bHqzgW5i9hXMtrpTGXb9woRgghJf3ck0ZuhAasS3WjsKWqA1Vt2ZjLadWrxK9lDY14
+         Hge+SRIpNP6febTGvbowdO72q7gdorW1waJwQ2Ie1FpeUBx+MgrAsD1cC/qjKN+buhXq
+         etE0cDoxjVZKjcuvcbXglmfum/3zLoRGfzJqR4TZ8k/HEsDo3PMt33UUoe2zSY+rddWA
+         fmYGWsmsaxg8i6cydPEhzVqibym6+WchsV7Qyea7nNpvc3QZiRm+4xBxmGiFyx3VyCD7
+         u9oyYPxhZTWRKJuQvN84mxOgBHvnhmmUKGyKzKef8euOpxyjo+tfSYpImE3T4jidZuwr
+         uYQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=bPntceHNT95Aah71cxJ2P7hO9EuIXRWFNPHwhOu7JVw=;
-        b=SGtQrJ9ZHDC1G+IfbpA48TuUqUD506ukAeDU07LYuKIQqVt3Q3huQaFC6/UtsiX4bx
-         IcWgH8i0NRqvtl2CZsgqTfJqKqAynZd3t5RoPffDVfYVvhWExmFV8SRfakjVTZsLSjjF
-         auKy1M+rLrAGs+5UPEkH3DTGihjFM6u2x+rcmgbOCKqDtRIffVoBHWf2RfnR0ZbtnFqo
-         MBfhiNJwIvs+5HmwEAKw/gZ8ioqlQtm9faeDdhMSDZH1PPCaPhjeJg8/hj8iBgkrd80v
-         E3RtWlnUzARQ7EN12aoOqbak2aL+4UuGruEKUahez9jPV+DdiVw557+YJ9DLY7UQbiTb
-         XuuQ==
-X-Gm-Message-State: AOAM533W6ZYgEU0RGmaj4uJ39V1m56kGqAzz8NFwh9GMGF/D7gptEi1o
-        yUut58htRvqDw+OSxleUavZibnrSh9QRdjQAxwDPD6c2DiBO
-X-Google-Smtp-Source: ABdhPJzvSPjqAafFCwwsXf55qpKdQLKypYl2Z1FLUmJ4ebvkUWDhxD+C4HTlXIUquvxEbSLbPrY9QTaHrsc+thc48wro0+jDG/8u
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=coMBlCfqWF7WeWHw2fT21t9p/mbep3AtkUZuiCBf3PU=;
+        b=Wu+T91FMsf5VtNuYrXnSIhN//dqkM7pfhVTCKeiLVivCfB0eeNl6pNw4WSYLjFlpIk
+         9hfoYB3fKc+t19rRrOeZMkh7TWUhHy9+keSl0lhVMUAlwmWoA+iSbjH3ZbWk53DltD31
+         QBT+rggQIwuwIybksoJo1CAaIYQcjc3zfPoHOEMgQ5Ng1vr6h6i+n2EC3RfestuPFm63
+         HFYUuoIWHTbtQj0PZwZFT57mkHx4jLlIXZ4QkZ0s21LhILJ2yFerlkZpMkHnTOsGp6jv
+         eCh8mKF9SZnxOji7aoY7rNakpoTT4PtCT0WxW3qQ+svWFAfW6cnvp9rB82cyCatIMhZv
+         Ps1Q==
+X-Gm-Message-State: AOAM533dYDkqFeciB0OlkLF/h7MsAMPGAcwJwWgEnwLe9l8eT1BpaZYH
+        7xJnyM/Vvtt5iK+45iAIto8AkiLlcbl6gDFjJqc=
+X-Google-Smtp-Source: ABdhPJyWYpaW9q4fl//8fGHBEhhQEV7PNhhstFd9YecDtFyd4RifxBB87qcGPz841dp2dG5rnCWKX8hIi6b89RlGrlg=
+X-Received: by 2002:a37:a491:: with SMTP id n139mr798247qke.576.1640056082339;
+ Mon, 20 Dec 2021 19:08:02 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:134a:: with SMTP id i10mr633428iov.147.1640055857152;
- Mon, 20 Dec 2021 19:04:17 -0800 (PST)
-Date:   Mon, 20 Dec 2021 19:04:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c70eef05d39f42a5@google.com>
-Subject: [syzbot] general protection fault in set_task_ioprio
-From:   syzbot <syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <1639721264-12294-1-git-send-email-huangzhaoyang@gmail.com>
+ <CAGWkznGdvLobshPvg2KY+D71Zh0625+V=WsAS9uExRspRFFjVQ@mail.gmail.com>
+ <CAJuCfpF9tJupcyWVeDHyEBnQqTZTnoyKVcKLqB1wWXyks6Z0Cw@mail.gmail.com>
+ <CAGWkznG8ipn96YgyOatF=i5acLGoLp9G8E4jD7vHKMw9aOV1ZA@mail.gmail.com>
+ <CAJuCfpEmvVVQGso4bKeigdJwNG4aqViay_P3oXo2Tu4sm-HKXw@mail.gmail.com>
+ <CAGWkznGk07jkuA8rftR0f5upq-7B6tkybSb_DMJYau0HjhYUnQ@mail.gmail.com> <CAJuCfpFT9odS7jON-D2npd4V3e8bkZw+tzdpMDFmddY-YbiGFg@mail.gmail.com>
+In-Reply-To: <CAJuCfpFT9odS7jON-D2npd4V3e8bkZw+tzdpMDFmddY-YbiGFg@mail.gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 21 Dec 2021 11:07:42 +0800
+Message-ID: <CAGWkznEevE4=8EezkhAwJzz+vd-tscT+6=_t0pq3FJPk=vLqkA@mail.gmail.com>
+Subject: Re: [PATCH] psi: fix possible trigger missing in the window
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    07f8c60fe60f Add linux-next specific files for 20211220
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1355d295b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2060504830b9124a
-dashboard link: https://syzkaller.appspot.com/bug?extid=8836466a79f4175961b0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12058fcbb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17141adbb00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8836466a79f4175961b0@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 1 PID: 3602 Comm: syz-executor484 Not tainted 5.16.0-rc5-next-20211220-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:set_task_ioprio+0x2de/0x620 block/blk-ioc.c:289 block/blk-ioc.c:289
-Code: 4c 8b ab 18 12 00 00 4d 85 ed 0f 84 9b 01 00 00 e8 d7 1e a4 fd 49 8d 7d 0c 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ef
-RSP: 0018:ffffc90001b1fe90 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: ffff88801f888000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83d3f779 RDI: 000000000000000c
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffaf957
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff88801f888948 R15: ffff88801f889218
-FS:  0000555556a34300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2155cab01d CR3: 00000000149ed000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __do_sys_ioprio_set+0x586/0xae0 block/ioprio.c:124 block/ioprio.c:124
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f2155c67cf9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc6f0f50c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000fb
-RAX: ffffffffffffffda RBX: 000000000000cbcf RCX: 00007f2155c67cf9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffc6f0f5268 R09: 00007ffc6f0f5268
-R10: ffffffffffffffff R11: 0000000000000246 R12: 00007ffc6f0f50dc
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:set_task_ioprio+0x2de/0x620 block/blk-ioc.c:289 block/blk-ioc.c:289
-Code: 4c 8b ab 18 12 00 00 4d 85 ed 0f 84 9b 01 00 00 e8 d7 1e a4 fd 49 8d 7d 0c 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 ef
-RSP: 0018:ffffc90001b1fe90 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: ffff88801f888000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83d3f779 RDI: 000000000000000c
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffaf957
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff88801f888948 R15: ffff88801f889218
-FS:  0000555556a34300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2155cab01d CR3: 00000000149ed000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	4c 8b ab 18 12 00 00 	mov    0x1218(%rbx),%r13
-   7:	4d 85 ed             	test   %r13,%r13
-   a:	0f 84 9b 01 00 00    	je     0x1ab
-  10:	e8 d7 1e a4 fd       	callq  0xfda41eec
-  15:	49 8d 7d 0c          	lea    0xc(%r13),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 01             	add    $0x1,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85 ef                	test   %ebp,%edi
-----------------
-Code disassembly (best guess):
-   0:	4c 8b ab 18 12 00 00 	mov    0x1218(%rbx),%r13
-   7:	4d 85 ed             	test   %r13,%r13
-   a:	0f 84 9b 01 00 00    	je     0x1ab
-  10:	e8 d7 1e a4 fd       	callq  0xfda41eec
-  15:	49 8d 7d 0c          	lea    0xc(%r13),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 01             	add    $0x1,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85 ef                	test   %ebp,%edi
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On Tue, Dec 21, 2021 at 11:00 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Mon, Dec 20, 2021 at 6:51 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> >
+> > On Tue, Dec 21, 2021 at 10:30 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Mon, Dec 20, 2021 at 5:57 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > > >
+> > > > On Tue, Dec 21, 2021 at 3:58 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > >
+> > > > > On Fri, Dec 17, 2021 at 10:03 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > > > > >
+> > > > > > loop Suren
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > >
+> > > > > >
+> > > > > > On Fri, Dec 17, 2021 at 2:08 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+> > > > > > >
+> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > >
+> > > > > > > There could be missing wake up if the rest of the window remain the
+> > > > > > > same stall states as the polling_total updates for every polling_min_period.
+> > > > >
+> > > > > Could you please expand on this description? I'm unclear what the
+> > > > > problem is. I assume "polling_min_period" in this description refers
+> > > > > to the group->poll_min_period.
+> > > > >
+> > > > > From the code, looks like the change results in update_triggers()
+> > > > > calling window_update() once there was a new stall recorded for the
+> > > > > trigger state and until the tracking window is complete. I don't see
+> > > > > the point of calling window_update() if there was no stall change
+> > > > > since the last call to window_update(). The resulting growth will not
+> > > > > increase if there is no new stall.
+> > > > > Maybe what you want to achieve here is more than one trigger per
+> > > > > window if the stall limit was breached? If so, then this goes against
+> > > > > the design for psi triggers in which we want to rate-limit the number
+> > > > > of generated triggers per tracking window (see:
+> > > > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L545).
+> > > > > Please clarify the issue and the intentions here.
+> > > > > Thanks!
+> > > > Please correct me if I am wrong. Imagine that there is a new stall
+> > > > during the 1st polling_min_period among 10 of them in the window and
+> > > > group->polling_total will be updated to total without trigger. If the
+> > > > rest of 9 polling_min_periods remain the same states, the trigger will
+> > > > be missed when window timing is reached.
+> > >
+> > > I don't see why updating group->polling_total after the first
+> > > registered stall is an issue here. window_update() calculates growth
+> > > using current group->total[] and win->start_value (see:
+> > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L483)
+> > > which is set at the beginning of the window (see:
+> > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L462).
+> > > If the calculated growth did not reach t->threshold then the trigger
+> > > should not be fired (see:
+> > > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L542).
+> > > We fire the trigger only if growth within a given window is higher
+> > > than the threshold.
+> > >
+> > > In your scenario if the stall recorded in the 1st polling_min_period
+> > > was less than the threshold and in the other 9 polling_min_periods no
+> > > new stalls were registered then there should be no triggers fired in
+> > > that window. This is intended behavior. Trigger is fired only when the
+> > The stall in the 1st polling_min_period was *LARGE* then the threshold
+> > will also be ignored here.
+>
+> Ok, in that case is it ignored due to this condition:
+> https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L546
+> ?
+> If so then I see what the problem might be. Please confirm.
+Yes.
+Actually, we found LMKD is driven by the inside polling_intervals
+which lose the trigger from PSI.
+>
+> >
+> > > recorded stall within the window breaches the threshold. And there
+> > > will be only one trigger generated per window, no matter how much
+> > > stall is being recorded after the threshold was breached.
+> > > Hopefully this clarifies the behavior?
+> >
+> > I don't think so. According to your opinion, if the total keeps no
+> > change in the last polling_min_period, then the growth during the 1-9
+> > min_periods which is much larger than the threshold will also be
+> > ignored. It does not make sense.
+> >
+> > https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L529
+> > >
+> > > > >
+> > > > > > >
+> > > > > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > > ---
+> > > > > > >  include/linux/psi_types.h |  2 ++
+> > > > > > >  kernel/sched/psi.c        | 30 ++++++++++++++++++------------
+> > > > > > >  2 files changed, 20 insertions(+), 12 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> > > > > > > index 0a23300..9533d2e 100644
+> > > > > > > --- a/include/linux/psi_types.h
+> > > > > > > +++ b/include/linux/psi_types.h
+> > > > > > > @@ -132,6 +132,8 @@ struct psi_trigger {
+> > > > > > >
+> > > > > > >         /* Refcounting to prevent premature destruction */
+> > > > > > >         struct kref refcount;
+> > > > > > > +
+> > > > > > > +       bool new_stall;
+> > > > > > >  };
+> > > > > > >
+> > > > > > >  struct psi_group {
+> > > > > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > > > > > > index 1652f2b..402718c 100644
+> > > > > > > --- a/kernel/sched/psi.c
+> > > > > > > +++ b/kernel/sched/psi.c
+> > > > > > > @@ -458,9 +458,12 @@ static void psi_avgs_work(struct work_struct *work)
+> > > > > > >  static void window_reset(struct psi_window *win, u64 now, u64 value,
+> > > > > > >                          u64 prev_growth)
+> > > > > > >  {
+> > > > > > > +       struct psi_trigger *t = container_of(win, struct psi_trigger, win);
+> > > > > > > +
+> > > > > > >         win->start_time = now;
+> > > > > > >         win->start_value = value;
+> > > > > > >         win->prev_growth = prev_growth;
+> > > > > > > +       t->new_stall = false;
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  /*
+> > > > > > > @@ -515,7 +518,6 @@ static void init_triggers(struct psi_group *group, u64 now)
+> > > > > > >  static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > >  {
+> > > > > > >         struct psi_trigger *t;
+> > > > > > > -       bool new_stall = false;
+> > > > > > >         u64 *total = group->total[PSI_POLL];
+> > > > > > >
+> > > > > > >         /*
+> > > > > > > @@ -523,19 +525,26 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > >          * watchers know when their specified thresholds are exceeded.
+> > > > > > >          */
+> > > > > > >         list_for_each_entry(t, &group->triggers, node) {
+> > > > > > > -               u64 growth;
+> > > > > > > -
+> > > > > > >                 /* Check for stall activity */
+> > > > > > >                 if (group->polling_total[t->state] == total[t->state])
+> > > > > > >                         continue;
+> > > > > > >
+> > > > > > >                 /*
+> > > > > > > -                * Multiple triggers might be looking at the same state,
+> > > > > > > -                * remember to update group->polling_total[] once we've
+> > > > > > > -                * been through all of them. Also remember to extend the
+> > > > > > > -                * polling time if we see new stall activity.
+> > > > > > > +                * update the trigger if there is new stall which will be
+> > > > > > > +                * reset when run out of the window
+> > > > > > >                  */
+> > > > > > > -               new_stall = true;
+> > > > > > > +               t->new_stall = true;
+> > > > > > > +
+> > > > > > > +               memcpy(&group->polling_total[t->state], &total[t->state],
+> > > > > > > +                               sizeof(group->polling_total[t->state]));
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > > +       list_for_each_entry(t, &group->triggers, node) {
+> > > > > > > +               u64 growth;
+> > > > > > > +
+> > > > > > > +               /* check if new stall happened during this window*/
+> > > > > > > +               if (!t->new_stall)
+> > > > > > > +                       continue;
+> > > > > > >
+> > > > > > >                 /* Calculate growth since last update */
+> > > > > > >                 growth = window_update(&t->win, now, total[t->state]);
+> > > > > > > @@ -552,10 +561,6 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+> > > > > > >                 t->last_event_time = now;
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -       if (new_stall)
+> > > > > > > -               memcpy(group->polling_total, total,
+> > > > > > > -                               sizeof(group->polling_total));
+> > > > > > > -
+> > > > > > >         return now + group->poll_min_period;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > @@ -1152,6 +1157,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+> > > > > > >         t->last_event_time = 0;
+> > > > > > >         init_waitqueue_head(&t->event_wait);
+> > > > > > >         kref_init(&t->refcount);
+> > > > > > > +       t->new_stall = false;
+> > > > > > >
+> > > > > > >         mutex_lock(&group->trigger_lock);
+> > > > > > >
+> > > > > > > --
+> > > > > > > 1.9.1
+> > > > > > >

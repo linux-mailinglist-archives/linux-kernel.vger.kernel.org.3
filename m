@@ -2,219 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 558A647C6EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0345B47C6F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241544AbhLUStt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:49:49 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:33652 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241543AbhLUSts (ORCPT
+        id S241552AbhLUSvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:51:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40844 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234501AbhLUSvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:49:48 -0500
-Received: by mail-qt1-f171.google.com with SMTP id n15so43661qta.0;
-        Tue, 21 Dec 2021 10:49:47 -0800 (PST)
+        Tue, 21 Dec 2021 13:51:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640112666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7hczl/fhcvDkf/yKuUBJ4xYsAaOY7Hv0t7pVBWGg6a8=;
+        b=FXzE6vgJaj1hIuss3k5bttYKWrI5uMJnsGt1r/rDcZuJkuCpMVA6qwPLJ68FxY/EYA5ngV
+        RwQICmCNoQYDp+8g8VbPSKzjJGWyVskjYdCoOyg2XRSLFV6MickjYLzIY4V4nSwgI19hew
+        EAEKSePB5Sj9b5lD1hPLV/4bZrEXLuQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-2ROhmg7AN7CQ7VQNxygagA-1; Tue, 21 Dec 2021 13:51:04 -0500
+X-MC-Unique: 2ROhmg7AN7CQ7VQNxygagA-1
+Received: by mail-ed1-f71.google.com with SMTP id dz8-20020a0564021d4800b003f897935eb3so543257edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:51:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tc7KgE4R7TIeJUPDVcb1bQxRyC9vHMWeEu1iTeMSAEU=;
-        b=ZWMOtvkKgFhWk4I1jx6CwKeRdatyOWTltLP3tuujA1WsrndgOsoxxpB8qYy8AvuCjp
-         F0Cq3qInEWNc2w131gBc7yUozQs4ixvoyUR3tZ/HQ4f0qeMlk2dRZpuhFlqwUtKZnM/p
-         LyhdmghCrvTtcvK9IqyHymwgPovMim8le17F7X/OpsNzsjwRBTixXVYYzEpEwZ4chpVD
-         rNdZPdooZgDA0XjHLbfDNcbZlce1pVOsi18Q3XOlX3Ompar3wRvq+BSepjqkf2wMIVDx
-         bcNtGIz74lWtYMs9YUNGJPOjHreF292J/ArAzLU/mLxhfrAVXnTI9BBLJAdd84621jd0
-         Xerw==
-X-Gm-Message-State: AOAM531bsNasO2Mbxx4p99UA3KaKr/cE7st2uOfhVYnAIMmOJE8EkiRW
-        DeVwXz9Yq8AGhQZi38ua6sbFBPkmWkQH
-X-Google-Smtp-Source: ABdhPJzCZFbAIi7Iw6KHaow+W0pn29adEINr94asi/uERGFjJPf/+XWX7T8JJ628S1p4rsK9qMjuLA==
-X-Received: by 2002:a05:622a:60e:: with SMTP id z14mr3408981qta.639.1640112587278;
-        Tue, 21 Dec 2021 10:49:47 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id l2sm17946697qtk.41.2021.12.21.10.49.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 10:49:46 -0800 (PST)
-Received: (nullmailer pid 1559272 invoked by uid 1000);
-        Tue, 21 Dec 2021 18:49:45 -0000
-Date:   Tue, 21 Dec 2021 14:49:45 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: regulator: pwm: Convert to json-schema
-Message-ID: <YcIhyWEdv1yRj46G@robh.at.kernel.org>
-References: <20211217170507.2843568-1-thierry.reding@gmail.com>
- <20211217170507.2843568-2-thierry.reding@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7hczl/fhcvDkf/yKuUBJ4xYsAaOY7Hv0t7pVBWGg6a8=;
+        b=VyI1bejJl5547cOSnhmN254Geih9ocPLYcxXyZQfyyKP8uH0uCC+Fp2M0e0m+Vib9j
+         +2fhVx1iwnvJVw9mEVKF1RxweeduTraJUV/Cx5l4Z6f5olD+l3lVuYdmbVQyrt9MPRh0
+         nvqcTPbzTmrUnk0pymvTtIBCgwsRrlI7a3dHm4MlS6zztUxjGDpEHIasS8q/lcWh1wB+
+         MdyOb5rt0xpjU8cWzEAEqypTZwagWP3MwyfBaA1fZxhvyNLOtFkJVVPVyFAqONA9xAco
+         eWrwJl5Adw5xxZI3q9A5PIYhopl6Moc+TThDjjaKbGLPCkmwMN9eq7XCJ+KUrr5nbU4r
+         tMcQ==
+X-Gm-Message-State: AOAM533O2IYP2DLlGh78yF7chUU02VsfmkLaeEmjDSA9nhkZFgrwNdr3
+        HDx7npOfFwSKYEryjtZ3N4UO9aLm4i/+8rGpQwaKz38MlQDxrRPDQ/sFF+CFGk9003euD6rITra
+        PGC1Oa9ca5Ozgi6ayDYYqhhhr
+X-Received: by 2002:a17:906:9b82:: with SMTP id dd2mr3766369ejc.406.1640112663658;
+        Tue, 21 Dec 2021 10:51:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzKhGJI6p5aykoXdpRRPjv5+TiP/RvCQZELs9dzZejbGpMiW+w3+zd7TBCkvjW+JID/ORuo1A==
+X-Received: by 2002:a17:906:9b82:: with SMTP id dd2mr3766345ejc.406.1640112663393;
+        Tue, 21 Dec 2021 10:51:03 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id w22sm8960767edd.49.2021.12.21.10.51.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:51:02 -0800 (PST)
+Message-ID: <e98a06d9-f8e0-bfa8-760f-5d3cc793f2b2@redhat.com>
+Date:   Tue, 21 Dec 2021 19:51:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217170507.2843568-2-thierry.reding@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 1/3] drm/privacy_screen: Add drvdata in
+ drm_privacy_screen
+Content-Language: en-US
+To:     Rajat Jain <rajatja@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benson Leung <bleung@chromium.org>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, gwendal@google.com,
+        seanpaul@google.com, marcheu@google.com, dtor@google.com
+Cc:     rajatxjain@gmail.com
+References: <20211220222828.2625444-1-rajatja@google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211220222828.2625444-1-rajatja@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 06:05:03PM +0100, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
+Hi,
+
+On 12/20/21 23:28, Rajat Jain wrote:
+> Allow a privacy screen provider to stash its private data pointer in the
+> drm_privacy_screen, and update the drm_privacy_screen_register() call to
+> accept that. Also introduce a *_get_drvdata() so that it can retrieved
+> back when needed.
 > 
-> Convert the generic PWM regulator bindings from the free-form text
-> format to json-schema.
+> This also touches the IBM Thinkpad platform driver, the only user of
+> privacy screen today, to pass NULL for now to the updated API.
 > 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
 > ---
->  .../bindings/regulator/pwm-regulator.txt      |  92 -------------
->  .../bindings/regulator/pwm-regulator.yaml     | 121 ++++++++++++++++++
->  2 files changed, 121 insertions(+), 92 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.txt
->  create mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+> v3: Initial version. Came up due to review comments on v2 of other patches.
+> v2: No v2
+> v1: No v1
+> 
+>  drivers/gpu/drm/drm_privacy_screen.c    |  5 ++++-
+>  drivers/platform/x86/thinkpad_acpi.c    |  2 +-
+>  include/drm/drm_privacy_screen_driver.h | 13 ++++++++++++-
+>  3 files changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_privacy_screen.c b/drivers/gpu/drm/drm_privacy_screen.c
+> index beaf99e9120a..03b149cc455b 100644
+> --- a/drivers/gpu/drm/drm_privacy_screen.c
+> +++ b/drivers/gpu/drm/drm_privacy_screen.c
+> @@ -387,7 +387,8 @@ static void drm_privacy_screen_device_release(struct device *dev)
+>   * * An ERR_PTR(errno) on failure.
+>   */
+>  struct drm_privacy_screen *drm_privacy_screen_register(
+> -	struct device *parent, const struct drm_privacy_screen_ops *ops)
+> +	struct device *parent, const struct drm_privacy_screen_ops *ops,
+> +	void *data)
+>  {
+>  	struct drm_privacy_screen *priv;
+>  	int ret;
+> @@ -404,6 +405,7 @@ struct drm_privacy_screen *drm_privacy_screen_register(
+>  	priv->dev.parent = parent;
+>  	priv->dev.release = drm_privacy_screen_device_release;
+>  	dev_set_name(&priv->dev, "privacy_screen-%s", dev_name(parent));
+> +	priv->drvdata = data;
+>  	priv->ops = ops;
+>  
+>  	priv->ops->get_hw_state(priv);
+> @@ -439,6 +441,7 @@ void drm_privacy_screen_unregister(struct drm_privacy_screen *priv)
+>  	mutex_unlock(&drm_privacy_screen_devs_lock);
+>  
+>  	mutex_lock(&priv->lock);
+> +	priv->drvdata = NULL;
+>  	priv->ops = NULL;
+>  	mutex_unlock(&priv->lock);
+>  
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 341655d711ce..ccbfda2b0095 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -9782,7 +9782,7 @@ static int tpacpi_lcdshadow_init(struct ibm_init_struct *iibm)
+>  		return 0;
+>  
+>  	lcdshadow_dev = drm_privacy_screen_register(&tpacpi_pdev->dev,
+> -						    &lcdshadow_ops);
+> +						    &lcdshadow_ops, NULL);
+>  	if (IS_ERR(lcdshadow_dev))
+>  		return PTR_ERR(lcdshadow_dev);
+>  
+> diff --git a/include/drm/drm_privacy_screen_driver.h b/include/drm/drm_privacy_screen_driver.h
+> index 24591b607675..4ef246d5706f 100644
+> --- a/include/drm/drm_privacy_screen_driver.h
+> +++ b/include/drm/drm_privacy_screen_driver.h
+> @@ -73,10 +73,21 @@ struct drm_privacy_screen {
+>  	 * for more info.
+>  	 */
+>  	enum drm_privacy_screen_status hw_state;
+> +	/**
+> +	 * @drvdata: Private data owned by the privacy screen provider
+> +	 */
+> +	void *drvdata;
+>  };
+>  
+> +static inline
+> +void *drm_privacy_screen_get_drvdata(struct drm_privacy_screen *priv)
+> +{
+> +	return priv->drvdata;
+> +}
+> +
+>  struct drm_privacy_screen *drm_privacy_screen_register(
+> -	struct device *parent, const struct drm_privacy_screen_ops *ops);
+> +	struct device *parent, const struct drm_privacy_screen_ops *ops,
+> +	void *data);
+>  void drm_privacy_screen_unregister(struct drm_privacy_screen *priv);
+>  
+>  void drm_privacy_screen_call_notifier_chain(struct drm_privacy_screen *priv);
 > 
 
-> diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
-> new file mode 100644
-> index 000000000000..d87e8110989d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
-> @@ -0,0 +1,121 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/pwm-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic PWM Regulator
-> +
-> +maintainers:
-> +  - Rob Herring <robh+dt@kernel.org>
-> +  - Mark Brown <broonie@kernel.org>
-> +
-> +description: |
-> +  Currently supports 2 modes of operation:
-> +
-> +    - Voltage Table: When in this mode, a voltage table (See below) of predefined voltage <=>
-> +      duty-cycle values must be provided via DT. Limitations are that the regulator can only
-> +      operate at the voltages supplied in the table. Intermediary duty-cycle values which would
-> +      normally allow finer grained voltage selection are ignored and rendered useless. Although
-> +      more control is given to the user if the assumptions made in continuous-voltage mode do not
-> +      reign true.
-> +
-> +    - Continuous Voltage: This mode uses the regulator's maximum and minimum supplied voltages
-> +      specified in the regulator-{min,max}-microvolt properties to calculate appropriate duty-cycle
-> +      values. This allows for a much more fine grained solution when compared with voltage-table
-> +      mode above. This solution does make an assumption that a %50 duty-cycle value will cause the
-> +      regulator voltage to run at half way between the supplied max_uV and min_uV values.
-> +
-> +  NB: To be clear, if voltage-table is provided, then the device will be used
-> +  in Voltage Table Mode.  If no voltage-table is provided, then the device will
-> +  be used in Continuous Voltage Mode.
-> +
-> +  Any property defined as part of the core regulator binding can also be used. (See:
-> +  ../regulator/regulator.txt)
-> +
-> +properties:
-> +  compatible:
-> +    const: pwm-regulator
-> +
-> +  pwms:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-
-Already has a type. Just need 'maxItems: 1'
-
-> +    description: phandle and PWM specifier (see ../pwm/pwm.txt)
-> +
-> +  # Only required for Voltage Table Mode:
-> +  voltage-table:
-> +    description: Voltage and Duty-Cycle table consisting of 2 cells. The first cell is the voltage
-> +      in microvolts (uV) and the second cell is duty-cycle in percent (%).
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-matrix"
-
-items:
-  maxItems: 2
-  minItems: 2
-
-
-> +
-> +  # Optional properties for Continuous mode:
-> +  pwm-dutycycle-unit:
-> +    description: Integer value encoding the duty cycle unit. If not defined, <100> is assumed,
-> +      meaning that pwm-dutycycle-range contains values expressed in percent.
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +
-> +  pwm-dutycycle-range:
-> +    description: Should contain 2 entries. The first entry is encoding the dutycycle for
-> +      regulator-min-microvolt and the second one the dutycycle for regulator-max-microvolt. Duty
-> +      cycle values are expressed in pwm-dutycycle-unit. If not defined, <0 100> is assumed.
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-
-maxItems: 2
-
-> +
-> +  # Optional properties:
-> +  enable-gpios:
-> +    description: GPIO to use to enable/disable the regulator
-
-maxItems: 1
-
-> +
-> +  # from regulator.yaml
-> +  regulator-enable-ramp-delay: true
-> +  regulator-max-microvolt: true
-> +  regulator-min-microvolt: true
-> +  regulator-name: true
-> +  regulator-ramp-delay: true
-> +  regulator-settling-time-us: true
-
-Given the other properties still missing, probably better to drop all 
-these and use unevaluatedProperties.
-
-> +  vin-supply: true
-> +
-> +allOf:
-> +  - $ref: "regulator.yaml"
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - pwms
-> +
-> +examples:
-> +  # Continuous Voltage With Enable GPIO:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    pwm_regulator {
-> +        compatible = "pwm-regulator";
-> +        pwms = <&pwm1 0 8448 0>;
-> +        enable-gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>;
-> +        regulator-min-microvolt = <1016000>;
-> +        regulator-max-microvolt = <1114000>;
-> +        regulator-name = "vdd_logic";
-> +        /* unit == per-mille */
-> +        pwm-dutycycle-unit = <1000>;
-> +        /*
-> +         * Inverted PWM logic, and the duty cycle range is limited
-> +         * to 30%-70%.
-> +         */
-> +        pwm-dutycycle-range = <700 300>; /* */
-> +    };
-> +
-> +  # Voltage Table:
-> +  - |
-> +    regulator {
-> +        compatible = "pwm-regulator";
-> +        pwms = <&pwm1 0 8448 0>;
-> +        regulator-min-microvolt = <1016000>;
-> +        regulator-max-microvolt = <1114000>;
-> +        regulator-name = "vdd_logic";
-> +
-> +        /* Voltage Duty-Cycle */
-> +        voltage-table = <1114000 0>,
-> +                        <1095000 10>,
-> +                        <1076000 20>,
-> +                        <1056000 30>,
-> +                        <1036000 40>,
-> +                        <1016000 50>;
-> +    };
-> -- 
-> 2.34.1
-> 
-> 

@@ -2,305 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A59D47C020
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2185A47C02C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237885AbhLUMwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:52:40 -0500
-Received: from mail-qv1-f48.google.com ([209.85.219.48]:38806 "EHLO
-        mail-qv1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234390AbhLUMwj (ORCPT
+        id S234189AbhLUMzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:55:49 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4313 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237896AbhLUMzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:52:39 -0500
-Received: by mail-qv1-f48.google.com with SMTP id o10so12308832qvc.5;
-        Tue, 21 Dec 2021 04:52:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m1B7l3mS3kUTU8so7uOc+jIgCAO6knrVM5YQ4rwdLGo=;
-        b=du8Ph5G6fF+BjVIcIE+396epK7WwFzTa1QsaYDMoelUAbd+2LdZpwfpNqEQyRkn5aC
-         MXm2iWFiiVHmlkfdiim4ZExbgsnm2dYVWSvojL9eKtASgL4Uz7YfDci0YFltFg/eeHZB
-         nWHYfumF2XNR32UZ8vzt+N9bRAGcAzbbnifVeZjtNeu+0rLYnmfzpuc46eaQmf6HNI3M
-         XSXCvl3sJ42vmoJ4Pwl2tY0Dt6GEnRLbrrzl/uYP8APMAjbnrq3/H4nOTaowwII2fQCO
-         zlBnauCiwUKYPsTgh+9cj1+UH3Wp/8JvBph1E4UxQ8yUsbCQ9bn8L82CY8REEhiDbu4E
-         /k/A==
-X-Gm-Message-State: AOAM5309AjpPsLS2CnIW3EHQcTvNozP7QJ9PUjh/96xE9GSulgD4OfR4
-        nKF3GVR1v8goLTyAXiuqbQ==
-X-Google-Smtp-Source: ABdhPJyuBOkK+1SyYLuLwxdaZwirAVxpp2OHAD0Tudg+XxkEaltQoeTJ6bX0JnXjQ/rxB6rRKyvAXw==
-X-Received: by 2002:a05:6214:1cc4:: with SMTP id g4mr2008650qvd.45.1640091158530;
-        Tue, 21 Dec 2021 04:52:38 -0800 (PST)
-Received: from xps15.. ([24.55.105.145])
-        by smtp.googlemail.com with ESMTPSA id x15sm13932938qko.82.2021.12.21.04.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 04:52:38 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: display: Add SPI peripheral schema to SPI based displays
-Date:   Tue, 21 Dec 2021 08:52:09 -0400
-Message-Id: <20211221125209.1195932-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 21 Dec 2021 07:55:49 -0500
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJGbM2jPCz67Vss;
+        Tue, 21 Dec 2021 20:53:19 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 13:55:46 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 12:55:45 +0000
+Subject: Re: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ming.lei@redhat.com>, <sathya.prakash@broadcom.com>
+References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com>
+Date:   Tue, 21 Dec 2021 12:55:44 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211221123157.14052-1-kashyap.desai@broadcom.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With 'unevaluatedProperties' support enabled, several SPI based display
-binding examples have warnings:
+On 21/12/2021 12:31, Kashyap Desai wrote:
 
-Documentation/devicetree/bindings/display/panel/samsung,ld9040.example.dt.yaml: lcd@0: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
-Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-3wire' were unexpected)
-Documentation/devicetree/bindings/display/panel/ilitek,ili9322.example.dt.yaml: display@0: Unevaluated properties are not allowed ('reg' was unexpected)
-Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.example.dt.yaml: display@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
-Documentation/devicetree/bindings/display/panel/abt,y030xx067a.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
-Documentation/devicetree/bindings/display/panel/sony,acx565akm.example.dt.yaml: panel@2: Unevaluated properties are not allowed ('spi-max-frequency', 'reg' were unexpected)
-Documentation/devicetree/bindings/display/panel/tpo,td.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
-Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('reg', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
-Documentation/devicetree/bindings/display/panel/innolux,ej030na.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
-Documentation/devicetree/bindings/display/panel/sitronix,st7789v.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+Hi Kashyap,
 
-Fix all of these by adding a reference to spi-peripheral-props.yaml.
-With this, the description that the binding must follow
-spi-controller.yaml is both a bit out of date and redundant, so remove
-it.
+What kernel is this for? 5.17 or 5.16 + stable? Your intention is not 
+clear to me.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-This is dependent on spi-peripheral-props.yaml landing in 5.17-rc1.
----
- .../devicetree/bindings/display/panel/abt,y030xx067a.yaml  | 5 +----
- .../devicetree/bindings/display/panel/ilitek,ili9322.yaml  | 4 +---
- .../devicetree/bindings/display/panel/innolux,ej030na.yaml | 5 +----
- .../bindings/display/panel/kingdisplay,kd035g6-54nt.yaml   | 5 +----
- .../bindings/display/panel/lgphilips,lb035q02.yaml         | 5 +----
- .../devicetree/bindings/display/panel/samsung,ld9040.yaml  | 7 +------
- .../devicetree/bindings/display/panel/samsung,s6e63m0.yaml | 1 +
- .../bindings/display/panel/sitronix,st7789v.yaml           | 5 +----
- .../devicetree/bindings/display/panel/sony,acx565akm.yaml  | 5 +----
- .../devicetree/bindings/display/panel/tpo,td.yaml          | 5 +----
- 10 files changed, 10 insertions(+), 37 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/abt,y030xx067a.yaml b/Documentation/devicetree/bindings/display/panel/abt,y030xx067a.yaml
-index a108029ecfab..acd2f3faa6b9 100644
---- a/Documentation/devicetree/bindings/display/panel/abt,y030xx067a.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/abt,y030xx067a.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Asia Better Technology 3.0" (320x480 pixels) 24-bit IPS LCD panel
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Paul Cercueil <paul@crapouillou.net>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
-index e89c1ea62ffa..7d221ef35443 100644
---- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
-@@ -15,11 +15,9 @@ description: |
-   960 TFT source driver pins and 240 TFT gate driver pins, VCOM, VCOML and
-   VCOMH outputs.
- 
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/innolux,ej030na.yaml b/Documentation/devicetree/bindings/display/panel/innolux,ej030na.yaml
-index cda36c04e85c..72788e3e6c59 100644
---- a/Documentation/devicetree/bindings/display/panel/innolux,ej030na.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/innolux,ej030na.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Innolux EJ030NA 3.0" (320x480 pixels) 24-bit TFT LCD panel
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Paul Cercueil <paul@crapouillou.net>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml b/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-index c45c92a3d41f..2a2756d19681 100644
---- a/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: King Display KD035G6-54NT 3.5" (320x240 pixels) 24-bit TFT LCD panel
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Paul Cercueil <paul@crapouillou.net>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
-index 830e335ddb53..5e4e0e552c2f 100644
---- a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: LG.Philips LB035Q02 Panel
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Tomi Valkeinen <tomi.valkeinen@ti.com>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml b/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
-index 060ee27a4749..d525165d6d63 100644
---- a/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Samsung LD9040 AMOLED LCD parallel RGB panel with SPI control bus
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Andrzej Hajda <a.hajda@samsung.com>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-@@ -63,8 +60,6 @@ examples:
- 
-         lcd@0 {
-             compatible = "samsung,ld9040";
--            #address-cells = <1>;
--            #size-cells = <0>;
- 
-             reg = <0>;
-             vdd3-supply = <&ldo7_reg>;
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-index ea58df49263a..940f7f88526f 100644
---- a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-@@ -12,6 +12,7 @@ maintainers:
- allOf:
-   - $ref: panel-common.yaml#
-   - $ref: /schemas/leds/backlight/common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-index fa46d151e7b3..9e1d707c2ace 100644
---- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Sitronix ST7789V RGB panel with SPI control bus
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Maxime Ripard <mripard@kernel.org>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml b/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
-index 95d053c548ab..98abdf4ddeac 100644
---- a/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml
-@@ -6,15 +6,12 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Sony ACX565AKM SDI Panel
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Tomi Valkeinen <tomi.valkeinen@ti.com>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/display/panel/tpo,td.yaml b/Documentation/devicetree/bindings/display/panel/tpo,td.yaml
-index 4aa605613445..f902a9d74141 100644
---- a/Documentation/devicetree/bindings/display/panel/tpo,td.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/tpo,td.yaml
-@@ -6,16 +6,13 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Toppoly TD Panels
- 
--description: |
--  The panel must obey the rules for a SPI slave device as specified in
--  spi/spi-controller.yaml
--
- maintainers:
-   - Marek Belisko <marek@goldelico.com>
-   - H. Nikolaus Schaller <hns@goldelico.com>
- 
- allOf:
-   - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
- 
- properties:
-   compatible:
--- 
-2.32.0
+> In [0], CPU usage for blk_mq_queue_tag_busy_iter() was optimized, but
+> there are still periodic call of blk_mq_queue_tag_busy_iter() from
+> below context. Below context is used for block layer timer to find out
+> potential expired command (per request queue) which requires tag iteration
+> almost every 5 seconds(defined BLK_MAX_TIMEOUT) for each request queue.
+> 
+> kthread
+>          worker_thread
+>          process_one_work
+>          blk_mq_timeout_work
+>          blk_mq_queue_tag_busy_iter
+>          bt_iter
+>          blk_mq_find_and_get_req
+>          _raw_spin_lock_irqsave
+>          native_queued_spin_lock_slowpath
+> 
+> Changes in this patch optimize extra iterations of tags in case of
+> shared_tags. One iteration of shared_tags can give expected results for
+> iterate function.
+> 
+> Setup -  AMD64 Gen-4.0 Server.
+> 64 Virtual Drive created using 16 Nvme drives + mpi3mr driver (in
+> shared_tags mode)
+> 
+> Test command -
+> fio 64.fio --rw=randread --bs=4K --iodepth=32 --numjobs=2 --ioscheduler=mq-deadline --disk_util=0
+> 
+> Without this patch on 5.16.0-rc5, mpi3mr driver in shared_tags mode can
+> give 4.0M IOPs vs expected to get ~6.0M.
+> Snippet of perf top
+> 
+>    25.42%  [kernel]                               [k] native_queued_spin_lock_slowpath
+>     3.95%  [kernel]                               [k] cpupri_set
+>     2.05%  [kernel]                               [k] __blk_mq_get_driver_tag
+>     1.67%  [kernel]                               [k] __rcu_read_unlock
+>     1.63%  [kernel]                               [k] check_preemption_disabled
+> 
+> After applying this patch on 5.16.0-rc5, mpi3mr driver in shared_tags
+> mode reach up to 5.8M IOPs.
+> 
+> Snippet of perf top
+> 
+>     7.95%  [kernel]                               [k] native_queued_spin_lock_slowpath
+>     5.61%  [kernel]                               [k] cpupri_set
+>     2.98%  [kernel]                               [k] acpi_processor_ffh_cstate_enter
+>     2.49%  [kernel]                               [k] read_tsc
+>     2.15%  [kernel]                               [k] check_preemption_disabled
+> 
+> 
+> [0] https://lore.kernel.org/all/9b092ca49e9b5415772cd950a3c12584@mail.gmail.com/
+> 
+> 
+> Cc: linux-block@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: john.garry@huawei.com
+> Cc: ming.lei@redhat.com
+> Cc: sathya.prakash@broadcom.com
+> Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
+> ---
+>   block/blk-mq-tag.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index 995336abee33..3e0a8e79f966 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -253,7 +253,8 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
+>   	if (!rq)
+>   		return true;
+>   
+> -	if (rq->q == hctx->queue && rq->mq_hctx == hctx)
+> +	if (rq->q == hctx->queue && (rq->mq_hctx == hctx ||
+> +				blk_mq_is_shared_tags(hctx->flags)))
+>   		ret = iter_data->fn(hctx, rq, iter_data->data, reserved);
+>   	blk_mq_put_rq_ref(rq);
+>   	return ret;
+> @@ -484,6 +485,14 @@ void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
+>   		if (tags->nr_reserved_tags)
+>   			bt_for_each(hctx, &tags->breserved_tags, fn, priv, true);
+>   		bt_for_each(hctx, &tags->bitmap_tags, fn, priv, false);
+> +		
+> +		/* In case of shared bitmap if shared_tags is allocated, it is not required
+> +		 * to iterate all the hctx. Looping one hctx is good enough.
+> +		 */
+> +		if (blk_mq_is_shared_tags(hctx->flags)) {
+> +			blk_queue_exit(q);
+> +			return;
 
+this looks like v5.16-rc6 code
+
+> +		}
+>   	}
+>   	blk_queue_exit(q);
+>   }
+> 
+
+
+
+Thanks,
+John

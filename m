@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E2A47B7AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D792547B7B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234142AbhLUCBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 21:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbhLUCAN (ORCPT
+        id S234718AbhLUCBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 21:01:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34324 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234088AbhLUCAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 21:00:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD7BC06137D;
-        Mon, 20 Dec 2021 18:00:12 -0800 (PST)
+        Mon, 20 Dec 2021 21:00:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79883B81113;
-        Tue, 21 Dec 2021 02:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5021CC36AE8;
-        Tue, 21 Dec 2021 02:00:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCF48B81110;
+        Tue, 21 Dec 2021 02:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF1AC36AF0;
+        Tue, 21 Dec 2021 02:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640052010;
-        bh=1rkQI2Le5cSkC8pp8ZXRUV1s8iNS+eYg6LzavWXGSH4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IqNoA21TJCfZJXK784ELUDRuZwJhugpqBR/189felzMK7CB6Beesqy17vUWUyArR1
-         uPUfIVpxMdheHQiWhbQPrSf1ylSqtIAnXK2Ml3lXy/ngOwtzv3N1WEdsQoD2dWLzhS
-         rIxwWLDfUg/EoI0EYyG++jyddpvf/hZkvir8/dhAtYZOBJ1ae1eVB8cOoMJSPEOrPp
-         /dorPjFoaDi+6ZvmsNeouISdP8pqcatobZwmS0kvNGa1uY/bD2ZxHx2iNsk3xHGXEt
-         dhpas2xiakaLrmvRgxARc109J3bN4w8pWdERitBTH0ZvoCQC6W8lVP+/8Fg/JnKFSo
-         34AGML2fWKWPA==
+        s=k20201202; t=1640052011;
+        bh=VpksPaUP1hExGyz40DdxNdgjEs84DqPnK/w4h4J53gU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aR0lZ1I2/FF68SYYOn/T/TRVVX3XBj/HWIyW+n//7aSIstDaT1aNYNLI6kLaMRQ5m
+         NqoSDZr43GKFAcDPiOReNP8HVUc84/G1rjr5dCJR41MgfjY5Y+OzN8BpqPZAgZ28d+
+         fhtuFI6ql6xI7L3XmloqU7XZvb1Kbhk3mLbmPd7+o55YCRpkGndRbRe0HZZvTpuht6
+         F6RlIa9l7BCya0HqIbFoW7qTWJ2klPGItSqkTxU0PmE4gZ18GWbimSNl6NEH2fdPjP
+         cYypIR9X/gtz/63Qd9e5re9PUe09xKsIWwQ52GjtUM0uGF769JmZLYCMMMK84X3/V8
+         dVYlPGTUoKkTA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, leoyang.li@nxp.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 01/14] ARM: dts: ls1021a-tsn: update RGMII delays for sja1105 switch
-Date:   Mon, 20 Dec 2021 20:59:39 -0500
-Message-Id: <20211221015952.117052-1-sashal@kernel.org>
+Cc:     "Ivan T. Ivanov" <iivanov@suse.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 02/14] ARM: rockchip: Use memcpy_toio instead of memcpy on smp bring-up
+Date:   Mon, 20 Dec 2021 20:59:40 -0500
+Message-Id: <20211221015952.117052-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211221015952.117052-1-sashal@kernel.org>
+References: <20211221015952.117052-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,44 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: "Ivan T. Ivanov" <iivanov@suse.de>
 
-[ Upstream commit e691f9282a89e24a8e87cdb91a181c6283ee5124 ]
+[ Upstream commit 423e85e97aaf69e5198bbec6811e3825c8b5019a ]
 
-In the new behavior, the sja1105 driver expects there to be explicit
-RGMII delays present on the fixed-link ports, otherwise it will complain
-that it falls back to legacy behavior, which is to apply RGMII delays
-incorrectly derived from the phy-mode string.
+This fixes a potential kernel panic on memcpy when FORTIFY_SOURCE
+is enabled. Because memory is iomem use appropriate function for
+accessing it.
 
-In this case, the legacy behavior of the driver is to not apply delays
-in any direction (mostly because the SJA1105T can't do that, so this
-board uses PCB traces). To preserve that but also silence the driver,
-use explicit delays of 0 ns. The delay information from the phy-mode is
-ignored by new kernels (it's still RGMII as long as it's "rgmii*"
-something), and the explicit {rx,tx}-internal-delay-ps properties are
-ignored by old kernels, so the change works both ways.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+Link: https://lore.kernel.org/r/20211116084616.24811-1-iivanov@suse.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/ls1021a-tsn.dts | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/mach-rockchip/platsmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/ls1021a-tsn.dts b/arch/arm/boot/dts/ls1021a-tsn.dts
-index 7235ce2a32936..d5dce78c85617 100644
---- a/arch/arm/boot/dts/ls1021a-tsn.dts
-+++ b/arch/arm/boot/dts/ls1021a-tsn.dts
-@@ -90,6 +90,8 @@ port@4 {
- 				/* Internal port connected to eth2 */
- 				ethernet = <&enet2>;
- 				phy-mode = "rgmii";
-+				rx-internal-delay-ps = <0>;
-+				tx-internal-delay-ps = <0>;
- 				reg = <4>;
+diff --git a/arch/arm/mach-rockchip/platsmp.c b/arch/arm/mach-rockchip/platsmp.c
+index 649e0a54784cd..8ee6e4b309b37 100644
+--- a/arch/arm/mach-rockchip/platsmp.c
++++ b/arch/arm/mach-rockchip/platsmp.c
+@@ -189,7 +189,7 @@ static int __init rockchip_smp_prepare_sram(struct device_node *node)
+ 	rockchip_boot_fn = __pa_symbol(secondary_startup);
  
- 				fixed-link {
+ 	/* copy the trampoline to sram, that runs during startup of the core */
+-	memcpy(sram_base_addr, &rockchip_secondary_trampoline, trampoline_sz);
++	memcpy_toio(sram_base_addr, &rockchip_secondary_trampoline, trampoline_sz);
+ 	flush_cache_all();
+ 	outer_clean_range(0, trampoline_sz);
+ 
 -- 
 2.34.1
 

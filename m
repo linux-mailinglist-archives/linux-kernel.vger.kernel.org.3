@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9D947C4B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B8747C4C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240064AbhLURJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:09:49 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:53619 "EHLO
+        id S240227AbhLURNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:13:06 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:58255 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbhLURJs (ORCPT
+        with ESMTP id S236622AbhLURNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:09:48 -0500
-Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MZTyo-1mvzXY45Ic-00WYpO; Tue, 21 Dec 2021 18:09:47 +0100
-Received: by mail-wm1-f46.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso2179626wmc.4;
-        Tue, 21 Dec 2021 09:09:46 -0800 (PST)
-X-Gm-Message-State: AOAM5326zEgzOjqCXQd8gJgkAAhXoQ2+ZYf16vCMQuVMlNaNlTyofrbk
-        +ZFVKqPh2KNRjYJGBKef9GWVfj4y6wb50kS633w=
-X-Google-Smtp-Source: ABdhPJzaqpqJNCbIa99dFVCtyNIizr9whaZNUWhkKim9JOkhaY5AWVisxu8w7rdXDuXyxS5+Qd3gQL/iBewf18GWlZ8=
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr3639851wmb.82.1640106586666;
- Tue, 21 Dec 2021 09:09:46 -0800 (PST)
+        Tue, 21 Dec 2021 12:13:04 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M4s8v-1n0XuK0OqF-001yOu; Tue, 21 Dec 2021 18:13:03 +0100
+Received: by mail-wr1-f48.google.com with SMTP id c4so28305783wrd.9;
+        Tue, 21 Dec 2021 09:13:03 -0800 (PST)
+X-Gm-Message-State: AOAM531nzMFYvFhmCst1DwC1uT5SXYSZwDc1FAHXjyyMxt4CpVntTUIG
+        NPcMvZYqmg6/VkfWkIE0LwB7C5g5AbMeis/BaRA=
+X-Google-Smtp-Source: ABdhPJxbIqjyU8TaVGGex6NdChPO7fkenTBnB/BLD4Lq+OCkYunXjff2m0E1G3pTqKAWxFdhJPGy7XhHYU7jc7xKAk4=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr3336935wru.12.1640106782679;
+ Tue, 21 Dec 2021 09:13:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
-In-Reply-To: <20211221163532.2636028-3-guoren@kernel.org>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
+In-Reply-To: <20211221163532.2636028-4-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 18:09:30 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
-Message-ID: <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
-Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
+Date:   Tue, 21 Dec 2021 18:12:46 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
+Message-ID: <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
+Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup.patel@wdc.com>,
@@ -41,24 +41,24 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lOmQL97/XHO8MyIAgwAHai3sRy97dYaav87m/8hm75iCrmiaL2k
- zkGy3YWgCJy9Pd3r6PWXhAClolwF0+Xp2MF8TjRCwsExjVoBsL94PMvI8pZDRWk8XJzJKhC
- XdRs9/qSY4v1dH3R+/OSM06gH1MQ1iOxdS0c11gYvffrx3pvqlBSv7JpeTSsH2bKyz+HLcy
- 6yRNS/E0a5CxMUOzYbLdg==
+X-Provags-ID: V03:K1:pBb1Ng8Nh1/iOIIQOjPW9XCHZ5jotfOcKb3GWhsoe9aEOLu57l3
+ /RXqhzC/5kSDWRxp2UAPEi9IbSgr78VnWQSu+XzqkTjFNq9q/HbzFfeDTGs4GNv45mf0W+7
+ JeLgdiZRSBrF3u+Bx1K3mdmUPA37DsKBYtH652GgVAenKGiHVGjGrXrUTrhdTpsDegW4vGe
+ fIPen64j2hxIMC3z1q3OQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O7M2kMbiGaU=:M6p/sgsl8uAPmSE+s+nNn8
- EE7HjqhT9sNazYO/fhAVexgoGw+6g+Pybo+Rwe+FPsuhSeWANgmjrmAqzApIwhRNykS+EaHhA
- 5eS0h6zNyk4fhyC0Vtczks9nV/CN99RAa/ONByquKSUQA3ecWXQV5mzWeag4SkNSV2s7u1/AQ
- oh91nhJGcRsKkby51r2hCCvZkE6dLJDmqea/+GRygPLZgMTj9D/IIvcdFEI2dFBGzb4hFo77f
- NI10AfA/3M9vwbYWUd35/2/SLrFQnt4mJtEcj+ZMNEZHiNxewxczhYvoiRcOLNvuE2XXMo0QL
- he7uuNyAyH9Mdl/L/rzPL5ekBBPAlswZTuPGEf//Rm0/h2SnQShk2GZgFHoCqlKjdifESzwR6
- DFxxNau9/tgPDS5vx4+m1eby5rtleHboqdlpgEspAG0jxNuQO+1qPAJNeueKS3WWE/sgkKoUZ
- RKyJkTZMvtz3IdyOccD/5BixppUeoze/AI0mxZSxen5pe14PWGHnEZMrCMAOY5iDXjFmjkTk4
- sSCzih6DV5APtUlhyt5PYyqWOyqgPWVYwBmiRYhsjum4y5zknZGUnLqG67WAVRMHP8MNHbtRd
- dwZ9bE0eCzqsyEnm3HlgvE+jSn+xNM6ijYVHaQKXPYibILx0rCdDQSg6FBOHL05XPjyNyCtfK
- IA0a8M9XspQsF6IBhlwmJ4k55Oxc7qMMKWZaNj/L6EsHDOFHgYuz9Lp4unjjYp1XdIz3Ukkga
- UXgbSiAN1Tiv2nniPuOJf4R7zNC7BbkSItT/VLdWToSQ6EsCFkOpLrDnNpGSQ5hHLFbgXG2Xw
- YbIwYmTEsONzYLq9JLZauoYP2BjmKQoX9bqK21Ypp4XMDZJhIs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0nrr0CbcCTs=:6FDjpdEmuR1HpWIePD19sa
+ 0jI2NJKmcjQx3/kvY7z6u9FVqKJsgN2Yue9WcpWNPr/d+1eS0sh2XOAt6wjqkgk1ErtqsfrrX
+ 6t7mjAKr+F+OjU41cPZKFXxaipV5280+dDtroyjNYYfw235EztUx98wBUYyi0/jXJdGy+sjwo
+ v4mreNQkwwGK3U/hTh85SdVQzYYc1VhncSJbszVsX6x0F5P0FIBMjJtOzHXC9Y0eg/T+xsAHA
+ XbH3Ju5MLAJjQfa7YlzmqvFJjMXSOsZGna4s25hOu9DE30PpmMvLTUxFL6Kig8Q+oFVkbRF3W
+ gKBnzF+P2Wv5CvS5At/wxsGtQZrK0yomhvFAnC5TWmdszl0UR7h/g9Uif4Jj6H+CmxEyJNjfM
+ ziy1GNFQgWKZ5JuvHnPSkHx1/TbrfU3ToRjvG/zjSReCe8M06jXd1GvSkYCKCq24VYuukNG4o
+ gQH2L3K//xVwwqQBYKx1TM1YqBDYfc+eDxlIbUIc8w9v+sZnA99W8+n0Hzs6pGSB8WEVQqqbh
+ +vVnfHkniCX1+agZMsgiurvgtzWRi/49fWtT0L58+QCNt8aWcetrRuAyCnP9GtxBiuxQ0Spvq
+ MOhG93uLibwVRvUcbMKNKi4Z9n6y1AOY2yG4CS2BxrI7EUY28bI98Ee/3PVQJuzoBSx7u7BPY
+ HdwCHsjQ4wcm37KDPB9sLXovJ5IFo7keA5jtPkRAEA1vqlLLzPGc3AEvdAMTK96RiQGlNQvjy
+ za9wgLy6t2NLcY8BCULNaP6kY2shhUMvw5NKJQurDJIZTnfpMLKfFPbw0xUcQM18g3E2mwVFV
+ CmS/TvRa3AA2jE+plOT/ylqIgfW4VL5TmM5z+R6ly4CZgg5qwQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -67,15 +67,37 @@ On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
 >
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Let's follow the origin patch's spirit.
+> Implement asm/compat.h for struct compat_xxx, RLIM_INFINITY,
+> OFF_T_MAX, is_compat_task, compat_user_regset, regset convert.
 >
-> The only difference between rv32_defconfig and defconfig is that
-> rv32_defconfig has  CONFIG_ARCH_RV32I=y.
->
-> This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
->
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> ---
+>  arch/riscv/include/asm/compat.h      | 259 +++++++++++++++++++++++++++
 
-If the intention is to keep them in sync, maybe use a fragment for 32-bit
-mode, like powerpc or mips do.
+Since both the native and compat side use the generic interface, I think this
+should all be part of asm-generic/compat.h, in case other architectures want to
+share this in the future. Maybe see if any other architectures use the
+same definition
+for some of the structures and then remove the duplicates.
 
-      Arnd
+> +struct compat_stat {
+> +       compat_ulong_t  st_dev;
+> +       compat_ulong_t  st_ino;
+> +       compat_uint_t   st_mode;
+> +       compat_uint_t   st_nlink;
+
+You should not need a compat_stat, because native rv32 does not have a
+stat() syscall.
+
+> +static inline int is_compat_task(void)
+> +{
+> +       return test_thread_flag(TIF_32BIT);
+> +}
+> +
+> +struct compat_user_regs_struct {
+> +       compat_ulong_t pc;
+> +       compat_ulong_t ra;
+
+These clearly need to stay in arch/riscv
+
+        Arnd

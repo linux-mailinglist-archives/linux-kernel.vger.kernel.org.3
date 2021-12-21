@@ -2,245 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C23347C2A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CB847C2A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239188AbhLUPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:19:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60062 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239330AbhLUPTm (ORCPT
+        id S239207AbhLUPTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:19:48 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4314 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239157AbhLUPTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:19:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640099981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5gm3ZLQRBKvCHbJaSdAbt4E0N/aoi9RgH7ebjbXdmrk=;
-        b=Zu2Vi9GjAiJsHK4DcHzaAS7U0Ij3iZ4/oB4ldM0NUAIeSmBO7wpBo8iDLvb84uY6+maVDM
-        +BxLWg3gHIp46pYysxXHEWG+UF21LRG3rSqMehvYK1XXaW/EHe8J2VacAUCWdzANX17ZCc
-        JRVlc/GHoNDSOr+LoFXLonrNpu8IkKk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-Zo6rEa5dNGyc72n9cZ5bEw-1; Tue, 21 Dec 2021 10:19:40 -0500
-X-MC-Unique: Zo6rEa5dNGyc72n9cZ5bEw-1
-Received: by mail-wm1-f72.google.com with SMTP id n31-20020a05600c3b9f00b0034440f99123so2889401wms.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:19:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=5gm3ZLQRBKvCHbJaSdAbt4E0N/aoi9RgH7ebjbXdmrk=;
-        b=W+Yp5qDRcIYz781x4bp+umo8ciUJf6nVNVUwNbrKufCledd9B/LZOZtWZJ9MMdOITt
-         an1lZ4EGQU7drCn8uRU6QQRrLWceqznjf5Poeo38Hvt/YAhbfC7p5vUtoV+4U5U1KBVl
-         W1Ng4Ka9QZw3YsTqEEc/MWhWixaKmMyj0yDu13gCK0hUeEN+QnLwbDNIbNUSV7DpS3lg
-         vXtgCSFP6eHRi/toPffTjjNMWUCRNXoJ984Qjj0JR8bJWsTJhHp1llkd9q0TEMoS2LJu
-         ishyHBWUaVj+b9QYRvBLMVJ+2FMyL8hAbDNZqPgfOPkT8d7VXUDQ3ttnAHaXHRwhUtFs
-         Ax0Q==
-X-Gm-Message-State: AOAM5338QLBKe9CFch3ssrVpWG5v+kTL55UCsevx/h7uqBBLNW7b5XOK
-        0l7XCNpDzJOBSJ1YEMWj0qiLguX/ruEvpowaOnZkVl5X0XJJoK6RIPSE/u4aiRzMpoaFSgS0uav
-        vA4s8ZYzdWWpjHj2jV9jcYJTA
-X-Received: by 2002:adf:db04:: with SMTP id s4mr3123277wri.467.1640099978752;
-        Tue, 21 Dec 2021 07:19:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwj9M2fdwpVEPT599gXIT3luVo4I7J5XVEWxtoh26mgFPng1aOUYRQ3MOTjaZ8BGRLBTURDIQ==
-X-Received: by 2002:adf:db04:: with SMTP id s4mr3123235wri.467.1640099978458;
-        Tue, 21 Dec 2021 07:19:38 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c64a4.dip0.t-ipconnect.de. [91.12.100.164])
-        by smtp.gmail.com with ESMTPSA id o38sm2925317wms.4.2021.12.21.07.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:19:37 -0800 (PST)
-Message-ID: <303f21d3-42b4-2f11-3f22-28f89f819080@redhat.com>
-Date:   Tue, 21 Dec 2021 16:19:33 +0100
+        Tue, 21 Dec 2021 10:19:47 -0500
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJKl45Wzpz6H8S1;
+        Tue, 21 Dec 2021 23:15:12 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 16:19:44 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 15:19:44 +0000
+Subject: Re: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ming.lei@redhat.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
+ <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com>
+ <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
+Date:   Tue, 21 Dec 2021 15:19:43 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+In-Reply-To: <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <20211221142812.GD1432915@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <20211221142812.GD1432915@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.21 15:28, Jason Gunthorpe wrote:
-> On Tue, Dec 21, 2021 at 09:58:32AM +0100, David Hildenbrand wrote:
->>> I'm having a hard time imagining how gup_fast can maintain any sort of
->>> bit - it lacks all forms of locks so how can we do an atomic test and
->>> set between two pieces of data?
->>
->> And exactly that is to be figured out.
->>
->> Note that I am trying to make also any kind of R/O pins on an anonymous
->> page work as expected as well, to fix any kind of GUP after fork() and
->> GUP before fork(). So taking a R/O pin on an !PageAnonExclusive() page
->> similarly has to make sure that the page is exclusive -- even if it's
->> mapped R/O (!).
+Hi Kashyap,
+
+> This is for current/5.17. This patch is meaningfully only on top of [1].
 > 
-> Why? AFAIK we don't have bugs here. If the page is RO and has an
-> elevated refcount it cannot be 'PageAnonExclusive' and so any place
-> that wants to drop the WP just cannot. What is the issue?
-
-Sure it can.
-
-1. Map page R/W
-2. Pin it R/W
-3. Swapout
-4. Read access
-
-Page is now mapped R/O and *has to be* marked PageAnonExclusive(), to
-properly skip the COW fault. That's literally 60% of the reproducers we
-have that need fixing.
-
-
-But what I think you actually mean is if we want to get R/O pins right.
+> [1] " blk-mq: Use shared tags for shared sbitmap support" Commit -
+> e155b0c238b20f0a866f4334d292656665836c8a
 > 
->> BUT, it would mean that whenever we fork() and there is one additional
->> reference on a page (even if it's from the swapcache), we would slow
->> down fork() even if there was never any GUP. This would apply to any
->> process out there that does a fork() ...
+
+But your change seems effectively the same as in 
+https://lore.kernel.org/all/1638794990-137490-4-git-send-email-john.garry@huawei.com/, 
+which is now merged in Jens' 5.17 queue:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-5.17/block&id=fea9f92f1748083cb82049ed503be30c3d3a9b69
+
+> While doing additional testing for [1], I noticed some performance issue.
+> Along with the performance issue, I noticed CPU lockup as well. Lockup
+> trace -
 > 
-> You mean because we'd copy?
-
-Yes.
-
+> _raw_spin_lock_irqsave+0x42/0x50
+>   blk_mq_find_and_get_req+0x20/0xa0
+>   bt_iter+0x2d/0x80
+>   blk_mq_queue_tag_busy_iter+0x1aa/0x2f0
+>   ? blk_mq_complete_request+0x30/0x30
+>   ? blk_mq_complete_request+0x30/0x30
+>   ? __schedule+0x360/0x850
+>   blk_mq_timeout_work+0x5e/0x120
+>   process_one_work+0x1a8/0x380
+>   worker_thread+0x30/0x380
+>   ? wq_calc_node_cpumask.isra.30+0x100/0x100
+>   kthread+0x167/0x190
+>   ? set_kthread_struct+0x40/0x40
+>   ret_from_fork+0x22/0x30
 > 
-> Is this common? Linus' prior email was talking as though swap is so
-> rare we should't optimize for it?
-At least in the enterprise segment having swap enabled is mostly a hard
-documented requirement. On customer installations swap is still common,
-and even gets replaced zswap that is enabled automatically in many
-installations ...
-
-So in the world I live and work in, swap is used frequently.
-
->  
->> So the idea is to mark a page only exclusive as soon as someone needs
->> the page to be exclusive and stay exclusive (-> e.g., GUP with FOLL_PIN
->> or selected FOLL_GET like O_DIRECT). This can happen in my current
->> approach using two ways:
->>
->> (1) Set the bit when we know we are the only users
->>
->> We can set PageAnonExclusive() in case *we sync against fork* and the
->> page cannot get unmapped (pt lock) when:
->> * The page is mapped writable
->> * The page is mapped readable and page_count == 1
+> It is a generic performance issue if driver use " shost->host_tagset = 1".
+> In fact, I found that [1] is useful to fix performance issue and provided
+> this additional patch.
 > 
-> I'm still not sure I see that all this complexity is netting a gain?
-
-Avoid copy on fork().
-
->  
->> If we cannot set the page exclusive, we have to trigger a page fault.
->>
->> (2) During pagefaults when FOLL_FAULT_UNSHARE is set.
+> I changed my setup to have 64 scsi_devices (earlier I just kept 16 or 24
+> drives, so did not noticed this issue). Performance/cpu lockup issue is not
+> due to [1].
+> More number of scsi device, hardware context per host and high queue depth
+> will increase the chances of lockup and performance drop.
 > 
-> Why do we need FOLL_FAULT_UNSHARE ? AFAICT that was part of this
-> series because of mapcount, once the hugetlb COW is fixed to use
-> refcount properly, as Linus showed, the bugs this was trying to fix go
-> away.
-
-The purpose of FOLL_FAULT_UNSHARE in the !mapcount version is to cleanly
-support R/O pins without the need for FOLL_WRITE.
-
-And it's comparatively easy to add on top. This is not core of the
-complexity, really.
-
+> Do you think, it is good to have changes in 5.16 + stable ?
+> I don't know if this  patch will create any side effect. Can you review and
+> let me know your feedback. ?
 > 
-> And as discussed before it is OK if READ gup becomes incoherent, that
-> is its defined semantic.
 
-And that's where I still disagree.
+Can you test my merged change again for this scenario?
 
-But anyhow, this is really more about FOLL_FAULT_UNSHARE, which is
-pretty easy and natural to add on top and just gets this right.
+I will also note that I mentioned previously that 
+blk_mq_queue_tag_busy_iter() was not optimum for shared sbitmap, i.e. 
+before shared tags, but no one said performance was bad for shared sbitmap.
 
-> 
->> The above should work fairly reliable with GUP. But indeed,
->> gup-fast-only is the problem. I'm still investigating what kind of
->> lightweight synchronization we could do against fork() such that we
->> wouldn't try setting a page PageAnonExclusive() while fork()
->> concurrently shares the page.
->>
->> We could eventually use the page lock and do a try_lock(), both in
->> fork() and in gup-fast-only. fork() would only clear the bit if the
->> try_lock() succeeded. gup-fast-only would only be able to set the bit
->> and not fallback to the slow path if try_lock() succeeded.
-> 
-> I suspect that is worse than just having fork clear the bit and leave
-> GUP as-is. try lock is an atomic, clearing PageAnonExclusive does not
-> need to be atomic, it is protected by the PTL.
-
-There are 2 models, leaving FOLL_FAULT_UNSHARE out of the picture for now:
-
-1) Whenever mapping an anonymous page R/W (after COW, during ordinary
-fault, on swapin), we mark the page exclusive. We must never lose the
-PageAnonExclusive bit, not during migration, not during swapout.
-
-fork() will process the bit for each and every process, even if there
-was no GUP, and will copy if there are additional references.
-
-2) Whenever GUP wants to pin/ref a page, we try marking it exclusive. We
-can lose the PageAnonExclusive bit during migration and swapout, because
-that can only happen when there are no additional references.
-
-fork() will process the bit only if there was GUP. Ordinary fork() is
-left unchanged.
-
-
-Getting R/O supported in the same way just means that we have to check
-on a R/O pin if the page is PageAnonExclusive, and if that's not the
-case, trigger a FOLL_FAULT_UNSHARE fault. That's really the only
-"complexity" on top which is without the mapcount really easy.
-
--- 
 Thanks,
-
-David / dhildenb
-
+John

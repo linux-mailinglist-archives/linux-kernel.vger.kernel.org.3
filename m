@@ -2,165 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D91447B680
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EA547B685
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbhLUAjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 19:39:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55418 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231365AbhLUAju (ORCPT
+        id S233448AbhLUAmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 19:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231355AbhLUAmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 19:39:50 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BKMXn64022063;
-        Tue, 21 Dec 2021 00:39:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pJWP2Dxbq//tgGh2ocH4HUS1hE/2OXhsKSEwQgCVods=;
- b=mUn3z2oE30K/ksGTnwMpR7UEAEo9Vm/sD3jkC9EtR8fznKrK2gc4ROvtMQyZGoPXj4C9
- oYAmCc989lE73fIaq4dgV49yc5ZotdFPJ0iKIe0sWVOEL5yCFEmVL8gVuT2681iXuAuO
- zjP8tRtNE+JzQFmiMsVuLT5V1ZbWjBzKlUoLcGRVDN973mNVLjvcN3zO39l66LB9zE7T
- doIJsC1oaCzMJeTEouTD5tXxTsPzIMnsXnNMfLEJLHjUAgmabp2GDxXnhfkmarNg7Btg
- Ce0MNRKuIw57/1VXFQ37OmSFvilWAMi8OBYRbT9f3Uz7R++ISSG6qZGNtbH7XQnfl6vW Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1skerbh7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 00:39:42 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BL0dfDj032349;
-        Tue, 21 Dec 2021 00:39:41 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d1skerbh3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 00:39:41 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BL0YUA2012585;
-        Tue, 21 Dec 2021 00:39:40 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3d179hq9sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 00:39:40 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BL0dbxH20840798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Dec 2021 00:39:37 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A469B78068;
-        Tue, 21 Dec 2021 00:39:37 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 029807805C;
-        Tue, 21 Dec 2021 00:39:35 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.65.210.85])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Dec 2021 00:39:35 +0000 (GMT)
-Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
- (powerpc)
-To:     Stefan Berger <stefanb@linux.ibm.com>, jarkko@kernel.org,
-        peterhuewe@gmx.de, linux-integrity@vger.kernel.org
-Cc:     Korrapati.Likhitha@ibm.com, pavrampu@in.ibm.com,
-        linux-kernel@vger.kernel.org, jgg@ziepe.ca,
-        linux-security-module@vger.kernel.org, gcwilson@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <1052cd36-1b85-5d36-045f-5c5bf9f0fc4e@linux.ibm.com>
-Date:   Mon, 20 Dec 2021 16:39:34 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 20 Dec 2021 19:42:49 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F8EC061574;
+        Mon, 20 Dec 2021 16:42:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so563885wmb.0;
+        Mon, 20 Dec 2021 16:42:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Puo2oNvsoRrnpQH+n5NLnmsOFgzm1Lgnbw19SNKWiaE=;
+        b=Yba/NrOEC10S1hJBj0eFz30kKNmKLgaqv31/VG2P2JWZnd8YevofZq00lN4ZZYpVxm
+         424ZLUH3eISz79/DXuMlNABq2nJjRWi0U3qlqC0Ll0pdrG249cCdq1fldf+sfZLYJfp3
+         SfvRJQ81dRqJWIgcol2ywuZPcNG/V9KSsxq/WzXgqiuvsreUmO/bqMDWn5dk++kSE2P8
+         bhRTTaZlcSwDGERXwXT3Pu4x3FAUkCtiZMpRMLdZVbbgvH2n/Ig86m7v5im/IK6u90Dj
+         HMMdvnjekcWiWtdcwBM/YA8aYQYu2jElTpI6eBO6nrBiXQBcGel+xWf40iMX5Y1Nw9zy
+         lxDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Puo2oNvsoRrnpQH+n5NLnmsOFgzm1Lgnbw19SNKWiaE=;
+        b=SuVt3NkVDwat1YxVBUkGvpBNUGUZnzVbwQTbUPbdYzXDsjfcc+Y46QQKi+uufdKKmF
+         aQJ2ZtHGw+0QXMDSO/+tyDJFdcDXLsvj/Ku3rd1x9D8Cy0qs1g97BClR/5R5dTjZtATj
+         jFg7lxgk4KXOUjBNyiy74sNfdkHyqGJ5ngS23EzU3WuiMvR/xzNFshJWUn2K9T3pZATn
+         ZQo6S8X1YPdHfd62W+9FPFZkdpDCQBldGpoJUQjfNIUk/eCZMUxH86toDAeb+ioLdf7k
+         ycrcN7DgK5BW8fdOFB6B+rurcgmHVRZFORvy5cJnw+5e1GPDEyliyLGfWl9MgQCnp6Zm
+         Duyg==
+X-Gm-Message-State: AOAM530U6a7HmOZReGDeT+S+tQ5RfbcAVAo0A7sp/I/4ef/yuq5tO39s
+        hZ9+hkrhd4AurDnyeSrJqBQ=
+X-Google-Smtp-Source: ABdhPJzjBBPLhk7+kN3XdBeElOx6r0VuLj7K389GxHsxIkT+d5ia1DNpdzu60cAWnGs3oVVdDE0kHw==
+X-Received: by 2002:a05:600c:2f01:: with SMTP id r1mr409570wmn.153.1640047367820;
+        Mon, 20 Dec 2021 16:42:47 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h2sm16176319wrz.23.2021.12.20.16.42.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 16:42:47 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] video: fbdev: mb862xx: remove redundant assignment to pointer ptr
+Date:   Tue, 21 Dec 2021 00:42:46 +0000
+Message-Id: <20211221004246.213203-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <20211212012804.1555661-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QyNPFZP8_EbRuNziPa7ZwPP5OjW4qjZt
-X-Proofpoint-GUID: bqMRiNrnxVf4QSAoFvw2J_KnKY2riSYc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-20_11,2021-12-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- spamscore=0 clxscore=1011 mlxscore=0 malwarescore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112210001
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21 5:28 PM, Stefan Berger wrote:
-> Fix the following crash on kexec by checking chip->ops for a NULL pointer
-> in tpm_chip_start() and returning an error code if this is the case.
-> 
-> BUG: Kernel NULL pointer dereference on read at 0x00000060
-> Faulting instruction address: 0xc00000000099a06c
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> ...
-> NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
->  LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> Call Trace:
-> [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
-> [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
-> [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
-> [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
-> [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
-> 
-> The referenced patch below introduced a function to shut down the VIO bus.
-> The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
-> after a call to tpm_class_shutdown, which already set chip->ops to NULL.
-> The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
-> chip->ops NULL pointer.
+The pointer ptr is being assigned a value that is never read. The
+pointer is being re-assigned later in a loop. The assignment is
+redundant and can be removed.
 
-It was unclear to me at first, but IIUC the problem is the ibmvtpm device
-receives two shutdown calls, the first is a class shutdown call for TPM devices,
-followed by a bus shutdown call for VIO devices.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/video/fbdev/mb862xx/mb862xxfb_accel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It appears that the class shutdown routines are meant to be a pre-shutdown
-routine as they are defined as class->shutdown_pre(), and it is clearly allowed
-to call class->shutdown_pre() followed by one of but not both of the following
-bus->shutdown() or driver->shutdown(). Even tpm_class_shutdown() mentions in the
-function comment that bus/device shutdown to follow.
-
-> 
-> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
-
-This patch left implementing each vio driver shutdown routine as an exercise for
-the respective maintainers, and instead just big hammers anything that doesn't
-have a shutdown routine by calling the driver->remove().
-
-If tpm_class_shutdown() quiecses ibmvtpm enough implementing a no-op
-ibmvtpm->shutdown() with a comment saying so suffices.
-
-However, the generic TPM code is still introducing a bug that an attempt to call
-tpm_chip_unregister() after tpm_class_shutdown() will crash as mentioned above.
-
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/tpm-chip.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index ddaeceb7e109..cca1bde296ee 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
->  {
->  	int ret;
-> 
-> +	if (!chip->ops)
-> +		return -EINVAL;
-> +
-
-I wonder if a better fix would to have tpm_del_char_device() check for valid
-chip->ops and call tpm_class_shutdown() when the ops are still valid. Calling
-tpm_class_shutdown() allows for some code deduplication in tpm_del_char_device().
-
--Tyrel
-
->  	tpm_clk_enable(chip);
-> 
->  	if (chip->locality == -1) {
-> 
+diff --git a/drivers/video/fbdev/mb862xx/mb862xxfb_accel.c b/drivers/video/fbdev/mb862xx/mb862xxfb_accel.c
+index d40b806461ca..61aed7fc0b8d 100644
+--- a/drivers/video/fbdev/mb862xx/mb862xxfb_accel.c
++++ b/drivers/video/fbdev/mb862xx/mb862xxfb_accel.c
+@@ -132,7 +132,7 @@ static void mb86290fb_imageblit8(u32 *cmd, u16 step, u16 dx, u16 dy,
+ 	cmd[2] = (height << 16) | width;
+ 
+ 	i = 0;
+-	line = ptr = image->data;
++	line = image->data;
+ 	bytes = image->width;
+ 
+ 	while (i < height) {
+-- 
+2.32.0
 

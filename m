@@ -2,129 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B68A47C9A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE2347C9AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237031AbhLUXXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:23:45 -0500
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:30253 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbhLUXXo (ORCPT
+        id S237118AbhLUXXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:23:55 -0500
+Received: from mail-qt1-f178.google.com ([209.85.160.178]:36655 "EHLO
+        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237047AbhLUXXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:23:44 -0500
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 1BLNNHa4005092;
-        Wed, 22 Dec 2021 08:23:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 1BLNNHa4005092
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1640128998;
-        bh=Mgwd2xi548VgomBDJet/kbCBxCGaN8Xhh3/n4lkHahM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LrWfPJoVZRGIhRU5n/jMRU1cqD1zm583R/R85ZTGbPuJg61VFgDLIANHHPGyk2ECf
-         Exdwu1N7lnRl6QgkpfBx0n539cXjsCuvjDnGYLrRtfsd8W4M8Qt6rt18IQyuc5feS7
-         aQyQJMvfOt7iR1MVUJT+rpgyY9iyJwyPkGatZJOJ0RQ+btwZSm9D2XY+EBbj5v62uI
-         HFr311HllLcnf2Cs4p3uGXeL44cf+Du9oFgZWisNL2ygB9K33y4inQHazJMLQurifR
-         MwAau89f9cr7JX2fHmQMv42R3loB5KBjNrKJlIPB4GLSBN2muyg+OAQOnzwc2hfpXP
-         t+z4RpIQUx1jA==
-X-Nifty-SrcIP: [209.85.210.170]
-Received: by mail-pf1-f170.google.com with SMTP id t123so599800pfc.13;
-        Tue, 21 Dec 2021 15:23:18 -0800 (PST)
-X-Gm-Message-State: AOAM530xwl3K1GB23ZmNBHIsE1rhYJh49IisHAkq72zk1eSKemGWkiPK
-        2Q968sqWAwsG/vkp0W0dHzg1uQbFeDKbqJ/2o6w=
-X-Google-Smtp-Source: ABdhPJyGOHJM1AVFJy0VcI6dJ1gzmzrWkdpdnhYXzUwfdAqGc6KCiJHHC9WrMEso8fb5p6Xth3nknwHdEJXuywXLMpw=
-X-Received: by 2002:a63:1947:: with SMTP id 7mr512348pgz.616.1640128997165;
- Tue, 21 Dec 2021 15:23:17 -0800 (PST)
+        Tue, 21 Dec 2021 18:23:54 -0500
+Received: by mail-qt1-f178.google.com with SMTP id t11so380867qtw.3;
+        Tue, 21 Dec 2021 15:23:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5MQc/hNj4+GOUJzjR6yeM8B4B8YsX41VgZGOk9H3GV8=;
+        b=KtEhjnDGHkOZMxPfumq5OPX9KM5ZRkmOR5nxA9+b1M/P5axxqXlKGajb6SFC1YlBWo
+         D0KCyDi3IMp+/j+aE3RNI/w1WQkcXw5HMqR52RcYUYYk6PnbSjncGNYPmJF2LV0MJ7sX
+         75oIl1OCnNdynrpDSgWlK6PoOpU1OI+mj2KyW0DOHv6W5ToCagvBErmRGrjs+fJfUAox
+         SHrdS2xd6kiPx/rXYgI5OysrVER/K0WhZXcI7p1dqs6fdZEXPt9JVN5//eqqXqgRdyos
+         /EwaGKCYtqJgIkhU4WaowuU3/wKVHDeDNpY6XcQgXnPSAYLscyJbfMwfNznGLR++91L2
+         JUeg==
+X-Gm-Message-State: AOAM5319TGWvpYRy66D3HIrIcOdOEt752uKc9mAOTKkZimBKKepnuj7N
+        zzMapYY1OcqLHBPeAa5SiQ==
+X-Google-Smtp-Source: ABdhPJyoZR2FMM/fuaf7CtFHWhnwXucqmgTqGR1t2y8gxLZP6mUXsOWl0zCBITZHkfLpeV/Z3EXGKA==
+X-Received: by 2002:a05:622a:120d:: with SMTP id y13mr399630qtx.155.1640129033644;
+        Tue, 21 Dec 2021 15:23:53 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id e7sm288557qtx.72.2021.12.21.15.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 15:23:52 -0800 (PST)
+Received: (nullmailer pid 1708618 invoked by uid 1000);
+        Tue, 21 Dec 2021 23:23:50 -0000
+Date:   Tue, 21 Dec 2021 19:23:50 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Jarrett Schultz <jaschultzms@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, bjorn.andersson@linaro.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-arm-msm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Jarrett Schultz <jaschultz@microsoft.com>
+Subject: Re: [PATCH RESEND v4 1/4] dt-bindings: platform: microsoft: Document
+ surface xbl
+Message-ID: <YcJiBk5f071eJ5+n@robh.at.kernel.org>
+References: <20211221182826.2141789-1-jaschultzMS@gmail.com>
+ <20211221182826.2141789-2-jaschultzMS@gmail.com>
 MIME-Version: 1.0
-References: <20211210000910.3597609-1-keescook@chromium.org> <CAK8P3a3wOVdds2-qz365LoBNGtrx6ksCzCHp7T+qSev+R3ZRPQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3wOVdds2-qz365LoBNGtrx6ksCzCHp7T+qSev+R3ZRPQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 22 Dec 2021 08:22:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS6po1Zj0QnFkaKZbDw8P3YD7Z2-20zsp_HBrUfmeEaWw@mail.gmail.com>
-Message-ID: <CAK7LNAS6po1Zj0QnFkaKZbDw8P3YD7Z2-20zsp_HBrUfmeEaWw@mail.gmail.com>
-Subject: Re: [PATCH] Kconfig.debug: Make DEBUG_INFO selectable from a choice
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221182826.2141789-2-jaschultzMS@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 6:40 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Dec 10, 2021 at 1:09 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Currently it's not possible to enable DEBUG_INFO for an all*config
-> > build, since it is marked as "depends on !COMPILE_TEST". This generally
-> > makes sense because a debug build of an all*config target ends up taking
-> > much longer and the output is much larger. Having this be "default off"
-> > makes sense. However, there are cases where enabling DEBUG_INFO for such
-> > builds is useful for doing treewide A/B comparisons of build options,
-> > etc.
-> >
-> > Make DEBUG_INFO selectable from any of the DWARF version choice options,
-> > with DEBUG_INFO_NONE being the default for COMPILE_TEST. The mutually
-> > exclusive relationship between DWARF5 and BTF must be inverted, but the
-> > result remains the same. Additionally moves DEBUG_KERNEL and DEBUG_MISC
-> > up to the top of the menu because was enabling features _above_ it,
-> > making it weird to navigate menuconfig.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
->
-> Looks good to me,
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->
-> One detail:
->
-> > +choice
-> > +       prompt "Debug information"
-> > +       depends on DEBUG_KERNEL
-> > +       default DEBUG_INFO_NONE if COMPILE_TEST
-> > +       default DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT if DEBUG_KERNEL
->
-> I think this line should be simplified to
->
->           default DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+On Tue, Dec 21, 2021 at 10:28:23AM -0800, Jarrett Schultz wrote:
+> From: Jarrett Schultz <jaschultz@microsoft.com>
+> 
+> Introduce yaml for surface xbl driver.
+> 
+> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+> 
+> ---
+> 
+> Changes in v4:
+>  - Addressed small formatting changes
+>  - Removed unnecessary lines
+> 
+> ---
+> 
+> Changes in v3:
+>  - Updated description to only pertain to the hardware
+>  - Updated the required field to properly reflect the binding
+>  - Removed the first example
+>  - Fixed the size of the reg field in the second example
+> 
+> ---
+> 
+> Changes in v2:
+>  - Removed json-schema dependence
+>  - Elaborated on description of driver
+>  - Updated example
+> ---
+>  .../platform/microsoft/surface-xbl.yaml       | 64 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml b/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+> new file mode 100644
+> index 000000000000..df5a87a016f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/platform/microsoft/surface-xbl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Surface Extensible Bootloader for Microsoft Surface Duo
+> +
+> +maintainers:
+> +  - Jarrett Schultz <jaschultz@microsoft.com>
+> +
+> +description: |
+> +  Defined to expose information that is used during production when
+> +  device is in manufacturing mode. Some of the information included
+> +  in this imem section is -
 
-Indeed.
+If this is onchip sram, we have a binding for that. That's not an MFD.
 
-It can be simplified into:
+> +    * board_id
+> +    * battery_present
+> +    * hw_init_retries
+> +    * is_customer_mode
+> +    * is_act_mode
+> +    * pmic_reset_reason
+> +    * touch_fw_version
+> +    * ocp_error_location
 
-           default DEBUG_INFO_NONE if COMPILE_TEST
-           default DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+nvmem binding doesn't work for describing these fields?
 
-The first entry of the choice is the default.
-So, it can be further simplified to:
+> +  See sysfs documentation for more information.
 
-          default DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT if !COMPILE_TEST
+sysfs? Not relevant to the binding.
 
+> +
+> +properties:
+> +  compatible:
+> +    const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - ranges
+> +  - address-cells
+> +  - size-cells
+> +
+> +examples:
+> +  - |
+> +    / {
+> +        compatible = "foo";
+> +        model = "foo";
 
+No need to make this the root node with a fake compatible.
 
-Another way is to move DEBUG_INFO_NONE to the last entry of the choice,
-then
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        imem@146bf000 {
+> +          compatible = "simple-mfd";
+> +          reg = <0x0 0x146bf000 0x0 0x1000>;
+> +          ranges = <0x0 0x0 0x146bf000 0x1000>;
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +          status = "okay";
 
-        default DEBUG_INFO_NONE if COMPILE_TEST
+Don't show status in examples.
 
-
-
-
-
-> since DEBUG_KERNEL is always enabled at this point. You can also consider
-> turning the 'menu' into 'menuconfig DEBUG_KERNEL' and dropping the 'depends
-> on DEBUG_KERNEL' in favor of the implied dependency.
->
->        Arnd
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+> +
+> +          xbl@a94 {
+> +            compatible = "microsoft,sm8150-surface-duo-xbl";
+> +            reg = <0xa94 0x100>;
+> +            status = "okay";
+> +          };
+> +        };
+> +      };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 13f9a84a617e..5d0ca2a98b57 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12649,6 +12649,13 @@ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
+>  F:	drivers/platform/surface/surface_dtx.c
+>  F:	include/uapi/linux/surface_aggregator/dtx.h
+>  
+> +MICROSOFT SURFACE DUO XBL DRIVER
+> +M:	Jarrett Schultz <jaschultz@microsoft.com>
+> +L:	linux-arm-msm@vger.kernel.org
+> +L:	platform-driver-x86@vger.kernel.org
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+> +
+>  MICROSOFT SURFACE GPE LID SUPPORT DRIVER
+>  M:	Maximilian Luz <luzmaximilian@gmail.com>
+>  L:	platform-driver-x86@vger.kernel.org
+> -- 
+> 2.25.1
+> 
+> 

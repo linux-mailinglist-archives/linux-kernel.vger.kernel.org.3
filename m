@@ -2,204 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D3947C64F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D9647C634
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241194AbhLUST4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:19:56 -0500
-Received: from mga01.intel.com ([192.55.52.88]:5944 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241302AbhLUSTp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:19:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640110785; x=1671646785;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LEuFFAjQyciZQYQp+HuE0uY8s9s5/twvrparNkv9kFk=;
-  b=YfDkJZ84V1aKoHIKBNOzokI3nf2YOUcGNVMGwDzjreJ8uJVbYOVHoHhO
-   LRxtvH0EoF96K4jFUOc4wCOZvzzXhj73ngR0e3Uj9EQ+i+mi97xP1xdKi
-   XD+XWuDHw4s1fU8EtT9j81jrYz9P4lzDQZU8hfAMB38IIksvzZr24ErGS
-   z87zA2ptVKWr+snBdPUGkWWQKkqCTwAuo63quNXaT6KLC89kmJlm+c6eG
-   7bJh+EN9uArp3+8ZYzdiY3sRXSj+QqtkBWGfY8xtxyAYkP56k2cmp5/WO
-   kXLb5dZicTadKWjR+54d0ZPHS1HuWlclRBvep31K1LnnCtK3GMSxlZKHc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="264655921"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="264655921"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 10:16:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="755907286"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Dec 2021 10:16:37 -0800
-Received: from abailey-MOBL.amr.corp.intel.com (unknown [10.209.52.201])
-        by linux.intel.com (Postfix) with ESMTP id 9C2DD580684;
-        Tue, 21 Dec 2021 10:16:36 -0800 (PST)
-Message-ID: <be2a1cce5691e5dc7fb875f46d5f2085b6a55542.camel@linux.intel.com>
-Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from
- MFD to Auxiliary Bus
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     lee.jones@linaro.org, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Date:   Tue, 21 Dec 2021 10:16:36 -0800
-In-Reply-To: <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
-References: <20211208015015.891275-1-david.e.box@linux.intel.com>
-         <20211208015015.891275-4-david.e.box@linux.intel.com>
-         <YbDbql39x7Kw6iAC@kroah.com>
-         <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
-         <YbD1NsYHbU8FvtTN@kroah.com>
-         <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
-         <YbEFuN7fwdiNI8vW@kroah.com>
-         <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
-         <YcGEaH0oAAocziU2@kroah.com>
-         <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
-         <YcIGwZqm2sfIixkH@kroah.com>
-         <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S241127AbhLUSRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241118AbhLUSRI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:17:08 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5926C061574;
+        Tue, 21 Dec 2021 10:17:07 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id j124so745770oih.12;
+        Tue, 21 Dec 2021 10:17:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wYb/gvyC6xUW4UwiSTV6/Lkd+rMWVTOP0ujZ+LU7gVo=;
+        b=PlThvNOfWd5q7/Tz/NEvEyjRVbbMrbTLrvRCZfkGlnYOpz/ksYrsDR+X4CgHYLOYfr
+         Jg73Kg4TIkfMtzubVjj9fKJ20yPbYLbwuzCrfDOb/2h4OSoccxuRq8qZsqXmetpXj6Ci
+         U9cM4s0v1irL9MUAkV2dQf1+TdfylczV/vkV90WhYsHQM4XIDJvCVrUdv13WV5tUo9Ij
+         ymi9lbWRCNvHYhbJb6z3PKPTHIr7YIYvbp+cwFDI/7AHoGNT2LuGwtcF4s66ByYSXlx9
+         b6mVto71lf16qP8VPfQr4A5fNwOug+BFcYChpBv7KfDr6t0td+TzdbAbng0Tqp/ybaQr
+         VUYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wYb/gvyC6xUW4UwiSTV6/Lkd+rMWVTOP0ujZ+LU7gVo=;
+        b=UaKGc8SI7rYxiJowfuFuMbUc5Y0so7uN40HIbYOzhgYzYx5rcTSjmepWiqy/N7fpX3
+         OR9ulq7O0BcDnZgsqJSYo5ax6F6Tn+75UtfUaTWefzKE4eJz+iLPovAkctY15y3xBMNT
+         idoXfaTMzqVGUTTx9LHpNq52uNlkxelVxFFAfIs0dQQeWwYKG3hxH+uu0ZnbAXdGyfMt
+         0yZOuWN0hxCgUpNFUMBK4c7r6GoBxLHZw2G8kQLlBA9NjMDO13TcZO4lp2ifOsCiewru
+         +CMmKJtkwV9KYL71CNGTI/sMLyQXMoU5FKBFEi5UGQvCDvYmX85BySyDLi0tXBiiTZuK
+         cExg==
+X-Gm-Message-State: AOAM5324fsr2YkC/0a19ouVfwdCVHKfUKkfyC7xWp9CgJpR23Lby96aJ
+        rCMuaUVjIDnUHJM3km46VV0Kj/eIcDE=
+X-Google-Smtp-Source: ABdhPJxNrwpxMo7bh7XFGcf0W+Cpt7uyR+XY6AWtDjLH4pQdSMr51guxzy1qypIjO6QuMnpijT488Q==
+X-Received: by 2002:aca:a993:: with SMTP id s141mr1039853oie.87.1640110627001;
+        Tue, 21 Dec 2021 10:17:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z8sm3605223oot.7.2021.12.21.10.17.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:17:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+References: <20211221175029.144906-1-paul@crapouillou.net>
+ <20211221175029.144906-3-paul@crapouillou.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: Add "label" attribute
+Message-ID: <78620358-737e-368e-e5f5-82a673adf26a@roeck-us.net>
+Date:   Tue, 21 Dec 2021 10:17:03 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211221175029.144906-3-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 18:04 +0100, Hans de Goede wrote:
-> Hi,
+On 12/21/21 9:50 AM, Paul Cercueil wrote:
+> If a label is defined in the device tree for this device add that
+> to the device specific attributes. This is useful for userspace to
+> be able to identify an individual device when multiple identical
+> chips are present in the system.
 > 
-> On 12/21/21 17:54, Greg KH wrote:
-> > On Tue, Dec 21, 2021 at 08:44:57AM -0800, David E. Box wrote:
-> > > On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
-> > > > On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
-> > > > > On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
-> > > > > > On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
-> > > > > > > On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
-> > > > > > > > On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
-> > > > > > > > > On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
-> > > > > > > > > > On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box
-> > > > > > > > > > wrote:
-> > > > > > > > > > > +static struct pci_driver intel_vsec_pci_driver = {
-> > > > > > > > > > > +       .name = "intel_vsec",
-> > > > > > > > > > > +       .id_table = intel_vsec_pci_ids,
-> > > > > > > > > > > +       .probe = intel_vsec_pci_probe,
-> > > > > > > > > > > +};
-> > > > > > > > > > 
-> > > > > > > > > > So when the PCI device is removed from the system you leak
-> > > > > > > > > > resources and
-> > > > > > > > > > have dangling devices?
-> > > > > > > > > 
-> > > > > > > > > No.
-> > > > > > > > > 
-> > > > > > > > > > Why no PCI remove driver callback?
-> > > > > > > > > 
-> > > > > > > > > After probe all resources are device managed. There's nothing
-> > > > > > > > > to
-> > > > > > > > > explicitly clean up. When
-> > > > > > > > > the
-> > > > > > > > > PCI
-> > > > > > > > > device is removed, all aux devices are automatically removed.
-> > > > > > > > > This
-> > > > > > > > > is the case for the SDSi
-> > > > > > > > > driver
-> > > > > > > > > as well.
-> > > > > > > > 
-> > > > > > > > Where is the "automatic cleanup" happening?  As this pci driver
-> > > > > > > > is
-> > > > > > > > bound
-> > > > > > > > to the PCI device, when the device is removed, what is called in
-> > > > > > > > this
-> > > > > > > > driver to remove the resources allocated in the probe callback?
-> > > > > > > > 
-> > > > > > > > confused,
-> > > > > > > 
-> > > > > > > devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux,
-> > > > > > > auxdev)
-> > > > > > 
-> > > > > > Wow that is opaque.  Why not do it on remove instead?
-> > > > > 
-> > > > > This code is common for auxdev cleanup. AFAICT most auxiliary bus code
-> > > > > is
-> > > > > done by drivers that have
-> > > > > some other primary function. They clean up their primary function
-> > > > > resources
-> > > > > in remove, but they
-> > > > > clean up the auxdev using the method above. In this case the sole
-> > > > > purpose of
-> > > > > this driver is to
-> > > > > create the auxdev. There are no other resources beyond what the auxdev
-> > > > > is
-> > > > > using.
-> > > > > 
-> > > > > Adding runtime pm to the pci driver will change this. Remove will be
-> > > > > needed
-> > > > > then.
-> > > > 
-> > > > And who will notice that being required when that happens?
-> > > > 
-> > > > Why is there no runtime PM for this driver?  Do you not care about power
-> > > > consumption?  :)
-> > > 
-> > > Of course. :)
-> > > 
-> > > There's a backlog of patches waiting for this series. One adds support for
-> > > the
-> > > telemetry device (an auxdev) on the DG2 GPU. This device requires runtime
-> > > pm in
-> > > order for the slot to go D3. But this also requires changes to the
-> > > telemetry
-> > > driver in order for runtime pm to be handled correctly. These and other
-> > > patches,
-> > > including a series to have all current aux drivers use the new drvdata
-> > > helpers,
-> > > are waiting for this.
-> > 
-> > I can take the aux driver drvdata patch now, through my tree, if you
-> > want, no need to make it wait for this tiny driver.
-> > 
-> > Feel free to send it independant of the existing patchset, and with the
-> > cleanup patches at the same time, should be quite easy to get merged.
-> 
-> If you're going to take that one, can you perhaps take patches
-> 1-3 for 5.17 through your tree as well (patch 3 depends on 2/it) ?
-> 
-> Note there is a v4 of this series, see please use that :)
-> 
-> I assume the follow up patches are also going to need patch 3
-> (the actual conversion of the driver to aux-bus).
 
-Yes.
+This is an ABI change which needs to be documented in
+Documentation/hwmon/sysfs-interface.rst.
 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>   drivers/hwmon/hwmon.c | 22 +++++++++++++++++++++-
+>   1 file changed, 21 insertions(+), 1 deletion(-)
 > 
-> Here is my Ack for the pdx86 bits in patch 3:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> And patch 1 and 3 also have acks from the PCI resp. MFD subsys maintainers,
-> so I guess taking this all upstream through your tree is fine.
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 3501a3ead4ba..15826260a463 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -71,8 +71,23 @@ name_show(struct device *dev, struct device_attribute *attr, char *buf)
+>   }
+>   static DEVICE_ATTR_RO(name);
+>   
+> +static ssize_t
+> +label_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	const char *label;
+> +	int ret;
+> +
+> +	ret = device_property_read_string(dev, "label", &label);
 
-Should I send 1-3 plus the drvdata cleanup patches I have to Grep? V5?
+Requires "#include <linux/property.h>". Also, reading and verifying the label
+each time it is read is excessive. More on that see below.
 
-> 
-> That leaves patches 4-6, 4 is the patching adding the new
-> "Intel Software Defined Silicon driver" sysfs API and I would
-> like to take some time to thoroughly review the new
-> userspace API, which I don't see happening before the
-> Christmas Holidays, so I don't plan to merge 4-6 (which
-> depends on 3) until after 5.17-rc1.
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return sysfs_emit(buf, "%s\n", label);
+> +}
+> +static DEVICE_ATTR_RO(label);
+> +
+>   static struct attribute *hwmon_dev_attrs[] = {
+>   	&dev_attr_name.attr,
+> +	&dev_attr_label.attr,
+>   	NULL
+>   };
+>   
+> @@ -81,7 +96,12 @@ static umode_t hwmon_dev_name_is_visible(struct kobject *kobj,
 
-Understood. Thanks.
+That function name is no longer appropriate and should be changed to
+something like hwmon_dev_attr_is_visible.
 
-> 
-> Regards,
-> 
-> Hans
+>   {
+>   	struct device *dev = kobj_to_dev(kobj);
+>   
+> -	if (to_hwmon_device(dev)->name == NULL)
+> +	if (attr == &dev_attr_name.attr &&
+> +	    to_hwmon_device(dev)->name == NULL)
+
+Unnecessary continuation line.
+
+> +		return 0;
+> +
+> +	if (attr == &dev_attr_label.attr &&
+> +	    !device_property_present(dev, "label"))
+
+If the property is present but not a string, each read of "label" would
+return a runtime error. I don't like that. I would suggest to store
+a pointer to the label in struct hwmon_device, set it during registration
+(eg by using devm_strdup() if it is defined), and use
+
+	if (attr == &dev_attr_label.attr && to_hwmon_device(dev)->label == NULL)
+		return 0;
+
+to check if it is present.
+
+>   		return 0;
+>   
+>   	return attr->mode;
 > 
 

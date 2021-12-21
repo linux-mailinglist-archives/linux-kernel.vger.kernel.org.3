@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A88847C8C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C6447C8C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbhLUVZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:25:39 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:46310 "EHLO
-        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236514AbhLUVZg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236211AbhLUVZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 21 Dec 2021 16:25:36 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:46248 "EHLO
+        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230326AbhLUVZf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 16:25:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:in-reply-to:references:mime-version:to:cc:
-        content-transfer-encoding:content-type;
-        s=sgd; bh=HO3cs/bAxWQRthzU1+hg6bvoy48ikxmGEMUA2a7K9+w=;
-        b=XPKv87IqusJyRBZnCbyca+lIIiq5h7/v3a6+RxyOUMNdV4eKK2q81hAZ1i7H0YolOL3Y
-        e0dR1to8dlZyvuREOjYPNX3Ycyydb9a0FYKopLtmLMOl5ukwdekgRD1uUkD3kYX9tjUkal
-        ZZINs1qJ57Vnpu4DITTFqhWTqpfNks2X0vAu5E6NROaxdg7rJ9WnYr7YitRyqjJlcAAe2l
-        OJj0jROJBW8EDLEgwbAJPUE03GHwRNo2FMg84ZSSFnkvvekghd46Y8T+jxRYu+DO4cYHSu
-        EFpR9tWh6qYF2PhEhVDXrP3kPQnJAeDrCG69zngAuta3TDaMgDlT1aijqifp8s5A==
-Received: by filterdrecv-75ff7b5ffb-ktk29 with SMTP id filterdrecv-75ff7b5ffb-ktk29-1-61C2464E-50
-        2021-12-21 21:25:34.665138902 +0000 UTC m=+9587099.899018923
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type;
+        s=sgd; bh=JHeSu5B22K89b1uN+6C/y1+Gc1Ewng2Ne1GLKiG5hJQ=;
+        b=Z50HddbN7Z/f/ln9vKHZp6CTWY0iWLqGHWzu/2r3ZTnZ0tP3yo/UuOoy0+DmooxppUlv
+        FpiF7wVHWOCGInsa0cPMupBPO+vI/FcZlKo/qDoiV4WEOFpJAxcA06C28T0drF+VNULZYA
+        xJaGpZz9cqRjy3LmYrUlVnKuHVDQUv1Y3vKu3Z6Jnrq1VS3QwNj5FTRe5Z7HiH3tSdqfum
+        PnQX7wk6g/9aujdCiOOlEiiJIu+O1PS7a5xK7mIZsSqaERmEGkZ7bN396FDakoulUjWb8r
+        INi5ZwrOknEHWOgKf7hTFYcMDR04IzK7glJKAUMQ3b5VpodP0da9hnnsMs69U2RA==
+Received: by filterdrecv-75ff7b5ffb-96rhp with SMTP id filterdrecv-75ff7b5ffb-96rhp-1-61C2464E-39
+        2021-12-21 21:25:34.636667651 +0000 UTC m=+9587114.517174376
 Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-1-1 (SG)
+        by geopod-ismtpd-2-0 (SG)
         with ESMTP
-        id q1v2zsc-RY6pU-ZMXq5ZTQ
-        Tue, 21 Dec 2021 21:25:34.472 +0000 (UTC)
+        id NbOfuhV3SlqtHpibrZR1UA
+        Tue, 21 Dec 2021 21:25:34.460 +0000 (UTC)
 Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id BBA4A7003AA; Tue, 21 Dec 2021 14:25:33 -0700 (MST)
+        id B6466700264; Tue, 21 Dec 2021 14:25:33 -0700 (MST)
 From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v7 2/2] wilc1000: Document enable-gpios and reset-gpios
- properties
+Subject: [PATCH v7 0/2] wilc1000: Add reset/enable GPIO support to SPI driver
 Date:   Tue, 21 Dec 2021 21:25:34 +0000 (UTC)
-Message-Id: <20211221212531.4011609-3-davidm@egauge.net>
+Message-Id: <20211221212531.4011609-1-davidm@egauge.net>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211221212531.4011609-1-davidm@egauge.net>
-References: <20211221212531.4011609-1-davidm@egauge.net>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvNkxAMBqlRWJnXBiC?=
- =?us-ascii?Q?dBWzv9OKWVEpA8riEnI5pBRHA1T77DKWuv8JL15?=
- =?us-ascii?Q?yLKrmob=2Fypa=2F=2FDem0v1MT4R9+fBmqTu3JJY8k=2FV?=
- =?us-ascii?Q?UUtTXNk2qVWwV+NNdecRgE0c9H5o0Ei0WAnlopN?=
- =?us-ascii?Q?EfSGVrBZr=2FI9ZkLR6CMqMqBeTOfictYXntojQxT?=
- =?us-ascii?Q?32cI8wprSpMDWMZBPoEWQ=3D=3D?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvPckgytttEHbTWkZU?=
+ =?us-ascii?Q?zzUaFH1kLvflQDrAYob2c03sztJSr2Z+wyu3Pv2?=
+ =?us-ascii?Q?No9OaSTU1pAoX0MBLY8TXKkx+uOZczxXNFgHJdJ?=
+ =?us-ascii?Q?DcAlKv7v+bdpdVwCgPXXcFDkK0C07gSvzxX6Mlj?=
+ =?us-ascii?Q?h=2FJjPVLDUTR8RJE3e3UOcG4jj36+oCqloMoX5cr?=
+ =?us-ascii?Q?HCanQ+PlyikGZEyFXPk4w=3D=3D?=
 To:     Ajay Singh <ajay.kathat@microchip.com>
 Cc:     Adham Abozaeid <adham.abozaeid@microchip.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
@@ -54,8 +51,7 @@ Cc:     Adham Abozaeid <adham.abozaeid@microchip.com>,
         Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
         linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        David Mosberger-Tang <davidm@egauge.net>,
-        Rob Herring <robh@kernel.org>
+        David Mosberger-Tang <davidm@egauge.net>
 X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=us-ascii
@@ -63,59 +59,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the ENABLE and RESET GPIOs that may be needed by
-wilc1000-spi.
+v7:
+	- Rebase to latest wireless-drivers-next.
+v6:
+	- Convert line comments to block comments.
+v5:
+	- Fix a dt_binding_check error by including
+	  <dt-bindings/gpio/gpio.h> in microchip,wilc1000.yaml.
+v4:
+	- Simplify wilc_wlan_power() by letting gpiod_set_value()
+	  handle NULL gpios.
+v3:
+	- Fix to include correct header file.
+	- Rename wilc_set_enable() to wilc_wlan_power().
+	- Use devm_gpiod_get{,_optional}() instead of of_get_named_gpio()
+	- Parse GPIO pins once at probe time.
+v2:
+	- Split documentation update and driver changes into seprate
+          patches.
 
-Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../net/wireless/microchip,wilc1000.yaml      | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+David Mosberger-Tang (2):
+  wilc1000: Add reset/enable GPIO support to SPI driver
+  wilc1000: Document enable-gpios and reset-gpios properties
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-index 6c35682377e6d..60de78f1bc7b9 100644
---- a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-@@ -32,6 +32,21 @@ properties:
-   clock-names:
-     const: rtc
- 
-+  enable-gpios:
-+    maxItems: 1
-+    description: Used by wilc1000-spi to determine the GPIO line
-+      connected to the ENABLE line.  If specified, reset-gpios
-+      must be specified as well as otherwise the driver cannot
-+      ensure the timing required between asserting ENABLE
-+      and deasserting RESET.  This should be declared as an
-+      active-high signal.
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: Used by wilc1000-spi to determine the GPIO line
-+      connected to the RESET line.  This should be declared as an
-+      active-low signal.
-+
- required:
-   - compatible
-   - interrupts
-@@ -40,6 +55,8 @@ additionalProperties: false
- 
- examples:
-   - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-     spi {
-       #address-cells = <1>;
-       #size-cells = <0>;
-@@ -51,6 +68,8 @@ examples:
-         interrupts = <27 0>;
-         clocks = <&pck1>;
-         clock-names = "rtc";
-+        enable-gpios = <&pioA 5 GPIO_ACTIVE_HIGH>;
-+        reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
-       };
-     };
- 
+ .../net/wireless/microchip,wilc1000.yaml      | 19 ++++++
+ drivers/net/wireless/microchip/wilc1000/spi.c | 62 ++++++++++++++++++-
+ .../net/wireless/microchip/wilc1000/wlan.c    |  2 +-
+ 3 files changed, 79 insertions(+), 4 deletions(-)
+
 -- 
 2.25.1
 

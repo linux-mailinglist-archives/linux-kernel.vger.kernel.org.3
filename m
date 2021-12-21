@@ -2,106 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CB647C73F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7916347C74C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbhLUTNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 14:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbhLUTNm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 14:13:42 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CDAC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 11:13:42 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z5so56019957edd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 11:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HHM9ApCIOXmvojtjZcgeuKj6BVJ/ehNH8xMBah+fAzM=;
-        b=zMD5k9nXWWKR1uoe+HV5h3+ZF+19/vXKLpZJP4wmpVaRDZRrO86G9J/R9FMsVZQRvC
-         ggFMAUeeMl/5uCM7WmNaTflOlrxAF/aIpn548633NOCOr8cP/qt3u0n3UgXjqMdHsL41
-         VjVVM7vgO9GMi/wxm7yeQdk+Em8CMENKG70PoyXDcfDPkDNtGHlDZOOigI8eiD1mOqR3
-         sbgA9blG0YJWWLPD4YkZh3fiO4iz6P/GvFowfz9dBWQ2tyAEAId5MvX5x2tHbaKP3z3r
-         /aIdE8egoX1fNuuU+lyoqhIFpcb7bsfxjTcgV6PgJVwIZKIz5ez3Xz7FaqJ++tAeN5o/
-         NrRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HHM9ApCIOXmvojtjZcgeuKj6BVJ/ehNH8xMBah+fAzM=;
-        b=RlnaVu18uQmZ9tr4GtY+4QEREmsptz6eZLan7nD7XvsMaASISXijEZIFxEcG22Kfyd
-         9CEU1k3R1OZFfeM4rbk8a4g6ZJ3RTlgwzzNZfliui2tcuPKrrO5V24/fp9x3/QvJj5ZM
-         LavcUoCWLkNqlqGuJ3wOCx2CTcODgRt3ArFvI5mZIKl+vwXtmoxNEikHYOc76RNGdOTc
-         Yh07hAh+EnQQaz+vLaUs9hbI1hvqpGX7IdIu55Tam4e0+cbCTZL+BYFrBp8msdZy+Wwh
-         iOeXaQeS1ufGoL6MaINI2rYqjyFM5vDPyO03oID7JE5kWXn3TZXf7EIeqd67zeBzPyGz
-         TtWw==
-X-Gm-Message-State: AOAM5314p52zQYmYNYZ/WQcPbj/QiHKV25tGbJlZrjpSmLpYIFeRFxvN
-        yTZctrmnx1FdCjX597Ek0MvWtguWZ6UP0k2KBR2pqQ==
-X-Google-Smtp-Source: ABdhPJwFaZxo6Y5DO/1AGztX9mo6QB4YplnjxPLSDYX2owZFmHOC2zmdiGz0WhPkFcyqK1wF3M1CeELod5+T/8lTFIk=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr3766325ejj.636.1640114021119;
- Tue, 21 Dec 2021 11:13:41 -0800 (PST)
+        id S237479AbhLUTQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 14:16:11 -0500
+Received: from mout.gmx.net ([212.227.15.15]:47699 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229659AbhLUTQK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 14:16:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640114161;
+        bh=a9Ev8+mzUT7djVwPdE0euA9s9JKk4vtQOXpreiuTIhQ=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=I1lFPsYKZv9RH3L6Ne8HM5OsvEeo7lf2vuI1klQW9h44Y9+0B1rKzVkEGtWjZE3Bk
+         NL4hkJypajxZzo/13cESjWUFDmIrrdVkUJfs0N5VlmpjOf69WoJdQQWWANAzKMMhgK
+         dUgKqI3zNyMZMM3YL3kbJqOfpVfpLwAox6BmZPZI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.70] ([46.223.119.124]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTABZ-1mu0lT3pa3-00UasG; Tue, 21
+ Dec 2021 20:16:00 +0100
+Subject: Re: [PATCH v2] tpm: fix potential NULL pointer access in
+ tpm_del_char_device
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        stefanb@linux.vnet.ibm.com
+References: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <d247bcfd-8c51-c8c3-3b30-d78624f89629@gmx.de>
+Date:   Tue, 21 Dec 2021 20:16:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211220132439.1194-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=Md3bpCJe_eFBjiKuhCRO_xqnFxSc1sw100fgNmajy6gaw@mail.gmail.com> <CAHp75VcbaYXfDpc7xE=asSqUspscRoHfqrg-yMtx=uo5UNqxfw@mail.gmail.com>
-In-Reply-To: <CAHp75VcbaYXfDpc7xE=asSqUspscRoHfqrg-yMtx=uo5UNqxfw@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 21 Dec 2021 20:13:30 +0100
-Message-ID: <CAMRc=MfWqV8UFWLaJO7JSo7N6MhYVMWdquMDJU7xR5gu8604AQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: Remove unused local OF node pointers
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        linux-unisoc@lists.infradead.org,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8UDmIHV3kmv4MDWO3EYxH/p3iIzZPJoIofhdnH+qoochXSK3zjF
+ /wNRGjUaXre7VJfvW1cqDb6Eb6btf5riY6Ean92Sc5q+OO0SL6ThGBw7EHUbmnBdIEkrwyA
+ mzotuZSHusU1fE3CFZWW+s8A6qltxPm93iZ6xC22vIpkjTlJK8C+Kz9AVdJ4daWlbhGNvOH
+ nyiPTOzpKIEToJ4v+EsPw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4ADerPwFa6E=:CbunJZ1lwIdGtgo3z2/Ja9
+ QTGV2OhGQtDj/+wMd8A0QOGD1zZBxmvAJkZVd3SotNgeZuoIC2U5hIo1VnndSrFpkcGibBCb1
+ oLMpIkND5B4H7CxtD3LOP6/03JIKZB+o9pUMXy8N3LNcuIeoHOlaeFdHIsEnTx9x9h1f9xC9c
+ dMqzy0dp1SaGsbtoSeP30gme0YtXtNpHgJpwZcowSmEN5SSHO2/94cgpzMbsAtpzw2kXN2gsx
+ V2xqwTwg1fMBM5GajV3zLsv8ErBLNdto5anj5Hq5YniKiwSQV9B6nWriqDF5+t+/eJ9sLi+wj
+ B4FfpuyRGCV0vLQrcQufVQabvPuyrEEfXdbLopbNwS3EzsYaOx5ZLj1TVrNqy4NQgemD9Axz6
+ YKiFpI+1Uv9tA6ulMISrTv1yC9tFvXxQlUoEyrbavUZIgI+z/C3IbsvUf10UgphyWvJkdkMRL
+ q0pmkc3aTI6jR0+cql7T7h7iqHiH8D/xgY8B+AeWZQTJTikYwzDFxSKVjSHmE7h3ghzmT3TWK
+ NCZ7RllHcGTN9jxgKpoKjN5po0Uc6ihGv5nOkcZgo7eUtCfCB/k2mV1vBbvYLwDnc6AP1nDt0
+ wjVO5CHHwXyDV3UYNGS8J/YQ4KqXNS1lN3Qx/Wtu4JiHZ+6oxuOzKDVq/EhCg8o9lqckqBIKo
+ C+TvYGPrujql/K86cLYYNoSDal+sEGJqOsoYLuy9qYAFFZ9FN3OjiewSIaqTFftbveCcT/2Nf
+ U2qvPxogX2h+4NDpqqD4VmjKHjkaIFPPybaQiZbpfCPqmyxmF6v8sBCehmabzBeRXiO7R2LNH
+ fJQztjhftFudOOQMI7Si5YDGnWMAFX6Gq5k/yI6N5PPoccrHlAp3+OwRq0eAauFs6f6C0x8sA
+ 091fU/xzG6a0PVrzRsWOmq2regWWzCQIOjRhB7at9Pa07+fvuUwmMv3Gzin05co/I4tqInmo0
+ dsUJuttYH73EeMA8NLjPgWCo0gUjI+pHHusTl6dwb4dx4tqffa6aPMXxA00I1QFAqLl0cqo+6
+ TOxdtyDOPDE4Sw+oW1nnW+88XIJo7MypDREIkao88IcnbEJbNOghOwQ6nibbQ0Hw9MVs7XqqA
+ ok/QYGL+1tmcYw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 4:11 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Dec 20, 2021 at 5:09 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Mon, Dec 20, 2021 at 2:24 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > After the commit 448cf90513d9 ("gpio: Get rid of duplicate of_node
-> > > assignment in the drivers") the OF node local pointers become unused.
-> > > Remove them for good and make compiler happy about.
-> > >
-> > > Fixes: 448cf90513d9 ("gpio: Get rid of duplicate of_node assignment in the drivers")
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> ...
->
-> > > -               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", dev->of_node);
-> > > +               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", np);
-> >
-> > This is unrelated though. Can you make it a separate patch?
->
-> It actually makes use of the local np IIRC.
-> It's related, no?
+Hi,
 
-No, the np pointer is already used elsewhere. You just replace the
-dev->of_node here with np. Rightfully so, but it's not part of this
-commit logically.
+the patch below should also fix the issue that Stefan reported here:
 
-Bart
+https://marc.info/?l=3Dlinux-integrity&m=3D163927245509564&w=3D2
+
+
+Regards,
+Lino
+
+
+On 20.12.21 at 16:06, Lino Sanfilippo wrote:
+> Some SPI controller drivers unregister the controller in the shutdown
+> handler (e.g. BCM2835). If such a controller is used with a TPM 2 slave
+> chip->ops may be accessed when it is already NULL:
+>
+> At system shutdown the pre-shutdown handler tpm_class_shutdown() shuts d=
+own
+> TPM 2 and sets chip->ops to NULL. Then at SPI controller unregistration
+> tpm_tis_spi_remove() is called and eventually calls tpm_del_char_device(=
+)
+> which tries to shut down TPM 2 again. Thereby it accesses chip->ops agai=
+n:
+> (tpm_del_char_device calls tpm_chip_start which calls tpm_clk_enable whi=
+ch
+> calls chip->ops->clk_enable).
+>
+> Avoid the NULL pointer access by testing if chip->ops is valid and skipp=
+ing
+> the TPM 2 shutdown procedure in case it is NULL.
+>
+> Fixes: dcbeab1946454 ("tpm: fix crash in tpm_tis deinitialization")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> ---
+>
+> Changes to v2:
+> - rephrased the commit message to clarify the circumstances under which
+>   this bug triggers (as requested by Jarkko)
+>
+>
+> I was able to reproduce this issue with a SLB 9670 TPM chip controlled b=
+y
+> a BCM2835 SPI controller.
+>
+> The approach to fix this issue in the BCM2835 driver was rejected after =
+a
+> discussion on the mailing list:
+>
+> https://marc.info/?l=3Dlinux-integrity&m=3D163285906725367&w=3D2
+>
+> The reason for the rejection was the realization, that this issue should=
+ rather
+> be fixed in the TPM code:
+>
+> https://marc.info/?l=3Dlinux-spi&m=3D163311087423271&w=3D2
+>
+> So this is the reworked version of a patch that is supposed to do that.
+>
+>
+>  drivers/char/tpm/tpm-chip.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index ddaeceb7e109..7960da490e72 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -474,13 +474,19 @@ static void tpm_del_char_device(struct tpm_chip *c=
+hip)
+>
+>  	/* Make the driver uncallable. */
+>  	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> -		if (!tpm_chip_start(chip)) {
+> -			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> -			tpm_chip_stop(chip);
+> +	/* Check if chip->ops is still valid: In case that the controller
+> +	 * drivers shutdown handler unregisters the controller in its
+> +	 * shutdown handler we are called twice and chip->ops to NULL.
+> +	 */
+> +	if (chip->ops) {
+> +		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +			if (!tpm_chip_start(chip)) {
+> +				tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> +				tpm_chip_stop(chip);
+> +			}
+>  		}
+> +		chip->ops =3D NULL;
+>  	}
+> -	chip->ops =3D NULL;
+>  	up_write(&chip->ops_sem);
+>  }
+>
+>
+> base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+>
+

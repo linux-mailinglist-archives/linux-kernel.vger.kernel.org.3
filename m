@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B8347C05D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382BC47C067
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238071AbhLUNDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S229930AbhLUNEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbhLUNDm (ORCPT
+        with ESMTP id S238084AbhLUND7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:03:42 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32281C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:42 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id g11so29262761lfu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:42 -0800 (PST)
+        Tue, 21 Dec 2021 08:03:59 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8FC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:58 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp20so13525417lfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=t0Xg3orseU+YFr+9C6yP7N5i5w90bmFHlz28JSF7k/M=;
-        b=dS44wMzmgN92SH1GoeY5sHqQjlqo4Bm5r4ZXHFiW+SAkKnuXd93oMfKxWGG2ehBMNa
-         AJKSkU9MPdw7C6astpdL+7BbK5YvRjmsFwtv218435gNiSoPeSu+rmHqu5JN04Oq3qd5
-         Cdxk1nxVxsLL7ImtKC3iKBauwPQJ7YY3yf+tS0L/57uiX9uyPrCFFMWWxRE0pKFh5Pg2
-         6aNXvTN3KW7mc8MW7jpGUevhsWf0feJ9UpozwkfM0OiE6v/ISzGVYdsYATyacJXXtfLI
-         8yFvCezNVmOlZcXLmlDbdcxAhy2KckC5RF5jcCjzEiX6QsiiouZYNDmInjY+lEYQr1qZ
-         n93A==
+        bh=yAKxA86yUoHK6VBBx2V4w+G9IgxdZUJ5j0qp6W74H9o=;
+        b=mNpqWH/qF6Qq598ubZF+RaCmiRhRw4c+Iy9f801LyVK+D9TDYRL7gV4LMUdxUvSoas
+         7vAVkB35q0W/wtT6apcgzCU6ZMAB9zwKDOIcad/+ToJOYVgpqvLJiNZV8Kf+35Ute/az
+         vZUwBEL1d8kr+ADgTVnsvACnq/q2KuEchu6EWXDLjcOhdqm5ePhoPuMQmpDEje/tcWJT
+         8ZQr5N0CK+7gmtDMfULlcQSPxEJNZ1JYZi/9d9r+g1BPXmfBHRRv++kNO7Cv4pzwYowu
+         CS2lWs0PW+b5hEpJfcuix9hZZzjcizMicHOsA0nU/pvSjgoUzkK5e48tP+Sj760RbE5K
+         GJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=t0Xg3orseU+YFr+9C6yP7N5i5w90bmFHlz28JSF7k/M=;
-        b=fA6N27bTeGcjD3vllRSL04Ml9++njsi/KwyJvKOmGpYMwfIYokFBwfBtiOzkOqyLID
-         96QgMiNswsbMKm8AH4P12qj4viDWh3KRwF5nik+8CszguIsACM1C0v6OK1S6BzeqK6qW
-         coqJwnuwmvJF3WeM7xQwySIvBy6aauPEWXvJ7gzpd2R7lU1AUxZKjzGla0PdDPv1BKJM
-         wcZDeKyzqWJt/l9ymxe9Od5P9vaFg+F+X1qeIfmvcZm0AomUal1XmEjrIbBWR9wYge8X
-         qrbEoQjO7Ygz2HFbznBI8KlZEkVrfl6/t0uMzBcqtQUG18hklOOFx0YOgpADo706Trd1
-         nXwQ==
-X-Gm-Message-State: AOAM533PQg3W3lTJu+EpqsuZ3m+Pjov+MBP4JafTsRh4eg5UH9C9hGnp
-        o/DVyrIQgWnXChZMcPa6b4NbLSg11BOFVllyCWo4Ww==
-X-Google-Smtp-Source: ABdhPJxG3uHqZH08DUdXd3BNJXX2KbKVBHTRtUnPbDdcp5BZXQjy3wBHGptH5UNs341UHXUYM5ZmO8yNCUzrkWzfPD8=
-X-Received: by 2002:ac2:5966:: with SMTP id h6mr2989371lfp.358.1640091820496;
- Tue, 21 Dec 2021 05:03:40 -0800 (PST)
+        bh=yAKxA86yUoHK6VBBx2V4w+G9IgxdZUJ5j0qp6W74H9o=;
+        b=Fob8Op6hPxd7tS/1iNzPkNrKmq8QwZuhJEl/fxht0SPuxuXVGqBVybDphThG4HW1gp
+         wnMHZ5hfdWwKAzlKiO0uEdz+QFtC1A9V9HC9O3WbsSXLpBhdv+MUW5pJCu3JCxxvjyIG
+         09/c0wfGr7d8EJKvUWI4SHiFziE10RdEVLWa9nI9EGrdVC7THHPONeSWxpcV9tT/yWXL
+         d6AUAw0nSx06kmhD8ShqlnzOt4EZQ/GvxrfNcwSUhjdzueTz7pAcgj6/2nMOxjzHhaAD
+         Dkzfuj5eDVA/xfzduRNwvadQ0D9NmiE5W5no5HxJLArjXSl8YWgbc8T9mz2Dox1zIjIk
+         TiJA==
+X-Gm-Message-State: AOAM533d07rVwy2kPpqW1XdYRvlcngu6Dc8EnMWGZWvMAJL8azUVI46o
+        zqzSguuzfm3uvW2zMPgvY7aArcigViZUomo7Nei91A==
+X-Google-Smtp-Source: ABdhPJx8IP2IAkRzIENJtaUA/EkQbrYytygRyaHBX3zyri4TEUhP93ZvkX5zMAMoMD6Gf5WjYsFU3b8O6W+BKXO4a2g=
+X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr2973456lfv.184.1640091836638;
+ Tue, 21 Dec 2021 05:03:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215161045.38843-1-marcan@marcan.st>
-In-Reply-To: <20211215161045.38843-1-marcan@marcan.st>
+References: <20211220190840.108061-1-paul@crapouillou.net>
+In-Reply-To: <20211220190840.108061-1-paul@crapouillou.net>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Dec 2021 14:03:03 +0100
-Message-ID: <CAPDyKFoGEqBZ3XbGzc5E4QvWFcQN6nM7Envq5cM7Wmdp+jZSvw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] mmc: sdhci-pci-gli: GL9755: Quirks for Apple ARM platforms
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Ben Chuang <benchuanggli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+Date:   Tue, 21 Dec 2021 14:03:17 +0100
+Message-ID: <CAPDyKFrX+sajBhR88Q-DaNOgfAL6VZg6NvrT0Bds3wO5rVK_MQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] mmc: ingenic: Support bi-directional DMA channel
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, list@opendingux.net,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 at 17:16, Hector Martin <marcan@marcan.st> wrote:
+On Mon, 20 Dec 2021 at 20:08, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> Hi folks,
+> Hi Ulf,
 >
-> This short series adds a few quirks needed to make the card readers in
-> Apple M1 Pro/Max MacBook laptops work properly.
+> This patchset adds support for using a single DMA channel for both RX
+> and TX operations, instead of using separate DMA channels for each
+> operation.
 >
-> The first patch should be straightforward; it just allows configuring
-> the CD/WP polarity based on device tree settings. There is already a
-> standard DT binding for this.
+> As some older Ingenic SoCs offer only a handful of DMA channels,
+> supporting bi-directional channels allow more hardware to use the
+> channels that would otherwise be used for the MMC/SD operation.
 >
-> The second patch works around an issue with 8/16-bit MMIO reads that
-> only affects these platforms, for some reason.
+> Note that the Device Tree binding for the DMA controller has been
+> updated in a (already merged) patchset, so that it accepts a 3 cells
+> (#dma-cells == 3) instead of just 2. It was merged in the DMA tree, so I
+> am not sure the autobuilders will like this YAML - but it was checked
+> without errors.
 >
-> Changes since v2:
->  - Style fixes
+> I also removed the descriptions of the "dmas" property in the YAML, as
+> they really weren't adding anything and were getting in my way.
 >
-> Hector Martin (2):
->   mmc: sdhci-pci-gli: GL9755: Support for CD/WP inversion on OF
->     platforms
->   mmc: sdhci-pci-gli: GL975[50]: Issue 8/16-bit MMIO reads as 32-bit
->     reads.
+> There are patches touching the driver file merged in the PM tree (the
+> ones that use the new PM macros) but I expect no problem here, they
+> touch different parts of the file.
 >
->  drivers/mmc/host/sdhci-pci-gli.c | 34 ++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
+> Cheers,
+> -Paul
+>
+> Paul Cercueil (2):
+>   dt-bindings: mmc: ingenic: Support using bi-directional DMA channel
+>   mmc: jz4740: Support using a bi-directional DMA channel
+>
+>  .../devicetree/bindings/mmc/ingenic,mmc.yaml  | 37 ++++++++++++++++---
+>  drivers/mmc/host/jz4740_mmc.c                 | 19 +++++++++-
+>  2 files changed, 48 insertions(+), 8 deletions(-)
 >
 
 Applied for next, thanks!
+
+Let's see how this goes when the changes hit linux-next. I will have
+to drop them, if we encounter any problems.
 
 Kind regards
 Uffe

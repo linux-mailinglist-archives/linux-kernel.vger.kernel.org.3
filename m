@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A8E47BB7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838AC47BB82
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbhLUIL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234701AbhLUIL1 (ORCPT
+        id S235437AbhLUILk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:11:40 -0500
+Received: from mail-vk1-f181.google.com ([209.85.221.181]:45027 "EHLO
+        mail-vk1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235432AbhLUILg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:11:27 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71DEC061574;
-        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id y9so11680020pgj.5;
-        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CNQ27S31DQKVMGNaa41vJ0MWzIDdPEbu6tohUmL45Xc=;
-        b=pWK7rOOe6EgoIgreqR5MDZpNyU04GgACI0jFEnyQ7jExs/7udsljcJrTRwZEPfYbwd
-         YkVlyFt10PL4riFiWcVbhu8LmpmmK2H0ZQVtO/z68Gyrsdhqd7Fnf5dneJzJ+LI6GzAL
-         9oCUXjCyX+2x+mrhIiSi1ZE/oyDDgMWJ4ihXNqpLPvF752E50HoZQDFsmvJl1jujPur7
-         +oR2aKa7zgfO1CFOFyJ55EYKbJqR4LZOWhVfPUx9BpozHtEnpoQ2fUA0U1BXMdos+56s
-         Mi+wCnO9sOOaWnXXwVOuDesraAB8rkTU6lpx+r9R7Q3I2BDYwJnouyEcaOvJaxArG7KY
-         i18Q==
+        Tue, 21 Dec 2021 03:11:36 -0500
+Received: by mail-vk1-f181.google.com with SMTP id b77so2281683vka.11;
+        Tue, 21 Dec 2021 00:11:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CNQ27S31DQKVMGNaa41vJ0MWzIDdPEbu6tohUmL45Xc=;
-        b=7zSa4bwpPwUv4ZB8LnXvLK2cfZzal3TLTcukTKbefafGC5so4o2Pg4Z1viYjCAuyhU
-         DkgD0KQGi8dFyi/WbTRiE1bx5Rq8DQOeQRg4hsuuqXZg3zl+Ao8OI56GFvLBHZqjPyej
-         hi6N2RYM1M46tv6h0LYCK+h0CLRT/cQqQQsnLoQsAizC9tSLdqXvG8bmo11OaLjFi2IY
-         KoKj7unNfX8VK2upB32/jmCDpkz6Qm9FZgx3lgHNdgGKSlChNacI34HMprAzo4X8120y
-         Jw/0/bJHD+Nzq+nsL2R0x3sObTW6Wu7gGU+dRsAsyJPJnT9ffw9ZsGp+NwvKAIZbUVil
-         8fgA==
-X-Gm-Message-State: AOAM530WXUtvlBz8lLwSPuL8LbRHvwon0NkBO/QU2+5bnwn3k825ncRT
-        K8B1InUPPS+C2NWhfHtdWjgoEnw/pqM=
-X-Google-Smtp-Source: ABdhPJzivj4IPkq9WcmMOBNQPCbJy7iEXusOZPE0zZnBwVmWYQio52v+igjnlqR4d8Jn8/gjmKRBYA==
-X-Received: by 2002:a62:8042:0:b0:4a8:15eb:db10 with SMTP id j63-20020a628042000000b004a815ebdb10mr2128313pfd.28.1640074286391;
-        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
-Received: from FLYINGPENG-MB0.tencent.com ([103.7.29.30])
-        by smtp.gmail.com with ESMTPSA id t8sm21024635pfj.26.2021.12.21.00.11.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
-From:   Peng Hao <flyingpenghao@gmail.com>
-X-Google-Original-From: Peng Hao <flyingpeng@tencent.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH]  block/elevator: handle possible null pointer
-Date:   Tue, 21 Dec 2021 16:10:42 +0800
-Message-Id: <20211221081042.78799-1-flyingpeng@tencent.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TB3EgKnQ6cDDwbUNjEM7H+wsTNMcb9wXt6YvS3W4ql8=;
+        b=jXYRKzSpCEHYENaxvdriLAWEEGUkR6NkkpovRU9Ehwl/l+QvWlHQGhTj1iyHgMopiE
+         IyDHyBYl5pHroyYRjeCv539l4B4IMjm5hcyr0Lt2YVpcgtMpvKkTcpRJCusFcNSRcy9K
+         kGgQoBlrH5ofcnyWQ2CccX3lGhBltYFPGVlK5TCY3smdRQmqvDJ2u/xDZ5X1n0vMbY+w
+         t0oBnk/Rg6C45B2fW7Uhas5HspN83dLQqyh8jQFyMTeVv0dDxBK+Lfqw49U0oc6BDilL
+         vSIYvwmTXK3nZBW39kvNYZEz3n/82hhE3xDDgcWh8hZoN5aF8eyin12wDCHoYMGVBIBC
+         5qdQ==
+X-Gm-Message-State: AOAM53284x8AjwrVqi4MN22CVj4cAjJDCJfjhUcSKCDIhg0qaCbnhYoJ
+        MkDKlB7b5JLM1iG+oaFtjw5kzWSPY6Xh5A==
+X-Google-Smtp-Source: ABdhPJxzRKHJi0hSv0lLc7UvBTg+bgTAuGdijAPJbPY9Q7lRnU7vwgvJ++BY/aHXe27BY4POTqz/YQ==
+X-Received: by 2002:a05:6122:d0f:: with SMTP id az15mr385543vkb.28.1640074295784;
+        Tue, 21 Dec 2021 00:11:35 -0800 (PST)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id q8sm821317vkq.4.2021.12.21.00.11.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 00:11:35 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id o1so22311104uap.4;
+        Tue, 21 Dec 2021 00:11:35 -0800 (PST)
+X-Received: by 2002:a67:2e09:: with SMTP id u9mr653700vsu.77.1640074295303;
+ Tue, 21 Dec 2021 00:11:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211221004246.213203-1-colin.i.king@gmail.com>
+In-Reply-To: <20211221004246.213203-1-colin.i.king@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Dec 2021 09:11:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXN=jjgirX4mTghvYo1TQtW4F+5uMLxHoOFKSXbqk5qPg@mail.gmail.com>
+Message-ID: <CAMuHMdXN=jjgirX4mTghvYo1TQtW4F+5uMLxHoOFKSXbqk5qPg@mail.gmail.com>
+Subject: Re: [PATCH] video: fbdev: mb862xx: remove redundant assignment to
+ pointer ptr
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a check for q->tag_set in the front of elevator_get_default,
-and there should be a check here too.
+On Tue, Dec 21, 2021 at 3:01 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+> The pointer ptr is being assigned a value that is never read. The
+> pointer is being re-assigned later in a loop. The assignment is
+> redundant and can be removed.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Signed-off-by: Peng Hao <flyingpeng@tencent.com>
----
- block/elevator.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-diff --git a/block/elevator.c b/block/elevator.c
-index 1f39f6e8ebb9..b7d0bead680c 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -636,7 +636,7 @@ static struct elevator_type *elevator_get_default(struct request_queue *q)
- 	if (q->tag_set && q->tag_set->flags & BLK_MQ_F_NO_SCHED_BY_DEFAULT)
- 		return NULL;
- 
--	if (q->nr_hw_queues != 1 &&
-+	if (q->nr_hw_queues != 1 && q->tag_set &&
- 	    !blk_mq_is_shared_tags(q->tag_set->flags))
- 		return NULL;
- 
--- 
-2.27.0
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

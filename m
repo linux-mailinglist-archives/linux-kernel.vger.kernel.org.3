@@ -2,231 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CBE47C6C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A7547C6C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbhLUSlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:41:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53780 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241405AbhLUSlR (ORCPT
+        id S241478AbhLUSmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:42:01 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36050 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241443AbhLUSl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:41:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E73614BB;
-        Tue, 21 Dec 2021 18:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 216B2C36AE8;
-        Tue, 21 Dec 2021 18:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640112076;
-        bh=TcAhcmKPDJiTf+3xKMg5zwHb806xTj+Tx5tC6UoVrt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PJeFxALm+X04MXxMeR+/iLZCr2Ze1PLGeIrjhiM8JAKWXe/ubcDnlUA/zXuq7WDkw
-         o249ShRlKSXU305LCzwED3MYQ0n6za44JTnH9bdVz/k1uRcp0bax6RF69jC+hE2ym+
-         XVezbO0IwYMeJOn2vHsP3FlksNah6vvfdXtHf6Fx+6RhFgjb7cVTdJZ5wleEDYJmSs
-         LsowiGjeyCKq6572miX7HULT9a+6ZrISNzSf69nheee5X0t9wcDo6rnyOnDgF4WdOW
-         dXe9do7Y3oPqAUc1JhNzNhlM5wk/2FTcqN24HGcgbKOD2lsMgjS5LTzUyZnvH9xNSo
-         eWefCck6kuH5g==
-Date:   Tue, 21 Dec 2021 10:41:15 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: iomap-folio & nvdimm merge
-Message-ID: <20211221184115.GY27664@magnolia>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-17-willy@infradead.org>
- <YcIIbtKhOulAL4s4@casper.infradead.org>
+        Tue, 21 Dec 2021 13:41:59 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B6D7D1F42F50
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1640112117; bh=Cj5O9TiD4i4HSRN+fjhO1sKRr/R9ttPdi5PW9xYEaLY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qpks0xHoub/2hdHjXqHjJNQq5L42GE3pxdVulYANco8hCdF8szEEvxnu7xNATxXsQ
+         56qmKX11QMw3gl9zd+ld6/+i4hSGwEkOWtilV+G8E8RfuflE/J4xHuRE6AUmD0nR4j
+         m9yAkotM01pqH3wNIV8qrUTPqiEsJxBRgX0iXjW/BbExNSjbQR5VWuuYoPnbJYFgUA
+         Rmgljyg6Om943/Wri0tD2Ccx5MtOfRmMCDY105oWEcyzkZx1nDBAcY7n7yQGudTdzk
+         MOrxY5KFIBmk40a0p7cmNCiVRoJBvapNLqYFe49dMdPC3rXskxd4c0JjaMqi0YNL7W
+         QdzLNXn+VIUaQ==
+Date:   Tue, 21 Dec 2021 23:41:51 +0500
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, kernel@collabora.com
+Cc:     usama.anjum@collabora.com
+Subject: [PATCH] serial: lantiq: store and compare return status correctly
+Message-ID: <YcIf7+oSWWn34ND6@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YcIIbtKhOulAL4s4@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 05:01:34PM +0000, Matthew Wilcox wrote:
-> On Thu, Dec 16, 2021 at 09:07:06PM +0000, Matthew Wilcox (Oracle) wrote:
-> > The zero iterator can work in folio-sized chunks instead of page-sized
-> > chunks.  This will save a lot of page cache lookups if the file is cached
-> > in large folios.
-> 
-> This patch (and a few others) end up conflicting with what Christoph did
-> that's now in the nvdimm tree.  In an effort to make the merge cleaner,
-> I took the next-20211220 tag and did the following:
-> 
-> Revert de291b590286
-> Apply: https://lore.kernel.org/linux-xfs/20211221044450.517558-1-willy@infradead.org/
-> (these two things are likely to happen in the nvdimm tree imminently)
-> 
-> I then checked out iomap-folio-5.17e and added this patch:
-> 
->     iomap: Inline __iomap_zero_iter into its caller
-> 
->     To make the merge easier, replicate the inlining of __iomap_zero_iter()
->     into iomap_zero_iter() that is currently in the nvdimm tree.
-> 
->     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+platform_get_irq() returns signed status. It should be stored and
+compared as signed value before storing to unsigned variable. Implicit
+conversion from signed to unsigned and then comparison with less than
+zero is wrong as unsigned value can never be less than zero.
 
-Looks like a reasonable function promotion to me...
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Fixes: f087f01ca2 ("serial: lantiq: Use platform_get_irq() to get the interrupt")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ drivers/tty/serial/lantiq.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-> 
-> diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-> index ba80bedd9590..c6b3a148e898 100644
-> --- a/fs/iomap/buffered-io.c
-> +++ b/fs/iomap/buffered-io.c
-> @@ -895,27 +895,6 @@ iomap_file_unshare(struct inode *inode, loff_t pos, loff_t len,
->  }
->  EXPORT_SYMBOL_GPL(iomap_file_unshare);
->  
-> -static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
-> -{
-> -       struct folio *folio;
-> -       int status;
-> -       size_t offset;
-> -       size_t bytes = min_t(u64, SIZE_MAX, length);
-> -
-> -       status = iomap_write_begin(iter, pos, bytes, &folio);
-> -       if (status)
-> -               return status;
-> -
-> -       offset = offset_in_folio(folio, pos);
-> -       if (bytes > folio_size(folio) - offset)
-> -               bytes = folio_size(folio) - offset;
-> -
-> -       folio_zero_range(folio, offset, bytes);
-> -       folio_mark_accessed(folio);
-> -
-> -       return iomap_write_end(iter, pos, bytes, bytes, folio);
-> -}
-> -
->  static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
->  {
->         struct iomap *iomap = &iter->iomap;
-> @@ -929,14 +908,34 @@ static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
->                 return length;
->  
->         do {
-> -               s64 bytes;
-> +               struct folio *folio;
-> +               int status;
-> +               size_t offset;
-> +               size_t bytes = min_t(u64, SIZE_MAX, length);
-> +
-> +               if (IS_DAX(iter->inode)) {
-> +                       s64 tmp = dax_iomap_zero(pos, bytes, iomap);
-> +                       if (tmp < 0)
-> +                               return tmp;
-> +                       bytes = tmp;
-> +                       goto good;
-> +               }
->  
-> -               if (IS_DAX(iter->inode))
-> -                       bytes = dax_iomap_zero(pos, length, iomap);
-> -               else
-> -                       bytes = __iomap_zero_iter(iter, pos, length);
-> -               if (bytes < 0)
-> -                       return bytes;
-> +               status = iomap_write_begin(iter, pos, bytes, &folio);
-> +               if (status)
-> +                       return status;
-> +
-> +               offset = offset_in_folio(folio, pos);
-> +               if (bytes > folio_size(folio) - offset)
-> +                       bytes = folio_size(folio) - offset;
-> +
-> +               folio_zero_range(folio, offset, bytes);
-> +               folio_mark_accessed(folio);
-> +
-> +               bytes = iomap_write_end(iter, pos, bytes, bytes, folio);
-> +good:
-> +               if (WARN_ON_ONCE(bytes == 0))
-> +                       return -EIO;
->  
->                 pos += bytes;
->                 length -= bytes;
-> 
-> 
-> 
-> Then I did the merge, and the merge commit looks pretty sensible
-> afterwards:
-> 
->     Merge branch 'iomap-folio-5.17f' into fixup
-> 
-> diff --cc fs/iomap/buffered-io.c
-> index 955f51f94b3f,c6b3a148e898..c938bbad075e
-> --- a/fs/iomap/buffered-io.c
-> +++ b/fs/iomap/buffered-io.c
-> @@@ -888,19 -908,32 +907,23 @@@ static loff_t iomap_zero_iter(struct io
->                 return length;
-> 
->         do {
-> -               unsigned offset = offset_in_page(pos);
-> -               size_t bytes = min_t(u64, PAGE_SIZE - offset, length);
-> -               struct page *page;
-> +               struct folio *folio;
->                 int status;
-> +               size_t offset;
-> +               size_t bytes = min_t(u64, SIZE_MAX, length);
-> 
-> -               status = iomap_write_begin(iter, pos, bytes, &page);
->  -              if (IS_DAX(iter->inode)) {
->  -                      s64 tmp = dax_iomap_zero(pos, bytes, iomap);
->  -                      if (tmp < 0)
->  -                              return tmp;
->  -                      bytes = tmp;
->  -                      goto good;
->  -              }
->  -
-> +               status = iomap_write_begin(iter, pos, bytes, &folio);
->                 if (status)
->                         return status;
-> 
-> -               zero_user(page, offset, bytes);
-> -               mark_page_accessed(page);
-> +               offset = offset_in_folio(folio, pos);
-> +               if (bytes > folio_size(folio) - offset)
-> +                       bytes = folio_size(folio) - offset;
-> +
-> +               folio_zero_range(folio, offset, bytes);
-> +               folio_mark_accessed(folio);
-> 
-> -               bytes = iomap_write_end(iter, pos, bytes, bytes, page);
-> +               bytes = iomap_write_end(iter, pos, bytes, bytes, folio);
->  -good:
+diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+index bb059418cb82..3e324d3f0a6d 100644
+--- a/drivers/tty/serial/lantiq.c
++++ b/drivers/tty/serial/lantiq.c
+@@ -727,16 +727,20 @@ static int fetch_irq_lantiq(struct device *dev, struct ltq_uart_port *ltq_port)
+ {
+ 	struct uart_port *port = &ltq_port->port;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-
+-	ltq_port->tx_irq = platform_get_irq(pdev, 0);
+-	if (ltq_port->tx_irq < 0)
+-		return ltq_port->tx_irq;
+-	ltq_port->rx_irq = platform_get_irq(pdev, 1);
+-	if (ltq_port->rx_irq < 0)
+-		return ltq_port->rx_irq;
+-	ltq_port->err_irq = platform_get_irq(pdev, 2);
+-	if (ltq_port->err_irq < 0)
+-		return ltq_port->err_irq;
++	int irq;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++	ltq_port->tx_irq = irq;
++	irq = platform_get_irq(pdev, 1);
++	if (irq < 0)
++		return irq;
++	ltq_port->rx_irq = irq;
++	irq = platform_get_irq(pdev, 2);
++	if (irq < 0)
++		return irq;
++	ltq_port->err_irq = irq;
+ 
+ 	port->irq = ltq_port->tx_irq;
+ 
+-- 
+2.30.2
 
-Assuming I'm reading the metadiff properly, I think this merge
-resolution looks correct given what both patchsets are trying to do.
-
->                 if (WARN_ON_ONCE(bytes == 0))
->                         return -EIO;
-> 
-> 
-> 
-> Shall I push out a version of this patch series which includes the
-> "iomap: Inline __iomap_zero_iter into its caller" patch I pasted above?
-
-Yes.
-
-I've been distracted for months with first a Huge Customer Escalation
-and now a <embargoed>, which means that I've been and continue to be
-very distracted.  I /think/ there are no other iomap patches being
-proposed for inclusion -- Andreas' patches were applied as fixes during
-5.16-rc, Christoph's DAX refactoring is now in the nvdimm tree, and that
-leaves Matthew's folios refactoring.
-
-So seeing as (I think?) there are no other iomap patches for 5.17, if
-Matthew wants to add his branch to for-next and push directly to Linus
-(rather than pushing to me to push the exact same branch to Linus) I
-think that would be ... better than letting it block on me.  IIRC I've
-RVB'd everything in the folios branch. :(
-
-FWIW I ran the 5.17e branch through my fstests cloud and nothing fell
-out, so I think it's in good enough shape to merge to for-next.
-
---D

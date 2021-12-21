@@ -2,303 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B947C4C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8AB47C4D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbhLURNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbhLURNa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:13:30 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B214CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:13:29 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bt1so30763300lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=12dcJuvCHbrqEuGjZHrbvg5DKcpEVHqkDCNV4U9OhRs=;
-        b=A3RLGqajl0TeHtr1c5Vv0kFB3FbWPw1WUaG7hsuHBG+Dfp7qKFdR0RNkwrrGotvNJx
-         r2jgZlKzpqwjpdpyawyyQY+lbpDbv3z+iVHyGB+JXztHoLo8bLDsCQrDLfQ8o3bJ+iDa
-         tkDb8NT40HcQcfPVSlVXl6mEKSWmcgKnD+GtwdZo/hQAl963SMePXW5ShHFA/KKB5ruK
-         KKKqplNuEmZlnsXIG2+bdL6lT5SMTWQH5L0hK6y6CmcD05u8QJkflrRbF8cyd8+6ujWp
-         5bRo+E0TWWGWSQZafKNs2hg4octWjQAFMWRFsVE/wfEStqAaB9EuMIkLZts2JdO/E+TZ
-         67iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=12dcJuvCHbrqEuGjZHrbvg5DKcpEVHqkDCNV4U9OhRs=;
-        b=tTdQlhXIvRFhVeqOWdjlCSX0E9Ag0pZ3KfjPSlNUuaP+1zX3Pp0gL0Q2O3GDu061/h
-         J+haxT29P0uINY1hRgUtYAad9BqLRUuU8fcpHxgHR/pKBnR7rlaPvXoFkaY4N5MHDlNw
-         bZw9KC8kSynT2TbS62Ah++sTegITg6jartGuLELqZXy2Waw44Mp9V8vLeO1GE8y8muW0
-         vb5R4mSSLV6hX+OMroQUi/wHD0PF2rnjW/wX4xTb9rQ9pnVnE20hXCakosIywPOUVjbi
-         jrPlR0KTRyTfgCNbPr9JsUKmoYQyJFks8foTSPY+mSR+Lojq1vYYuIcvrVVQKkSsF/tX
-         iBpg==
-X-Gm-Message-State: AOAM5339E4J9SdD7dwZhD37Q0yWFczL6yYcnTg7M+p7dcmPnsCu9wRco
-        veoZmTzqG5ynP5ePQZWsBa8aV9uH+R8sfJ71+b+uOQ==
-X-Google-Smtp-Source: ABdhPJy0SMRbANoYsvRK8C4mSbAOUg6sVhbLSzzhXMKUy+ikltxRcSgtxT9puTj7+7PiFFDsCXH6PJOEWr+NPrC9DO8=
-X-Received: by 2002:ac2:52a4:: with SMTP id r4mr3812262lfm.645.1640106807496;
- Tue, 21 Dec 2021 09:13:27 -0800 (PST)
+        id S240295AbhLURRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:17:01 -0500
+Received: from mga09.intel.com ([134.134.136.24]:4456 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240285AbhLURQ7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 12:16:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640107019; x=1671643019;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IFDWg1QnMHEW+1kgWM0jrUfEP4GIANB+qKGijyGGPSQ=;
+  b=cA9HF0XAr+KBhmqiPTUQWzfjP5TjpR/dBFWOdzZrDiDHEeTK2sJAENb3
+   SLJNENmFjxi1YeT55mEtxcNo+R1gfr/zJ+qweA02Q+l07dDBcE5r3TIdt
+   2xJ+Akd1+pu/qrxL9z8i7IIa9aL9HhbiCB1nEvj9xPMM2iQkGrNiv1tXa
+   GnDZ5AD0rFf3FtL9F3fMXcM9KaUdncSbAEsFHVRRgSx8YBwqKHxgAEWvG
+   TV/9IBpZmN2GukbaOep9osu4+ihG+DgLrI56QEwIaANMGMUjAoM/gnCvO
+   RYy90ixZVWs11eHNcfAgDHQ4N/B/DLV9JRL/VIoDVgERp9AGtyxvFUtVR
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240246475"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="240246475"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:15:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="508149106"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 09:15:01 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzij6-0009Eu-Ub; Tue, 21 Dec 2021 17:15:00 +0000
+Date:   Wed, 22 Dec 2021 01:14:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [frederic-dynticks:preempt/arm-v4 2/5] lib/Kconfig.debug:536:error:
+ recursive dependency detected!
+Message-ID: <202112220052.Go2LhCpb-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211210093307.31701-1-mgorman@techsingularity.net>
- <20211210093307.31701-3-mgorman@techsingularity.net> <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
- <20211213130131.GQ3366@techsingularity.net> <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
- <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com> <20211215122550.GR3366@techsingularity.net>
- <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com> <20211220111243.GS3366@techsingularity.net>
-In-Reply-To: <20211220111243.GS3366@techsingularity.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 21 Dec 2021 18:13:15 +0100
-Message-ID: <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 12:12, Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> (sorry for the delay, was offline for a few days)
->
-> On Fri, Dec 17, 2021 at 12:03:06AM +0530, Gautham R. Shenoy wrote:
-> > Hello Mel,
-> >
-> > On Wed, Dec 15, 2021 at 12:25:50PM +0000, Mel Gorman wrote:
-> > > On Wed, Dec 15, 2021 at 05:22:30PM +0530, Gautham R. Shenoy wrote:
-> >
-> > [..SNIP..]
-> >
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git preempt/arm-v4
+head:   6fc1c7e3d83c4e06b019b041894d9bb25f37ac6c
+commit: 44d4846a007823ebf184ef1861a37362a43c6434 [2/5] arm64: implement support for static call trampolines
+config: arm64-randconfig-r022-20211220
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6c2bf01270a8a52b7986d5c49eaa7ad1c7083ec5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=44d4846a007823ebf184ef1861a37362a43c6434
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks preempt/arm-v4
+        git checkout 44d4846a007823ebf184ef1861a37362a43c6434
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64 
 
-[snip]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> To avoid the corner case, we'd need to explicitly favour spreading early
-> and assume wakeup will pull communicating tasks together and NUMA
-> balancing migrate the data after some time which looks like
->
-> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> index c07bfa2d80f2..54f5207154d3 100644
-> --- a/include/linux/sched/topology.h
-> +++ b/include/linux/sched/topology.h
-> @@ -93,6 +93,7 @@ struct sched_domain {
->         unsigned int busy_factor;       /* less balancing by factor if busy */
->         unsigned int imbalance_pct;     /* No balance until over watermark */
->         unsigned int cache_nice_tries;  /* Leave cache hot tasks for # tries */
-> +       unsigned int imb_numa_nr;       /* Nr imbalanced tasks allowed between nodes */
+All errors (new ones prefixed by >>):
 
-So now you compute an allowed imbalance level instead of using
-25% of sd->span_weight
-or
-25% of busiest->group_weight
-
-And you adjust this new imb_numa_nr according to the topology.
-
-That makes sense.
-
->
->         int nohz_idle;                  /* NOHZ IDLE status */
->         int flags;                      /* See SD_* */
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 0a969affca76..df0e84462e62 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -1489,6 +1489,7 @@ struct task_numa_env {
->
->         int src_cpu, src_nid;
->         int dst_cpu, dst_nid;
-> +       int imb_numa_nr;
->
->         struct numa_stats src_stats, dst_stats;
->
-> @@ -1504,7 +1505,8 @@ static unsigned long cpu_load(struct rq *rq);
->  static unsigned long cpu_runnable(struct rq *rq);
->  static unsigned long cpu_util(int cpu);
->  static inline long adjust_numa_imbalance(int imbalance,
-> -                                       int dst_running, int dst_weight);
-> +                                       int dst_running,
-> +                                       int imb_numa_nr);
->
->  static inline enum
->  numa_type numa_classify(unsigned int imbalance_pct,
-> @@ -1885,7 +1887,7 @@ static void task_numa_find_cpu(struct task_numa_env *env,
->                 dst_running = env->dst_stats.nr_running + 1;
->                 imbalance = max(0, dst_running - src_running);
->                 imbalance = adjust_numa_imbalance(imbalance, dst_running,
-> -                                                       env->dst_stats.weight);
-> +                                                 env->imb_numa_nr);
->
->                 /* Use idle CPU if there is no imbalance */
->                 if (!imbalance) {
-> @@ -1950,8 +1952,10 @@ static int task_numa_migrate(struct task_struct *p)
->          */
->         rcu_read_lock();
->         sd = rcu_dereference(per_cpu(sd_numa, env.src_cpu));
-> -       if (sd)
-> +       if (sd) {
->                 env.imbalance_pct = 100 + (sd->imbalance_pct - 100) / 2;
-> +               env.imb_numa_nr = sd->imb_numa_nr;
-> +       }
->         rcu_read_unlock();
->
->         /*
-> @@ -9050,9 +9054,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
->   * This is an approximation as the number of running tasks may not be
->   * related to the number of busy CPUs due to sched_setaffinity.
->   */
-> -static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-> +static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
->  {
-> -       return (dst_running < (dst_weight >> 2));
-> +       return dst_running < imb_numa_nr;
->  }
->
->  /*
-> @@ -9186,12 +9190,13 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
->                                 return idlest;
->  #endif
->                         /*
-> -                        * Otherwise, keep the task on this node to stay close
-> -                        * its wakeup source and improve locality. If there is
-> -                        * a real need of migration, periodic load balance will
-> -                        * take care of it.
-> +                        * Otherwise, keep the task on this node to stay local
-> +                        * to its wakeup source if the number of running tasks
-> +                        * are below the allowed imbalance. If there is a real
-> +                        * need of migration, periodic load balance will take
-> +                        * care of it.
->                          */
-> -                       if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->span_weight))
-> +                       if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->imb_numa_nr))
->                                 return NULL;
->                 }
->
-> @@ -9280,19 +9285,13 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
->         }
->  }
->
-> -#define NUMA_IMBALANCE_MIN 2
-> -
->  static inline long adjust_numa_imbalance(int imbalance,
-> -                               int dst_running, int dst_weight)
-> +                               int dst_running, int imb_numa_nr)
->  {
-> -       if (!allow_numa_imbalance(dst_running, dst_weight))
-> +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
->                 return imbalance;
->
-> -       /*
-> -        * Allow a small imbalance based on a simple pair of communicating
-> -        * tasks that remain local when the destination is lightly loaded.
-> -        */
-> -       if (imbalance <= NUMA_IMBALANCE_MIN)
-> +       if (imbalance <= imb_numa_nr)
-
-Isn't this always true ?
-
-imbalance is "always" < dst_running as imbalance is usually the number
-of these tasks that we would like to migrate
+>> lib/Kconfig.debug:536:error: recursive dependency detected!
+   lib/Kconfig.debug:536: symbol DEBUG_FS is selected by ZSMALLOC_STAT
+   mm/Kconfig:705: symbol ZSMALLOC_STAT depends on ZSMALLOC
+   mm/Kconfig:694: symbol ZSMALLOC is selected by ZSWAP_ZPOOL_DEFAULT_ZSMALLOC
+   mm/Kconfig:644: symbol ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is part of choice <choice>
+   mm/Kconfig:618: choice <choice> contains symbol <choice>
+   mm/Kconfig:618: choice <choice> contains symbol ZSWAP
+   mm/Kconfig:534: symbol ZSWAP depends on CRYPTO
+   crypto/Kconfig:16: symbol CRYPTO is selected by SND_SOC_CROS_EC_CODEC
+   sound/soc/codecs/Kconfig:583: symbol SND_SOC_CROS_EC_CODEC is selected by SND_SOC_AMD_RV_RT5682_MACH
+   sound/soc/amd/Kconfig:32: symbol SND_SOC_AMD_RV_RT5682_MACH depends on GPIOLIB
+   drivers/gpio/Kconfig:14: symbol GPIOLIB is selected by CEC_GPIO
+   drivers/media/cec/platform/Kconfig:43: symbol CEC_GPIO depends on PREEMPTION
+   kernel/Kconfig.preempt:92: symbol PREEMPTION is selected by PREEMPT_BUILD
+   kernel/Kconfig.preempt:9: symbol PREEMPT_BUILD is selected by PREEMPT_DYNAMIC
+   kernel/Kconfig.preempt:96: symbol PREEMPT_DYNAMIC depends on HAVE_PREEMPT_DYNAMIC
+   arch/Kconfig:1266: symbol HAVE_PREEMPT_DYNAMIC depends on HAVE_STATIC_CALL
+   arch/Kconfig:1259: symbol HAVE_STATIC_CALL is selected by LTO_CLANG_THIN
+   arch/Kconfig:697: symbol LTO_CLANG_THIN is part of choice <choice>
+   arch/Kconfig:663: choice <choice> contains symbol LTO_CLANG_FULL
+   arch/Kconfig:678: symbol LTO_CLANG_FULL is part of choice HAS_LTO_CLANG
+   arch/Kconfig:649: symbol HAS_LTO_CLANG depends on GCOV_KERNEL
+   kernel/gcov/Kconfig:4: symbol GCOV_KERNEL depends on DEBUG_FS
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
 
 
->                 return 0;
->
->         return imbalance;
-> @@ -9397,7 +9396,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
->                 /* Consider allowing a small imbalance between NUMA groups */
->                 if (env->sd->flags & SD_NUMA) {
->                         env->imbalance = adjust_numa_imbalance(env->imbalance,
-> -                               busiest->sum_nr_running, env->sd->span_weight);
-> +                               busiest->sum_nr_running, env->sd->imb_numa_nr);
->                 }
->
->                 return;
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index d201a7052a29..1fa3e977521d 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -2242,6 +2242,55 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
->                 }
->         }
->
-> +       /*
-> +        * Calculate an allowed NUMA imbalance such that LLCs do not get
-> +        * imbalanced.
-> +        */
-> +       for_each_cpu(i, cpu_map) {
-> +               unsigned int imb = 0;
-> +               unsigned int imb_span = 1;
-> +
-> +               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-> +                       struct sched_domain *child = sd->child;
-> +
-> +                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-> +                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
+vim +536 lib/Kconfig.debug
 
-sched_domains have not been degenerated yet so you found here the DIE domain
+6210b6402f582b Changbin Du    2019-12-06  492  
+6dfc06651b3d29 Dave Hansen    2013-07-01  493  config MAGIC_SYSRQ
+6dfc06651b3d29 Dave Hansen    2013-07-01  494  	bool "Magic SysRq key"
+6dfc06651b3d29 Dave Hansen    2013-07-01  495  	depends on !UML
+6dfc06651b3d29 Dave Hansen    2013-07-01  496  	help
+6dfc06651b3d29 Dave Hansen    2013-07-01  497  	  If you say Y here, you will have some control over the system even
+6dfc06651b3d29 Dave Hansen    2013-07-01  498  	  if the system crashes for example during kernel debugging (e.g., you
+6dfc06651b3d29 Dave Hansen    2013-07-01  499  	  will be able to flush the buffer cache to disk, reboot the system
+6dfc06651b3d29 Dave Hansen    2013-07-01  500  	  immediately or dump some status information). This is accomplished
+6dfc06651b3d29 Dave Hansen    2013-07-01  501  	  by pressing various keys while holding SysRq (Alt+PrintScreen). It
+6dfc06651b3d29 Dave Hansen    2013-07-01  502  	  also works on a serial console (on PC hardware at least), if you
+6dfc06651b3d29 Dave Hansen    2013-07-01  503  	  send a BREAK and then within 5 seconds a command keypress. The
+f8998c226587fb Hans Holmberg  2017-03-16  504  	  keys are documented in <file:Documentation/admin-guide/sysrq.rst>.
+f8998c226587fb Hans Holmberg  2017-03-16  505  	  Don't say Y unless you really know what this hack does.
+8446f1d391f3d2 Ingo Molnar    2005-09-06  506  
+8eaede49dfdc1f Ben Hutchings  2013-10-07  507  config MAGIC_SYSRQ_DEFAULT_ENABLE
+8eaede49dfdc1f Ben Hutchings  2013-10-07  508  	hex "Enable magic SysRq key functions by default"
+8eaede49dfdc1f Ben Hutchings  2013-10-07  509  	depends on MAGIC_SYSRQ
+8eaede49dfdc1f Ben Hutchings  2013-10-07  510  	default 0x1
+8eaede49dfdc1f Ben Hutchings  2013-10-07  511  	help
+8eaede49dfdc1f Ben Hutchings  2013-10-07  512  	  Specifies which SysRq key functions are enabled by default.
+8eaede49dfdc1f Ben Hutchings  2013-10-07  513  	  This may be set to 1 or 0 to enable or disable them all, or
+f8998c226587fb Hans Holmberg  2017-03-16  514  	  to a bitmask as described in Documentation/admin-guide/sysrq.rst.
+8eaede49dfdc1f Ben Hutchings  2013-10-07  515  
+732dbf3a6104a3 Felix Fietkau  2016-12-22  516  config MAGIC_SYSRQ_SERIAL
+732dbf3a6104a3 Felix Fietkau  2016-12-22  517  	bool "Enable magic SysRq key over serial"
+732dbf3a6104a3 Felix Fietkau  2016-12-22  518  	depends on MAGIC_SYSRQ
+732dbf3a6104a3 Felix Fietkau  2016-12-22  519  	default y
+732dbf3a6104a3 Felix Fietkau  2016-12-22  520  	help
+732dbf3a6104a3 Felix Fietkau  2016-12-22  521  	  Many embedded boards have a disconnected TTL level serial which can
+732dbf3a6104a3 Felix Fietkau  2016-12-22  522  	  generate some garbage that can lead to spurious false sysrq detects.
+732dbf3a6104a3 Felix Fietkau  2016-12-22  523  	  This option allows you to decide whether you want to enable the
+732dbf3a6104a3 Felix Fietkau  2016-12-22  524  	  magic SysRq key.
+732dbf3a6104a3 Felix Fietkau  2016-12-22  525  
+68af43173d3fce Dmitry Safonov 2020-03-02  526  config MAGIC_SYSRQ_SERIAL_SEQUENCE
+68af43173d3fce Dmitry Safonov 2020-03-02  527  	string "Char sequence that enables magic SysRq over serial"
+68af43173d3fce Dmitry Safonov 2020-03-02  528  	depends on MAGIC_SYSRQ_SERIAL
+68af43173d3fce Dmitry Safonov 2020-03-02  529  	default ""
+68af43173d3fce Dmitry Safonov 2020-03-02  530  	help
+68af43173d3fce Dmitry Safonov 2020-03-02  531  	  Specifies a sequence of characters that can follow BREAK to enable
+68af43173d3fce Dmitry Safonov 2020-03-02  532  	  SysRq on a serial console.
+68af43173d3fce Dmitry Safonov 2020-03-02  533  
+d3394b3d51828d Dmitry Safonov 2020-03-06  534  	  If unsure, leave an empty string and the option will not be enabled.
+d3394b3d51828d Dmitry Safonov 2020-03-06  535  
+ec29a5c197e6ef Changbin Du    2019-12-06 @536  config DEBUG_FS
+ec29a5c197e6ef Changbin Du    2019-12-06  537  	bool "Debug Filesystem"
+ec29a5c197e6ef Changbin Du    2019-12-06  538  	help
+ec29a5c197e6ef Changbin Du    2019-12-06  539  	  debugfs is a virtual file system that kernel developers use to put
+ec29a5c197e6ef Changbin Du    2019-12-06  540  	  debugging files into.  Enable this option to be able to read and
+ec29a5c197e6ef Changbin Du    2019-12-06  541  	  write to these files.
+ec29a5c197e6ef Changbin Du    2019-12-06  542  
+ec29a5c197e6ef Changbin Du    2019-12-06  543  	  For detailed documentation on the debugfs API, see
+ec29a5c197e6ef Changbin Du    2019-12-06  544  	  Documentation/filesystems/.
+ec29a5c197e6ef Changbin Du    2019-12-06  545  
+ec29a5c197e6ef Changbin Du    2019-12-06  546  	  If unsure, say N.
+ec29a5c197e6ef Changbin Du    2019-12-06  547  
 
-> +                               struct sched_domain *top, *top_p;
-> +                               unsigned int llc_sq;
-> +
-> +                               /*
-> +                                * nr_llcs = (sd->span_weight / llc_weight);
-> +                                * imb = (llc_weight / nr_llcs) >> 2
+:::::: The code at line 536 was first introduced by commit
+:::::: ec29a5c197e6ef88fd94a2f3ea087037ae8acc21 kernel-hacking: move DEBUG_FS to 'Generic Kernel Debugging Instruments'
 
-it would be good to add a comment to explain why 25% of LLC weight /
-number of LLC in a node is the right value.
-For example, why is it better than just 25% of the LLC weight ?
-Do you want to allow the same imbalance at node level whatever the
-number of LLC in the node ?
+:::::: TO: Changbin Du <changbin.du@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-> +                                *
-> +                                * is equivalent to
-> +                                *
-> +                                * imb = (llc_weight^2 / sd->span_weight) >> 2
-> +                                *
-> +                                */
-> +                               llc_sq = child->span_weight * child->span_weight;
-> +
-> +                               imb = max(2U, ((llc_sq / sd->span_weight) >> 2));
-> +                               sd->imb_numa_nr = imb;
-> +
-> +                               /*
-> +                                * Set span based on top domain that places
-> +                                * tasks in sibling domains.
-> +                                */
-> +                               top = sd;
-> +                               top_p = top->parent;
-> +                               while (top_p && (top_p->flags & SD_PREFER_SIBLING)) {
-
-Why are you looping on SD_PREFER_SIBLING  instead of SD_NUMA  ?
-Apart the heterogeneous domain (SD_ASYM_CPUCAPACITY) but I'm not sure
-that you want to take this case into account, only numa node don't
-have SD_PREFER_SIBLING
-
-> +                                       top = top->parent;
-> +                                       top_p = top->parent;
-> +                               }
-> +                               imb_span = top_p ? top_p->span_weight : sd->span_weight;
-> +                       } else {
-> +                               int factor = max(1U, (sd->span_weight / imb_span));
-> +
-> +                               sd->imb_numa_nr = imb * factor;
-> +                       }
-> +               }
-> +       }
-> +
->         /* Calculate CPU capacity for physical packages and nodes */
->         for (i = nr_cpumask_bits-1; i >= 0; i--) {
->                 if (!cpumask_test_cpu(i, cpu_map))
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

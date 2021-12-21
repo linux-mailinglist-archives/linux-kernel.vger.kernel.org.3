@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F1247C2A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D98147C2AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239237AbhLUPTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:19:51 -0500
-Received: from mail-qt1-f181.google.com ([209.85.160.181]:33615 "EHLO
-        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbhLUPTt (ORCPT
+        id S239248AbhLUPUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239157AbhLUPUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:19:49 -0500
-Received: by mail-qt1-f181.google.com with SMTP id n15so13216226qta.0;
-        Tue, 21 Dec 2021 07:19:49 -0800 (PST)
+        Tue, 21 Dec 2021 10:20:17 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B36C061574;
+        Tue, 21 Dec 2021 07:20:17 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id i31so14831283lfv.10;
+        Tue, 21 Dec 2021 07:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=T0/ofZQcXMKN8oGRcoOw+6rBxR+Ouo3vIEIiIJRMs0Q=;
+        b=f9IEBoL6YPTDCgse/LTTD0EcTxeFS0YUBjhbUXEiw90ce+dIIX0YifeeKcBEH82ejL
+         aVniFH4v7kszbUJQFUMWC305rIEgsTiuRIzcygq7JpLrQQyi52f43Y/H/IMucahYIVCz
+         qfpmLnK3GjZFRK3E+cyXC/C4U0iZ8qRjP6qzKOPhh5Z4ZW9nEuTAr0jz8iP63D1v+jfz
+         d6nyrV8H5nM5BZkHWy692QH8AO7ZZlhb7V9nsKSEYZPknlMNM7DtnvUZ6JKp0WF5LZv8
+         PpwasYPhJBSqPUJow1zplojiUC6+lEDDAvL/vngX12y4ylC9fOHh8hlOGtgMLzQa4xgF
+         OHwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jhn6L+LBMMGihOUvIcsbiibaFmeCSn1ijpCpfQZUYKo=;
-        b=oxVC+EnVcOs7kxqvSbIcWn7ro4E0d4SNAGuhYu9PchMLP8prjPceIDDv23mL/4K6Z7
-         6RAzuOw3gCLNH/+AdZRI7eEbdPq+yowTLczG6/rGZN5HNf1JVAFkTRzmwf7YhtvPAOHw
-         czprYwhx6BAktP1+itlGCyxWtYt54YJE4XSYLrIp8yYKPvvByCKv993iQcKqPznraN51
-         lN3f8cqVm7Nmy3NVUPAnJUrKFFLQia9oJG2i8qoUqfWV9Gu8jXdyoqyx0D0UgNLmqbKQ
-         K3CaXpQEz6cUwKn/yalXDc6qKQCayAS1LasNk6utHI3mTq7SMnRTrxD8MUVxY8f+JZx3
-         R2QQ==
-X-Gm-Message-State: AOAM53310tqf4oifzMqdJVLUwW/+3JqfhS7fjGnERYwQ5ZRT6bJM1EKF
-        /IfhuLxUFoPAJ8rDSovorw==
-X-Google-Smtp-Source: ABdhPJy1YHPtDITAx99YSSbS+ZUmgpGbyenEdctyF6U5/LZg3Ybkqx4YHOsFy1ktK+IAsUpYwi8LaA==
-X-Received: by 2002:ac8:7589:: with SMTP id s9mr2602203qtq.314.1640099988563;
-        Tue, 21 Dec 2021 07:19:48 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id d1sm1096220qtn.56.2021.12.21.07.19.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 07:19:47 -0800 (PST)
-Received: (nullmailer pid 1436571 invoked by uid 1000);
-        Tue, 21 Dec 2021 15:19:46 -0000
-Date:   Tue, 21 Dec 2021 11:19:46 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-tegra@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, David Heidelberg <david@ixit.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        alsa-devel@alsa-project.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1] dt-bindings: sound: tegra-audio-rt5677: Correct
- example
-Message-ID: <YcHwksy2hKFZj43h@robh.at.kernel.org>
-References: <20211216160229.17049-1-digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=T0/ofZQcXMKN8oGRcoOw+6rBxR+Ouo3vIEIiIJRMs0Q=;
+        b=bcj1Zg41mY1iF5ZOcyW+6Ka2dTsa5p+k+C4gCAt1AEDM1w+sXhTU6yod4rz7OkBZEg
+         hSkwGJP10/vR2MyOniVCuK+/9lPD0FWUpId6dIbeZ45cJtaAJFIQfzicAlH6PKHxxBW9
+         Co0rK/USK9JB7QpAOL0UNzYx1Mev044+pAD/izMbxHszbXokRpSFj4fpcBUVIlIFas+U
+         CR+hXirofx51U18zd9U0a09ZIxti6Ficq+zhaTMwMI9MYatI8QeYOYJVie6kyNK5lPHb
+         QHUcxm/vear02BqEX2xQqeTmzDy2GFPz5lv7bB4VyaozW8BWHZwk6yafG0DBPETq2tsV
+         x5rA==
+X-Gm-Message-State: AOAM530QwtBTI8vTUozA7tNXmikeNz9m/1nLaO0iPZ2retk44SWRyl01
+        PLMqM5jh25AhxA8ozR2Ok3eDJPXpq6o=
+X-Google-Smtp-Source: ABdhPJyYwazba8NyvqSG6pdeP0ppzcRxJZtCBWlGDj7aITS6uJyAS6/6FfPvZNUUxuu60HRZMQxaaw==
+X-Received: by 2002:a19:4f5e:: with SMTP id a30mr3465355lfk.228.1640100015228;
+        Tue, 21 Dec 2021 07:20:15 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id b10sm1134927lfb.107.2021.12.21.07.20.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 07:20:14 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] ALSA: hda/tegra: Fix Tegra194 HDA reset failure
+To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, perex@perex.cz
+Cc:     jonathanh@nvidia.com, mkumard@nvidia.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
+ <1640021408-12824-2-git-send-email-spujar@nvidia.com>
+ <f859559c-abf1-ae37-6a0f-80329e6f747f@gmail.com>
+ <f65ae56d-d289-9e3f-1c15-f0bedda3918c@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <46acc080-56f5-f970-a9fa-3a9ece0dd2a3@gmail.com>
+Date:   Tue, 21 Dec 2021 18:20:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216160229.17049-1-digetx@gmail.com>
+In-Reply-To: <f65ae56d-d289-9e3f-1c15-f0bedda3918c@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 19:02:29 +0300, Dmitry Osipenko wrote:
-> Remove non-existent properties from the example of the binding. These
-> properties were borrower from the old txt binding, but they were never
-> used in practice and aren't documented in the new binding. They aren't
-> reported by the binding checker because dtschema needs extra patch that
-> hasn't been upstreamed yet to make unevaluatedProperties work properly.
+21.12.2021 09:18, Sameer Pujar пишет:
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml   | 3 ---
->  1 file changed, 3 deletions(-)
 > 
+> On 12/21/2021 6:51 AM, Dmitry Osipenko wrote:
+>>
+>> All stable kernels affected by this problem that don't support the bulk
+>> reset API are EOL now. Please use bulk reset API like I suggested in the
+>> comment to v1, it will allow us to have a cleaner and nicer code.
+> 
+> Agree that it would be compact and cleaner, but any specific reset
+> failure in the group won't be obvious in the logs. In this case it
+> failed silently. If compactness is preferred, then may be I can keep an
+> error print at group level so that we see some failure context whenever
+> it happens.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The group shouldn't fail ever unless device-tree is wrong. Why do you
+think we should care about the case which realistically won't ever
+happen? This is a bit unpractical approach.
+
+If we really care about those error messages, then will be much more
+reasonable to add them to the reset core, like clk core does it [1],
+IMO. This will be a trivial change. Will you be happy with this variant?
+
+[1]
+https://elixir.bootlin.com/linux/v5.16-rc6/source/drivers/clk/clk-bulk.c#L100
+
+diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+index 61e688882643..85ce0d6eeb34 100644
+--- a/drivers/reset/core.c
++++ b/drivers/reset/core.c
+@@ -962,6 +962,11 @@ int __reset_control_bulk_get(struct device *dev,
+int num_rstcs,
+ 						    shared, optional, acquired);
+ 		if (IS_ERR(rstcs[i].rstc)) {
+ 			ret = PTR_ERR(rstcs[i].rstc);
++
++			if (ret != -EPROBE_DEFER)
++				dev_err(dev, "Failed to get reset '%s': %d\n",
++					rstcs[i].id, ret);
++
+ 			goto err;
+ 		}
+ 	}

@@ -2,93 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE8C47C2DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9C247C2DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239387AbhLUPew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:34:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28140 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239378AbhLUPeu (ORCPT
+        id S239360AbhLUPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234135AbhLUPeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:34:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640100890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLiQ3KqxHj8McNXMPKcVRblNYX80dTIcLn8t7hvXc64=;
-        b=IWr7OEP9zd2ZET1cy05o3aTueGT97go/7Brxc9U8IqZ2YErMYOFgPU3Q15gnRPCx6+kuyN
-        PAZsPpzKZFdscyFp33ZKGoF8s+IjzCkZCy+6wEmaiAxRrpBJL/TaQH1ORzAbbSAkl4groE
-        AwUEvDAN92yZRGJ4phr7FZ7PR+O6m+g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-_O2S2IrsMTifpVKfFyoKYw-1; Tue, 21 Dec 2021 10:34:48 -0500
-X-MC-Unique: _O2S2IrsMTifpVKfFyoKYw-1
-Received: by mail-wm1-f70.google.com with SMTP id r10-20020a1c440a000000b003456b2594e0so2901015wma.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:34:48 -0800 (PST)
+        Tue, 21 Dec 2021 10:34:44 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD03C061574;
+        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id i63so21989822lji.3;
+        Tue, 21 Dec 2021 07:34:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ENsWP3t0OEsvzi2ehFfWL5PLo9nbmRuKstEblytFSZk=;
+        b=du6prEqyy4VDh/9oQkaNuO9m1zQmEsrUQ+ezBUvmdM6CVHpRrysbEQkA9iSaS8HB+8
+         MMzGTQKeSwvJ/OMg2yhe7Yt1vapH1K108rr2fLquBGUMx0MpBRRQl2si/5hZffG4aFAG
+         N9jkNTT9MYa23a5A7VgGu7lS5uMTHDm1h7ZrmuXECkw8zkoH8pKFS0hF7MjLbTEFkOlN
+         gLOYbyWyTbW1YKBZlvHUA+8qaXAlZh0AzZB8Ig0kFWVbyqaJq+Q1T+FBmLBNfogkbfYs
+         4o7SJOOV18G/kAxQu0QoOel+dW83xDbMgHYW+3Zof+o1vsttA+tQNcM/eEesD1T9fSXC
+         yNww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=VLiQ3KqxHj8McNXMPKcVRblNYX80dTIcLn8t7hvXc64=;
-        b=1yorl8WNtb1lRXGmrl7VuFb5t7IgUi768evAANMts41TyywL0vTUHbYI5XQpTwsmAf
-         Wv5kaoTMin/DlX6L4UIePJD3E0ogph2pHL6y8fX/EtHf1hWUGDU7/SJWiTutz3hA2qEX
-         AWZRFkKNkKYR+9pJgoBTKU066EdglfATosP48wYvtoxZ32JsvULFa11wYH/jolrZUoDk
-         XrL3czADs6+155Am1JYSkWWlB9hTuwKbqm+dUs7Gj9rNoV4Qx3wSRLpJlDlPVHvMZ147
-         oTPmfHNlzFm0CbaRPA3pDFvHonG/JJkjwPA8NkVqD3CWsyL2hxeBW7vy/AN0cVEDG9xZ
-         EK7g==
-X-Gm-Message-State: AOAM5304C8bg71hXiKGNDNh1ey7XQjBtMcQdmdaPcKyqDiYti06mSdlU
-        nhr5cn4BMRxqSY+UPfh9rXJJ4/a6ic13K5EKtfFh5AN7NLeOT5rJArLxWUK08QcLJDwPIS0fIQI
-        XlW7HyDTTQt7+cIuRxQ+ltbHw
-X-Received: by 2002:adf:ed82:: with SMTP id c2mr3112506wro.183.1640100887639;
-        Tue, 21 Dec 2021 07:34:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxJqpw8uIY10QqnXbQKRyOqFEzE0cFhwUq+ORGFcE2RieR7pChtQQCtO0IR/u0f07CF0OUrxQ==
-X-Received: by 2002:adf:ed82:: with SMTP id c2mr3112498wro.183.1640100887461;
-        Tue, 21 Dec 2021 07:34:47 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id q8sm6576181wrx.59.2021.12.21.07.34.43
+        bh=ENsWP3t0OEsvzi2ehFfWL5PLo9nbmRuKstEblytFSZk=;
+        b=TG+wOZKjktHQUjIAAkl55XtF3qlM1E/f8mdnXpeDoHyQBvs2E121VnesvZLf6xRWDQ
+         Tb+ln3H1dMD2jHBUo3aVr7M9MwpyEhMTf/STvCiT1nqfPaUY32XeBaPogAWcotaIbQyD
+         q1E5bdha/2eb7/+9oGm0sydjBApkG3rQvpdtpaCSD/nzAjIIpaO5c39yhFTCQS3/LRNZ
+         kVQwDUP+hlJ67qsSayZZ0ObhoRN+zQz3MQskuYL74pXx/CzuPg5gwNcu/Ax9+bg85SM1
+         Pa982juKAiobhF6OYgNYGLs/zTdgeDQA/I6pQxJr9cktPzhpoFmIH7cAWKy8vEnv+SRv
+         Rn8g==
+X-Gm-Message-State: AOAM530nYJjJOZan29nSxH0fd2o1WBQUH7ZWZ5ZBRVCqv1ipaVG0ywG/
+        oLjkRxdd6o+Iq5rs5XHHKkPZxEj+nVk=
+X-Google-Smtp-Source: ABdhPJyDx3MAzVctUS7978ihuhMpJuYGK9FEWO80QNPmP5CaKDEoqhisEbZErPGWxHz0QLZ7Rtf0oQ==
+X-Received: by 2002:a2e:7a11:: with SMTP id v17mr2727509ljc.33.1640100882577;
+        Tue, 21 Dec 2021 07:34:42 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id bf19sm2771177ljb.126.2021.12.21.07.34.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:34:46 -0800 (PST)
-Message-ID: <38678f18-80eb-414b-4e98-8ed266abb113@redhat.com>
-Date:   Tue, 21 Dec 2021 16:34:37 +0100
+        Tue, 21 Dec 2021 07:34:42 -0800 (PST)
+Subject: Re: [PATCH v1] memory: tegra30-emc: Print additional memory info
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20211217234711.8353-1-digetx@gmail.com>
+ <fc5601e7-40e7-03c5-a433-859539f82144@canonical.com>
+ <03a09ff5-fe2d-3ce2-a93b-4e44fd030ffb@gmail.com>
+ <84487ed8-2f9d-c178-012b-8407e5083b87@canonical.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <f775891b-12c4-ae6c-364c-abaa7ea3f249@gmail.com>
+Date:   Tue, 21 Dec 2021 18:34:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: The vcpu won't be wakened for a long time
+In-Reply-To: <84487ed8-2f9d-c178-012b-8407e5083b87@canonical.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Huangzhichao <huangzhichao@huawei.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
- <YbjWFTtNo9Ap7kDp@google.com> <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
- <Ybtea42RxZ9aVzCh@google.com> <8a1a3ac75a6e4acf9bd1ce9779835e1c@huawei.com>
- <YcHyReHoF+qjIVTy@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YcHyReHoF+qjIVTy@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 16:27, Sean Christopherson wrote:
+21.12.2021 11:14, Krzysztof Kozlowski пишет:
+>>>> +static void emc_read_lpddr_sdram_info(struct tegra_emc *emc,
+>>>> +				      unsigned int emem_dev)
+>>>> +{
+>>>> +	union lpddr2_basic_config4 basic_conf4;
+>>>> +	unsigned int manufacturer_id;
+>>>> +	unsigned int revision_id1;
+>>>> +	unsigned int revision_id2;
+>>>> +
+>>>> +	/* these registers are standard for all LPDDR JEDEC memory chips */
+>>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 5, &manufacturer_id);
+>>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 6, &revision_id1);
+>>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 7, &revision_id2);
+>>>> +	emc_read_lpddr_mode_register(emc, emem_dev, 8, &basic_conf4.value);
+>>>> +
+>>>> +	dev_info(emc->dev, "SDRAM[dev%u]: manufacturer: 0x%x (%s) rev1: 0x%x rev2: 0x%x prefetch: S%u density: %uMbit iowidth: %ubit\n",
+>>>> +		 emem_dev, manufacturer_id,
+>>>> +		 lpddr2_jedec_manufacturer(manufacturer_id),
+>>>> +		 revision_id1, revision_id2,
+>>>> +		 4 >> basic_conf4.arch_type,
+>>>> +		 64 << basic_conf4.density,
+>>>> +		 32 >> basic_conf4.io_width);
+>>>> +}
+>>>> +
+>>> Quickly looking, these two functions are exactly the same as ones in
+>>> tegra20-emc.c
+>>> . Later you might come up with another set for other SoCs, so it looks
+>>> it is worth to share these.
+>> Should be too much trouble for not much gain, IMO. How many bytes will
+>> be shared in the end? There is no much code here, we may lose more than
+>> win. All these Tegra EMC drivers can be compiled as a loadable modules,
+>> that's what distro kernels usually do. There are no plans for other SoCs
+>> for today.
+> It's not about the bytes but source code lines to maintain and fix (if
+> there is something to fix). But if you don't plan to make a third copy
+> of it, it is okay.
+
+Only Tegra114 SoC potentially supports LPDDR2, later SoCs dropped LPDDR2
+support. We don't even have memory driver for T114 at all in the today's
+mainline. I also doubt that there were any consumer T114 devices sold
+with LPDDR2. Hence we shouldn't have a need for the third copy anytime
+soon, likely ever.
+
+>> I don't see how that sharing could be done easily and nicely. Please
+>> tell if you see.
+> Since it is not about duplicated object code, but code for review, it is
+> pretty straightforward:
 > 
-> Paolo, can the changelog be amended to the below, and maybe even pull the commit
-> into 5.16?
+> 1. Create tegra-emc-common.[ch]
+> 2. In Makefile:
+> 
+> +tegra20_emc-y += tegra20-emc.o tegra-emc-common.o
+> 
+> +obj-$(CONFIG_TEGRA20_EMC)  += tegra20_emc.o
+> 
+> +
+> 
+> +tegra30_emc-y += tegra30-emc.o tegra-emc-common.o
+> 
+> +obj-$(CONFIG_TEGRA30_EMC)  += tegra30_emc.o
+> 
 
-Yes, of course.
-
-Paolo
-
+The problem that struct tegra_emc isn't shareable and this common code
+should introduce messiness to the Tegra EMC drivers. I'd prefer not to
+share anything for now and get back to this option with sharing later
+on, if will be another good reason.

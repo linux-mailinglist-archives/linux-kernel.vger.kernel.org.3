@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD1347BA5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE38447BA5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbhLUG6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbhLUG6x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:58:53 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B6EC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 22:58:53 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id co15so11652076pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 22:58:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bfdq92o7810i6rJp9/BW3OyetwWdf/1GNppZ2JN9OJk=;
-        b=CeGvoycc2Gl6K76WdEbf+k5/nTMd19fWb21A6Xwiyn6l5U82KTjVDpCgmfzwxTAnCe
-         VNwmXZ2Wc78gQyFSxxVbv33ApfCh5jrVyaGOOAgBCZYmqk5e9PxFf/6tGSum9PBGesqv
-         wn5Jvt7ElLn6JOY4PoZiNLmNjSf/iZNRs38v/T8+/3tYZZecOxxAKbG+JOy9dWp6TgfH
-         wHXX/W9ysSnmhTHKq90voFPmtNIkvCIyOxDGQnsL/rfFT4mn1AOYJUkPOYT0c3K0J+M2
-         CfGP7KIIy5M00ZArYqzq3HQGJLRKdoYWkaMCUdn9r1bn5oKDRVeevJQ9U8qjbFavoa3E
-         Je4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bfdq92o7810i6rJp9/BW3OyetwWdf/1GNppZ2JN9OJk=;
-        b=zuPNhDSwptAe4pzt26PNlmvhrziKLyB3lrJWeXLBHB4ofzcTEmv08QThKn3fQa2R9N
-         NcoytUF8Q5/w1t8ZORGuhZa/nDMWfhTDH4SnGCRqvY5Koqbyv6FEai7AELIsM/dTRjuB
-         WKuS4ceELq3cyLQH6Zfw/JbCtZraE7a3lj+AK6o1VYghJCbQfqXC6ZcPmIrOXQAYNePH
-         31lGt/JS8IjRMFSPoGnYoCISlUj8HJXdrwvGQ9EeJs0es9+yD66er0G+hdgdiLVrYx5s
-         hx+I4ZEEqtofJHeN1XBoURNRuqe40MnRUNKcpdtGAHnrj1NQJDhAIl2wYXAUDfYg5T1h
-         FEqg==
-X-Gm-Message-State: AOAM533mkikiztJdKm81rWzIbxrfFFfBwKIip9Nb6CdxXc/L8LI4vi5+
-        T0n0P/8/cru4HdF1cXG2FozZ
-X-Google-Smtp-Source: ABdhPJyosroBDKTLC8AhjYjToKLzIvkOBbyYz/3ygLbTchaVzURgogP17coYgfRhs5dw3LlpbnHrPQ==
-X-Received: by 2002:a17:90a:5285:: with SMTP id w5mr2518033pjh.1.1640069933188;
-        Mon, 20 Dec 2021 22:58:53 -0800 (PST)
-Received: from thinkpad ([117.193.215.70])
-        by smtp.gmail.com with ESMTPSA id w7sm10141086pfw.133.2021.12.20.22.58.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 22:58:52 -0800 (PST)
-Date:   Tue, 21 Dec 2021 12:28:45 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845: add missing power-controller
- compatible
-Message-ID: <20211221065845.GC26872@thinkpad>
-References: <20211220211443.106754-1-david@ixit.cz>
+        id S234426AbhLUG7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:59:09 -0500
+Received: from mga17.intel.com ([192.55.52.151]:57715 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233417AbhLUG7I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 01:59:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="221015349"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="221015349"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 22:59:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="521128571"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.155]) ([10.238.4.155])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 22:59:05 -0800
+Message-ID: <c63144a6-efd4-d266-a584-11eb34391569@linux.intel.com>
+Date:   Tue, 21 Dec 2021 14:59:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220211443.106754-1-david@ixit.cz>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] perf pmu: Fix event list for uncore PMUs
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, irogers@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1639670017-74918-1-git-send-email-john.garry@huawei.com>
+ <Yb09t/AAFexaGE+j@kernel.org>
+ <d596837e-e3f1-33ed-b17e-d420bfcf3bd1@huawei.com>
+ <eb0fc722-5de6-04be-8440-5df6a8236847@linux.intel.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <eb0fc722-5de6-04be-8440-5df6a8236847@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:14:43PM +0100, David Heidelberg wrote:
-> dt-schema expect to have fallback compatible, which is now in-place.
-> 
-> Fixes warning generated by `make qcom/sdm845-oneplus-fajita.dtb`:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: power-controller@c300000: compatible: ['qcom,sdm845-aoss-qmp'] is too short
->         From schema: Documentation/devicetree/bindings/soc/qcom/qcom,aoss-qmp.yaml
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 92ab4513a08b..dbdb4243499c 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -4619,7 +4619,7 @@ aoss_reset: reset-controller@c2a0000 {
->  		};
->  
->  		aoss_qmp: power-controller@c300000 {
-> -			compatible = "qcom,sdm845-aoss-qmp";
-> +			compatible = "qcom,sdm845-aoss-qmp", "qcom,aoss-qmp";
 
-"qcom,sdm845-aoss-qmp" compatible is supported by the driver. So ideally we
-don't need a fallback here.
 
-Is this something for DT backwards compatibility?
-
-Thanks,
-Mani
-
->  			reg = <0 0x0c300000 0 0x100000>;
->  			interrupts = <GIC_SPI 389 IRQ_TYPE_EDGE_RISING>;
->  			mboxes = <&apss_shared 0>;
-> -- 
-> 2.34.1
+On 12/21/2021 12:34 AM, Liang, Kan wrote:
 > 
+> 
+> On 12/20/2021 3:38 AM, John Garry wrote:
+>> On 18/12/2021 01:47, Arnaldo Carvalho de Melo wrote:
+>>>> Commit 0e0ae8742207 ("perf list: Display hybrid PMU events with cpu 
+>>>> type")
+>>>> changed the list for uncore PMUs, such that duplicate aliases are now
+>>>> listed per PMU (which they should not be), like:
+>>>>
+>>>> ./perf list
+>>>> ...
+>>>> unc_cbo_cache_lookup.any_es
+>>>> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+>>>> line in E or S-state]
+>>>> unc_cbo_cache_lookup.any_es
+>>>> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+>>>> line in E or S-state]
+>>>> unc_cbo_cache_lookup.any_i
+>>>> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+>>>> line in I-state]
+>>>> unc_cbo_cache_lookup.any_i
+>>>> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+>>>> line in I-state]
+>>>> ...
+>>>>
+>>>> Notice how the events are listed twice.
+>>> Hi Jin,
+>>>
+>>>     Can I have your acked-by/tested-by?
+>>
+>> Hi Arnaldo,
+>>
+>> I assume that address is bouncing for you also.
+>>
+> 
+> Yes, Jin Yao has left Intel.
+> 
+>> So if anyone else has one of these hybrid PMU x86 systems then it 
+>> would be appreciated to check this change.
+>>
+> 
+> + Zhengjun
+> 
+> Zhengjun,
+> 
+> Could you please help to verify the change?
+> 
+> Thanks,
+> Kan
+
+Tested this patch on one hybrid PMU x86 system, it works OK.
+
+Tested-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+
+-- 
+Zhengjun Xing

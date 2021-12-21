@@ -2,96 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D274647C411
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5517E47C418
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239979AbhLUQpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 11:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S239995AbhLUQre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 11:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbhLUQpk (ORCPT
+        with ESMTP id S236468AbhLUQrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:45:40 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B7BC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:45:39 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id b13so25858432edd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:45:39 -0800 (PST)
+        Tue, 21 Dec 2021 11:47:33 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91AEC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:47:32 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z29so54312052edl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:47:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=jGQh2Zl818G1tF0nVPUmp4kI247aa5EVon23vUrDvZ8=;
-        b=Qf+AHD5BZa5Y0UtFdt23sSoakg0eqC3c0bqWgBcDayBNEq/IXIGGFKizWlkJMUPRRJ
-         1PfW2bh9sHAL11M99YZsbpKKsKRhImb0a8+gKD761G/sfZsVaPfX9Jo/2KPj+7YpMJMz
-         D7TDqKAzyX+03Fl7D6Z7OoXtyuHF/lLN79ec1fu1WJJWKRia3FrjtuHGa5qtufpWLgAB
-         NUSW6TDbjW0iao52nLOngqlbBpdVKUiA5YAZoFteMnY0vP6UW3TE1GPddzvioWduumk/
-         XupQyCfMbc5DnkkBwAiXejdFR15f0xvWXMaNuybwdkY39Dnr/kZo8UKLXgC6cykJ68Z2
-         ti2Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qgzoOjuixCPGD3DrGcfNRG0OiVFUDG2snsOsT7Z+aWs=;
+        b=GfZb8I6uUXmA3ugHIvVwpvC75DFWqQ9FTrkYC+xshHSAlo0PBtBwr7JyaJl6qNUSCK
+         /NZ6dgKqVNXMkHXcvp8keaHOhC9o7qT5Z9WQn7CLE9/9acgQ9bSYnrzfhgtyY4icBoFS
+         S47vPFEUe8cwXS+Xtn4fDGjQIFrraNgMjP/RQf4KV17CZAV6Gs6jpwglRvHOcqHDpJaL
+         5hGWYcKtbkA6Zh2tnyqRJAbPS1yb272ZLAfgQMP1sImvfwE59amNwt1QMBPS3ZrdCfQA
+         wgF9LuSmes4YJDeRDmkhDeZ+UoZ5SxTFUH9cTHgpFrJY/OB3ks5+8yfIUcc0dhJH3lWj
+         tiEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=jGQh2Zl818G1tF0nVPUmp4kI247aa5EVon23vUrDvZ8=;
-        b=SHbIQfUAM570wmU5E2923MQbjzlGjBtnx18TVAIOA180oODXwdIdCBF+AkrX934VPQ
-         7xNSdM6kK/MlUxGEUfZoojXgcgtyAfylBINct2xDsGY9JrjMBOLEj4WGfil6qlctdCEF
-         crWTjf3RNKA1aMvrDXY03xb/6jkOKBiMiyC3Izy9InZgLf8+Mj5zB5ffJv8KplA8MfGK
-         8XlYqaWbfQKJxGZ4AdieLp0O9q3hHtIOchPQkOrV+GnWylDJGUDdQsIR9pr8klPbVj3z
-         r+nlkkG4ZC0QxvO33XGn8rV8jtp+ikL3/fRzkzcXcMbUqeT+0zx15YO4Sh+YcnsGJz0c
-         AB4Q==
-X-Gm-Message-State: AOAM5311wnKqlxk/bN6q2wEByiYh/XKdg9ryQ56pCnIvcv/rNCZ3toDl
-        ILBtcRIK16amkIiUNiuiKDcbsRW3NcE+L3+ucwM=
-X-Google-Smtp-Source: ABdhPJxTjSxHCUuoBEhZhseKiud10G9uBNDs33/PSeA8xdveFDjjYoK9lNtrmK345sBHw6tR2cnI+j7AsomZvtAoI5E=
-X-Received: by 2002:a05:6402:5251:: with SMTP id t17mr3934184edd.397.1640105138359;
- Tue, 21 Dec 2021 08:45:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qgzoOjuixCPGD3DrGcfNRG0OiVFUDG2snsOsT7Z+aWs=;
+        b=pcqabkCcI7AnZJmfC0rWOm4Gv1vlfATHLCCPUqpaG9rd+f1WGdtH2RojfqN3SgTGP6
+         giQCpSx6dV19/2wnZrCuLt4SmceNl4EGYQcVXhoLdKYuhbphYbBXYY78+Yymu8GrT506
+         zuoxY9NpBwg+GoMUi6bGXUOWTJorjQgxepdipfTZCwL+2GE3mCQ8x+zJXlxzySZSiGtG
+         vS0Hx739gh2nl+sEDGoywaOFm95aq/H6k2mXgg6xnole4HM0ant32s8FtrI6Zi2UI68S
+         iTiHfWq0nSsQ6eUEZsoz03bGxIrz8RyyP7OcHA9U53iiNpZV9xtAhulagVQH2XDPQZt4
+         bGow==
+X-Gm-Message-State: AOAM530PV09GNHfV0EsuDYeFjvL1rFNYXWy5zLwGBJyJw6uqpR1vtrEV
+        Gf9LPLhtqTNG6j9wRqpaOxZcKDhz0nTn2m4dk2beZQ==
+X-Google-Smtp-Source: ABdhPJwDLPCgB8Wi8VYCO/jFHJtdzGpyco8O0RmQmiFpE9YLdKzudzKph06jI7RIeEBybqsLVIoSLRUWzWUsqlZzMAA=
+X-Received: by 2002:a05:6402:1c08:: with SMTP id ck8mr4115171edb.32.1640105250601;
+ Tue, 21 Dec 2021 08:47:30 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:907:2cf4:0:0:0:0 with HTTP; Tue, 21 Dec 2021 08:45:37
- -0800 (PST)
-Reply-To: ali.muhammad22@aol.com
-From:   mrs aisha gambo <chinonsoa66@gmail.com>
-Date:   Tue, 21 Dec 2021 17:45:37 +0100
-Message-ID: <CAGFd-ff+xbJONSOkTG_xDcO=TgmXOt0Y9MBG8fxqpaRk4anb_g@mail.gmail.com>
-Subject: Dear friend Contact my secretary with this Email(ali.muhammad22@)aol.com
-To:     undisclosed-recipients:;
+References: <20211220210643.47842-1-pmenzel@molgen.mpg.de> <CAE_wzQ_Lg1ODV5sEqtW=SauhSXxi6+fh3msOuhnJy8-sNtORcg@mail.gmail.com>
+In-Reply-To: <CAE_wzQ_Lg1ODV5sEqtW=SauhSXxi6+fh3msOuhnJy8-sNtORcg@mail.gmail.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 21 Dec 2021 08:47:19 -0800
+Message-ID: <CABXOdTeNy3jQ5aQijw9HTpwcNvkEJmddz9yf0Mk-Z+78bDDN-A@mail.gmail.com>
+Subject: Re: [PATCH] CHROMIUM: i2c: Add device property for probing
+To:     Dmitry Torokhov <dtor@chromium.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Furquan Shaikh <furquan@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tim Wawrzynczak <twawrzynczak@chromium.org>,
+        coreboot@coreboot.org, Matt DeVillier <matt.devillier@gmail.com>,
+        Felix Singer <felixsinger@posteo.net>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Furquan Shaikh <furquan@chromium.org>,
+        Justin TerAvest <teravest@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>, linux-i2c@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear friend Contact my secretary with this Email(ali.muhammad22@)aol.com
+On Mon, Dec 20, 2021 at 1:49 PM Dmitry Torokhov <dtor@chromium.org> wrote:
+>
+> Hi Paul,
+>
+> On Mon, Dec 20, 2021 at 1:07 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote=
+:
+> >
+> > From: Furquan Shaikh <furquan@google.com>
+> >
+> > Dear Linux folks,
+> >
+> >
+> > Google Chromebooks are often built with devices sourced from different
+> > vendors. These need to be probed. To deal with this, the firmware =E2=
+=80=93 in
+> > this case coreboot =E2=80=93 tags such optional devices accordingly =E2=
+=80=93 I think
+> > this is commit fbf2c79b (drivers/i2c/generic: Add config for marking
+> > device as probed) =E2=80=93 and Chromium OS=E2=80=99 Linux kernel has t=
+he patch at hand
+> > applied to act accordingly. Right after the merge, Dmitry created a
+> > revert, which was actively discussed for two days but wasn=E2=80=99t ap=
+plied.
+> > That means, millions of devices shipped with such a firmware and Linux
+> > kernel. To support these devices with upstream Linux kernel, is there a=
+n
+> > alternative to applying the patch to the Linux kernel, and to support
+> > the shipped devices?
+>
+> *sigh* I should have pushed harder, but I see it managed to
+> proliferate even into our newer kernels. Not having this patch should
+> not cause any problems, it can only hurt, because the i2c core has no
+> idea how to power up and reset the device properly. The only downside
+> of not having this patch is that we may have devices in sysfs that are
+> not connected to actual hardware. They do now cause any problems and
+> is how we have been shipping ARM-based devices where we also dual- and
+> triple-source components. However if we were to have a device that
+> switches between several addresses (let's say device in bootloader
+> mode uses 0x10 address and in normal mode 0x20) this "probing" may
+> result in device not being detected at all.
+>
+> If we wanted to do this correctly, coreboot would have to implement
+> full power and reset control and also add drivers for I2C controllers
+> to be able to communicate with peripherals, and then adjust _STA
+> methods to report "not present" when the device is indeed absent. And
+> note that even in this case we would have issues with "morphing
+> devices", so coreboot would also need to know how to reset device out
+> of bootloader mode, and maybe flash firmware so device can work in
+> normal mode.
+>
+> However coreboot does (or did?) not want to add code to handle i2c
+> controllers, and would like to push this knowledge to the kernel. And
+> the kernel does know how to handle peripherals properly, but that
+> knowledge lies in individual drivers, not i2c core.
+>
+> We should remove "linux,probed" from coreboot and not propagate to
+> newer Chrome OS kernels, and keep it away from upstream.
+>
 
+Revert from chromeos-5.15 is at
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
+3350347.
+Everyone please feel free to comment there.
 
-We are inform you about your long overdue Payment outstanding in our
-records. We saw your name in the Central Computer among list of unpaid
-inheritance claims individuals and we have update you through your
-email, we have already arranged your payment to be paid to you,
-through ATM Visa Card.
-
-Your name appeared among the beneficiaries who will receive sum of
-Five Millions Two-Hundred Thousands United State Dollars
-(USD$5.200,000.00) through ATM Visa Card was set up for you, this will
-enable you to withdraw your funds in any ATM Machines in your country.
-
-You should contact my secretary in Burkina Faso his Name Mr ali
-muhammad Email.ali.muhammad22@gmail.com
-
-Tell/advice him to send your ATM Visa Card sum of Five Millions
-Two-Hundred Thousands United State Dollars (USD$5.200,000.00) we are
-kept for you, get in touch with my secretary, his name Mr ali muhammad
-instructs him where to send you the ATM Visa Card worth of Five
-Millions Two-Hundred Thousands United State Dollars (USD$5.200,000.00)
-to you.
-
-I hope you understood the reason why this big amount of money was kept for you??
- Please inform me immediately you received the ATM Visa Card sum of
-Five Millions Two-Hundred Thousands United State Dollars
-(USD$5.200,000.00) so that i will tell our managing director that you
-have already received your ATM Visa card.
-
-You should remembered that I have forwarded instructions to the
-secretary on your behalf to send the ATM Visa Card to you immediately,
-feel free to contact the secretary so that he will send the ATM Visa
-Card sum of Five Millions Two-Hundred Thousands United State Dollars
-(USD$5.200,000.00) to you immediately without delay.
-
-Yours faithfully
-Mrs aisha gambo.
+Guenter

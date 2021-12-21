@@ -2,259 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A2047C0B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3D047C0B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbhLUNTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:19:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35388 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbhLUNTy (ORCPT
+        id S238161AbhLUNVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234517AbhLUNVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:19:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46381615A9;
-        Tue, 21 Dec 2021 13:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC388C36AEB;
-        Tue, 21 Dec 2021 13:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640092793;
-        bh=si/OavSeoSBngnHkOx9IF/AzCke6m5sxieeo9KjaURk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uZ71KPnoSH83KUCEECdp4QPheL7hVeoxfDy9CMv0zsh4yCtspkyWbZJr8Ztd0iwzT
-         hGuwhYSeaZywsHHJRJVqPEOJEURDXs0muDlj8gzPl6iOcuaBM511ANgiQFEOKXYU92
-         gXRkES/eDhTVq65TiF+1yBbXM3Qsj8MqYJn0cLcpZiPaLUxpnRKGt5on4RIV6PSXYi
-         ljy47vt+fnT1ecC4/NNFN0X25s6A5jvfROnG+HzRiiL4Z5BAyo7LHGUazY5i1yR88m
-         dvUiiJfW9G8hRfzbWnBFlNus4mSuekb/kpO7MiyPLzfZOJDr53x82ei4xQSwEuKFwG
-         v0Iit8DYwEvhA==
-Received: by mail-ed1-f47.google.com with SMTP id bm14so39080324edb.5;
-        Tue, 21 Dec 2021 05:19:53 -0800 (PST)
-X-Gm-Message-State: AOAM531HwAlIEggbBFlg7YwBSWPix42vdBd936Tv12kXFGIRqacCzM4H
-        VO7F6JcZsuL/9GE3l8/6UIxVmYMcBPRJggD3ZA==
-X-Google-Smtp-Source: ABdhPJwd681NVmCNJDAiTucwZYvRsGIIdGam7p0YhgGV8RYkiF73p71kMIoy3Ftb7FJzPCF2FEevHXY25jCdG+Omg7g=
-X-Received: by 2002:a17:907:3d94:: with SMTP id he20mr2645147ejc.14.1640092791861;
- Tue, 21 Dec 2021 05:19:51 -0800 (PST)
+        Tue, 21 Dec 2021 08:21:44 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20AAC061574;
+        Tue, 21 Dec 2021 05:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B/oDToJjF+9MzhiotE5SBO6bEHgGlfnze/KNPpAHsCg=; b=SfQyc19jT/JZHSai2UnntFDszE
+        dHXubqLDm2OtdY+7lByHgwHoqZv5IkGbAbEqeONpa6hu5tS8N2Fk/5x1B+aB4TlkCHoY7FQ4fKb5d
+        fCmrRWtxPOcJVp2OyTmyMq5mxuavxsyrcrhutLwB0905JlF6NwGi1Eq8qOC0SQqV+23s3ezCVK8GQ
+        qdAaPpEM23eAPsR/2hqZI7bJ32V+qYe5eixsRzCGEviLjVtEvoBkHH2Lp+uXWD0AZpVxY4hjl2bhR
+        cqojP2dzXmKesKtM+SNwap1S7kIA7njOKiAiDTI2Aa3THkrBARxKYFudRpw4uZMgZ/3TADlJBvQo6
+        TbsMRdmA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzf55-002jwx-KO; Tue, 21 Dec 2021 13:21:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D41533002AE;
+        Tue, 21 Dec 2021 14:21:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE30C206E66FD; Tue, 21 Dec 2021 14:21:26 +0100 (CET)
+Date:   Tue, 21 Dec 2021 14:21:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, kernel@openvz.org
+Subject: Re: [PATCH/RFC v2 1/3] tlb: mmu_gather: introduce
+ CONFIG_MMU_GATHER_TABLE_FREE_COMMON
+Message-ID: <YcHU1maQkp4VXZvS@hirez.programming.kicks-ass.net>
+References: <20211218185205.1744125-1-nikita.yushchenko@virtuozzo.com>
+ <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
 MIME-Version: 1.0
-References: <20211218213556.42061-1-david@ixit.cz>
-In-Reply-To: <20211218213556.42061-1-david@ixit.cz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 21 Dec 2021 09:19:40 -0400
-X-Gmail-Original-Message-ID: <CAL_JsqKRAnBOtk_tsXp6BqMOexB+Sz1dZOT6c_uzf-Vbuu_SRg@mail.gmail.com>
-Message-ID: <CAL_JsqKRAnBOtk_tsXp6BqMOexB+Sz1dZOT6c_uzf-Vbuu_SRg@mail.gmail.com>
-Subject: Re: [PATCH] RFC: dt-bindings: soc: qcom: convert GLINK binding to yaml
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        ~okias/devicetree@lists.sr.ht,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 5:36 PM David Heidelberg <david@ixit.cz> wrote:
->
-> Convert Qualcomm GLINK binding to the yaml syntax.
->
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+On Sat, Dec 18, 2021 at 09:52:04PM +0300, Nikita Yushchenko wrote:
+> For architectures that use free_page_and_swap_cache() as their
+> __tlb_remove_table(), place that common implementation into
+> mm/mmu_gather.c, ifdef'ed by CONFIG_MMU_GATHER_TABLE_FREE_COMMON.
+> 
+> Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
 > ---
->  .../bindings/soc/qcom/qcom,glink.txt          |  94 ----------------
->  .../bindings/soc/qcom/qcom,glink.yaml         | 106 ++++++++++++++++++
->  2 files changed, 106 insertions(+), 94 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
->
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
-> deleted file mode 100644
-> index 1214192847ac..000000000000
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt
-> +++ /dev/null
-> @@ -1,94 +0,0 @@
-> -Qualcomm GLINK edge binding
-> -
-> -This binding describes a Qualcomm GLINK edge, a fifo based mechanism for
-> -communication between subsystem-pairs on various Qualcomm platforms. Two types
-> -of edges can be described by the binding; the GLINK RPM edge and a SMEM based
-> -edge.
-> -
-> -- compatible:
-> -       Usage: required for glink-rpm
-> -       Value type: <stringlist>
-> -       Definition: must be "qcom,glink-rpm"
-> -
-> -- label:
-> -       Usage: optional
-> -       Value type: <string>
-> -       Definition: should specify the subsystem name this edge corresponds to.
-> -
-> -- interrupts:
-> -       Usage: required
-> -       Value type: <prop-encoded-array>
-> -       Definition: should specify the IRQ used by the remote processor to
-> -                   signal this processor about communication related events
-> -
-> -- qcom,remote-pid:
-> -       Usage: required for glink-smem
-> -       Value type: <u32>
-> -       Definition: specifies the identifier of the remote endpoint of this edge
-> -
-> -- qcom,rpm-msg-ram:
-> -       Usage: required for glink-rpm
-> -       Value type: <prop-encoded-array>
-> -       Definition: handle to RPM message memory resource
-> -
-> -- mboxes:
-> -       Usage: required
-> -       Value type: <prop-encoded-array>
-> -       Definition: reference to the "rpm_hlos" mailbox in APCS, as described
-> -                   in mailbox/mailbox.txt
-> -
-> -= GLINK DEVICES
-> -Each subnode of the GLINK node represent function tied to a virtual
-> -communication channel. The name of the nodes are not important. The properties
-> -of these nodes are defined by the individual bindings for the specific function
-> -- but must contain the following property:
-> -
-> -- qcom,glink-channels:
-> -       Usage: required
-> -       Value type: <stringlist>
-> -       Definition: a list of channels tied to this function, used for matching
-> -                   the function to a set of virtual channels
-> -
-> -- qcom,intents:
-> -       Usage: optional
-> -       Value type: <prop-encoded-array>
-> -       Definition: a list of size,amount pairs describing what intents should
-> -                   be preallocated for this virtual channel. This can be used
-> -                   to tweak the default intents available for the channel to
-> -                   meet expectations of the remote.
-> -
-> -= EXAMPLE
-> -The following example represents the GLINK RPM node on a MSM8996 device, with
-> -the function for the "rpm_request" channel defined, which is used for
-> -regulators and root clocks.
-> -
-> -       apcs_glb: mailbox@9820000 {
-> -               compatible = "qcom,msm8996-apcs-hmss-global";
-> -               reg = <0x9820000 0x1000>;
-> -
-> -               #mbox-cells = <1>;
-> -       };
-> -
-> -       rpm_msg_ram: memory@68000 {
-> -               compatible = "qcom,rpm-msg-ram";
-> -               reg = <0x68000 0x6000>;
-> -       };
-> -
-> -       rpm-glink {
-> -               compatible = "qcom,glink-rpm";
-> -
-> -               interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -
-> -               qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -
-> -               mboxes = <&apcs_glb 0>;
-> -
-> -               rpm-requests {
-> -                       compatible = "qcom,rpm-msm8996";
-> -                       qcom,glink-channels = "rpm_requests";
-> -
-> -                       qcom,intents = <0x400 5
-> -                                       0x800 1>;
-> -                       ...
-> -               };
-> -       };
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
-> new file mode 100644
-> index 000000000000..11a7c845ea0a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,glink.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,glink.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm GLINK edge
-> +
-> +description: |
-> +  Qualcomm GLINK edge, a fifo based mechanism for communication between
-> +  subsystem-pairs on various Qualcomm platforms. Two types of edges can be
-> +  described by the binding; the GLINK RPM edge and a SMEM based.
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^(rpm-)?glink(-edge)?$"
-> +
-> +  compatible:
-> +    const: qcom,glink-rpm
-> +
-> +  label:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: should specify the subsystem name this edge corresponds to
-> +
-> +  interrupts:
-> +    description: >
-> +      should specify the IRQ used by the remote processor to
-> +      signal this processor about communication related events
-> +    maxItems: 1
-> +
-> +  mboxes:
-> +    description: >
-> +      reference to the "rpm_hlos" mailbox in APCS, as described
-> +      in mailbox/mailbox.txt
-> +
-> +  qcom,remote-pid:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: specifies the identifier of the remote endpoint of this edge
-> +
-> +  qcom,rpm-msg-ram:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: RPM message memory resource
-> +
-> +patternProperties:
-> +  ".*":
+>  arch/Kconfig                 |  3 +++
+>  arch/arm/Kconfig             |  1 +
+>  arch/arm/include/asm/tlb.h   |  5 -----
+>  arch/arm64/Kconfig           |  1 +
+>  arch/arm64/include/asm/tlb.h |  5 -----
+>  arch/x86/Kconfig             |  1 +
+>  arch/x86/include/asm/tlb.h   | 14 --------------
+>  include/asm-generic/tlb.h    |  5 +++++
+>  mm/mmu_gather.c              | 10 ++++++++++
+>  9 files changed, 21 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index d3c4ab249e9c..9eba553cd86f 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -415,6 +415,9 @@ config HAVE_ARCH_JUMP_LABEL_RELATIVE
+>  config MMU_GATHER_TABLE_FREE
+>  	bool
+>  
+> +config MMU_GATHER_TABLE_FREE_COMMON
+> +	bool
 
-This doesn't work because it will match everything including the above
-properties. You can use additionalProperties or unevaluatedProperties
-instead.
-
-> +    type: object
-> +    properties:
-> +      qcom,glink-channels:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        description: >
-> +          a list of channels tied to this function, used for matching
-> +          the function to a set of virtual channels
-> +
-> +      'qcom,intents':
-
-Don't need quotes.
-
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        description: >
-> +          a list of size, amount pairs describing what intents should
-> +          be preallocated for this virtual channel. This can be used
-> +          to tweak the default intents available for the channel to
-> +          meet expectations of the remote
-> +
-> +    required:
-> +      - qcom,glink-channels
-> +
-> +    additionalProperties: true
-
-However, if the child nodes are the above properties plus other device
-specific properties as this indicates, then you need to split this to
-a separate schema file for those device specific schemas to reference.
-Otherwise, unevaluatedProperties can't see all the properties for the
-child node.
-
-Rob
+I don't like that name... The point isn't that it's common, the point is
+that the page-table's are backed by pages.

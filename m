@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C98547BCDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D04ED47BCE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbhLUJaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234398AbhLUJaC (ORCPT
+        id S236368AbhLUJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:30:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37672 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232603AbhLUJay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:30:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86FAC061574;
-        Tue, 21 Dec 2021 01:30:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4741061335;
-        Tue, 21 Dec 2021 09:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FBBC36AE2;
-        Tue, 21 Dec 2021 09:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640079001;
-        bh=t9uG/PUzJfJCt5vq7qOvzQiuQHsRYBb+5hBgWJjQF8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MMrMbGrsqXDDJawxnYTgl5OlqV29ks8dDbYtGt+9DN7vpqfD5awhcaVrfIphjkLhR
-         eCRBU9SysvivSe0EOauQNT2dECjbHZrp5OFoLLZrHfj5oxihlfsbp1jTAEj+M4zMa2
-         qN4tkQlXtDx9JJihAZOgHkEn4Qjac7ihVzHqkY94=
-Date:   Tue, 21 Dec 2021 10:29:59 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH v4 01/34] component: Introduce struct aggregate_device
-Message-ID: <YcGel9PtOgqWH6l3@kroah.com>
-References: <20211202222732.2453851-1-swboyd@chromium.org>
- <20211202222732.2453851-2-swboyd@chromium.org>
+        Tue, 21 Dec 2021 04:30:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640079054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MDP731re5DMtQOApW41TGX/daqIlWGEhnQrLBNbi7cU=;
+        b=UJ1G9+aC/wLQj6TtCQu/frP4WdqRKcc9qbxvhTdn1RDqW3N86TQro2KmbfLRqvAhcGTAt6
+        JRnlbQeRBcuCRWadJwTJsZUr4PCEh7r0/7x25YjXzzk9RJ+yej/SSLt52T3OUsAibrNkv/
+        Ac4CzuHCiXhE+FQBl/Qx9VKKvE65FAU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-448-VWnp8ExyPGWVsOcK2XHS_w-1; Tue, 21 Dec 2021 04:30:52 -0500
+X-MC-Unique: VWnp8ExyPGWVsOcK2XHS_w-1
+Received: by mail-wr1-f69.google.com with SMTP id v6-20020adfa1c6000000b001a26d0c3e32so3081733wrv.14
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:30:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MDP731re5DMtQOApW41TGX/daqIlWGEhnQrLBNbi7cU=;
+        b=UAlaMWwVz5u/WiVJGu7+j+RtQPLBCRCH17FK242NhHfCshqubot312uQ5nLlOdo2f7
+         NJGE5+2lyBcFSAnhBAxUmoP4ygj9+J/auvi2mpr60IbWZ1H/lrd0D93IDcH3g6Jm/dZt
+         1IBLd+MsXw8cmnVoYavz5BJOIfAGdtnk906IyWQFACtsIgeDAFxl4eyW2/WyM/iGEoP2
+         XGLsGDjFLQkiaN2oZTC9wpFBXeY8pcm4g1mT3xT2cUvJynvjxo/EZpn1Arqiepx3fbpg
+         kL40uo5dQ4JPEhxDWGPUMARJkN0O9sHaFQ2QTEIWXzHu4pKeTVJzDar62D3YeWGFnHLN
+         vftQ==
+X-Gm-Message-State: AOAM531QP3Bpe1ynMMwrOzx9FcaLYv6WsWMONVldELFyiBEYJlRyZ0OE
+        ebqF3AafT77VhiIxocCk618arT1G6LT4q73z1f7Gb6A+rVDP5n5oFzbe7V8WZKngRNph5D/4ZJx
+        zXmAZRzGag7aZhxTIJ13EiqyV
+X-Received: by 2002:a05:6000:1866:: with SMTP id d6mr1820860wri.704.1640079051269;
+        Tue, 21 Dec 2021 01:30:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy4OPUY2kgWsIwpXa/+dQUUQY5BJbjatdV1r5w+V9wm4oetQS+1VJTpTYIkBdnpO2hY/PhkRg==
+X-Received: by 2002:a05:6000:1866:: with SMTP id d6mr1820839wri.704.1640079051075;
+        Tue, 21 Dec 2021 01:30:51 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id j17sm10390448wrp.68.2021.12.21.01.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 01:30:50 -0800 (PST)
+Message-ID: <34ad15d6-d525-1fe0-8aa7-92a52a19861c@redhat.com>
+Date:   Tue, 21 Dec 2021 10:30:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202222732.2453851-2-swboyd@chromium.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
+Content-Language: en-US
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+References: <20211217153003.1719189-1-jing2.liu@intel.com>
+ <20211217153003.1719189-19-jing2.liu@intel.com>
+ <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
+ <e0fd378de64f44fd8becfe67b02cb635@intel.com>
+ <219a751e-ac2d-9ce1-9db7-7d5b1edd6bdd@redhat.com>
+ <c06fdc4f3b4d4346ae80801a6c3a6ff2@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <c06fdc4f3b4d4346ae80801a6c3a6ff2@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 02:26:59PM -0800, Stephen Boyd wrote:
-> Replace 'struct master' with 'struct aggregate_device' and then rename
-> 'master' to 'adev' everywhere in the code. While we're here, put a
-> struct device inside the aggregate device so that we can register it
-> with a bus_type in the next patch.
+On 12/21/21 10:06, Wang, Wei W wrote:
+>> (I'm not sure if the first sentence is true in the code, but if not it is a bug that
+>> has to be fixed :)).
+> For the implementation, KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2) always return kvm->vcpus[0]->arch.guest_fpu.uabi_size.
+> Do you want to change it to below?
 > 
-> The diff is large but that's because this is mostly a rename, where
-> sometimes 'master' is replaced with 'adev' and other times it is
-> replaced with 'parent' to indicate that the struct device that was being
-> used is actually the parent of the aggregate device and driver.
+> If (kvm->vcpus[0]->arch.guest_fpu.uabi_size < 4096)
+> 	return 0;
+
+return 4096;
+
+since the minimum size of struct kvm_xsave2 (with no extra) is 4096.
+
+Paolo
+
+> else
+> 	return kvm->vcpus[0]->arch.guest_fpu.uabi_size;
 > 
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/base/component.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/component.c b/drivers/base/component.c
-> index 2d25a6416587..d25048d04b70 100644
-> --- a/drivers/base/component.c
-> +++ b/drivers/base/component.c
-> @@ -9,6 +9,7 @@
->   */
->  #include <linux/component.h>
->  #include <linux/device.h>
-> +#include <linux/idr.h>
->  #include <linux/list.h>
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
-> @@ -63,7 +64,10 @@ struct master {
->  
->  	const struct component_master_ops *ops;
->  	struct device *parent;
-> +	struct device dev;
+> If the size is less than 4096 (e.g. no dynamic xfeatures enabled),
+> userspace should use the old KVM_GET_XSAVE (instead of KVM_GET_XSAVE2)?
+> (KVM_GET_XSAVE2 supports to work with size less than 4096, so I think this isn't necessary)
 
-Who initializes this new structure?
-
->  	struct component_match *match;
-> +
-> +	int id;
->  };
->  
->  struct component {
-> @@ -79,6 +83,7 @@ struct component {
->  static DEFINE_MUTEX(component_mutex);
->  static LIST_HEAD(component_list);
->  static LIST_HEAD(masters);
-> +static DEFINE_IDA(aggregate_ida);
->  
->  #ifdef CONFIG_DEBUG_FS
->  
-> @@ -440,6 +445,7 @@ static void free_master(struct master *master)
->  		}
->  	}
->  
-> +	ida_free(&aggregate_ida, master->id);
->  	kfree(master);
->  }
->  
-> @@ -460,7 +466,7 @@ int component_master_add_with_match(struct device *parent,
->  	struct component_match *match)
->  {
->  	struct master *master;
-> -	int ret;
-> +	int ret, id;
->  
->  	/* Reallocate the match array for its true size */
->  	ret = component_match_realloc(match, match->num);
-> @@ -471,9 +477,17 @@ int component_master_add_with_match(struct device *parent,
->  	if (!master)
->  		return -ENOMEM;
->  
-> +	id = ida_alloc(&aggregate_ida, GFP_KERNEL);
-> +	if (id < 0) {
-> +		kfree(master);
-> +		return id;
-> +	}
-> +
-> +	master->id = id;
->  	master->parent = parent;
->  	master->ops = ops;
->  	master->match = match;
-> +	dev_set_name(&master->dev, "aggregate%d", id);
-
-You set the name yet the device is not "real"?
-
-I don't understand this patch at all, sorry.
-
-greg k-h

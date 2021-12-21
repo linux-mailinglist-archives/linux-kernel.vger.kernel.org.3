@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4A647C822
+	by mail.lfdr.de (Postfix) with ESMTP id A37E847C821
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbhLUULo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S233741AbhLUULm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbhLUULd (ORCPT
+        with ESMTP id S233322AbhLUULe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:11:33 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D16AC061574;
-        Tue, 21 Dec 2021 12:11:33 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id z29so56387526edl.7;
-        Tue, 21 Dec 2021 12:11:32 -0800 (PST)
+        Tue, 21 Dec 2021 15:11:34 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169DFC06173F;
+        Tue, 21 Dec 2021 12:11:34 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id m21so943708edc.0;
+        Tue, 21 Dec 2021 12:11:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4Jkv8qUJh2Qvz2gJBqyHxg6YZrouzoh2tHirL2oPEjY=;
-        b=i7DlPC8hunO7b9Ca44FoAj4NTyiOe5HIz1Gox/5gJSMbPz2fPZqHAdAc1Bpk0iLaeP
-         isEhr58ECcupjzJqCRDjRF7e8S1Jf2VTKz+kKsUDhT1rT10Z1I1GgP7hDp8gjLs7PWQ2
-         x8J5q0suZzmlGj1H/hu3TCPxy4LThURmBT8OQPqDg3nze3rUGi/B8q0a6wXug3stgsHr
-         dSNdlpEJkq+lTE1sU04UremTCofRqGBBKKtTUZ2/lcoaDJbTcDX5xUqz2zIqa8GupROD
-         ElW8BNNzrKGltyKR+w9Kz6SR7tymcDU7npMK2K0NvlS0uCDO5nUJ4ZjWPLJFdjzZQ7Xk
-         UHiA==
+        bh=3Yt9Z3R3Mz6HQLD0UxdravpstVCwaJ2Fm/yBXqM+ku8=;
+        b=bC5mDLBffrpjxhP74SsDcqbCtldL7iv5RMYhAojPGVYe3AfzmNgwr/aLOSd/av0I1g
+         3JDiU0LENFq/NWiuvkg2KIrIVavgltwj0jmGDqcW2QDuv4zTWGw2c33gitzujf2gcOGQ
+         7RS6vQsSHXfoDJN+xQYl8y5JNvL1y83d3ABH8PT+C0rDv2dss3nC0k4gvjv4GH9sGCRn
+         saoAk541XLKhv64VKoaA23dECf6Hj/uSVd2X05PUqWGQpxzf7jmGi2UvZq1P/Sfzhuel
+         +0WVRgiqEVj27Ij4Woy/K9TlDXjOI1rK8Kmzrktj2GbyUpdPn9ljw+YIcSUhipOFxTQ1
+         c0ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4Jkv8qUJh2Qvz2gJBqyHxg6YZrouzoh2tHirL2oPEjY=;
-        b=jGzn6VDrPzsedn0gmaPnXbWsgfv/tn/aBnK+qChaP/qux5zsozylC5nk2t11xzTwVM
-         1qBL2HGzxR1GITKdBKXW+DhPoWom/hHLvupc+pJqfJyT+88pjXwQCiEkqY8hD1UEI6d9
-         VW/EOX7BSDHmALMMu4REo7/HI97naPUFiMuMYvKxF62MIEE2hEUTONlniI0MK0kxARZ3
-         UnzPzMMQJuCS4IFLF52f+DB4bcuFXxH3PXqq3RWMTYwpWICGXqVX9BCs0YbJaVJ6UVE/
-         +HekZPvmgzTwDuuf2lJXU+HLePSxjI7O1yIlcZGMTHWIFfJ4Yp3LE7LRk2HKqVkD7Qnn
-         uwrw==
-X-Gm-Message-State: AOAM532TNFQGRkORM8I0LG5a2qv0vJ5mBygQPwDlzNu1ZrNoGQWIukPA
-        9O+15HeIBCnNbnXPHlxlLPY=
-X-Google-Smtp-Source: ABdhPJwWX6ueiELbbia9OPY/Ac0P/7wg0qodfLA+B+wmLR0+lP7vxpCPVRySSl4e9j0ejCKFJyTkTg==
-X-Received: by 2002:a17:907:7616:: with SMTP id jx22mr4130824ejc.119.1640117491688;
-        Tue, 21 Dec 2021 12:11:31 -0800 (PST)
+        bh=3Yt9Z3R3Mz6HQLD0UxdravpstVCwaJ2Fm/yBXqM+ku8=;
+        b=eesWALFBtKxsA4Qv9t0ticRFRC+DdBq5LiY0YctR0AxUeM8Zg/5/jFqxY3HlKsqeKC
+         VZFFjoVUsF8HPm2FfxLWAyjsiz6Um2U4CSz4+4RksZWU9u3XRerUG19ab8lxrONv6yJ0
+         b5ghXpReq2r5kA4qsYxTKyk2H8E6o4pAUgiw26Reif4igpkr1H+yVW81qnBhrJTJrvPA
+         sGBFqNZpQzs51HoV56DsYLoGcBUdpB4/lrQ/2wxYg4IrMYagUIoD0zP0s28iwi7pne2X
+         mt5GU9c/viDME6soZ/E+tqem+VScxEhWCfQ8WQF/GEWxH3NtvnGzSvs+opdTVTJ8gAFt
+         od7g==
+X-Gm-Message-State: AOAM532zXkuCQey4oBjNabYpeC89iBE0vPV5aHngB/2AXnRvmHo+uY6h
+        7mapW1XmPgbY+JlpD5hlOPk=
+X-Google-Smtp-Source: ABdhPJxqBIF3l2S0ltYO5l0DH4DmRrWHmYEpRCiiiozmgYiU91cxkq2LKI7iWWLguVkqFAKTZnaj+w==
+X-Received: by 2002:a17:907:1c02:: with SMTP id nc2mr4174991ejc.333.1640117492694;
+        Tue, 21 Dec 2021 12:11:32 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id b7sm8648418edj.24.2021.12.21.12.11.30
+        by smtp.gmail.com with ESMTPSA id b7sm8648418edj.24.2021.12.21.12.11.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 12:11:31 -0800 (PST)
+        Tue, 21 Dec 2021 12:11:32 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 7/8] hwmon: (adt7x10) Pass hwinfo dev to irq handler
-Date:   Tue, 21 Dec 2021 22:11:12 +0200
-Message-Id: <20211221201113.752827-7-demonsingur@gmail.com>
+Subject: [PATCH v1 8/8] hwmon: (adt7x10) Use hwmon_notify_event
+Date:   Tue, 21 Dec 2021 22:11:13 +0200
+Message-Id: <20211221201113.752827-8-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221201113.752827-1-demonsingur@gmail.com>
 References: <20211221201113.752827-1-demonsingur@gmail.com>
@@ -68,39 +68,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-The irq handler will need to trigger events on the
-hwmon device. Pass it so that we don't store it in
-private data.
+The hwmon subsystem provides means of notifying userspace
+about events. Use it.
 
 Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- drivers/hwmon/adt7x10.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/hwmon/adt7x10.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 72d3a5de359e..964cbe43de46 100644
+index 964cbe43de46..994160bd8901 100644
 --- a/drivers/hwmon/adt7x10.c
 +++ b/drivers/hwmon/adt7x10.c
-@@ -101,7 +101,9 @@ static const u8 ADT7X10_REG_TEMP[4] = {
+@@ -111,11 +111,11 @@ static irqreturn_t adt7x10_irq_handler(int irq, void *private)
+ 		return IRQ_HANDLED;
  
- static irqreturn_t adt7x10_irq_handler(int irq, void *private)
- {
--	struct device *dev = private;
-+	struct device *hdev = private;
-+	struct adt7x10_data *d = dev_get_drvdata(hdev);
-+	struct device *dev = d->bus_dev;
- 	int status;
+ 	if (status & ADT7X10_STAT_T_HIGH)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_max_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_max_alarm, 0);
+ 	if (status & ADT7X10_STAT_T_LOW)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_min_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_min_alarm, 0);
+ 	if (status & ADT7X10_STAT_T_CRIT)
+-		sysfs_notify(&dev->kobj, NULL, "temp1_crit_alarm");
++		hwmon_notify_event(hdev, hwmon_temp, hwmon_temp_crit_alarm, 0);
  
- 	status = adt7x10_read_byte(dev, ADT7X10_STATUS);
-@@ -454,7 +456,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
- 						adt7x10_irq_handler,
- 						IRQF_TRIGGER_FALLING |
- 						IRQF_ONESHOT,
--						dev_name(dev), dev);
-+						dev_name(dev), hdev);
- 		if (ret)
- 			return ret;
- 	}
+ 	return IRQ_HANDLED;
+ }
 -- 
 2.34.1
 

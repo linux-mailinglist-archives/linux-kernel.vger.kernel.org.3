@@ -2,112 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED547C7E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D6947C7FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbhLUUA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S231710AbhLUUBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhLUUAY (ORCPT
+        with ESMTP id S230350AbhLUUBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:00:24 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6CBC061574;
-        Tue, 21 Dec 2021 12:00:23 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id u13so206537lff.12;
-        Tue, 21 Dec 2021 12:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=43/2Mezhuf3WWJTy/6w8lAncDvzXAj2g4OEisA/QoPc=;
-        b=e/7PubARU7NoVPBABUvhADa8uENBdfgxs0KNkTxtBzHkr1YeMWO7EUGNuF4s259YmN
-         MdkRmTIpeXu88h2ODoTcQO1MZWSc4wbNu/A9qZi7zx/nXY/7KOxNx0S4FRnjnNmnUmgT
-         JoMtNgW4NWCl/8v1vAcldb1U9hSbPzFWsLbYZJdCy+zoYfmqVFDHvPyi0Kp/0TVraMzE
-         tyuqQSHYpXkW9eVxEIlbRl+njcvFAaMXhTAUf86qHaM+JoqWdh+DgisjpDNWlgaK7vpd
-         +mZvfOoYq5qIw/FMrPltdDEyxIsOVYLYeQKIKQTja/IA0R39CdEPn6kkYde3A5DMbHS7
-         ZV1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=43/2Mezhuf3WWJTy/6w8lAncDvzXAj2g4OEisA/QoPc=;
-        b=zO9aXlt90MyX++L+Hn3y5mwwc8GVmG6Y+nD0boCu6sxWTbSu28VMYLP8ZI+osVg8Z9
-         uBWMeXgPFmoQeoYBWZIm/VLqGtaI4Gt2NBFbALWwtDXp9L3LkKCOXK7JUlPxp0RCVWdN
-         FJ2f4uqzEkggGr/lafdBUFclQeRtLwFAmq2B2uk8pLx7Tl+kcmRS9EcaYUOPI5eDA8bM
-         N+iOd/VdxaWS92/v9AUwSopJIM3HMLxghgmrHPzYM+Oc5SFqcFRZgdRSBGY83RNvQ3mD
-         1r9dRk6CVpWAHcbyoyrC0iMfQy62lxpxrpzLc0y2Z6ajI20tja3cvTmfNkdLPpvdEbmF
-         JMZQ==
-X-Gm-Message-State: AOAM531AuHtyUsm2VHQJUnRcDKZNFqJkvahzxSjuNgyiuPeJlI/qVwSH
-        clfkGByarQrRGgTog2vXTkU=
-X-Google-Smtp-Source: ABdhPJwU/zRSU/yagVXc2QJ/i0oPGRhcT51zXVjPnhW5k1d5fA28rs9Yv5Z+akpOtx/5ySQjSoUz0A==
-X-Received: by 2002:ac2:5a45:: with SMTP id r5mr4324253lfn.547.1640116822111;
-        Tue, 21 Dec 2021 12:00:22 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id bd28sm2822051ljb.134.2021.12.21.12.00.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 12:00:21 -0800 (PST)
-Message-ID: <65ff1752-f60e-a3b3-2a5f-a7f0b9c97f36@gmail.com>
-Date:   Tue, 21 Dec 2021 23:00:20 +0300
+        Tue, 21 Dec 2021 15:01:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E870C061574;
+        Tue, 21 Dec 2021 12:01:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1ED5EB819B2;
+        Tue, 21 Dec 2021 20:01:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1DFC36AE8;
+        Tue, 21 Dec 2021 20:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640116892;
+        bh=vJkLjaATflEPsX+S3P13UPpgq8GAW8ytUv0DIV3pq8A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=L7NkvhBKk8LWq5KpKKI3MfV/2OUSKilcD0MPAhJFzYbs6WDWSHpy7kTkKsizL2Pux
+         9pP7ahSftL8dbC7iGD5Wll8t+Lc5jlA5Hlz22y80o7I+k0NvYf5CjBjYeVcotP56U5
+         UiLwWU7Bb0ngLAuOHwiL1DkF+OHC+P4cIozUR3cvQOKl9i9X4gJm9woahhlXUaPQQ/
+         nUqeKPIlO1xn5pX1gfGuYd+HIsOib1LRyxeKQOWB1g8C/6p+srbfJo4FWgUccYZTnK
+         PBRDqop+reGNUjbTPQfVV7KOzZm0hkadmvw6qfvpPL/P+4SrBGGE4G+mp7X7/LLFlm
+         LKlt9tzZMabuQ==
+Subject: Re: [PATCH v4 3/4] memory: omap-gpmc: Use a compatible match table
+ when checking for NAND controller
+To:     krzysztof.kozlowski@canonical.com, miquel.raynal@bootlin.com,
+        tony@atomide.com
+Cc:     robh@kernel.org, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20211221131757.2030-1-rogerq@kernel.org>
+ <20211221131757.2030-4-rogerq@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <51b8e895-95e1-0024-1457-ec534985c9f0@kernel.org>
+Date:   Tue, 21 Dec 2021 22:01:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] asix: fix wrong return value in
- asix_check_host_enable()
+In-Reply-To: <20211221131757.2030-4-rogerq@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        robert.foss@collabora.com, freddy@asix.com.tw,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <bd6a7e1779ba97a300650e8e23b69ecffb3b4236.1640115493.git.paskripkin@gmail.com>
- <989915c5f8887e4a0281ed87325277aa8c997291.1640115493.git.paskripkin@gmail.com>
- <YcIulPIwii+7OOzT@lunn.ch>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <YcIulPIwii+7OOzT@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 22:44, Andrew Lunn wrote:
-> On Tue, Dec 21, 2021 at 10:40:05PM +0300, Pavel Skripkin wrote:
->> If asix_read_cmd() returns 0 on 30th interation, 0 will be returned from
->> asix_check_host_enable(), which is logically wrong. Fix it by returning
->> -ETIMEDOUT explicitly if we have exceeded 30 iterations
->> 
->> Fixes: a786e3195d6a ("net: asix: fix uninit value bugs")
->> Reported-by: Andrew Lunn <andrew@lunn.ch>
->> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
->> ---
->>  drivers/net/usb/asix_common.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
->> index 06823d7141b6..8c61d410a123 100644
->> --- a/drivers/net/usb/asix_common.c
->> +++ b/drivers/net/usb/asix_common.c
->> @@ -83,7 +83,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
->>  			break;
->>  	}
->>  
->> -	return ret;
->> +	return i >= 30? -ETIMEDOUT: ret;
+Hi Miquel,
+
+On 21/12/2021 15:17, Roger Quadros wrote:
+> As more compatibles can be added to the GPMC NAND controller driver
+> use a compatible match table.
 > 
-> I think the coding style guidelines would recommend a space before the ?
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  drivers/memory/omap-gpmc.c                   | 6 +++++-
+>  drivers/mtd/nand/raw/omap2.c                 | 5 +----
+
+Will need your Ack for this one as well. Thanks :)
+
+
+>  include/linux/platform_data/mtd-nand-omap2.h | 9 ++++++++-
+>  3 files changed, 14 insertions(+), 6 deletions(-)
+
+cheers,
+-roger
+
 > 
-
-Ah, yes, I forgot to run chechpatch on 2nd one, sorry. Will fix in v2
-
-> I would also replace the 30 with a #define, both here and in the for
-> loop.
-
-Will fix in v2 as well. Thanks for review!
-
-
-
-With regards,
-Pavel Skripkin
+> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+> index 624153048182..d19ffc895e5b 100644
+> --- a/drivers/memory/omap-gpmc.c
+> +++ b/drivers/memory/omap-gpmc.c
+> @@ -2091,6 +2091,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>  	u32 val;
+>  	struct gpio_desc *waitpin_desc = NULL;
+>  	struct gpmc_device *gpmc = platform_get_drvdata(pdev);
+> +	bool is_nand = false;
+>  
+>  	if (of_property_read_u32(child, "reg", &cs) < 0) {
+>  		dev_err(&pdev->dev, "%pOF has no 'reg' property\n",
+> @@ -2183,7 +2184,10 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>  		}
+>  	}
+>  
+> -	if (of_device_is_compatible(child, "ti,omap2-nand")) {
+> +	if (of_match_node(omap_nand_ids, child))
+> +		is_nand = true;
+> +
+> +	if (is_nand) {
+>  		/* NAND specific setup */
+>  		val = 8;
+>  		of_property_read_u32(child, "nand-bus-width", &val);
+> diff --git a/drivers/mtd/nand/raw/omap2.c b/drivers/mtd/nand/raw/omap2.c
+> index b26d4947af02..e6dd8b4cf0d2 100644
+> --- a/drivers/mtd/nand/raw/omap2.c
+> +++ b/drivers/mtd/nand/raw/omap2.c
+> @@ -2352,10 +2352,7 @@ static int omap_nand_remove(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static const struct of_device_id omap_nand_ids[] = {
+> -	{ .compatible = "ti,omap2-nand", },
+> -	{},
+> -};
+> +/* omap_nand_ids defined in linux/platform_data/mtd-nand-omap2.h */
+>  MODULE_DEVICE_TABLE(of, omap_nand_ids);
+>  
+>  static struct platform_driver omap_nand_driver = {
+> diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
+> index de6ada739121..92f011805ad4 100644
+> --- a/include/linux/platform_data/mtd-nand-omap2.h
+> +++ b/include/linux/platform_data/mtd-nand-omap2.h
+> @@ -7,6 +7,7 @@
+>  #define	_MTD_NAND_OMAP2_H
+>  
+>  #include <linux/mtd/partitions.h>
+> +#include <linux/mod_devicetable.h>
+>  
+>  #define	GPMC_BCH_NUM_REMAINDER	8
+>  
+> @@ -61,4 +62,10 @@ struct gpmc_nand_regs {
+>  	void __iomem	*gpmc_bch_result5[GPMC_BCH_NUM_REMAINDER];
+>  	void __iomem	*gpmc_bch_result6[GPMC_BCH_NUM_REMAINDER];
+>  };
+> -#endif
+> +
+> +static const struct of_device_id omap_nand_ids[] = {
+> +	{ .compatible = "ti,omap2-nand", },
+> +	{},
+> +};
+> +
+> +#endif /* _MTD_NAND_OMAP2_H */
+> 

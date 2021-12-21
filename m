@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C878347C61A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4AE47C61D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241082AbhLUSOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:14:46 -0500
-Received: from mail-qk1-f170.google.com ([209.85.222.170]:37690 "EHLO
-        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241021AbhLUSOg (ORCPT
+        id S241087AbhLUSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241021AbhLUSPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:14:36 -0500
-Received: by mail-qk1-f170.google.com with SMTP id m186so13397465qkb.4;
-        Tue, 21 Dec 2021 10:14:36 -0800 (PST)
+        Tue, 21 Dec 2021 13:15:15 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034F0C061574;
+        Tue, 21 Dec 2021 10:15:15 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id bn20so22755939ljb.8;
+        Tue, 21 Dec 2021 10:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rGlhGYi7c9JFZAs90lb+S8aDlBU/W750jjxARuJX2+M=;
+        b=JUt+MrsyFxQklIoUIT4pV5yzp+XK3eXrKwgHYOSzSuVh2z6eRilPd/TOs+710UFBIH
+         ArQaGW3hA8gmXDMLSfeZceTijix+xnOk3CZbSaNP3lMEch4yqP6u0iUwkEvX3YtK0+io
+         5t7YuqjsI2YEVkSKgCADJ6G/leKK+qstYUmtL95nAY0eYwOu6NOWMBrRBEUFNKkkJd3K
+         PiCxfdbqxcauBcEnAGwpwKoTDKnazhLroJLRufJFL4EHdUyksSngPQMe0WfABrhCGgX2
+         AOahhbRdJa8OKcTzWnmrml4Htny/mR9IZO9IhBi2t6PoLM8uixux9bPc3fFh6rSi5aKh
+         K+Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pZh3Qpd5SvcqUEcT4y52L9C1fd8K8ht/Ht2rKQMnZjA=;
-        b=2le176EVEyP0SuNIq4HFWzj8b8PvR7z2k/GuCucaLgK4/artjHfyy5+IHJ/WNtDcoL
-         8elzBVMt6b8Q8F/u5b8+4J5y3jW85b8MLyiIVRUoqo4FmmdgyXQ7zBTocumVohT7ewJT
-         7n2pL4zVd7R/O40+7GyThIaGtrE5yv9G1yX+GrUCsOIeRTim82fsXKAy/L/KUQloR/b5
-         QO5flTyfRHlBHskLHxgG4Aztx7FIqRpfQeyFuBP94CC/fEFx4eKJGHqF2AN3p0KGDEy+
-         ybR3Wo14w0RbLEt9I2ckkiC3/7UYlMfNwhhaK3kbHFiEv6jgsv3fCLvdgELpwgz2EpEV
-         3afw==
-X-Gm-Message-State: AOAM532VkJJdu/mD/jLTZ/apyWAUQDnaiMFloy4NH4kOCWqNzpiz/l3f
-        S6YvLsImmddAUewuputLbg==
-X-Google-Smtp-Source: ABdhPJw/vwQnHfFXE5Kgv5iAOXOBqrO6DxVee4i4XIzMBK7qyJ5XdnnCecKYFFLszmdnzt2n50BYFw==
-X-Received: by 2002:a05:620a:e0e:: with SMTP id y14mr2856584qkm.760.1640110476023;
-        Tue, 21 Dec 2021 10:14:36 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id e15sm325541qtq.83.2021.12.21.10.14.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 10:14:35 -0800 (PST)
-Received: (nullmailer pid 1521054 invoked by uid 1000);
-        Tue, 21 Dec 2021 18:14:32 -0000
-Date:   Tue, 21 Dec 2021 14:14:32 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Hammer Hsieh <hammerh0314@gmail.com>
-Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wells.lu@sunplus.com, Hammer Hsieh <hammer.hsieh@sunplus.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings:pwm:Add bindings doc for Sunplus SoC
- PWM Driver
-Message-ID: <YcIZiFvyo+N4ai7r@robh.at.kernel.org>
-References: <1639741568-5846-1-git-send-email-hammer.hsieh@sunplus.com>
- <1639741568-5846-2-git-send-email-hammer.hsieh@sunplus.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rGlhGYi7c9JFZAs90lb+S8aDlBU/W750jjxARuJX2+M=;
+        b=eZvcsA+27N3L0abghwdnuby/PyQR27KXOagWJkN9Ckclmi2sICdMCX8uxJQ9OO+ZG3
+         dpe8i9xYfokUIVO5LTY4ao5EW1/3M9Hi1bCqezQbqTgeUnvJmf4stOlqmZY0zkjC/+lg
+         8Vcq/Phn6tkeIYkRSMtAIQ9ESXmjVG1xkY1UqCKOsvHHAeuQS+c6FxBGV2nmFyn3yyU6
+         Ve/pu8BomuACsZ1lSJ6mb9T/IC0oUXXcCHjPX1/YKj86enVgFI0REOEn2X+OX5KfmKNl
+         DHR8bsCs7w0wHMdIWhGfmPmDoX8UHZ8Ub5Fo5nSjG83OlkcV0oc8DY+bH49q+6/0z8Np
+         cv1g==
+X-Gm-Message-State: AOAM530dYz2oEsbvhOqx+YbCL2is2kZPtj764AeW5Bxbr+jmhIWwNvAn
+        kWS7KaxkQrCkiZmlsKAo6tRPmW8qxp0=
+X-Google-Smtp-Source: ABdhPJynGnhbhNwiivGaod1p0Su4ja3s2R0c4x90ptRc7pL2XdvSrcCA4gOoBZT/M4xHVrzuaPKaFg==
+X-Received: by 2002:a2e:b0ca:: with SMTP id g10mr3291206ljl.491.1640110513110;
+        Tue, 21 Dec 2021 10:15:13 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id m15sm317882lfg.291.2021.12.21.10.15.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:15:12 -0800 (PST)
+Subject: Re: [PATCH v1 0/5] Improvements for TC358768 DSI bridge driver
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-tegra@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211002233447.1105-1-digetx@gmail.com>
+ <CAG3jFysa8G_fuGDfSLze-ovft3=gc5PXLaPtwTkC2_e0itQYNw@mail.gmail.com>
+ <c09bd552-767e-e783-3f9f-114b8cedb475@gmail.com>
+ <a999b141-4b14-cdd0-f6fa-3d861c0f381f@gmail.com>
+ <CAG3jFytG110MN=AjnY3mz4pHtLYaTTXVWr9z_1=qpCo8hJoM2g@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1aeaf8f2-a65e-5142-65ae-e3ca7f42fc55@gmail.com>
+Date:   Tue, 21 Dec 2021 21:15:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639741568-5846-2-git-send-email-hammer.hsieh@sunplus.com>
+In-Reply-To: <CAG3jFytG110MN=AjnY3mz4pHtLYaTTXVWr9z_1=qpCo8hJoM2g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 07:46:07PM +0800, Hammer Hsieh wrote:
-> Add bindings doc for Sunplus SoC PWM Driver
+21.12.2021 21:10, Robert Foss пишет:
+> Hey Dmitry,
 > 
-> Signed-off-by: Hammer Hsieh <hammer.hsieh@sunplus.com>
+> On Sun, 19 Dec 2021 at 17:02, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 19.10.2021 23:37, Dmitry Osipenko пишет:
+>>> 19.10.2021 12:47, Robert Foss пишет:
+>>>> Applied to drm-misc-next
+>>>>
+>>>> On Sun, 3 Oct 2021 at 01:35, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>>
+>>>>> This series adds couple improvements to the TC358768 DSI bridge driver,
+>>>>> enabling Panasonic VVX10F004B00 DSI panel support. This panel is used by
+>>>>> ASUS Transformer TF700T tablet, which is ready for upstream kernel and
+>>>>> display panel support is the biggest missing part.
+>>>>>
+>>>>> Dmitry Osipenko (5):
+>>>>>   drm/bridge: tc358768: Enable reference clock
+>>>>>   drm/bridge: tc358768: Support pulse mode
+>>>>>   drm/bridge: tc358768: Calculate video start delay
+>>>>>   drm/bridge: tc358768: Disable non-continuous clock mode
+>>>>>   drm/bridge: tc358768: Correct BTACNTRL1 programming
+>>>>>
+>>>>>  drivers/gpu/drm/bridge/tc358768.c | 94 +++++++++++++++++++++++--------
+>>>>>  1 file changed, 71 insertions(+), 23 deletions(-)
+>>>>>
+>>>>> --
+>>>>> 2.32.0
+>>>>>
+>>>
+>>> Robert, thank you for taking care of these patches! Now nothing is
+>>> holding us from upstreaming the device-tree of the Transformer tablet.
+>>>
+>>
+>> Hello Robert,
+>>
+>> These patches spent 2 months in drm-misc-next, will they graduate into
+>> v5.17 or something special needs to be done for that?
+> 
+> They series has landed in linux-next, and will be in v5.17 if nothing
+> catastrophic happens.
 
-The author email and S-o-b must match.
-
-> ---
->  .../devicetree/bindings/pwm/pwm-sunplus.yaml       | 45 ++++++++++++++++++++++
->  MAINTAINERS                                        |  5 +++
->  2 files changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml b/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
-> new file mode 100644
-> index 0000000..9af19df
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/pwm-sunplus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SoC PWM Controller
-> +
-> +maintainers:
-> +  - Hammer Hsieh <hammer.hsieh@sunplus.com>
-> +
-> +properties:
-> +  '#pwm-cells':
-> +    const: 2
-> +
-> +  compatible:
-> +    items:
-> +      - const: sunplus,sp7021-pwm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +required:
-> +  - '#pwm-cells'
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pwm: pwm@9c007a00 {
-> +      #pwm-cells = <2>;
-> +      compatible = "sunplus,sp7021-pwm";
-> +      reg = <0x9c007a00 0x80>;
-> +      clocks = <&clkc 0xa2>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 13f9a84..721ed79 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18242,6 +18242,11 @@ L:	netdev@vger.kernel.org
->  S:	Maintained
->  F:	drivers/net/ethernet/dlink/sundance.c
->  
-> +SUNPLUS PWM DRIVER
-> +M:	Hammer Hsieh <hammer.hsieh@sunplus.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
-> +
->  SUPERH
->  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->  M:	Rich Felker <dalias@libc.org>
-> -- 
-> 2.7.4
-> 
-> 
+Very good to know, thank you!

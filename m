@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDA447BEFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A81747BEFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237143AbhLULcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:32:33 -0500
-Received: from outbound-smtp30.blacknight.com ([81.17.249.61]:59954 "EHLO
-        outbound-smtp30.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237139AbhLULcb (ORCPT
+        id S237157AbhLULct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230449AbhLULcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:32:31 -0500
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id 45382BAB0E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 11:32:30 +0000 (GMT)
-Received: (qmail 18383 invoked from network); 21 Dec 2021 11:32:30 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Dec 2021 11:32:29 -0000
-Date:   Tue, 21 Dec 2021 11:32:27 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] sched/fair: Use weight of SD_NUMA domain in
- find_busiest_group
-Message-ID: <20211221113227.GT3366@techsingularity.net>
-References: <20211210093307.31701-1-mgorman@techsingularity.net>
- <20211210093307.31701-2-mgorman@techsingularity.net>
- <CAKfTPtDPu6r3dsSmY-ZDB0k4muoSk1a2J3=NKqoBG1y8aEwNYQ@mail.gmail.com>
+        Tue, 21 Dec 2021 06:32:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C0C061574;
+        Tue, 21 Dec 2021 03:32:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AB3861532;
+        Tue, 21 Dec 2021 11:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B23C36AE8;
+        Tue, 21 Dec 2021 11:32:44 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 11:32:41 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yufeng Mo <moyufeng@huawei.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v2] asm-generic: introduce io_stop_wc() and add
+ implementation for ARM64
+Message-ID: <YcG7WRvrWiSxcBZt@arm.com>
+References: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
+ <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtDPu6r3dsSmY-ZDB0k4muoSk1a2J3=NKqoBG1y8aEwNYQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 11:53:50AM +0100, Vincent Guittot wrote:
-> On Fri, 10 Dec 2021 at 10:33, Mel Gorman <mgorman@techsingularity.net> wrote:
+On Tue, Dec 21, 2021 at 10:17:27AM +0100, Arnd Bergmann wrote:
+> On Tue, Dec 21, 2021 at 4:55 AM Xiongfeng Wang
+> <wangxiongfeng2@huawei.com> wrote:
 > >
-> > find_busiest_group uses the child domain's group weight instead of
-> > the sched_domain's weight that has SD_NUMA set when calculating the
-> > allowed imbalance between NUMA nodes. This is wrong and inconsistent
-> > with find_idlest_group.
+> > For memory accesses with write-combining attributes (e.g. those returned
+> > by ioremap_wc()), the CPU may wait for prior accesses to be merged with
+> > subsequent ones. But in some situation, such wait is bad for the
+> > performance.
+> >
+> > We introduce io_stop_wc() to prevent the merging of write-combining
+> > memory accesses before this macro with those after it.
+> >
+> > We add implementation for ARM64 using DGH instruction and provide NOP
+> > implementation for other architectures.
+> >
+> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> > Suggested-by: Will Deacon <will@kernel.org>
+> > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+> > ---
+> > v1->v2: change 'Normal-Non Cacheable' to 'write-combining'
 > 
-> I agree that find_busiest_group and find_idlest_group should be
-> consistent and use the same parameters but I wonder if sched_domain's
-> weight is the right one to use instead of the target group's weight.
+> For asm-generic:
 > 
-
-Ok
-
-> IIRC, the goal of adjust_numa_imbalance is to keep some threads on the
-> same node as long as we consider that there is no performance impact
-> because of sharing  resources as they can even take advantage of
-> locality if they interact.
-
-Yes.
-
-> So we consider that tasks will not be
-> impacted by sharing resources if they use less than 25% of the CPUs of
-> a node. If we use the sd->span_weight instead, we consider that we can
-> pack threads in the same node as long as it uses less than 25% of the
-> CPUs in all nodes.
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 > 
+> Will, Catalin: if you are happy with this version, please merge it through the
+> arm64 tree.
 
-I assume you mean the target group weight instead of the node. The
-primary resource we are concerned with is memory bandwidth and it's a
-guess because we do not know for sure where memory channels are or how
-they are configured in this context and it may or may not be correlated
-with groups. I think using the group instead would deserve a series on
-its own after settling on an imbalance number when there are multiple
-LLCs per node.
+Thanks for the ack Arnd. I'll queue this through the arm64 tree.
 
 -- 
-Mel Gorman
-SUSE Labs
+Catalin

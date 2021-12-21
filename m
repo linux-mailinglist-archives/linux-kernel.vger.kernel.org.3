@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 006F047BB77
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A8E47BB7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbhLUIGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:06:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34278 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235383AbhLUIGp (ORCPT
+        id S235424AbhLUIL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234701AbhLUIL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:06:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640074005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9bw88l3NHmiaTt/a1Fx/Og6tPlXiHJAJaUCru5jyB0I=;
-        b=gWC1kBqcxy8tey4bmN4xkpVXXuCSdN3ZxXcEzdri9qZ1AG2gfk61RKVlcdoaAkfG5Jr/C/
-        AQ01UG8ZGeg9dIrVB2w4VD/zmLbn6pkAXjpo9zkpagP3+Y478A6fu8ghXt0dGtg9rtkNtN
-        M/0bOgHmOi6RQz/w3fDmY3/gr3L9jNo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-cR91BW0sP-6B7qCjNn-KXA-1; Tue, 21 Dec 2021 03:06:42 -0500
-X-MC-Unique: cR91BW0sP-6B7qCjNn-KXA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3AA8B34891;
-        Tue, 21 Dec 2021 08:06:40 +0000 (UTC)
-Received: from localhost (ovpn-12-118.pek2.redhat.com [10.72.12.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 819D17EA4E;
-        Tue, 21 Dec 2021 08:06:29 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 16:06:26 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        akpm@linux-foundation.org
-Cc:     Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-        kexec@lists.infradead.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Convert vmcore to use an iov_iter
-Message-ID: <20211221080626.GB7986@MiWiFi-R3L-srv>
-References: <20211213143927.3069508-1-willy@infradead.org>
+        Tue, 21 Dec 2021 03:11:27 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71DEC061574;
+        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id y9so11680020pgj.5;
+        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CNQ27S31DQKVMGNaa41vJ0MWzIDdPEbu6tohUmL45Xc=;
+        b=pWK7rOOe6EgoIgreqR5MDZpNyU04GgACI0jFEnyQ7jExs/7udsljcJrTRwZEPfYbwd
+         YkVlyFt10PL4riFiWcVbhu8LmpmmK2H0ZQVtO/z68Gyrsdhqd7Fnf5dneJzJ+LI6GzAL
+         9oCUXjCyX+2x+mrhIiSi1ZE/oyDDgMWJ4ihXNqpLPvF752E50HoZQDFsmvJl1jujPur7
+         +oR2aKa7zgfO1CFOFyJ55EYKbJqR4LZOWhVfPUx9BpozHtEnpoQ2fUA0U1BXMdos+56s
+         Mi+wCnO9sOOaWnXXwVOuDesraAB8rkTU6lpx+r9R7Q3I2BDYwJnouyEcaOvJaxArG7KY
+         i18Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CNQ27S31DQKVMGNaa41vJ0MWzIDdPEbu6tohUmL45Xc=;
+        b=7zSa4bwpPwUv4ZB8LnXvLK2cfZzal3TLTcukTKbefafGC5so4o2Pg4Z1viYjCAuyhU
+         DkgD0KQGi8dFyi/WbTRiE1bx5Rq8DQOeQRg4hsuuqXZg3zl+Ao8OI56GFvLBHZqjPyej
+         hi6N2RYM1M46tv6h0LYCK+h0CLRT/cQqQQsnLoQsAizC9tSLdqXvG8bmo11OaLjFi2IY
+         KoKj7unNfX8VK2upB32/jmCDpkz6Qm9FZgx3lgHNdgGKSlChNacI34HMprAzo4X8120y
+         Jw/0/bJHD+Nzq+nsL2R0x3sObTW6Wu7gGU+dRsAsyJPJnT9ffw9ZsGp+NwvKAIZbUVil
+         8fgA==
+X-Gm-Message-State: AOAM530WXUtvlBz8lLwSPuL8LbRHvwon0NkBO/QU2+5bnwn3k825ncRT
+        K8B1InUPPS+C2NWhfHtdWjgoEnw/pqM=
+X-Google-Smtp-Source: ABdhPJzivj4IPkq9WcmMOBNQPCbJy7iEXusOZPE0zZnBwVmWYQio52v+igjnlqR4d8Jn8/gjmKRBYA==
+X-Received: by 2002:a62:8042:0:b0:4a8:15eb:db10 with SMTP id j63-20020a628042000000b004a815ebdb10mr2128313pfd.28.1640074286391;
+        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
+Received: from FLYINGPENG-MB0.tencent.com ([103.7.29.30])
+        by smtp.gmail.com with ESMTPSA id t8sm21024635pfj.26.2021.12.21.00.11.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Dec 2021 00:11:26 -0800 (PST)
+From:   Peng Hao <flyingpenghao@gmail.com>
+X-Google-Original-From: Peng Hao <flyingpeng@tencent.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH]  block/elevator: handle possible null pointer
+Date:   Tue, 21 Dec 2021 16:10:42 +0800
+Message-Id: <20211221081042.78799-1-flyingpeng@tencent.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213143927.3069508-1-willy@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 at 02:39pm, Matthew Wilcox (Oracle) wrote:
-> For some reason several people have been sending bad patches to fix
-> compiler warnings in vmcore recently.  Here's how it should be done.
-> Compile-tested only on x86.  As noted in the first patch, s390 should
-> take this conversion a bit further, but I'm not inclined to do that
-> work myself.
+There is a check for q->tag_set in the front of elevator_get_default,
+and there should be a check here too.
 
-Ack this series of patches.
+Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+---
+ block/elevator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> 
-> v3:
->  - Send the correct patches this time
-> v2:
->  - Removed unnecessary kernel-doc
->  - Included uio.h to fix compilation problems
->  - Made read_from_oldmem_iter static to avoid compile warnings during the
->    conversion
->  - Use iov_iter_truncate() (Christoph)
-> 
-> Matthew Wilcox (Oracle) (3):
->   vmcore: Convert copy_oldmem_page() to take an iov_iter
->   vmcore: Convert __read_vmcore to use an iov_iter
->   vmcore: Convert read_from_oldmem() to take an iov_iter
-> 
->  arch/arm/kernel/crash_dump.c     |  27 +------
->  arch/arm64/kernel/crash_dump.c   |  29 +------
->  arch/ia64/kernel/crash_dump.c    |  32 +-------
->  arch/mips/kernel/crash_dump.c    |  27 +------
->  arch/powerpc/kernel/crash_dump.c |  35 ++-------
->  arch/riscv/kernel/crash_dump.c   |  26 +------
->  arch/s390/kernel/crash_dump.c    |  13 ++--
->  arch/sh/kernel/crash_dump.c      |  29 ++-----
->  arch/x86/kernel/crash_dump_32.c  |  29 +------
->  arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
->  fs/proc/vmcore.c                 | 129 +++++++++++++------------------
->  include/linux/crash_dump.h       |  19 ++---
->  12 files changed, 122 insertions(+), 321 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
+diff --git a/block/elevator.c b/block/elevator.c
+index 1f39f6e8ebb9..b7d0bead680c 100644
+--- a/block/elevator.c
++++ b/block/elevator.c
+@@ -636,7 +636,7 @@ static struct elevator_type *elevator_get_default(struct request_queue *q)
+ 	if (q->tag_set && q->tag_set->flags & BLK_MQ_F_NO_SCHED_BY_DEFAULT)
+ 		return NULL;
+ 
+-	if (q->nr_hw_queues != 1 &&
++	if (q->nr_hw_queues != 1 && q->tag_set &&
+ 	    !blk_mq_is_shared_tags(q->tag_set->flags))
+ 		return NULL;
+ 
+-- 
+2.27.0
 

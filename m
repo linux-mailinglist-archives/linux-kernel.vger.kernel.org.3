@@ -2,90 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE4C47C4E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7816047C4EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240363AbhLURWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:22:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:56714 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231630AbhLURWo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:22:44 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65535D6E;
-        Tue, 21 Dec 2021 09:22:38 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE3A83F718;
-        Tue, 21 Dec 2021 09:22:36 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     John Keeping <john@metanate.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-In-Reply-To: <20211221164528.3c84543f.john@metanate.com>
-References: <Yb3vXx3DcqVOi+EA@donbot> <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com> <20211221164528.3c84543f.john@metanate.com>
-Date:   Tue, 21 Dec 2021 17:22:34 +0000
-Message-ID: <87wnjx7u05.mognet@arm.com>
+        id S240367AbhLURWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240368AbhLURWq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 12:22:46 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B8C061401
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:22:46 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id x32so40773429ybi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:22:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=R3pCw4gmHP7nbUtLpCJSRrJ6QBuaaSPlAZfdmztAG9M=;
+        b=q+pUQswpzxshvmdojEBW/sD4WtIQjhaFUQbYKo5SWFMd8Zb3XglDJm+DELuZgLSYGv
+         wlaxyiq8SEOm7/BUfK7ha34aK+TMGJ82rKRwiU8XDUCYCEZ6jtu/VCoQjq00LWh1rKUu
+         m1THhz5cFsjKY392VCVc/K0nv81A5gwl7zZnVvWJd/jxY/t/43LaF04BD/TKC4ZUKr1h
+         M2MsoXHApCAbZfznd/wFit4vvrY2VFGAw52wNP8Tor6T7TCbOQx/gj6q/Q5FWHRnt4gn
+         QTPGCpzXSpir2aFt+u5QllkzynSQGZfu+P5d5CeXEnBJtjBQJoGj7S2dRSMTirUkNsIs
+         BXXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R3pCw4gmHP7nbUtLpCJSRrJ6QBuaaSPlAZfdmztAG9M=;
+        b=tALAsUpssUbTFkZr1i5TrL4navOzVAoJ864+MgX6DwswQ5vtN7ucIQ7aS/2iG87vNA
+         NtTynp85XJiDiL6QQ6Zugx7Bz+NT5dT5QITh30g+ABE1n9WaiIY3eWIb1yT8YBMSmSoz
+         V7uHlX+0ZbIdCAgZ9VLvEsY/zw6T/solUAxcBHXYuvDtX4jwMaVcxpwfJgl44MEpMa2J
+         gRQ0kyPvMaEytajRNZp2my47FVIVow8IlrtVyHor79PHSxue7a0saFDOTLtFgmBTW4N0
+         riwE9cAnBW6cA59e4xxuCEf6dLGhitLFSYc919Nty55a9S1X6YUOgilc4jjo20vG/PfX
+         6zQw==
+X-Gm-Message-State: AOAM530R9lx2CiRYvG3XIvuGD9LoVlJepMUyzNlzvzEFwzla4TmR+Dr3
+        BDeHpukVrfmZTj8X1xQUf6m3AxAei9jKOfT24Sb1Zw==
+X-Google-Smtp-Source: ABdhPJxb8QTXqWwUuy1tqHwGZ8h99rMkG0dszNFGCs6GuxiUEBedOLQhW3yuezpECpmK4ZTcYluTK6SVSPx1ZfuhI00=
+X-Received: by 2002:a25:d68e:: with SMTP id n136mr6220237ybg.520.1640107365561;
+ Tue, 21 Dec 2021 09:22:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211220143022.266532675@linuxfoundation.org>
+In-Reply-To: <20211220143022.266532675@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Dec 2021 22:52:34 +0530
+Message-ID: <CA+G9fYuZo2v6iyVbif40U8PpvsffKMjL2cXV5GjEZ9t9Mrm8og@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/45] 4.14.259-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/21 16:45, John Keeping wrote:
-> On Tue, 21 Dec 2021 16:11:34 +0000
-> Valentin Schneider <valentin.schneider@arm.com> wrote:
+On Mon, 20 Dec 2021 at 20:10, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->> On 20/12/21 18:35, Dietmar Eggemann wrote:
->> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->> > index ef8228d19382..798887f1eeff 100644
->> > --- a/kernel/sched/rt.c
->> > +++ b/kernel/sched/rt.c
->> > @@ -1895,9 +1895,17 @@ static int push_rt_task(struct rq *rq, bool pull)
->> >                 struct task_struct *push_task = NULL;
->> >                 int cpu;
->> >
->> > +               if (WARN_ON_ONCE(!rt_task(rq->curr))) {
->> > +                       printk("next_task=[%s %d] rq->curr=[%s %d]\n",
->> > +                              next_task->comm, next_task->pid, rq->curr->comm, rq->curr->pid);
->> > +               }
->> > +
->> >                 if (!pull || rq->push_busy)
->> >                         return 0;
->> >
->> > +               if (!rt_task(rq->curr))
->> > +                       return 0;
->> > +  
->> 
->> If current is a DL/stopper task, why not; if that's CFS (which IIUC is your
->> case), that's buggered: we shouldn't be trying to pull RT tasks when we
->> have queued RT tasks and a less-than-RT current, we should be rescheduling
->> right now.
->> 
->> I'm thinking this can happen via rt_mutex_setprio() when we demote an RT-boosted
->> CFS task (or straight up sched_setscheduler()):
->> check_class_changed()->switched_from_rt() doesn't trigger a resched_curr(),
->> so I suspect we get to the push/pull callback before getting a
->> resched (I actually don't see where we'd get a resched in that case other
->> than at the next tick).
->> 
->> IOW, feels like we want the below. Unfortunately I can't reproduce the
->> issue locally (yet), so that's untested.
+> This is the start of the stable review cycle for the 4.14.259 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> This patch doesn't make any difference for me - I hit the BUG on the
-> first boot with this applied.
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.259-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
 >
 
-Thanks for the swift testing!
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Did you give Dietmar's patch a try? ITSM it lacks a resched_curr(), but if
-we can somehow get to the push IRQ work before rescheduling (which I think
-might happen if we try to resched_curr(this_rq)), then we need his
-bailout.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.14.259-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.14.y
+* git commit: 5b3e273408e5c9c7147eaa73e314267fd8e7c830
+* git describe: v4.14.258-46-g5b3e273408e5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.258-46-g5b3e273408e5
+
+## No Test Regressions (compared to v4.14.257-54-gcca31a2a7082)
+
+## No Test Fixes (compared to v4.14.257-54-gcca31a2a7082)
+
+## Test result summary
+total: 70666, pass: 57051, fail: 606, skip: 11219, xfail: 1790
+
+## Build Summary
+* arm: 254 total, 242 passed, 12 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 52 total, 0 passed, 52 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

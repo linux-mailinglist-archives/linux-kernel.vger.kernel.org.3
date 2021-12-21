@@ -2,445 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFD447B6F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CEB47B6F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbhLUBnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 20:43:42 -0500
-Received: from mga11.intel.com ([192.55.52.93]:43196 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231151AbhLUBnk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:43:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640051020; x=1671587020;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y2r13LSehJuyWi3VUyYlT3eBWB8znWZRHuXXRToy74E=;
-  b=JtYRS4RqM2D90vRRCVuvOfJVeW+C3dVMq7P1ANiYRX431/1nqdwg7wX9
-   J/hnhaejr8rAMeiqQYYFEC4RJ49PlrCsfzA2MZlqtAJNa4sWZ3Iu9d/g8
-   JMYv3Yf2oPJFw77HsOvN7alVd5pSJi0soVDGtvx3YsbzHfPQax6L0xwW5
-   bLwSK85Y7JpUoyecg5A7wGfSLi22IMwVmoZCiOWQqnidW4O22ppcrpA4x
-   nc8ZGdqLK8gaE8nad6N9NSruuRrqZOXS9Zgikr3D1TCJaLzGKhBoulFP3
-   W6pCP9CVDgdOV4gFVBByiHoAi0BMajvNSfpzZyeuIJKjXdL9jNMpTfF1D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="237842490"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="237842490"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 17:43:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="570050947"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 17:43:38 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzUBl-0008Vi-EF; Tue, 21 Dec 2021 01:43:37 +0000
-Date:   Tue, 21 Dec 2021 09:42:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fangrui Song <maskray@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [linux-stable-rc:queue/4.19 3414/9999]
- arch/powerpc/kernel/process.c:1285:6: error: no previous prototype for
- function 'show_user_instructions'
-Message-ID: <202112210926.fs7sutsS-lkp@intel.com>
+        id S231579AbhLUBxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 20:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231533AbhLUBxP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 20:53:15 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8F1C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:53:15 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p14so3033941plf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UKifyk4mnM2Yqu+DHF9A4ZQKh8AD3UzsDcB1i167Eiw=;
+        b=MaB1um+dYv2t6mjXCrJsFKlTMZbqdh/9n62tnx8pJE+h24nBSFYAs9RdvxUsrmE63/
+         GiRfYfME5IXTH79JPNx/yE6A3KmFIE3wIbS/9gjJmm5Wh/Lma/B1iHLRC2c8/vb+iNuU
+         KToY0L0svEZG3BTFCF/Ug68BwgzvyuYFdb9odRsESXJ7VVLQfJPAUxKCT28UtESBlqsO
+         niz5Tb2iNCiNZ84x/v+NmgFolirSgBL4hMiNerKgTlD9Yblk7ohIXbxSKGBamZtJaWon
+         YNoXFp58iaauv1VTbNaQmO90D1axttElWNWGunncNWQY5z6Hfz7z/fNr5Bdcfkzbskfd
+         J7Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UKifyk4mnM2Yqu+DHF9A4ZQKh8AD3UzsDcB1i167Eiw=;
+        b=bjrWhYRXFJSAHJHLPUKd7w5bH4ST2yfY1Hh+7iDFbJX517IL4CK9LdGz3ftbR45oj3
+         AM1cTvrx5sfqd1t6OMocIBsgTwVQWOA40iTOgY35Ianne4BJWHEK1fHdMfDVdSAvqxCj
+         45TNh2c8ZM/reB5LFSBk5UxCxKBbnvDl6rVg6vFRb01NgqSPDrEaUCoDhovqnyrDa1Hs
+         BYxbGX4SCyDD1jC16EUcDCe+dezeXouAO57wJurUBR/140PTUMaALJwPEpPVkEwzSN7i
+         hVqUpjYylp0fmrQlD4aICKlObMxLKCuw3wM20qk1THKgnu1E+5zwRhuqc8GpgySPAqHT
+         Gxfg==
+X-Gm-Message-State: AOAM531ac57ETyrCel4lj6fya4F2WTQwMfdHIBYtdtE4msl3e6ljbT7a
+        KfcvrX1ZCjDKr0SBAuOUB/dOBiVMdS6SjwNeyvUpuQ==
+X-Google-Smtp-Source: ABdhPJw1wGlebTO1Y/iJTrz3X12wTkdt7cSjE7BAWPIRZYlry0j+kWAUq5yqBlrqlRC3HhBqvTsqcFirQF44KF2itFs=
+X-Received: by 2002:a17:90a:d498:: with SMTP id s24mr1313595pju.46.1640051594509;
+ Mon, 20 Dec 2021 17:53:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211216172658.GA770781@bhelgaas> <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
+In-Reply-To: <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Mon, 20 Dec 2021 17:52:38 -0800
+Message-ID: <CACK8Z6Fs0zBZ252XLzBr3QKQd0kx1L=PBgO9qUzSYisM1YHitQ@mail.gmail.com>
+Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
+To:     david.e.box@linux.intel.com
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, nirmal.patel@linux.intel.com,
+        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fangrui,
+Hello,
 
-First bad commit (maybe != root cause):
+On Thu, Dec 16, 2021 at 1:24 PM David E. Box
+<david.e.box@linux.intel.com> wrote:
+>
+> On Thu, 2021-12-16 at 11:26 -0600, Bjorn Helgaas wrote:
+> > [+cc Rajat for LTR max latency write]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
-head:   9f6406625bbb07737566962028df57ed2e9e7bc0
-commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [3414/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-config: powerpc64-randconfig-r015-20211220 (https://download.01.org/0day-ci/archive/20211221/202112210926.fs7sutsS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 683cbc12b33e5c8dc8d29bf5ed79fbf45763aadd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/4.19
-        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
+> > > From: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > >
+> > > On Tiger Lake and Alder Lake platforms, VMD controllers do not have ASPM
+> > > enabled nor LTR values set by BIOS. This leads high power consumption on
+> > > these platforms when VMD is enabled as reported in bugzilla [1].  Enable
+> > > these features in the VMD driver using pcie_aspm_policy_override() to set
+> > > the ASPM policy for the root ports.
+> >
+> > s/leads high/leads to high/
+> >
+> > Does this depend on "Tiger Lake and Alder Lake platforms"
+> > specifically, or does it depend on a BIOS design choice, i.e., "don't
+> > configure ASPM or LTR for devices below a VMD"?
+>
+> It was a BIOS design choice to have this done by the OS driver for both Tiger Lake and Alder Lake.
+>
+> >
+> > The subject says "override ASPM on VMD devices," but it looks like
+> > this affects the ASPM configuration of devices *below* the VMD, not of
+> > the VMD itself.
+>
+> Yes.
+>
+> >
+> > It looks like this only affects *NVMe* devices, since
+> > vmd_enable_aspm() checks for PCI_CLASS_STORAGE_EXPRESS.  Why is that?
+> > Is there something special about NVMe?  I'd think you would want to do
+> > this for *all* devices below a VMD.
+>
+> We need this for all devices under the PCIe root ports below VMD. Those will only be NVMe device
+> AFAICS.
+>
+> >
+> > Since it only affects PCI_CLASS_STORAGE_EXPRESS devices, I don't think
+> > it actually "sets ASPM policy for the root ports".  vmd_enable_aspm()
+> > calls pcie_aspm_policy_override() on endpoints.  It's true that the
+> > link ASPM state happens to be attached to the upstream end of the
+> > link, but that's an ASPM implementation detail.
+> >
+> > This all needs to be clear in the subject and commit log.
+>
+> Ack
+>
+> >
+> > > To do this, add an additional flag in VMD features to specify devices that
+> > > must have their respective policies overridden.
+> >
+> > I'm not clear on why you want this to apply to only certain VMDs and
+> > not others.  Do some BIOSes configure ASPM for devices below some
+> > VMDs?
+>
+> Not currently. But the plan is for future devices to move back to having BIOS do the programming.
+>
+> >
+> > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
+> > >
+> > > Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > Tested-by: Adhitya Mohan <me@adhityamohan.in>
+> > > ---
+> > > V4
+> > >  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
+> > >    and more readable. Suggested by Christoph.
+> > > V3
+> > >  - No changes
+> > > V2
+> > >  - Use return status to print pci_info message if ASPM cannot be enabled.
+> > >  - Add missing static declaration, caught by lkp@intel.com
+> > >
+> > >  drivers/pci/controller/vmd.c | 43 +++++++++++++++++++++++++++++++++---
+> > >  1 file changed, 40 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> > > index a45e8e59d3d4..880afd450a14 100644
+> > > --- a/drivers/pci/controller/vmd.c
+> > > +++ b/drivers/pci/controller/vmd.c
+> > > @@ -20,6 +20,8 @@
+> > >
+> > >  #include <asm/irqdomain.h>
+> > >
+> > > +#include "../pci.h"
+> > > +
+> > >  #define VMD_CFGBAR     0
+> > >  #define VMD_MEMBAR1    2
+> > >  #define VMD_MEMBAR2    4
+> > > @@ -67,6 +69,12 @@ enum vmd_features {
+> > >          * interrupt handling.
+> > >          */
+> > >         VMD_FEAT_CAN_BYPASS_MSI_REMAP           = (1 << 4),
+> > > +
+> > > +       /*
+> > > +        * Device must have ASPM policy overridden, as its default policy is
+> > > +        * incorrect.
+> > > +        */
+> > > +       VMD_FEAT_QUIRK_OVERRIDE_ASPM            = (1 << 5),
+> >
+> > I think you specifically want to *enable* some ASPM link states, not
+> > just "override the default policy."  "Override" tells us nothing about
+> > whether you are enabling or disabling ASPM.  Applies to subject line
+> > as well.
+>
+> Ack
+>
+> >
+> > >  };
+> > >
+> > >  static DEFINE_IDA(vmd_instance_ida);
+> > > @@ -661,6 +669,30 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
+> > >         return 0;
+> > >  }
+> > >
+> > > +/*
+> > > + * Override the BIOS ASPM policy and set the LTR value for PCI storage
+> > > + * devices on the VMD bride.
+> >
+> > I don't think there's any BIOS "policy" here.  At this point BIOS is
+> > no longer involved at all, so all that's left is whatever ASPM config
+> > the BIOS did or did not do.
+> >
+> > Why only storage?
+>
+> Only storage devices will be on these root ports.
+>
+> >
+> > s/bride/bridge/
+> >
+> > > + */
+> > > +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
+> > > +{
+> > > +       int features = *(int *)userdata, pos;
+> > > +
+> > > +       if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
+> > > +           pdev->class != PCI_CLASS_STORAGE_EXPRESS)
+> > > +               return 0;
+> > > +
+> > > +       pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
+> > > +       if (!pos)
+> > > +               return 0;
+> > > +
+> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, 0x1003);
+> > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT, 0x1003);
+> >
+> > 1) Where did this magic 0x1003 value come from?  Does that depend on
+> > the VMD device?  The endpoint?  The circuit design?  The path between
+> > endpoint and VMD?  What if there are switches in the path?
+>
+> The number comes from the BIOS team. They are tied to the SoC. I don't believe there can be switches
+> in the path but Nirmal and Jonathan should know for sure. From what I've seen these root ports are
+> wired directly to M.2 slots on boards that are intended for storage devices.
+>
+> >
+> > 2) There exist broken devices where WORD config accesses don't work:
+> > https://lore.kernel.org/all/20211208000948.487820-1-rajatja@google.com/
+> >
+> > We might need a way to quirk config accesses to those devices, but we
+> > don't have one yet.  So for now this needs to be a single DWORD write.
+>
+> Ack
+>
 
-All errors (new ones prefixed by >>):
+Sideband: Yes, I'm trying to work out such a quirk mechanism, but for
+now, yes, please do that as a single DWORD write access.
 
-   In file included from arch/powerpc/kernel/process.c:18:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:19:
-   In file included from include/linux/string.h:6:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/kernel/process.c:18:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
-   arch/powerpc/kernel/process.c:216:16: error: variable 'cpumsr' set but not used [-Werror,-Wunused-but-set-variable]
-           unsigned long cpumsr;
-                         ^
->> arch/powerpc/kernel/process.c:1285:6: error: no previous prototype for function 'show_user_instructions' [-Werror,-Wmissing-prototypes]
-   void show_user_instructions(struct pt_regs *regs)
-        ^
-   arch/powerpc/kernel/process.c:1285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void show_user_instructions(struct pt_regs *regs)
-   ^
-   static 
-   4 errors generated.
---
-   In file included from arch/powerpc/kernel/mce_power.c:26:
-   In file included from include/linux/ptrace.h:5:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/kernel/mce_power.c:26:
-   In file included from include/linux/ptrace.h:6:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
->> arch/powerpc/kernel/mce_power.c:601:6: error: no previous prototype for function '__machine_check_early_realmode_p7' [-Werror,-Wmissing-prototypes]
-   long __machine_check_early_realmode_p7(struct pt_regs *regs)
-        ^
-   arch/powerpc/kernel/mce_power.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long __machine_check_early_realmode_p7(struct pt_regs *regs)
-   ^
-   static 
->> arch/powerpc/kernel/mce_power.c:609:6: error: no previous prototype for function '__machine_check_early_realmode_p8' [-Werror,-Wmissing-prototypes]
-   long __machine_check_early_realmode_p8(struct pt_regs *regs)
-        ^
-   arch/powerpc/kernel/mce_power.c:609:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long __machine_check_early_realmode_p8(struct pt_regs *regs)
-   ^
-   static 
-   arch/powerpc/kernel/mce_power.c:614:6: error: no previous prototype for function '__machine_check_early_realmode_p9' [-Werror,-Wmissing-prototypes]
-   long __machine_check_early_realmode_p9(struct pt_regs *regs)
-        ^
-   arch/powerpc/kernel/mce_power.c:614:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long __machine_check_early_realmode_p9(struct pt_regs *regs)
-   ^
-   static 
-   5 errors generated.
---
-   In file included from arch/powerpc/mm/pgtable-book3s64.c:10:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:19:
-   In file included from include/linux/string.h:6:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/mm/pgtable-book3s64.c:10:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
-   arch/powerpc/mm/pgtable-book3s64.c:462:6: error: no previous prototype for function 'arch_report_meminfo' [-Werror,-Wmissing-prototypes]
-   void arch_report_meminfo(struct seq_file *m)
-        ^
-   arch/powerpc/mm/pgtable-book3s64.c:462:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void arch_report_meminfo(struct seq_file *m)
-   ^
-   static 
->> arch/powerpc/mm/pgtable-book3s64.c:493:5: error: no previous prototype for function 'pmd_move_must_withdraw' [-Werror,-Wmissing-prototypes]
-   int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
-       ^
-   arch/powerpc/mm/pgtable-book3s64.c:493:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
-   ^
-   static 
-   4 errors generated.
---
-   In file included from arch/powerpc/mm/pkeys.c:8:
-   In file included from arch/powerpc/include/asm/mman.h:15:
-   In file included from include/linux/mm.h:9:
-   In file included from include/linux/mmdebug.h:5:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/powerpc/include/asm/bug.h:128:
-   In file included from include/asm-generic/bug.h:5:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/mm/pkeys.c:8:
-   In file included from arch/powerpc/include/asm/mman.h:15:
-   In file included from include/linux/mm.h:10:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:54:
-   In file included from include/linux/irqflags.h:16:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:64:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
->> arch/powerpc/mm/pkeys.c:60:5: error: no previous prototype for function 'pkey_initialize' [-Werror,-Wmissing-prototypes]
-   int pkey_initialize(void)
-       ^
-   arch/powerpc/mm/pkeys.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pkey_initialize(void)
-   ^
-   static 
->> arch/powerpc/mm/pkeys.c:406:6: error: no previous prototype for function 'arch_vma_access_permitted' [-Werror,-Wmissing-prototypes]
-   bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
-        ^
-   arch/powerpc/mm/pkeys.c:406:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool arch_vma_access_permitted(struct vm_area_struct *vma, bool write,
-   ^
-   static 
->> arch/powerpc/mm/pkeys.c:420:6: error: no previous prototype for function 'arch_dup_pkeys' [-Werror,-Wmissing-prototypes]
-   void arch_dup_pkeys(struct mm_struct *oldmm, struct mm_struct *mm)
-        ^
-   arch/powerpc/mm/pkeys.c:420:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void arch_dup_pkeys(struct mm_struct *oldmm, struct mm_struct *mm)
-   ^
-   static 
-   5 errors generated.
---
-   In file included from arch/powerpc/sysdev/udbg_memcons.c:21:
-   In file included from include/linux/kernel.h:10:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
->> arch/powerpc/sysdev/udbg_memcons.c:48:6: error: no previous prototype for function 'memcons_putc' [-Werror,-Wmissing-prototypes]
-   void memcons_putc(char c)
-        ^
-   arch/powerpc/sysdev/udbg_memcons.c:48:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void memcons_putc(char c)
-   ^
-   static 
->> arch/powerpc/sysdev/udbg_memcons.c:61:5: error: no previous prototype for function 'memcons_getc_poll' [-Werror,-Wmissing-prototypes]
-   int memcons_getc_poll(void)
-       ^
-   arch/powerpc/sysdev/udbg_memcons.c:61:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int memcons_getc_poll(void)
-   ^
-   static 
->> arch/powerpc/sysdev/udbg_memcons.c:84:5: error: no previous prototype for function 'memcons_getc' [-Werror,-Wmissing-prototypes]
-   int memcons_getc(void)
-       ^
-   arch/powerpc/sysdev/udbg_memcons.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int memcons_getc(void)
-   ^
-   static 
-   4 errors generated.
---
-   In file included from arch/powerpc/platforms/powermac/feature.c:20:
-   In file included from include/linux/init.h:5:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/platforms/powermac/feature.c:21:
-   In file included from include/linux/delay.h:26:
-   In file included from arch/powerpc/include/asm/delay.h:6:
-   In file included from arch/powerpc/include/asm/time.h:18:
-   In file included from include/linux/percpu.h:7:
-   In file included from include/linux/smp.h:64:
-   In file included from arch/powerpc/include/asm/smp.h:28:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
->> arch/powerpc/platforms/powermac/feature.c:1548:6: error: no previous prototype for function 'g5_phy_disable_cpu1' [-Werror,-Wmissing-prototypes]
-   void g5_phy_disable_cpu1(void)
-        ^
-   arch/powerpc/platforms/powermac/feature.c:1548:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void g5_phy_disable_cpu1(void)
-   ^
-   static 
-   3 errors generated.
---
-   In file included from arch/powerpc/platforms/powernv/pci-ioda.c:14:
-   In file included from include/linux/kernel.h:10:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/platforms/powernv/pci-ioda.c:15:
-   In file included from include/linux/pci.h:29:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:13:
-   In file included from include/linux/mutex.h:14:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
->> arch/powerpc/platforms/powernv/pci-ioda.c:874:18: error: variable 'parent' set but not used [-Werror,-Wunused-but-set-variable]
-           struct pci_dev *parent;
-                           ^
-   3 errors generated.
---
-   In file included from arch/powerpc/platforms/pseries/ras.c:19:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:19:
-   In file included from include/linux/string.h:6:
-   In file included from include/linux/compiler.h:250:
-   arch/powerpc/include/asm/barrier.h:47:9: error: '__lwsync' macro redefined [-Werror,-Wmacro-redefined]
-   #define __lwsync()      __asm__ __volatile__ (stringify_in_c(LWSYNC) : : :"memory")
-           ^
-   <built-in>:311:9: note: previous definition is here
-   #define __lwsync __builtin_ppc_lwsync
-           ^
-   In file included from arch/powerpc/platforms/pseries/ras.c:19:
-   In file included from include/linux/sched.h:12:
-   In file included from arch/powerpc/include/asm/current.h:16:
-   In file included from arch/powerpc/include/asm/paca.h:21:
-   In file included from arch/powerpc/include/asm/lppaca.h:36:
-   In file included from arch/powerpc/include/asm/mmu.h:313:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:30:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:24:
-   arch/powerpc/include/asm/book3s/64/pgtable.h:1292:15: error: 'const' type qualifier on return type has no effect [-Werror,-Wignored-qualifiers]
-   static inline const int pud_pfn(pud_t pud)
-                 ^~~~~~
-   arch/powerpc/platforms/pseries/ras.c:59:12: error: no previous prototype for function 'init_ras_hotplug_IRQ' [-Werror,-Wmissing-prototypes]
-   int __init init_ras_hotplug_IRQ(void)
-              ^
-   arch/powerpc/platforms/pseries/ras.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init init_ras_hotplug_IRQ(void)
-   ^
-   static 
->> arch/powerpc/platforms/pseries/ras.c:163:7: error: variable 'modifier' set but not used [-Werror,-Wunused-but-set-variable]
-           char modifier;
-                ^
-   arch/powerpc/platforms/pseries/ras.c:252:6: error: variable 'status' set but not used [-Werror,-Wunused-but-set-variable]
-           int status;
-               ^
-   5 errors generated.
+Thanks,
 
+Rajat
 
-vim +/show_user_instructions +1285 arch/powerpc/kernel/process.c
-
-06d67d54741a5b Paul Mackerras          2005-10-10  1284  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01 @1285  void show_user_instructions(struct pt_regs *regs)
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1286  {
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1287  	unsigned long pc;
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1288  	int i;
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1289  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1290  	pc = regs->nip - (instructions_to_print * 3 / 4 * sizeof(int));
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1291  
-a932ed3b718147 Michael Ellerman        2018-10-05  1292  	/*
-a932ed3b718147 Michael Ellerman        2018-10-05  1293  	 * Make sure the NIP points at userspace, not kernel text/data or
-a932ed3b718147 Michael Ellerman        2018-10-05  1294  	 * elsewhere.
-a932ed3b718147 Michael Ellerman        2018-10-05  1295  	 */
-a932ed3b718147 Michael Ellerman        2018-10-05  1296  	if (!__access_ok(pc, instructions_to_print * sizeof(int), USER_DS)) {
-a932ed3b718147 Michael Ellerman        2018-10-05  1297  		pr_info("%s[%d]: Bad NIP, not dumping instructions.\n",
-a932ed3b718147 Michael Ellerman        2018-10-05  1298  			current->comm, current->pid);
-a932ed3b718147 Michael Ellerman        2018-10-05  1299  		return;
-a932ed3b718147 Michael Ellerman        2018-10-05  1300  	}
-a932ed3b718147 Michael Ellerman        2018-10-05  1301  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1302  	pr_info("%s[%d]: code: ", current->comm, current->pid);
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1303  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1304  	for (i = 0; i < instructions_to_print; i++) {
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1305  		int instr;
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1306  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1307  		if (!(i % 8) && (i > 0)) {
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1308  			pr_cont("\n");
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1309  			pr_info("%s[%d]: code: ", current->comm, current->pid);
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1310  		}
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1311  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1312  		if (probe_kernel_address((unsigned int __user *)pc, instr)) {
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1313  			pr_cont("XXXXXXXX ");
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1314  		} else {
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1315  			if (regs->nip == pc)
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1316  				pr_cont("<%08x> ", instr);
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1317  			else
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1318  				pr_cont("%08x ", instr);
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1319  		}
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1320  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1321  		pc += sizeof(int);
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1322  	}
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1323  
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1324  	pr_cont("\n");
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1325  }
-88b0fe17573592 Murilo Opsfelder Araujo 2018-08-01  1326  
-
-:::::: The code at line 1285 was first introduced by commit
-:::::: 88b0fe17573592a8e3196bf143f865da460178e7 powerpc: Add show_user_instructions()
-
-:::::: TO: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >
+> > > +       if (pcie_aspm_policy_override(pdev))
+> > > +               pci_info(pdev, "Unable of override ASPM policy\n");
+> >
+> > s/Unable of/Unable to/
+> >
+> > I think we might need a message about when we *do* override the
+> > policy.  A note in dmesg might be useful for debugging.  I'm worried
+> > about the LTR programming because I really don't understand how we
+> > should be doing that.
+>
+> Sure.
+>
+> >
+> > > +       return 0;
+> > > +}
+> > > +
+> > >  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> > >  {
+> > >         struct pci_sysdata *sd = &vmd->sysdata;
+> > > @@ -807,6 +839,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> > >         pci_scan_child_bus(vmd->bus);
+> > >         pci_assign_unassigned_bus_resources(vmd->bus);
+> > >
+> > > +       pci_walk_bus(vmd->bus, vmd_enable_aspm, &features);
+> >
+> > Do you support hotplug under VMD?  This will not happen for hot-added
+> > devices.
+>
+> That I don't know. Nirmal, Jonathan?
+>
+> David
+>
+> >
+> > >         /*
+> > >          * VMD root buses are virtual and don't return true on pci_is_pcie()
+> > >          * and will fail pcie_bus_configure_settings() early. It can instead be
+> > > @@ -948,15 +982,18 @@ static const struct pci_device_id vmd_ids[] = {
+> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
+> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c3d),
+> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> > >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> > >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> > >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> > >         {0,}
+> > >  };
+> > >  MODULE_DEVICE_TABLE(pci, vmd_ids);
+> > > --
+> > > 2.25.1
+> > >
+>
+>

@@ -2,201 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE2347C9AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCCF47C9B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbhLUXXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:23:55 -0500
-Received: from mail-qt1-f178.google.com ([209.85.160.178]:36655 "EHLO
-        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbhLUXXy (ORCPT
+        id S237241AbhLUX2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237140AbhLUX2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:23:54 -0500
-Received: by mail-qt1-f178.google.com with SMTP id t11so380867qtw.3;
-        Tue, 21 Dec 2021 15:23:54 -0800 (PST)
+        Tue, 21 Dec 2021 18:28:36 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1C0C061574;
+        Tue, 21 Dec 2021 15:28:36 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id u8so606391iol.5;
+        Tue, 21 Dec 2021 15:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Y9qNhArsQ0y20VLdp6J5wDm7XykoFJAUNYk5IaM9hU=;
+        b=ffbFCTx9cfBHU9hVLoh1EuPKDfCbDkzePVspueec6ve0wQOxK3Dy3UTajDENOBWcQp
+         3acuN4AJC4/cQfOHUVm4rfZcCEB79xPSQ/1Xs2knQPKSppIUuMp6Z9YEmznMypkZC/Lw
+         qxavyX1+ZR82xuusqd1+l3ejhhDRBSv43dksVNIN38QVBOnIF+x+wb51eGNR+44o84zt
+         v49Za90vVKeECaz59prHRMf/PDtQJoW/PneufPYykMW+81S8JAfNM02zxwGvxNQ41qrN
+         7r2cIEMBO0N5xS+DtmB2TNA1yiKJ2uAicO9L9LmDqulNhKn/WChLbYTRiJbw6D3I0khq
+         gOWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5MQc/hNj4+GOUJzjR6yeM8B4B8YsX41VgZGOk9H3GV8=;
-        b=KtEhjnDGHkOZMxPfumq5OPX9KM5ZRkmOR5nxA9+b1M/P5axxqXlKGajb6SFC1YlBWo
-         D0KCyDi3IMp+/j+aE3RNI/w1WQkcXw5HMqR52RcYUYYk6PnbSjncGNYPmJF2LV0MJ7sX
-         75oIl1OCnNdynrpDSgWlK6PoOpU1OI+mj2KyW0DOHv6W5ToCagvBErmRGrjs+fJfUAox
-         SHrdS2xd6kiPx/rXYgI5OysrVER/K0WhZXcI7p1dqs6fdZEXPt9JVN5//eqqXqgRdyos
-         /EwaGKCYtqJgIkhU4WaowuU3/wKVHDeDNpY6XcQgXnPSAYLscyJbfMwfNznGLR++91L2
-         JUeg==
-X-Gm-Message-State: AOAM5319TGWvpYRy66D3HIrIcOdOEt752uKc9mAOTKkZimBKKepnuj7N
-        zzMapYY1OcqLHBPeAa5SiQ==
-X-Google-Smtp-Source: ABdhPJyoZR2FMM/fuaf7CtFHWhnwXucqmgTqGR1t2y8gxLZP6mUXsOWl0zCBITZHkfLpeV/Z3EXGKA==
-X-Received: by 2002:a05:622a:120d:: with SMTP id y13mr399630qtx.155.1640129033644;
-        Tue, 21 Dec 2021 15:23:53 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id e7sm288557qtx.72.2021.12.21.15.23.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 15:23:52 -0800 (PST)
-Received: (nullmailer pid 1708618 invoked by uid 1000);
-        Tue, 21 Dec 2021 23:23:50 -0000
-Date:   Tue, 21 Dec 2021 19:23:50 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Jarrett Schultz <jaschultzms@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, bjorn.andersson@linaro.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-arm-msm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Jarrett Schultz <jaschultz@microsoft.com>
-Subject: Re: [PATCH RESEND v4 1/4] dt-bindings: platform: microsoft: Document
- surface xbl
-Message-ID: <YcJiBk5f071eJ5+n@robh.at.kernel.org>
-References: <20211221182826.2141789-1-jaschultzMS@gmail.com>
- <20211221182826.2141789-2-jaschultzMS@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Y9qNhArsQ0y20VLdp6J5wDm7XykoFJAUNYk5IaM9hU=;
+        b=7KfPTOiOs2Mfo8UMe+IkH15PuGX/FbbOPAVBoooSfHDGQ0BymOmLd9/u45knJEHYti
+         SY85JslEZz/a52h/+kq1ZqKZMo8mYmHURkBuogZFasIhX5rttVb7SbV+0jqzMPjsuypl
+         DP8Wk3jXXRAXPJPc7BNTFJpSqtcxK41+9y4rAvQ8TZbVGDuQqhLoqHehgyUiHgtOO7Us
+         7Bn7X71RIf39R8Bwk3dILhYc+STal/+BpGsvnpfoyOImZXVD1HRqWIQ/ORV69f89tJkb
+         6OpqClFwdfczCW5B6yFLRXPFIN0OD0ts/G1ded9NXVVdrudRJ9xEgaOC0WkLq7V5mEjf
+         Md3Q==
+X-Gm-Message-State: AOAM5304ntmPT2n1if852H2EeSyYc9V11E5JZ4nFDlbT8H0CMBds9DV/
+        3UVMlK/E9TKM2DJHK/AZsUPraPQ4Tn2zuxEmfm2fmp12ZuoINgHQEWbVHw==
+X-Google-Smtp-Source: ABdhPJxEqu9uWtwLGTXTaastqfzijEJ++BtgObWTVb3g45BTyAIZLFBFjCN3lj09MdocSmg5U6Aq/GG7aq42sEeGSjs=
+X-Received: by 2002:a05:6602:204e:: with SMTP id z14mr212310iod.90.1640129316028;
+ Tue, 21 Dec 2021 15:28:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221182826.2141789-2-jaschultzMS@gmail.com>
+References: <20211103114830.62711-1-alistair@alistair23.me>
+ <20211103114830.62711-2-alistair@alistair23.me> <YYYk/uisKqPNgRu0@google.com>
+ <CAKmqyKOFZOLpjMY+kj2CLibFhYJ3-tL+9+cKEVzgSn9Mzq30gw@mail.gmail.com>
+ <YbbeDFJERtP0mAIQ@google.com> <20211218231823.49a72256@aktux>
+In-Reply-To: <20211218231823.49a72256@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Wed, 22 Dec 2021 09:28:10 +1000
+Message-ID: <CAKmqyKOtZ5AfVtNPYDNTMUjMRobZUwP7coTgEt94uze35Zxb7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] Input: Add driver for Cypress Generation 5 touchscreen
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mylene Josserand <mylene.josserand@free-electrons.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Myl=C3=A8ne_Josserand?= <mylene.josserand@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:28:23AM -0800, Jarrett Schultz wrote:
-> From: Jarrett Schultz <jaschultz@microsoft.com>
-> 
-> Introduce yaml for surface xbl driver.
-> 
-> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
-> 
-> ---
-> 
-> Changes in v4:
->  - Addressed small formatting changes
->  - Removed unnecessary lines
-> 
-> ---
-> 
-> Changes in v3:
->  - Updated description to only pertain to the hardware
->  - Updated the required field to properly reflect the binding
->  - Removed the first example
->  - Fixed the size of the reg field in the second example
-> 
-> ---
-> 
-> Changes in v2:
->  - Removed json-schema dependence
->  - Elaborated on description of driver
->  - Updated example
-> ---
->  .../platform/microsoft/surface-xbl.yaml       | 64 +++++++++++++++++++
->  MAINTAINERS                                   |  7 ++
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml b/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-> new file mode 100644
-> index 000000000000..df5a87a016f4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/platform/microsoft/surface-xbl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Surface Extensible Bootloader for Microsoft Surface Duo
-> +
-> +maintainers:
-> +  - Jarrett Schultz <jaschultz@microsoft.com>
-> +
-> +description: |
-> +  Defined to expose information that is used during production when
-> +  device is in manufacturing mode. Some of the information included
-> +  in this imem section is -
+On Sun, Dec 19, 2021 at 8:18 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> Hi,
+>
+> On Sun, 12 Dec 2021 21:45:48 -0800
+> Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+>
+> [...]
+> > > > This is also likely unsafe if controller is not completely shut off and
+> > > > is capable of generating interrupts given input device is not yet
+> > > > allocated.
+> > >
+> > > I have dropped the `IRQF_TRIGGER_FALLING |`
+> > >
+> > > I have tried to use level interrupts, but I can't get the device
+> > > working with them.
+> >
+> > That is weird, does the interrupt controller support level interrupts?
+> >
+> I have set level interrupts via the devicetree,
+> things seem to work on Kobo Clara HD:
+> /proc/interrupts
+> 203:      37402  gpio-mxc   6 Level     tt21000
+>
+>        touchscreen@24 {
+>                 compatible = "cypress,tt21000";
+>                 reg = <0x24>;
+>                 pinctrl-names = "default","sleep";
+>                 pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
+>                 pinctrl-1 = <&pinctrl_cyttsp5_gpio_sleep>;
+>                 interrupt-parent = <&gpio5>;
+>                 interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
+>                 reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+>         };
 
-If this is onchip sram, we have a binding for that. That's not an MFD.
+I have tried using IRQ_TYPE_LEVEL_LOW as well, but the device doesn't
+start correctly and the commands time out.
 
-> +    * board_id
-> +    * battery_present
-> +    * hw_init_retries
-> +    * is_customer_mode
-> +    * is_act_mode
-> +    * pmic_reset_reason
-> +    * touch_fw_version
-> +    * ocp_error_location
+It works fine with IRQ_TYPE_EDGE_FALLING though.
 
-nvmem binding doesn't work for describing these fields?
+Alistair
 
-> +  See sysfs documentation for more information.
-
-sysfs? Not relevant to the binding.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: simple-mfd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - ranges
-> +  - address-cells
-> +  - size-cells
-> +
-> +examples:
-> +  - |
-> +    / {
-> +        compatible = "foo";
-> +        model = "foo";
-
-No need to make this the root node with a fake compatible.
-
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        imem@146bf000 {
-> +          compatible = "simple-mfd";
-> +          reg = <0x0 0x146bf000 0x0 0x1000>;
-> +          ranges = <0x0 0x0 0x146bf000 0x1000>;
-> +          #address-cells = <1>;
-> +          #size-cells = <1>;
-> +          status = "okay";
-
-Don't show status in examples.
-
-> +
-> +          xbl@a94 {
-> +            compatible = "microsoft,sm8150-surface-duo-xbl";
-> +            reg = <0xa94 0x100>;
-> +            status = "okay";
-> +          };
-> +        };
-> +      };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 13f9a84a617e..5d0ca2a98b57 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12649,6 +12649,13 @@ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
->  F:	drivers/platform/surface/surface_dtx.c
->  F:	include/uapi/linux/surface_aggregator/dtx.h
->  
-> +MICROSOFT SURFACE DUO XBL DRIVER
-> +M:	Jarrett Schultz <jaschultz@microsoft.com>
-> +L:	linux-arm-msm@vger.kernel.org
-> +L:	platform-driver-x86@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-> +
->  MICROSOFT SURFACE GPE LID SUPPORT DRIVER
->  M:	Maximilian Luz <luzmaximilian@gmail.com>
->  L:	platform-driver-x86@vger.kernel.org
-> -- 
-> 2.25.1
-> 
-> 
+>
+> Regards,
+> Andreas

@@ -2,135 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D713347C24C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C29847C251
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbhLUPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbhLUPLv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:11:51 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBADC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:11:51 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id t6so12828424qkg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 07:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=inKnCrxjiVlEFGg7TNsjz8T66oFLFowuMdP2ABAhDNw=;
-        b=ZXXoTFFpFceomVCNZbiSunDDkt4OnlItu8mtU+NMmTOEcfg0gxBDShl1sSnVt/nLm8
-         x2YmJ/p+osB3SadllEUVUcn9Pt/IfJyQHd9cxW+VxL7ytT24/D9PkhyZM9vHpr8q9kBQ
-         QVeD7D8f1QPckG3DjhGcEc7GHW5rDNW+b8VeFwlxyMlErdA6UsDQvAPrqXni9eITkLEl
-         r+bYnT3mgV2uljc7gH/N3+Gh8waibfzvtq0GtTBV3/9s5Irju2R49+xQezhFPH/jGiNK
-         5Cb7c9GkaFLc1c570g8Z9qv3cYgKJzmtBqEYCP6bDbebH5ABNRqp0Tu0yKkJI2q6v+Mm
-         iFRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=inKnCrxjiVlEFGg7TNsjz8T66oFLFowuMdP2ABAhDNw=;
-        b=X5aALgM669te53EiBwD5a5ZtzePWGJvpGWSi3Sh4r1ZTI20KmkL1aXjf8RlZYMygrB
-         Z7m+sDuHFZwIrvKsehgkqQZJpZz3I3QDlYfAFQ1EHYbYgMM7R9WC6NnuEzaLj43Asgwa
-         3rPTLw+zRS1mJYHp+T7sE8KjrjcRKOXNVwhPm5A4gOQws9CMv2eufMGwfhbR7BZ6PCd2
-         icsaNNcp9WYPgmUsDcjJp95qYd8MHs6TkWgdE+4ZchgTcRpH8mXrjwNLQiXKQirxpJP3
-         FDaeO7qiZIekk9WOX83KZkkTdjLlL6juaxBqeDYZoNsFRCWSsBTD/tqpRm91F3i9w+mf
-         3v2g==
-X-Gm-Message-State: AOAM530dxaMfAYKEFewaTDXCLfskck4KN92BT1p1GTWRk+hVXrHJPvsf
-        WIw7ZhpjP6PrYbJtySoM66T4G17/0EezMqilPGmPMg==
-X-Google-Smtp-Source: ABdhPJxUCH5aZo8HNcHbdUS06B2iz7YpO0Z5RJr0Phvi1i+pX2K7NddgPRzWHHeZmi01iZghm7e3vWM7VMUd7b8x8go=
-X-Received: by 2002:a05:620a:e0c:: with SMTP id y12mr2303562qkm.109.1640099508387;
- Tue, 21 Dec 2021 07:11:48 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1640036051.git.andreyknvl@google.com> <c3fa42da7337bc46a4b7a1e772e87bed5ff89850.1640036051.git.andreyknvl@google.com>
-In-Reply-To: <c3fa42da7337bc46a4b7a1e772e87bed5ff89850.1640036051.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 21 Dec 2021 16:11:11 +0100
-Message-ID: <CAG_fn=UHZe+9sSkpc0=2HWP9ZeVNWU0jR2tEVS-4FP5+zRB6sA@mail.gmail.com>
-Subject: Re: [PATCH mm v4 22/39] kasan, fork: reset pointer tags of vmapped stacks
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
+        id S239007AbhLUPMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:12:20 -0500
+Received: from mga14.intel.com ([192.55.52.115]:56144 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238992AbhLUPMT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 10:12:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640099539; x=1671635539;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=xtbgbUjVJSiP/3NOnfjZyjZXB+ptWQ3Ys8Zly2meUqc=;
+  b=YrU4kPEC7vdCMBxWRRXrn4qLCHtjjqQ/zzXGoighX+mpYzLTgF2NO6pn
+   Lb0JkEgoQXHeRTuOc7GSYfVgFGkobhm+TNZg4M7etTLzPjeJU6XbN6JJj
+   uyu8hp1vfniC8jNCzpIkJK5J+yHzRzq7bcXY+CXLCwUF0BfA5KrXRZaaE
+   TF6u2jouwF3gX3We0bfgBmONxpG5etSSZKJlDkFYWVTA8ySGAufMThZJi
+   SOBPq7ZFh7LK8I4rNLO/IG672ktiwg6sLNGNzy1Mk2A8AJVqfN3IJ//T+
+   k/fA44nuW3C/7lPtLuSJQxvZWhaGrte++sJWpUS0s/L4R5tcif4UJVhn/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240632474"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="240632474"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 07:12:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="684688273"
+Received: from chaop.bj.intel.com ([10.240.192.101])
+  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 07:12:11 -0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: [PATCH v3 01/15] mm/shmem: Introduce F_SEAL_INACCESSIBLE
+Date:   Tue, 21 Dec 2021 23:11:11 +0800
+Message-Id: <20211221151125.19446-2-chao.p.peng@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211221151125.19446-1-chao.p.peng@linux.intel.com>
+References: <20211221151125.19446-1-chao.p.peng@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:01 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Once tag-based KASAN modes start tagging vmalloc() allocations,
-> kernel stacks start getting tagged if CONFIG_VMAP_STACK is enabled.
->
-> Reset the tag of kernel stack pointers after allocation in
-> alloc_thread_stack_node().
->
-> For SW_TAGS KASAN, when CONFIG_KASAN_STACK is enabled, the
-> instrumentation can't handle the SP register being tagged.
->
-> For HW_TAGS KASAN, there's no instrumentation-related issues. However,
-> the impact of having a tagged SP register needs to be properly evaluated,
-> so keep it non-tagged for now.
->
-> Note, that the memory for the stack allocation still gets tagged to
-> catch vmalloc-into-stack out-of-bounds accesses.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
->
-> ---
->
-> Changes v2->v3:
-> - Update patch description.
-> ---
->  kernel/fork.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 403b9dbbfb62..4125373dba4e 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -254,6 +254,7 @@ static unsigned long *alloc_thread_stack_node(struct =
-task_struct *tsk, int node)
->          * so cache the vm_struct.
->          */
->         if (stack) {
-> +               stack =3D kasan_reset_tag(stack);
->                 tsk->stack_vm_area =3D find_vm_area(stack);
->                 tsk->stack =3D stack;
->         }
-> --
-> 2.25.1
->
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 
+Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
+the file is inaccessible from userspace in any possible ways like
+read(),write() or mmap() etc.
 
---=20
-Alexander Potapenko
-Software Engineer
+It provides semantics required for KVM guest private memory support
+that a file descriptor with this seal set is going to be used as the
+source of guest memory in confidential computing environments such
+as Intel TDX/AMD SEV but may not be accessible from host userspace.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+At this time only shmem implements this seal.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+---
+ include/uapi/linux/fcntl.h |  1 +
+ mm/shmem.c                 | 37 +++++++++++++++++++++++++++++++++++--
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index 2f86b2ad6d7e..e2bad051936f 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -43,6 +43,7 @@
+ #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+ #define F_SEAL_WRITE	0x0008	/* prevent writes */
+ #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
++#define F_SEAL_INACCESSIBLE	0x0020  /* prevent file from accessing */
+ /* (1U << 31) is reserved for signed error codes */
+ 
+ /*
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 18f93c2d68f1..faa7e9b1b9bc 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1098,6 +1098,10 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+ 		    (newsize > oldsize && (info->seals & F_SEAL_GROW)))
+ 			return -EPERM;
+ 
++		if ((info->seals & F_SEAL_INACCESSIBLE) &&
++		    (newsize & ~PAGE_MASK))
++			return -EINVAL;
++
+ 		if (newsize != oldsize) {
+ 			error = shmem_reacct_size(SHMEM_I(inode)->flags,
+ 					oldsize, newsize);
+@@ -1364,6 +1368,8 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
+ 		goto redirty;
+ 	if (!total_swap_pages)
+ 		goto redirty;
++	if (info->seals & F_SEAL_INACCESSIBLE)
++		goto redirty;
+ 
+ 	/*
+ 	 * Our capabilities prevent regular writeback or sync from ever calling
+@@ -2262,6 +2268,9 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+ 	if (ret)
+ 		return ret;
+ 
++	if (info->seals & F_SEAL_INACCESSIBLE)
++		return -EPERM;
++
+ 	/* arm64 - allow memory tagging on RAM-based files */
+ 	vma->vm_flags |= VM_MTE_ALLOWED;
+ 
+@@ -2459,12 +2468,15 @@ shmem_write_begin(struct file *file, struct address_space *mapping,
+ 	pgoff_t index = pos >> PAGE_SHIFT;
+ 
+ 	/* i_rwsem is held by caller */
+-	if (unlikely(info->seals & (F_SEAL_GROW |
+-				   F_SEAL_WRITE | F_SEAL_FUTURE_WRITE))) {
++	if (unlikely(info->seals & (F_SEAL_GROW | F_SEAL_WRITE |
++				    F_SEAL_FUTURE_WRITE |
++				    F_SEAL_INACCESSIBLE))) {
+ 		if (info->seals & (F_SEAL_WRITE | F_SEAL_FUTURE_WRITE))
+ 			return -EPERM;
+ 		if ((info->seals & F_SEAL_GROW) && pos + len > inode->i_size)
+ 			return -EPERM;
++		if (info->seals & F_SEAL_INACCESSIBLE)
++			return -EPERM;
+ 	}
+ 
+ 	return shmem_getpage(inode, index, pagep, SGP_WRITE);
+@@ -2538,6 +2550,21 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		end_index = i_size >> PAGE_SHIFT;
+ 		if (index > end_index)
+ 			break;
++
++		/*
++		 * inode_lock protects setting up seals as well as write to
++		 * i_size. Setting F_SEAL_INACCESSIBLE only allowed with
++		 * i_size == 0.
++		 *
++		 * Check F_SEAL_INACCESSIBLE after i_size. It effectively
++		 * serialize read vs. setting F_SEAL_INACCESSIBLE without
++		 * taking inode_lock in read path.
++		 */
++		if (SHMEM_I(inode)->seals & F_SEAL_INACCESSIBLE) {
++			error = -EPERM;
++			break;
++		}
++
+ 		if (index == end_index) {
+ 			nr = i_size & ~PAGE_MASK;
+ 			if (nr <= offset)
+@@ -2663,6 +2690,12 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
+ 			goto out;
+ 		}
+ 
++		if ((info->seals & F_SEAL_INACCESSIBLE) &&
++		    (offset & ~PAGE_MASK || len & ~PAGE_MASK)) {
++			error = -EINVAL;
++			goto out;
++		}
++
+ 		shmem_falloc.waitq = &shmem_falloc_waitq;
+ 		shmem_falloc.start = (u64)unmap_start >> PAGE_SHIFT;
+ 		shmem_falloc.next = (unmap_end + 1) >> PAGE_SHIFT;
+-- 
+2.17.1
+

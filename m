@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC64147BE55
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE78F47BE5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbhLUKqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbhLUKqJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:46:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A8DC061401
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:46:08 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mzcej-0005BQ-7b; Tue, 21 Dec 2021 11:46:05 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mzcej-005ngB-6A; Tue, 21 Dec 2021 11:46:04 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mzcei-0004CY-1b; Tue, 21 Dec 2021 11:46:04 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     David Lechner <david@lechnology.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] counter: Remove unused member from struct counter_device
-Date:   Tue, 21 Dec 2021 11:45:46 +0100
-Message-Id: <20211221104546.214066-9-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
-References: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
+        id S234181AbhLUKq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:46:56 -0500
+Received: from mga07.intel.com ([134.134.136.100]:63071 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231523AbhLUKqz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 05:46:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640083615; x=1671619615;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pjRFMk7WKO1ICd6qxstX01wYCkdvmQVl4OiV2DiXEQQ=;
+  b=UgGwh+ndOdmTCmh7p2Bg8+jJqR31TdH97wy+lPnlo3ZIOaRh8W5HcUWV
+   yJzCi066QTqlrxpEKvEz2VQK3pNY6iS9/VHkPg/10p1mx2SQV1HLrsJIt
+   TGnK/1cVfXqIBzB3YQHIFk8RUWhFxVDz8DkDjzm66tH6S16WRrFbOqDut
+   nC3uOJB20jywGh7V1QoFrteCpPb8slxZgduLalFPp8GHSHwF9EH932vxe
+   crvJsisAXkMv4OK0/sVeCo7z9QWlu1KGAgjPmHiwp+ChVC1wAgyOjeXz2
+   JGn1e2dx6ZcDyZdk4VJz3kTqMHCnqu/GzBopl7ZCqmzlKaFEZiCY7tpzy
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="303741704"
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="303741704"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 02:46:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="616725537"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Dec 2021 02:46:53 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzcfU-000909-U0; Tue, 21 Dec 2021 10:46:52 +0000
+Date:   Tue, 21 Dec 2021 18:46:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrea Arcangeli <aarcange@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andrea-aa:main 22/46] include/linux/compiler_types.h:335:45: error:
+ call to '__compiletime_assert_426' declared with attribute error:
+ BUILD_BUG_ON failed: (long) &mm_check->page_table_lock - (long)
+ &mm_check->mmap_lock < L1_CACHE_BYTES
+Message-ID: <202112211850.LkEJiilF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=Y0NkBLHZbTPV9AgKvEXqVQXBuc1J1Y5wZlZqUt+q8z8=; m=gRJhxNFIrXvCs2HMMhrXRYXJ62P50jhM9VxuUIFr16M=; p=2zqxcELaKv036XA4cqHni0/9tKYCfObbbaJb80+Waf0=; g=66d467d4dda659dec3678c8363304f55cb46ce85
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHBsFIACgkQwfwUeK3K7Ak4BQf+Jab Qe3ZLW5+lF0d5ZR9GNedPSuZVa54hNR9n8KeVlE68fdhXjdDB5V+GKDNjN2do9Zh6pvDkqoVgT5cd yLjSIUdDnzshi304AduYuD+kPig8lWozhUwR4IlJ4OG/tvaNh0iW2UUbbRszBC1lsTb08f0bvL+1/ bDAw4xafTThYVlUWQ2x1JTQfBsd9tvbabkYewGmjzSN0G/pTa9Q9P/+5sNpMmEARWF30P6YDLgqT1 zB3FWl3pyLO7qj+bz7f5FlF7rYMre+LN/BH4doMfx5Im39EVXtWvOiz6Z2rLKxGV6xnnskwI+TxVb E65U+vojgrFIiq8EyLeds4XPrE7Il0Q==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functionality priv was designed for can better be accomplished using
-container_of. All drivers have been converted, so drop this now unused
-member.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/andrea/aa.git main
+head:   9571e82616c7501d7cc5a590c12e467ed14e31ff
+commit: 181520af2b00728d6bb76d98d5a531c7853333b2 [22/46] mm: cacheline alignment for page_table_lock and mmap_lock
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211221/202112211850.LkEJiilF-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/andrea/aa.git/commit/?id=181520af2b00728d6bb76d98d5a531c7853333b2
+        git remote add andrea-aa https://git.kernel.org/pub/scm/linux/kernel/git/andrea/aa.git
+        git fetch --no-tags andrea-aa main
+        git checkout 181520af2b00728d6bb76d98d5a531c7853333b2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Just one assignment was missed in the conversion of the ti-eqep driver.
-This is unused and so can be safely dropped, too.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+All errors (new ones prefixed by >>):
+
+   kernel/fork.c:763:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
+     763 | void __init __weak arch_task_cache_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   kernel/fork.c: In function 'proc_caches_init':
+>> include/linux/compiler_types.h:335:45: error: call to '__compiletime_assert_426' declared with attribute error: BUILD_BUG_ON failed: (long) &mm_check->page_table_lock - (long) &mm_check->mmap_lock < L1_CACHE_BYTES
+     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:316:25: note: in definition of macro '__compiletime_assert'
+     316 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
+     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   kernel/fork.c:2938:9: note: in expansion of macro 'BUILD_BUG_ON'
+    2938 |         BUILD_BUG_ON((long) &mm_check->page_table_lock -
+         |         ^~~~~~~~~~~~
+
+
+vim +/__compiletime_assert_426 +335 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  322  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  324  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  325  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  326   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  327   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  328   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  329   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  330   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  331   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  332   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  333   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @335  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  
+
+:::::: The code at line 335 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
 ---
- drivers/counter/ti-eqep.c | 1 -
- include/linux/counter.h   | 3 ---
- 2 files changed, 4 deletions(-)
-
-diff --git a/drivers/counter/ti-eqep.c b/drivers/counter/ti-eqep.c
-index 9e0e46bca4c2..8cdc9ab98859 100644
---- a/drivers/counter/ti-eqep.c
-+++ b/drivers/counter/ti-eqep.c
-@@ -402,7 +402,6 @@ static int ti_eqep_probe(struct platform_device *pdev)
- 	priv->counter.num_counts = ARRAY_SIZE(ti_eqep_counts);
- 	priv->counter.signals = ti_eqep_signals;
- 	priv->counter.num_signals = ARRAY_SIZE(ti_eqep_signals);
--	priv->counter.priv = priv;
- 
- 	platform_set_drvdata(pdev, priv);
- 
-diff --git a/include/linux/counter.h b/include/linux/counter.h
-index b7d0a00a61cf..fd58f36ea2f7 100644
---- a/include/linux/counter.h
-+++ b/include/linux/counter.h
-@@ -287,7 +287,6 @@ struct counter_ops {
-  * @num_counts:		number of Counts specified in @counts
-  * @ext:		optional array of Counter device extensions
-  * @num_ext:		number of Counter device extensions specified in @ext
-- * @priv:		optional private data supplied by driver
-  * @dev:		internal device structure
-  * @chrdev:		internal character device structure
-  * @events_list:	list of current watching Counter events
-@@ -314,8 +313,6 @@ struct counter_device {
- 	struct counter_comp *ext;
- 	size_t num_ext;
- 
--	void *priv;
--
- 	struct device dev;
- 	struct cdev chrdev;
- 	struct list_head events_list;
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

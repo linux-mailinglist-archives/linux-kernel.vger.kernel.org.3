@@ -2,122 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 503DF47C048
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE9C47BECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbhLUNBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:01:31 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:16648 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237988AbhLUNB1 (ORCPT
+        id S237070AbhLULWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:22:25 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:25992 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230391AbhLULWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:01:27 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL9nuC4027858;
-        Tue, 21 Dec 2021 08:01:20 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3d2pyqm2m3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Dec 2021 08:01:20 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 1BLD1Jck013994
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Dec 2021 08:01:19 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 21 Dec
- 2021 08:01:18 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 21 Dec 2021 08:01:18 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.181])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1BLD1BQh024109;
-        Tue, 21 Dec 2021 08:01:15 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tue, 21 Dec 2021 06:22:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1640085745; x=1671621745;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=xXxa9lxh+lcHQD/PM+FEPQljZ3NTW38sGBoGucSqFLg=;
+  b=kqkFjHGvtY6KWWM6dbo8BN2UX0YMLc2MSY21puunpAiY0hNBiO7hsbTU
+   sfZcjNcIpLMCiDONYIjp7BqVmxBrU25u6E6Er2/wMIOn27zAWJJZy9Tc3
+   6NnYV2hIAdwW2aIivpLhMFmR/2kEfqenCL/4+qxn6Chps8qcy3JL3if07
+   mZ4EJbVF9fhN/3jc2Bh9HD/JY5wm2tFcLemeIzpBzAuIUqiUibUuiZNgp
+   B6GRECI1FHowJJ9C953dKf99WvJ1rhLy3u6fz/Z+rs+PlEMOYGjESIgl4
+   rcZ2CBY1ayrMk4EISomnTJ6QatFGZQ3cQsNS8CH19Yvoy+8Z1sqChmRSf
+   A==;
+IronPort-SDR: hwrpSQBm71ZkeVij1/i15FECQaLCKoMatKhW/qhgDMBlqKABR6QchprxedpzMGTKjAf9uxZrtX
+ DiVDx0L8S6sJdbnSuxTA9Lz9UgO7UjtVqYo1sLPdcwp1QvwnwmM6edk0zn2ufSrBxtITdlGqh7
+ j8WF7SSAi+sextZti36oGbGYgXYTJ5jfZ1TXFQJ8ODmoIUN8dP+XiZb+5p8eQ9emesB+qP+pYv
+ N/WeJCqF6dLxDc/55XJ4uZ4ar3DXZusxL0e3UMwbZTly0em1e8jFEcxWj6GBc+SGpqdeHlRoZY
+ 1qAFcT73M3hZHcUo0h6hQ7zX
+X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
+   d="scan'208";a="147359666"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Dec 2021 04:22:24 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 21 Dec 2021 04:22:23 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 21 Dec 2021 04:22:20 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v7 3/3] Documentation:ABI:testing:admv1013: add ABI docs
-Date:   Tue, 21 Dec 2021 13:22:06 +0200
-Message-ID: <20211221112206.97066-3-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211221112206.97066-1-antoniu.miclaus@analog.com>
-References: <20211221112206.97066-1-antoniu.miclaus@analog.com>
+CC:     <UNGLinuxDriver@microchip.com>
+Subject: [PATCH v2 net-next] net: phy: micrel: Adding interrupt support for Link up/Link down in LAN8814 Quad phy
+Date:   Tue, 21 Dec 2021 16:52:17 +0530
+Message-ID: <20211221112217.9502-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: G5c2vhHyJ2a6RujJvVibxsOz6svQ66o6
-X-Proofpoint-ORIG-GUID: G5c2vhHyJ2a6RujJvVibxsOz6svQ66o6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 spamscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112210059
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the use of the Local Oscillator Feedthrough Offset
-calibration.
+This patch add support for Link up or Link down
+interrupt support in LAN8814 Quad phy
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
 ---
-changes in v7:
- - rename `phase` -> `calibphase`
- - specify that the phase values are unscaled
- .../testing/sysfs-bus-iio-frequency-admv1013  | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
+v1 -> v2
+* Defining Common Macro for Control and status bits of
+  Link up, Link Down and sharing them across Interrupt
+  control and Interrupt status registers.
+---
+ drivers/net/phy/micrel.c | 67 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
-new file mode 100644
-index 000000000000..105bae9e2f5c
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
-@@ -0,0 +1,38 @@
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_i_calibphase
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write unscaled value for the Local Oscillatior path quadrature I phase shift.
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 44a24b99c894..c6a97fcca0e6 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -66,6 +66,19 @@
+ #define KSZ8081_LMD_SHORT_INDICATOR		BIT(12)
+ #define KSZ8081_LMD_DELTA_TIME_MASK		GENMASK(8, 0)
+ 
++/* Lan8814 general Interrupt control/status reg in GPHY specific block. */
++#define LAN8814_INTC				0x18
++#define LAN8814_INTS				0x1B
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_q_calibphase
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write unscaled value for the Local Oscillatior path quadrature Q phase shift.
++#define LAN8814_INT_LINK_DOWN			BIT(2)
++#define LAN8814_INT_LINK_UP			BIT(0)
++#define LAN8814_INT_LINK			(LAN8814_INT_LINK_UP |\
++						 LAN8814_INT_LINK_DOWN)
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior Feedthrough Offset Calibration I Positive
-+		side.
++#define LAN8814_INTR_CTRL_REG			0x34
++#define LAN8814_INTR_CTRL_REG_POLARITY		BIT(1)
++#define LAN8814_INTR_CTRL_REG_INTR_ENABLE	BIT(0)
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior Feedthrough Offset Calibration Q Positive side.
+ /* PHY Control 1 */
+ #define MII_KSZPHY_CTRL_1			0x1e
+ #define KSZ8081_CTRL1_MDIX_STAT			BIT(4)
+@@ -1620,6 +1633,58 @@ static int lan8804_config_init(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
++{
++	int irq_status;
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_i_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration I Negative
-+		side.
++	irq_status = phy_read(phydev, LAN8814_INTS);
++	if (irq_status < 0)
++		return IRQ_NONE;
 +
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_q_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration Q Negative
-+		side.
++	if (!(irq_status & LAN8814_INT_LINK))
++		return IRQ_NONE;
++
++	phy_trigger_machine(phydev);
++
++	return IRQ_HANDLED;
++}
++
++static int lan8814_ack_interrupt(struct phy_device *phydev)
++{
++	/* bit[12..0] int status, which is a read and clear register. */
++	int rc;
++
++	rc = phy_read(phydev, LAN8814_INTS);
++
++	return (rc < 0) ? rc : 0;
++}
++
++static int lan8814_config_intr(struct phy_device *phydev)
++{
++	int err;
++
++	lanphy_write_page_reg(phydev, 4, LAN8814_INTR_CTRL_REG,
++			      LAN8814_INTR_CTRL_REG_POLARITY |
++			      LAN8814_INTR_CTRL_REG_INTR_ENABLE);
++
++	/* enable / disable interrupts */
++	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
++		err = lan8814_ack_interrupt(phydev);
++		if (err)
++			return err;
++
++		err =  phy_write(phydev, LAN8814_INTC, LAN8814_INT_LINK);
++	} else {
++		err =  phy_write(phydev, LAN8814_INTC, 0);
++		if (err)
++			return err;
++
++		err = lan8814_ack_interrupt(phydev);
++	}
++
++	return err;
++}
++
+ static struct phy_driver ksphy_driver[] = {
+ {
+ 	.phy_id		= PHY_ID_KS8737,
+@@ -1802,6 +1867,8 @@ static struct phy_driver ksphy_driver[] = {
+ 	.get_stats	= kszphy_get_stats,
+ 	.suspend	= genphy_suspend,
+ 	.resume		= kszphy_resume,
++	.config_intr	= lan8814_config_intr,
++	.handle_interrupt = lan8814_handle_interrupt,
+ }, {
+ 	.phy_id		= PHY_ID_LAN8804,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
 -- 
-2.34.1
+2.17.1
 

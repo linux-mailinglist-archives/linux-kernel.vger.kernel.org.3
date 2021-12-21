@@ -2,152 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B338947C8EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC61147C8F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbhLUV4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S237457AbhLUV6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:58:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLUV4t (ORCPT
+        with ESMTP id S230251AbhLUV6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:56:49 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51542C061574;
-        Tue, 21 Dec 2021 13:56:49 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id d10so613952ybn.0;
-        Tue, 21 Dec 2021 13:56:49 -0800 (PST)
+        Tue, 21 Dec 2021 16:58:44 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD901C061574;
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z5so668148edd.3;
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nH5deYnY1F+nFd2Y1Uyf515q7YwKeWK3mKwSxQWbEyc=;
-        b=b1kd8BudFlrruJSAJZ5gb3m3crA+JNARA6Iw+Mvqs+ksg5BPcU8ZCxuPE+Y6kDVNvM
-         cVX1Ili0M6zSt2zF8l/ZqqBZR0ZROyA78zYdfr0DGKf1P4tWhUAdPpfdiiUex3jd6woh
-         UUtSyko9ZW5SRC0H274qX11uPZZpyCJZLqBzgO0gshcoVtoHzNsaWnuIEN6DPzKIa3Dj
-         6LnV6SEmtV5/baKo1MaSx2+q8DxKf/2vJRV2+GQK5NOTkS48MYEvcKFGK1L6EbnHlT33
-         y7fLEu9rKjtVeyhCLo//wwERcJyaFWemz/Wk//PMEPO9ok4FK2ZWsLoMMk9VpU9XqJDv
-         TjyA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
+        b=bd6HqV3UMrb9sepofinLvIt3WmGL1zLxlImvORLg3MLxjF4VdIicCOoe5H/r4czjT0
+         YWmTS5mwJZVhzpbfnzy6G4OiVXAdz1epYplAv8OMgDhWa0Uc647rrCFCeHTLJ1YhqXzw
+         ehCWuxNzAzF1w2mNqmfwp2e8EtTfD1qrG2K02KRLKgmxz5HuE3/ABqxVpoayIMmV4Dqe
+         HClwT9OQ+Hm42rODUtzgAeulz59Ej8oTAmL/tVRX/MtNzilGq0/XJt2hiOm+Es+XlOJg
+         HrMAytl6vbn85HrMJHsoxPKRL8W15ONi/sanX3gytv0z2fM506ACQw6DwVLxjvODq1He
+         9q5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nH5deYnY1F+nFd2Y1Uyf515q7YwKeWK3mKwSxQWbEyc=;
-        b=KAkK9YQOsgiKj0udFYt7MqwMBhQYNdFzim1Ig22SaQ7ysLTkqZMSZocXCABDATf5V9
-         SdXzLVwY9GKjXiimeOMxhL8/9kdX2/xuvqZrwIvtxSfTvPOUcUOVO0ONivv0ZdIrjUUG
-         SyxwChw+/8z4fP2TtVgp+vIkXxjKfVc44OklT1g54DyEDwgUl/PsY14jsBmoQaSjHFfm
-         oKm6qsxXauJbnN0ieAmC53j+H3T2P0TzSWAR0bFKyXOXIuKPjO55ZXh7/bj0r6P9sF+l
-         mYQEVJz01QJT0i2mpuX5wmrVuPAdOUPvQobKiWezzpIVJFBJF8womUgJUlDjT2fpj9cM
-         2VpQ==
-X-Gm-Message-State: AOAM530CIHg85u6Fk7wAR2Rk+vMk9fInKN9UjcXw1bPGW+PK9Z6SfBja
-        dsANJD/DiG9wUHAaKeOlv1nbVfPOK2k2Vuy3nNg=
-X-Google-Smtp-Source: ABdhPJyWp+tcos8RglvIuOvmkPeM/jkjRDtdU6lOBCtRSyS0bLAiW5Ii0Op2ac9aMWD7PIcmQXv3XuyrZjK5cimrh7k=
-X-Received: by 2002:a05:6902:722:: with SMTP id l2mr392530ybt.573.1640123808421;
- Tue, 21 Dec 2021 13:56:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
+        b=w9/PcNpvb6l64aZg5e9pNXOU6JEF6oXLU+JyK51vdPcc7vwnpov/1xzgSAvo0S5D+j
+         bLa3HkX83HyX7DF+HKBlb+HsofUFrscnk7Qiya8smOijGidQCWWP4BeVg8enAp5Gbk4/
+         LMN1982B3USQnYHsTL4ySgZEsjkUTjh+CSYKyK3xz0mbbiZgxfBw1qZR6WREXu7npMFz
+         gWEJriOW1eLAAAQsYkEHic8CDFUGof2sjz7BAGWBa/L9twPCCxV6h57hHb+yuPtKRZXE
+         RnHVSGCSO80BBTZTLDWgeZF9ShDl/xL8Z4mR36rHHhMaJ7+mZM4k8P6ZMeDMh7F6v0O0
+         mypA==
+X-Gm-Message-State: AOAM531Nr7s+6Z75lhlb719r0C6eA7x58YuX4BN/dtTBu0VHyFb1ReXl
+        bkwK1stIsOCQaEVnXqk3XIA=
+X-Google-Smtp-Source: ABdhPJyeBIXVTijWSWWT3bHWlHikQP2eP6zx9tIYJhbsevUfsN85qkZw4V8E1PP8plVaIhlzCL7RwA==
+X-Received: by 2002:a05:6402:184c:: with SMTP id v12mr254883edy.154.1640123922503;
+        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+Received: from demon-pc.localdomain ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id nc29sm41640ejc.3.2021.12.21.13.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7] Refactor ADT7X10
+Date:   Tue, 21 Dec 2021 23:58:34 +0200
+Message-Id: <20211221215841.2641417-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211216044839.v9.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
- <202112171439.KaggScQN-lkp@intel.com>
-In-Reply-To: <202112171439.KaggScQN-lkp@intel.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 21 Dec 2021 13:56:37 -0800
-Message-ID: <CABBYNZ+hvtsA=i2mgJnuzR3B6Byku8t+wHBuSW3_5eG4KSHy-w@mail.gmail.com>
-Subject: Re: [kbuild] Re: [PATCH v9 1/3] bluetooth: msft: Handle MSFT Monitor
- Device Event
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, Manish Mandlik <mmandlik@google.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Miao-chen Chou <mcchou@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+V1 -> V2:
+ * add device managed action for restoring config
+ * merge multiple small related patches into a single patch
+   that converts the driver to use devm_hwmon_device_register_with_info
+ * switch to devm_request_threaded_irq after switching to
+   devm_hwmon_device_register_with_info to make sure that it is impossible
+   for the interrupt handler to access the freed hwmon device
+ * drop core driver remove callback
 
-On Thu, Dec 16, 2021 at 11:18 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Hi Manish,
->
-> url:    https://github.com/0day-ci/linux/commits/Manish-Mandlik/bluetooth-msft-Handle-MSFT-Monitor-Device-Event/20211216-205227
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git  master
-> config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112171439.KaggScQN-lkp@intel.com/config )
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->
-> smatch warnings:
-> net/bluetooth/msft.c:757 msft_vendor_evt() warn: inconsistent returns '&hdev->lock'.
->
-> vim +757 net/bluetooth/msft.c
->
-> 3e54c5890c87a30 Luiz Augusto von Dentz 2021-12-01  714  void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buff *skb)
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  715  {
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  716          struct msft_data *msft = hdev->msft_data;
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  717          u8 *evt_prefix;
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  718          u8 *evt;
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  719
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  720          if (!msft)
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  721                  return;
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  722
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  723          /* When the extension has defined an event prefix, check that it
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  724           * matches, and otherwise just return.
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  725           */
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  726          if (msft->evt_prefix_len > 0) {
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  727                  evt_prefix = msft_skb_pull(hdev, skb, 0, msft->evt_prefix_len);
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  728                  if (!evt_prefix)
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  729                          return;
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  730
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  731                  if (memcmp(evt_prefix, msft->evt_prefix, msft->evt_prefix_len))
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  732                          return;
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  733          }
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  734
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  735          /* Every event starts at least with an event code and the rest of
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  736           * the data is variable and depends on the event code.
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  737           */
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  738          if (skb->len < 1)
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  739                  return;
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  740
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  741          hci_dev_lock(hdev);
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  742
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  743          evt = msft_skb_pull(hdev, skb, 0, sizeof(*evt));
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  744          if (!evt)
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  745                  return;
->
-> Missing hci_dev_unlock(hdev);
->
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  746
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  747          switch (*evt) {
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  748          case MSFT_EV_LE_MONITOR_DEVICE:
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  749                  msft_monitor_device_evt(hdev, skb);
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  750                  break;
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  751
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  752          default:
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  753                  bt_dev_dbg(hdev, "MSFT vendor event 0x%02x", *evt);
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  754                  break;
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  755          }
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16  756
-> e5af6a85decc8c1 Manish Mandlik         2021-12-16 @757          hci_dev_unlock(hdev);
-> 145373cb1b1fcdb Miao-chen Chou         2020-04-03  758  }
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> _______________________________________________
-> kbuild mailing list -- kbuild@lists.01.org
-> To unsubscribe send an email to kbuild-leave@lists.01.org
+V2 -> V3:
+ * merge patch that passes name from i2c driver into the
+   devm_hwmon_device_register_with_info patch
 
-Are you working on fixing the above problems?
+Cosmin Tanislav (7):
+  hwmon: (adt7x10) Store bus_dev in private data
+  hwmon: (adt7x10) Add device managed action for restoring config
+  hwmon: (adt7x10) Use devm_hwmon_device_register_with_info
+  hwmon: (adt7x10) Use devm_request_threaded_irq
+  hwmon: (adt7x10) Remove empty driver removal callback
+  hwmon: (adt7x10) Pass hwinfo dev to irq handler
+  hwmon: (adt7x10) Use hwmon_notify_event
 
+ drivers/hwmon/adt7310.c |   7 -
+ drivers/hwmon/adt7410.c |   9 +-
+ drivers/hwmon/adt7x10.c | 281 ++++++++++++++++++++--------------------
+ drivers/hwmon/adt7x10.h |   1 -
+ 4 files changed, 144 insertions(+), 154 deletions(-)
 
 -- 
-Luiz Augusto von Dentz
+2.34.1
+

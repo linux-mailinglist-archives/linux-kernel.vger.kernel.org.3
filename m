@@ -2,273 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D713F47C296
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2789147C29A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239021AbhLUPQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
+        id S239057AbhLUPRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236130AbhLUPQn (ORCPT
+        with ESMTP id S233629AbhLUPRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:16:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D567C061574;
-        Tue, 21 Dec 2021 07:16:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1161B8168A;
-        Tue, 21 Dec 2021 15:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8E3C36AE9;
-        Tue, 21 Dec 2021 15:16:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640099800;
-        bh=TQQPmZNvRn9ESBfprDKzVPgHnt6touO9bUo0b6HJ1K8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jd71xbUIGzCtRVR5K9hFY8QjLNlZBDEi5WjKWbgMR6ycXuuPVzIx3BFx5PNl3zAo9
-         ePlkpU11+GVwbAcFF2qzs2sqrqMY7Gfiu/nyr+urT633GWhXcFAVjMWcbSPU0S2Ehe
-         rI/G/gE/x+0uE0ktJEPXISfmyV9SEUWteu76j/8nsu1vtBxFWEmyLFGaac3IRQfJwS
-         VYgAu7thlfTxdIUxrzQfSppe6yZ72LHdKAIX8tJWpWZSjOBEaiXqprU3PqI6bOFKP0
-         nks2ZCH4WVyXWn0nMW+zdRzBSizAYTunGxapYyGu1SH6nXz1J5SyEBtqUomAwXfbey
-         vewYqe/to3c7w==
-Date:   Wed, 22 Dec 2021 00:16:37 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 01/12] user_events: Add minimal support for
- trace_event into ftrace
-Message-Id: <20211222001637.4d45b40ce99737ba213ae2b4@kernel.org>
-In-Reply-To: <20211216173511.10390-2-beaub@linux.microsoft.com>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
-        <20211216173511.10390-2-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 21 Dec 2021 10:17:46 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E15C061574;
+        Tue, 21 Dec 2021 07:17:46 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so17024454otg.4;
+        Tue, 21 Dec 2021 07:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tHke5PraZLo9zXLtEiDurFbl90Vg6q42JU7gVJRCp00=;
+        b=lMbaJFrwg+YTl4dmVQ0fzyniXXUY0Iwi0eFGCinwLz3/I2b+MzmD/fPvwhTwWIeyli
+         ACszRNHs+QnKkNyuJlITF/Vi6GagnKPne75nPxmaHgW3oEwz7hMVPpeb7J4dOE/OcH+3
+         Yo0ZTwuezmL1Cd0f/hDKv8vSifAYfcKg385xf70oAAnjnPtnBDN4egVnsCENNFPpaFES
+         e5lyVS7bR3YvFrWbwEfI93VmkIPbHiQda39MPlFp9u4yN4V9Hrz1vqY8XyDFOv0nace1
+         3CpswTFlz+mrT1H8GuZkbomJJXkHOdTSlGaopCvYNTNc0BGSdDUpRMvPPFO/vjs2u4jl
+         GbIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=tHke5PraZLo9zXLtEiDurFbl90Vg6q42JU7gVJRCp00=;
+        b=YF0tG/51BSOqbEKhC3yZs78RO40F6sC+S9lDIVKFxQXAE85tsQXaHcgCmLzUbB5ges
+         FHV/QzKN6xO2p6k4dwXk2u4bRj/fPnHnvR9KMsspppgMAuDJsuFMMtdpyET6tzA9ebUc
+         BP7h6eqlgZNKHGCPws06SiCDw/w1kNsG4oGTc/P2GNw28FGJSicARfk5O5FTTQ/YHebW
+         b1fCVU5ROYdXeBnxc9U67p7mIvm8Pg+Etc9CZX7HklNbtKdNkjH/laH/0wsWRt14C9tM
+         V+8FCrzHQ7kUZk1YIfbe4KW+7Pj0rtOwlKngvPlKFKH4xpAU9/SFXFvToz3Dg96XrmEH
+         FUeg==
+X-Gm-Message-State: AOAM532BZBwTUY6vhvmDwt2kUmroho9mGzVJtf6jCLBBjyqKwielcMV5
+        9Bb6Pk6mtFkXlH5CfV/Yfwl+z18EIT8=
+X-Google-Smtp-Source: ABdhPJxZSwgVMZz21CwDVSI7Lu9dcnUsS6TM24ip7kPE41/cZwy3L3UhE8jgChbhcf6/8hW7SZyfYQ==
+X-Received: by 2002:a9d:5549:: with SMTP id h9mr2533630oti.36.1640099865983;
+        Tue, 21 Dec 2021 07:17:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ay40sm4134452oib.1.2021.12.21.07.17.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 07:17:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 21 Dec 2021 07:17:44 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 02/10] hwmon: adt7x10: do not create name attr
+Message-ID: <20211221151744.GB2753412@roeck-us.net>
+References: <20211221123944.2683245-1-demonsingur@gmail.com>
+ <20211221123944.2683245-2-demonsingur@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221123944.2683245-2-demonsingur@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Beau,
-
-On Thu, 16 Dec 2021 09:35:00 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-> Minimal support for interacting with dynamic events, trace_event and
-> ftrace.
-
-Since the cover mail is merged, could you describe what is
-the user_events here? :)
-
-I have some comments below, but not so much.
-
-> Core outline of flow between user process, ioctl and trace_event
-> APIs.
+On Tue, Dec 21, 2021 at 02:39:36PM +0200, Cosmin Tanislav wrote:
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > 
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> It will later be created automatically by hwmon.
+> 
+Patches have to work on their own to retain bisectability. 
+The driver would be non-operational after this patch is applied
+until the registration function is changed. Please merge this
+patch into the with_info rework patch.
+
+Guenter
+
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > ---
->  include/uapi/linux/user_events.h |   71 ++
->  kernel/trace/Kconfig             |   14 +
->  kernel/trace/Makefile            |    1 +
->  kernel/trace/trace_events_user.c | 1188 ++++++++++++++++++++++++++++++
->  4 files changed, 1274 insertions(+)
->  create mode 100644 include/uapi/linux/user_events.h
->  create mode 100644 kernel/trace/trace_events_user.c
+>  drivers/hwmon/adt7x10.c | 29 +----------------------------
+>  1 file changed, 1 insertion(+), 28 deletions(-)
 > 
-> diff --git a/include/uapi/linux/user_events.h b/include/uapi/linux/user_events.h
-> new file mode 100644
-> index 000000000000..f97db05e00c9
-> --- /dev/null
-> +++ b/include/uapi/linux/user_events.h
-> @@ -0,0 +1,71 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + * Copyright (c) 2021, Microsoft Corporation.
-> + *
-> + * Authors:
-> + *   Beau Belgrave <beaub@linux.microsoft.com>
-> + */
-> +#ifndef _UAPI_LINUX_USER_EVENTS_H
-> +#define _UAPI_LINUX_USER_EVENTS_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/ioctl.h>
-> +
-> +#ifdef __KERNEL__
-> +#include <linux/uio.h>
-> +#else
-> +#include <sys/uio.h>
-> +#endif
-> +
-> +#define USER_EVENTS_SYSTEM "user_events"
-> +#define USER_EVENTS_PREFIX "u:"
-> +
-> +/* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
-> +#define EVENT_BIT_FTRACE 0
-> +#define EVENT_BIT_PERF 1
-> +#define EVENT_BIT_OTHER 7
-> +
-> +#define EVENT_STATUS_FTRACE (1 << EVENT_BIT_FTRACE)
-> +#define EVENT_STATUS_PERF (1 << EVENT_BIT_PERF)
-> +#define EVENT_STATUS_OTHER (1 << EVENT_BIT_OTHER)
-> +
-> +/* Create dynamic location entry within a 32-bit value */
-> +#define DYN_LOC(offset, size) ((size) << 16 | (offset))
-> +
-> +/* Use raw iterator for attached BPF program(s), no affect on ftrace/perf */
-> +#define FLAG_BPF_ITER (1 << 0)
-> +
-
-Can you add a description of the user_reg (and each field) here?
-
-> +struct user_reg {
-> +	__u32 size;
-> +	__u64 name_args;
-
-BTW, this field name is a bit strange. It is indeed "name and arguments",
-but actually, it is the definition of the event, isn't it?
-
-> +	__u32 status_index;
-> +	__u32 write_index;
-> +};
-> +
-> +#define DIAG_IOC_MAGIC '*'
-> +#define DIAG_IOCSREG _IOWR(DIAG_IOC_MAGIC, 0, struct user_reg*)
-> +#define DIAG_IOCSDEL _IOW(DIAG_IOC_MAGIC, 1, char*)
-> +
-> +enum {
-> +	USER_BPF_DATA_KERNEL,
-> +	USER_BPF_DATA_USER,
-> +	USER_BPF_DATA_ITER,
-> +};
-> +
-> +struct user_bpf_iter {
-> +	__u32 iov_offset;
-> +	__u32 nr_segs;
-> +	const struct iovec *iov;
-> +};
-> +
-> +struct user_bpf_context {
-> +	__u32 data_type;
-> +	__u32 data_len;
-> +	union {
-> +		void *kdata;
-> +		void *udata;
-> +		struct user_bpf_iter *iter;
-> +	};
-> +};
-
-Are those bpf related data structures passed from/to user?
-
-[...]
-> +/*
-> + * Parses a register command for user_events
-> + * Format: event_name[:FLAG1[,FLAG2...]] [field1[;field2...]]
-> + *
-> + * Example event named test with a 20 char msg field with a unsigned int after:
-
-Please quote the words in the example, like 
-
-Example event named 'test' with a 20 char 'msg' field with an 'unsigned int id' after:
-
-(is that correct?)
-
-> + * test char[20] msg;unsigned int id
-> + *
-> + * NOTE: Offsets are from the user data perspective, they are not from the
-> + * trace_entry/buffer perspective. We automatically add the common properties
-> + * sizes to the offset for the user.
-> + */
-> +static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
-> +{
-> +	char *name = raw_command;
-> +	char *args = strpbrk(name, " ");
-> +	char *flags;
-> +
-> +	if (args)
-> +		*args++ = 0;
-> +
-> +	flags = strpbrk(name, ":");
-> +
-> +	if (flags)
-> +		*flags++ = 0;
-> +
-
-Just a nitpick. What about using strsep()?
-
-args = raw_command;
-flags = strsep(&args, " ");
-name = strsep(&flags, ":");
-
-> +	return user_event_parse(name, args, flags, newuser);
-> +}
-> +
-
-[...]
-
-> +
-> +static ssize_t user_status_read(struct file *file, char __user *ubuf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	/*
-> +	 * Delay allocation of seq data until requested, most callers
-> +	 * will never read the status file. They will only mmap.
-> +	 */
-
-I think you don't need to do this optimization since this is not
-a hot path. And it causes strange behaviors. See below;
-
-> +	if (file->private_data == NULL) {
-> +		int ret;
-> +
-> +		if (*ppos != 0)
-> +			return -EINVAL;
-> +
-> +		ret = single_open(file, user_status_show, NULL);
-> +
-> +		if (ret)
-> +			return ret;
-
-This seems strange returning failure of open(2) from read(2).
-
-> +	}
-> +
-> +	return seq_read(file, ubuf, count, ppos);
-> +}
-> +
-> +static loff_t user_status_seek(struct file *file, loff_t offset, int whence)
-> +{
-> +	if (file->private_data == NULL)
-
-For example, this means unless start reading we can not do seek.
-So, please make the code as usually that is, unless any special reason.
-
-
-> +		return 0;
-> +
-> +	return seq_lseek(file, offset, whence);
-> +}
-> +
-> +static int user_status_release(struct inode *node, struct file *file)
-> +{
-> +	if (file->private_data == NULL)
-> +		return 0;
-> +
-> +	return single_release(node, file);
-> +}
-> +
-> +static const struct file_operations user_status_fops = {
-> +	.mmap = user_status_mmap,
-> +	.read = user_status_read,
-> +	.llseek  = user_status_seek,
-> +	.release = user_status_release,
-> +};
-
-Thank you,
-
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
+> index 2439da9b64e6..dbe9f1ad7db0 100644
+> --- a/drivers/hwmon/adt7x10.c
+> +++ b/drivers/hwmon/adt7x10.c
+> @@ -54,7 +54,6 @@
+>  /* Each client has this additional data */
+>  struct adt7x10_data {
+>  	const struct adt7x10_ops *ops;
+> -	const char		*name;
+>  	struct device		*hwmon_dev;
+>  	struct device		*bus_dev;
+>  	struct mutex		update_lock;
+> @@ -316,14 +315,6 @@ static ssize_t adt7x10_alarm_show(struct device *dev,
+>  	return sprintf(buf, "%d\n", !!(ret & attr->index));
+>  }
+>  
+> -static ssize_t name_show(struct device *dev, struct device_attribute *da,
+> -			 char *buf)
+> -{
+> -	struct adt7x10_data *data = dev_get_drvdata(dev);
+> -
+> -	return sprintf(buf, "%s\n", data->name);
+> -}
+> -
+>  static SENSOR_DEVICE_ATTR_RO(temp1_input, adt7x10_temp, 0);
+>  static SENSOR_DEVICE_ATTR_RW(temp1_max, adt7x10_temp, 1);
+>  static SENSOR_DEVICE_ATTR_RW(temp1_min, adt7x10_temp, 2);
+> @@ -337,7 +328,6 @@ static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, adt7x10_alarm,
+>  			     ADT7X10_STAT_T_HIGH);
+>  static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, adt7x10_alarm,
+>  			     ADT7X10_STAT_T_CRIT);
+> -static DEVICE_ATTR_RO(name);
+>  
+>  static struct attribute *adt7x10_attributes[] = {
+>  	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> @@ -368,7 +358,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+>  		return -ENOMEM;
+>  
+>  	data->ops = ops;
+> -	data->name = name;
+>  	data->bus_dev = dev;
+>  
+>  	dev_set_drvdata(dev, data);
+> @@ -406,21 +395,10 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+>  	if (ret)
+>  		goto exit_restore;
+>  
+> -	/*
+> -	 * The I2C device will already have it's own 'name' attribute, but for
+> -	 * the SPI device we need to register it. name will only be non NULL if
+> -	 * the device doesn't register the 'name' attribute on its own.
+> -	 */
+> -	if (name) {
+> -		ret = device_create_file(dev, &dev_attr_name);
+> -		if (ret)
+> -			goto exit_remove;
+> -	}
+> -
+>  	data->hwmon_dev = hwmon_device_register(dev);
+>  	if (IS_ERR(data->hwmon_dev)) {
+>  		ret = PTR_ERR(data->hwmon_dev);
+> -		goto exit_remove_name;
+> +		goto exit_remove;
+>  	}
+>  
+>  	if (irq > 0) {
+> @@ -435,9 +413,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+>  
+>  exit_hwmon_device_unregister:
+>  	hwmon_device_unregister(data->hwmon_dev);
+> -exit_remove_name:
+> -	if (name)
+> -		device_remove_file(dev, &dev_attr_name);
+>  exit_remove:
+>  	sysfs_remove_group(&dev->kobj, &adt7x10_group);
+>  exit_restore:
+> @@ -454,8 +429,6 @@ void adt7x10_remove(struct device *dev, int irq)
+>  		free_irq(irq, dev);
+>  
+>  	hwmon_device_unregister(data->hwmon_dev);
+> -	if (data->name)
+> -		device_remove_file(dev, &dev_attr_name);
+>  	sysfs_remove_group(&dev->kobj, &adt7x10_group);
+>  	if (data->oldconfig != data->config)
+>  		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
+> -- 
+> 2.34.1
+> 

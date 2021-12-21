@@ -2,118 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD72D47C1BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B5B47C1C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238574AbhLUOnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:43:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21717 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232589AbhLUOnP (ORCPT
+        id S238587AbhLUOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:43:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37842 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232589AbhLUOnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:43:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640097795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=au6VllE/GeLnsIb0itQOsWjmnN2qcl/Ccot7HKnDawM=;
-        b=OACde4cou9oFm7UIBO6OZa7CtyYrOhKUKaNmoD75BelKXVAeS5fFB6bcaaLJNF282tQPHf
-        jx5Xkt6uU3IOFaZhzzBZXSdKfgRMPX5KVbQIBK2CbsaFPH8F8beGylED8uGhg46kP30MJo
-        tStE6P3mW9D+vCfxKuI3HHkA//h7Ayk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-jGu1uFrkOtqmCNivb9aHFQ-1; Tue, 21 Dec 2021 09:43:14 -0500
-X-MC-Unique: jGu1uFrkOtqmCNivb9aHFQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 21 Dec 2021 09:43:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 325D464141;
-        Tue, 21 Dec 2021 14:43:12 +0000 (UTC)
-Received: from work (unknown [10.40.194.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A60395DF37;
-        Tue, 21 Dec 2021 14:43:10 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 15:43:05 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: Fix remount with 'abort' option isn't
- effective
-Message-ID: <20211221144305.nlryh7q2cgdbpmi5@work>
-References: <20211221123214.2410593-1-yebin10@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 797586162C;
+        Tue, 21 Dec 2021 14:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87BA0C36AEC;
+        Tue, 21 Dec 2021 14:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640097802;
+        bh=zs0pRYfzDm3/92K39XTHazInHRGHzlCY1oDliqEaOWg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=EIwg3vm8l3VYBpxKKzXdVD7DyH73kBkDVGdZnD79uyYAcAc1z3+LJa5BvgxxZhcHH
+         xDku7+yt84zAOs0yhNGIwiEEvgd02ejnwFhmdkjQBcBD57F/PGm9F8H3sjeqGXA6cG
+         k1uYyFGcoCeZLUixQ5b9n9GXIeVe6p9DXj09bXwP7Q+Vrp8e/5B3bsDbiFnmlhlFa5
+         pVmXs08BzUGAuC96XJMaWkjBKxy7U3i6HAj5XfFMiQ7tfEuXOnDJoJWMwBjQfQKYiN
+         77+3txuAk+P8vZaur8bMK0O4LjdwPINsv9KwN5NYwUQqTM8tm+7wJKY6Rs1knPCImR
+         nfAMgupR89zcw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211221120744.1118518-1-robh@kernel.org>
+References: <20211221120744.1118518-1-robh@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: samsung,s5m8767: Move fixed string BUCK9 to 'properties'
+Message-Id: <164009780128.868718.2419980624533374160.b4-ty@kernel.org>
+Date:   Tue, 21 Dec 2021 14:43:21 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221123214.2410593-1-yebin10@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-nice catch. This is a bug indeed. However I am currently in a process of
-changing the ctx_set/clear/test_ helpers because currently it generates
-functions that are unused.
-
-While I am at it I can just create a custom ctx_set_mount_flags()
-helper that would behave as expected so that we won't have to specify
-"1 < EXT4_MF_FS_ABORTED" which is not really obvious and hence error
-prone.
-
-My plan is to send my patch set including this one tomorrow, will that
-be fine with you ?
-
--Lukas
-
-On Tue, Dec 21, 2021 at 08:32:14PM +0800, Ye Bin wrote:
-> We test remount with 'abort' option as follows:
-> [root@localhost home]# mount  /dev/sda test
-> [root@localhost home]# mount | grep test
-> /dev/sda on /home/test type ext4 (rw,relatime)
-> [root@localhost home]# mount -o remount,abort test
-> [root@localhost home]# mount | grep test
-> /dev/sda on /home/test type ext4 (rw,relatime)
+On Tue, 21 Dec 2021 08:07:43 -0400, Rob Herring wrote:
+> There's no need for a fixed string like 'BUCK9' to be under
+> 'patternProperties', so move it under 'properties' instead.
 > 
-> Obviously, remount 'abort' option isn't effective.
-> After 6e47a3cc68fc commit we process abort option with 'ctx_set_mount_flags':
-> static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int flag)
-> {
-> 	ctx->mask_s_mount_flags |= flag;
-> 	ctx->vals_s_mount_flags |= flag;
-> }
-> 
-> But we test 'abort' option with 'ext4_test_mount_flag':
-> static inline int ext4_test_mount_flag(struct super_block *sb, int bit)
-> {
->         return test_bit(bit, &EXT4_SB(sb)->s_mount_flags);
-> }
-> 
-> To solve this issue, pass (1 <<  EXT4_MF_FS_ABORTED) to 'ctx_set_mount_flags'.
-> 
-> Fixes:6e47a3cc68fc("ext4: get rid of super block and sbi from handle_mount_ops()")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/super.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index b72d989b77fb..071b7b3c5678 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -2236,7 +2236,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
->  			 param->key);
->  		return 0;
->  	case Opt_abort:
-> -		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
-> +		ctx_set_mount_flags(ctx, 1 << EXT4_MF_FS_ABORTED);
->  		return 0;
->  	case Opt_i_version:
->  		ctx_set_flags(ctx, SB_I_VERSION);
-> -- 
-> 2.31.1
 > 
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: dt-bindings: samsung,s5m8767: Move fixed string BUCK9 to 'properties'
+      commit: 5d55cbc720cc3650aafed6c1f5dbcf7e3f276312
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

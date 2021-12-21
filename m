@@ -2,201 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E022F47C516
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB70447C5AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240433AbhLURex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbhLURew (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:34:52 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B3AC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:34:52 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so17483305oto.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:34:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u+4aD5Pe6rsO93aXXQVERPguDn8LEagFobvNQYR5AMY=;
-        b=qlnub33qV4W7YlZJhHMjbzC+h6WX/94y1RwbNLLHvKmsu+ox4HVbc9CWMxtbPAGsIA
-         tjqC3MO+uOXryktkOwyzbK56qQpn/+hiAFaJJP7bPqa/f6vj+7GNkSE/Fbgh/cunVNLs
-         2n5XgBB+ZeSx5UTUoHfC9SqzJMZ/5S7/RzMxLMMtWgwMoAVgMzaD7YG3BJJE8j9dZv1h
-         ycqHvKU/v6+mllXm+Fs0auAxTr6bhEWZMfwBw6H1X8cTwsE2jRj/uuKyRJl2nHCredx+
-         zXQucCZCTAvwca8yJ/k646rw3EJeQ7ebxGb4MOcBQPc2rjVX4X/XdMdoHVdeBTFDz7Fb
-         cCpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u+4aD5Pe6rsO93aXXQVERPguDn8LEagFobvNQYR5AMY=;
-        b=TNpJgkHPX8A7b1OrwJwyt3XChLek6NY+SxkNzWxs6q7zqmSBs0a1BarHtCtf/wGPci
-         Sm2TrsH6wFpGU/MLpfSg6DI0JxcOm6TOPmiCj7O5wC0JwYDCPauZmS8o0jfPYDudjSyv
-         fo127dwP7hGIXlkFxHFo4bJrhwyjMaGfvbzwb9uK/AvN9oQ8o+/TED4gRWgAQQUL2zo1
-         wilK86EsYZlx24QvpV16E3qbvPa0zGjcG5EN7RgobgttDWhgxYp9DbFEjQDWvdN+qaVx
-         X1s+yFjqL4pM7vYGKGc/I6PgBqlHK5A8BJhk57NVQj0kgnBoAHSMsHDlsUl5lHLKtnAR
-         4Feg==
-X-Gm-Message-State: AOAM532KIHPL3M+n/FkWtbA1Nd8WW8Qzbfbk4h0tjeeMJcyz5VvVYa5c
-        fpkj25uny7P1YBEwIwXCeiv3V3o9UVScq5BiXruOUw==
-X-Google-Smtp-Source: ABdhPJwSPyuU2fRgegim+90H8AF9sLEywy3fam6vEwJ68FP5oAYF/cHGAfxmlg6p5PD69Tb+7ROuRpuZ/12Rv7/K8y4=
-X-Received: by 2002:a9d:2ab:: with SMTP id 40mr3114788otl.208.1640108091530;
- Tue, 21 Dec 2021 09:34:51 -0800 (PST)
+        id S240200AbhLUSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:03:56 -0500
+Received: from mga01.intel.com ([192.55.52.88]:3719 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232088AbhLUSD4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:03:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640109836; x=1671645836;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oi41HYlIbq01fjKNWy/Z7i7pvCOJnN47rmSuUs724Ps=;
+  b=E9aCmc05yMGIZ1x/WTdAU/NMU+ggBFll+3FeR7r/V+PX6A2VZx5f3Hd4
+   z52wXQBK36np5zQ6+dZ3I2C7J/k6SnAGR66OLSmlLVzTAD0NneNvG56MS
+   4Q9Rn6VcR9BNVt6kN4+kqISfcqcPQcTAZzgcfOIzalcmbgmIb3ca3qosS
+   J/gKefsRrIevcUGCvbE+5bamHpnd/tqXa0Y6vWH07RODddUE3X7SV13HJ
+   rkxPelWv2vduVTEvuKglwvZ+IAkqrkYbUZ6Hh2fwJtZD1XcopQvtQTWmU
+   JN70aegZjCME5zrlAYQkq+50wERF+v7KN2q+bBBn6++HAitujjT9ixEXq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="264647664"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="264647664"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:36:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="508158184"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 09:36:02 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mzj3R-0009Fw-AZ; Tue, 21 Dec 2021 17:36:01 +0000
+Date:   Wed, 22 Dec 2021 01:35:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik@protonmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sven Peter <sven@svenpeter.dev>
+Subject: [asahilinux:asahi-with-new-nvme 9/34]
+ drivers/clk/clk-apple-nco.c:95:16: error: implicit declaration of function
+ 'FIELD_PREP'
+Message-ID: <202112220119.mQPJa9jt-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211220143017.842390782@linuxfoundation.org>
-In-Reply-To: <20211220143017.842390782@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Dec 2021 23:04:40 +0530
-Message-ID: <CA+G9fYvDRXZ5se1Y9TPWx5cfaDC9JTRSv=Js0w-Pu8qObZDnFw@mail.gmail.com>
-Subject: Re: [PATCH 4.4 00/23] 4.4.296-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 20:07, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.4.296 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.4.296-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://github.com/AsahiLinux/linux asahi-with-new-nvme
+head:   675e4ce8d8355827d6ee1f2fadff9fd9598348c7
+commit: 4c12a1771a86a4e324e793617cc40c498c054fb6 [9/34] clk: clk-apple-nco: Add driver for Apple NCO
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211222/202112220119.mQPJa9jt-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/4c12a1771a86a4e324e793617cc40c498c054fb6
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux asahi-with-new-nvme
+        git checkout 4c12a1771a86a4e324e793617cc40c498c054fb6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build
-* kernel: 4.4.296-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.4.y
-* git commit: f46f7fed481068d1389efbf0122c45cb9f36480d
-* git describe: v4.4.295-24-gf46f7fed4810
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.2=
-95-24-gf46f7fed4810
+   drivers/clk/clk-apple-nco.c: In function 'nco_div_translate':
+>> drivers/clk/clk-apple-nco.c:95:16: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+      95 |         return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
+         |                ^~~~~~~~~~
+   drivers/clk/clk-apple-nco.c: In function 'nco_div_translate_inv':
+>> drivers/clk/clk-apple-nco.c:103:27: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+     103 |         coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
+         |                           ^~~~~~~~~
+   cc1: some warnings being treated as errors
 
-## No Test Regressions (compared to v4.4.295-6-ge478503b16a3)
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
+   Depends on SOUND && !UML && SND && SND_SOC && SND_SOC_ACPI
+   Selected by
+   - SND_SOC_SOF_AMD_COMMON && SOUND && !UML && SND && SND_SOC && SND_SOC_SOF_TOPLEVEL && SND_SOC_SOF_AMD_TOPLEVEL
 
-## No Test Fixes (compared to v4.4.295-6-ge478503b16a3)
 
-## Test result summary
-total: 46356, pass: 37461, fail: 177, skip: 7721, xfail: 997
+vim +/FIELD_PREP +95 drivers/clk/clk-apple-nco.c
 
-## Build Summary
-* arm: 129 total, 129 passed, 0 failed
-* arm64: 31 total, 31 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 30 total, 24 passed, 6 failed
+    87	
+    88	static u32 nco_div_translate(struct nco_tables *tbl, int div)
+    89	{
+    90		int coarse = div / 4;
+    91	
+    92		if (WARN_ON(!nco_div_check(div)))
+    93			return 0;
+    94	
+  > 95		return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
+    96				FIELD_PREP(DIV_FINE, div % 4);
+    97	}
+    98	
+    99	static int nco_div_translate_inv(struct nco_tables *tbl, int regval)
+   100	{
+   101		int coarse, fine;
+   102	
+ > 103		coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
+   104		fine = FIELD_GET(DIV_FINE, regval);
+   105	
+   106		return coarse * 4 + fine;
+   107	}
+   108	
 
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

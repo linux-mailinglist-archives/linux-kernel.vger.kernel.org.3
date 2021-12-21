@@ -2,101 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CBA47B84A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501AE47B84D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbhLUCPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 21:15:00 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:50868 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhLUCO6 (ORCPT
+        id S232227AbhLUCPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 21:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230060AbhLUCP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 21:14:58 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BL28DUG011549;
-        Tue, 21 Dec 2021 10:08:13 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 21 Dec
- 2021 10:13:34 +0800
-Message-ID: <d9dc2375-e4a8-9bb2-bb70-7104fa8186a7@aspeedtech.com>
-Date:   Tue, 21 Dec 2021 10:13:34 +0800
+        Mon, 20 Dec 2021 21:15:28 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35515C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 18:15:28 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id gj24so11142332pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 18:15:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=X+5KJ9FrJYpXfb1+tuCUi6hpFU6+4UtQHAwnNGrR4/o=;
+        b=KagCj61S1LX4enjBUzsD6fJGJkjFyCdxAOOc9OilFY2u1L6VTwjBkdFdJZNKL9bKqS
+         VVK1mfraxHm3cRYauqN+m9HyRLJhdtDLuRZDcVrXvohy1zfINatoyAVzAQl2ohhZ/FkI
+         M0D6/YLK6/DHmGT4JD/ZGsOl5+K6T6GP1T4aq71dgraebxpUfwENVFOWDUxoZeHqdHjD
+         R3K4a6DQCfavA13Uk6Hh8VT8aR6uRseVOIv/Q21DlSDy5QM/GE693wvI8WgUeL/Dynji
+         rhQFxEn5aU6O8iKqI8VDAvSrkOrPZeiYQTgYKP6+h0QwZJnBgz4ZQTaxdh9UIui6X7ks
+         Ds/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=X+5KJ9FrJYpXfb1+tuCUi6hpFU6+4UtQHAwnNGrR4/o=;
+        b=V9pPQnD40ctobSUSdacd8QFvRJaPFfcnOJ/3vL7cGT4Ala9NkkOk9RDU0l2oyCQA4Q
+         MX2vd/y1CSKjU4QhCXFTUqoLcS3qx9aI492qvdv5hDHWtGVybyFDF4GK2DY9FY90JgBd
+         YNgx7I1UsVRw1bx0eB8Az9e5ZPhRxdAtnbQGza0sYHEJmK51zLiaS0B4q/0PQx37oBVe
+         kY5YqqA1SNgmY5bjOVW712uSaWxyRGYeda1gtXDWYNHyjvKTeEbLqIL8pZofZuqOFpV6
+         ABFkTCkoJicB11PM9c6tqgIQubJmyU6iy+eYacxvMs7ETSMVedYfia2C1KH+jFTgzFgE
+         V4gw==
+X-Gm-Message-State: AOAM53003OTLwZKJG/Wg3XpePFRoU6B5R2ZKzL4Bqfur4b1LzPU913Wr
+        yfRDYU1YKKcTt2jJoHboK9k4Z6+F4HZVT1nAMEZtXg==
+X-Google-Smtp-Source: ABdhPJwKm3e9be+Fqg47PD3bhsyNITwsQegdqowooDGUF8BzYrntsDSKbybFuZ0ttGIv0lt1kkxbwY+ch0cFoSVT82Q=
+X-Received: by 2002:a17:90b:3716:: with SMTP id mg22mr1169196pjb.173.1640052927425;
+ Mon, 20 Dec 2021 18:15:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v5 00/10] add aspeed-jpeg support for aspeed-video
-Content-Language: en-US
-To:     "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
-CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211118074030.685-1-jammy_huang@aspeedtech.com>
- <5ab806d1-e407-1fa4-83ec-93ebe8df7db4@xs4all.nl>
- <b6ba49f3-a9ed-f5e6-959c-309db8cce7f6@aspeedtech.com>
- <6e0da74e-ddce-3c94-42a1-f98833489d60@xs4all.nl>
- <549aaf9a-cd72-e200-0329-30f6c71b8ed7@aspeedtech.com>
- <e61856d5-c371-ab52-2814-d0d8aabee0f0@aspeedtech.com>
- <YcDfl9V1oJFMebfF@paasikivi.fi.intel.com>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <YcDfl9V1oJFMebfF@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BL28DUG011549
+References: <20211220172848.GA1006510@bhelgaas> <e87a297cc74cca02fa1a8f5aa9562489a4db26b3.camel@linux.intel.com>
+In-Reply-To: <e87a297cc74cca02fa1a8f5aa9562489a4db26b3.camel@linux.intel.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Mon, 20 Dec 2021 18:14:51 -0800
+Message-ID: <CACK8Z6F812_DYVr=sxRXxhtPxyCw206U=jW6CFt6T-MyKJXMgQ@mail.gmail.com>
+Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
+To:     david.e.box@linux.intel.com
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        francisco.munoz.ruiz@linux.intel.com, nirmal.patel@linux.intel.com,
+        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+Hello,
 
-On 2021/12/21 上午 03:55, sakari.ailus@linux.intel.com wrote:
-> Hi Jammy,
+On Mon, Dec 20, 2021 at 3:06 PM David E. Box
+<david.e.box@linux.intel.com> wrote:
 >
-> On Tue, Dec 07, 2021 at 11:03:00AM +0800, Jammy Huang wrote:
->> Hi Hans,
->>
->> The implementation of decoder for this format as been available here.
->> https://github.com/AspeedTech-BMC/aspeed_codec
-> The format documentation should point to this, as well as other
-> documentation there is.
-OK, I will add this into format documentation as well.
+> Hi Born,
 >
-> I'm not sure there have been specific requirements of license, but it's the
-> first time I see MPL 2.0 being used in such context. It's eventually
-> convertible to GPL (or LGPL) although the route is inconvenient at best.
-> Or would people be happy with MPL code in v4l-utils?
+> So you know this patch comes from our platform power management team to a=
+ddress several VMD bugs
+> affecting power. The VMD driver developers are already cc'd but also addi=
+ng Francisco from the VMD
+> team who can maybe help clarify.
+>
+> On Mon, 2021-12-20 at 11:28 -0600, Bjorn Helgaas wrote:
+> > On Thu, Dec 16, 2021 at 01:24:00PM -0800, David E. Box wrote:
+> > > On Thu, 2021-12-16 at 11:26 -0600, Bjorn Helgaas wrote:
+> > > > On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
+> > > > > From: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > > > >
+> > > > > On Tiger Lake and Alder Lake platforms, VMD controllers do not ha=
+ve ASPM
+> > > > > enabled nor LTR values set by BIOS. This leads high power consump=
+tion on
+> > > > > these platforms when VMD is enabled as reported in bugzilla [1]. =
+ Enable
+> > > > > these features in the VMD driver using pcie_aspm_policy_override(=
+) to set
+> > > > > the ASPM policy for the root ports.
+> > > > > ...
+> >
+> > > > > To do this, add an additional flag in VMD features to specify
+> > > > > devices that must have their respective policies overridden.
+> > > >
+> > > > I'm not clear on why you want this to apply to only certain VMDs
+> > > > and not others.  Do some BIOSes configure ASPM for devices below
+> > > > some VMDs?
+> > >
+> > > Not currently. But the plan is for future devices to move back to
+> > > having BIOS do the programming.
+> >
+> > Since this is apparently a BIOS design choice, it seems wrong to base
+> > the functionality on the Device ID instead of some signal that tells
+> > us what the BIOS is doing.
+>
+> I don't know if there is another way to tell what the BIOS is _not_ doing=
+. DID is tied to the SoC so
+> it's our best method of inferring this. We know the firmware team has sai=
+d they will not support
+> programming these values for the mentioned platforms so there's no BIOS u=
+pdate coming to change
+> this.
 
-In order to have aspeed-jpeg format to work on openbmc's KVM, I was 
-working on noVNC.
-And this codec library is part of the code to make it work.
+I'd like to mention here that ChromeOS also runs linux kernel on TGL
+and ADL platforms, and we may run a different BIOS altogether, so yes,
+we'd greatly appreciate if you do not assume BIOS setting from device
+ID / SOC ID, if the setting is *not tied to device ID / SOC ID*.
+Perhaps you use ACPI or device trees to convey what BIOS has or hasn't
+configured?
 
-Before I put this source on github, I am not sure which kind of license 
-is suitable. So I check
-what noVNC used, https://github.com/novnc/noVNC/blob/master/LICENSE.txt. 
-That's why I
-adapted MPL 2.0.
+> But to be sure, we can add a check first to confirm that these values hav=
+e not been programmed
+> (ASPM is disabled and LTRs are 0).
 
-If you think GPL(or LGPL) is more suitable, I can make a switch.
+Yes, reading the ASPM configuration from hardware sounds OK to me.
+
+>
+> >
+> > > > > + * Override the BIOS ASPM policy and set the LTR value for PCI s=
+torage
+> > > > > + * devices on the VMD bride.
+> > > >
+> > > > I don't think there's any BIOS "policy" here.  At this point BIOS
+> > > > is no longer involved at all, so all that's left is whatever ASPM
+> > > > config the BIOS did or did not do.
+
+Should the Policy override really take place if aspm_policy =3D
+POLICY_DEFAULT which seems to suggest we leave it to whatever BIOS
+left it at?
+
+Perhaps for this override to take place, aspm_policy needs to be the
+policy needs to be POLICY_POWERSAVE?
+
+#define POLICY_DEFAULT 0        /* BIOS default setting */
+#define POLICY_PERFORMANCE 1    /* high performance */
+#define POLICY_POWERSAVE 2      /* high power saving */
+#define POLICY_POWER_SUPERSAVE 3 /* possibly even more power saving */
+
+
+> > > >
+> > > > Why only storage?
+> > >
+> > > Only storage devices will be on these root ports.
+> >
+> > How do you know this?  You say below that there's an M.2 slot, so
+> > surely the slot could contain a non-storage device?  Couldn't somebody
+> > build a platform with a VMD root port connected to a regular PCIe x4
+> > slot?
+>
+> In VMD mode the root ports under the VMD bridge are used specifically to =
+manage storage devices. So
+> only storage devices should be attached to these ports.
+
+Bjorn: from https://www.intel.com/content/www/us/en/architecture-and-techno=
+logy/intel-volume-management-device-overview.html
+"Intel=C2=AE Volume Management Device (Intel=C2=AE VMD) is specifically des=
+igned
+for enterprise-grade management of NVMe SSDs connected to Intel=C2=AE Xeon=
+=C2=AE
+CPUs."
+
+I think what David means is that any other device other than an NVME
+SSD showing up under VMD might be an error / bad device.
 
 
 >
-> I wonder what others think.
+> >   Couldn't such a slot support hotplug?
 >
--- 
-Best Regards
-Jammy
+> The answer I just learned is yes. It may be possible to have a switch too=
+. So both of those would
+> need to be addressed though I'm note quite sure how yet.
+>
+> >
+> > It would be very unusual to hard-code topology knowledge like this
+> > into the kernel, since plug-and-play has always been a major goal of
+> > PCI.
+> >
+> > > > > +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
+> > > > > +{
+> > > > > +       int features =3D *(int *)userdata, pos;
+> > > > > +
+> > > > > +       if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
+> > > > > +           pdev->class !=3D PCI_CLASS_STORAGE_EXPRESS)
+> > > > > +               return 0;
+> >
+> > > > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, =
+0x1003);
+> > > > > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT=
+, 0x1003);
+> > > >
+> > > > 1) Where did this magic 0x1003 value come from?  Does that depend
+> > > > on the VMD device?  The endpoint?  The circuit design?  The path
+> > > > between endpoint and VMD?  What if there are switches in the path?
+> > >
+> > > The number comes from the BIOS team. They are tied to the SoC. I
+> > > don't believe there can be switches in the path but Nirmal and
+> > > Jonathan should know for sure. From what I've seen these root ports
+> > > are wired directly to M.2 slots on boards that are intended for
+> > > storage devices.
+> >
+> > I guess you're saying that 0x1003 is determined by the SoC.  If so, I
+> > think this value should be in your .driver_data (which would mean
+> > converting it from a scalar to a struct, as many other drivers do).
+> > The current code suggests that 0x1003 is the correct value for *all*
+> > VMDs and all configurations.
+>
+> Okay
+>
+> >
+> > I don't understand LTR well enough to be convinced that this static
+> > value would be the correct value for all possible hierarchies and
+> > devices that could appear below a VMD root port.  I would love to be
+> > educated about this.
+>
+> I am not an LTR expert either, but LTRs are "conglomerated" per spec. Swi=
+tches subtract their own
+> latency from the minimum LTR of the downstream ports and report this cong=
+lomerated value upstream.
+> So the value will decrease as needed to account for latency in the hierar=
+chy.
+>
+> PCI 5.0 Version 1.0, Section 6.18 (pg 611)
 
+As described here and as much as I understand, I think these LTR
+values (0x1003 here) depend on the platform topology. So what works
+for David's platform may not work for another one that may have
+Switched for e.g., or for perhaps for another NVME that is hotplugged
+later (and has different characteristics than what is on board).
+Technically tying the LTR values to a SOC or VID/DID sounds incorrect
+to me, and instead should be tied to the platform. Ideally I *thiink*
+they should come from ACPI or device tree. However, I wouldn't protest
+putting them in driver_data for now given that there aren't any other
+users. We may have to find a solution once there are more platforms
+that begin to use this driver. I think this is a bigger problem that
+needs to be addressed w.r.t. ASPM in general.
+
+Thanks & Best Regards,
+
+Rajat
+
+
+>
+> Thanks
+>
+> David
+>
+> >
+> > Bjorn
+>
+>

@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B381247BCCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E331E47BCD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbhLUJX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:23:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44302 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbhLUJX1 (ORCPT
+        id S236345AbhLUJX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:23:57 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:48457 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236335AbhLUJX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:23:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F079EB8124B;
-        Tue, 21 Dec 2021 09:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0FBC36AE2;
-        Tue, 21 Dec 2021 09:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640078604;
-        bh=vs6i4+czViyI3niT0XaIdGWKKRNE64KCSW1Ge0iJUMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YFyHD1mTWBetPy/IaSAHNt0jtVC558rU2odGeu0CUBv7mrg/gEEPDUJ3dI5/k+gNs
-         S/RmsgwAx/8pU6/vOHLbVQTP0gIHnDwKBjw8jGNtz9QCbGBFoMkd+KjIb7DZzy8+Dg
-         7jIC2+VjTX3zVG0LBA9+tnzVxTdT9qhclPLrtRgY=
-Date:   Tue, 21 Dec 2021 10:23:22 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     tim@cyberelk.net, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] paride: fix up build warning on mips platforms
-Message-ID: <YcGdCp1lgG2x89y/@kroah.com>
-References: <20211130084626.3215987-1-gregkh@linuxfoundation.org>
- <YcCo8+jTG3b+5GTA@kroah.com>
- <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
+        Tue, 21 Dec 2021 04:23:56 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N4A1h-1mHILL3et7-0103h9; Tue, 21 Dec 2021 10:23:54 +0100
+Received: by mail-wm1-f53.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so813387wmb.1;
+        Tue, 21 Dec 2021 01:23:54 -0800 (PST)
+X-Gm-Message-State: AOAM532vQkbbxFoMchKoE2YDv0ctIyZExlrp1xM7AcBLnwJXkhf8YZCv
+        Yj1NE+WNYEYb3sm1va3/RftZO5obmDWSbTn8olU=
+X-Google-Smtp-Source: ABdhPJxu4IIGUAJNFiVsKRHmu5Fm1WfAFFV+LIjz5QIC1dQeqlZKZlfsQpcmI+Ykki0QMCXpv+QkW4e8nyXrisyOwUQ=
+X-Received: by 2002:a7b:cc90:: with SMTP id p16mr1841210wma.98.1640078634500;
+ Tue, 21 Dec 2021 01:23:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
+References: <20211221071426.733023-1-wangborong@cdjrlc.com>
+In-Reply-To: <20211221071426.733023-1-wangborong@cdjrlc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 21 Dec 2021 10:23:38 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3zQm7zJWprcYq47VZD0ZZsuOTR3w7a8k78VH=3he2Fdw@mail.gmail.com>
+Message-ID: <CAK8P3a3zQm7zJWprcYq47VZD0ZZsuOTR3w7a8k78VH=3he2Fdw@mail.gmail.com>
+Subject: Re: [PATCH] net: dl2k: replace strlcpy with strscpy
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9Jrpw3QjTo4hxhWFiFBXUAzRrXEZkyoHhbGRIoY1m4nASCg6EcF
+ ZOODLhQK9cIt3r3wTu/LmQRYoCcPKhTmP2qiQibZ8vUx36LKuVBn5ItvlKd+SH6PcqCgyqY
+ 7bhY9Dp23pNg/nwvFSpPJXWAt5QUxjCU3KYB2MYCGEwXN4oOtokFXI+yEQdZdBeDvYO8QGt
+ RRLHRkMSvmmArE0bvr2gA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UmxuFodIhxM=:MGaX4wsZkCV9MqhDsbfaMn
+ gF0cnMQgzdej7XWOs8iYeK40EvIH+ERCn4hCkga9x4z0GQZU3+afcPtZkqspG9LyzFc+0GocX
+ AVyWsb5oJhelLjsDOc26P5dbXjYAJAiwHeoq+3ptGJEAL7qj7qJiEM9wLHuu/DTR11tNQd/li
+ LqXlamnDlmH63h6jygNyfrGLFXhFjOlXtEPrORQyZcyNETm5fmYTJ6l7SLwb0MPeNa4T076Tj
+ kPWHzOk4FjSqIYSGsSKk4zirKu+6HpwkIVmfPmxJOyiz3NN4a3BHcHfHqmQ56v2ZjZbBYDBhz
+ SH86uhSWi++KVcBkFoLl8cQ5be9GFSvOHoz+PGKbS4EQ2mlsjs7clC8/sh9nPpaPPxBG/BiNT
+ R8hvKXQR1wBm4cNXcf5aq3Wuh4FNTVot0XtWA4y4F33X5dymaHdPCZPzM5216N81xwtx9IB8t
+ d4pJdq1BlQ+892/yngKUXDeSg6IFZjVFeyIp7lEvl9jt7ng91dECT6vbZ/Ya2+Y/z9gEPyW3X
+ PeGFAE3OwXZwWZbIcfKpx7mBmWgu+v0SCNdiLsVTM8o9aLqzq2xvZpwAzJsWOIDp1HHzYnudW
+ bXowfCc+DW6L3T7VXPkmD/q0DpaUY9rHX1nU6WolF/2F9RCoFQSWQoJtofZyIOrCoS0Igtg1Y
+ 35lumcp2P1IzN0HO3M0Gqe0MoLJtARE3UX2vh3Ya8O5ZohAi1odwix3eCBWxH6/Q2gf5px0OX
+ zg9h7l7XGeZinid1YgZLFuNV45cQNcGdWlzZIIkhXp07oP5ElIoHZA3t+gOPHN/1ssP2YJC74
+ 5KgUdMI/0Dtk8g2n7uTtZXdHccDXlq4SZRDKkBAntBlqTD+0b0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 09:33:12AM -0700, Jens Axboe wrote:
-> On 12/20/21 9:01 AM, Greg Kroah-Hartman wrote:
-> > On Tue, Nov 30, 2021 at 09:46:26AM +0100, Greg Kroah-Hartman wrote:
-> >> MIPS include files define "PC" so when building the paride driver the
-> >> following build warning shows up:
-> >>
-> >> 	rivers/block/paride/bpck.c:32: warning: "PC" redefined
-> >>
-> >> Fix this by undefining PC before redefining it as is done for other
-> >> defines in this driver.
-> >>
-> >> Cc: Tim Waugh <tim@cyberelk.net>
-> >> Cc: Jens Axboe <axboe@kernel.dk>
-> >> Cc: linux-block@vger.kernel.org
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >> ---
-> >>  drivers/block/paride/bpck.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/block/paride/bpck.c b/drivers/block/paride/bpck.c
-> >> index f5f63ca2889d..d880a9465e9b 100644
-> >> --- a/drivers/block/paride/bpck.c
-> >> +++ b/drivers/block/paride/bpck.c
-> >> @@ -28,6 +28,7 @@
-> >>  
-> >>  #undef r2
-> >>  #undef w2
-> >> +#undef PC
-> >>  
-> >>  #define PC			pi->private
-> >>  #define r2()			(PC=(in_p(2) & 0xff))
-> >> -- 
-> >> 2.34.1
-> >>
-> > 
-> > Given the lack of objections to this, I'll just take it through one of
-> > my trees for 5.17-rc1.
-> 
-> Sorry about that, got lost. I can queue it  up too, or you can add my
-> acked-by, either is fine.
+On Tue, Dec 21, 2021 at 8:14 AM Jason Wang <wangborong@cdjrlc.com> wrote:
+>
+> The strlcpy should not be used because it doesn't limit the source
+> length. So that it will lead some potential bugs.
+>
+> But the strscpy doesn't require reading memory from the src string
+> beyond the specified "count" bytes, and since the return value is
+> easier to error-check than strlcpy()'s. In addition, the implementation
+> is robust to the string changing out from underneath it, unlike the
+> current strlcpy() implementation.
+>
+> Thus, replace strlcpy with strscpy.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-Easy enough for me to take it, now done, thanks!
+Are you trying to eliminate strlcpy() from all 800 files using it
+completely? If not, I don't see a need to fix individual drivers
+that use a constant source string and don't use the return
+code, as the behavior should be the same.
 
-greg k-h
+While it seems reasonable to converge towards a more robust
+string copy, none of the points you list in the changelog apply to
+the function you patch here.
+
+        Arnd

@@ -2,126 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A9B47C69E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070EB47C6A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbhLUSbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbhLUSbU (ORCPT
+        id S241347AbhLUScG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:32:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40101 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230127AbhLUScF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:31:20 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA185C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:31:19 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f5so32422482edq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:31:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kr2TxL6wnne8Q9bYsPk7XLye7r5BDis7uMpH40CjpuM=;
-        b=UMZi0Hx4yN8uS8EBWgD+gNYmL13lzK1vKaY6zW2PFGKQwwgxzxKbuKQjiUmhtbIulS
-         rmztzOpTqtEghOW6rMW16mKk1ILe+hsFn7rh5L+vQygm5jShj6QoCzImZ8AR3odal/hZ
-         X3poz6NiOlDdXIa9nYc39Mc7M1gNl6Suze1pw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kr2TxL6wnne8Q9bYsPk7XLye7r5BDis7uMpH40CjpuM=;
-        b=kjBlhQ+ZMBRsdiLaQZBRUHYbR8G17Who/0D6aFl/HWyUayd07fQCKXDXFlpRUkgU62
-         1wGv3zgNY8+fXMqBXiajbBqMF0x8JwzrHbJBk/LHtMb/IF7QY9jpD4OEyjthGGavJ80g
-         eWiTrQzd3oHCQ8GaIginix5XrvHFzZklSjGG4kZ1MIVkd9BcsWYpYiYp8AMlJgyPYLKQ
-         /gN72BMnrjgpKA9lUAZITFdbvmQFjrP4uxkMSLq1FfKSLG3F7IyK+bbrib/B+tfbZaBU
-         O5YJlXNLVu4UVk0pLsQ93iX/aDeBSnu7tDn0tOTn6kmmZh8q6Rjz9q2SXjyOh/Tp9b/k
-         +iHg==
-X-Gm-Message-State: AOAM532Oxp/xLinlcI+4hZr/vR4kyXaSuMPxKu1Kse7XkjsTySAS2qwH
-        JWhVVmuu3M+Umu/962PpZRBbU/DqXgeuSz4d9IU=
-X-Google-Smtp-Source: ABdhPJyT3ULAqHAmNoPDEO/uv3t8gzKFBJTZgbS6JC9IZldSQ8qajr+WAlFObcAwW25sJt41Ty3Wgg==
-X-Received: by 2002:a17:907:16a8:: with SMTP id hc40mr3654262ejc.210.1640111478103;
-        Tue, 21 Dec 2021 10:31:18 -0800 (PST)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id qw4sm2298177ejc.55.2021.12.21.10.31.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 10:31:16 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id r17so28365747wrc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:31:15 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr3617856wrx.193.1640111475384;
- Tue, 21 Dec 2021 10:31:15 -0800 (PST)
+        Tue, 21 Dec 2021 13:32:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640111525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wMhFZtO7yKI5BwQWMaY+mEAZQOYttP8C1xI6ZXPwY7s=;
+        b=V2+GupCqxO+c7ceJsu1UD1eFfJkExNLyARFTFP0PuKhIdW7KUz/EgX5vOEX+3dOce5fX7Z
+        OJcxrXpN1trfD7EYgx7Sbr83lApxUwp8G+l8XQLWQq95j6uPPvDzk52l/1UG0qV0nRBzU0
+        0nwNVxMb2IgKbe6oeQ4qjlZLXcvW0mA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-fd9AH3tIMUmVLJ-sNZFQSQ-1; Tue, 21 Dec 2021 13:32:03 -0500
+X-MC-Unique: fd9AH3tIMUmVLJ-sNZFQSQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A2D301018721;
+        Tue, 21 Dec 2021 18:32:02 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 54BFC78DA4;
+        Tue, 21 Dec 2021 18:32:02 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.16-rc7 (and likely final)
+Date:   Tue, 21 Dec 2021 13:32:01 -0500
+Message-Id: <20211221183201.307603-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com> <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com> <20211221180705.GA32603@quack2.suse.cz>
-In-Reply-To: <20211221180705.GA32603@quack2.suse.cz>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Dec 2021 10:30:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
-Message-ID: <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Jan Kara <jack@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:07 AM Jan Kara <jack@suse.cz> wrote:
->
-> For record we always intended (and still intend) to make O_DIRECT use
-> FOLL_PIN. Just it is tricky because some users mix pages pinned with GUP
-> and pages acquired through get_page() in a single bio (such as zero page)
-> and thus it is non-trivial to do the right thing on IO completion (unpin or
-> just put_page).
+Linus,
 
-Side note: the new "exclusive VM" bit wouldn't _solve_ this issue, but
-it might make it much easier to debug and catch.
+The following changes since commit 18c841e1f4112d3fb742aca3429e84117fcb1e1c:
 
-If we only set the exclusive VM bit on pages that get mapped into user
-space, and we guarantee that GUP only looks up such pages, then we can
-also add a debug test to the "unpin" case that the bit is still set.
+  KVM: x86: Retry page fault if MMU reload is pending and root has no sp (2021-12-19 19:38:58 +0100)
 
-And that would catch anybody who ends up using other pages for
-unpin(), and you could have a WARN_ON() for it (obviously also trigger
-on the page count being too small to unpin).
+are available in the Git repository at:
 
-That way, at least from a kernel debugging and development standpoint
-it would make it easy to see "ok, this unpinning got a page that
-wasn't pinned", and it would help find these cases where some
-situation had used just a get_page() rather than a pin to get a page
-pointer.
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-No?
+for you to fetch changes up to fdba608f15e2427419997b0898750a49a735afcb:
 
-                  Linus
+  KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU (2021-12-21 12:39:03 -0500)
+
+----------------------------------------------------------------
+* Fix for compilation of selftests on non-x86 architectures
+* Fix for kvm_run->if_flag on SEV-ES
+* Fix for page table use-after-free if yielding during exit_mm()
+* Improve behavior when userspace starts a nested guest with invalid state
+* Fix missed wakeup with assigned devices but no VT-d posted interrupts
+* Do not tell userspace to save/restore an unsupported PMU MSR
+
+----------------------------------------------------------------
+
+So, 5.16 really was a huge bug shakedown for KVM.  Apart from the locking
+changes in -rc4, almost everything that went in after -rc2 was Cc'ed
+stable, including this pull request (which I guess is not a bad thing
+for rc7).
+
+You can't quite see it, but things do seem to have calmed down; these
+patches as well as those in rc6 had actually been submitted a week or
+so ago; one was a relatively old 5.17 change that turned out to fix a
+bug.  Since I'm taking some time off until right before the merge
+window, I don't expect any more changes in 5.16.  Thanks for putting up
+with this weird KVM release cycle.
+
+Paolo
+
+Andrew Jones (1):
+      selftests: KVM: Fix non-x86 compiling
+
+Marc Orr (1):
+      KVM: x86: Always set kvm_run->if_flag
+
+Sean Christopherson (6):
+      KVM: x86/mmu: Don't advance iterator after restart due to yielding
+      KVM: VMX: Always clear vmx->fail on emulation_required
+      KVM: nVMX: Synthesize TRIPLE_FAULT for L2 if emulation is required
+      KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
+      KVM: selftests: Add test to verify TRIPLE_FAULT on invalid L2 guest state
+      KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
+
+Wei Wang (1):
+      KVM: x86: remove PMU FIXED_CTR3 from msrs_to_save_all
+
+ Documentation/admin-guide/kernel-parameters.txt    |   8 +-
+ arch/x86/include/asm/kvm-x86-ops.h                 |   1 +
+ arch/x86/include/asm/kvm_host.h                    |   1 +
+ arch/x86/kvm/mmu/tdp_iter.c                        |   6 ++
+ arch/x86/kvm/mmu/tdp_iter.h                        |   6 ++
+ arch/x86/kvm/mmu/tdp_mmu.c                         |  29 +++---
+ arch/x86/kvm/svm/svm.c                             |  21 +++--
+ arch/x86/kvm/vmx/vmx.c                             |  45 ++++++---
+ arch/x86/kvm/x86.c                                 |  11 +--
+ tools/testing/selftests/kvm/.gitignore             |   1 +
+ tools/testing/selftests/kvm/Makefile               |   1 +
+ tools/testing/selftests/kvm/include/kvm_util.h     |  10 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c         |   5 +
+ .../kvm/x86_64/vmx_invalid_nested_guest_state.c    | 105 +++++++++++++++++++++
+ 14 files changed, 195 insertions(+), 55 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_invalid_nested_guest_state.c
+

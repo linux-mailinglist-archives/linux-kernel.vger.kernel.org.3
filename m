@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9186247BF26
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAD447BF29
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbhLULwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S237298AbhLULww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:52:52 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43658 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237291AbhLULwt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Dec 2021 06:52:49 -0500
-Received: from meesny.iki.fi ([195.140.195.201]:39874 "EHLO meesny.iki.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233650AbhLULws (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:52:48 -0500
-Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id DCE3C203BD;
-        Tue, 21 Dec 2021 13:52:42 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1640087563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 429C321114;
+        Tue, 21 Dec 2021 11:52:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640087568; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zDILul4DPdQ7u3FrvLmLVHQqmpPqTky0C1q7FxA7Zwk=;
-        b=jrzjLJBNlwnrwNALeYy1MAzhHCzyNfWA/BAjzdIv1Ozf70rSOdacq5lJwsOrIrvKF4V9Ys
-        4oxnC138JFkIt64jgElA/XR72JwqNi87/DwEr3o8huqD/4Nr5TMcGrpA0hQ6ZMQKrJNdc4
-        uGDvfJjzZUSgFhjdvPKiI969weSNwBw=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4B1CC634C90;
-        Tue, 21 Dec 2021 13:52:42 +0200 (EET)
-Date:   Tue, 21 Dec 2021 13:52:42 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] software node: fix wrong node passed to find nargs_prop
-Message-ID: <YcHACtgpYcAWU68K@valkosipuli.retiisi.eu>
-References: <20211220210533.3578678-1-clement.leger@bootlin.com>
+        bh=SCgxXcO/BZlBAUPu/jU/ISxCVbf1DpLofk5IlL3lQL0=;
+        b=AwOnU2FEPfu6mm17FwEKXn7vFLAM4F0SfFny4EAt8FaQO4BICBQwT3fhV37/GN7dVPiSHq
+        4l17UTn1xFdJBTXlqotg5IFAtFQp97PxtSFKmxnO9CymhXd0WFXxdkDxFPQqpYMGghUsmi
+        gXHZ7VcxkNW1SQbhPtA4js+l2DyTMZY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640087568;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SCgxXcO/BZlBAUPu/jU/ISxCVbf1DpLofk5IlL3lQL0=;
+        b=n8cmMnrBkFYeFhPOzJnGCilZY/ecndMZhBa8W0rTV9rJ+ESd8Xpgiigt4GB7GieARcNpDw
+        IRXWG93OA8y8V5Bg==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 21234A3B8F;
+        Tue, 21 Dec 2021 11:52:48 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id BD2A01F2CEA; Tue, 21 Dec 2021 12:52:47 +0100 (CET)
+Date:   Tue, 21 Dec 2021 12:52:47 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, tj@kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, fchecconi@gmail.com,
+        avanzini.arianna@gmail.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH 2/4] block, bfq: avoid moving bfqq to it's parent bfqg
+Message-ID: <20211221115247.GE24748@quack2.suse.cz>
+References: <20211221032135.878550-1-yukuai3@huawei.com>
+ <20211221032135.878550-3-yukuai3@huawei.com>
+ <20211221101659.GB24748@quack2.suse.cz>
+ <d1c91a5f-33f3-ffad-e1ad-fb91482eb864@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211220210533.3578678-1-clement.leger@bootlin.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1640087563; a=rsa-sha256; cv=none;
-        b=GTd8soqhhyq8Z/EwJxdFeK47O0j/aa1YgUAsF0iyauE4goHnvcS+vVwO1CrihvYoF6r4Dm
-        6W5icmoJ8tPOSCckwk1D0zbPFWwdyog3qbfU9F3Chh3Gg0qlvrG+pRGWpoGKKO9ICSotBB
-        HhnbGxWzIC16VG3HwU2tYcIM3VR9uek=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1640087563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zDILul4DPdQ7u3FrvLmLVHQqmpPqTky0C1q7FxA7Zwk=;
-        b=MBwFYykErRw41yoNr2MNTqGy+jZxMnYFtrGzF5T+AfpoKn1l23Vt7DULSU5Tj070aJ0aOB
-        T8vnLxJoH/nIkWTQ4V4HFou5OqtIuJfi9zO/ar1684GCDfcuA7o1l0Zjx69hOlp/xmD4wm
-        Eowj+q8uWN4BF4AwoFVSRXr7zQhbZ3I=
+In-Reply-To: <d1c91a5f-33f3-ffad-e1ad-fb91482eb864@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:05:33PM +0100, Clément Léger wrote:
-> nargs_prop refers to a property located in the reference that is found
-> within the nargs property. Use the correct reference node in call to
-> property_entry_read_int_array() to retrieve the correct nargs value.
+On Tue 21-12-21 19:08:44, yukuai (C) wrote:
+> åœ¨ 2021/12/21 18:16, Jan Kara å†™é“:
+> > On Tue 21-12-21 11:21:33, Yu Kuai wrote:
+> > > Moving bfqq to it's parent bfqg is pointless.
+> > > 
+> > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > 
+> > Did you notice that this is happening often enough that the check is worth
+> > it? Where do we do this?
+> > 
 > 
-> Fixes: b06184acf751 ("software node: Add software_node_get_reference_args()")
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-
-Thank you (and thanks to Andy for cc'ing me).
-
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-> ---
->  drivers/base/swnode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I noticed that this will happend when root group is offlined:
 > 
-> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-> index 4debcea4fb12..0a482212c7e8 100644
-> --- a/drivers/base/swnode.c
-> +++ b/drivers/base/swnode.c
-> @@ -529,7 +529,7 @@ software_node_get_reference_args(const struct fwnode_handle *fwnode,
->  		return -ENOENT;
->  
->  	if (nargs_prop) {
-> -		error = property_entry_read_int_array(swnode->node->properties,
-> +		error = property_entry_read_int_array(ref->node->properties,
->  						      nargs_prop, sizeof(u32),
->  						      &nargs_prop_val, 1);
->  		if (error)
+> bfq_pd_offline
+>  bfq_put_async_queues
+>   __bfq_put_async_bfqq
+>    bfq_bfqq_move
+> 
+> I'm not sure if there are other situations. I think bfq_bfqq_move()
+> is not happening often itself, thus the checking won't affect
+> performance.
+
+Yeah, OK, I was just wondering. I guess there's no harm in doing this
+check. Maybe add a comment that this can sometimes happen when dealing with
+the root cgroup. And then feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 
 -- 
-Sakari Ailus
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

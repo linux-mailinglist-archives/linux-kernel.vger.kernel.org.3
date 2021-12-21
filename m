@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856D847C865
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510CA47C866
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbhLUUsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbhLUUsw (ORCPT
+        id S235018AbhLUUtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:49:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43748 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233546AbhLUUtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:48:52 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201CAC061574;
-        Tue, 21 Dec 2021 12:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=52nPiLeCIbzbs31AEDsXVWz0++v57IOwZujp1/Gj768=;
-        t=1640119732; x=1641329332; b=kPlwQxzuv9B8AWNCnyZ3uGveJZYtc7CAqyHYhRV/X4lbiYp
-        G9LR76ezsBc2I4ItYerEMVQ+iKJz95o/GgGsW7ZIGJK/0Eot2FAJY3UTzpDp8mZ5cy4NOWX+KGZAQ
-        IXZJzv3jyOEEMtjWJqKufmzwk3tryP7D8sDWvk2IY+KgSKUYJXBRwrsnwJI77Opyj6nSkkIZIlKiy
-        2aZXNN3UxCbypAjaUpt7ueKnKJ3m9avmaJJmUajamg9nBFZZEN8CjNu2jxNK30VSyAAe2J4dybsGl
-        vNX1KtlTh8KrWe+U/oyRUo89WCx44DAfSZ++dJIXe/1tso58cxN/CdqVSy0UddoQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mzm3g-00Eijv-7p;
-        Tue, 21 Dec 2021 21:48:28 +0100
-Message-ID: <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
-Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kernel@axis.com, devicetree@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 21 Dec 2021 21:48:26 +0100
-In-Reply-To: <20211221090447.1567-1-vincent.whitchurch@axis.com>
-References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Tue, 21 Dec 2021 15:49:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE027B819E7;
+        Tue, 21 Dec 2021 20:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70AF5C36AE9;
+        Tue, 21 Dec 2021 20:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640119737;
+        bh=g6gqJ+KeVGJoBQHhgVWPalUdsd+av7U2ld9ePfN05yY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pyy+g56HvHrz4K1K6Ooxl/9OvZQ6oY47ncyGf4v8bYg8BtTpUq6d/GHBZ+9+ihQqX
+         bTQxdRIVtVvyfrA+buN9aAX5kkSzcACCsvCNUM9y2e2r2VjK059oLbpkmoGJYiZnRb
+         czj81XiGJFoUeA6pxhLeqS9CIZCUqepVW9C0z/hqLI13wRl6mHW7bcPPINxkLlCuPN
+         L5dDOtF7AoTiQu7WePciup+zPm4e9Y6qKQwQ0vuaXSv5TeEMInvxcRx9DcTH9NZydd
+         7GOzKxA3nx+UMdM0ktpbe9ZN96lrO3sMCxe2XaX8ghtza2/SJAbRplCn6OpJl8rHL+
+         EnP2aFKpH8g3Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 93D0940B92; Tue, 21 Dec 2021 17:48:55 -0300 (-03)
+Date:   Tue, 21 Dec 2021 17:48:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        irogers@google.com, kan.liang@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf pmu: Fix event list for uncore PMUs
+Message-ID: <YcI9twHCIiFyUDOu@kernel.org>
+References: <1639670017-74918-1-git-send-email-john.garry@huawei.com>
+ <YcGJJ2g+i5qWea7d@krava>
+ <bbf9c0b4-c048-3adf-5282-2355aa648acf@huawei.com>
+ <YcGf/d5PPqqyXxUW@krava>
+ <43e185f6-9fa7-6ae1-e4fd-c90c6a50f68f@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43e185f6-9fa7-6ae1-e4fd-c90c6a50f68f@huawei.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
-> Allow the virtio_uml device to be probed from the devicetree so that
-> sub-devices can be specified using the standard virtio bindings, for
-> example:
+Em Tue, Dec 21, 2021 at 10:14:42AM +0000, John Garry escreveu:
+> On 21/12/2021 09:35, Jiri Olsa wrote:
+> > On Tue, Dec 21, 2021 at 09:10:37AM +0000, John Garry wrote:
+> > > On 21/12/2021 07:58, Jiri Olsa wrote:
+> > > > > +	/* Different names -> never duplicates */
+> > > > > +	if (strcmp(alias_a->name, alias_b->name))
+> > > > > +		return false;
+> > > > > +	if (!alias_a->pmu)
+> > > > > +		return true;
+> > > > > +	if (!alias_b->pmu)
+> > > > > +		return true;
+> > > > nit could be:
+> > > > 
+> > > > 	if (!alias_a->pmu || !alias_b->pmu)
+> > > > 		return true;
+> > > > 
+> > > > would be great to have more comments explaining the check
+> > > > 
+> > > 
+> > > This is just a sanity check that both strings are non-NULL as we do a
+> > > strcmp() next. So would this be better:
+> > > 
+> > > if (!alias_a->pmu || !alias_b->pmu || !strcmp(alias_a->pmu, alias_b->pmu))
+> > > 	return true
+> > > 
+> > > ?
+> > > 
+> > > It will spill a line.
+> > 
+> > sure, it cought my eye because the is_cpu check later is done on
+> > the same line, so I started wondering what's the difference ;-)
+> > 
 > 
->   virtio@1 {
->     compatible = "virtio,uml";
->     socket-path = "i2c.sock";
->     virtio-device-id = <0x22>;
+> Now thinking a bit more I am not confident that this patch is a full fix.
 > 
+> arm have heterogeneous CPU systems as well - which are not "hybrid" - and I
+> need to ensure that aliasing is still working properly there, as I think
+> that this following check would stop removing duplicates there:
+> 
+> +	/* uncore PMUs */
+> +	if (!alias_a->is_cpu && !alias_b->is_cpu)
+> +		return true;
+> +	return false;
 
-Given this, maybe it should modify
-Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
-add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
+I was about to process this, do you think its better to revert the
+original patch while this gets fixed?
 
-+Rob, because I'm not really into any of this.
-
-Also, I'm not even sure we should/need to document the DT bits that are
-basically only used for testing in the first place?
-
-Code looks good to me.
-
-johannes
+- Arnaldo

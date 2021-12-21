@@ -2,106 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A2B47BC69
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B916847BC70
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbhLUJF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:05:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35583 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233775AbhLUJFX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:05:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640077523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rgPifuu1RB0k0LUOxT2X3VnLk1g+LzCMRjZsLuLn63g=;
-        b=SvEAsypBMur7gpsEp+uWKbVp+vEI3c7+wNH7n8S9ZYUC0FCxYvjUL13USumW/sO2V5L8EJ
-        jh/KlgOzGZZi7mWn8JhzswHmOFjSw1AJUYytbWCuZl7YXJ1Fg9I+rBQVvfNMPE83yZKmsN
-        sFDa/VQfbRsJ0F6Mn5Gk5kaMdbCuzoA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-l7QwlxDANCCO-YFeN1w7FA-1; Tue, 21 Dec 2021 04:05:21 -0500
-X-MC-Unique: l7QwlxDANCCO-YFeN1w7FA-1
-Received: by mail-wm1-f72.google.com with SMTP id v190-20020a1cacc7000000b003456d598510so966554wme.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:05:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rgPifuu1RB0k0LUOxT2X3VnLk1g+LzCMRjZsLuLn63g=;
-        b=5NASolUkvsgo+7Q2e4r05HBIRqpi8NlGA6qmBVmM9qEBSBw2tNhUE0qjPeg+22ORuu
-         G6xj1PrBWe1W52OG+xV6HNCf2H7Uk0MsQfZ4ccKZLN9XVCE3j6KGRsB4vftmwEJGsX/T
-         aunPszsx3Jz9T8VBWwZBFOpNGoQzfy5l5T5aLETpr/JSuK589AUcFyQciLIu6hoCLCy9
-         ua5eeA3hLwo/PAOmHFeBWIAji6tiF9jNWeXkVmD6JZpAo5cIVosM6CQSJmlVpgtDikW5
-         foNNJNXAslwCLJsFS+M2l3pKp+Vki0xlMqIt4doXN3+MNDKxgMgqb6Wtmy09b2VoO8cZ
-         5sOA==
-X-Gm-Message-State: AOAM5338BoRBDzU4x4iPZZMQ1dcO119HUJxfCPby4bTKcujhuzKYhA/y
-        KS3iUmsplWcMH5RojHVGa4FuFwYlAoGHiU+nvFkedt0kmqVCYwh1F8mXN7nPZr/SbMLwFqjhi00
-        FGY9Gh1peCZdhbUNmmdPOr8bf
-X-Received: by 2002:adf:8165:: with SMTP id 92mr1808681wrm.199.1640077520325;
-        Tue, 21 Dec 2021 01:05:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwz9dD/lyXn12XSkfz7PrwHF1Fi8hcgYYgOHY1FWx8GoepwZnjYExiR9qO3tS5VayQk7j0WEA==
-X-Received: by 2002:adf:8165:: with SMTP id 92mr1808655wrm.199.1640077520096;
-        Tue, 21 Dec 2021 01:05:20 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id c11sm1920328wmq.48.2021.12.21.01.05.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 01:05:19 -0800 (PST)
-Message-ID: <5b0e2e4c-a7bc-b0a5-1af7-df937618b2e4@redhat.com>
-Date:   Tue, 21 Dec 2021 10:05:18 +0100
+        id S236049AbhLUJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:05:58 -0500
+Received: from verein.lst.de ([213.95.11.211]:46048 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236041AbhLUJF4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 04:05:56 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id D4A5B68B05; Tue, 21 Dec 2021 10:05:52 +0100 (CET)
+Date:   Tue, 21 Dec 2021 10:05:52 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
+Subject: Re: [PATCH v4 17/23] block: add check when merging zone device
+ pages
+Message-ID: <20211221090552.GD7949@lst.de>
+References: <20211117215410.3695-1-logang@deltatee.com> <20211117215410.3695-18-logang@deltatee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 23/23] kvm: x86: Disable RDMSR interception of
- IA32_XFD_ERR
-Content-Language: en-US
-To:     "Liu, Jing2" <jing2.liu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-References: <20211217153003.1719189-1-jing2.liu@intel.com>
- <20211217153003.1719189-24-jing2.liu@intel.com>
- <e6fd3fc5-ea06-30a5-29ce-1ffd6b815b47@redhat.com>
- <MWHPR11MB12451924FE9189E4B69E78A4A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
- <f465ec18-4a0d-2e1c-239e-cc93aa43226f@redhat.com>
- <MWHPR11MB1245CA82DBCE3D660CDE4756A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <MWHPR11MB1245CA82DBCE3D660CDE4756A97C9@MWHPR11MB1245.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211117215410.3695-18-logang@deltatee.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 10:00, Liu, Jing2 wrote:
-> Thanks Paolo.
-> 
-> BTW do we want to put this together into patch 13 or 14, I guess you were saying patch 14 😊
-> [PATCH v2 13/23] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-> [PATCH v2 14/23] kvm: x86: Emulate IA32_XFD_ERR for guest
+> +/*
+> + * Consecutive zone device pages should not be merged into the same sgl
+> + * or bvec segment with other types of pages or if they belong to different
+> + * pgmaps. Otherwise getting the pgmap of a given segment is not possible
+> + * without scanning the entire segment. This helper returns true either if
+> + * both pages are not zone device pages or both pages are zone device pages
+> + * with the same pgmap.
+> + */
+> +static inline bool zone_device_pages_are_mergeable(const struct page *a,
+> +						   const struct page *b)
 
-No, I meant patch 13 because it is where xfd_err is added to struct 
-kvm_vcpu and the wrmsr is added on vmentry.
-
-But really it is not a big deal.  You might as well keep it a separate 
-patch ("patch 14.5") so we don't have to argue.
-
-Paolo
-
+Merging is only really a use case here.  This really checks if they
+belong to the same pgmap, so I suspect that should be in the name.

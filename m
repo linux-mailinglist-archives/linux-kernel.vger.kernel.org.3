@@ -2,156 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0EB47C0AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45FD47C085
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbhLUNTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:19:49 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:10867 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbhLUNTs (ORCPT
+        id S235080AbhLUNOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhLUNOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:19:48 -0500
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211221131945epoutp031745ed36c5b771162d5330327f323541~Cx7L-_9hR0259702597epoutp033
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 13:19:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211221131945epoutp031745ed36c5b771162d5330327f323541~Cx7L-_9hR0259702597epoutp033
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1640092785;
-        bh=CXyCFLfPQb3fk0Wa9KEUmKrY1neR+3waQ8bjm8cVIlM=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=jYyt4iUh2SM1HYBePfDav+jg3RCggvI1ZupsX236AROTIz7UgQYepColkItYMa576
-         n9HW9FdMSIWH0WolN+lLn1jik+LoarVLMEFzy15NiPrw+fxGXzABbkrfnaa+k2N37N
-         0DubQdTQwk3jwCrGPdC6HDUaYNZkS/l8WP+r6exA=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20211221131945epcas5p2f0be3374955094396b6faba21043836b~Cx7Lvtuuy1205912059epcas5p2-;
-        Tue, 21 Dec 2021 13:19:45 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-3f-61c1d471d241
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C5.71.06423.174D1C16; Tue, 21 Dec 2021 22:19:45 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH 1/1] Smack:- Fix the issue of wrong info printed in
- ptrace error logs
-Reply-To: vishal.goel@samsung.com
-Sender: Vishal Goel <vishal.goel@samsung.com>
-From:   Vishal Goel <vishal.goel@samsung.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     AMIT SAHRAWAT <a.sahrawat@samsung.com>,
-        Vaneet Narang <v.narang@samsung.com>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <a648c816-3093-8023-d96c-b1b8d459430f@schaufler-ca.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20211221131233epcms5p2e334598b208dcd76f6efec26f879c784@epcms5p2>
-Date:   Tue, 21 Dec 2021 22:12:33 +0900
-X-CMS-MailID: 20211221131233epcms5p2e334598b208dcd76f6efec26f879c784
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleLIzCtJLcpLzFFi42LZdlhTXbfwysFEgwv75C0u7k61uLftF5vF
-        wRN7GS0u75rDZvGh5xGbxaGTcxkd2Dze77vK5tG3ZRWjx9H9i9g8Pm+SC2CJ4rJJSc3JLEst
-        0rdL4Mq4+Gw9Y8Ea7or/6/oZGxjnsHUxcnJICJhItB3+z9rFyMUhJLCbUaLj3hzmLkYODl4B
-        QYm/O4RBaoQF4iVu/37CDmILCShKrFg+jxGkRFhAV2LelACQMJuAtkTvvLtMIGNEBA4xSpz9
-        toIRxGEWaGWU2D5rJxPEMl6JGe1PWSBsaYnty7cygticAi4Sr5res0PERSVurn4LZ78/Np8R
-        whaRaL13lhnCFpR48HM3VFxGYsKcs2APSAi0M0qc/neSEcKZwCjRtPo4VJW5xPolq9ghPvOV
-        2NDFCRJmEVCVOLBzH9QyF4l1T76AHccsIC+x/S0kIJgFNCXW79KHKJGVmHpqHRNECZ9E7+8n
-        cH/tmAdjq0pMndTNDvPj4RtnoP71kHi/rAca0L8YJdb0/GebwKgwCxHWs5BsnoWweQEj8ypG
-        ydSC4tz01GLTAsO81HK94sTc4tK8dL3k/NxNjOCkouW5g/Hugw96hxiZOBiBEcDBrCTCu2X2
-        /kQh3pTEyqrUovz4otKc1OJDjNIcLErivKfTNyQKCaQnlqRmp6YWpBbBZJk4OKUamJqWM71K
-        vxv5k5/z3vLsHVbGE17aMVlFSR9NZ/2zvrp+35dnzUJifrcuqZ54fzFBL2/P1MNi3+v4rsY8
-        yLmwaXbFchGf1p8T+/Iqn827EuukkdWx8t7Zdu8EUcG0eU8+PDnr5B/4qu/J8UdNjPUskbN1
-        Sorj/oWoZh/gqkoXf2P8o0/r7v89H3j5j5p8PMvBsHt7Q3OlyzuV+b/0HMX8Le/ePhrDccD0
-        xQNnkbCDc5eoHXyt7Jrov8Vwb+tuv18bLDv2rl/r1zFf0nLPxA2XF2xY9ua5C+/qKdPaogy2
-        rpzgqnz/xOsvUqo3nqnNsmrK331uVfXl/AVdC5TNGbf9DHwetakhcJXEzamzWhzl9+xTYinO
-        SDTUYi4qTgQA0BqADJkDAAA=
-X-CMS-RootMailID: 20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7
-References: <a648c816-3093-8023-d96c-b1b8d459430f@schaufler-ca.com>
-        <20211220101318.3538824-1-vishal.goel@samsung.com>
-        <3ccb78ef-905c-4914-c77a-24765c0e6675@schaufler-ca.com>
-        <CGME20211220101352epcas5p3aec72d06d04f71a7c387570957a0f6c7@epcms5p2>
+        Tue, 21 Dec 2021 08:14:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FCDC061574;
+        Tue, 21 Dec 2021 05:14:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tyz8PzJg8/A5UQdYT2N7TKnumB0ofZk85H9pQ9LnVsA=; b=AjuA8BQjL7+/rDNZMwZx4pp5q2
+        PysFMI/fv4hFwTTDw4XxEArzWe0ZK5GBiEyp+hDW9HM9+h6/ZQCy4eC6WJX6fq6WowEskId61gItI
+        vRtt7Qm+xnjKQJyFhny8sHZIOa5QhN28flhxt6JyTHAaWzsk++I2u5VmR6FcyYtUF142KdOdzW/ij
+        rsIR+fX912pBnHUo+yxjOsM57rBSDe4DP5Z3xHSWbFiPRhCn7BprBdEc7nvH86sVcXn+TO5h5ewz0
+        QHNZiJS0siLYVEYPdmAnApk4NZVOc9gsKI++PEcz/gWfc9htRxnDddmeKc6liKB4Ie5fC4TDa2Wy7
+        5PkwJRrg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzexF-002UMD-PZ; Tue, 21 Dec 2021 13:13:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA37C300347;
+        Tue, 21 Dec 2021 14:13:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8DCA2206E66FD; Tue, 21 Dec 2021 14:13:17 +0100 (CET)
+Date:   Tue, 21 Dec 2021 14:13:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 15/17] kernel/cpu: add num_active_cpu counter
+Message-ID: <YcHS7c7zWVrLhIfV@hirez.programming.kicks-ass.net>
+References: <20211218212014.1315894-1-yury.norov@gmail.com>
+ <20211218212014.1315894-16-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218212014.1315894-16-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Dec 18, 2021 at 01:20:11PM -0800, Yury Norov wrote:
+> Similarly to the online cpus, the cpu_active_mask is actively used
+> in the kernel. This patch adds a counter for active cpus, so that
+> users that call num_active_cpus() would know the result immediately,
+> instead of calling the bitmap_weight for the mask.
 
->>> Signed-off-by: Vishal Goel <vishal.goel@samsung.com>
-> 
-> What test case do you have that generates these records?
+Who cares about num_active_cpus() ?
 
-Test case for 1st log:-
-void main(int argc,char *argv[])
-{
-        int pid;
+> +EXPORT_SYMBOL(set_cpu_active);
 
-        if (argc < 2) {
-                printf("enter pid of the tracee process\n");
-                exit(0);
-        }
+NAK, this should *never*ever* be used from a module.
 
-        pid = atoi(argv[1]);
-        fprintf(stderr,"Inside\n");
-        ptrace(PTRACE_ATTACH, pid,NULL,NULL);
-        while(1)
-        {
-                sleep(10);
-        }
-}
-
-Test case for 2nd log:-
-void main(int argc,char *argv[])
-{
-        int pid;
-
-        pid = getpid();
-        fprintf(stderr,"Inside\n");
-        ptrace(PTRACE_TRACEME, pid,NULL,NULL);
-        while(1)
-        {
-               sleep(10);
-        }
-}
-
-Test case for 3rd log:-
-void main()
-{
-        int pid;
-        char *argv[2];
-
-        fprintf(stderr,"Inside\n");
-        pid = fork();
-        if(pid == 0) {
-                argv[0] = "/tst_pt";
-                argv[1] = NULL;
-
-                if(ptrace(PTRACE_TRACEME, pid,NULL,NULL))
-                        printf("attached child\n");
-
-                printf("going for exec\n");
-                execv("/tst_pt",argv);
-        }
-        else
-        {
-                while(1)
-                {
-                        sleep(10);
-                }
-        }
-}
-
->>
->> Added linux-audit to the CC list.
->>
-
-Thanks
-Vishal Goel

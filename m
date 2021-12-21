@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195FC47C527
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6019047C52B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240476AbhLURnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        id S240496AbhLURoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbhLURnc (ORCPT
+        with ESMTP id S240487AbhLURoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:43:32 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79909C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:43:32 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so2244154wmj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:43:32 -0800 (PST)
+        Tue, 21 Dec 2021 12:44:17 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EE0C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:44:17 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id l28-20020a25b31c000000b005c27dd4987bso27062782ybj.18
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:44:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qBE12b8vdnqtstGHFEJZcs6qFoeauTfFcVbXgvgPULA=;
-        b=hdnPfbv2sNQLuRXnuw3LxzsfrfuuQFSEWMWM2+xryiMjdQgWpY+182PYMMRSHmx1Er
-         nAwTgZUrFPRo6u3h7IlgkxLPRxFQ3WeJmpeDmQZThimeADQEc5nnyD+7nAblN+8x1+iQ
-         IHzaz0tFFOdBP2SSJnKGV4VulYnyJ4WYyuXZWUwAbSuV9CKba/SOQnS7I4+uYbSaIWP+
-         +z1cnJK9c2U/GmMc2hy5ax2p2DlTf95ykYwNhFWMHby/8O4RpHI++ftH0zVwgak9G321
-         lTctF/xGdd4wLFGTOqzh4MkRm8/ycK2+4ZFtwlYSXMx4AD4gMmhrre6mrE/faUTOl5gn
-         d89Q==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CDuBDxOSUYlCehxXtPSC2OIzjN0BmuoKrvgmDwQyvuQ=;
+        b=TfaGYcVbeJF4OeDvfFRzo2v0n3VAgiSZ3mYQT9Dxs6ECLCGrTBdlc+kWr64JHpqCR8
+         rH3rwP7DYtDKLJtEcuRtG6Xiau9Wem4usMhThTsyuDqj+AcHiYOyPEUtPSQMvdv3Y5ox
+         0kYuYQxzIGm39nxLk/ZGKVHHUVDhP6RUQ1v++V1m8R5Xo6/bal8jhjQ7DHJJRj29aIWm
+         G9Cee5gMwrOgqiNuG4RWRaivl/BNl+Z6ii9TJOQBJ1uWshAgX1+i8HbRDlIvEHsMupZJ
+         pM+5xJt07vuSvz1P6oGCwpVEURMMbNuTiQuJKVMZRPJjN9JrnB+ADawiT2newm6S6EGT
+         sQJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qBE12b8vdnqtstGHFEJZcs6qFoeauTfFcVbXgvgPULA=;
-        b=pGtkMBTDsOB2Ii9Bm8+bB5heWmVvDBrcD841o1MkQXnf9/YXhUrBR7NBDCSnwBLOpu
-         1b3/jcGhy8826iVvYoyr5NSWT7ZdMphT4oltxlTe2EFLsln3cWUf4iRoiljxMUwSr0ai
-         +vWOVVfr5XsDK+lotGniQ0ipqeIKRGUh+RVYJp9toZHuFmhsty/kIq9uvEODxv5M5PHy
-         phE4ngFKorDMqVjUy0o9O3VzVitPRTMEIxEKifwBNaCjI/99ecYV5MEBqR1qUkWxmE7U
-         nMYYjwEp1lI9rGpbgQko5hl7joldho7YjAepTqACtJq8av+YAroJASczL/U7UGKLcDh4
-         THOw==
-X-Gm-Message-State: AOAM530uO+i4kUwjda7/gaW6amSVmjiu1N3RDryked9J8GbfxHEqUrvq
-        fD81gWGi6k/OyU6cTAjXTgTPgw==
-X-Google-Smtp-Source: ABdhPJxr9epBEjiveABhSyTbxZrFLQQ1wVGQ2VrDZrrOrzDb25Cwi8Vbsjqw1O7zBByQHEU7Y8b2VA==
-X-Received: by 2002:a1c:e909:: with SMTP id q9mr3597321wmc.184.1640108610904;
-        Tue, 21 Dec 2021 09:43:30 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:4a23:42ad:dc71:62e9])
-        by smtp.gmail.com with ESMTPSA id a1sm19123717wru.113.2021.12.21.09.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 09:43:30 -0800 (PST)
-Date:   Tue, 21 Dec 2021 17:43:26 +0000
-From:   David Brazdil <dbrazdil@google.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: firmware: Add Open Profile for DICE
-Message-ID: <YcISPrm/R8QIqkMb@google.com>
-References: <20211213195833.772892-1-dbrazdil@google.com>
- <20211213195833.772892-2-dbrazdil@google.com>
- <YbpPYG4rzPmJmwA6@robh.at.kernel.org>
- <YbpZTSpmnieCNZ9a@google.com>
- <CAL_JsqJRpNr7McM9OJcPs095ZfAqGJfN7FhGhy7i6pN+tx1MGg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJRpNr7McM9OJcPs095ZfAqGJfN7FhGhy7i6pN+tx1MGg@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CDuBDxOSUYlCehxXtPSC2OIzjN0BmuoKrvgmDwQyvuQ=;
+        b=IYtXhznlbwDtbaQFFFWAN3LmcGxUaUDo12oEu8Lxd7RquV3EPTWjo6i/zWKbB6b5PZ
+         TqOgLl7lfyVtBcleB+oxpMwsK5h91MTZC235zuFUd2c6UWzUxCNlKXAj5K+cHYIG4DBL
+         jLqOPj+RlMUx7bGp6/9PMVv58Q/9DuYY33PlfUmBSWg8VyF8Q91+xP6rkgn3R3Rrkq3f
+         Qg2AhzNBNxeiBJXIkzHJ2m73YAuqFrl50J195jd6ppOlTvsN9ZPLE1aQoIAiag8djnXc
+         hK8R9b1GWqXdXebLRkPgzZCma7OlX1CHJBrriht/EfLIRxCUCH2n4TY+8DJ2s5PRxYRB
+         wldQ==
+X-Gm-Message-State: AOAM532UsLwfDfxtmcsTE6fwDwJ/TjOeDefCn5V3o12j0kWCrRA6kfGg
+        KoYX+4OyHNdhsesq26u5FSS49ra+cioFrMAT0uy7wGq5hihh//2hGVuHa2/HRGytwVCkZA19ow6
+        RaUMmuNo7M9iWgkuZ0MtqHgPnXgnlAUVbImvKTNh0odyjOWH0UIovRPVBQHvwjA0PJVYhtcto
+X-Google-Smtp-Source: ABdhPJxArDKEt7s8nvJ9hO+5aMzE0jhQdqi4ArT2F52H2Z6NTXreZ4J7/reCC5firYqFR/Hmc/uPcZyFi9bu
+X-Received: from suichen.svl.corp.google.com ([2620:15c:2c5:13:19fd:5987:f46f:7488])
+ (user=suichen job=sendgmr) by 2002:a25:2f03:: with SMTP id
+ v3mr6131319ybv.557.1640108656573; Tue, 21 Dec 2021 09:44:16 -0800 (PST)
+Date:   Tue, 21 Dec 2021 09:43:41 -0800
+Message-Id: <20211221174344.1249202-1-suichen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
+Subject: [RFC Patch v3 0/3] I2C statistics as sysfs attributes
+From:   Sui Chen <suichen@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
+        benjaminfair@google.com, krellan@google.com,
+        Sui Chen <suichen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 09:21:00AM -0600, Rob Herring wrote:
-> On Wed, Dec 15, 2021 at 3:08 PM David Brazdil <dbrazdil@google.com> wrote:
-> >
-> > Hi Rob,
-> >
-> > > > +        dice_reserved: dice@12340000 {
-> > > > +            reg = <0x00 0x12340000 0x2000>;
-> > > > +            no-map;
-> > > > +        };
-> > > > +    };
-> > > > +
-> > > > +    dice {
-> > > > +        compatible = "google,open-dice";
-> > > > +        memory-region = <&dice_reserved>;
-> > >
-> > > There's no need for this indirection. Just add the compatible to the
-> > > dice@12340000 node. You can bind drivers to /reserved-memory nodes.
-> >
-> > I have not found a way to make that work for kernel modules. Built-in
-> > drivers can bind with RESERVEDMEM_OF_DECLARE, which puts an entry in
-> > __reservedmem_of_table and __reserved_mem_init_node() iterates find it
-> > there. A good case study might be CONFIG_TEGRA210_EMC, where the driver
-> > itself can be a module but the rmem parsing is always built-in under
-> > CONFIG_TEGRA210_EMC_TABLE. I don't think that's worth the trouble with
-> > this driver.
-> 
-> I forgot you have to add the compatible to reserved_mem_matches in
-> drivers/of/platform.c.
+Add I2C statistics (transaction, bus error and NACK counts) as sysfs
+attributes for a stable and unified API.
 
-Oh nice! Exactly what I was looking for, thanks. I'll respin shortly.
+The motivation is monitoring large numbers of BMCs at scale.
+Monitoring will be done using OpenBMC, which includes a Redfish
+implementation (bmcweb) and runs on different SoCs.
 
-David
+OpenBMC has distribution-wide DBus C++ bindings, for which I2C
+statistics will be added. For the Redfish schemas, the upcoming
+Release 2021.4 will include I2C statistics too.
+
+Since both OpenBMC and Redfish have/will have committed to stable
+APIs for monitoring I2C statistics, we would like to learn the
+kernel community's opinion on stable kernel APIs for I2C counters.
+
+A more detailed explanation could be found in [1].
+
+This version (v3) fixes format errors, potential unchecked memory
+allocation, and fixes a build problem found by the Kernel Test Robot.
+
+Thanks!
+
+[1] https://lore.kernel.org/lkml/CAJOps0u=seskB-YGvLBsHantJohkEX7do-mt7YSZ6zChQMQxbg@mail.gmail.com/
+
+
+Sui Chen (2):
+  i2c debug counters as sysfs attributes
+  add npcm7xx debug counters as sysfs attributes
+
+Tali Perry (1):
+  i2c: npcm7xx: add tx_complete counter
+
+ drivers/i2c/busses/i2c-npcm7xx.c |  13 ++++
+ drivers/i2c/i2c-core-base.c      |  23 ++++++
+ drivers/i2c/i2c-dev.c            | 124 +++++++++++++++++++++++++++++++
+ include/linux/i2c.h              |  28 +++++++
+ 4 files changed, 188 insertions(+)
+
+-- 
+2.34.1.307.g9b7440fafd-goog
+

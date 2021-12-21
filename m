@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589C747BC4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1E147BC4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbhLUI7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbhLUI7M (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:59:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7BBC061574;
-        Tue, 21 Dec 2021 00:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wHV6GRR4eealQww1iJ3X6PIJAgvUqP6QFcBO/7H/dwA=; b=aHBb50Wa5isXtAMsqxF6OqcRS5
-        Hmpz+X/6tFqcv5yPwUdnV67lcPCIHy6ZUAL4qO9GPiknrWSLdymdHViVIMvq965OMQoUvx4kF1FP7
-        JN4AdLf7oxczerBipw7sjE5qOGAzOH1TkI0RZoDlAKGUlxGX1fojXlxHSw3Gl8OPTUYSODKG9gsAN
-        m9pkcXigBpB1QNUYLahgPlN6XDovrC4kSTUZghc/6ZXbZWo3DBMiIEZQdXiBZE3O/J4kgfpAsKwEj
-        W3ovp8tMzAW4z2q3yCrn0I17fOPNABRZ8nvhWE5sU3HFUFJ21lMh5FlaV5IBO7/mRwlsB7X6PXG0H
-        DiM1rSdA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzazF-0060Dn-PJ; Tue, 21 Dec 2021 08:59:09 +0000
-Date:   Tue, 21 Dec 2021 00:59:09 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Miko Larsson <mikoxyzzz@gmail.com>
-Cc:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, hch@infradead.org
-Subject: Re: [PATCH v2 2/2] zram: zram_drv: replace 'strlcpy()'
-Message-ID: <YcGXXQhB8YUMXI3O@infradead.org>
-References: <20211217063224.3474-1-mikoxyzzz@gmail.com>
- <20211217063224.3474-3-mikoxyzzz@gmail.com>
+        id S235953AbhLUJAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:00:13 -0500
+Received: from verein.lst.de ([213.95.11.211]:45969 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233983AbhLUJAM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 04:00:12 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7A18568AFE; Tue, 21 Dec 2021 10:00:04 +0100 (CET)
+Date:   Tue, 21 Dec 2021 10:00:03 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v4 01/23] lib/scatterlist: cleanup macros into static
+ inline functions
+Message-ID: <20211221090003.GA7949@lst.de>
+References: <20211117215410.3695-1-logang@deltatee.com> <20211117215410.3695-2-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217063224.3474-3-mikoxyzzz@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20211117215410.3695-2-logang@deltatee.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 07:32:24AM +0100, Miko Larsson wrote:
-> 'strlcpy()' shouldn't be used, and should be replaced with safer
-> alternatives. Cristoph Hellwig suggested [1] that 'kmemdup_nul()' should
-> be used in two cases instead of 'strscpy()', and that a regular
-> 'strcpy()' should be used in the third case. [2][3]
+On Wed, Nov 17, 2021 at 02:53:48PM -0700, Logan Gunthorpe wrote:
+> Convert the sg_is_chain(), sg_is_last() and sg_chain_ptr() macros
+> into static inline functions. There's no reason for these to be macros
+> and static inline are generally preferred these days.
+> 
+> Also introduce the SG_PAGE_LINK_MASK define so the P2PDMA work, which is
+> adding another bit to this mask, can do so more easily.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 
-Not that strcpy isn't really safer, but if your plan is to get rid
-of strlcpy I think it makes more sense there.
+Looks fine:
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
+
+scatterlist.h doesn't have a real maintainer, do you want me to pick
+this up through the DMA tree?

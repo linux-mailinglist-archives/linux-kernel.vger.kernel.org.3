@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC24E47BEEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDA447BEFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbhLUL3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:29:09 -0500
-Received: from www381.your-server.de ([78.46.137.84]:35608 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbhLUL3I (ORCPT
+        id S237143AbhLULcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:32:33 -0500
+Received: from outbound-smtp30.blacknight.com ([81.17.249.61]:59954 "EHLO
+        outbound-smtp30.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237139AbhLULcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:29:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=XAIzWHN8FTDDcXtJnRpWIyylmj5yDBO4/E5ACkN17U0=; b=Rq0PXRgEfSp52z3EloLYIbOxMZ
-        EknfBS+dgW23/lUUAlKf9AF6gpUcJXutdKxBl3uYqvGUbkGk/8SH0N4N9tZt37gnoJix4PJuKtzAj
-        K14ap2Pk2PrdpXtRrTCxGhZvg4EjPDt3MD9/EuuhHo9PK5pv2A9TEk7Pbge9yFr1u7KxeWihQ6xjO
-        v2Xwbm/K3QYFg68VM0AklxoLHLVAVOEVgtjSCuWM38i+zlVqGSENjGuuYsCWwFXlCyGBjEws4JYWp
-        RSH2C5m3BLIB3/Pb8o9az3gBlHA3t17hAXUrYcbkyYZtTIGhhJ3Qgy0hHhKxUsqpe4MAaaQqxghLr
-        LP6zdMfg==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1mzdKL-000H2C-Dl; Tue, 21 Dec 2021 12:29:05 +0100
-Received: from [2001:a61:2bc8:8501:9e5c:8eff:fe01:8578]
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1mzdKL-000Xs3-3Y; Tue, 21 Dec 2021 12:29:05 +0100
-Subject: Re: [PATCH] dt-bindings: iio: Document "label" property
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211221104354.35073-1-paul@crapouillou.net>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <7718b4c6-59f8-c728-87ae-3c85e992e300@metafoo.de>
-Date:   Tue, 21 Dec 2021 12:29:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 06:32:31 -0500
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id 45382BAB0E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 11:32:30 +0000 (GMT)
+Received: (qmail 18383 invoked from network); 21 Dec 2021 11:32:30 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Dec 2021 11:32:29 -0000
+Date:   Tue, 21 Dec 2021 11:32:27 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Gautham Shenoy <gautham.shenoy@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] sched/fair: Use weight of SD_NUMA domain in
+ find_busiest_group
+Message-ID: <20211221113227.GT3366@techsingularity.net>
+References: <20211210093307.31701-1-mgorman@techsingularity.net>
+ <20211210093307.31701-2-mgorman@techsingularity.net>
+ <CAKfTPtDPu6r3dsSmY-ZDB0k4muoSk1a2J3=NKqoBG1y8aEwNYQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211221104354.35073-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26395/Tue Dec 21 10:18:41 2021)
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtDPu6r3dsSmY-ZDB0k4muoSk1a2J3=NKqoBG1y8aEwNYQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 11:43 AM, Paul Cercueil wrote:
-> All iio devices can have a label, which will be carried on to userspace
-> as a sysfs attribute. This is useful when having several iio devices
-> that represent different instances of the same hardware, as the name
-> attribute would then not be enough to differentiate between them.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->   Documentation/devicetree/bindings/iio/common.yaml | 8 ++++++++
->   1 file changed, 8 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/iio/common.yaml b/Documentation/devicetree/bindings/iio/common.yaml
-> index f845b41d74c4..a90ad7718ecf 100644
-> --- a/Documentation/devicetree/bindings/iio/common.yaml
-> +++ b/Documentation/devicetree/bindings/iio/common.yaml
-> @@ -32,6 +32,14 @@ properties:
->         considered 'near' to the device (an object is near to the
->         sensor).
->   
-> +  label:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: |
-> +      All iio devices can have a label, which will be carried on to userspace
-> +      as a sysfs attribute. This is useful when having several iio devices that
-> +      represent different instances of the same hardware, as the name attribute
-> +      would then not be enough to differentiate between them.
-> +
+On Tue, Dec 21, 2021 at 11:53:50AM +0100, Vincent Guittot wrote:
+> On Fri, 10 Dec 2021 at 10:33, Mel Gorman <mgorman@techsingularity.net> wrote:
+> >
+> > find_busiest_group uses the child domain's group weight instead of
+> > the sched_domain's weight that has SD_NUMA set when calculating the
+> > allowed imbalance between NUMA nodes. This is wrong and inconsistent
+> > with find_idlest_group.
+> 
+> I agree that find_busiest_group and find_idlest_group should be
+> consistent and use the same parameters but I wonder if sched_domain's
+> weight is the right one to use instead of the target group's weight.
+> 
 
-The description has a lot of implementation details of the Linux kernel. 
-The devicetree bindings should be formulated operating system agnostic.
+Ok
 
-Something like:
+> IIRC, the goal of adjust_numa_imbalance is to keep some threads on the
+> same node as long as we consider that there is no performance impact
+> because of sharing  resources as they can even take advantage of
+> locality if they interact.
 
-A descriptive label that allows to uniquely identify the device within 
-the system.
+Yes.
 
+> So we consider that tasks will not be
+> impacted by sharing resources if they use less than 25% of the CPUs of
+> a node. If we use the sd->span_weight instead, we consider that we can
+> pack threads in the same node as long as it uses less than 25% of the
+> CPUs in all nodes.
+> 
+
+I assume you mean the target group weight instead of the node. The
+primary resource we are concerned with is memory bandwidth and it's a
+guess because we do not know for sure where memory channels are or how
+they are configured in this context and it may or may not be correlated
+with groups. I think using the group instead would deserve a series on
+its own after settling on an imbalance number when there are multiple
+LLCs per node.
+
+-- 
+Mel Gorman
+SUSE Labs

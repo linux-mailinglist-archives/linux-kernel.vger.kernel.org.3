@@ -2,174 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E6047C49A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A3547C49D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbhLUREQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbhLUREN (ORCPT
+        id S232229AbhLURET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:04:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45481 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231747AbhLURES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:04:13 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D435AC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:12 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id h7-20020adfaa87000000b001885269a937so4886430wrc.17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=E92eP/emmd4tPCtN84LURrU10uCO5laN21sGBPTutAE=;
-        b=rwpDUr7BTlt54xIChNSmy2vthIyUPwepgykcLhAy0Tqh6ftXSTZ/GU2wZdiVYKH08q
-         qlSOPn5txoRbNT7LCL8O7qHChumewLMumnMW+8Nmo+KPjs1Ic9CeT6Kip/bt1ynTn41n
-         76P2uFig+Iz7hVjf76TDD4MfC4k37Tyqjfug663hsm2+PpKw1YpwM2dvlKmAGX4Ud5S6
-         8Uz5E3KA+xcUdh7nwoqwFoy146IBa7rYSH3ewx+EcUcWQ7aEJagBL5GigJNuOwuJL72J
-         py64vabHgkeBqKjTCs4E+NgfvQzhDC2CXrS8y+vrVJ5/LtG6IWP/4qRMo91Z8NtkYyfW
-         H8aQ==
+        Tue, 21 Dec 2021 12:04:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640106258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yl3Vp8QjwavG3f+ohEPxYXZer5SzEY7eKto2Guu34dg=;
+        b=EJ7fuezrdgBu3bR0mbQ2NxNW7/e+IJto4muBEWvGLqaVo6MT/8qZ/3WPIzjCFD/TyOuBCS
+        1OGMp3jurM1EE5vA/UoUM3V1lpIfR+pg1fs74eaFxCqduwQzKmwSpGMo13DCI8ZUc8dxbU
+        FEwLMD8lPpGSWalJ8t1wF8eZIhfvYjs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-OojWRiN1NoO5BCwmP6kLSw-1; Tue, 21 Dec 2021 12:04:15 -0500
+X-MC-Unique: OojWRiN1NoO5BCwmP6kLSw-1
+Received: by mail-ed1-f69.google.com with SMTP id h22-20020a056402281600b003f839627a38so7079318ede.23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=E92eP/emmd4tPCtN84LURrU10uCO5laN21sGBPTutAE=;
-        b=elmNKSzjHUSx6fcy3zH5iZt1G71uKpQI4+0hW6jvzHZTyYbirxYLeUQpya72olKwqf
-         EjQ6OG8ZpYXwk9RVc7IUc/C38NsnWBQSXvuzsVba9v2gOqiaCLc/eUAy66HBizDNN+Ow
-         IVLRUvk/ADfQtv1QPeV/uVTQCuXGhsvIWdUKxRzi4CdZGtmL/BINghkvd4WEyd/egYVB
-         9TlZPskyenrbUT3RoQ3A1w+t+ZPHkfq6uWTWra+Kwh+hZhS0s9fH5xQThQFe/D2fb+La
-         Wu+FulKqPO+rNkLHLhPjV8XWrLarYMXe8vPdYz9vo2xMXHHruULeyMhzPZQp2cBn5hPm
-         1lrA==
-X-Gm-Message-State: AOAM5336PFcYz7m7brMMCmbj4h2WJ8VQaySLKiB/kTXb9xgvoMdEMR1h
-        Efgb+vr/KmDwJ9yxIjymt3Yfq6cCfEY=
-X-Google-Smtp-Source: ABdhPJyLn8mGeU7bn6CPz7Aiqz1oL/fzfhyHRcntGAJO1GMZpfrwge/x6XsHlSdfv7OZ2HE5m/brWxjkYHs=
-X-Received: from nogikh-hp.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:200d])
- (user=nogikh job=sendgmr) by 2002:a1c:9dc7:: with SMTP id g190mr3701479wme.56.1640106251428;
- Tue, 21 Dec 2021 09:04:11 -0800 (PST)
-Date:   Tue, 21 Dec 2021 17:03:48 +0000
-In-Reply-To: <20211221170348.1113266-1-nogikh@google.com>
-Message-Id: <20211221170348.1113266-3-nogikh@google.com>
-Mime-Version: 1.0
-References: <20211221170348.1113266-1-nogikh@google.com>
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 2/2] kcov: properly handle subsequent mmap calls
-From:   Aleksandr Nogikh <nogikh@google.com>
-To:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org
-Cc:     dvyukov@google.com, andreyknvl@gmail.com, elver@google.com,
-        glider@google.com, tarasmadan@google.com, bigeasy@linutronix.de,
-        nogikh@google.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yl3Vp8QjwavG3f+ohEPxYXZer5SzEY7eKto2Guu34dg=;
+        b=m+S1AxnfhMytLKZJe8+nxGQLpf9/lb3S9kjMKeakTc0SRl+6H2nWiapxY2YYPKw0K4
+         qhy4cPtWIFQSumuwzLEpLxLNNXZP8/di2iboTrEKQfPvuVRb38qxvHknZeg3Y89A3YdW
+         q3dLvHnEzMYVRxxYy9nHLuZbDVWgeg6W0SM95P3VGpZCSW3paJyWFgj2Iwah5BvzatwT
+         r6CKH5hMyUliEZxx4BYXFwaK3JP+iLWPSKKVaUGyey/rz91fOqhLEJDYFjaz/kaX8DdD
+         3nbdYs0flmJ8M1opGMlaMz6c4qrbXWgkNxFvEG+da6MYA2rBEgbEDXzf1ObFT+iFF/eW
+         AlJQ==
+X-Gm-Message-State: AOAM531veRGaupl0/H70EdbAtEhJMKGG9ydypJhwsiqC7yaLMqE4480a
+        ONugrYbAqZ7sOnK4qrMkPS3t77yAJ/wDljbPJfmNMKnLFBPzDCNsPeLEl4Hc6LkkZn2IeprNj2f
+        6KfgkmJr9V9M94np1oKfKtBbP
+X-Received: by 2002:a17:906:abc8:: with SMTP id kq8mr3305389ejb.643.1640106254745;
+        Tue, 21 Dec 2021 09:04:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykzGfLApBGKkOJE2ylZ9A5UcRtimHTwwP3RPrPiKxQzVhnSXHE8vf9wsNFBRnLgzSevKdx6w==
+X-Received: by 2002:a17:906:abc8:: with SMTP id kq8mr3305365ejb.643.1640106254488;
+        Tue, 21 Dec 2021 09:04:14 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id cn8sm2564736edb.13.2021.12.21.09.04.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 09:04:12 -0800 (PST)
+Message-ID: <3913dfd7-3872-7d69-24af-eba747a7a92d@redhat.com>
+Date:   Tue, 21 Dec 2021 18:04:11 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from MFD
+ to Auxiliary Bus
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "David E. Box" <david.e.box@linux.intel.com>
+Cc:     lee.jones@linaro.org, bhelgaas@google.com,
+        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+References: <20211208015015.891275-1-david.e.box@linux.intel.com>
+ <20211208015015.891275-4-david.e.box@linux.intel.com>
+ <YbDbql39x7Kw6iAC@kroah.com>
+ <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
+ <YbD1NsYHbU8FvtTN@kroah.com>
+ <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
+ <YbEFuN7fwdiNI8vW@kroah.com>
+ <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
+ <YcGEaH0oAAocziU2@kroah.com>
+ <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
+ <YcIGwZqm2sfIixkH@kroah.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YcIGwZqm2sfIixkH@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate the kcov buffer during KCOV_MODE_INIT in order to untie mmapping
-of a kcov instance and the actual coverage collection process. Modify
-kcov_mmap, so that it can be reliably used any number of times once
-KCOV_MODE_INIT has succeeded.
+Hi,
 
-These changes to the user-facing interface of the tool only weaken the
-preconditions, so all existing user space code should remain compatible
-with the new version.
+On 12/21/21 17:54, Greg KH wrote:
+> On Tue, Dec 21, 2021 at 08:44:57AM -0800, David E. Box wrote:
+>> On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
+>>> On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
+>>>> On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
+>>>>> On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
+>>>>>> On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
+>>>>>>> On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
+>>>>>>>> On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
+>>>>>>>>> On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box wrote:
+>>>>>>>>>> +static struct pci_driver intel_vsec_pci_driver = {
+>>>>>>>>>> +       .name = "intel_vsec",
+>>>>>>>>>> +       .id_table = intel_vsec_pci_ids,
+>>>>>>>>>> +       .probe = intel_vsec_pci_probe,
+>>>>>>>>>> +};
+>>>>>>>>>
+>>>>>>>>> So when the PCI device is removed from the system you leak
+>>>>>>>>> resources and
+>>>>>>>>> have dangling devices?
+>>>>>>>>
+>>>>>>>> No.
+>>>>>>>>
+>>>>>>>>> Why no PCI remove driver callback?
+>>>>>>>>
+>>>>>>>> After probe all resources are device managed. There's nothing to
+>>>>>>>> explicitly clean up. When
+>>>>>>>> the
+>>>>>>>> PCI
+>>>>>>>> device is removed, all aux devices are automatically removed. This
+>>>>>>>> is the case for the SDSi
+>>>>>>>> driver
+>>>>>>>> as well.
+>>>>>>>
+>>>>>>> Where is the "automatic cleanup" happening?  As this pci driver is
+>>>>>>> bound
+>>>>>>> to the PCI device, when the device is removed, what is called in this
+>>>>>>> driver to remove the resources allocated in the probe callback?
+>>>>>>>
+>>>>>>> confused,
+>>>>>>
+>>>>>> devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev)
+>>>>>
+>>>>> Wow that is opaque.  Why not do it on remove instead?
+>>>>
+>>>> This code is common for auxdev cleanup. AFAICT most auxiliary bus code is
+>>>> done by drivers that have
+>>>> some other primary function. They clean up their primary function resources
+>>>> in remove, but they
+>>>> clean up the auxdev using the method above. In this case the sole purpose of
+>>>> this driver is to
+>>>> create the auxdev. There are no other resources beyond what the auxdev is
+>>>> using.
+>>>>
+>>>> Adding runtime pm to the pci driver will change this. Remove will be needed
+>>>> then.
+>>>
+>>> And who will notice that being required when that happens?
+>>>
+>>> Why is there no runtime PM for this driver?  Do you not care about power
+>>> consumption?  :)
+>>
+>> Of course. :)
+>>
+>> There's a backlog of patches waiting for this series. One adds support for the
+>> telemetry device (an auxdev) on the DG2 GPU. This device requires runtime pm in
+>> order for the slot to go D3. But this also requires changes to the telemetry
+>> driver in order for runtime pm to be handled correctly. These and other patches,
+>> including a series to have all current aux drivers use the new drvdata helpers,
+>> are waiting for this.
+> 
+> I can take the aux driver drvdata patch now, through my tree, if you
+> want, no need to make it wait for this tiny driver.
+> 
+> Feel free to send it independant of the existing patchset, and with the
+> cleanup patches at the same time, should be quite easy to get merged.
 
-Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
----
- kernel/kcov.c | 49 +++++++++++++++++++++++++------------------------
- 1 file changed, 25 insertions(+), 24 deletions(-)
+If you're going to take that one, can you perhaps take patches
+1-3 for 5.17 through your tree as well (patch 3 depends on 2/it) ?
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 5d87b4e0126f..d6a522fc6f36 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -459,37 +459,28 @@ void kcov_task_exit(struct task_struct *t)
- static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
- {
- 	int res = 0;
--	void *area;
- 	struct kcov *kcov = vma->vm_file->private_data;
- 	unsigned long size, off;
- 	struct page *page;
- 	unsigned long flags;
- 
--	area = vmalloc_user(vma->vm_end - vma->vm_start);
--	if (!area)
--		return -ENOMEM;
--
- 	spin_lock_irqsave(&kcov->lock, flags);
- 	size = kcov->size * sizeof(unsigned long);
--	if (kcov->mode != KCOV_MODE_INIT || vma->vm_pgoff != 0 ||
-+	if (kcov->area == NULL || vma->vm_pgoff != 0 ||
- 	    vma->vm_end - vma->vm_start != size) {
- 		res = -EINVAL;
- 		goto exit;
- 	}
--	if (!kcov->area) {
--		kcov->area = area;
--		vma->vm_flags |= VM_DONTEXPAND;
--		spin_unlock_irqrestore(&kcov->lock, flags);
--		for (off = 0; off < size; off += PAGE_SIZE) {
--			page = vmalloc_to_page(kcov->area + off);
--			if (vm_insert_page(vma, vma->vm_start + off, page))
--				WARN_ONCE(1, "vm_insert_page() failed");
--		}
--		return 0;
-+	spin_unlock_irqrestore(&kcov->lock, flags);
-+	vma->vm_flags |= VM_DONTEXPAND;
-+	for (off = 0; off < size; off += PAGE_SIZE) {
-+		page = vmalloc_to_page(kcov->area + off);
-+		if (vm_insert_page(vma, vma->vm_start + off, page))
-+			WARN_ONCE(1, "vm_insert_page() failed");
- 	}
-+	return 0;
- exit:
- 	spin_unlock_irqrestore(&kcov->lock, flags);
--	vfree(area);
- 	return res;
- }
- 
-@@ -671,25 +662,35 @@ static int kcov_ioctl_unlocked(struct kcov *kcov, unsigned int cmd,
- {
- 	unsigned long size, flags;
- 	int res;
-+	void *area;
- 
- 	switch (cmd) {
- 	case KCOV_INIT_TRACE:
- 		/*
- 		 * Enable kcov in trace mode and setup buffer size.
- 		 * Must happen before anything else.
--		 */
--		if (kcov->mode != KCOV_MODE_DISABLED)
--			return -EBUSY;
--		/*
--		 * Size must be at least 2 to hold current position and one PC.
--		 * Later we allocate size * sizeof(unsigned long) memory,
--		 * that must not overflow.
-+		 *
-+		 * First check the size argument - it must be at least 2
-+		 * to hold the current position and one PC.
- 		 */
- 		size = arg;
- 		if (size < 2 || size > INT_MAX / sizeof(unsigned long))
- 			return -EINVAL;
-+
-+		area = vmalloc_user(size * sizeof(unsigned long));
-+		if (area == NULL)
-+			return -ENOMEM;
-+
-+		spin_lock_irqsave(&kcov->lock, flags);
-+		if (kcov->mode != KCOV_MODE_DISABLED) {
-+			spin_unlock_irqrestore(&kcov->lock, flags);
-+			vfree(area);
-+			return -EBUSY;
-+		}
-+		kcov->area = area;
- 		kcov->size = size;
- 		kcov->mode = KCOV_MODE_INIT;
-+		spin_unlock_irqrestore(&kcov->lock, flags);
- 		return 0;
- 	default:
- 		/*
--- 
-2.34.1.307.g9b7440fafd-goog
+Note there is a v4 of this series, see please use that :)
+
+I assume the follow up patches are also going to need patch 3
+(the actual conversion of the driver to aux-bus).
+
+Here is my Ack for the pdx86 bits in patch 3:
+
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+
+And patch 1 and 3 also have acks from the PCI resp. MFD subsys maintainers,
+so I guess taking this all upstream through your tree is fine.
+
+That leaves patches 4-6, 4 is the patching adding the new
+"Intel Software Defined Silicon driver" sysfs API and I would
+like to take some time to thoroughly review the new
+userspace API, which I don't see happening before the
+Christmas Holidays, so I don't plan to merge 4-6 (which
+depends on 3) until after 5.17-rc1.
+
+Regards,
+
+Hans
 

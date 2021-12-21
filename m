@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F83347B941
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 05:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3263247B943
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbhLUEy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 23:54:28 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:50122 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbhLUEy0 (ORCPT
+        id S231645AbhLUFEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 00:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhLUFE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 23:54:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1640062467; x=1671598467;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a/wMZz9CrZXLjivTFTZZRqGAfks9G2lpHxOQXEEBUzs=;
-  b=R6/9vjxPDAVyT2XHlCNJcWBpGG/YTYRdp1kPZ8McdQmRww9VzmfWID+L
-   4r7nHSwJ//SClR7ntwcuZTmq+9nYLCy/Dac+mg3q3GAcEjewUc00e6t99
-   PfvVjs0fk9tIOVKwlCLyKSuvqwwKcoHAKRGhxFC7JiTZT2Y/foA6WQ2/m
-   kH9PbZBGVw2DlHErp+uMTc+o/jZv/T3blZXGSyB/y/SbLJkOQykElJ1/c
-   Z+dvzeO976roM50mrlvpRmiD5GY7ozT2V54cMFqeOYtsm0FR2oL55fHq5
-   +ZGQuzs8ACfG/GPLlxZ5gKRtnRK6u9ZIukgJlrLksvYqG4pR2AyHgLD4G
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,222,1635177600"; 
-   d="scan'208";a="189764685"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2021 12:54:27 +0800
-IronPort-SDR: AejmevScuWXKlHi4GbBK/Or3wKkZNMaRoRDGcHWyRAKNrvjCCwyVa0Z5luYygJr0sllDfKCyHH
- PBm4758S1P+bgshvD0vKxuoqUgw2n1j7Qc0lu6caghR4HZlpP07bzBF2ogIWiO5UJLLJrUHNbO
- InBkAcSlm1GMlrDT8x4/SycmqM7TD+7CSWlNkc6itvGB/HI1MRgp2vmXbiH5NADdKeD/t/08tf
- wkhYOT18v5/NWtLj7+PcTShldUpam0sWkaw3i0EthZEzEGotd/4+OVd5vqjC2lPw9OitJQBmwS
- y+qDeYMTguaRBsk09h0uUQAg
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 20:27:14 -0800
-IronPort-SDR: XH68oUSYsmAIqHcg1HUDptFzeRG3JZGAGihS+X3gPF6hhMK8r+CffLgI4Ag4hhUUQWtkrcUw7B
- I5N/Y3B77qsF6caxEzyL3/nNY2O1xCeo4wnKsvBefEOucXFYyEYA+GDQm3q1h09zmH9RMv6xC9
- 4TqYCn3NqVxTg0LsnP2p8FOVO7nV2alK9/FN9fyqss18ziBoZqbXh/lJ8mNv2mg44AvsVTvQNE
- whymNKxaUc5pPHKvh7Xkn/MnlCHHjJyrczxSX4NzH8pnaWFD97TcH115iDnRjorfyBfAdYN2k5
- ByY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 20:54:26 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JJ3yn3gQJz1Rwns
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 20:54:25 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1640062464; x=1642654465; bh=a/wMZz9CrZXLjivTFTZZRqGAfks9G2lpHxO
-        QXEEBUzs=; b=DqEeyvBKk/eFim4n/fx4v3DSxkHaZvVT1+KW1hyQ4g7OBxjYUd8
-        RWf63nMkjyFITTKqsWgGLk+/St/NLTGvcM543Ds68oxWFM59EXmIESDINRiZuwkz
-        fFHXokJHM45K3hJsFfD/Qzv3mwBZZb/DaexTZkOszsIxVMRYGwjw21clozFaiWdD
-        qGUFHQkRVxPZHiEvJmaoapsRe4+NW3trGdYqa2IOT2wx0MDQyn5BWpuG4sl9RWbG
-        qx7CMUZuHBg/IuEzj7tbNzKIr7DmXi4s0EXXp7vdfWut3cTvbkOLFuEXgF3hb8Z4
-        5N653r6kvkil6m6jteqR3+sFntrRXlNKqUA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id m-hb436KW0AZ for <linux-kernel@vger.kernel.org>;
-        Mon, 20 Dec 2021 20:54:24 -0800 (PST)
-Received: from [10.225.163.32] (unknown [10.225.163.32])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JJ3yl3b5vz1RtVG;
-        Mon, 20 Dec 2021 20:54:23 -0800 (PST)
-Message-ID: <e81624de-95b5-f5ae-e0fb-9019f9fc3944@opensource.wdc.com>
-Date:   Tue, 21 Dec 2021 13:54:22 +0900
+        Tue, 21 Dec 2021 00:04:29 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAC0C06173E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 21:04:29 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 8so10637159pfo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 21:04:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=roO/zjlz7hlayqobSlKBJ+EHSvXCzlAQjwxwfUokloc=;
+        b=jDLj6QJsuRh1MP+VUcVWNnIwCAwGMhRyqIKohOFIYw6wdLuhrnezokTmGB4SQlNCwu
+         VU4kk5q7UHdX5Ax7TenNiYT0mPd5iA5UD1m0Jpbotiqv+QtYv0VYAqkGvnjhPGsALO6s
+         T1NBkhDIPo2rEjZR5i8d/mwQbHyMUKBPleWMQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=roO/zjlz7hlayqobSlKBJ+EHSvXCzlAQjwxwfUokloc=;
+        b=6zgkyk9dtGAQvujLnvPMkLNs+14iL1IouyDQ+691+xVKorLQnd89LwfJKJlj4p1nFW
+         hmdsRAlaidLDarGk1V5CjWvXGEC658jPR1Qt6dN23XNUEGNSkOjuy03fgy8KEcgqLXr2
+         Mse3QFOeOfMqVbPWnqh5QtqMEY7QoDgJj9AybnH2luImlQ+6EeuVaDOruf6vRghnfPOV
+         tBnAomJGxu2+B7Q+9301BtRhkaMFlhLxw1MMRUatdzAnk7wMiW3Q94dXyxHqzHlarebi
+         d/IZEPqyRYrfC6500rRC2MpMY3GSIhKlOssPgQVTdb8TJavWSoTSfaQMw1yyRU+FrldW
+         dT0A==
+X-Gm-Message-State: AOAM533LgtnuaJhhh9r+tgw7bjueOmGcj3p5TO2A+uIrHD8YkaAJn742
+        1VGR5UX11mUhJ9NfZnzB0/AEUg==
+X-Google-Smtp-Source: ABdhPJwolfmaO34aPmud1iRzBZsl782Fs/z6/go6YKARoLUS1XZitiZPdvObbKc/NtkuKhlW2sFqtQ==
+X-Received: by 2002:aa7:8283:0:b0:49f:a0d0:abcf with SMTP id s3-20020aa78283000000b0049fa0d0abcfmr1476967pfm.70.1640063068583;
+        Mon, 20 Dec 2021 21:04:28 -0800 (PST)
+Received: from zhuohao-z440.tpe.corp.google.com ([2401:fa00:1:10:2a75:4739:5568:50ad])
+        by smtp.gmail.com with ESMTPSA id e35sm17892462pgm.92.2021.12.20.21.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 21:04:28 -0800 (PST)
+From:   Zhuohao Lee <zhuohao@chromium.org>
+To:     hverkuil-cisco@xs4all.nl, mchehab@kernel.org, bleung@chromium.org,
+        groeck@chromium.org, levinale@chromium.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhuohao Lee <zhuohao@chromium.org>
+Subject: [PATCH] media: platform: Add brask to the match table
+Date:   Tue, 21 Dec 2021 13:04:20 +0800
+Message-Id: <20211221050420.238376-1-zhuohao@chromium.org>
+X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] libata: use min() to make code cleaner
-Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20211220113358.472974-1-deng.changcheng@zte.com.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20211220113358.472974-1-deng.changcheng@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/21 20:33, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
-> 
-> Use min() in order to make code cleaner.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+The Google Brask device uses the same approach as the Google Fix
+which enables the HDMI CEC via the cros-ec-cec driver.
 
-Applied to for-5.17. Thanks !
+Signed-off-by: Zhuohao Lee <zhuohao@chromium.org>
+---
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index 2d95e16cd248..8c8d8fc5e63e 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -215,6 +215,8 @@ struct cec_dmi_match {
+ static const struct cec_dmi_match cec_dmi_match_table[] = {
+ 	/* Google Fizz */
+ 	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
++	/* Google Brask */
++	{ "Google", "Brask", "0000:00:02.0", "Port B" },
+ };
+ 
+ static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1.307.g9b7440fafd-goog
+

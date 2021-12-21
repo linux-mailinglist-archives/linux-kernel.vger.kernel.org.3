@@ -2,118 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA84447C59D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E452647C5AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240793AbhLUR6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S240840AbhLUSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240786AbhLUR6C (ORCPT
+        with ESMTP id S240821AbhLUSFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:58:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD95C061574;
-        Tue, 21 Dec 2021 09:58:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B22161560;
-        Tue, 21 Dec 2021 17:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843AFC36AE8;
-        Tue, 21 Dec 2021 17:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640109481;
-        bh=3qgi7m2U5AM2AOiPN4zIxugcdCksddJqx+Ux44PyM1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qAo8OY8u5TEnvSJXZTiZPWyAFXoQ498I07KyY1TYKZm7G6Q8/kCLLQ7dhohQ3ANj2
-         4iL+bFix8HrBp5vSbuDu6qaN7g3Q+7TVrHR+0HMN6xYmwYmgzytDnN6u2ttbRB3bT6
-         GZVH0aIXC7jY4Z4U7miqtQgUscHNZQa1urs8sQBEzpLyIAKDiIx5AAYn2ztZ7SqO4L
-         rL8i0riLSvD54/OWExGZg0jvHJAXhyVPf3KYe3STaWLh16pAczqyW7Obw+Dyr+fLuO
-         VocalQNktwbs6YMxyTE4njNwdbNToIenMfRfR6ia1m7qhFKRaWz4bt7Ew6DkwMNwgw
-         IDxVE7i7sqW+w==
-Date:   Tue, 21 Dec 2021 12:58:00 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 5.15 20/29] block: reduce
- kblockd_mod_delayed_work_on() CPU consumption
-Message-ID: <YcIVqFOrxbG8sqXK@sashalap>
-References: <20211221015751.116328-1-sashal@kernel.org>
- <20211221015751.116328-20-sashal@kernel.org>
- <MWHPR21MB1593141494C76CF5A0BDDB11D77C9@MWHPR21MB1593.namprd21.prod.outlook.com>
- <ad76826e-73b2-b2f0-3cd4-8481645a6568@kernel.dk>
+        Tue, 21 Dec 2021 13:05:55 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C36C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:54 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id j6so34512768edw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VIbA3tyKRgvmJRKKTWC54hBhDnm0QxqACXVEDucCono=;
+        b=hi49HjIoBTBvSXG2A2+cFTDsRuJjpXTbXPT2YO0B5WLC6WmWLV13V5z0TR/SlDr/63
+         iOmlX+Uu844DfzR1WbHs0Qw1BOG13MhIrY+PoLF4H5qxGf8+AMW/UNirqtZtyPp4EF02
+         DRy+25A1pXY0epijI8EyJvK8QbbP7eNmzrRr8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VIbA3tyKRgvmJRKKTWC54hBhDnm0QxqACXVEDucCono=;
+        b=sMvSrB2KHY6aGzV59t3BDG2U6y5V6LUqmXwcJPnFszk/Lb+gzUgfF/bKFEGlPv5ijb
+         hwX9jh5AQKuykabyE/vrBioNophjjAiu3j5/Ve5dypUiQ9Ecah4BK3A6gAVKCe5Uz+q4
+         XNbx+AaPctZ6ZtdV1BiZsgOWDRNqB3D4Lcu6uZYJOlfoX37BGTiSymtavl6573/NWbud
+         iFVmry+RdQCXpLwmih7rG10MZXcS3cCzpIHSrJkSx9r7EJHmb4kQMp2NiVaBDBLZDvXs
+         qw32QnvVIQPUKBwFUWVmxcrM8IQyEm30v48KCRcl2NRW5LworSOJx3NRlPSVlzPBOP1u
+         OQpQ==
+X-Gm-Message-State: AOAM530YuuADDdINahwGlSvf8LvP1rGYK8bQSP77qALE+mHTqQAYtTyA
+        Vd9O/bbMYKI7oitdPEKZ91awk/Avv6yq0XRExc4=
+X-Google-Smtp-Source: ABdhPJx23p3rxyQxmqlGMRo0zdr9ln5LHRsrQCJ+p4N3APsTQcgZybBTwedaV6riNAKcH2wBCVXwaQ==
+X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr3476152ejc.313.1640109953140;
+        Tue, 21 Dec 2021 10:05:53 -0800 (PST)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id gt7sm5497856ejc.180.2021.12.21.10.05.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 10:05:52 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id l4so169507wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 10:05:52 -0800 (PST)
+X-Received: by 2002:a7b:cb17:: with SMTP id u23mr3769746wmj.155.1640109639062;
+ Tue, 21 Dec 2021 10:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ad76826e-73b2-b2f0-3cd4-8481645a6568@kernel.dk>
+References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
+ <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com> <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+In-Reply-To: <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Dec 2021 10:00:22 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
+Message-ID: <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 08:36:33AM -0700, Jens Axboe wrote:
->On 12/21/21 8:35 AM, Michael Kelley (LINUX) wrote:
->> From: Sasha Levin <sashal@kernel.org> Sent: Monday, December 20, 2021 5:58 PM
->>>
->>> From: Jens Axboe <axboe@kernel.dk>
->>>
->>> [ Upstream commit cb2ac2912a9ca7d3d26291c511939a41361d2d83 ]
->>>
->>> Dexuan reports that he's seeing spikes of very heavy CPU utilization when
->>> running 24 disks and using the 'none' scheduler. This happens off the
->>> sched restart path, because SCSI requires the queue to be restarted async,
->>> and hence we're hammering on mod_delayed_work_on() to ensure that the work
->>> item gets run appropriately.
->>>
->>> Avoid hammering on the timer and just use queue_work_on() if no delay
->>> has been specified.
->>>
->>> Reported-and-tested-by: Dexuan Cui <decui@microsoft.com>
->>> Link: https://lore.kernel.org/linux-block/BYAPR21MB1270C598ED214C0490F47400BF719@BYAPR21MB1270.namprd21.prod.outlook.com/
->>> Reviewed-by: Ming Lei <ming.lei@redhat.com>
->>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>> Signed-off-by: Sasha Levin <sashal@kernel.org>
->>> ---
->>>  block/blk-core.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/block/blk-core.c b/block/blk-core.c
->>> index c2d912d0c976c..a728434fcff87 100644
->>> --- a/block/blk-core.c
->>> +++ b/block/blk-core.c
->>> @@ -1625,6 +1625,8 @@ EXPORT_SYMBOL(kblockd_schedule_work);
->>>  int kblockd_mod_delayed_work_on(int cpu, struct delayed_work *dwork,
->>>  				unsigned long delay)
->>>  {
->>> +	if (!delay)
->>> +		return queue_work_on(cpu, kblockd_workqueue, &dwork->work);
->>>  	return mod_delayed_work_on(cpu, kblockd_workqueue, dwork, delay);
->>>  }
->>>  EXPORT_SYMBOL(kblockd_mod_delayed_work_on);
->>> --
->>> 2.34.1
->>
->> Sasha -- there are reports of this patch causing performance problems.
->> See
->> https://lore.kernel.org/lkml/1639853092.524jxfaem2.none@localhost/. I
->> would suggest *not* backporting it to any of the stable branches until
->> the issues are fully sorted out.
+On Tue, Dec 21, 2021 at 9:40 AM David Hildenbrand <david@redhat.com> wrote:
 >
->Both this and the revert were backported. Which arguably doesn't make a
->lot of sense, but at least it's consistent and won't cause any issues...
+> > I do think the existing "maybe_pinned()" logic is fine for that. The
+> > "exclusive to this VM" bit can be used to *help* that decision -
+> > because only an exclusive page can be pinned - bit I don't think it
+> > should _replace_ that logic.
+>
+> The issue is that O_DIRECT uses FOLL_GET and cannot easily be changed to
+> FOLL_PIN unfortunately. So I'm *trying* to make it more generic such
+> that such corner cases can be handled as well correctly. But yeah, I'll
+> see where this goes ... O_DIRECT has to be fixed one way or the other.
+>
+> John H. mentioned that he wants to look into converting that to
+> FOLL_PIN. So maybe that will work eventually.
 
-The logic behind it is that it makes it easy for both us as well as
-everyone else to annotate why a certain patch might be "missing" from
-the trees - in this case because it was reverted.
+I'd really prefer that as the plan.
 
-It looks dumb now, but it saves a lot of time as well as mitigates the
-risk of it being picked up again at some point in the future.
+What exactly is the issue with O_DIRECT? Is it purely that it uses
+"put_page()" instead of "unpin", or what?
 
--- 
-Thanks,
-Sasha
+I really think that if people look up pages and expect those pages to
+stay coherent with the VM they looked it up for, they _have_ to
+actively tell the VM layer - which means using FOLL_PIN.
+
+Note that this is in absolutely no way a "new" issue. It has *always*
+been true. If some O_DIORECT path depends on pinning behavior, it has
+never worked correctly, and it is entirely on O_DIRECT, and not at all
+a VM issue. We've had people doing GUP games forever, and being burnt
+by those games not working reliably.
+
+GUP (before we even had the notion of pinning) would always just take
+a reference to the page, but it would not guarantee that that exact
+page then kept an association with the VM.
+
+Now, in *practice* this all works if:
+
+ (a) the GUP user had always written to the page since the fork
+(either explicitly, or with FOLL_WRITE obviously acting as such)
+
+ (b) the GUP user never forks afterwards until the IO is done
+
+ (c) the GUP user plays no other VM games on that address
+
+and it's also very possible that it has worked by pure luck (ie we've
+had a lot of random code that actively mis-used things and it would
+work in practice just because COW would happen to cut the right
+direction etc).
+
+Is there some particular GUP user you happen to care about more than
+others? I think it's a valid option to try to fix things up one by
+one, even if you don't perhaps fix _all_ cases.
+
+              Linus

@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382BC47C067
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E8847C069
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 14:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbhLUNEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 08:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S238116AbhLUNEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 08:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238084AbhLUND7 (ORCPT
+        with ESMTP id S238087AbhLUNEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:03:59 -0500
+        Tue, 21 Dec 2021 08:04:01 -0500
 Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8FC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:58 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp20so13525417lfb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:03:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB087C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:04:00 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bu9so7644257lfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 05:04:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yAKxA86yUoHK6VBBx2V4w+G9IgxdZUJ5j0qp6W74H9o=;
-        b=mNpqWH/qF6Qq598ubZF+RaCmiRhRw4c+Iy9f801LyVK+D9TDYRL7gV4LMUdxUvSoas
-         7vAVkB35q0W/wtT6apcgzCU6ZMAB9zwKDOIcad/+ToJOYVgpqvLJiNZV8Kf+35Ute/az
-         vZUwBEL1d8kr+ADgTVnsvACnq/q2KuEchu6EWXDLjcOhdqm5ePhoPuMQmpDEje/tcWJT
-         8ZQr5N0CK+7gmtDMfULlcQSPxEJNZ1JYZi/9d9r+g1BPXmfBHRRv++kNO7Cv4pzwYowu
-         CS2lWs0PW+b5hEpJfcuix9hZZzjcizMicHOsA0nU/pvSjgoUzkK5e48tP+Sj760RbE5K
-         GJVw==
+        bh=zQ60oAIcpzw/aiNJhWx+YuVYFuBdeA2tf0TAL6Ahzz8=;
+        b=FyzJPWLK3MyD0A05R6cOZTiRbRyu0I9pVEa6AYgGVM6NdVhcIEicsgbDxbLp2psgKo
+         dXh/oeeKPbpXFFp19/VKSLvBrwTcqXpVX4O7bcllIlKULHYrDPOxeVYxw7mTyYiKX7S/
+         kECmy4o/0HfM2VaHzN28A4mg7HKDvWfEt+VFD4lORru9SBBeKhTlZyd6XfI+aY3+jivK
+         Fg4BolkuW1gS9ylNqY/bOKph9tjpatGAt/q2FfH+Oo8ZWULkaq/Isg7M+NGj0kiYQWqp
+         rvlXVW/wqjmlKQJjppoE0wDTliuS1//Yf+LNNclTw0EXeizQnFGnSI1gjHvUWwlKPHCJ
+         8AyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yAKxA86yUoHK6VBBx2V4w+G9IgxdZUJ5j0qp6W74H9o=;
-        b=Fob8Op6hPxd7tS/1iNzPkNrKmq8QwZuhJEl/fxht0SPuxuXVGqBVybDphThG4HW1gp
-         wnMHZ5hfdWwKAzlKiO0uEdz+QFtC1A9V9HC9O3WbsSXLpBhdv+MUW5pJCu3JCxxvjyIG
-         09/c0wfGr7d8EJKvUWI4SHiFziE10RdEVLWa9nI9EGrdVC7THHPONeSWxpcV9tT/yWXL
-         d6AUAw0nSx06kmhD8ShqlnzOt4EZQ/GvxrfNcwSUhjdzueTz7pAcgj6/2nMOxjzHhaAD
-         Dkzfuj5eDVA/xfzduRNwvadQ0D9NmiE5W5no5HxJLArjXSl8YWgbc8T9mz2Dox1zIjIk
-         TiJA==
-X-Gm-Message-State: AOAM533d07rVwy2kPpqW1XdYRvlcngu6Dc8EnMWGZWvMAJL8azUVI46o
-        zqzSguuzfm3uvW2zMPgvY7aArcigViZUomo7Nei91A==
-X-Google-Smtp-Source: ABdhPJx8IP2IAkRzIENJtaUA/EkQbrYytygRyaHBX3zyri4TEUhP93ZvkX5zMAMoMD6Gf5WjYsFU3b8O6W+BKXO4a2g=
-X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr2973456lfv.184.1640091836638;
- Tue, 21 Dec 2021 05:03:56 -0800 (PST)
+        bh=zQ60oAIcpzw/aiNJhWx+YuVYFuBdeA2tf0TAL6Ahzz8=;
+        b=C/mTmAvCmyU9Fy9/SdX/S30wEjf9NPckKgjsLdwDoabg8BkOWfvIWvjCPUZyddRfnE
+         CjhYbcdA0F2qdjzDPAOK5DfpjJ4Z+4S8B2F+KkA6xBn+ZJ+chyYoOfdS+1LSfKXg+Fkx
+         DEfn9gwkU2hn2UYHo4eNtxUauvLnWHeG4J2S0B09RJniP3eRPByRmdZnslLKHybtZHLL
+         yLIVbKQ4yvjwLNhbDp5YKy1rZR+tvEwLBkLcTWzsfBJbwlzY3ssgA5Ofu4Z1UIwW+cT3
+         D1c6LBg/vsSp8CQwDChNDNpse2mTMM98Qr2FgyNg9Hlk+PdJ4czszxOWp4cuw4q61NJl
+         tcmA==
+X-Gm-Message-State: AOAM530NdXkEBx6BdBAUls1q671iEhCQtGFSTI2Tg7U3idpS8JJm00JD
+        qS5MmLOkmZaauoVZQ754fVw9Amzyep8b+fNGZdia2w==
+X-Google-Smtp-Source: ABdhPJzpHVkr+LzfFPjvMMJmCxmbRiPqxVa67nqEOcia2o3P/Jocj0CMojpVyoSnx3VLPJ3yKe0f5hkaclinOBqd9kM=
+X-Received: by 2002:a19:5019:: with SMTP id e25mr2973830lfb.254.1640091839021;
+ Tue, 21 Dec 2021 05:03:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211220190840.108061-1-paul@crapouillou.net>
-In-Reply-To: <20211220190840.108061-1-paul@crapouillou.net>
+References: <1640076288-32714-1-git-send-email-haibo.chen@nxp.com>
+In-Reply-To: <1640076288-32714-1-git-send-email-haibo.chen@nxp.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Dec 2021 14:03:17 +0100
-Message-ID: <CAPDyKFrX+sajBhR88Q-DaNOgfAL6VZg6NvrT0Bds3wO5rVK_MQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] mmc: ingenic: Support bi-directional DMA channel
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>, list@opendingux.net,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Date:   Tue, 21 Dec 2021 14:03:21 +0100
+Message-ID: <CAPDyKFrmUgQCYyrN5FRhZ2+L=buJNA01RwNKUPEhLaEx6qhy9g@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add i.MX sdhci maintainer
+To:     haibo.chen@nxp.com
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, Kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 at 20:08, Paul Cercueil <paul@crapouillou.net> wrote:
+On Tue, 21 Dec 2021 at 10:13, <haibo.chen@nxp.com> wrote:
 >
-> Hi Ulf,
+> From: Haibo Chen <haibo.chen@nxp.com>
 >
-> This patchset adds support for using a single DMA channel for both RX
-> and TX operations, instead of using separate DMA channels for each
-> operation.
+> Add myself as the i.MX sdhci driver maintainer.
 >
-> As some older Ingenic SoCs offer only a handful of DMA channels,
-> supporting bi-directional channels allow more hardware to use the
-> channels that would otherwise be used for the MMC/SD operation.
->
-> Note that the Device Tree binding for the DMA controller has been
-> updated in a (already merged) patchset, so that it accepts a 3 cells
-> (#dma-cells == 3) instead of just 2. It was merged in the DMA tree, so I
-> am not sure the autobuilders will like this YAML - but it was checked
-> without errors.
->
-> I also removed the descriptions of the "dmas" property in the YAML, as
-> they really weren't adding anything and were getting in my way.
->
-> There are patches touching the driver file merged in the PM tree (the
-> ones that use the new PM macros) but I expect no problem here, they
-> touch different parts of the file.
->
-> Cheers,
-> -Paul
->
-> Paul Cercueil (2):
->   dt-bindings: mmc: ingenic: Support using bi-directional DMA channel
->   mmc: jz4740: Support using a bi-directional DMA channel
->
->  .../devicetree/bindings/mmc/ingenic,mmc.yaml  | 37 ++++++++++++++++---
->  drivers/mmc/host/jz4740_mmc.c                 | 19 +++++++++-
->  2 files changed, 48 insertions(+), 8 deletions(-)
->
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 
-Applied for next, thanks!
+Thanks for stepping and helping out with maintenance!
 
-Let's see how this goes when the changes hit linux-next. I will have
-to drop them, if we encounter any problems.
+Applied for next!
 
 Kind regards
 Uffe
+
+
+> ---
+>  MAINTAINERS | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 210bded08641..1e72f46b43b0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17283,6 +17283,13 @@ L:     linux-mmc@vger.kernel.org
+>  S:     Maintained
+>  F:     drivers/mmc/host/sdhci-omap.c
+>
+> +SECURE DIGITAL HOST CONTROLLER INTERFACE (SDHCI) NXP i.MX DRIVER
+> +M:     Haibo Chen <haibo.chen@nxp.com>
+> +L:     linux-imx@nxp.com
+> +L:     linux-mmc@vger.kernel.org
+> +S:     Maintained
+> +F:     drivers/mmc/host/sdhci-esdhc-imx.c
+> +
+>  SECURE ENCRYPTING DEVICE (SED) OPAL DRIVER
+>  M:     Jonathan Derrick <jonathan.derrick@intel.com>
+>  M:     Revanth Rajashekar <revanth.rajashekar@intel.com>
+> --
+> 2.25.1
+>

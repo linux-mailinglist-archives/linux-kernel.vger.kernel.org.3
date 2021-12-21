@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BC747C6BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F12847C6C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241417AbhLUSk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbhLUSk2 (ORCPT
+        id S241439AbhLUSls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:41:48 -0500
+Received: from st43p00im-zteg10071901.me.com ([17.58.63.169]:36246 "EHLO
+        st43p00im-zteg10071901.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241422AbhLUSlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:40:28 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C454C061574;
-        Tue, 21 Dec 2021 10:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IohrmZmNU3Hl56vOk9dfj8ea6Zz8qMj/ReZu4s25uUo=; b=hRMP29RPHdi28VGviekLkzmWh4
-        shpCgk95knF0M5RALNqOEJKYvvPUnmgWGXmjOVOqo1pvKNvXdotnDNIExTk/h77OtZjVWAQKW/qkm
-        R+YWMjerPJlaOqxqpJoWzSecSJW83CmdbWgKfORTu8mpuY6HzbgDrzw5Wr3R/LF7JwIjcUhRlYIAF
-        PJKRIsGADeUXf5Y/1Au9vWH+YD4K06bl3nHpsB4/Lo+RsdmpQCkLJY90CvUugZH1VUdAUUWUiq1/K
-        E4gP4tfBGq9RLmgXNa7vrAVybtpAEbP5A67uJTOjykV7Xol0H11Ll6p6nFeNFHDGiO/Npq3l1ubw0
-        G4Nj4heA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzk3b-002ivi-Tc; Tue, 21 Dec 2021 18:40:15 +0000
-Date:   Tue, 21 Dec 2021 18:40:15 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     syzbot <syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        chinwen.chang@mediatek.com, fgheet255t@gmail.com,
-        Jann Horn <jannh@google.com>,
-        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
-        Vlastimil Babka <vbabka@suse.cz>, walken@google.com,
-        Zi Yan <ziy@nvidia.com>
-Subject: Re: [syzbot] kernel BUG in __page_mapcount
-Message-ID: <YcIfj3nfuL0kzkFO@casper.infradead.org>
-References: <00000000000017977605c395a751@google.com>
- <0000000000009411bb05d3ab468f@google.com>
- <CAHbLzkoU_giAFiOyhHZvxLT9Vie2-8TmQv_XLDpRxbec5r5weg@mail.gmail.com>
+        Tue, 21 Dec 2021 13:41:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1640112107; bh=C6huN6VL+o6HN6uRKRvyI2bxo42cj05WhgpeugHXIjI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=LBrureV0sljUGf30ywAB6zXiR9tCpvjxe2oCGD3T6VUqdPoUvdyoH0I7xZPlalYso
+         0jsWHRjQn/iSXoV112/FjCWMWF6pSmp3p0sdWcMgaqtLZaMMb+elTIC1UfcXxGBx6Y
+         K027XDAV2kW3sYVEfNLcJkUTacKkesUOh/SXl5XsR4kFEKv17CG/oOwxTpg6cmx0/+
+         4DVybzk6KH00kQUcthxEAuhCdGXsW7J38mRqz5tsvRR99kUF828lRkBatitM0+5aEk
+         f7Kt5LZSaWcezNUD6Myf821RB3G/ttd03Jm62yf+L6II5HNRVf87FibJl1Ng+DoQCr
+         mte7RzNdLc6pw==
+Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-zteg10071901.me.com (Postfix) with ESMTPSA id 5F9DC84084B;
+        Tue, 21 Dec 2021 18:41:46 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>, avolmat@me.com
+Subject: [PATCH v2 0/5] Introduction of PCIe support on STi platform
+Date:   Tue, 21 Dec 2021 19:40:58 +0100
+Message-Id: <20211221184103.279437-1-avolmat@me.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkoU_giAFiOyhHZvxLT9Vie2-8TmQv_XLDpRxbec5r5weg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.790,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2021-12-21=5F04:2021-12-21=5F01,2021-12-21=5F04,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2112210091
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:24:27AM -0800, Yang Shi wrote:
-> It seems the THP is split during smaps walk. The reproducer does call
-> MADV_FREE on partial THP which may split the huge page.
-> 
-> The below fix (untested) should be able to fix it.
+The STi platform SoC embed a designware based PCIe controller.
+This serie include the driver for the controller and DT for the
+stih407-family and for the stih418-b2264 into which it is used.
 
-Did you read the rest of the thread on this?  If the page is being
-migrated, we should still account it ... also, you've changed the
-refcount, so this:
+Within the DT and the binding, only st,stih407-pcie compatible is
+used.
+Rob, could you clarify if I need to mention both compatible (st,stih407-pcie
+and snps,dw-pcie) or if st,stih407-pcie is enought ?
 
-        if (page_count(page) == 1) {
-                smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
-                        locked, true);
-                return;
-        }
+v2: update of the pcie-st driver to add possibility to build as module
+    and remove the __init of the probe
 
-will never trigger.
+Alain Volmat (5):
+  dt-bindings: pci: st-pcie: PCIe controller found on STi platforms
+  pci: dwc: pcie-st: Add PCIe driver for STi platforms
+  MAINTAINERS: add entry for ST STI PCIE driver
+  ARM: dts: sti: add the PCIe controller node within stih407-family
+  ARM: dts: sti: enable PCIe on the stih418-b2264 board
+
+ .../devicetree/bindings/pci/snps,dw-pcie.yaml |   2 +-
+ .../devicetree/bindings/pci/st,st-pcie.yaml   | 112 +++++
+ MAINTAINERS                                   |   6 +
+ arch/arm/boot/dts/stih407-family.dtsi         |  40 ++
+ arch/arm/boot/dts/stih418-b2264.dts           |   5 +
+ drivers/pci/controller/dwc/Kconfig            |  11 +
+ drivers/pci/controller/dwc/Makefile           |   1 +
+ drivers/pci/controller/dwc/pcie-sti.c         | 386 ++++++++++++++++++
+ 8 files changed, 562 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/st,st-pcie.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-sti.c
+
+-- 
+2.25.1
+

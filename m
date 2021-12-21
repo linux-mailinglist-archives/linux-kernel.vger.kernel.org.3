@@ -2,98 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E74147BE8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A1947BE93
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbhLULH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S236925AbhLULHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236894AbhLULH1 (ORCPT
+        with ESMTP id S236910AbhLULHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:07:27 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B31AC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:07:27 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a9so26109917wrr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M5nj+gBvQdZROHMnLR6jxrg8l7EBQjNMsTgxyewyXUU=;
-        b=io5cAXMS5UqaOiSu6i7Yu72xUCmiP6/25wgJ2ecsrCYURA2QDdGtEA4RMAK9Qgp3EI
-         GxY9sjivPZ4kthZ9ArnxD85NWydWugFVIXTKij2HjjNw4YKSms86DgPgUjQwy1tSMn7W
-         2B72VtQFLLeqSmp9onrzLIZQAJZ5vTjFVYn/itsv5qIjmPn+Nbcx6g3lnCrvpVJ2ZJoK
-         DRHA/8cmXPQBR5WaYePKZEK9gpkabLpPpPjfI+R3qrEGYGiwSnU6GBXX6Gpnc/FRg3iy
-         8qJdq35gRumj7UFZAKAPofsg6S535rchXWPjINeqgSSafWEKt2WJipi4i9QGVHTmEZRz
-         9WHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M5nj+gBvQdZROHMnLR6jxrg8l7EBQjNMsTgxyewyXUU=;
-        b=qQ/DbvaYLMwSFRTMlA0YJTCSgIwT9jDC0+gZSVC6yQtOUs5z72PYI7HzMNOjGSruBI
-         FnSYTsl+PBm3/X2F82vcG/FxDCNyYXp2Gx6sH7gjMacfx9PJSNpvHHrCojmI8RRH/gwz
-         oUn6LoVhvoMKM4CuiMCkMEtIcutgMOBIYHEX07nRthyx5uelwh/s2NcpKHVJhJDWXwQR
-         33V6YMXa7/6/zmYpzmdzntqW5CQOi0vFSgsjaY+/B46+JBEh24Scjk+i0DiAP98gDIaM
-         hiFJ20bIawye+PskO8ngHxnGVm56Z3RcwgTy6sq5rEgMeKSSM6MBrJ7U2ODjqr5ut4Fh
-         YJTg==
-X-Gm-Message-State: AOAM5302YjZ1coS3tg+x4/eWJems6ejiHbGcL9ZLmSiv6Qf70MJCKYp6
-        +bUKqVzvlWSZNiirSOX0qv0=
-X-Google-Smtp-Source: ABdhPJwDCCyprFCtxmBhJnotrdlSlZ2i0c4q5M7XL2cw3TYABXW5kGTbXS+bcu+52TBee7PUFp6TOQ==
-X-Received: by 2002:a5d:6d41:: with SMTP id k1mr2193127wri.134.1640084845897;
-        Tue, 21 Dec 2021 03:07:25 -0800 (PST)
-Received: from abel.fritz.box (p57b0bff8.dip0.t-ipconnect.de. [87.176.191.248])
-        by smtp.gmail.com with ESMTPSA id n7sm2138483wms.45.2021.12.21.03.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 03:07:25 -0800 (PST)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, hch@infradead.org
-Subject: [PATCH] dma: Revert "make dma pool to use kmalloc_node"
-Date:   Tue, 21 Dec 2021 12:07:24 +0100
-Message-Id: <20211221110724.97664-1-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Dec 2021 06:07:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881D1C06173F;
+        Tue, 21 Dec 2021 03:07:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJDFP69FHz4xgt;
+        Tue, 21 Dec 2021 22:07:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640084858;
+        bh=sGwUVGMYmfSOoq7kl7vDs2DU8f7u457UNrYrWsnc7cI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GBeMZgtBF1Ft8aaYUK9ZHz1PCA/BuMMlMIXe1CB+qAraH9eWDGytnzFDHvZrEifYE
+         3xx+NaZPvwmClY3RfkRs6xtrPLlhYgdJgdqZQq3ju0e4iPQUcApm/y2g8tFJS7YyaO
+         39dCcedc5yaOPL9R/smS8At/hzLOGuX53CGrHgOlOxFyGp3NYcmv5PnZ0CeUJlaNM+
+         htXChcCt193YQrJhkMD+l3mVMWvsLDFubLh0ANohPfe4YGOI23QzBtPxo70PZEEbZ9
+         1jQx1kenazBsZt9bts8EAaBuk9PEw8o0yvfA6bJmqzAySqYt9FiGp8ReYbZVW5zcYZ
+         FrKXvdL8brhHw==
+Date:   Tue, 21 Dec 2021 22:07:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the akpm-current tree with the userns
+ tree
+Message-ID: <20211221220734.16e36bdf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/zy9E67.wwSzBvkVnKa=+TMT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 2618c60b8b5836b73e8deb385a036820744d256d.
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-While working myself into the dmapool code I've found this little odd
-kmalloc_node().
+Hi all,
 
-What basically happens here is that we allocate the housekeeping structure
-on the numa node where the device is attached to. Since the device is never
-doing DMA to or from that memory this doesn't seem to make sense at all.
+Today's linux-next merge of the akpm-current tree got conflicts in:
 
-So while this doesn't seem to cause much harm it's probably cleaner to
-revert the change for consistency.
+  include/linux/kthread.h
+  kernel/kthread.c
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- mm/dmapool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+between commit:
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 64b537b3ccb0..a7eb5d0eb2da 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -152,7 +152,7 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 	else if ((boundary < size) || (boundary & (boundary - 1)))
- 		return NULL;
- 
--	retval = kmalloc_node(sizeof(*retval), GFP_KERNEL, dev_to_node(dev));
-+	retval = kmalloc(sizeof(*retval), GFP_KERNEL);
- 	if (!retval)
- 		return retval;
- 
--- 
-2.25.1
+  40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads=
+")
 
+from the userns tree and commit:
+
+  1ac41b3d9ad8 ("kthread: dynamically allocate memory to store kthread's fu=
+ll name")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/kthread.h
+index 4f3433afb54b,a1810374eaa9..000000000000
+--- a/include/linux/kthread.h
++++ b/include/linux/kthread.h
+@@@ -33,7 -33,8 +33,8 @@@ struct task_struct *kthread_create_on_c
+  					  unsigned int cpu,
+  					  const char *namefmt);
+ =20
++ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk=
+);
+ -void set_kthread_struct(struct task_struct *p);
+ +bool set_kthread_struct(struct task_struct *p);
+ =20
+  void kthread_set_per_cpu(struct task_struct *k, int cpu);
+  bool kthread_is_per_cpu(struct task_struct *k);
+diff --cc kernel/kthread.c
+index c14707d15341,8be710f2d83d..000000000000
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@@ -94,7 -95,19 +96,19 @@@ static inline struct kthread *__to_kthr
+  	return kthread;
+  }
+ =20
++ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk)
++ {
++ 	struct kthread *kthread =3D to_kthread(tsk);
++=20
++ 	if (!kthread || !kthread->full_name) {
++ 		__get_task_comm(buf, buf_size, tsk);
++ 		return;
++ 	}
++=20
++ 	strscpy_pad(buf, kthread->full_name, buf_size);
++ }
++=20
+ -void set_kthread_struct(struct task_struct *p)
+ +bool set_kthread_struct(struct task_struct *p)
+  {
+  	struct kthread *kthread;
+ =20
+@@@ -122,13 -128,17 +136,17 @@@ void free_kthread_struct(struct task_st
+  	struct kthread *kthread;
+ =20
+  	/*
+ -	 * Can be NULL if this kthread was created by kernel_thread()
+ -	 * or if kmalloc() in kthread() failed.
+ +	 * Can be NULL if kmalloc() in set_kthread_struct() failed.
+  	 */
+  	kthread =3D to_kthread(k);
++ 	if (!kthread)
++ 		return;
++=20
+  #ifdef CONFIG_BLK_CGROUP
+- 	WARN_ON_ONCE(kthread && kthread->blkcg_css);
++ 	WARN_ON_ONCE(kthread->blkcg_css);
+  #endif
+ +	k->set_child_tid =3D (__force void __user *)NULL;
++ 	kfree(kthread->full_name);
+  	kfree(kthread);
+  }
+ =20
+
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBtXYACgkQAVBC80lX
+0Gybugf/QCb63It2JBJC7x3/0T9JyLC8vuGTK+1+oDDMZ6O+jSRqqTd8XOjcP7FN
+aCqGpu0eKvnS7XfyJzebP+OrzWXvOqKsfOHR4dfBqitrqBUE2Dc1zNS3i8+UfqYJ
+dphfXJHDrPR+K2Ty3L7UcHb0M9kf7yC5RWouHEyBeLuZj0ds/P15losPo204CdUg
+37pfwcpxgj3Z7fMLecbxp52yF8ZeqHJcGMb4B6TbZwMIyEN71pPQlSV4QMQwKhV8
+ArjwL7v7nK1qbu7CU5Evt4nH9UlcCGqhIbSPrW2oELoixbcApJcVaXaDPUyQo6I6
+ZcNY1uEgVC3oPg9jnz6Rx3uQxk+o4A==
+=jh07
+-----END PGP SIGNATURE-----
+
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT--

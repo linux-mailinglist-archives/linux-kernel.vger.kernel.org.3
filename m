@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FF847C606
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C8147C609
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241025AbhLUSMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbhLUSMP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:12:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68479C061574;
-        Tue, 21 Dec 2021 10:12:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05A0861718;
-        Tue, 21 Dec 2021 18:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4793DC36AE8;
-        Tue, 21 Dec 2021 18:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640110334;
-        bh=z1E1/wAJJGrH0x8EU8kQ64U1z7glpRBR+FXEjx7aNLA=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=VQ+rmdOvukFuL6yp+nAFR9p/t+aEhBBhUz+LBV4O/4TWR8XpUEvlJ1IHK5W0PE4eE
-         9ynJ99JtByrYvuBEzHowiJ2nqzRpPjgOkTWdf/8bvl83/ev4Z54y36ecT3Zh3qJnS2
-         xDodcCMgjSsBFjRzW9d2bIf5810Bp2e1d8VGv3fEJmj9yxKLheUplXUFYRw1F8bxig
-         U8fUm0lGVIbAyoCrVS/lkw9M41h2Cul8wM1kn1q5HMt2Bc7HhmZFNPyCjl+IgmexEj
-         iZ2sagGfZnqf+WQU1QdZFDO79akW5SoqSjgaR+t39Au7ISETq420X7E0s4wFbfQlzx
-         hWT228FN+xlBg==
-Content-Type: text/plain; charset="utf-8"
+        id S241033AbhLUSNB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Dec 2021 13:13:01 -0500
+Received: from aposti.net ([89.234.176.197]:40256 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241027AbhLUSNA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:13:00 -0500
+Date:   Tue, 21 Dec 2021 18:12:50 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] dt-bindings: display: Add SPI peripheral schema to SPI
+ based displays
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Maxime Ripard <mripard@kernel.org>,
+        Marek Belisko <marek@goldelico.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <E99H4R.USZAFSZ7ENW71@crapouillou.net>
+In-Reply-To: <20211221125209.1195932-1-robh@kernel.org>
+References: <20211221125209.1195932-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wilc1000: Convert static "chipid" variable to
- device-local
- variable
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211216032612.3798573-1-davidm@egauge.net>
-References: <20211216032612.3798573-1-davidm@egauge.net>
-To:     David Mosberger-Tang <davidm@egauge.net>
-Cc:     Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Mosberger-Tang <davidm@egauge.net>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164011033066.7951.14633765796539711427.kvalo@kernel.org>
-Date:   Tue, 21 Dec 2021 18:12:12 +0000 (UTC)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Mosberger-Tang <davidm@egauge.net> wrote:
+Hi Rob,
 
-> Move "chipid" variable into the per-driver structure so the code
-> doesn't break if more than one wilc1000 module is present.
+Le mar., déc. 21 2021 at 08:52:09 -0400, Rob Herring <robh@kernel.org> 
+a écrit :
+> With 'unevaluatedProperties' support enabled, several SPI based 
+> display
+> binding examples have warnings:
 > 
-> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> Documentation/devicetree/bindings/display/panel/samsung,ld9040.example.dt.yaml: 
+> lcd@0: Unevaluated properties are not allowed ('#address-cells', 
+> '#size-cells', 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were 
+> unexpected)
+> Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
+> 'spi-3wire' were unexpected)
+> Documentation/devicetree/bindings/display/panel/ilitek,ili9322.example.dt.yaml: 
+> display@0: Unevaluated properties are not allowed ('reg' was 
+> unexpected)
+> Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.example.dt.yaml: 
+> display@0: Unevaluated properties are not allowed 
+> ('spi-max-frequency' was unexpected)
+> Documentation/devicetree/bindings/display/panel/abt,y030xx067a.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('spi-max-frequency' 
+> was unexpected)
+> Documentation/devicetree/bindings/display/panel/sony,acx565akm.example.dt.yaml: 
+> panel@2: Unevaluated properties are not allowed ('spi-max-frequency', 
+> 'reg' were unexpected)
+> Documentation/devicetree/bindings/display/panel/tpo,td.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
+> 'spi-cpol', 'spi-cpha' were unexpected)
+> Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('reg', 
+> 'spi-max-frequency', 'spi-cpol', 'spi-cpha' were unexpected)
+> Documentation/devicetree/bindings/display/panel/innolux,ej030na.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('spi-max-frequency' 
+> was unexpected)
+> Documentation/devicetree/bindings/display/panel/sitronix,st7789v.example.dt.yaml: 
+> panel@0: Unevaluated properties are not allowed ('spi-max-frequency', 
+> 'spi-cpol', 'spi-cpha' were unexpected)
+> 
+> Fix all of these by adding a reference to spi-peripheral-props.yaml.
+> With this, the description that the binding must follow
+> spi-controller.yaml is both a bit out of date and redundant, so remove
+> it.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Failed to apply, please rebase on top of wireless-drivers-next.
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-Recorded preimage for 'drivers/net/wireless/microchip/wilc1000/netdev.h'
-error: Failed to merge in the changes.
-hint: Use 'git am --show-current-patch' to see the failed patch
-Applying: wilc1000: Convert static "chipid" variable to device-local variable
-Using index info to reconstruct a base tree...
-M	drivers/net/wireless/microchip/wilc1000/netdev.h
-M	drivers/net/wireless/microchip/wilc1000/wlan.c
-Falling back to patching base and 3-way merge...
-Auto-merging drivers/net/wireless/microchip/wilc1000/wlan.c
-Auto-merging drivers/net/wireless/microchip/wilc1000/netdev.h
-CONFLICT (content): Merge conflict in drivers/net/wireless/microchip/wilc1000/netdev.h
-Patch failed at 0001 wilc1000: Convert static "chipid" variable to device-local variable
+Cheers,
+-Paul
 
-Patch set to Changes Requested.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211216032612.3798573-1-davidm@egauge.net/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

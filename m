@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE84747B86E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A3D47B873
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 03:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbhLUClP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 21:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbhLUClP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 21:41:15 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F42C061574;
-        Mon, 20 Dec 2021 18:41:14 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id t123so8983092pfc.13;
-        Mon, 20 Dec 2021 18:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=afti1NXvSIwBw8US5gzMRH6ZikCTI5DK3ck1t2Ge/2s=;
-        b=J3uv/O/S+HSTaa2LdazRFnAe5WNXJLOy6PA+B7U4tshjAacxGvSQclIlAynOcZT/CN
-         CQpGZtGaQEFewu+j5wDytaXzaLG9kx4rd8rMmJMEne3uNxQzL4AP/lwekxPj3v3TFOCV
-         6X+UD3Xro49FkcqML18U5jslu4oDep6EA9f400IDpalDyZLMYH7hZjfANOWHloE1fL7D
-         L+7ZK6wgEnRgwbaO7KWOCgJYjoy5RkpM8K86Ci5fYIRMSDM5eWBlw7XCvqZjjr+C6BQc
-         kVwROulXy2ch1EGfKBDzZeSfT+pVB4vKUjzH5G6z/uOyTgMGgePWRuspyQB9b13MujKb
-         9F4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=afti1NXvSIwBw8US5gzMRH6ZikCTI5DK3ck1t2Ge/2s=;
-        b=6QPGFKCLtiK+nDcs1ZOhhFqvzPthBIkMwYtzKwNK+G4F8H0kn19vD2SoKWwqSpGsLA
-         nK4EvdpPX7AZCjkyhFqoksxe+krceNjwchFZGA4JkW6fmY3dzceVEpCXI+Q6hOS6QqY/
-         xeKbbDsuR/XDONCH8zXayeAOeuGlPUk81FbVsYWgTDFaRQ7FF+tf8/+4qh0MeutS4b5h
-         E1ifuyTwyIZjbk7wAPXvZLib17ydjmxDcgVWvrPmyorMlaSU94SLLaFnu2/VwtDddDzf
-         pEWaPHC7q3vqYFculKQ04b4vLnzK2C3am9PAbuI4sXakCNNp1oJrobIZ60l8GBpMMWBu
-         psbQ==
-X-Gm-Message-State: AOAM532r44nbFGD1oa/mub/J3WPmFX8EpjlIKw/fMUZCIvJdsBfWXGvu
-        BcBT1ebCdK/UdriE09VRoI8=
-X-Google-Smtp-Source: ABdhPJxbRUfeiNisUkz//f/ap0uiQ4vbYAccA0RhpZjFSVQEJMcTMzFEpu+yc6yWie1WSmLvwjtHrw==
-X-Received: by 2002:a63:2b05:: with SMTP id r5mr1023137pgr.0.1640054474022;
-        Mon, 20 Dec 2021 18:41:14 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:9632:a1c4:968a:6f66])
-        by smtp.gmail.com with ESMTPSA id pc1sm718411pjb.5.2021.12.20.18.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 18:41:12 -0800 (PST)
-Date:   Mon, 20 Dec 2021 18:41:10 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        linux-input@vger.kernel.org, dianders@chromium.org,
-        "jingle.wu" <jingle.wu@emc.com.tw>
-Subject: Re: [PATCH 2/3] Input: elan_i2c - Use PM subsystem to manage wake irq
-Message-ID: <YcE+xrSnS7qw0G1/@google.com>
-References: <20211220234346.2798027-1-rrangel@chromium.org>
- <20211220163823.2.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+        id S233630AbhLUCpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 21:45:51 -0500
+Received: from mga14.intel.com ([192.55.52.115]:8199 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231833AbhLUCpu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 21:45:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640054750; x=1671590750;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=a9EAtYjMjgBhRqx9t80MptniHLo76DppyNXKRomGOUk=;
+  b=N4SUr9lUbRHoz9nt7J9U4T+LKGlh46oiD+41YBJZrAbatdmDpWgOk8co
+   G1k1O0Vy+31HbI6FjALZxpPGzbSGt+PGE9J1rcot6us+0Smjh2O7JNRhT
+   Ia5MIA0N/qc/87WUtidpqSzfharSNjSOLCZUX97dcvve6TOe0TQq6tFN5
+   oyq8pOLWShW7sirGdh6NXOVK+cdao6s742piLogKcJOJ7/9QKf6VpsuOe
+   cYRvU/tNyUKSH0nGnXbX4w8g3WVoUvddwC4ds32gHz4IanbxCHNklAPS4
+   BD5rd8I8D0lkpXNtb0vHVi3YTsvn6cAzf9qZN7gX++vfgfYYj5tbjzU64
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240533482"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="240533482"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 18:45:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
+   d="scan'208";a="616620471"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga004.jf.intel.com with ESMTP; 20 Dec 2021 18:45:48 -0800
+Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 20 Dec 2021 18:45:47 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 10:45:45 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Tue, 21 Dec 2021 10:45:45 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: RE: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
+Thread-Topic: [PATCH v2 18/23] kvm: x86: Get/set expanded xstate buffer
+Thread-Index: AQHX81r8L73y8adYV0a4DFLIQjWYRqw6lEwAgAGYYhA=
+Date:   Tue, 21 Dec 2021 02:45:45 +0000
+Message-ID: <e0fd378de64f44fd8becfe67b02cb635@intel.com>
+References: <20211217153003.1719189-1-jing2.liu@intel.com>
+ <20211217153003.1719189-19-jing2.liu@intel.com>
+ <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
+In-Reply-To: <3ffa47eb-3555-5925-1c55-f89a07ceb4bc@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220163823.2.Id022caf53d01112188308520915798f08a33cd3e@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raul,
-
-On Mon, Dec 20, 2021 at 04:43:45PM -0700, Raul E Rangel wrote:
-> @@ -1368,11 +1367,13 @@ static int elan_probe(struct i2c_client *client,
->  	}
->  
->  	/*
-> -	 * Systems using device tree should set up wakeup via DTS,
-> +	 * Systems using device tree or ACPI should set up wakeup via DTS/ACPI,
->  	 * the rest will configure device as wakeup source by default.
->  	 */
-> -	if (!dev->of_node)
-> +	if (!dev->of_node && !ACPI_COMPANION(dev)) {
-
-I think this will break our Rambis that use ACPI for enumeration but
-actually lack _PRW. As far as I remember their trackpads were capable
-of waking up the system.
-
-I think we should remove this chunk completely and instead add necessary
-code to drivers/platform/chrome/chrome-laptop.c (I suppose we need to
-have additional member in struct acpi_peripheral to indicate whether
-device needs to be configured for wakeup and then act upon it in
-chromeos_laptop_adjust_client().
-
->  		device_init_wakeup(dev, true);
-> +		dev_pm_set_wake_irq(dev, client->irq);
-> +	}
->  
->  	return 0;
->  }
-
-Thanks.
-
--- 
-Dmitry
+T24gTW9uZGF5LCBEZWNlbWJlciAyMCwgMjAyMSA1OjA0IFBNLCBQYW9sbyBCb256aW5pIHdyb3Rl
+Og0KPiBPbiAxMi8xNy8yMSAxNjoyOSwgSmluZyBMaXUgd3JvdGU6DQo+ID4gKy8qIGZvciBLVk1f
+Q0FQX1hTQVZFIGFuZCBLVk1fQ0FQX1hTQVZFMiAqLw0KPiA+ICAgc3RydWN0IGt2bV94c2F2ZSB7
+DQo+ID4gKwkvKg0KPiA+ICsJICogS1ZNX0dFVF9YU0FWRSBvbmx5IHVzZXMgdGhlIGZpcnN0IDQw
+OTYgYnl0ZXMuDQo+ID4gKwkgKg0KPiA+ICsJICogS1ZNX0dFVF9YU0FWRTIgbXVzdCBoYXZlIHRo
+ZSBzaXplIG1hdGNoIHdoYXQgaXMgcmV0dXJuZWQgYnkNCj4gPiArCSAqIEtWTV9DSEVDS19FWFRF
+TlNJT04oS1ZNX0NBUF9YU0FWRTIpLg0KPiA+ICsJICoNCj4gPiArCSAqIEtWTV9TRVRfWFNBVkUg
+dXNlcyB0aGUgZXh0cmEgZmllbGQgaWYgZ3Vlc3RfZnB1OjpmcHN0YXRlOjpzaXplDQo+ID4gKwkg
+KiBleGNlZWRzIDQwOTYgYnl0ZXMuDQo+IA0KPiBLVk1fR0VUX1hTQVZFMiBhbmQgS1ZNX1NFVF9Y
+U0FWRSByZXNwZWN0aXZlbHkgd3JpdGUgYW5kIHJlYWQgYXMgbWFueQ0KPiBieXRlcyBhcyBhcmUg
+cmV0dXJuZWQgYnkgS1ZNX0NIRUNLX0VYVEVOU0lPTihLVk1fQ0FQX1hTQVZFMiksIHdoZW4NCj4g
+aW52b2tlZCBvbiB0aGUgdm0gZmlsZSBkZXNjcmlwdG9yLiAgQ3VycmVudGx5LA0KPiBLVk1fQ0hF
+Q0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSB3aWxsIG9ubHkgcmV0dXJuIGEgdmFsdWUgdGhh
+dCBpcw0KPiBncmVhdGVyIHRoYW4gNDA5NiBieXRlcyBpZiBhbnkgZHluYW1pYyBmZWF0dXJlcyBo
+YXZlIGJlZW4gZW5hYmxlZCB3aXRoDQo+IGBgYXJjaF9wcmN0bCgpYGA7IHRoaXMgaG93ZXZlciBt
+YXkgY2hhbmdlIGluIHRoZSBmdXR1cmUuDQoNCldvdWxkIHRoaXMgbWFrZSBwZW9wbGUgdGhpbmsg
+dGhhdCBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSBkb2VzbuKAmXQNCnJldHVy
+biB0aGUgdmFsdWUgKGkuZS4gcmV0dXJuIDApIGlmIGl0IGlzIHNtYWxsZXIgdGhhbiA0MDk2Pw0K
+KGkuZS4gS1ZNX0dFVF9YU0FWRTIgZG9lc24ndCB3b3JrIHdpdGggc2l6ZSA8IDQwOTYsIHdoaWNo
+IGlzbuKAmXQgdHJ1ZSkNCg0KSSBwbGFuIHRvIGp1c3QgcmV3b3JkIGEgYml0Og0KQ3VycmVudGx5
+LCBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSB3aWxsIG9ubHkgcmV0dXJuIGEg
+c2l6ZSB2YWx1ZSwNCmFuZCB0aGUgdmFsdWUgaXMgZ3JlYXRlciB0aGFuIDQwOTYgYnl0ZXMgaWYg
+YW55IGR5bmFtaWMgZmVhdHVyZXMgaGF2ZSBiZWVuIGVuYWJsZWQgd2l0aA0KYGBhcmNoX3ByY3Rs
+KClgYC4gTW9yZSB0eXBlcyBvZiB2YWx1ZXMgY291bGQgYmUgcmV0dXJuZWQgaW4gdGhlIGZ1dHVy
+ZS4NCg0KVGhhbmtzLA0KV2VpDQo=

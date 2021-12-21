@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2457A47C8CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1FD47C8D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbhLUVbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:31:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42392 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbhLUVbU (ORCPT
+        id S237034AbhLUVf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:35:57 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:23027 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236211AbhLUVfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:31:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C371C617AF;
-        Tue, 21 Dec 2021 21:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A4EC36AE8;
-        Tue, 21 Dec 2021 21:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640122279;
-        bh=/qM5xHCT4LRaktft7rjFAPqdkqB1j9+h9rt9Y06i7Sw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gwLvcrbeeZx5Z0TOqt6iQHWvx1wwiMn/dvWJZR/lJgltanuJ83nTstkFFvsBPyo2f
-         FHxer0t72xeUNoI5HKFCTGEdIertrZctkoJAw1lDsSrzKnf9f7xqRiXKYuqGa+sb4S
-         oVfkveJvHR/oFsueEulc4DOb0i3JC7dfq080qGXejYq6vsvjH8HTK0uxp72mHbWLe3
-         70YJhHW5MQ/QBhMRm+cgScRUPIxo9TQNPBVtTORVh8WHq9T6+ZbhYk3YAx+w02anLX
-         s907LuZ3M2Kk4ozXbjP4MbBc1g2o8c2Ws9UuZxhcxbEGSTd1/UTsd4Wt+WBJpjNFFj
-         Ky00r1BepVfUA==
-Date:   Tue, 21 Dec 2021 14:31:14 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     trix@redhat.com
-Cc:     wangzhou1@hisilicon.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ndesaulniers@google.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] crypto: cleanup warning in qm_get_qos_value()
-Message-ID: <YcJHoqXXVFZatIla@archlinux-ax161>
-References: <20211221205953.3128923-1-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221205953.3128923-1-trix@redhat.com>
+        Tue, 21 Dec 2021 16:35:54 -0500
+X-IronPort-AV: E=Sophos;i="5.88,224,1635174000"; 
+   d="scan'208";a="104266934"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 22 Dec 2021 06:35:53 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A77B64008C6B;
+        Wed, 22 Dec 2021 06:35:51 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] mfd: ab8500-core: Use platform_get_irq() to get the interrupt
+Date:   Tue, 21 Dec 2021 21:35:47 +0000
+Message-Id: <20211221213547.1553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 12:59:53PM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Building with clang static analysis returns this warning:
-> 
-> qm.c:4382:11: warning: The left operand of '==' is a garbage value
->         if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
->             ~~~~ ^
-> 
-> The call to qm_qos_value_init() can return an error without setting
-> *val.  So check ret before checking *val.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
-Should this have a fixes tag?
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Hi,
 
-Fixes: 72b010dc33b9 ("crypto: hisilicon/qm - supports writing QoS int the host")
+Usage of platform_get_irq() was agreed based on the discussion [0].
 
-> ---
->  drivers/crypto/hisilicon/qm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-> index b1fe9c7b8cc89..c906f2e59277b 100644
-> --- a/drivers/crypto/hisilicon/qm.c
-> +++ b/drivers/crypto/hisilicon/qm.c
-> @@ -4379,7 +4379,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
->  		return -EINVAL;
->  
->  	ret = qm_qos_value_init(val_buf, val);
-> -	if (*val == 0 || *val > QM_QOS_MAX_VAL || ret) {
-> +	if (ret || *val == 0 || *val > QM_QOS_MAX_VAL) {
->  		pci_err(qm->pdev, "input qos value is error, please set 1~1000!\n");
->  		return -EINVAL;
->  	}
-> -- 
-> 2.26.3
-> 
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+---
+ drivers/mfd/ab8500-core.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mfd/ab8500-core.c b/drivers/mfd/ab8500-core.c
+index cca0aac26148..1e61c3dacb0d 100644
+--- a/drivers/mfd/ab8500-core.c
++++ b/drivers/mfd/ab8500-core.c
+@@ -1042,7 +1042,6 @@ static int ab8500_probe(struct platform_device *pdev)
+ 	enum ab8500_version version = AB8500_VERSION_UNDEFINED;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct ab8500 *ab8500;
+-	struct resource *resource;
+ 	int ret;
+ 	int i;
+ 	u8 value;
+@@ -1053,13 +1052,9 @@ static int ab8500_probe(struct platform_device *pdev)
+ 
+ 	ab8500->dev = &pdev->dev;
+ 
+-	resource = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!resource) {
+-		dev_err(&pdev->dev, "no IRQ resource\n");
+-		return -ENODEV;
+-	}
+-
+-	ab8500->irq = resource->start;
++	ab8500->irq = platform_get_irq(pdev, 0);
++	if (ab8500->irq < 0)
++		return ab8500->irq;
+ 
+ 	ab8500->read = ab8500_prcmu_read;
+ 	ab8500->write = ab8500_prcmu_write;
+-- 
+2.17.1
+

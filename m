@@ -2,546 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8697747BA4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92BE47BA4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbhLUGv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:51:59 -0500
-Received: from mga06.intel.com ([134.134.136.31]:29894 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229947AbhLUGvs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:51:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640069508; x=1671605508;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nWH8n9kTyD2iwRgGuJa9kqNKiX43tG/cyKOmbrL67wY=;
-  b=AGnq7i6EDxRCpkJka3KtwCmlha3s1s0xITavCwoe5kjaBgUBx2qgN9ht
-   6ghyjgH3uJ1Ecgc1V5hDYnrL21dAHNlZGyw0oFhQFC5aqgLwVA7gL+s/T
-   Yj6RIYW7KojSTIa3sR9yvoTJFbcN4PWC4BRuHKyaZsGHZgDWvJhc0099M
-   BrtnOULbHrpVHL7KPY9tez+vxYHkiYL5DNANrUqgAoJFhZrz+REOLj6RB
-   2lc8VXlTH8iQyF7LtT5kaprwfEO6Jb45nwt4UYDx2ZqrIBO+c/pcc54x1
-   Ab6ZF+dlIc6Kn2brVS+IsCuJ6GVUkza+bt0DX9NB2pmqw8Z6/01GWcG8/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="301107553"
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="301107553"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 22:50:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,222,1635231600"; 
-   d="scan'208";a="570119141"
-Received: from unknown (HELO localhost.localdomain) ([10.228.150.100])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Dec 2021 22:50:44 -0800
-From:   Mike Ximing Chen <mike.ximing.chen@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        dan.j.williams@intel.com, pierre-louis.bossart@linux.intel.com,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
-Subject: [RFC PATCH v12 17/17] dlb: add basic sysfs interfaces
-Date:   Tue, 21 Dec 2021 00:50:47 -0600
-Message-Id: <20211221065047.290182-18-mike.ximing.chen@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211221065047.290182-1-mike.ximing.chen@intel.com>
-References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
+        id S229957AbhLUGwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:52:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41722 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229721AbhLUGwd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 01:52:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640069552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2yD916/h8up9wxshnuCprdFf9EbxTiB8RWRE9+mpT/4=;
+        b=ZMJPnLIvf0JMY+TrI91R3tiQKgL5kdCEx9LwAuzSm5LBgFJV6iAC4N1QYCHbPW6uBxQC8v
+        3slsc1EtUtwyP5g+IU8NMzWMPJ/9T30j2+kewJFlT/mQFoRmWNEB251/OSDvuSz/0Ktn18
+        iRTJxjjPU/dcSIuNQ9aQT/QU3r9pQ00=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-bLfoejczN8uKO9MW2Ozr2A-1; Tue, 21 Dec 2021 01:52:29 -0500
+X-MC-Unique: bLfoejczN8uKO9MW2Ozr2A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72A391800D50;
+        Tue, 21 Dec 2021 06:52:27 +0000 (UTC)
+Received: from localhost (ovpn-12-118.pek2.redhat.com [10.72.12.118])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BD7DA34D5E;
+        Tue, 21 Dec 2021 06:52:22 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 14:52:16 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
+        kexec@lists.infradead.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] vmcore: Convert __read_vmcore to use an iov_iter
+Message-ID: <20211221065216.GA7986@MiWiFi-R3L-srv>
+References: <20211213143927.3069508-1-willy@infradead.org>
+ <20211213143927.3069508-3-willy@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213143927.3069508-3-willy@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dlb sysfs interfaces include files for reading the total and
-available device resources, and reading the device ID and version. The
-interfaces are used for device level configurations and resource
-inquiries.
+On 12/13/21 at 02:39pm, Matthew Wilcox (Oracle) wrote:
+> This gets rid of copy_to() and let us use proc_read_iter() instead
+> of proc_read().
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Signed-off-by: Mike Ximing Chen <mike.ximing.chen@intel.com>
----
- Documentation/ABI/testing/sysfs-driver-dlb | 116 ++++++++++++
- drivers/misc/dlb/dlb_args.h                |  34 ++++
- drivers/misc/dlb/dlb_main.c                |   5 +
- drivers/misc/dlb/dlb_main.h                |   3 +
- drivers/misc/dlb/dlb_pf_ops.c              | 195 +++++++++++++++++++++
- drivers/misc/dlb/dlb_resource.c            |  50 ++++++
- 6 files changed, 403 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-dlb
+Acked-by: Baoquan He <bhe@redhat.com>
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-dlb b/Documentation/ABI/testing/sysfs-driver-dlb
-new file mode 100644
-index 000000000000..bf09ef6f8a3a
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-dlb
-@@ -0,0 +1,116 @@
-+What:		/sys/bus/pci/devices/.../total_resources/num_atomic_inflights
-+What:		/sys/bus/pci/devices/.../total_resources/num_dir_credits
-+What:		/sys/bus/pci/devices/.../total_resources/num_dir_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_hist_list_entries
-+What:		/sys/bus/pci/devices/.../total_resources/num_ldb_credits
-+What:		/sys/bus/pci/devices/.../total_resources/num_ldb_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_cos0_ldb_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_cos1_ldb_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_cos2_ldb_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_cos3_ldb_ports
-+What:		/sys/bus/pci/devices/.../total_resources/num_ldb_queues
-+What:		/sys/bus/pci/devices/.../total_resources/num_sched_domains
-+Date:		Oct 15, 2021
-+KernelVersion:	5.15
-+Contact:	mike.ximing.chen@intel.com
-+Description:
-+		The total_resources subdirectory contains read-only files that
-+		indicate the total number of resources in the device.
-+
-+		num_atomic_inflights:  Total number of atomic inflights in the
-+				       device. Atomic inflights refers to the
-+				       on-device storage used by the atomic
-+				       scheduler.
-+
-+		num_dir_credits:       Total number of directed credits in the
-+				       device.
-+
-+		num_dir_ports:	       Total number of directed ports (and
-+				       queues) in the device.
-+
-+		num_hist_list_entries: Total number of history list entries in
-+				       the device.
-+
-+		num_ldb_credits:       Total number of load-balanced credits in
-+				       the device.
-+
-+		num_ldb_ports:	       Total number of load-balanced ports in
-+				       the device.
-+
-+		num_cos<M>_ldb_ports:  Total number of load-balanced ports
-+				       belonging to class-of-service M in the
-+				       device.
-+
-+		num_ldb_queues:	       Total number of load-balanced queues in
-+				       the device.
-+
-+		num_sched_domains:     Total number of scheduling domains in the
-+				       device.
-+
-+What:		/sys/bus/pci/devices/.../avail_resources/num_atomic_inflights
-+What:		/sys/bus/pci/devices/.../avail_resources/num_dir_credits
-+What:		/sys/bus/pci/devices/.../avail_resources/num_dir_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_hist_list_entries
-+What:		/sys/bus/pci/devices/.../avail_resources/num_ldb_credits
-+What:		/sys/bus/pci/devices/.../avail_resources/num_ldb_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_cos0_ldb_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_cos1_ldb_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_cos2_ldb_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_cos3_ldb_ports
-+What:		/sys/bus/pci/devices/.../avail_resources/num_ldb_queues
-+What:		/sys/bus/pci/devices/.../avail_resources/num_sched_domains
-+What:		/sys/bus/pci/devices/.../avail_resources/max_ctg_hl_entries
-+Date:		Oct 15, 2021
-+KernelVersion:	5.15
-+Contact:	mike.ximing.chen@intel.com
-+Description:
-+		The avail_resources subdirectory contains read-only files that
-+		indicate the available number of resources in the device.
-+		"Available" here means resources that are not currently in use
-+		by an application or, in the case of a physical function
-+		device, assigned to a virtual function.
-+
-+		num_atomic_inflights:  Available number of atomic inflights in
-+				       the device.
-+
-+		num_dir_ports:	       Available number of directed ports (and
-+				       queues) in the device.
-+
-+		num_hist_list_entries: Available number of history list entries
-+				       in the device.
-+
-+		num_ldb_credits:       Available number of load-balanced credits
-+				       in the device.
-+
-+		num_ldb_ports:	       Available number of load-balanced ports
-+				       in the device.
-+
-+		num_cos<M>_ldb_ports:  Available number of load-balanced ports
-+				       belonging to class-of-service M in the
-+				       device.
-+
-+		num_ldb_queues:	       Available number of load-balanced queues
-+				       in the device.
-+
-+		num_sched_domains:     Available number of scheduling domains in
-+				       the device.
-+
-+		max_ctg_hl_entries:    Maximum contiguous history list entries
-+				       available in the device.
-+
-+				       Each scheduling domain is created with
-+				       an allocation of history list entries,
-+				       and each domain's allocation of entries
-+				       must be contiguous.
-+
-+What:		/sys/bus/pci/devices/.../dev_id
-+Date:		Oct 15, 2021
-+KernelVersion:	5.15
-+Contact:	mike.ximing.chen@intel.com
-+Description:	Device ID used in /dev, i.e. /dev/dlb<device ID>
-+
-+		Each DLB 2.0 PF and VF device is granted a unique ID by the
-+		kernel driver, and this ID is used to construct the device's
-+		/dev directory: /dev/dlb<device ID>. This sysfs file can be read
-+		to determine a device's ID, which allows the user to map a
-+		device file to a PCI BDF.
-diff --git a/drivers/misc/dlb/dlb_args.h b/drivers/misc/dlb/dlb_args.h
-index eac8890c3a70..7a48751f4b56 100644
---- a/drivers/misc/dlb/dlb_args.h
-+++ b/drivers/misc/dlb/dlb_args.h
-@@ -58,6 +58,40 @@ struct dlb_create_sched_domain_args {
- 	__u32 num_dir_credits;
- };
- 
-+/*
-+ * dlb_get_num_resources_args: Used to get the number of available resources
-+ *      (queues, ports, etc.) that this device owns.
-+ *
-+ * Output parameters:
-+ * @response.status: Detailed error code. In certain cases, such as if the
-+ *	request arg is invalid, the driver won't set status.
-+ * @num_domains: Number of available scheduling domains.
-+ * @num_ldb_queues: Number of available load-balanced queues.
-+ * @num_ldb_ports: Total number of available load-balanced ports.
-+ * @num_dir_ports: Number of available directed ports. There is one directed
-+ *	queue for every directed port.
-+ * @num_atomic_inflights: Amount of available temporary atomic QE storage.
-+ * @num_hist_list_entries: Amount of history list storage.
-+ * @max_contiguous_hist_list_entries: History list storage is allocated in
-+ *	a contiguous chunk, and this return value is the longest available
-+ *	contiguous range of history list entries.
-+ * @num_ldb_credits: Amount of available load-balanced QE storage.
-+ * @num_dir_credits: Amount of available directed QE storage.
-+ */
-+struct dlb_get_num_resources_args {
-+	/* Output parameters */
-+	struct dlb_cmd_response response;
-+	__u32 num_sched_domains;
-+	__u32 num_ldb_queues;
-+	__u32 num_ldb_ports;
-+	__u32 num_dir_ports;
-+	__u32 num_atomic_inflights;
-+	__u32 num_hist_list_entries;
-+	__u32 max_contiguous_hist_list_entries;
-+	__u32 num_ldb_credits;
-+	__u32 num_dir_credits;
-+};
-+
- /*************************************************/
- /* 'domain' level control/access data structures */
- /*************************************************/
-diff --git a/drivers/misc/dlb/dlb_main.c b/drivers/misc/dlb/dlb_main.c
-index ce3cbe15e198..ea2139462602 100644
---- a/drivers/misc/dlb/dlb_main.c
-+++ b/drivers/misc/dlb/dlb_main.c
-@@ -409,6 +409,10 @@ static int dlb_probe(struct pci_dev *pdev, const struct pci_device_id *pdev_id)
- 	if (ret)
- 		goto dma_set_mask_fail;
- 
-+	ret = dlb_pf_sysfs_create(dlb);
-+	if (ret)
-+		goto sysfs_create_fail;
-+
- 	ret = dlb_configfs_create_device(dlb);
- 	if (ret)
- 		goto configfs_create_fail;
-@@ -453,6 +457,7 @@ static int dlb_probe(struct pci_dev *pdev, const struct pci_device_id *pdev_id)
- dlb_reset_fail:
- wait_for_device_ready_fail:
- configfs_create_fail:
-+sysfs_create_fail:
- dma_set_mask_fail:
- 	device_destroy(dlb_class, dlb->dev_number);
- map_pci_bar_fail:
-diff --git a/drivers/misc/dlb/dlb_main.h b/drivers/misc/dlb/dlb_main.h
-index f410e7307c12..2c1401532496 100644
---- a/drivers/misc/dlb/dlb_main.h
-+++ b/drivers/misc/dlb/dlb_main.h
-@@ -330,6 +330,7 @@ struct dlb;
- int dlb_pf_map_pci_bar_space(struct dlb *dlb, struct pci_dev *pdev);
- void dlb_pf_unmap_pci_bar_space(struct dlb *dlb, struct pci_dev *pdev);
- int dlb_pf_init_driver_state(struct dlb *dlb);
-+int dlb_pf_sysfs_create(struct dlb *dlb);
- void dlb_pf_enable_pm(struct dlb *dlb);
- int dlb_pf_wait_for_device_ready(struct dlb *dlb, struct pci_dev *pdev);
- void dlb_pf_init_hardware(struct dlb *dlb);
-@@ -625,6 +626,8 @@ int dlb_hw_unmap_qid(struct dlb_hw *hw, u32 domain_id,
- int dlb_reset_domain(struct dlb_hw *hw, u32 domain_id);
- int dlb_ldb_port_owned_by_domain(struct dlb_hw *hw, u32 domain_id, u32 port_id);
- int dlb_dir_port_owned_by_domain(struct dlb_hw *hw, u32 domain_id, u32 port_id);
-+int dlb_hw_get_num_resources(struct dlb_hw *hw,
-+			     struct dlb_get_num_resources_args *arg);
- void dlb_clr_pmcsr_disable(struct dlb_hw *hw);
- int dlb_hw_get_ldb_queue_depth(struct dlb_hw *hw, u32 domain_id,
- 			       struct dlb_get_ldb_queue_depth_args *args,
-diff --git a/drivers/misc/dlb/dlb_pf_ops.c b/drivers/misc/dlb/dlb_pf_ops.c
-index 66fb4ffae939..4dde46642d6e 100644
---- a/drivers/misc/dlb/dlb_pf_ops.c
-+++ b/drivers/misc/dlb/dlb_pf_ops.c
-@@ -102,3 +102,198 @@ void dlb_pf_init_hardware(struct dlb *dlb)
- 	dlb_hw_enable_sparse_ldb_cq_mode(&dlb->hw);
- 	dlb_hw_enable_sparse_dir_cq_mode(&dlb->hw);
- }
-+
-+/*****************************/
-+/****** Sysfs callbacks ******/
-+/*****************************/
-+
-+#define DLB_TOTAL_SYSFS_SHOW(name, macro)		\
-+static ssize_t total_##name##_show(			\
-+	struct device *dev,				\
-+	struct device_attribute *attr,			\
-+	char *buf)					\
-+{							\
-+	int val = DLB_MAX_NUM_##macro;			\
-+							\
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", val);	\
-+}
-+
-+DLB_TOTAL_SYSFS_SHOW(num_sched_domains, DOMAINS)
-+DLB_TOTAL_SYSFS_SHOW(num_ldb_queues, LDB_QUEUES)
-+DLB_TOTAL_SYSFS_SHOW(num_ldb_ports, LDB_PORTS)
-+DLB_TOTAL_SYSFS_SHOW(num_dir_ports, DIR_PORTS)
-+DLB_TOTAL_SYSFS_SHOW(num_ldb_credits, LDB_CREDITS)
-+DLB_TOTAL_SYSFS_SHOW(num_dir_credits, DIR_CREDITS)
-+DLB_TOTAL_SYSFS_SHOW(num_atomic_inflights, AQED_ENTRIES)
-+DLB_TOTAL_SYSFS_SHOW(num_hist_list_entries, HIST_LIST_ENTRIES)
-+
-+#define DLB_AVAIL_SYSFS_SHOW(name)			     \
-+static ssize_t avail_##name##_show(			     \
-+	struct device *dev,				     \
-+	struct device_attribute *attr,			     \
-+	char *buf)					     \
-+{							     \
-+	struct dlb *dlb = dev_get_drvdata(dev);		     \
-+	struct dlb_get_num_resources_args arg;		     \
-+	struct dlb_hw *hw = &dlb->hw;			     \
-+	int val;					     \
-+							     \
-+	mutex_lock(&dlb->resource_mutex);		     \
-+							     \
-+	val = dlb_hw_get_num_resources(hw, &arg);	     \
-+							     \
-+	mutex_unlock(&dlb->resource_mutex);		     \
-+							     \
-+	if (val)					     \
-+		return -1;				     \
-+							     \
-+	val = arg.name;					     \
-+							     \
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", val);	     \
-+}
-+
-+DLB_AVAIL_SYSFS_SHOW(num_sched_domains)
-+DLB_AVAIL_SYSFS_SHOW(num_ldb_queues)
-+DLB_AVAIL_SYSFS_SHOW(num_ldb_ports)
-+DLB_AVAIL_SYSFS_SHOW(num_dir_ports)
-+DLB_AVAIL_SYSFS_SHOW(num_ldb_credits)
-+DLB_AVAIL_SYSFS_SHOW(num_dir_credits)
-+DLB_AVAIL_SYSFS_SHOW(num_atomic_inflights)
-+DLB_AVAIL_SYSFS_SHOW(num_hist_list_entries)
-+
-+static ssize_t max_ctg_hl_entries_show(struct device *dev,
-+				       struct device_attribute *attr,
-+				       char *buf)
-+{
-+	struct dlb *dlb = dev_get_drvdata(dev);
-+	struct dlb_get_num_resources_args arg;
-+	struct dlb_hw *hw = &dlb->hw;
-+	int val;
-+
-+	mutex_lock(&dlb->resource_mutex);
-+
-+	val = dlb_hw_get_num_resources(hw, &arg);
-+
-+	mutex_unlock(&dlb->resource_mutex);
-+
-+	if (val)
-+		return -1;
-+
-+	val = arg.max_contiguous_hist_list_entries;
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", val);
-+}
-+
-+/*
-+ * Device attribute name doesn't match the show function name, so we define our
-+ * own DEVICE_ATTR macro.
-+ */
-+#define DLB_DEVICE_ATTR_RO(_prefix, _name) \
-+struct device_attribute dev_attr_##_prefix##_##_name = {\
-+	.attr = { .name = __stringify(_name), .mode = 0444 },\
-+	.show = _prefix##_##_name##_show,\
-+}
-+
-+static DLB_DEVICE_ATTR_RO(total, num_sched_domains);
-+static DLB_DEVICE_ATTR_RO(total, num_ldb_queues);
-+static DLB_DEVICE_ATTR_RO(total, num_ldb_ports);
-+static DLB_DEVICE_ATTR_RO(total, num_dir_ports);
-+static DLB_DEVICE_ATTR_RO(total, num_ldb_credits);
-+static DLB_DEVICE_ATTR_RO(total, num_dir_credits);
-+static DLB_DEVICE_ATTR_RO(total, num_atomic_inflights);
-+static DLB_DEVICE_ATTR_RO(total, num_hist_list_entries);
-+
-+static struct attribute *dlb_total_attrs[] = {
-+	&dev_attr_total_num_sched_domains.attr,
-+	&dev_attr_total_num_ldb_queues.attr,
-+	&dev_attr_total_num_ldb_ports.attr,
-+	&dev_attr_total_num_dir_ports.attr,
-+	&dev_attr_total_num_ldb_credits.attr,
-+	&dev_attr_total_num_dir_credits.attr,
-+	&dev_attr_total_num_atomic_inflights.attr,
-+	&dev_attr_total_num_hist_list_entries.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group dlb_total_attr_group = {
-+	.attrs = dlb_total_attrs,
-+	.name = "total_resources",
-+};
-+
-+static DLB_DEVICE_ATTR_RO(avail, num_sched_domains);
-+static DLB_DEVICE_ATTR_RO(avail, num_ldb_queues);
-+static DLB_DEVICE_ATTR_RO(avail, num_ldb_ports);
-+static DLB_DEVICE_ATTR_RO(avail, num_dir_ports);
-+static DLB_DEVICE_ATTR_RO(avail, num_ldb_credits);
-+static DLB_DEVICE_ATTR_RO(avail, num_dir_credits);
-+static DLB_DEVICE_ATTR_RO(avail, num_atomic_inflights);
-+static DLB_DEVICE_ATTR_RO(avail, num_hist_list_entries);
-+static DEVICE_ATTR_RO(max_ctg_hl_entries);
-+
-+static struct attribute *dlb_avail_attrs[] = {
-+	&dev_attr_avail_num_sched_domains.attr,
-+	&dev_attr_avail_num_ldb_queues.attr,
-+	&dev_attr_avail_num_ldb_ports.attr,
-+	&dev_attr_avail_num_dir_ports.attr,
-+	&dev_attr_avail_num_ldb_credits.attr,
-+	&dev_attr_avail_num_dir_credits.attr,
-+	&dev_attr_avail_num_atomic_inflights.attr,
-+	&dev_attr_avail_num_hist_list_entries.attr,
-+	&dev_attr_max_ctg_hl_entries.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group dlb_avail_attr_group = {
-+	.attrs = dlb_avail_attrs,
-+	.name = "avail_resources",
-+};
-+
-+static ssize_t dev_id_show(struct device *dev,
-+			   struct device_attribute *attr,
-+			   char *buf)
-+{
-+	struct dlb *dlb = dev_get_drvdata(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", dlb->id);
-+}
-+
-+/* [7:0]: device revision, [15:8]: device version */
-+#define DLB_SET_DEVICE_VERSION(ver, rev) (((ver) << 8) | (rev))
-+
-+static ssize_t dev_ver_show(struct device *dev,
-+			    struct device_attribute *attr,
-+			    char *buf)
-+{
-+	int ver;
-+
-+	ver = DLB_SET_DEVICE_VERSION(2, 0);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", ver);
-+}
-+
-+static DEVICE_ATTR_RO(dev_id);
-+static DEVICE_ATTR_RO(dev_ver);
-+
-+static struct attribute *dlb_dev_id_attr[] = {
-+	&dev_attr_dev_id.attr,
-+	&dev_attr_dev_ver.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group dlb_dev_id_attr_group = {
-+	.attrs = dlb_dev_id_attr,
-+};
-+
-+static const struct attribute_group *dlb_pf_attr_groups[] = {
-+	&dlb_dev_id_attr_group,
-+	&dlb_total_attr_group,
-+	&dlb_avail_attr_group,
-+	NULL,
-+};
-+
-+int dlb_pf_sysfs_create(struct dlb *dlb)
-+{
-+	struct device *dev = &dlb->pdev->dev;
-+
-+	return devm_device_add_groups(dev, dlb_pf_attr_groups);
-+}
-diff --git a/drivers/misc/dlb/dlb_resource.c b/drivers/misc/dlb/dlb_resource.c
-index e19c0f6cc321..6926ad95d9e2 100644
---- a/drivers/misc/dlb/dlb_resource.c
-+++ b/drivers/misc/dlb/dlb_resource.c
-@@ -3855,6 +3855,56 @@ int dlb_dir_port_owned_by_domain(struct dlb_hw *hw, u32 domain_id, u32 port_id)
- 	return port->domain_id == domain->id;
- }
- 
-+/**
-+ * dlb_hw_get_num_resources() - query the PCI function's available resources
-+ * @hw: dlb_hw handle for a particular device.
-+ * @arg: pointer to resource counts.
-+ *
-+ * This function returns the number of available resources for the PF or for a
-+ * VF.
-+ *
-+ * Return:
-+ * Returns 0 upon success, -EINVAL if input argument is
-+ * invalid.
-+ */
-+int dlb_hw_get_num_resources(struct dlb_hw *hw,
-+			     struct dlb_get_num_resources_args *arg)
-+{
-+	struct dlb_function_resources *rsrcs;
-+	struct dlb_bitmap *map;
-+	int i;
-+
-+	if (!hw || !arg)
-+		return -EINVAL;
-+
-+	rsrcs = &hw->pf;
-+
-+	arg->num_sched_domains = rsrcs->num_avail_domains;
-+
-+	arg->num_ldb_queues = rsrcs->num_avail_ldb_queues;
-+
-+	arg->num_ldb_ports = 0;
-+	for (i = 0; i < DLB_NUM_COS_DOMAINS; i++)
-+		arg->num_ldb_ports += rsrcs->num_avail_ldb_ports[i];
-+
-+	arg->num_dir_ports = rsrcs->num_avail_dir_pq_pairs;
-+
-+	arg->num_atomic_inflights = rsrcs->num_avail_aqed_entries;
-+
-+	map = rsrcs->avail_hist_list_entries;
-+
-+	arg->num_hist_list_entries = bitmap_weight(map->map, map->len);
-+
-+	arg->max_contiguous_hist_list_entries =
-+		dlb_bitmap_longest_set_range(map);
-+
-+	arg->num_ldb_credits = rsrcs->num_avail_qed_entries;
-+
-+	arg->num_dir_credits = rsrcs->num_avail_dqed_entries;
-+
-+	return 0;
-+}
-+
- /**
-  * dlb_clr_pmcsr_disable() - power on bulk of DLB 2.0 logic
-  * @hw: dlb_hw handle for a particular device.
--- 
-2.27.0
+> ---
+>  fs/proc/vmcore.c | 81 +++++++++++++++++-------------------------------
+>  1 file changed, 29 insertions(+), 52 deletions(-)
+> 
+> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+> index 958cad6476e6..7b25f568d20d 100644
+> --- a/fs/proc/vmcore.c
+> +++ b/fs/proc/vmcore.c
+> @@ -252,22 +252,8 @@ ssize_t __weak copy_oldmem_page_encrypted(struct iov_iter *iter,
+>  	return copy_oldmem_page(iter, pfn, csize, offset);
+>  }
+>  
+> -/*
+> - * Copy to either kernel or user space
+> - */
+> -static int copy_to(void *target, void *src, size_t size, int userbuf)
+> -{
+> -	if (userbuf) {
+> -		if (copy_to_user((char __user *) target, src, size))
+> -			return -EFAULT;
+> -	} else {
+> -		memcpy(target, src, size);
+> -	}
+> -	return 0;
+> -}
+> -
+>  #ifdef CONFIG_PROC_VMCORE_DEVICE_DUMP
+> -static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
+> +static int vmcoredd_copy_dumps(struct iov_iter *iter, u64 start, size_t size)
+>  {
+>  	struct vmcoredd_node *dump;
+>  	u64 offset = 0;
+> @@ -280,14 +266,13 @@ static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
+>  		if (start < offset + dump->size) {
+>  			tsz = min(offset + (u64)dump->size - start, (u64)size);
+>  			buf = dump->buf + start - offset;
+> -			if (copy_to(dst, buf, tsz, userbuf)) {
+> +			if (copy_to_iter(buf, tsz, iter) < tsz) {
+>  				ret = -EFAULT;
+>  				goto out_unlock;
+>  			}
+>  
+>  			size -= tsz;
+>  			start += tsz;
+> -			dst += tsz;
+>  
+>  			/* Leave now if buffer filled already */
+>  			if (!size)
+> @@ -343,33 +328,28 @@ static int vmcoredd_mmap_dumps(struct vm_area_struct *vma, unsigned long dst,
+>  /* Read from the ELF header and then the crash dump. On error, negative value is
+>   * returned otherwise number of bytes read are returned.
+>   */
+> -static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
+> -			     int userbuf)
+> +static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
+>  {
+>  	ssize_t acc = 0, tmp;
+>  	size_t tsz;
+>  	u64 start;
+>  	struct vmcore *m = NULL;
+>  
+> -	if (buflen == 0 || *fpos >= vmcore_size)
+> +	if (iter->count == 0 || *fpos >= vmcore_size)
+>  		return 0;
+>  
+> -	/* trim buflen to not go beyond EOF */
+> -	if (buflen > vmcore_size - *fpos)
+> -		buflen = vmcore_size - *fpos;
+> +	iov_iter_truncate(iter, vmcore_size - *fpos);
+>  
+>  	/* Read ELF core header */
+>  	if (*fpos < elfcorebuf_sz) {
+> -		tsz = min(elfcorebuf_sz - (size_t)*fpos, buflen);
+> -		if (copy_to(buffer, elfcorebuf + *fpos, tsz, userbuf))
+> +		tsz = min(elfcorebuf_sz - (size_t)*fpos, iter->count);
+> +		if (copy_to_iter(elfcorebuf + *fpos, tsz, iter) < tsz)
+>  			return -EFAULT;
+> -		buflen -= tsz;
+>  		*fpos += tsz;
+> -		buffer += tsz;
+>  		acc += tsz;
+>  
+>  		/* leave now if filled buffer already */
+> -		if (buflen == 0)
+> +		if (iter->count == 0)
+>  			return acc;
+>  	}
+>  
+> @@ -390,35 +370,31 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
+>  		/* Read device dumps */
+>  		if (*fpos < elfcorebuf_sz + vmcoredd_orig_sz) {
+>  			tsz = min(elfcorebuf_sz + vmcoredd_orig_sz -
+> -				  (size_t)*fpos, buflen);
+> +				  (size_t)*fpos, iter->count);
+>  			start = *fpos - elfcorebuf_sz;
+> -			if (vmcoredd_copy_dumps(buffer, start, tsz, userbuf))
+> +			if (vmcoredd_copy_dumps(iter, start, tsz))
+>  				return -EFAULT;
+>  
+> -			buflen -= tsz;
+>  			*fpos += tsz;
+> -			buffer += tsz;
+>  			acc += tsz;
+>  
+>  			/* leave now if filled buffer already */
+> -			if (!buflen)
+> +			if (!iter->count)
+>  				return acc;
+>  		}
+>  #endif /* CONFIG_PROC_VMCORE_DEVICE_DUMP */
+>  
+>  		/* Read remaining elf notes */
+> -		tsz = min(elfcorebuf_sz + elfnotes_sz - (size_t)*fpos, buflen);
+> +		tsz = min(elfcorebuf_sz + elfnotes_sz - (size_t)*fpos, iter->count);
+>  		kaddr = elfnotes_buf + *fpos - elfcorebuf_sz - vmcoredd_orig_sz;
+> -		if (copy_to(buffer, kaddr, tsz, userbuf))
+> +		if (copy_to_iter(kaddr, tsz, iter) < tsz)
+>  			return -EFAULT;
+>  
+> -		buflen -= tsz;
+>  		*fpos += tsz;
+> -		buffer += tsz;
+>  		acc += tsz;
+>  
+>  		/* leave now if filled buffer already */
+> -		if (buflen == 0)
+> +		if (iter->count == 0)
+>  			return acc;
+>  	}
+>  
+> @@ -426,19 +402,17 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
+>  		if (*fpos < m->offset + m->size) {
+>  			tsz = (size_t)min_t(unsigned long long,
+>  					    m->offset + m->size - *fpos,
+> -					    buflen);
+> +					    iter->count);
+>  			start = m->paddr + *fpos - m->offset;
+> -			tmp = read_from_oldmem(buffer, tsz, &start,
+> -					       userbuf, cc_platform_has(CC_ATTR_MEM_ENCRYPT));
+> +			tmp = read_from_oldmem_iter(iter, tsz, &start,
+> +					cc_platform_has(CC_ATTR_MEM_ENCRYPT));
+>  			if (tmp < 0)
+>  				return tmp;
+> -			buflen -= tsz;
+>  			*fpos += tsz;
+> -			buffer += tsz;
+>  			acc += tsz;
+>  
+>  			/* leave now if filled buffer already */
+> -			if (buflen == 0)
+> +			if (iter->count == 0)
+>  				return acc;
+>  		}
+>  	}
+> @@ -446,15 +420,14 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
+>  	return acc;
+>  }
+>  
+> -static ssize_t read_vmcore(struct file *file, char __user *buffer,
+> -			   size_t buflen, loff_t *fpos)
+> +static ssize_t read_vmcore(struct kiocb *iocb, struct iov_iter *iter)
+>  {
+> -	return __read_vmcore((__force char *) buffer, buflen, fpos, 1);
+> +	return __read_vmcore(iter, &iocb->ki_pos);
+>  }
+>  
+>  /*
+>   * The vmcore fault handler uses the page cache and fills data using the
+> - * standard __vmcore_read() function.
+> + * standard __read_vmcore() function.
+>   *
+>   * On s390 the fault handler is used for memory regions that can't be mapped
+>   * directly with remap_pfn_range().
+> @@ -464,9 +437,10 @@ static vm_fault_t mmap_vmcore_fault(struct vm_fault *vmf)
+>  #ifdef CONFIG_S390
+>  	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+>  	pgoff_t index = vmf->pgoff;
+> +	struct iov_iter iter;
+> +	struct kvec kvec;
+>  	struct page *page;
+>  	loff_t offset;
+> -	char *buf;
+>  	int rc;
+>  
+>  	page = find_or_create_page(mapping, index, GFP_KERNEL);
+> @@ -474,8 +448,11 @@ static vm_fault_t mmap_vmcore_fault(struct vm_fault *vmf)
+>  		return VM_FAULT_OOM;
+>  	if (!PageUptodate(page)) {
+>  		offset = (loff_t) index << PAGE_SHIFT;
+> -		buf = __va((page_to_pfn(page) << PAGE_SHIFT));
+> -		rc = __read_vmcore(buf, PAGE_SIZE, &offset, 0);
+> +		kvec.iov_base = page_address(page);
+> +		kvec.iov_len = PAGE_SIZE;
+> +		iov_iter_kvec(&iter, READ, &kvec, 1, PAGE_SIZE);
+> +
+> +		rc = __read_vmcore(&iter, &offset);
+>  		if (rc < 0) {
+>  			unlock_page(page);
+>  			put_page(page);
+> @@ -725,7 +702,7 @@ static int mmap_vmcore(struct file *file, struct vm_area_struct *vma)
+>  
+>  static const struct proc_ops vmcore_proc_ops = {
+>  	.proc_open	= open_vmcore,
+> -	.proc_read	= read_vmcore,
+> +	.proc_read_iter	= read_vmcore,
+>  	.proc_lseek	= default_llseek,
+>  	.proc_mmap	= mmap_vmcore,
+>  };
+> -- 
+> 2.33.0
+> 
 

@@ -2,94 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B5147C946
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717EA47C949
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237998AbhLUWhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 17:37:37 -0500
-Received: from mga18.intel.com ([134.134.136.126]:21593 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237387AbhLUWhg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 17:37:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640126256; x=1671662256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p/Vl9wCw1ZI3a9nwksfebCZpk0SdstlowEWaFCNjn2M=;
-  b=L1uBKmD+MwjWk1J+7CZZTJ0p2sPd8nKKh43Tr3j+QqVVKrKSyccxNUuc
-   EnqFNMIQ0rhqVNK2GA28jKd/oFjWXVCIJ+gMS7q7wQYBzH6GeLjf14IqS
-   0vTla3ZUO5j70MOrTevOpWPnPxnDhmnD0PC7BAWqhtVBnPq0tHuMq2wWC
-   mCZ/H7JMpWHOQx6jvfo21bxMDFpRvDK2V5y8kPY25Wm7vUJ/wAVSEWZQb
-   GvCtaDYE4KX9GNyDEFELeM9BcD69xHt58dKS4TZ/zlj+KeHIKyV0qRStn
-   7hEEEwevXaj06K0gs5UXeLQ/0OnNjU/a+CLxixpG31JwZb5LEtdD2WO2C
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227354209"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="227354209"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 14:37:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="484563726"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Dec 2021 14:37:19 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mznl1-0009cF-0I; Tue, 21 Dec 2021 22:37:19 +0000
-Date:   Wed, 22 Dec 2021 06:36:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, tytso@mit.edu,
-        gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH] random: use BLAKE2s instead of SHA1 in extraction
-Message-ID: <202112220650.fYJyuWCt-lkp@intel.com>
-References: <20211221175047.341782-1-Jason@zx2c4.com>
+        id S231394AbhLUWkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 17:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhLUWkl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 17:40:41 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6195AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 14:40:41 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v64so755441ybi.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 14:40:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hD0pZoQcS3KfcyiV0zGmIHG20iPzEg5VDSH1vfbov/g=;
+        b=pW8gWI/jXD1bJTfs0SmV/vRFgZ/l0OgWGoCeQJIUXMToVGWQjowAEFmE8bTjEsXKKr
+         OVz91r8Apn2zb1pfGQ9THwvt3YnCMt8lJ23OyzFvzWbfoqY6SHp4LmtQPU6Mhca3xptN
+         Vu/8AAsttTOCKpmdyPLx8d4SZ8c69vNhZ/BUOWwQXLKZSpEJh7Ybh4KSwAKUypIzIGJH
+         Twh2S8CKOHJqEpLpSJP+hltUxa3yo5zcak81sXNHz+2O9FwcHB370RoHYmh1gvkL4ESL
+         THgawQXsrZImhr0IoF4r72Ij0TSvMKTPuDBaRlJ7XKgR0t9izDBll9bPslN+n4j8UB6/
+         rbSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hD0pZoQcS3KfcyiV0zGmIHG20iPzEg5VDSH1vfbov/g=;
+        b=PRATt9IntSPGSFIIAyR9+4Cn2K2eZCi8cjcyLFmXv75SmP2eD0hQ7bnFG6vXd022FF
+         Mfl2hX4yfsigvtzjnz07aUcvrW74GD+zDMozJO9g3A92vph+fUGvNuHlCUJfSOiT/JAB
+         tQkfgAJIEEQA0PH6hkL7OE/7RtkoBHMTzSBevjZuUbL8GpuEPzD/COHlLbBAkK3I9mVs
+         W4HV0S1IRE6U3V6Ur5LWUL2vMET96RLbGkiiwHL0Qzlw9OiAQMFLhnNxI9zP1kNK48Y2
+         yswXUOGyRklMYAlB0dHajxKXxfTWP2xGqOdr9T34WpOzF+OT3GwwkaqQxzjZ7RMX4U/9
+         seCA==
+X-Gm-Message-State: AOAM531aKOQp+ovknSx6zJend8E/XGcaNeSiNNnPRF7qFF546bBpM6I6
+        VhWxK80TIBDN6NnTohMMZNRKUo3/gMnxa9nBRw8fFV/72kzEeVZz
+X-Google-Smtp-Source: ABdhPJwewWZuE8UNQR14Q3RT96/FbV3ekF2iUw1OO7au3+ISkSasPaUEout5OHOQO2w1HJi/gQW2EnKR18y+6kndlkg=
+X-Received: by 2002:a5b:c0b:: with SMTP id f11mr694892ybq.488.1640126440296;
+ Tue, 21 Dec 2021 14:40:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221175047.341782-1-Jason@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1640075637-14520-1-git-send-email-huangzhaoyang@gmail.com>
+In-Reply-To: <1640075637-14520-1-git-send-email-huangzhaoyang@gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 21 Dec 2021 14:40:29 -0800
+Message-ID: <CAJuCfpGTmbbT0kf8USCLZYtC0txOioNO-OyigCJGKb0Pf5eppA@mail.gmail.com>
+Subject: Re: [PATCH v2] psi: fix possible trigger missing in the window
+To:     Huangzhaoyang <huangzhaoyang@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Jason,
+On Tue, Dec 21, 2021 at 12:34 AM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-I love your patch! Yet something to improve:
+CC'ing PeterZ since I think this change will need to be accepted into
+his tree. Please include Peter in the future versions of this patch.
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on char-misc/char-misc-testing herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v5.16-rc6 next-20211221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>
+> There could be missing wake up if the rest of the window remain the
+> same stall states as the polling_total updates for every polling_min_period.
+> Introducing threshold_breach flag to record the trigger's status and update
+> the logic.
 
-url:    https://github.com/0day-ci/linux/commits/Jason-A-Donenfeld/random-use-BLAKE2s-instead-of-SHA1-in-extraction/20211222-021452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: nds32-allnoconfig (https://download.01.org/0day-ci/archive/20211222/202112220650.fYJyuWCt-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/79f40c8f3c427b4f4819dca21ea159bc3c0350f0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jason-A-Donenfeld/random-use-BLAKE2s-instead-of-SHA1-in-extraction/20211222-021452
-        git checkout 79f40c8f3c427b4f4819dca21ea159bc3c0350f0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+At least for me, it's hard to understand the problem from this
+description. Suggest something like this:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+When a new threshold breaching stall happens after a psi event was
+generated and within the window duration, the new event is not
+generated because the events are rate-limited to one per window. If
+after that no new stall is recorded then the event will not be
+generated even after rate-limiting duration has passed. This is
+happening because with no new stall, window_update will not be called
+even though threshold was previously breached. To fix this, record
+threshold breaching occurrence and generate the event once window
+duration is passed.
 
-All errors (new ones prefixed by >>):
+The code looks good to me. Thanks!
 
-   nds32le-linux-ld: lib/crypto/blake2s.o: in function `blake2s_mod_init':
-   blake2s.c:(.init.text+0x4): undefined reference to `blake2s_selftest'
->> nds32le-linux-ld: blake2s.c:(.init.text+0x8): undefined reference to `blake2s_selftest'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> Suggested-by: Suren Baghdasaryan <surenb@google.com>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+> v2: modify the logic according to Suren's suggestion
+> ---
+> ---
+>  include/linux/psi_types.h |  2 ++
+>  kernel/sched/psi.c        | 38 +++++++++++++++++++++++---------------
+>  2 files changed, 25 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index 0a23300..87b694a 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -132,6 +132,8 @@ struct psi_trigger {
+>
+>         /* Refcounting to prevent premature destruction */
+>         struct kref refcount;
+> +
+> +       bool threshold_breach;
+>  };
+>
+>  struct psi_group {
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 1652f2b..5c67ab9 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -524,24 +524,29 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>          */
+>         list_for_each_entry(t, &group->triggers, node) {
+>                 u64 growth;
+> +               bool trigger_stalled =
+> +                       group->polling_total[t->state] != total[t->state];
+>
+> -               /* Check for stall activity */
+> -               if (group->polling_total[t->state] == total[t->state])
+> -                       continue;
+> -
+> -               /*
+> -                * Multiple triggers might be looking at the same state,
+> -                * remember to update group->polling_total[] once we've
+> -                * been through all of them. Also remember to extend the
+> -                * polling time if we see new stall activity.
+> -                */
+> -               new_stall = true;
+> -
+> -               /* Calculate growth since last update */
+> -               growth = window_update(&t->win, now, total[t->state]);
+> -               if (growth < t->threshold)
+> +               /* Check for stall activity or a previous threshold breach */
+> +               if (!trigger_stalled && !t->threshold_breach)
+>                         continue;
+>
+> +               if (trigger_stalled) {
+> +                       /*
+> +                        * Multiple triggers might be looking at the same state,
+> +                        * remember to update group->polling_total[] once we've
+> +                        * been through all of them. Also remember to extend the
+> +                        * polling time if we see new stall activity.
+> +                        */
+> +                       new_stall = true;
+> +
+> +                       /* Calculate growth since last update */
+> +                       growth = window_update(&t->win, now, total[t->state]);
+> +                       if (growth < t->threshold)
+> +                               continue;
+> +
+> +                       t->threshold_breach = true;
+> +               }
+>                 /* Limit event signaling to once per window */
+>                 if (now < t->last_event_time + t->win.size)
+>                         continue;
+> @@ -550,6 +555,8 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>                 if (cmpxchg(&t->event, 0, 1) == 0)
+>                         wake_up_interruptible(&t->event_wait);
+>                 t->last_event_time = now;
+> +               /* Reset threshold breach flag once event got generated */
+> +               t->threshold_breach = false;
+>         }
+>
+>         if (new_stall)
+> @@ -1152,6 +1159,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+>         t->last_event_time = 0;
+>         init_waitqueue_head(&t->event_wait);
+>         kref_init(&t->refcount);
+> +       t->threshold_breach = false;
+>
+>         mutex_lock(&group->trigger_lock);
+>
+> --
+> 1.9.1
+>

@@ -2,141 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5517E47C418
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EBF47C41E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239995AbhLUQre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 11:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236468AbhLUQrd (ORCPT
+        id S240005AbhLUQtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 11:49:04 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4317 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236468AbhLUQtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:47:33 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91AEC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:47:32 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z29so54312052edl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qgzoOjuixCPGD3DrGcfNRG0OiVFUDG2snsOsT7Z+aWs=;
-        b=GfZb8I6uUXmA3ugHIvVwpvC75DFWqQ9FTrkYC+xshHSAlo0PBtBwr7JyaJl6qNUSCK
-         /NZ6dgKqVNXMkHXcvp8keaHOhC9o7qT5Z9WQn7CLE9/9acgQ9bSYnrzfhgtyY4icBoFS
-         S47vPFEUe8cwXS+Xtn4fDGjQIFrraNgMjP/RQf4KV17CZAV6Gs6jpwglRvHOcqHDpJaL
-         5hGWYcKtbkA6Zh2tnyqRJAbPS1yb272ZLAfgQMP1sImvfwE59amNwt1QMBPS3ZrdCfQA
-         wgF9LuSmes4YJDeRDmkhDeZ+UoZ5SxTFUH9cTHgpFrJY/OB3ks5+8yfIUcc0dhJH3lWj
-         tiEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qgzoOjuixCPGD3DrGcfNRG0OiVFUDG2snsOsT7Z+aWs=;
-        b=pcqabkCcI7AnZJmfC0rWOm4Gv1vlfATHLCCPUqpaG9rd+f1WGdtH2RojfqN3SgTGP6
-         giQCpSx6dV19/2wnZrCuLt4SmceNl4EGYQcVXhoLdKYuhbphYbBXYY78+Yymu8GrT506
-         zuoxY9NpBwg+GoMUi6bGXUOWTJorjQgxepdipfTZCwL+2GE3mCQ8x+zJXlxzySZSiGtG
-         vS0Hx739gh2nl+sEDGoywaOFm95aq/H6k2mXgg6xnole4HM0ant32s8FtrI6Zi2UI68S
-         iTiHfWq0nSsQ6eUEZsoz03bGxIrz8RyyP7OcHA9U53iiNpZV9xtAhulagVQH2XDPQZt4
-         bGow==
-X-Gm-Message-State: AOAM530PV09GNHfV0EsuDYeFjvL1rFNYXWy5zLwGBJyJw6uqpR1vtrEV
-        Gf9LPLhtqTNG6j9wRqpaOxZcKDhz0nTn2m4dk2beZQ==
-X-Google-Smtp-Source: ABdhPJwDLPCgB8Wi8VYCO/jFHJtdzGpyco8O0RmQmiFpE9YLdKzudzKph06jI7RIeEBybqsLVIoSLRUWzWUsqlZzMAA=
-X-Received: by 2002:a05:6402:1c08:: with SMTP id ck8mr4115171edb.32.1640105250601;
- Tue, 21 Dec 2021 08:47:30 -0800 (PST)
+        Tue, 21 Dec 2021 11:49:01 -0500
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJMnD4ZC8z6GDFT;
+        Wed, 22 Dec 2021 00:47:12 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 17:48:59 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 16:48:58 +0000
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
+ <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+ <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+ <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+ <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+ <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+ <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+ <d45ee18a-1faa-9c56-071d-18f5737d225c@huawei.com>
+ <11e180449d82e5276586cdaab5e70a1c1b3adb42.camel@linux.ibm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <3d543c90-383f-647a-5cd4-f7fd4e7246ad@huawei.com>
+Date:   Tue, 21 Dec 2021 16:48:57 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20211220210643.47842-1-pmenzel@molgen.mpg.de> <CAE_wzQ_Lg1ODV5sEqtW=SauhSXxi6+fh3msOuhnJy8-sNtORcg@mail.gmail.com>
-In-Reply-To: <CAE_wzQ_Lg1ODV5sEqtW=SauhSXxi6+fh3msOuhnJy8-sNtORcg@mail.gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 21 Dec 2021 08:47:19 -0800
-Message-ID: <CABXOdTeNy3jQ5aQijw9HTpwcNvkEJmddz9yf0Mk-Z+78bDDN-A@mail.gmail.com>
-Subject: Re: [PATCH] CHROMIUM: i2c: Add device property for probing
-To:     Dmitry Torokhov <dtor@chromium.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Furquan Shaikh <furquan@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>,
-        coreboot@coreboot.org, Matt DeVillier <matt.devillier@gmail.com>,
-        Felix Singer <felixsinger@posteo.net>,
-        Duncan Laurie <dlaurie@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Furquan Shaikh <furquan@chromium.org>,
-        Justin TerAvest <teravest@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>, linux-i2c@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <11e180449d82e5276586cdaab5e70a1c1b3adb42.camel@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 1:49 PM Dmitry Torokhov <dtor@chromium.org> wrote:
->
-> Hi Paul,
->
-> On Mon, Dec 20, 2021 at 1:07 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote=
-:
-> >
-> > From: Furquan Shaikh <furquan@google.com>
-> >
-> > Dear Linux folks,
-> >
-> >
-> > Google Chromebooks are often built with devices sourced from different
-> > vendors. These need to be probed. To deal with this, the firmware =E2=
-=80=93 in
-> > this case coreboot =E2=80=93 tags such optional devices accordingly =E2=
-=80=93 I think
-> > this is commit fbf2c79b (drivers/i2c/generic: Add config for marking
-> > device as probed) =E2=80=93 and Chromium OS=E2=80=99 Linux kernel has t=
-he patch at hand
-> > applied to act accordingly. Right after the merge, Dmitry created a
-> > revert, which was actively discussed for two days but wasn=E2=80=99t ap=
-plied.
-> > That means, millions of devices shipped with such a firmware and Linux
-> > kernel. To support these devices with upstream Linux kernel, is there a=
-n
-> > alternative to applying the patch to the Linux kernel, and to support
-> > the shipped devices?
->
-> *sigh* I should have pushed harder, but I see it managed to
-> proliferate even into our newer kernels. Not having this patch should
-> not cause any problems, it can only hurt, because the i2c core has no
-> idea how to power up and reset the device properly. The only downside
-> of not having this patch is that we may have devices in sysfs that are
-> not connected to actual hardware. They do now cause any problems and
-> is how we have been shipping ARM-based devices where we also dual- and
-> triple-source components. However if we were to have a device that
-> switches between several addresses (let's say device in bootloader
-> mode uses 0x10 address and in normal mode 0x20) this "probing" may
-> result in device not being detected at all.
->
-> If we wanted to do this correctly, coreboot would have to implement
-> full power and reset control and also add drivers for I2C controllers
-> to be able to communicate with peripherals, and then adjust _STA
-> methods to report "not present" when the device is indeed absent. And
-> note that even in this case we would have issues with "morphing
-> devices", so coreboot would also need to know how to reset device out
-> of bootloader mode, and maybe flash firmware so device can work in
-> normal mode.
->
-> However coreboot does (or did?) not want to add code to handle i2c
-> controllers, and would like to push this knowledge to the kernel. And
-> the kernel does know how to handle peripherals properly, but that
-> knowledge lies in individual drivers, not i2c core.
->
-> We should remove "linux,probed" from coreboot and not propagate to
-> newer Chrome OS kernels, and keep it away from upstream.
->
+On 20/12/2021 09:27, Niklas Schnelle wrote:
+>>   > My feeling is that in this case we want some other dependency, e.g. a
+>>   > new CONFIG_LPC. It should actually be possible to use this driver on
+>>   > any machine with an LPC bus, which would by definition be the primary
+>>   > I/O space, so it should be possible to load it on Arm64.
+>>
+>> You did suggest HARDCODED_IOPORT earlier in this thread, and the
+>> definition/premise there seemed sensible to me.
+>>
+>> Anyway it seems practical to make all these changes in a single series,
+>> so need a way forward as Niklas has no such changes for this additional
+>> kconfig option.
+>>
+>> As a start, may I suggest we at least have Niklas' patch committed to a
+>> dev branch based on -next or latest mainline release for further analysis?
+>>
+>> Thanks,
+>> John
+>>
+>>
+> My plan would be to split the patch up into more manageable pieces as
+> suggested by Arnd plus of course fixes like the missing ARM select. As
+> Arnd suggested I'll split the HAS_IOPORT additions into the initial
+> introduction plus arch selects and then the HAS_IOPORT dependencies per
+> subsytem. I think these per subsystem dependency patches then would be
+> a great place to find drivers which should have a different dependency
+> be it on LPC or a newly introduced HARDCODED_IOPORT. The thing is we
+> can find and check HAS_IOPORT dependencies easily but it's hard to find
+> HARDCODED_IOPORT so I think the lattter should be a refinement of the
+> former. It can of course still go in as a single series. I'll
+> definitely make the next iteration available as a git branch.
 
-Revert from chromeos-5.15 is at
-https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
-3350347.
-Everyone please feel free to comment there.
+I'll do an audit for what would require HARDCODED_IOPORT to understand 
+the scope while you can continue the work on your current path.
 
-Guenter
+Thanks,
+john
+

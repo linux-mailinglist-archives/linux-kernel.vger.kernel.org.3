@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A87CC47BBA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C19547BBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbhLUISf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbhLUISb (ORCPT
+        id S235501AbhLUITv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:19:51 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:53778
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232095AbhLUITt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:18:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE010C061574;
-        Tue, 21 Dec 2021 00:18:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Dec 2021 03:19:49 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D45EB80E07;
-        Tue, 21 Dec 2021 08:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1161C36AE7;
-        Tue, 21 Dec 2021 08:18:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640074708;
-        bh=vrx6RPSDmWAICZO/O856wjjtSS7R7umwCZ+joXnTXy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f2fbqHayxI5zE8rz7XssFncNFlkheTrC0qEaUpbufP9D9nhnmrUkTSTw4Fd3KzNzw
-         XvDaug56XhG1VsIE0IDzOOaRQiMo3IR70nij7cfM1Gse1OCuIQ72t7al9hpTAAoPXG
-         EmRiiBLfpv7UZXc9K41Jl5l0+8LPNyGRwQhRcf6g=
-Date:   Tue, 21 Dec 2021 09:18:25 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3] tty: rpmsg: Fix race condition releasing tty port
-Message-ID: <YcGN0fDn2hqAdrP9@kroah.com>
-References: <20211215153121.30010-1-arnaud.pouliquen@foss.st.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8AC743F20D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640074788;
+        bh=AmwBkgsCQBlvy6a8IJhNBe3rHFIw/oazUsEvZEPNdNw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=p0gp1Ub/qBL4Lo0HnHH0ySOaLrz2zHVSV+jPW6Nlzta9gdEaA0qt7fumUtBmKfRlL
+         gAhkExfiWqLj5PTHrZzK4gQlBtwyNldRXIBzT9EQTwWI7dMfYBcXb+apTs2RmOFW3y
+         XJQ6ujOMPbTi0SOFjwd9DIl1nal4zEr2NHgAlr1s3RTMt1gHDKOaHI4FmapOarKb/O
+         rWX/HxroBATh69wF58tn3VYjyKSKt4uk9xdTzhbRvTyoVX5H98u2NC2+GlmdQcMDYK
+         PICxzYkZmjCg/b8Dp7ok6kW9e1ZZwEkruh9VpkuVCg4F/iACBKIneR8lFjmcf1/sTH
+         6lRtxU9REfh/A==
+Received: by mail-lf1-f72.google.com with SMTP id g18-20020a05651222d200b0042612bda352so1588634lfu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 00:19:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AmwBkgsCQBlvy6a8IJhNBe3rHFIw/oazUsEvZEPNdNw=;
+        b=V/ELlJWkJMeLTC6ge4iuJoP4BHHQL8kOVuSEjN5bvFnBEb+aJLnvVkIfTt8TlFWQns
+         KyzQCRIE6bslq7i+P+rvyeBU4yexuYB4c++sh/dYQM5JdVZEE3FGayAknoni659cQEoI
+         D1dupIKEZ8xHC23Tbic5WEqzAP57dpKg3SamM3mhh+X+ZZ8y+mjzAY23bI6Uf/6x7C/E
+         vORXtouQOlVYzf2PEno8QO6U7R5d+hE8XkkvAnHryuirELgZj6Kd/q6Rcnf56+XmxJnA
+         +FsWFxhDngxR6o67+Z3vLSyPunQGoBqnN3MQnAAwp7jC3fdPcDGVFA3VZqe77rmHybdm
+         raTw==
+X-Gm-Message-State: AOAM533rwwu4TJAcXgFOz1og8nZXzT6qWrS8qix5SEO0Gd5Pjee7uVUs
+        hF8uItoUTysFSRgaAoP1d4qnwhZ1ihil6Y31ibtZSmx5SAw5lSilJUgQRoOEtAIfnIkb0hRPiGp
+        N1H3wshS48Bzzr/LdILuZGGryrITtyjFbYOE7hKEv6Q==
+X-Received: by 2002:a2e:b177:: with SMTP id a23mr1708971ljm.168.1640074787938;
+        Tue, 21 Dec 2021 00:19:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxy/XhlYssCNLAWRYkWoIWMzAeGZqkYE+7VzTrmhujnAacn27xoPqnMQ2uSgBrGs8xv+IeKow==
+X-Received: by 2002:a2e:b177:: with SMTP id a23mr1708948ljm.168.1640074787666;
+        Tue, 21 Dec 2021 00:19:47 -0800 (PST)
+Received: from [192.168.0.27] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id z26sm2654830lja.48.2021.12.21.00.19.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 00:19:47 -0800 (PST)
+Message-ID: <edd828b4-66ad-1c1e-4332-e1b05931e92a@canonical.com>
+Date:   Tue, 21 Dec 2021 09:19:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215153121.30010-1-arnaud.pouliquen@foss.st.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Sylwester Nawrocki <snawrocki@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211217161549.24836-1-semen.protsenko@linaro.org>
+ <20211217161549.24836-2-semen.protsenko@linaro.org>
+ <2fdc5c97-6c19-8e70-d717-28b29d86160c@kernel.org>
+ <5bd5c0bf-4390-22c2-e4e0-cb02b80dfb9c@canonical.com>
+ <CAPLW+4msw_yeG4uDbS9mMULOuc43MK9O6Paya_Z2jBj2t6ZTiA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4msw_yeG4uDbS9mMULOuc43MK9O6Paya_Z2jBj2t6ZTiA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 04:31:21PM +0100, Arnaud Pouliquen wrote:
-> The tty_port struct is part of the rpmsg_tty_port structure.
-> The issue is that the rpmsg_tty_port structure is freed on
-> rpmsg_tty_remove while it is still referenced in the tty_struct.
-> Its release is not predictable due to workqueues.
+On 20/12/2021 15:55, Sam Protsenko wrote:
+> On Mon, 20 Dec 2021 at 11:31, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 19/12/2021 23:29, Sylwester Nawrocki wrote:
+>>> On 17.12.2021 17:15, Sam Protsenko wrote:
+>>>> System Register is used to configure system behavior, like USI protocol,
+>>>> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+>>>> make it possible to modify SYSREG registers.
+>>>>
+>>>> While at it, add also missing PMU and GPIO clocks, which looks necessary
+>>>> and might be needed for corresponding Exynos850 features soon.
+>>>>
+>>>> Reviewed-by: Krzysztof Kozlowski<krzysztof.kozlowski@canonical.com>
+>>>> Acked-by: Rob Herring<robh@kernel.org>
+>>>> Acked-by: Chanwoo Choi<cw00.choi@samsung.com>
+>>>> Signed-off-by: Sam Protsenko<semen.protsenko@linaro.org>
+>>>
+>>> Apologies for late reply, this patch is applied now.
+>>>
+>>
+>> Sam,
+>>
+>> The clock is used in the DTSI, so since this was applied, there are only
+>> two choices now:
+>> 1. wait for next cycle with DTSI and DTS,
+>> 2. Resubmit with replacing the newly added clocks in DTSI/DTS with
+>> numbers and a TODO note.
+>>
 > 
-> For instance following ftrace shows that rpmsg_tty_close is called after
-> rpmsg_tty_release_cport:
-> 
->      nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
-> remove
->              cat-1191    [001] .....   212.095697: tty_release <-__fput
->       nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
-> sg_tty_remove
->              cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
->              cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
-> 
-> As consequence, the port must be free only when user has released the TTY
-> interface.
-> 
-> This path :
-> - Introduce the .destruct port ops function to release the allocated
->   rpmsg_tty_port structure.
-> - Manages the tty port refcounting to trig the .destruct port ops,
-> - Introduces the rpmsg_tty_cleanup function to ensure that the TTY is
->   removed before decreasing the port refcount.
-> - Uses tty_vhangup and tty_port_hangup instead of tty_port_tty_hangup.
+> But why? I thought because Sylwester applied my clock patches, those
+> will get into v5.17, and so DTSI/DTS might rely on those clocks? If I
+> get it wrong, please let me know why, and I'll go with item (2) you
+> suggested.
 
-Shouldn't this hangup change be a separate change?
+If I apply the DTSI+DTS, all my builds will start failing. The
+linux-next (since Sylwester's tree is included) should build fine, but
+my tree won't be buildable anymore. Then arm-soc pulls my tree and gets
+said because it does not build. Later, Linus will be unhappy if he pulls
+arm-soc (thus mine) before clock tree.
 
-> 
-> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
-> delta vs V2: taking into account Jiri Slaby's comments:
->  - Inline rpmsg_tty_release_cport in rpmsg_tty_destruct_port,
->  - call tty_port_put in case of error in rpmsg_tty_probe,
->  - use tty_port_get port return in rpmsg_tty_install to take into account
->    NULL port return case.
-> 
-> Applied and tested on fa55b7dcdc43 ("Linux 5.16-rc1", 2021-11-14)
-> ---
->  drivers/tty/rpmsg_tty.c | 49 +++++++++++++++++++++++++++++------------
->  1 file changed, 35 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-> index dae2a4e44f38..cdc590c63f03 100644
-> --- a/drivers/tty/rpmsg_tty.c
-> +++ b/drivers/tty/rpmsg_tty.c
-> @@ -50,10 +50,21 @@ static int rpmsg_tty_cb(struct rpmsg_device *rpdev, void *data, int len, void *p
->  static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
->  {
->  	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
-> +	struct tty_port *port = tty->port;
->  
->  	tty->driver_data = cport;
->  
-> -	return tty_port_install(&cport->port, driver, tty);
-> +	port = tty_port_get(&cport->port);
-> +	return tty_port_install(port, driver, tty);
-> +}
-> +
-> +static void rpmsg_tty_cleanup(struct tty_struct *tty)
-> +{
-> +	struct tty_port *port = tty->port;
-> +
-> +	WARN_ON(!port);
+Other solution, instead of using raw numbers, is to copy-paste the clock
+macros you use directly in DTSI and do not include the clock header.
+This actually might be cleaner choice - changes will be limited to one
+place in DTSI.
 
-How can this ever trigger?  Shouldn't you do something if it can?
-
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

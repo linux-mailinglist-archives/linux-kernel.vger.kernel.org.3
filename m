@@ -2,179 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D174647C9E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF2547C9ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbhLUXwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbhLUXwn (ORCPT
+        id S232222AbhLUXy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:54:57 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:62451 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230432AbhLUXy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:52:43 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB38C061574;
-        Tue, 21 Dec 2021 15:52:43 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id u8so533448ilk.0;
-        Tue, 21 Dec 2021 15:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vew+Y6C0Xb4YbeDjKWJ5N89q8pmGnOIhzn71f8LdWQI=;
-        b=EaNe3ZSvokj/H/pohy2LjACQAmPjtsoc7e9TOiwwVjNOe0NV3jJFuDeHisHSmFg19n
-         gaB0NAMWSofDJjyv/mtQZCBg2AxOpnoXuNiZMslBRQzDwmxXsCHSQOorSIy2Qhpwdj2w
-         eVXRAf+Ng78+AlCtuzbPENAIMgUvN275RLUR60CCInXfRHdcsyOWaSQQCIRFmjpnk0nm
-         MLoOSSU24l1qdHCnBO0esW2VQmNeD9iAxj3bMWUf+ZjOQkVrD59tWz0pBIlgQ+yV2uwK
-         f9tEXapPrpHGJG1CmjwusUHoHzumcQBeS6jKPoPmaeaN3H/YmnecDDfKulihPlTEn7vg
-         4vhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vew+Y6C0Xb4YbeDjKWJ5N89q8pmGnOIhzn71f8LdWQI=;
-        b=rDeLtQxpwV0Ml5zTKtkW7pfLv6U3RPGLsrB8v5Gl4Rg+hvT5YTgVhKx3KYpy+R/2cj
-         Kr+Jgn44Mk/78h1sgEdeGK27IEyxtzuMZ6MFj4zfcXx45op0xNZhnfDjyKlAIgkDs9BI
-         5thMSBCAlytiKSXrobalwWiIIOpTf6ljQlWJiJlwwNwWEhfa+0FIbbADNGkT0uS3aVz9
-         E3CElBlVJPmxoXpnA0uu6448QgFlfPhcrFNBMHk3GmQhOCdcC3pfjumzW/Ry9pToaoIG
-         KaSFb609tXm9d2onSmadJFJJcF+3RxV3GMaS6dophYJlDo81pDKOHfWHWBQG9iy3QGuV
-         nNew==
-X-Gm-Message-State: AOAM533Y6kSpAsIiitM03EJRpKqKH2osCzom7/XVaj0UszGX0+BWEkVc
-        pMNpR6nObdGa7c5I+1dq4HCU+kRxj1tSDQNB9N4=
-X-Google-Smtp-Source: ABdhPJw6EW6RqfsSqxydJGudx4Qgp0WEhCNkhiP+plg+tm0GmGuZ04r1MKvAkbCXFQYs+Jb3vh4//oyKqEPK+fBG50s=
-X-Received: by 2002:a05:6e02:1a21:: with SMTP id g1mr257519ile.71.1640130762806;
- Tue, 21 Dec 2021 15:52:42 -0800 (PST)
+        Tue, 21 Dec 2021 18:54:56 -0500
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 1BLNsW0I027486;
+        Wed, 22 Dec 2021 08:54:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BLNsW0I027486
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1640130873;
+        bh=lt5/Q1qF/gM5zxSTWJAiuYhZ7G063l8nDfj5NFBWPFQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bh96yNjfb6Yj02+wz5jpvvCQp45C5hUHe1yw9BJb03RSm5Ca7mQrmI5Exb2tIZpAi
+         UQ4Wshddr/+a4zeAjjiIS/RR8+NzchKfO6PFVDqWtV06daxVs5UNCKhKKFf6obU2qK
+         k4Zk2Aa9FxYCy4SUcCoOVxUX7P/bu5VLaVdM+b7ptdyb6Te9jSqiDr30Hhw+bbxnyP
+         1ncY2dcdYD402rjDNvDYfUOjN01jr7zSykAASfCQtgA3A4jHUnvonIF+AEtJHpQ8+D
+         SoLTsDtC4aD2TDvglp0BoZSEbpELUGm7yH9ZE7vFqoO+J/Nd3ydKL1rJsF8Wkfb25L
+         acZi3WsWv+a8Q==
+X-Nifty-SrcIP: [209.85.216.43]
+Received: by mail-pj1-f43.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so747382pjb.5;
+        Tue, 21 Dec 2021 15:54:32 -0800 (PST)
+X-Gm-Message-State: AOAM532aqX6TyaFpZsMWkgVcEp+OHiD1eN4jKuoAZri73W7X8UKt0sxW
+        tijQ684oNBvLquxdgOJV+z9MCcgttuIHQOcMq34=
+X-Google-Smtp-Source: ABdhPJyHmvEe/SbJP3NHZTlSWYDquxYNiXZefe5wDyRzBFR3pBzKvvtO4Qazoi1sYZxSb/j4kgFS4EFu261nxG1IfAU=
+X-Received: by 2002:a17:90b:164a:: with SMTP id il10mr609570pjb.77.1640130872060;
+ Tue, 21 Dec 2021 15:54:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214135555.125348-1-pulehui@huawei.com> <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
- <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com> <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
- <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com> <88aa98df-b566-d031-b9f9-2b88a437a810@huawei.com>
-In-Reply-To: <88aa98df-b566-d031-b9f9-2b88a437a810@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 21 Dec 2021 15:52:31 -0800
-Message-ID: <CAEf4BzbJsmKiZHrnEZUZxCL_7PP2w3K5-VabP1bcsoyKogiypw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20211213030915.1170219-1-masahiroy@kernel.org> <0314b689-4445-def8-5f17-0c73f7567cf1@gmx.de>
+In-Reply-To: <0314b689-4445-def8-5f17-0c73f7567cf1@gmx.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Dec 2021 08:53:53 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS1fBV1=tA0v-u0vYEopxhw7U5KjMku2Duz++Na3DfB6Q@mail.gmail.com>
+Message-ID: <CAK7LNAS1fBV1=tA0v-u0vYEopxhw7U5KjMku2Duz++Na3DfB6Q@mail.gmail.com>
+Subject: Re: [PATCH] parisc: decompressor: do not copy source files while building
+To:     Helge Deller <deller@gmx.de>
+Cc:     Parisc List <linux-parisc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 4:58 PM Pu Lehui <pulehui@huawei.com> wrote:
+On Tue, Dec 14, 2021 at 7:45 PM Helge Deller <deller@gmx.de> wrote:
 >
->
->
-> On 2021/12/20 22:02, Pu Lehui wrote:
+> On 12/13/21 04:09, Masahiro Yamada wrote:
+> > As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
+> > builds") stated, copying source files during the build time may not
+> > end up with as clean code as expected.
 > >
+> > Do similar for parisc to clean up the Makefile.
 > >
-> > On 2021/12/18 0:45, Andrii Nakryiko wrote:
-> >> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 2021/12/16 12:06, Andrii Nakryiko wrote:
-> >>>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
-> >>>>>
-> >>>>> When building bpf selftests on arm64, the following error will occur:
-> >>>>>
-> >>>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> >>>>> user_pt_regs'
-> >>>>>
-> >>>>> Some archs, like arm64 and riscv, use userspace pt_regs in
-> >>>>> bpf_tracing.h, which causes build failure when bpf prog use
-> >>>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
-> >>>>
-> >>>> We could probably also extend bpf_tracing.h to work with
-> >>>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
-> >>>> __VMLINUX_H__ checks). It's more work, but will benefit other end
-> >>>> users, not just selftests.
-> >>>>
-> >>> It might change a lot. We can use header file directory generated by
-> >>> "make headers_install" to fix it.
-> >>
-> >> We don't have dependency on "make headers_install" and I'd rather not
-> >> add it.
-> >>
-> >> What do you mean by "change a lot"?
-> >>
-> > Maybe I misunderstood your advice. Your suggestion might be to extend
-> > bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64,
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Acked-by: Helge Deller <deller@gmx.de>
+>
 
-yes
+Can you apply it to your tree?
+Thanks.
 
-> > only support user-space. So the patch might be like this:
+
+> Thanks!
+> Helge
+>
+> > ---
 > >
-> > diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> > index db05a5937105..2c3cb8e9ae92 100644
-> > --- a/tools/lib/bpf/bpf_tracing.h
-> > +++ b/tools/lib/bpf/bpf_tracing.h
-> > @@ -195,9 +195,13 @@ struct pt_regs;
+> >  arch/parisc/boot/compressed/.gitignore | 2 --
+> >  arch/parisc/boot/compressed/Makefile   | 8 --------
+> >  arch/parisc/boot/compressed/firmware.c | 2 ++
+> >  arch/parisc/boot/compressed/real2.S    | 2 ++
+> >  scripts/remove-stale-files             | 5 +++++
+> >  5 files changed, 9 insertions(+), 10 deletions(-)
+> >  create mode 100644 arch/parisc/boot/compressed/firmware.c
+> >  create mode 100644 arch/parisc/boot/compressed/real2.S
 > >
-> >   #elif defined(bpf_target_arm64)
+> > diff --git a/arch/parisc/boot/compressed/.gitignore b/arch/parisc/boot/compressed/.gitignore
+> > index b9853a356ab2..a5839aa16706 100644
+> > --- a/arch/parisc/boot/compressed/.gitignore
+> > +++ b/arch/parisc/boot/compressed/.gitignore
+> > @@ -1,6 +1,4 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> > -firmware.c
+> > -real2.S
+> >  sizes.h
+> >  vmlinux
+> >  vmlinux.lds
+> > diff --git a/arch/parisc/boot/compressed/Makefile b/arch/parisc/boot/compressed/Makefile
+> > index bf4f2891d0b7..116bd5c1873c 100644
+> > --- a/arch/parisc/boot/compressed/Makefile
+> > +++ b/arch/parisc/boot/compressed/Makefile
+> > @@ -13,7 +13,6 @@ OBJECTS := head.o real2.o firmware.o misc.o piggy.o
+> >  targets := vmlinux.lds vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2
+> >  targets += vmlinux.bin.xz vmlinux.bin.lzma vmlinux.bin.lzo vmlinux.bin.lz4
+> >  targets += $(OBJECTS) sizes.h
+> > -targets += real2.S firmware.c
 > >
-> > -struct pt_regs;
-> > +#if defined(__KERNEL__)
-> > +#define PT_REGS_ARM64 const volatile struct pt_regs
-> > +#else
-> >   /* arm64 provides struct user_pt_regs instead of struct pt_regs to
-> > userspace */
-> >   #define PT_REGS_ARM64 const volatile struct user_pt_regs
-> > +#endif
+> >  KBUILD_CFLAGS := -D__KERNEL__ -O2 -DBOOTLOADER
+> >  KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+> > @@ -42,14 +41,7 @@ $(obj)/head.o: $(obj)/sizes.h
+> >  CFLAGS_misc.o += -I$(objtree)/$(obj)
+> >  $(obj)/misc.o: $(obj)/sizes.h
+> >
+> > -$(obj)/firmware.o: $(obj)/firmware.c
+> > -$(obj)/firmware.c: $(srctree)/arch/$(SRCARCH)/kernel/firmware.c
+> > -     $(call cmd,shipped)
+> > -
+> >  AFLAGS_real2.o += -DBOOTLOADER
+> > -$(obj)/real2.o: $(obj)/real2.S
+> > -$(obj)/real2.S: $(srctree)/arch/$(SRCARCH)/kernel/real2.S
+> > -     $(call cmd,shipped)
+> >
+> >  CPPFLAGS_vmlinux.lds += -I$(objtree)/$(obj) -DBOOTLOADER
+> >  $(obj)/vmlinux.lds: $(obj)/sizes.h
+> > diff --git a/arch/parisc/boot/compressed/firmware.c b/arch/parisc/boot/compressed/firmware.c
+> > new file mode 100644
+> > index 000000000000..16a07137fe92
+> > --- /dev/null
+> > +++ b/arch/parisc/boot/compressed/firmware.c
+> > @@ -0,0 +1,2 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +#include "../../kernel/firmware.c"
+> > diff --git a/arch/parisc/boot/compressed/real2.S b/arch/parisc/boot/compressed/real2.S
+> > new file mode 100644
+> > index 000000000000..cdc6a4da3240
+> > --- /dev/null
+> > +++ b/arch/parisc/boot/compressed/real2.S
+> > @@ -0,0 +1,2 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#include "../../kernel/real2.S"
+> > diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+> > index f0d53227fe7b..80430b8fb617 100755
+> > --- a/scripts/remove-stale-files
+> > +++ b/scripts/remove-stale-files
+> > @@ -33,4 +33,9 @@ if [ -n "${building_out_of_srctree}" ]; then
+> >       do
+> >               rm -f arch/mips/boot/compressed/${f}
+> >       done
 > > +
-> >   #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-> >   #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
-> >   #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
+> > +     for f in firmware.c real2.S
+> > +     do
+> > +             rm -f arch/parisc/boot/compressed/${f}
+> > +     done
+> >  fi
 > >
-> Please ignore the last reply. User-space pt_regs of arm64/s390 is the
-> first part of the kernel-space's, it should has covered both kernel and
-> userspace.
+>
 
-Alright, so is there still a problem or not? Looking at the definition
-of struct pt_regs for arm64, just casting struct pt_regs to struct
-user_pt_regs will indeed just work. So in that case, what was your
-original issue?
 
-> >>>
-> >>> --- a/tools/testing/selftests/bpf/Makefile
-> >>> +++ b/tools/testing/selftests/bpf/Makefile
-> >>> @@ -294,7 +294,8 @@ MENDIAN=$(if
-> >>> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
-> >>>    CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
-> >>>    BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
-> >>>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
-> >>> -            -I$(abspath $(OUTPUT)/../usr/include)
-> >>> +            -I$(abspath $(OUTPUT)/../usr/include) \
-> >>> +            -I../../../../usr/include
-> >>>>>
-> >>>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> >>>>> ---
-> >>>>>    tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
-> >>>>>    tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
-> >>>>>    tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
-> >>>>>    tools/testing/selftests/bpf/progs/loop6.c     | 20
-> >>>>> ++++++-------------
-> >>>>>    .../selftests/bpf/progs/test_overhead.c       |  8 ++------
-> >>>>>    .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
-> >>>>>    6 files changed, 15 insertions(+), 43 deletions(-)
-> >>>>>
-> >>>>
-> >>>> [...]
-> >>>> .
-> >>>>
-> >> .
-> >>
-> > .
+-- 
+Best Regards
+Masahiro Yamada

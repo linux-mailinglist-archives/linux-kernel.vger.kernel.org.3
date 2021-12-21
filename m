@@ -2,74 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B82B47BCF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CB247BCF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbhLUJeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:34:17 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50340 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbhLUJeQ (ORCPT
+        id S236415AbhLUJgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:36:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38823 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233216AbhLUJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:34:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2D0DDCE129D;
-        Tue, 21 Dec 2021 09:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB2DC36AE2;
-        Tue, 21 Dec 2021 09:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640079253;
-        bh=S0liGZ/rrTWRVdA9HyNrsNhXjNGJ+JYhJzh98QoHfGI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmR7lXKIcRmYcBOZFtreMCl4qB5kNvl7wYHMNeztXCOF++uhNzbqPdbgb4v+m3W68
-         mgcM4P4RcNKHyjk5Czvk1M2+vzN4BhMuygwHRP7ZJqlCHTmDmgb72JQfbkPSytaSKr
-         bmj96z7eglkDIMb4luXxJEDGfRBSysor5eRBJgZo=
-Date:   Tue, 21 Dec 2021 10:34:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] software node: fix wrong node passed to find nargs_prop
-Message-ID: <YcGfky32lSXeABEF@kroah.com>
-References: <20211220210533.3578678-1-clement.leger@bootlin.com>
- <CAHp75Vf+F2L4EFmokRYD+-M9hSuz+SbiiWnqHvFZttRyfKS-mg@mail.gmail.com>
- <d9f5b201-2a00-799d-3a0f-7c9709d77102@gmail.com>
+        Tue, 21 Dec 2021 04:36:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640079361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+2FSzsZgNLWGLz0XhMjKaJvgHqsF7frzjYDf7l6DD9o=;
+        b=g9QtzznVJpHglbobaAtj2IIqmDTDSjyjq+id+Kx11qYPb3A4pwkLSMe3Aix1UQcwOP5b9B
+        96kRDZNo5rWGcDvuoimH0Bk8sKS/aoQqG7vSFDY/5Qw1GpRSAyn0yEhg6F/PyglKZZxBE2
+        xMyGOBSfWaZMwdJIN1aWYZh5e5Y5VO4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-hpSxNQDwPBS5VVoS0c0Xaw-1; Tue, 21 Dec 2021 04:36:00 -0500
+X-MC-Unique: hpSxNQDwPBS5VVoS0c0Xaw-1
+Received: by mail-wm1-f72.google.com with SMTP id p22-20020a05600c1d9600b00345a25ea8cfso882669wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:36:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+2FSzsZgNLWGLz0XhMjKaJvgHqsF7frzjYDf7l6DD9o=;
+        b=2Y/xSJnNWTOhGObkrBmMlhSqssKPuy84qI1bR38IHEvduXn+lg0c4O5nTkLVkt/VYw
+         nXyx7yFVhcMhG/3crUouteYMPRfT9WDDD/5lKIw3v2iaX8CUkxKyO9bqzw4Qehm6vCAd
+         HQuI/pnjLLLFAnUvyqZCs/qRQTLCVl+2n7OTREf+xJyCTDbDdfUmTxGEdcle6EsEtgT7
+         rTQ3W6qThrmzIa/bqkc2WwUQbSspfjsapi9/Nto9z0nvmlYhwGOpwk//B/0pbZ/0jrsG
+         lDJfWSYOFvhSNTpG4nMqv+bVWS5CJgPj0bwsbERtr+dAdaPrupkeEtNimJ58nS4+P/+j
+         7+wQ==
+X-Gm-Message-State: AOAM5312C1WSev0/t60ggZyBd34dWyGTWGdK9DHQDJD+ysbNW2qe6WEX
+        uycC5kKYQ/vuoXixYFUIILiLw+3DBFOzbNWPhsvcBm+elq2VDbUo1SsG9Dd6J6KvkQZrrakEVjT
+        Q/QgYX/NBvafUeZiwLTmPi9VB
+X-Received: by 2002:a5d:64ed:: with SMTP id g13mr1833666wri.197.1640079359334;
+        Tue, 21 Dec 2021 01:35:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy/1aAdXtJSPl2esQ9FVWb9gI7srtciCVYmg1Xivyel9J/heXzg+Wlcav85MQtWHeLh0gkclg==
+X-Received: by 2002:a5d:64ed:: with SMTP id g13mr1833656wri.197.1640079359208;
+        Tue, 21 Dec 2021 01:35:59 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id r11sm17559494wrw.5.2021.12.21.01.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 01:35:58 -0800 (PST)
+Date:   Tue, 21 Dec 2021 10:35:57 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org, irogers@google.com, kan.liang@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf pmu: Fix event list for uncore PMUs
+Message-ID: <YcGf/d5PPqqyXxUW@krava>
+References: <1639670017-74918-1-git-send-email-john.garry@huawei.com>
+ <YcGJJ2g+i5qWea7d@krava>
+ <bbf9c0b4-c048-3adf-5282-2355aa648acf@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d9f5b201-2a00-799d-3a0f-7c9709d77102@gmail.com>
+In-Reply-To: <bbf9c0b4-c048-3adf-5282-2355aa648acf@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:37:07PM +0000, Daniel Scally wrote:
-> Thanks Andy
-> 
-> On 20/12/2021 22:13, Andy Shevchenko wrote:
-> > + Sakari, Dan
+On Tue, Dec 21, 2021 at 09:10:37AM +0000, John Garry wrote:
+> On 21/12/2021 07:58, Jiri Olsa wrote:
+> > > +	/* Different names -> never duplicates */
+> > > +	if (strcmp(alias_a->name, alias_b->name))
+> > > +		return false;
+> > > +	if (!alias_a->pmu)
+> > > +		return true;
+> > > +	if (!alias_b->pmu)
+> > > +		return true;
+> > nit could be:
 > > 
-> > On Monday, December 20, 2021, Clément Léger <clement.leger@bootlin.com
-> > <mailto:clement.leger@bootlin.com>> wrote:
+> > 	if (!alias_a->pmu || !alias_b->pmu)
+> > 		return true;
 > > 
-> >     nargs_prop refers to a property located in the reference that is found
-> >     within the nargs property.
+> > would be great to have more comments explaining the check
+> > 
 > 
-> I think this is right (it's not used in the ACPI version, and the OF
-> version is quite convoluted so a bit hard to follow)...but also I note
-> that none of the users of fwnode_property_get_reference_args() pass
-> anything to nargs_prop anyway...do we even need this?
+> This is just a sanity check that both strings are non-NULL as we do a
+> strcmp() next. So would this be better:
+> 
+> if (!alias_a->pmu || !alias_b->pmu || !strcmp(alias_a->pmu, alias_b->pmu))
+> 	return true
+> 
+> ?
+> 
+> It will spill a line.
 
-Looks like it is unused, please just remove it.
+sure, it cought my eye because the is_cpu check later is done on
+the same line, so I started wondering what's the difference ;-)
 
-thanks,
+jirka
 
-greg k-h
+> 
+> Thanks,
+> John
+> 
+> > thanks,
+> > jirka
+> > 
+> > > +	if (!strcmp(alias_a->pmu, alias_b->pmu))
+> > > +		return true;
+> > > +	/* uncore PMUs */
+> 
+> 
+

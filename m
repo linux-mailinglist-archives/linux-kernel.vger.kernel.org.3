@@ -2,144 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603C447C40D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E3C47C412
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 17:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239969AbhLUQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 11:45:01 -0500
-Received: from mga18.intel.com ([134.134.136.126]:55770 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239955AbhLUQo7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 11:44:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640105099; x=1671641099;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Q4tyfixgHyEhzlQ+wu6MKp8Bif+Yw8I7N5uaDrDgfl8=;
-  b=Ol1VccmRHudcHXUXwS9xA2vQYDu3GvVYGROcHaHCrot1/yXnwFFItNAZ
-   ngLK4HhVdF+o+una7YhVxCdy8QKV1zNmkdgNtbW7gYkbGlwXSuoGHjY1f
-   galsDjf2O/QXOLp58hDcWYbUBAEZu+KQ5tucDryMB4O0GdHoKKUw9gqcm
-   r3VVIIJLdTvDHQwRYJTtT+7MbEmdeuCeZwriQ4Npfur9f+/zUkmE+g/M0
-   nAH96Pd2wmYVetQgpwcXucKya9+D/J/Z6vdx/Y4eE6VigBftseVpEQy4S
-   0UhsVKSX5AcjkADijYo9fnO7snm0lVEn3erZD7rvz/mX2hBSa29TDrH3q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227279235"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="227279235"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 08:44:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="755869271"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Dec 2021 08:44:57 -0800
-Received: from abailey-MOBL.amr.corp.intel.com (unknown [10.209.52.201])
-        by linux.intel.com (Postfix) with ESMTP id 74F865807C5;
-        Tue, 21 Dec 2021 08:44:57 -0800 (PST)
-Message-ID: <e9648546c3fb751954e411dfa392f0e0f90f0c85.camel@linux.intel.com>
-Subject: Re: [PATCH RESEND V2 3/6] platform/x86/intel: Move intel_pmt from
- MFD to Auxiliary Bus
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Date:   Tue, 21 Dec 2021 08:44:57 -0800
-In-Reply-To: <YcGEaH0oAAocziU2@kroah.com>
-References: <20211208015015.891275-1-david.e.box@linux.intel.com>
-         <20211208015015.891275-4-david.e.box@linux.intel.com>
-         <YbDbql39x7Kw6iAC@kroah.com>
-         <7e78e6311cb0d261892f7361a1ef10130436f358.camel@linux.intel.com>
-         <YbD1NsYHbU8FvtTN@kroah.com>
-         <a70956e1c4da10603e29087e893cbae62ce82631.camel@linux.intel.com>
-         <YbEFuN7fwdiNI8vW@kroah.com>
-         <622887d53eaf6e6ae36354bfa0ed483df1cd9214.camel@linux.intel.com>
-         <YcGEaH0oAAocziU2@kroah.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S239988AbhLUQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 11:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239972AbhLUQpk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 11:45:40 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE52C061401;
+        Tue, 21 Dec 2021 08:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
+        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
+        :Content-Description; bh=JIgd2jfSglzRbcIc1E1/BJx1EyWbvswuVDf/T+cKOFE=; b=ZM5l
+        zLSsClu4WEGbXKyIl3KyKKSdqobTBDDs141ifYCZ1YvcQqVoSFZ3xO2qBLuEiQq+uVgOo/t5+XKrc
+        f3CGlQUk0I6cTwnOa/f9RrWCYwB8Nn0qek4QNJ6gq1CU2kfidJYQGgxeQNTBY77eSDTFtFNieHC3C
+        0O7P9M/baOlLXmugzwjmwDnD1F4V/b72HzuMlugmoBiX/bfRnMrTun8tFDD575Q5vGwWJ0B78pEXR
+        xxh1pF6V2C1c7Z05WTAIu+YmYp2jzcYcz51ZO67z8UYu4aRLhkh3RTnCPoL93KBx9TBWADoYHHcEJ
+        NM2+S9uWQvmHh63q858/8ooEDPA5YA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mziGX-00060B-3Y; Tue, 21 Dec 2021 16:45:29 +0000
+Date:   Tue, 21 Dec 2021 16:45:28 +0000
+From:   John Keeping <john@metanate.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+Message-ID: <20211221164528.3c84543f.john@metanate.com>
+In-Reply-To: <87zgou6iq1.mognet@arm.com>
+References: <Yb3vXx3DcqVOi+EA@donbot>
+        <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
+        <87zgou6iq1.mognet@arm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-21 at 08:38 +0100, Greg KH wrote:
-> On Wed, Dec 08, 2021 at 01:30:06PM -0800, David E. Box wrote:
-> > On Wed, 2021-12-08 at 20:21 +0100, Greg KH wrote:
-> > > On Wed, Dec 08, 2021 at 11:09:48AM -0800, David E. Box wrote:
-> > > > On Wed, 2021-12-08 at 19:11 +0100, Greg KH wrote:
-> > > > > On Wed, Dec 08, 2021 at 09:47:26AM -0800, David E. Box wrote:
-> > > > > > On Wed, 2021-12-08 at 17:22 +0100, Greg KH wrote:
-> > > > > > > On Tue, Dec 07, 2021 at 05:50:12PM -0800, David E. Box wrote:
-> > > > > > > > +static struct pci_driver intel_vsec_pci_driver = {
-> > > > > > > > +       .name = "intel_vsec",
-> > > > > > > > +       .id_table = intel_vsec_pci_ids,
-> > > > > > > > +       .probe = intel_vsec_pci_probe,
-> > > > > > > > +};
-> > > > > > > 
-> > > > > > > So when the PCI device is removed from the system you leak
-> > > > > > > resources and
-> > > > > > > have dangling devices?
-> > > > > > 
-> > > > > > No.
-> > > > > > 
-> > > > > > > Why no PCI remove driver callback?
-> > > > > > 
-> > > > > > After probe all resources are device managed. There's nothing to
-> > > > > > explicitly clean up. When
-> > > > > > the
-> > > > > > PCI
-> > > > > > device is removed, all aux devices are automatically removed. This
-> > > > > > is the case for the SDSi
-> > > > > > driver
-> > > > > > as well.
-> > > > > 
-> > > > > Where is the "automatic cleanup" happening?  As this pci driver is
-> > > > > bound
-> > > > > to the PCI device, when the device is removed, what is called in this
-> > > > > driver to remove the resources allocated in the probe callback?
-> > > > > 
-> > > > > confused,
-> > > > 
-> > > > devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev)
-> > > 
-> > > Wow that is opaque.  Why not do it on remove instead?
-> > 
-> > This code is common for auxdev cleanup. AFAICT most auxiliary bus code is
-> > done by drivers that have
-> > some other primary function. They clean up their primary function resources
-> > in remove, but they
-> > clean up the auxdev using the method above. In this case the sole purpose of
-> > this driver is to
-> > create the auxdev. There are no other resources beyond what the auxdev is
-> > using.
-> > 
-> > Adding runtime pm to the pci driver will change this. Remove will be needed
-> > then.
-> 
-> And who will notice that being required when that happens?
-> 
-> Why is there no runtime PM for this driver?  Do you not care about power
-> consumption?  :)
+On Tue, 21 Dec 2021 16:11:34 +0000
+Valentin Schneider <valentin.schneider@arm.com> wrote:
 
-Of course. :)
-
-There's a backlog of patches waiting for this series. One adds support for the
-telemetry device (an auxdev) on the DG2 GPU. This device requires runtime pm in
-order for the slot to go D3. But this also requires changes to the telemetry
-driver in order for runtime pm to be handled correctly. These and other patches,
-including a series to have all current aux drivers use the new drvdata helpers,
-are waiting for this.
-
-David
-
+> On 20/12/21 18:35, Dietmar Eggemann wrote:
+> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> > index ef8228d19382..798887f1eeff 100644
+> > --- a/kernel/sched/rt.c
+> > +++ b/kernel/sched/rt.c
+> > @@ -1895,9 +1895,17 @@ static int push_rt_task(struct rq *rq, bool pull)
+> >                 struct task_struct *push_task = NULL;
+> >                 int cpu;
+> >
+> > +               if (WARN_ON_ONCE(!rt_task(rq->curr))) {
+> > +                       printk("next_task=[%s %d] rq->curr=[%s %d]\n",
+> > +                              next_task->comm, next_task->pid, rq->curr->comm, rq->curr->pid);
+> > +               }
+> > +
+> >                 if (!pull || rq->push_busy)
+> >                         return 0;
+> >
+> > +               if (!rt_task(rq->curr))
+> > +                       return 0;
+> > +  
 > 
-> thanks,
+> If current is a DL/stopper task, why not; if that's CFS (which IIUC is your
+> case), that's buggered: we shouldn't be trying to pull RT tasks when we
+> have queued RT tasks and a less-than-RT current, we should be rescheduling
+> right now.
 > 
-> greg k-h
+> I'm thinking this can happen via rt_mutex_setprio() when we demote an RT-boosted
+> CFS task (or straight up sched_setscheduler()):
+> check_class_changed()->switched_from_rt() doesn't trigger a resched_curr(),
+> so I suspect we get to the push/pull callback before getting a
+> resched (I actually don't see where we'd get a resched in that case other
+> than at the next tick).
+> 
+> IOW, feels like we want the below. Unfortunately I can't reproduce the
+> issue locally (yet), so that's untested.
+
+This patch doesn't make any difference for me - I hit the BUG on the
+first boot with this applied.
+
+> ---
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index fd7c4f972aaf..7d61ceec1a3b 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>  	 * this is the right place to try to pull some other one
+>  	 * from an overloaded CPU, if any.
+>  	 */
+> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
+> +	if (!task_on_rq_queued(p))
+>  		return;
+>  
+> -	deadline_queue_pull_task(rq);
+> +	if (!rq->dl.dl_nr_running)
+> +		deadline_queue_pull_task(rq);
+> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
+> +		resched_curr(rq);
+>  }
+>  
+>  /*
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index ef8228d19382..1ea2567612fb 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+>  	 * we may need to handle the pulling of RT tasks
+>  	 * now.
+>  	 */
+> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+> +	if (!task_on_rq_queued(p))
+>  		return;
+>  
+> -	rt_queue_pull_task(rq);
+> +	if (!rq->rt.rt_nr_running)
+> +		rt_queue_pull_task(rq);
+> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
+> +		resched_curr(rq);
+>  }
+>  
+>  void __init init_sched_rt_class(void)
 

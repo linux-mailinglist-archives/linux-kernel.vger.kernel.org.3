@@ -2,86 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D8447C9C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD6847C9C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237839AbhLUXeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S237997AbhLUXfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:35:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbhLUXeK (ORCPT
+        with ESMTP id S237268AbhLUXfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:34:10 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AC9C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 15:34:09 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id g17so957873ybe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 15:34:09 -0800 (PST)
+        Tue, 21 Dec 2021 18:35:01 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D0C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 15:35:01 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so738085pjw.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 15:35:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JYJm3T3Mh0/65r9JZT1OHzQn7oDZGbb/tFfElr78RMo=;
-        b=QrKNBeLoWWgP9CtbSNTZuFnSSxtoW26vGF0yf4K+esP8I2S+uvUDJ/UHYcsvjn+TWO
-         iK83SVWcTDoBX4hjuQhTIBiXdkNkIYTFM3jXvHO6SFXaB8MhK7DQDTzWsg/65aVIP7QY
-         YkDXbil+SQEETrH7oVtNabo+WSkYyalEuwKP9L+fshoXrt9XnYHJEiwLUvSAmozyRwBj
-         TyLV9PbG7tRytNKSKpivxQt+EXxDsnCzrMWDL2asGJmHFWq7f0Z8VESc1Z6vNdGUFAMz
-         Zbmj79LtcTzjkAgp4YLbLhjdr2b2UnqE+YfMoUx0UdSe2Pa4b3OORXmPrQYSWMn+pbGO
-         D+MQ==
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pOFga3csMzqxlQmjAN5qzbbbVuYOWHf63es+b6CDNAc=;
+        b=AWem4FFWepHI4GiG1vYWPraJqQUiTomICNrapdxKgXw5RiWlc2qnmWxmfYwryjrz9H
+         ry7VY7ErAoRwxYa+v/F7++t1ymF8xTqaHJqwBwvPOmdTqwicW2GLbpWt9tAFPpvVo9ZC
+         itkkdLosZknu7CUrfzqdhVonTuzJaRTCtexVNvlSQ57BTut71N+ikFJQhkcnm/iYRzFf
+         m5DDP1CS8Pr+PjWDEubKWtXpeuwIeKMriGQViKqK6jQwG/yIrK99W4YP9JmADxKFkFR/
+         RMqEhCYMyii5RsjVK/Zxce07N447Wr2PkWL7kQdJ87omhEQJtFAsxPGD540Fjb7SWbSi
+         r+gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JYJm3T3Mh0/65r9JZT1OHzQn7oDZGbb/tFfElr78RMo=;
-        b=5oJ//mwj1657e3OG87Q31aUEHd4XK69T1H2yZk8p7Z8lrUDbM/be9jXtllAPe4LRww
-         d88oIiB2cMcn+aKk3DwA57T80yyANV2LWRpRVPA2uo0P7A0m1RrMqJnM0LcwxDj2SOal
-         RUKD2RhH0QBGZQHTSqnCpZFYEnvOjzasXOQ37j2DL25HO9tpG0GRIzaQx6t3wewgb7nG
-         oOufm89oIXcHfYOgp63LVuHK+POgRKwPkNi4RveV1EFBTYlkH+zIcREfsiR6wKNwhOip
-         Gfvfgku4MTUxAj4Iav0ZbzWQe4CCix+2EO/8hX2sICxeuTwG2sd51pz5E2DFEcs7G6xg
-         b5ug==
-X-Gm-Message-State: AOAM532tINNfsabKe2TiDhFGMkQ9E/gl0Zoxlg5Ze9f3WWSMi9DQ0Vs1
-        w03qYpEEIjw86qln6NmXlVmXvx+9owqiCM+xHKg=
-X-Google-Smtp-Source: ABdhPJysb8Bqz97DpxkXO5xGRzeDjX9drXOLjqNVP2BF2qp1hf+xRskwavqdQd0HlpHlz6naAaVsi6bJRh2epDW2F88=
-X-Received: by 2002:a05:6902:721:: with SMTP id l1mr942134ybt.48.1640129648947;
- Tue, 21 Dec 2021 15:34:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pOFga3csMzqxlQmjAN5qzbbbVuYOWHf63es+b6CDNAc=;
+        b=hLCt2ItiK8Gsn0L9xhrokVqeHOFHPNKdw9+f2y0waFLB3zpATo1AqK2nZNdC2/nJqc
+         DN0vDQ3M3KxBIacbqMf2YIFtqBg7NZXupYaomkla8buKDkq+S40+acf6bzB76hn0I0vS
+         gZwkiQDc8JKJc8Q0bT5ecjaI3R+c8vOXnL63rnH4j4UMcLM8v+6+5IYl0rSlQKDPY3Pg
+         0UKGwNfJjXfKLrpzZ2Q8hHb+cfM7KE+nAuOwRdZUGtfUMnS14G/uauVlea9QXZaFQC0r
+         /2OmCx2VVvQXYFuu+NJXl9urmFCORnSRNxK9OVkCqKYsiE99DegTP4OKYskaxdrIo7Uk
+         m7Kw==
+X-Gm-Message-State: AOAM531zwH2eyht3KEcoZnHHEXk6N85wh57F6Ft2ljsKp4rNOBl9yjT7
+        MfkzlQD45PiNR1ZBQPhIVl0q/w==
+X-Google-Smtp-Source: ABdhPJwE8pf9uY9sS7o5GbRV0wFt25q+iILI8BQPj/jnVtmFK5YsySB0BCDIR5vGr62+1SGA0r60ZA==
+X-Received: by 2002:a17:902:d2d2:b0:148:f7d1:6315 with SMTP id n18-20020a170902d2d200b00148f7d16315mr628476plc.10.1640129700992;
+        Tue, 21 Dec 2021 15:35:00 -0800 (PST)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id u2sm126412pjc.23.2021.12.21.15.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 15:35:00 -0800 (PST)
+Date:   Tue, 21 Dec 2021 15:34:58 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Mike Ximing Chen <mike.ximing.chen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org, dan.j.williams@intel.com,
+        pierre-louis.bossart@linux.intel.com, netdev@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org
+Subject: Re: [RFC PATCH v12 17/17] dlb: add basic sysfs interfaces
+Message-ID: <20211221153458.51710479@hermes.local>
+In-Reply-To: <20211221065047.290182-18-mike.ximing.chen@intel.com>
+References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
+        <20211221065047.290182-18-mike.ximing.chen@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:839b:0:0:0:0 with HTTP; Tue, 21 Dec 2021 15:34:08
- -0800 (PST)
-Reply-To: mrsrosematthews987@gmail.com
-From:   "Mrs. Rose Matthew" <chukwumachioma59@gmail.com>
-Date:   Wed, 22 Dec 2021 00:34:08 +0100
-Message-ID: <CAJHvH_vw7_rA3M3oRQz2+VP3BPZcZNmSPdUPD37mFs7xPF-TjA@mail.gmail.com>
-Subject: PEACE OF THE LORD BE WITH YOU,,,,,,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
+On Tue, 21 Dec 2021 00:50:47 -0600
+Mike Ximing Chen <mike.ximing.chen@intel.com> wrote:
 
-My name is  Mrs.Rose Matthew from United States,a widow suffering from
- Breast Cancer and Stroke, which denied me a child as a result,i may
-not last till the next two months according to my doctor report.I'm
-married to late Pastor Matthew Wilson, and we were married for many
-years without any  child before his death. I'm 68 years old woman. I
-have some funds i inherited from my late husband the sum of
-US$10,000,000(Ten Million dollars) which i needed a very honest and
-God fearing person who will claim the funds from the bank and use the
-funds for work of God Affairs like; donation in the house of
-God,propagating the good news of God and to endeavor God worshiping
-place and help less-privileged. I found your profile and i decided to
-contact you for the donation work of God.
+> The dlb sysfs interfaces include files for reading the total and
+> available device resources, and reading the device ID and version. The
+> interfaces are used for device level configurations and resource
+> inquiries.
+> 
+> Signed-off-by: Mike Ximing Chen <mike.ximing.chen@intel.com>
+> ---
+>  Documentation/ABI/testing/sysfs-driver-dlb | 116 ++++++++++++
+>  drivers/misc/dlb/dlb_args.h                |  34 ++++
+>  drivers/misc/dlb/dlb_main.c                |   5 +
+>  drivers/misc/dlb/dlb_main.h                |   3 +
+>  drivers/misc/dlb/dlb_pf_ops.c              | 195 +++++++++++++++++++++
+>  drivers/misc/dlb/dlb_resource.c            |  50 ++++++
+>  6 files changed, 403 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-dlb
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-dlb b/Documentation/ABI/testing/sysfs-driver-dlb
+> new file mode 100644
+> index 000000000000..bf09ef6f8a3a
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-dlb
+> @@ -0,0 +1,116 @@
+> +What:		/sys/bus/pci/devices/.../total_resources/num_atomic_inflights
+> +What:		/sys/bus/pci/devices/.../total_resources/num_dir_credits
+> +What:		/sys/bus/pci/devices/.../total_resources/num_dir_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_hist_list_entries
+> +What:		/sys/bus/pci/devices/.../total_resources/num_ldb_credits
+> +What:		/sys/bus/pci/devices/.../total_resources/num_ldb_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_cos0_ldb_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_cos1_ldb_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_cos2_ldb_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_cos3_ldb_ports
+> +What:		/sys/bus/pci/devices/.../total_resources/num_ldb_queues
+> +What:		/sys/bus/pci/devices/.../total_resources/num_sched_domains
+> +Date:		Oct 15, 2021
+> +KernelVersion:	5.15
+> +Contact:	mike.ximing.chen@intel.com
+> +Description:
+> +		The total_resources subdirectory contains read-only files that
+> +		indicate the total number of resources in the device.
+> +
+> +		num_atomic_inflights:  Total number of atomic inflights in the
+> +				       device. Atomic inflights refers to the
+> +				       on-device storage used by the atomic
+> +				       scheduler.
+> +
+> +		num_dir_credits:       Total number of directed credits in the
+> +				       device.
+> +
+> +		num_dir_ports:	       Total number of directed ports (and
+> +				       queues) in the device.
+> +
+> +		num_hist_list_entries: Total number of history list entries in
+> +				       the device.
+> +
+> +		num_ldb_credits:       Total number of load-balanced credits in
+> +				       the device.
+> +
+> +		num_ldb_ports:	       Total number of load-balanced ports in
+> +				       the device.
+> +
+> +		num_cos<M>_ldb_ports:  Total number of load-balanced ports
+> +				       belonging to class-of-service M in the
+> +				       device.
+> +
+> +		num_ldb_queues:	       Total number of load-balanced queues in
+> +				       the device.
+> +
+> +		num_sched_domains:     Total number of scheduling domains in the
+> +				       device.
+> +
 
-I don't need any telephone communication in this regards because of my
-health according to my doctor report, please if you would be able to
-use the funds for the work of God as i stated ,contact me back so i
-will lead you to Alpha  bank  where this funds was deposited by my
-late husband Pastor Matthew Wilson  , for you to retrieve the funds in
-my name as the next of kin.
+Sysfs is only slightly better than /proc as an API.
+If it is just for testing than debugfs might be better.
 
-please contact me on my private email (mrsrosematthews987@gmail.com)
-I will stop here until i hear from you.
+Could this be done with a real netlink interface?
+Maybe as part of devlink?
 
-Always pray for my health.
-May God bless you In Jesus name Amen!!!
-Mrs. Rose Matthew

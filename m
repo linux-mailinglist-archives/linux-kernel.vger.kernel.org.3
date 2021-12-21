@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2093A47BE07
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0124447BE65
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbhLUKPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:15:20 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:37362 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbhLUKPS (ORCPT
+        id S234850AbhLUKsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:48:05 -0500
+Received: from bosmailout01.eigbox.net ([66.96.184.1]:58687 "EHLO
+        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232697AbhLUKsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:15:18 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 684282114D;
-        Tue, 21 Dec 2021 10:15:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640081717; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tw4XdfqKEnDXFIq4KJAkTaIZVJn1UjG86AxtNcsugP8=;
-        b=Hjyte8ENHdsPrBGaVKpNFn1mwcPxGe7gGmzQMk577eS/xg7Pz8BF7k5gk9VW2Sck6Eq61M
-        A6fT0Z6/hDxsTH4hAJdSSOKKZez+Hyn+fY03LdgZdjsuEArzOZYvCTAGFiwCzVGI68RGuw
-        aNqrAysr/+N8GWNpt7852Prl0Wd4DSA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640081717;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tw4XdfqKEnDXFIq4KJAkTaIZVJn1UjG86AxtNcsugP8=;
-        b=/iFnvAG4RtesCazLS7MFQDjGh3UnSiR0emxt3HUEhp0xgT6K6zgWlDSxErALSjimAWHqOo
-        WfH9FJNrpG9+C8BA==
-Received: from quack2.suse.cz (unknown [10.163.28.18])
-        by relay2.suse.de (Postfix) with ESMTP id 5309AA3B89;
-        Tue, 21 Dec 2021 10:15:17 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 2A3E41E14A1; Tue, 21 Dec 2021 11:15:17 +0100 (CET)
-Date:   Tue, 21 Dec 2021 11:15:17 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, paolo.valente@linaro.org,
-        jack@suse.cz, fchecconi@gmail.com, avanzini.arianna@gmail.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH 1/4] block, bfq: cleanup bfq_bfqq_to_bfqg()
-Message-ID: <20211221101517.GA24748@quack2.suse.cz>
-References: <20211221032135.878550-1-yukuai3@huawei.com>
- <20211221032135.878550-2-yukuai3@huawei.com>
+        Tue, 21 Dec 2021 05:48:04 -0500
+X-Greylist: delayed 1825 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Dec 2021 05:48:04 EST
+Received: from bosmailscan04.eigbox.net ([10.20.15.4])
+        by bosmailout01.eigbox.net with esmtp (Exim)
+        id 1mzcDC-0006eL-4d; Tue, 21 Dec 2021 05:17:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ewhac.org;
+         s=dkim; h=Sender:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:To:From:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=EimLAUwkePQ+L+4urY/7QQSNoxw6K1rYTlIf2uEcgII=; b=nuD9TAtQVNpUE8sE8+luSzdmCP
+        yFFCQ9K119CBWzAbZNtg1fohVA56+Lc92vewyCcBMASqYjxvXvsOpSCygPefye895P/33y4+tzj8H
+        1df/0ZnKkIv6yA9oxm+VipQoxxQHaTr1IRKnsmd5A95ZX45mo5hfIIl/GsaPirkvHfVpjlYJ3eQAB
+        oSBgcnPiiYPOZb24JHJKvztX067kPfKLtP/vvMlo67arkv3nPW3IV1NBOewoI9mEgrWUy+AKbRXb/
+        FpFgq9FcGIPCCJT8vWcof0skUf2Ezbn7c8fdiU3G+LXTCSK13FzeauoF+QHencC2rmeOrSs7/Tbk5
+        Q0ggIwyw==;
+Received: from [10.115.3.33] (helo=bosimpout13)
+        by bosmailscan04.eigbox.net with esmtp (Exim)
+        id 1mzcDB-0002mx-Ss; Tue, 21 Dec 2021 05:17:37 -0500
+Received: from bosauthsmtp10.yourhostingaccount.com ([10.20.18.10])
+        by bosimpout13 with 
+        id YyHa2600B0D2CUy01yHdXG; Tue, 21 Dec 2021 05:17:37 -0500
+X-Authority-Analysis: v=2.3 cv=RNUo47q+ c=1 sm=1 tr=0
+ a=Kpo39fPXdbgqDwiI3/AEUA==:117 a=lOZ7gjDonWBvovu+dU3iMA==:17
+ a=IOMw9HtfNCkA:10 a=ltsmEuTAGloA:10 a=fmD_JHji_u0A:10 a=z5_pBHiqAAAA:8
+ a=qn0TFzAFAAAA:8 a=pGLkceISAAAA:8 a=Pzg-1rgCefmo0o8-T2QA:9
+ a=Ixuhb_GfD2BeaOSowo0a:22 a=HH7FIXwXL_sUf1zzYxQd:22 a=1ZDzRB_x0Jt2thgvHzGi:22
+ a=bwAZncKOXFtojdMDTreG:22
+Received: from [135.180.175.56] (port=57742 helo=exiguous.ewhac.net)
+        by bosauthsmtp10.eigbox.net with esmtpsa (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim)
+        id 1mzcD8-00040G-H5; Tue, 21 Dec 2021 05:17:34 -0500
+From:   "Leo L. Schwab" <ewhac@ewhac.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Leo L. Schwab" <ewhac@ewhac.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] Input: spaceball - fix parsing of movement data packets
+Date:   Tue, 21 Dec 2021 02:16:31 -0800
+Message-Id: <20211221101630.1146385-1-ewhac@ewhac.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221032135.878550-2-yukuai3@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-EN-UserInfo: a76222b247b80e113a63936ffdc903eb:931c98230c6409dcc37fa7e93b490c27
+X-EN-AuthUser: ewhac@ewhac.org
+Sender:  "Leo L. Schwab" <ewhac@ewhac.org>
+X-EN-OrigIP: 135.180.175.56
+X-EN-OrigHost: unknown
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-12-21 11:21:32, Yu Kuai wrote:
-> Use bfq_group() instead, which do the same thing.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+The spaceball.c module was not properly parsing the movement reports
+coming from the device.  The code read axis data as signed 16-bit
+little-endian values starting at offset 2.
 
-Nice. Feel free to add:
+In fact, axis data in Spaceball movement reports are signed 16-bit
+big-endian values starting at offset 3.  This was determined first by
+visually inspecting the data packets, and later verified by consulting:
+http://spacemice.org/pdf/SpaceBall_2003-3003_Protocol.pdf
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+If this ever worked properly, it was in the time before Git...
 
-								Honza
+Signed-off-by: Leo L. Schwab <ewhac@ewhac.org>
+---
+Changes in v2:
+  - Coding style changes requested by <dmitry.torokhov@gmail.com>.
 
-> ---
->  block/bfq-iosched.c |  4 ++--
->  block/bfq-iosched.h |  1 -
->  block/bfq-wf2q.c    | 15 ---------------
->  3 files changed, 2 insertions(+), 18 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 0c612a911696..2f2b97cad980 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -774,7 +774,7 @@ bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  	if (!bfqq->next_rq)
->  		return;
->  
-> -	bfqq->pos_root = &bfq_bfqq_to_bfqg(bfqq)->rq_pos_tree;
-> +	bfqq->pos_root = &bfqq_group(bfqq)->rq_pos_tree;
->  	__bfqq = bfq_rq_pos_tree_lookup(bfqd, bfqq->pos_root,
->  			blk_rq_pos(bfqq->next_rq), &parent, &p);
->  	if (!__bfqq) {
-> @@ -2669,7 +2669,7 @@ static struct bfq_queue *bfqq_find_close(struct bfq_data *bfqd,
->  					 struct bfq_queue *bfqq,
->  					 sector_t sector)
->  {
-> -	struct rb_root *root = &bfq_bfqq_to_bfqg(bfqq)->rq_pos_tree;
-> +	struct rb_root *root = &bfqq_group(bfqq)->rq_pos_tree;
->  	struct rb_node *parent, *node;
->  	struct bfq_queue *__bfqq;
->  
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 07288b9da389..99949548896e 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -1051,7 +1051,6 @@ extern struct blkcg_policy blkcg_policy_bfq;
->  	for (parent = NULL; entity ; entity = parent)
->  #endif /* CONFIG_BFQ_GROUP_IOSCHED */
->  
-> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq);
->  struct bfq_queue *bfq_entity_to_bfqq(struct bfq_entity *entity);
->  unsigned int bfq_tot_busy_queues(struct bfq_data *bfqd);
->  struct bfq_service_tree *bfq_entity_service_tree(struct bfq_entity *entity);
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index b74cc0da118e..e1f5ca5c1fdb 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -142,16 +142,6 @@ static bool bfq_update_next_in_service(struct bfq_sched_data *sd,
->  
->  #ifdef CONFIG_BFQ_GROUP_IOSCHED
->  
-> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq)
-> -{
-> -	struct bfq_entity *group_entity = bfqq->entity.parent;
-> -
-> -	if (!group_entity)
-> -		group_entity = &bfqq->bfqd->root_group->entity;
-> -
-> -	return container_of(group_entity, struct bfq_group, entity);
-> -}
-> -
->  /*
->   * Returns true if this budget changes may let next_in_service->parent
->   * become the next_in_service entity for its parent entity.
-> @@ -230,11 +220,6 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
->  
->  #else /* CONFIG_BFQ_GROUP_IOSCHED */
->  
-> -struct bfq_group *bfq_bfqq_to_bfqg(struct bfq_queue *bfqq)
-> -{
-> -	return bfqq->bfqd->root_group;
-> -}
-> -
->  static bool bfq_update_parent_budget(struct bfq_entity *next_in_service)
->  {
->  	return false;
-> -- 
-> 2.31.1
-> 
+ drivers/input/joystick/spaceball.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/input/joystick/spaceball.c b/drivers/input/joystick/spaceball.c
+index 429411c6c0a8..10e09c86e067 100644
+--- a/drivers/input/joystick/spaceball.c
++++ b/drivers/input/joystick/spaceball.c
+@@ -19,6 +19,7 @@
+ #include <linux/module.h>
+ #include <linux/input.h>
+ #include <linux/serio.h>
++#include <asm/unaligned.h>
+ 
+ #define DRIVER_DESC	"SpaceTec SpaceBall 2003/3003/4000 FLX driver"
+ 
+@@ -74,10 +75,16 @@ static void spaceball_process_packet(struct spaceball* spaceball)
+ 	switch (spaceball->data[0]) {
+ 
+ 		case 'D':					/* Ball data */
++			/*
++			 * Skip first three bytes; read six axes worth of data.
++			 * Axis values are signed 16-bit big-endian.
++			 */
+ 			if (spaceball->idx != 15) return;
+-			for (i = 0; i < 6; i++)
++			data += 3;
++			for (i = 0;  i < ARRAY_SIZE(spaceball_axes);  ++i) {
+ 				input_report_abs(dev, spaceball_axes[i],
+-					(__s16)((data[2 * i + 3] << 8) | data[2 * i + 2]));
++					(__s16)get_unaligned_be16(&data[i * 2]));
++			}
+ 			break;
+ 
+ 		case 'K':					/* Button data */
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+

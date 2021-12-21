@@ -2,210 +2,2852 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D8047C004
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D25447C00B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 13:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237847AbhLUMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 07:51:43 -0500
-Received: from mail-dm6nam11on2087.outbound.protection.outlook.com ([40.107.223.87]:24160
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S237817AbhLUMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 07:51:52 -0500
+Received: from mail-bn8nam12on2065.outbound.protection.outlook.com ([40.107.237.65]:5856
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235157AbhLUMvk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 07:51:40 -0500
+        id S237866AbhLUMvt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:51:49 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=khN815j9hq9I5sVIHRzg91Il5uReexTsIFg9JFNB3G240NYbG2r96L9JO/JYsVIliNteO+824rM7in+uPB7wtiQwiSISnKcezz/S2HwubR78ntwEpAozUolGYOegJ+T1hxoJBUhPJI8jF2Q4lWSXujaEHYFBcHVexPzcNuIcV3IE3UM2cRDxQhuKzKk/WkKnBo4HlB1O5GnwMavrO1mmgl1dAolT8r+IxYKBMGZYB+/PUB5qMtaU7iF0k7bh3XFpg9t9Xe5wdgDTqaDs2HU+0OPSw/XidoOtYth/hiWe5gd6kDR3uowynWlV0RHcqKt+GPp7DBx7FOHv+WU5Q094Eg==
+ b=lAlKOGzKY1Qq9/6MYmF32Dq/ZLb5YLcQuy8eoBdZZefPOpI02cBAOA1TJJrYlwZHflYcT+whFXyaCOLJh/cK6LVTRYz3Gcdw60YHSHSsTFiNG7G51ck7khOXDNea9nuZgsY2bF2v1VxncWNxpz4ouaYkSSDeB6YY39mpwF210Ja4zVyvYFgpDLnwjsWdWDICNs7JjPHyEvJYo9/q3tMsBZYPQa3MVQywaA70J5fbdAA7XeNbGgXEnod1/SYfagGkRn1Ur7enZGr7Uh3lHM/NA7jRDHNPHvJppP34z89SPNsbGA8cOyE/BN292q2Vl0cbq/RTDY588N+ftkTdEtlS1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YrTzuzVkHkdoEkxZZEBbamQ/HZPPn8PSyb6DIXse8dk=;
- b=BM+lg25woromPGFqKYheKwzeIo+lGh9OISoq+uti5sgRyvTr4E1/8GjMsRSDmLrDjAc1rduD3AM6ZDDhEajta2ICw86y6wNz4UGuy9v89e0C7/g8H/oQmcFAD8fkhIwDL70foA5bEok4/FXhDLdefaFnMHQ9Lhet7uSxLPlyo1aZLAEoUirnJE87m1hYJUcsuEeZZ2YG4n7y2BBzuye15okmsofLfXB3DnmummRZwNsUTyBdPQ6AjZB/WlN8zBzZ9SI4lBKgt0M3dFKhQgxrZ7ZH+3zjcwAaswIuMc1gMAE6+GTBR2U3EPDlmHiIYQBfrYtfOTZIS1n52lt20LLF4w==
+ bh=qE3TI4PRgZrQxUQLe7l1835G3yeTqu3c1ZtxK4Lz9eI=;
+ b=nKnc/1Y+1nZ1Pwf773sQoJh2Wr/nfu0IH9P4Assxv0+D3O+VcNqK9vpsiNYFDQjBLgZNxQXp316e9GekTDjS8dMTIL76qYLkTVXgIIXxzPUd9A0iOVGuKamj2o1UfSTWvffGjFgbkLfAPyUypoNnpyaFxYPrSW/DCqd6iMoq7/eKjzPRBxGwEyEgAzSEwevZ1CigHVQb5QHjmAKCu6bj1VsUmQ6vaWibHXU7uQ4znfF6sG24ZUsI3UxHwaV7cHwPjH6URTau4qCIVtll2M9nI7Rqs1iUAYJZbsO8V9kZGb8L1C8U0rkPffqprzsAeNqiU/lU3O78eiDDf+h6KGw+tg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=nvidia.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YrTzuzVkHkdoEkxZZEBbamQ/HZPPn8PSyb6DIXse8dk=;
- b=nE9UxySpM6d0F9Mkldi5NN4zq6T5qlVdV7Wdh49pY8XFsGkTzOk779v1uterqTU/qLWawjXb2D2Ma5Gt2SFlwc6sKO/yqeLDDO+GPydg67FZHxPgY6CAN/2epdWmrs9M5e7N8t77m/9TpLFKKS666ZEEtdRIM6vJfUOqwSBjuDCgxjxQNDjuIakioHAYw/DBcteeeXcJ/cA8gHKaUIzP0Lc3zeiuS+4UOUZ/r2+LC9+jqCbnCutGQFwiPutzV5TUOOTqQA0Guq9P9EKW8B2Y2aQjLcLeVZ58r/BIkfREwHFMnF9vw90RB/Y/PBxUvRodEITrfPHB548KKexJ4MIt4A==
-Received: from MWHPR07CA0021.namprd07.prod.outlook.com (2603:10b6:300:116::31)
- by CY4PR1201MB0056.namprd12.prod.outlook.com (2603:10b6:910:1c::16) with
+ bh=qE3TI4PRgZrQxUQLe7l1835G3yeTqu3c1ZtxK4Lz9eI=;
+ b=jTNcCaNlCwVUbQ8C6ZR4vMzZ4M9s15Qd+xdFzhcpMdtKOjB9G6oWjddnJD5/DrFV+hy2obJNheZqTHqrd7ag3pPGObi9KxWTEAFMXZE6Lu4dlxAQGA9of489OjAFMxlUXGr5PzS/PAGq9zKD5YgfuLV75uxPvuh1KhymEmfGQwhnzQzkwOY6Hp4a4ITsx9P5XCkH/Y/aSVkOUiXO/Dc3LzjKhEJLGDvm7j4AYUkRJWxKilBiny8gBo/iLwvF/kq7GKs73ffDPyamWyueIFXSbQ+bfytnW86GzlDKiSum+mOtuYFrTi0/cgEIRsFxGIieNO5ls5bk+PiR+7QcBDfY+g==
+Received: from MWHPR22CA0013.namprd22.prod.outlook.com (2603:10b6:300:ef::23)
+ by MN2PR12MB2863.namprd12.prod.outlook.com (2603:10b6:208:103::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.20; Tue, 21 Dec
- 2021 12:51:38 +0000
-Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:116:cafe::c5) by MWHPR07CA0021.outlook.office365.com
- (2603:10b6:300:116::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.19; Tue, 21 Dec
+ 2021 12:51:44 +0000
+Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:ef:cafe::70) by MWHPR22CA0013.outlook.office365.com
+ (2603:10b6:300:ef::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
- Transport; Tue, 21 Dec 2021 12:51:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ Transport; Tue, 21 Dec 2021 12:51:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4801.14 via Frontend Transport; Tue, 21 Dec 2021 12:51:38 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 21 Dec
- 2021 12:51:37 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 21 Dec
- 2021 04:51:37 -0800
+ 15.20.4801.14 via Frontend Transport; Tue, 21 Dec 2021 12:51:44 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 21 Dec
+ 2021 12:51:43 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 21 Dec
+ 2021 12:51:40 +0000
 Received: from sumitg-l4t.nvidia.com (172.20.187.6) by mail.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 21 Dec 2021 12:51:34 +0000
+ Transport; Tue, 21 Dec 2021 12:51:37 +0000
 From:   Sumit Gupta <sumitg@nvidia.com>
 To:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <robh+dt@kernel.org>
 CC:     <kbuild-all@lists.01.org>, <sumitg@nvidia.com>, <bbasu@nvidia.com>,
         <vsethi@nvidia.com>, <jsequeira@nvidia.com>
-Subject: [Patch v3 4/9] arm64: tegra: Add node for CBB1.0 in Tegra194 SOC
-Date:   Tue, 21 Dec 2021 18:21:12 +0530
-Message-ID: <20211221125117.6545-5-sumitg@nvidia.com>
+Subject: [Patch v3 5/9] soc: tegra: cbb: Add CBB1.0 driver for Tegra194
+Date:   Tue, 21 Dec 2021 18:21:13 +0530
+Message-ID: <20211221125117.6545-6-sumitg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211221125117.6545-1-sumitg@nvidia.com>
 References: <20211221125117.6545-1-sumitg@nvidia.com>
-X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2178e706-43cf-471f-b37f-08d9c480a0d2
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0056:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB0056D46DF97E21D33318DE04B97C9@CY4PR1201MB0056.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Office365-Filtering-Correlation-Id: 80dfc394-d2f1-4fcc-afd1-08d9c480a464
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2863:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB28637D3E2B4A05BED33DACDCB97C9@MN2PR12MB2863.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:449;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KmMSL7rIIiWk6Cb9fwfPa7dBvuENWX4JQfcTGXNGfGGkvZIv9IU0AmSkx9Xn/u7Y0kXdvdeaCx9fxUePGcxe/pzZjnxaDZ1VrebT0S58ONDjlPiJSvXM37thhT0tAtp4XcBUdA4CUO7iLOwcUsdwXLMk2hOnxsQwpjMItV+4f6TyoaRKwcydttoXjE33eClqGhK4pOczSDgKOHwysotNi0+gkmLdnTX8577QgQxBusM9u7DuVkbZiHWscPI7yMzRFIn0On+dB79JyxnRb46ATx/Os8HzT1PsomsHkwuhM2o2SXPtrRBuCacvLhLGDV9myNrpyTQybCQ5khqqW7yNPDk8T0S4+7zIL+y+2o8hub4xK2q0Vcv8zTA+HpoX4ILp2d9FCXFiKbWy6PALfbKHtdu/FAxpsMoRCLAdjjoHL5heJygWh+GMuuwDuZRRADa51Cb/DKR59eG/g5/6W8k9BRyb9kqve+9HL5PS1XcrC+M40pJ0TmUgPAI950Z+MUFLaKrxA32L0Vsf05gAnwHHMrwWdnt9UvMEmxfthM3BSxFl7RTDXkrxlSwkbAZ3WQXwAxq3yWJc3859J3YdbURPcY+Mx6KYL1wCbipm/53AV/F0mx7tWqfZTxNuQTE5FQ7N+wQEFBImuxTZ9X06mqsQMKE9zT2bWE317yBu04J010K/AvoR+cNXeGU/qfJhigErpifRahPvhRHGIcPnSyxiGuJfc7fhZJKYcTVx+i3Db73VHcmcv2ewAAarI7ze4vj19x992BohBvIIKivXBbaOER9XVC9wK+OJwpXX3EtYnotKo0QlXP+RuZyhDIgiqAIOEpdwCPubsUOJYqXyMSRiag==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(5660300002)(40460700001)(26005)(4326008)(54906003)(316002)(8676002)(8936002)(70206006)(2906002)(107886003)(110136005)(186003)(6666004)(81166007)(36860700001)(36756003)(34020700004)(2616005)(336012)(86362001)(70586007)(47076005)(1076003)(83380400001)(7696005)(356005)(82310400004)(426003)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: bRVtl0c96GVS7kUKD2g9S0vNhYGZ4YjiAUJXB5SUiaPr1IqcDehlnBnK4eXK8O4r7QOoGSr4J1FH1f1mV7fVsQKuTiFpLnHyVbAEHfIa7KzR4nBt7s2BFyif9YF+pSRidrNTDLm/RqNMjIvsb7i37PiG5M+vf5yjHV39tXtgdacO+by0bBaOiOA4b0tEuIP0G6jgAjaefTin4sSyR+SZ6I8gF0bJGUMVtsS8S6CtifRc22l7jIHlfMmXzNMZqus2OeRPDG1gmp8ib/ZJc5YAAEDJVETz+u6/2xg2Wj4I5CnDeBJqafIJpsgRi1nv5Y4I3mHN2wetT8ITywKK3Hpvvtg24/3cXzqZMLxLD1A2RYACwrxkQZILi/fYXbw2amgr1KAY/YoNrDKqOmro0pLjt/byWB77eEsN1RNykKFcoYMt1Npc1j+PkRqQTiF5rt3qxjOLSkNyZ7prhhyPI6U+MB8FNQV93twqwTEyKC6lN5UE/TBNm8UB0calkfvA9COszkUm9y393/r95x+AiJ3y3IEN+QBYMmRbtElEaEdwYJXF7Fl+wHk3Ddu7V1DTELLq8uVVsjHVQaKDplVL1vH8tRQ7stDMwxl24SWag7v37U87MtPHM5v5bsRN5r/FilYOIMXd2jJNOarsnVy2oEPQlTqiwaoOwLpxEktvNX9LeS3ynobpKi8NHI6ozO9afhBUbgvSfZS9eSO2qbRlM6GdVY42EAXfOEa08pMwgqqrScMKpwY/lLl4bpI2RvAkQdEMWUsaYKTCrGBJJaww8tXCxwBjXsJf7j2r3V3siM2plUev4/POtOAhcFGZCJ9sHpm4Gt2XZSCLknKpeW8ODsyYkQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(426003)(47076005)(83380400001)(5660300002)(4326008)(7696005)(36860700001)(508600001)(6666004)(81166007)(34020700004)(8936002)(316002)(70586007)(107886003)(336012)(2616005)(26005)(70206006)(356005)(186003)(30864003)(82310400004)(8676002)(86362001)(110136005)(54906003)(2906002)(1076003)(40460700001)(36756003)(36900700001)(579004)(559001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 12:51:38.1593
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 12:51:44.1149
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2178e706-43cf-471f-b37f-08d9c480a0d2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80dfc394-d2f1-4fcc-afd1-08d9c480a464
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0056
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2863
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding device tree nodes to enable the driver for handling errors from
-Control Backbone(CBB). CBB version 1.0 is used in Tegra194 SOC.
+Adding driver to handle errors from Control Backbone(CBB) which are
+generated due to illegal accesses. CBB1.0 is used in Tegra194 SOC.
+When an error is reported from a NOC within CBB, the driver prints
+debug information about failed transaction like Error Code, Error
+Description, Master, Address, AXI ID, Cache, Protection, Security
+Group etc. It then causes system crash using BUG_ON() or call WARN()
+based on whether the error type is fatal or not.
 
 Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 ---
- arch/arm64/boot/dts/nvidia/tegra194.dtsi | 62 +++++++++++++++++++++++-
- 1 file changed, 61 insertions(+), 1 deletion(-)
+ drivers/soc/tegra/Kconfig            |    9 +
+ drivers/soc/tegra/Makefile           |    1 +
+ drivers/soc/tegra/cbb/Makefile       |    8 +
+ drivers/soc/tegra/cbb/tegra-cbb.c    |  198 +++
+ drivers/soc/tegra/cbb/tegra194-cbb.c | 2261 ++++++++++++++++++++++++++
+ include/soc/tegra/tegra-cbb.h        |   43 +
+ include/soc/tegra/tegra194-cbb.h     |  158 ++
+ 7 files changed, 2678 insertions(+)
+ create mode 100644 drivers/soc/tegra/cbb/Makefile
+ create mode 100644 drivers/soc/tegra/cbb/tegra-cbb.c
+ create mode 100644 drivers/soc/tegra/cbb/tegra194-cbb.c
+ create mode 100644 include/soc/tegra/tegra-cbb.h
+ create mode 100644 include/soc/tegra/tegra194-cbb.h
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-index 851e049b3519..dddc4982b35a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-@@ -22,7 +22,7 @@
- 		#size-cells = <1>;
- 		ranges = <0x0 0x0 0x0 0x40000000>;
+diff --git a/drivers/soc/tegra/Kconfig b/drivers/soc/tegra/Kconfig
+index 8b53ed1cc67e..0520b9744ec4 100644
+--- a/drivers/soc/tegra/Kconfig
++++ b/drivers/soc/tegra/Kconfig
+@@ -161,3 +161,12 @@ config SOC_TEGRA30_VOLTAGE_COUPLER
+ 	bool "Voltage scaling support for Tegra30 SoCs"
+ 	depends on ARCH_TEGRA_3x_SOC || COMPILE_TEST
+ 	depends on REGULATOR
++
++config SOC_TEGRA_CBB
++	tristate "Tegra driver to handle error from CBB"
++	depends on ARCH_TEGRA_194_SOC
++	default y
++	help
++	  Support for handling error from Tegra Control Backbone(CBB).
++	  This driver handles the errors from CBB and prints debug
++	  information about the failed transactions.
+diff --git a/drivers/soc/tegra/Makefile b/drivers/soc/tegra/Makefile
+index 054e862b63d8..d722f512dc9d 100644
+--- a/drivers/soc/tegra/Makefile
++++ b/drivers/soc/tegra/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-y += fuse/
++obj-y += cbb/
  
--		misc@100000 {
-+		apbmisc: misc@100000 {
- 			compatible = "nvidia,tegra194-misc";
- 			reg = <0x00100000 0xf000>,
- 			      <0x0010f000 0x1000>;
-@@ -87,6 +87,27 @@
- 			gpio-controller;
- 		};
- 
-+		cbb-noc@2300000 {
-+			compatible = "nvidia,tegra194-cbb-noc";
-+			reg = <0x02300000 0x1000>;
-+			interrupts = <GIC_SPI 230 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
-+			nvidia,axi2apb = <&axi2apb>;
-+			nvidia,apbmisc = <&apbmisc>;
-+			status = "okay";
-+		};
+ obj-y += common.o
+ obj-$(CONFIG_SOC_TEGRA_FLOWCTRL) += flowctrl.o
+diff --git a/drivers/soc/tegra/cbb/Makefile b/drivers/soc/tegra/cbb/Makefile
+new file mode 100644
+index 000000000000..3f9ff6575628
+--- /dev/null
++++ b/drivers/soc/tegra/cbb/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Control Backbone Driver code.
++#
++ifdef CONFIG_SOC_TEGRA_CBB
++obj-y += tegra-cbb.o
++obj-$(CONFIG_ARCH_TEGRA_194_SOC)        += tegra194-cbb.o
++endif
+diff --git a/drivers/soc/tegra/cbb/tegra-cbb.c b/drivers/soc/tegra/cbb/tegra-cbb.c
+new file mode 100644
+index 000000000000..75583c938a97
+--- /dev/null
++++ b/drivers/soc/tegra/cbb/tegra-cbb.c
+@@ -0,0 +1,198 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved
++ */
 +
-+		axi2apb: axi2apb@2390000 {
-+			compatible = "nvidia,tegra194-axi2apb";
-+			reg = <0x2390000 0x1000>,
-+			    <0x23a0000 0x1000>,
-+			    <0x23b0000 0x1000>,
-+			    <0x23c0000 0x1000>,
-+			    <0x23d0000 0x1000>,
-+			    <0x23e0000 0x1000>;
-+			status = "okay";
-+		 };
++#include <asm/cpufeature.h>
++#include <linux/clk.h>
++#include <linux/debugfs.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/device.h>
++#include <linux/io.h>
++#include <linux/of_irq.h>
++#include <linux/of_address.h>
++#include <linux/interrupt.h>
++#include <linux/ioport.h>
++#include <linux/version.h>
++#include <soc/tegra/fuse.h>
++#include <soc/tegra/tegra-cbb.h>
 +
- 		ethernet@2490000 {
- 			compatible = "nvidia,tegra194-eqos",
- 				     "nvidia,tegra186-eqos",
-@@ -1359,6 +1380,26 @@
- 			#phy-cells = <0>;
- 		};
- 
-+		sce-noc@b600000 {
-+			compatible = "nvidia,tegra194-sce-noc";
-+			reg = <0xb600000 0x1000>;
-+			interrupts = <GIC_SPI 261 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-+			nvidia,axi2apb = <&axi2apb>;
-+			nvidia,apbmisc = <&apbmisc>;
-+			status = "okay";
-+		};
++void tegra_cbb_print_err(struct seq_file *file, const char *fmt, ...)
++{
++	va_list args;
++	struct va_format vaf;
 +
-+		rce-noc@be00000 {
-+			compatible = "nvidia,tegra194-rce-noc";
-+			reg = <0xbe00000 0x1000>;
-+			interrupts = <GIC_SPI 259 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
-+			nvidia,axi2apb = <&axi2apb>;
-+			nvidia,apbmisc = <&apbmisc>;
-+			status = "okay";
-+		};
++	va_start(args, fmt);
 +
- 		hsp_aon: hsp@c150000 {
- 			compatible = "nvidia,tegra194-hsp", "nvidia,tegra186-hsp";
- 			reg = <0x0c150000 0x90000>;
-@@ -1374,6 +1415,15 @@
- 			#mbox-cells = <2>;
- 		};
- 
-+		aon-noc@c600000 {
-+			compatible = "nvidia,tegra194-aon-noc";
-+			reg = <0xc600000 0x1000>;
-+			interrupts = <GIC_SPI 260 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
-+			nvidia,apbmisc = <&apbmisc>;
-+			status = "okay";
-+		};
++	if (file) {
++		seq_vprintf(file, fmt, args);
++	} else {
++		vaf.fmt = fmt;
++		vaf.va = &args;
++		pr_crit("%pV", &vaf);
++	}
 +
- 		gen2_i2c: i2c@c240000 {
- 			compatible = "nvidia,tegra194-i2c";
- 			reg = <0x0c240000 0x10000>;
-@@ -1552,6 +1602,16 @@
- 			status = "okay";
- 		};
- 
-+		bpmp-noc@d600000 {
-+			compatible = "nvidia,tegra194-bpmp-noc";
-+			reg = <0xd600000 0x1000>;
-+			interrupts = <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>,
-+					<GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+			nvidia,axi2apb = <&axi2apb>;
-+			nvidia,apbmisc = <&apbmisc>;
-+			status = "okay";
-+		};
++	va_end(args);
++}
 +
- 		host1x@13e00000 {
- 			compatible = "nvidia,tegra194-host1x";
- 			reg = <0x13e00000 0x10000>,
++void tegra_cbb_print_cache(struct seq_file *file, u32 cache)
++{
++	char *buff_str;
++	char *mod_str;
++	char *rd_str;
++	char *wr_str;
++
++	buff_str = (cache & BIT(0)) ? "Bufferable " : "";
++	mod_str = (cache & BIT(1)) ? "Modifiable " : "";
++	rd_str = (cache & BIT(2)) ? "Read-Allocate " : "";
++	wr_str = (cache & BIT(3)) ? "Write-Allocate" : "";
++
++	if (cache == 0x0)
++		buff_str = "Device Non-Bufferable";
++
++	tegra_cbb_print_err(file, "\t  Cache\t\t\t: 0x%x -- %s%s%s%s\n",
++			    cache, buff_str, mod_str, rd_str, wr_str);
++}
++
++void tegra_cbb_print_prot(struct seq_file *file, u32 prot)
++{
++	char *data_str;
++	char *secure_str;
++	char *priv_str;
++
++	data_str = (prot & 0x4) ? "Instruction" : "Data";
++	secure_str = (prot & 0x2) ? "Non-Secure" : "Secure";
++	priv_str = (prot & 0x1) ? "Privileged" : "Unprivileged";
++
++	tegra_cbb_print_err(file, "\t  Protection\t\t: 0x%x -- %s, %s, %s Access\n",
++			    prot, priv_str, secure_str, data_str);
++}
++
++#ifdef CONFIG_DEBUG_FS
++static int created_root;
++
++static int cbb_err_show(struct seq_file *file, void *data)
++{
++	struct tegra_cbb *cbb = file->private;
++
++	return cbb->ops->cbb_err_debugfs_show(cbb, file, data);
++}
++
++static int cbb_err_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, cbb_err_show, inode->i_private);
++}
++
++static const struct file_operations cbb_err_fops = {
++	.open = cbb_err_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = single_release
++};
++
++static int tegra_cbb_err_dbgfs_init(struct tegra_cbb *cbb)
++{
++	struct dentry *d;
++
++	if (!created_root) {
++		d = debugfs_create_file("tegra_cbb_err", 0444, NULL, cbb,
++					&cbb_err_fops);
++		if (IS_ERR_OR_NULL(d)) {
++			pr_err
++			("%s: could not create 'tegra_cbb_err' node\n",
++			 __func__);
++			return PTR_ERR(d);
++		}
++		created_root = true;
++	}
++	return 0;
++}
++
++#else
++static int tegra_cbb_err_dbgfs_init(void) { return 0; }
++#endif
++
++void tegra_cbb_stallen(struct tegra_cbb *cbb)
++{
++	if (cbb->ops->stallen)
++		cbb->ops->stallen(cbb);
++}
++
++void tegra_cbb_faulten(struct tegra_cbb *cbb)
++{
++	if (cbb->ops->faulten)
++		cbb->ops->faulten(cbb);
++}
++
++void tegra_cbb_errclr(struct tegra_cbb *cbb)
++{
++	if (cbb->ops->errclr)
++		cbb->ops->errclr(cbb);
++}
++
++u32 tegra_cbb_errvld(struct tegra_cbb *cbb)
++{
++	if (cbb->ops->errvld)
++		return cbb->ops->errvld(cbb);
++	else
++		return 0;
++}
++
++int tegra_cbb_err_getirq(struct platform_device *pdev, int *nonsec_irq, int *sec_irq)
++{
++	int num_intr = 0;
++	int intr_indx = 0;
++
++	num_intr = platform_irq_count(pdev);
++	if (!num_intr)
++		return -EINVAL;
++
++	if (num_intr == 2) {
++		*nonsec_irq = platform_get_irq(pdev, intr_indx);
++		if (*nonsec_irq <= 0) {
++			dev_err(&pdev->dev, "can't get irq (%d)\n", *nonsec_irq);
++			return -ENOENT;
++		}
++		intr_indx++;
++	}
++
++	*sec_irq = platform_get_irq(pdev, intr_indx);
++	if (*sec_irq <= 0) {
++		dev_err(&pdev->dev, "can't get irq (%d)\n", *sec_irq);
++		return -ENOENT;
++	}
++
++	if (num_intr == 1)
++		dev_info(&pdev->dev, "secure_irq = %d\n", *sec_irq);
++	if (num_intr == 2)
++		dev_info(&pdev->dev, "secure_irq = %d, nonsecure_irq = %d>\n",
++			 *sec_irq, *nonsec_irq);
++	return 0;
++}
++
++int tegra_cbb_register_isr_enaberr(struct tegra_cbb *cbb)
++{
++	struct platform_device *pdev = cbb->pdev;
++	int ret = 0;
++
++	ret = tegra_cbb_err_dbgfs_init(cbb);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to create debugfs\n");
++		return ret;
++	}
++
++	/* register interrupt handler for errors due to different initiators */
++	ret = cbb->ops->cbb_intr_enable(cbb);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Failed to register CBB Interrupt ISR");
++		return ret;
++	}
++
++	cbb->ops->cbb_err_enable(cbb);
++	dsb(sy);
++
++	return 0;
++}
+diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c b/drivers/soc/tegra/cbb/tegra194-cbb.c
+new file mode 100644
+index 000000000000..740fc2a029f9
+--- /dev/null
++++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
+@@ -0,0 +1,2261 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved
++ *
++ * The driver handles Error's from Control Backbone(CBB) generated due to
++ * illegal accesses. When an error is reported from a NOC within CBB,
++ * the driver checks ErrVld status of all three Error Logger's of that NOC.
++ * It then prints debug information about failed transaction using ErrLog
++ * registers of error logger which has ErrVld set. Currently, SLV, DEC,
++ * TMO, SEC, UNS are the codes which are supported by CBB.
++ */
++
++#include <asm/cpufeature.h>
++#include <linux/clk.h>
++#include <linux/debugfs.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/device.h>
++#include <linux/io.h>
++#include <linux/of_irq.h>
++#include <linux/of_address.h>
++#include <linux/interrupt.h>
++#include <linux/ioport.h>
++#include <linux/version.h>
++#include <soc/tegra/fuse.h>
++#include <soc/tegra/tegra-cbb.h>
++#include <soc/tegra/tegra194-cbb.h>
++
++static LIST_HEAD(cbb_noc_list);
++static DEFINE_SPINLOCK(cbb_noc_lock);
++
++static const char *t194_cbb_trantype[] = {
++	"RD  - Read, Incrementing",
++	"RDW - Read, Wrap",			/* Not Supported */
++	"RDX - Exclusive Read",			/* Not Supported */
++	"RDL - Linked Read",			/* Not Supported */
++	"WR  - Write, Incrementing",
++	"WRW - Write, Wrap",			/* Not Supported */
++	"WRC - Exclusive Write",		/* Not Supported */
++	"PRE - Preamble Sequence for Fixed Accesses"
++};
++
++static const char *t194_axi2apb_err[] = {
++	"SFIFONE - Status FIFO Not Empty interrupt",
++	"SFIFOF - Status FIFO Full interrupt",
++	"TIM - Timer(Timeout) interrupt",
++	"SLV - SLVERR interrupt",
++	"NULL",
++	"ERBF - Early response buffer Full interrupt",
++	"NULL",
++	"RDFIFOF - Read Response FIFO Full interrupt",
++	"WRFIFOF - Write Response FIFO Full interrupt",
++	"CH0DFIFOF - Ch0 Data FIFO Full interrupt",
++	"CH1DFIFOF - Ch1 Data FIFO Full interrupt",
++	"CH2DFIFOF - Ch2 Data FIFO Full interrupt",
++	"UAT - Unsupported alignment type error",
++	"UBS - Unsupported burst size error",
++	"UBE - Unsupported Byte Enable error",
++	"UBT - Unsupported burst type error",
++	"BFS - Block Firewall security error",
++	"ARFS - Address Range Firewall security error",
++	"CH0RFIFOF - Ch0 Request FIFO Full interrupt",
++	"CH1RFIFOF - Ch1 Request FIFO Full interrupt",
++	"CH2RFIFOF - Ch2 Request FIFO Full interrupt"
++};
++
++static const char *t194_master_id[] = {
++	"CCPLEX",		/* 0x1 */
++	"CCPLEX_DPMU",		/* 0x2 */
++	"BPMP",			/* 0x3 */
++	"AON",			/* 0x4 */
++	"SCE",			/* 0x5 */
++	"GPCDMA_PERIPHERAL",	/* 0x6 */
++	"TSECA",		/* 0x7 */
++	"TSECB",		/* 0x8 */
++	"JTAGM_DFT",		/* 0x9 */
++	"CORESIGHT_AXIAP",	/* 0xa */
++	"APE",			/* 0xb */
++	"PEATR",		/* 0xc */
++	"NVDEC",		/* 0xd */
++	"RCE",			/* 0xe */
++	"NVDEC1"		/* 0xf */
++};
++
++static const struct tegra_noc_errors t194_noc_errors[] = {
++	{.errcode = "SLV",
++	 .src = "Target",
++	 .type = "Target error detected by CBB slave"
++	},
++	{.errcode = "DEC",
++	 .src = "Initiator NIU",
++	 .type = "Address decode error"
++	},
++	{.errcode = "UNS",
++	 .src = "Target NIU",
++	 .type = "Unsupported request. Not a valid transaction"
++	},
++	{.errcode = "DISC",                     /* Not Supported by CBB */
++	 .src = "Power Disconnect",
++	 .type = "Disconnected target or domain"
++	},
++	{.errcode = "SEC",
++	 .src = "Initiator NIU or Firewall",
++	 .type = "Security violation. Firewall error"
++	},
++	{.errcode = "HIDE",                     /* Not Supported by CBB */
++	 .src = "Firewall",
++	 .type = "Hidden security violation, reported as OK to initiator"
++	},
++	{.errcode = "TMO",
++	 .src = "Target NIU",
++	 .type = "Target time-out error"
++	},
++	{.errcode = "RSV",
++	 .src = "None",
++	 .type = "Reserved"
++	}
++};
++
++/*
++ * CBB NOC aperture lookup table as per file "cbb_central_noc_Structure.info".
++ */
++static char *t194_cbbcentralnoc_routeid_initflow[] = {
++	"aon_p2ps/I/aon",			/* 0x0 */
++	"ape_p2ps/I/ape_p2ps",			/* 0x1 */
++	"bpmp_p2ps/I/bpmp_p2ps",		/* 0x2 */
++	"ccroc_p2ps/I/ccroc_p2ps",		/* 0x3 */
++	"csite_p2ps/I/0",			/* 0x4 */
++	"gpcdma_mmio_p2ps/I/0",			/* 0x5 */
++	"jtag_p2ps/I/0",			/* 0x6 */
++	"nvdec1_p2ps/I/0",			/* 0x7 */
++	"nvdec_p2ps/I/0",			/* 0x8 */
++	"rce_p2ps/I/rce_p2ps",			/* 0x9 */
++	"sce_p2ps/I/sce_p2ps",			/* 0xA */
++	"tseca_p2ps/I/0",			/* 0xB */
++	"tsecb_p2ps/I/0",			/* 0xC */
++	"RESERVED",				/* 0xD */
++	"RESERVED",				/* 0xE */
++	"RESERVED"				/* 0xF */
++};
++
++static char *t194_cbbcentralnoc_routeid_targflow[] = {
++	"SVC/T/intreg",							/*0x0*/
++	"axis_satellite_axi2apb_p2pm/T/axis_satellite_axi2apb_p2pm",	/*0x1*/
++	"axis_satellite_grout/T/axis_satellite_grout",			/*0x2*/
++	"cbb_firewall/T/cbb_firewall",					/*0x3*/
++	"gpu_p2pm/T/gpu_p2pm",						/*0x4*/
++	"host1x_p2pm/T/host1x_p2pm",					/*0x5*/
++	"sapb_3_p2pm/T/sapb_3_p2pm",					/*0x6*/
++	"smmu0_p2pm/T/smmu0_p2pm",					/*0x7*/
++	"smmu1_p2pm/T/smmu1_p2pm",					/*0x8*/
++	"smmu2_p2pm/T/smmu2_p2pm",					/*0x9*/
++	"stm_p2pm/T/stm_p2pm",						/*0xA*/
++	"RESERVED",							/*0xB*/
++	"RESERVED",							/*0xC*/
++	"RESERVED",							/*0xD*/
++	"RESERVED",							/*0xE*/
++	"RESERVED"							/*0xF*/
++};
++
++/*
++ * Fields of CBB NOC lookup table:
++ * Init flow, Targ flow, Targ subrange, Init mapping, Init localAddress,
++ *                                              Targ mapping, Targ localAddress
++ * ----------------------------------------------------------------------------
++ */
++static const struct tegra194_cbb_aperture t194_cbbcentralnoc_apert_lookup[] = {
++	{ 0x0, 0x0, 0x00, 0x0, 0x02300000,  0, 0x0 },
++	{ 0x0, 0x1, 0x00, 0x0, 0x02003000,  0, 0x02003000 },
++	{ 0x0, 0x1, 0x01, 0x0, 0x02006000,  2, 0x02006000 },
++	{ 0x0, 0x1, 0x02, 0x0, 0x02016000,  3, 0x02016000 },
++	{ 0x0, 0x1, 0x03, 0x0, 0x0201d000,  4, 0x0201d000 },
++	{ 0x0, 0x1, 0x04, 0x0, 0x0202b000,  6, 0x0202b000 },
++	{ 0x0, 0x1, 0x05, 0x0, 0x02434000, 20, 0x02434000 },
++	{ 0x0, 0x1, 0x06, 0x0, 0x02436000, 21, 0x02436000 },
++	{ 0x0, 0x1, 0x07, 0x0, 0x02438000, 22, 0x02438000 },
++	{ 0x0, 0x1, 0x08, 0x0, 0x02445000, 24, 0x02445000 },
++	{ 0x0, 0x1, 0x09, 0x0, 0x02446000, 25, 0x02446000 },
++	{ 0x0, 0x1, 0x0a, 0x0, 0x02004000,  1, 0x02004000 },
++	{ 0x0, 0x1, 0x0b, 0x0, 0x0201e000,  5, 0x0201e000 },
++	{ 0x0, 0x1, 0x0c, 0x0, 0x0202c000,  7, 0x0202c000 },
++	{ 0x0, 0x1, 0x0d, 0x0, 0x02204000,  8, 0x02204000 },
++	{ 0x0, 0x1, 0x0e, 0x0, 0x02214000,  9, 0x02214000 },
++	{ 0x0, 0x1, 0x0f, 0x0, 0x02224000, 10, 0x02224000 },
++	{ 0x0, 0x1, 0x10, 0x0, 0x02234000, 11, 0x02234000 },
++	{ 0x0, 0x1, 0x11, 0x0, 0x02244000, 12, 0x02244000 },
++	{ 0x0, 0x1, 0x12, 0x0, 0x02254000, 13, 0x02254000 },
++	{ 0x0, 0x1, 0x13, 0x0, 0x02264000, 14, 0x02264000 },
++	{ 0x0, 0x1, 0x14, 0x0, 0x02274000, 15, 0x02274000 },
++	{ 0x0, 0x1, 0x15, 0x0, 0x02284000, 16, 0x02284000 },
++	{ 0x0, 0x1, 0x16, 0x0, 0x0243a000, 23, 0x0243a000 },
++	{ 0x0, 0x1, 0x17, 0x0, 0x02370000, 17, 0x02370000 },
++	{ 0x0, 0x1, 0x18, 0x0, 0x023d0000, 18, 0x023d0000 },
++	{ 0x0, 0x1, 0x19, 0x0, 0x023e0000, 19, 0x023e0000 },
++	{ 0x0, 0x1, 0x1a, 0x0, 0x02450000, 26, 0x02450000 },
++	{ 0x0, 0x1, 0x1b, 0x0, 0x02460000, 27, 0x02460000 },
++	{ 0x0, 0x1, 0x1c, 0x0, 0x02490000, 28, 0x02490000 },
++	{ 0x0, 0x1, 0x1d, 0x0, 0x03130000, 31, 0x03130000 },
++	{ 0x0, 0x1, 0x1e, 0x0, 0x03160000, 32, 0x03160000 },
++	{ 0x0, 0x1, 0x1f, 0x0, 0x03270000, 33, 0x03270000 },
++	{ 0x0, 0x1, 0x20, 0x0, 0x032e0000, 35, 0x032e0000 },
++	{ 0x0, 0x1, 0x21, 0x0, 0x03300000, 36, 0x03300000 },
++	{ 0x0, 0x1, 0x22, 0x0, 0x13090000, 40, 0x13090000 },
++	{ 0x0, 0x1, 0x23, 0x0, 0x20120000, 43, 0x20120000 },
++	{ 0x0, 0x1, 0x24, 0x0, 0x20170000, 44, 0x20170000 },
++	{ 0x0, 0x1, 0x25, 0x0, 0x20190000, 45, 0x20190000 },
++	{ 0x0, 0x1, 0x26, 0x0, 0x201b0000, 46, 0x201b0000 },
++	{ 0x0, 0x1, 0x27, 0x0, 0x20250000, 47, 0x20250000 },
++	{ 0x0, 0x1, 0x28, 0x0, 0x20260000, 48, 0x20260000 },
++	{ 0x0, 0x1, 0x29, 0x0, 0x20420000, 49, 0x20420000 },
++	{ 0x0, 0x1, 0x2a, 0x0, 0x20460000, 50, 0x20460000 },
++	{ 0x0, 0x1, 0x2b, 0x0, 0x204f0000, 51, 0x204f0000 },
++	{ 0x0, 0x1, 0x2c, 0x0, 0x20520000, 52, 0x20520000 },
++	{ 0x0, 0x1, 0x2d, 0x0, 0x20580000, 53, 0x20580000 },
++	{ 0x0, 0x1, 0x2e, 0x0, 0x205a0000, 54, 0x205a0000 },
++	{ 0x0, 0x1, 0x2f, 0x0, 0x205c0000, 55, 0x205c0000 },
++	{ 0x0, 0x1, 0x30, 0x0, 0x20690000, 56, 0x20690000 },
++	{ 0x0, 0x1, 0x31, 0x0, 0x20770000, 57, 0x20770000 },
++	{ 0x0, 0x1, 0x32, 0x0, 0x20790000, 58, 0x20790000 },
++	{ 0x0, 0x1, 0x33, 0x0, 0x20880000, 59, 0x20880000 },
++	{ 0x0, 0x1, 0x34, 0x0, 0x20990000, 62, 0x20990000 },
++	{ 0x0, 0x1, 0x35, 0x0, 0x20e10000, 65, 0x20e10000 },
++	{ 0x0, 0x1, 0x36, 0x0, 0x20e70000, 66, 0x20e70000 },
++	{ 0x0, 0x1, 0x37, 0x0, 0x20e80000, 67, 0x20e80000 },
++	{ 0x0, 0x1, 0x38, 0x0, 0x20f30000, 68, 0x20f30000 },
++	{ 0x0, 0x1, 0x39, 0x0, 0x20f50000, 69, 0x20f50000 },
++	{ 0x0, 0x1, 0x3a, 0x0, 0x20fc0000, 70, 0x20fc0000 },
++	{ 0x0, 0x1, 0x3b, 0x0, 0x21110000, 72, 0x21110000 },
++	{ 0x0, 0x1, 0x3c, 0x0, 0x21270000, 73, 0x21270000 },
++	{ 0x0, 0x1, 0x3d, 0x0, 0x21290000, 74, 0x21290000 },
++	{ 0x0, 0x1, 0x3e, 0x0, 0x21840000, 75, 0x21840000 },
++	{ 0x0, 0x1, 0x3f, 0x0, 0x21880000, 76, 0x21880000 },
++	{ 0x0, 0x1, 0x40, 0x0, 0x218d0000, 77, 0x218d0000 },
++	{ 0x0, 0x1, 0x41, 0x0, 0x21950000, 78, 0x21950000 },
++	{ 0x0, 0x1, 0x42, 0x0, 0x21960000, 79, 0x21960000 },
++	{ 0x0, 0x1, 0x43, 0x0, 0x21a10000, 80, 0x21a10000 },
++	{ 0x0, 0x1, 0x44, 0x0, 0x024a0000, 29, 0x024a0000 },
++	{ 0x0, 0x1, 0x45, 0x0, 0x024c0000, 30, 0x024c0000 },
++	{ 0x0, 0x1, 0x46, 0x0, 0x032c0000, 34, 0x032c0000 },
++	{ 0x0, 0x1, 0x47, 0x0, 0x03400000, 37, 0x03400000 },
++	{ 0x0, 0x1, 0x48, 0x0, 0x130a0000, 41, 0x130a0000 },
++	{ 0x0, 0x1, 0x49, 0x0, 0x130c0000, 42, 0x130c0000 },
++	{ 0x0, 0x1, 0x4a, 0x0, 0x208a0000, 60, 0x208a0000 },
++	{ 0x0, 0x1, 0x4b, 0x0, 0x208c0000, 61, 0x208c0000 },
++	{ 0x0, 0x1, 0x4c, 0x0, 0x209a0000, 63, 0x209a0000 },
++	{ 0x0, 0x1, 0x4d, 0x0, 0x21a40000, 81, 0x21a40000 },
++	{ 0x0, 0x1, 0x4e, 0x0, 0x03440000, 38, 0x03440000 },
++	{ 0x0, 0x1, 0x4f, 0x0, 0x20d00000, 64, 0x20d00000 },
++	{ 0x0, 0x1, 0x50, 0x0, 0x21000000, 71, 0x21000000 },
++	{ 0x0, 0x1, 0x51, 0x0, 0x0b000000, 39, 0x0b000000 },
++	{ 0x0, 0x2, 0x00, 0x0, 0x00000000,  0, 0x00000000 },
++	{ 0x0, 0x3, 0x00, 0x0, 0x02340000,  0, 0x00000000 },
++	{ 0x0, 0x4, 0x00, 0x0, 0x17000000,  0, 0x17000000 },
++	{ 0x0, 0x4, 0x01, 0x0, 0x18000000,  1, 0x18000000 },
++	{ 0x0, 0x5, 0x00, 0x0, 0x13e80000,  1, 0x13e80000 },
++	{ 0x0, 0x5, 0x01, 0x0, 0x15810000, 12, 0x15810000 },
++	{ 0x0, 0x5, 0x02, 0x0, 0x15840000, 14, 0x15840000 },
++	{ 0x0, 0x5, 0x03, 0x0, 0x15a40000, 17, 0x15a40000 },
++	{ 0x0, 0x5, 0x04, 0x0, 0x13f00000,  3, 0x13f00000 },
++	{ 0x0, 0x5, 0x05, 0x0, 0x15820000, 13, 0x15820000 },
++	{ 0x0, 0x5, 0x06, 0x0, 0x13ec0000,  2, 0x13ec0000 },
++	{ 0x0, 0x5, 0x07, 0x0, 0x15200000,  6, 0x15200000 },
++	{ 0x0, 0x5, 0x08, 0x0, 0x15340000,  7, 0x15340000 },
++	{ 0x0, 0x5, 0x09, 0x0, 0x15380000,  8, 0x15380000 },
++	{ 0x0, 0x5, 0x0a, 0x0, 0x15500000, 10, 0x15500000 },
++	{ 0x0, 0x5, 0x0b, 0x0, 0x155c0000, 11, 0x155c0000 },
++	{ 0x0, 0x5, 0x0c, 0x0, 0x15a00000, 16, 0x15a00000 },
++	{ 0x0, 0x5, 0x0d, 0x0, 0x13e00000,  0, 0x13e00000 },
++	{ 0x0, 0x5, 0x0e, 0x0, 0x15100000,  5, 0x15100000 },
++	{ 0x0, 0x5, 0x0f, 0x0, 0x15480000,  9, 0x15480000 },
++	{ 0x0, 0x5, 0x10, 0x0, 0x15880000, 15, 0x15880000 },
++	{ 0x0, 0x5, 0x11, 0x0, 0x15a80000, 18, 0x15a80000 },
++	{ 0x0, 0x5, 0x12, 0x0, 0x15b00000, 19, 0x15b00000 },
++	{ 0x0, 0x5, 0x13, 0x0, 0x14800000,  4, 0x14800000 },
++	{ 0x0, 0x5, 0x14, 0x0, 0x15c00000, 20, 0x15c00000 },
++	{ 0x0, 0x5, 0x15, 0x0, 0x16000000, 21, 0x16000000 },
++	{ 0x0, 0x6, 0x00, 0x0, 0x02000000,  4, 0x02000000 },
++	{ 0x0, 0x6, 0x01, 0x0, 0x02007000,  5, 0x02007000 },
++	{ 0x0, 0x6, 0x02, 0x0, 0x02008000,  6, 0x02008000 },
++	{ 0x0, 0x6, 0x03, 0x0, 0x02013000,  7, 0x02013000 },
++	{ 0x0, 0x6, 0x04, 0x0, 0x0201c000,  8, 0x0201c000 },
++	{ 0x0, 0x6, 0x05, 0x0, 0x02020000,  9, 0x02020000 },
++	{ 0x0, 0x6, 0x06, 0x0, 0x0202a000, 10, 0x0202a000 },
++	{ 0x0, 0x6, 0x07, 0x0, 0x0202e000, 11, 0x0202e000 },
++	{ 0x0, 0x6, 0x08, 0x0, 0x06400000, 33, 0x06400000 },
++	{ 0x0, 0x6, 0x09, 0x0, 0x02038000, 12, 0x02038000 },
++	{ 0x0, 0x6, 0x0a, 0x0, 0x00100000,  0, 0x00100000 },
++	{ 0x0, 0x6, 0x0b, 0x0, 0x023b0000, 13, 0x023b0000 },
++	{ 0x0, 0x6, 0x0c, 0x0, 0x02800000, 16, 0x02800000 },
++	{ 0x0, 0x6, 0x0d, 0x0, 0x030e0000, 22, 0x030e0000 },
++	{ 0x0, 0x6, 0x0e, 0x0, 0x03800000, 23, 0x03800000 },
++	{ 0x0, 0x6, 0x0f, 0x0, 0x03980000, 25, 0x03980000 },
++	{ 0x0, 0x6, 0x10, 0x0, 0x03a60000, 26, 0x03a60000 },
++	{ 0x0, 0x6, 0x11, 0x0, 0x03d80000, 31, 0x03d80000 },
++	{ 0x0, 0x6, 0x12, 0x0, 0x20000000, 36, 0x20000000 },
++	{ 0x0, 0x6, 0x13, 0x0, 0x20050000, 38, 0x20050000 },
++	{ 0x0, 0x6, 0x14, 0x0, 0x201e0000, 40, 0x201e0000 },
++	{ 0x0, 0x6, 0x15, 0x0, 0x20280000, 42, 0x20280000 },
++	{ 0x0, 0x6, 0x16, 0x0, 0x202c0000, 43, 0x202c0000 },
++	{ 0x0, 0x6, 0x17, 0x0, 0x20390000, 44, 0x20390000 },
++	{ 0x0, 0x6, 0x18, 0x0, 0x20430000, 45, 0x20430000 },
++	{ 0x0, 0x6, 0x19, 0x0, 0x20440000, 46, 0x20440000 },
++	{ 0x0, 0x6, 0x1a, 0x0, 0x204e0000, 47, 0x204e0000 },
++	{ 0x0, 0x6, 0x1b, 0x0, 0x20550000, 48, 0x20550000 },
++	{ 0x0, 0x6, 0x1c, 0x0, 0x20570000, 49, 0x20570000 },
++	{ 0x0, 0x6, 0x1d, 0x0, 0x20590000, 50, 0x20590000 },
++	{ 0x0, 0x6, 0x1e, 0x0, 0x20730000, 52, 0x20730000 },
++	{ 0x0, 0x6, 0x1f, 0x0, 0x209f0000, 54, 0x209f0000 },
++	{ 0x0, 0x6, 0x20, 0x0, 0x20e20000, 55, 0x20e20000 },
++	{ 0x0, 0x6, 0x21, 0x0, 0x20ed0000, 56, 0x20ed0000 },
++	{ 0x0, 0x6, 0x22, 0x0, 0x20fd0000, 57, 0x20fd0000 },
++	{ 0x0, 0x6, 0x23, 0x0, 0x21120000, 59, 0x21120000 },
++	{ 0x0, 0x6, 0x24, 0x0, 0x211a0000, 60, 0x211a0000 },
++	{ 0x0, 0x6, 0x25, 0x0, 0x21850000, 61, 0x21850000 },
++	{ 0x0, 0x6, 0x26, 0x0, 0x21860000, 62, 0x21860000 },
++	{ 0x0, 0x6, 0x27, 0x0, 0x21890000, 63, 0x21890000 },
++	{ 0x0, 0x6, 0x28, 0x0, 0x21970000, 64, 0x21970000 },
++	{ 0x0, 0x6, 0x29, 0x0, 0x21990000, 65, 0x21990000 },
++	{ 0x0, 0x6, 0x2a, 0x0, 0x21a00000, 66, 0x21a00000 },
++	{ 0x0, 0x6, 0x2b, 0x0, 0x21a90000, 68, 0x21a90000 },
++	{ 0x0, 0x6, 0x2c, 0x0, 0x21ac0000, 70, 0x21ac0000 },
++	{ 0x0, 0x6, 0x2d, 0x0, 0x01f80000,  3, 0x01f80000 },
++	{ 0x0, 0x6, 0x2e, 0x0, 0x024e0000, 14, 0x024e0000 },
++	{ 0x0, 0x6, 0x2f, 0x0, 0x030c0000, 21, 0x030c0000 },
++	{ 0x0, 0x6, 0x30, 0x0, 0x03820000, 24, 0x03820000 },
++	{ 0x0, 0x6, 0x31, 0x0, 0x03aa0000, 27, 0x03aa0000 },
++	{ 0x0, 0x6, 0x32, 0x0, 0x03c80000, 29, 0x03c80000 },
++	{ 0x0, 0x6, 0x33, 0x0, 0x130e0000, 34, 0x130e0000 },
++	{ 0x0, 0x6, 0x34, 0x0, 0x20020000, 37, 0x20020000 },
++	{ 0x0, 0x6, 0x35, 0x0, 0x20060000, 39, 0x20060000 },
++	{ 0x0, 0x6, 0x36, 0x0, 0x20200000, 41, 0x20200000 },
++	{ 0x0, 0x6, 0x37, 0x0, 0x206a0000, 51, 0x206a0000 },
++	{ 0x0, 0x6, 0x38, 0x0, 0x20740000, 53, 0x20740000 },
++	{ 0x0, 0x6, 0x39, 0x0, 0x20fe0000, 58, 0x20fe0000 },
++	{ 0x0, 0x6, 0x3a, 0x0, 0x21a20000, 67, 0x21a20000 },
++	{ 0x0, 0x6, 0x3b, 0x0, 0x21aa0000, 69, 0x21aa0000 },
++	{ 0x0, 0x6, 0x3c, 0x0, 0x02b80000, 17, 0x02b80000 },
++	{ 0x0, 0x6, 0x3d, 0x0, 0x03080000, 20, 0x03080000 },
++	{ 0x0, 0x6, 0x3e, 0x0, 0x13100000, 35, 0x13100000 },
++	{ 0x0, 0x6, 0x3f, 0x0, 0x01f00000,  2, 0x01f00000 },
++	{ 0x0, 0x6, 0x40, 0x0, 0x03000000, 19, 0x03000000 },
++	{ 0x0, 0x6, 0x41, 0x0, 0x03c00000, 28, 0x03c00000 },
++	{ 0x0, 0x6, 0x42, 0x0, 0x03d00000, 30, 0x03d00000 },
++	{ 0x0, 0x6, 0x43, 0x0, 0x01700000,  1, 0x01700000 },
++	{ 0x0, 0x6, 0x44, 0x0, 0x02c00000, 18, 0x02c00000 },
++	{ 0x0, 0x6, 0x45, 0x0, 0x02600000, 15, 0x02600000 },
++	{ 0x0, 0x6, 0x46, 0x0, 0x06000000, 32, 0x06000000 },
++	{ 0x0, 0x6, 0x47, 0x0, 0x24000000, 71, 0x24000000 },
++	{ 0x0, 0x7, 0x00, 0x0, 0x12000000,  0, 0x12000000 },
++	{ 0x0, 0x8, 0x00, 0x0, 0x11000000,  0, 0x11000000 },
++	{ 0x0, 0x9, 0x00, 0x0, 0x10000000,  0, 0x10000000 },
++	{ 0x0, 0xA, 0x00, 0x0, 0x22000000,  0, 0x22000000 }
++};
++
++/*
++ * BPMP NOC aperture lookup table as per file "BPMP_NOC_Structure.info".
++ */
++static char *t194_bpmpnoc_routeid_initflow[] = {
++	"cbb_i/I/0",				/* 0x0 */
++	"cpu_m_i/I/0",				/* 0x1 */
++	"cpu_p_i/I/0",				/* 0x2 */
++	"cvc_i/I/0",				/* 0x3 */
++	"dma_m_i/I/0",				/* 0x4 */
++	"dma_p_i/I/0",				/* 0x5 */
++	"RESERVED",				/* 0x6 */
++	"RESERVED"				/* 0x6 */
++};
++
++static char *t194_bpmpnoc_routeid_targflow[] = {
++	"multiport0_t/T/actmon",		/* 0x0 */
++	"multiport0_t/T/ast_0",			/* 0x1 */
++	"multiport0_t/T/ast_1",			/* 0x2 */
++	"multiport0_t/T/atcm_cfg",		/* 0x3 */
++	"multiport0_t/T/car",			/* 0x4 */
++	"multiport0_t/T/central_pwr_mgr",	/* 0x5 */
++	"multiport0_t/T/central_vtg_ctlr",	/* 0x6 */
++	"multiport0_t/T/cfg",			/* 0x7 */
++	"multiport0_t/T/dma",			/* 0x8 */
++	"multiport0_t/T/err_collator",		/* 0x9 */
++	"multiport0_t/T/err_collator_car",	/* 0xA */
++	"multiport0_t/T/fpga_misc",		/* 0xB */
++	"multiport0_t/T/fpga_uart",		/* 0xC */
++	"multiport0_t/T/gte",			/* 0xD */
++	"multiport0_t/T/hsp",			/* 0xE */
++	"multiport0_t/T/misc",			/* 0xF */
++	"multiport0_t/T/pm",			/* 0x10 */
++	"multiport0_t/T/simon0",		/* 0x11 */
++	"multiport0_t/T/simon1",		/* 0x12 */
++	"multiport0_t/T/simon2",		/* 0x13 */
++	"multiport0_t/T/simon3",		/* 0x14 */
++	"multiport0_t/T/simon4",		/* 0x15 */
++	"multiport0_t/T/soc_therm",		/* 0x16 */
++	"multiport0_t/T/tke",			/* 0x17 */
++	"multiport0_t/T/vic_0",			/* 0x18 */
++	"multiport0_t/T/vic_1",			/* 0x19 */
++	"ast0_t/T/0",				/* 0x1A */
++	"ast1_t/T/0",				/* 0x1B */
++	"bpmp_noc_firewall/T/0",		/* 0x1C */
++	"cbb_t/T/0",				/* 0x1D */
++	"cpu_t/T/0",				/* 0x1E */
++	"svc_t/T/0"				/* 0x1F */
++};
++
++/*
++ * Fields of BPMP NOC lookup table:
++ * Init flow, Targ flow, Targ subrange, Init mapping, Init localAddress,
++ *                                              Targ mapping, Targ localAddress
++ * ----------------------------------------------------------------------------
++ */
++static const struct tegra194_cbb_aperture t194_bpmpnoc_apert_lookup[] = {
++	{ 0x0, 0x1C, 0x0, 0x0, 0xd640000, 0, 0x0000000 },
++	{ 0x0, 0x1E, 0x0, 0x0, 0xd400000, 0, 0xd400000 },
++	{ 0x0, 0x00, 0x0, 0x0, 0xd230000, 0, 0x0000000 },
++	{ 0x0, 0x01, 0x0, 0x0, 0xd040000, 0, 0x0000000 },
++	{ 0x0, 0x02, 0x0, 0x0, 0xd050000, 0, 0x0000000 },
++	{ 0x0, 0x03, 0x0, 0x0, 0xd000000, 0, 0x0000000 },
++	{ 0x0, 0x04, 0x0, 0x0, 0x20ae0000, 3, 0xe0000 },
++	{ 0x0, 0x04, 0x1, 0x0, 0x20ac0000, 2, 0xc0000 },
++	{ 0x0, 0x04, 0x2, 0x0, 0x20a80000, 1, 0x80000 },
++	{ 0x0, 0x04, 0x3, 0x0, 0x20a00000, 0, 0x0000000 },
++	{ 0x0, 0x05, 0x0, 0x0, 0xd2a0000, 0, 0x0000000 },
++	{ 0x0, 0x06, 0x0, 0x0, 0xd290000, 0, 0x0000000 },
++	{ 0x0, 0x07, 0x0, 0x0, 0xd2c0000, 0, 0x0000000 },
++	{ 0x0, 0x08, 0x0, 0x0, 0xd0e0000, 4, 0x80000 },
++	{ 0x0, 0x08, 0x1, 0x0, 0xd060000, 0, 0x0000000 },
++	{ 0x0, 0x08, 0x2, 0x0, 0xd080000, 1, 0x20000 },
++	{ 0x0, 0x08, 0x3, 0x0, 0xd0a0000, 2, 0x40000 },
++	{ 0x0, 0x08, 0x4, 0x0, 0xd0c0000, 3, 0x60000 },
++	{ 0x0, 0x09, 0x0, 0x0, 0xd650000, 0, 0x0000000 },
++	{ 0x0, 0x0A, 0x0, 0x0, 0x20af0000, 0, 0x0000000 },
++	{ 0x0, 0x0B, 0x0, 0x0, 0xd3e0000, 0, 0x0000000 },
++	{ 0x0, 0x0C, 0x0, 0x0, 0xd3d0000, 0, 0x0000000 },
++	{ 0x0, 0x0D, 0x0, 0x0, 0xd1e0000, 0, 0x0000000 },
++	{ 0x0, 0x0E, 0x0, 0x0, 0xd150000, 0, 0x0000000 },
++	{ 0x0, 0x0E, 0x1, 0x0, 0xd160000, 1, 0x10000 },
++	{ 0x0, 0x0E, 0x2, 0x0, 0xd170000, 2, 0x20000 },
++	{ 0x0, 0x0E, 0x3, 0x0, 0xd180000, 3, 0x30000 },
++	{ 0x0, 0x0E, 0x4, 0x0, 0xd190000, 4, 0x40000 },
++	{ 0x0, 0x0E, 0x5, 0x0, 0xd1a0000, 5, 0x50000 },
++	{ 0x0, 0x0E, 0x6, 0x0, 0xd1b0000, 6, 0x60000 },
++	{ 0x0, 0x0E, 0x7, 0x0, 0xd1c0000, 7, 0x70000 },
++	{ 0x0, 0x0E, 0x8, 0x0, 0xd1d0000, 8, 0x80000 },
++	{ 0x0, 0x0F, 0x0, 0x0, 0xd660000, 0, 0x0000000 },
++	{ 0x0, 0x10, 0x0, 0x0, 0xd1f0000, 0, 0x0000000 },
++	{ 0x0, 0x10, 0x1, 0x0, 0xd200000, 1, 0x10000 },
++	{ 0x0, 0x10, 0x2, 0x0, 0xd210000, 2, 0x20000 },
++	{ 0x0, 0x10, 0x3, 0x0, 0xd220000, 3, 0x30000 },
++	{ 0x0, 0x11, 0x0, 0x0, 0xd240000, 0, 0x0000000 },
++	{ 0x0, 0x12, 0x0, 0x0, 0xd250000, 0, 0x0000000 },
++	{ 0x0, 0x13, 0x0, 0x0, 0xd260000, 0, 0x0000000 },
++	{ 0x0, 0x14, 0x0, 0x0, 0xd270000, 0, 0x0000000 },
++	{ 0x0, 0x15, 0x0, 0x0, 0xd2b0000, 0, 0x0000000 },
++	{ 0x0, 0x16, 0x0, 0x0, 0xd280000, 0, 0x0000000 },
++	{ 0x0, 0x17, 0x0, 0x0, 0xd0f0000, 0, 0x0000000 },
++	{ 0x0, 0x17, 0x1, 0x0, 0xd100000, 1, 0x10000 },
++	{ 0x0, 0x17, 0x2, 0x0, 0xd110000, 2, 0x20000 },
++	{ 0x0, 0x17, 0x3, 0x0, 0xd120000, 3, 0x30000 },
++	{ 0x0, 0x17, 0x4, 0x0, 0xd130000, 4, 0x40000 },
++	{ 0x0, 0x17, 0x5, 0x0, 0xd140000, 5, 0x50000 },
++	{ 0x0, 0x18, 0x0, 0x0, 0xd020000, 0, 0x0000000 },
++	{ 0x0, 0x19, 0x0, 0x0, 0xd030000, 0, 0x0000000 },
++	{ 0x0, 0x1F, 0x0, 0x0, 0xd600000, 0, 0x0000000 },
++	{ 0x0, 0x1F, 0x1, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x1, 0x1A, 0x0, 0x0, 0x40000000, 0, 0x40000000 },
++	{ 0x1, 0x1A, 0x1, 0x1, 0x80000000, 1, 0x80000000 },
++	{ 0x1, 0x1A, 0x2, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x2, 0x1C, 0x0, 0x0, 0xd640000, 0, 0x0000000 },
++	{ 0x2, 0x1D, 0x0, 0x0, 0x20b00000, 8, 0x20b00000 },
++	{ 0x2, 0x1D, 0x1, 0x0, 0x20800000, 7, 0x20800000 },
++	{ 0x2, 0x1D, 0x2, 0x0, 0x20c00000, 9, 0x20c00000 },
++	{ 0x2, 0x1D, 0x3, 0x0, 0xd800000, 3, 0xd800000 },
++	{ 0x2, 0x1D, 0x4, 0x0, 0x20000000, 6, 0x20000000 },
++	{ 0x2, 0x1D, 0x5, 0x0, 0xc000000, 2, 0xc000000 },
++	{ 0x2, 0x1D, 0x6, 0x0, 0x21000000, 10, 0x21000000 },
++	{ 0x2, 0x1D, 0x7, 0x0, 0xe000000, 4, 0xe000000 },
++	{ 0x2, 0x1D, 0x8, 0x0, 0x22000000, 11, 0x22000000 },
++	{ 0x2, 0x1D, 0x9, 0x0, 0x8000000, 1, 0x8000000 },
++	{ 0x2, 0x1D, 0xa, 0x0, 0x24000000, 12, 0x24000000 },
++	{ 0x2, 0x1D, 0xb, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x2, 0x1D, 0xc, 0x0, 0x28000000, 13, 0x28000000 },
++	{ 0x2, 0x1D, 0xd, 0x0, 0x10000000, 5, 0x10000000 },
++	{ 0x2, 0x1D, 0xe, 0x0, 0x30000000, 14, 0x30000000 },
++	{ 0x2, 0x00, 0x0, 0x0, 0xd230000, 0, 0x0000000 },
++	{ 0x2, 0x01, 0x0, 0x0, 0xd040000, 0, 0x0000000 },
++	{ 0x2, 0x02, 0x0, 0x0, 0xd050000, 0, 0x0000000 },
++	{ 0x2, 0x03, 0x0, 0x0, 0xd000000, 0, 0x0000000 },
++	{ 0x2, 0x04, 0x0, 0x0, 0x20ae0000, 3, 0xe0000 },
++	{ 0x2, 0x04, 0x1, 0x0, 0x20ac0000, 2, 0xc0000 },
++	{ 0x2, 0x04, 0x2, 0x0, 0x20a80000, 1, 0x80000 },
++	{ 0x2, 0x04, 0x3, 0x0, 0x20a00000, 0, 0x0000000 },
++	{ 0x2, 0x05, 0x0, 0x0, 0xd2a0000, 0, 0x0000000 },
++	{ 0x2, 0x06, 0x0, 0x0, 0xd290000, 0, 0x0000000 },
++	{ 0x2, 0x07, 0x0, 0x0, 0xd2c0000, 0, 0x0000000 },
++	{ 0x2, 0x08, 0x0, 0x0, 0xd0e0000, 4, 0x80000 },
++	{ 0x2, 0x08, 0x1, 0x0, 0xd060000, 0, 0x0000000 },
++	{ 0x2, 0x08, 0x2, 0x0, 0xd080000, 1, 0x20000 },
++	{ 0x2, 0x08, 0x3, 0x0, 0xd0a0000, 2, 0x40000 },
++	{ 0x2, 0x08, 0x4, 0x0, 0xd0c0000, 3, 0x60000 },
++	{ 0x2, 0x09, 0x0, 0x0, 0xd650000, 0, 0x0000000 },
++	{ 0x2, 0x0A, 0x0, 0x0, 0x20af0000, 0, 0x0000000 },
++	{ 0x2, 0x0B, 0x0, 0x0, 0xd3e0000, 0, 0x0000000 },
++	{ 0x2, 0x0C, 0x0, 0x0, 0xd3d0000, 0, 0x0000000 },
++	{ 0x2, 0x0D, 0x0, 0x0, 0xd1e0000, 0, 0x0000000 },
++	{ 0x2, 0x0E, 0x0, 0x0, 0xd150000, 0, 0x0000000 },
++	{ 0x2, 0x0E, 0x1, 0x0, 0xd160000, 1, 0x10000 },
++	{ 0x2, 0x0E, 0x2, 0x0, 0xd170000, 2, 0x20000 },
++	{ 0x2, 0x0E, 0x3, 0x0, 0xd180000, 3, 0x30000 },
++	{ 0x2, 0x0E, 0x4, 0x0, 0xd190000, 4, 0x40000 },
++	{ 0x2, 0x0E, 0x5, 0x0, 0xd1a0000, 5, 0x50000 },
++	{ 0x2, 0x0E, 0x6, 0x0, 0xd1b0000, 6, 0x60000 },
++	{ 0x2, 0x0E, 0x7, 0x0, 0xd1c0000, 7, 0x70000 },
++	{ 0x2, 0x0E, 0x8, 0x0, 0xd1d0000, 8, 0x80000 },
++	{ 0x2, 0x0F, 0x0, 0x0, 0xd660000, 0, 0x0000000 },
++	{ 0x2, 0x10, 0x0, 0x0, 0xd1f0000, 0, 0x0000000 },
++	{ 0x2, 0x10, 0x1, 0x0, 0xd200000, 1, 0x10000 },
++	{ 0x2, 0x10, 0x2, 0x0, 0xd210000, 2, 0x20000 },
++	{ 0x2, 0x10, 0x3, 0x0, 0xd220000, 3, 0x30000 },
++	{ 0x2, 0x11, 0x0, 0x0, 0xd240000, 0, 0x0000000 },
++	{ 0x2, 0x12, 0x0, 0x0, 0xd250000, 0, 0x0000000 },
++	{ 0x2, 0x13, 0x0, 0x0, 0xd260000, 0, 0x0000000 },
++	{ 0x2, 0x14, 0x0, 0x0, 0xd270000, 0, 0x0000000 },
++	{ 0x2, 0x15, 0x0, 0x0, 0xd2b0000, 0, 0x0000000 },
++	{ 0x2, 0x16, 0x0, 0x0, 0xd280000, 0, 0x0000000 },
++	{ 0x2, 0x17, 0x0, 0x0, 0xd0f0000, 0, 0x0000000 },
++	{ 0x2, 0x17, 0x1, 0x0, 0xd100000, 1, 0x10000 },
++	{ 0x2, 0x17, 0x2, 0x0, 0xd110000, 2, 0x20000 },
++	{ 0x2, 0x17, 0x3, 0x0, 0xd120000, 3, 0x30000 },
++	{ 0x2, 0x17, 0x4, 0x0, 0xd130000, 4, 0x40000 },
++	{ 0x2, 0x17, 0x5, 0x0, 0xd140000, 5, 0x50000 },
++	{ 0x2, 0x18, 0x0, 0x0, 0xd020000, 0, 0x0000000 },
++	{ 0x2, 0x19, 0x0, 0x0, 0xd030000, 0, 0x0000000 },
++	{ 0x2, 0x1F, 0x0, 0x0, 0xd600000, 0, 0x0000000 },
++	{ 0x2, 0x1F, 0x1, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x3, 0x1B, 0x0, 0x0, 0x40000000, 0, 0x40000000 },
++	{ 0x3, 0x1B, 0x1, 0x1, 0x80000000, 1, 0x80000000 },
++	{ 0x3, 0x1C, 0x0, 0x2, 0xd640000, 0, 0x0000000 },
++	{ 0x3, 0x1D, 0x0, 0x2, 0x20b00000, 8, 0x20b00000 },
++	{ 0x3, 0x1D, 0x1, 0x2, 0x20800000, 7, 0x20800000 },
++	{ 0x3, 0x1D, 0x2, 0x2, 0x20c00000, 9, 0x20c00000 },
++	{ 0x3, 0x1D, 0x3, 0x2, 0xd800000, 3, 0xd800000 },
++	{ 0x3, 0x1D, 0x4, 0x2, 0x20000000, 6, 0x20000000 },
++	{ 0x3, 0x1D, 0x5, 0x2, 0xc000000, 2, 0xc000000 },
++	{ 0x3, 0x1D, 0x6, 0x2, 0x21000000, 10, 0x21000000 },
++	{ 0x3, 0x1D, 0x7, 0x2, 0xe000000, 4, 0xe000000 },
++	{ 0x3, 0x1D, 0x8, 0x2, 0x22000000, 11, 0x22000000 },
++	{ 0x3, 0x1D, 0x9, 0x2, 0x8000000, 1, 0x8000000 },
++	{ 0x3, 0x1D, 0xa, 0x2, 0x24000000, 12, 0x24000000 },
++	{ 0x3, 0x1D, 0xb, 0x2, 0x0, 0, 0x0000000 },
++	{ 0x3, 0x1D, 0xc, 0x2, 0x28000000, 13, 0x28000000 },
++	{ 0x3, 0x1D, 0xd, 0x2, 0x10000000, 5, 0x10000000 },
++	{ 0x3, 0x1D, 0xe, 0x2, 0x30000000, 14, 0x30000000 },
++	{ 0x3, 0x1E, 0x0, 0x2, 0xd400000, 0, 0xd400000 },
++	{ 0x3, 0x00, 0x0, 0x2, 0xd230000, 0, 0x0000000 },
++	{ 0x3, 0x01, 0x0, 0x2, 0xd040000, 0, 0x0000000 },
++	{ 0x3, 0x02, 0x0, 0x2, 0xd050000, 0, 0x0000000 },
++	{ 0x3, 0x03, 0x0, 0x2, 0xd000000, 0, 0x0000000 },
++	{ 0x3, 0x04, 0x0, 0x2, 0x20ae0000, 3, 0xe0000 },
++	{ 0x3, 0x04, 0x1, 0x2, 0x20ac0000, 2, 0xc0000 },
++	{ 0x3, 0x04, 0x2, 0x2, 0x20a80000, 1, 0x80000 },
++	{ 0x3, 0x04, 0x3, 0x2, 0x20a00000, 0, 0x0000000 },
++	{ 0x3, 0x05, 0x0, 0x2, 0xd2a0000, 0, 0x0000000 },
++	{ 0x3, 0x06, 0x0, 0x2, 0xd290000, 0, 0x0000000 },
++	{ 0x3, 0x07, 0x0, 0x2, 0xd2c0000, 0, 0x0000000 },
++	{ 0x3, 0x08, 0x0, 0x2, 0xd0e0000, 4, 0x80000 },
++	{ 0x3, 0x08, 0x1, 0x2, 0xd060000, 0, 0x0000000 },
++	{ 0x3, 0x08, 0x2, 0x2, 0xd080000, 1, 0x20000 },
++	{ 0x3, 0x08, 0x3, 0x2, 0xd0a0000, 2, 0x40000 },
++	{ 0x3, 0x08, 0x4, 0x2, 0xd0c0000, 3, 0x60000 },
++	{ 0x3, 0x09, 0x0, 0x2, 0xd650000, 0, 0x0000000 },
++	{ 0x3, 0x0A, 0x0, 0x2, 0x20af0000, 0, 0x0000000 },
++	{ 0x3, 0x0B, 0x0, 0x2, 0xd3e0000, 0, 0x0000000 },
++	{ 0x3, 0x0C, 0x0, 0x2, 0xd3d0000, 0, 0x0000000 },
++	{ 0x3, 0x0D, 0x0, 0x2, 0xd1e0000, 0, 0x0000000 },
++	{ 0x3, 0x0E, 0x0, 0x2, 0xd150000, 0, 0x0000000 },
++	{ 0x3, 0x0E, 0x1, 0x2, 0xd160000, 1, 0x10000 },
++	{ 0x3, 0x0E, 0x2, 0x2, 0xd170000, 2, 0x20000 },
++	{ 0x3, 0x0E, 0x3, 0x2, 0xd180000, 3, 0x30000 },
++	{ 0x3, 0x0E, 0x4, 0x2, 0xd190000, 4, 0x40000 },
++	{ 0x3, 0x0E, 0x5, 0x2, 0xd1a0000, 5, 0x50000 },
++	{ 0x3, 0x0E, 0x6, 0x2, 0xd1b0000, 6, 0x60000 },
++	{ 0x3, 0x0E, 0x7, 0x2, 0xd1c0000, 7, 0x70000 },
++	{ 0x3, 0x0E, 0x8, 0x2, 0xd1d0000, 8, 0x80000 },
++	{ 0x3, 0x0F, 0x0, 0x2, 0xd660000, 0, 0x0000000 },
++	{ 0x3, 0x10, 0x0, 0x2, 0xd1f0000, 0, 0x0000000 },
++	{ 0x3, 0x10, 0x1, 0x2, 0xd200000, 1, 0x10000 },
++	{ 0x3, 0x10, 0x2, 0x2, 0xd210000, 2, 0x20000 },
++	{ 0x3, 0x10, 0x3, 0x2, 0xd220000, 3, 0x30000 },
++	{ 0x3, 0x11, 0x0, 0x2, 0xd240000, 0, 0x0000000 },
++	{ 0x3, 0x12, 0x0, 0x2, 0xd250000, 0, 0x0000000 },
++	{ 0x3, 0x13, 0x0, 0x2, 0xd260000, 0, 0x0000000 },
++	{ 0x3, 0x14, 0x0, 0x2, 0xd270000, 0, 0x0000000 },
++	{ 0x3, 0x15, 0x0, 0x2, 0xd2b0000, 0, 0x0000000 },
++	{ 0x3, 0x16, 0x0, 0x2, 0xd280000, 0, 0x0000000 },
++	{ 0x3, 0x17, 0x0, 0x2, 0xd0f0000, 0, 0x0000000 },
++	{ 0x3, 0x17, 0x1, 0x2, 0xd100000, 1, 0x10000 },
++	{ 0x3, 0x17, 0x2, 0x2, 0xd110000, 2, 0x20000 },
++	{ 0x3, 0x17, 0x3, 0x2, 0xd120000, 3, 0x30000 },
++	{ 0x3, 0x17, 0x4, 0x2, 0xd130000, 4, 0x40000 },
++	{ 0x3, 0x17, 0x5, 0x2, 0xd140000, 5, 0x50000 },
++	{ 0x3, 0x18, 0x0, 0x2, 0xd020000, 0, 0x0000000 },
++	{ 0x3, 0x19, 0x0, 0x2, 0xd030000, 0, 0x0000000 },
++	{ 0x3, 0x1F, 0x0, 0x2, 0xd600000, 0, 0x0000000 },
++	{ 0x3, 0x1F, 0x1, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x4, 0x1B, 0x0, 0x0, 0x40000000, 0, 0x40000000 },
++	{ 0x4, 0x1B, 0x1, 0x1, 0x80000000, 1, 0x80000000 },
++	{ 0x4, 0x1E, 0x0, 0x2, 0xd400000, 0, 0xd400000 },
++	{ 0x4, 0x1E, 0x1, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x5, 0x1C, 0x0, 0x0, 0xd640000, 0, 0x0000000 },
++	{ 0x5, 0x1D, 0x0, 0x0, 0x20b00000, 8, 0x20b00000 },
++	{ 0x5, 0x1D, 0x1, 0x0, 0x20800000, 7, 0x20800000 },
++	{ 0x5, 0x1D, 0x2, 0x0, 0x20c00000, 9, 0x20c00000 },
++	{ 0x5, 0x1D, 0x3, 0x0, 0xd800000, 3, 0xd800000 },
++	{ 0x5, 0x1D, 0x4, 0x0, 0x20000000, 6, 0x20000000 },
++	{ 0x5, 0x1D, 0x5, 0x0, 0xc000000, 2, 0xc000000 },
++	{ 0x5, 0x1D, 0x6, 0x0, 0x21000000, 10, 0x21000000 },
++	{ 0x5, 0x1D, 0x7, 0x0, 0xe000000, 4, 0xe000000 },
++	{ 0x5, 0x1D, 0x8, 0x0, 0x22000000, 11, 0x22000000 },
++	{ 0x5, 0x1D, 0x9, 0x0, 0x8000000, 1, 0x8000000 },
++	{ 0x5, 0x1D, 0xa, 0x0, 0x24000000, 12, 0x24000000 },
++	{ 0x5, 0x1D, 0xb, 0x0, 0x0, 0, 0x0000000 },
++	{ 0x5, 0x1D, 0xc, 0x0, 0x28000000, 13, 0x28000000 },
++	{ 0x5, 0x1D, 0xd, 0x0, 0x10000000, 5, 0x10000000 },
++	{ 0x5, 0x1D, 0xe, 0x0, 0x30000000, 14, 0x30000000 },
++	{ 0x5, 0x00, 0x0, 0x0, 0xd230000, 0, 0x0000000 },
++	{ 0x5, 0x01, 0x0, 0x0, 0xd040000, 0, 0x0000000 },
++	{ 0x5, 0x02, 0x0, 0x0, 0xd050000, 0, 0x0000000 },
++	{ 0x5, 0x03, 0x0, 0x0, 0xd000000, 0, 0x0000000 },
++	{ 0x5, 0x04, 0x0, 0x0, 0x20ae0000, 3, 0xe0000 },
++	{ 0x5, 0x04, 0x1, 0x0, 0x20ac0000, 2, 0xc0000 },
++	{ 0x5, 0x04, 0x2, 0x0, 0x20a80000, 1, 0x80000 },
++	{ 0x5, 0x04, 0x3, 0x0, 0x20a00000, 0, 0x0000000 },
++	{ 0x5, 0x05, 0x0, 0x0, 0xd2a0000, 0, 0x0000000 },
++	{ 0x5, 0x06, 0x0, 0x0, 0xd290000, 0, 0x0000000 },
++	{ 0x5, 0x07, 0x0, 0x0, 0xd2c0000, 0, 0x0000000 },
++	{ 0x5, 0x08, 0x0, 0x0, 0xd0e0000, 4, 0x80000 },
++	{ 0x5, 0x08, 0x1, 0x0, 0xd060000, 0, 0x0000000 },
++	{ 0x5, 0x08, 0x2, 0x0, 0xd080000, 1, 0x20000 },
++	{ 0x5, 0x08, 0x3, 0x0, 0xd0a0000, 2, 0x40000 },
++	{ 0x5, 0x08, 0x4, 0x0, 0xd0c0000, 3, 0x60000 },
++	{ 0x5, 0x09, 0x0, 0x0, 0xd650000, 0, 0x0000000 },
++	{ 0x5, 0x0A, 0x0, 0x0, 0x20af0000, 0, 0x0000000 },
++	{ 0x5, 0x0B, 0x0, 0x0, 0xd3e0000, 0, 0x0000000 },
++	{ 0x5, 0x0C, 0x0, 0x0, 0xd3d0000, 0, 0x0000000 },
++	{ 0x5, 0x0D, 0x0, 0x0, 0xd1e0000, 0, 0x0000000 },
++	{ 0x5, 0x0E, 0x0, 0x0, 0xd150000, 0, 0x0000000 },
++	{ 0x5, 0x0E, 0x1, 0x0, 0xd160000, 1, 0x10000 },
++	{ 0x5, 0x0E, 0x2, 0x0, 0xd170000, 2, 0x20000 },
++	{ 0x5, 0x0E, 0x3, 0x0, 0xd180000, 3, 0x30000 },
++	{ 0x5, 0x0E, 0x4, 0x0, 0xd190000, 4, 0x40000 },
++	{ 0x5, 0x0E, 0x5, 0x0, 0xd1a0000, 5, 0x50000 },
++	{ 0x5, 0x0E, 0x6, 0x0, 0xd1b0000, 6, 0x60000 },
++	{ 0x5, 0x0E, 0x7, 0x0, 0xd1c0000, 7, 0x70000 },
++	{ 0x5, 0x0E, 0x8, 0x0, 0xd1d0000, 8, 0x80000 },
++	{ 0x5, 0x0F, 0x0, 0x0, 0xd660000, 0, 0x0000000 },
++	{ 0x5, 0x10, 0x0, 0x0, 0xd1f0000, 0, 0x0000000 },
++	{ 0x5, 0x10, 0x1, 0x0, 0xd200000, 1, 0x10000 },
++	{ 0x5, 0x10, 0x2, 0x0, 0xd210000, 2, 0x20000 },
++	{ 0x5, 0x10, 0x3, 0x0, 0xd220000, 3, 0x30000 },
++	{ 0x5, 0x11, 0x0, 0x0, 0xd240000, 0, 0x0000000 },
++	{ 0x5, 0x12, 0x0, 0x0, 0xd250000, 0, 0x0000000 },
++	{ 0x5, 0x13, 0x0, 0x0, 0xd260000, 0, 0x0000000 },
++	{ 0x5, 0x14, 0x0, 0x0, 0xd270000, 0, 0x0000000 },
++	{ 0x5, 0x15, 0x0, 0x0, 0xd2b0000, 0, 0x0000000 },
++	{ 0x5, 0x16, 0x0, 0x0, 0xd280000, 0, 0x0000000 },
++	{ 0x5, 0x17, 0x0, 0x0, 0xd0f0000, 0, 0x0000000 },
++	{ 0x5, 0x17, 0x1, 0x0, 0xd100000, 1, 0x10000 },
++	{ 0x5, 0x17, 0x2, 0x0, 0xd110000, 2, 0x20000 },
++	{ 0x5, 0x17, 0x3, 0x0, 0xd120000, 3, 0x30000 },
++	{ 0x5, 0x17, 0x4, 0x0, 0xd130000, 4, 0x40000 },
++	{ 0x5, 0x17, 0x5, 0x0, 0xd140000, 5, 0x50000 },
++	{ 0x5, 0x18, 0x0, 0x0, 0xd020000, 0, 0x0000000 },
++	{ 0x5, 0x19, 0x0, 0x0, 0xd030000, 0, 0x0000000 },
++	{ 0x5, 0x1F, 0x0, 0x0, 0xd600000, 0, 0x0000000 },
++	{ 0x5, 0x1F, 0x1, 0x0, 0x0, 0, 0x0000000 }
++};
++
++/*
++ * AON NOC aperture lookup table as per file "AON_NOC_Structure.info".
++ */
++static char *t194_aonnoc_routeid_initflow[] = {
++	"cbb_i/I/0",					/* 0x0 */
++	"cpu_p_i/I/0",					/* 0x1 */
++	"dma_m_i/I/0",					/* 0x2 */
++	"dma_p_i/I/0"					/* 0x3 */
++};
++
++static char *t194_aonnoc_routeid_targflow[] = {
++	"multiport1_t/T/aon_misc",			/* 0  */
++	"multiport1_t/T/avic0",				/* 1  */
++	"multiport1_t/T/avic1",				/* 2  */
++	"multiport1_t/T/can1",				/* 3  */
++	"multiport1_t/T/can2",				/* 4  */
++	"multiport1_t/T/dma",				/* 5  */
++	"multiport1_t/T/dmic",				/* 6  */
++	"multiport1_t/T/err_collator",			/* 7  */
++	"multiport1_t/T/fpga_misc",			/* 8  */
++	"multiport1_t/T/gte",				/* 9  */
++	"multiport1_t/T/hsp",				/* A  */
++	"multiport1_t/T/i2c2",				/* B  */
++	"multiport1_t/T/i2c8",				/* C  */
++	"multiport1_t/T/pwm",				/* D  */
++	"multiport1_t/T/spi2",				/* E  */
++	"multiport1_t/T/tke",				/* F  */
++	"multiport1_t/T/uartg",				/* 10 */
++	"RESERVED",					/* 11 */
++	"RESERVED",					/* 12 */
++	"RESERVED",					/* 13 */
++	"RESERVED",					/* 14 */
++	"RESERVED",					/* 15 */
++	"RESERVED",					/* 16 */
++	"RESERVED",					/* 17 */
++	"RESERVED",					/* 18 */
++	"RESERVED",					/* 19 */
++	"RESERVED",					/* 1A */
++	"RESERVED",					/* 1B */
++	"RESERVED",					/* 1C */
++	"RESERVED",					/* 1D */
++	"RESERVED",					/* 1E */
++	"RESERVED",					/* 1F */
++	"multiport0_t/T/aovc",				/* 20 */
++	"multiport0_t/T/atcm",				/* 21 */
++	"multiport0_t/T/cast",				/* 22 */
++	"multiport0_t/T/dast",				/* 23 */
++	"multiport0_t/T/err_collator_car",		/* 24 */
++	"multiport0_t/T/gpio",				/* 25 */
++	"multiport0_t/T/i2c10",				/* 26 */
++	"multiport0_t/T/mss",				/* 27 */
++	"multiport0_t/T/padctl_a12",			/* 28 */
++	"multiport0_t/T/padctl_a14",			/* 29 */
++	"multiport0_t/T/padctl_a15",			/* 2A */
++	"multiport0_t/T/rtc",				/* 2B */
++	"multiport0_t/T/tsc",				/* 2C */
++	"RESERVED",					/* 2D */
++	"RESERVED",					/* 2E */
++	"RESERVED",					/* 2F */
++	"multiport2_t/T/aon_vref_ro",			/* 30 */
++	"multiport2_t/T/aopm",				/* 31 */
++	"multiport2_t/T/car",				/* 32 */
++	"multiport2_t/T/pmc",				/* 33 */
++	"ast1_t/T/0",					/* 34 */
++	"cbb_t/T/0",					/* 35 */
++	"cpu_t/T/0",					/* 36 */
++	"firewall_t/T/0",				/* 37 */
++	"svc_t/T/0",					/* 38 */
++	"uartc/T/uartc",				/* 39 */
++	"RESERVED",					/* 3A */
++	"RESERVED",					/* 3B */
++	"RESERVED",					/* 3C */
++	"RESERVED",					/* 3D */
++	"RESERVED",					/* 3E */
++	"RESERVED"					/* 3F */
++};
++
++/*
++ * Fields of AON NOC lookup table:
++ * Init flow, Targ flow, Targ subrange, Init mapping, Init localAddress,
++ *                                              Targ mapping, Targ localAddress
++ * ----------------------------------------------------------------------------
++ */
++static const struct tegra194_cbb_aperture t194_aonnoc_aperture_lookup[] = {
++	{ 0x0, 0x37, 0x0, 0, 0xc640000, 0, 0x0 },
++	{ 0x0, 0x20, 0x0, 0, 0xc3b0000, 0, 0x0 },
++	{ 0x0, 0x21, 0x0, 0, 0xc000000, 0, 0x0 },
++	{ 0x0, 0x22, 0x0, 0, 0xc040000, 0, 0x0 },
++	{ 0x0, 0x23, 0x0, 0, 0xc050000, 0, 0x0 },
++	{ 0x0, 0x24, 0x0, 0, 0x20cf0000, 0, 0x0 },
++	{ 0x0, 0x25, 0x0, 0, 0xc2f0000, 0, 0x0 },
++	{ 0x0, 0x26, 0x0, 0, 0xc230000, 0, 0x0 },
++	{ 0x0, 0x27, 0x0, 0, 0xc350000, 0, 0x0 },
++	{ 0x0, 0x28, 0x0, 0, 0xc301000, 0, 0x0 },
++	{ 0x0, 0x29, 0x0, 0, 0xc302000, 0, 0x0 },
++	{ 0x0, 0x2A, 0x0, 0, 0xc303000, 0, 0x0 },
++	{ 0x0, 0x2B, 0x0, 0, 0xc2a0000, 0, 0x0 },
++	{ 0x0, 0x2C, 0x0, 0, 0xc2b0000, 0, 0x0 },
++	{ 0x0, 0x2C, 0x1, 0, 0xc2c0000, 1, 0x10000 },
++	{ 0x0, 0x2C, 0x2, 0, 0xc2d0000, 2, 0x20000 },
++	{ 0x0, 0x2C, 0x3, 0, 0xc2e0000, 3, 0x30000 },
++	{ 0x0, 0x0, 0x0, 0, 0xc660000, 0, 0x0 },
++	{ 0x0, 0x1, 0x0, 0, 0xc020000, 0, 0x0 },
++	{ 0x0, 0x2, 0x0, 0, 0xc030000, 0, 0x0 },
++	{ 0x0, 0x3, 0x0, 0, 0xc310000, 0, 0x0 },
++	{ 0x0, 0x4, 0x0, 0, 0xc320000, 0, 0x0 },
++	{ 0x0, 0x5, 0x0, 0, 0xc0a0000, 2, 0x40000 },
++	{ 0x0, 0x5, 0x1, 0, 0xc0b0000, 3, 0x50000 },
++	{ 0x0, 0x5, 0x2, 0, 0xc0e0000, 5, 0x80000 },
++	{ 0x0, 0x5, 0x3, 0, 0xc060000, 0, 0x0 },
++	{ 0x0, 0x5, 0x4, 0, 0xc080000, 1, 0x20000 },
++	{ 0x0, 0x5, 0x5, 0, 0xc0c0000, 4, 0x60000 },
++	{ 0x0, 0x6, 0x0, 0, 0xc330000, 0, 0x0 },
++	{ 0x0, 0x7, 0x0, 0, 0xc650000, 0, 0x0 },
++	{ 0x0, 0x8, 0x0, 0, 0xc3e0000, 0, 0x0 },
++	{ 0x0, 0x9, 0x0, 0, 0xc1e0000, 0, 0x0 },
++	{ 0x0, 0xA, 0x0, 0, 0xc150000, 0, 0x0 },
++	{ 0x0, 0xA, 0x1, 0, 0xc160000, 1, 0x10000 },
++	{ 0x0, 0xA, 0x2, 0, 0xc170000, 2, 0x20000 },
++	{ 0x0, 0xA, 0x3, 0, 0xc180000, 3, 0x30000 },
++	{ 0x0, 0xA, 0x4, 0, 0xc190000, 4, 0x40000 },
++	{ 0x0, 0xA, 0x5, 0, 0xc1a0000, 5, 0x50000 },
++	{ 0x0, 0xA, 0x6, 0, 0xc1b0000, 6, 0x60000 },
++	{ 0x0, 0xA, 0x7, 0, 0xc1c0000, 7, 0x70000 },
++	{ 0x0, 0xA, 0x8, 0, 0xc1d0000, 8, 0x80000 },
++	{ 0x0, 0xB, 0x0, 0, 0xc240000, 0, 0x0 },
++	{ 0x0, 0xC, 0x0, 0, 0xc250000, 0, 0x0 },
++	{ 0x0, 0xD, 0x0, 0, 0xc340000, 0, 0x0 },
++	{ 0x0, 0xE, 0x0, 0, 0xc260000, 0, 0x0 },
++	{ 0x0, 0xF, 0x0, 0, 0xc0f0000, 0, 0x0 },
++	{ 0x0, 0xF, 0x1, 0, 0xc100000, 1, 0x10000 },
++	{ 0x0, 0xF, 0x2, 0, 0xc110000, 2, 0x20000 },
++	{ 0x0, 0xF, 0x3, 0, 0xc120000, 3, 0x30000 },
++	{ 0x0, 0xF, 0x4, 0, 0xc130000, 4, 0x40000 },
++	{ 0x0, 0xF, 0x5, 0, 0xc140000, 5, 0x50000 },
++	{ 0x0, 0x10, 0x0, 0, 0xc290000, 0, 0x0 },
++	{ 0x0, 0x30, 0x0, 0, 0x20ce0000, 0, 0x0 },
++	{ 0x0, 0x31, 0x0, 0, 0xc1f0000, 0, 0x0 },
++	{ 0x0, 0x31, 0x1, 0, 0xc200000, 1, 0x10000 },
++	{ 0x0, 0x31, 0x2, 0, 0xc210000, 2, 0x20000 },
++	{ 0x0, 0x31, 0x3, 0, 0xc220000, 3, 0x30000 },
++	{ 0x0, 0x32, 0x0, 0, 0x20cc0000, 3, 0x1c0000 },
++	{ 0x0, 0x32, 0x1, 0, 0x20c80000, 2, 0x180000 },
++	{ 0x0, 0x32, 0x2, 0, 0x20c00000, 1, 0x100000 },
++	{ 0x0, 0x32, 0x3, 0, 0x20b00000, 0, 0x0 },
++	{ 0x0, 0x33, 0x0, 0, 0xc360000, 0, 0x0 },
++	{ 0x0, 0x33, 0x1, 0, 0xc370000, 1, 0x10000 },
++	{ 0x0, 0x33, 0x2, 0, 0xc3a0000, 3, 0x40000 },
++	{ 0x0, 0x33, 0x3, 0, 0xc380000, 2, 0x20000 },
++	{ 0x0, 0x38, 0x0, 0, 0xc600000, 0, 0x0 },
++	{ 0x0, 0x38, 0x1, 0, 0x0000000, 0, 0x0, },
++	{ 0x0, 0x39, 0x0, 0, 0xc280000, 0, 0x0 },
++	{ 0x1, 0x35, 0x0, 0, 0x0000000, 0, 0x0, },
++	{ 0x1, 0x35, 0x1, 0, 0x100000,  1, 0x100000 },
++	{ 0x1, 0x35, 0x2, 0, 0x5a00000, 11, 0x5a00000 },
++	{ 0x1, 0x35, 0x3, 0, 0x5b00000, 32, 0x5b00000 },
++	{ 0x1, 0x35, 0x4, 0, 0x5c00000, 33, 0x5c00000 },
++	{ 0x1, 0x35, 0x5, 0, 0x5d00000, 12, 0x5d00000 },
++	{ 0x1, 0x35, 0x6, 0, 0x20000000, 19, 0x20000000 },
++	{ 0x1, 0x35, 0x7, 0, 0x20100000, 20, 0x20100000 },
++	{ 0x1, 0x35, 0x8, 0, 0x20a00000, 24, 0x20a00000 },
++	{ 0x1, 0x35, 0x9, 0, 0x20d00000, 25, 0x20d00000 },
++	{ 0x1, 0x35, 0xa, 0, 0x200000,  2, 0x200000 },
++	{ 0x1, 0x35, 0xb, 0, 0x5800000, 10, 0x5800000 },
++	{ 0x1, 0x35, 0xc, 0, 0x5e00000, 13, 0x5e00000 },
++	{ 0x1, 0x35, 0xd, 0, 0x20200000, 21, 0x20200000 },
++	{ 0x1, 0x35, 0xe, 0, 0x20800000, 23, 0x20800000 },
++	{ 0x1, 0x35, 0xf, 0, 0x20e00000, 26, 0x20e00000 },
++	{ 0x1, 0x35, 0x10, 0, 0x400000,  3, 0x400000 },
++	{ 0x1, 0x35, 0x11, 0, 0x20400000, 22, 0x20400000 },
++	{ 0x1, 0x35, 0x12, 0, 0x800000, 4, 0x800000 },
++	{ 0x1, 0x35, 0x13, 0, 0x5000000, 9, 0x5000000 },
++	{ 0x1, 0x35, 0x14, 0, 0xc800000, 34, 0xc800000 },
++	{ 0x1, 0x35, 0x15, 0, 0x1000000, 5, 0x1000000 },
++	{ 0x1, 0x35, 0x16, 0, 0x3000000, 7, 0x3000000 },
++	{ 0x1, 0x35, 0x17, 0, 0x4000000, 8, 0x4000000 },
++	{ 0x1, 0x35, 0x18, 0, 0xd000000, 16, 0xd000000 },
++	{ 0x1, 0x35, 0x19, 0, 0x21000000, 27, 0x21000000 },
++	{ 0x1, 0x35, 0x1a, 0, 0x2000000, 6, 0x2000000 },
++	{ 0x1, 0x35, 0x1b, 0, 0x6000000, 14, 0x6000000 },
++	{ 0x1, 0x35, 0x1c, 0, 0xe000000, 17, 0xe000000 },
++	{ 0x1, 0x35, 0x1d, 0, 0x22000000, 28, 0x22000000 },
++	{ 0x1, 0x35, 0x1e, 0, 0x8000000, 15, 0x8000000 },
++	{ 0x1, 0x35, 0x1f, 0, 0x24000000, 29, 0x24000000 },
++	{ 0x1, 0x35, 0x20, 0, 0x28000000, 30, 0x28000000 },
++	{ 0x1, 0x35, 0x21, 0, 0x10000000, 18, 0x10000000 },
++	{ 0x1, 0x35, 0x22, 0, 0x30000000, 31, 0x30000000 },
++	{ 0x1, 0x37, 0x0, 0, 0xc640000, 0, 0x0 },
++	{ 0x1, 0x20, 0x0, 0, 0xc3b0000, 0, 0x0 },
++	{ 0x1, 0x21, 0x0, 0, 0xc000000, 0, 0x0 },
++	{ 0x1, 0x22, 0x0, 0, 0xc040000, 0, 0x0 },
++	{ 0x1, 0x23, 0x0, 0, 0xc050000, 0, 0x0 },
++	{ 0x1, 0x24, 0x0, 0, 0x20cf0000, 0, 0x0 },
++	{ 0x1, 0x25, 0x0, 0, 0xc2f0000, 0, 0x0 },
++	{ 0x1, 0x26, 0x0, 0, 0xc230000, 0, 0x0 },
++	{ 0x1, 0x27, 0x0, 0, 0xc350000, 0, 0x0 },
++	{ 0x1, 0x28, 0x0, 0, 0xc301000, 0, 0x0 },
++	{ 0x1, 0x29, 0x0, 0, 0xc302000, 0, 0x0 },
++	{ 0x1, 0x2A, 0x0, 0, 0xc303000, 0, 0x0 },
++	{ 0x1, 0x2B, 0x0, 0, 0xc2a0000, 0, 0x0 },
++	{ 0x1, 0x2C, 0x0, 0, 0xc2b0000, 0, 0x0 },
++	{ 0x1, 0x2C, 0x1, 0, 0xc2c0000, 1, 0x10000 },
++	{ 0x1, 0x2C, 0x2, 0, 0xc2d0000, 2, 0x20000 },
++	{ 0x1, 0x2C, 0x3, 0, 0xc2e0000, 3, 0x30000 },
++	{ 0x1, 0x0, 0x0, 0, 0xc660000, 0, 0x0 },
++	{ 0x1, 0x1, 0x0, 0, 0xc020000, 0, 0x0 },
++	{ 0x1, 0x2, 0x0, 0, 0xc030000, 0, 0x0 },
++	{ 0x1, 0x3, 0x0, 0, 0xc310000, 0, 0x0 },
++	{ 0x1, 0x4, 0x0, 0, 0xc320000, 0, 0x0 },
++	{ 0x1, 0x5, 0x0, 0, 0xc0a0000, 2, 0x40000 },
++	{ 0x1, 0x5, 0x1, 0, 0xc0b0000, 3, 0x50000 },
++	{ 0x1, 0x5, 0x2, 0, 0xc0e0000, 5, 0x80000 },
++	{ 0x1, 0x5, 0x3, 0, 0xc060000, 0, 0x0 },
++	{ 0x1, 0x5, 0x4, 0, 0xc080000, 1, 0x20000 },
++	{ 0x1, 0x5, 0x5, 0, 0xc0c0000, 4, 0x60000 },
++	{ 0x1, 0x6, 0x0, 0, 0xc330000, 0, 0x0 },
++	{ 0x1, 0x7, 0x0, 0, 0xc650000, 0, 0x0 },
++	{ 0x1, 0x8, 0x0, 0, 0xc3e0000, 0, 0x0 },
++	{ 0x1, 0x9, 0x0, 0, 0xc1e0000, 0, 0x0 },
++	{ 0x1, 0xA, 0x0, 0, 0xc150000, 0, 0x0 },
++	{ 0x1, 0xA, 0x1, 0, 0xc160000, 1, 0x10000 },
++	{ 0x1, 0xA, 0x2, 0, 0xc170000, 2, 0x20000 },
++	{ 0x1, 0xA, 0x3, 0, 0xc180000, 3, 0x30000 },
++	{ 0x1, 0xA, 0x4, 0, 0xc190000, 4, 0x40000 },
++	{ 0x1, 0xA, 0x5, 0, 0xc1a0000, 5, 0x50000 },
++	{ 0x1, 0xA, 0x6, 0, 0xc1b0000, 6, 0x60000 },
++	{ 0x1, 0xA, 0x7, 0, 0xc1c0000, 7, 0x70000 },
++	{ 0x1, 0xA, 0x8, 0, 0xc1d0000, 8, 0x80000 },
++	{ 0x1, 0xB, 0x0, 0, 0xc240000, 0, 0x0 },
++	{ 0x1, 0xC, 0x0, 0, 0xc250000, 0, 0x0 },
++	{ 0x1, 0xD, 0x0, 0, 0xc340000, 0, 0x0 },
++	{ 0x1, 0xE, 0x0, 0, 0xc260000, 0, 0x0 },
++	{ 0x1, 0xF, 0x0, 0, 0xc0f0000, 0, 0x0 },
++	{ 0x1, 0xF, 0x1, 0, 0xc100000, 1, 0x10000 },
++	{ 0x1, 0xF, 0x2, 0, 0xc110000, 2, 0x20000 },
++	{ 0x1, 0xF, 0x3, 0, 0xc120000, 3, 0x30000 },
++	{ 0x1, 0xF, 0x4, 0, 0xc130000, 4, 0x40000 },
++	{ 0x1, 0xF, 0x5, 0, 0xc140000, 5, 0x50000 },
++	{ 0x1, 0x10, 0x0, 0, 0xc290000, 0, 0x0 },
++	{ 0x1, 0x30, 0x0, 0, 0x20ce0000, 0, 0x0 },
++	{ 0x1, 0x31, 0x0, 0, 0xc1f0000, 0, 0x0 },
++	{ 0x1, 0x31, 0x1, 0, 0xc200000, 1, 0x10000 },
++	{ 0x1, 0x31, 0x2, 0, 0xc210000, 2, 0x20000 },
++	{ 0x1, 0x31, 0x3, 0, 0xc220000, 3, 0x30000 },
++	{ 0x1, 0x32, 0x0, 0, 0x20cc0000, 3, 0x1c0000 },
++	{ 0x1, 0x32, 0x1, 0, 0x20c80000, 2, 0x180000 },
++	{ 0x1, 0x32, 0x2, 0, 0x20c00000, 1, 0x100000 },
++	{ 0x1, 0x32, 0x3, 0, 0x20b00000, 0, 0x0 },
++	{ 0x1, 0x33, 0x0, 0, 0xc360000, 0, 0x0 },
++	{ 0x1, 0x33, 0x1, 0, 0xc370000, 1, 0x10000 },
++	{ 0x1, 0x33, 0x2, 0, 0xc3a0000, 3, 0x40000 },
++	{ 0x1, 0x33, 0x3, 0, 0xc380000, 2, 0x20000 },
++	{ 0x1, 0x38, 0x0, 0, 0xc600000, 0, 0x0 },
++	{ 0x1, 0x38, 0x1, 0, 0x0000000, 0, 0x0, },
++	{ 0x1, 0x39, 0x0, 0, 0xc280000, 0, 0x0 },
++	{ 0x2, 0x34, 0x0, 0, 0x40000000, 0, 0x40000000 },
++	{ 0x2, 0x34, 0x1, 0, 0x80000000, 1, 0x80000000 },
++	{ 0x2, 0x36, 0x0, 0, 0xc400000, 0, 0xc400000 },
++	{ 0x2, 0x36, 0x1, 0, 0x0000000, 0, 0x0, },
++	{ 0x3, 0x35, 0x0, 0, 0x0000000, 0, 0x0, },
++	{ 0x3, 0x35, 0x1, 0, 0x100000, 1, 0x100000 },
++	{ 0x3, 0x35, 0x2, 0, 0x5a00000, 11, 0x5a00000 },
++	{ 0x3, 0x35, 0x3, 0, 0x5b00000, 32, 0x5b00000 },
++	{ 0x3, 0x35, 0x4, 0, 0x5c00000, 33, 0x5c00000 },
++	{ 0x3, 0x35, 0x5, 0, 0x5d00000, 12, 0x5d00000 },
++	{ 0x3, 0x35, 0x6, 0, 0x20000000, 19, 0x20000000 },
++	{ 0x3, 0x35, 0x7, 0, 0x20100000, 20, 0x20100000 },
++	{ 0x3, 0x35, 0x8, 0, 0x20a00000, 24, 0x20a00000 },
++	{ 0x3, 0x35, 0x9, 0, 0x20d00000, 25, 0x20d00000 },
++	{ 0x3, 0x35, 0xa, 0, 0x200000, 2, 0x200000 },
++	{ 0x3, 0x35, 0xb, 0, 0x5800000, 10, 0x5800000 },
++	{ 0x3, 0x35, 0xc, 0, 0x5e00000, 13, 0x5e00000 },
++	{ 0x3, 0x35, 0xd, 0, 0x20200000, 21, 0x20200000 },
++	{ 0x3, 0x35, 0xe, 0, 0x20800000, 23, 0x20800000 },
++	{ 0x3, 0x35, 0xf, 0, 0x20e00000, 26, 0x20e00000 },
++	{ 0x3, 0x35, 0x10, 0, 0x400000, 3, 0x400000 },
++	{ 0x3, 0x35, 0x11, 0, 0x20400000, 22, 0x20400000 },
++	{ 0x3, 0x35, 0x12, 0, 0x800000, 4, 0x800000 },
++	{ 0x3, 0x35, 0x13, 0, 0x5000000, 9, 0x5000000 },
++	{ 0x3, 0x35, 0x14, 0, 0xc800000, 34, 0xc800000 },
++	{ 0x3, 0x35, 0x15, 0, 0x1000000, 5, 0x1000000 },
++	{ 0x3, 0x35, 0x16, 0, 0x3000000, 7, 0x3000000 },
++	{ 0x3, 0x35, 0x17, 0, 0x4000000, 8, 0x4000000 },
++	{ 0x3, 0x35, 0x18, 0, 0xd000000, 16, 0xd000000 },
++	{ 0x3, 0x35, 0x19, 0, 0x21000000, 27, 0x21000000 },
++	{ 0x3, 0x35, 0x1a, 0, 0x2000000, 6, 0x2000000 },
++	{ 0x3, 0x35, 0x1b, 0, 0x6000000, 14, 0x6000000 },
++	{ 0x3, 0x35, 0x1c, 0, 0xe000000, 17, 0xe000000 },
++	{ 0x3, 0x35, 0x1d, 0, 0x22000000, 28, 0x22000000 },
++	{ 0x3, 0x35, 0x1e, 0, 0x8000000, 15, 0x8000000 },
++	{ 0x3, 0x35, 0x1f, 0, 0x24000000, 29, 0x24000000 },
++	{ 0x3, 0x35, 0x20, 0, 0x28000000, 30, 0x28000000 },
++	{ 0x3, 0x35, 0x21, 0, 0x10000000, 18, 0x10000000 },
++	{ 0x3, 0x35, 0x22, 0, 0x30000000, 31, 0x30000000 },
++	{ 0x3, 0x37, 0x0, 0, 0xc640000, 0, 0x0 },
++	{ 0x3, 0x20, 0x0, 0, 0xc3b0000, 0, 0x0 },
++	{ 0x3, 0x21, 0x0, 0, 0xc000000, 0, 0x0 },
++	{ 0x3, 0x22, 0x0, 0, 0xc040000, 0, 0x0 },
++	{ 0x3, 0x23, 0x0, 0, 0xc050000, 0, 0x0 },
++	{ 0x3, 0x24, 0x0, 0, 0x20cf0000, 0, 0x0 },
++	{ 0x3, 0x25, 0x0, 0, 0xc2f0000, 0, 0x0 },
++	{ 0x3, 0x26, 0x0, 0, 0xc230000, 0, 0x0 },
++	{ 0x3, 0x27, 0x0, 0, 0xc350000, 0, 0x0 },
++	{ 0x3, 0x28, 0x0, 0, 0xc301000, 0, 0x0 },
++	{ 0x3, 0x29, 0x0, 0, 0xc302000, 0, 0x0 },
++	{ 0x3, 0x2A, 0x0, 0, 0xc303000, 0, 0x0 },
++	{ 0x3, 0x2B, 0x0, 0, 0xc2a0000, 0, 0x0 },
++	{ 0x3, 0x2C, 0x0, 0, 0xc2b0000, 0, 0x0 },
++	{ 0x3, 0x2C, 0x1, 0, 0xc2c0000, 1, 0x10000 },
++	{ 0x3, 0x2C, 0x2, 0, 0xc2d0000, 2, 0x20000 },
++	{ 0x3, 0x2C, 0x3, 0, 0xc2e0000, 3, 0x30000 },
++	{ 0x3, 0x0, 0x0, 0, 0xc660000, 0, 0x0 },
++	{ 0x3, 0x1, 0x0, 0, 0xc020000, 0, 0x0 },
++	{ 0x3, 0x2, 0x0, 0, 0xc030000, 0, 0x0 },
++	{ 0x3, 0x3, 0x0, 0, 0xc310000, 0, 0x0 },
++	{ 0x3, 0x4, 0x0, 0, 0xc320000, 0, 0x0 },
++	{ 0x3, 0x5, 0x0, 0, 0xc0a0000, 2, 0x40000 },
++	{ 0x3, 0x5, 0x1, 0, 0xc0b0000, 3, 0x50000 },
++	{ 0x3, 0x5, 0x2, 0, 0xc0e0000, 5, 0x80000 },
++	{ 0x3, 0x5, 0x3, 0, 0xc060000, 0, 0x0 },
++	{ 0x3, 0x5, 0x4, 0, 0xc080000, 1, 0x20000 },
++	{ 0x3, 0x5, 0x5, 0, 0xc0c0000, 4, 0x60000 },
++	{ 0x3, 0x6, 0x0, 0, 0xc330000, 0, 0x0 },
++	{ 0x3, 0x7, 0x0, 0, 0xc650000, 0, 0x0 },
++	{ 0x3, 0x8, 0x0, 0, 0xc3e0000, 0, 0x0 },
++	{ 0x3, 0x9, 0x0, 0, 0xc1e0000, 0, 0x0 },
++	{ 0x3, 0xA, 0x0, 0, 0xc150000, 0, 0x0 },
++	{ 0x3, 0xA, 0x1, 0, 0xc160000, 1, 0x10000 },
++	{ 0x3, 0xA, 0x2, 0, 0xc170000, 2, 0x20000 },
++	{ 0x3, 0xA, 0x3, 0, 0xc180000, 3, 0x30000 },
++	{ 0x3, 0xA, 0x4, 0, 0xc190000, 4, 0x40000 },
++	{ 0x3, 0xA, 0x5, 0, 0xc1a0000, 5, 0x50000 },
++	{ 0x3, 0xA, 0x6, 0, 0xc1b0000, 6, 0x60000 },
++	{ 0x3, 0xA, 0x7, 0, 0xc1c0000, 7, 0x70000 },
++	{ 0x3, 0xA, 0x8, 0, 0xc1d0000, 8, 0x80000 },
++	{ 0x3, 0xB, 0x0, 0, 0xc240000, 0, 0x0 },
++	{ 0x3, 0xC, 0x0, 0, 0xc250000, 0, 0x0 },
++	{ 0x3, 0xD, 0x0, 0, 0xc340000, 0, 0x0 },
++	{ 0x3, 0xE, 0x0, 0, 0xc260000, 0, 0x0 },
++	{ 0x3, 0xF, 0x0, 0, 0xc0f0000, 0, 0x0 },
++	{ 0x3, 0xF, 0x1, 0, 0xc100000, 1, 0x10000 },
++	{ 0x3, 0xF, 0x2, 0, 0xc110000, 2, 0x20000 },
++	{ 0x3, 0xF, 0x3, 0, 0xc120000, 3, 0x30000 },
++	{ 0x3, 0xF, 0x4, 0, 0xc130000, 4, 0x40000 },
++	{ 0x3, 0xF, 0x5, 0, 0xc140000, 5, 0x50000 },
++	{ 0x3, 0x10, 0x0, 0, 0xc290000, 0, 0x0 },
++	{ 0x3, 0x30, 0x0, 0, 0x20ce0000, 0, 0x0 },
++	{ 0x3, 0x31, 0x0, 0, 0xc1f0000, 0, 0x0 },
++	{ 0x3, 0x31, 0x1, 0, 0xc200000, 1, 0x10000 },
++	{ 0x3, 0x31, 0x2, 0, 0xc210000, 2, 0x20000 },
++	{ 0x3, 0x31, 0x3, 0, 0xc220000, 3, 0x30000 },
++	{ 0x3, 0x32, 0x0, 0, 0x20cc0000, 3, 0x1c0000 },
++	{ 0x3, 0x32, 0x1, 0, 0x20c80000, 2, 0x180000 },
++	{ 0x3, 0x32, 0x2, 0, 0x20c00000, 1, 0x100000 },
++	{ 0x3, 0x32, 0x3, 0, 0x20b00000, 0, 0x0 },
++	{ 0x3, 0x33, 0x0, 0, 0xc360000, 0, 0x0 },
++	{ 0x3, 0x33, 0x1, 0, 0xc370000, 1, 0x10000 },
++	{ 0x3, 0x33, 0x2, 0, 0xc3a0000, 3, 0x40000 },
++	{ 0x3, 0x33, 0x3, 0, 0xc380000, 2, 0x20000 },
++	{ 0x3, 0x38, 0x0, 0, 0xc600000, 0, 0x0 },
++	{ 0x3, 0x38, 0x1, 0, 0x0, 0, 0x0 },
++	{ 0x3, 0x39, 0x0, 0, 0xc280000, 0, 0x0 }
++};
++
++/*
++ * SCE/RCE NOC aperture lookup table as per file "AON_NOC_Structure.info".
++ */
++static char *t194_scenoc_routeid_initflow[] = {
++	"cbb_i/I/0",				/* 0 */
++	"cpu_m_i/I/0",				/* 1 */
++	"cpu_p_i/I/0",				/* 2 */
++	"dma_m_i/I/0",				/* 3 */
++	"dma_p_i/I/0",				/* 4 */
++	"RESERVED",				/* 5 */
++	"RESERVED",				/* 6 */
++	"RESERVED"				/* 7 */
++};
++
++static char *t194_scenoc_routeid_targflow[] = {
++	"multiport0_t/T/atcm_cfg",		/* 0x0  */
++	"multiport0_t/T/car",			/* 0x1  */
++	"multiport0_t/T/cast",			/* 0x2  */
++	"multiport0_t/T/cfg",			/* 0x3  */
++	"multiport0_t/T/dast",			/* 0x4  */
++	"multiport0_t/T/dma",			/* 0x5  */
++	"multiport0_t/T/err_collator",		/* 0x6  */
++	"multiport0_t/T/err_collator_car",	/* 0x7  */
++	"multiport0_t/T/fpga_misc",		/* 0x8  */
++	"multiport0_t/T/fpga_uart",		/* 0x9  */
++	"multiport0_t/T/gte",			/* 0xA  */
++	"multiport0_t/T/hsp",			/* 0xB  */
++	"multiport0_t/T/misc",			/* 0xC  */
++	"multiport0_t/T/pm",			/* 0xD  */
++	"multiport0_t/T/tke",			/* 0xE  */
++	"RESERVED",				/* 0xF  */
++	"multiport1_t/T/hsm",			/* 0x10 */
++	"multiport1_t/T/vic0",			/* 0x11 */
++	"multiport1_t/T/vic1",			/* 0x12 */
++	"ast0_t/T/0",				/* 0x13 */
++	"ast1_t/T/0",				/* 0x14 */
++	"cbb_t/T/0",				/* 0x15 */
++	"cpu_t/T/0",				/* 0x16 */
++	"sce_noc_firewall/T/0",			/* 0x17 */
++	"svc_t/T/0",				/* 0x18 */
++	"RESERVED",				/* 0x19 */
++	"RESERVED",				/* 0x1A */
++	"RESERVED",				/* 0x1B */
++	"RESERVED",				/* 0x1C */
++	"RESERVED",				/* 0x1D */
++	"RESERVED",				/* 0x1E */
++	"RESERVED"				/* 0x1F */
++};
++
++/*
++ * Fields of SCE/RCE NOC lookup table:
++ * Init flow, Targ flow, Targ subrange, Init mapping, Init localAddress,
++ *                                              Targ mapping, Targ localAddress
++ * ----------------------------------------------------------------------------
++ */
++static const struct tegra194_cbb_aperture t194_scenoc_apert_lookup[] = {
++	{ 0x0, 0x16, 0x0, 0, 0xb400000, 0, 0xb400000 },
++	{ 0x0, 0x16, 0x1, 0, 0xbc00000, 1, 0xbc00000 },
++	{ 0x0, 0x0, 0x0, 0, 0xb000000, 0, 0x0 },
++	{ 0x0, 0x0, 0x1, 0, 0xb800000, 1, 0x0 },
++	{ 0x0, 0x1, 0x0, 0, 0x20de0000, 3, 0xe0000 },
++	{ 0x0, 0x1, 0x1, 0, 0x210e0000, 7, 0xe0000 },
++	{ 0x0, 0x1, 0x2, 0, 0x20dc0000, 2, 0xc0000 },
++	{ 0x0, 0x1, 0x3, 0, 0x210c0000, 6, 0xc0000 },
++	{ 0x0, 0x1, 0x4, 0, 0x20d80000, 1, 0x80000 },
++	{ 0x0, 0x1, 0x5, 0, 0x21080000, 5, 0x80000 },
++	{ 0x0, 0x1, 0x6, 0, 0x20d00000, 0, 0x0 },
++	{ 0x0, 0x1, 0x7, 0, 0x21000000, 4, 0x0 },
++	{ 0x0, 0x2, 0x0, 0, 0xb040000, 0, 0x0 },
++	{ 0x0, 0x2, 0x1, 0, 0xb840000, 1, 0x0 },
++	{ 0x0, 0x3, 0x0, 0, 0xb230000, 0, 0x0 },
++	{ 0x0, 0x3, 0x1, 0, 0xba30000, 1, 0x0 },
++	{ 0x0, 0x4, 0x0, 0, 0xb050000, 0, 0x0 },
++	{ 0x0, 0x4, 0x1, 0, 0xb850000, 1, 0x0 },
++	{ 0x0, 0x5, 0x0, 0, 0xb060000, 0, 0x0 },
++	{ 0x0, 0x5, 0x1, 0, 0xb070000, 1, 0x10000 },
++	{ 0x0, 0x5, 0x2, 0, 0xb080000, 2, 0x20000 },
++	{ 0x0, 0x5, 0x3, 0, 0xb090000, 3, 0x30000 },
++	{ 0x0, 0x5, 0x4, 0, 0xb0a0000, 4, 0x40000 },
++	{ 0x0, 0x5, 0x5, 0, 0xb0b0000, 5, 0x50000 },
++	{ 0x0, 0x5, 0x6, 0, 0xb0c0000, 6, 0x60000 },
++	{ 0x0, 0x5, 0x7, 0, 0xb0d0000, 7, 0x70000 },
++	{ 0x0, 0x5, 0x8, 0, 0xb0e0000, 8, 0x80000 },
++	{ 0x0, 0x5, 0x9, 0, 0xb860000, 9, 0x0 },
++	{ 0x0, 0x5, 0xa, 0, 0xb870000, 10, 0x10000 },
++	{ 0x0, 0x5, 0xb, 0, 0xb880000, 11, 0x20000 },
++	{ 0x0, 0x5, 0xc, 0, 0xb890000, 12, 0x30000 },
++	{ 0x0, 0x5, 0xd, 0, 0xb8a0000, 13, 0x40000 },
++	{ 0x0, 0x5, 0xe, 0, 0xb8b0000, 14, 0x50000 },
++	{ 0x0, 0x5, 0xf, 0, 0xb8c0000, 15, 0x60000 },
++	{ 0x0, 0x5, 0x10, 0, 0xb8d0000, 16, 0x70000 },
++	{ 0x0, 0x5, 0x11, 0, 0xb8e0000, 17, 0x80000 },
++	{ 0x0, 0x6, 0x0, 0, 0xb650000, 0, 0x0 },
++	{ 0x0, 0x6, 0x1, 0, 0xbe50000, 1, 0x0 },
++	{ 0x0, 0x7, 0x0, 0, 0x20df0000, 0, 0x0 },
++	{ 0x0, 0x7, 0x1, 0, 0x210f0000, 1, 0x0 },
++	{ 0x0, 0x8, 0x0, 0, 0xb3e0000, 0, 0x0 },
++	{ 0x0, 0x8, 0x1, 0, 0xbbe0000, 1, 0x0 },
++	{ 0x0, 0x9, 0x0, 0, 0xb3d0000, 0, 0x0 },
++	{ 0x0, 0x9, 0x1, 0, 0xbbd0000, 1, 0x0 },
++	{ 0x0, 0xA, 0x0, 0, 0xb1e0000, 0, 0x0 },
++	{ 0x0, 0xA, 0x1, 0, 0xb9e0000, 1, 0x0 },
++	{ 0x0, 0xB, 0x0, 0, 0xb150000, 0, 0x0 },
++	{ 0x0, 0xB, 0x1, 0, 0xb160000, 1, 0x10000 },
++	{ 0x0, 0xB, 0x2, 0, 0xb170000, 2, 0x20000 },
++	{ 0x0, 0xB, 0x3, 0, 0xb180000, 3, 0x30000 },
++	{ 0x0, 0xB, 0x4, 0, 0xb190000, 4, 0x40000 },
++	{ 0x0, 0xB, 0x5, 0, 0xb1a0000, 5, 0x50000 },
++	{ 0x0, 0xB, 0x6, 0, 0xb1b0000, 6, 0x60000 },
++	{ 0x0, 0xB, 0x7, 0, 0xb1c0000, 7, 0x70000 },
++	{ 0x0, 0xB, 0x8, 0, 0xb1d0000, 8, 0x80000 },
++	{ 0x0, 0xB, 0x9, 0, 0xb950000, 9, 0x0 },
++	{ 0x0, 0xB, 0xa, 0, 0xb960000, 10, 0x10000 },
++	{ 0x0, 0xB, 0xb, 0, 0xb970000, 11, 0x20000 },
++	{ 0x0, 0xB, 0xc, 0, 0xb980000, 12, 0x30000 },
++	{ 0x0, 0xB, 0xd, 0, 0xb990000, 13, 0x40000 },
++	{ 0x0, 0xB, 0xe, 0, 0xb9a0000, 14, 0x50000 },
++	{ 0x0, 0xB, 0xf, 0, 0xb9b0000, 15, 0x60000 },
++	{ 0x0, 0xB, 0x10, 0, 0xb9c0000, 16, 0x70000 },
++	{ 0x0, 0xB, 0x11, 0, 0xb9d0000, 17, 0x80000 },
++	{ 0x0, 0xC, 0x0, 0, 0xb660000, 0, 0x0 },
++	{ 0x0, 0xC, 0x1, 0, 0xbe60000, 1, 0x0 },
++	{ 0x0, 0xD, 0x0, 0, 0xb1f0000, 0, 0x0 },
++	{ 0x0, 0xD, 0x1, 0, 0xb200000, 1, 0x10000 },
++	{ 0x0, 0xD, 0x2, 0, 0xb210000, 2, 0x20000 },
++	{ 0x0, 0xD, 0x3, 0, 0xb220000, 3, 0x30000 },
++	{ 0x0, 0xD, 0x4, 0, 0xb9f0000, 4, 0x0 },
++	{ 0x0, 0xD, 0x5, 0, 0xba00000, 5, 0x10000 },
++	{ 0x0, 0xD, 0x6, 0, 0xba10000, 6, 0x20000 },
++	{ 0x0, 0xD, 0x7, 0, 0xba20000, 7, 0x30000 },
++	{ 0x0, 0xE, 0x0, 0, 0xb0f0000, 0, 0x0 },
++	{ 0x0, 0xE, 0x1, 0, 0xb100000, 1, 0x10000 },
++	{ 0x0, 0xE, 0x2, 0, 0xb110000, 2, 0x20000 },
++	{ 0x0, 0xE, 0x3, 0, 0xb120000, 3, 0x30000 },
++	{ 0x0, 0xE, 0x4, 0, 0xb130000, 4, 0x40000 },
++	{ 0x0, 0xE, 0x5, 0, 0xb140000, 5, 0x50000 },
++	{ 0x0, 0xE, 0x6, 0, 0xb8f0000, 6, 0x0 },
++	{ 0x0, 0xE, 0x7, 0, 0xb900000, 7, 0x10000 },
++	{ 0x0, 0xE, 0x8, 0, 0xb910000, 8, 0x20000 },
++	{ 0x0, 0xE, 0x9, 0, 0xb920000, 9, 0x30000 },
++	{ 0x0, 0xE, 0xa, 0, 0xb930000, 10, 0x40000 },
++	{ 0x0, 0xE, 0xb, 0, 0xb940000, 11, 0x50000 },
++	{ 0x0, 0x10, 0x0, 0, 0xb240000, 0, 0x0 },
++	{ 0x0, 0x10, 0x1, 0, 0xba40000, 1, 0x0 },
++	{ 0x0, 0x11, 0x0, 0, 0xb020000, 0, 0x0 },
++	{ 0x0, 0x11, 0x1, 0, 0xb820000, 1, 0x0 },
++	{ 0x0, 0x12, 0x0, 0, 0xb030000, 0, 0x0 },
++	{ 0x0, 0x12, 0x1, 0, 0xb830000, 1, 0x0 },
++	{ 0x0, 0x17, 0x0, 0, 0xb640000, 0, 0x0 },
++	{ 0x0, 0x17, 0x1, 0, 0xbe40000, 1, 0x0 },
++	{ 0x0, 0x18, 0x0, 0, 0xb600000, 0, 0x0 },
++	{ 0x0, 0x18, 0x1, 0, 0xbe00000, 1, 0x0 },
++	{ 0x0, 0x18, 0x2, 0, 0x0, 0, 0x0 },
++	{ 0x0, 0x18, 0x3, 0, 0x0, 0, 0x0 },
++	{ 0x1, 0x13, 0x0, 0, 0x40000000, 0, 0x40000000 },
++	{ 0x1, 0x13, 0x1, 1, 0x80000000, 1, 0x80000000 },
++	{ 0x1, 0x13, 0x2, 0, 0x0, 0, 0x0 },
++	{ 0x2, 0x15, 0x0, 0, 0x20c00000, 8, 0x20c00000 },
++	{ 0x2, 0x15, 0x1, 0, 0x21100000, 22, 0x21100000 },
++	{ 0x2, 0x15, 0x2, 0, 0x20e00000, 9, 0x20e00000 },
++	{ 0x2, 0x15, 0x3, 0, 0x21200000, 23, 0x21200000 },
++	{ 0x2, 0x15, 0x4, 0, 0x20800000, 7, 0x20800000 },
++	{ 0x2, 0x15, 0x5, 0, 0x21400000, 24, 0x21400000 },
++	{ 0x2, 0x15, 0x6, 0, 0xb000000, 18, 0xb000000 },
++	{ 0x2, 0x15, 0x7, 0, 0xb800000, 3, 0xb800000 },
++	{ 0x2, 0x15, 0x8, 0, 0x20000000, 6, 0x20000000 },
++	{ 0x2, 0x15, 0x9, 0, 0x21800000, 25, 0x21800000 },
++	{ 0x2, 0x15, 0xa, 0, 0xa000000, 2, 0xa000000 },
++	{ 0x2, 0x15, 0xb, 0, 0xa000000, 17, 0xa000000 },
++	{ 0x2, 0x15, 0xc, 0, 0x20000000, 21, 0x20000000 },
++	{ 0x2, 0x15, 0xd, 0, 0x21000000, 10, 0x21000000 },
++	{ 0x2, 0x15, 0xe, 0, 0x8000000, 1, 0x8000000 },
++	{ 0x2, 0x15, 0xf, 0, 0x8000000, 16, 0x8000000 },
++	{ 0x2, 0x15, 0x10, 0, 0x22000000, 11, 0x22000000 },
++	{ 0x2, 0x15, 0x11, 0, 0x22000000, 26, 0x22000000 },
++	{ 0x2, 0x15, 0x12, 0, 0xc000000, 4, 0xc000000 },
++	{ 0x2, 0x15, 0x13, 0, 0xc000000, 19, 0xc000000 },
++	{ 0x2, 0x15, 0x14, 0, 0x24000000, 12, 0x24000000 },
++	{ 0x2, 0x15, 0x15, 0, 0x24000000, 27, 0x24000000 },
++	{ 0x2, 0x15, 0x16, 0, 0x0, 0, 0x0 },
++	{ 0x2, 0x15, 0x17, 0, 0x0, 15, 0x0 },
++	{ 0x2, 0x15, 0x18, 0, 0x28000000, 13, 0x28000000 },
++	{ 0x2, 0x15, 0x19, 0, 0x28000000, 28, 0x28000000 },
++	{ 0x2, 0x15, 0x1a, 0, 0x10000000, 5, 0x10000000 },
++	{ 0x2, 0x15, 0x1b, 0, 0x10000000, 20, 0x10000000 },
++	{ 0x2, 0x15, 0x1c, 0, 0x30000000, 14, 0x30000000 },
++	{ 0x2, 0x15, 0x1d, 0, 0x30000000, 29, 0x30000000 },
++	{ 0x2, 0x0, 0x0, 0, 0xb000000, 0, 0x0 },
++	{ 0x2, 0x0, 0x1, 0, 0xb800000, 1, 0x0 },
++	{ 0x2, 0x1, 0x0, 0, 0x20de0000, 3, 0xe0000 },
++	{ 0x2, 0x1, 0x1, 0, 0x210e0000, 7, 0xe0000 },
++	{ 0x2, 0x1, 0x2, 0, 0x20dc0000, 2, 0xc0000 },
++	{ 0x2, 0x1, 0x3, 0, 0x210c0000, 6, 0xc0000 },
++	{ 0x2, 0x1, 0x4, 0, 0x20d80000, 1, 0x80000 },
++	{ 0x2, 0x1, 0x5, 0, 0x21080000, 5, 0x80000 },
++	{ 0x2, 0x1, 0x6, 0, 0x20d00000, 0, 0x0 },
++	{ 0x2, 0x1, 0x7, 0, 0x21000000, 4, 0x0 },
++	{ 0x2, 0x2, 0x0, 0, 0xb040000, 0, 0x0 },
++	{ 0x2, 0x2, 0x1, 0, 0xb840000, 1, 0x0 },
++	{ 0x2, 0x3, 0x0, 0, 0xb230000, 0, 0x0 },
++	{ 0x2, 0x3, 0x1, 0, 0xba30000, 1, 0x0 },
++	{ 0x2, 0x4, 0x0, 0, 0xb050000, 0, 0x0 },
++	{ 0x2, 0x4, 0x1, 0, 0xb850000, 1, 0x0 },
++	{ 0x2, 0x5, 0x0, 0, 0xb060000, 0, 0x0 },
++	{ 0x2, 0x5, 0x1, 0, 0xb070000, 1, 0x10000 },
++	{ 0x2, 0x5, 0x2, 0, 0xb080000, 2, 0x20000 },
++	{ 0x2, 0x5, 0x3, 0, 0xb090000, 3, 0x30000 },
++	{ 0x2, 0x5, 0x4, 0, 0xb0a0000, 4, 0x40000 },
++	{ 0x2, 0x5, 0x5, 0, 0xb0b0000, 5, 0x50000 },
++	{ 0x2, 0x5, 0x6, 0, 0xb0c0000, 6, 0x60000 },
++	{ 0x2, 0x5, 0x7, 0, 0xb0d0000, 7, 0x70000 },
++	{ 0x2, 0x5, 0x8, 0, 0xb0e0000, 8, 0x80000 },
++	{ 0x2, 0x5, 0x9, 0, 0xb860000, 9, 0x0 },
++	{ 0x2, 0x5, 0xa, 0, 0xb870000, 10, 0x10000 },
++	{ 0x2, 0x5, 0xb, 0, 0xb880000, 11, 0x20000 },
++	{ 0x2, 0x5, 0xc, 0, 0xb890000, 12, 0x30000 },
++	{ 0x2, 0x5, 0xd, 0, 0xb8a0000, 13, 0x40000 },
++	{ 0x2, 0x5, 0xe, 0, 0xb8b0000, 14, 0x50000 },
++	{ 0x2, 0x5, 0xf, 0, 0xb8c0000, 15, 0x60000 },
++	{ 0x2, 0x5, 0x10, 0, 0xb8d0000, 16, 0x70000 },
++	{ 0x2, 0x5, 0x11, 0, 0xb8e0000, 17, 0x80000 },
++	{ 0x2, 0x6, 0x0, 0, 0xb650000, 0, 0x0 },
++	{ 0x2, 0x6, 0x1, 0, 0xbe50000, 1, 0x0 },
++	{ 0x2, 0x7, 0x0, 0, 0x20df0000, 0, 0x0 },
++	{ 0x2, 0x7, 0x1, 0, 0x210f0000, 1, 0x0 },
++	{ 0x2, 0x8, 0x0, 0, 0xb3e0000, 0, 0x0 },
++	{ 0x2, 0x8, 0x1, 0, 0xbbe0000, 1, 0x0 },
++	{ 0x2, 0x9, 0x0, 0, 0xb3d0000, 0, 0x0 },
++	{ 0x2, 0x9, 0x1, 0, 0xbbd0000, 1, 0x0 },
++	{ 0x2, 0xA, 0x0, 0, 0xb1e0000, 0, 0x0 },
++	{ 0x2, 0xA, 0x1, 0, 0xb9e0000, 1, 0x0 },
++	{ 0x2, 0xB, 0x0, 0, 0xb150000, 0, 0x0 },
++	{ 0x2, 0xB, 0x1, 0, 0xb160000, 1, 0x10000 },
++	{ 0x2, 0xB, 0x2, 0, 0xb170000, 2, 0x20000 },
++	{ 0x2, 0xB, 0x3, 0, 0xb180000, 3, 0x30000 },
++	{ 0x2, 0xB, 0x4, 0, 0xb190000, 4, 0x40000 },
++	{ 0x2, 0xB, 0x5, 0, 0xb1a0000, 5, 0x50000 },
++	{ 0x2, 0xB, 0x6, 0, 0xb1b0000, 6, 0x60000 },
++	{ 0x2, 0xB, 0x7, 0, 0xb1c0000, 7, 0x70000 },
++	{ 0x2, 0xB, 0x8, 0, 0xb1d0000, 8, 0x80000 },
++	{ 0x2, 0xB, 0x9, 0, 0xb950000, 9, 0x0 },
++	{ 0x2, 0xB, 0xa, 0, 0xb960000, 10, 0x10000 },
++	{ 0x2, 0xB, 0xb, 0, 0xb970000, 11, 0x20000 },
++	{ 0x2, 0xB, 0xc, 0, 0xb980000, 12, 0x30000 },
++	{ 0x2, 0xB, 0xd, 0, 0xb990000, 13, 0x40000 },
++	{ 0x2, 0xB, 0xe, 0, 0xb9a0000, 14, 0x50000 },
++	{ 0x2, 0xB, 0xf, 0, 0xb9b0000, 15, 0x60000 },
++	{ 0x2, 0xB, 0x10, 0, 0xb9c0000, 16, 0x70000 },
++	{ 0x2, 0xB, 0x11, 0, 0xb9d0000, 17, 0x80000 },
++	{ 0x2, 0xC, 0x0, 0, 0xb660000, 0, 0x0 },
++	{ 0x2, 0xC, 0x1, 0, 0xbe60000, 1, 0x0 },
++	{ 0x2, 0xD, 0x0, 0, 0xb1f0000, 0, 0x0 },
++	{ 0x2, 0xD, 0x1, 0, 0xb200000, 1, 0x10000 },
++	{ 0x2, 0xD, 0x2, 0, 0xb210000, 2, 0x20000 },
++	{ 0x2, 0xD, 0x3, 0, 0xb220000, 3, 0x30000 },
++	{ 0x2, 0xD, 0x4, 0, 0xb9f0000, 4, 0x0 },
++	{ 0x2, 0xD, 0x5, 0, 0xba00000, 5, 0x10000 },
++	{ 0x2, 0xD, 0x6, 0, 0xba10000, 6, 0x20000 },
++	{ 0x2, 0xD, 0x7, 0, 0xba20000, 7, 0x30000 },
++	{ 0x2, 0xE, 0x0, 0, 0xb0f0000, 0, 0x0 },
++	{ 0x2, 0xE, 0x1, 0, 0xb100000, 1, 0x10000 },
++	{ 0x2, 0xE, 0x2, 0, 0xb110000, 2, 0x20000 },
++	{ 0x2, 0xE, 0x3, 0, 0xb120000, 3, 0x30000 },
++	{ 0x2, 0xE, 0x4, 0, 0xb130000, 4, 0x40000 },
++	{ 0x2, 0xE, 0x5, 0, 0xb140000, 5, 0x50000 },
++	{ 0x2, 0xE, 0x6, 0, 0xb8f0000, 6, 0x0 },
++	{ 0x2, 0xE, 0x7, 0, 0xb900000, 7, 0x10000 },
++	{ 0x2, 0xE, 0x8, 0, 0xb910000, 8, 0x20000 },
++	{ 0x2, 0xE, 0x9, 0, 0xb920000, 9, 0x30000 },
++	{ 0x2, 0xE, 0xa, 0, 0xb930000, 10, 0x40000 },
++	{ 0x2, 0xE, 0xb, 0, 0xb940000, 11, 0x50000 },
++	{ 0x2, 0x10, 0x0, 0, 0xb240000, 0, 0x0 },
++	{ 0x2, 0x10, 0x1, 0, 0xba40000, 1, 0x0 },
++	{ 0x2, 0x11, 0x0, 0, 0xb020000, 0, 0x0 },
++	{ 0x2, 0x11, 0x1, 0, 0xb820000, 1, 0x0 },
++	{ 0x2, 0x12, 0x0, 0, 0xb030000, 0, 0x0 },
++	{ 0x2, 0x12, 0x1, 0, 0xb830000, 1, 0x0 },
++	{ 0x2, 0x17, 0x0, 0, 0xb640000, 0, 0x0 },
++	{ 0x2, 0x17, 0x1, 0, 0xbe40000, 1, 0x0 },
++	{ 0x2, 0x18, 0x0, 0, 0xb600000, 0, 0x0 },
++	{ 0x2, 0x18, 0x1, 0, 0xbe00000, 1, 0x0 },
++	{ 0x2, 0x18, 0x2, 0, 0x0, 0, 0x0 },
++	{ 0x2, 0x18, 0x3, 0, 0x0, 0, 0x0 },
++	{ 0x3, 0x14, 0x0, 0, 0x40000000, 0, 0x40000000 },
++	{ 0x3, 0x14, 0x1, 1, 0x80000000, 1, 0x80000000 },
++	{ 0x3, 0x16, 0x0, 2, 0xb400000, 0, 0xb400000 },
++	{ 0x3, 0x16, 0x1, 2, 0xbc00000, 1, 0xbc00000 },
++	{ 0x3, 0x16, 0x2, 0, 0x0, 0, 0x0 },
++	{ 0x3, 0x16, 0x3, 0, 0x0, 0, 0x0 },
++	{ 0x4, 0x15, 0x0, 0, 0x20c00000, 8, 0x20c00000 },
++	{ 0x4, 0x15, 0x1, 0, 0x21100000, 22, 0x21100000 },
++	{ 0x4, 0x15, 0x2, 0, 0x20e00000, 9, 0x20e00000 },
++	{ 0x4, 0x15, 0x3, 0, 0x21200000, 23, 0x21200000 },
++	{ 0x4, 0x15, 0x4, 0, 0x20800000, 7, 0x20800000 },
++	{ 0x4, 0x15, 0x5, 0, 0x21400000, 24, 0x21400000 },
++	{ 0x4, 0x15, 0x6, 0, 0xb000000, 18, 0xb000000 },
++	{ 0x4, 0x15, 0x7, 0, 0xb800000, 3, 0xb800000 },
++	{ 0x4, 0x15, 0x8, 0, 0x20000000, 6, 0x20000000 },
++	{ 0x4, 0x15, 0x9, 0, 0x21800000, 25, 0x21800000 },
++	{ 0x4, 0x15, 0xa, 0, 0xa000000, 2, 0xa000000 },
++	{ 0x4, 0x15, 0xb, 0, 0xa000000, 17, 0xa000000 },
++	{ 0x4, 0x15, 0xc, 0, 0x20000000, 21, 0x20000000 },
++	{ 0x4, 0x15, 0xd, 0, 0x21000000, 10, 0x21000000 },
++	{ 0x4, 0x15, 0xe, 0, 0x8000000, 1, 0x8000000 },
++	{ 0x4, 0x15, 0xf, 0, 0x8000000, 16, 0x8000000 },
++	{ 0x4, 0x15, 0x10, 0, 0x22000000, 11, 0x22000000 },
++	{ 0x4, 0x15, 0x11, 0, 0x22000000, 26, 0x22000000 },
++	{ 0x4, 0x15, 0x12, 0, 0xc000000, 4, 0xc000000 },
++	{ 0x4, 0x15, 0x13, 0, 0xc000000, 19, 0xc000000 },
++	{ 0x4, 0x15, 0x14, 0, 0x24000000, 12, 0x24000000 },
++	{ 0x4, 0x15, 0x15, 0, 0x24000000, 27, 0x24000000 },
++	{ 0x4, 0x15, 0x16, 0, 0x0, 0, 0x0 },
++	{ 0x4, 0x15, 0x17, 0, 0x0, 15, 0x0 },
++	{ 0x4, 0x15, 0x18, 0, 0x28000000, 13, 0x28000000 },
++	{ 0x4, 0x15, 0x19, 0, 0x28000000, 28, 0x28000000 },
++	{ 0x4, 0x15, 0x1a, 0, 0x10000000, 5, 0x10000000 },
++	{ 0x4, 0x15, 0x1b, 0, 0x10000000, 20, 0x10000000 },
++	{ 0x4, 0x15, 0x1c, 0, 0x30000000, 14, 0x30000000 },
++	{ 0x4, 0x15, 0x1d, 0, 0x30000000, 29, 0x30000000 },
++	{ 0x4, 0x0, 0x0, 0, 0xb000000, 0, 0x0 },
++	{ 0x4, 0x0, 0x1, 0, 0xb800000, 1, 0x0 },
++	{ 0x4, 0x1, 0x0, 0, 0x20de0000, 3, 0xe0000 },
++	{ 0x4, 0x1, 0x1, 0, 0x210e0000, 7, 0xe0000 },
++	{ 0x4, 0x1, 0x2, 0, 0x20dc0000, 2, 0xc0000 },
++	{ 0x4, 0x1, 0x3, 0, 0x210c0000, 6, 0xc0000 },
++	{ 0x4, 0x1, 0x4, 0, 0x20d80000, 1, 0x80000 },
++	{ 0x4, 0x1, 0x5, 0, 0x21080000, 5, 0x80000 },
++	{ 0x4, 0x1, 0x6, 0, 0x20d00000, 0, 0x0 },
++	{ 0x4, 0x1, 0x7, 0, 0x21000000, 4, 0x0 },
++	{ 0x4, 0x2, 0x0, 0, 0xb040000, 0, 0x0 },
++	{ 0x4, 0x2, 0x1, 0, 0xb840000, 1, 0x0 },
++	{ 0x4, 0x3, 0x0, 0, 0xb230000, 0, 0x0 },
++	{ 0x4, 0x3, 0x1, 0, 0xba30000, 1, 0x0 },
++	{ 0x4, 0x4, 0x0, 0, 0xb050000, 0, 0x0 },
++	{ 0x4, 0x4, 0x1, 0, 0xb850000, 1, 0x0 },
++	{ 0x4, 0x5, 0x0, 0, 0xb060000, 0, 0x0 },
++	{ 0x4, 0x5, 0x1, 0, 0xb070000, 1, 0x10000 },
++	{ 0x4, 0x5, 0x2, 0, 0xb080000, 2, 0x20000 },
++	{ 0x4, 0x5, 0x3, 0, 0xb090000, 3, 0x30000 },
++	{ 0x4, 0x5, 0x4, 0, 0xb0a0000, 4, 0x40000 },
++	{ 0x4, 0x5, 0x5, 0, 0xb0b0000, 5, 0x50000 },
++	{ 0x4, 0x5, 0x6, 0, 0xb0c0000, 6, 0x60000 },
++	{ 0x4, 0x5, 0x7, 0, 0xb0d0000, 7, 0x70000 },
++	{ 0x4, 0x5, 0x8, 0, 0xb0e0000, 8, 0x80000 },
++	{ 0x4, 0x5, 0x9, 0, 0xb860000, 9, 0x0 },
++	{ 0x4, 0x5, 0xa, 0, 0xb870000, 10, 0x10000 },
++	{ 0x4, 0x5, 0xb, 0, 0xb880000, 11, 0x20000 },
++	{ 0x4, 0x5, 0xc, 0, 0xb890000, 12, 0x30000 },
++	{ 0x4, 0x5, 0xd, 0, 0xb8a0000, 13, 0x40000 },
++	{ 0x4, 0x5, 0xe, 0, 0xb8b0000, 14, 0x50000 },
++	{ 0x4, 0x5, 0xf, 0, 0xb8c0000, 15, 0x60000 },
++	{ 0x4, 0x5, 0x10, 0, 0xb8d0000, 16, 0x70000 },
++	{ 0x4, 0x5, 0x11, 0, 0xb8e0000, 17, 0x80000 },
++	{ 0x4, 0x6, 0x0, 0, 0xb650000, 0, 0x0 },
++	{ 0x4, 0x6, 0x1, 0, 0xbe50000, 1, 0x0 },
++	{ 0x4, 0x7, 0x0, 0, 0x20df0000, 0, 0x0 },
++	{ 0x4, 0x7, 0x1, 0, 0x210f0000, 1, 0x0 },
++	{ 0x4, 0x8, 0x0, 0, 0xb3e0000, 0, 0x0 },
++	{ 0x4, 0x8, 0x1, 0, 0xbbe0000, 1, 0x0 },
++	{ 0x4, 0x9, 0x0, 0, 0xb3d0000, 0, 0x0 },
++	{ 0x4, 0x9, 0x1, 0, 0xbbd0000, 1, 0x0 },
++	{ 0x4, 0xA, 0x0, 0, 0xb1e0000, 0, 0x0 },
++	{ 0x4, 0xA, 0x1, 0, 0xb9e0000, 1, 0x0 },
++	{ 0x4, 0xB, 0x0, 0, 0xb150000, 0, 0x0 },
++	{ 0x4, 0xB, 0x1, 0, 0xb160000, 1, 0x10000 },
++	{ 0x4, 0xB, 0x2, 0, 0xb170000, 2, 0x20000 },
++	{ 0x4, 0xB, 0x3, 0, 0xb180000, 3, 0x30000 },
++	{ 0x4, 0xB, 0x4, 0, 0xb190000, 4, 0x40000 },
++	{ 0x4, 0xB, 0x5, 0, 0xb1a0000, 5, 0x50000 },
++	{ 0x4, 0xB, 0x6, 0, 0xb1b0000, 6, 0x60000 },
++	{ 0x4, 0xB, 0x7, 0, 0xb1c0000, 7, 0x70000 },
++	{ 0x4, 0xB, 0x8, 0, 0xb1d0000, 8, 0x80000 },
++	{ 0x4, 0xB, 0x9, 0, 0xb950000, 9, 0x0 },
++	{ 0x4, 0xB, 0xa, 0, 0xb960000, 10, 0x10000 },
++	{ 0x4, 0xB, 0xb, 0, 0xb970000, 11, 0x20000 },
++	{ 0x4, 0xB, 0xc, 0, 0xb980000, 12, 0x30000 },
++	{ 0x4, 0xB, 0xd, 0, 0xb990000, 13, 0x40000 },
++	{ 0x4, 0xB, 0xe, 0, 0xb9a0000, 14, 0x50000 },
++	{ 0x4, 0xB, 0xf, 0, 0xb9b0000, 15, 0x60000 },
++	{ 0x4, 0xB, 0x10, 0, 0xb9c0000, 16, 0x70000 },
++	{ 0x4, 0xB, 0x11, 0, 0xb9d0000, 17, 0x80000 },
++	{ 0x4, 0xC, 0x0, 0, 0xb660000, 0, 0x0 },
++	{ 0x4, 0xC, 0x1, 0, 0xbe60000, 1, 0x0 },
++	{ 0x4, 0xD, 0x0, 0, 0xb1f0000, 0, 0x0 },
++	{ 0x4, 0xD, 0x1, 0, 0xb200000, 1, 0x10000 },
++	{ 0x4, 0xD, 0x2, 0, 0xb210000, 2, 0x20000 },
++	{ 0x4, 0xD, 0x3, 0, 0xb220000, 3, 0x30000 },
++	{ 0x4, 0xD, 0x4, 0, 0xb9f0000, 4, 0x0 },
++	{ 0x4, 0xD, 0x5, 0, 0xba00000, 5, 0x10000 },
++	{ 0x4, 0xD, 0x6, 0, 0xba10000, 6, 0x20000 },
++	{ 0x4, 0xD, 0x7, 0, 0xba20000, 7, 0x30000 },
++	{ 0x4, 0xE, 0x0, 0, 0xb0f0000, 0, 0x0 },
++	{ 0x4, 0xE, 0x1, 0, 0xb100000, 1, 0x10000 },
++	{ 0x4, 0xE, 0x2, 0, 0xb110000, 2, 0x20000 },
++	{ 0x4, 0xE, 0x3, 0, 0xb120000, 3, 0x30000 },
++	{ 0x4, 0xE, 0x4, 0, 0xb130000, 4, 0x40000 },
++	{ 0x4, 0xE, 0x5, 0, 0xb140000, 5, 0x50000 },
++	{ 0x4, 0xE, 0x6, 0, 0xb8f0000, 6, 0x0 },
++	{ 0x4, 0xE, 0x7, 0, 0xb900000, 7, 0x10000 },
++	{ 0x4, 0xE, 0x8, 0, 0xb910000, 8, 0x20000 },
++	{ 0x4, 0xE, 0x9, 0, 0xb920000, 9, 0x30000 },
++	{ 0x4, 0xE, 0xa, 0, 0xb930000, 10, 0x40000 },
++	{ 0x4, 0xE, 0xb, 0, 0xb940000, 11, 0x50000 },
++	{ 0x4, 0x10, 0x0, 0, 0xb240000, 0, 0x0 },
++	{ 0x4, 0x10, 0x1, 0, 0xba40000, 1, 0x0 },
++	{ 0x4, 0x11, 0x0, 0, 0xb020000, 0, 0x0 },
++	{ 0x4, 0x11, 0x1, 0, 0xb820000, 1, 0x0 },
++	{ 0x4, 0x12, 0x0, 0, 0xb030000, 0, 0x0 },
++	{ 0x4, 0x12, 0x1, 0, 0xb830000, 1, 0x0 },
++	{ 0x4, 0x17, 0x0, 0, 0xb640000, 0, 0x0 },
++	{ 0x4, 0x17, 0x1, 0, 0xbe40000, 1, 0x0 },
++	{ 0x4, 0x18, 0x0, 0, 0xb600000, 0, 0x0 },
++	{ 0x4, 0x18, 0x1, 0, 0xbe00000, 1, 0x0 },
++	{ 0x4, 0x18, 0x2, 0, 0x0, 0, 0x0 },
++	{ 0x4, 0x18, 0x3, 0, 0x0, 0, 0x0 }
++};
++
++static void cbbcentralnoc_parse_routeid(struct tegra194_cbb_aperture *info, u64 routeid)
++{
++	info->initflow = FIELD_GET(CBB_NOC_INITFLOW, routeid);
++	info->targflow = FIELD_GET(CBB_NOC_TARGFLOW, routeid);
++	info->targ_subrange = FIELD_GET(CBB_NOC_TARG_SUBRANGE, routeid);
++	info->seqid = FIELD_GET(CBB_NOC_SEQID, routeid);
++}
++
++static void bpmpnoc_parse_routeid(struct tegra194_cbb_aperture *info, u64 routeid)
++{
++	info->initflow = FIELD_GET(BPMP_NOC_INITFLOW, routeid);
++	info->targflow = FIELD_GET(BPMP_NOC_TARGFLOW, routeid);
++	info->targ_subrange = FIELD_GET(BPMP_NOC_TARG_SUBRANGE, routeid);
++	info->seqid = FIELD_GET(BPMP_NOC_SEQID, routeid);
++}
++
++static void aonnoc_parse_routeid(struct tegra194_cbb_aperture *info, u64 routeid)
++{
++	info->initflow = FIELD_GET(AON_NOC_INITFLOW, routeid);
++	info->targflow = FIELD_GET(AON_NOC_TARGFLOW, routeid);
++	info->targ_subrange = FIELD_GET(AON_NOC_TARG_SUBRANGE, routeid);
++	info->seqid = FIELD_GET(AON_NOC_SEQID, routeid);
++}
++
++static void scenoc_parse_routeid(struct tegra194_cbb_aperture *info, u64 routeid)
++{
++	info->initflow = FIELD_GET(SCE_NOC_INITFLOW, routeid);
++	info->targflow = FIELD_GET(SCE_NOC_TARGFLOW, routeid);
++	info->targ_subrange = FIELD_GET(SCE_NOC_TARG_SUBRANGE, routeid);
++	info->seqid = FIELD_GET(SCE_NOC_SEQID, routeid);
++}
++
++static void cbbcentralnoc_parse_userbits(struct tegra194_cbb_userbits *usrbits, u32 elog_5)
++{
++	usrbits->axcache = FIELD_GET(CBB_NOC_AXCACHE, elog_5);
++	usrbits->non_mod = FIELD_GET(CBB_NOC_NON_MOD, elog_5);
++	usrbits->axprot = FIELD_GET(CBB_NOC_AXPROT, elog_5);
++	usrbits->falconsec = FIELD_GET(CBB_NOC_FALCONSEC, elog_5);
++	usrbits->grpsec = FIELD_GET(CBB_NOC_GRPSEC, elog_5);
++	usrbits->vqc = FIELD_GET(CBB_NOC_VQC, elog_5);
++	usrbits->mstr_id = FIELD_GET(CBB_NOC_MSTR_ID, elog_5) - 1;
++	usrbits->axi_id = FIELD_GET(CBB_NOC_AXI_ID, elog_5);
++}
++
++static void clusternoc_parse_userbits(struct tegra194_cbb_userbits *usrbits, u32 elog_5)
++{
++	usrbits->axcache = FIELD_GET(CLUSTER_NOC_AXCACHE, elog_5);
++	usrbits->axprot = FIELD_GET(CLUSTER_NOC_AXCACHE, elog_5);
++	usrbits->falconsec = FIELD_GET(CLUSTER_NOC_FALCONSEC, elog_5);
++	usrbits->grpsec = FIELD_GET(CLUSTER_NOC_GRPSEC, elog_5);
++	usrbits->vqc = FIELD_GET(CLUSTER_NOC_VQC, elog_5);
++	usrbits->mstr_id = FIELD_GET(CLUSTER_NOC_MSTR_ID, elog_5) - 1;
++}
++
++static void tegra194_cbb_faulten(struct tegra_cbb *cbb)
++{
++	void __iomem *addr = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->vaddr;
++
++	writel(1, addr + ERRLOGGER_0_FAULTEN_0);
++	writel(1, addr + ERRLOGGER_1_FAULTEN_0);
++	writel(1, addr + ERRLOGGER_2_FAULTEN_0);
++}
++
++static void tegra194_cbb_stallen(struct tegra_cbb *cbb)
++{
++	void __iomem *addr = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->vaddr;
++
++	writel(1, addr + ERRLOGGER_0_STALLEN_0);
++	writel(1, addr + ERRLOGGER_1_STALLEN_0);
++	writel(1, addr + ERRLOGGER_2_STALLEN_0);
++}
++
++static void tegra194_cbb_errclr(struct tegra_cbb *cbb)
++{
++	void __iomem *addr = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->vaddr;
++
++	writel(1, addr + ERRLOGGER_0_ERRCLR_0);
++	writel(1, addr + ERRLOGGER_1_ERRCLR_0);
++	writel(1, addr + ERRLOGGER_2_ERRCLR_0);
++	dsb(sy);
++}
++
++static u32 tegra194_cbb_errvld(struct tegra_cbb *cbb)
++{
++	void __iomem *addr = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->vaddr;
++	u32 value = 0;
++
++	value = readl(addr + ERRLOGGER_0_ERRVLD_0);
++	value |= (readl(addr + ERRLOGGER_1_ERRVLD_0) << 1);
++	value |= (readl(addr + ERRLOGGER_2_ERRVLD_0) << 2);
++
++	dsb(sy);
++	return value;
++}
++
++static u32 tegra194_axi2apb_errstatus(void __iomem *addr)
++{
++	u32 value = 0;
++
++	value = readl(addr + DMAAPB_X_RAW_INTERRUPT_STATUS);
++	writel(0xFFFFFFFF, addr + DMAAPB_X_RAW_INTERRUPT_STATUS);
++	return value;
++}
++
++static bool tegra194_axi2apb_err(struct seq_file *file, int bridge, u32 status)
++{
++	size_t max = ARRAY_SIZE(t194_axi2apb_err);
++	bool is_fatal = true;
++	int j = 0;
++
++	for (j = 0; j < max; j++) {
++		if (status & (1 << j)) {
++			tegra_cbb_print_err(file, "\t  AXI2APB_%d bridge error: %s\n",
++					    bridge + 1, t194_axi2apb_err[j]);
++			if (strstr(t194_axi2apb_err[j], "Firewall"))
++				is_fatal = false;
++		}
++	}
++	return is_fatal;
++}
++
++/*
++ * Fetch InitlocalAddress from NOC Aperture lookup table
++ * using Targflow, Targsubrange
++ */
++static u32 get_init_localaddress(const struct tegra194_cbb_aperture *info,
++				 const struct tegra194_cbb_aperture *aper, int max)
++{
++	int t_f = 0, t_sr = 0;
++	u32 i_locaddr = 0;
++	int targflow = info->targflow;
++	int targ_subrange = info->targ_subrange;
++
++	for (t_f = 0; t_f < max; t_f++) {
++		if (aper[t_f].targflow == targflow) {
++			t_sr = t_f;
++			do {
++				if (aper[t_sr].targ_subrange == targ_subrange) {
++					i_locaddr = aper[t_sr].init_localaddress;
++					return i_locaddr;
++				}
++				if (t_sr >= max)
++					return 0;
++				t_sr++;
++			} while (aper[t_sr].targflow == aper[t_sr - 1].targflow);
++			t_f = t_sr;
++		}
++	}
++
++	return i_locaddr;
++}
++
++static void print_errlog5(struct seq_file *file, struct tegra_cbb_errlog_record *errlog)
++{
++	struct tegra194_cbb_userbits userbits;
++	u32 errlog5 = errlog->errlog5;
++
++	errlog->noc_parse_userbits(&userbits, errlog5);
++	if (!strcmp(errlog->name, "cbb-noc")) {
++		tegra_cbb_print_err(file, "\t  Non-Modify\t\t: 0x%x\n", userbits.non_mod);
++		tegra_cbb_print_err(file, "\t  AXI ID\t\t: 0x%x\n", userbits.axi_id);
++	}
++
++	tegra_cbb_print_err(file, "\t  Master ID\t\t: %s\n",
++			    errlog->cbb_master_id[userbits.mstr_id]);
++	tegra_cbb_print_err(file, "\t  Security Group(GRPSEC): 0x%x\n", userbits.grpsec);
++	tegra_cbb_print_cache(file, userbits.axcache);
++	tegra_cbb_print_prot(file, userbits.axprot);
++	tegra_cbb_print_err(file, "\t  FALCONSEC\t\t: 0x%x\n", userbits.falconsec);
++	tegra_cbb_print_err(file, "\t  Virtual Queuing Channel(VQC): 0x%x\n", userbits.vqc);
++}
++
++/*
++ *  Fetch Base Address/InitlocalAddress from NOC aperture lookup table
++ *  using TargFlow & Targ_subRange extracted from RouteId.
++ *  Perform address reconstruction as below:
++ *		Address = Base Address + (ErrLog3+ErrLog4)
++ */
++static void
++print_errlog3_4(struct seq_file *file, u32 errlog3, u32 errlog4,
++		const struct tegra194_cbb_aperture *trans_info,
++		const struct tegra194_cbb_aperture *noc_aperture, int max)
++{
++	u64 addr = 0;
++
++	addr = errlog4;
++	addr = (addr << 32) | errlog3;
++
++	/*
++	 * if errlog4[7]="1", then it's a joker entry.
++	 * joker entry is a rare phenomenon and address is not reliable.
++	 * debug should be done using the routeid information alone.
++	 */
++	if (errlog4 & 0x80)
++		tegra_cbb_print_err(file, "\t debug using routeid alone as below"
++				    " address is a joker entry and notreliable");
++
++	addr += get_init_localaddress(trans_info, noc_aperture, max);
++
++	tegra_cbb_print_err(file, "\t  Address accessed\t: 0x%llx\n", addr);
++}
++
++/*
++ *  Get RouteId from ErrLog1+ErrLog2 registers and fetch values of
++ *  InitFlow, TargFlow, Targ_subRange and SeqId values from RouteId
++ */
++static void
++print_errlog1_2(struct seq_file *file, struct tegra_cbb_errlog_record *errlog,
++		struct tegra194_cbb_aperture *info)
++{
++	u64     routeid = 0;
++	u32     seqid = 0;
++
++	routeid = errlog->errlog2;
++	routeid = (routeid << 32) | errlog->errlog1;
++	tegra_cbb_print_err(file, "\t  RouteId\t\t: 0x%llx\n", routeid);
++
++	errlog->noc_parse_routeid(info, routeid);
++
++	tegra_cbb_print_err(file, "\t  InitFlow\t\t: %s\n",
++			    errlog->noc_routeid_initflow[info->initflow]);
++
++	tegra_cbb_print_err(file, "\t  Targflow\t\t: %s\n",
++			    errlog->noc_routeid_targflow[info->targflow]);
++
++	tegra_cbb_print_err(file, "\t  TargSubRange\t\t: %d\n", info->targ_subrange);
++	tegra_cbb_print_err(file, "\t  SeqId\t\t\t: %d\n", seqid);
++}
++
++/*
++ * Print transcation type, error code and description from ErrLog0 for all
++ * errors. For NOC slave errors, all relevant error info is printed using
++ * ErrLog0 only. But additional information is printed for errors from
++ * APB slaves because for them:
++ *  - All errors are logged as SLV(slave) errors due to APB having only single
++ *    bit pslverr to report all errors.
++ *  - Exact cause is printed by reading DMAAPB_X_RAW_INTERRUPT_STATUS register.
++ *  - The driver prints information showing AXI2APB bridge and exact error
++ *    only if there is error in any AXI2APB slave.
++ *  - There is still no way to disambiguate a DEC error from SLV error type.
++ */
++static bool print_errlog0(struct seq_file *file,
++			  struct tegra_cbb_errlog_record *errlog)
++{
++	struct tegra194_cbb_packet_header hdr;
++	bool is_fatal = true;
++
++	hdr.lock    = errlog->errlog0 & 0x1;
++	hdr.opc     = FIELD_GET(CBB_ERR_OPC, errlog->errlog0);
++	hdr.errcode = FIELD_GET(CBB_ERR_ERRCODE, errlog->errlog0);
++	hdr.len1    = FIELD_GET(CBB_ERR_LEN1, errlog->errlog0);
++	hdr.format  = (errlog->errlog0 >> 31);
++
++	tegra_cbb_print_err(file, "\t  Transaction Type\t: %s\n",
++			    t194_cbb_trantype[hdr.opc]);
++	tegra_cbb_print_err(file, "\t  Error Code\t\t: %s\n",
++			    t194_noc_errors[hdr.errcode].errcode);
++	tegra_cbb_print_err(file, "\t  Error Source\t\t: %s\n",
++			    t194_noc_errors[hdr.errcode].src);
++	tegra_cbb_print_err(file, "\t  Error Description\t: %s\n",
++			    t194_noc_errors[hdr.errcode].type);
++	/*
++	 * Donot crash system for errors which are only notifications
++	 * to indicate a transaction was not allowed to be attempted.
++	 */
++
++	if (!strcmp(t194_noc_errors[hdr.errcode].errcode, "SEC") ||
++	    !strcmp(t194_noc_errors[hdr.errcode].errcode, "DEC") ||
++	    !strcmp(t194_noc_errors[hdr.errcode].errcode, "UNS") ||
++	    !strcmp(t194_noc_errors[hdr.errcode].errcode, "DISC")
++	)
++		is_fatal = false;
++	else if (!strcmp(t194_noc_errors[hdr.errcode].errcode, "SLV") &&
++		 errlog->is_ax2apb_bridge_connected) {
++		int i = 0;
++		u32 status = 0;
++
++		/* For all SLV errors, read DMAAPB_X_RAW_INTERRUPT_STATUS
++		 * register to get error status for all AXI2APB bridges.
++		 * Print bridge details if a bit is set in a bridge's
++		 * status register due to error in a APB slave connected
++		 * to that bridge. For other NOC slaves, none of the status
++		 * register will be set.
++		 */
++
++		for (i = 0; i < errlog->apb_bridge_cnt; i++) {
++			status = tegra194_axi2apb_errstatus(errlog->axi2abp_bases[i]);
++
++			if (status)
++				is_fatal = tegra194_axi2apb_err(file, i, status);
++		}
++	}
++	tegra_cbb_print_err(file, "\t  Packet header Lock\t: %d\n", hdr.lock);
++	tegra_cbb_print_err(file, "\t  Packet header Len1\t: %d\n", hdr.len1);
++	if (hdr.format)
++		tegra_cbb_print_err(file, "\t  NOC protocol version\t: %s\n",
++				    "version >= 2.7");
++	else
++		tegra_cbb_print_err(file, "\t  NOC protocol version\t: %s\n",
++				    "version < 2.7");
++	return is_fatal;
++}
++
++/*
++ * Print debug information about failed transaction using
++ * ErrLog registers of error loggger having ErrVld set
++ */
++static bool print_errloggerX_info(struct seq_file *file,
++				  struct tegra_cbb_errlog_record *errlog,
++				  int errloggerX)
++{
++	struct tegra194_cbb_aperture info = {0,};
++	bool is_fatal = true;
++
++	tegra_cbb_print_err(file, "\tError Logger\t\t: %d\n", errloggerX);
++	if (errloggerX == 0) {
++		errlog->errlog0 = readl(errlog->vaddr + ERRLOGGER_0_ERRLOG0_0);
++		errlog->errlog1 = readl(errlog->vaddr + ERRLOGGER_0_ERRLOG1_0);
++		errlog->errlog2 = readl(errlog->vaddr + ERRLOGGER_0_RSVD_00_0);
++		errlog->errlog3 = readl(errlog->vaddr + ERRLOGGER_0_ERRLOG3_0);
++		errlog->errlog4 = readl(errlog->vaddr + ERRLOGGER_0_ERRLOG4_0);
++		errlog->errlog5 = readl(errlog->vaddr + ERRLOGGER_0_ERRLOG5_0);
++	} else if (errloggerX == 1) {
++		errlog->errlog0 = readl(errlog->vaddr + ERRLOGGER_1_ERRLOG0_0);
++		errlog->errlog1 = readl(errlog->vaddr + ERRLOGGER_1_ERRLOG1_0);
++		errlog->errlog2 = readl(errlog->vaddr + ERRLOGGER_1_RSVD_00_0);
++		errlog->errlog3 = readl(errlog->vaddr + ERRLOGGER_1_ERRLOG3_0);
++		errlog->errlog4 = readl(errlog->vaddr + ERRLOGGER_1_ERRLOG4_0);
++		errlog->errlog5 = readl(errlog->vaddr + ERRLOGGER_1_ERRLOG5_0);
++	} else if (errloggerX == 2) {
++		errlog->errlog0 = readl(errlog->vaddr + ERRLOGGER_2_ERRLOG0_0);
++		errlog->errlog1 = readl(errlog->vaddr + ERRLOGGER_2_ERRLOG1_0);
++		errlog->errlog2 = readl(errlog->vaddr + ERRLOGGER_2_RSVD_00_0);
++		errlog->errlog3 = readl(errlog->vaddr + ERRLOGGER_2_ERRLOG3_0);
++		errlog->errlog4 = readl(errlog->vaddr + ERRLOGGER_2_ERRLOG4_0);
++		errlog->errlog5 = readl(errlog->vaddr + ERRLOGGER_2_ERRLOG5_0);
++	}
++
++	tegra_cbb_print_err(file, "\tErrLog0\t\t\t: 0x%x\n", errlog->errlog0);
++	is_fatal = print_errlog0(file, errlog);
++
++	tegra_cbb_print_err(file, "\tErrLog1\t\t\t: 0x%x\n", errlog->errlog1);
++	tegra_cbb_print_err(file, "\tErrLog2\t\t\t: 0x%x\n", errlog->errlog2);
++	print_errlog1_2(file, errlog, &info);
++
++	tegra_cbb_print_err(file, "\tErrLog3\t\t\t: 0x%x\n", errlog->errlog3);
++	tegra_cbb_print_err(file, "\tErrLog4\t\t\t: 0x%x\n", errlog->errlog4);
++	print_errlog3_4(file, errlog->errlog3, errlog->errlog4,
++			&info, errlog->noc_aperture, errlog->max_aperture);
++
++	tegra_cbb_print_err(file, "\tErrLog5\t\t\t: 0x%x\n", errlog->errlog5);
++	if (errlog->errlog5)
++		print_errlog5(file, errlog);
++	return is_fatal;
++}
++
++static bool print_errlog(struct seq_file *file, struct tegra_cbb *cbb,
++			 struct tegra_cbb_errlog_record *errlog, u32 errvld)
++{
++	bool is_fatal = true;
++
++	pr_crit("**************************************\n");
++	pr_crit("CPU:%d, Error:%s\n", smp_processor_id(), errlog->name);
++
++	if (errvld & 0x1)
++		is_fatal = print_errloggerX_info(file, errlog, 0);
++	else if (errvld & 0x2)
++		is_fatal = print_errloggerX_info(file, errlog, 1);
++	else if (errvld & 0x4)
++		is_fatal = print_errloggerX_info(file, errlog, 2);
++
++	tegra_cbb_errclr(cbb);
++	tegra_cbb_print_err(file, "\t**************************************\n");
++	return is_fatal;
++}
++
++#ifdef CONFIG_DEBUG_FS
++static DEFINE_MUTEX(cbb_err_mutex);
++
++static int tegra194_cbb_err_show(struct tegra_cbb *cbb, struct seq_file *file, void *data)
++{
++	struct tegra_cbb_errlog_record *errlog;
++	u32 errvld = 0;
++
++	mutex_lock(&cbb_err_mutex);
++
++	list_for_each_entry(errlog, &cbb_noc_list, node) {
++		cbb = errlog->cbb;
++		errvld = tegra_cbb_errvld(cbb);
++		if (errvld)
++			print_errlog(file, cbb, errlog, errvld);
++	}
++
++	mutex_unlock(&cbb_err_mutex);
++	return 0;
++}
++#endif
++
++/*
++ * Handler for CBB errors from different initiators
++ */
++static irqreturn_t tegra194_cbb_err_isr(int irq, void *data)
++{
++	bool is_inband_err = false, is_fatal = false;
++	struct tegra_cbb_errlog_record *errlog;
++	struct tegra_cbb *cbb = data;
++	unsigned int errvld = 0;
++	unsigned long flags;
++	u8 mstr_id = 0;
++
++	spin_lock_irqsave(&cbb_noc_lock, flags);
++
++	list_for_each_entry(errlog, &cbb_noc_list, node) {
++		errvld = tegra_cbb_errvld(cbb);
++
++		if (errvld && ((irq == errlog->sec_irq) ||
++			       (irq == errlog->nonsec_irq))) {
++			tegra_cbb_print_err(NULL, "CPU:%d, Error:%s@0x%llx,irq=%d\n",
++					    smp_processor_id(), errlog->name,
++					    errlog->start, irq);
++
++			is_fatal = print_errlog(NULL, cbb, errlog, errvld);
++
++			mstr_id =  FIELD_GET(USRBITS_MSTR_ID, errlog->errlog5) - 1;
++			/*
++			 * If illegal request is from CCPLEX(0x1)
++			 * initiator then call BUG() to crash system.
++			 */
++			if ((mstr_id == 0x1) && errlog->erd_mask_inband_err)
++				is_inband_err = 1;
++		}
++	}
++	spin_unlock_irqrestore(&cbb_noc_lock, flags);
++
++	if (is_inband_err) {
++		if (is_fatal)
++			BUG();
++		else
++			WARN(true, "Warning due to CBB Error\n");
++	}
++
++	return IRQ_HANDLED;
++}
++
++/*
++ * Register handler for CBB_NONSECURE & CBB_SECURE interrupts
++ * for reporting CBB errors
++ */
++static int tegra194_cbb_intr_en(struct tegra_cbb *cbb)
++{
++	struct platform_device *pdev = cbb->pdev;
++	int sec_irq, nonsec_irq;
++	int err = 0;
++
++	sec_irq = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->sec_irq;
++	nonsec_irq = ((struct tegra_cbb_errlog_record *)cbb->err_rec)->nonsec_irq;
++	if (sec_irq) {
++		err = devm_request_irq(&pdev->dev, sec_irq, tegra194_cbb_err_isr,
++				       0, dev_name(&pdev->dev), cbb);
++		if (err) {
++			dev_err(&pdev->dev, "%s: Unable to register (%d) interrupt\n",
++				__func__, sec_irq);
++			goto isr_err_free_sec_irq;
++		}
++	}
++	if (nonsec_irq) {
++		err = devm_request_irq(&pdev->dev, nonsec_irq, tegra194_cbb_err_isr,
++				       0, dev_name(&pdev->dev), cbb);
++		if (err) {
++			dev_err(&pdev->dev, "%s: Unable to register (%d) interrupt\n",
++				__func__, nonsec_irq);
++			goto isr_err_free_nonsec_irq;
++		}
++	}
++
++	return 0;
++
++isr_err_free_nonsec_irq:
++	if (nonsec_irq)
++		free_irq(nonsec_irq, pdev);
++isr_err_free_sec_irq:
++	if (sec_irq)
++		free_irq(sec_irq, pdev);
++
++	return err;
++}
++
++static void tegra194_cbb_err_en(struct tegra_cbb *cbb)
++{
++	/*
++	 * Set “StallEn=1” to enable queuing of error packets till
++	 * first is served & cleared
++	 */
++	tegra_cbb_stallen(cbb);
++
++	/* set “FaultEn=1” to enable error reporting signal “Fault” */
++	tegra_cbb_faulten(cbb);
++}
++
++static struct tegra_cbb_err_ops tegra194_cbb_errlogger_ops = {
++	.errvld	 = tegra194_cbb_errvld,
++	.errclr	 = tegra194_cbb_errclr,
++	.faulten = tegra194_cbb_faulten,
++	.stallen = tegra194_cbb_stallen,
++	.cbb_err_enable = tegra194_cbb_err_en,
++	.cbb_intr_enable = tegra194_cbb_intr_en,
++#ifdef CONFIG_DEBUG_FS
++	.cbb_err_debugfs_show = tegra194_cbb_err_show,
++#endif
++};
++
++static struct tegra_cbb_noc_data tegra194_cbb_central_noc_data = {
++	.name   = "cbb-noc",
++	.erd_mask_inband_err = true,
++	.cbb_master_id = t194_master_id,
++	.noc_aperture = t194_cbbcentralnoc_apert_lookup,
++	.max_aperture = ARRAY_SIZE(t194_cbbcentralnoc_apert_lookup),
++	.noc_routeid_initflow = t194_cbbcentralnoc_routeid_initflow,
++	.noc_routeid_targflow = t194_cbbcentralnoc_routeid_targflow,
++	.noc_parse_routeid = cbbcentralnoc_parse_routeid,
++	.noc_parse_userbits = cbbcentralnoc_parse_userbits
++};
++
++static struct tegra_cbb_noc_data tegra194_aon_noc_data = {
++	.name   = "aon-noc",
++	.erd_mask_inband_err = false,
++	.cbb_master_id = t194_master_id,
++	.noc_aperture = t194_aonnoc_aperture_lookup,
++	.max_aperture = ARRAY_SIZE(t194_aonnoc_aperture_lookup),
++	.noc_routeid_initflow = t194_aonnoc_routeid_initflow,
++	.noc_routeid_targflow = t194_aonnoc_routeid_targflow,
++	.noc_parse_routeid = aonnoc_parse_routeid,
++	.noc_parse_userbits = clusternoc_parse_userbits
++};
++
++static struct tegra_cbb_noc_data tegra194_bpmp_noc_data = {
++	.name   = "bpmp-noc",
++	.erd_mask_inband_err = false,
++	.cbb_master_id = t194_master_id,
++	.noc_aperture = t194_bpmpnoc_apert_lookup,
++	.max_aperture = ARRAY_SIZE(t194_bpmpnoc_apert_lookup),
++	.noc_routeid_initflow = t194_bpmpnoc_routeid_initflow,
++	.noc_routeid_targflow = t194_bpmpnoc_routeid_targflow,
++	.noc_parse_routeid = bpmpnoc_parse_routeid,
++	.noc_parse_userbits = clusternoc_parse_userbits
++};
++
++static struct tegra_cbb_noc_data tegra194_rce_noc_data = {
++	.name   = "rce-noc",
++	.erd_mask_inband_err = false,
++	.cbb_master_id = t194_master_id,
++	.noc_aperture = t194_scenoc_apert_lookup,
++	.max_aperture = ARRAY_SIZE(t194_scenoc_apert_lookup),
++	.noc_routeid_initflow = t194_scenoc_routeid_initflow,
++	.noc_routeid_targflow = t194_scenoc_routeid_targflow,
++	.noc_parse_routeid = scenoc_parse_routeid,
++	.noc_parse_userbits = clusternoc_parse_userbits
++};
++
++static struct tegra_cbb_noc_data tegra194_sce_noc_data = {
++	.name   = "sce-noc",
++	.erd_mask_inband_err = false,
++	.cbb_master_id = t194_master_id,
++	.noc_aperture = t194_scenoc_apert_lookup,
++	.max_aperture = ARRAY_SIZE(t194_scenoc_apert_lookup),
++	.noc_routeid_initflow = t194_scenoc_routeid_initflow,
++	.noc_routeid_targflow = t194_scenoc_routeid_targflow,
++	.noc_parse_routeid = scenoc_parse_routeid,
++	.noc_parse_userbits = clusternoc_parse_userbits
++};
++
++static const struct of_device_id tegra194_cbb_match[] = {
++	{.compatible    = "nvidia,tegra194-cbb-noc",
++		.data = &tegra194_cbb_central_noc_data},
++	{.compatible    = "nvidia,tegra194-aon-noc",
++		.data = &tegra194_aon_noc_data},
++	{.compatible    = "nvidia,tegra194-bpmp-noc",
++		.data = &tegra194_bpmp_noc_data},
++	{.compatible    = "nvidia,tegra194-rce-noc",
++		.data = &tegra194_rce_noc_data},
++	{.compatible    = "nvidia,tegra194-sce-noc",
++		.data = &tegra194_sce_noc_data},
++	{},
++};
++MODULE_DEVICE_TABLE(of, tegra194_cbb_match);
++
++static int
++tegra194_cbb_get_axi2apb_data(struct platform_device *pdev, struct device_node *np,
++			      int *apb_bridge_cnt, void __iomem ***bases)
++{
++	static void __iomem **axi2apb_bases;
++	int i = 0;
++
++	if (axi2apb_bases) {
++		*bases = axi2apb_bases;
++		return 0;
++	}
++
++	*apb_bridge_cnt = (of_property_count_elems_of_size(np, "reg", sizeof(u32))) / 4;
++
++	axi2apb_bases = devm_kzalloc(&pdev->dev, sizeof(void *) * (*apb_bridge_cnt), GFP_KERNEL);
++	if (!axi2apb_bases)
++		return -ENOMEM;
++
++	for (i = 0; i < *apb_bridge_cnt; i++) {
++		void __iomem *base = of_iomap(np, i);
++
++		if (!base) {
++			dev_err(&pdev->dev, "failed to map axi2apb range\n");
++			return -ENOENT;
++		}
++		axi2apb_bases[i] = base;
++	}
++	*bases = axi2apb_bases;
++
++	return 0;
++}
++
++static int
++tegra194_cbb_errlogger_init(const struct tegra_cbb_noc_data *pdata,
++			    struct tegra_cbb *cbb, struct resource *res_base)
++{
++	struct platform_device *pdev = cbb->pdev;
++	struct tegra_cbb_errlog_record *errlog;
++	struct device_node *np = NULL;
++	unsigned long flags = 0;
++	int err = 0;
++
++	errlog = (struct tegra_cbb_errlog_record *)cbb->err_rec;
++	errlog->vaddr = devm_ioremap_resource(&pdev->dev, res_base);
++	if (IS_ERR(errlog->vaddr))
++		return -EINVAL;
++
++	errlog->name = pdata->name;
++	errlog->start = res_base->start;
++	errlog->erd_mask_inband_err = pdata->erd_mask_inband_err;
++	errlog->cbb_master_id = pdata->cbb_master_id;
++	errlog->noc_aperture = pdata->noc_aperture;
++	errlog->max_aperture = pdata->max_aperture;
++	errlog->noc_routeid_initflow = pdata->noc_routeid_initflow;
++	errlog->noc_routeid_targflow = pdata->noc_routeid_targflow;
++	errlog->noc_parse_routeid = pdata->noc_parse_routeid;
++	errlog->noc_parse_userbits = pdata->noc_parse_userbits;
++	errlog->cbb = cbb;
++
++	np = of_parse_phandle(pdev->dev.of_node, "nvidia,axi2apb", 0);
++	if (np) {
++		errlog->is_ax2apb_bridge_connected = 1;
++		dev_info(&pdev->dev, "axi2apb bridge info present\n");
++
++		err = tegra194_cbb_get_axi2apb_data(pdev, np,
++						    &(errlog->apb_bridge_cnt),
++						    &(errlog->axi2abp_bases));
++		if (err) {
++			dev_err(&pdev->dev, "axi2apb bridge read failed\n");
++			return err;
++		}
++	}
++
++	err = tegra_cbb_err_getirq(pdev, &errlog->nonsec_irq, &errlog->sec_irq);
++	if (err)
++		return err;
++
++	cbb->ops = &tegra194_cbb_errlogger_ops;
++
++	spin_lock_irqsave(&cbb_noc_lock, flags);
++	list_add(&errlog->node, &cbb_noc_list);
++	spin_unlock_irqrestore(&cbb_noc_lock, flags);
++
++	return 0;
++};
++
++static int tegra194_cbb_probe(struct platform_device *pdev)
++{
++	struct tegra_cbb_errlog_record *errlog = NULL;
++	const struct tegra_cbb_noc_data *pdata;
++	struct resource *res_base;
++	struct tegra_cbb *cbb;
++	int err = 0;
++
++	pdata = of_device_get_match_data(&pdev->dev);
++	if (!pdata) {
++		dev_err(&pdev->dev, "No device match found\n");
++		return -EINVAL;
++	}
++
++	if (pdata->erd_mask_inband_err) {
++		/*
++		 * Set Error Response Disable(ERD) bit to mask SError/inband
++		 * error and only trigger interrupts for illegal access from
++		 * CCPLEX initiator.
++		 */
++		err = tegra194_miscreg_mask_serror();
++		if (err) {
++			dev_err(&pdev->dev, "couldn't mask inband errors\n");
++			return err;
++		}
++	}
++
++	res_base = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res_base) {
++		dev_err(&pdev->dev, "Could not find base address");
++		return -ENOENT;
++	}
++
++	cbb = devm_kzalloc(&pdev->dev, sizeof(*cbb), GFP_KERNEL);
++	if (!cbb)
++		return -ENOMEM;
++
++	errlog = devm_kzalloc(&pdev->dev, sizeof(*errlog), GFP_KERNEL);
++	if (!errlog)
++		return -ENOMEM;
++
++	cbb->err_rec = errlog;
++	cbb->pdev = pdev;
++	err = tegra194_cbb_errlogger_init(pdata, cbb, res_base);
++	if (err) {
++		dev_err(&pdev->dev, "cbberr init for soc failing\n");
++		return err;
++	}
++
++	platform_set_drvdata(pdev, cbb);
++
++	return tegra_cbb_register_isr_enaberr(cbb);
++}
++
++static int tegra194_cbb_remove(struct platform_device *pdev)
++{
++	struct tegra_cbb_errlog_record *errlog, *el_noc, *temp_el;
++	struct tegra_cbb *cbb;
++	unsigned long flags;
++
++	cbb = platform_get_drvdata(pdev);
++	if (!cbb)
++		return -EINVAL;
++
++	errlog = (struct tegra_cbb_errlog_record *)cbb->err_rec;
++
++	spin_lock_irqsave(&cbb_noc_lock, flags);
++	list_for_each_entry_safe(el_noc, temp_el, &cbb_noc_list, node) {
++		if (errlog->start == el_noc->start) {
++			list_del(&el_noc->node);
++			break;
++		}
++	}
++	spin_unlock_irqrestore(&cbb_noc_lock, flags);
++
++	return 0;
++}
++
++#ifdef CONFIG_PM_SLEEP
++static int tegra194_cbb_resume_noirq(struct device *dev)
++{
++	struct tegra_cbb *cbb = dev_get_drvdata(dev);
++	struct tegra_cbb_errlog_record *errlog;
++
++	errlog = (struct tegra_cbb_errlog_record *)cbb->err_rec;
++
++	if (!errlog)
++		return -EINVAL;
++
++	tegra194_cbb_err_en(cbb);
++	dsb(sy);
++
++	dev_info(dev, "%s resumed\n", errlog->name);
++	return 0;
++}
++
++static const struct dev_pm_ops tegra194_cbb_pm = {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, tegra194_cbb_resume_noirq)
++};
++#endif
++
++static struct platform_driver tegra194_cbb_driver = {
++	.probe          = tegra194_cbb_probe,
++	.remove         = tegra194_cbb_remove,
++	.driver = {
++		.owner  = THIS_MODULE,
++		.name   = "tegra19x-cbb",
++		.of_match_table = of_match_ptr(tegra194_cbb_match),
++#ifdef CONFIG_PM_SLEEP
++		.pm     = &tegra194_cbb_pm,
++#endif
++	},
++};
++
++static int __init tegra194_cbb_init(void)
++{
++	return platform_driver_register(&tegra194_cbb_driver);
++}
++
++static void __exit tegra194_cbb_exit(void)
++{
++	platform_driver_unregister(&tegra194_cbb_driver);
++}
++
++pure_initcall(tegra194_cbb_init);
++module_exit(tegra194_cbb_exit);
++
++MODULE_AUTHOR("Sumit Gupta <sumitg@nvidia.com>");
++MODULE_DESCRIPTION("Control Backbone error handling driver for Tegra194");
++MODULE_LICENSE("GPL v2");
+diff --git a/include/soc/tegra/tegra-cbb.h b/include/soc/tegra/tegra-cbb.h
+new file mode 100644
+index 000000000000..a9ddc6d53aee
+--- /dev/null
++++ b/include/soc/tegra/tegra-cbb.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved
++ */
++
++#ifndef __TEGRA_CBBERR_H
++#define __TEGRA_CBBERR_H
++
++struct tegra_noc_errors {
++	char *errcode;
++	char *src;
++	char *type;
++};
++
++struct tegra_cbb {
++	struct tegra_cbb_err_ops *ops;
++	struct platform_device *pdev;
++	void *err_rec;
++};
++
++struct tegra_cbb_err_ops {
++	int (*cbb_err_debugfs_show)(struct tegra_cbb *cbb, struct seq_file *s, void *v);
++	int (*cbb_intr_enable)(struct tegra_cbb *cbb);
++	void (*cbb_err_enable)(struct tegra_cbb *cbb);
++	void (*faulten)(struct tegra_cbb *cbb);
++	void (*stallen)(struct tegra_cbb *cbb);
++	void (*errclr)(struct tegra_cbb *cbb);
++	u32 (*errvld)(struct tegra_cbb *cbb);
++};
++
++int tegra_cbb_err_getirq(struct platform_device *pdev, int *nonsec_irq, int *sec_irq);
++__printf(2, 3) void tegra_cbb_print_err(struct seq_file *file, const char *fmt, ...);
++
++void tegra_cbb_print_cache(struct seq_file *file, u32 cache);
++void tegra_cbb_print_prot(struct seq_file *file, u32 prot);
++int tegra_cbb_register_isr_enaberr(struct tegra_cbb *cbb);
++
++void tegra_cbb_faulten(struct tegra_cbb *cbb);
++void tegra_cbb_stallen(struct tegra_cbb *cbb);
++void tegra_cbb_errclr(struct tegra_cbb *cbb);
++u32 tegra_cbb_errvld(struct tegra_cbb *cbb);
++
++#endif /* __TEGRA_CBBERR_H */
+diff --git a/include/soc/tegra/tegra194-cbb.h b/include/soc/tegra/tegra194-cbb.h
+new file mode 100644
+index 000000000000..4b0dec239954
+--- /dev/null
++++ b/include/soc/tegra/tegra194-cbb.h
+@@ -0,0 +1,158 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved
++ */
++
++#define  ERRLOGGER_0_ID_COREID_0            0x00000000
++#define  ERRLOGGER_0_ID_REVISIONID_0        0x00000004
++#define  ERRLOGGER_0_FAULTEN_0              0x00000008
++#define  ERRLOGGER_0_ERRVLD_0               0x0000000c
++#define  ERRLOGGER_0_ERRCLR_0               0x00000010
++#define  ERRLOGGER_0_ERRLOG0_0              0x00000014
++#define  ERRLOGGER_0_ERRLOG1_0              0x00000018
++#define  ERRLOGGER_0_RSVD_00_0              0x0000001c
++#define  ERRLOGGER_0_ERRLOG3_0              0x00000020
++#define  ERRLOGGER_0_ERRLOG4_0              0x00000024
++#define  ERRLOGGER_0_ERRLOG5_0              0x00000028
++#define  ERRLOGGER_0_STALLEN_0              0x00000038
++
++#define  ERRLOGGER_1_ID_COREID_0            0x00000080
++#define  ERRLOGGER_1_ID_REVISIONID_0        0x00000084
++#define  ERRLOGGER_1_FAULTEN_0              0x00000088
++#define  ERRLOGGER_1_ERRVLD_0               0x0000008c
++#define  ERRLOGGER_1_ERRCLR_0               0x00000090
++#define  ERRLOGGER_1_ERRLOG0_0              0x00000094
++#define  ERRLOGGER_1_ERRLOG1_0              0x00000098
++#define  ERRLOGGER_1_RSVD_00_0              0x0000009c
++#define  ERRLOGGER_1_ERRLOG3_0              0x000000A0
++#define  ERRLOGGER_1_ERRLOG4_0              0x000000A4
++#define  ERRLOGGER_1_ERRLOG5_0              0x000000A8
++#define  ERRLOGGER_1_STALLEN_0              0x000000b8
++
++#define  ERRLOGGER_2_ID_COREID_0            0x00000100
++#define  ERRLOGGER_2_ID_REVISIONID_0        0x00000104
++#define  ERRLOGGER_2_FAULTEN_0              0x00000108
++#define  ERRLOGGER_2_ERRVLD_0               0x0000010c
++#define  ERRLOGGER_2_ERRCLR_0               0x00000110
++#define  ERRLOGGER_2_ERRLOG0_0              0x00000114
++#define  ERRLOGGER_2_ERRLOG1_0              0x00000118
++#define  ERRLOGGER_2_RSVD_00_0              0x0000011c
++#define  ERRLOGGER_2_ERRLOG3_0              0x00000120
++#define  ERRLOGGER_2_ERRLOG4_0              0x00000124
++#define  ERRLOGGER_2_ERRLOG5_0              0x00000128
++#define  ERRLOGGER_2_STALLEN_0              0x00000138
++
++
++#define CBB_NOC_INITFLOW GENMASK(23, 20)
++#define CBB_NOC_TARGFLOW GENMASK(19, 16)
++#define CBB_NOC_TARG_SUBRANGE GENMASK(15, 9)
++#define CBB_NOC_SEQID GENMASK(8, 0)
++
++#define BPMP_NOC_INITFLOW GENMASK(20, 18)
++#define BPMP_NOC_TARGFLOW GENMASK(17, 13)
++#define BPMP_NOC_TARG_SUBRANGE GENMASK(12, 9)
++#define BPMP_NOC_SEQID GENMASK(8, 0)
++
++#define AON_NOC_INITFLOW GENMASK(22, 21)
++#define AON_NOC_TARGFLOW GENMASK(20, 15)
++#define AON_NOC_TARG_SUBRANGE GENMASK(14, 9)
++#define AON_NOC_SEQID GENMASK(8, 0)
++
++#define SCE_NOC_INITFLOW GENMASK(21, 19)
++#define SCE_NOC_TARGFLOW GENMASK(18, 14)
++#define SCE_NOC_TARG_SUBRANGE GENMASK(13, 9)
++#define SCE_NOC_SEQID GENMASK(8, 0)
++
++#define CBB_NOC_AXCACHE GENMASK(3, 0)
++#define CBB_NOC_NON_MOD GENMASK(4, 4)
++#define CBB_NOC_AXPROT GENMASK(7, 5)
++#define CBB_NOC_FALCONSEC GENMASK(9, 8)
++#define CBB_NOC_GRPSEC GENMASK(16, 10)
++#define CBB_NOC_VQC GENMASK(18, 17)
++#define CBB_NOC_MSTR_ID GENMASK(22, 19)
++#define CBB_NOC_AXI_ID GENMASK(30, 23)
++
++#define CLUSTER_NOC_AXCACHE GENMASK(3, 0)
++#define CLUSTER_NOC_AXPROT GENMASK(6, 4)
++#define CLUSTER_NOC_FALCONSEC GENMASK(8, 7)
++#define CLUSTER_NOC_GRPSEC GENMASK(15, 9)
++#define CLUSTER_NOC_VQC GENMASK(17, 16)
++#define CLUSTER_NOC_MSTR_ID GENMASK(21, 18)
++
++#define USRBITS_MSTR_ID GENMASK(21, 18)
++
++#define CBB_ERR_OPC GENMASK(4, 1)
++#define CBB_ERR_ERRCODE GENMASK(10, 8)
++#define CBB_ERR_LEN1 GENMASK(27, 16)
++
++#define DMAAPB_X_RAW_INTERRUPT_STATUS   0x2ec
++
++struct tegra194_cbb_packet_header {
++	bool lock;   // [0]
++	u8   opc;    // [4:1]
++	u8   errcode;// [10:8]= RD, RDW, RDL, RDX, WR, WRW, WRC, PRE, URG
++	u16  len1;   // [27:16]
++	bool format; // [31]  = 1 -> FlexNoC versions 2.7 & above
++};
++
++struct tegra194_cbb_aperture {
++	u8  initflow;
++	u8  targflow;
++	u8  targ_subrange;
++	u8  init_mapping;
++	u32 init_localaddress;
++	u8  targ_mapping;
++	u32 targ_localaddress;
++	u16 seqid;
++};
++
++struct tegra194_cbb_userbits {
++	u8  axcache;
++	u8  non_mod;
++	u8  axprot;
++	u8  falconsec;
++	u8  grpsec;
++	u8  vqc;
++	u8  mstr_id;
++	u8  axi_id;
++};
++
++struct tegra_cbb_noc_data {
++	char *name;
++	bool erd_mask_inband_err;
++	const char **cbb_master_id;
++	int  max_aperture;
++	const struct tegra194_cbb_aperture *noc_aperture;
++	char **noc_routeid_initflow;
++	char **noc_routeid_targflow;
++	void (*noc_parse_routeid)(struct tegra194_cbb_aperture *info, u64 routeid);
++	void (*noc_parse_userbits)(struct tegra194_cbb_userbits *usrbits, u32 elog_5);
++};
++
++struct tegra_cbb_errlog_record {
++	struct list_head node;
++	char *name;
++	phys_addr_t start;
++	void __iomem *vaddr;
++	int num_intr;
++	int sec_irq;
++	int nonsec_irq;
++	u32 errlog0;
++	u32 errlog1;
++	u32 errlog2;
++	u32 errlog3;
++	u32 errlog4;
++	u32 errlog5;
++	int  apb_bridge_cnt;
++	void __iomem **axi2abp_bases;
++	bool is_ax2apb_bridge_connected;
++	bool erd_mask_inband_err;
++	const char **cbb_master_id;
++	struct tegra_cbb *cbb;
++	int  max_aperture;
++	const struct tegra194_cbb_aperture *noc_aperture;
++	char **noc_routeid_initflow;
++	char **noc_routeid_targflow;
++	void (*noc_parse_routeid)(struct tegra194_cbb_aperture *info, u64 routeid);
++	void (*noc_parse_userbits)(struct tegra194_cbb_userbits *usrbits, u32 elog_5);
++};
 -- 
 2.17.1
 

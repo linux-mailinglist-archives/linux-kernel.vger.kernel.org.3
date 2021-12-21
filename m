@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D72347C2B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D0147C2B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239157AbhLUPWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:22:03 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:57002 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbhLUPWC (ORCPT
+        id S239257AbhLUPWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:22:15 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36524 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239250AbhLUPWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:22:02 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BLFLku0064740;
-        Tue, 21 Dec 2021 09:21:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640100106;
-        bh=dE4T1fnuau00k5Mo7+ksZdAC/dHCWN8R7vt1VAKqDi8=;
-        h=From:To:CC:Subject:Date;
-        b=exUm+UNDhDkYMEAks0RboPUf/AVUPfEMp+w3IOR9x+148iqK78pmz+3/u5auUlKaF
-         SpCXl0KHznni6QEkTxADpX2UNnQl+IlBwn5IFEUtSm5hiVH2oLwXHqb/SCfRejx4Gk
-         iIUoUSZnehXoxJk1rbYmpUwr7upfsrTWn5Fzvjkw=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BLFLjRg018631
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Dec 2021 09:21:45 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 21
- Dec 2021 09:21:45 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 21 Dec 2021 09:21:45 -0600
-Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BLFLhIL075869;
-        Tue, 21 Dec 2021 09:21:43 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, <trini@konsulko.com>
-Subject: [PATCH v2] arm64: defconfig: Enable USB drivers for TI K3 SoC
-Date:   Tue, 21 Dec 2021 20:51:40 +0530
-Message-ID: <20211221152140.15151-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Dec 2021 10:22:14 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2F5DD1F388;
+        Tue, 21 Dec 2021 15:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1640100133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z59VsQxPK7tcYGrkiUV7duMrk49fkRi2ISpPTXEYeVw=;
+        b=kRHcuyPJG/g1WfdTCvJIc3r+XpE+Qmg+GMpFMQFebNt/s4nIc2+Yc3cnqkD6IdRvgIvrrU
+        iiHPGfjbjzZvzMO6XE/SNro+KTKugA4MiYFWK9kztv+9f2b4BUYbMprXN0PDvRV2Ac4IJo
+        4bU2ZCNjWT7xFIq0fqIJE8ENidBIYMQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1640100133;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z59VsQxPK7tcYGrkiUV7duMrk49fkRi2ISpPTXEYeVw=;
+        b=ddLjwFfbNdKuBPnlRt96fTBTphXHFMP5fn2SoN3I+ANCSmxD/X+5XmLoOt8OlwDnDXVw+/
+        a7AQTg9lMxmjTzBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10F9613C98;
+        Tue, 21 Dec 2021 15:22:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TmKbAyXxwWGAZAAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 21 Dec 2021 15:22:13 +0000
+Date:   Tue, 21 Dec 2021 16:22:19 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Marco Elver <elver@google.com>
+Cc:     Carel Si <beibei.si@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+Message-ID: <YcHxKzB3WPurKlZ9@zn.tnic>
+References: <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+ <YbyIJYzqtHPKRMFt@zn.tnic>
+ <20211221143153.GA4676@linux.intel.com>
+ <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Cadence USB, TI USB and required SERDES drivers to support USB on
-TI K3 SoCs.
+On Tue, Dec 21, 2021 at 04:10:31PM +0100, Marco Elver wrote:
+> Also double-check the Makefile-based solution: the Makefiles in both
+> directories already contain various KCOV_INSTRUMENT/K*SAN_SANITIZE :=
+> n, so perhaps adding GCOV_PROFILE or GCOV_PROFILE_whicheverfile.o := n
+> may be more appropriate should the functions that should not be
+> instrumented be a moving target, and prone to breakage again in
+> future.
 
-Reported-by: Tom Rini <trini@konsulko.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Reviewed-by: Tom Rini <trini@konsulko.com>
----
+Yeah, I asked whether we should exclude the whole ...cpu/common.c from
+profiling - it has mostly init code so it probably doesn't matter
+for coverage but no one said anything so I left it to the function
+annotation.
 
-v2:
-Drop Cadence PCIe driver configs as they cannot be built as modules
-based on feedback at [1].
+And also, I'm still waiting on clang folks to chime in on the New Pass
+Manager and whether there's a bug in clang there so that we won't need
+the __no_profile annotation at all. I mean, gcc is fine with that config
+so unless clang is doing more profiling gunk than gcc and requires that
+__llvm_gcov_init constructor... see Nathan's mail upthread.
 
-v1: https://lore.kernel.org/r/20211208060856.16106-1-vigneshr@ti.com
+Thx.
 
-[1] https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/
-
- arch/arm64/configs/defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index f2e2b9bdd702..dfa34bd06949 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -822,6 +822,10 @@ CONFIG_USB_RENESAS_USBHS_HCD=m
- CONFIG_USB_RENESAS_USBHS=m
- CONFIG_USB_ACM=m
- CONFIG_USB_STORAGE=y
-+CONFIG_USB_CDNS_SUPPORT=m
-+CONFIG_USB_CDNS3=m
-+CONFIG_USB_CDNS3_GADGET=y
-+CONFIG_USB_CDNS3_HOST=y
- CONFIG_USB_MTU3=y
- CONFIG_USB_MUSB_HDRC=y
- CONFIG_USB_MUSB_SUNXI=y
-@@ -1123,6 +1127,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
- CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_SUN4I_USB=y
-+CONFIG_PHY_CADENCE_SIERRA=m
- CONFIG_PHY_MIXEL_MIPI_DPHY=m
- CONFIG_PHY_HI6220_USB=y
- CONFIG_PHY_HISTB_COMBPHY=y
-@@ -1146,6 +1151,8 @@ CONFIG_PHY_SAMSUNG_UFS=y
- CONFIG_PHY_UNIPHIER_USB2=y
- CONFIG_PHY_UNIPHIER_USB3=y
- CONFIG_PHY_TEGRA_XUSB=y
-+CONFIG_PHY_AM654_SERDES=m
-+CONFIG_PHY_J721E_WIZ=m
- CONFIG_ARM_SMMU_V3_PMU=m
- CONFIG_FSL_IMX8_DDR_PMU=m
- CONFIG_HISI_PMU=y
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

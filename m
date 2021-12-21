@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECAA47BC35
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7422D47BC37
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbhLUIwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbhLUIwd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:52:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B6FC061574;
-        Tue, 21 Dec 2021 00:52:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80255B81211;
-        Tue, 21 Dec 2021 08:52:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4600C36AE2;
-        Tue, 21 Dec 2021 08:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640076751;
-        bh=cTgfH3Chgz3SzxHPSaXVcyqObWYtBCdFtEJiZmv4+6o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJA5ZlLczUqRya8BJ1+xQhKgfZ6m96GMzlSjxW5/+Kwc3ydaF4yBiX2HzVkSvlibI
-         AowwJvtt+0iDSeyVsynxir9x+Ts75PWPcnkhvU6P1m73XyhWQyEAnnAOMWkwRdJV4L
-         9J8Qi/fa4mHqxwy37saqNcskcn+Zj9t2jnX8sCZJozrHQVNcKCldu56/7+dpl6XBx+
-         3xdQaBTVBjXy3Q3n972MpSA9hxQ0Oibq2hRb/qZz/2nqqQdqUIdqBhORhRoLYt9mwl
-         gDNivYxrgTz1n9wvL6OUfJ26ATnMCr3NOCTzOGjma7pMC/n7h9cxDyp0WSLdQMI/b5
-         DN7R08AGGIyxw==
-Date:   Tue, 21 Dec 2021 10:52:30 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/25] x86/sgx: Support modifying SGX page type
-Message-ID: <YcGVzsXmHrijKaFz@iki.fi>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <c0f04a8f7e1afd9e9319bb9f283db9a3187f7abc.1638381245.git.reinette.chatre@intel.com>
- <Yav9g4+L8zg48DRf@iki.fi>
- <dc74a876-54fe-5caa-6602-8887cfe34315@intel.com>
- <2a269a4dde2976f7aaf17de9c4a7fca3552e9c7a.camel@kernel.org>
- <0fb14185-5cc3-a963-253d-2e119b4a52bb@intel.com>
+        id S235872AbhLUIxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:53:01 -0500
+Received: from verein.lst.de ([213.95.11.211]:45923 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235860AbhLUIxA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 03:53:00 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 58D8768AFE; Tue, 21 Dec 2021 09:52:56 +0100 (CET)
+Date:   Tue, 21 Dec 2021 09:52:56 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, corbet@lwn.net, hch@lst.de, cl@linux.com
+Subject: Re: [PATCH 2/2] dma-pool: allow user to disable atomic pool
+Message-ID: <20211221085256.GB7439@lst.de>
+References: <20211217090827.101938-1-bhe@redhat.com> <20211217090827.101938-3-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0fb14185-5cc3-a963-253d-2e119b4a52bb@intel.com>
+In-Reply-To: <20211217090827.101938-3-bhe@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 09:43:38AM -0800, Dave Hansen wrote:
-> On 12/11/21 12:02 AM, Jarkko Sakkinen wrote:
-> > On Mon, 2021-12-06 at 13:48 -0800, Reinette Chatre wrote:
-> >>> I'd suggest to change this as SGX_IOC_ENCLAVE_MODIFY_TYPE.
-> >> How about SGX_IOC_ENCLAVE_MOD_TYPE to be consistent with your earlier 
-> >> suggestion of SGX_IOC_ENCLAVE_MOD_PROTECTIONS ?
-> > I think it would be best to introduce only one new ioctl that would
-> > be capable of doing either operation (and use secinfo as a vessel
-> > for additional data).
+On Fri, Dec 17, 2021 at 05:08:27PM +0800, Baoquan He wrote:
+> In the current code, three atomic memory pools are always created,
+> atomic_pool_kernel|dma|dma32, even though 'coherent_pool=0' is
+> specified in kernel command line. In fact, atomic pool is only
+> necessary when CONFIG_DMA_DIRECT_REMAP=y or mem_encrypt_active=y
+> which are needed on few ARCHes.
 > 
-> Why?
+> So change code to allow user to disable atomic pool by specifying
+> 'coherent_pool=0'.
 > 
-> I don't think we should try to multiplex within an ioctl().  Just create
-> a second ioctl().
+> Meanwhile, update the relevant document in kernel-parameter.txt.
+> 
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 3 ++-
+>  kernel/dma/pool.c                               | 7 +++++--
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index ec4d25e854a8..d7015309614b 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -664,7 +664,8 @@
+>  
+>  	coherent_pool=nn[KMG]	[ARM,KNL]
+>  			Sets the size of memory pool for coherent, atomic dma
+> -			allocations. Otherwise the default size will be scaled
+> +			allocations. A value of 0 disables the three atomic
+> +			memory pool. Otherwise the default size will be scaled
+>  			with memory capacity, while clamped between 128K and
+>  			1 << (PAGE_SHIFT + MAX_ORDER-1).
+>  
+> diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
+> index 5f84e6cdb78e..5a85804b5beb 100644
+> --- a/kernel/dma/pool.c
+> +++ b/kernel/dma/pool.c
+> @@ -21,7 +21,7 @@ static struct gen_pool *atomic_pool_kernel __ro_after_init;
+>  static unsigned long pool_size_kernel;
+>  
+>  /* Size can be defined by the coherent_pool command line */
+> -static size_t atomic_pool_size;
+> +static unsigned long atomic_pool_size = -1;
 
-I'm fine with 2 ioctls.
+Using UINT_MAX instead of -1 here and below would probably be more
+descriptive.
 
-/Jarkko
+Otherwise looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D50F47BF15
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6434147BF18
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbhLULoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:44:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43538 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233650AbhLULom (ORCPT
+        id S237242AbhLULrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233650AbhLULrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:44:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640087082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wbwxDN6wj5FeFXwr7pjnR/9gTyWUAmPUku3aTqaGEOY=;
-        b=X2TP4WtkKa239W7YhyP5LLaheIUVb7TCj3K4Abci7pKIN/wmlBmHP/mjozmh9BIpOpidAC
-        Zy1fTvX3ZXizMjO1wPMOzcibVbKAxg3rNd6rzs3RIxYohAQk4fYOBQugHzboXL+7gwLtLv
-        tEZJNFbcGag5WfV7o8jCKTRb5f0BxtA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-82-FXhi4RSuN6G4jj_YUY-SKg-1; Tue, 21 Dec 2021 06:44:41 -0500
-X-MC-Unique: FXhi4RSuN6G4jj_YUY-SKg-1
-Received: by mail-wr1-f69.google.com with SMTP id a11-20020adffb8b000000b001a0b0f4afe9so4589877wrr.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:44:41 -0800 (PST)
+        Tue, 21 Dec 2021 06:47:23 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D94C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:47:22 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bu9so7166982lfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:47:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5iHMu2RceiYZBlM7VQJrpbt7pv1hPIsprESHZDmwuTY=;
+        b=SlMtEqXNa+jqXV5oiXirDiiBXnO7KyZtnJXamN8ehWQqFiIXZmDb8rw/p/J4AMpQ76
+         8Y+bMR0/4sYPYk7Tv2e+ympFkAGUdXgWbUPNO0jU79aRV0/HF/K1XFznhJ+IaIMRQxiZ
+         CatQl76QNhO4jtpNLXQo98+uPSloV0zA44ItlE4WKMGVcjtxVNstRQ3LdpjrmJC7bFLl
+         U0uKoQZw1oKD/M0agtCq6G2MZlWhMcXhwpqp+BQ7aJfrZIUA5p0i7BCPRk74lcbbm3Cf
+         2e25EO8OwWB+eIMtIpePRINnIYCmpCjsMuLuI2ksXr750wX/HIoUxZJytJCxUY7BJKI+
+         xqsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wbwxDN6wj5FeFXwr7pjnR/9gTyWUAmPUku3aTqaGEOY=;
-        b=kzQaSFdT8Lv85laH017iKVVTpZsV8Wq6bzs/ptcv9giZ+wQkw+31bnfOkI8NYg9CIW
-         aVlVKjag6UV/+czYWb5E5kZQh6cXYWvCpiB2jbohfm8LlsGj0rXBXa+WHql/4h+eioPL
-         UHTs6Efx7vD8T39DZSNbVUR+T5lQC4MV3K218xq964HxLuf7dX4VX/GL/XR5VqRdn6eG
-         0BKPLAm3DLBYykfvE/Rixk4Sf2p/DQSYCBcJvJtHv9jxxnghyv6/wqj8or5RZu8za+/O
-         s5AMCCHiEq27kzSU4TCwYTTTqS9V+GSdh52+QOQ8rR0xQW5HNvWKfg2fR+OG5r5lp4Ab
-         KowQ==
-X-Gm-Message-State: AOAM533zgyD0uMlK9CTAjAF0HXEYzVouwE3HlomU/Gqq4aSUh5PsSIps
-        DcIGJC2q1kO1UJBHw1d5gswp0TaJj5vJdQky1SPK7wyCie2mhamxnohl65rxlTLl8xv51b/DqoS
-        sRmQ3k+FpXhn40QN068oSWGo=
-X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2226116wrd.682.1640087079994;
-        Tue, 21 Dec 2021 03:44:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/jkUzjPboutyA7ZKw6bugiCMhEIJ/J5UCT3C0AchPv48wFvUEdKBJxeBkwaNlPk1TKH7zOg==
-X-Received: by 2002:a05:6000:1688:: with SMTP id y8mr2226106wrd.682.1640087079786;
-        Tue, 21 Dec 2021 03:44:39 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id n9sm2318886wmq.37.2021.12.21.03.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 03:44:39 -0800 (PST)
-Date:   Tue, 21 Dec 2021 11:44:38 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Allen <allen.lkml@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com
-Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
-Message-ID: <20211221114438.lbbnte2f7u6xi5ii@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20211124173327.3878177-1-atomlin@redhat.com>
- <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
- <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
- <CAOMdWSKzH2uzD6XDN21x_R7_iThBko75s9tHTTMKxbG2pdFYMg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5iHMu2RceiYZBlM7VQJrpbt7pv1hPIsprESHZDmwuTY=;
+        b=WBQBSKs+LYZZYfVERr8nxeo4DOwF1sH+zSJ9xYJPfhdI0SHOh8vzPnAt19eieAiUqX
+         Bi9detJcQROlCLLqbxl/DcVDTkqIOMoNza6zoBhapo5+60tCI8+QKsTTPJKHT8d1jWO0
+         0FutWBAWhLoslSidSsx4dhUeQK7+l04LE4Lu9ydcHx8vXs0AhW5gKvbpdmnd4MxtejWM
+         sgbcn0C3qPp4Z3QwzLxPMu/0meoPW+dztCbJgrBZfDFqw1zEeBpa5iasy0Hsk1Yy4ajq
+         6yAouFAW3TwMpC1Qy/cxWi2poB1bpcreB4atxdTdNjndfwwNV+7x1FR50U2qb+pM/5Kb
+         7WbA==
+X-Gm-Message-State: AOAM531BAN/Fvd+4aWIXILOTpkC+8z0eSz2ad54wF8tzmr9/w9Rl0guO
+        z2zOxbQ0LpNRvg+jqw8qOnRCft7XgfDFsWGWDVGisQ==
+X-Google-Smtp-Source: ABdhPJz5e1F2UioOi7x20744XGEveL1bhBJE+6hcEi+URVa1/5tCLuhCcxduegYHFw/t0tJUUmwS8b2xFV54ZZY88MA=
+X-Received: by 2002:a05:6512:4015:: with SMTP id br21mr2819857lfb.233.1640087241138;
+ Tue, 21 Dec 2021 03:47:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAOMdWSKzH2uzD6XDN21x_R7_iThBko75s9tHTTMKxbG2pdFYMg@mail.gmail.com>
+References: <5542600.DvuYhMxLoT@kreacher>
+In-Reply-To: <5542600.DvuYhMxLoT@kreacher>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 21 Dec 2021 12:46:44 +0100
+Message-ID: <CAPDyKFq+UFT0bbPSj01Tvzj0Ty50Tcq+zV_eCPt2h_Xmz00QfQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify locking in pm_runtime_put_suppliers()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2021-12-13 18:30 +0530, Allen wrote:
-> Aaron, Luis,
+On Fri, 17 Dec 2021 at 20:16, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Notice that pm_runtime_put_suppliers() cannot be called with
+> disabled interrupts, because it may sleep (due to the device
+> links read locking in the non-SRCU case), and so it can use
+> spin_lock_irq() and spin_unlock_irq() for the locking.
+>
+> Update the function accordingly and while at it move the "put"
+> local variable in it into the inner block where it is used.
+>
+> This change is not expected to have any visible functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hi Allen
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> I have some ideas and did some work on it. Let me know if we could work
-> together on this.
+Kind regards
+Uffe
 
-Yes, we can. What have you done so far?
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+> ---
+>  drivers/base/power/runtime.c |   12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -1748,8 +1748,6 @@ void pm_runtime_get_suppliers(struct dev
+>  void pm_runtime_put_suppliers(struct device *dev)
+>  {
+>         struct device_link *link;
+> -       unsigned long flags;
+> -       bool put;
+>         int idx;
+>
+>         idx = device_links_read_lock();
+> @@ -1757,11 +1755,17 @@ void pm_runtime_put_suppliers(struct dev
+>         list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+>                                 device_links_read_lock_held())
+>                 if (link->supplier_preactivated) {
+> +                       bool put;
+> +
+>                         link->supplier_preactivated = false;
+> -                       spin_lock_irqsave(&dev->power.lock, flags);
+> +
+> +                       spin_lock_irq(&dev->power.lock);
+> +
+>                         put = pm_runtime_status_suspended(dev) &&
+>                               refcount_dec_not_one(&link->rpm_active);
+> -                       spin_unlock_irqrestore(&dev->power.lock, flags);
+> +
+> +                       spin_unlock_irq(&dev->power.lock);
+> +
+>                         if (put)
+>                                 pm_runtime_put(link->supplier);
+>                 }
+>
+>
+>

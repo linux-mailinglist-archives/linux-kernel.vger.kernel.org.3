@@ -2,148 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE4047C4F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8927A47C4F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbhLURYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:24:22 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:39838 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240390AbhLURYV (ORCPT
+        id S240402AbhLURYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231187AbhLURYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:24:21 -0500
-Received: by mail-io1-f71.google.com with SMTP id m6-20020a0566022e8600b005ec18906edaso9441855iow.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:24:20 -0800 (PST)
+        Tue, 21 Dec 2021 12:24:47 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCC5C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:24:46 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id v203so40855011ybe.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KlmUjgrDgCnHrb4pHRfggpW+PxoV4JLDgRs10VlOABM=;
+        b=UUGqlz2Mmd/P8Mxj9A0f0Dvi5GVohPmCCl1RxcoZymUgRQkL+lxZQXeYHtm92xILnU
+         h+Tu9H/CwyRaOZW9rak6qNPCF+cjVjWEKniLvnCln3CVW3BbWD33EVAG6eearOJgeh1r
+         bhRJWPK7PtutonRub0zdUJE9gRdMb924MSvw3ET34JIdW5miVoyie5SXxi7EnBvRf3Hn
+         x466eYwEeNq04da2rhZ5b/gzU2D+rueMzDB/31exWZn8efBnQNaMFBwdVSLQ9N6lwZ3E
+         LLHvrXTdDPxfune0tS9ZUhtj/G2D1RwxX7zCuSOcpuAnRKG9AtcyUwdvgras6QCsK8ij
+         Hslw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=NR2r2axULjweOgBCAvolqftShAH89P7hUZxF3KCl6ZI=;
-        b=YmKk7Cu4zDjqXYDNgwh7xwymMJsNv/5B60TbM7wjxqHmmQ7Mk/fdxl+meC1fH9KUnL
-         8GIC7lsP/Vn0mrYT+Uwhi4rZ57ElkL1xaPf5IRtPXmKpa0uqWLpYrsm4bArbT+l/A/jY
-         fqj+4ah4Isywof1A3JsISyG5dN/zU5wNyHU+L8VbONK2niQPdg10oIc6LJ/KRTxIsKjM
-         E1HQvsv6r5LaNkfroQ1agOkikQfcV37S6GqoURPGwyn+park57BRGk8Xh1y6I/MIbMfQ
-         CdfVaiv8yjxW4ZGReemuN6+/d4YIlkA/31iM5dhWk8TwBZ2DHSrI1o+FHqx7ZEd1QdTN
-         KNyQ==
-X-Gm-Message-State: AOAM530FvvdEmkUA7hwyoXA46OyP/l1JU1fKU23vZ3jahc0hM8v5fOwS
-        j2mltK/bYcqzAlhOMd4h9T0y1scSduvo/dxLrAs9lMQoSPiW
-X-Google-Smtp-Source: ABdhPJyA4yEg0OFko1dn0BPJP+DPmZi62d05HfP0iJCDTKr40FizNsqIOUeZbK47sQGxlXjEH/vGThBhZDl9JHKRqeEiu4o4NWSi
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KlmUjgrDgCnHrb4pHRfggpW+PxoV4JLDgRs10VlOABM=;
+        b=VVdR2/4dd0UDR8lQNMZnI25CWSvuhuq/2y4Nof4zkJ6vOf2hPsfA8MHLUsf5vjiRMI
+         gn1EjEfc1Yp+n3aD2j5dGT97KmVqlwvFLPLPQNRjiNMVluJuxUUdQ1d0JeLrzFErHI6+
+         3a+385bNBr2yc3mFGwlq/JRe5GZw++ItVbjWM26L0dPuOAhyBclWr6+XkXfGSl886ncU
+         kX525GLXUA1d/tkw4uwFgG/TPxShYQNi3aaN8dvi2lRpZN3/EeaK73rE0F4chN9qWg57
+         pKPB6X59ISPyCypEFg5dWpy7uuklbbf6CayFWETKk1+Mx0DqtMPXXNcZTIw/O7yGaPoL
+         o3dA==
+X-Gm-Message-State: AOAM531NHDZb6v7ihNkWbZO8Fw7S6lbEDJQpgI3LwZSihtSCu0jUREyL
+        PYW8Kol9kOjxCKGcWp+2RwmzFOy6qcbrcKP7o6NzYQ==
+X-Google-Smtp-Source: ABdhPJyJ2hs4Mx5dN1WE2hCto9lXtbSx7HjysBti/Jhs3pasyGB4uu/mk3kMbpSs/7a2A9YJenKBVY6Ix1fsrDDTKeI=
+X-Received: by 2002:a25:26c5:: with SMTP id m188mr5941565ybm.146.1640107484575;
+ Tue, 21 Dec 2021 09:24:44 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:140c:: with SMTP id t12mr2230992iov.187.1640107460529;
- Tue, 21 Dec 2021 09:24:20 -0800 (PST)
-Date:   Tue, 21 Dec 2021 09:24:20 -0800
-In-Reply-To: <00000000000017977605c395a751@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009411bb05d3ab468f@google.com>
-Subject: Re: [syzbot] kernel BUG in __page_mapcount
-From:   syzbot <syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, apopple@nvidia.com,
-        chinwen.chang@mediatek.com, fgheet255t@gmail.com, jannh@google.com,
-        khlebnikov@yandex-team.ru, kirill.shutemov@linux.intel.com,
-        kirill@shutemov.name, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        peterx@redhat.com, peterz@infradead.org,
-        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
-        vbabka@suse.cz, walken@google.com, willy@infradead.org,
-        ziy@nvidia.com
+References: <20211220143023.451982183@linuxfoundation.org>
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Dec 2021 22:54:33 +0530
+Message-ID: <CA+G9fYssvVRBMTh37PBK7DRty8uNfL0KGLsCL6vRVtRRNLZj5A@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/56] 4.19.222-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, 20 Dec 2021 at 20:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.222 release.
+> There are 56 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.222-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-HEAD commit:    6e0567b73052 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14c192b3b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ae22d1ee4fbca18
-dashboard link: https://syzkaller.appspot.com/bug?extid=1f52b3a18d5633fa7f82
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133200fdb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c3102db00000
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
- __mmput+0x122/0x4b0 kernel/fork.c:1113
- mmput+0x56/0x60 kernel/fork.c:1134
- exit_mm kernel/exit.c:507 [inline]
- do_exit+0xb27/0x2b40 kernel/exit.c:819
- do_group_exit+0x125/0x310 kernel/exit.c:929
- get_signal+0x47d/0x2220 kernel/signal.c:2852
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-------------[ cut here ]------------
-kernel BUG at include/linux/page-flags.h:785!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
-RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
-RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
-RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
-R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
-R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
-FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- page_mapcount include/linux/mm.h:837 [inline]
- smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
- smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
- smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
- walk_pmd_range mm/pagewalk.c:128 [inline]
- walk_pud_range mm/pagewalk.c:205 [inline]
- walk_p4d_range mm/pagewalk.c:240 [inline]
- walk_pgd_range mm/pagewalk.c:277 [inline]
- __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
- walk_page_vma+0x277/0x350 mm/pagewalk.c:530
- smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
- smap_gather_stats fs/proc/task_mmu.c:741 [inline]
- show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
- seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
- seq_read+0x3e0/0x5b0 fs/seq_file.c:162
- vfs_read+0x1b5/0x600 fs/read_write.c:479
- ksys_read+0x12d/0x250 fs/read_write.c:619
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7faa2af6c969
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
-RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
-R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
-R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 24ec93ff95e4ac3d ]---
-RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
-RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
-RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
-RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
-R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
-R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
-FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+## Build
+* kernel: 4.19.222-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: 2b0e0aea0c2aec46fb5e692e66a67cb1701ee5fd
+* git describe: v4.19.221-57-g2b0e0aea0c2a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.221-57-g2b0e0aea0c2a
 
+## No Test Regressions (compared to v4.19.221-10-g1d60913d545c)
+
+
+## No Test Fixes (compared to v4.19.221-10-g1d60913d545c)
+
+## Test result summary
+total: 82353, pass: 67127, fail: 754, skip: 12730, xfail: 1742
+
+## Build Summary
+* arm: 254 total, 246 passed, 8 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

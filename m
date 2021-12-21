@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0839E47C5FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFD747C5FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 19:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240934AbhLUSLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 13:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbhLUSLC (ORCPT
+        id S241006AbhLUSLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 13:11:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40970 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233449AbhLUSLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:11:02 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6A4C061574;
-        Tue, 21 Dec 2021 10:11:02 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id g2so10457666pgo.9;
-        Tue, 21 Dec 2021 10:11:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=60PcoFBXkpHH8tFBM2IBep4sOYr978ha6EWUV4ZY7X4=;
-        b=h0tYups5FGvH0lnBSpzOR3AcWM5aGsXgsLb/pK+t8stGrr35Wm9KDT8VEILYYzstv9
-         yW88hzbBIKKytWeH7WWm9D21gh3/0x0csmaYpgaNkFaNdoHnUq4DRGI2iIsM5IRxvLFO
-         igm6SYe+RV3T75alMmbf7hgw3CC+xjat+4R6gKgbZKeR8TBlYOfqhbsufJbZrFETkih6
-         E0srMrNPIO5mRWEPmSc0MEyspc7BZb+SCx8w2/qX5RDm3KG3TGKna375QykmTDuwcbtf
-         wNI25PFJeLe0klfFjiomKOdn7P0SHTL0MRW1jLlI1X/KcCS96TdaDCz0wbffW+mtnZ8p
-         BEHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=60PcoFBXkpHH8tFBM2IBep4sOYr978ha6EWUV4ZY7X4=;
-        b=vc24NNaie2lGZGDuOsi2jtUUS/3Tx5QyeY8qKJg5ers9pN29dg0G9ju/Xmp6latWe1
-         lcb23zp+N6CkHOdc9uqfYW1AI62zdr6G0qG+999ie/q7onLSY5phWH4Z8b+zI84834vF
-         2SlRpA7eVLJF/xGVyauWX6N506g8jIXiBLqZuB/+UQ4o9r4JuKQ1n1VQZjPPCnwyUJiz
-         F5lpFpCCrPCf9WizJKcFR+DJlrZEhsGCtrlYhnhT/nbiL7rgaGHLM4DQywlQ9gF+T69q
-         zzN+VskTDfYK2K/Vtaz/5jz2iO5Zq5ithT9HIq25DOcSxzNwyl19dbH71ye40wT/1JQK
-         14iA==
-X-Gm-Message-State: AOAM532xqehSoSpRyiyEvsMCEZSXdjTy1DTckycmXIk+h0hySXgQotsw
-        kGRi17k3QkaDHLIhYfpfNUm5Gz7VGKU=
-X-Google-Smtp-Source: ABdhPJz05CiVltsGeOBsBEY1tHDuqF85B0PRbRlnziM+i40J9vGKjQXsQEBovQe+1F+2mr6adf8YBw==
-X-Received: by 2002:a62:aa15:0:b0:4ba:ca5f:2841 with SMTP id e21-20020a62aa15000000b004baca5f2841mr4360781pff.73.1640110261135;
-        Tue, 21 Dec 2021 10:11:01 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id z71sm20355785pgz.52.2021.12.21.10.10.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 10:11:00 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.15 000/177] 5.15.11-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211220143040.058287525@linuxfoundation.org>
-Message-ID: <1b98acd0-5f3b-fbe6-0ece-7c19ac973ed0@gmail.com>
-Date:   Tue, 21 Dec 2021 10:10:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 13:11:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 588786171A;
+        Tue, 21 Dec 2021 18:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7805C36AE9;
+        Tue, 21 Dec 2021 18:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640110282;
+        bh=7ezUXDCpzUX86IBuxs4d3ZAJp0n6hwwofR+D+8ceuW4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=hucdRqR5W0X5UXLZbnLopw3wMx2rmIBkTz3XiMlHCvu+G5azjzhCB5lES3Ix0nqGK
+         KMcbL5At6410aQEw4fCja1mAfNCsqsFo/KI8/LDRboQlIIECdXhOWshSJttNP1rimv
+         1fWQln4hr1dZY2k6H6DuXDpJLH0LjXZHdNl43ttGbNvgSdWpJeRM3DWxryrLD0104j
+         kfv73BFjCezBuYP09mHG6uZwm46/s/Oz5XiEWoermMcox5H0OTigfNUPf4+la7hZtd
+         Rw5RUnZp9z8JYgE+j4ZqRVsz4iBW0qjbir/cl7DquxgqSNUuKn8P+CBDVFrqmx4HBr
+         7kpX9Ony7OsZA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v6 1/2] wilc1000: Add reset/enable GPIO support to SPI
+ driver
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211220180334.3990693-2-davidm@egauge.net>
+References: <20211220180334.3990693-2-davidm@egauge.net>
+To:     David Mosberger-Tang <davidm@egauge.net>
+Cc:     Ajay Singh <ajay.kathat@microchip.com>,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        David Mosberger-Tang <davidm@egauge.net>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164011027826.7951.6332452994063982868.kvalo@kernel.org>
+Date:   Tue, 21 Dec 2021 18:11:19 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+David Mosberger-Tang <davidm@egauge.net> wrote:
 
+> For the SDIO driver, the RESET/ENABLE pins of WILC1000 are controlled
+> through the SDIO power sequence driver.  This commit adds analogous
+> support for the SPI driver.  Specifically, during initialization, the
+> chip will be ENABLEd and taken out of RESET and during
+> deinitialization, the chip will be placed back into RESET and disabled
+> (both to reduce power consumption and to ensure the WiFi radio is
+> off).
+> 
+> Both RESET and ENABLE GPIOs are optional.  However, if the ENABLE GPIO
+> is specified, then the RESET GPIO should normally also be specified as
+> otherwise there is no way to ensure proper timing of the ENABLE/RESET
+> sequence.
+> 
+> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 
-On 12/20/2021 6:32 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.11 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.11-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Failed to apply, please rebase on top of wireless-drivers-next.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+error: sha1 information is lacking or useless (drivers/net/wireless/microchip/wilc1000/wlan.c).
+error: could not build fake ancestor
+hint: Use 'git am --show-current-patch' to see the failed patch
+Applying: wilc1000: Add reset/enable GPIO support to SPI driver
+Patch failed at 0001 wilc1000: Add reset/enable GPIO support to SPI driver
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+2 patches set to Changes Requested.
+
+12688345 [v6,1/2] wilc1000: Add reset/enable GPIO support to SPI driver
+12688343 [v6,2/2] wilc1000: Document enable-gpios and reset-gpios properties
+
 -- 
-Florian
+https://patchwork.kernel.org/project/linux-wireless/patch/20211220180334.3990693-2-davidm@egauge.net/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

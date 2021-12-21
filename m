@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D3347BE7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AFF47BE77
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbhLUK4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbhLUK4y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:56:54 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26287C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:56:52 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id v11so8210100pfu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:56:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5NCsrps1VB7zv4WoOsC/DWIopmzq24bKQXov1cHCoSE=;
-        b=dgYeMu7+MhdFVkYweWszhr9AQkrcGVMxp3EZU07VL3Ok8r0pvZuPqMBdnnjJuHsqm+
-         7BZoafwe0BJ2Y5+SLIFInQntcdXSMHGZg2jnjHr3juw6D6E5kjFkLcnUbZpIG6qa9TyT
-         Reh6AibWU10O/XqE9fNEjAo85ByZSqbJAj1EA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5NCsrps1VB7zv4WoOsC/DWIopmzq24bKQXov1cHCoSE=;
-        b=VLA035XI8SZWaDNkJX8vI3qDUHyaD74EzaJr63wLLrv4UhVllmayaQInZhqycojfPt
-         vAu5+Q8xYRrAeHU40Q63AEYJ8fwBweEjzBZXTGgpArn6MGA6k1hfqPEi2BCCa2NlnoIR
-         fzdnSJl+i+Ow0AkFV3ufPsmf57AAK4Kvyrv3IulAjF8aWrPrUAlhwude665mUPfbARdR
-         8AX+gIWUI3qrjVMhcJIliynhpVWsmr9GrtTaE1ZhgSH1g3bTg9279GiSdLwZFIbCHUVt
-         rfyeo5ZP8tbhr3wztSxBmUneZgI3265o06N1rT5UNmIO9/LKV2QIYJnZMtkn2MD2L7VU
-         1Afw==
-X-Gm-Message-State: AOAM531SirBbTPbwbjEE3LnEIoY6gmLlQTHjIUS6Yh/LZVRxlyJ+0cky
-        dpjxo/GXaCyU7CYT8ZP7RALI1A==
-X-Google-Smtp-Source: ABdhPJymrs4hgP/Wh1S07nIz1KLV8v0OS0zz/u4I2xbmG2psObUFhqMdRTtycPqO5hDcRrkaMGSDbA==
-X-Received: by 2002:aa7:88d6:0:b0:49f:dd4b:ddbc with SMTP id k22-20020aa788d6000000b0049fdd4bddbcmr2663799pff.31.1640084211426;
-        Tue, 21 Dec 2021 02:56:51 -0800 (PST)
-Received: from 9d766e42b9b9 ([1.145.8.37])
-        by smtp.gmail.com with ESMTPSA id k19sm3108216pff.5.2021.12.21.02.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 02:56:51 -0800 (PST)
-Date:   Tue, 21 Dec 2021 10:56:43 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/177] 5.15.11-rc1 review
-Message-ID: <20211221105643.GA1117674@9d766e42b9b9>
-References: <20211220143040.058287525@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220143040.058287525@linuxfoundation.org>
+        id S236816AbhLUKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:50:52 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:59802 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229761AbhLUKus (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 05:50:48 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7AB14201A00;
+        Tue, 21 Dec 2021 11:50:47 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 428352019FE;
+        Tue, 21 Dec 2021 11:50:47 +0100 (CET)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 81357183AC4F;
+        Tue, 21 Dec 2021 18:50:45 +0800 (+08)
+From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+To:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     UNGLinuxDriver@microchip.com, kuba@kernel.org,
+        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, f.fainelli@gmail.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, xiaoliang.yang_1@nxp.com,
+        marouen.ghodhbane@nxp.com
+Subject: [PATCH net-next] net: dsa: tag_ocelot: use traffic class to map priority on injected header
+Date:   Tue, 21 Dec 2021 19:02:09 +0800
+Message-Id: <20211221110209.31309-1-xiaoliang.yang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 03:32:30PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.11 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
-> Anything received after that time might be too late.
+For Ocelot switches, the CPU injected frames have an injection header
+where it can specify the QoS class of the packet and the DSA tag, now it
+uses the SKB priority to set that. If a traffic class to priority
+mapping is configured on the netdevice (with mqprio for example ...), it
+won't be considered for CPU injected headers. This patch make the QoS
+class aligned to the priority to traffic class mapping if it exists.
 
-Hi Greg,
+Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Signed-off-by: Marouen Ghodhbane <marouen.ghodhbane@nxp.com>
+---
+ net/dsa/tag_ocelot.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Looking good.
+diff --git a/net/dsa/tag_ocelot.c b/net/dsa/tag_ocelot.c
+index 4ba460c5a880..0d81f172b7a6 100644
+--- a/net/dsa/tag_ocelot.c
++++ b/net/dsa/tag_ocelot.c
+@@ -47,9 +47,13 @@ static void ocelot_xmit_common(struct sk_buff *skb, struct net_device *netdev,
+ 	void *injection;
+ 	__be32 *prefix;
+ 	u32 rew_op = 0;
++	u64 qos_class;
+ 
+ 	ocelot_xmit_get_vlan_info(skb, dp, &vlan_tci, &tag_type);
+ 
++	qos_class = netdev_get_num_tc(netdev) ?
++		    netdev_get_prio_tc_map(netdev, skb->priority) : skb->priority;
++
+ 	injection = skb_push(skb, OCELOT_TAG_LEN);
+ 	prefix = skb_push(skb, OCELOT_SHORT_PREFIX_LEN);
+ 
+@@ -57,7 +61,7 @@ static void ocelot_xmit_common(struct sk_buff *skb, struct net_device *netdev,
+ 	memset(injection, 0, OCELOT_TAG_LEN);
+ 	ocelot_ifh_set_bypass(injection, 1);
+ 	ocelot_ifh_set_src(injection, ds->num_ports);
+-	ocelot_ifh_set_qos_class(injection, skb->priority);
++	ocelot_ifh_set_qos_class(injection, qos_class);
+ 	ocelot_ifh_set_vlan_tci(injection, vlan_tci);
+ 	ocelot_ifh_set_tag_type(injection, tag_type);
+ 
+-- 
+2.17.1
 
-Run tested on:
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
-
-In addition: build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi

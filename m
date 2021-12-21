@@ -2,104 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4971E47BF12
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0288447BEDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbhLULk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:40:58 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4312 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbhLULk5 (ORCPT
+        id S233619AbhLUL1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:27:14 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30155 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231459AbhLUL1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:40:57 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJDx02Q80z67Mdm;
-        Tue, 21 Dec 2021 19:38:28 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+        Tue, 21 Dec 2021 06:27:13 -0500
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JJDdJ0hV9z8vr4;
+        Tue, 21 Dec 2021 19:24:52 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 12:40:54 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <stable@vger.kernel.org>,
-        <syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com>
-Subject: [PATCH] drm: Fix gem obj imbalance due to calling drm_gem_object_put() twice
-Date:   Tue, 21 Dec 2021 12:38:37 +0100
-Message-ID: <20211221113837.1607448-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
+ 15.1.2308.20; Tue, 21 Dec 2021 19:27:11 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 21 Dec
+ 2021 19:27:10 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <gregkh@linuxfoundation.org>,
+        <paolo.valente@linaro.org>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
+Subject: [PATCH linux-4.19.y 0/5] fix memleak of bfq weights_tree node
+Date:   Tue, 21 Dec 2021 19:38:44 +0800
+Message-ID: <20211221113849.2219126-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 9786b65bc61ac ("drm/ttm: fix mmap refcounting"),
-drm_gem_mmap_obj() takes a reference of the passed drm_gem_object at the
-beginning of the function to safely dereference the mmap offset pointer,
-and releases it at the end, if an error occurred. However, the cma and
-shmem helpers are also releasing that reference in case of an error,
-which causes the imbalance of the reference counter and the panic
-reported by syzbot.
+Our test found that bfq_weight_counter can leak quite easy. This problem
+can be fixed by patch 4, and other patches is needed to backport patch
+4.
 
-Don't release the reference in drm_gem_mmap_obj() if the mmap method was
-called and it returned an error, and uniformly apply the same behavior of
-the cma and shmem helpers to the ttm helper (release the reference in the
-helper, not in the caller, when an error occurs).
+Federico Motta (2):
+  block, bfq: improve asymmetric scenarios detection
+  block, bfq: fix asymmetric scenarios detection
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reported-by: syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
-Fixes: 9786b65bc61ac ("drm/ttm: fix mmap refcounting")
----
- drivers/gpu/drm/drm_gem.c            | 3 ++-
- drivers/gpu/drm/drm_gem_ttm_helper.c | 4 +---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Paolo Valente (3):
+  block, bfq: fix decrement of num_active_groups
+  block, bfq: fix queue removal from weights tree
+  block, bfq: fix use after free in bfq_bfqq_expire
 
-diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-index 4dcdec6487bb..7264a1a7a8d2 100644
---- a/drivers/gpu/drm/drm_gem.c
-+++ b/drivers/gpu/drm/drm_gem.c
-@@ -1049,8 +1049,9 @@ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
- 
- 	if (obj->funcs->mmap) {
- 		ret = obj->funcs->mmap(obj, vma);
-+		/* All helpers call drm_gem_object_put() */
- 		if (ret)
--			goto err_drm_gem_object_put;
-+			return ret;
- 		WARN_ON(!(vma->vm_flags & VM_DONTEXPAND));
- 	} else {
- 		if (!vma->vm_ops) {
-diff --git a/drivers/gpu/drm/drm_gem_ttm_helper.c b/drivers/gpu/drm/drm_gem_ttm_helper.c
-index ecf3d2a54a98..c44bfdbb722d 100644
---- a/drivers/gpu/drm/drm_gem_ttm_helper.c
-+++ b/drivers/gpu/drm/drm_gem_ttm_helper.c
-@@ -101,8 +101,6 @@ int drm_gem_ttm_mmap(struct drm_gem_object *gem,
- 	int ret;
- 
- 	ret = ttm_bo_mmap_obj(vma, bo);
--	if (ret < 0)
--		return ret;
- 
- 	/*
- 	 * ttm has its own object refcounting, so drop gem reference
-@@ -110,7 +108,7 @@ int drm_gem_ttm_mmap(struct drm_gem_object *gem,
- 	 */
- 	drm_gem_object_put(gem);
- 
--	return 0;
-+	return ret;
- }
- EXPORT_SYMBOL(drm_gem_ttm_mmap);
- 
+ block/bfq-iosched.c | 287 +++++++++++++++++++++++++++-----------------
+ block/bfq-iosched.h |  76 +++++++++---
+ block/bfq-wf2q.c    |  56 +++++----
+ 3 files changed, 270 insertions(+), 149 deletions(-)
+
 -- 
-2.32.0
+2.31.1
 

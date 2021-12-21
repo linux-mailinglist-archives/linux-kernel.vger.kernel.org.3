@@ -2,146 +2,602 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79D547B9A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD84947B9C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 06:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbhLUFqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 00:46:21 -0500
-Received: from mail-bn8nam08lp2049.outbound.protection.outlook.com ([104.47.74.49]:6125
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229964AbhLUFqU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 00:46:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oBTA34aKq7bfJVPXyZeBtK/VHDrxhPN/LA2yjWknjdFqDZuul8YZcdSvv1n6ElPJudy/U8zgNFPUq0+xVG2GyEXLsdV9QZ48pJQjk/HsNgsy5PfHRSCYXcX2lSe3PZgGBZrkvmPkGrseX/KpUxEQvWS54BoMTW0ZxwWLH2VKuU8sZCk2M26HVLFBsiWPpCvPj81g3dsFTvxgvzaaDosUFV3wvR6WqGQLf7P/PZ8wzQu+qpgrMxR/TSIuFw9xWDOF0Lcs0Piy8rTMWuw7UpoBsVMJM+fxvOVt8Cfx+teI5EP2rqiPkxHvHO6RWmptChQ8VR5D8lDMPwoT7De2ur5uFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CqFaYVmqXM7syhOW0Lfp9/EnvqZKg7dMIOvPDxrwAz4=;
- b=Qp/hj6Ghvf2Q/19mjfcd1bUfn8CF8FR3LrjBb/n6rr5e2vDiqNkavTBLV1mvOxQK+dgCyzw2Zd4kUk4dM4q230JX+x07d3KB8h5j/6czVCqnvxyrlhhi7zjnjSNSjNEa73VSyURfVb+WJlc2IpEMQADHbYVf5ZwbWrw4xIK9wJ12sDx5wX7Ilfla1lFOAvVoQgV+9z2+Cfe7TBtiSHkNMaZiDVeIlx6ScKmMbCUVEOlqnF5xLz6nDt6BYDydpS/9APDNVWFRf/mmgCKm41ObUlbI+CmT145l7Ahr7jygTx2FMeKbFFlTHDgh7ax6m5NB3bhMmTinsdYsmbujRq3w+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CqFaYVmqXM7syhOW0Lfp9/EnvqZKg7dMIOvPDxrwAz4=;
- b=CxsgVa+7o6HBupxps6GP6fXr3+7lO9sqLV0SYVAsEThbFnzRIGbknB7nCHsOd6rdS/ejcU1iUu2mM4RYlT6mQPMpPMsm0luFXL3t/aH+zQQp29gBv4jJgSSEspiIfCwUmqNbTivWFYVemFKEOOrFBKdq+mBO9HNmcmLYVtYOjLk=
-Received: from MWHPR05MB3648.namprd05.prod.outlook.com (2603:10b6:301:45::23)
- by BL0PR05MB4835.namprd05.prod.outlook.com (2603:10b6:208:56::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.14; Tue, 21 Dec
- 2021 05:46:17 +0000
-Received: from MWHPR05MB3648.namprd05.prod.outlook.com
- ([fe80::6929:b34e:d8b9:70bc]) by MWHPR05MB3648.namprd05.prod.outlook.com
- ([fe80::6929:b34e:d8b9:70bc%4]) with mapi id 15.20.4823.014; Tue, 21 Dec 2021
- 05:46:16 +0000
-From:   Alexey Makhalov <amakhalov@vmware.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Thread-Topic: [PATCH v3] mm: fix panic in __alloc_pages
-Thread-Index: AQHX1N5+lqzX5/9/hUCR9L+z9tfLRKv6c74AgAD9U4CAAB7tAIAADZWAgAnMHQCAAIIHgIAAufyAgAJfDQCAHgMmAIABcMIAgAEjF4CAAGztgIAAC/IAgAAHxwCAAAeTgIAAM82AgABcswCAAO2MgIALPnkAgAVLzQA=
-Date:   Tue, 21 Dec 2021 05:46:16 +0000
-Message-ID: <FD8165E2-E17E-458E-B4EE-8C4DB21BA3B6@vmware.com>
-References: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbBywDwc2bCxWGAQ@dhcp22.suse.cz>
- <77BCF61E-224F-435D-8620-670C9E874A9A@vmware.com>
- <YbHCT1r7NXyIvpsS@dhcp22.suse.cz>
- <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
- <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
- <B5B3BCE0-853B-444E-BAD8-823CEE8A3E59@vmware.com>
- <YbIEqflrP/vxIsXZ@dhcp22.suse.cz>
- <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
- <YbMZsczMGpChaWz0@dhcp22.suse.cz> <YbyIVPAc2A2sWO8/@dhcp22.suse.cz>
-In-Reply-To: <YbyIVPAc2A2sWO8/@dhcp22.suse.cz>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.55.21111400
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 358aadce-fcfc-4942-ac69-08d9c44534e5
-x-ms-traffictypediagnostic: BL0PR05MB4835:EE_
-x-microsoft-antispam-prvs: <BL0PR05MB4835E6D585FBD980A541EE15D57C9@BL0PR05MB4835.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rSiGe/JxSN0cwTr8dvA2/R1FiO7HxUjECBGrrIpckahNlny59QTWG828aWtxupwLRPOwOi0doi09lDzVCY9bakf4p9UCqSS2Z2R6AVVxN/+f2K30TUUxiDsXnBiLxtUDkW2txDo+todzUPZyKtIgT026EtioYhHKVMg7oKbNKCcYoM33rGEOBtIJz81l40FbecSbAhpw3bUyIoBSad8ccV4S7IEVNKKCbAR4ACl5dUMFANOdnad1LXgano6TMSjJkw8ol+R8Z/5yplH7g0ND6Ju0e+P70rkgBQRkb7fpZzoDL3TqM63RdBSD6DgN80cP8Vx7EWgEWb3j7Wu4WchvHps3ktgZ6qFZJTBXH/cX5zFg/w/dRv5Et3K0TA7rlqKCyqCG9mJQs3gIUjVck2/5NK3vZkhICE9uiXDzSIFU4npV57MDD6t/wCzuw+RZbnmLv0YMXOTwV5Ezv9boLitNIIirVZbin5pGFK3KQEFFHGirX+U1/7qG34/IighIzO4ZOxlFP7/SbLn3d1Rs5z43GPYPLEFPRm7Fa7LMN5YgnTSLlLg8z2dQcOZ2wSoM2CmAVL2OIf5m3gjvl4Ng2iSpCSM62Uj7/5cxBxfbO3g5Vy29l8O6o79x0+V0q7eSoQwsCLSArOblHbOrE/6j+aS61cR93MW6yAACRBuhuGFO+OA//51iz+pYV7dKUjbqSwBBNp1JJSB94fatr0UjCHslErJlc2baYlWg7rF7aHtUdn0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR05MB3648.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(2616005)(36756003)(38100700002)(122000001)(2906002)(6512007)(33656002)(7416002)(4744005)(5660300002)(8676002)(66446008)(64756008)(86362001)(4326008)(66476007)(38070700005)(6486002)(71200400001)(6506007)(66556008)(66946007)(91956017)(76116006)(316002)(508600001)(54906003)(8936002)(6916009)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VitGeHN4UklhWnIzc3BsLzEzakxPMjdLZmZlOTdUQThnc21TOFV1QUljczdw?=
- =?utf-8?B?N25VQUthR2N6Zzg3R1d5clFtK3NhWDhIZ2NhQjllOW9FTElpVDl2Wm4rd0J0?=
- =?utf-8?B?UjZrWUx0aURDa21ockFUQ2wvNkMraXcrZU9BemN2YmdIY21XZjFFYXF0b3lr?=
- =?utf-8?B?U3ExN0U0QUxORFYrd3dxT1I5RVFQQ2FQTVZNVUNGYldDZlJzNU1HcEYvd3ov?=
- =?utf-8?B?eU00TjZsNThkRGhwVjNiVE5nWllVb3RyQ0xiSU91WGx5RVVwQndSbmRrNE1i?=
- =?utf-8?B?TnlvUitFR0JRSjBJZ2hycWJ0ZmxqS3pjYUVCZXU1cmwvckUwU2oya3AwR0JV?=
- =?utf-8?B?SlpRNEhwdUxRVXZLVEFEeFozSjVscG1WeThtaW9LcEZ2aE05RTY3T2lUNENQ?=
- =?utf-8?B?Q25ZVWN6aUIwMVk3UytJL2ZudFEwM2RXb2lWMmxaeDBwSzhhbDhDN2tpdERC?=
- =?utf-8?B?RlZwak0rMVJhWkZIZG9GUmJVL1VaVlJydzZRNkxJWnZLT0tBWkJ3bzhrTldi?=
- =?utf-8?B?Zm1mV1ZYZFNsZDdkUXZRNmRMaHJ5c1dhT2l6TDg1OFhCcE9CdDlBNzIxNTFo?=
- =?utf-8?B?cjIvMVlwZjlPZHFtNVpZM2xEd0t4NFlYZzNmNnlDK1FLdEFiTUcxNk1ZRDhD?=
- =?utf-8?B?ak9tYUFyeCtKNkF0bU5DeHg3MmxNN0RYR3NnNGVpTHlrNFlRUHVKS1dydHdY?=
- =?utf-8?B?WnkzNkQ0S0lreEIzMWZVRnJObDBKV2hpdmUxZzdXZXVJd1hYdURmcndBd3ZB?=
- =?utf-8?B?WFMzdmFGQmQyd1lDRU9KS1ZDMG85R0ZxWkxOOFJxZkwxUnZOajdzRzcxUHZI?=
- =?utf-8?B?eldXWWVXRXB2azR6ZDlDSHlscFQ5Nk4xbURoY2l2MFZYMG5iMUF1UUcyZDE3?=
- =?utf-8?B?NktuRmUvNWNUMkZyUWY3M0VDME9ETTA3VnlWejJVZ2xjaHVkMkhTcUJDMktD?=
- =?utf-8?B?VXVHWllzWW1lQmJHR2Z3Q0VTNXRiZzBqazhPOEd4eVgzTDE0ZFNncDJGSDVL?=
- =?utf-8?B?ZCtiTW0yU3I4L2s1WHdPZzJOSXRFanVybGZuVDF4ZDFzN2Rkc2x1VzU2cWdD?=
- =?utf-8?B?TzZXVmJRRktWV3E4UExUbmJaY1J6L0lWajkvYU1CTDh4anpITSsxV0lMRzJt?=
- =?utf-8?B?WVZqRzJJZDU1WFpwNUlsTnJxSDZlL2VlOUhQc3BiYXc1Y3F0a1ZMMmp0bEdE?=
- =?utf-8?B?elFVN0RpZjd6VXFjbWppcGxJUE02Y2s3clkzQkV3ZEVGOTUraWswRlF4N2gy?=
- =?utf-8?B?UDZ0eG9uMjdNMVJMdzRoTENvWUZ5Qy93TDBZaHZFZjVwMTFpa2RtSDdXbjR0?=
- =?utf-8?B?NzRMQ1l5MmFydmY3TldOZ2daWm9QQTBQcTBYdlJZbjdzOXhxQVZGNjNlVnJi?=
- =?utf-8?B?T1Q0MVhLM25Wb3ZkUGZvaUdLSEZUZUJxWlk5Y2htd2EyOTZDbUR0VlFseHFG?=
- =?utf-8?B?eENCeDhNS1JZaiswdStGOTJMaFd1TG01cUI1dUp3bzI1YkFLSHRXZFJjY1Zy?=
- =?utf-8?B?VzA1K2tMUjVQZ0I5NWNHL0VVNlBvcGdQdklvZjBRYU55VVFBZElmRGRKZkVP?=
- =?utf-8?B?YkljNFBtZThSSGVUeHJ6ME9JRmxsMFQvUXM4SlltRytrYW5TTjM3NTIzdDFL?=
- =?utf-8?B?a2lJY3NTSnByOGdZUWdqUXRUdWRsdnRTZHVjTWJKTnlUY09WazUyWDBHUWlk?=
- =?utf-8?B?Z29UM0ZMU0cwbGF4NWJPME9HeVlnR2tKdE5aN0xQcThUNWFoWnF1cTU1UTBS?=
- =?utf-8?B?QkRvaTRyYmF2WURKK3BzVldsS3ZBTXE5NmdQSC84OWxQVWxXYWN0ei9aZzly?=
- =?utf-8?B?TkhDbFRmSlJVVndnOXJBNGRGZ0ZwL010elFremp0dkd1Qk9UNUFWbUtVMVhy?=
- =?utf-8?B?V0FHdW41UGlnUG9rY3pWQ1ljcjB1TE5xN2RNYWI1QlBHckViUW9Qa0tIZ3h1?=
- =?utf-8?B?LzFRZ2FhT0FGL1JJREt1cUdCTjZ3S291NFdDWGJ6akV5VnZ5NkxXK3hEby9k?=
- =?utf-8?B?ZlZCUGdEMXlCZDkveUFRenJRaFo0a2NXOHNGbXkxT2NWT1p4R2dMQ0grY2gz?=
- =?utf-8?B?NTIxenBPY1dsSTF2MTJOSVJsa3MvaGppSEw1TWRGL0dJZHFmK2JoejdYODR2?=
- =?utf-8?B?S0RjK3NnbkRQYWFNTE51bFp5NUdJV1BSS29KUlJadEtMRjhtQmJTS0xuQ1I5?=
- =?utf-8?Q?6uibcjSVCA1ND24botlO/Expz8enqlQVQEfBdJhMxLNP?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7CF73094123CA34EA7CCFAC57E14EE4F@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S233109AbhLUFy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 00:54:58 -0500
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:40455 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233079AbhLUFy5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 00:54:57 -0500
+Received: by mail-lj1-f182.google.com with SMTP id u22so19620014lju.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 21:54:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jfi9UjB57hbDM6Jzg/GUzBNAysGg3/ki3QoOw4uWt+k=;
+        b=JswoVgLg6LxS64st1mV4oSFAM2kxjW9DOWxuNliv72gD7HoEwSNBcvR4gSGA1aynQI
+         8Pl71gpMQoUs71wJixj6c/CHOGPaz8Q3XE/sJPgfwx8NvstM+Bk4SIUuL3d2wNcsqrw0
+         /L0EozjvGTE1aRfNkYI+7HHfurSPAfnkZmDvswOK8IgeRCGDDfkOS/QRZ8nDGsK8rTP8
+         nN1JPvFvfZ5bsoHpMKIcElrbgwE7qiMEYg+lAfSQKm39JNZ/aFsI8X/FlB/EQq2the40
+         p61CDAAIKwpjAvFEG8P1COVe3oylVnZwbTpOId8ozSHOAvI9EnP4OewyaG/RPuc2N+u2
+         c5tg==
+X-Gm-Message-State: AOAM532XuCwS+KzCf8spftc2pG/0S70iikPHRdR2TJVwdwF3OTLQMSiw
+        MA1xRUVyEWvI94uhw5agMlqi8jr/0r55M8fYm8o=
+X-Google-Smtp-Source: ABdhPJwJI6PnOJCOtuShC1ANT/zhz1cuIqYKeQHMGdN1zkfEeoJd7hANCHEKAtNRZw6Qv17hTAWZxMEn8a7hGV06N78=
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr1301700ljp.202.1640066095951;
+ Mon, 20 Dec 2021 21:54:55 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR05MB3648.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 358aadce-fcfc-4942-ac69-08d9c44534e5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 05:46:16.7796
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8C/8CthGI1C6NDgHnUoTlF5KKv6Yqztn+N/k1PzLWWhE/opQOtJ3+s91s134bcNzmvnqDkzuuunX0dlEVGyZ8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR05MB4835
+References: <20211205224843.1503081-1-namhyung@kernel.org> <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
+ <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com>
+ <20211210103341.GS16608@worktop.programming.kicks-ass.net>
+ <Yby8Su+fVA1lqVjT@hirez.programming.kicks-ass.net> <YcB06DasOBtU0b00@hirez.programming.kicks-ass.net>
+In-Reply-To: <YcB06DasOBtU0b00@hirez.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 20 Dec 2021 21:54:44 -0800
+Message-ID: <CAM9d7cjndf2BKMZPziwy-tCuzE-TSwpto8Ng0Jy-5C=aS8dePA@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWljaGFsLA0KDQpUaGUgcGF0Y2hzZXQgbG9va3MgZ29vZCB0byBtZS4gSSBkaWRu4oCZdCBm
-aW5kIGFueSBpc3N1ZXMgZHVyaW5nIHRoZSB0ZXN0aW5nLg0KSSBoYXZlIG9uZSBjb25jZXJuIHJl
-Z2FyZGluZyBkbWVzZyBvdXRwdXQuIERvIHlvdSB0aGluayB0aGlzIG1lc3NhZ2luZyBpcw0KdmFs
-aWQgaWYgcG9zc2libGUgbm9kZSBpcyBub3QgeWV0IHByZXNlbnQ/DQpPciBpcyBpdCBvbmx5IHRo
-ZSBpc3N1ZSBmb3IgdmlydHVhbCBtYWNoaW5lcz8NCg0KICBOb2RlIFhYIHVuaW5pdGlhbGl6ZWQg
-YnkgdGhlIHBsYXRmb3JtLiBQbGVhc2UgcmVwb3J0IHdpdGggYm9vdCBkbWVzZy4NCiAgSW5pdG1l
-bSBzZXR1cCBub2RlIFhYIFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAwMDAwMDAwMDAwMDAw
-MF0NCg0KVGhhbmtzLA0K4oCUQWxleGV5DQoNCg0K
+On Mon, Dec 20, 2021 at 4:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+>
+> How's this then?
+>
+> ---
+> Subject: perf: Fix perf_event_read_local() time
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Mon Dec 20 09:59:47 CET 2021
+>
+> Time readers that cannot take locks (due to NMI etc..) currently make
+> use of perf_event::shadow_ctx_time, which, for that event gives:
+>
+>         time' = now + (time - timestamp)
+>
+> or, alternatively arranged:
+>
+>         time' = time + (now - timestamp)
+>
+> IOW, the progression of time since the last time the shadow_ctx_time
+> was updated.
+>
+> There's problems with this:
+>
+>  A) the shadow_ctx_time is per-event, even though the ctx_time it
+>     reflects is obviously per context. The direct concequence of this
+>     is that the context needs to iterate all events all the time to
+>     keep the shadow_ctx_time in sync.
+>
+>  B) even with the prior point, the context itself might not be active
+>     meaning its time should not advance to begin with.
+>
+>  C) shadow_ctx_time isn't consistently updated when ctx_time is
+>
+> There are 3 users of this stuff, that suffer differently from this:
+>
+>  - calc_timer_values()
+>    - perf_output_read()
+>    - perf_event_update_userpage()       /* A */
+>
+>  - perf_event_read_local()              /* A,B */
+>
+> In particular, perf_output_read() doesn't suffer at all, because it's
+> sample driven and hence only relevant when the event is actually
+> running.
+>
+> This same was supposed to be true for perf_event_update_userpage(),
+> after all self-monitoring implies the context is active *HOWEVER*, as
+> per commit f79256532682 ("perf/core: fix userpage->time_enabled of
+> inactive events") this goes wrong when combined with counter
+> overcommit, in that case those events that do not get scheduled when
+> the context becomes active (task events typically) miss out on the
+> EVENT_TIME update and ENABLED time is inflated (for a little while)
+> with the time the context was inactive. Once the event gets rotated
+> in, this gets corrected, leading to a non-monotonic timeflow.
+>
+> perf_event_read_local() made things even worse, it can request time at
+> any point, suffering all the problems perf_event_update_userpage()
+> does and more. Because while perf_event_update_userpage() is limited
+> by the context being active, perf_event_read_local() users have no
+> such constraint.
+>
+> Therefore, completely overhaul things and do away with
+> perf_event::shadow_ctx_time. Instead have regular context time updates
+> keep track of this offset directly and provide perf_event_time_now()
+> to complement perf_event_time().
+>
+> perf_event_time_now() will, in adition to being context wide, also
+> take into account if the context is active. For inactive context, it
+> will not advance time.
+>
+> This latter property means the cgroup perf_cgroup_info context needs
+> to grow addition state to track this.
+>
+> Additionally, since all this is strictly per-cpu, we can use barrier()
+> to order context activity vs context time.
+>
+> Fixes: 7d9285e82db5 ("perf/bpf: Extend the perf_event_read_local() interface, a.k.a. "bpf: perf event change needed for subsequent bpf helpers"")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+It worked well for my test.
+
+Tested-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+> ---
+>  include/linux/perf_event.h |   15 ---
+>  kernel/events/core.c       |  224 +++++++++++++++++++++++++++------------------
+>  2 files changed, 138 insertions(+), 101 deletions(-)
+>
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -683,18 +683,6 @@ struct perf_event {
+>         u64                             total_time_running;
+>         u64                             tstamp;
+>
+> -       /*
+> -        * timestamp shadows the actual context timing but it can
+> -        * be safely used in NMI interrupt context. It reflects the
+> -        * context time as it was when the event was last scheduled in,
+> -        * or when ctx_sched_in failed to schedule the event because we
+> -        * run out of PMC.
+> -        *
+> -        * ctx_time already accounts for ctx->timestamp. Therefore to
+> -        * compute ctx_time for a sample, simply add perf_clock().
+> -        */
+> -       u64                             shadow_ctx_time;
+> -
+>         struct perf_event_attr          attr;
+>         u16                             header_size;
+>         u16                             id_header_size;
+> @@ -841,6 +829,7 @@ struct perf_event_context {
+>          */
+>         u64                             time;
+>         u64                             timestamp;
+> +       u64                             timeoffset;
+>
+>         /*
+>          * These fields let us detect when two contexts have both
+> @@ -923,6 +912,8 @@ struct bpf_perf_event_data_kern {
+>  struct perf_cgroup_info {
+>         u64                             time;
+>         u64                             timestamp;
+> +       u64                             timeoffset;
+> +       int                             active;
+>  };
+>
+>  struct perf_cgroup {
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -674,6 +674,23 @@ perf_event_set_state(struct perf_event *
+>         WRITE_ONCE(event->state, state);
+>  }
+>
+> +/*
+> + * UP store-release, load-acquire
+> + */
+> +
+> +#define __store_release(ptr, val)                                      \
+> +do {                                                                   \
+> +       barrier();                                                      \
+> +       WRITE_ONCE(*(ptr), (val));                                      \
+> +} while (0)
+> +
+> +#define __load_acquire(ptr)                                            \
+> +({                                                                     \
+> +       __unqual_scalar_typeof(*(ptr)) ___p = READ_ONCE(*(ptr));        \
+> +       barrier();                                                      \
+> +       ___p;                                                           \
+> +})
+> +
+>  #ifdef CONFIG_CGROUP_PERF
+>
+>  static inline bool
+> @@ -719,34 +736,51 @@ static inline u64 perf_cgroup_event_time
+>         return t->time;
+>  }
+>
+> -static inline void __update_cgrp_time(struct perf_cgroup *cgrp)
+> +static inline u64 perf_cgroup_event_time_now(struct perf_event *event, u64 now)
+>  {
+> -       struct perf_cgroup_info *info;
+> -       u64 now;
+> -
+> -       now = perf_clock();
+> +       struct perf_cgroup_info *t;
+>
+> -       info = this_cpu_ptr(cgrp->info);
+> +       t = per_cpu_ptr(event->cgrp->info, event->cpu);
+> +       if (!__load_acquire(&t->active))
+> +               return t->time;
+> +       now += READ_ONCE(t->timeoffset);
+> +       return now;
+> +}
+>
+> -       info->time += now - info->timestamp;
+> +static inline void __update_cgrp_time(struct perf_cgroup_info *info, u64 now, bool adv)
+> +{
+> +       if (adv)
+> +               info->time += now - info->timestamp;
+>         info->timestamp = now;
+> +       /*
+> +        * see update_context_time()
+> +        */
+> +       WRITE_ONCE(info->timeoffset, info->time - info->timestamp);
+>  }
+>
+> -static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx)
+> +static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx, bool final)
+>  {
+>         struct perf_cgroup *cgrp = cpuctx->cgrp;
+>         struct cgroup_subsys_state *css;
+> +       struct perf_cgroup_info *info;
+>
+>         if (cgrp) {
+> +               u64 now = perf_clock();
+> +
+>                 for (css = &cgrp->css; css; css = css->parent) {
+>                         cgrp = container_of(css, struct perf_cgroup, css);
+> -                       __update_cgrp_time(cgrp);
+> +                       info = this_cpu_ptr(cgrp->info);
+> +
+> +                       __update_cgrp_time(info, now, true);
+> +                       if (final)
+> +                               __store_release(&info->active, 0);
+>                 }
+>         }
+>  }
+>
+>  static inline void update_cgrp_time_from_event(struct perf_event *event)
+>  {
+> +       struct perf_cgroup_info *info;
+>         struct perf_cgroup *cgrp;
+>
+>         /*
+> @@ -760,8 +794,10 @@ static inline void update_cgrp_time_from
+>         /*
+>          * Do not update time when cgroup is not active
+>          */
+> -       if (cgroup_is_descendant(cgrp->css.cgroup, event->cgrp->css.cgroup))
+> -               __update_cgrp_time(event->cgrp);
+> +       if (cgroup_is_descendant(cgrp->css.cgroup, event->cgrp->css.cgroup)) {
+> +               info = this_cpu_ptr(event->cgrp->info);
+> +               __update_cgrp_time(info, perf_clock(), true);
+> +       }
+>  }
+>
+>  static inline void
+> @@ -785,7 +821,8 @@ perf_cgroup_set_timestamp(struct task_st
+>         for (css = &cgrp->css; css; css = css->parent) {
+>                 cgrp = container_of(css, struct perf_cgroup, css);
+>                 info = this_cpu_ptr(cgrp->info);
+> -               info->timestamp = ctx->timestamp;
+> +               __update_cgrp_time(info, ctx->timestamp, false);
+> +               __store_release(&info->active, 1);
+>         }
+>  }
+>
+> @@ -982,14 +1019,6 @@ static inline int perf_cgroup_connect(in
+>  }
+>
+>  static inline void
+> -perf_cgroup_set_shadow_time(struct perf_event *event, u64 now)
+> -{
+> -       struct perf_cgroup_info *t;
+> -       t = per_cpu_ptr(event->cgrp->info, event->cpu);
+> -       event->shadow_ctx_time = now - t->timestamp;
+> -}
+> -
+> -static inline void
+>  perf_cgroup_event_enable(struct perf_event *event, struct perf_event_context *ctx)
+>  {
+>         struct perf_cpu_context *cpuctx;
+> @@ -1066,7 +1095,8 @@ static inline void update_cgrp_time_from
+>  {
+>  }
+>
+> -static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx)
+> +static inline void update_cgrp_time_from_cpuctx(struct perf_cpu_context *cpuctx,
+> +                                               bool final)
+>  {
+>  }
+>
+> @@ -1098,12 +1128,12 @@ perf_cgroup_switch(struct task_struct *t
+>  {
+>  }
+>
+> -static inline void
+> -perf_cgroup_set_shadow_time(struct perf_event *event, u64 now)
+> +static inline u64 perf_cgroup_event_time(struct perf_event *event)
+>  {
+> +       return 0;
+>  }
+>
+> -static inline u64 perf_cgroup_event_time(struct perf_event *event)
+> +static inline u64 perf_cgroup_event_time_now(struct perf_event *event, u64 now)
+>  {
+>         return 0;
+>  }
+> @@ -1525,22 +1555,59 @@ static void perf_unpin_context(struct pe
+>  /*
+>   * Update the record of the current time in a context.
+>   */
+> -static void update_context_time(struct perf_event_context *ctx)
+> +static void __update_context_time(struct perf_event_context *ctx, bool adv)
+>  {
+>         u64 now = perf_clock();
+>
+> -       ctx->time += now - ctx->timestamp;
+> +       if (adv)
+> +               ctx->time += now - ctx->timestamp;
+>         ctx->timestamp = now;
+> +
+> +       /*
+> +        * The above: time' = time + (now - timestamp), can be re-arranged
+> +        * into: time` = now + (time - timestamp), which gives a single value
+> +        * offset to compute future time without locks on.
+> +        *
+> +        * See perf_event_time_now(), which can be used from NMI context where
+> +        * it's (obviously) not possible to acquire ctx->lock in order to read
+> +        * both the above values in a consistent manner.
+> +        */
+> +       WRITE_ONCE(ctx->timeoffset, ctx->time - ctx->timestamp);
+> +}
+> +
+> +static void update_context_time(struct perf_event_context *ctx)
+> +{
+> +       __update_context_time(ctx, true);
+>  }
+>
+>  static u64 perf_event_time(struct perf_event *event)
+>  {
+>         struct perf_event_context *ctx = event->ctx;
+>
+> +       if (unlikely(!ctx))
+> +               return 0;
+> +
+>         if (is_cgroup_event(event))
+>                 return perf_cgroup_event_time(event);
+>
+> -       return ctx ? ctx->time : 0;
+> +       return ctx->time;
+> +}
+> +
+> +static u64 perf_event_time_now(struct perf_event *event, u64 now)
+> +{
+> +       struct perf_event_context *ctx = event->ctx;
+> +
+> +       if (unlikely(!ctx))
+> +               return 0;
+> +
+> +       if (is_cgroup_event(event))
+> +               return perf_cgroup_event_time_now(event, now);
+> +
+> +       if (!(__load_acquire(&ctx->is_active) & EVENT_TIME))
+> +               return ctx->time;
+> +
+> +       now += READ_ONCE(ctx->timeoffset);
+> +       return now;
+>  }
+>
+>  static enum event_type_t get_event_type(struct perf_event *event)
+> @@ -2346,7 +2413,7 @@ __perf_remove_from_context(struct perf_e
+>
+>         if (ctx->is_active & EVENT_TIME) {
+>                 update_context_time(ctx);
+> -               update_cgrp_time_from_cpuctx(cpuctx);
+> +               update_cgrp_time_from_cpuctx(cpuctx, false);
+>         }
+>
+>         event_sched_out(event, cpuctx, ctx);
+> @@ -2357,6 +2424,9 @@ __perf_remove_from_context(struct perf_e
+>         list_del_event(event, ctx);
+>
+>         if (!ctx->nr_events && ctx->is_active) {
+> +               if (ctx == &cpuctx->ctx)
+> +                       update_cgrp_time_from_cpuctx(cpuctx, true);
+> +
+>                 ctx->is_active = 0;
+>                 ctx->rotate_necessary = 0;
+>                 if (ctx->task) {
+> @@ -2478,40 +2548,6 @@ void perf_event_disable_inatomic(struct
+>         irq_work_queue(&event->pending);
+>  }
+>
+> -static void perf_set_shadow_time(struct perf_event *event,
+> -                                struct perf_event_context *ctx)
+> -{
+> -       /*
+> -        * use the correct time source for the time snapshot
+> -        *
+> -        * We could get by without this by leveraging the
+> -        * fact that to get to this function, the caller
+> -        * has most likely already called update_context_time()
+> -        * and update_cgrp_time_xx() and thus both timestamp
+> -        * are identical (or very close). Given that tstamp is,
+> -        * already adjusted for cgroup, we could say that:
+> -        *    tstamp - ctx->timestamp
+> -        * is equivalent to
+> -        *    tstamp - cgrp->timestamp.
+> -        *
+> -        * Then, in perf_output_read(), the calculation would
+> -        * work with no changes because:
+> -        * - event is guaranteed scheduled in
+> -        * - no scheduled out in between
+> -        * - thus the timestamp would be the same
+> -        *
+> -        * But this is a bit hairy.
+> -        *
+> -        * So instead, we have an explicit cgroup call to remain
+> -        * within the time source all along. We believe it
+> -        * is cleaner and simpler to understand.
+> -        */
+> -       if (is_cgroup_event(event))
+> -               perf_cgroup_set_shadow_time(event, event->tstamp);
+> -       else
+> -               event->shadow_ctx_time = event->tstamp - ctx->timestamp;
+> -}
+> -
+>  #define MAX_INTERRUPTS (~0ULL)
+>
+>  static void perf_log_throttle(struct perf_event *event, int enable);
+> @@ -2552,8 +2588,6 @@ event_sched_in(struct perf_event *event,
+>
+>         perf_pmu_disable(event->pmu);
+>
+> -       perf_set_shadow_time(event, ctx);
+> -
+>         perf_log_itrace_start(event);
+>
+>         if (event->pmu->add(event, PERF_EF_START)) {
+> @@ -3247,16 +3281,6 @@ static void ctx_sched_out(struct perf_ev
+>                 return;
+>         }
+>
+> -       ctx->is_active &= ~event_type;
+> -       if (!(ctx->is_active & EVENT_ALL))
+> -               ctx->is_active = 0;
+> -
+> -       if (ctx->task) {
+> -               WARN_ON_ONCE(cpuctx->task_ctx != ctx);
+> -               if (!ctx->is_active)
+> -                       cpuctx->task_ctx = NULL;
+> -       }
+> -
+>         /*
+>          * Always update time if it was set; not only when it changes.
+>          * Otherwise we can 'forget' to update time for any but the last
+> @@ -3270,7 +3294,22 @@ static void ctx_sched_out(struct perf_ev
+>         if (is_active & EVENT_TIME) {
+>                 /* update (and stop) ctx time */
+>                 update_context_time(ctx);
+> -               update_cgrp_time_from_cpuctx(cpuctx);
+> +               update_cgrp_time_from_cpuctx(cpuctx, ctx == &cpuctx->ctx);
+> +               /*
+> +                * CPU-release for the below ->is_active store,
+> +                * see __load_acquire() in perf_event_time_now()
+> +                */
+> +               barrier();
+> +       }
+> +
+> +       ctx->is_active &= ~event_type;
+> +       if (!(ctx->is_active & EVENT_ALL))
+> +               ctx->is_active = 0;
+> +
+> +       if (ctx->task) {
+> +               WARN_ON_ONCE(cpuctx->task_ctx != ctx);
+> +               if (!ctx->is_active)
+> +                       cpuctx->task_ctx = NULL;
+>         }
+>
+>         is_active ^= ctx->is_active; /* changed bits */
+> @@ -3707,13 +3746,19 @@ static noinline int visit_groups_merge(s
+>         return 0;
+>  }
+>
+> +/*
+> + * Because the userpage is strictly per-event (there is no concept of context,
+> + * so there cannot be a context indirection), every userpage must be updated
+> + * when context time starts :-(
+> + *
+> + * IOW, we must not miss EVENT_TIME edges.
+> + */
+>  static inline bool event_update_userpage(struct perf_event *event)
+>  {
+>         if (likely(!atomic_read(&event->mmap_count)))
+>                 return false;
+>
+>         perf_event_update_time(event);
+> -       perf_set_shadow_time(event, event->ctx);
+>         perf_event_update_userpage(event);
+>
+>         return true;
+> @@ -3797,13 +3842,23 @@ ctx_sched_in(struct perf_event_context *
+>              struct task_struct *task)
+>  {
+>         int is_active = ctx->is_active;
+> -       u64 now;
+>
+>         lockdep_assert_held(&ctx->lock);
+>
+>         if (likely(!ctx->nr_events))
+>                 return;
+>
+> +       if (is_active ^ EVENT_TIME) {
+> +               /* start ctx time */
+> +               __update_context_time(ctx, false);
+> +               perf_cgroup_set_timestamp(task, ctx);
+> +               /*
+> +                * CPU-release for the below ->is_active store,
+> +                * see __load_acquire() in perf_event_time_now()
+> +                */
+> +               barrier();
+> +       }
+> +
+>         ctx->is_active |= (event_type | EVENT_TIME);
+>         if (ctx->task) {
+>                 if (!is_active)
+> @@ -3814,13 +3869,6 @@ ctx_sched_in(struct perf_event_context *
+>
+>         is_active ^= ctx->is_active; /* changed bits */
+>
+> -       if (is_active & EVENT_TIME) {
+> -               /* start ctx time */
+> -               now = perf_clock();
+> -               ctx->timestamp = now;
+> -               perf_cgroup_set_timestamp(task, ctx);
+> -       }
+> -
+>         /*
+>          * First go through the list and put on any pinned groups
+>          * in order to give them the best chance of going on.
+> @@ -4473,10 +4521,9 @@ int perf_event_read_local(struct perf_ev
+>
+>         *value = local64_read(&event->count);
+>         if (enabled || running) {
+> -               u64 now = event->shadow_ctx_time + perf_clock();
+> -               u64 __enabled, __running;
+> +               u64 __enabled, __running, __now;;
+>
+> -               __perf_update_times(event, now, &__enabled, &__running);
+> +               calc_timer_values(event, &__now, &__enabled, &__running);
+>                 if (enabled)
+>                         *enabled = __enabled;
+>                 if (running)
+> @@ -5806,7 +5853,7 @@ static void calc_timer_values(struct per
+>         u64 ctx_time;
+>
+>         *now = perf_clock();
+> -       ctx_time = event->shadow_ctx_time + *now;
+> +       ctx_time = perf_event_time_now(event, *now);
+>         __perf_update_times(event, ctx_time, enabled, running);
+>  }
+>
+> @@ -6349,7 +6396,6 @@ static int perf_mmap(struct file *file,
+>                 ring_buffer_attach(event, rb);
+>
+>                 perf_event_update_time(event);
+> -               perf_set_shadow_time(event, event->ctx);
+>                 perf_event_init_userpage(event);
+>                 perf_event_update_userpage(event);
+>         } else {

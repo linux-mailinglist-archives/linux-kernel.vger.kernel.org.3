@@ -2,81 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A81747BEFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C0B47BF04
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237157AbhLULct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S237192AbhLULeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbhLULcs (ORCPT
+        with ESMTP id S237180AbhLULeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:32:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C0C061574;
-        Tue, 21 Dec 2021 03:32:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AB3861532;
-        Tue, 21 Dec 2021 11:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B23C36AE8;
-        Tue, 21 Dec 2021 11:32:44 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 11:32:41 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yufeng Mo <moyufeng@huawei.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2] asm-generic: introduce io_stop_wc() and add
- implementation for ARM64
-Message-ID: <YcG7WRvrWiSxcBZt@arm.com>
-References: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
- <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
+        Tue, 21 Dec 2021 06:34:13 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA221C061401
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:34:12 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id v64so37846023ybi.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 03:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Z9+V1aGya/Hb+Ui2nvpmg7RECtXiIeunXU1isHEoQ8I=;
+        b=P7iHs7VoVN4MJoE59E1P1IPqLlbnoRpd/0/LTNRvi+7mdOj/gip8JIDzpNQvGOjR8i
+         fqz4Ll0FQPW6G6RASEo/9jKidxD8FIuX79rHUwdRhIp6D97zwTtG4qZAXHBkzU5d9USt
+         iAyL+Q0BO47cVW5QTu2Ro5ExYxPDBP2EwDADmbBZz4WkyTkvd8TwUD6i0gTxOZ5oIujN
+         ReWuPjR0E4Hibb3ntxhC+GjsHjfoJzIGgEchR1QLeUM+wgi2d01Rhsdsp5E0pbikXllr
+         CO+JVtsXDkFeYI568l0KBLn3cT3LH79/JA+rNBAHbYpg2OKsMl2anZ1S3lA899rcixzr
+         iCoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z9+V1aGya/Hb+Ui2nvpmg7RECtXiIeunXU1isHEoQ8I=;
+        b=meyMsmC79js/NHfrn5jlF6xEgWkIFAkL05Cn/wkUrzCJrGaXMIPSlhlxOQMBmxhMK6
+         TBSYkkPLd4soHWUEHXqNpeu/gt033HaXUyWAj21o3BYpZeQ5fXA5tqDGEZJMD08URihh
+         /XZUEIiUd+V3ihUC3lteKJ6ZR0gj8IKt5X/tTT4TI+3+8aL1lGvpHI8e50lNFFGYbk4V
+         iOuI3LsgwaosGsk2k5yOux0gsELNfinnbQ2r/M4iaICuF/yWqzbyd1KdSPU/x/wGyM8K
+         tRHM3SCDvMjJH084l+Ytt0IjbhZvcs8DTNX2sTsM391eKveCBWVmywURgKYAjF6NTwA3
+         wQVA==
+X-Gm-Message-State: AOAM532ZYPAsi+jBmLHu7W0OodTj7t0cc/vSbn2wkmOLNn2gzzrlUFdC
+        BtyWaWSTSx637QyUTe3BEN4q5LKO5Yl0LYdtSLGx0g==
+X-Google-Smtp-Source: ABdhPJxzriEGE3qTmY8bhfS+uPzicxwSv+W0Keuw0kfQQ5beuYsAqJOyzjmC52LhnSihvltPAAt49a2fw87z0oXoIXs=
+X-Received: by 2002:a5b:18c:: with SMTP id r12mr3875829ybl.553.1640086451895;
+ Tue, 21 Dec 2021 03:34:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
+References: <20211220143029.352940568@linuxfoundation.org>
+In-Reply-To: <20211220143029.352940568@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Dec 2021 17:04:00 +0530
+Message-ID: <CA+G9fYuWtS83ZO8neLVby97Ux9_W1aAbhtvuAVfzPR2izmEQ+Q@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/99] 5.10.88-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:17:27AM +0100, Arnd Bergmann wrote:
-> On Tue, Dec 21, 2021 at 4:55 AM Xiongfeng Wang
-> <wangxiongfeng2@huawei.com> wrote:
-> >
-> > For memory accesses with write-combining attributes (e.g. those returned
-> > by ioremap_wc()), the CPU may wait for prior accesses to be merged with
-> > subsequent ones. But in some situation, such wait is bad for the
-> > performance.
-> >
-> > We introduce io_stop_wc() to prevent the merging of write-combining
-> > memory accesses before this macro with those after it.
-> >
-> > We add implementation for ARM64 using DGH instruction and provide NOP
-> > implementation for other architectures.
-> >
-> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> > Suggested-by: Will Deacon <will@kernel.org>
-> > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> > ---
-> > v1->v2: change 'Normal-Non Cacheable' to 'write-combining'
-> 
-> For asm-generic:
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Will, Catalin: if you are happy with this version, please merge it through the
-> arm64 tree.
+On Mon, 20 Dec 2021 at 20:17, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.88 release.
+> There are 99 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.88-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks for the ack Arnd. I'll queue this through the arm64 tree.
 
--- 
-Catalin
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.88-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 22ecdc9ddc3f790d7897c1c8bc1813fba064ec9c
+* git describe: v5.10.87-100-g22ecdc9ddc3f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.87-100-g22ecdc9ddc3f
+
+## No Test Regressions (compared to v5.10.84-128-g24961377099e)
+
+## No Test Fixes (compared to v5.10.84-128-g24961377099e)
+
+## Test result summary
+total: 92504, pass: 79026, fail: 519, skip: 12006, xfail: 953
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 46 passed, 6 failed
+* riscv: 24 total, 16 passed, 8 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

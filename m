@@ -2,172 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DBF47BC64
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A2647BC6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbhLUJEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:04:51 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:65464 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234178AbhLUJEu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:04:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1640077490;
-  x=1671613490;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=21MVjU8BBU4s3iqha0uhpIEldo19sR0X+czAnqzhGmM=;
-  b=f0OEJquD69q2pZcMG9bfU7vI7k/WP38ZLPu25rh/GAfc9ToH5U2Ck1r2
-   grSf5HRaoZDPZY4Gpf/SR+iDN5QZgp3o9+7KjtJ6H3Z7VrEMdnm28/oTz
-   nXSh9faMFL7OADZosutvzYuqsW/dlpiu/rbw22ipK38iIhW+CtE9Z52Jz
-   GgYGCM6uM+PjA65oLvWD8EXm0P4Lld3NrYhLQnOvx3isWMVXCNuPubDv0
-   heawjITqpEKs5wnc5x3OEHTlMdytKOfLj0iVqq1Qo51i99dlQi0YfYFv7
-   NH0a0RrrO1EPjQF81Nm1pRP+Bpoj9za7aK2U4b0yDxIyY0weFB0yszorg
-   A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>
-CC:     <kernel@axis.com>, <johannes.berg@intel.com>,
-        <devicetree@vger.kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] um: virtio_uml: allow probing from devicetree
-Date:   Tue, 21 Dec 2021 10:04:46 +0100
-Message-ID: <20211221090447.1567-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.33.1
+        id S236038AbhLUJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:05:52 -0500
+Received: from mail-sn1anam02on2089.outbound.protection.outlook.com ([40.107.96.89]:58830
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229728AbhLUJFv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 04:05:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kUxjtwrrnw0FbyWQtNMTIxs4N+6SLbAr4kHZ5YIv2cmdjHg/j0Hmw47e+3fsbGY90k8EZpqtyQ5L6DrukCwkDeUHv6xviqDD8KSp6VkmIepbFyoS1fNMx9hDzKuxGBGkLQmzHqYJc6BOyFAEfWQMO6OOzR89KH8/LO/mi3IQdsHte658TX/sQ2ryR6faEpwfAcH3GdJVfJ751t25Srz21gzcAhWfPLsEoMk4dtN1np4ssL05GooXEJaF0xgj4Tq2NnVll230KZZ0eZ5ABhQfanYfKMrdhiNo0q9vTHQafT3BXn8pBImxx2q346IKrD11iTgI4i1gaacBt28McTBUDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=caYdKyXX/58EqY2W9ytSuiyScnXCSqGf9dxryFyCxjA=;
+ b=TxyjXbhApmejV5Do8xATVLsr6sMdeSjgeSWfmu6h8OBHZMLI/3iyWgxzTt9tdHB7rj1OFCb76s1L6HB6HBJ6SWPhHQNUGFHbNigDOdAkd2/3p5Cx37/F2KH37M7JHGmnwpq4Htg8wKE59LYvZiNk8XY1o58uVBN/v+siBxiY/KNzt8ZbkiI/TW+Myii2l8arCd8R3WdnCQomgajzR1TwKM2iTJbuWx/b/KsiE0fmq78v2ySmWimGSHScin0fakFfsNgSwThChn8dZRsmPP/l6UGQxDy5tLov7pgQkM5Xn6nfvCAjVlUKL2R0VeaM+g5HcupVRD0Q3dm2Oh2GxX2Z0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=caYdKyXX/58EqY2W9ytSuiyScnXCSqGf9dxryFyCxjA=;
+ b=J8a4UAToFfEIFUUXBJlFYg+XtmMjRhB10DITS/Ls8ykbgvaJcynoE5i4gEVnQZT0NksFo0oML6Hyu9IYTJfrGNecBeQQz+uAi462A9WBtOU4QAcTFHjgmYu5jCB+poNpM/DfyhSYkAVWyNES2TtbbyuuHc3RSY9v7NXUTv6bR4LS+q/hS2kd8cABTIv9RSLWXH+IoISJ5H63LTiLQLfYKdoM96hlYhowx0DpSpzxw3aCeh6E+9Q8FCxH1F+04zWi/eE/R2vHd3bBI2kk1WncghnqwI1Rk0S4nIBYvKbebeyJixgrNtCL+5ctPx365hZAbM1Ri4KcpgMcLxJWam+RyQ==
+Received: from MW4PR03CA0256.namprd03.prod.outlook.com (2603:10b6:303:b4::21)
+ by CY4PR12MB1366.namprd12.prod.outlook.com (2603:10b6:903:40::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 09:05:48 +0000
+Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b4:cafe::ac) by MW4PR03CA0256.outlook.office365.com
+ (2603:10b6:303:b4::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
+ Transport; Tue, 21 Dec 2021 09:05:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4801.14 via Frontend Transport; Tue, 21 Dec 2021 09:05:48 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 21 Dec
+ 2021 09:05:47 +0000
+Received: from foundations-user-AS-2114GT-DNR-C1-NC24B.nvidia.com
+ (172.20.187.5) by rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.986.9; Tue, 21 Dec 2021 01:05:47 -0800
+From:   Kechen Lu <kechenl@nvidia.com>
+To:     <kvm@vger.kernel.org>, <pbonzini@redhat.com>, <seanjc@google.com>
+CC:     <wanpengli@tencent.com>, <vkuznets@redhat.com>, <mst@redhat.com>,
+        <somduttar@nvidia.com>, <kechenl@nvidia.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v2 0/3] KVM: x86: add per-vCPU exits disable capability
+Date:   Tue, 21 Dec 2021 01:04:46 -0800
+Message-ID: <20211221090449.15337-1-kechenl@nvidia.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e7d732c-77ab-406e-45a0-08d9c46114bc
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1366:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1366A614C82A4FD478B02ED4CA7C9@CY4PR12MB1366.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1AMUToHACduJ+LD30qYwioHnKHPUZVuuZYhV60Qz1lVH8/Jg61AIZ2xJkUTGCGJDY+gKU7FDi/qZpUeqyE83pan62qLZGgWdihhZ4LuDUoiyy5U8u2WL5CakrFmwJ7k45KO7D7+U3NQfp/PlQknePt8ZIXq/N6iECGldpgE0//G4oeCOLUvU8TDTF7krT8gDSvh7v89q92/0Ka1mWEpE50t+1+CvfzwvL5wbfVWYZzv8sktpdEA8c+E9GnkcUd5wQKVdVbLjoZGptW6SO/tUnd30TMccm2ERrSjDv7w32kledyKO6bGAMciancfhwcS3Vlkj8X0iBi1716CY20R4hHO8JHrs5ZVl5j5Xy1s5lElvA33PsN+7Qk7hk47VbHXfh5jXHexke0oUjO//vmyPS42J8+AHeAkHn4EZbCHElPay9JexM+YEK6uu16fiHgWw+ulboxkv2kw+N2TZrhK5moNrm5AuQGH6wh5Mg/8Nq5uypp61tWvSe30fBsDNz/4zn6k24rhrHixyaBk+VSLGoc9I3aKBft35J28mjXrLbbEtXjEgjieYbs82c8/Pqj4S7l7ADGVhh3MmAlYxoR5dRg6Ud1AoYvkFdxFIXV8b+GbJO4+SAeZ6RYTddFUOU11Gzl3K35ZHH1iMw+oh8P2eezFlgKaTI640/f3UXzJQDaET+MsWjlz28yd8W/OFW/mAwy/QC4265HTc/tig3UPhi6CcST+yc3ueu/tlS1k5sVt5yYl144j+0lyFlNNCf2fnNigWK6OW338hdyXE0ZrghLGPP3BsyO26mW1bBgaoXeU51Bh4Axh/b1CsvkTFVymHGaSwgqhr/rxskq+M1xZb5w==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(36860700001)(16526019)(70586007)(186003)(26005)(316002)(336012)(70206006)(4326008)(8676002)(83380400001)(82310400004)(54906003)(356005)(110136005)(1076003)(8936002)(40460700001)(86362001)(7696005)(508600001)(81166007)(426003)(5660300002)(47076005)(34020700004)(2906002)(36756003)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 09:05:48.7296
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e7d732c-77ab-406e-45a0-08d9c46114bc
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1366
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the virtio_uml device to be probed from the devicetree so that
-sub-devices can be specified using the standard virtio bindings, for
-example:
+Summary
+===========
+Introduce support of vCPU-scoped ioctl with KVM_CAP_X86_DISABLE_EXITS
+cap for disabling exits to enable finer-grained VM exits disabling
+on per vCPU scales instead of whole guest. This patch series enabled
+the vCPU-scoped exits control on HLT VM-exits.
 
-  virtio@1 {
-    compatible = "virtio,uml";
-    socket-path = "i2c.sock";
-    virtio-device-id = <0x22>;
+Motivation
+============
+In use cases like Windows guest running heavy CPU-bound
+workloads, disabling HLT VM-exits could mitigate host sched ctx switch
+overhead. Simply HLT disabling on all vCPUs could bring
+performance benefits, but if no pCPUs reserved for host threads, could
+happened to the forced preemption as host does not know the time to do
+the schedule for other host threads want to run. With this patch, we
+could only disable part of vCPUs HLT exits for one guest, this still
+keeps performance benefits, and also shows resiliency to host stressing
+workload running at the same time.
 
-    i2c-controller {
-      compatible = "virtio,device22";
-      #address-cells = <0x01>;
-      #size-cells = <0x00>;
+Performance and Testing
+=========================
+In the host stressing workload experiment with Windows guest heavy
+CPU-bound workloads, it shows good resiliency and having the ~3%
+performance improvement. E.g. Passmark running in a Windows guest
+with this patch disabling HLT exits on only half of vCPUs still
+showing 2.4% higher main score v/s baseline.
 
-      light-sensor@01 {
-        compatible = "ti,opt3001";
-        reg = <0x01>;
-      };
-    };
-  };
+Tested everything on AMD machines.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
 
-Notes:
-    Requires the UML devicetree support I posted a couple of weeks ago:
-    https://lore.kernel.org/all/20211208151123.29313-1-vincent.whitchurch@axis.com/
+v1->v2 (Sean Christopherson) :
+- Add explicit restriction for VM-scoped exits disabling to be called
+  before vCPUs creation (patch 1)
+- Use vCPU ioctl instead of 64bit vCPU bitmask (patch 3), and make exits
+  disable flags check purely for vCPU instead of VM (patch 2)
 
- arch/um/drivers/virtio_uml.c | 50 +++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
 
-diff --git a/arch/um/drivers/virtio_uml.c b/arch/um/drivers/virtio_uml.c
-index d51e445df797..3e4fa0f262d3 100644
---- a/arch/um/drivers/virtio_uml.c
-+++ b/arch/um/drivers/virtio_uml.c
-@@ -21,6 +21,7 @@
-  * Based on Virtio MMIO driver by Pawel Moll, copyright 2011-2014, ARM Ltd.
-  */
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/virtio.h>
-@@ -49,6 +50,7 @@ struct virtio_uml_platform_data {
- struct virtio_uml_device {
- 	struct virtio_device vdev;
- 	struct platform_device *pdev;
-+	struct virtio_uml_platform_data *pdata;
- 
- 	spinlock_t sock_lock;
- 	int sock, req_fd, irq;
-@@ -149,7 +151,7 @@ static int vhost_user_recv(struct virtio_uml_device *vu_dev,
- 	if (rc == -ECONNRESET && vu_dev->registered) {
- 		struct virtio_uml_platform_data *pdata;
- 
--		pdata = vu_dev->pdev->dev.platform_data;
-+		pdata = vu_dev->pdata;
- 
- 		virtio_break_device(&vu_dev->vdev);
- 		schedule_work(&pdata->conn_broken_wk);
-@@ -1113,21 +1115,63 @@ void virtio_uml_set_no_vq_suspend(struct virtio_device *vdev,
- 		 no_vq_suspend ? "dis" : "en");
- }
- 
-+static void vu_of_conn_broken(struct work_struct *wk)
-+{
-+	/*
-+	 * We can't remove the device from the devicetree so the only thing we
-+	 * can do is warn.
-+	 */
-+	WARN_ON(1);
-+}
-+
- /* Platform device */
- 
-+static struct virtio_uml_platform_data *
-+virtio_uml_create_pdata(struct platform_device *pdev)
-+{
-+	struct device_node *np = pdev->dev.of_node;
-+	struct virtio_uml_platform_data *pdata;
-+	int ret;
-+
-+	if (!np)
-+		return ERR_PTR(-EINVAL);
-+
-+	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-+	if (!pdata)
-+		return ERR_PTR(-ENOMEM);
-+
-+	INIT_WORK(&pdata->conn_broken_wk, vu_of_conn_broken);
-+	pdata->pdev = pdev;
-+
-+	ret = of_property_read_string(np, "socket-path", &pdata->socket_path);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = of_property_read_u32(np, "virtio-device-id",
-+				   &pdata->virtio_device_id);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return pdata;
-+}
-+
- static int virtio_uml_probe(struct platform_device *pdev)
- {
- 	struct virtio_uml_platform_data *pdata = pdev->dev.platform_data;
- 	struct virtio_uml_device *vu_dev;
- 	int rc;
- 
--	if (!pdata)
--		return -EINVAL;
-+	if (!pdata) {
-+		pdata = virtio_uml_create_pdata(pdev);
-+		if (IS_ERR(pdata))
-+			return PTR_ERR(pdata);
-+	}
- 
- 	vu_dev = kzalloc(sizeof(*vu_dev), GFP_KERNEL);
- 	if (!vu_dev)
- 		return -ENOMEM;
- 
-+	vu_dev->pdata = pdata;
- 	vu_dev->vdev.dev.parent = &pdev->dev;
- 	vu_dev->vdev.dev.release = virtio_uml_release_dev;
- 	vu_dev->vdev.config = &virtio_uml_config_ops;
+Best Regards,
+Kechen
+
+Kechen Lu (3):
+  KVM: x86: only allow exits disable before vCPUs created
+  KVM: x86: move ()_in_guest checking to vCPU scope
+  KVM: x86: add vCPU ioctl for HLT exits disable capability
+
+ Documentation/virt/kvm/api.rst     |  4 +++-
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  7 +++++++
+ arch/x86/kvm/cpuid.c               |  2 +-
+ arch/x86/kvm/lapic.c               |  2 +-
+ arch/x86/kvm/svm/svm.c             | 20 +++++++++++++++-----
+ arch/x86/kvm/vmx/vmx.c             | 26 ++++++++++++++++++--------
+ arch/x86/kvm/x86.c                 | 24 +++++++++++++++++++++++-
+ arch/x86/kvm/x86.h                 | 16 ++++++++--------
+ 9 files changed, 77 insertions(+), 25 deletions(-)
+
 -- 
-2.33.1
+2.30.2
 

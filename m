@@ -2,59 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1647BC04
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4567E47BBFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbhLUIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:44:24 -0500
-Received: from mail.globalbizbuy.pl ([217.61.121.138]:40230 "EHLO
-        mail.globalbizbuy.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbhLUIoX (ORCPT
+        id S235708AbhLUIkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232357AbhLUIkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:44:23 -0500
-Received: by mail.globalbizbuy.pl (Postfix, from userid 1001)
-        id A6013A391F; Tue, 21 Dec 2021 08:37:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=globalbizbuy.pl;
-        s=mail; t=1640076273;
-        bh=keciCK/Bg4sJmGUq5pgzLAbvC1lwGkAxKqnASfuHvcc=;
-        h=Date:From:To:Subject:From;
-        b=PHOUNpzTu7AHe72M6g7L2aT1eIjJ2I/19lC/KBXy9au6FIInlHIriBS+h6nDD9yC6
-         7qQsxmPAZciAMx3Djx+0U3IGEsNC2hpowzWBTPBX64mO726gEUr3CdvDzDfQchC02s
-         ppcT11Xs9jn7mBpmLYmNQWRQollKQ9fYsn0xcvX+9klabQjqpcv0tXhWO6/w1IZSmn
-         np/7GLKUuBfbnjH8bbfiflk1RUz8/jJltU1q6eHBCpefujTOLRcql4rTkAOvvTJNHe
-         wq4Fqsg0ZIck2U1Fylrr8/4AsOuwRlxuIcEuVP3ThrjamynYiiKuaW0Axd8b8G9dsn
-         inAqyEujlO4iA==
-Received: by mail.globalbizbuy.pl for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 08:37:25 GMT
-Message-ID: <20211221074500-0.1.5k.k1hx.0.78xlga46gn@globalbizbuy.pl>
-Date:   Tue, 21 Dec 2021 08:37:25 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@globalbizbuy.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.globalbizbuy.pl
+        Tue, 21 Dec 2021 03:40:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAD7C061574;
+        Tue, 21 Dec 2021 00:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xTgGXdRhk/J8c5C+wjN+pamdHhw1k/IjmQ+O8umcpLE=; b=mAHY6xQJXk3yN9gApc5WYAdWv4
+        MBpKl0uCLHdpaf8B7I/j+exPfGWQaKiLTXcG40qXoRa5d8ix1WwYHRSOpvKM/UxCxNfJoG009ov9x
+        F/U5byv2l1OhEQVXkMWYTfOW4n/M+r657oJdcidD4al3A6OPaDJI3I3a5rSU/9yeywi5GbhoOllJf
+        1V2D5Vz18htUWvrnR8cvWjpJJpITTKPvIYAqRaNnmMFgFp6/WGXjcs/Z/aKU2KcWurDntil7ZrBbR
+        CxQGQyGygnzPpTqIsSsngvtVbK2f5MXxjF+XHPnJZRulRJ3UJ2/ucg7IOpIahZrhCNNHWww0dQ0Vx
+        ootWzaDg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzagy-005xZe-Tp; Tue, 21 Dec 2021 08:40:16 +0000
+Date:   Tue, 21 Dec 2021 00:40:16 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/18] MM: use ->swap_rw for reads from SWP_FS_OPS
+ swap-space
+Message-ID: <YcGS8IMk4li9qYHC@infradead.org>
+References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
+ <163969850289.20885.1044395970457169316.stgit@noble.brown>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163969850289.20885.1044395970457169316.stgit@noble.brown>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+> +int sio_pool_init(void)
+> +{
+> +	if (!sio_pool)
+> +		sio_pool = mempool_create_kmalloc_pool(
+> +			SWAP_CLUSTER_MAX, sizeof(struct swap_iocb));
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+I can't see anything serializing access here, so we'll need a lock or
+cmpxchg dance.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+> +	if (sio_pool)
+> +		return 0;
+> +	else
+> +		return -ENOMEM;
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+Nit: This would flow much nicer as:
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
+	if (!sio_pool)
+		return -ENOMEM;
+	return 0;
 
+>  int swap_readpage(struct page *page, bool synchronous)
+>  {
+>  	struct bio *bio;
+> @@ -378,13 +412,25 @@ int swap_readpage(struct page *page, bool synchronous)
+>  	}
+>  
+>  	if (data_race(sis->flags & SWP_FS_OPS)) {
+> -		//struct file *swap_file = sis->swap_file;
+> -		//struct address_space *mapping = swap_file->f_mapping;
 
-Pozdrawiam,
-Arkadiusz Soko=C5=82owski
+This should not be left by the previous patch.  In fact I suspect the
+part of the previous patch that adds ->swap_rw should probably be folded
+into this patch.
+
+> +		struct file *swap_file = sis->swap_file;
+> +		struct address_space *mapping = swap_file->f_mapping;
+> +		struct iov_iter from;
+> +		struct swap_iocb *sio;
+> +		loff_t pos = page_file_offset(page);
+> +
+> +		sio = mempool_alloc(sio_pool, GFP_KERNEL);
+> +		init_sync_kiocb(&sio->iocb, swap_file);
+> +		sio->iocb.ki_pos = pos;
+> +		sio->iocb.ki_complete = sio_read_complete;
+> +		sio->bvec.bv_page = page;
+> +		sio->bvec.bv_len = PAGE_SIZE;
+> +		sio->bvec.bv_offset = 0;
+> +
+> +		iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
+> +		ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+> +		if (ret != -EIOCBQUEUED)
+> +			sio_read_complete(&sio->iocb, ret);
+>  
+>  		goto out;
+
+I'd be tempted to split the SWP_FS_OPS into a helper to keep the
+code tidy.

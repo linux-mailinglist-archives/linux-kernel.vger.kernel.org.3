@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA0E47B910
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA1847B913
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 04:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbhLUDjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 22:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbhLUDjf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 22:39:35 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEDDC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:39:35 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z5so46533493edd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 19:39:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HhnT9iNZb45m+Yl6mmQXF6P5epcMOvtSvPcLxLPj1Hk=;
-        b=OTtRQUfhK6ogaf3OkEckf0AdFVHviCmA+iuNxTtJWMhIu2fWrZTI9qwtfjDf28mLHY
-         gcYrWGWoXgnOhvwnvbtxuoInQmGgEIwOp45lwB8uiSGMIbrVExVtwfxeT0VYuv3C1Szf
-         q8QKzfD9ewNC6xax+cp6ToRES9Se77yLt/m9Jmanl4ulaYqhnjDyNhGKlPcAv5WE41sR
-         8bF0soaUCI0CoLbQBSYbzLe8reUJtmRc+pEKcdztC44tc7hmAanE0yO7hcqKVhjSH8aI
-         79PhW1m4DK+9jvmEPA3mIUZ5QF/yTGpni2YHVkDM9F/X3G/rNWjgQTavKJtoa1hygxvP
-         USPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HhnT9iNZb45m+Yl6mmQXF6P5epcMOvtSvPcLxLPj1Hk=;
-        b=J97fPM6Jncve0OJSyxWqCBeZ7VAyCfAiqAXFldhEtbubsfX0sFnU5asIcC/XnukqYt
-         UPS9g3ggbowMyi2N+Vpw7NhZyIKNrrc4W30pB73aoatSdsthTnHtxa7SlDc/x925poKo
-         aqFd2/SCjPNuZUmKlAUQ93oEkFIMzf9Tibohs87SlZRjHYWAnAgwuS8IU19UyCVkwsmk
-         NSyVQ3ZR1yzHf57A4kGqagTqKDsruPX6IFPAiecUjBBfGJ962YqoOdr7GgJfKggEYMqg
-         jhjLvuGDruOWUZBMksnj6gnDcjcMuJcWGShG5CV2pSBdys6Rujrxj9hl7ZI3IeU9qSxn
-         aWTQ==
-X-Gm-Message-State: AOAM533O/4kBoRIWGsWfs2Z37EHlmF/1HNKkx9SftrFrU71q5XIj8Z/C
-        UHFV8rNh9Y/7puh79BQp/h6x0vE7xyvoiRvR2oeG
-X-Google-Smtp-Source: ABdhPJwAGTC0km/cbwkFPRUxwBn/XhPvg5GSgJxcHMqmSVAPC3iT1QyAHbSC+PLi61u4PtVo0FVoBVQzBNBelmY5xNA=
-X-Received: by 2002:a17:907:2da6:: with SMTP id gt38mr1076078ejc.536.1640057973687;
- Mon, 20 Dec 2021 19:39:33 -0800 (PST)
+        id S231865AbhLUDll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 22:41:41 -0500
+Received: from mout.gmx.net ([212.227.15.15]:36507 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230157AbhLUDll (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 22:41:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640058099;
+        bh=tVINHS4jvwne6uYKSUagzwIrKVOdLTF2oyFSnxZAS/8=;
+        h=X-UI-Sender-Class:Date:From:To:Subject:Cc;
+        b=jezU1LvuwnncplP0HhhaCmg0drKyYfORLzAtc5Bi4CavgRsrE2EPEePPfeQ4At9KT
+         LlTkH1FTnVsqrMmVJZmqGg9WQkr3bwJzSRLWWLgk2HT1S0u0IfCXNp3OqE0rd+IhOU
+         rv7BAL7F0rIZb6V395MrZeEAyFsmula8xahm6/5g=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.33.110]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbFs-1mAR0v2TUU-00siC2; Tue, 21
+ Dec 2021 04:41:39 +0100
+Message-ID: <056cc6ea-3556-7d79-1b23-43c8defcab33@gmx.de>
+Date:   Tue, 21 Dec 2021 04:41:38 +0100
 MIME-Version: 1.0
-References: <20211220122241.150-1-xieyongji@bytedance.com> <a4ba2441-83eb-dde2-09ae-7c5f42ff6ad3@acm.org>
-In-Reply-To: <a4ba2441-83eb-dde2-09ae-7c5f42ff6ad3@acm.org>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Tue, 21 Dec 2021 11:39:22 +0800
-Message-ID: <CACycT3t-UzaLOFSTmYyKniHYPK8jH9SevgB+1xrnCTc_4JKXQw@mail.gmail.com>
-Subject: Re: [PATCH] nbd: Don't use workqueue to handle recv work
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.15 000/177] 5.15.11-rc1 review
+Cc:     stable@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:HJXhn8qA3aOK2z7xNVj3ar+/WGQhS3LQ7e0Tu3ftZnD8f7ckIZv
+ 6PbP33AxdLRJiY0SQJp5XgHXeTqMEWeqf4D0Mnnyxzd/dgks1WAWMU/TpQb+KfKJcJ/81sp
+ sAULvIaRaLO9PmPRd1xxKuoSI5mj07vsAKnqGKTJvZU8dMjXAdBxwJvLfnQyYH0G3IuOBua
+ EUJCRk9E7oaGG1m/Ju0zw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6eASxNzuEVs=:WR3grzz9VGBE6Vh45PQSWz
+ RHxLG+EkATJ0d9zzHMmaXL2sSNYhnIlQx7Qyam/2s40zkVq9HQMaAkMKchXIs9luVVcgWX/Yi
+ UR86ZuhivJBI3XY+37MDMfJjU1QphkklDB9s0UfDMTzKsjkqSozVFhb7/UIpMW/DfJ6husALZ
+ QhRyI92274umswri8DLSEtPE5ig3fOkWX3JlhYZ6jJHG1+f+XzdnxrpDx9q1iZT3gn7ZZ3Pfv
+ cG6S7q3fijObLqNZaXsm96ynfO1nbO7OklKOtSloK/thBqsXth4ZtGi7yXYTP4AEhk8UZa/2z
+ Fl8/aCl5i+jDhlEEB531kmIuoj93pUA2AUAoD7I+L2JVAUIYmUleygH845j4aYYDiczZL62R7
+ +bpWi8yM3yjUeD0BwasSZ1p5eEYLh8atgJyH4/J2OuO5mP4DGPY/t9KPpTf66eoj4H6owT4kA
+ 4UNWpfPlBOb/jSmOIWFi1kOjaKflA49HeBPoC/r6Ne6/bxW2E14oPkDwlrp2kOkrgJpDEexT3
+ CeTz9lzmzrBJylS72jm44W6ftSf7c6bv4INOEc9nOYsz7ru49YMwKG5f7cv4p0yIDyNzLVsHF
+ VAEhybyfYRIjRQLZJwK35Xv2X4oYSFFbC83GFL2qXtjvw3fDizdUtZSJQraUQewZ18/IxyO43
+ AOzlFuV5Lhy4FZSyklP2ZaxVj//H1XHbQBBcD8PxGIRvzSkagGIT73RZyIFltH7fcaAB6ycSS
+ RcHnHGNQCbEvP4hljwIa2YZU6rGTVqevAriRQ7///L8IyVliKn5M7uJIhGE6lHPJRbVuaV1rT
+ 2cVpXRVWpYZDDRER4wXZDRzPQ9iJPd6FAbDflqOCMINn3euPGs5J/06+/JumhDyQkdtTnNtvH
+ YvUduD/4YLO3nA78sJ+jlLvAzr9gO4UnfujG8jYDR9tpSdZNOrRSmIHl+MAfxPWgQnfwVyfK2
+ NhZ84KmMv4lk358aqclERVC99/loL6TALcTIjbjSfHJch2AOhVYf0UAcUZqItjvX13lHYuk/5
+ Wo8hnqTb9GQP9taTPo3xibExvbtNctUle9gTdq3HME19Z2yvVQS2fmru1Gf4rZl34Lq6lsP9V
+ iF7vP2aPpWencQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 1:10 AM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 12/20/21 04:22, Xie Yongji wrote:
-> > The rescuer thread might take over the works queued on
-> > the workqueue when the worker thread creation timed out.
-> > If this happens, we have no chance to create multiple
-> > recv threads which causes I/O hung on this nbd device.
-> >
-> > To fix it, this tries to create kthreads directly to
-> > handle the recv work instead of using workqueue.
->
-> Why a kthread instead of only removing the WQ_MEM_RECLAIM flag from the
+hallo Greg
 
-I think we can not simply remove the WQ_MEM_RECLAIM flag because the
-recv work is in the memory reclaim path.
+5.15.11-rc1  successfully compiled, booted and suspended on an x86_64
+(Intel i5-11400, Fedora 35)
 
-> alloc_workqueue() call? This should have been explained in the patch
-> description. Additionally, a Fixes: tag is missing.
->
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-OK, will do it in v2.
 
-Thanks,
-Yongji
+Thanks
+
+Ronald

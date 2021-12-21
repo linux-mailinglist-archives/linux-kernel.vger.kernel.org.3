@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6FC47BEA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00DF47BEB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236959AbhLULMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:12:34 -0500
-Received: from www381.your-server.de ([78.46.137.84]:50936 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbhLULMc (ORCPT
+        id S236988AbhLULPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:15:25 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:45167 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236868AbhLULPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:12:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=y3MWVmCp4IRkq6xyrY/A4eXrUjdzp1WMmlbBYxWpWKA=; b=QofDzbsztPc29qGZbjjZr9M4qq
-        dv2dd6AWsghoIzKpoJkhuJYGXN6Kz9REkp2qCVAskQE9z/pAXdI/fnIuEyTyCi/nZUnENaulCOXxG
-        zpk/cKUN2jR6BFY4v5/AuXbi9r2GR5yYL3NkSmfIMhvYv/xKUqXFFWGCx2J2/EVPL9mYwF6ntYCVz
-        QwIKVNaGJuwyAjfKNlfA4Mr4Qwwr7oIpWpidmAb1ZJAFocZ+6dRB1rPYmZdQKa8iiRuRnHSSzl719
-        JaWF4NNp4P9LBTAotvzwECAqoL1CQSGO9hgYs+dcKOYNQMb79UO9+tJ2Ej53Ff2O5lsBFWJv5rLF6
-        fglotcsQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1mzd41-000DYW-B5; Tue, 21 Dec 2021 12:12:13 +0100
-Received: from [2001:a61:2bc8:8501:9e5c:8eff:fe01:8578]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1mzd40-000FN1-VF; Tue, 21 Dec 2021 12:12:12 +0100
-Subject: Re: [PATCH 0/8] counter: Remove struct counter_device::priv
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        David Lechner <david@lechnology.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Kamel Bouhara <kamel.bouhara@bootlin.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <dadb79b2-ac21-1899-48b9-1c6723afb1b4@metafoo.de>
-Date:   Tue, 21 Dec 2021 12:12:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 06:15:24 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJDQJ6X2bz4xd4;
+        Tue, 21 Dec 2021 22:15:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640085322;
+        bh=zZkCmuM8dy4u5SSNbvtKZOSY0KcRa0sAsxjjN0iRWV8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bs8jiSf/vPfTKKvCvF4JagdjJXCr5cFOvXW8b9lQUuE4Hne9MfQkZIoqwPB4myzcg
+         OB9Nq5xi4jzNDk2ZAYexdioBmMIFTJUfzupBQWdjbYkozWkW5TBqrZX5dFLQ+Gcmk2
+         tiigMsntVg4AukNjmKqjXmVx4hCdZHEy5IGzBjjw90KwTABrxiCe40freTUq+2bD+I
+         vg4fTYX4zvgUCOAxgBwAhk5cdcUKavjkQUsYB/4PTNdTB2tkjD/HLz5LfdK//ISk3Y
+         w5gvfRa5BTfySimwUSkJqC06gjXwYrI7DZiKA5sz/JEXBKbTKkD/SewMkwo0+JiFRc
+         B8WKtOGqxQAig==
+Date:   Tue, 21 Dec 2021 22:15:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mac80211-next tree
+Message-ID: <20211221221519.75dff443@canb.auug.org.au>
+In-Reply-To: <82d41a8b2c236fa40697094a3d4a325865bde2b2.camel@sipsolutions.net>
+References: <20211221115004.1cd6b262@canb.auug.org.au>
+        <82d41a8b2c236fa40697094a3d4a325865bde2b2.camel@sipsolutions.net>
 MIME-Version: 1.0
-In-Reply-To: <20211221104546.214066-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26395/Tue Dec 21 10:18:41 2021)
+Content-Type: multipart/signed; boundary="Sig_/mdMhyTlXJ9ilgL7/L=l+t69";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 11:45 AM, Uwe Kleine-König wrote:
-> Hello,
+--Sig_/mdMhyTlXJ9ilgL7/L=l+t69
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Johannes,
+
+On Tue, 21 Dec 2021 12:02:57 +0100 Johannes Berg <johannes@sipsolutions.net=
+> wrote:
 >
-> similar to patch
-> https://lore.kernel.org/r/4bde7cbd9e43a5909208102094444219d3154466.1640072891.git.vilhelm.gray@gmail.com
-> the usage of struct counter_device::priv can be replaced by
-> container_of which improves type safety and code size.
->
-> This series depends on above patch, converts the remaining drivers and
-> finally drops struct counter_device::priv.
+> Thanks for the heads-up, also on the merge issue.
+>=20
+> I'll pull back net-next and fix this.
 
-Not sure if this is such a good idea. struct counter_device should not 
-be embedded in the drivers state struct in the first place.
+Or just let Dave know when you ask him to merge your tree ...
 
-struct counter_device contains a struct device, which is a reference 
-counted object. But by embedding it in the driver state struct the life 
-time of both the struct counter_device and and struct device are bound 
-to the life time of the driver state struct.
+--=20
+Cheers,
+Stephen Rothwell
 
-Which means the struct device memory can get freed before the last 
-reference is dropped, which leads to a use-after-free and undefined 
-behavior.
+--Sig_/mdMhyTlXJ9ilgL7/L=l+t69
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-The framework should be changed to rather then embedding the struct 
-counter_device in the state struct to just have a pointer to it. With 
-the struct counter_device having its own allocation that will be freed 
-when the last reference to the struct device is dropped.
+-----BEGIN PGP SIGNATURE-----
 
-- Lars
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBt0cACgkQAVBC80lX
+0GxbTwf8DfhkfVzmA7j2mmLtUtXDDkcNcISrPuY/pUkPdzruPDtH1FggXnOMmlx0
+CL58GtGrSM42GF2ijl48GSVSekZFcMslCg6Pliaj13j+MHXc5oYRVwTJ5RnsIiTz
+zbrnnHcrUgr2/MdozDuyuJ1KE71s3Ob/rcoBUWFAF9VMrdMhLDePbqZmJxvvjpsI
+vi/yMi5/TJ6jfVxyTOjhzw5cs/Jjlv3bvPo+poQeMbbA2siYgVSyI34G8aVeKXQY
+XF80i+ExgZm81YUzdwInrwlpoYiIi1O3sRHFJCAIUS/VSP4FoOR/Z/SdU4WgNZ6L
+kJjn18KucsujyqMzBqpBRAIFJLBxjQ==
+=pY8G
+-----END PGP SIGNATURE-----
 
+--Sig_/mdMhyTlXJ9ilgL7/L=l+t69--

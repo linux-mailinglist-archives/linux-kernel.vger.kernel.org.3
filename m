@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D98147C2AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72347C2B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 16:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239248AbhLUPUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 10:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbhLUPUR (ORCPT
+        id S239157AbhLUPWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 10:22:03 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57002 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234602AbhLUPWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 10:20:17 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B36C061574;
-        Tue, 21 Dec 2021 07:20:17 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id i31so14831283lfv.10;
-        Tue, 21 Dec 2021 07:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T0/ofZQcXMKN8oGRcoOw+6rBxR+Ouo3vIEIiIJRMs0Q=;
-        b=f9IEBoL6YPTDCgse/LTTD0EcTxeFS0YUBjhbUXEiw90ce+dIIX0YifeeKcBEH82ejL
-         aVniFH4v7kszbUJQFUMWC305rIEgsTiuRIzcygq7JpLrQQyi52f43Y/H/IMucahYIVCz
-         qfpmLnK3GjZFRK3E+cyXC/C4U0iZ8qRjP6qzKOPhh5Z4ZW9nEuTAr0jz8iP63D1v+jfz
-         d6nyrV8H5nM5BZkHWy692QH8AO7ZZlhb7V9nsKSEYZPknlMNM7DtnvUZ6JKp0WF5LZv8
-         PpwasYPhJBSqPUJow1zplojiUC6+lEDDAvL/vngX12y4ylC9fOHh8hlOGtgMLzQa4xgF
-         OHwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T0/ofZQcXMKN8oGRcoOw+6rBxR+Ouo3vIEIiIJRMs0Q=;
-        b=bcj1Zg41mY1iF5ZOcyW+6Ka2dTsa5p+k+C4gCAt1AEDM1w+sXhTU6yod4rz7OkBZEg
-         hSkwGJP10/vR2MyOniVCuK+/9lPD0FWUpId6dIbeZ45cJtaAJFIQfzicAlH6PKHxxBW9
-         Co0rK/USK9JB7QpAOL0UNzYx1Mev044+pAD/izMbxHszbXokRpSFj4fpcBUVIlIFas+U
-         CR+hXirofx51U18zd9U0a09ZIxti6Ficq+zhaTMwMI9MYatI8QeYOYJVie6kyNK5lPHb
-         QHUcxm/vear02BqEX2xQqeTmzDy2GFPz5lv7bB4VyaozW8BWHZwk6yafG0DBPETq2tsV
-         x5rA==
-X-Gm-Message-State: AOAM530QwtBTI8vTUozA7tNXmikeNz9m/1nLaO0iPZ2retk44SWRyl01
-        PLMqM5jh25AhxA8ozR2Ok3eDJPXpq6o=
-X-Google-Smtp-Source: ABdhPJyYwazba8NyvqSG6pdeP0ppzcRxJZtCBWlGDj7aITS6uJyAS6/6FfPvZNUUxuu60HRZMQxaaw==
-X-Received: by 2002:a19:4f5e:: with SMTP id a30mr3465355lfk.228.1640100015228;
-        Tue, 21 Dec 2021 07:20:15 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id b10sm1134927lfb.107.2021.12.21.07.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 07:20:14 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] ALSA: hda/tegra: Fix Tegra194 HDA reset failure
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, perex@perex.cz
-Cc:     jonathanh@nvidia.com, mkumard@nvidia.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <1640021408-12824-1-git-send-email-spujar@nvidia.com>
- <1640021408-12824-2-git-send-email-spujar@nvidia.com>
- <f859559c-abf1-ae37-6a0f-80329e6f747f@gmail.com>
- <f65ae56d-d289-9e3f-1c15-f0bedda3918c@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <46acc080-56f5-f970-a9fa-3a9ece0dd2a3@gmail.com>
-Date:   Tue, 21 Dec 2021 18:20:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 10:22:02 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BLFLku0064740;
+        Tue, 21 Dec 2021 09:21:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640100106;
+        bh=dE4T1fnuau00k5Mo7+ksZdAC/dHCWN8R7vt1VAKqDi8=;
+        h=From:To:CC:Subject:Date;
+        b=exUm+UNDhDkYMEAks0RboPUf/AVUPfEMp+w3IOR9x+148iqK78pmz+3/u5auUlKaF
+         SpCXl0KHznni6QEkTxADpX2UNnQl+IlBwn5IFEUtSm5hiVH2oLwXHqb/SCfRejx4Gk
+         iIUoUSZnehXoxJk1rbYmpUwr7upfsrTWn5Fzvjkw=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BLFLjRg018631
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Dec 2021 09:21:45 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 21
+ Dec 2021 09:21:45 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 21 Dec 2021 09:21:45 -0600
+Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BLFLhIL075869;
+        Tue, 21 Dec 2021 09:21:43 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <trini@konsulko.com>
+Subject: [PATCH v2] arm64: defconfig: Enable USB drivers for TI K3 SoC
+Date:   Tue, 21 Dec 2021 20:51:40 +0530
+Message-ID: <20211221152140.15151-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <f65ae56d-d289-9e3f-1c15-f0bedda3918c@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-21.12.2021 09:18, Sameer Pujar пишет:
-> 
-> 
-> On 12/21/2021 6:51 AM, Dmitry Osipenko wrote:
->>
->> All stable kernels affected by this problem that don't support the bulk
->> reset API are EOL now. Please use bulk reset API like I suggested in the
->> comment to v1, it will allow us to have a cleaner and nicer code.
-> 
-> Agree that it would be compact and cleaner, but any specific reset
-> failure in the group won't be obvious in the logs. In this case it
-> failed silently. If compactness is preferred, then may be I can keep an
-> error print at group level so that we see some failure context whenever
-> it happens.
+Enable Cadence USB, TI USB and required SERDES drivers to support USB on
+TI K3 SoCs.
 
-The group shouldn't fail ever unless device-tree is wrong. Why do you
-think we should care about the case which realistically won't ever
-happen? This is a bit unpractical approach.
+Reported-by: Tom Rini <trini@konsulko.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Reviewed-by: Tom Rini <trini@konsulko.com>
+---
 
-If we really care about those error messages, then will be much more
-reasonable to add them to the reset core, like clk core does it [1],
-IMO. This will be a trivial change. Will you be happy with this variant?
+v2:
+Drop Cadence PCIe driver configs as they cannot be built as modules
+based on feedback at [1].
 
-[1]
-https://elixir.bootlin.com/linux/v5.16-rc6/source/drivers/clk/clk-bulk.c#L100
+v1: https://lore.kernel.org/r/20211208060856.16106-1-vigneshr@ti.com
 
-diff --git a/drivers/reset/core.c b/drivers/reset/core.c
-index 61e688882643..85ce0d6eeb34 100644
---- a/drivers/reset/core.c
-+++ b/drivers/reset/core.c
-@@ -962,6 +962,11 @@ int __reset_control_bulk_get(struct device *dev,
-int num_rstcs,
- 						    shared, optional, acquired);
- 		if (IS_ERR(rstcs[i].rstc)) {
- 			ret = PTR_ERR(rstcs[i].rstc);
-+
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(dev, "Failed to get reset '%s': %d\n",
-+					rstcs[i].id, ret);
-+
- 			goto err;
- 		}
- 	}
+[1] https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/
+
+ arch/arm64/configs/defconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f2e2b9bdd702..dfa34bd06949 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -822,6 +822,10 @@ CONFIG_USB_RENESAS_USBHS_HCD=m
+ CONFIG_USB_RENESAS_USBHS=m
+ CONFIG_USB_ACM=m
+ CONFIG_USB_STORAGE=y
++CONFIG_USB_CDNS_SUPPORT=m
++CONFIG_USB_CDNS3=m
++CONFIG_USB_CDNS3_GADGET=y
++CONFIG_USB_CDNS3_HOST=y
+ CONFIG_USB_MTU3=y
+ CONFIG_USB_MUSB_HDRC=y
+ CONFIG_USB_MUSB_SUNXI=y
+@@ -1123,6 +1127,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
++CONFIG_PHY_CADENCE_SIERRA=m
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
+ CONFIG_PHY_HI6220_USB=y
+ CONFIG_PHY_HISTB_COMBPHY=y
+@@ -1146,6 +1151,8 @@ CONFIG_PHY_SAMSUNG_UFS=y
+ CONFIG_PHY_UNIPHIER_USB2=y
+ CONFIG_PHY_UNIPHIER_USB3=y
+ CONFIG_PHY_TEGRA_XUSB=y
++CONFIG_PHY_AM654_SERDES=m
++CONFIG_PHY_J721E_WIZ=m
+ CONFIG_ARM_SMMU_V3_PMU=m
+ CONFIG_FSL_IMX8_DDR_PMU=m
+ CONFIG_HISI_PMU=y
+-- 
+2.34.1
+

@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FE947C73A
+	by mail.lfdr.de (Postfix) with ESMTP id C361947C73B
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbhLUTMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 14:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S241751AbhLUTMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 14:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241721AbhLUTMh (ORCPT
+        with ESMTP id S241719AbhLUTMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 14:12:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AB4C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 11:12:37 -0800 (PST)
+        Tue, 21 Dec 2021 14:12:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39012C061574;
+        Tue, 21 Dec 2021 11:12:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCC1CB81992
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 19:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832E6C36AEA;
-        Tue, 21 Dec 2021 19:12:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8E6C6178B;
+        Tue, 21 Dec 2021 19:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B6EC36AE8;
+        Tue, 21 Dec 2021 19:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640113954;
-        bh=PI9JsaIFDN7yqONnNOEbLQVi3YNrLsUoOS1QyXiQQlY=;
+        s=k20201202; t=1640113957;
+        bh=PAs5jiYeFo0MBioLBW42YrvXg3HDfr/75mvKAgP84o4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GlXJ6WBZ+xlzM9rM70oU6/pG/JzGzIuUSiXpuUqZjUZgYLaOf0jNwPuZ+dgcf/NQw
-         WK3SLdCLFXJkQ3umVpYzfhQxuBg7V8L8zrY5BfRKBCwtXVsW5BkHe6qb2b2ih1znPw
-         M0d8FtlSdCpeYWcO13d76W+qSYX98u2FRkv6TTUbD3v+S25yJcuHGROlXN5Rfzsbdf
-         vNgPzucDa1Y7B30uZ6uKMg7lPfDKbmjuIYEMYRXgadIAsWwwYFxzLfrNCFblOOtBlD
-         6FUeAgAB056Qk5LWvIuI4t9oEbcv+uRGkQ2fh+aTzRIVp9ji5G30ZRaTclm/YgtoHP
-         SDnXBOuo1Zq5w==
+        b=mU333hz0r1ky9N5/Cxf891yMrzILchntrHGZPscClx+sfRB1ORC2u1lgzqaabDVbg
+         MzFK5rtV5d0fpUUQMeCKfCXCVsKeUxEBxlMBEbZVGWOfIi9fOrROjFdWx5dy2Kv8xv
+         7ROsBWlNoLI1YYooIMxAoSdCPfqW8bNz7nw0elqS482K9+BvB+zdQD5NV7OMLUIjht
+         0f4iA9t8RiETnFfczdqAmNTvNLfd2nWTHgFEFBKa/t5/LDy+DMSwEhqfYrzZDW8Q5s
+         r6pVoYlqnn3PDsjS/mRgtuV0iwFXJriQoUFKKBL12hUJTuXyvWRsG24T8u3qx0hmoP
+         BDfONoq1OfehQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211221170100.27423-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211221170100.27423-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 0/2] sound/soc: Use platform_get_irq() to fetch IRQ's
-Message-Id: <164011395226.93163.12622480659294102609.b4-ty@kernel.org>
-Date:   Tue, 21 Dec 2021 19:12:32 +0000
+To:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        perex@perex.cz, Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     stephan@gerhold.net, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211220193725.2650356-1-vincent.knecht@mailoo.org>
+References: <20211220193725.2650356-1-vincent.knecht@mailoo.org>
+Subject: Re: [PATCH v2 1/2] ASoC: dt-bindings: codecs: Add bindings for ak4375
+Message-Id: <164011395475.93163.15678068758276605566.b4-ty@kernel.org>
+Date:   Tue, 21 Dec 2021 19:12:34 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,15 +51,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 17:00:58 +0000, Lad Prabhakar wrote:
-> This patch series aims to drop using platform_get_resource() for IRQ types
-> in preparation for removal of static setup of IRQ resource from DT core
-> code.
+On Mon, 20 Dec 2021 20:37:24 +0100, Vincent Knecht wrote:
+> AK4375 is an audio DAC with headphones amplifier controlled via I2C.
+> Add simple device tree bindings that describe how to set it up.
 > 
-> Dropping usage of platform_get_resource() was agreed based on
-> the discussion [0].
 > 
-> [...]
 
 Applied to
 
@@ -70,10 +63,10 @@ Applied to
 
 Thanks!
 
-[1/2] ASoC: xlnx: Use platform_get_irq() to get the interrupt
-      commit: c2efaf8f2d53ffa2ecc487e21c62d13bbb8d88c3
-[2/2] ASoC: bcm: Use platform_get_irq() to get the interrupt
-      commit: 5de035c270047e7ae754fbfb69031707aa5b54f7
+[1/2] ASoC: dt-bindings: codecs: Add bindings for ak4375
+      commit: 70ba14cf6dfd7ebd1275562bb9637b8d0ddb8f49
+[2/2] ASoC: Add AK4375 support
+      commit: 53778b8292b5492ec3ecf1efb84163eac2a6e422
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

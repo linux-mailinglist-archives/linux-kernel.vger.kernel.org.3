@@ -2,150 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7414247C121
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F5047C124
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237617AbhLUODY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:03:24 -0500
-Received: from mga14.intel.com ([192.55.52.115]:50587 "EHLO mga14.intel.com"
+        id S238328AbhLUOD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:03:56 -0500
+Received: from mga01.intel.com ([192.55.52.88]:45112 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229453AbhLUODX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:03:23 -0500
+        id S237643AbhLUODy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:03:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640095403; x=1671631403;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ew0G8WM+VTpwrJE101MQQ+KB69Q+us1//I+VQV9XUtY=;
-  b=Ew0MXoC6gbPq7izMH/M3cktA3xiR6L2wHiWxmluOvQNro6emS4sLtqxe
-   FAJYCu3tvOwJuHjW2DicdS8jpRUO8qZD/N7YYxWwT0SwYR7QaaQ2zcayw
-   y29hhejQPiB4OsH4u4gxnJcUuPv3z1MqH9RqfikKYB8bFqh8CKQwCaFDs
-   SHm06aud9GR4LDpweV8TStUzwz1e1ZWB9DiqgS1pvc1ZDA4rBtQBEgFG9
-   W6El2KepS17G7RWJE56Jyev3buz2tt9lNxTj6OAHtdmnaKm2tjCfCC0Hc
-   idrAofDoI9VHa8cBJPG6LYco4244uDi6ZZ9+nfjGOf+XPq746l+hZlc1+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240621163"
+  t=1640095434; x=1671631434;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Uh70ksbEU7pnFgq98eswdjP5WmynGQUVmaFlmlZHi9c=;
+  b=AByXzgUmPzygdZ/pDWiPRTNECkWCCP+AuyE2hITDebyw6QT+odVP14Nn
+   zIHtjEA3W+1ZoR5HIYkrmvKj6wm47Gu1qwXsn+oKo8PVZPjFSSrXstThC
+   +EZGYY5idWYtLlshNWWyUnaHedd72Nxnn+rUjjdu/xlKO3YtaNtpgBqfq
+   bsQoaNIaRLJaMEQnQkXjFn6+tBe3+XIu2wz3jnGFgL60OvjO/bwAaJPN7
+   zyazdrTMgy4n4V5XmILcj9nV+5ASkuYuMkCK2o/6S468j5t+odCswSf2s
+   i0Ilc3avaJ71+SUgS+A0xVBZWv4UW3+YzkHFmDOgME1v74DaI96gNpZTR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="264589083"
 X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="240621163"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:03:23 -0800
+   d="scan'208";a="264589083"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:03:54 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="684669415"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.20.192]) ([10.209.20.192])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:03:22 -0800
-Message-ID: <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
-Date:   Tue, 21 Dec 2021 06:03:15 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+   d="scan'208";a="663953078"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Dec 2021 06:03:42 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 06:03:40 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 21 Dec 2021 06:03:40 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 21 Dec 2021 06:03:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DcQccyMikg7aIssAYwZD/lDqOwjjvaAbTVq/jH1NgeYS7M50j9X+yqwfXkYe3Pqv4h5FuTaQKs9s+Q53Q6a1o18T9sbZ87jL0EFEBNvwXSZArUORNY9pxrq4cei9bPUYz9/kvsvpcMMwTRKIb7fSwOF7L35RUo9hDwE/x0erGXD96USf7s39Mfzip6raGzKPIgQYk9TgfDSSMG0TPsi/GZqiAy/+VnnyIRzwxXMiHTr78mp496y42D4y1gTGC+ag4r9Ks/9LoUqsk4p2flLsXZ4MxRQ02P4vGs2y37K0egQejrsJ+WrUxfCXcRI5iHrKqXjFjbICL9BNkQVfYau80Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9fYCMVnvX7SgnPjPAspFwL9cnRHiUsqjqc3tBHIevTk=;
+ b=UAGCuU6XpT44+fZ1oNMMxGaOp841Jb4fqvucGt6vAnuinU3JA7X5r2xlQpoRnIL76YSnjyvaGZ4U9hBmruYlEum/Oqbt9cN6gh4T7P04tsrDON1Qb1KdPEk7myynx0dBS4id3HqalVoOsIO2sGZSpbICcXWGdVHFlIGmN1WiA/yeEwumShjClXr0C6j2rBdix5TiQ1QSSMwf3f2ED39hvWUSnmAJOLH63LJDEHrxoy3XLU/mqhbF5dD5NuRXwiGFQvg1Dlc58EaoCiqSha6yWAF0sFpBxeb2I/iK7JZEVqert6nKsRgoH/BpCv54f1aZkLiffn36Yl29duuvD+QCkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB5170.namprd11.prod.outlook.com (2603:10b6:303:95::10)
+ by MW4PR11MB5890.namprd11.prod.outlook.com (2603:10b6:303:188::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 14:03:38 +0000
+Received: from CO1PR11MB5170.namprd11.prod.outlook.com
+ ([fe80::4c2a:62a1:d6e5:b67b]) by CO1PR11MB5170.namprd11.prod.outlook.com
+ ([fe80::4c2a:62a1:d6e5:b67b%6]) with mapi id 15.20.4801.022; Tue, 21 Dec 2021
+ 14:03:38 +0000
+From:   "Chen, Mike Ximing" <mike.ximing.chen@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+Subject: RE: [RFC PATCH v12 00/17] dlb: introduce DLB device driver
+Thread-Topic: [RFC PATCH v12 00/17] dlb: introduce DLB device driver
+Thread-Index: AQHX9jcJdm85rPhvxUq3c7I9WRTitKw8hvqAgABjytA=
+Date:   Tue, 21 Dec 2021 14:03:38 +0000
+Message-ID: <CO1PR11MB51700037C8A23B19C0DCF5CAD97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
+References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
+ <YcF9rRTVzrbCyOtq@kroah.com>
+In-Reply-To: <YcF9rRTVzrbCyOtq@kroah.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com>
- <20211214184240.24215-2-andrew.kilroy@arm.com>
- <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
- <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
- <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-reaction: no-action
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e8e331fe-b4f3-4dc7-01f2-08d9c48aafe8
+x-ms-traffictypediagnostic: MW4PR11MB5890:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <MW4PR11MB5890372A07FCF8211FE0792ED97C9@MW4PR11MB5890.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Rgj9dJyD+EfCifdZL+AbjcozgQwUr9JlygIAeYlkzfdoYbk9ZdJRsjdfjo2LIItcReaqVI8AcmWofXxSyjcc82H9+IYb875oSxJUrK6dkE8jw7wevMZfmVJ3B42cTVMEGaDcPMVq4/0IbeM7ArtYAr6blqC1ifzx0LhnjkZ3h3jYDCXwNZXA6rGRehPaqCKB2PjKDFMK3RDB7/H4cZRw2Vajtp8m4mqwXoiE79GM262z3AH8iHVmveYSf/pVnk5Qar0S8OvdCi7mLKy7KtKJf7Uyat8gUQBh0qKyZousEN23/0TchfF4x/jh5jPjrW73OrDxZUhHwDOLrXY91ZNT3Eb9BS8uGMBelyu6oelOcvsSkIVj6nDJawifwFt54Ws80ENVo69pWAs3/GQ/Z9KfVpiRZbh6oKXf137RRP2TTZsjEUQOkd+C8cbQrXYj3GCVxL3DYETTaaFLJUjNyDlJ1xXSFPHUnkl8GjoREN7Cn486Fz2nSsYk+efgIuSh6CYybIoECf3Oawtc6sPcg7nfSbBIAAGYKJdRigIdi34JVLuzVK4hBf3llNsfd9+EM7KmgmbLnpjkaXltAU+TuFJY4w/jUeRBK5bKuUQ0eOEAWEwwhERutqQYPl/P++YgZQXkLzekb07Y5p+ysz2BNcHMhqL5FcyMxfGv9vD77CqbTs/s15eQOlJyCtCeFhfDOZJZ0f488PmEXQjoz4poiNjIow==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5170.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(76116006)(38070700005)(7696005)(55016003)(186003)(66476007)(122000001)(26005)(64756008)(83380400001)(86362001)(2906002)(5660300002)(6916009)(54906003)(66556008)(52536014)(82960400001)(9686003)(66946007)(53546011)(6506007)(33656002)(71200400001)(8676002)(508600001)(66446008)(8936002)(38100700002)(4326008)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?s5WRZCgeYRSyYd1tdsuk3Q6FZx5iu06KJiefgbREmMJtOS2/kCYAz8oeqwZ9?=
+ =?us-ascii?Q?J+dA2bQurl25arNQcOK7issF5jTD+Zwi3/DKNzMh8M5zRY2qqE2tE6BM4+VT?=
+ =?us-ascii?Q?s2lYF6DWoc33EUCqVjxYX/5eynyQ+vPLYYGMT1FhPIbkbmINLNmY6yOLou9i?=
+ =?us-ascii?Q?o1GfhkAUx68OLjmvpNMflJ9P8pXrowmO6czajyQA4shLsTZaK5hcpFoT2MNf?=
+ =?us-ascii?Q?FQpvSyMlSGyqKYRZWmDOSUFGHUJKVTi5ci+jBya1xiy4PTEncMzk9ZAdOEM9?=
+ =?us-ascii?Q?UAKQrMjXtM4XtveuktDeKGmdOwLAIrwNgHSrIR6ZvtWSTIcsmm6c+JVrUmDV?=
+ =?us-ascii?Q?9DHOSOhtsjNoEZenouq6sRwUv5aEx5l5tPaJXPqiCSqqTpu7KmhdID3eTXFg?=
+ =?us-ascii?Q?cg8LGUN2SzaDubXBo81X85FvajV6E99a83W1Y7dE5Uclu1gaRXZulpVlscff?=
+ =?us-ascii?Q?ZFPH7ETuQssu8jqokmlYUJq1qIxjsC45r/R00MXQ5hXvFWxEr4gydZklta6E?=
+ =?us-ascii?Q?URe111R5RTn+du3Kdje02qg6ZNtyKiRfG/554juPcvPasl5pk7zFttW2cJUf?=
+ =?us-ascii?Q?wUEGhk/k+bKThsY7+tbaPOuYF+fmWAHzCEfzojVjbzirOIqL0wzPvbhQAVQT?=
+ =?us-ascii?Q?xRnFU1HQy8oRtySXNpXkUhjhpFLfQeVva7kw2wjX2+8YIXJJ90rx6JGy5ee3?=
+ =?us-ascii?Q?rAi4bzuVz2CYftD+bsHZ8xzySMrZord0IykMUPtWi0d3DN+mxPjCT6z2URUD?=
+ =?us-ascii?Q?IUeHwpx1e2Ga8rwSWmmw2Glx+RtKIu5O0scGTJZVfJZ6B8SwplbPg0VwX3Zj?=
+ =?us-ascii?Q?QEbKkqN6IigDXcND6WZCSwNUCmXyMiGD5YEeVSnI+pYmFGoh4l3SCFuq2i4i?=
+ =?us-ascii?Q?zixQtIY0Ew0vbly1sQvIywXedohRFVa4GW3yg83lCJkQn2hFCxAIQhNLqkAw?=
+ =?us-ascii?Q?P0L+tbxPFQMNvRns8HAr+0aJXP5t7GuYC+oe5ei3LPatcqNLWzzcmCAF7Jk8?=
+ =?us-ascii?Q?WL7m7+el31dSS0PLY8FD0vkA77cZxmjCqw5TiC+vwfO+0mZnKSSraGdXKbyw?=
+ =?us-ascii?Q?lw2Di04SV1RmxbZ7Eu37/cqMjfR6gHn0OFvFzqu/fFOSX0THy8Zw/z/jF3oq?=
+ =?us-ascii?Q?MMlphqpFQvpoSOFkXlYy5vxNef4wKu3V3VZpgioo2dq96XXLrp0L8hRf1OP8?=
+ =?us-ascii?Q?1dcW0x40p+0OsBNG5xcEnGeNCBtT3a8f4BhrEtONzuh7aeirYPtEJEyuY0yA?=
+ =?us-ascii?Q?BGvIgLiUfCmzjDyKlGMrQ7s4rnK4aFHj6M+TQzHxFyvp6ApUVFWzOS+xYbhC?=
+ =?us-ascii?Q?iQVQXLCZFjlNCoku7dudy1iFqwDrEOSpCjJ3jU6Z8Wc+jOeVL2ae2tbjICu1?=
+ =?us-ascii?Q?TjH2jj+fT7PrXqyaBkwslpHsTCwepQMEZLpTJCReE+L2crFod8lAIYx/LGoy?=
+ =?us-ascii?Q?Xy2CGRkRZPLDnv/NBftvO8QRi3fNG45G0YoOYTEgY7oIYWeYdupn/MMEq9vs?=
+ =?us-ascii?Q?R9+BLVPUT6T3gfTYSmFE45kbOPMSeZyfRhubSrSd/aUp0mONIAunP0TwDPLc?=
+ =?us-ascii?Q?Qt0w1OysqLkCra595XeSGLJdE08kjqP0zhJk7T+0bJ2V3cI984oYKbxlBzhI?=
+ =?us-ascii?Q?qDFlHgP9OqZIcTUPnBppE1DT8y2lfwcHoeqEUmwxXi3fcRI4XB4Je+Tt72Ld?=
+ =?us-ascii?Q?75tgvA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5170.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8e331fe-b4f3-4dc7-01f2-08d9c48aafe8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 14:03:38.3910
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IZtkM9DaAzptvLhnTp6yq/gh9qB13oOwxYn7sG/6WkgDVP7RGsX7CX9k6+lbvaslw4qASqhBsThn0bKRlycA33h/aPH0pbHl2kfE6pMmJLs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5890
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/20/2021 9:21 AM, Andrew Kilroy wrote:
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Tuesday, December 21, 2021 2:10 AM
+> To: Chen, Mike Ximing <mike.ximing.chen@intel.com>
+> Cc: linux-kernel@vger.kernel.org; arnd@arndb.de; Williams, Dan J <dan.j.w=
+illiams@intel.com>; pierre-
+> louis.bossart@linux.intel.com; netdev@vger.kernel.org; davem@davemloft.ne=
+t; kuba@kernel.org
+> Subject: Re: [RFC PATCH v12 00/17] dlb: introduce DLB device driver
+>=20
+> On Tue, Dec 21, 2021 at 12:50:30AM -0600, Mike Ximing Chen wrote:
+> > v12:
+>=20
+> <snip>
+>=20
+> How is a "RFC" series on version 12?  "RFC" means "I do not think this sh=
+ould be merged, please give me
+> some comments on how this is all structured" which I think is not the cas=
+e here.
+
+Hi Greg,
+
+"RFC" here means exactly what you referred to. As you know we have made man=
+y changes since your
+last review of the patch set (which was v10).  At this point we are not sur=
+e if we are on the right track in
+terms of some configfs implementation, and would like some comments from th=
+e community. I stated
+this in the cover letter before the change log: " This submission is still =
+a work in progress.... , a couple of
+issues that we would like to get help and suggestions from reviewers and co=
+mmunity". I presented two
+issues/questions we are facing, and would like to get comments.=20
+
+The code on the other hand are tested and validated on our hardware platfor=
+ms. I kept the version number
+in series (using v12, instead v1) so that reviewers can track the old submi=
+ssions and have a better
+understanding of the patch set's history.
+
+>=20
+> > - The following coding style changes suggested by Dan will be implement=
+ed
+> >   in the next revision
+> > -- Replace DLB_CSR_RD() and DLB_CSR_WR() with direct ioread32() and
+> >    iowrite32() call.
+> > -- Remove bitmap wrappers and use linux bitmap functions directly.
+> > -- Use trace_event in configfs attribute file update.
+>=20
+> Why submit a patch series that you know will be changed?  Just do the wor=
+k, don't ask anyone to review
+> stuff you know is incorrect, that just wastes our time and ensures that w=
+e never want to review it again.
 >
-> On 15/12/2021 10:52, John Garry wrote:
->> Hi Andrew,
->>
->>>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
->>>>                                                   const struct 
->>>> pmu_events_map *map);
->>>>   int metricgroup__parse_groups_test(struct evlist *evlist,
->>>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
->>>> index 1081b20f9891..57c0c5f2c6bd 100644
->>>> --- a/tools/perf/util/topdown.c
->>>> +++ b/tools/perf/util/topdown.c
->>>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
->>>> *leader __maybe_unused)
->>>>   {
->>>>          return false;
->>>>   }
->>>> +
->>>> +__weak bool arch_topdown_use_json_metrics(void)
->>>> +{
->>
->> AFAICS, only x86 supports topdown today and that is because they have 
->> special kernel topdown events exposed for the kernel CPU PMU driver. 
->> So other architectures - not only arm - would need rely on 
->> metricgroups for topdown support. So let's make this generic for all 
->> archs.
->>
->>> I like this extension! I've ranted in the past about weak symbols
->>> breaking with archives due to lazy loading [1]. In this case
->>> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
->>> and so the weak symbol has an extra chance of being linked
->>> incorrectly. We could add a new command line of --topdown-json to
->>> avoid this, but there seems little difference in doing this over just
->>> doing '-M TopDownL1'.
->>
->>
->>> Is it possible to use the json metric approach
->>> for when the CPU version fails?
->>
->> I think that's a good idea.
->>
->
->
-> While looking into using the json metrics approach as a fallback to 
-> the original, I noticed  there are two json metricgroups 'TopdownL1' 
-> and 'TopDownL1' (note the case difference) on x86. Not sure if the 
-> case difference is intentional.
->
-> On skylake, 'TopdownL1' contains the four json metrics Retiring, 
-> Bad_Speculation, Frontend_Bound, and Backend_Bound.  'TopDownL1' has 
-> 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 'Instructions'.  I think its a 
-> similar situation on other x86 chips.
+Since this is a RFC, and is not for merging or a full review, we though it =
+was OK to log the pending coding
+style changes. The patch set was submitted and reviewed by the community be=
+fore, and there was no
+complains on using macros like DLB_CSR_RD(), etc, but we think we can repla=
+ce them for better
+readability of the code.
 
-
-There's also SMT metrics.
-
-
-We don't want to include CoreIPC etc. by default because it would cause 
-multiplexing in common situations.
-
->
-> The search for those metrics by metricgroup name is case insensitive, 
-> so it's picking up all 8 metrics when using the lookup string 
-> 'TopDownL1'.  So the extra 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 
-> 'Instructions' metrics would be printed as well.
->
-> Not sure what the significance of the case difference might be.
->
-> Should we use a different string than 'TopDownL1' as the metric group 
-> name to search for?
-
-
-We should probably fix the case (or just make the match case insensitive)
-
-Can we just keep x86 at using the kernel metrics? On Skylake and earlier 
-it needs different formulas and other options depending whether SMT is 
-on or off, so it's not straight forward to express it as json directly.
-
-
--Andi
-
+Thanks
+Mike=20
+=20

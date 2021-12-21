@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FC847BF0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A8B47BF01
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 12:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbhLULkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 06:40:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53772 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237206AbhLULj7 (ORCPT
+        id S237170AbhLULeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 06:34:04 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16845 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230449AbhLULeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 06:39:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38C4F6153C;
-        Tue, 21 Dec 2021 11:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FABC36AF4;
-        Tue, 21 Dec 2021 11:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640086798;
-        bh=FZveIUfSLfCEZ1y0HfpyCoozxsgZmMxrhPNBuggw9dc=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=YyaC04+iHm3HCJGC9E2C40+3bVu/qLLlAVy5b7+loiUEADd9jUwQU0LmJ48GBdpAG
-         gBNdD4v0wlsMufOeHD+LPNdN4Sau/5okchAnLgZuSADk0SXd8W9zV+fElH0yhJymz7
-         6vW6Q/MXj1r1FGIhctGFQv/gYpa26friD4MAkdwmBJgKMGO5kkjjyJBuTBGfU2p/+O
-         S8nhXBEVe7FZtbQVQZlNtebh4Xm5u6nSlaL10UUpYi3y13hsCqd2sTDPbIM7pAfspq
-         1JHl94PgI/IUGlTlca8QCAv7RstUxHcuwRsVqBbvH4mwUfUQcpYQuPieaJUYA8pjAD
-         dVsh0ULUW7s4A==
-Received: by mail-ot1-f53.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso16353021otf.0;
-        Tue, 21 Dec 2021 03:39:58 -0800 (PST)
-X-Gm-Message-State: AOAM533lRAWy3ATzxzyyKu0/4V/jcrFynG6QqRE4dh4T5A8HbMuIAivl
-        YbeAv5jDEHJeuzUbG/mP8PzYJD3kYVNAWnvohp4=
-X-Google-Smtp-Source: ABdhPJwcUhvpKWIr2DIfWcBlHa2apSuyJ0A17Xaah/Z1k9S/dtSf0z1WUHPmahfEPQDvYBZmR7Ln+0ZhtSPwCQXL3tE=
-X-Received: by 2002:a9d:43:: with SMTP id 61mr1855862ota.18.1640086797831;
- Tue, 21 Dec 2021 03:39:57 -0800 (PST)
+        Tue, 21 Dec 2021 06:34:03 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJDpw1Dhxz8yfQ;
+        Tue, 21 Dec 2021 19:33:12 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 19:34:01 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 21 Dec
+ 2021 19:34:01 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <ath11k@lists.infradead.org>
+CC:     <kvalo@kernel.org>, <akolli@codeaurora.org>
+Subject: [PATCH -next] ath11k: add missing of_node_put() to avoid leak
+Date:   Tue, 21 Dec 2021 19:40:03 +0800
+Message-ID: <20211221114003.335557-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Tue, 21 Dec 2021 03:39:57
- -0800 (PST)
-In-Reply-To: <20211221090714.122543-2-yang.lee@linux.alibaba.com>
-References: <20211221090714.122543-1-yang.lee@linux.alibaba.com> <20211221090714.122543-2-yang.lee@linux.alibaba.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Tue, 21 Dec 2021 20:39:57 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_5M6Wajx2Zqv9vaAs1oRLO7YCv4iKxzoqpZ4UqVc+oPA@mail.gmail.com>
-Message-ID: <CAKYAXd_5M6Wajx2Zqv9vaAs1oRLO7YCv4iKxzoqpZ4UqVc+oPA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/4] ksmbd: Fix smb2_set_info_file() kernel-doc comment
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     senozhatsky@chromium.org, sfrench@samba.org, hyc.lee@gmail.com,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021-12-21 18:07 GMT+09:00, Yang Li <yang.lee@linux.alibaba.com>:
-> Fix argument list that the kdoc format and script verified in
-> smb2_set_info_file().
->
-> The warnings were found by running scripts/kernel-doc, which is
-> caused by using 'make W=1'.
-> fs/ksmbd/smb2pdu.c:5862: warning: Function parameter or member 'req' not
-> described in 'smb2_set_info_file'
-> fs/ksmbd/smb2pdu.c:5862: warning: Excess function parameter 'info_class'
-> description in 'smb2_set_info_file'
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Fixes: 9496e268e3af ("ksmbd: add request buffer validation in
-> smb2_set_info")
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  fs/ksmbd/smb2pdu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-> index ee2bcd02d0d7..2d55a186b825 100644
-> --- a/fs/ksmbd/smb2pdu.c
-> +++ b/fs/ksmbd/smb2pdu.c
-> @@ -5850,7 +5850,7 @@ static int set_file_mode_info(struct ksmbd_file *fp,
->   * smb2_set_info_file() - handler for smb2 set info command
->   * @work:	smb work containing set info command buffer
->   * @fp:		ksmbd_file pointer
-> - * @info_class:	smb2 set info class
-> + * @req:        request buffer validation
-I will directly update it to "request buffer pointer".
+The node pointer is returned by of_find_node_by_type()
+or of_parse_phandle() with refcount incremented. Calling
+of_node_put() to aovid the refcount leak.
 
-About your 4 patches, Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Fixes: 6ac04bdc5edb ("ath11k: Use reserved host DDR addresses from DT for PCI devices")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/wireless/ath/ath11k/mhi.c | 1 +
+ drivers/net/wireless/ath/ath11k/qmi.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Thanks!
->   * @share:	ksmbd_share_config pointer
->   *
->   * Return:	0 on success, otherwise error
-> --
-> 2.20.1.7.g153144c
->
->
+diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+index e4250ba8dfee..cccaa348cf21 100644
+--- a/drivers/net/wireless/ath/ath11k/mhi.c
++++ b/drivers/net/wireless/ath/ath11k/mhi.c
+@@ -332,6 +332,7 @@ static int ath11k_mhi_read_addr_from_dt(struct mhi_controller *mhi_ctrl)
+ 		return -ENOENT;
+ 
+ 	ret = of_address_to_resource(np, 0, &res);
++	of_node_put(np);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 3b9ba0e03a66..2d46c0b07be3 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1892,6 +1892,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
+ 			}
+ 
+ 			ret = of_address_to_resource(hremote_node, 0, &res);
++			of_node_put(hremote_node);
+ 			if (ret) {
+ 				ath11k_dbg(ab, ATH11K_DBG_QMI,
+ 					   "qmi fail to get reg from hremote\n");
+-- 
+2.25.1
+

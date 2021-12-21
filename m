@@ -2,79 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A346547C157
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C127547C158
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238393AbhLUOUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:20:01 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50888 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234213AbhLUOUA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:20:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640096400; x=1671632400;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2jc9rhBb6jVW67VHv6/2nS5oRjaeExlRDPRSyBv0DeA=;
-  b=fW37JtROHxNTS579KNwtL7IJycPT7toCuLPI+ccnljt/fQPIoFFjQInW
-   aYknl+RjycAc93BSgDbcF4/mPlMwqDc36YUb68plItHykDYec6esAqNEA
-   yUjrd3KaXe6r5VgsrfpVX1mVF8dEMim2zFnXnzl5V2Vjv9GwUak9DPZzT
-   9gfAm1TBHQOIMcXHvwU8dL3yCtp7kPAAdPpwSD/4Lt6W4IaAlUvkYudmr
-   e7mNgpHc6jECzDFF/vo2mTkJ75wc+lV8VllzYfMuHsAcwxJxRFThOz2cY
-   rTjeyTpMIPZMobOXb2IwAbGpOrRfswkRtRli0VHgIpTriGDwERjOaGTzM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="240206848"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="240206848"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:19:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="508086329"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 06:19:58 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzfzi-00098q-0O; Tue, 21 Dec 2021 14:19:58 +0000
-Date:   Tue, 21 Dec 2021 22:19:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sm8350-next-20211215 33/35] dp_debug.c:undefined
- reference to `dp_panel_tpg_config'
-Message-ID: <202112212258.GaBWCstq-lkp@intel.com>
+        id S238404AbhLUOUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238398AbhLUOUC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:20:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE424C061574;
+        Tue, 21 Dec 2021 06:20:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 41E93CE17AD;
+        Tue, 21 Dec 2021 14:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C1BC36AE9;
+        Tue, 21 Dec 2021 14:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640096398;
+        bh=w+0W4nazN2afM86/V/3t4u41Se18DBzL91myJaMCIXc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N5DzwXYvjIUHQ4NKGXFKmXQ3Gd5ieCrivd3hXeP0bYbG5FyfLC5UhI/ovQIXoDq3S
+         CXKv+QEWPQAky7OhnG2lbSd9njlFYgFapqaW7xtr2TSlfos3upLy+OKqvyu1qfiFYZ
+         iTJe3xq/ZSBy3jTwsPacvhiF0q8GtUZQ4qSmfurhIkmLM6lXd4pojUCpUz8fZMpGi4
+         eBoD8/daxaneuaXln2Hr/FG6eOFPuwr3Q+tTw/+lGXa6bk5PW/vLumSJ2gupKYgdAM
+         jblozaZLU0x/iA3UZcO3oV48BGuGHcqpSAszKx8u5nUxG8K3wTEeih8PKgKdJKt4zX
+         dockSPk4juyqw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B055A40DC5; Tue, 21 Dec 2021 11:19:55 -0300 (-03)
+Date:   Tue, 21 Dec 2021 11:19:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] perf expr: Fix return value of ids__new
+Message-ID: <YcHii0u6dusZFt6E@kernel.org>
+References: <20211214011030.20200-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211214011030.20200-1-linmq006@gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sm8350-next-20211215
-head:   525164cde506e9a9353b07816e50e26685e57fe4
-commit: 78d97ba5fc73e3d73729d57551fb7b4521a94755 [33/35] drm/msm/dp: Make it possible to enable the test pattern
-config: arm-randconfig-c002-20211220 (https://download.01.org/0day-ci/archive/20211221/202112212258.GaBWCstq-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/78d97ba5fc73e3d73729d57551fb7b4521a94755
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sm8350-next-20211215
-        git checkout 78d97ba5fc73e3d73729d57551fb7b4521a94755
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+Em Tue, Dec 14, 2021 at 01:10:27AM +0000, Miaoqian Lin escreveu:
+> callers of ids__new() function only do NULL checking for the return
+> value. ids__new() calles hashmap__new(), which may return
+> ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
+> return NULL instead of ERR_PTR(-ENOMEM) to keep
+> consistent.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Please don't use --- as a separator inside the commit message, it breaks
+scripts that expect it to be a separator from the commit log message to
+the diffstat + patch.
 
-All errors (new ones prefixed by >>):
+Applying after fixing this.
 
-   arm-linux-gnueabi-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_write':
->> dp_debug.c:(.text+0x398): undefined reference to `dp_panel_tpg_config'
+- Arnaldo
+ 
+> ---
+> Changes in v3:
+> fix compilation error and add tags.
+> ---
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> Tested-by: German Gomez <german.gomez@arm.com>
+> Reviewed-by: German Gomez <german.gomez@arm.com>
+> ---
+>  tools/perf/util/expr.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+> index 1d532b9fed29..f225247acc01 100644
+> --- a/tools/perf/util/expr.c
+> +++ b/tools/perf/util/expr.c
+> @@ -12,6 +12,7 @@
+>  #include "expr-bison.h"
+>  #include "expr-flex.h"
+>  #include "smt.h"
+> +#include <linux/err.h>
+>  #include <linux/kernel.h>
+>  #include <linux/zalloc.h>
+>  #include <ctype.h>
+> @@ -65,7 +66,12 @@ static bool key_equal(const void *key1, const void *key2,
+>  
+>  struct hashmap *ids__new(void)
+>  {
+> -	return hashmap__new(key_hash, key_equal, NULL);
+> +	struct hashmap *hash;
+> +
+> +	hash = hashmap__new(key_hash, key_equal, NULL);
+> +	if (IS_ERR(hash))
+> +		return NULL;
+> +	return hash;
+>  }
+>  
+>  void ids__free(struct hashmap *ids)
+> -- 
+> 2.17.1
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+
+- Arnaldo

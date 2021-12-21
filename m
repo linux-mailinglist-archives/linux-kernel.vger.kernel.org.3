@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDA447B9E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF16247B9EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 07:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbhLUGRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 01:17:04 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48652 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229698AbhLUGRD (ORCPT
+        id S233209AbhLUGRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 01:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233179AbhLUGRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 01:17:03 -0500
-X-UUID: 725fb2254b3a4a2a839744d8b17270c5-20211221
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fsqmCiRK++ZH7UUg/8t/S1vZ6GLSXPgcsopcYXVP/ho=;
-        b=pwASkwYOHFOnDKboNRTvkeuzPJujkQGEdDqa8akb/tbdZSkwwFSFw4AYBzX6Uju5PmpA2YPF3tmHlcEBdnGanNrwi1l/v+721LnawWoT4uXo/apCDrTrDcWdfnOZTqBh80QMOSkSgu4KBxbvRHq93eLpVwjp7cXejdD0AImHKxo=;
-X-UUID: 725fb2254b3a4a2a839744d8b17270c5-20211221
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 944519692; Tue, 21 Dec 2021 14:16:59 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 21 Dec 2021 14:16:58 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 21 Dec
- 2021 14:16:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 21 Dec 2021 14:16:57 +0800
-Message-ID: <37fc793f6b544f46cb214f7ed14034a1934bfe32.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/4] usb: mtu3: fix list_head check warning
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>,
-        Yuwen Ng <yuwen.ng@mediatek.com>
-Date:   Tue, 21 Dec 2021 14:16:58 +0800
-In-Reply-To: <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
-References: <20211218095749.6250-1-chunfeng.yun@mediatek.com>
-         <20211218095749.6250-3-chunfeng.yun@mediatek.com>
-         <64b9453a-84c5-8d41-26d5-698d1ae9d473@gmail.com>
-         <Yb8MM2zL2Ecfzv1/@kroah.com>
-         <9c5417f7-3cd9-472d-5b04-f831135ffd78@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Dec 2021 01:17:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8853AC06173F;
+        Mon, 20 Dec 2021 22:17:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47D83B811B1;
+        Tue, 21 Dec 2021 06:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821EFC36AE2;
+        Tue, 21 Dec 2021 06:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640067425;
+        bh=yIz5GSteNznazB9ICJ0nSd7ewm/WJGgw+sxO9Mzuqp4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rsBbAHwnQ2mYUDKX+ggXToetIrxkNHaoSVCNlJr7HfyWukaT3e9dZt4Y7JCzUzN66
+         GawpgWhOD2URgRY7TvLixYCQc3gfNAAr5Te9Aj7sbUTSfS0byKchT71NvzlLdHRXJU
+         gxQTtBHzUvg6xDt24R4UX4cQX6GDmpp3uQQvRjn4=
+Date:   Tue, 21 Dec 2021 07:17:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     ok@artecdesign.ee, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] USB: host: isp116x: Check for null res pointer
+Message-ID: <YcFxXkn99IOl2L3s@kroah.com>
+References: <20211221015658.1002191-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221015658.1002191-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIxLTEyLTE5IGF0IDE0OjAwICswMzAwLCBTZXJnZWkgU2h0eWx5b3Ygd3JvdGU6
-DQo+IE9uIDE5LjEyLjIwMjEgMTM6NDAsIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gWy4u
-Ll0NCj4gDQo+ID4gPiA+IFRoaXMgaXMgY2F1c2VkIGJ5IHVuaW5pdGlhbGl6YXRpb24gb2YgbGlz
-dF9oZWFkLg0KPiA+ID4gDQo+ID4gPiAgICAgQWdhaW4sIHRoZXJlJ3Mgbm8gc3VjaCB3b3JkIGFz
-ICJ1bmluaXRpYWxpemF0aW9uIiAoZXZlbiBpZiBpdA0KPiA+ID4gZXhpc3RlZCwgaXQNCj4gPiA+
-IHdvdWxkbid0IG1lYW4gd2hhdCB5b3Ugd2FudGVkIHRvIHNheSk7IHBsZWFzZSByZXBsYWNlIGJ5
-ICJub3QNCj4gPiA+IGluaXRpYWxpemluZyIuDQo+ID4gDQo+ID4gV2UgYXJlIG5vdCBFbmdsaXNo
-IGxhbmd1YWdlIHNjaG9sYXJzLCBtb3N0IG9mIHVzIGRvIG5vdCBoYXZlDQo+ID4gRW5nbGlzaCBh
-cw0KPiA+IHRoZWlyIG5hdGl2ZSBsYW5ndWFnZS4gIFdlIGFsbCBjYW4gdW5kZXJzdGFuZCB3aGF0
-IGlzIGJlaW5nIHNhaWQNCj4gPiBoZXJlLA0KPiA+IHRoZXJlJ3Mgbm8gbmVlZCBmb3IgYW55IGNo
-YW5nZSwgcGxlYXNlIGRvIG5vdCBiZSBzbyBjcml0aWNhbC4NCj4gDQo+ICAgICBPSywgbm90ZWQu
-Li4NCj4gICAgIEkgd2FzIGp1c3Qgc29tZXdoYXQgdXBzZXQgdGhhdCBteSAxc3QgY29tbWVudCB3
-YXMgaWdub3JlZC4gOi0vDQpWZXJ5IHNvcnJ5LCBJIHBsYW5uZWQgdG8gZml4IGl0LCBidXQgZm9y
-Z290IGl0Ow0KDQpQbGVhc2UgZmVlbCBmcmVlIHRvIHBvaW50IG91dCBteSBtaXN0YWtlczsNCg0K
-VGhhbmtzIGEgbG90DQoNCj4gDQo+ID4gdGhhbmtzLA0KPiA+IA0KPiA+IGdyZWcgay1oDQo+IA0K
-PiBNQlIsIFNlcmdleQ0K
+On Tue, Dec 21, 2021 at 09:56:58AM +0800, Jiasheng Jiang wrote:
+> And I correct my commit message because platform_get_resource returns
+> null if fails.
+> Here is it.
+> The return value of platform_get_resource() could be null when there is
+> no suitable resource.
+> So it should be better to check it to avoid the use of null pointer in
+> release_mem_region().
+> 
+> Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+> 
+> v3 -> v4
+> 
+> *Change 1. Just skip the use of null pointer instead of directly return.
+> *Change 2. Add the driver name in the subject line.
+> *Change 3. Correct commit message.
+> ---
+>  drivers/usb/host/isp116x-hcd.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
+*plonk*

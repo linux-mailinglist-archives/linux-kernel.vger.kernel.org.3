@@ -2,170 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B772447C934
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B133E47C93B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 23:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbhLUW1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 17:27:23 -0500
-Received: from mga09.intel.com ([134.134.136.24]:30135 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230085AbhLUW1W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 17:27:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640125642; x=1671661642;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OCoz9JuOsNdr+vSGj+llFZf1/IPEarrp1WZdEUevh+A=;
-  b=deCvRMIKV9S23n+lBCaFXMMoSVO19SAihESEM3Gs+W58u7FVgoRMkeze
-   wG/n9cFUCxItjaPyRAWoS85BmIqcY7tqfDz5EP5K+TAm71RZBVpo4y4YG
-   664c8V4BIJ8/MXmSgXTZlqob8iYq2xWJx0z+GE7fpkh5eIgieuXgUwLqk
-   A1YAeC0kyZPx3ZYdDHoXYoyqABBzjqnL/msvDDTB68lOTJFf1VXuOY9qE
-   +6s4syasArt3aYFZlrPlAcf5ci8J40x065dpYdZlWIpz6f/8uUvjnZsVd
-   +pAKyHJWFwGnY0qIo76HtdoF2aamhgjpHFQRTC3Ditb0Z6UC7WHVsLrTX
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240309469"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="240309469"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 14:27:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="508250684"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2021 14:27:19 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mznbK-0009bp-Sl; Tue, 21 Dec 2021 22:27:18 +0000
-Date:   Wed, 22 Dec 2021 06:26:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Anuj Gupta <anuj20.g@samsung.com>
-Subject: [axboe-block:nvme-passthru-wip.2 15/23] include/linux/io_uring.h:60:
- multiple definition of `io_uring_cmd_import_fixed';
- kernel/fork.o:include/linux/io_uring.h:60: first defined here
-Message-ID: <202112220658.XCmoVSe5-lkp@intel.com>
+        id S237909AbhLUWco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 17:32:44 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:59678 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230085AbhLUWcm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 17:32:42 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BLMWI6o015985
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Dec 2021 17:32:18 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 188E815C33A4; Tue, 21 Dec 2021 17:32:18 -0500 (EST)
+Date:   Tue, 21 Dec 2021 17:32:18 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+Message-ID: <YcJV8p/1XRGOQurz@mit.edu>
+References: <00000000000032992d05d370f75f@google.com>
+ <20211219023540.1638-1-hdanton@sina.com>
+ <Yb6zKVoxuD3lQMA/@casper.infradead.org>
+ <20211221090804.1810-1-hdanton@sina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211221090804.1810-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git nvme-passthru-wip.2
-head:   7567defdb3c6a81e4114a03ddf3d6c158df81a76
-commit: bc18161c9b80cf2d647710257f9716ee6c66fee4 [15/23] io_uring: add flag and helper for fixed-buffer uring-cmd
-config: x86_64-randconfig-a002-20211220 (https://download.01.org/0day-ci/archive/20211222/202112220658.XCmoVSe5-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=bc18161c9b80cf2d647710257f9716ee6c66fee4
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block nvme-passthru-wip.2
-        git checkout bc18161c9b80cf2d647710257f9716ee6c66fee4
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Tue, Dec 21, 2021 at 05:08:04PM +0800, Hillf Danton wrote:
+> 
+> I am trying to find the cause of same jbd2 journal thread blocked for
+> more than 120 seconds on a customer's system of linux-4.18 with RT
+> turned on and 12 CPUs in total bootup.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So here's the tricky bit with trying to use ext4 (or any file system,
+really; the details will be different but the fundamental issues will
+remain the same).  When a thread either calls fsync(2) or tries to
+initiate a flie system mutation by creating a jbd2 handle and there
+isn't enough space, the process will wake up the jbd2 thread and block
+until a new transaction has been started.
 
-All error/warnings (new ones prefixed by >>):
+In the jbd2 thread, the first thing it does is wait for all currently
+open handles to close, since it can only commit the current
+transaction when all handles attached to the current transaction have
+been closed.  If some non-real-time process happens to have an open
+handle, but it can't make forward progress for some reason, then this
+will prevent the commit from completing, and this in turn will cause
+any other process which needs to make changes to the file system from
+making forward progress, since they will be blocked by jbd2 commit
+thread, which in turn is blocked waiting low-priority process to make
+forward progress --- and if that process is blocked behind some high
+priority process, then that's the classic definition of "priority
+inversion".
 
-   In file included from fs/exec.c:66:
->> include/linux/io_uring.h:58:5: warning: no previous prototype for 'io_uring_cmd_import_fixed' [-Wmissing-prototypes]
-      58 | int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
---
-   ld: kernel/exit.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: fs/exec.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: block/fops.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/core.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/ioctl.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/trace.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/zns.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/fault_inject.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/fabrics.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/host/fc.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: drivers/nvme/target/fcloop.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: net/socket.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: net/ipv4/tcp.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: net/ipv4/raw.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: net/ipv4/udp.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
-   ld: net/unix/scm.o: in function `io_uring_cmd_import_fixed':
->> include/linux/io_uring.h:60: multiple definition of `io_uring_cmd_import_fixed'; kernel/fork.o:include/linux/io_uring.h:60: first defined here
---
-   In file included from kernel/exit.c:65:
->> include/linux/io_uring.h:58:5: warning: no previous prototype for 'io_uring_cmd_import_fixed' [-Wmissing-prototypes]
-      58 | int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/exit.c:1817:13: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
-    1817 | __weak void abort(void)
-         |             ^~~~~
+> Without both access to it and
+> clue of what RT apps running in the system, what I proposed is to
+> launch one more FIFO task of priority MAX_RT_PRIO-1 in the system like
+> 
+> 	for (;;) {
+> 		unsigned long i;
+> 
+> 		for (;;) /* spin for 150 seconds */
+> 			i++;
+> 		sleep a second;
+> 	}
+> 
+> in bid to observe the changes in behavior of underlying hardware using
+> the diff below.
 
+I'm not sure what you hope to learn by doing something like that.
+That will certainly perturb the system, but every 150 seconds, the
+task is going to let other tasks/threads run --- but it will be
+whatever is the next highest priority thread. 
 
-vim +60 include/linux/io_uring.h
+What you want to do is to figure out which thread is still holding a
+handle open, and why it can't run --- is it because there are
+sufficient higher priority threads that are running that it can't get
+a time slice to run, so it can complete its file system operation and
+release its handle?  Is it blocked behind a memory allocation (perhaps
+because it is in a memory-constrained cgroup)?  Is it blocked waiting
+on some mutex perhaps because it's doing something crazy like
+sendfile()?  Or some kind of I/O Uring system call?  Etc, Etc., Etc.
 
-    34	
-    35	static inline void io_uring_files_cancel(void)
-    36	{
-    37		if (current->io_uring)
-    38			__io_uring_cancel(false);
-    39	}
-    40	static inline void io_uring_task_cancel(void)
-    41	{
-    42		if (current->io_uring)
-    43			__io_uring_cancel(true);
-    44	}
-    45	static inline void io_uring_free(struct task_struct *tsk)
-    46	{
-    47		if (tsk->io_uring)
-    48			__io_uring_free(tsk);
-    49	}
-    50	#else
-    51	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret)
-    52	{
-    53	}
-    54	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
-    55				void (*driver_cb)(struct io_uring_cmd *))
-    56	{
-    57	}
-  > 58	int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
-    59			int rw, struct iov_iter *iter, void *ioucmd)
-  > 60	{
-    61		return -1;
-    62	}
-    63	static inline struct sock *io_uring_get_socket(struct file *file)
-    64	{
-    65		return NULL;
-    66	}
-    67	static inline void io_uring_task_cancel(void)
-    68	{
-    69	}
-    70	static inline void io_uring_files_cancel(void)
-    71	{
-    72	}
-    73	static inline void io_uring_free(struct task_struct *tsk)
-    74	{
-    75	}
-    76	#endif
-    77	
+What would probably make sense is to use "ps -eLcl" before the system
+hangs so you can see what processes and threads are running with which
+real-time or non-real-time priorities.  Or if the system has hung,
+uses the magic sysrq key to find out what threads are running on each
+CPU, and grab a stack trace from all of the running processes so you
+can figure out where some task might be blocked, and figure out which
+task might be blocked inside a codepath where it would be holding a
+handle.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If that level of access means you have to get a government security
+clearance, or get permission from a finance company's vice president
+for that kind of access --- get that clearance ahead of time, even if
+it takes months and involves background investigations and polygraph
+tests.  Because you *will* need that kind of access to debug these
+sorts of real-time locking issues.  There is an extremely high (99.9%)
+probability that the bug is in the system configuration or application
+logic, so you will need full source code access to the workload to
+understand what might have gone wrong.  It's almost never a kernel
+bug, but rather a fundamental application design or system
+configuration problem.
+
+> Is it a well-designed system in general if it would take more than
+> three seconds for the IO to complete with hardware glitch ruled out?
+
+Well, it depends on your definition of "well-designed" and "the I/O",
+doesn't it?  If you are using a cost-optimized cheap-sh*t flash device
+from Shenzhen, it can minutes for I/O to complete.  Just try copying
+DVD's worth of data using buffered writes to said slow USB device, and
+run "sync" or "umount /mnt", and watch the process hang for a long,
+long time.
+
+Or if you are using a cloud environment, and you are using virtual
+block device which is provisioned for a small number of IOPS, whose
+fault is it?  The cloud system, for throttling I/O the IOPS that was
+provisioned for the device?  The person who created the VM, for not
+appropriately provisioning enough IOPS?  Or the application
+programmer?  Or the kernel programmer?  (And if you've ever worked at
+a Linux distro or a cloud provider, you can be sure that at least one
+platinum customer will try to blame the kernel programmer.  :-)
+
+Or if you are using a storage area network, and you have a real time
+process which is logging to a file, and battle damage takes out part
+of the storage area network, and now the real-time process (which
+might be responsible for ship navigation or missle defense) hangs
+because file write is hanging, is that a "well-designed system"?  This
+is why you never, never, *NEVER* write to a file from a mission or
+life-critical real-time thread.  Instead you log to a ring buffer
+which is shared by non-real-time process, and that non-realtime
+process will save the log information to a file.  And if the
+non-real-time process can't keep up with writing the log, which is
+worse?  Missing log information?  Or a laggy or deadlocked missile
+defense system?
+
+The bottom line is especially if you are trying to use real-time
+threads, the entire system configuration, including choice of
+hardware, as well as the overall system architecture, all needs to be
+part of a holistic design.  You can't just be "the OS person" but
+instead you need to be part of the overall system architecture team.
+
+Cheers,
+
+						- Ted

@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA16A47BA9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C07447BAA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbhLUHUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:20:43 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:16920 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229999AbhLUHUm (ORCPT
+        id S234967AbhLUHUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:20:50 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:44568 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234934AbhLUHUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:20:42 -0500
+        Tue, 21 Dec 2021 02:20:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640071242; x=1671607242;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=5apnI+NFP5ph+MQ6/FXEzCVP6wQpf+R+4+RH8/BQ9W4=;
-  b=JTYjEv0O15GKHCkn1EwKZiF6oULouassbNPUNxRRRCyozsEK0JDIhHFI
-   guN99GIcnt24UNDgVGpEyEIjV49lIyo0J0ZnQpPM+EpW2JI32g+8bWKSq
-   V/DE5qfwoUPP3V6+Nkzktkhc2lcr9iExnwvSaRkPtG8WLlk77a/UNYwGN
-   I=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Dec 2021 23:20:42 -0800
+  t=1640071246; x=1671607246;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=BT3ij+o+RNqqmo+4+LR+KXAEY8VWuAd61fJQJ8OAeq8=;
+  b=LL5eHQt91GNX6iWSdWxVwxVi0a4tO3MDnPFiJ2axQvMf/1jubn2/uSV1
+   uJJSc8ZFVbDnBje21ya7Xeol0gz6+CWJL3OpiMrx0WUOGpYHWgJLnICe4
+   3KMpgLEpGznBl6enySXrd4/kQojfFvvdrvrFxJeZBSc4Jx3IVSHUDdCPc
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 20 Dec 2021 23:20:45 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 23:20:41 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 23:20:45 -0800
 Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 20 Dec 2021 23:20:41 -0800
+ 15.2.922.19; Mon, 20 Dec 2021 23:20:44 -0800
 Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 20 Dec 2021 23:20:39 -0800
+ 15.2.922.19; Mon, 20 Dec 2021 23:20:42 -0800
 From:   Fenglin Wu <quic_fenglinw@quicinc.com>
 To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sboyd@kernel.org>
 CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
-        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
-Subject: [PATCH v4 00/11] A bunch of fix and optimization patches in spmi-pmic-arb.c
-Date:   Tue, 21 Dec 2021 15:19:58 +0800
-Message-ID: <1640071211-31462-1-git-send-email-quic_fenglinw@quicinc.com>
+        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>,
+        <maz@kernel.org>, Abhijeet Dharmapurikar <adharmap@codeaurora.org>
+Subject: [PATCH v4 01/11] spmi: pmic-arb: add a print in cleanup_irq
+Date:   Tue, 21 Dec 2021 15:19:59 +0800
+Message-ID: <1640071211-31462-2-git-send-email-quic_fenglinw@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1640071211-31462-1-git-send-email-quic_fenglinw@quicinc.com>
+References: <1640071211-31462-1-git-send-email-quic_fenglinw@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -52,55 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v4:
-  In [v4 02/11], separated spurious interrupt handling.
-  In [v4 03/11], added Fixes tag for ("spmi: pmic-arb: do not ack and clear peripheral").
-  In [v4 11/11], updated the binding to address few warnings in "make dtbs_check"
+From: Abhijeet Dharmapurikar <adharmap@codeaurora.org>
 
-Changes in v3:
-  Drop [v2 07/10] as this is no longer needed after this change:
-		50fc4c8cd240 ("spmi: spmi-pmic-arb: fix irq_set_type race condition")
-  In [v3 07/10], updated the author email to match with Signed-off-by.
-  In [v3 10/10], added the binding change in this series, and addressed issues in "make dt_binding_check"
+The cleanup_irq() was meant to clear and mask interrupts that were
+left enabled in the hardware but there was no interrupt handler
+registered for it. Add an error print when it gets invoked.
 
-Changes in v2:
-  In [v2 01/10], added code to handle spurious interrupt.
-  In [v2 03/10], adressed minor comments to update the code logic.
-  In [v2 04/10], minor update to detect spurious interrupt.
-  In [v2 05/10], added Fixes tag.
-  In [v2 07/10], added Fixes tag and updated commit text to explain the problem.
-  In [v2 08/10], added binding change to make interrupt properties as optional.
-  In [v2 09/10], updated to check presence of "interrupt-controller" property.
+Signed-off-by: Abhijeet Dharmapurikar <adharmap@codeaurora.org>
+Signed-off-by: David Collins <collinsd@codeaurora.org>
+Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+---
+ drivers/spmi/spmi-pmic-arb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Abhijeet Dharmapurikar (1):
-  spmi: pmic-arb: add a print in cleanup_irq
-
-Ashay Jaiswal (1):
-  spmi: pmic-arb: add support to dispatch interrupt based on IRQ status
-
-David Collins (6):
-  spmi: pmic-arb: check apid against limits before calling irq handler
-  spmi: pmic-arb: correct duplicate APID to PPID mapping logic
-  spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
-  bindings: spmi: spmi-pmic-arb: mark interrupt properties as optional
-  spmi: pmic-arb: make interrupt support optional
-  spmi: pmic-arb: increase SPMI transaction timeout delay
-
-Fenglin Wu (2):
-  spmi: pmic-arb: handle spurious interrupt
-  dt-bindings: convert qcom,spmi-pmic-arb binding to YAML format
-
-Subbaraman Narayanamurthy (1):
-  spmi: pmic-arb: do not ack and clear peripheral interrupts in
-    cleanup_irq
-
- .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  65 ---------
- .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 146 +++++++++++++++++++++
- drivers/spmi/spmi-pmic-arb.c                       | 136 +++++++++++++------
- 3 files changed, 242 insertions(+), 105 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
- create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-
+diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
+index 2113be4..5a99723 100644
+--- a/drivers/spmi/spmi-pmic-arb.c
++++ b/drivers/spmi/spmi-pmic-arb.c
+@@ -590,6 +590,8 @@ static void cleanup_irq(struct spmi_pmic_arb *pmic_arb, u16 apid, int id)
+ 	u8 per = ppid & 0xFF;
+ 	u8 irq_mask = BIT(id);
+ 
++	dev_err_ratelimited(&pmic_arb->spmic->dev, "%s apid=%d sid=0x%x per=0x%x irq=%d\n",
++			__func__, apid, sid, per, id);
+ 	writel_relaxed(irq_mask, pmic_arb->ver_ops->irq_clear(pmic_arb, apid));
+ 
+ 	if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
 -- 
 2.7.4
 

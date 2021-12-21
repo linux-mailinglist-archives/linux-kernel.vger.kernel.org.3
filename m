@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA8247C499
+	by mail.lfdr.de (Postfix) with ESMTP id A4E6047C49A
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 18:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbhLUREL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 12:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S231777AbhLUREQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 12:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbhLUREK (ORCPT
+        with ESMTP id S231747AbhLUREN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:04:10 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFDBC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:10 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id ay40-20020a05600c1e2800b003458b72e865so1571411wmb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:10 -0800 (PST)
+        Tue, 21 Dec 2021 12:04:13 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D435AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:12 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id h7-20020adfaa87000000b001885269a937so4886430wrc.17
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 09:04:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=tAooiWC6s3hGfLWdFjLduilnhzXlkBJTQtprgFsbC0o=;
-        b=mt6SflaHttOXMo5IdHfav4XJKjqRUcXV/IcRkPTC2HpPWr0iYXnqGdz7rW8j0B2psQ
-         GP9CEXSaVgrXipTdYPzvrEAgxsjSlqI+bUDNQQfTi9knQpEJ4WjL2JrrXnvQ2Vrqy3y6
-         UXTQNabhLReAXNgGz6hHPkfBgXmSA+Y54s3e1uoyklmsA4hu+jC6AGY8B3A2xPSoEPTr
-         /9Q1ozn0eZlyyI98QfJLshzAqoU/1xcGn9WkBPZFjGolHKzUsPxSh4bOhbWRCkxX8tlT
-         ci5IuqhVqtthnxlUWzDj4FtWs3Jk2F4Zs6BcZmOWfTX0sudfkeQ71wfF0tlSuthQI7kG
-         unHw==
+        bh=E92eP/emmd4tPCtN84LURrU10uCO5laN21sGBPTutAE=;
+        b=rwpDUr7BTlt54xIChNSmy2vthIyUPwepgykcLhAy0Tqh6ftXSTZ/GU2wZdiVYKH08q
+         qlSOPn5txoRbNT7LCL8O7qHChumewLMumnMW+8Nmo+KPjs1Ic9CeT6Kip/bt1ynTn41n
+         76P2uFig+Iz7hVjf76TDD4MfC4k37Tyqjfug663hsm2+PpKw1YpwM2dvlKmAGX4Ud5S6
+         8Uz5E3KA+xcUdh7nwoqwFoy146IBa7rYSH3ewx+EcUcWQ7aEJagBL5GigJNuOwuJL72J
+         py64vabHgkeBqKjTCs4E+NgfvQzhDC2CXrS8y+vrVJ5/LtG6IWP/4qRMo91Z8NtkYyfW
+         H8aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=tAooiWC6s3hGfLWdFjLduilnhzXlkBJTQtprgFsbC0o=;
-        b=tdU/xxkQWLB4JPJKlZsFdHZG5vKcLOmSIJBHyawUmXtV3MlgRL5qJKAtPX8Wc4Yuey
-         lSsiEFv2ks6bKiFcnDlO7N2/0K0O3gevdmkj8rTBl7BTMDZUbW0R2vW0YfDXwVnK+8rm
-         t9zHMXBIGk9vcMSKuw8rq/ttNjJnPu8KorRM+fAEBZY2bDJKaqU4aE+Me1B4+zvwtPM7
-         ZYza4+y0NBO1egtkgyD6JTFFE27Uh3K3lTOEULFQhSL5iRmd+673VLWYMBZSFelR5Dcq
-         6lxVyGj72xQxVSRyOPBArkjEEOLECwXhObt6pxoj7/YedFEWn4CnZxRr3Zn/tHCtX8N4
-         D12A==
-X-Gm-Message-State: AOAM530lTo1pW56rVijO3wwiLK9Gnq4AzkkMOjZ9lBzaOzI9GCKpiHV9
-        5Up2hjS6jyR/HWlhs027hqRmwFYzV/Q=
-X-Google-Smtp-Source: ABdhPJxNg3MRDG0w76H+Usw0QGimLPzUV1NQv9ea80h4ZfMx4qSxPKR+9iH0YfFhDc5TGu2K7QANkmWtUFc=
+        bh=E92eP/emmd4tPCtN84LURrU10uCO5laN21sGBPTutAE=;
+        b=elmNKSzjHUSx6fcy3zH5iZt1G71uKpQI4+0hW6jvzHZTyYbirxYLeUQpya72olKwqf
+         EjQ6OG8ZpYXwk9RVc7IUc/C38NsnWBQSXvuzsVba9v2gOqiaCLc/eUAy66HBizDNN+Ow
+         IVLRUvk/ADfQtv1QPeV/uVTQCuXGhsvIWdUKxRzi4CdZGtmL/BINghkvd4WEyd/egYVB
+         9TlZPskyenrbUT3RoQ3A1w+t+ZPHkfq6uWTWra+Kwh+hZhS0s9fH5xQThQFe/D2fb+La
+         Wu+FulKqPO+rNkLHLhPjV8XWrLarYMXe8vPdYz9vo2xMXHHruULeyMhzPZQp2cBn5hPm
+         1lrA==
+X-Gm-Message-State: AOAM5336PFcYz7m7brMMCmbj4h2WJ8VQaySLKiB/kTXb9xgvoMdEMR1h
+        Efgb+vr/KmDwJ9yxIjymt3Yfq6cCfEY=
+X-Google-Smtp-Source: ABdhPJyLn8mGeU7bn6CPz7Aiqz1oL/fzfhyHRcntGAJO1GMZpfrwge/x6XsHlSdfv7OZ2HE5m/brWxjkYHs=
 X-Received: from nogikh-hp.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:200d])
- (user=nogikh job=sendgmr) by 2002:a7b:c219:: with SMTP id x25mr67034wmi.1.1640106248480;
- Tue, 21 Dec 2021 09:04:08 -0800 (PST)
-Date:   Tue, 21 Dec 2021 17:03:47 +0000
+ (user=nogikh job=sendgmr) by 2002:a1c:9dc7:: with SMTP id g190mr3701479wme.56.1640106251428;
+ Tue, 21 Dec 2021 09:04:11 -0800 (PST)
+Date:   Tue, 21 Dec 2021 17:03:48 +0000
 In-Reply-To: <20211221170348.1113266-1-nogikh@google.com>
-Message-Id: <20211221170348.1113266-2-nogikh@google.com>
+Message-Id: <20211221170348.1113266-3-nogikh@google.com>
 Mime-Version: 1.0
 References: <20211221170348.1113266-1-nogikh@google.com>
 X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 1/2] kcov: split ioctl handling into locked and unlocked parts
+Subject: [PATCH v2 2/2] kcov: properly handle subsequent mmap calls
 From:   Aleksandr Nogikh <nogikh@google.com>
 To:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         akpm@linux-foundation.org
@@ -63,44 +63,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently all ioctls are de facto processed under a spin lock in order
-to serialise them. This, however, prohibits the use of vmalloc and other
-memory management functions in the implementation of those ioctls,
-unnecessary complicating any further changes.
+Allocate the kcov buffer during KCOV_MODE_INIT in order to untie mmapping
+of a kcov instance and the actual coverage collection process. Modify
+kcov_mmap, so that it can be reliably used any number of times once
+KCOV_MODE_INIT has succeeded.
 
-Let all ioctls first be processed inside the kcov_ioctl_unlocked()
-function which should execute the ones that are not compatible with
-spinlock and pass control to kcov_ioctl_locked() for all other ones.
-
-Although it is still compatible with a spinlock, move KCOV_INIT_TRACE
-handling to kcov_ioctl_unlocked(), so that its planned change is easier
-to follow.
+These changes to the user-facing interface of the tool only weaken the
+preconditions, so all existing user space code should remain compatible
+with the new version.
 
 Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
 ---
- kernel/kcov.c | 64 +++++++++++++++++++++++++++++++--------------------
- 1 file changed, 39 insertions(+), 25 deletions(-)
+ kernel/kcov.c | 49 +++++++++++++++++++++++++------------------------
+ 1 file changed, 25 insertions(+), 24 deletions(-)
 
 diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 36ca640c4f8e..5d87b4e0126f 100644
+index 5d87b4e0126f..d6a522fc6f36 100644
 --- a/kernel/kcov.c
 +++ b/kernel/kcov.c
-@@ -564,31 +564,12 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
- 			     unsigned long arg)
+@@ -459,37 +459,28 @@ void kcov_task_exit(struct task_struct *t)
+ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
  {
- 	struct task_struct *t;
--	unsigned long size, unused;
-+	unsigned long flags, unused;
- 	int mode, i;
- 	struct kcov_remote_arg *remote_arg;
- 	struct kcov_remote *remote;
--	unsigned long flags;
+ 	int res = 0;
+-	void *area;
+ 	struct kcov *kcov = vma->vm_file->private_data;
+ 	unsigned long size, off;
+ 	struct page *page;
+ 	unsigned long flags;
+ 
+-	area = vmalloc_user(vma->vm_end - vma->vm_start);
+-	if (!area)
+-		return -ENOMEM;
+-
+ 	spin_lock_irqsave(&kcov->lock, flags);
+ 	size = kcov->size * sizeof(unsigned long);
+-	if (kcov->mode != KCOV_MODE_INIT || vma->vm_pgoff != 0 ||
++	if (kcov->area == NULL || vma->vm_pgoff != 0 ||
+ 	    vma->vm_end - vma->vm_start != size) {
+ 		res = -EINVAL;
+ 		goto exit;
+ 	}
+-	if (!kcov->area) {
+-		kcov->area = area;
+-		vma->vm_flags |= VM_DONTEXPAND;
+-		spin_unlock_irqrestore(&kcov->lock, flags);
+-		for (off = 0; off < size; off += PAGE_SIZE) {
+-			page = vmalloc_to_page(kcov->area + off);
+-			if (vm_insert_page(vma, vma->vm_start + off, page))
+-				WARN_ONCE(1, "vm_insert_page() failed");
+-		}
+-		return 0;
++	spin_unlock_irqrestore(&kcov->lock, flags);
++	vma->vm_flags |= VM_DONTEXPAND;
++	for (off = 0; off < size; off += PAGE_SIZE) {
++		page = vmalloc_to_page(kcov->area + off);
++		if (vm_insert_page(vma, vma->vm_start + off, page))
++			WARN_ONCE(1, "vm_insert_page() failed");
+ 	}
++	return 0;
+ exit:
+ 	spin_unlock_irqrestore(&kcov->lock, flags);
+-	vfree(area);
+ 	return res;
+ }
+ 
+@@ -671,25 +662,35 @@ static int kcov_ioctl_unlocked(struct kcov *kcov, unsigned int cmd,
+ {
+ 	unsigned long size, flags;
+ 	int res;
++	void *area;
  
  	switch (cmd) {
--	case KCOV_INIT_TRACE:
--		/*
--		 * Enable kcov in trace mode and setup buffer size.
--		 * Must happen before anything else.
+ 	case KCOV_INIT_TRACE:
+ 		/*
+ 		 * Enable kcov in trace mode and setup buffer size.
+ 		 * Must happen before anything else.
 -		 */
 -		if (kcov->mode != KCOV_MODE_DISABLED)
 -			return -EBUSY;
@@ -108,80 +145,31 @@ index 36ca640c4f8e..5d87b4e0126f 100644
 -		 * Size must be at least 2 to hold current position and one PC.
 -		 * Later we allocate size * sizeof(unsigned long) memory,
 -		 * that must not overflow.
--		 */
--		size = arg;
--		if (size < 2 || size > INT_MAX / sizeof(unsigned long))
--			return -EINVAL;
--		kcov->size = size;
--		kcov->mode = KCOV_MODE_INIT;
--		return 0;
- 	case KCOV_ENABLE:
- 		/*
- 		 * Enable coverage for the current task.
-@@ -685,6 +666,43 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
- 	}
- }
- 
-+static int kcov_ioctl_unlocked(struct kcov *kcov, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	unsigned long size, flags;
-+	int res;
++		 *
++		 * First check the size argument - it must be at least 2
++		 * to hold the current position and one PC.
+ 		 */
+ 		size = arg;
+ 		if (size < 2 || size > INT_MAX / sizeof(unsigned long))
+ 			return -EINVAL;
 +
-+	switch (cmd) {
-+	case KCOV_INIT_TRACE:
-+		/*
-+		 * Enable kcov in trace mode and setup buffer size.
-+		 * Must happen before anything else.
-+		 */
-+		if (kcov->mode != KCOV_MODE_DISABLED)
-+			return -EBUSY;
-+		/*
-+		 * Size must be at least 2 to hold current position and one PC.
-+		 * Later we allocate size * sizeof(unsigned long) memory,
-+		 * that must not overflow.
-+		 */
-+		size = arg;
-+		if (size < 2 || size > INT_MAX / sizeof(unsigned long))
-+			return -EINVAL;
-+		kcov->size = size;
-+		kcov->mode = KCOV_MODE_INIT;
-+		return 0;
-+	default:
-+		/*
-+		 * All other commands can be fully executed under a spin lock, so we
-+		 * obtain and release it here to simplify the code of kcov_ioctl_locked().
-+		 */
++		area = vmalloc_user(size * sizeof(unsigned long));
++		if (area == NULL)
++			return -ENOMEM;
++
 +		spin_lock_irqsave(&kcov->lock, flags);
-+		res = kcov_ioctl_locked(kcov, cmd, arg);
++		if (kcov->mode != KCOV_MODE_DISABLED) {
++			spin_unlock_irqrestore(&kcov->lock, flags);
++			vfree(area);
++			return -EBUSY;
++		}
++		kcov->area = area;
+ 		kcov->size = size;
+ 		kcov->mode = KCOV_MODE_INIT;
 +		spin_unlock_irqrestore(&kcov->lock, flags);
-+		return res;
-+	}
-+}
-+
- static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- {
- 	struct kcov *kcov;
-@@ -692,7 +710,6 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	struct kcov_remote_arg *remote_arg = NULL;
- 	unsigned int remote_num_handles;
- 	unsigned long remote_arg_size;
--	unsigned long flags;
- 
- 	if (cmd == KCOV_REMOTE_ENABLE) {
- 		if (get_user(remote_num_handles, (unsigned __user *)(arg +
-@@ -713,10 +730,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	}
- 
- 	kcov = filep->private_data;
--	spin_lock_irqsave(&kcov->lock, flags);
--	res = kcov_ioctl_locked(kcov, cmd, arg);
--	spin_unlock_irqrestore(&kcov->lock, flags);
--
-+	res = kcov_ioctl_unlocked(kcov, cmd, arg);
- 	kfree(remote_arg);
- 
- 	return res;
+ 		return 0;
+ 	default:
+ 		/*
 -- 
 2.34.1.307.g9b7440fafd-goog
 

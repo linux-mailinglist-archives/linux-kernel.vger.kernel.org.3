@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC61147C8F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E46347C8F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 22:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237457AbhLUV6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 16:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S237496AbhLUV6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 16:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLUV6o (ORCPT
+        with ESMTP id S230251AbhLUV6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:58:44 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD901C061574;
-        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z5so668148edd.3;
-        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
+        Tue, 21 Dec 2021 16:58:45 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B96C061574;
+        Tue, 21 Dec 2021 13:58:45 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y13so512086edd.13;
+        Tue, 21 Dec 2021 13:58:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
-        b=bd6HqV3UMrb9sepofinLvIt3WmGL1zLxlImvORLg3MLxjF4VdIicCOoe5H/r4czjT0
-         YWmTS5mwJZVhzpbfnzy6G4OiVXAdz1epYplAv8OMgDhWa0Uc647rrCFCeHTLJ1YhqXzw
-         ehCWuxNzAzF1w2mNqmfwp2e8EtTfD1qrG2K02KRLKgmxz5HuE3/ABqxVpoayIMmV4Dqe
-         HClwT9OQ+Hm42rODUtzgAeulz59Ej8oTAmL/tVRX/MtNzilGq0/XJt2hiOm+Es+XlOJg
-         HrMAytl6vbn85HrMJHsoxPKRL8W15ONi/sanX3gytv0z2fM506ACQw6DwVLxjvODq1He
-         9q5g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TZKAtR6UT3uSpTIEo5wgVOep5oODFFJr46+sXEmJhnY=;
+        b=ierSayg6Die2nd/9Aa5Spr4PGfBZiSophXnaVzcqgoD5p8C72hZiPqmIJ81AS1B5JL
+         69FNr0LUWL67Bz32Mg7KMqnIzALCaRoUBQO7HHsBxWR+vgde+Ut6VUWOTwQyEJ4SMD5g
+         7DF3/yHnWgbob2w1RV4EXKjupojJ43Jtl1YPvqyNRFXMXDEgIu4MQ8/ETKra3O8Mmpwf
+         uJ9sgGMHQ9pNCCMVOM6NkU57XPk+uoVnunbkdUjFTLngaLxPrOK9mzzQuAYUlWustn28
+         7FFXuSV7fFtegeqMqgnlLD8vxF8IwB7jfNz2zkl2Kq6ut6TzQo1epHon2uu921Dq0laf
+         36Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hhfHR54p1zqpF7NId8kxEyF9NRPoraDa4HvuJbnAmbk=;
-        b=w9/PcNpvb6l64aZg5e9pNXOU6JEF6oXLU+JyK51vdPcc7vwnpov/1xzgSAvo0S5D+j
-         bLa3HkX83HyX7DF+HKBlb+HsofUFrscnk7Qiya8smOijGidQCWWP4BeVg8enAp5Gbk4/
-         LMN1982B3USQnYHsTL4ySgZEsjkUTjh+CSYKyK3xz0mbbiZgxfBw1qZR6WREXu7npMFz
-         gWEJriOW1eLAAAQsYkEHic8CDFUGof2sjz7BAGWBa/L9twPCCxV6h57hHb+yuPtKRZXE
-         RnHVSGCSO80BBTZTLDWgeZF9ShDl/xL8Z4mR36rHHhMaJ7+mZM4k8P6ZMeDMh7F6v0O0
-         mypA==
-X-Gm-Message-State: AOAM531Nr7s+6Z75lhlb719r0C6eA7x58YuX4BN/dtTBu0VHyFb1ReXl
-        bkwK1stIsOCQaEVnXqk3XIA=
-X-Google-Smtp-Source: ABdhPJyeBIXVTijWSWWT3bHWlHikQP2eP6zx9tIYJhbsevUfsN85qkZw4V8E1PP8plVaIhlzCL7RwA==
-X-Received: by 2002:a05:6402:184c:: with SMTP id v12mr254883edy.154.1640123922503;
-        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TZKAtR6UT3uSpTIEo5wgVOep5oODFFJr46+sXEmJhnY=;
+        b=ZGGnm0qmto6+bF1Qnmvz9laByFMrKdfBKEGYrxA29CdhyAKK6aGyFq76SzHC6Jjcd8
+         NmMklbicv3fekmcnSDvMFDnG8pxlIIi3OML9uNblwknlZ1gH9c7pbb5ao6JvhA6+YSJ6
+         WWVQnWa7vHf8ScM3y0qRtUy+0rXhhc4Lyh4hjyOfStP48KaVa7jaoudgU2XDow2TQkze
+         DXjVMHANgb2LCHIhDEBHuisc3SihPQsZkVcQfHdcSEucb6z+RdPnQcMjvnT+4EUDb0jK
+         gnzBE9HkXPaW6mh0565gSbS58Uq2BL3EyMlAMbkLHz7AC04ruMeIJaHGRJNTti/avwhq
+         UH4Q==
+X-Gm-Message-State: AOAM530FHR2j0o1GWG+Zr/NAdymWmXpKHhagSJVra2WYed07BbPPR592
+        Gi4DN1gXXrVsMkkCQWql4Vg=
+X-Google-Smtp-Source: ABdhPJwRnHrUM2ZIH+Q2YXLAgYWKFCbG+Vydsnw2lQWh2CD85v+b9zIwEy6KBXunEzn0k0N3ENgoaw==
+X-Received: by 2002:a17:906:3e09:: with SMTP id k9mr250919eji.104.1640123923852;
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.42.157])
-        by smtp.gmail.com with ESMTPSA id nc29sm41640ejc.3.2021.12.21.13.58.41
+        by smtp.gmail.com with ESMTPSA id nc29sm41640ejc.3.2021.12.21.13.58.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 13:58:42 -0800 (PST)
+        Tue, 21 Dec 2021 13:58:43 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/7] Refactor ADT7X10
-Date:   Tue, 21 Dec 2021 23:58:34 +0200
-Message-Id: <20211221215841.2641417-1-demonsingur@gmail.com>
+Subject: [PATCH v3 1/7] hwmon: (adt7x10) Store bus_dev in private data
+Date:   Tue, 21 Dec 2021 23:58:35 +0200
+Message-Id: <20211221215841.2641417-2-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211221215841.2641417-1-demonsingur@gmail.com>
+References: <20211221215841.2641417-1-demonsingur@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -64,34 +66,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V1 -> V2:
- * add device managed action for restoring config
- * merge multiple small related patches into a single patch
-   that converts the driver to use devm_hwmon_device_register_with_info
- * switch to devm_request_threaded_irq after switching to
-   devm_hwmon_device_register_with_info to make sure that it is impossible
-   for the interrupt handler to access the freed hwmon device
- * drop core driver remove callback
+From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-V2 -> V3:
- * merge patch that passes name from i2c driver into the
-   devm_hwmon_device_register_with_info patch
+It will later be used to access the bus device because
+callbacks only provide the hwmon device.
 
-Cosmin Tanislav (7):
-  hwmon: (adt7x10) Store bus_dev in private data
-  hwmon: (adt7x10) Add device managed action for restoring config
-  hwmon: (adt7x10) Use devm_hwmon_device_register_with_info
-  hwmon: (adt7x10) Use devm_request_threaded_irq
-  hwmon: (adt7x10) Remove empty driver removal callback
-  hwmon: (adt7x10) Pass hwinfo dev to irq handler
-  hwmon: (adt7x10) Use hwmon_notify_event
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ drivers/hwmon/adt7x10.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/hwmon/adt7310.c |   7 -
- drivers/hwmon/adt7410.c |   9 +-
- drivers/hwmon/adt7x10.c | 281 ++++++++++++++++++++--------------------
- drivers/hwmon/adt7x10.h |   1 -
- 4 files changed, 144 insertions(+), 154 deletions(-)
-
+diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
+index e9d33aa78a19..2439da9b64e6 100644
+--- a/drivers/hwmon/adt7x10.c
++++ b/drivers/hwmon/adt7x10.c
+@@ -56,6 +56,7 @@ struct adt7x10_data {
+ 	const struct adt7x10_ops *ops;
+ 	const char		*name;
+ 	struct device		*hwmon_dev;
++	struct device		*bus_dev;
+ 	struct mutex		update_lock;
+ 	u8			config;
+ 	u8			oldconfig;
+@@ -368,6 +369,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
+ 
+ 	data->ops = ops;
+ 	data->name = name;
++	data->bus_dev = dev;
+ 
+ 	dev_set_drvdata(dev, data);
+ 	mutex_init(&data->update_lock);
 -- 
 2.34.1
 

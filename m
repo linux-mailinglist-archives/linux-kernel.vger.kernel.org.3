@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EDF47B6E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6715347B6DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 02:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhLUBeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 20:34:21 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:49522 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230287AbhLUBeU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:34:20 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABHTFgDL8FhFCYUBA--.49504S2;
-        Tue, 21 Dec 2021 09:33:55 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ok@artecdesign.ee, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] USB: host: isp116x: Check for null res pointer
-Date:   Tue, 21 Dec 2021 09:33:54 +0800
-Message-Id: <20211221013354.1002134-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S230284AbhLUBeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 20:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230287AbhLUBeE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 20 Dec 2021 20:34:04 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C7DC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:34:03 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id k21so7588622lfu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Dec 2021 17:34:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=NmWe9GJ4ZAnK4jiKgzkrDqHn2s1Dhkh9he/1fT1teTS1VQqwhkn1T02E7sE69jm2rE
+         AD61z9BysxbEhTdkBsssaZt+/mChXafU8va8Hn7bOJKO6HL7A0RAaxA9PMBYsqKE9vQj
+         xaoF63eDIIubuhQQ2YuNg7P2UYWd0m6UbkgV35zGchEgQiTwTIhMaSaff5GWwXHp6O5l
+         c1NQdGcMm8BC8hjASz9QVTvbibtiJcxbHAq/+cUiFb8+Qmnn+3SDD/QRwGt7YQYVUOQr
+         e+RA5SotEd8LRNl7O++O1RfNi+bU+qmdjN/j5pWCMWjb8XfRKoaBMuAAPuD4B2H3mCLf
+         +QpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=OgeIoGEy8AbJ2u1pbqii89oQ2QQhoY9VOxNL25po9lYUpc2h4Uny9udiUvl+Z8frU/
+         1GoNb0lxeeZ/YmyUPYj3BUdnXxvdhRHcQV+urh+JCgZGH3qVMctyNTuk2FJ1uHTrgGUb
+         RcLggo+GN4N6vmLmcrqI5a9cYcdl6YQVYWctRXCyR78KB4+iR36nGFLNIav6NfglnEHB
+         +j5gYShs06IhTPds0HPwLw6St0pgHsTs1j1/uofw0ijQAUag2wrj/gGay1fVW43xMZSN
+         l1BU4QPLJpqtUDcp6cCijAXhF6ObfR4+dIMdRV9OB70NIlclxM+dYUeND+NYb5qTZot0
+         WcnQ==
+X-Gm-Message-State: AOAM531Ch076cY2oknf+cwZ1fgtJQVB1v0Z8+fvoG7M+rDUa46lDHy1T
+        F5ZNZr0fAv/7AyZNpdX8e6m+wLitnKitzuYkP3M=
+X-Google-Smtp-Source: ABdhPJxOcvzHq9yWiVfRO/g5dfdb052VxUk5d3NJt+np17jsN+4QksmFfqA6RRVpreOa0T/pIFAAi1gubBte5wceG5g=
+X-Received: by 2002:a05:6512:3e09:: with SMTP id i9mr896877lfv.132.1640050441990;
+ Mon, 20 Dec 2021 17:34:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABHTFgDL8FhFCYUBA--.49504S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZry8Aw1xGw15KrWDKF4kWFg_yoWkuFb_C3
-        yF9rs5Kr4DGFn8t3W8Ar15ua92yr4DWr48uF1vva4avryUJr1UX3yDurWrJr98Wws8CF98
-        C34DXrWfu343ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUg4SOUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Received: by 2002:a05:6512:3f2:0:0:0:0 with HTTP; Mon, 20 Dec 2021 17:34:01
+ -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   Ms Lisa Hugh <lisahugh531@gmail.com>
+Date:   Mon, 20 Dec 2021 17:34:01 -0800
+Message-ID: <CAFnQ+S47ma5PkwQq+YbqJxn1b4Gm7XNF3qQLPVD3ro4eUgF8eQ@mail.gmail.com>
+Subject: YOU WILL HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I agree with the comments and I have add the driver name in the subject
-line.
+Dear Friend,
 
-Fixes: 4808a1c02611 ("[PATCH] USB: Add isp116x-hcd USB host controller driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-v2 -> v3
+I need your co-operation for the  transferring of ($4,500,000,00
+,U.S.DOLLARS)to your bank account for both of us benefit.
 
-*Change 1. Just skip the use of null pointer instead of directly return.
-*Change 2. Add the driver name in the subject line.
----
- drivers/usb/host/isp116x-hcd.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
-index 8835f6bd528e..aacaf6e2ddca 100644
---- a/drivers/usb/host/isp116x-hcd.c
-+++ b/drivers/usb/host/isp116x-hcd.c
-@@ -1541,10 +1541,13 @@ static int isp116x_remove(struct platform_device *pdev)
- 
- 	iounmap(isp116x->data_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
-+
- 	iounmap(isp116x->addr_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
- 
- 	usb_put_hcd(hcd);
- 	return 0;
--- 
-2.25.1
-
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh

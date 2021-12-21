@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9042147C812
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2EC47C816
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 21:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbhLUUKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 15:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S232943AbhLUUL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 15:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbhLUUKs (ORCPT
+        with ESMTP id S229916AbhLUUL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 15:10:48 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E48DC061574;
-        Tue, 21 Dec 2021 12:10:48 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id z8so110839ljz.9;
-        Tue, 21 Dec 2021 12:10:48 -0800 (PST)
+        Tue, 21 Dec 2021 15:11:27 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAABC061574;
+        Tue, 21 Dec 2021 12:11:26 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id j21so52138888edt.9;
+        Tue, 21 Dec 2021 12:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DUTD85DTqFh8A4kGTDuc3IZA1YdriBEGBR1o80m5qXg=;
-        b=QJbP+m5ENMCLb32+58udXRwmKFtpZR/Jn5kpWoDjgSQeJK8Ny8xiL2FLgLE1FY5xj3
-         rjhkeuKdGZL1w6IJkbfVjJZ4QPJowh2VhVqXDNKQhcDnUcbv9CEacUv+5tCbJ7FzfFsY
-         lFNXwdqT3L3MNm2KSy3EwRfRqwgIsuI9uVHAvUbPhm9fhSTLci9HaOY0aecyUwW3RJFt
-         L093Uk1e0Zrfhx3nCpMA+OLtadEnWc22K2Bt53kxBL+9JoXq/aVXXLJsOBfVIp5v8esG
-         /hCO18IVZNB7x6RKsggRMdZB1tqzz16oYbILW996ErppsuWe5LsNTTjOYF1FhPFXTPc2
-         wK/g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZcYF0sJxfCsW5AbyQlpVqnAvfQ5ZjjzzRLMoH53YhLw=;
+        b=Gi8L57PPvhuXcja1D3wFp2AkNoaB7TKIi4o+uOtS4L4ydvxYaxnP2EemQW46AGg2Pw
+         kyBcv3YElHNDZ336eJoPGyG3TsGnxtFg33VDslZJdviFNZomjav9Fwty0n5Y5bWLlACC
+         jnpT1yVQEtOsHdMHqetGLhmsqjmv9stC1sI3KpqxLh8dCRXksy9Wqjk74Lza3YZ4cRRl
+         52SwljS035GU7q5EhD5tnmc5OxCvWMGA99rcHAXT1cPL/6ZeXMDEOj8CC5JHzOgFP9p7
+         ABg8UpX3tZpw75zlZRumWgwaYyo6qNMG6h5k2flspqqVJEKL6eTM5DsITVV2CgJ4Pp9F
+         Z/SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DUTD85DTqFh8A4kGTDuc3IZA1YdriBEGBR1o80m5qXg=;
-        b=7/OCQ0y5UpE/m4oZj2bwk2nY+z5s+8LTw6Ht221TLpBHM+fb/rjqsS03K+Ge+ot8ZV
-         TdPDKUHfPr7CIsXW0yOsdQzmMNirmVg4mVrDkud6LGa+E8D0gQGd5wq/mW8Hnu1V5pu/
-         sbY0hmDOVvnZFXeQCWThQzi0EPYMSTsZwBZHtR61OQKwOF7F/vb854WeaDER/VDmIGg+
-         y83rDKVMzEBEXcOvS5J25cHYj5st6w/POiDFE9PqJkeRwu3+FAHFrn4G5Z4sXTUaP0Kr
-         m6hXBKkWJzFa308eivvk5Zv+Q3zhAzuzJVCjqUe1DYSAjLCUcc7lRr2jS2n/6qWS1owS
-         DwaA==
-X-Gm-Message-State: AOAM532Nxum8glx8bQBKjgRRnyLx98rWjcf6+Xq547oTbs884SS9iqRa
-        dbZD+Ri0n6oWvjpKPKeJIXk=
-X-Google-Smtp-Source: ABdhPJwSBbfWRMMbV6dSe98Hu6LuthQ0RfohJQzy6Z3HBsE+XDP3K2cL7FIK7/TsdodtGglA/WbZ5g==
-X-Received: by 2002:a2e:84c4:: with SMTP id q4mr9911ljh.266.1640117446444;
-        Tue, 21 Dec 2021 12:10:46 -0800 (PST)
-Received: from localhost.localdomain ([94.103.235.97])
-        by smtp.gmail.com with ESMTPSA id m2sm1656560lfu.254.2021.12.21.12.10.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZcYF0sJxfCsW5AbyQlpVqnAvfQ5ZjjzzRLMoH53YhLw=;
+        b=lc0N8jgPjGOo4QQ2VIqg6Ce2/QI/b8q9O5QuKw9yTpZrwdVeCwDr6amLMkscPCIw5D
+         /5DFw0ZIepsnr4mruzsP7Jb28GHQm8q8KrEdALtzB9muthqm308I8fc1ESooRb9xTBf/
+         wYxr1Evft+DZVR/0Dq67xTSv+W/nZ+JWyCHXbr2+LQq9FeHaKJBDGPe88WelV6OWblce
+         IQQtofydQs3s5miKXDU2Zv2iGQX5h+4Jt1iJqYeVsHSh5GkM0M+DkzpjU3txjHgKBEM1
+         1qpRXnHT7kH7boQy+bbTptCg9kgovOu0VNAFby5h22J6Gz93DBb9LJkq9Qb21thAY09r
+         xQ9w==
+X-Gm-Message-State: AOAM5324MLnbhrVM1W9I9zUm0BsxkjPmui5r/xVE2AaYS4X/EDPhB+tX
+        amz0HxefKX/1DfGPTXBOUOg=
+X-Google-Smtp-Source: ABdhPJwuuhZqAj3MyCbcWW64G3oL8Lkpm3t6gaNMjAWXD782vtRN81Ip/EO2HEcFUgAC5P09mYNZEw==
+X-Received: by 2002:aa7:de86:: with SMTP id j6mr4945878edv.1.1640117485317;
+        Tue, 21 Dec 2021 12:11:25 -0800 (PST)
+Received: from demon-pc.localdomain ([188.24.42.157])
+        by smtp.gmail.com with ESMTPSA id b7sm8648418edj.24.2021.12.21.12.11.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 12:10:46 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, robert.foss@collabora.com, freddy@asix.com.tw
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH v2 2/2] asix: fix wrong return value in asix_check_host_enable()
-Date:   Tue, 21 Dec 2021 23:10:43 +0300
-Message-Id: <ecd3470ce6c2d5697ac635d0d3b14a47defb4acb.1640117288.git.paskripkin@gmail.com>
+        Tue, 21 Dec 2021 12:11:24 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/8] hwmon: (adt7410) Pass name to core driver
+Date:   Tue, 21 Dec 2021 22:11:06 +0200
+Message-Id: <20211221201113.752827-1-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <8966e3b514edf39857dd93603fc79ec02e000a75.1640117288.git.paskripkin@gmail.com>
-References: <8966e3b514edf39857dd93603fc79ec02e000a75.1640117288.git.paskripkin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If asix_read_cmd() returns 0 on 30th interation, 0 will be returned from
-asix_check_host_enable(), which is logically wrong. Fix it by returning
--ETIMEDOUT explicitly if we have exceeded 30 iterations
+From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-Also, replaced 30 with #define as suggested by Andrew
+It will later be used to register hwmon device using
+hwmon_device_register_with_info.
 
-Fixes: a786e3195d6a ("net: asix: fix uninit value bugs")
-Reported-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
+ drivers/hwmon/adt7410.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-	- Fixed coding style issues
-	- Replaced 30 with #define
-
----
- drivers/net/usb/asix_common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index 06823d7141b6..71682970be58 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -9,6 +9,8 @@
+diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
+index 973db057427b..ef4b5af865e9 100644
+--- a/drivers/hwmon/adt7410.c
++++ b/drivers/hwmon/adt7410.c
+@@ -45,7 +45,7 @@ static int adt7410_i2c_probe(struct i2c_client *client)
+ 			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
+ 		return -ENODEV;
  
- #include "asix.h"
- 
-+#define AX_HOST_EN_RETRIES	30
-+
- int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 		  u16 size, void *data, int in_pm)
- {
-@@ -68,7 +70,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 	int i, ret;
- 	u8 smsr;
- 
--	for (i = 0; i < 30; ++i) {
-+	for (i = 0; i < AX_HOST_EN_RETRIES; ++i) {
- 		ret = asix_set_sw_mii(dev, in_pm);
- 		if (ret == -ENODEV || ret == -ETIMEDOUT)
- 			break;
-@@ -83,7 +85,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
- 			break;
- 	}
- 
--	return ret;
-+	return i >= AX_HOST_EN_RETRIES ? -ETIMEDOUT : ret;
+-	return adt7x10_probe(&client->dev, NULL, client->irq, &adt7410_i2c_ops);
++	return adt7x10_probe(&client->dev, client->name, client->irq, &adt7410_i2c_ops);
  }
  
- static void reset_asix_rx_fixup_info(struct asix_rx_fixup_info *rx)
+ static int adt7410_i2c_remove(struct i2c_client *client)
 -- 
 2.34.1
 

@@ -2,34 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7990947BB0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B65C47BB0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbhLUHa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbhLUHa1 (ORCPT
+        id S235200AbhLUHbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:31:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55824 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235191AbhLUHbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:30:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED7AC061574;
-        Mon, 20 Dec 2021 23:30:26 -0800 (PST)
+        Tue, 21 Dec 2021 02:31:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73B9861425;
-        Tue, 21 Dec 2021 07:30:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C987C36AE7;
-        Tue, 21 Dec 2021 07:30:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89FC0B8106C;
+        Tue, 21 Dec 2021 07:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF9DC36AE7;
+        Tue, 21 Dec 2021 07:31:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640071825;
-        bh=CJerA/mN0YyI2tFVe/fzLdV7aBBk5wmHqqJDBcg53KE=;
+        s=korg; t=1640071862;
+        bh=CNeQD1UgCcyk9OiMA9cYBMpngp02cKvoagD3hTeIwiI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r25qSWLbqw89+H4nLz/vRzBcGGuUTagWmFT5Il8sB9UAhKPX1EgaPZfSO1kzOUG2e
-         Rng1IJUYuh24Ay1tz4uJGzAq9BZybhaV/mxmaGeJlCYb8YAD/eukVz8N+db0XUYog1
-         t4SpNyTlO7GAPpyv+hUtppMNZh9wTR+LuiWx5AYM=
-Date:   Tue, 21 Dec 2021 08:30:23 +0100
+        b=Azhs+JHNZ37JDosMNQkxDfvhzLkRxssGF6G494z3+bQk3e3ZkFFUbq3vex4IT/Rac
+         O4Yn0Hda1++RQksqcMyuEAZMOr67wYFboaz0ucD3Q4XvCGlph1FvJAxWEnhZGLtYjk
+         VdNLOOUhlgf1I3WCMbR5ieQOVdpOfdn7ZNn4jZeM=
+Date:   Tue, 21 Dec 2021 08:30:59 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Yu Tu <yu.tu@amlogic.com>
 Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -39,30 +36,35 @@ Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH 1/3] tty: serial: meson: modify request_irq and free_irq
-Message-ID: <YcGCj2jGpzl+sKcT@kroah.com>
+Subject: Re: [PATCH 0/3] the UART driver compatible with the Amlogic Meson S4
+ SoC
+Message-ID: <YcGCs1LYqXNnQwsF@kroah.com>
 References: <20211221071634.25980-1-yu.tu@amlogic.com>
- <20211221071634.25980-2-yu.tu@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221071634.25980-2-yu.tu@amlogic.com>
+In-Reply-To: <20211221071634.25980-1-yu.tu@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 03:16:32PM +0800, Yu Tu wrote:
-> Change request_irq to devm_request_irq and free_irq to devm_free_irq.
-> It's better to change the code this way.
-
-Why?  What did this fix up?  You still are manually requesting and
-freeing the irq.  What bug did you fix?
-
+On Tue, Dec 21, 2021 at 03:16:31PM +0800, Yu Tu wrote:
+> The UART driver compatible with the Amlogic Meson S4 SoC on-chip, change the
+> UART interrupt interface function while adding IRQF_SHARED flag. And add clear
+> AML_UART_TX_EN bit in meson_uart_shutdown funtion.
 > 
-> The IRQF_SHARED interrupt flag was added because an interrupt error was
-> detected when the serial port was opened twice in a row on the project.
+> Yu Tu (3):
+>   tty: serial: meson: modify request_irq and free_irq
+>   tty: serial: meson: meson_uart_shutdown omit clear AML_UART_TX_EN bit
+>   tty: serial: meson: add UART driver compatible with S4 SoC on-chip
+> 
+> Link:https://patchwork.kernel.org/project/linux-amlogic/patch/20211206100200.31914-1-xianwei.zhao@amlogic.com/
 
-That is a different change.  Make that a different patch.
+What is this link for?
+
+And why patchwork?
+
+Please just use lore.kernel.org links for mailing list threads.
 
 thanks,
 

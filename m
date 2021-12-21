@@ -2,178 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A7F47C126
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0368847C127
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 15:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238336AbhLUOFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 09:05:41 -0500
-Received: from mga17.intel.com ([192.55.52.151]:3914 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235358AbhLUOFk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 09:05:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640095540; x=1671631540;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3c3RKIElv4/iZC7wLuellRpNUyG2sJEF1V5fMsTCyaE=;
-  b=B0XW6qGLzkRxIXqYXp+I66SiARKbLqg0R2SFCynslRgdGQxUNI5D+xmR
-   uZmW5UWl2ZdMM60bxisM7Quo+hsmn5X2gFbduJ7I9gBt4E+SXfAo7XSHm
-   6QX4pRuaDdD+u84pMzD3rOwpEbBRqLVBDCMBypd4yGraXlP5oGVUkyfP5
-   wNP5fkTDol/+KyWgR7BacGvvxqf90cQOyDcqZ7MkN/VXRPpIWiekNTGN3
-   44vaYCFFaQf2mJrimfAMusUYvGGIMVmlHo9jquFqk09SZi6UUpkrNnoSa
-   po5VIeQTaEOnRWlwSiBmH+uKAv7gxJTRMY1aarpxThn8EJhGj/PU+1XaU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="221074825"
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="221074825"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 06:05:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,223,1635231600"; 
-   d="scan'208";a="521738049"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Dec 2021 06:05:39 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 06:05:39 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 21 Dec 2021 06:05:39 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.42) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 21 Dec 2021 06:05:39 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zq5tVQTAogB2yKkI+8g1sbh7Ek1h0jh7lTuEKWzduge1xGf/zMp0Hwrxp0NLf/N5EQsBtsy4JYkF7z8NFaEBMVLv4O1RKJkFS6zQd9xpUh8Au6Cthm4F6W+9wB0nPUNaBnkhsVpPwHQy3D9e5Oq/cuGa3AlKE6wITQvkf+AOcXSwbPZq8wluGDK1HI2IqvYH4IR44uCbBcqn2rvyk7xmWiEtydqZbrwA56dI0EYRbA5qO7Fpk290GLp3/eROtQv89EcGCdH9fLY5mRvNgRja+aNsvfOIr5pYyDnLSQT8MOwBfnkWZ9hKWCo2AKoYJTWb+8sikJPnjz4VZWbjNN0DRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f9egA1hOlobJB1xNPJQU4X45XGCU2KHRWnSlXUnnJSI=;
- b=BsTb7oI+J22ASOmbwWEr0SLBMb/FrIwLw6ujE+CJaB4+WnPyzEINm/7ALXSyHHMTGyUZjqEJu9JtpTg1MbW10d/iyY/atqOsQ83+Te62VPmPXNsXCkqHhXQhq0kdo5zsWJLbBeiYky6HfowOEW76qAMjC3LwxODSG9B1TWiQ5kIvmDezb5u0PL0uNVU8C4R0Xd6OWUpzPV/ROcht8pFTYIoZVJNm7GJnvefD+Swskt9LQ+TbR5qq1imCLAEGkKYkMxR05lBZzAuvvgUBxkPBQPcgeErJL4OhzXMXPwV1zdkN4Qf6QVY4q8bp0iSeS5aGVbgKJIZJzqPiJHiy3yltaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CO1PR11MB5170.namprd11.prod.outlook.com (2603:10b6:303:95::10)
- by MWHPR11MB1261.namprd11.prod.outlook.com (2603:10b6:300:28::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
- 2021 14:05:37 +0000
-Received: from CO1PR11MB5170.namprd11.prod.outlook.com
- ([fe80::4c2a:62a1:d6e5:b67b]) by CO1PR11MB5170.namprd11.prod.outlook.com
- ([fe80::4c2a:62a1:d6e5:b67b%6]) with mapi id 15.20.4801.022; Tue, 21 Dec 2021
- 14:05:37 +0000
-From:   "Chen, Mike Ximing" <mike.ximing.chen@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Subject: RE: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
-Thread-Topic: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
-Thread-Index: AQHX9jcKOP1y1O92CEC3pIeygh1pI6w8h6kAgABzECA=
-Date:   Tue, 21 Dec 2021 14:05:37 +0000
-Message-ID: <CO1PR11MB5170297D70E7AF1EF0BD80B7D97C9@CO1PR11MB5170.namprd11.prod.outlook.com>
-References: <20211221065047.290182-1-mike.ximing.chen@intel.com>
- <20211221065047.290182-2-mike.ximing.chen@intel.com>
- <YcF+QIHKgNLJOxUh@kroah.com>
-In-Reply-To: <YcF+QIHKgNLJOxUh@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-reaction: no-action
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 077a72e9-499e-44ec-6b91-08d9c48af717
-x-ms-traffictypediagnostic: MWHPR11MB1261:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <MWHPR11MB1261094B5F3C1BC75137B5F7D97C9@MWHPR11MB1261.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oX5fhtPphtVTyrn+sjQeQlLfPppa0dKEgYOlkrGvlyeMMTmQOP9OxJrPGPyOPhskflykrt+1COqZp+2Uq9OPQK6wOwOo/MgADO5szZ8Rbc1OhkHD6mEXMtR45r4wdU/cS0hi4IfTe4mNxjldOY8IWQArsrvpDqgTINYQanG7FBP7RMt0zEbwqsr8LaYU3AU4wGrhGy5Z0BHvP4HorSBxtZu8gNTi13sIVd3qsv3/hkvfy8Mn64r2yUwuRQ2Ed1aMPeoh8vmiYvTXKJs5UTFcNy2Dc0EMqsynvRZ4b58s2Y1vp+ASZxUCEF1QMbzSPOCRCbRIm3IwFHyXZT1a3uatlTSl1WwR5uBvEdJlBroUwvlO/NFRGBYY0UvIfJUoCnGFBtIacxNnEuF2fowImWAhCFqjeoCI7poGVJSP/rnOWcVfGAM8Zf7hctrLmSdFmbzuDYlCTLzK1THkf5t0MPYBvBfDSl7xH7qw7jUcB6hucu/z71XuUnRL7fhCdeZiwKWJlCCtsykBXAh4c7V686gbpsWKYRcxaWVHjx7fYpbm6hogZjzufhlSuaoz5ZYIzBc28o0/T58hrGxkXqvL7tT1b7zEZEQ7OkSZ5l2p73UKRP7WlQ5ffTTRDhY5YJgFNxnchvJsyyYQeuDXFSBphOnBu9+sDTmtkPRfFR5dL0SW2gIwS24Dagi6dpEyzygmWA9To5qRAh4KO3zzfp3b/QE7VQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5170.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4326008)(7696005)(38070700005)(8676002)(8936002)(86362001)(38100700002)(82960400001)(71200400001)(52536014)(508600001)(6916009)(122000001)(9686003)(55016003)(316002)(33656002)(6506007)(66446008)(83380400001)(64756008)(4744005)(66556008)(76116006)(66946007)(66476007)(2906002)(5660300002)(186003)(53546011)(54906003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6m85nn8/yGwbP1LjUItQpeInfrE6+2vgNlBP9p1o/RD7Jxog21cHhhQQkivI?=
- =?us-ascii?Q?KcB+TF+y+T6n9apcF+AhS0BdT18KRv0c2raTFqGeciDBadtHHufDCka1CrjO?=
- =?us-ascii?Q?yNs1fbos/42ar4W69vvGsuE3+0jPmNpHsxWuj0JAAvY72jKovVL80hmsY/Gv?=
- =?us-ascii?Q?Bu0c7+Oob+LgcDxDkuoXaLd+YgDsmILgpvpj6wRkDDCNdBykBZUFOJrXeWOW?=
- =?us-ascii?Q?X7y2+bHn/Wj9roWoMbyWf/zCsfNv4QLu5UCcAN6V+Kuh1HMEczFhioZ279Mn?=
- =?us-ascii?Q?2nAOv4EaWvFnL98WqzueUWKV54fmEphm27Kg7YmuTBZXBgCDzeJNIaJ5rJ2c?=
- =?us-ascii?Q?cmucWU86tk54kpHPv3jIL99Acdvci+ZXbLDBgrVIfLQrjjQ8Q1WGL9M979Yr?=
- =?us-ascii?Q?MJ61oGr/YA6dGJlouYFGCqu7hcnyeE2JHo+dKwujFwyQjE6bJjPv6rMJVroD?=
- =?us-ascii?Q?yWN5PT2zUvqfUrSBTXwQS3zK98HpEKwRZDGP5s/BCH1qV0xsSZChUfpm4vr7?=
- =?us-ascii?Q?1iumxaYm+lglBsa2bnG4u6tCQ1OB/JVLXYHV3J3e1BnBPWBgfMsKZ3DmKZUA?=
- =?us-ascii?Q?2D76MfOtJw9HdLViAz5E3uTdNvE/8/2sDiAQ4EWTQF7m5BUaXyFQVrGnuc9V?=
- =?us-ascii?Q?P9vswhBp6HVu2ofHvVnF1fA1Pmlztq+IiZk8UN7b4f51uOmR6gDTtAoFmnvp?=
- =?us-ascii?Q?iW6LhnUPWFArBUfjh9AcQKrQZ3Ca/OxYZf3/gNIPL9QJQtrOq1XD3oZATJFS?=
- =?us-ascii?Q?oofhQJEg4Q1FbWhWt/v94Nd2HkO70nnCJROByYeFSQ9a30Dk16EZDEKELAlx?=
- =?us-ascii?Q?/EhrX2CdTaaXGapCDskgFERNB+l2FKAN1Qip8xjd+3aFXpk08R+judGHvNdj?=
- =?us-ascii?Q?DXkxydBlwceuKZRgmNevs/iDZWu55C6cCYfSYuiN3IqGO2Q6C4q3WD6umHeU?=
- =?us-ascii?Q?9U9t1zNWKgV9QWNpp/wGxGK73CyHIlfSfoQqZjCRHa9Jy3W7U95/IQavxunz?=
- =?us-ascii?Q?okoM01xIX+/PEtJR7BUh+YpuDWzgqyFC0cW3PxOtb98H1YbH1YrYFzXUq1K6?=
- =?us-ascii?Q?da3OImwlciK7RapZyCxeYHiTD8f0eyZsd6eDQiPwrElS/avHWYFXpnP8iCno?=
- =?us-ascii?Q?JipR3fj/GLy1i93wDtbs4HthRLihLGNwS7wYJpiZ4m3/rmS6e+41uGkXmlrc?=
- =?us-ascii?Q?hbQQbEJyAKeyqPZKZ54BNhSoZQz2Z80zsUQN8AuthVaGJ0MnoKEBb70UQ8MW?=
- =?us-ascii?Q?JIItTLASuCo480ZE+oSP3/IFQwYI8adzGLD6DUYp0OMrCRBq6fKjje1riruA?=
- =?us-ascii?Q?R43v/fB/mbCuas6tPp5bv8AlzWVjCJeYgxLfCRObbl87GBvYttaWThbcCVnb?=
- =?us-ascii?Q?MS3ZM1GGHhV20plIgrL1G5lespvi/aNlK9p1xC+z6kr90qEZ86P4Eu+gDtK3?=
- =?us-ascii?Q?5y1wcISZwnkWugYxHVrXcsLYA8UzgyNoARE7N2geWqclHn7M/lPeO0pB5ZU9?=
- =?us-ascii?Q?tLJC5xAJRVUjelWKsg3iY5BAhN8UMODnHcL+gzuGpvFuvldLqP7LLZvJDyTS?=
- =?us-ascii?Q?+2DjBxt9F/koPzO9cnvFpVzfp+HVIdbQRW+DTPf0z/ixzZxBeCCJEzuQ2uQe?=
- =?us-ascii?Q?lkCOs+kgHIKULoSW1AtSEzrbJJPJlWS8+LddfR6mArrNz7WkMLWagcLGykWX?=
- =?us-ascii?Q?8FXTpQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S238344AbhLUOFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 09:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238339AbhLUOFr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 09:05:47 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF90C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 06:05:47 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id fo11so12509449qvb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 06:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EUOnHPowtx6q4q24zTCtJzxc21cmmOXKCgae/dYiG+E=;
+        b=YB1ehYxKUttskAql2UTpddRguX0jF5Z+97LDNKvdkuz2lCu7++UE77+bG9GwoBsZk6
+         b1BPZmviOj8Iyk2EGEZ39KEC7x4PapNyvy2/y/66k11nkSjpldmYmpBblReevEUZyZwu
+         rzQbdO778yqstKdv4fV7nHCsd8R0PTS5S7RpLUpjx2GgMrQN4cvFKGvuLIsQ8yNsVg9Q
+         RUc3SM7SsPzUONApMUM3mBOMIg/ZSioYVcLLo8b1+sKg+I9h5ITDwzoWK5BJeU8J/5eb
+         gI8XP163ndqH7y+rM2DKV0zy1m6hk+VP4qpQOLNRHQ2oeCilvmD0sK1IB5nYzLFsYi16
+         D6cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=EUOnHPowtx6q4q24zTCtJzxc21cmmOXKCgae/dYiG+E=;
+        b=1rCaGvtvNMWXFIhZfOoClvmezSYicTJrGjxE3ePCQqfR7qJSnPH7wmd+mNDQ6xRAoD
+         5qpCY6Jk3DfGv/xBFWKRndiXXaDoP++Cdpig7/LBzIVlmj9IULimzSmKP8WLWt+zY5E6
+         nar0GRvLVpnuUNYVei6Lgg9Hagc59PSs5pq19Er+/aKqfUI1VGRrNvFfyoI9N+kgq0jG
+         dfFWxAQRBzDH8BgLoF1KCRaHgKn6BuP+EhCdp8imasipfT/oEMH0u4YebB85y8Uv97tC
+         SIITEiPcqwXqmaIG4A+mQmYmRClzGpYUf3ItuF34IoX/2PrngKWw7wLzR0tA2lJ8gM6o
+         cTDQ==
+X-Gm-Message-State: AOAM533x5QDrpPoi0LjZQihf0M7E/PrYrOKVjq/a3taUHjEFO0RqsDns
+        jyR1A+YBTIXZNXv0VfxfPUbZixECUw==
+X-Google-Smtp-Source: ABdhPJy59iSnoogBCUs9whKRQz+C80MTK4n4/b8d5/sIL7la4xnj1O/Nw5ncXDq5ykyxHxdPNCA4/A==
+X-Received: by 2002:a05:6214:410c:: with SMTP id kc12mr1938735qvb.53.1640095546397;
+        Tue, 21 Dec 2021 06:05:46 -0800 (PST)
+Received: from serve.minyard.net ([47.184.156.158])
+        by smtp.gmail.com with ESMTPSA id s6sm14522820qko.43.2021.12.21.06.05.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 06:05:45 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:1461:51dd:3b2b:342d])
+        by serve.minyard.net (Postfix) with ESMTPSA id C1243180013;
+        Tue, 21 Dec 2021 14:05:44 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 08:05:43 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Wu Bo <wubo40@huawei.com>
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, linfeilong@huawei.com
+Subject: Re: [PATCH v2] ipmi: Fix UAF when uninstall ipmi_si and
+ ipmi_msghandler module
+Message-ID: <20211221140543.GT14936@minyard.net>
+Reply-To: minyard@acm.org
+References: <1640070034-56671-1-git-send-email-wubo40@huawei.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5170.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 077a72e9-499e-44ec-6b91-08d9c48af717
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 14:05:37.8469
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Xr4cm5JNHsFGhUJUEC4rPszRgA85osm4bMLYnc8T6bTxQmoY5upwXge7nNcKlqe1umv2NxlmJn3pcHjDG2QEIHmo36l1aNLjcTHe3eQi1Q0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1261
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1640070034-56671-1-git-send-email-wubo40@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 21, 2021 at 03:00:34PM +0800, Wu Bo wrote:
+> Hi,
+> 
+> When testing install and uninstall of ipmi_si.ko and ipmi_msghandler.ko,
+> the system crashed.
 
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Tuesday, December 21, 2021 2:12 AM
-> To: Chen, Mike Ximing <mike.ximing.chen@intel.com>
-> Cc: linux-kernel@vger.kernel.org; arnd@arndb.de; Williams, Dan J <dan.j.w=
-illiams@intel.com>; pierre-
-> louis.bossart@linux.intel.com; netdev@vger.kernel.org; davem@davemloft.ne=
-t; kuba@kernel.org
-> Subject: Re: [RFC PATCH v12 01/17] dlb: add skeleton for DLB driver
->=20
-> On Tue, Dec 21, 2021 at 12:50:31AM -0600, Mike Ximing Chen wrote:
-> > +/* Copyright(C) 2016-2020 Intel Corporation. All rights reserved. */
->=20
-> So you did not touch this at all in 2021?  And it had a copyrightable cha=
-nged added to it for every year,
-> inclusive, from 2016-2020?
->=20
-> Please run this past your lawyers on how to do this properly.
->=20
-> greg k-h
+Thanks for the fix, it's in my queue.  I'll try to get it up soon.
 
-Thanks for pointing it out. I will fix this.
+-corey
 
-Mike
+> 
+> The log as follows:
+> [  141.087026] BUG: unable to handle kernel paging request at ffffffffc09b3a5a
+> [  141.087241] PGD 8fe4c0d067 P4D 8fe4c0d067 PUD 8fe4c0f067 PMD 103ad89067 PTE 0
+> [  141.087464] Oops: 0010 [#1] SMP NOPTI
+> [  141.087580] CPU: 67 PID: 668 Comm: kworker/67:1 Kdump: loaded Not tainted 4.18.0.x86_64 #47
+> [  141.088009] Workqueue: events 0xffffffffc09b3a40
+> [  141.088009] RIP: 0010:0xffffffffc09b3a5a
+> [  141.088009] Code: Bad RIP value.
+> [  141.088009] RSP: 0018:ffffb9094e2c3e88 EFLAGS: 00010246
+> [  141.088009] RAX: 0000000000000000 RBX: ffff9abfdb1f04a0 RCX: 0000000000000000
+> [  141.088009] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 0000000000000246
+> [  141.088009] RBP: 0000000000000000 R08: ffff9abfffee3cb8 R09: 00000000000002e1
+> [  141.088009] R10: ffffb9094cb73d90 R11: 00000000000f4240 R12: ffff9abfffee8700
+> [  141.088009] R13: 0000000000000000 R14: ffff9abfdb1f04a0 R15: ffff9abfdb1f04a8
+> [  141.088009] FS:  0000000000000000(0000) GS:ffff9abfffec0000(0000) knlGS:0000000000000000
+> [  141.088009] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  141.088009] CR2: ffffffffc09b3a30 CR3: 0000008fe4c0a001 CR4: 00000000007606e0
+> [  141.088009] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  141.088009] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  141.088009] PKRU: 55555554
+> [  141.088009] Call Trace:
+> [  141.088009]  ? process_one_work+0x195/0x390
+> [  141.088009]  ? worker_thread+0x30/0x390
+> [  141.088009]  ? process_one_work+0x390/0x390
+> [  141.088009]  ? kthread+0x10d/0x130
+> [  141.088009]  ? kthread_flush_work_fn+0x10/0x10
+> [  141.088009]  ? ret_from_fork+0x35/0x40] BUG: unable to handle kernel paging request at ffffffffc0b28a5a
+> [  200.223240] PGD 97fe00d067 P4D 97fe00d067 PUD 97fe00f067 PMD a580cbf067 PTE 0
+> [  200.223464] Oops: 0010 [#1] SMP NOPTI
+> [  200.223579] CPU: 63 PID: 664 Comm: kworker/63:1 Kdump: loaded Not tainted 4.18.0.x86_64 #46
+> [  200.224008] Workqueue: events 0xffffffffc0b28a40
+> [  200.224008] RIP: 0010:0xffffffffc0b28a5a
+> [  200.224008] Code: Bad RIP value.
+> [  200.224008] RSP: 0018:ffffbf3c8e2a3e88 EFLAGS: 00010246
+> [  200.224008] RAX: 0000000000000000 RBX: ffffa0799ad6bca0 RCX: 0000000000000000
+> [  200.224008] RDX: 0000000000000000 RSI: 0000000000000246 RDI: 0000000000000246
+> [  200.224008] RBP: 0000000000000000 R08: ffff9fe43fde3cb8 R09: 00000000000000d5
+> [  200.224008] R10: ffffbf3c8cb53d90 R11: 00000000000f4240 R12: ffff9fe43fde8700
+> [  200.224008] R13: 0000000000000000 R14: ffffa0799ad6bca0 R15: ffffa0799ad6bca8
+> [  200.224008] FS:  0000000000000000(0000) GS:ffff9fe43fdc0000(0000) knlGS:0000000000000000
+> [  200.224008] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  200.224008] CR2: ffffffffc0b28a30 CR3: 00000097fe00a002 CR4: 00000000007606e0
+> [  200.224008] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  200.224008] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  200.224008] PKRU: 55555554
+> [  200.224008] Call Trace:
+> [  200.224008]  ? process_one_work+0x195/0x390
+> [  200.224008]  ? worker_thread+0x30/0x390
+> [  200.224008]  ? process_one_work+0x390/0x390
+> [  200.224008]  ? kthread+0x10d/0x130
+> [  200.224008]  ? kthread_flush_work_fn+0x10/0x10
+> [  200.224008]  ? ret_from_fork+0x35/0x40
+> [  200.224008] kernel fault(0x1) notification starting on CPU 63
+> [  200.224008] kernel fault(0x1) notification finished on CPU 63
+> [  200.224008] CR2: ffffffffc0b28a5a
+> [  200.224008] ---[ end trace c82a412d93f57412 ]---
+> 
+> The reason is as follows:
+> T1: rmmod ipmi_si.
+>     ->ipmi_unregister_smi()
+>         -> ipmi_bmc_unregister()
+>             -> __ipmi_bmc_unregister()
+>                 -> kref_put(&bmc->usecount, cleanup_bmc_device);
+>                     -> schedule_work(&bmc->remove_work);
+> 
+> T2: rmmod ipmi_msghandler.
+>     ipmi_msghander module uninstalled, and the module space 
+>     will be freed.
+> 
+> T3: bmc->remove_work doing cleanup the bmc resource.
+>     -> cleanup_bmc_work()
+>         -> platform_device_unregister(&bmc->pdev);
+>             -> platform_device_del(pdev);
+>                 -> device_del(&pdev->dev);
+>                     -> kobject_uevent(&dev->kobj, KOBJ_REMOVE);
+>                         -> kobject_uevent_env()
+>                             -> dev_uevent()
+>                                 -> if (dev->type && dev->type->name)
+> 
+>    'dev->type'(bmc_device_type) pointer space has freed when uninstall
+>     ipmi_msghander module, 'dev->type->name' cause the system crash.
+> 
+> drivers/char/ipmi/ipmi_msghandler.c:
+> 2820 static const struct device_type bmc_device_type = {
+> 2821         .groups         = bmc_dev_attr_groups,
+> 2822 };
+> 
+> Steps to reproduce:
+> Add a time delay in cleanup_bmc_work() function,
+> and uninstall ipmi_si and ipmi_msghandler module.
+> 
+> 2910 static void cleanup_bmc_work(struct work_struct *work)
+> 2911 {
+> 2912         struct bmc_device *bmc = container_of(work, struct bmc_device,
+> 2913                                               remove_work);
+> 2914         int id = bmc->pdev.id; /* Unregister overwrites id */
+> 2915
+> 2916         msleep(3000);   <---
+> 2917         platform_device_unregister(&bmc->pdev);
+> 2918         ida_simple_remove(&ipmi_bmc_ida, id);
+> 2919 }
+> 
+> Use 'remove_work_wq' instead of 'system_wq' to solve this issues.
+> 
+> Fixes: b2cfd8ab4add ("ipmi: Rework device id and guid handling to catch changing BMCs")
+> Signed-off-by: Wu Bo <wubo40@huawei.com>
+> ---
+>  drivers/char/ipmi/ipmi_msghandler.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+> index c837d54..d96184d 100644
+> --- a/drivers/char/ipmi/ipmi_msghandler.c
+> +++ b/drivers/char/ipmi/ipmi_msghandler.c
+> @@ -3031,7 +3031,7 @@ static void cleanup_bmc_work(struct work_struct *work)
+>  	 * with removing the device attributes while reading a device
+>  	 * attribute.
+>  	 */
+> -	schedule_work(&bmc->remove_work);
+> +	queue_work(remove_work_wq, &bmc->remove_work);
+>  }
+>  
+>  /*
+> -- 
+> 1.8.3.1
+> 

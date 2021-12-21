@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BF547BCCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B381247BCCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbhLUJXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbhLUJXk (ORCPT
+        id S236312AbhLUJX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:23:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44302 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232251AbhLUJX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:23:40 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CFC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:23:39 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id m186so11960207qkb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 01:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xzwisqb1Sy2od8aWgP/bz4IaYgTJ8bQBQSdhNAj9vNM=;
-        b=VyLPgc+N3ejMZB5IuZpuMhrPHt40i6UgHuVzvVUlYzns/vLh7SllYTfzOm95Ydu08d
-         bx7Ijb4zr3t69OAIEg9m0V6YlE33teplPktDpkPw0gG63SHbfd16CU+wVWw+Oef1tcku
-         P/vcm1/Ru/jSA5g0tcErfFLo7NpZdN66pUoNO53kYQf3CiY4BMfHPfNhbFjVvTFOKqWp
-         iaGgdXRexxwOQKTIM3+EhOj9fgBa4giaI8mSMwEdsb5MTMgEUJDkb8OulUL+3ClUD/Ub
-         AZVUBHrqVyBimX6Rl6yaNdzGUI1dm7GgJgbXeDKaxqHBSAY0bTYqzWr9wU6738yOmXy5
-         IWDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xzwisqb1Sy2od8aWgP/bz4IaYgTJ8bQBQSdhNAj9vNM=;
-        b=RI6XN4VweUkMwjxF3XQ+FyOAdyyUt5rYVnZMoeGVkpvnSoNgvXxgRMxdoXfhEcIpC8
-         IePNudxWX2cGT+NVtLw7UXXkS2PB+qx4Krjxu4dUN5O/TH3YJrBWxnPaI6oP9n5P3LeU
-         l+7TKAkN9X7UszwVMnCtxkXyk1ElsDQJy2Nu9Q4w1mw6fwTK272NhoA7Mxk2KBop8W1N
-         9QiivtdArpY1wHn4rZJmPETUMXsQiAMrcpr2FRz/hJOhNwYE59pb+bEokyUPvgQHNgad
-         ixLWVnlhBcRQTOxg5JQv4TKLUBaLdciL8zAxlmLpnia+RrRV3TslU7KCXL2R28H7GSY6
-         BmbQ==
-X-Gm-Message-State: AOAM532FAVqPQs4sN6Ry+xS6Qw7G3kYjWcDthSWKdjs50HXqJRjYTsvH
-        vYtj3fjdAfKD11wW2B4H9C69AzPohCFVVTALUgcx8w==
-X-Google-Smtp-Source: ABdhPJwUQwtUA7ETB7iiXK+EgRxi4jixcxQLCwfTNYX/jDe2+vsavoXHf7aXOqIotNdigbbLBx3ZmfbySHD7LauTBvM=
-X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr1353598qkp.610.1640078618621;
- Tue, 21 Dec 2021 01:23:38 -0800 (PST)
+        Tue, 21 Dec 2021 04:23:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F079EB8124B;
+        Tue, 21 Dec 2021 09:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0FBC36AE2;
+        Tue, 21 Dec 2021 09:23:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640078604;
+        bh=vs6i4+czViyI3niT0XaIdGWKKRNE64KCSW1Ge0iJUMQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YFyHD1mTWBetPy/IaSAHNt0jtVC558rU2odGeu0CUBv7mrg/gEEPDUJ3dI5/k+gNs
+         S/RmsgwAx/8pU6/vOHLbVQTP0gIHnDwKBjw8jGNtz9QCbGBFoMkd+KjIb7DZzy8+Dg
+         7jIC2+VjTX3zVG0LBA9+tnzVxTdT9qhclPLrtRgY=
+Date:   Tue, 21 Dec 2021 10:23:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     tim@cyberelk.net, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] paride: fix up build warning on mips platforms
+Message-ID: <YcGdCp1lgG2x89y/@kroah.com>
+References: <20211130084626.3215987-1-gregkh@linuxfoundation.org>
+ <YcCo8+jTG3b+5GTA@kroah.com>
+ <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
 MIME-Version: 1.0
-References: <cover.1640036051.git.andreyknvl@google.com> <b929882627e19a4a2d02c13788bd2d343f3e5573.1640036051.git.andreyknvl@google.com>
-In-Reply-To: <b929882627e19a4a2d02c13788bd2d343f3e5573.1640036051.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 21 Dec 2021 10:23:02 +0100
-Message-ID: <CAG_fn=W_6j08zxpgWeCX_uxN+Jqi93XYtQ_GY-Gjs_Ru2Hb2aQ@mail.gmail.com>
-Subject: Re: [PATCH mm v4 16/39] kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4915ba81-28b1-6008-62f2-50316177fd46@kernel.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:00 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> In preparation for adding vmalloc support to SW_TAGS KASAN,
-> provide a KASAN_VMALLOC_INVALID definition for it.
->
-> HW_TAGS KASAN won't be using this value, as it falls back onto
-> page_alloc for poisoning freed vmalloc() memory.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+On Mon, Dec 20, 2021 at 09:33:12AM -0700, Jens Axboe wrote:
+> On 12/20/21 9:01 AM, Greg Kroah-Hartman wrote:
+> > On Tue, Nov 30, 2021 at 09:46:26AM +0100, Greg Kroah-Hartman wrote:
+> >> MIPS include files define "PC" so when building the paride driver the
+> >> following build warning shows up:
+> >>
+> >> 	rivers/block/paride/bpck.c:32: warning: "PC" redefined
+> >>
+> >> Fix this by undefining PC before redefining it as is done for other
+> >> defines in this driver.
+> >>
+> >> Cc: Tim Waugh <tim@cyberelk.net>
+> >> Cc: Jens Axboe <axboe@kernel.dk>
+> >> Cc: linux-block@vger.kernel.org
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >> ---
+> >>  drivers/block/paride/bpck.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/block/paride/bpck.c b/drivers/block/paride/bpck.c
+> >> index f5f63ca2889d..d880a9465e9b 100644
+> >> --- a/drivers/block/paride/bpck.c
+> >> +++ b/drivers/block/paride/bpck.c
+> >> @@ -28,6 +28,7 @@
+> >>  
+> >>  #undef r2
+> >>  #undef w2
+> >> +#undef PC
+> >>  
+> >>  #define PC			pi->private
+> >>  #define r2()			(PC=(in_p(2) & 0xff))
+> >> -- 
+> >> 2.34.1
+> >>
+> > 
+> > Given the lack of objections to this, I'll just take it through one of
+> > my trees for 5.17-rc1.
+> 
+> Sorry about that, got lost. I can queue it  up too, or you can add my
+> acked-by, either is fine.
+
+Easy enough for me to take it, now done, thanks!
+
+greg k-h

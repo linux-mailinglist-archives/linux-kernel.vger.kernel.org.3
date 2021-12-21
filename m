@@ -2,104 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A8347BB25
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F21247BB2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 08:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbhLUHdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 02:33:20 -0500
-Received: from mail.emtrion.de ([87.139.198.129]:44325 "EHLO mail3.emtrion.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232745AbhLUHdT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 02:33:19 -0500
-Received: from EMT-KA-S004.emtrion.local (2003:f9:5824:1:c59f:32f4:72e5:b9e1)
- by EMT-KA-S004.emtrion.local (2003:f9:5824:1:c59f:32f4:72e5:b9e1) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 21 Dec
- 2021 08:33:16 +0100
-Received: from EMT-KA-S004.emtrion.local ([fe80::c59f:32f4:72e5:b9e1]) by
- EMT-KA-S004.emtrion.local ([fe80::c59f:32f4:72e5:b9e1%11]) with mapi id
- 15.02.0922.019; Tue, 21 Dec 2021 08:33:16 +0100
-From:   "Mueller, Reinhold" <Reinhold.Mueller@emtrion.de>
-To:     'Fabio Estevam' <festevam@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: AW: [PATCH v4 2/2] arm64: dts: imx8mm: Add support for emtrion
- emCON-MX8M Mini
-Thread-Topic: [PATCH v4 2/2] arm64: dts: imx8mm: Add support for emtrion
- emCON-MX8M Mini
-Thread-Index: AQHX9XKJlzVF8fJ5YEOzNVjKch3kBaw8AYeAgACLvEA=
-Date:   Tue, 21 Dec 2021 07:33:16 +0000
-Message-ID: <e6adf5d9473e417d85a1845b007a4ee1@emtrion.de>
-References: <20211220072332.81072-1-reinhold.mueller@emtrion.com>
- <20211220072332.81072-3-reinhold.mueller@emtrion.com>
- <CAOMZO5BvLZYh3=q_-XNcw-v5wDcBpR3Qo26Gd3hTtJ_a-FQiuA@mail.gmail.com>
-In-Reply-To: <CAOMZO5BvLZYh3=q_-XNcw-v5wDcBpR3Qo26Gd3hTtJ_a-FQiuA@mail.gmail.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [2003:f9:5824:1:602d:8cff:3d08:141a]
-x-c2processedorg: 5b249fcb-306f-4927-9982-5d11b1d300ce
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235280AbhLUHeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 02:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231382AbhLUHet (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 02:34:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F9FC061574;
+        Mon, 20 Dec 2021 23:34:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD799B80F79;
+        Tue, 21 Dec 2021 07:34:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83D8C36AE2;
+        Tue, 21 Dec 2021 07:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640072086;
+        bh=dsSQbAT1V4+2QpbUbARv7dXxnQ6C8Kb0uF8C7BfJ+08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d5cxkQ3tSPDMhdbJUR0SRb5m++JZlNF3uNA9QpyyfhrG35K37kwIlktQe5cMCCK5w
+         HIalXPRJyNXojT6zjtJulQ8Zae9F6UKVIkNV5cAOHSUTgsSOH/0E+PyIncU2VrVLGh
+         YpZ6UPlkvIIBW4EztidU15mOLNksZ5QmrvVcm42I=
+Date:   Tue, 21 Dec 2021 08:34:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yu Tu <yu.tu@amlogic.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH 3/3] tty: serial: meson: add UART driver compatible with
+ S4 SoC on-chip
+Message-ID: <YcGDk3eC3sIstYjs@kroah.com>
+References: <20211221071634.25980-1-yu.tu@amlogic.com>
+ <20211221071634.25980-4-yu.tu@amlogic.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221071634.25980-4-yu.tu@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRmFiaW8sDQoNCnRoYW5rcyBmb3IgdGhlIGZhc3QgZmVlZGJhY2suDQpCZWxvdyBpIGhhdmUg
-Y29tbWVudGVkIHlvdXIgaXNzdWUgZm9yIGNsYXJpZmljYXRpb24uDQoNClJlZ2FyZHMNClJlaW5o
-b2xkDQoNCg0KUmVpbmhvbGQgTXVlbGxlcg0KU29mdHdhcmUgZW5naW5lZXINCg0KDQplbXRyaW9u
-IEdtYkgNCkFtIEhhc2VuYmllbCA2IHwgNzYyOTcgU3R1dGVuc2VlIHwgR2VybWFueQ0KDQpQaG9u
-ZSArNDkgNzI0NCA2MjY5NCAyMA0KRmF4ICs0OSA3MjQ0IDYyNjk0IDE5DQpFbWFpbCBSZWluaG9s
-ZC5NdWVsbGVyQGVtdHJpb24uZGUNCk9ubGluZSB3d3cuZW10cmlvbi5kZQ0KDQoqKiogTWVycnkg
-WC1NYXMgJiBIYXBweSBOZXcgWWVhciAyMDIyICoqKg0KDQoNCmVtdHJpb24gR21iSCDigKIgQW10
-c2dlcmljaHQgTWFubmhlaW0g4oCiIEhSQiAxMTAgMzAwIOKAoiBHZXNjaMOkZnRzZsO8aHJlcjog
-UmFtb25hIE1hdXJlciwgQWNobWVkIEhhZGRvdSDigKIgVW1zYXR6c3RldWVyaWRlbnRpZmlrYXRp
-b25zbnVtbWVyOkRFODEzNjk0MjYwIOKAoiBJbXByZXNzdW06IHd3dy5lbXRyaW9uLmRlL2RlL2lt
-cHJlc3N1bS5odG1sDQoNCkhJTldFSVM6IFBlcnNvbmVuYmV6b2dlbmUgRGF0ZW4sIGRpZSBTaWUg
-cGVyIEUtTWFpbCBhbiB1bnMgw7xiZXJtaXR0ZWxuLCB3ZXJkZW4gYmVpIHVucyBnZXNwZWljaGVy
-dCB1bmQgdmVyYXJiZWl0ZXQuIEluZm9ybWF0aW9uZW4genUgdW5zZXJlbiBnZXNldHpsaWNoZW4g
-SW5mb3JtYXRpb25zcGZsaWNodGVuLCB6dSB1bnMgdW5kIHVuc2VyZW4gRGllbnN0bGVpc3R1bmdl
-biBmaW5kZW4gU2llIGluIHVuc2VyZW4gRGF0ZW5zY2h1dHpoaW53ZWlzZW4uDQpEaWVzZSBFLU1h
-aWwga2FubiB2ZXJ0cmF1bGljaGUgdW5kIC8gb2RlciByZWNodGxpY2ggZ2VzY2jDvHR6dGUgSW5m
-b3JtYXRpb25lbiBlbnRoYWx0ZW4uIFdlbm4gU2llIG5pY2h0IGRlciByaWNodGlnZSBBZHJlc3Nh
-dCBzaW5kLCBvZGVyIGRpZXNlIEUtTWFpbCBpcnJ0w7xtbGljaCBlcmhhbHRlbiBoYWJlbiwgaW5m
-b3JtaWVyZW4gU2llIGJpdHRlIGRlbiBBYnNlbmRlciB1bmQgdmVybmljaHRlbiBkaWVzZSBNYWls
-LiBEYXMgdW5lcmxhdWJ0ZSBrb3BpZXJlbiwgc293aWUgZGllIHVuYmVmdWd0ZSBXZWl0ZXJnYWJl
-IGRpZXNlciBNYWlsIGlzdCBuaWNodCBnZXN0YXR0ZXQuDQo+IC0tLS0tVXJzcHLDvG5nbGljaGUg
-TmFjaHJpY2h0LS0tLS0NCj4gVm9uOiBGYWJpbyBFc3RldmFtIDxmZXN0ZXZhbUBnbWFpbC5jb20+
-DQo+IEdlc2VuZGV0OiBEaWVuc3RhZywgMjEuIERlemVtYmVyIDIwMjEgMDE6MDYNCj4gQW46IE11
-ZWxsZXIsIFJlaW5ob2xkIDxSZWluaG9sZC5NdWVsbGVyQGVtdHJpb24uZGU+DQo+IENjOiBSb2Ig
-SGVycmluZyA8cm9iaCtkdEBrZXJuZWwub3JnPjsgU2FzY2hhIEhhdWVyDQo+IDxzLmhhdWVyQHBl
-bmd1dHJvbml4LmRlPjsgU2FzY2hhIEhhdWVyIDxrZXJuZWxAcGVuZ3V0cm9uaXguZGU+Ow0KPiBT
-aGF3biBHdW8gPHNoYXduZ3VvQGtlcm5lbC5vcmc+OyBOWFAgTGludXggVGVhbSA8bGludXgtDQo+
-IGlteEBueHAuY29tPjsgb3BlbiBsaXN0Ok9QRU4gRklSTVdBUkUgQU5EIEZMQVRURU5FRCBERVZJ
-Q0UgVFJFRQ0KPiBCSU5ESU5HUyA8ZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc+OyBsaW51eC1r
-ZXJuZWwgPGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnPg0KPiBCZXRyZWZmOiBSZTog
-W1BBVENIIHY0IDIvMl0gYXJtNjQ6IGR0czogaW14OG1tOiBBZGQgc3VwcG9ydCBmb3IgZW10cmlv
-bg0KPiBlbUNPTi1NWDhNIE1pbmkNCj4NCj4gSGkgUmVpbmhvbGQsDQo+DQo+IE9uIE1vbiwgRGVj
-IDIwLCAyMDIxIGF0IDQ6MjMgQU0gPHJlaW5ob2xkLm11ZWxsZXJAZW10cmlvbi5jb20+IHdyb3Rl
-Og0KPg0KPiA+ICsgICAgICAgcGluY3RybF9lY3NwaTE6IGVjc3BpMS1ncnAgew0KPiA+ICsgICAg
-ICAgICAgICAgICBmc2wscGlucyA9IDwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBNWDhN
-TV9JT01VWENfRUNTUEkxX1NDTEtfRUNTUEkxX1NDTEsgICAgICAgICAgICAweDgyDQo+ID4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgTVg4TU1fSU9NVVhDX0VDU1BJMV9NT1NJX0VDU1BJMV9NT1NJ
-ICAgICAgICAgICAgMHg4Mg0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIE1YOE1NX0lPTVVY
-Q19FQ1NQSTFfTUlTT19FQ1NQSTFfTUlTTyAgICAgICAgICAgIDB4ODINCj4gPiArICAgICAgICAg
-ICAgICAgPjsNCj4gPiArICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgcGluY3RybF9lY3Nw
-aTFfY3M6IGVjc3BpMS1jcyB7DQo+ID4gKyAgICAgICAgICAgICAgIGZzbCxwaW5zID0gPA0KPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIE1YOE1NX0lPTVVYQ19FQ1NQSTFfU1MwX0dQSU81X0lP
-OSAgICAgICAgICAgICAgIDB4NDAwMDANCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBNWDhN
-TV9JT01VWENfRUNTUEkyX1NTMF9HUElPNV9JTzEzICAgICAgICAgICAgICAweDQwMDAwDQo+DQo+
-IFRoaXMgdmVyc2lvbiBsb29rcyBnb29kIHRvIG1lLg0KPg0KPiBPbmUgbml0OiB5b3Ugc2VlbSB0
-byB1c2UgYSBzaW5nbGUgU1BJIGNoaXBzZWxlY3QsIGJ1dCB5b3UgYWRkIHR3byBlbnRyaWVzDQo+
-IGhlcmUuDQo+DQo+IElzIHRoZSBNWDhNTV9JT01VWENfRUNTUEkyX1NTMF9HUElPNV9JTzEzIG5l
-ZWRlZCB0b28/DQpZZXMsIG9mIGNvdXJzZSB0aGUgZW1DT04gcHJvdmlkZXMgYSBjb25uZWN0b3Ig
-Y29ubmVjdGluZyB0d28gc2xhdmVzIG9uIHRoZSBzcGkgYnVzLg0KPg0KPiBFaXRoZXIgd2F5Og0K
-Pg0KPiBSZXZpZXdlZC1ieTogRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZ21haWwuY29tPg0K
+On Tue, Dec 21, 2021 at 03:16:34PM +0800, Yu Tu wrote:
+> The S4 SoC on-chip UART uses a 12M clock as the clock source for
+> calculating the baud rate of the UART. But previously, chips used 24M or
+> other clock sources. So add this change. The specific clock source is
+> determined by chip design.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>  drivers/tty/serial/meson_uart.c | 62 +++++++++++++++++++++++++++++----
+>  1 file changed, 55 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> index 69450a461c48..557c24d954a2 100644
+> --- a/drivers/tty/serial/meson_uart.c
+> +++ b/drivers/tty/serial/meson_uart.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/serial_core.h>
+>  #include <linux/tty.h>
+>  #include <linux/tty_flip.h>
+> +#include <linux/of_device.h>
+>  
+>  /* Register offsets */
+>  #define AML_UART_WFIFO			0x00
+> @@ -68,6 +69,8 @@
+>  #define AML_UART_BAUD_MASK		0x7fffff
+>  #define AML_UART_BAUD_USE		BIT(23)
+>  #define AML_UART_BAUD_XTAL		BIT(24)
+> +#define AML_UART_BAUD_XTAL_TICK		BIT(26)
+> +#define AML_UART_BAUD_XTAL_DIV2		BIT(27)
+>  
+>  #define AML_UART_PORT_NUM		12
+>  #define AML_UART_PORT_OFFSET		6
+> @@ -80,6 +83,11 @@ static struct uart_driver meson_uart_driver;
+>  
+>  static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+>  
+> +struct meson_uart_data {
+> +	/*A clock source that calculates baud rates*/
+
+Please use spaces in your comments.
+
+> +	unsigned int xtal_tick_en;
+
+What is "_en" for?
+
+"enabled"?
+
+Spell it out please.
+
+And why an unsigned int for a boolean flag?
+
+> +};
+> +
+>  static void meson_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>  {
+>  }
+> @@ -294,16 +302,29 @@ static int meson_uart_startup(struct uart_port *port)
+>  
+>  static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
+>  {
+> +	struct meson_uart_data *uart_data = port->private_data;
+>  	u32 val;
+>  
+>  	while (!meson_uart_tx_empty(port))
+>  		cpu_relax();
+>  
+> +	val = readl_relaxed(port->membase + AML_UART_REG5);
+> +	val &= ~AML_UART_BAUD_MASK;
+> +
+>  	if (port->uartclk == 24000000) {
+> -		val = ((port->uartclk / 3) / baud) - 1;
+> -		val |= AML_UART_BAUD_XTAL;
+> +		if (uart_data->xtal_tick_en) {
+> +			val = (port->uartclk / 2 + baud / 2) / baud  - 1;
+> +			val |= (AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_DIV2);
+> +		} else {
+> +			val = ((port->uartclk / 3) + baud / 2) / baud  - 1;
+> +			val &= (~(AML_UART_BAUD_XTAL_TICK |
+> +				AML_UART_BAUD_XTAL_DIV2));
+> +			val |= AML_UART_BAUD_XTAL;
+> +		}
+>  	} else {
+>  		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
+> +		val &= (~(AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_TICK |
+> +			AML_UART_BAUD_XTAL_DIV2));
+>  	}
+>  	val |= AML_UART_BAUD_USE;
+>  	writel(val, port->membase + AML_UART_REG5);
+> @@ -714,6 +735,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+>  {
+>  	struct resource *res_mem, *res_irq;
+>  	struct uart_port *port;
+> +	struct meson_uart_data *uart_data;
+>  	int ret = 0;
+>  	int id = -1;
+>  
+> @@ -729,6 +751,10 @@ static int meson_uart_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	uart_data = of_device_get_match_data(&pdev->dev);
+> +	if (!uart_data)
+> +		return  -EINVAL;
+
+Wrong spacing.
+
+Always use checkpatch.pl on your patches before sending them out.
+
+And did you just break existing systems?  Do you know if all older ones
+will still work with that call?
+
+> +
+>  	if (pdev->id < 0 || pdev->id >= AML_UART_PORT_NUM)
+>  		return -EINVAL;
+>  
+> @@ -770,6 +796,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+>  	port->x_char = 0;
+>  	port->ops = &meson_uart_ops;
+>  	port->fifosize = 64;
+> +	port->private_data = uart_data;
+>  
+>  	meson_ports[pdev->id] = port;
+>  	platform_set_drvdata(pdev, port);
+> @@ -798,14 +825,35 @@ static int meson_uart_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct meson_uart_data meson_uart_data = {
+> +	.xtal_tick_en = 0,
+> +};
+> +
+> +static const struct meson_uart_data s4_meson_uart_data = {
+> +	.xtal_tick_en = 1,
+> +};
+
+As your whole structure just has one bit, why not just use that as the
+data value, instead of a structure?  No need to be complex here at all.
+
+thanks,
+
+greg k-h

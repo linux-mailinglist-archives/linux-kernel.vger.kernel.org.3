@@ -2,550 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7200E47BBAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B521F47BBC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 09:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235524AbhLUISh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 03:18:37 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:39510 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235508AbhLUISg (ORCPT
+        id S235563AbhLUIZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 03:25:40 -0500
+Received: from esa18.fujitsucc.c3s2.iphmx.com ([216.71.158.38]:40516 "EHLO
+        esa18.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234882AbhLUIZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:18:36 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BL8INSW089601;
-        Tue, 21 Dec 2021 02:18:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640074703;
-        bh=s0aCx/mF6uFQz44GNHFWYa8DEfJ9UDOgwJqXHCdKSWk=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=itYADCWoWs45d5ACRVyJttK/pTo2Z2d5aPFdjBgRzf33yBsOVGIBT3FY0mQbwdObw
-         W/Ff8iRjlIHfqFEfFyrgoditENkSLu5HEchXfpIdOkxhcatFCg8d0SvqGX9JWjl1/4
-         TOJcpm2YrcFxvU8OYvs/Xerz+oML99xEfnbDm1X0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BL8IN6Z081478
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Dec 2021 02:18:23 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 21
- Dec 2021 02:18:23 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 21 Dec 2021 02:18:23 -0600
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BL8I7oD010607;
-        Tue, 21 Dec 2021 02:18:21 -0600
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH v4 5/5] arch: arm64: ti: Add support J721S2 Common Processor Board
-Date:   Tue, 21 Dec 2021 13:48:06 +0530
-Message-ID: <20211221081806.7836-6-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211221081806.7836-1-a-govindraju@ti.com>
-References: <20211221081806.7836-1-a-govindraju@ti.com>
+        Tue, 21 Dec 2021 03:25:38 -0500
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Dec 2021 03:25:38 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1640075139; x=1671611139;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=leLuW5M0w/kxejprJQIO678ts1KHdQeKyaT3AAB0+70=;
+  b=qzMriaFKaKZcEdTNkCwI55ZyZYhc124QAYHO5aKRzXBlxRN0VGHrUiuz
+   l2+HQjYPyuIZPXQofob2cLXHvA/z6gm/v7/pV5oG09tgw8RwAXGTHgR4m
+   VFh4y1HqFwg5ELIBKm1KAusXk5MY4zXzg6gfWE4qVicZeswtT0pl2LxSd
+   GTdBh9rcKtjA90p91U6yg0eNpKpcEICHlx/CMgjyJBe+z4eeaP5Cj1uf3
+   +E+8b2qK1z7nt8K+zneA43/O6/TjoBwLBIxbReLq/OJ3xcW7WVZpXEj9G
+   XQc0IiI9r2Cv0EfL0xPbP8et4h8aQV9gmgJ+B75zJIDprjBDiSX1uuX9y
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10204"; a="47237113"
+X-IronPort-AV: E=Sophos;i="5.88,222,1635174000"; 
+   d="scan'208";a="47237113"
+Received: from mail-tycjpn01lp2168.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.168])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 17:18:25 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g94IoXCAllgai6xCcAbwCgxSOR9+WHLjD0FCx9Ck3GDnu8TYsJu89+cxUdpZC4evCrWgJJreCSYxx/uV4WrW6HnuQeZCS0RShFI+uujwbT1MruoV4l8LAjmZutrahlyKt4uuJ3Fw7pcgRNQ4wiXmWhF5AECf00SOQItTJDXisMdkKyjM5NFyxma0+qdDPsEyru6Sw9Lk0ixwhnFUNaVeoVhgzE8Byq7oHDq6t+pzIaltFzK09XCd8GhxaEkjv4wQyC4vsgqOsqR8nIUdie40rPU3bznmMT43oQvkEI4wZe9WMRAk6WcxY8DENP8mBllhFHsc1a6uDZAIJVyNWqP1NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T3SrEdiPGG5AeD20O1QZjkIwHzOy3CNY1JN7WZzttx8=;
+ b=kYX+cvuSOJXhm4yQxQhqRPHVIJNmMNW8UF01DKUA3OCxRxQR/27hsjhcr/OtRggVCkD8bApmIM2zSj5fuwuWpuNIdYi/Q4fxKw7aYOr/SoCtVnLmXOxI64OxVUGenTJ52eNvtSjnjGKLi/qdyVLjTCJWA2movjDH9Arxq20a+tVVd6imdKi5rQjJbkvZcYgrlT29BIpLdD2vjhtkuAWQT2zbq5LiV+WiDTS5Jyik0fY6DnGth5/A1Ebu5Q66guXLVvFqbrkW45v/exd+6BDBm1fTgaAUFb/c7zaRPENdrpzgXgZHug54cynE3z06YjicNcj4tF1LugML9UnK9zWA+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T3SrEdiPGG5AeD20O1QZjkIwHzOy3CNY1JN7WZzttx8=;
+ b=b95W555/5ArqLPZ3WQ3Kw5BAuz3SBbEyeymni0arj7VXqiFRt6XOrrAjxRbMdE2kyvr7Uxj20w0IEzOcJndUJyQP0qZIZSmK+unnM54VZuRd6c1eb8WITXoc43kMUewPywmvluOloq6nMC9K+ikH3slIdi4GOhChLzM6EqBT+Yc=
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com (2603:1096:604:7e::12)
+ by OSAPR01MB5060.jpnprd01.prod.outlook.com (2603:1096:604:6e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Tue, 21 Dec
+ 2021 08:18:22 +0000
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::2c38:ad18:39de:3042]) by OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::2c38:ad18:39de:3042%5]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
+ 08:18:22 +0000
+From:   "nakamura.shun@fujitsu.com" <nakamura.shun@fujitsu.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v5 3/3] libperf tests: Add test_stat_multiplexing test
+Thread-Topic: [PATCH v5 3/3] libperf tests: Add test_stat_multiplexing test
+Thread-Index: AQHX60P0SRYTbqZ3XUqLA2y/FGhh0Kwq2moAgBHT2H4=
+Date:   Tue, 21 Dec 2021 08:18:22 +0000
+Message-ID: <OSBPR01MB46004A56EC0CB66FAD6EC4FCF77C9@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+References: <20211207082245.604654-1-nakamura.shun@fujitsu.com>
+ <20211207082245.604654-4-nakamura.shun@fujitsu.com>
+ <CAM9d7ci3Uycj21X4XXu-MxV--k=gtYkS-H+vGWheKC-YG+d3Wg@mail.gmail.com>
+In-Reply-To: <CAM9d7ci3Uycj21X4XXu-MxV--k=gtYkS-H+vGWheKC-YG+d3Wg@mail.gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=True;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2021-12-21T08:18:22.221Z;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
+suggested_attachment_session_id: cc9cf796-e099-07d0-cb9d-642225b29653
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 101379f0-4599-4e4d-f22b-08d9c45a744e
+x-ms-traffictypediagnostic: OSAPR01MB5060:EE_
+x-microsoft-antispam-prvs: <OSAPR01MB5060EED2C38DB0F8A6DB1C0AF77C9@OSAPR01MB5060.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qBJ1NagcM7ty3f84b8eBwrWC+oBCBNFLRA9LDDZOKtLMqe6QnzlqCtzsNlzSDkvHZwqpznB4pHCYVOLLWN6mEtyY5SwB2YxwvzhvXnurbFIWFQIQjBvsAIIACgK2OHW8MafAH1Y9lpRd/OaQddqQuxR9Nz+jVyt31Q5pgRVDWY14ZElYJwDz57zDCXYGTFTqU+itkNs6bDpkZeNhbKEwzHU6OGiEo8THs53oqAggJ1uEf60m17irLsbfhtElWeYP/uwvrru/zozdi5e376iLs/H5dpe7Tl1ZGzg0LiWdaF/SVPNoimMUYMNN72dcYZXCeikT43D0FT2ocX6pDA6owiKvybiDyl5m0yVAUJYN3QteZSdHj7y8bTpANYtMmg/hwPER5dMUWNpQeoe3h3byZ10puhxZ87EwbE8ttOn/ImZirwwuqNMkEkF/SQdXM7Yw0Rq1l95gTGsD5FSdiNkDLwUQcjnDjRqYk7/dV5w2ni3G+QJ7I6q/I8YB4TM7B4se7hSFTtU6r3fyNQ+U3BDYmZL6XeDhLW++3Nn7z9GjHPyK98/MId8YZ2zNr8WOCnARKT1WR5LoilDI1iIU43sj7nru/eM9zdVX1rQCHnXBZkYM28rscJ3vz1ZHOTFJdc3jsTzoOBtB6AUCnTKzn7sY+1LvAYhZRD21sSOR8xWqPITxv3tCUILRwobvbzJA4GJ4CxVYqBGxohTMBpV4OzH2oA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4600.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(26005)(86362001)(6916009)(55016003)(186003)(8676002)(71200400001)(8936002)(38070700005)(54906003)(316002)(7696005)(9686003)(33656002)(66556008)(76116006)(52536014)(38100700002)(83380400001)(66476007)(66446008)(82960400001)(2906002)(64756008)(91956017)(66946007)(85182001)(7416002)(5660300002)(122000001)(6506007)(508600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?VjRPdWdjaWZKa0g3bVYzNUJSK1JMNXFrYlZHWDR3NHh0Q1VYckM3M0I2?=
+ =?iso-2022-jp?B?dWtSc0hJU2xWcm5yUmFlVCt1UkZlZDlLMzR4QnZyQWRFTzU1U2MxaURs?=
+ =?iso-2022-jp?B?YzA3bGpSNlhNWTRNZjZBT080L1pONzkvMVVvTkowWUtuUVViMlcrWTd3?=
+ =?iso-2022-jp?B?ZDR4MVZpbHlpa0YzeTlLZEJpMU5sOTlaNlhaYXp3L0RZcFBJWDN5Q3Fa?=
+ =?iso-2022-jp?B?NktiWlFCZzVFV2Q4Q1ZZbXB5cUwwbVZXakVxSS92OVFGb2UxZkJBN3l4?=
+ =?iso-2022-jp?B?RFVJSXZlZ1ZDWEh4NlhMWkRaYVZOb1phVURHUkpZazBjVDVoUjZOSkow?=
+ =?iso-2022-jp?B?RlNDVGpNL3doaXZyN3JaK2tSSWpjQjAybGlCa3UyVEllK25NcnJrSTZv?=
+ =?iso-2022-jp?B?cGtKZExmajFpOEkvWUxyUFVocmNTUjhMblNCTTV2Wm9KSVVRSnpBalZ0?=
+ =?iso-2022-jp?B?VUJXQXFia2N5VjhoL3h1UVNEWUxnV2dzc0E4NW9mVkY2OElWU01UUnlz?=
+ =?iso-2022-jp?B?dHNCSGU0bkVPaUZBbVBRcktpQ2dLeVlwbm5qdWhJdDhkR29vMWZjRURS?=
+ =?iso-2022-jp?B?eE53Mi9DcVVXd2JRQ09CRllmc1dzRFFqWURxSzd6Uk1sYWVCNW1IcVNV?=
+ =?iso-2022-jp?B?RWZiMDNzc2lTdFBacHRzN21pTzdwRXVvWjdSeTc5R2JYREN3ZHF3Y3hN?=
+ =?iso-2022-jp?B?VFZEZVB2UlRJVjNvRk1VK21oZmpmTXFwUWNJdTV4SU9Da25ubkZYUlNM?=
+ =?iso-2022-jp?B?Q0o3d2ZsZ25EYjl5U3lWZmhraSswMW8zblNldWdPTkFscWN4R2lzdU5N?=
+ =?iso-2022-jp?B?UUlWakVhWTMrcnBpT0pSR09PUEJwOEhVYjRGK01MTFFzNHJ4Ni96WFVO?=
+ =?iso-2022-jp?B?dTFtRVY4bVlFd3FCY3BEdHYreVNhdjVSWkdGU3RGcnI4S3VLQ3VFalpD?=
+ =?iso-2022-jp?B?ck9YVnpSb29EU1JuZ0xNVGdMR1BUcEJnYnlScVRVSThCeXRkSVQxTFJI?=
+ =?iso-2022-jp?B?TWxMaUxNOGxNZ1hvSlllSlFMd2psaGIrN2lxaDdXZEhzTXRKV1dEZnNk?=
+ =?iso-2022-jp?B?aXl6NENkaUlGTmVWOUdLdWhST0NrQU5TckRSRUJNdDlNdEZFS0t0V2N1?=
+ =?iso-2022-jp?B?M1N5YkZ0K3ZBS1g0MmtiSituaHZnV2trL2lKSlNUR0FiN3J6OEhnbllQ?=
+ =?iso-2022-jp?B?QjJxSFpzWVl4Q2FseVFtQWNRWjJhOWM2QmlPTVAza2NLcTdBZVUySmZk?=
+ =?iso-2022-jp?B?U3dQMlBTYzFiZEM1Mlo0S2pSSjNVdk9WN2IzdnBYTGFhTk1JWFpkTHdn?=
+ =?iso-2022-jp?B?T0R6dTJTNlRNby8wVEM3cllVNVVmb3NuK1Y4d3Nwb25MeVJ3elF2TVNB?=
+ =?iso-2022-jp?B?dUIzZ3VqMGd2c1FWMysxa2RvUnJ1Y1B4NVp5ZXd5SWU2djhnOGhqTmE5?=
+ =?iso-2022-jp?B?S0ZBK3BTcVNrS3pTbjBhVlRtc1NQMEQyUURxNXFYYm8xYWdMQ0pWWHRo?=
+ =?iso-2022-jp?B?eW5jZWdGVFlKNHZmRCtSZVozaE93UFRJNGQ4ZjNDNVBqd2ZWWEF2NS9G?=
+ =?iso-2022-jp?B?dXg5bDFJK0tldUQzc1hGNmY1NEZiWEc5SU10cXZmZUxVVEx6RXhhY21F?=
+ =?iso-2022-jp?B?dndTTTVrcVdBMmxUeGw0SEZWT1lBenFLeGt0Zmx2NXhUSUxFNEtaeU1D?=
+ =?iso-2022-jp?B?TS9qbTNmbzU3Z1FBZHdLUUVYbS9TK1lOWnI5RnUzR0MxTC9PdUY0dS9a?=
+ =?iso-2022-jp?B?SVVzdXFVSjFYM2NxdjYxKzRPQkRCd0Q2SkFOaDBiM3RndTExdFdCaktt?=
+ =?iso-2022-jp?B?YkxJMGZBcFRSVDY4MU5DaHltUjR0emhTcDg2UjRHZ3Z2RjRCbjFmaGRj?=
+ =?iso-2022-jp?B?S3A3WGIzOGpKdEFMWEh3elJheStqd0dJQWRBbzMzN1I5RldRS3BCRmlX?=
+ =?iso-2022-jp?B?aWlmZVRMOTJMdGRoR0NDY1R1V3I5NlBZTmxkdTVVbHl6Yi9pU3o0TU50?=
+ =?iso-2022-jp?B?QjRhM3dRWnVDMzdTcHUxRENmdnViN1hKZEhTMWtpbDB4WVZoVTRCVkxE?=
+ =?iso-2022-jp?B?K2picnB2cXVaa1dndnFpS2FqdW9MbUNtOTNSbWQrQzE4ZGJDcU40R3Ji?=
+ =?iso-2022-jp?B?SVlodzZzR1NRU3VRenRyM2YyRWtWK2xZelZ3Q2JUTlEwaEhaNDFHZmwv?=
+ =?iso-2022-jp?B?M053UzYzWTRmYXFOZmgvYVpwWk9WZnBXODVkTHM2R253RHhFUDlqbmZV?=
+ =?iso-2022-jp?B?SWxHTDB6ZTUrRFpnY2lIc2ZVZ0pWblY3elpwQmlmY1gxOWJYcnVnb3Fr?=
+ =?iso-2022-jp?B?enY4Y3BmYnEzaW5wUk1QeE0vWXQxNUJlN1o1VE95NlRLVmQ3bzI5ckdK?=
+ =?iso-2022-jp?B?THFwZ2ZQRks3RVJVZTdJZHhhNjV0QW1NdUpwd0dhOWJjOHFmK1RSb2sz?=
+ =?iso-2022-jp?B?Z211YVRnPT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4600.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 101379f0-4599-4e4d-f22b-08d9c45a744e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 08:18:22.6687
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pO+c2EEKsQZT+apDP2qvYn6vQ7Bdz5/yz0Fo4kt46PL0ssHpTQ5iv7mlDAetAvZkOZYIpf1pQ2kYPvReZ9aFvkTZChK1OzEGiOFYYFqV+iM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB5060
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EVM architecture for J721S2 is similar to that of J721E and J7200. It
-is as follows,
-
-+------------------------------------------------------+
-|   +-------------------------------------------+      |
-|   |                                           |      |
-|   |        Add-on Card 1 Options              |      |
-|   |                                           |      |
-|   +-------------------------------------------+      |
-|                                                      |
-|                                                      |
-|                     +-------------------+            |
-|                     |                   |            |
-|                     |   SOM             |            |
-|  +--------------+   |                   |            |
-|  |              |   |                   |            |
-|  |  Add-on      |   +-------------------+            |
-|  |  Card 2      |                                    |    Power Supply
-|  |  Options     |                                    |    |
-|  |              |                                    |    |
-|  +--------------+                                    | <---
-+------------------------------------------------------+
-                                 Common Processor Board
-
-Common Processor board is the baseboard that contains most of the actual
-connectors, power supply etc. The System on Module (SoM) is plugged on to
-the common processor baord. Therefore, add support for peripherals brought
-out in the common processor board.
-
-Common Processor Board: https://www.ti.com/tool/J721EXCPXEVM
-
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |   2 +
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 430 ++++++++++++++++++
- 2 files changed, 432 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 71f6097d4621..90be511bc4d0 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -17,5 +17,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
- 
- dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
- 
-+dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
-+
- dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-new file mode 100644
-index 000000000000..10a3c6c1f53b
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -0,0 +1,430 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
-+ *
-+ * Common Processor Board: https://www.ti.com/tool/J721EXCPXEVM
-+ */
-+
-+/dts-v1/;
-+
-+#include "k3-j721s2-som-p0.dtsi"
-+#include <dt-bindings/net/ti-dp83867.h>
-+
-+/ {
-+	compatible = "ti,j721s2-evm", "ti,j721s2";
-+	model = "Texas Instruments J721S2 EVM";
-+
-+	chosen {
-+		stdout-path = "serial2:115200n8";
-+		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,2880000";
-+	};
-+
-+	aliases {
-+		serial2 = &main_uart8;
-+		mmc0 = &main_sdhci0;
-+		mmc1 = &main_sdhci1;
-+		can0 = &main_mcan16;
-+		can1 = &mcu_mcan0;
-+		can2 = &mcu_mcan1;
-+	};
-+
-+	evm_12v0: fixedregulator-evm12v0 {
-+		/* main supply */
-+		compatible = "regulator-fixed";
-+		regulator-name = "evm_12v0";
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vsys_3v3: fixedregulator-vsys3v3 {
-+		/* Output of LM5140 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vsys_3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&evm_12v0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vsys_5v0: fixedregulator-vsys5v0 {
-+		/* Output of LM5140 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vsys_5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&evm_12v0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vdd_mmc1: fixedregulator-sd {
-+		/* Output of TPS22918 */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_mmc1";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		vin-supply = <&vsys_3v3>;
-+		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	vdd_sd_dv: gpio-regulator-TLV71033 {
-+		/* Output of TLV71033 */
-+		compatible = "regulator-gpio";
-+		regulator-name = "tlv71033";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		vin-supply = <&vsys_5v0>;
-+		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
-+		states = <1800000 0x0>,
-+			 <3300000 0x1>;
-+	};
-+
-+	transceiver1: can-phy1 {
-+		compatible = "ti,tcan1043";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mcu_mcan0_gpio_pins_default>;
-+		standby-gpios = <&wkup_gpio0 69 GPIO_ACTIVE_LOW>;
-+		enable-gpios = <&wkup_gpio0 0 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	transceiver2: can-phy2 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mcu_mcan1_gpio_pins_default>;
-+		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+};
-+
-+&main_pmx0 {
-+	main_uart8_pins_default: main-uart8-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x040, PIN_INPUT, 14) /* (AC28) MCASP0_AXR0.UART8_CTSn */
-+			J721S2_IOPAD(0x044, PIN_OUTPUT, 14) /* (Y26) MCASP0_AXR1.UART8_RTSn */
-+			J721S2_IOPAD(0x0d0, PIN_INPUT, 11) /* (AF26) SPI0_CS1.UART8_RXD */
-+			J721S2_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AH27) SPI0_CLK.UART8_TXD */
-+		>;
-+	};
-+
-+	main_i2c3_pins_default: main-i2c3-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x064, PIN_INPUT_PULLUP, 13) /* (W28) MCAN0_TX.I2C3_SCL */
-+			J721S2_IOPAD(0x060, PIN_INPUT_PULLUP, 13) /* (AC27) MCASP2_AXR1.I2C3_SDA */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x104, PIN_INPUT, 0) /* (P23) MMC1_CLK */
-+			J721S2_IOPAD(0x108, PIN_INPUT, 0) /* (N24) MMC1_CMD */
-+			J721S2_IOPAD(0x100, PIN_INPUT, 0) /* (###) MMC1_CLKLB */
-+			J721S2_IOPAD(0x0fc, PIN_INPUT, 0) /* (M23) MMC1_DAT0 */
-+			J721S2_IOPAD(0x0f8, PIN_INPUT, 0) /* (P24) MMC1_DAT1 */
-+			J721S2_IOPAD(0x0f4, PIN_INPUT, 0) /* (R24) MMC1_DAT2 */
-+			J721S2_IOPAD(0x0f0, PIN_INPUT, 0) /* (R22) MMC1_DAT3 */
-+			J721S2_IOPAD(0x0e8, PIN_INPUT, 8) /* (AE25) TIMER_IO0.MMC1_SDCD */
-+		>;
-+	};
-+
-+	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
-+		>;
-+	};
-+};
-+
-+&wkup_pmx0 {
-+	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
-+			J721S2_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
-+			J721S2_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
-+			J721S2_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
-+			J721S2_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
-+			J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
-+			J721S2_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
-+			J721S2_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
-+			J721S2_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
-+			J721S2_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
-+			J721S2_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
-+			J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	mcu_mdio_pins_default: mcu-mdio-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
-+			J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
-+		>;
-+	};
-+
-+	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x0bc, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
-+			J721S2_WKUP_IOPAD(0x0b8, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
-+		>;
-+	};
-+
-+	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
-+			J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX */
-+		>;
-+	};
-+
-+	mcu_mcan0_gpio_pins_default: mcu-mcan0-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) WKUP_GPIO0_0 */
-+			J721S2_WKUP_IOPAD(0x0a8, PIN_INPUT, 7) /* (B25) MCU_SPI0_D1.WKUP_GPIO0_69 */
-+		>;
-+	};
-+
-+	mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
-+		>;
-+	};
-+};
-+
-+&main_gpio2 {
-+	status = "disabled";
-+};
-+
-+&main_gpio4 {
-+	status = "disabled";
-+};
-+
-+&main_gpio6 {
-+	status = "disabled";
-+};
-+
-+&wkup_gpio1 {
-+	status = "disabled";
-+};
-+
-+&wkup_uart0 {
-+	status = "reserved";
-+};
-+
-+&main_uart0 {
-+	status = "disabled";
-+};
-+
-+&main_uart1 {
-+	status = "disabled";
-+};
-+
-+&main_uart2 {
-+	status = "disabled";
-+};
-+
-+&main_uart3 {
-+	status = "disabled";
-+};
-+
-+&main_uart4 {
-+	status = "disabled";
-+};
-+
-+&main_uart5 {
-+	status = "disabled";
-+};
-+
-+&main_uart6 {
-+	status = "disabled";
-+};
-+
-+&main_uart7 {
-+	status = "disabled";
-+};
-+
-+&main_uart8 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart8_pins_default>;
-+	/* Shared with TFA on this platform */
-+	power-domains = <&k3_pds 357 TI_SCI_PD_SHARED>;
-+};
-+
-+&main_uart9 {
-+	status = "disabled";
-+};
-+
-+&main_i2c0 {
-+	clock-frequency = <400000>;
-+
-+	exp1: gpio@20 {
-+		compatible = "ti,tca6416";
-+		reg = <0x20>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names = "PCIE_2L_MODE_SEL", "PCIE_2L_PERSTZ", "PCIE_2L_RC_RSTZ",
-+				  "PCIE_2L_EP_RST_EN", "PCIE_1L_MODE_SEL", "PCIE_1L_PERSTZ",
-+				  "PCIE_1L_RC_RSTZ", "PCIE_1L_EP_RST_EN", "PCIE_2L_PRSNT#",
-+				  "PCIE_1L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3", "EXP_MUX1",
-+				  "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTz";
-+	};
-+
-+	exp2: gpio@22 {
-+		compatible = "ti,tca6424";
-+		reg = <0x22>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names = "APPLE_AUTH_RSTZ", "MLB_RSTZ", "GPIO_USD_PWR_EN", "USBC_PWR_EN",
-+				  "USBC_MODE_SEL1", "USBC_MODE_SEL0", "MCAN0_EN", "MCAN0_STB#",
-+				  "MUX_SPAREMUX_SPARE", "MCASP/TRACE_MUX_S0", "MCASP/TRACE_MUX_S1",
-+				  "MLB_MUX_SEL", "MCAN_MUX_SEL", "MCASP2/SPI3_MUX_SEL", "PCIe_CLKREQn_MUX_SEL",
-+				  "CDCI2_RSTZ", "ENET_EXP_PWRDN", "ENET_EXP_RESETZ", "ENET_I2CMUX_SEL",
-+				  "ENET_EXP_SPARE2", "M2PCIE_RTSZ", "USER_INPUT1", "USER_LED1", "USER_LED2";
-+	};
-+};
-+
-+&main_i2c1 {
-+	status = "disabled";
-+};
-+
-+&main_i2c2 {
-+	status = "disabled";
-+};
-+
-+&main_i2c3 {
-+	status = "disabled";
-+};
-+
-+&main_i2c4 {
-+	status = "disabled";
-+};
-+
-+&main_i2c5 {
-+	status = "disabled";
-+};
-+
-+&main_i2c6 {
-+	status = "disabled";
-+};
-+
-+&main_sdhci0 {
-+	/* eMMC */
-+	non-removable;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&main_sdhci1 {
-+	/* SD card */
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	pinctrl-names = "default";
-+	disable-wp;
-+	vmmc-supply = <&vdd_mmc1>;
-+	vqmmc-supply = <&vdd_sd_dv>;
-+};
-+
-+&mcu_cpsw {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_cpsw_pins_default &mcu_mdio_pins_default>;
-+};
-+
-+&davinci_mdio {
-+	phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&cpsw_port1 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&phy0>;
-+};
-+
-+&mcu_mcan0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan0_pins_default>;
-+	phys = <&transceiver1>;
-+};
-+
-+&mcu_mcan1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan1_pins_default>;
-+	phys = <&transceiver2>;
-+};
-+
-+&main_mcan0 {
-+	status = "disabled";
-+};
-+
-+&main_mcan1 {
-+	status = "disabled";
-+};
-+
-+&main_mcan2 {
-+	status = "disabled";
-+};
-+
-+&main_mcan3 {
-+	status = "disabled";
-+};
-+
-+&main_mcan4 {
-+	status = "disabled";
-+};
-+
-+&main_mcan5 {
-+	status = "disabled";
-+};
-+
-+&main_mcan6 {
-+	status = "disabled";
-+};
-+
-+&main_mcan7 {
-+	status = "disabled";
-+};
-+
-+&main_mcan8 {
-+	status = "disabled";
-+};
-+
-+&main_mcan9 {
-+	status = "disabled";
-+};
-+
-+&main_mcan10 {
-+	status = "disabled";
-+};
-+
-+&main_mcan11 {
-+	status = "disabled";
-+};
-+
-+&main_mcan12 {
-+	status = "disabled";
-+};
-+
-+&main_mcan13 {
-+	status = "disabled";
-+};
-+
-+&main_mcan14 {
-+	status = "disabled";
-+};
-+
-+&main_mcan15 {
-+	status = "disabled";
-+};
-+
-+&main_mcan17 {
-+	status = "disabled";
-+};
--- 
-2.17.1
-
+Hi Namhyung=0A=
+=0A=
+Sorry for the late reply.=0A=
+=0A=
+> > +static double display_error(long long average,=0A=
+> > +                           long long high,=0A=
+> > +                           long long low,=0A=
+> > +                           long long expected)=0A=
+> > +{=0A=
+> > +       double error;=0A=
+> > +=0A=
+> > +       error =3D (((double)average - expected) / expected) * 100.0;=0A=
+> > +=0A=
+> > +       __T_VERBOSE("   Expected: %lld\n", expected);=0A=
+> > +       __T_VERBOSE("   High: %lld   Low:  %lld   Average:  %lld\n",=0A=
+> > +                   high, low, average);=0A=
+> > +=0A=
+> > +       __T_VERBOSE("   Average Error =3D %.2f%%\n", error);=0A=
+> > +=0A=
+> > +       return error;=0A=
+> > +}=0A=
+> > +=0A=
+> > +static int test_stat_multiplexing(void)=0A=
+> > +{=0A=
+> > +       struct perf_counts_values expected_counts =3D { .val =3D 0 };=
+=0A=
+> > +       struct perf_counts_values counts[EVENT_NUM] =3D {{ .val =3D 0 }=
+,};=0A=
+> > +       struct perf_thread_map *threads;=0A=
+> > +       struct perf_evlist *evlist;=0A=
+> > +       struct perf_evsel *evsel;=0A=
+> > +       struct perf_event_attr attr =3D {=0A=
+> > +               .type        =3D PERF_TYPE_HARDWARE,=0A=
+> > +               .config      =3D PERF_COUNT_HW_INSTRUCTIONS,=0A=
+> > +               .read_format =3D PERF_FORMAT_TOTAL_TIME_ENABLED |=0A=
+> > +                              PERF_FORMAT_TOTAL_TIME_RUNNING,=0A=
+> > +               .disabled    =3D 1,=0A=
+> =0A=
+> It'd be nice if you use a less restrictive event attribute=0A=
+> so that we can test it on VM or with non-root.=0A=
+> =0A=
+> How about using SOFTWARE / CPU_CLOCKS with=0A=
+> exclude_kernel =3D 1 ?=0A=
+=0A=
+I'm currently working on adding a new API for libperf.=0A=
+So, I will respond to the above comments around the end of January.=0A=
+=0A=
+=0A=
+Best Regards=0A=
+Shunsuke=

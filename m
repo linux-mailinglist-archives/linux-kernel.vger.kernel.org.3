@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 959B547C771
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED7C47C774
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 20:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbhLUT14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 14:27:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52833 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233354AbhLUT1z (ORCPT
+        id S233354AbhLUT2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 14:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241789AbhLUT2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 14:27:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640114874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MAqUVYyX8GGNbuDInZkyqWznH3DItMsslMtWzh73Y2E=;
-        b=ga1w2FTODgMuczTvTyCGiXWN+5ukJxfmGlKOecJgaUqxMGR/wDCMDzZzyEVNJd2C3nSFTq
-        h5oijCJYzGyX5hT9UdZxl/Kt+WanjkhJ+cMUlkLVK7bQ/BGSfAqN5TZezHNQwVsxXJPsLI
-        NX0vgit0Q7fKSiYPGzg+PqUUpIH7oIc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-iRelq30OOm2x5uJ6l-PKqA-1; Tue, 21 Dec 2021 14:27:52 -0500
-X-MC-Unique: iRelq30OOm2x5uJ6l-PKqA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 79B74101F015;
-        Tue, 21 Dec 2021 19:27:49 +0000 (UTC)
-Received: from [10.22.33.162] (unknown [10.22.33.162])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C41F67F559;
-        Tue, 21 Dec 2021 19:27:47 +0000 (UTC)
-Message-ID: <7f0f8e71-cf62-4c0b-5f13-a41919c6cd9b@redhat.com>
-Date:   Tue, 21 Dec 2021 14:27:47 -0500
+        Tue, 21 Dec 2021 14:28:05 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE8BC061574;
+        Tue, 21 Dec 2021 11:28:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v11so65002wrw.10;
+        Tue, 21 Dec 2021 11:28:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=54zGxX/pNsFEGTRMffzqOdT320nhaq4iFU14GnCGm74=;
+        b=fn4lwmVZp4pFH7HMXYHkCiMzn4ZY5ocaXBGnRkxGKfS5xJaDTkQJoy5jvBFH4QSsHl
+         G5WANlWXCjg+je7jq6HLL/klgNMTshet2t5KGTVt+TtiyqAuLWSwmLBnd5nuXFnvMDzy
+         d4G45gJnFOdZGo/i8eNCCLPJkCYLFwK3eQJXq3wJlb5RSmsyln4g+6zS0QqqhOStpnU4
+         cMLkQ8eEpOwgDzLZ+aVsqdH3wWHKO6U2usdnPxDUTuKQE//OhEIdjytKDZH7C3byf4P/
+         sjo4uLqyZCupP9RP2H5lVWnIQIzMjc/bWe/P5s6kO+n/AN6fPV+/59s2SZ+uOlbDL/p+
+         gmAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=54zGxX/pNsFEGTRMffzqOdT320nhaq4iFU14GnCGm74=;
+        b=SZRFPmKQrxjzKO1wL1DgD6jUhT3Pwii3ujvvm4WsvrgnTLH48VWyLa+6FJhKiBlzJ0
+         i8F5tr9Y2hlPDuqND1DGw5CJVzb0wiwOiyVCP+sVBkGp+cYpL6srEmRcyfeh3Y+fHhmF
+         H5Ia23JsXR6wmbhpLdq2a6I7LpUB7CkZ22sNtaytE2vp3mHGu4+uKld564ga+WBVF6sg
+         uO0Gix8ydzLtgBgxsb96eKk9+jY7XWxqrZhu5YHmgiI4HfHMuIz91JpNOAovUb9Smz6Z
+         5Njbmd/IsGhmNAcqLTCqKOYOzQsZKaDFz1GULA4f7udIYNokRdKoF6mriK7upqT8QnMi
+         XrpQ==
+X-Gm-Message-State: AOAM530ffsFaayCSfviWYPl5STwbeuem1GVW4xc4PFCYgsdt/HFIQSQn
+        laJ/dQdLjC8VXc7Dac0PVS7b++cBuE1eA1q0m0C2gw==
+X-Google-Smtp-Source: ABdhPJxuy0ZSllptPGAgjF64vL/b0YoqDQJMy6qH3aN6fJNHc0URALfBDwbJnVyvoUiZYFWSnSd9oQ==
+X-Received: by 2002:a05:6000:1ac6:: with SMTP id i6mr3691896wry.373.1640114884119;
+        Tue, 21 Dec 2021 11:28:04 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m35sm7942852wms.1.2021.12.21.11.28.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 11:28:03 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     David Airlie <airlied@linux.ie>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] via-agp: remove redundant pointer current_size
+Date:   Tue, 21 Dec 2021 19:28:02 +0000
+Message-Id: <20211221192802.636630-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] exec: Make suid_dumpable apply to SUID/SGID binaries
- irrespective of invoking users
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Vivier <laurent@vivier.eu>,
-        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
-        Willy Tarreau <w@1wt.eu>
-References: <20211221021744.864115-1-longman@redhat.com>
- <87lf0e7y0k.fsf@email.froward.int.ebiederm.org>
- <4f67dc4c-7038-7dde-cad9-4feeaa6bc71b@redhat.com>
- <87czlp7tdu.fsf@email.froward.int.ebiederm.org>
- <e78085e4-74cd-52e1-bc0e-4709fac4458a@redhat.com>
- <CAHk-=wg+qpNvqcROndhRidOE1i7bQm93xM=jmre98-X4qkVkMw@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CAHk-=wg+qpNvqcROndhRidOE1i7bQm93xM=jmre98-X4qkVkMw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 13:19, Linus Torvalds wrote:
-> On Tue, Dec 21, 2021 at 10:01 AM Waiman Long <longman@redhat.com> wrote:
->> Default RLIMIT_CORE to 0 will likely mitigate this vulnerability.
->> However, there are still some userspace impacts as existing behavior
->> will be modified. For instance, we may need to modify su to restore a
->> proper value for RLIMIT_CORE after successful authentication.
-> We had a "clever" idea for this that I thought people were ok with.
->
-> It's been some time since this came up, but iirc the notion was to
-> instead of setting the rlimit to zero (which makes it really hard to
-> restore afterwards, because you don't know what the restored value
-> would be, so you are dependent on user space doing it), we just never
-> reset set_dumpable() when we execve.
->
-> So any suid exec will do set_dumpable() to suid_dumpable, and exec'ing
-> something else does nothing at all - it stays non-dumpable (obviously
-> "non-dumpable" here depends on the actual value for "suid_dumpable" -
-> you can enable suid dump debugging manually).
->
-> And instead, we say that operations like "setsid()" that start a new
-> session - *those* are the ones that enable core dumping again. Or
-> doing things like a "ulimit(RLIMIT_CORE)" (which clearly implies "I
-> want core-dumps").
->
-> Those will all very naturally make "login" and friends work correctly,
-> while keeping core-dumps disabled for some suid situation that doesn't
-> explicitly set up a new context.
->
-> I think the basic problem with the traditional UNIX model of "suid
-> exec doesn't core dump" is that the "enter non-core-dump" is a nice
-> clear "your privileges changed".
->
-> But then the "exit non-core-dump" thing is an exec that *doesn't*
-> change privileges. That's the odd and crazy part: you just disabled
-> core-dumps because there was a privilege level change, and then you
-> enable core-dumps again because there *wasn't* a privilege change -
-> even if you're still at those elevated privileges.
->
-> Now, this is clearly not a Linux issue - we're just doing what others
-> have been doing too. But I think we should just admit that "what
-> others have been doing" is simply broken.
->
-> And yes, some odd situation migth be broken by this kind of change,
-> but I think this kind of "the old model was broken" may simply require
-> that. I suspect we can find a solution that fixes all the regular
-> cases.
->
-> Hmm?
+Pointer current_size is being assigned a value but it is never
+read. The pointer is redundant and can be removed.
 
-I think this is a pretty clever idea. At least it is better than 
-resetting RLIMIT_CORE to 0. As it is all done within the kernel, there 
-is no need to change any userspace code. We may need to add a flag bit 
-in the task structure to indicate using the suid_dumpable setting so 
-that it can be inherited across fork/exec.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/char/agp/via-agp.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thanks for the suggestion.
-
-Cheers,
-Longman
+diff --git a/drivers/char/agp/via-agp.c b/drivers/char/agp/via-agp.c
+index a460ae352772..b2f484f527fb 100644
+--- a/drivers/char/agp/via-agp.c
++++ b/drivers/char/agp/via-agp.c
+@@ -128,9 +128,6 @@ static int via_fetch_size_agp3(void)
+ static int via_configure_agp3(void)
+ {
+ 	u32 temp;
+-	struct aper_size_info_16 *current_size;
+-
+-	current_size = A_SIZE_16(agp_bridge->current_size);
+ 
+ 	/* address to map to */
+ 	agp_bridge->gart_bus_addr = pci_bus_address(agp_bridge->dev,
+-- 
+2.33.1
 

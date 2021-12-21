@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A644447BE7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B99A47BE7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 11:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbhLUKyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 05:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbhLUKyD (ORCPT
+        id S236828AbhLUKyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 05:54:49 -0500
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:52791 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236774AbhLUKyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 05:54:03 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708E2C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:54:03 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id bq20so27344454lfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 02:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=87VcK+iQighJg5zj7ze4C2dKKB7zV4zvOTE4j5zOnU0=;
-        b=n63mGF0BHKqOPr0fjceMwIl3/w93BgTojZ1jLeljtA9aec/Yow3swK/N7tRljux4WA
-         2Sxv5oEQo4riOZSsCmwd/ra1Chb47+TxZBx+WuDO20NMMgvzUSt/53mLHmVDGkLRvNA6
-         NoHfoKYNwgNaTZujS37Vdnaj8YKjAXwrEt4/ykvhQj8397esvRHQV7cmQJKnA+7Ft6j0
-         xQn+JB9zBUm5Qxe/WZoHXqtz53xmUZ/3f0+0bm5WTjYiWc8e4kzF9X+hekoKhAUKoGLA
-         8yaeifbylYaf+8hxnMXLN52KAR/WzSWdiqZS/CvEpnHptlj6k86TM5cV5t3++8geBK/u
-         G5rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=87VcK+iQighJg5zj7ze4C2dKKB7zV4zvOTE4j5zOnU0=;
-        b=x+F6rw/vfM7TTjMscrWXl57f2Ux/xg0n/amB5cr1ZfiU/GgRA10RSagNBReZWeaQIg
-         2H3pTYiI8kw+R0QaRHZPGfBQbULFZotwQVW6LOK6ZGY2WmhXQt4Y/G7lYj+8jUpDffAH
-         pOvkdu1Ui5P06fQtcXZK3ps7dSJFPJRC/b6TodG9Ci7Bn43O+8a92fxKn8RNG4C4eRUT
-         FzntQTCqp47vell9LQNg77kwTyegSPR8/VxmOo280DuSPRkprLfg4NcPLIOPFMPAvodJ
-         LWTi8w8qHv9lNlIq6xLRu9S7tqih6piOmW8UheW5EWM60h8n4UTiBr/F3Ghbt0f+5MY4
-         FzxA==
-X-Gm-Message-State: AOAM532M1DpAhsaiwAtibKZyBrYXvbXc9wZ9t1J3ba2i+iElmu2Pi9EO
-        FH5fFg4+CaRSDgtJO20AwffnjzWNOwT3Erhvmc/QBw==
-X-Google-Smtp-Source: ABdhPJz0xRkMLtB6puzGUDl9dPVtYELrAm4NS7RWwk1vnDhc2w3eJK+dws6MPoPTeTuJLfFJRrrf5G7/Gzd73ieRUzM=
-X-Received: by 2002:a05:6512:3d17:: with SMTP id d23mr2527189lfv.523.1640084041572;
- Tue, 21 Dec 2021 02:54:01 -0800 (PST)
+        Tue, 21 Dec 2021 05:54:49 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 486135C0305;
+        Tue, 21 Dec 2021 05:54:48 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 21 Dec 2021 05:54:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=10u2seyTtDKFh00Zfz/k03hmkz3
+        kOv0x/W4LJ4OGXIc=; b=J+2hudM1lN3q+QxEDzLvWHX/7r7mxc1nXK5x8lGZ0Fc
+        VIDOQjMhbIQy0DpvWntNVfwlwgi4kvK5Uvg9iK8GlIhj3HHLqcQm73wIDt6bvrSU
+        3t9xE3E3SkwjEO85VB5CS8lnos2V7/DVQ1yE+5urImo/K3r2quvJ7BCv3JzHdsBH
+        8arcYlOKcx6oGMErfbHOh7rZ5602525Jx0EASKqkNkHV87uUUepW2CxOmnkkFvtn
+        ALfuTkii2KqLN2ntfDerAoM2yYRDinxJdBDoavS4U6a400i4rcHmzobxo7ROZf6g
+        k9R0QxlUK7d+c/ex8v2iUJZ/SajGRBkkmnwORHcnylg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=10u2se
+        yTtDKFh00Zfz/k03hmkz3kOv0x/W4LJ4OGXIc=; b=Ui9Miq0wg67yWnAJnd27B/
+        7LZlRDrb9vHQuZJYbyq84aAwboetzbrhfzUh4EQ0F5ERO1r0eziu9HM5SARgvzEt
+        hjRhLqwzPXNRk8FA14Q7Uyje9cpmcazytyc10SyhJLZg2W5nZMQ8MDBPu8kx/a0g
+        F0KzEse27fBuhiTd38EsGxHLvBdDlWNYMNVujlUUE1eGXikzwElI+Zt7n10Z0Egn
+        vcWYEruoQhJgWweBeDhvv3DX8p+LSjYzZKyTXvs4L8T9YqzrM99l7QMt+Hv3g7NG
+        klPcL2E+Au2wfkvbaT8YTqSG5of9ZJZIzNHsFHCYJn+KMd7rQXgtGX4XlXPTFqFA
+        ==
+X-ME-Sender: <xms:d7LBYenCx4WpenTpOzYfZqsQyIvZc2PGO1Y26yplXT-2IneSk71hhA>
+    <xme:d7LBYV1v7XO8B5QCiQjHe4OYlw02af9L5nL_NsLWrgdOO9cGIcQl7lP5TXh_ZiNE7
+    WLwBDjfviYSrigU-RM>
+X-ME-Received: <xmr:d7LBYcpQQvV_cOmY7A3d8pqTE6PLlhlKyBWG927pDy_QQf05NrvfsFgM6eV2hVrpysry5nVU3bg4erK1d7eC8oA-zHhhffIY2g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtgedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtro
+    dttddtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
+    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhephffhvdejve
+    ffkeeifffhuedufeekkefgtddvteeggeehgeeljeduhfdvhfejvdeknecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:d7LBYSlO7ey3mSyanWXGQgdOYXw2WlotdYHPCBAh84bF3_7WsRt6nA>
+    <xmx:d7LBYc3hUu3PAo0YiSy77pYk7WPoMjlso4vmKMTVEXcyU7DU6Hr7pg>
+    <xmx:d7LBYZvuCvMyL9v40I7_3hwib7cuaTZnyKYrk20jLA1dR2edxUiJpw>
+    <xmx:eLLBYZxsqsVLwepd4A-bP51zIbADVIE-tMd4mHZzPAGawVjawn9VKA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Dec 2021 05:54:46 -0500 (EST)
+Date:   Tue, 21 Dec 2021 19:54:42 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     stefanr@s5r6.in-berlin.de
+Cc:     alsa-devel@alsa-project.org, linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, marcan@marcan.st
+Subject: Re: [PATCH 0/3] firewire: assist unit driver to compute packet
+ timestamp
+Message-ID: <YcGycqUrptkWYeOV@workstation>
+Mail-Followup-To: stefanr@s5r6.in-berlin.de, alsa-devel@alsa-project.org,
+        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        marcan@marcan.st
+References: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
 MIME-Version: 1.0
-References: <20211210093307.31701-1-mgorman@techsingularity.net> <20211210093307.31701-2-mgorman@techsingularity.net>
-In-Reply-To: <20211210093307.31701-2-mgorman@techsingularity.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 21 Dec 2021 11:53:50 +0100
-Message-ID: <CAKfTPtDPu6r3dsSmY-ZDB0k4muoSk1a2J3=NKqoBG1y8aEwNYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/fair: Use weight of SD_NUMA domain in find_busiest_group
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 at 10:33, Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> find_busiest_group uses the child domain's group weight instead of
-> the sched_domain's weight that has SD_NUMA set when calculating the
-> allowed imbalance between NUMA nodes. This is wrong and inconsistent
-> with find_idlest_group.
+Hi Stefan,
 
-I agree that find_busiest_group and find_idlest_group should be
-consistent and use the same parameters but I wonder if sched_domain's
-weight is the right one to use instead of the target group's weight.
+Thank you for your long effort to maintain Linux FireWire subsystem. I'd
+like to use the timestamp function for my integration in ALSA firewire
+stack planned at next version of Linux kernel. I'm glad if getting to
+your help for upstreaming.
 
-IIRC, the goal of adjust_numa_imbalance is to keep some threads on the
-same node as long as we consider that there is no performance impact
-because of sharing  resources as they can even take advantage of
-locality if they interact. So we consider that tasks will not be
-impacted by sharing resources if they use less than 25% of the CPUs of
-a node. If we use the sd->span_weight instead, we consider that we can
-pack threads in the same node as long as it uses less than 25% of the
-CPUs in all nodes.
+On Thu, Dec 02, 2021 at 08:34:54PM +0900, Takashi Sakamoto wrote:
+> Hi,
+> 
+> In 1394 OHCI specification, each descriptor of IR/IT/AR/AT DMA context
+> has timeStamp field. The value of timeStamp field express the time in
+> which the controller accept packet. The resolution of value is isochronous
+> cycle count (8,000 Hz) with second up to 7.
+> 
+> I have a plan to use the value of timeStamp field for ALSA firewire stack
+> so that userspace ALSA PCM/Rawmidi applications can get converted timestamp
+> (ktime) for PCM frame/MIDI message. The timestamp can ideally express
+> finer granularity than the time to invoke IRQ handler (and co).
+> 
+> Current implementation of Linux FireWire subsystem delivers the value of
+> timeStamp field to unit driver for IR/IT/AT DMA context, but not for AR
+> DMA context. Additionally, the way to refer to Isochronous Cycle Timer
+> Register in MMIO region of 1394 OHCI controller is transaction to local
+> node. It includes overhead of transaction and it's preferable to add
+> less-overhead way available in any type of IRQ context.
+> 
+> This patchset adds two functions exposed in kernel space:
+> 
+>  * fw_card_read_cycle_time()
+>     * allow unit driver to access to CYCLE_TIME register in MMIO region
+>       without initiate transaction
+>  * fw_request_get_timestamp()
+>     * allow unit driver to get timestamp of request packet inner request
+>       handler
+> 
+> I note that Hector Martin found kernel null pointer dereference during
+> process to remove PCI card and has posted a patch:
+> 
+>  * https://lore.kernel.org/lkml/20211027113130.8802-1-marcan@marcan.st/
+> 
+> His patch is included in the series with my comment for relevant commit
+> 20802224298c ("firewire: core: add forgotten dummy driver methods, remove
+> unused ones"). The patch is required since unit driver can refer to dummy
+> driver between removal callback of PCI subsystem and removal callback of
+> FireWire subsystem.
+> 
+> Hector Martin (1):
+>   firewire: Add dummy read_csr/write_csr functions
+> 
+> Takashi Sakamoto (2):
+>   firewire: add kernel API to access CYCLE_TIME register
+>   firewire: add kernel API to access packet structure in request
+>     structure for AR context
+> 
+>  drivers/firewire/core-card.c        | 39 +++++++++++++++++++++++++++++
+>  drivers/firewire/core-cdev.c        |  6 +++--
+>  drivers/firewire/core-transaction.c | 18 +++++++++++++
+>  include/linux/firewire.h            |  3 +++
+>  4 files changed, 64 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.32.0
 
->
-> This patch uses the SD_NUMA weight in both.
->
-> Fixes: 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA nodes")
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6e476f6d9435..0a969affca76 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9397,7 +9397,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
->                 /* Consider allowing a small imbalance between NUMA groups */
->                 if (env->sd->flags & SD_NUMA) {
->                         env->imbalance = adjust_numa_imbalance(env->imbalance,
-> -                               busiest->sum_nr_running, busiest->group_weight);
-> +                               busiest->sum_nr_running, env->sd->span_weight);
->                 }
->
->                 return;
-> --
-> 2.31.1
->
+
+Sincerely yours
+
+Takashi Sakamoto

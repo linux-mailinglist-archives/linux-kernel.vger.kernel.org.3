@@ -2,92 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E1447C9EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3251E47C9F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbhLUXz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:55:27 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:52861 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbhLUXz0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:55:26 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        id S238281AbhLUX5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:57:05 -0500
+Received: from mx1.riseup.net ([198.252.153.129]:35650 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230432AbhLUX5D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 18:57:03 -0500
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJYHJ4pbGz4xRC;
-        Wed, 22 Dec 2021 10:55:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640130925;
-        bh=j0V/wOWv/iisTcFw3H1yQ3cpV6UloRtM5aIMFr4CsDI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oBzo1n/Jix/s1zjaxMayF90T4JqH26U6G4WoRdqQyAIDeUAZhdd2nqPs+C72oR2or
-         olX2LNupZy7XiOJ6rZuYV4SjZ1AzE9tSDG14uOxN/ryYYb2i7sEW+QfLSn5Wc/jgug
-         XJLE7ZGgjYbM2IVgmteC+XxSc34erfeyr9PIaZi5Jnl1blKTKDG/W23o1Yic09C36f
-         jEF1TOAybp8SXZyC7Lq7c75bmItLhCMDgB0q9tBeWR2QNKGjYumb3OYkVZ32mtb/OY
-         TPnobVhCMY+dGaGZ+b5ywZjvIWqvb3CNQyYzsyPqz7G5y3cglTVoOOSstTKhBYPjdf
-         wPuhhAmg0F9XQ==
-Date:   Wed, 22 Dec 2021 10:55:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: linux-next: build failure after merge of the uml tree
-Message-ID: <20211222105521.31b14a32@canb.auug.org.au>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4JJYKB4HYyzDs8x;
+        Tue, 21 Dec 2021 15:57:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1640131022; bh=hPL9XrwxyAvqWoaPPeDQV6HVhQKo58lzzdfpX5klCQU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=h5/3v+j4rshd3xdJQHc3yfuNjHZuKapY8tzcCWA8lt7aklYBKNrCAw39xV5eZXwyt
+         X4n6WYk0YomoNiNpwjJFRIAhhr8wrVRqBer2GJ/36/cmGT3u/aJBZklNmNMG3a6gBI
+         /U7NZ6C3q0NZj2e/6Ys3n1VsraJh3TLcNX/z9F5c=
+X-Riseup-User-ID: E390E7649A9FC2C022021D4D55EA595B565F50E20EC628618F78C2257AC81052
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4JJYK96T29z5vkM;
+        Tue, 21 Dec 2021 15:57:01 -0800 (PST)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112172022100.2968@hadrien>
+ <87r1abt1d2.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112180654470.3139@hadrien>
+ <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien>
+ <871r29tvdj.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
+ <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
+Date:   Tue, 21 Dec 2021 15:56:51 -0800
+Message-ID: <878rwdse9o.fsf@riseup.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AWURcZ3_tsObtcwfNcrH0WP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/AWURcZ3_tsObtcwfNcrH0WP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-Hi all,
+> On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
+>>
+>> Julia Lawall <julia.lawall@inria.fr> writes:
+>>
+>> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+>
+> [cut]
+>
+>> > I did some experiements with forcing different frequencies.  I haven't
+>> > finished processing the results, but I notice that as the frequency goes
+>> > up, the utilization (specifically the value of
+>> > map_util_perf(sg_cpu->util) at the point of the call to
+>> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+>> > Is this expected?
+>> >
+>>
+>> Actually, it *is* expected based on our previous hypothesis that these
+>> workloads are largely latency-bound: In cases where a given burst of CPU
+>> work is not parallelizable with any other tasks the thread needs to
+>> complete subsequently, its overall runtime will decrease monotonically
+>> with increasing frequency, therefore the number of instructions executed
+>> per unit of time will increase monotonically with increasing frequency,
+>> and with it its frequency-invariant utilization.
+>
+> But shouldn't these two effects cancel each other if the
+> frequency-invariance mechanism works well?
 
-After merging the uml tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+No, they won't cancel each other out under our hypothesis that these
+workloads are largely latency-bound, since the performance of the
+application will increase steadily with increasing frequency, and with
+it the amount of computational resources it utilizes per unit of time on
+the average, and therefore its frequency-invariant utilization as well.
 
-arch/x86/kvm/mmu/spte.c: In function 'kvm_is_mmio_pfn':
-arch/x86/kvm/mmu/spte.c:85:6: error: implicit declaration of function 'pat_=
-enabled'; did you mean 'kasan_enabled'? [-Werror=3Dimplicit-function-declar=
-ation]
-   85 |    (!pat_enabled() || pat_pfn_immune_to_uc_mtrr(pfn));
-      |      ^~~~~~~~~~~
-      |      kasan_enabled
-arch/x86/kvm/mmu/spte.c:85:23: error: implicit declaration of function 'pat=
-_pfn_immune_to_uc_mtrr' [-Werror=3Dimplicit-function-declaration]
-   85 |    (!pat_enabled() || pat_pfn_immune_to_uc_mtrr(pfn));
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+If you're not convinced by my argument, consider a simple latency-bound
+application that repeatedly blocks for t0 on some external agent and
+then requires the execution of n1 CPU clocks which cannot be
+parallelized with any of the operations occurring during that t0 idle
+time.  The runtime of a single cycle of that application will be,
+assuming that the CPU frequency is f:
 
-I am not sure what caused this - presumably some include file tidying up.
+T = t0 + n1/f
 
-I have used the uml tree from next-20211221 for today.
+Its frequency-invariant utilization will approach on the average:
 
---=20
-Cheers,
-Stephen Rothwell
+u = (T-t0) / T * f / f1 = n1/f / (t0 + n1/f) * f / f1 = (n1 / f1) / (t0 + n1/f)
 
---Sig_/AWURcZ3_tsObtcwfNcrH0WP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHCaWkACgkQAVBC80lX
-0GzgHQf+Kj39OT5TXQYDPqOMBMVCX166UnS+dYMY5PCkjJM+tYAuE7ubqqo6gdc1
-KFdWugIudVFhDZb8qInwS8R8JZsI9rnedN7xt1nQhC7piOFBz9l3gomWfIOxmtr/
-NK1MU4dQgE4FYDqDX/Ca7YefD8v363iRyxXVQcwJt7RS8QDnMlWddwdQTVQNKslb
-+dTzyearUd2Gxr9c+KHbMxqk5CQJiuhLVtFKo/BzLU+BB/jkjgDsoQ28WD96v+1J
-oWza+iH1TNIMI94k9Z+I9Bw17qv2GfH+rrOIV4zBRm8EJm1TTqNYxtncNC94ZLDb
-sdenU+1tb5tFQr2Dj7Mmpixz11BCIQ==
-=kbrX
------END PGP SIGNATURE-----
-
---Sig_/AWURcZ3_tsObtcwfNcrH0WP--
+with f1 a constant with units of frequency.  As you can see the
+denominator of the last expression above decreases with frequency,
+therefore the frequency-invariant utilization increases, as expected for
+an application whose performance is increasing.

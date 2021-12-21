@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF62047BC54
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C7147BCA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 10:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235971AbhLUJA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 04:00:59 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:36758 "EHLO vps0.lunn.ch"
+        id S236191AbhLUJNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 04:13:50 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:40662 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233983AbhLUJA6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:00:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vVRni0bR12c2JVjkK5XJ084xSenLxxeOYAyg4nuubiY=; b=YBZEyQ5GZsk0DI+cRwgS94D86Z
-        7TTmau/QW0vdZpClSnlSsuBkoWxlWkdAjy0B87Fpd8DQiNXZ2HrVCLBvYgrhlln+pPbBUgnNZPFut
-        5kJz/7n3mX7R0BsxsqgxCZIISh8hzG+WjGcLYqiY++6o3forMrzBcsnkPTYMqvnmWLLE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mzb0r-00H70g-Ng; Tue, 21 Dec 2021 10:00:49 +0100
-Date:   Tue, 21 Dec 2021 10:00:49 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next] net: phy: micrel: Adding interrupt support for
- Link up/Link down in LAN8814 Quad phy
-Message-ID: <YcGXwQ63DFzdpSoj@lunn.ch>
-References: <20211221070502.14811-1-Divya.Koppera@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221070502.14811-1-Divya.Koppera@microchip.com>
+        id S232169AbhLUJNt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 04:13:49 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AEBE9201266;
+        Tue, 21 Dec 2021 10:13:48 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7682D2019CE;
+        Tue, 21 Dec 2021 10:13:48 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id E6C13183ACDE;
+        Tue, 21 Dec 2021 17:13:46 +0800 (+08)
+From:   haibo.chen@nxp.com
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, haibo.chen@nxp.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: add i.MX sdhci maintainer
+Date:   Tue, 21 Dec 2021 16:44:48 +0800
+Message-Id: <1640076288-32714-1-git-send-email-haibo.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 12:35:02PM +0530, Divya Koppera wrote:
-> This patch add support for Link up or Link down
-> interrupt support in LAN8814 Quad phy.
-> 
-> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
-> ---
->  drivers/net/phy/micrel.c | 71 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 71 insertions(+)
-> 
-> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> index 44a24b99c894..46931020ef84 100644
-> --- a/drivers/net/phy/micrel.c
-> +++ b/drivers/net/phy/micrel.c
-> @@ -66,6 +66,23 @@
->  #define KSZ8081_LMD_SHORT_INDICATOR		BIT(12)
->  #define KSZ8081_LMD_DELTA_TIME_MASK		GENMASK(8, 0)
->  
-> +/* Lan8814 general Interrupt control/status reg in GPHY specific block. */
-> +#define LAN8814_INTC				0x18
-> +#define LAN8814_INTC_LINK_DOWN			BIT(2)
-> +#define LAN8814_INTC_LINK_UP			BIT(0)
-> +#define LAN8814_INTC_LINK			(LAN8814_INTC_LINK_UP |\
-> +						 LAN8814_INTC_LINK_DOWN)
-> +
-> +#define LAN8814_INTS				0x1B
-> +#define LAN8814_INTS_LINK_DOWN			BIT(2)
-> +#define LAN8814_INTS_LINK_UP			BIT(0)
-> +#define LAN8814_INTS_LINK			(LAN8814_INTS_LINK_UP |\
+From: Haibo Chen <haibo.chen@nxp.com>
 
-I've never seen an interrupt controller where the interrupt control
-bits and the interrupt status bits are different. So just define the
-two interesting bits as LAN8814_INT_LINK_DOWN and LAN8814_INT_LINK_UP
-and share them across the two registers.
+Add myself as the i.MX sdhci driver maintainer.
 
-Otherwise this looks good.
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-    Andrew
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 210bded08641..1e72f46b43b0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17283,6 +17283,13 @@ L:	linux-mmc@vger.kernel.org
+ S:	Maintained
+ F:	drivers/mmc/host/sdhci-omap.c
+ 
++SECURE DIGITAL HOST CONTROLLER INTERFACE (SDHCI) NXP i.MX DRIVER
++M:	Haibo Chen <haibo.chen@nxp.com>
++L:	linux-imx@nxp.com
++L:	linux-mmc@vger.kernel.org
++S:	Maintained
++F:	drivers/mmc/host/sdhci-esdhc-imx.c
++
+ SECURE ENCRYPTING DEVICE (SED) OPAL DRIVER
+ M:	Jonathan Derrick <jonathan.derrick@intel.com>
+ M:	Revanth Rajashekar <revanth.rajashekar@intel.com>
+-- 
+2.25.1
+

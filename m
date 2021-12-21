@@ -2,88 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CB947B689
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFD847B68D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Dec 2021 01:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbhLUAsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Dec 2021 19:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S233502AbhLUAuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Dec 2021 19:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbhLUAsN (ORCPT
+        with ESMTP id S232190AbhLUAuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Dec 2021 19:48:13 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B15EC061574;
-        Mon, 20 Dec 2021 16:48:12 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 185-20020a1c01c2000000b00345b7a50a7bso147232wmb.3;
-        Mon, 20 Dec 2021 16:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/kPfUDXgs/I5bXAuQrDJgSbN/QtfIuaiRvGXMYN9BHs=;
-        b=IpeqEo0vDIcG9LNaNsjUcUK7ecr2IjmvTO2xIbXXL831sIdXOxVN/8WNMb/n7zxcGJ
-         Nrd37AD61C8usPSfKUTs8xEj34IFZmzpecXKkdpckcd6Yf0eDY6I8KZdxFIiSwmmQVbO
-         moV/ISXcMG6kTovU3g70EjodnfJnKUZmRcUHEKXjX1a0znO96BL5zmaTvWGU/9wVBDvb
-         jzzcIzZ2f76f+blbfe1X22GF5noBUmsVa2us3I4wHoJ6WA0P1Gu8ta20lt2CFncYAycD
-         JualuUSkJK35OuvJI8lTcCSEi8XLq2FnTUYL+ULs8x5TIg6OE75P4konL26HRZen+6nJ
-         CNoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/kPfUDXgs/I5bXAuQrDJgSbN/QtfIuaiRvGXMYN9BHs=;
-        b=jwgghIK69XD2BbKNrWKy4QEzb3mywahoOwuL74fPJyrQi3rEgtUmM4qL76XpfWWR6a
-         NagI2HLSlG5zzh5QN/geJX36krzFCt+S1ZlG9O10+PaLD4bOm3nksOt7P9p6imcgKFs1
-         ycK9REKB1weacNQzH/IEucvaA7CT6DfDwNvYT94acAiBJUICwL0iNWwDtyZDG2t5oZLl
-         aR+yl9o34zNcarOk9M5wKTxV5+xwErJYiq1+P0WUnzAKQMzf1NRufnIvfvfuAAaokGia
-         fJqYaIcklulsdU1T5ke1KJ2rUcc5g/Ps8yeW+CiWD+RasSqwTlH9W9hCc36IzQeUnxya
-         TKuw==
-X-Gm-Message-State: AOAM530yn8GcLKgPDbuzTkWf48DMeUGsXfJ9zeIVOxGmxWIx5thOrqn7
-        V2rfdGBGPUBpWvGig1IF/ok=
-X-Google-Smtp-Source: ABdhPJyXDI1q8mxV7GeqUWqzghf86fbpn8/L62NzGAUcAcp5DO7GgyRsexOq1rSdZcn1uo0X8y2PiQ==
-X-Received: by 2002:a05:600c:33a5:: with SMTP id o37mr418327wmp.83.1640047690903;
-        Mon, 20 Dec 2021 16:48:10 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f18sm16498263wre.7.2021.12.20.16.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 16:48:10 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cifs: remove redundant assignment to pointer p
-Date:   Tue, 21 Dec 2021 00:48:09 +0000
-Message-Id: <20211221004809.213602-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 20 Dec 2021 19:50:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DE0C061574;
+        Mon, 20 Dec 2021 16:50:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHyXr5XjJz4xd4;
+        Tue, 21 Dec 2021 11:50:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640047806;
+        bh=o7imnqc01K6O2x4L1xT595ExkFUcfmNcjumSxNKsTNQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ISTij4Lc6XsfULDHvU77JbihwPhaCBWf/CyiyjMFIQ7T6OMRIZ/NGMglgkZU+V1/b
+         5EaQ92pEpg7Fn971jCpxLXmPwPK/Merd3AOPE432TFPbLw0dpH9MflaaruznC6Mcl2
+         wUMHuEK3mNeJ2Kc9ujwUgpvqcpoHJMHi6iVCwFbJtIGlQNfXq24sCF6KwkgHFcqUCf
+         WFK25P3FhXcSBR9WR7zw7ZFGrk8LsF97kS2ctBxA6fgF51prdi2+Q9/3j73onfkpru
+         ULRTvM3eT2B1kQ00c/sFdIHzlzApUOXRoTgAARxDjm7DU5+5xteFMpJWsmgqztinN+
+         2ScWP/X2DgY3Q==
+Date:   Tue, 21 Dec 2021 11:50:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kalle Valo <quic_kvalo@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mac80211-next tree
+Message-ID: <20211221115004.1cd6b262@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/03R.m108Y_t1hW6EI1SYrX8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer p is being assigned with a value that is never read. The
-pointer is being re-assigned a different value inside the do-while
-loop. The assignment is redundant and can be removed.
+--Sig_/03R.m108Y_t1hW6EI1SYrX8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hi all,
+
+After merging the mac80211-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/net/wireless/ath/ath10k/wmi.c: In function 'ath10k_wmi_event_mgmt_r=
+x':
+drivers/net/wireless/ath/ath10k/wmi.c:2626:12: error: too few arguments to =
+function 'cfg80211_get_ies_channel_number'
+ 2626 |   ies_ch =3D cfg80211_get_ies_channel_number(mgmt->u.beacon.variabl=
+e,
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/mac80211.h:21,
+                 from drivers/net/wireless/ath/ath10k/htt.h:16,
+                 from drivers/net/wireless/ath/ath10k/core.h:18,
+                 from drivers/net/wireless/ath/ath10k/wmi.c:11:
+include/net/cfg80211.h:6421:5: note: declared here
+ 6421 | int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  7f599aeccbd2 ("cfg80211: Use the HE operation IE to determine a 6GHz BSS =
+channel")
+
+interacting with commit
+
+  3bf2537ec2e3 ("ath10k: drop beacon and probe response which leak from oth=
+er channel")
+
+from the net-next tree.
+
+I have applied the following merge fix patch for today (which, on
+reflection, may not be correct, but builds).
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 21 Dec 2021 11:40:49 +1100
+Subject: [PATCH] fixup for "cfg80211: Use the HE operation IE to determine =
+a 6GHz BSS channel"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- fs/cifs/cifsfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath10k/wmi.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index d3f3acf340f1..61091eed8c65 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -775,7 +775,7 @@ cifs_get_root(struct smb3_fs_context *ctx, struct super_block *sb)
- 
- 	sep = CIFS_DIR_SEP(cifs_sb);
- 	dentry = dget(sb->s_root);
--	p = s = full_path;
-+	s = full_path;
- 
- 	do {
- 		struct inode *dir = d_inode(dentry);
--- 
-2.32.0
+diff --git a/drivers/net/wireless/ath/ath10k/wmi.c b/drivers/net/wireless/a=
+th/ath10k/wmi.c
+index 4733fd7fb169..657bd6a32a36 100644
+--- a/drivers/net/wireless/ath/ath10k/wmi.c
++++ b/drivers/net/wireless/ath/ath10k/wmi.c
+@@ -2613,6 +2613,7 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struc=
+t sk_buff *skb)
+ 	if (ieee80211_is_beacon(hdr->frame_control) ||
+ 	    ieee80211_is_probe_resp(hdr->frame_control)) {
+ 		struct ieee80211_mgmt *mgmt =3D (void *)skb->data;
++		enum cfg80211_bss_frame_type ftype;
+ 		u8 *ies;
+ 		int ies_ch;
+=20
+@@ -2623,9 +2624,14 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, stru=
+ct sk_buff *skb)
+=20
+ 		ies =3D mgmt->u.beacon.variable;
+=20
++		if (ieee80211_is_beacon(mgmt->frame_control))
++			ftype =3D CFG80211_BSS_FTYPE_BEACON;
++		else /* if (ieee80211_is_probe_resp(mgmt->frame_control)) */
++			ftype =3D CFG80211_BSS_FTYPE_PRESP;
++
+ 		ies_ch =3D cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
+ 							 skb_tail_pointer(skb) - ies,
+-							 sband->band);
++							 sband->band, ftype);
+=20
+ 		if (ies_ch > 0 && ies_ch !=3D channel) {
+ 			ath10k_dbg(ar, ATH10K_DBG_MGMT,
+--=20
+2.33.0
 
+
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/03R.m108Y_t1hW6EI1SYrX8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBJLwACgkQAVBC80lX
+0GwPygf+Kdmuupv94+ul74skfM1l6UVffIhetINDDorSIeBSZVHaajDwmqi7P8PZ
+0N0722gKosC32PXbvmaqvqg1myGKaPza7p6IfQ9sxQDikFPIjdBPjY7spJq8c1qp
+2ohSvsqklP8c7Bn5hszbg1RaKESb2NnB/nD8DkXYZbUUh6L/aktbaPBwMaart2K1
+ezT4pKeILtDJoYMdqUYpQKDDM/iIZdy+BMfS8NAkUhcm2FmtrqmCsJ/z9m4+eiMu
+oByQ03O+mu/G568/Dqmp1Cc+oBvdlB15DdqJZTz7osV67dugIvBHdrK2XZch3etz
+C941+p2Sqdftj6paKziCPyjmFnHfGA==
+=iUW7
+-----END PGP SIGNATURE-----
+
+--Sig_/03R.m108Y_t1hW6EI1SYrX8--

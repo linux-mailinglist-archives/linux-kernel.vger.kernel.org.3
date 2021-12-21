@@ -2,256 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B184E47C997
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9CE47C99D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 00:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236807AbhLUXPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 18:15:30 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:39672 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbhLUXP3 (ORCPT
+        id S236999AbhLUXRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 18:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236827AbhLUXRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 18:15:29 -0500
-Received: by mail-qk1-f171.google.com with SMTP id 69so606134qkd.6;
-        Tue, 21 Dec 2021 15:15:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o6ghia2oyzyiH6598CR7ywYiwIMz19YOc/inSFGIjXg=;
-        b=66EvN33l/vN3KVBdNEYE2q/RnO6Fxf0ZKY1Lo+4hPWPcHDh8T6cCXsxKHqn+zuSooQ
-         8JlOc1mQnZZF5CKX8YxZtQyR3mzxu2r3BnoeVPdGoqP6r7EK3SPAqsA9oVhgxvXi07CI
-         uWHsmr5I+MbR97hnixV0rTNnVwRlupfrSBfQuvxYuWw+DrXVgSkhX6gZLFxOdBZzOLGj
-         Vsy5GxVtJw3OMkbwzKVFxdOI9ByJQdrFfeQvMrlt/iRuu1LZ7E74jeySuBQ+Y4mBb6ZY
-         EcaYpFhNbDHkgk+qvr4a3Dx3JnwX4HtHxppMwQNPY0WqqFdl653kr8aiO2yeJImOxe7u
-         cpLA==
-X-Gm-Message-State: AOAM531vsWc7dEOiafdCJqvOUBOJ4Ddogp/lAFRHIyEnWR2JJQnw5tLh
-        LhBOMj9IzJgaDxYfYWCNmA==
-X-Google-Smtp-Source: ABdhPJy/cHQS5nApZxm48O3HXciLucD7zbZaW6bVGeweLlpl2HjKP7ScYE0q99i2ucfRtMIlvzF8aQ==
-X-Received: by 2002:a05:620a:2789:: with SMTP id g9mr436915qkp.295.1640128528267;
-        Tue, 21 Dec 2021 15:15:28 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id o21sm288848qta.89.2021.12.21.15.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 15:15:27 -0800 (PST)
-Received: (nullmailer pid 1696922 invoked by uid 1000);
-        Tue, 21 Dec 2021 23:15:25 -0000
-Date:   Tue, 21 Dec 2021 19:15:25 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Niklas Cassel <nks@flawful.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: avs: qcom,cpr: Convert to DT schema
-Message-ID: <YcJgDToAY/vXXekl@robh.at.kernel.org>
-References: <20211221133937.173618-1-y.oudjana@protonmail.com>
+        Tue, 21 Dec 2021 18:17:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938FBC061574;
+        Tue, 21 Dec 2021 15:17:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65371B817D0;
+        Tue, 21 Dec 2021 23:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3ED1C36AE9;
+        Tue, 21 Dec 2021 23:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640128623;
+        bh=eLpwNszMuOuFEkO+RZzNfIdGgdQR36iwWtCmciSz6/M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=PSk8Xv5BtvoaVFwebGYKgMvw8X8f2J268mCFiUliSj7V8seeRzBhRP26sn3TaPtiO
+         t2EKjS4LmdBFZpVZMhDyxhtFJq2As+KZKrqyZugS2IGWUUQFEXa8WBQ8a6RIOqC5E0
+         Ct7KS1kPcuxcCjtTQomDaLYUwSY+kkBHKfvVDigsWiAoqam/3ncqtEXGBj11BmiTmu
+         CImW9ns+J1zL9R+i/h0zaRWIH8homEVTVX15SP0n6bQhMMcfXR0U7Q2XlDwFf+Fmeq
+         apI2M6zrudl1fOrMgzhcFA8Z9NjaMK0xO9/u6s+TzL/NyLc6A1yr8LI3Xf9sf5yVqA
+         SuVfgP+j7oJxg==
+Date:   Tue, 21 Dec 2021 17:17:01 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+        lenb@kernel.org, rjw@rjwysocki.net, bhelgaas@google.com,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+Subject: Re: [RESEND PATCH v4] ACPI: Move sdei_init and ghes_init ahead to
+ handle platform errors earlier
+Message-ID: <20211221231701.GA1125162@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221133937.173618-1-y.oudjana@protonmail.com>
+In-Reply-To: <20211216133456.21002-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 01:40:05PM +0000, Yassine Oudjana wrote:
-> Convert qcom,cpr.txt to DT schema format.
+On Thu, Dec 16, 2021 at 09:34:56PM +0800, Shuai Xue wrote:
+> On an ACPI system, ACPI is initialised very early from a subsys_initcall(),
+> while SDEI is not ready until a subsys_initcall_sync().
 > 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->  .../bindings/power/avs/qcom,cpr.txt           | 130 --------------
->  .../bindings/power/avs/qcom,cpr.yaml          | 161 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 162 insertions(+), 131 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
->  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-
-
-> diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml b/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-> new file mode 100644
-> index 000000000000..852eb36eea93
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-> @@ -0,0 +1,161 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/avs/qcom,cpr.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Core Power Reduction (CPR) bindings
-> +
-> +maintainers:
-> +  - Niklas Cassel <nks@flawful.org>
-> +
-> +description: |
-> +  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
-> +  or other device. Each OPP of a device corresponds to a "corner" that has
-> +  a range of valid voltages for a particular frequency. While the device is
-> +  running at a particular frequency, CPR monitors dynamic factors such as
-> +  temperature, etc. and suggests adjustments to the voltage to save power
-> +  and meet silicon characteristic requirements.
-> +
-> +properties:
-> +  compatible:
-> +    allOf:
-
-Don't need allOf with only 1 entry.
-
-> +      - items:
-> +          - enum:
-> +              - qcom,qcs404-cpr
-> +          - const: qcom,cpr
-> +
-> +  reg:
-> +    description: Base address and size of the RBCPR register region.
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Reference clock.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref
-> +
-> +  vdd-apc-supply:
-> +    description: APC regulator supply.
-> +
-> +  '#power-domain-cells':
-> +    const: 0
-> +
-> +  operating-points-v2:
-> +    description: |
-> +      A phandle to the OPP table containing the performance states
-> +      supported by the CPR power domain.
-> +
-> +  acc-syscon:
-> +    description: A phandle to the syscon used for writing ACC settings.
-> +
-> +  nvmem-cells:
-> +    items:
-> +      - description: Corner 1 quotient offset
-> +      - description: Corner 2 quotient offset
-> +      - description: Corner 3 quotient offset
-> +      - description: Corner 1 initial voltage
-> +      - description: Corner 2 initial voltage
-> +      - description: Corner 3 initial voltage
-> +      - description: Corner 1 quotient
-> +      - description: Corner 2 quotient
-> +      - description: Corner 3 quotient
-> +      - description: Corner 1 ring oscillator
-> +      - description: Corner 2 ring oscillator
-> +      - description: Corner 3 ring oscillator
-> +      - description: Fuse revision
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: cpr_quotient_offset1
-> +      - const: cpr_quotient_offset2
-> +      - const: cpr_quotient_offset3
-> +      - const: cpr_init_voltage1
-> +      - const: cpr_init_voltage2
-> +      - const: cpr_init_voltage3
-> +      - const: cpr_quotient1
-> +      - const: cpr_quotient2
-> +      - const: cpr_quotient3
-> +      - const: cpr_ring_osc1
-> +      - const: cpr_ring_osc2
-> +      - const: cpr_ring_osc3
-> +      - const: cpr_fuse_revision
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - vdd-apc-supply
-> +  - '#power-domain-cells'
-> +  - operating-points-v2
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    cpr_opp_table: cpr-opp-table {
-> +        compatible = "operating-points-v2-qcom-level";
-> +
-> +        cpr_opp1: opp1 {
-> +            opp-level = <1>;
-> +            qcom,opp-fuse-level = <1>;
-> +        };
-> +        cpr_opp2: opp2 {
-> +            opp-level = <2>;
-> +            qcom,opp-fuse-level = <2>;
-> +        };
-> +        cpr_opp3: opp3 {
-> +            opp-level = <3>;
-> +            qcom,opp-fuse-level = <3>;
-> +        };
-> +    };
-> +
-> +    power-controller@b018000 {
-> +        compatible = "qcom,qcs404-cpr", "qcom,cpr";
-> +        reg = <0x0b018000 0x1000>;
-> +        interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
-> +        clocks = <&xo_board>;
-> +        clock-names = "ref";
-> +        vdd-apc-supply = <&pms405_s3>;
-> +        #power-domain-cells = <0>;
-> +        operating-points-v2 = <&cpr_opp_table>;
-> +        acc-syscon = <&tcsr>;
-> +
-> +        nvmem-cells = <&cpr_efuse_quot_offset1>,
-> +            <&cpr_efuse_quot_offset2>,
-> +            <&cpr_efuse_quot_offset3>,
-> +            <&cpr_efuse_init_voltage1>,
-> +            <&cpr_efuse_init_voltage2>,
-> +            <&cpr_efuse_init_voltage3>,
-> +            <&cpr_efuse_quot1>,
-> +            <&cpr_efuse_quot2>,
-> +            <&cpr_efuse_quot3>,
-> +            <&cpr_efuse_ring1>,
-> +            <&cpr_efuse_ring2>,
-> +            <&cpr_efuse_ring3>,
-> +            <&cpr_efuse_revision>;
-> +        nvmem-cell-names = "cpr_quotient_offset1",
-> +            "cpr_quotient_offset2",
-> +            "cpr_quotient_offset3",
-> +            "cpr_init_voltage1",
-> +            "cpr_init_voltage2",
-> +            "cpr_init_voltage3",
-> +            "cpr_quotient1",
-> +            "cpr_quotient2",
-> +            "cpr_quotient3",
-> +            "cpr_ring_osc1",
-> +            "cpr_ring_osc2",
-> +            "cpr_ring_osc3",
-> +            "cpr_fuse_revision";
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a7d86182fa6b..9ebbccb0494e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15746,7 +15746,7 @@ M:	Niklas Cassel <nks@flawful.org>
->  L:	linux-pm@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
-> +F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
->  F:	drivers/soc/qcom/cpr.c
->  
->  QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
-> -- 
-> 2.34.1
+> The SDEI driver provides functions (e.g. apei_sdei_register_ghes,
+> apei_sdei_unregister_ghes) to register or unregister event callback for
+> dispatcher in firmware. When the GHES driver probing, it registers the
+> corresponding callback according to the notification type specified by
+> GHES. If the GHES notification type is SDEI, the GHES driver will call
+> apei_sdei_register_ghes to register event call.
+>
+> When the firmware emits an event, it migrates the handling of the event
+> into the kernel at the registered entry-point __sdei_asm_handler. And
+> finally, the kernel will call the registered event callback and return
+> status_code to indicate the status of event handling. SDEI_EV_FAILED
+> indicates that the kernel failed to handle the event.
 > 
+> Consequently, when an error occurs during kernel booting, the kernel is
+> unable to handle and report errors until the GHES driver is initialized by
+> device_initcall(), in which the event callback is registered. All errors
+> that occurred before GHES initialization are missed and there is no chance
+> to report and find them again.
 > 
-> 
+> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+> the estatus memory pool. On the other hand, ghes_init() relies on
+> sdei_init() to detect the SDEI version and the framework for registering
+> and unregistering events.
+
+> By the way, I don't figure out why acpi_hest_init is called in
+> acpi_pci_root_init, it don't rely on any other thing. May it could
+> be moved further, following acpi_iort_init in acpi_init.
+
+I think you should drop the "By the way ..." text or move it after the
+"---" at the bottom of your commit log.  It doesn't help understand
+this patch.
+
+> sdei_init() relies on ACPI table which is initialized
+> subsys_initcall(): acpi_init(), acpi_bus_init(), acpi_load_tables(),
+> acpi_tb_laod_namespace().  May it should be also moved further,
+> after acpi_load_tables.
+
+This text also doesn't seem relevant to this patch.
+
+> In this patch, move sdei_init and ghes_init as far ahead as
+> possible, right after acpi_hest_init().
+
+I'm having a hard time figuring out the reason for this patch.
+
+Apparently the relevant parts are sdei_init() and ghes_init().
+Today they are executed in that order:
+
+  subsys_initcall_sync(sdei_init);
+  device_initcall(ghes_init);
+
+After this patch, they would be executed in the same order, but called
+explicitly instead of as initcalls:
+
+  acpi_pci_root_init()
+  {
+    acpi_hest_init();
+    sdei_init();
+    ghes_init();
+    ...
+
+Explicit calls are certainly better than initcalls, but that doesn't
+seem to be the reason for this patch.
+
+Does this patch fix a bug?  If so, what is the bug?
+
+You say that currently "errors that occur before GHES initialization
+are missed".  Isn't that still true after this patch?  Does this patch
+merely reduce the time before GHES initialization?  If so, I'm
+dubious, because we have to tolerate an arbitrary amount of time
+there.
+
+s/acpi_tb_laod_namespace/acpi_tb_load_namespace/
+
+You use "()" after function names sometimes, but not always.  Please
+do it consistently.
+
+> -device_initcall(ghes_init);
+
+>  void __init acpi_pci_root_init(void)
+>  {
+>  	acpi_hest_init();
+> +	sdei_init();
+> +	ghes_init();
+
+What's the connection between PCI, SDEI, and GHES?  As far as I can
+tell, SDEI and GHES are not PCI-specific, so it doesn't seem like they
+should be initialized here in acpi_pci_root_init().
+
+> -subsys_initcall_sync(sdei_init);

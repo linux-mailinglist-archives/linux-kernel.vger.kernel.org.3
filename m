@@ -2,85 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0498247D548
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1318747D51E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343977AbhLVQnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:43:18 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:45112 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343936AbhLVQnM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:43:12 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 27d37701df046c32; Wed, 22 Dec 2021 17:43:11 +0100
-Received: from kreacher.localnet (unknown [213.134.181.48])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S241849AbhLVQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:30:25 -0500
+Received: from mga11.intel.com ([192.55.52.93]:60913 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236333AbhLVQaX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:30:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640190623; x=1671726623;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OQkd/+4WnQwVupRHWCmJi8rcxsFXTMWhWZ8ZTu/W230=;
+  b=Yf8S+cDQMpZtJ/K/sqaHZQccdJwDYMF60Rn/+fmF5dwYull72kyiTzx2
+   oPQ5+PpkiBzR2V1Ntv3Lpi7TbSxDFmr7u7vHk6A7sYkfVGGib79Sywutn
+   abIOPqInVIQOLrqbjoPbL+/gCBQFfh8g1YE1z1GSyFwLav6HFqjM44+/b
+   afb/m16fjtNp7CMQAFxPWjlYWp7i88ziibNo2xEEW1MwuTC4oJrMPd9It
+   9vNNmPygTxSSM2lZdPhdbI5xO38KytHIoPTl0CS62dozJGPQlZ+9JXCXR
+   EriCIWyGxgtHVrPETX4Od7Z/JEjNfBnF4OnHxWIbHZewvHXLKwjsjVD7X
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="238191027"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="238191027"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:30:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="613889167"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Dec 2021 08:30:23 -0800
+Received: from [10.212.131.121] (kliang2-MOBL.ccr.corp.intel.com [10.212.131.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6BBAD66AE27;
-        Wed, 22 Dec 2021 17:43:10 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 08/19] ACPICA: Utilities: Avoid deleting the same object twice in a row
-Date:   Wed, 22 Dec 2021 17:29:45 +0100
-Message-ID: <3407207.iIbC2pHGDl@kreacher>
-In-Reply-To: <11889746.O9o76ZdvQC@kreacher>
-References: <11889746.O9o76ZdvQC@kreacher>
+        by linux.intel.com (Postfix) with ESMTPS id 3C984580A92;
+        Wed, 22 Dec 2021 08:30:22 -0800 (PST)
+Message-ID: <e4a9aa08-1594-1b7b-a9e6-b1d9221e44d3@linux.intel.com>
+Date:   Wed, 22 Dec 2021 11:30:21 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.48
-X-CLIENT-HOSTNAME: 213.134.181.48
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddtiedgkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefgkedtheeuheetffeuleelhefhfffgjedthedvtdefteejffevteehhedvjefgudenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvudefrddufeegrddukedurdegkeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3] perf/x86/intel/uncore: Fix CAS_COUNT_WRITE issue for
+ ICX
+Content-Language: en-US
+To:     zhengjun.xing@linux.intel.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org
+Cc:     adrian.hunter@intel.com, alexander.shishkin@intel.com,
+        ak@linux.intel.com, kan.liang@intel.com, stable@vger.kernel.org
+References: <20211118160241.329657-1-zhengjun.xing@linux.intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20211118160241.329657-1-zhengjun.xing@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-
-ACPICA commit c11af67d8f7e3d381068ce7771322f2b5324d687
-
-If original_count is 0 in acpi_ut_update_ref_count (),
-acpi_ut_delete_internal_obj () is invoked for the target object, which is
-incorrect, because that object has been deleted once already and the
-memory allocated to store it may have been reclaimed and allocated
-for a different purpose by the host OS.  Moreover, a confusing debug
-message following the "Reference Count is already zero, cannot
-decrement" warning is printed in that case.
-
-To fix this issue, make acpi_ut_update_ref_count () return after finding
-that original_count is 0 and printing the above warning.
-
-Link: https://github.com/acpica/acpica/commit/c11af67d
-Link: https://github.com/acpica/acpica/pull/652
-Reported-by: Mark Asselstine <mark.asselstine@windriver.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
----
- drivers/acpi/acpica/utdelete.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
-index e5ba9795ec69..8d7736d2d269 100644
---- a/drivers/acpi/acpica/utdelete.c
-+++ b/drivers/acpi/acpica/utdelete.c
-@@ -422,6 +422,7 @@ acpi_ut_update_ref_count(union acpi_operand_object *object, u32 action)
- 			ACPI_WARNING((AE_INFO,
- 				      "Obj %p, Reference Count is already zero, cannot decrement\n",
- 				      object));
-+			return;
- 		}
- 
- 		ACPI_DEBUG_PRINT_RAW((ACPI_DB_ALLOCATIONS,
--- 
-2.26.2
 
 
+On 11/18/2021 11:02 AM, zhengjun.xing@linux.intel.com wrote:
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> 
+> The user recently report a perf issue in the ICX platform, when test by
+
+If you have the user's name, you may want to add a Reported-by tag to 
+give them credit. If you don't have, it doesn't matter either.
+
+> perf event “uncore_imc_x/cas_count_write”,the write bandwidth is always
+> very small (only 0.38MB/s), it is caused by the wrong "umask" for the
+> "cas_count_write" event. When double-checking, find "cas_count_read"
+> also is wrong.
+> 
+> The public document for ICX uncore:
+> 
+> https://www.intel.com/content/www/us/en/develop/download/3rd-gen-intel-xeon-processor-scalable-uncore-pm.html
+> 
+> On page 142, Table 2-143, defines Unit Masks for CAS_COUNT:
+> RD b00001111
+> WR b00110000
+>
+
+I think we usually want a permanent reference in the change log. The 
+document may be updated later. The page number or the table number may 
+not be accurate anymore.
+
+I guess you may want to give the exact document name and the version 
+number here. So people can still easily locate the information several 
+years later.
+E.g., "3rd Gen Intel® Xeon® Processor Scalable Family, Codename Ice 
+Lake, Uncore Performance Monitoring Reference Manual, Revision 1.00, May 
+2021"
 
 
+> So Corrected both "cas_count_read" and "cas_count_write" for ICX.
+> 
+> Old settings:
+>   hswep_uncore_imc_events
+> 	INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x03")
+>   	INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x0c")
+> 
+> New settings:
+>   snr_uncore_imc_events
+> 	INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x04,umask=0x0f")
+> 	INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x04,umask=0x30"),
+> 
+> Fixes: 2b3b76b5ec67 ("perf/x86/intel/uncore: Add Ice Lake server uncore support")
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+
+Other than the above comments, the patch looks good to me.
+
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+
+Thanks,
+Kan
+
+> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Cc: stable@vger.kernel.org
+> ---
+> Change log:
+> 
+>    v3:
+>      * Add change log
+> 
+>    v2:
+>      * Add stable tag
+> 
+>   arch/x86/events/intel/uncore_snbep.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
+> index 5ddc0f30db6f..a6fd8eb410a9 100644
+> --- a/arch/x86/events/intel/uncore_snbep.c
+> +++ b/arch/x86/events/intel/uncore_snbep.c
+> @@ -5468,7 +5468,7 @@ static struct intel_uncore_type icx_uncore_imc = {
+>   	.fixed_ctr_bits	= 48,
+>   	.fixed_ctr	= SNR_IMC_MMIO_PMON_FIXED_CTR,
+>   	.fixed_ctl	= SNR_IMC_MMIO_PMON_FIXED_CTL,
+> -	.event_descs	= hswep_uncore_imc_events,
+> +	.event_descs	= snr_uncore_imc_events,
+>   	.perf_ctr	= SNR_IMC_MMIO_PMON_CTR0,
+>   	.event_ctl	= SNR_IMC_MMIO_PMON_CTL0,
+>   	.event_mask	= SNBEP_PMON_RAW_EVENT_MASK,

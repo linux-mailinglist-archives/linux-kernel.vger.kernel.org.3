@@ -2,98 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB5747D7CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8B647D7CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345249AbhLVTdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:33:55 -0500
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:65165 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235166AbhLVTdy (ORCPT
+        id S1345261AbhLVTf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:35:26 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34694 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232808AbhLVTfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:33:54 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 07MznESxgf6fn07MznJHFa; Wed, 22 Dec 2021 20:33:51 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 22 Dec 2021 20:33:51 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     robdclark@gmail.com, sean@poorly.run, quic_abhinavk@quicinc.com,
-        airlied@linux.ie, daniel@ffwll.ch, swboyd@chromium.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] drm/msm/dp: Simplify dp_debug_init() and dp_debug_get()
-Date:   Wed, 22 Dec 2021 20:33:47 +0100
-Message-Id: <dc2d6f535379dd38a5e3f9ba502f1f2b3d1f56b7.1640201523.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Wed, 22 Dec 2021 14:35:25 -0500
+Date:   Wed, 22 Dec 2021 20:35:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1640201724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rkPNWOADgnC36BjgHUX/l07Xpal9174kWfL7noL/iQ0=;
+        b=z9hToS1fSJQDmIizgg5c68gAfttWbhc5y5zulXIGTv8C7Acknp6zBqymzPubJ9pUJ0Kp0D
+        Xn7EmWhswAbPklw3UKW/y0lCvTw6uhQvT0UVAm5QNBVtNwWg1lOjTv8HK2JG7iM+cegmyA
+        EckIq8MoBmUwa1D6n5UOTTHuV4pXzDewlN7Rd/gT4EtCeMn+9TazFiJxgYM1ZmUtrbj+1S
+        Ip/Bpiwve8C43kQL5JjvXEhKlqTvH7Lm2sJSKOJ42m4xOxJK4WwywWqJtJltakEiOS38p5
+        uaSFGrFgYyE+gspkv/t5w/jI7zgZi9zeJ55bNl8Fg/LPdtwlEAMEz8gM/UoPNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1640201724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rkPNWOADgnC36BjgHUX/l07Xpal9174kWfL7noL/iQ0=;
+        b=dSvyKK+j1I4mP2azSbbXHkXrmQQicRdPLVkeTnEpT/E5u0f8k+iXACOGacRsVzgaRhRrC9
+        my6n42wjB2HqsbBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Clark Williams <williams@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Pavel Machek <pavel@denx.de>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH RT] net: Add missing xmit_lock_owner hunks.
+Message-ID: <YcN9+vGl7GXAZwJH@linutronix.de>
+References: <163977665182.1250088.11049848941535534253@puck.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <163977665182.1250088.11049848941535534253@puck.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_debug_init() always returns 0. So, make it a void function and simplify
-the only caller accordingly.
+The patch
+	net: move xmit_recursion to per-task variable on -RT
 
-While at it remove a useless 'rc' initialization in dp_debug_get()
+lost a few hunks during its rebase.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Add the `xmit_lock_owner' accessor/wrapper.
+
+Reported-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/gpu/drm/msm/dp/dp_debug.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ include/linux/netdevice.h | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_debug.c b/drivers/gpu/drm/msm/dp/dp_debug.c
-index da4323556ef3..338f1f9c4d14 100644
---- a/drivers/gpu/drm/msm/dp/dp_debug.c
-+++ b/drivers/gpu/drm/msm/dp/dp_debug.c
-@@ -207,9 +207,8 @@ static const struct file_operations test_active_fops = {
- 	.write = dp_test_active_write
- };
- 
--static int dp_debug_init(struct dp_debug *dp_debug, struct drm_minor *minor)
-+static void dp_debug_init(struct dp_debug *dp_debug, struct drm_minor *minor)
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 7b34ce34114ac..ce19befe4d87d 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3882,17 +3882,17 @@ static inline u32 netif_msg_init(int debug_value, int default_msg_enable_bits)
+ #ifdef CONFIG_PREEMPT_RT_FULL
+ static inline void netdev_queue_set_owner(struct netdev_queue *txq, int cpu)
  {
--	int rc = 0;
- 	struct dp_debug_private *debug = container_of(dp_debug,
- 			struct dp_debug_private, dp_debug);
- 
-@@ -229,17 +228,15 @@ static int dp_debug_init(struct dp_debug *dp_debug, struct drm_minor *minor)
- 			debug, &dp_test_type_fops);
- 
- 	debug->root = minor->debugfs_root;
--
--	return rc;
+-	txq->xmit_lock_owner = current;
++	WRITE_ONCE(txq->xmit_lock_owner, current);
  }
  
- struct dp_debug *dp_debug_get(struct device *dev, struct dp_panel *panel,
- 		struct dp_usbpd *usbpd, struct dp_link *link,
- 		struct drm_connector *connector, struct drm_minor *minor)
+ static inline void netdev_queue_clear_owner(struct netdev_queue *txq)
  {
--	int rc = 0;
- 	struct dp_debug_private *debug;
- 	struct dp_debug *dp_debug;
-+	int rc;
+-	txq->xmit_lock_owner = NULL;
++	WRITE_ONCE(txq->xmit_lock_owner, NULL);
+ }
  
- 	if (!dev || !panel || !usbpd || !link) {
- 		DRM_ERROR("invalid input\n");
-@@ -266,11 +263,7 @@ struct dp_debug *dp_debug_get(struct device *dev, struct dp_panel *panel,
- 	dp_debug->hdisplay = 0;
- 	dp_debug->vrefresh = 0;
+ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
+ {
+-	if (txq->xmit_lock_owner != NULL)
++	if (READ_ONCE(txq->xmit_lock_owner) != NULL)
+ 		return true;
+ 	return false;
+ }
+@@ -3901,17 +3901,19 @@ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
  
--	rc = dp_debug_init(dp_debug, minor);
--	if (rc) {
--		devm_kfree(dev, debug);
--		goto error;
--	}
-+	dp_debug_init(dp_debug, minor);
+ static inline void netdev_queue_set_owner(struct netdev_queue *txq, int cpu)
+ {
+-	txq->xmit_lock_owner = cpu;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, cpu);
+ }
  
- 	return dp_debug;
-  error:
+ static inline void netdev_queue_clear_owner(struct netdev_queue *txq)
+ {
+-	txq->xmit_lock_owner = -1;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, -1);
+ }
+ 
+ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
+ {
+-	if (txq->xmit_lock_owner != -1)
++	if (READ_ONCE(txq->xmit_lock_owner != -1))
+ 		return true;
+ 	return false;
+ }
+@@ -3920,8 +3922,7 @@ static inline bool netdev_queue_has_owner(struct netdev_queue *txq)
+ static inline void __netif_tx_lock(struct netdev_queue *txq, int cpu)
+ {
+ 	spin_lock(&txq->_xmit_lock);
+-	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
+-	WRITE_ONCE(txq->xmit_lock_owner, cpu);
++	netdev_queue_set_owner(txq, cpu);
+ }
+ 
+ static inline bool __netif_tx_acquire(struct netdev_queue *txq)
+@@ -3938,8 +3939,7 @@ static inline void __netif_tx_release(struct netdev_queue *txq)
+ static inline void __netif_tx_lock_bh(struct netdev_queue *txq)
+ {
+ 	spin_lock_bh(&txq->_xmit_lock);
+-	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
+-	WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++	netdev_queue_set_owner(txq, smp_processor_id());
+ }
+ 
+ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+@@ -3947,23 +3947,20 @@ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+ 	bool ok = spin_trylock(&txq->_xmit_lock);
+ 
+ 	if (likely(ok)) {
+-		/* Pairs with READ_ONCE() in __dev_queue_xmit() */
+-		WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++		netdev_queue_set_owner(txq, smp_processor_id());
+ 	}
+ 	return ok;
+ }
+ 
+ static inline void __netif_tx_unlock(struct netdev_queue *txq)
+ {
+-	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
+-	WRITE_ONCE(txq->xmit_lock_owner, -1);
++	netdev_queue_clear_owner(txq);
+ 	spin_unlock(&txq->_xmit_lock);
+ }
+ 
+ static inline void __netif_tx_unlock_bh(struct netdev_queue *txq)
+ {
+-	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
+-	WRITE_ONCE(txq->xmit_lock_owner, -1);
++	netdev_queue_clear_owner(txq);
+ 	spin_unlock_bh(&txq->_xmit_lock);
+ }
+ 
 -- 
-2.32.0
+2.34.1
 

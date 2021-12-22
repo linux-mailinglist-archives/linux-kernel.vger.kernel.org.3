@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4424847D117
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B7447D127
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244712AbhLVLf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:35:28 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4318 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbhLVLf0 (ORCPT
+        id S244727AbhLVLlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:41:24 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:39656 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237624AbhLVLlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:35:26 -0500
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJrjl1Wg8z67b01;
-        Wed, 22 Dec 2021 19:30:51 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Wed, 22 Dec 2021 12:35:24 +0100
-Received: from [10.195.32.222] (10.195.32.222) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 11:35:23 +0000
-Subject: Re: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
-To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ming.lei@redhat.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
- <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com>
- <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
- <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
- <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <e50cfdcd-110b-d778-6e3f-edfed9b1c5a4@huawei.com>
-Date:   Wed, 22 Dec 2021 11:35:22 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 22 Dec 2021 06:41:23 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D483B212B9;
+        Wed, 22 Dec 2021 11:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1640173281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ps07gwicxIa6if6MGpsmNI9n6pnErUxgnZxQzcd6Lbk=;
+        b=sP3nnik3EJAsx3SWWYmI+EC3wsLNXWfVbcgv3VLqEXO8fzAegf2b6Sv4hNKy/1wb8fF78n
+        yDahY3G7ZuiIOAuh2CvzSLLFls2YtMKRdz0LdF2BGksXesvgavLjoLsPDVvl5wba9Dv2zr
+        PuTQcX61PzWQjpPDl++F1vLDoiqNCqc=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B8BB1A3B84;
+        Wed, 22 Dec 2021 11:41:21 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 12:41:18 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexey Makhalov <amakhalov@vmware.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YcMO3qm9UDcPZjCT@dhcp22.suse.cz>
+References: <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
+ <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
+ <B5B3BCE0-853B-444E-BAD8-823CEE8A3E59@vmware.com>
+ <YbIEqflrP/vxIsXZ@dhcp22.suse.cz>
+ <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
+ <YbMZsczMGpChaWz0@dhcp22.suse.cz>
+ <YbyIVPAc2A2sWO8/@dhcp22.suse.cz>
+ <FD8165E2-E17E-458E-B4EE-8C4DB21BA3B6@vmware.com>
+ <YcGignpJgdvy9Vnu@dhcp22.suse.cz>
+ <078460FE-84C4-442C-BD80-97DB90557809@vmware.com>
 MIME-Version: 1.0
-In-Reply-To: <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.32.222]
-X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <078460FE-84C4-442C-BD80-97DB90557809@vmware.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2021 11:20, Kashyap Desai wrote:
-> Yes, above is the same changes I was looking for. I did very basic mistake.
-> I applied your above commit while doing megaraid_sas testing.
->   While I move to mpi3mr testing, I did not apply your patch set. 
+On Tue 21-12-21 20:23:34, Alexey Makhalov wrote:
+> 
+> 
+> > On Dec 21, 2021, at 1:46 AM, Michal Hocko <mhocko@suse.com> wrote:
+> > 
+> > On Tue 21-12-21 05:46:16, Alexey Makhalov wrote:
+> >> Hi Michal,
+> >> 
+> >> The patchset looks good to me. I didn’t find any issues during the testing.
+> > 
+> > Thanks a lot. Can I add your Tested-by: tag?
+> Sure, thanks.
 
-But I did not think that my patch would help mpi3mr since it does not 
-use host_tagset.
+Thanks I will add those then.
+ 
+> >> I have one concern regarding dmesg output. Do you think this messaging is
+> >> valid if possible node is not yet present?
+> >> Or is it only the issue for virtual machines?
+> >> 
+> >>  Node XX uninitialized by the platform. Please report with boot dmesg.
+> >>  Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
+> > 
+> > AFAIU the Initmem part of the output is what concerns you, right? Yeah,
+> First line actually, this sentence “Please report with boot dmesg.”. But
+> there is nothing to fix, at least for VMs.
 
-> We can drop
-> request of this RFT since I tested above series and it serve the same
-> purpose.
+I am still not sure because at least x86 aims at handling that at the
+platform code. David has given us a way to trigger this from kvm/qemu so
+I will play with that. I can certainly change the wording but this whole
+thing was meant to do a fixup after the arch specific code has initialized
+everything.
 
-ok, fine.
+> > that really is more cryptic than necessary. Does this look any better?
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 34743dcd2d66..7e18a924be7e 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -7618,9 +7618,14 @@ static void __init free_area_init_node(int nid)
+> > 	pgdat->node_start_pfn = start_pfn;
+> > 	pgdat->per_cpu_nodestats = NULL;
+> > 
+> > -	pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+> > -		(u64)start_pfn << PAGE_SHIFT,
+> > -		end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
+> > +	if (start_pfn != end_pfn) {
+> > +		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+> > +			(u64)start_pfn << PAGE_SHIFT,
+> > +			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
+> > +	} else {
+> > +		pr_info("Initmem setup node %d as memoryless\n", nid);
+> > +	}
+> > +
+> > 	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
+> > 
+> > 	alloc_node_mem_map(pgdat);
+> Second line looks much better.
 
-And just to confirm, do you now think that we need to fix any older 
-kernel with some backport of my changes? I think that we would just need 
-to consider 5.16 (when it becomes stable), 5.15, and and 5.10
+OK, I will fold that in. I think it is more descriptive as well.
+> 
+> Thank you,
+> —Alexey
+> 
 
-Thanks,
-John
+-- 
+Michal Hocko
+SUSE Labs

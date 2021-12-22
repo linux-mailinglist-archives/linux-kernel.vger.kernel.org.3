@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7180347D3AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D5647D3AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241331AbhLVO21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:28:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50994 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237162AbhLVO20 (ORCPT
+        id S241346AbhLVObI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237162AbhLVObI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:28:26 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DAA9B81CDB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 14:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B22C36AE5;
-        Wed, 22 Dec 2021 14:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640183304;
-        bh=fKPYHQMQ71cyDKzqzqXIDTB/qWkF46W+v2jYAbM/08M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eZi3dqDN11H4l/49f6SMeHNJq+G6xbY2XseMkGMGjhCI/daoihBTBTNpYoQ7tgVNH
-         ft+ooFdLx9H9ZZWyRkUkhaagVwpmHyIKibnK89JllC6n0TAclTts3Qbtg8TrzYbx4b
-         lPwQWYhjzb94c3s3TWn3tgwEDKB4xLNlAnQatFp0cAOR7h5mNU64G22gEC4ZUINte/
-         gyrktsdBKhFTlVScSeyadZxr2XoyQhYPkSAWnNY2nCj2f8AYA9B8V7ODHTVQ9n3nSr
-         pajM0Ri0B6x50zZ89P+lAdGhccuqKbnFmeLQ4en7zX71F1E9/mu6PulrJHGMMrqSAU
-         sgLun6673DLMg==
-Date:   Wed, 22 Dec 2021 23:28:20 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kprobe: Remove kprobe_instance and its related
- functions
-Message-Id: <20211222232820.df0aafcc3baeb309fadef4d7@kernel.org>
-In-Reply-To: <20211222100345.412013-1-jolsa@kernel.org>
-References: <20211222100345.412013-1-jolsa@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 22 Dec 2021 09:31:08 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EF4C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:31:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so802355pjf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:31:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tJ25Nfg2fMSokb+xxWVDgEZFconNFznTg4MsQbjfczw=;
+        b=SjaIZ1BXa+otteg0t4IPMfXhUe5JveNmXofyGtHCo78TNoQSscL3awXIQCtr+bfftC
+         IjhfMTJOq/3mw6GhIBfyuyrZjjqai4qCIZWsjO4Zukoyhcwi2FC9HY865F1jjPpEMotY
+         CgWTKO5QZG+LlY0Ay/Dl7qhP7JC7OVh8Xl7H6VTWqLalKYwcR388PkXfOBdXq5Kfrk/F
+         GP857m5bIoNciLZ7NYhwbV3fuCVQ9hPE00JirO18FNzIIhiaOgWt1ppzBnEf3b8/VOjt
+         7wcrTee5DFbWueIP6VlWCTRDcl4W5jGNG/I6MZCzhARbyRy35bZP9z1Xyd9Ee03uiok/
+         N3NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tJ25Nfg2fMSokb+xxWVDgEZFconNFznTg4MsQbjfczw=;
+        b=xBU1FkbD3jdxqqeBEiAkTWVhmZIPGgvy3YYko4WiTmX2xfx9xbwTTu02N5jtP3Bqj4
+         A5en3Nh4SPBA5YO4kJYwZJPDPRhjCtzWaHcNVzx4VYK0BTRRVYcA4yyTFznOO5Nz8sfl
+         5sPscY9lx9bJFk5KYPMC2rCvAlaYu+FElspTJ+nNr521UoU/kAETqFJ5ejvPA4TsaPXE
+         YQTtBfIBZ8WMVmKILBQ5B9reDzeNw9Eqm6UFz8ViVY82G2a+ZT8kApB8st3IEEkpA6eA
+         WhxeM7M0BMyhR77YUaj3AhlHhdkuOy9RlrvE23LMp5IaqpS1StEbU4mw0Ul6+EGwcW2n
+         dwDg==
+X-Gm-Message-State: AOAM533cT+RDvqn87lBBMtvPmzMp0TDjEqVFIJjC/VTd94OPEU2E5qhg
+        HrSvorOeinHxrR2wo2caA2uAvU05j48pke5U/z7iMQ==
+X-Google-Smtp-Source: ABdhPJw8gD7KnZbnNTVxB7uebJVM/vF/RvVWp1TUVNYyxEujbMljp0fcz/N0KBVSjdgR+sWcFRuA2PdJQh5j849OzUw=
+X-Received: by 2002:a17:90b:1c81:: with SMTP id oo1mr1647873pjb.137.1640183467482;
+ Wed, 22 Dec 2021 06:31:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20211220190150.2107077-1-tkjos@google.com>
+In-Reply-To: <20211220190150.2107077-1-tkjos@google.com>
+From:   Martijn Coenen <maco@android.com>
+Date:   Wed, 22 Dec 2021 15:30:56 +0100
+Message-ID: <CAB0TPYF4zb3R+iv7hLdgmddtV98zu507WgJyeiN77RV9aFeiaA@mail.gmail.com>
+Subject: Re: [PATCH] binder: fix async_free_space accounting for empty parcels
+To:     Todd Kjos <tkjos@google.com>
+Cc:     gregkh@linuxfoundation.org, christian@brauner.io, arve@android.com,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        maco@google.com, joel@joelfernandes.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 11:03:45 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
+LGTM,
 
-> The last user od kprobe_instance got removed in [1],
-> now it just occupies space, removing it.
-> 
-> [1] ec6aba3d2be1 ("kprobes: Remove kprobe::fault_handler")
-> 
+On Mon, Dec 20, 2021 at 8:02 PM 'Todd Kjos' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+> fixed a kernel structure visibility issue. As part of that patch,
+> sizeof(void *) was used as the buffer size for 0-length data payloads so
+> the driver could detect abusive clients sending 0-length asynchronous
+> transactions to a server by enforcing limits on async_free_size.
+>
+> Unfortunately, on the "free" side, the accounting of async_free_space
+> did not add the sizeof(void *) back. The result was that up to 8-bytes of
+> async_free_space were leaked on every async transaction of 8-bytes or
+> less.  These small transactions are uncommon, so this accounting issue
+> has gone undetected for several years.
+>
+> The fix is to use "buffer_size" (the allocated buffer size) instead of
+> "size" (the logical buffer size) when updating the async_free_space
+> during the free operation. These are the same except for this
+> corner case of asynchronous transactions with payloads < 8 bytes.
+>
+> Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+> Signed-off-by: Todd Kjos <tkjos@google.com>
+Reviewed-by: Martijn Coenen <maco@android.com>
 
-Good catch! Thank you very much!
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  kernel/kprobes.c | 24 ++----------------------
->  1 file changed, 2 insertions(+), 22 deletions(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 21eccc961bba..d20ae8232835 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -62,7 +62,6 @@ static bool kprobes_all_disarmed;
->  
->  /* This protects 'kprobe_table' and 'optimizing_list' */
->  static DEFINE_MUTEX(kprobe_mutex);
-> -static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
->  
->  kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
->  					unsigned int __unused)
-> @@ -353,17 +352,6 @@ struct kprobe_insn_cache kprobe_optinsn_slots = {
->  #endif
->  #endif
->  
-> -/* We have preemption disabled.. so it is safe to use __ versions */
-> -static inline void set_kprobe_instance(struct kprobe *kp)
-> -{
-> -	__this_cpu_write(kprobe_instance, kp);
-> -}
-> -
-> -static inline void reset_kprobe_instance(void)
-> -{
-> -	__this_cpu_write(kprobe_instance, NULL);
-> -}
-> -
->  /*
->   * This routine is called either:
->   *	- under the 'kprobe_mutex' - during kprobe_[un]register().
-> @@ -421,11 +409,8 @@ void opt_pre_handler(struct kprobe *p, struct pt_regs *regs)
->  	struct kprobe *kp;
->  
->  	list_for_each_entry_rcu(kp, &p->list, list) {
-> -		if (kp->pre_handler && likely(!kprobe_disabled(kp))) {
-> -			set_kprobe_instance(kp);
-> +		if (kp->pre_handler && likely(!kprobe_disabled(kp)))
->  			kp->pre_handler(kp, regs);
-> -		}
-> -		reset_kprobe_instance();
->  	}
->  }
->  NOKPROBE_SYMBOL(opt_pre_handler);
-> @@ -1177,11 +1162,9 @@ static int aggr_pre_handler(struct kprobe *p, struct pt_regs *regs)
->  
->  	list_for_each_entry_rcu(kp, &p->list, list) {
->  		if (kp->pre_handler && likely(!kprobe_disabled(kp))) {
-> -			set_kprobe_instance(kp);
->  			if (kp->pre_handler(kp, regs))
->  				return 1;
->  		}
-> -		reset_kprobe_instance();
->  	}
->  	return 0;
->  }
-> @@ -1193,11 +1176,8 @@ static void aggr_post_handler(struct kprobe *p, struct pt_regs *regs,
->  	struct kprobe *kp;
->  
->  	list_for_each_entry_rcu(kp, &p->list, list) {
-> -		if (kp->post_handler && likely(!kprobe_disabled(kp))) {
-> -			set_kprobe_instance(kp);
-> +		if (kp->post_handler && likely(!kprobe_disabled(kp)))
->  			kp->post_handler(kp, regs, flags);
-> -			reset_kprobe_instance();
-> -		}
->  	}
->  }
->  NOKPROBE_SYMBOL(aggr_post_handler);
-> -- 
-> 2.33.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+>  drivers/android/binder_alloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 340515f54498..47bc74a8c7b6 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -671,7 +671,7 @@ static void binder_free_buf_locked(struct binder_alloc *alloc,
+>         BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
+>
+>         if (buffer->async_transaction) {
+> -               alloc->free_async_space += size + sizeof(struct binder_buffer);
+> +               alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
+>
+>                 binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
+>                              "%d: binder_free_buf size %zd async free %zd\n",
+> --
+> 2.34.1.307.g9b7440fafd-goog
+>
+>

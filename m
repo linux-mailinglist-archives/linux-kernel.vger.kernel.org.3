@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8B347D194
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541E147D199
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbhLVMTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:19:47 -0500
-Received: from mga03.intel.com ([134.134.136.65]:1689 "EHLO mga03.intel.com"
+        id S240392AbhLVMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:23:39 -0500
+Received: from ixit.cz ([94.230.151.217]:46846 "EHLO ixit.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229616AbhLVMTq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:19:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640175586; x=1671711586;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IpQcbv20rPvoU2QuAxvuOWNufLhcgT8QLvQICN5SqcI=;
-  b=gs2yHw+SZCfmsGYV0NhebdFV9ZVYISCfPCZAyadhDliBaW12qaxy3Ad0
-   9/F87QkyvBO6SqC5/rxq7FGdgE2sOvejAlW8IzeupkXrAwtu8/RUWD6Xf
-   BmhZHOBpOVOcsac6vqudcuBLSe8EF5TTBFntJ+aZsMxqVdNzj2QBhqx5Z
-   mYCh/VPwSvOM0n43MJq8BbeeipwPwVR+qR/PvfeeF1LRAeVGZaugPsW0S
-   6fvV1+ShV6zLlaTZVzBZmrS1Ufidbdjr3Rx7UETzTVIzA1sdPvpg4K0zo
-   mvDDGVYk7ua4EpspSUkrR0DSYkkMFdDbxLkEk+26IVo8NJa9u0Hl3UycT
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240559036"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240559036"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:19:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="685004645"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2021 04:19:44 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n00ar-0000QD-3M; Wed, 22 Dec 2021 12:19:41 +0000
-Date:   Wed, 22 Dec 2021 20:19:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- function 'kasan_tag_mismatch'
-Message-ID: <202112222040.WutR6KJ2-lkp@intel.com>
+        id S229616AbhLVMXh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:23:37 -0500
+Received: from [127.0.0.1] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 75D632243C;
+        Wed, 22 Dec 2021 13:23:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1640175815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jKHE104nrU7+UPiwbD+7cG4P34KlnZN5bC/8w5bsAJs=;
+        b=fIWCddE52AW71C8340gbNr+P/QfYOFL3LxN6q1yv2pLq8PCyLFnk0Vt9W+CH0pKSXzMkga
+        O03BAaAJzSxFx3DISD0Ay2Gjlj+D6Iw1jOG7jnRqsGo+EDNRsdW2a7of37EITvhYVF06KV
+        73RvCI6p6OdA452CXD+QjVeJ8z3SgWM=
+Date:   Wed, 22 Dec 2021 12:23:34 +0000
+From:   David Heidelberg <david@ixit.cz>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Subject: =?US-ASCII?Q?Re=3A_Question_about_node_naming_in_=5BPATCH_v3?= =?US-ASCII?Q?_13/18=5D_ARM=3A_dts=3A_qcom=3A_sdx55=3A_Add_spmi_node?=
+In-Reply-To: <20211222091910.GA5159@thinkpad>
+References: <HTKF4R.5S1PY4MCM4QS@ixit.cz> <20211221071219.GD26872@thinkpad> <20211222091910.GA5159@thinkpad>
+Message-ID: <8AFA24D7-3378-42B6-87E2-0C4FB2ACDF95@ixit.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Thank you=2E
 
-FYI, the error/warning still remains.
+I'll rename the nodes to `spmi@` then and send binding conversion=2E
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   7 months ago
-config: arm64-randconfig-r023-20211222 (https://download.01.org/0day-ci/archive/20211222/202112222040.WutR6KJ2-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project de4e0195ae1c39f1c3b07834b8e32c113f4f20eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-        ^
-   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-   ^
-   static 
-   1 warning generated.
+David
 
 
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+PR is merged now=2E So you can proceed with using "spmi" node name in all =
+dts=2E
 
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+Thanks,
+Mani
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Thanks,
+> Mani
+>=20
+> [1] https://github=2Ecom/devicetree-org/devicetree-specification/pull/50
+>=20
+> > I'm currently converting binding for
+> > Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb and I'm
+> > considering adding qcom,spmi into qcom,spmi-pmic-arb or just rename th=
+is and
+> > arch/arm64/boot/dts/qcom/msm8996=2Edtsi `qcom,spmi@` occurences to `sp=
+mi@`=2E
+> >=20
+> > Ideas, inputs?
+> >=20
+> > Thank you
+> > David
+> >=20
+> >=20

@@ -2,191 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6816547D4DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E92347D4DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbhLVQIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 11:08:04 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:32134 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbhLVQID (ORCPT
+        id S233335AbhLVQIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:08:49 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38350 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232944AbhLVQIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:08:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640189284; x=1671725284;
-  h=from:to:cc:subject:date:message-id;
-  bh=r3lEt8Gkain1TWNfcDUXk8ZAKI4ZCOg3/oSgolx8HoM=;
-  b=m28UIXig56Y0vHD9G0zLGwLdrP3FRORO89snsVBEHwI+bKl3s2s/qoN/
-   1PcJv0+xBV1FlstQV6ueGor8H5WcJRqfGJ/EbuBYmrzzBDrb5GxPrmRp8
-   zGmhRb9ryi+9vz7DCOcwNAZkN0dkusV0MEfoC9bYgKZo63yXMV0PAGLys
-   s=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 22 Dec 2021 08:08:04 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Dec 2021 08:08:02 -0800
-X-QCInternal: smtphost
-Received: from pmaliset-linux.qualcomm.com ([10.206.64.233])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 22 Dec 2021 21:37:46 +0530
-Received: by pmaliset-linux.qualcomm.com (Postfix, from userid 3848298)
-        id 583FD21198; Wed, 22 Dec 2021 21:37:45 +0530 (IST)
-From:   Prasad Malisetty <quic_c_pmaliset@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>
-Subject: [PATCH v1] PCI: qcom: Add system PM support
-Date:   Wed, 22 Dec 2021 21:37:42 +0530
-Message-Id: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 22 Dec 2021 11:08:48 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 35A891F38F;
+        Wed, 22 Dec 2021 16:08:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640189327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ETKI8A1rkI3ZeqetSWGhIJawu5367T3rAku+xjwvwvM=;
+        b=h1uU8FQ95+/iErjxmYoM9UAE03UHz6rWr+DVs2Cw1qcepePKzfqvYy59KYrWrYegzeFo9o
+        Yb0oS6INt3Zv9b9AaNB+RgUSXSTQQKNHMbnAOCuT2rH8Hwg75JGg3roX6xM4VR6bc1nblX
+        O2mkZfKuDxtytavIOi4IxQr1MkndlK8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640189327;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ETKI8A1rkI3ZeqetSWGhIJawu5367T3rAku+xjwvwvM=;
+        b=ZzpI5cYwTrcXtdkpwn6tYD3iCB2x2giaTZciFxb8R/ssBBGG+M7YNgm/f4AnQTrjwDzP4W
+        Qoykgt4uh7Cz4iAw==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 00F92A3B81;
+        Wed, 22 Dec 2021 16:08:47 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id D591D1F2CEF; Wed, 22 Dec 2021 17:08:46 +0100 (CET)
+Date:   Wed, 22 Dec 2021 17:08:46 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211222160846.GH685@quack2.suse.cz>
+References: <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <20211222144255.GE685@quack2.suse.cz>
+ <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prasad Malisetty <quic_pmaliset@quicinc.com>
+On Wed 22-12-21 15:48:34, David Hildenbrand wrote:
+> On 22.12.21 15:42, Jan Kara wrote:
+> > On Wed 22-12-21 14:09:41, David Hildenbrand wrote:
+> >>>> IIUC, our COW logic makes sure that a shared anonymous page that might
+> >>>> still be used by a R/O FOLL_GET cannot be modified, because any attempt
+> >>>> to modify it would result in a copy.
+> >>>
+> >>> Well, we defined FOLL_PIN to mean the intent that the caller wants to access
+> >>> not only page state (for which is enough FOLL_GET and there are some users
+> >>> - mostly inside mm - who need this) but also page data. Eventually, we even
+> >>> wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
+> >>> internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
+> >>>
+> >>> For file pages we need this data vs no-data access distinction so that
+> >>> filesystems can detect when someone can be accessing page data although the
+> >>> page is unmapped.  Practically, filesystems care most about when someone
+> >>> can be *modifying* page data (we need to make sure data is stable e.g. when
+> >>> writing back data to disk or doing data checksumming or other operations)
+> >>> so using FOLL_GET when wanting to only read page data should be OK for
+> >>> filesystems but honestly I would be reluctant to break the rule of "use
+> >>> FOLL_PIN when wanting to access page data" to keep things simple and
+> >>> reasonably easy to understand for parties such as filesystem developers or
+> >>> driver developers who all need to interact with pinned pages...
+> >>
+> >> Right, from an API perspective we really want people to use FOLL_PIN.
+> >>
+> >> To optimize this case in particular it would help if we would have the
+> >> FOLL flags on the unpin path. Then we could just decide internally
+> >> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+> >> this like a FOLL_GET instead". And we would need that as well if we were
+> >> to keep different counters for R/O vs. R/W pinned.
+> > 
+> > Well, I guess the question here is: Which GUP user needs only R/O access to
+> > page data and is so performance critical that it would be worth it to
+> > sacrifice API clarity for speed? I'm not aware of any but I was not looking
+> > really hard...
+> 
+> I'd be interested in examples as well. Maybe databases that use O_DIRECT
+> after fork()?
 
-Add suspend_noirq and resume_noirq callbacks to handle
-System suspend and resume in dwc pcie controller driver.
+Well, but O_DIRECT reads must use FOLL_PIN in any case because they modify
+page data (and so we need to detect them both for COW and filesystem needs).
+O_DIRECT writes could use FOLL_GET but at this point I'm not convinced it
+is worth it.
 
-When system suspends, send PME turnoff message to enter
-link into L2 state. Along with powerdown the PHY, disable
-pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
-supported and disable the pcie clocks, regulators.
-
-When system resumes, PCIe link will be re-established and
-setup rc settings.
-
-Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 103 +++++++++++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
-
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index c19cd506..24dcf5a 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -73,6 +73,8 @@
- 
- #define PCIE20_PARF_Q2A_FLUSH			0x1AC
- 
-+#define PCIE20_PARF_PM_STTS                     0x24
-+
- #define PCIE20_MISC_CONTROL_1_REG		0x8BC
- #define DBI_RO_WR_EN				1
- 
-@@ -1616,6 +1618,107 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
-+{
-+	int ret = 0;
-+	u32 val = 0, poll_val = 0;
-+	uint64_t l23_rdy_poll_timeout = 100000;
-+	struct dw_pcie *pci = pcie->pci;
-+	struct device *dev = pci->dev;
-+
-+	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-+	val |= BIT(4);
-+	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-+
-+	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
-+			(poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
-+	if (!ret)
-+		dev_dbg(dev, "PCIe: PM_Enter_L23 is received\n");
-+	else
-+		dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
-+			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
-+
-+	return ret;
-+}
-+
-+static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
-+{
-+	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-+
-+	/*Assert the reset of endpoint */
-+	qcom_ep_reset_assert(pcie);
-+
-+	/* Put PHY into POWER DOWN state */
-+	phy_power_off(pcie->phy);
-+
-+	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
-+
-+	/* Disable pipe clock */
-+	pcie->ops->post_deinit(pcie);
-+
-+	/* Change GCC_PCIE_1_PIPE_MUXR register to 0x2 for XO as parent */
-+	if (pcie->pipe_clk_need_muxing)
-+		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
-+
-+	/* Disable PCIe clocks and regulators*/
-+	pcie->ops->deinit(pcie);
-+}
-+
-+static int __maybe_unused qcom_pcie_pm_suspend_noirq(struct device *dev)
-+{
-+	int ret = 0;
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+	struct dw_pcie *pci = pcie->pci;
-+
-+	if (!dw_pcie_link_up(pci)) {
-+		dev_err(dev, "Power has been turned off already\n");
-+		return ret;
-+	}
-+
-+	/* Send PME turnoff msg */
-+	ret = qcom_pcie_send_pme_turnoff_msg(pcie);
-+	if (ret)
-+		return ret;
-+
-+	/* Power down the PHY, disable clock and regulators */
-+	qcom_pcie_host_disable(pcie);
-+
-+	dev_info(dev, "PM: PCI is suspended\n");
-+	return ret;
-+}
-+
-+/* Resume the PCIe link */
-+static int __maybe_unused qcom_pcie_pm_resume_noirq(struct device *dev)
-+{
-+	int ret = 0;
-+	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-+	struct dw_pcie *pci = pcie->pci;
-+	struct pcie_port *pp = &pci->pp;
-+
-+	dev_info(dev, "PM: Resuming\n");
-+
-+	/* Initialize PCIe host */
-+	ret = qcom_pcie_host_init(pp);
-+	if (ret)
-+		dev_err(dev, "cannot initialize host\n");
-+
-+	dw_pcie_iatu_detect(pci);
-+	dw_pcie_setup_rc(pp);
-+
-+	/* Start the PCIe link */
-+	qcom_pcie_start_link(pci);
-+
-+	ret = dw_pcie_wait_for_link(pci);
-+	if (ret)
-+		dev_err(dev, "Link never came up, Resume failed\n");
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops qcom_pcie_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
-+};
-+
- static const struct of_device_id qcom_pcie_match[] = {
- 	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
- 	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+								Honza
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

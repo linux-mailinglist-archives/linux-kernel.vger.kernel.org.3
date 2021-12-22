@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E09A547CCFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AF247CCFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239173AbhLVG3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:29:13 -0500
-Received: from wtarreau.pck.nerim.net ([62.212.114.60]:49905 "EHLO 1wt.eu"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233176AbhLVG3L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:29:11 -0500
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 1BM6T3g0001806;
-        Wed, 22 Dec 2021 07:29:03 +0100
-Date:   Wed, 22 Dec 2021 07:29:03 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Vivier <laurent@vivier.eu>,
-        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] exec: Make suid_dumpable apply to SUID/SGID binaries
- irrespective of invoking users
-Message-ID: <20211222062903.GA1720@1wt.eu>
-References: <20211221021744.864115-1-longman@redhat.com>
- <87lf0e7y0k.fsf@email.froward.int.ebiederm.org>
- <4f67dc4c-7038-7dde-cad9-4feeaa6bc71b@redhat.com>
- <87czlp7tdu.fsf@email.froward.int.ebiederm.org>
- <e78085e4-74cd-52e1-bc0e-4709fac4458a@redhat.com>
- <CAHk-=wg+qpNvqcROndhRidOE1i7bQm93xM=jmre98-X4qkVkMw@mail.gmail.com>
- <7f0f8e71-cf62-4c0b-5f13-a41919c6cd9b@redhat.com>
- <20211221205635.GB30289@1wt.eu>
- <20211221221336.GC30289@1wt.eu>
- <87o8594jlq.fsf@email.froward.int.ebiederm.org>
+        id S242756AbhLVGbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233175AbhLVGbC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:31:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52200C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 22:31:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBD7C618BF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 06:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B83FC36AE5;
+        Wed, 22 Dec 2021 06:31:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640154661;
+        bh=kOC4wWHNwotDFufgc5qAmoRfDRS0MtG/Ry58g//qJNs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Flhc3hMIuoPFhMzcN6pCAvjrTONovn+Ke8Dip1zDqYJ+jOtaHvAoF1u0+r20dTRUG
+         iAsxEv2XH3FkRX9s4hHYKlimA3yjPIh19uVEVexjmlJTCqPGWgvGObO2ORnMmjqdbc
+         pTgmoRulAbGk1Q0TP62/77ZCO7hM4j20sZ5wOC6k=
+Date:   Wed, 22 Dec 2021 07:30:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: Re: [PATCH] random: use BLAKE2s instead of SHA1 in extraction
+Message-ID: <YcLGIbWiMH4VudW0@kroah.com>
+References: <20211221175047.341782-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o8594jlq.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211221175047.341782-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 05:35:29PM -0600, Eric W. Biederman wrote:
-> > Would there be any interest in pursuing attempts like the untested patch
-> > below ? The intent is to set a new MMF_NOT_DUMPABLE on exec on setuid or
-> > setgid bit, but clear it on setrlimit(RLIMIT_CORE), prctl(SET_DUMPABLE),
-> > and setsid(). This flag makes get_dumpable() return SUID_DUMP_DISABLED
-> > when set. I think that in the spirit it could maintain the info that a
-> > suidexec happened and was not reset, without losing any tuning made by
-> > the application. I never feel at ease touching all this and I certainly
-> > did some mistakes but for now it's mostly to have a base to discuss
-> > around, so do not hesitate to suggest or criticize.
+On Tue, Dec 21, 2021 at 06:50:47PM +0100, Jason A. Donenfeld wrote:
+> This commit addresses one of the lower hanging fruits of the RNG: its
+> usage of SHA1.
 > 
+> BLAKE2s is generally faster, and certainly more secure, than SHA1, which
+> has [1] been [2] really [3] very [4] broken [5]. Additionally, the
+> current construction in the RNG doesn't use the full SHA1 function, as
+> specified, and allows overwriting the IV with RDRAND output in an
+> undocumented way, even in the case when RDRAND isn't set to "trusted",
+> which means potential malicious IV choices. And its short length means
+> that keeping only half of it secret when feeding back into the mixer
+> gives us only 2^80 bits of forward secrecy. In other words, not only is
+> the choice of hash function dated, but the use of it isn't really great
+> either.
 > 
-> Yes.  This looks like a good place to start the conversation.
-
-OK thanks.
-
-> We need to do something like you are doing to separate dumpability
-> changes due to privilege gains during exec and dumpability changes due
-> to privilege shuffling with setresuid.
+> This commit aims to fix both of these issues while also keeping the
+> general structure and semantics as close to the original as possible.
+> Specifically:
 > 
-> As long as we only impact processes descending from a binary that has
-> gained privileges during exec (like this patch) I think we have a lot
-> of latitude in how we make this happen.
-
-Yes that's the idea. I think that fundamentally we ought to mark
-that a chain of processes are potentially unsafe for dumps until the
-application has shown that it could regain control of the code paths,
-and hence is expected to deal properly with errors that might appear
-so as not to dump a core anywhere with random permissions.
-
-> Basically we only need to
-> test su and sudo and verify that whatever we do works reasonably
-> well for them.
+>    a) Rather than overwriting the hash IV with RDRAND, we put it into
+>       BLAKE2's documented "salt" and "personal" fields, which were
+>       specifically created for this type of usage.
+>    b) Since this function feeds the full hash result back into the
+>       entropy collector, we only return from it half the length of the
+>       hash, just as it was done before. This increases the
+>       construction's forward secrecy from 2^80 to a much more
+>       comfortable 2^128.
+>    c) Rather than using the raw "sha1_transform" function alone, we
+>       instead use the full proper BLAKE2s function, with finalization.
 > 
-> On the one hand I believe of gaining privileges during exec while
-> letting the caller control some aspect of our environment is a dangerous
-> design flaw and I would love to remove gaining privileges during exec
-> entirely.
-
-You would like to postpone this ? It's not very clear to me how to do
-that nor if it could reliably address this shortcoming.
-
-> On the other hand we need to introduces as few regressions as possible
-> and make gaining privileges during exec as safe as possible.
-
-Yep I think so. Also code that is designed to run under setuid (like sudo)
-is usally well tested, and quite portable thanks to various OS-specific
-tweaks that we definitely don't want to break.
-
-> I do agree that RLIMIT_CORE and prctl(SET_DUMPABLE) are good places
-> to clear the flag.
-
-There are probably other ones, but ideally we ought to avoid stuff
-that could happen early in the dynamic linker.
-
-> I don't know if setsid is the proper key to re-enabling dumpability.
-
-It was a supposition emitted by Linus, which deserved being checked
-at least given that it's part of the usual sequence when starting a
-deamon.
-
-> I ran a quick test and simply doing "su" and then running a shell
-> as root does not change the session, nor does "su -" (which creates
-> a login shell).  Also "sudo -s" does not create a new session.
+> This also has the advantage of supplying 16 bytes at a time rather than
+> SHA1's 10 bytes, which, in addition to having a faster compression
+> function to begin with, means faster extraction in general. On an Intel
+> i7-11850H, this commit makes calls to RNDRESEEDCRNG around 28% faster.
 > 
-> So session creation does not happen naturally.
-
-OK, so it will not help them. For them we could use setuid()/setreuid()
-and setresuid() as good indicators that the application has taken control
-of its fate. Sadly we cannot do that in set_user() because this one is
-not called when the uid doesn't change.
-
-> Still setsid is part of the standard formula for starting a daemon,
-> so I don't think system services that run as daemons will be affected.
+> BLAKE2s itself has the nice property of internally being based on the
+> ChaCha permutation, which the RNG is already using for expansion, so
+> there shouldn't be any issue with newness, funkiness, or surprising CPU
+> behavior, since it's based on something already in use.
 > 
+> [1] https://eprint.iacr.org/2005/010.pdf
+> [2] https://www.iacr.org/archive/crypto2005/36210017/36210017.pdf
+> [3] https://eprint.iacr.org/2015/967.pdf
+> [4] https://shattered.io/static/shattered.pdf
+> [5] https://www.usenix.org/system/files/sec20-leurent.pdf
 > 
-> I don't think anything we do matters for systemd.  As I understand
-> it "systemctl start ..." causes pid 1 to fork and exec services,
-> which will ensure the started processes are not descendants of
-> the binary the gained privileges during exec.
+> Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Good point, I hadn't thought about that, but I agree with you.
+0-day build issues asside, this looks sane to me, nice work:
 
-Willy
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

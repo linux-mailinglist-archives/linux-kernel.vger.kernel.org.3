@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD83447CE95
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACBC47CE93
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243558AbhLVJBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243554AbhLVJBa (ORCPT
+        id S243549AbhLVJBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:01:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33880 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243507AbhLVJBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:01:30 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FE6C06173F;
-        Wed, 22 Dec 2021 01:01:30 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id e136so4661694ybc.4;
-        Wed, 22 Dec 2021 01:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ysosXtFfyBojHJLz2B9nDDvXFhZv0++ox9CFVTznA+c=;
-        b=JsUN+RmQivZezcs9oQRRqoXfB599vatZ0Ep+6oVEJ0sx8pgAdz6tqV22dkNqhKeYXJ
-         zTWTgE4Hw53v60oDlu3eK9AGY4MLc8mAKO9uWy6Jn4mYYgm1/4ypeQQOJg5DjOB8zp+l
-         bLAxqDbG4newwic8yL6vKmit9GrPpFA9dET/6J2COBSJCAQYfBXvgge5/u1+YED9TZi5
-         lotcsIMqCDI37QJzDUsUaJESuuHRvp9mYOc/iTVXPgoOD/zlgH8qMoWnkxXK+YXc/9q5
-         p9kzPDt2zzE4gRFeSRYD8p+1eFpTgLddYeeAyWJqLxgcg9Heza2geY+cJy4iHu1AHM6w
-         JINw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ysosXtFfyBojHJLz2B9nDDvXFhZv0++ox9CFVTznA+c=;
-        b=C18/EJHWD4PA4TYJxyVeOkknX4ePBpQYvRggztVlKGKxU0Ts9IysdQh0suTVhZH2HA
-         Ys9aYppTwSLNsPV3WA+plnlHGGkzAaMfGHc1vqAi/IZbxhnh4GVRYhYNfOkV+RQfj55D
-         QuwZZVS7pgRlNQTRQ7VJ+kf7eul7sVDLVih9gjY8jvmOPMlV3LfXUIndJr8vKAMA5y/1
-         jdy3gwCCy1Kh9/s7JJMv8QlJr1Ha5o9vrRN8cVT6/fRNrRVAWyoNMknheTWnMGdw20FA
-         PqgiNU+2ZIhxOytBOmLR8bNDZvrosCBgqfI3Gq2COU2niV9AF9TO+bcWWGJNO32t/dz+
-         r3DA==
-X-Gm-Message-State: AOAM531i7PsoWFP3YaqT6/XoWJ7xTOYgQW10ZWEJ13Vhbvs7O3dJfdlU
-        E5pOV8MYr+pHNKv+5lUuIFKx44qSlAP3RUMxEww=
-X-Google-Smtp-Source: ABdhPJy8SPaXPB+PlYBKclA6Nzp2t6vAeKGWi+UVGwSmqff9B9lRwibzONxW/zvOUq1rv58c9AT9u5fHqQgMa/RYpKc=
-X-Received: by 2002:a25:84c1:: with SMTP id x1mr3018951ybm.690.1640163689302;
- Wed, 22 Dec 2021 01:01:29 -0800 (PST)
+        Wed, 22 Dec 2021 04:01:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9DAB61948;
+        Wed, 22 Dec 2021 09:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC24C36AED;
+        Wed, 22 Dec 2021 09:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640163680;
+        bh=2moYNoWlwOl9vGeaInC5IbNS/P0yE72jrtG09/FTmSg=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=UU42TL/5+qV7slg6LKwN19dhqaNHopUeV8WF4k84O1fU3BEuv3l3BJXogYJi2nEs/
+         tqUbfZs7oFmOHZ85vQzWMRe9SMG57DdaPzFtfvU73565t4ntWD7VQPcm8qDxoVTfkB
+         bXVm2Ymy7d9Zhs5QYToX9tHxnpPwpTM7dhxZbHvqP2TpkuVPaHYVfifjeCzlvQO4GU
+         1/1lsGIAGeJ2ifRNSoaW/zsFHiMzqpX8OK3bdFNQx/+DAGithxBjzf/8kRuw85ccMg
+         UQtaLzsvkJBfKBbl0uerONaI0tqJOtjltELCqtmXo3GO1v2XkC9ie05i9OT8i3MHFM
+         f/P0YeYZq0XmA==
+Received: by mail-yb1-f173.google.com with SMTP id j2so4576860ybg.9;
+        Wed, 22 Dec 2021 01:01:20 -0800 (PST)
+X-Gm-Message-State: AOAM531fBvcNP7tN0MdRD5O1qvnshFgM9vH+X9euRdwr7LluCAVK6FS3
+        HZOvwYH67LTT0jnxehGnfDvwIVRJ30Krq8aj5qw=
+X-Google-Smtp-Source: ABdhPJwJHFOdM+I8yd4DzexYFkdoFEOKhPY4OP+s/Ps+Ppp8eP1m/Mmy45xUCOHlPjym6cQ8xSi7mlkhmNEKBQDyxdE=
+X-Received: by 2002:a5b:c50:: with SMTP id d16mr2838979ybr.106.1640163679293;
+ Wed, 22 Dec 2021 01:01:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221171532.29881-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YcLBZBwIZkhhKxGD@kroah.com>
-In-Reply-To: <YcLBZBwIZkhhKxGD@kroah.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 22 Dec 2021 09:01:03 +0000
-Message-ID: <CA+V-a8s1RzonxKf2PbitTmb88WKKW9eSiZPsdHO6=-vxww7LFQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: Fix unused variable warning
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:7110:1313:b0:11b:f4cd:b869 with HTTP; Wed, 22 Dec 2021
+ 01:01:18 -0800 (PST)
+In-Reply-To: <bdd6f570-f387-0371-09fb-d7b8c9993e8b@virtuozzo.com>
+References: <bdd6f570-f387-0371-09fb-d7b8c9993e8b@virtuozzo.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 22 Dec 2021 18:01:18 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_WJa76Jy5StEQ0G3Xa2gufh2CtRF47YiXsMPb3r4hCUA@mail.gmail.com>
+Message-ID: <CAKYAXd_WJa76Jy5StEQ0G3Xa2gufh2CtRF47YiXsMPb3r4hCUA@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: force "fail immediately" flag on fs with its own ->lock
+To:     Vasily Averin <vvs@virtuozzo.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steve French <sfrench@samba.org>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
+        Bruce Fields <bfields@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, kernel@openvz.org,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-Thank you for the review.
-
-On Wed, Dec 22, 2021 at 6:10 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+2021-12-17 20:23 GMT+09:00, Vasily Averin <vvs@virtuozzo.com>:
+> Like nfsd and lockd, ksmbd can cause deadlock if the exported
+> file system does not support asynchronous processing of blocking locks:
+> if all ksmbd worker threads handles such requests,
+> they can never finish and the server will not be able to handle
+> any other incoming requests.
 >
-> On Tue, Dec 21, 2021 at 05:15:32PM +0000, Lad Prabhakar wrote:
-> > This patch fixes the below warning:
-> >
-> > drivers/usb/renesas_usbhs/mod.c: In function 'usbhs_status_get_each_irq':
-> > drivers/usb/renesas_usbhs/mod.c:195:13: warning: variable 'intenb0'
-> > set but not used [-Wunused-but-set-variable]
-> >   195 |         u16 intenb0, intenb1;
-> >       |
-> >
-> > Fixes: 33e4245ee919 ("usb: renesas_usbhs: Use platform_get_irq() to get the interrupt")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/usb/renesas_usbhs/mod.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/renesas_usbhs/mod.c b/drivers/usb/renesas_usbhs/mod.c
-> > index f2ea3e1412d2..3919e350b487 100644
-> > --- a/drivers/usb/renesas_usbhs/mod.c
-> > +++ b/drivers/usb/renesas_usbhs/mod.c
-> > @@ -192,13 +192,12 @@ static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-> >                                    struct usbhs_irq_state *state)
-> >  {
-> >       struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-> > -     u16 intenb0, intenb1;
-> >       unsigned long flags;
-> > +     u16 intenb1;
-> >
-> >       /********************  spin lock ********************/
-> >       usbhs_lock(priv, flags);
-> >       state->intsts0 = usbhs_read(priv, INTSTS0);
-> > -     intenb0 = usbhs_read(priv, INTENB0);
+> Any filesystem that leaves ->lock NULL will use posix_lock_file(), which
+> does the right thing. Simplest is just to assume that any filesystem
+> that defines its own ->lock is not safe to request a blocking lock from.
 >
-> Did you just break the hardware?  Reading is often times needed and
-> clang has no idea about hardware issues.  We need proof in the changlog
-> that this really is safe to do.
+> To work around the problem we need to drop fl->fl_flag FL_SLEEP before
+> vfs_lock_file() execution, it forces affected functions to avoid blocking.
 >
-I introduced this warning in commit 33e4245ee919 ("usb: renesas_usbhs:
-Use platform_get_irq() to get the interrupt'') where
-IORESOURCE_IRQ_SHAREABLE flag handling was dropped and I missed to
-remove this change. As a result I included a fixes tag for this
-commit. Let me know if you want me to update the changelog.
+> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 
-> How did you test your change?
+Thanks!
+> ---
+>  fs/ksmbd/smb2pdu.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-I haven't but can test it.
-
-Cheers,
-Prabhakar
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index 121f8e8c70ac..f2225491af02 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -6634,6 +6634,12 @@ static int smb2_set_flock_flags(struct file_lock
+> *flock, int flags)
+>  {
+>  	int cmd = -EINVAL;
+>
+> +	if ((flock->fl_file->f_op->lock) &&
+> +	    ((flags == SMB2_LOCKFLAG_SHARED) ||
+> +	     (flags == SMB2_LOCKFLAG_EXCLUSIVE))) {
+> +		ksmbd_debug(SMB, "force fail immediately request\n");
+> +		flags |= SMB2_LOCKFLAG_FAIL_IMMEDIATELY;
+> +	}
+>  	/* Checking for wrong flag combination during lock request*/
+>  	switch (flags) {
+>  	case SMB2_LOCKFLAG_SHARED:
+> --
+> 2.25.1
+>
+>

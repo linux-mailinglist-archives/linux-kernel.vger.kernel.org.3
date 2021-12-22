@@ -2,82 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9AF47D581
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8519747D584
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344129AbhLVQ4D convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 11:56:03 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:36410 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344121AbhLVQ4C (ORCPT
+        id S1344143AbhLVQ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:56:34 -0500
+Received: from mail-qt1-f173.google.com ([209.85.160.173]:47084 "EHLO
+        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230314AbhLVQ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:56:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 752B1614E2CD;
-        Wed, 22 Dec 2021 17:56:00 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CF-VDLV6_9Wv; Wed, 22 Dec 2021 17:55:59 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D297C614E2D5;
-        Wed, 22 Dec 2021 17:55:59 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 3T-5_MrcWr8U; Wed, 22 Dec 2021 17:55:59 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id AB83A614E2CD;
-        Wed, 22 Dec 2021 17:55:59 +0100 (CET)
-Date:   Wed, 22 Dec 2021 17:55:59 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     bp <bp@alien8.de>
-Cc:     hch <hch@lst.de>, anton ivanov <anton.ivanov@cambridgegreys.com>,
-        x86 <x86@kernel.org>, linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <689476797.194605.1640192159613.JavaMail.zimbra@nod.at>
-In-Reply-To: <YcMuW88cOBNXAdb/@zn.tnic>
-References: <20211215165612.554426-1-hch@lst.de> <1202521211.191037.1640120703350.JavaMail.zimbra@nod.at> <20211222081753.GB22041@lst.de> <YcMuW88cOBNXAdb/@zn.tnic>
-Subject: Re: remove set_fs for UML
+        Wed, 22 Dec 2021 11:56:29 -0500
+Received: by mail-qt1-f173.google.com with SMTP id m25so2446958qtq.13;
+        Wed, 22 Dec 2021 08:56:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/CxlT8UfntCcJIxvAFw49ebCUmp42spJcN9bvtecGVE=;
+        b=ntG3AJHhnOGpB/VdCHUPtUIu5ZrP388VvvcEga9hJegwFDBWcMrimC5MnspphgtNFo
+         WkEfVmvNMzvq3XPjXJV/m+EHrsldasbqMz4vC7euqzY+jToVbY0UUGhz606XZ8KfEAIh
+         3vIeNFn95043KbTJOBAMYRZqnMjCnjzutKW+18rb2J+jTImVrTXnw4p+j7vkls3l83jd
+         uSaoAG6HxsSvDAAFkkB4q2y0VSYwkMzYULlkVJbcOHDqbEqzGHjD0VsQcO6V7tGuB9ca
+         GG00Frsmp10nTCB6c0gNiDcTKpZaQwQaJiho3sY3X/HcwHZ/EeGzFgvlUCLjc8c+DEKu
+         mQuw==
+X-Gm-Message-State: AOAM532iAMvaz85TrwRV/qNFlTwGRCkCzulyYM3V3H5buiT5r3/j+c2g
+        rz9MR3mUhF3W2s29EtsQKgnJ2U6FkAYw8XEoI/c=
+X-Google-Smtp-Source: ABdhPJwzmlqwgawxmg+TU8iWrWaCc9WSk8wRRglcT1JADcGBAxvYlq2Y5Hi/FOlpLaAmGPTJgTmYuHF37GGLbs16oWM=
+X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr2812055qtv.80.1640192188582;
+ Wed, 22 Dec 2021 08:56:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
-Thread-Topic: remove set_fs for UML
-Thread-Index: VWc5UxOt2mEfXDfyiYxJYrg133SXXQ==
+References: <20211222165300.8222-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20211222165300.8222-1-sumeet.r.pawnikar@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Dec 2021 17:56:17 +0100
+Message-ID: <CAJZ5v0gyGsOjiFsw1FP4ZXP7yXNFwcjRtrbdR0Gov_xMFhYRew@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/int340x: add functions for mbox read and
+ write commands
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boris,
+On Wed, Dec 22, 2021 at 5:53 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
+>
+> The existing mail mechanism only supports writing of workload types.
+> But mailbox command for RFIM (cmd = 0x08) also requires write operation
+> which was ignored. This results in failing to store RFI restriction.
+> This requires enhancing mailbox writes for non workload commands also.
+> So, remove the check for MBOX_CMD_WORKLOAD_TYPE_WRITE in mailbox write,
+> with this other write commands also can be supoorted. But at the same
+> time, we have to make sure that there is no impact on read commands,
+> by not writing anything in mailbox data register.
+> To properly implement, add two separate functions for mbox read and write
+> command for processor thermal workload command type. This helps to
+> differentiate the read and write workload command types while sending mbox
+> command.
+>
+> Fixes: 5d6fbc96bd36 ("thermal/drivers/int340x: processor_thermal: Export additional attributes")
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> Cc: stable@vger.kernel.org # 5.14+
 
------ Ursprüngliche Mail -----
-> Von: "bp" <bp@alien8.de>
-> An: "hch" <hch@lst.de>
-> CC: "richard" <richard@nod.at>, "anton ivanov" <anton.ivanov@cambridgegreys.com>, "x86" <x86@kernel.org>, "linux-um"
-> <linux-um@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
-> Gesendet: Mittwoch, 22. Dezember 2021 14:55:39
-> Betreff: Re: remove set_fs for UML
+This requires an ACK from Srinivas.
 
-> On Wed, Dec 22, 2021 at 09:17:53AM +0100, hch wrote:
->> On Tue, Dec 21, 2021 at 10:05:03PM +0100, Richard Weinberger wrote:
->> > So far UML seems to work with these changes applied. :-)
->> > I have applied both patches to my UML tree for now, I assume x86 maintainers are
->> > fine with
->> > patch 1/2?
->> 
->> Looks like patch 1 needs this fixup for some configurations, where
->> pci.h doesn't get pulled into kvm by other means.
->> 
->> But we probably want an ACK from the x86 maintainers to be sure anyway..
-> 
-> I don't see why not so
-> 
-> Acked-by: Borislav Petkov <bp@suse.de>
-> 
-> Should I take the first one along with this hunk below?
-
-Would be great!
-When I'll drop "x86/mtrr: remove the mtrr_bp_init stub" from the UML tree.
- 
-Thanks,
-//richard
+> ---
+>  .../processor_thermal_device.h                |   3 +-
+>  .../int340x_thermal/processor_thermal_mbox.c  | 101 +++++++++++-------
+>  .../int340x_thermal/processor_thermal_rfim.c  |  23 ++--
+>  3 files changed, 74 insertions(+), 53 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index be27f633e40a..43def8c5d2ce 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -80,7 +80,8 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev);
+>  int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+>  void proc_thermal_mbox_remove(struct pci_dev *pdev);
+>
+> -int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp);
+> +int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp);
+> +int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data);
+>  int proc_thermal_add(struct device *dev, struct proc_thermal_device *priv);
+>  void proc_thermal_remove(struct proc_thermal_device *proc_priv);
+>  int proc_thermal_suspend(struct device *dev);
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
+> index 01008ae00e7f..26bae0434829 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
+> @@ -24,19 +24,15 @@
+>
+>  static DEFINE_MUTEX(mbox_lock);
+>
+> -static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
+> +static int wait_for_mbox_ready(struct proc_thermal_device *proc_priv)
+>  {
+> -       struct proc_thermal_device *proc_priv;
+>         u32 retries, data;
+>         int ret;
+>
+> -       mutex_lock(&mbox_lock);
+> -       proc_priv = pci_get_drvdata(pdev);
+> -
+>         /* Poll for rb bit == 0 */
+>         retries = MBOX_RETRY_COUNT;
+>         do {
+> -               data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+> +               data = readl(proc_priv->mmio_base + MBOX_OFFSET_INTERFACE);
+>                 if (data & BIT_ULL(MBOX_BUSY_BIT)) {
+>                         ret = -EBUSY;
+>                         continue;
+> @@ -45,53 +41,79 @@ static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cm
+>                 break;
+>         } while (--retries);
+>
+> +       return ret;
+> +}
+> +
+> +static int send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
+> +{
+> +       struct proc_thermal_device *proc_priv;
+> +       u32 reg_data;
+> +       int ret;
+> +
+> +       proc_priv = pci_get_drvdata(pdev);
+> +
+> +       mutex_lock(&mbox_lock);
+> +
+> +       ret = wait_for_mbox_ready(proc_priv);
+>         if (ret)
+>                 goto unlock_mbox;
+>
+> -       if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_WRITE)
+> -               writel(cmd_data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_DATA)));
+> -
+> +       writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+>         /* Write command register */
+> -       data = BIT_ULL(MBOX_BUSY_BIT) | cmd_id;
+> -       writel(data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_INTERFACE)));
+> +       reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
+> +       writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+>
+> -       /* Poll for rb bit == 0 */
+> -       retries = MBOX_RETRY_COUNT;
+> -       do {
+> -               data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+> -               if (data & BIT_ULL(MBOX_BUSY_BIT)) {
+> -                       ret = -EBUSY;
+> -                       continue;
+> -               }
+> +       ret = wait_for_mbox_ready(proc_priv);
+>
+> -               if (data) {
+> -                       ret = -ENXIO;
+> -                       goto unlock_mbox;
+> -               }
+> +unlock_mbox:
+> +       mutex_unlock(&mbox_lock);
+> +       return ret;
+> +}
+>
+> -               ret = 0;
+> +static int send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp)
+> +{
+> +       struct proc_thermal_device *proc_priv;
+> +       u32 reg_data;
+> +       int ret;
+>
+> -               if (!cmd_resp)
+> -                       break;
+> +       proc_priv = pci_get_drvdata(pdev);
+>
+> -               if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_READ)
+> -                       *cmd_resp = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+> -               else
+> -                       *cmd_resp = readq((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+> +       mutex_lock(&mbox_lock);
+>
+> -               break;
+> -       } while (--retries);
+> +       ret = wait_for_mbox_ready(proc_priv);
+> +       if (ret)
+> +               goto unlock_mbox;
+> +
+> +       writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+> +       /* Write command register */
+> +       reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
+> +       writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+> +
+> +       ret = wait_for_mbox_ready(proc_priv);
+> +       if (ret)
+> +               goto unlock_mbox;
+> +
+> +       if (id == MBOX_CMD_WORKLOAD_TYPE_READ)
+> +               *resp = readl(proc_priv->mmio_base + MBOX_OFFSET_DATA);
+> +       else
+> +               *resp = readq(proc_priv->mmio_base + MBOX_OFFSET_DATA);
+>
+>  unlock_mbox:
+>         mutex_unlock(&mbox_lock);
+>         return ret;
+>  }
+>
+> -int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
+> +int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp)
+>  {
+> -       return send_mbox_cmd(pdev, cmd_id, cmd_data, cmd_resp);
+> +       return send_mbox_read_cmd(pdev, id, data, resp);
+>  }
+> -EXPORT_SYMBOL_GPL(processor_thermal_send_mbox_cmd);
+> +EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_read_cmd, INT340X_THERMAL);
+> +
+> +int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
+> +{
+> +       return send_mbox_write_cmd(pdev, id, data);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_write_cmd, INT340X_THERMAL);
+>
+>  /* List of workload types */
+>  static const char * const workload_types[] = {
+> @@ -104,7 +126,6 @@ static const char * const workload_types[] = {
+>         NULL
+>  };
+>
+> -
+>  static ssize_t workload_available_types_show(struct device *dev,
+>                                                struct device_attribute *attr,
+>                                                char *buf)
+> @@ -146,7 +167,7 @@ static ssize_t workload_type_store(struct device *dev,
+>
+>         data |= ret;
+>
+> -       ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data, NULL);
+> +       ret = send_mbox_write_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data);
+>         if (ret)
+>                 return false;
+>
+> @@ -161,7 +182,7 @@ static ssize_t workload_type_show(struct device *dev,
+>         u64 cmd_resp;
+>         int ret;
+>
+> -       ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+> +       ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+>         if (ret)
+>                 return false;
+>
+> @@ -186,8 +207,6 @@ static const struct attribute_group workload_req_attribute_group = {
+>         .name = "workload_request"
+>  };
+>
+> -
+> -
+>  static bool workload_req_created;
+>
+>  int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv)
+> @@ -196,7 +215,7 @@ int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+>         int ret;
+>
+>         /* Check if there is a mailbox support, if fails return success */
+> -       ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+> +       ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+>         if (ret)
+>                 return 0;
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> index e693ec8234fb..bebc7aaf3433 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -9,6 +9,8 @@
+>  #include <linux/pci.h>
+>  #include "processor_thermal_device.h"
+>
+> +MODULE_IMPORT_NS(INT340X_THERMAL);
+> +
+>  struct mmio_reg {
+>         int read_only;
+>         u32 offset;
+> @@ -194,8 +196,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
+>                                      struct device_attribute *attr,
+>                                      const char *buf, size_t count)
+>  {
+> -       u16 cmd_id = 0x0008;
+> -       u64 cmd_resp;
+> +       u16 id = 0x0008;
+>         u32 input;
+>         int ret;
+>
+> @@ -203,7 +204,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
+>         if (ret)
+>                 return ret;
+>
+> -       ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, input, &cmd_resp);
+> +       ret = processor_thermal_send_mbox_write_cmd(to_pci_dev(dev), id, input);
+>         if (ret)
+>                 return ret;
+>
+> @@ -214,30 +215,30 @@ static ssize_t rfi_restriction_show(struct device *dev,
+>                                     struct device_attribute *attr,
+>                                     char *buf)
+>  {
+> -       u16 cmd_id = 0x0007;
+> -       u64 cmd_resp;
+> +       u16 id = 0x0007;
+> +       u64 resp;
+>         int ret;
+>
+> -       ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
+> +       ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, 0, &resp);
+>         if (ret)
+>                 return ret;
+>
+> -       return sprintf(buf, "%llu\n", cmd_resp);
+> +       return sprintf(buf, "%llu\n", resp);
+>  }
+>
+>  static ssize_t ddr_data_rate_show(struct device *dev,
+>                                   struct device_attribute *attr,
+>                                   char *buf)
+>  {
+> -       u16 cmd_id = 0x0107;
+> -       u64 cmd_resp;
+> +       u16 id = 0x0107;
+> +       u64 resp;
+>         int ret;
+>
+> -       ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
+> +       ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, 0, &resp);
+>         if (ret)
+>                 return ret;
+>
+> -       return sprintf(buf, "%llu\n", cmd_resp);
+> +       return sprintf(buf, "%llu\n", resp);
+>  }
+>
+>  static DEVICE_ATTR_RW(rfi_restriction);
+> --
+> 2.17.1
+>

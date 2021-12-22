@@ -2,180 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE747D450
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E67847D458
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 16:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343734AbhLVPf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 10:35:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343727AbhLVPf0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 10:35:26 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CFFC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 07:35:26 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v203so7774572ybe.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 07:35:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=cwnIm+Pjf1RTUBBb5BRinhHvVqdyboPG2JJubsE04f4=;
-        b=AG9Ug8PUwm0BhJU9O/vGcCjhoBDHg4gQq1bWPDSXIgj2KDi7CkFNOOv/u74Em02wkD
-         os3Dou1fSrFsMcV35l/mRKBXXmx4l863Jip4zBJa8a1TLFmnPbO9Jd0vgmU4/ml+SJp0
-         AbJnXpaUOdNLQG66dPGZNaDsXdpZLZUvB9A0B+yi6pz2BuCXZlzfZ8wO435oxxb1nos/
-         Dx2yzjDENAgI2RyCbAgtcM/VZf8vakzzP+L9t5KekKiQzZ51av9j06vf6w1T/JHM5hvF
-         Zp2YTI+rfHAO5KSW55ReosawsBPaxV2ZuuMmlvYvVHoHFiD3BN6TNjHpq7MrA88jUiOJ
-         sX0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=cwnIm+Pjf1RTUBBb5BRinhHvVqdyboPG2JJubsE04f4=;
-        b=wOFp+zWp0t051lWgm51rivYjvzekJ/r2NTrVdDuVP0jkyiBPS4IEXdLuhjTRUPRw1u
-         5yNjFsN8ScQVq8SN3TuQ4/wI7/fTuE+Nsn+FOSUthLOmO38M+vsEAaH1zRd1TFJWZ3Aw
-         xkX9VsxQX/jWmk2sGvtVnWaWxZyRI8V6y6ISt5hDIBSe+NU2juVtVXQ2jYvPxVzqbUUD
-         uYDNbdjJaaTAkGROTtPGERrDt6ff7A2kNUm84sUtOrvLbj7EJPtF0h56QZKuKkEAOeiT
-         3gXsC9XwJlk01H0GujxLsm+aIkJjaxFSspPYA5Gm8aTrei0BaKRbowVZAl4LFWdmrDmY
-         gjbw==
-X-Gm-Message-State: AOAM530i6YOBPPcBMirKyN3W/sHnQJecM/oqPnahook7h9ShEvKEKcM0
-        +IDUTMX+trOBZa67An5pP0cIBf6TnsU4uqtw78pZCQ==
-X-Google-Smtp-Source: ABdhPJw7mITeuoygQFK1MhJbMGiGJKKDtAs86FI3UP7IrYs5kVS/hvOy/t4bTtqxhCrOxSYegmcjo3RH5D7EXfQqA5A=
-X-Received: by 2002:a25:3c07:: with SMTP id j7mr5487832yba.612.1640187325665;
- Wed, 22 Dec 2021 07:35:25 -0800 (PST)
+        id S1343742AbhLVPlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 10:41:07 -0500
+Received: from mga18.intel.com ([134.134.136.126]:49612 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229608AbhLVPlE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 10:41:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640187664; x=1671723664;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pNGGU5exxXmBba17iKeNMkYLms3huHnZB9vDNIxO3O8=;
+  b=dksOyokONr3r0qRc2cKR0eOjvMFsDtxFEUZJBteiIn1gRIAgCcqRl5/Q
+   JjwyLocUrAz7bgXR155OI1lQJ/xA+STAIwUf4bVcqBMCtUsCcbqGbQI1h
+   hpBnuSyCPsA6qbhoFHNtbq2HmhEgxaF8CHFVS6j6jX1oC7MMTITy5ICu6
+   68gjzc/eAgxzyP1DaAMWBd3WispnUL+KpIbfhQPjxMjpHXIVfskADzsPC
+   8oMj4VSrW/57lw61IEyBdUh+sjqhfB5pHkM7HXAnZWTKSQIJeUek6LZ8Y
+   Hm/YUt0mhyzlOw8vSibxSrs6OHglaWLg6Rj4VtFQdiNID0nGHLk5pvWhY
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227493277"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="227493277"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:40:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="484793202"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2021 07:40:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 371AEFE; Wed, 22 Dec 2021 17:40:39 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: [PATCH v2 1/1] drm/i915/dsi: Drop double check ACPI companion device for NULL
+Date:   Wed, 22 Dec 2021 17:40:33 +0200
+Message-Id: <20211222154033.6770-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a81:58c2:0:0:0:0:0 with HTTP; Wed, 22 Dec 2021 07:35:25
- -0800 (PST)
-In-Reply-To: <YcF3C9kfVoRqKamp@kroah.com>
-References: <20211216192222.127908-1-martin.fernandez@eclypsium.com>
- <20211216192222.127908-4-martin.fernandez@eclypsium.com> <YcCxUHSMnUJgXIJF@kroah.com>
- <CAKgze5boi5h08ffpodqsKp5xNS=+u_zJWEVnExdbsXRgJ+eCTQ@mail.gmail.com> <YcF3C9kfVoRqKamp@kroah.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Wed, 22 Dec 2021 12:35:25 -0300
-Message-ID: <CAKgze5a2Nv56e=wJwmBjPgAf2x7waZWXGJ1YDk6_DK-ahShXTg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] x86/e820: Tag e820_entry with crypto capabilities
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
-        daniel.gutson@eclypsium.com, hughsient@gmail.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21, Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Mon, Dec 20, 2021 at 05:27:00PM -0300, Martin Fernandez wrote:
->> On 12/20/21, Greg KH <gregkh@linuxfoundation.org> wrote:
->> > On Thu, Dec 16, 2021 at 04:22:20PM -0300, Martin Fernandez wrote:
->> >> diff --git a/arch/x86/include/asm/e820/types.h
->> >> b/arch/x86/include/asm/e820/types.h
->> >> index 314f75d886d0..7b510dffd3b9 100644
->> >> --- a/arch/x86/include/asm/e820/types.h
->> >> +++ b/arch/x86/include/asm/e820/types.h
->> >> @@ -56,6 +56,7 @@ struct e820_entry {
->> >>  	u64			addr;
->> >>  	u64			size;
->> >>  	enum e820_type		type;
->> >> +	u8			crypto_capable;
->> >
->> > Why isn't this a bool?
->>
->> It was a bool initially, but Andy Shevchenko told me that it couldn't
->> be that way because boolean may not be part of firmware ABIs.
->
-> Where does this structure hit an "ABI"?  Looks internal to me.  If not,
-> then something just broke anyway.
->
+acpi_dev_get_resources() does perform the NULL pointer check against
+ACPI companion device which is given as function parameter. Thus,
+there is no need to duplicate this check in the caller.
 
-I prefer that Andy answers.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: used LIST_HEAD() (Ville), initialized lookup directly on stack (Ville)
+ drivers/gpu/drm/i915/display/intel_dsi_vbt.c | 28 +++++++-------------
+ 1 file changed, 10 insertions(+), 18 deletions(-)
 
-Either way, I think that the enum will be the best option.
+diff --git a/drivers/gpu/drm/i915/display/intel_dsi_vbt.c b/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
+index 0da91849efde..da0bd056f3d3 100644
+--- a/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
++++ b/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
+@@ -426,24 +426,16 @@ static void i2c_acpi_find_adapter(struct intel_dsi *intel_dsi,
+ 				  const u16 slave_addr)
+ {
+ 	struct drm_device *drm_dev = intel_dsi->base.base.dev;
+-	struct device *dev = drm_dev->dev;
+-	struct acpi_device *acpi_dev;
+-	struct list_head resource_list;
+-	struct i2c_adapter_lookup lookup;
+-
+-	acpi_dev = ACPI_COMPANION(dev);
+-	if (acpi_dev) {
+-		memset(&lookup, 0, sizeof(lookup));
+-		lookup.slave_addr = slave_addr;
+-		lookup.intel_dsi = intel_dsi;
+-		lookup.dev_handle = acpi_device_handle(acpi_dev);
+-
+-		INIT_LIST_HEAD(&resource_list);
+-		acpi_dev_get_resources(acpi_dev, &resource_list,
+-				       i2c_adapter_lookup,
+-				       &lookup);
+-		acpi_dev_free_resource_list(&resource_list);
+-	}
++	struct acpi_device *adev = ACPI_COMPANION(drm_dev->dev);
++	struct i2c_adapter_lookup lookup = {
++		.slave_addr = slave_addr,
++		.intel_dsi = intel_dsi,
++		.dev_handle = acpi_device_handle(adev),
++	};
++	LIST_HEAD(resource_list);
++
++	acpi_dev_get_resources(adev, &resource_list, i2c_adapter_lookup, &lookup);
++	acpi_dev_free_resource_list(&resource_list);
+ }
+ #else
+ static inline void i2c_acpi_find_adapter(struct intel_dsi *intel_dsi,
+-- 
+2.34.1
 
->> >> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
->> >> index bc0657f0deed..001d64686938 100644
->> >> --- a/arch/x86/kernel/e820.c
->> >> +++ b/arch/x86/kernel/e820.c
->> >> @@ -163,7 +163,7 @@ int e820__get_entry_type(u64 start, u64 end)
->> >>  /*
->> >>   * Add a memory region to the kernel E820 map.
->> >>   */
->> >> -static void __init __e820__range_add(struct e820_table *table, u64
->> >> start,
->> >> u64 size, enum e820_type type)
->> >> +static void __init __e820__range_add(struct e820_table *table, u64
->> >> start,
->> >> u64 size, enum e820_type type, u8 crypto_capable)
->> >
->> > Horrid api change, but it's internal to this file so oh well :(
->> >
->> > Hint, don't add flags to functions like this, it forces you to have to
->> > always remember what those flags are when you read the code.  Right now
->> > you stuck "0" and "1" in the function call, which is not instructional
->> > at all.
->> >
->> > Heck, why not make it an enum to have it be self-describing?  Like the
->> > type is here.  that would make it much better and easier to understand
->> > and maintain over time.
->> >
->>
->> Yes, an enum will absolutely improve things. I'll do that.
->>
->> >> @@ -327,6 +330,7 @@ int __init e820__update_table(struct e820_table
->> >> *table)
->> >>  	unsigned long long last_addr;
->> >>  	u32 new_nr_entries, overlap_entries;
->> >>  	u32 i, chg_idx, chg_nr;
->> >> +	u8 current_crypto, last_crypto;
->> >>
->> >>  	/* If there's only one memory region, don't bother: */
->> >>  	if (table->nr_entries < 2)
->> >> @@ -367,6 +371,7 @@ int __init e820__update_table(struct e820_table
->> >> *table)
->> >>  	new_nr_entries = 0;	 /* Index for creating new map entries */
->> >>  	last_type = 0;		 /* Start with undefined memory type */
->> >>  	last_addr = 0;		 /* Start with 0 as last starting address */
->> >> +	last_crypto = 0;
->> >>
->> >>  	/* Loop through change-points, determining effect on the new map: */
->> >>  	for (chg_idx = 0; chg_idx < chg_nr; chg_idx++) {
->> >> @@ -388,13 +393,17 @@ int __init e820__update_table(struct e820_table
->> >> *table)
->> >>  		 * 1=usable, 2,3,4,4+=unusable)
->> >>  		 */
->> >>  		current_type = 0;
->> >> +		current_crypto = 1;
->> >>  		for (i = 0; i < overlap_entries; i++) {
->> >> +			current_crypto = current_crypto &&
->> >> overlap_list[i]->crypto_capable;
->> >
->> > Is it a u8 or not?  You treat it as a boolean a lot :(
->> >
->> >>  			if (overlap_list[i]->type > current_type)
->> >>  				current_type = overlap_list[i]->type;
->> >>  		}
->> >>
->> >>  		/* Continue building up new map based on this information: */
->> >> -		if (current_type != last_type || e820_nomerge(current_type)) {
->> >> +		if (current_type != last_type ||
->> >> +		    current_crypto != last_crypto ||
->> >> +		    e820_nomerge(current_type)) {
->> >
->> > Why check it before calling e820_nomerge()?  Is that required?
->> >
->>
->> I don't see how the order of the checks matter, am I missing something?
->
-> It might prevent this function from being called now when it previously
-> was.  Is that ok?
->
-
-Oh I see. No, that's not a problem. That if guard is to decide if you
-need to start/close a region. e820_nomerge is to prevent merging
-certain region types. In any case, the new check will cause less
-merging, complying with what e820_nomerge says.

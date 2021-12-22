@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D1C47CED2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34A947CED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbhLVJHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S239851AbhLVJHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbhLVJHG (ORCPT
+        with ESMTP id S236355AbhLVJHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:07:06 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078BCC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:06 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id o6so5983196edc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:05 -0800 (PST)
+        Wed, 22 Dec 2021 04:07:24 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6AAC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:24 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id y70so1976166iof.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OH9lUZGvbIYsFS6r93OdVkoyWwer11g866A2zNPeehk=;
-        b=r3WN6KoV0SzdgtxvaGk6qQynqc2rvj3SjmK9MBxRug7Pb+EVJpUK3t+F+yktx2DuJc
-         OBYJ2S/tGlHwp1SwDX3Tk8FzNeauleOXb8tli4nGClkgMNhBrB5Ix0fTy1fZ49TXXAdD
-         2zmt7dP0B7bijNj6jcyR5tlg2IMGqdpZNx90la65lXq+rIS/tpWu1Xm0N3FCPJn1YdV3
-         sVjtI99DrXEc8h+K9oqIjtQ/ZRjSkQmJ/zpQHi4QlRjTedfonW7XGiqlDGfZBk2S4CWi
-         A5DG5wlrtcO62lxYpYfdJNGpLp/TihBJ092A4EYWpnn0zu66tWHrhZlqA6gWE9bQckw8
-         h80A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=82q23pf6F79CsGvvyr6VtDk1U+LrvvXzl1yTpgD2qXI=;
+        b=NTGfEsaq/Z50NHpLlCHaPzI5WfxbxdMl0ct1kvlbHAL451PDYR5CLpPG8C/Yu0Q6XF
+         4TY0pcnpLOSV2brWp2f6Cggcezl4B8gvYNu3WsNWH5CCd51YHXms+wssKTVPwQQt5ciJ
+         Uf4YWJwSrCtAB3pD9SrIAWlBSkjz4C1hrP8834IJ6mBua1rks57alNLHh5oXRe9zdFMD
+         r58CqFObroiFWZ6Dc9R/N0sSLaKdEAMHYvghxbhzntTnvkO3RClWSUdKvlqKoOdukxa0
+         nJMcirQSpxl8vxc3LUTlRigA9UXuRMjVt3eXUwxxnRRIUSsF1IWVf7ylscxcBbZzCLCv
+         vT0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OH9lUZGvbIYsFS6r93OdVkoyWwer11g866A2zNPeehk=;
-        b=AlrYAI3752Moh17qw3+LzWqekGMwA5+5uVF0JwsObnhocPKBZOAF2AL1Nq4XMVw3uv
-         bhDhKNT03cIhJHoauRLakSbstLM2DUtLT2GjtEa7mIDnnAInTGcopDODlLOC65eXXCd3
-         nW7SA5OUgn9kx3rJL3ZsWqTNuY2/J8omN0UoVzg+ctS7CRhZ0D29whAkQQjgIGzNzcNT
-         oRZDRXwLUJ9okTgK0ufTm4C63xKkaDcgUQqhE+mSZs9drXExT4etl+8lrqLppn9RV3Mx
-         +025YPggBAsbyfBtuf6TVMwCuT+bNaLBvOeLdLpG4kDuCVooM/3NgGT8sAVZ/uwXgimo
-         Ns2Q==
-X-Gm-Message-State: AOAM532HzFQzPgntmraaXR8Z3YZEKetgfii/fWqrvjtAVVbhD+UcaqNn
-        3AXYl0ankChswCfdai5R+nYfCSbcH20mPCkGbON1VQ==
-X-Google-Smtp-Source: ABdhPJwlTOwQkimbTWuIr5y0SujyhX/GH7oxW5rFLOJAM7Fb2ZmmwI2kQCMkhG9muS1yczRmhCgRLzxKggSNitGnEZ0=
-X-Received: by 2002:a17:907:7208:: with SMTP id dr8mr1727842ejc.697.1640164024530;
- Wed, 22 Dec 2021 01:07:04 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=82q23pf6F79CsGvvyr6VtDk1U+LrvvXzl1yTpgD2qXI=;
+        b=ruFUIXbFLUlZhxCVETdkZG8s89flQMiiAgB1QVof9RYfm4V0nBl73cPJsMQsjiEgmc
+         K+moJJXvlqxNQbm2cfFb8pT1tLOiMrjleVCD7tRZQPcdoY3cXYSHMPWh6JF72zX4GPTa
+         +kz7H5N0qP4ZYp6l2nEJbBsf3i7jaqIScyTFklRWKq9Cz7wqbXn14Aa52o6usYZP+1MB
+         aWUnNvriHnvcNtFihtuANXIM1CmJgcLoon7NpqlkD7EuSrjxV+Jgxwdmm0NbBOjW2gdq
+         9cBPuOefWhHhI0Z0ql1q8ShzTXm21xeNYrTV3MSxk6EM+JWmHzn1xTEGy8/NBSHphTaD
+         Zdpw==
+X-Gm-Message-State: AOAM530gRSr2QpL+Vgn6Im4+1qv+3W7piHdyOrgSg5+EX31zmOlObg45
+        LjUo+YJg7mH7Jl0m2jJigL2LJCtJGMk=
+X-Google-Smtp-Source: ABdhPJyFLxncjijnVuS5KNcjwTO+lXy9IW1Mver2NIeQoTrkbrAtkoVh5HBoMTrpUH0StirNzNuaEA==
+X-Received: by 2002:a05:620a:430e:: with SMTP id u14mr1372729qko.286.1640164033021;
+        Wed, 22 Dec 2021 01:07:13 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id bk25sm1371223qkb.13.2021.12.22.01.07.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 01:07:12 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     mpe@ellerman.id.au
+Cc:     arnd@arndb.de, benh@kernel.crashing.org, cgel.zte@gmail.com,
+        deng.changcheng@zte.com.cn, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, paulus@samba.org, zealci@zte.com.cn
+Subject: [PATCH v2] powerpc/cell/axon_msi: replace DEFINE_SIMPLE_ATTRIBUTE with  DEFINE_DEBUGFS_ATTRIBUTE
+Date:   Wed, 22 Dec 2021 09:06:55 +0000
+Message-Id: <20211222090655.484551-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87h7b1lcvt.fsf@mpe.ellerman.id.au>
+References: <87h7b1lcvt.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20211220132439.1194-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=Md3bpCJe_eFBjiKuhCRO_xqnFxSc1sw100fgNmajy6gaw@mail.gmail.com>
- <CAHp75VcbaYXfDpc7xE=asSqUspscRoHfqrg-yMtx=uo5UNqxfw@mail.gmail.com>
- <CAMRc=MfWqV8UFWLaJO7JSo7N6MhYVMWdquMDJU7xR5gu8604AQ@mail.gmail.com> <CAHp75VfhY9zFxC_vDj0OH0Y0ah3RUgEEYO9p_uQsm7Xe63QF8w@mail.gmail.com>
-In-Reply-To: <CAHp75VfhY9zFxC_vDj0OH0Y0ah3RUgEEYO9p_uQsm7Xe63QF8w@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 22 Dec 2021 10:06:53 +0100
-Message-ID: <CAMRc=Mfn9P30niRMNqV4f7VByzV0a+Sf2vS4OcU1qPa4o1O8Lg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: Remove unused local OF node pointers
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        linux-unisoc@lists.infradead.org,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 9:21 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Dec 21, 2021 at 9:13 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > On Mon, Dec 20, 2021 at 4:11 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Mon, Dec 20, 2021 at 5:09 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > > > On Mon, Dec 20, 2021 at 2:24 PM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > > > > -               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", dev->of_node);
-> > > > > +               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", np);
-> > > >
-> > > > This is unrelated though. Can you make it a separate patch?
-> > >
-> > > It actually makes use of the local np IIRC.
-> > > It's related, no?
-> >
-> > No, the np pointer is already used elsewhere. You just replace the
-> > dev->of_node here with np. Rightfully so, but it's not part of this
-> > commit logically.
->
-> I see. Probably I missed that somehow.
-> Nevertheless, do you want a new version or can you just revert that
-> particular change?
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-I removed it and queued the rest.
+Fix the following coccicheck warning:
+./arch/powerpc/platforms/cell/axon_msi.c: 456: 0-23: WARNING: fops_msic
+should be defined with DEFINE_DEBUGFS_ATTRIBUTE
 
-Bart
+DEFINE_SIMPLE_ATTRIBUTE + debugfs_create_file()
+imposes some significant overhead as compared to
+DEFINE_DEBUGFS_ATTRIBUTE + debugfs_create_file_unsafe().
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ arch/powerpc/platforms/cell/axon_msi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/platforms/cell/axon_msi.c b/arch/powerpc/platforms/cell/axon_msi.c
+index 354a58c1e6f2..362c1efe4180 100644
+--- a/arch/powerpc/platforms/cell/axon_msi.c
++++ b/arch/powerpc/platforms/cell/axon_msi.c
+@@ -453,7 +453,7 @@ static int msic_get(void *data, u64 *val)
+ 	return 0;
+ }
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(fops_msic, msic_get, msic_set, "%llu\n");
++DEFINE_DEBUGFS_ATTRIBUTE(fops_msic, msic_get, msic_set, "%llu\n");
+ 
+ void axon_msi_debug_setup(struct device_node *dn, struct axon_msic *msic)
+ {
+@@ -474,6 +474,6 @@ void axon_msi_debug_setup(struct device_node *dn, struct axon_msic *msic)
+ 
+ 	snprintf(name, sizeof(name), "msic_%d", of_node_to_nid(dn));
+ 
+-	debugfs_create_file(name, 0600, arch_debugfs_dir, msic, &fops_msic);
++	debugfs_create_file_unsafe(name, 0600, arch_debugfs_dir, msic, &fops_msic);
+ }
+ #endif /* DEBUG */
+-- 
+2.25.1
+

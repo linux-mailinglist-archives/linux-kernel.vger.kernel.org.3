@@ -2,297 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E7647D2EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D7847D2F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbhLVNOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbhLVNOx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:14:53 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE61C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:14:53 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id u22so3731478lju.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 05:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lx7q288tSsACrLXpM5U9NrQkbySvIQeGt4ayysLq54Q=;
-        b=p70DG0V3Ns2c48pkB5N9gbltMa/5ImyKiSJEBrWHgmMcxTlk9xBSCTbRDCSL7x+e5V
-         fiKpHBk/WXOdbGaUig8bE0Qd9aU4T/PYW95xg8/foYPAHawejR21ibGkwKuMULQy0Y/M
-         kskSR3hCF55fM09FIPIfadZJNm6xGSOh62b4OVWnRevYW1Dwb4cK8l7wB8Xt/W+jrJHU
-         f8C/vocNaHTBjQKU88fWACG4D5yYCEechzswqF4j6UrR0PRiJGpiimauHZVjpaRIh4Am
-         99/n/ARs4onfaBay3iof9g45OqDeX6ZV3w9d/juuIAE9AgRmTc2xBdoM2iaDkHVqgjdS
-         8/Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lx7q288tSsACrLXpM5U9NrQkbySvIQeGt4ayysLq54Q=;
-        b=MskoxYbfhGqyAgxM/2nWYvc3al0M6kmHo/YfAxEfQ/x89Cqh+SQw7GD/YKBETP5hAx
-         kohpUtKGH9P9Togw3IdZUmn3V2/J2aQhzAouR71OFDWkaHAAKxtpfw7TJlOr9EmjEwJK
-         YJT+qK1L2GdcOcNEGXo3q+lwxZR0kgrEruoKLvQUzIreMTdmaqtYVIHbhAT9Btwna2lR
-         XsgcY+Z3WQGVUGJ96pxjvoNASFOp5MsowxLL+cpr361CCGcAVUdsuC+v+2S1xVVxDkqt
-         OBhz0fv2PwgkqRZfW7zZR+L50TCeFIe0MdYXP6cKhfnxDtiZpQyj+irqgZ7Oz8kj3q68
-         OTFQ==
-X-Gm-Message-State: AOAM530+GNluPk5nN9XtUmkzZHMFY93PKbiSxYZY4g4sN0vMk6dIyRVz
-        3wOpBGiS1W4KCfe15PEZcSbDVi/JF9FvjMHI0z0n7w==
-X-Google-Smtp-Source: ABdhPJx31eOOiJm+Tya50eOVqHz3iuRd06/XaMkLMIM9Ijau6D+AH4p411g70RJdIoUb4o/3+oM0unCVvjDF1o8dzj4=
-X-Received: by 2002:a2e:b815:: with SMTP id u21mr2126925ljo.92.1640178891394;
- Wed, 22 Dec 2021 05:14:51 -0800 (PST)
+        id S240821AbhLVNQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:16:10 -0500
+Received: from mail-eopbgr90054.outbound.protection.outlook.com ([40.107.9.54]:15680
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231786AbhLVNQJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 08:16:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N1vFnHpHkkjDsNn6S1t2AymzgXcosN9fTjGKOkw0sn4NiTDKMy5PgtWj74BV5hrQzHlE9zmBJnllY7J8K/SQDf7Z1bQLLvPgp3A9+pUszi6ucJStoqL+fjLGVkRHElLp/v43KBPnXkhmucHUMAC3oPEYgLlaJSoMO8h5Z4cqVAT70CJTj0g2BZUywOVpxqdipyomkBRGZH5i0Ba/76vHIViOtXOXge8zddH5AWlA8IO0w4VgRO+nEh1Drekvq6qinWSw0mfzhpWzOD9ogdno/iC07+5iKW80+aedAq4jRbWwO1TtOFYxGEFhakz17T5n8Wxh8yniTnlm5pDHdz4i9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RoHP1BqvP93q7d+Ot5Rw6w9QT2uX7CuQ+GWU3yQCdY8=;
+ b=W1J9Tna6Q/TT28VLilXw1tHxmhn9hMuv8tGL2MvKlsnykoT2FqGoQQ35SwJjU1jF1KgawhvAIHSX+k3JSw+2d0oh/GfMz15881RBMmI4JMRgvF+cJwnLuBol5gBd/oamjl8izNV6+zozq/x5ejuD0L3Fae5rkZYaViaMUNVi3cKY0KLrg05iJVRZ0UBOjwm6TYUlWRh9M4ki6IZkcEt+3PWg0PhHbe1Q1NbveQnGZWXtAUPyrmFchuojxAyVSDHBaSbePsmadHOGRl7GXGhPFAWFFdF31C8U8vNeBFnQg8hZolrAY48WZDxErldbkAw2GH2yoOmVfwk4I+6G/dPBIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0196.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18; Wed, 22 Dec
+ 2021 13:16:06 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f0ef:856d:b0de:e85d%7]) with mapi id 15.20.4823.018; Wed, 22 Dec 2021
+ 13:16:06 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v1 06/11] powerpc/code-patching: Fix patch_branch() return
+ on out-of-range failure
+Thread-Topic: [PATCH v1 06/11] powerpc/code-patching: Fix patch_branch()
+ return on out-of-range failure
+Thread-Index: AQHX53Q7dAArItqC7kaUUigNLmTl0Kw+nT2A
+Date:   Wed, 22 Dec 2021 13:16:06 +0000
+Message-ID: <f08d7495-0e6d-f66e-9cc1-1ef0906d050d@csgroup.eu>
+References: <3ff9823c0a812a8a145d979a9600a6d4591b80ee.1638446239.git.christophe.leroy@csgroup.eu>
+ <8540cb64b1f06710eaf41e3835c7ba3e21fa2b05.1638446239.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <8540cb64b1f06710eaf41e3835c7ba3e21fa2b05.1638446239.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 00b05e9e-b7a8-48b4-dd72-08d9c54d3658
+x-ms-traffictypediagnostic: MR2P264MB0196:EE_
+x-microsoft-antispam-prvs: <MR2P264MB0196BA15C29D2A40D4795D85ED7D9@MR2P264MB0196.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:2733;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hfa5e0YFgtswIR8pPh7/H6MpvYalM3EDBoyFI+Yzd+2HMMC+matVlDQCJQFdEGgjM6/61FnTvLtHgdremxZjttqIUtWaIye1p4TylmZ1KfKQDVVYXt1AnM+kdR4huETsSFD7NdYUFOtKD0Jbdoody6b7N+OFPI/cQ/tFIuENwPdH/x+oWLYHD83hRMmBWa0C3/AZe03g7ZpZuwBAdW4CkqYCQTa6XHryG2YOumeCjQCPmYEMsADQKXL7jqTCmb9lWSBjqBqqki+79B7iuIxunlT9o09Gn+WOgKF1TB5L1sfpL5Iv9thtLtI6rOEGdDSJw9vvHCmPEvMzw6KqlH2vNsuIdiCzHuQKXEy+E6S/dfzLHGo9iI6o5dCnYuDQHq+FYqkQOVLB+MBcvJy3IQCaW10df+fclpGfekHYoEyj2Qyo7pNdNHY9uQ8OxgAXL9rtty1TdU6yQlHLeKBAgTLawXd5v1JXzP0vcbnrEsSQI4DlV0E6A30A3ZooO1C+12zAgzvvX8vtKZr1xpKPF0zWZ1Rn8PmzSjqmit7rJeBk+foFS1IEPS8wMqwuprNfmWKgmTKMaHuGbNi//4J7CuiltkTg9TmhnEERH72lZT0jVAzi5W4qSquWoBBZRazb2tom3hTK11n3Oxwp4tFS5FuUJhBNA8fnrfv89TdtH55I+sQoArdX+XkjSIdTfd3UnyIwzmo5hOmL5/Jy92IReqF9HySObE4OSbbyPcSP7ceZrpx8K8z+EMUHnILQ3tcxMr0ZoIVfMFcb9hJtW7KAgbYzw1o+VbcEbD7K/2ifZT4YJiUihQDYOpwBQDdde4C/o/BHa1Wg2f+/QvX05cF4QtcyFk9UeDHJ7bFOzAbbhcswf3E=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(31686004)(38100700002)(6506007)(122000001)(2616005)(66574015)(2906002)(316002)(4744005)(86362001)(8936002)(966005)(44832011)(38070700005)(83380400001)(71200400001)(5660300002)(31696002)(186003)(36756003)(110136005)(54906003)(6486002)(508600001)(8676002)(4326008)(66446008)(26005)(6512007)(66476007)(66946007)(76116006)(91956017)(66556008)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlA3ai9SWTdYR25Uajh4OFNqNVloZ0YyalhpUGZmRVBrYVVBR0oyQUM1N1lI?=
+ =?utf-8?B?a0kwZlIxOGtXbmJwQnErdkdQS2pBMm95dVBKK1F0aTJUek8zKzVURGMzakdr?=
+ =?utf-8?B?aXZBNEFWZXlMbVAyeTh3NXV2ZVJndTVJTDJSSWk1VkZGc0p5UUxBUVFYSk9r?=
+ =?utf-8?B?aXR5dnl5Qi84ZEcvOENiblBDMmhDN3hSd3dIdWp4Y2RMMUhoNnRUaVVEQ3o5?=
+ =?utf-8?B?a3o5MzNLM0RNUjY0MkJPWjc2VXVIdG9QaFR6K2VOZzYzMUs4NzVQMzRwUUk0?=
+ =?utf-8?B?VDFBam5nNFRaZDJOdG4rYXh2dktzNTlmV2pnR3cvSmJCY25BZzJVby96WVhG?=
+ =?utf-8?B?RVdoaSs1NFJCeGU4cTFFOCswcHk3OTkrZkFtcnZReEJUcnRRMTRGTFNxNVZT?=
+ =?utf-8?B?VkpoMTJLMWNZNy9TcTJSS2lvNkpVSUVKQkVMU2h1QnVFbjZadjBaRlFaSHlB?=
+ =?utf-8?B?eTQwY1oxdFFKSWxRTXpOVWRlS2ZkM3d6d3I1cExuaXFWK09vNGRlblZJTEJn?=
+ =?utf-8?B?d0hrM3FrYUhTeVFkdnZPcDgzdnlPaCtaK0NNKzlJb3BFTitNYVY1ditzMWZq?=
+ =?utf-8?B?VU4vT2NjOWVWZW4xQjVyWGo2R3JsQ3pnbUlGR1NFU2xNb0p5dGNtalN2RS8y?=
+ =?utf-8?B?VnhPRTVQQnBnbC9UMHJwSHR4ZDVLVk9aQ2hBemFXU1kwelQwcFdyWkowQ25E?=
+ =?utf-8?B?TzBMcjlLaDA3VS9NNUhSaEc2R0JyOWZuQ01rcm8vRlZNRnpHeUtoWW9waG5H?=
+ =?utf-8?B?MU5SRnBHUTNqdjNqYURFak1nOFA1bXF6NFY1ZWNiK0JBdXh0RFBnanV6MTk0?=
+ =?utf-8?B?OHBzRXI0VEFJMTgwL3ViMnRTS254LzlzY0ZnWXFLT0RzYlZoand4U0FUYzI2?=
+ =?utf-8?B?T0pnWnNyeGhXT0ZqZ0RUMWJuYVlrVVJHMmh0WFg1eVlGb1JVT293M2lLLzJN?=
+ =?utf-8?B?L2h1T0ZSUlJNRjlBTGU4ZjVXMk15Wi9pOXFmZVp4V2FCTlo2ZHpUNFZ1OUxT?=
+ =?utf-8?B?RjBpbE11OGZFNnRKcFkzc3ZPVDNwSUhvc0w4YUpFMjM3V1c1Q3d4c09aZGpr?=
+ =?utf-8?B?ZUczR203bE0yN2Iwb0xKZFN5QW9McHNUQXNwVUlEakptcnZmQVJPL2lyQjNS?=
+ =?utf-8?B?SW03aHhWTGNtMFZ5RVRLUWF0OEhweEZYSWUwcjlZSDJHdWJ3Q09yOVdsWkVv?=
+ =?utf-8?B?WlcvVFcrbTRSd1h4SjZjS0pGak5tUXBRbmh4VGJla3JYaEJDSEF0NWRnMncy?=
+ =?utf-8?B?MjJlVkp6VXhyRWhrYlcyQTQ4YjdlMGd1czR6VnFCaDhLUDFuU0JjbS9SbXZ5?=
+ =?utf-8?B?Q2lZQm9RL3hybWptUlZXL09hbE0wVUdPQVVBVFpGSHg3enhwRXVyK0t2Mkgx?=
+ =?utf-8?B?ekF3SkR2MWpJdHBqVS96WTlqU1NHTlNhbXkxQ0YvL3poajhWUTJad0xEdFpv?=
+ =?utf-8?B?MU85akJIS1RBeko2aWNvK2FhM1JZWGhWRXhsRFIrQWhuemVZZXpBVUUzcmNv?=
+ =?utf-8?B?WEZ1ZHdnZC9ONmJBL042VWswUW1WeERlV2JFTFFoM25kaFJ1U2VTUmFKWndj?=
+ =?utf-8?B?QldMbTdOMFJqbTdHUzF6bkFDUWlPYlljRmZQNGpiYy9CMSswLytBaWxVbGtJ?=
+ =?utf-8?B?Q2xjb0hYeElmUVJJU202d3pDVDNzZ1p2MFFLRW9UYm9CM255NEE4eUJ1ZnlJ?=
+ =?utf-8?B?YzYzdVJ3dUN0SWJvbFA3bXpyQkluYVlSdnZTaE1XUDVHRmszQ2RJd3prN2FH?=
+ =?utf-8?B?bDNBalJaRHZGbHdub2JVMHkwVGhVK0ttL2pqMWlmS0xVSUJINzgzVEVKTzlt?=
+ =?utf-8?B?ckpRd1ZqNFVXOUQrNUk1KzQ5L21ZdTNFN0FsaDNTQ1FBbnp0Q3JRZldITHFs?=
+ =?utf-8?B?WkVrZmJhc3ZLVXFQNnhrYkVjQzcwdzI3eFlLcW5WdUJ5cGoveEo3VnFuY3ZL?=
+ =?utf-8?B?Qy9xS3lzR0FwSVdNTXErYTluc0RUOCtEL1J1ZjRCSVdDUkNnMGZzdkp2ZG0z?=
+ =?utf-8?B?MDFtTnF6YUU1WXlIODd2OXlZMVo4YjJBeGxGUU5KT0dUWEZrTHBITGVUTDFr?=
+ =?utf-8?B?amVHdGRzZ3RyWEJKbWpub0xKWW44a3RCTXhDbkpKQWtWMXdxMmM3bitkMTlr?=
+ =?utf-8?B?aFJmZGxHaXZ4YUJXa3JNaThRZGovNExUb0VyMTBqOEVXV2NwMlVRZEVjTkFp?=
+ =?utf-8?B?K1NpYW00c25MZDNLY1dHQ0JKZWVMc29aNStIUXdIdlh0TTVGK2NtWnpOVGU0?=
+ =?utf-8?Q?rVOJLgpWC340VZLa2dhTeZDhy12yceuvXKLkNkTjfA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <402666B5709DCE40ADA86AA46BB16B7A@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211215041149.73171-1-yangyicong@hisilicon.com>
- <20211215041149.73171-2-yangyicong@hisilicon.com> <YcL80lUZi4f9zqjB@BLR-5CG11610CF.amd.com>
- <CAGsJ_4y_G74f1KEze__i_1qFOF30DMWaD=R3ww8rvvRMHvPELA@mail.gmail.com>
-In-Reply-To: <CAGsJ_4y_G74f1KEze__i_1qFOF30DMWaD=R3ww8rvvRMHvPELA@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 22 Dec 2021 14:14:40 +0100
-Message-ID: <CAKfTPtDmwAFBYXdkiSdEdQx=H5t_hK9w5tRvSexBAMdVVD3ydQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched: Add per_cpu cluster domain info and
- cpus_share_cluster API
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00b05e9e-b7a8-48b4-dd72-08d9c54d3658
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2021 13:16:06.3488
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VRzfkznVVDfuhC0lNFKdGrPA7ccQTh/9Bmrl2GITNXaK+MNxpCp1SfKc+wWpgiFKr5BBphWBEmGOXGXJAXtOvkvWS0ylNpx7y2/yt8NPk0M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0196
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 at 12:06, Barry Song <21cnbao@gmail.com> wrote:
->
-> On Wed, Dec 22, 2021 at 11:24 PM Gautham R. Shenoy
-> <gautham.shenoy@amd.com> wrote:
-> >
-> > Hello Yicong, Barry,
-> >
-> >
-> > On Wed, Dec 15, 2021 at 12:11:48PM +0800, Yicong Yang wrote:
-> > > From: Barry Song <song.bao.hua@hisilicon.com>
-> > >
-> > > Add per-cpu cluster domain info and cpus_share_cluster() API.
-> > > This is the preparation for the optimization of select_idle_cpu()
-> > > on platforms with cluster scheduler level.
-> > >
-> > > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > > ---
-> > >  include/linux/sched/sd_flags.h |  5 +++++
-> > >  include/linux/sched/topology.h |  8 +++++++-
-> > >  kernel/sched/core.c            | 12 ++++++++++++
-> > >  kernel/sched/sched.h           |  2 ++
-> > >  kernel/sched/topology.c        |  9 +++++++++
-> > >  5 files changed, 35 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-> > > index 57bde66d95f7..0f732bcfbb2c 100644
-> > > --- a/include/linux/sched/sd_flags.h
-> > > +++ b/include/linux/sched/sd_flags.h
-> > > @@ -109,6 +109,11 @@ SD_FLAG(SD_ASYM_CPUCAPACITY_FULL, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-> > >   */
-> > >  SD_FLAG(SD_SHARE_CPUCAPACITY, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> > >
-> > > +/*
-> > > + * Set up for cluster domains sharing resources such as llc tags or l2
-> > > + */
-> > > +SD_FLAG(SD_CLUSTER, SDF_NEEDS_GROUPS)
-> > > +
-> > >  /*
-> > >   * Domain members share CPU package resources (i.e. caches)
-> > >   *
-> > > diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> > > index c07bfa2d80f2..78c3a94fae66 100644
-> > > --- a/include/linux/sched/topology.h
-> > > +++ b/include/linux/sched/topology.h
-> > > @@ -45,7 +45,7 @@ static inline int cpu_smt_flags(void)
-> > >  #ifdef CONFIG_SCHED_CLUSTER
-> > >  static inline int cpu_cluster_flags(void)
-> > >  {
-> > > -     return SD_SHARE_PKG_RESOURCES;
-> > > +     return SD_CLUSTER | SD_SHARE_PKG_RESOURCES;
-> >
-> > On non-cluster systems, there would be only one group at the at the
-> > CLS domain. Since SD_CLUSTER is also tagged with SDF_NEEDS_GROUP, it
-> > would need the presence of two groups. Thus, on such non-cluster
-> > systems, the CLS domain will continue to be degenerated in favour of
-> > the SMT domain.
-> >
-> > >  }
-> > >  #endif
-> > >
-> > > @@ -177,6 +177,7 @@ cpumask_var_t *alloc_sched_domains(unsigned int ndoms);
-> > >  void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
-> > >
-> > >  bool cpus_share_cache(int this_cpu, int that_cpu);
-> > > +bool cpus_share_cluster(int this_cpu, int that_cpu);
-> > >
-> > >  typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
-> > >  typedef int (*sched_domain_flags_f)(void);
-> > > @@ -230,6 +231,11 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
-> > >       return true;
-> > >  }
-> > >
-> > > +static inline bool cpus_share_cluster(int this_cpu, int that_cpu)
-> > > +{
-> > > +     return true;
-> > > +}
-> > > +
-> > >  #endif       /* !CONFIG_SMP */
-> > >
-> > >  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > > index 3c9b0fda64ac..11f9b25c3068 100644
-> > > --- a/kernel/sched/core.c
-> > > +++ b/kernel/sched/core.c
-> > > @@ -3732,6 +3732,18 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
-> > >       return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
-> > >  }
-> > >
-> > > +/*
-> > > + * On non-Cluster machine this function works same with cpus_share_cache()
-> > > + * as sd_cluster_id equals to sd_llc_id.
-> > > + */
-> >
-> > Ok, so on a non-cluster machine, a cluster is trivially defined to be
-> > a single core (this is reflected in what the cpu_cluster_mask() shows
-> > up on such machines).
-> >
-> > However, in cpus_share_cluster(), we are upgrading the definition of a
-> > cluster to be group of CPUs that share the LLC. This is inconsistent
-> > with the original definition. Is there a way to avoid this
-> > inconsistency ?
->
-> Hi gautham,
-> Yep but I wrote this trick to keep the change in patch2/2 compatible
-> with non-cluster machine:
->
-> @@ -6384,7 +6422,7 @@ static int select_idle_sibling(struct
-> task_struct *p, int prev, int target)
->   /*
->   * If the previous CPU is cache affine and idle, don't be stupid:
->   */
-> - if (prev != target && cpus_share_cache(prev, target) &&
-> + if (prev != target && cpus_share_cluster(prev, target) &&
->      (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
->      asym_fits_capacity(task_util, prev))
->   return prev;
-> @@ -6408,7 +6446,7 @@ static int select_idle_sibling(struct
-> task_struct *p, int prev, int target)
->   p->recent_used_cpu = prev;
->   if (recent_used_cpu != prev &&
->      recent_used_cpu != target &&
-> -    cpus_share_cache(recent_used_cpu, target) &&
-> +    cpus_share_cluster(recent_used_cpu, target) &&
->      (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
->      cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
->      asym_fits_capacity(task_util, recent_used_cpu)) {
-> @@ -6449,7 +6487,7 @@ static int select_idle_sibling(struct
-> task_struct *p, int prev, int target)
->   }
->   }
->
-> I didn't find a better way to implement this with minimum overhead and
-> code modification.
->
-> >
-> >
-> >
-> > > +bool cpus_share_cluster(int this_cpu, int that_cpu)
-> > > +{
-> > > +     if (this_cpu == that_cpu)
-> > > +             return true;
-> > > +
-> > > +     return per_cpu(sd_cluster_id, this_cpu) == per_cpu(sd_cluster_id, that_cpu);
-> > > +}
-> > > +
-> > >  static inline bool ttwu_queue_cond(int cpu, int wake_flags)
-> > >  {
-> > >       /*
-> > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > > index 0e66749486e7..ddd29879ad40 100644
-> > > --- a/kernel/sched/sched.h
-> > > +++ b/kernel/sched/sched.h
-> > > @@ -1763,7 +1763,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
-> > >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
-> > >  DECLARE_PER_CPU(int, sd_llc_size);
-> > >  DECLARE_PER_CPU(int, sd_llc_id);
-> > > +DECLARE_PER_CPU(int, sd_cluster_id);
-> > >  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-> > > +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
-> > >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
-> > >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
-> > >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-> > > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > > index d201a7052a29..5642df384904 100644
-> > > --- a/kernel/sched/topology.c
-> > > +++ b/kernel/sched/topology.c
-> > > @@ -644,6 +644,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
-> > >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
-> > >  DEFINE_PER_CPU(int, sd_llc_size);
-> > >  DEFINE_PER_CPU(int, sd_llc_id);
-> > > +DEFINE_PER_CPU(int, sd_cluster_id);
-> > > +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
-> > >  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-> > >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
-> > >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
-> > > @@ -669,6 +671,12 @@ static void update_top_cache_domain(int cpu)
-> > >       per_cpu(sd_llc_id, cpu) = id;
-> > >       rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
-> > >
-> > > +     sd = lowest_flag_domain(cpu, SD_CLUSTER);
-> > > +     if (sd)
-> > > +             id = cpumask_first(sched_domain_span(sd));
-> > > +     rcu_assign_pointer(per_cpu(sd_cluster, cpu), sd);
-> > > +     per_cpu(sd_cluster_id, cpu) = id;
-> > > +
-
-This deserves a large comment to highlight that the new code above is
-not self contained and  relies on the fact that it is done just after
-looking for LLC and sd and that id and sd must not be changed in
-between inorder to ensures that per_cpu(sd_cluster_id, cpu) equals
-per_cpu(sd_llc_id, cpu) if there is no domain with SD_CLUSTER.
-
-and per_cpu(sd_cluster_id, cpu) might not be cluster but llc
-
-> > >       sd = lowest_flag_domain(cpu, SD_NUMA);
-> > >       rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
-> > >
-> > > @@ -1514,6 +1522,7 @@ static unsigned long __read_mostly *sched_numa_onlined_nodes;
-> > >   */
-> > >  #define TOPOLOGY_SD_FLAGS            \
-> > >       (SD_SHARE_CPUCAPACITY   |       \
-> > > +      SD_CLUSTER             |       \
-> > >        SD_SHARE_PKG_RESOURCES |       \
-> > >        SD_NUMA                |       \
-> > >        SD_ASYM_PACKING)
-> > > --
-> > > 2.33.0
-> > >
-> >
-> >
-> > --
-> > Thanks and Regards
-> > gautham.
->
-> Thanks
-> Barry
+DQoNCkxlIDAyLzEyLzIwMjEgw6AgMTM6MDAsIENocmlzdG9waGUgTGVyb3kgYSDDqWNyaXTCoDoN
+Cj4gRG8gbm90IHNpbGVudGVseSBpZ25vcmUgYSBmYWlsdXJlIG9mIGNyZWF0ZV9icmFuY2goKSBp
+bg0KPiBwYXRjaF9icmFuY2goKS4gUmV0dXJuIC1FUkFOR0UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
+OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCiBGcm9t
+IA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBjLWRldi9wYXRj
+aC80OTQwYjAzZGUyMjBkMWRmZTJjNmI0N2E0MWU2MDkyNTQ5N2NlMTI1LjE2MzA2NTczMzEuZ2l0
+LmNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldS8NCg0KUmV2aWV3ZWQtYnk6IE5hdmVlbiBOLiBS
+YW8gPG5hdmVlbi5uLnJhb0BsaW51eC52bmV0LmlibS5jb20+DQoNCj4gLS0tDQo+ICAgYXJjaC9w
+b3dlcnBjL2xpYi9jb2RlLXBhdGNoaW5nLmMgfCA0ICsrKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwg
+MyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9w
+b3dlcnBjL2xpYi9jb2RlLXBhdGNoaW5nLmMgYi9hcmNoL3Bvd2VycGMvbGliL2NvZGUtcGF0Y2hp
+bmcuYw0KPiBpbmRleCBhNDNjYTIyMzEzZWUuLmU3YTJhNDFhZThlYiAxMDA2NDQNCj4gLS0tIGEv
+YXJjaC9wb3dlcnBjL2xpYi9jb2RlLXBhdGNoaW5nLmMNCj4gKysrIGIvYXJjaC9wb3dlcnBjL2xp
+Yi9jb2RlLXBhdGNoaW5nLmMNCj4gQEAgLTE5MSw3ICsxOTEsOSBAQCBpbnQgcGF0Y2hfYnJhbmNo
+KHUzMiAqYWRkciwgdW5zaWduZWQgbG9uZyB0YXJnZXQsIGludCBmbGFncykNCj4gICB7DQo+ICAg
+CXBwY19pbnN0X3QgaW5zdHI7DQo+ICAgDQo+IC0JY3JlYXRlX2JyYW5jaCgmaW5zdHIsIGFkZHIs
+IHRhcmdldCwgZmxhZ3MpOw0KPiArCWlmIChjcmVhdGVfYnJhbmNoKCZpbnN0ciwgYWRkciwgdGFy
+Z2V0LCBmbGFncykpDQo+ICsJCXJldHVybiAtRVJBTkdFOw0KPiArDQo+ICAgCXJldHVybiBwYXRj
+aF9pbnN0cnVjdGlvbihhZGRyLCBpbnN0cik7DQo+ICAgfQ0KPiAgIA0KPiA=

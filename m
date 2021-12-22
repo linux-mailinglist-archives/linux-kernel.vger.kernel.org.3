@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EB547D6BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A9747D6AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344694AbhLVS1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:27:11 -0500
-Received: from mga12.intel.com ([192.55.52.136]:33504 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344690AbhLVS1K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:27:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640197630; x=1671733630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uN531P6eAKoDlmobwFM1DNbNSTwy3I5gzy72Rjv6Q/8=;
-  b=ZS7MZWfwKbvKrOpxFSzWZg49+LrFdtx4NENBaCQLvY+dfJ9efZBIBArm
-   wAMZoJW6SGF68TjCxgc2pKZcgLz/zfy7dGy26RNVPF/pTNffOL7y9ZQW5
-   TiDGhOWuCUJxYaWuJQ8qf8DTXaCt6fB9kiO6yxKQwfrcIj+ts87ik4FnZ
-   pNFrMcvDyGxYHtJOxuls0HoxKjTgVlXqPFr4upNZi2kWpCjfIIXokY1d/
-   ht1aD029n75kAy9x21T2KIE6qjNNoQCR6tAliMIbfQ+2ikgbSO3TBy9Xw
-   2ZVxijTKRkBEZ2S720eQMPXZQW9ccczcqZypmr0HQW7yJ/EYPaOyvL4eP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="220697807"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="220697807"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 10:27:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="587098653"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 10:27:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n06J5-000uwc-2x;
-        Wed, 22 Dec 2021 20:25:43 +0200
-Date:   Wed, 22 Dec 2021 20:25:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: Re: [PATCH v1 1/1] KVM: arm64: vgic: Replace kernel.h with the
- necessary inclusions
-Message-ID: <YcNtpnxbyDA/CGgc@smile.fi.intel.com>
-References: <20211222165552.69288-1-andriy.shevchenko@linux.intel.com>
- <8735mk1pgt.wl-maz@kernel.org>
+        id S1344673AbhLVS0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:26:03 -0500
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:45950 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234920AbhLVS0D (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 13:26:03 -0500
+Received: by mail-qk1-f170.google.com with SMTP id e16so3134659qkl.12;
+        Wed, 22 Dec 2021 10:26:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EiNGic/7Uk0xRMXUuPRSvEzPSJgDKtizB/7NByrGUGI=;
+        b=cOLol6yZWmMVUhusoh67nGFrimNvGgMMJUYW7oBHoWoUpq+hhrfswFHGiK5vIRm5Rs
+         nKyV514YVsCaCLc0Cxvj8ZRS8N+BxGr1sg9QWFu5yIss/WTJW81E3fqYpf7O+Jzmp4b2
+         LxMZqjDPiBYtdp/p6rhGVwEAXgHMMxrHd0GiQgfldTnb+wD4AOoHRonfhTRSGT34qyFN
+         4E4t4PKIDpP0hk8+hBNIFYeyWhhQzvioeLO7cfUclS96e5ZH6q3gqti1vR4O7nNG4lQz
+         78Laj8GsR8rM6A9I/WnfiLx9K4xo3Y2+evFb66CKaxa7N/qO3QvxGtdXO3cHqwmdcQU8
+         DFHw==
+X-Gm-Message-State: AOAM531xiE+Yu1eN3d3BWtgVw4+M7cUncxYzglTE4OGxUUGCsL6Vghmg
+        WzA+R0ArA7PdeLxpyT1DpA==
+X-Google-Smtp-Source: ABdhPJwOW3FRILTSWh8U0aXGgKx7xFeVB1FWT0QX0oRjOofQ2fVd2uqCF0UyrnlL8DxlBvLTKaH1kQ==
+X-Received: by 2002:a05:620a:24d4:: with SMTP id m20mr2891229qkn.575.1640197561906;
+        Wed, 22 Dec 2021 10:26:01 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id o10sm2329911qtx.33.2021.12.22.10.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 10:26:01 -0800 (PST)
+Received: (nullmailer pid 2459647 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:25:59 -0000
+Date:   Wed, 22 Dec 2021 14:25:59 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-serial@vger.kernel.org, netdev@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 08/16] dt-bindings: clock: Add R9A07G054 CPG Clock and
+ Reset Definitions
+Message-ID: <YcNtt4vloXXGwZe5@robh.at.kernel.org>
+References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211221094717.16187-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8735mk1pgt.wl-maz@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211221094717.16187-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 06:09:22PM +0000, Marc Zyngier wrote:
-> On Wed, 22 Dec 2021 16:55:52 +0000,
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > 
-> > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > especially when there are circular dependencies are involved.
+On Tue, 21 Dec 2021 09:47:09 +0000, Lad Prabhakar wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
 > 
-> Which circular dependencies? What problem are you solving?
+> Define RZ/V2L (R9A07G054) Clock Pulse Generator Core Clock and module
+> clock outputs, as listed in Table 7.1.4.2 ("Clock List r1.0") and also
+> add Reset definitions referring to registers CPG_RST_* in Section 7.2.3
+> ("Register configuration") of the RZ/V2L Hardware User's Manual (Rev.1.00,
+> Nov.2021).
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  include/dt-bindings/clock/r9a07g054-cpg.h | 226 ++++++++++++++++++++++
+>  1 file changed, 226 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/r9a07g054-cpg.h
+> 
 
-In particular moving bitmap_*alloc() APIs to the headers.
-
-But this may be a side effect of what I realized during the attempts
-of solving that issue. In any case there is no need to take entire
-mess of kernel.h in another header.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Acked-by: Rob Herring <robh@kernel.org>

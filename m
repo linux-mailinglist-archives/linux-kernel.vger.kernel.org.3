@@ -2,127 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D021A47CAAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B282D47CAB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240622AbhLVBT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:19:26 -0500
-Received: from mga12.intel.com ([192.55.52.136]:18849 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240545AbhLVBTY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:19:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640135964; x=1671671964;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vtS7ouF3TOFWRpidAt0aRiMo+56z6XAZqUDoj4bu7+0=;
-  b=ncacJ2zcoNWlntBlv19wL7MNSfAOx8RJUec9pZ57qYAW99LY71vvSVy9
-   0vMVcbo98tyPeL5F+n+f6ex1tFKOO4I4R947KwDX7E6vMUXwyv/KuRYo6
-   7Y0C/3WTV4kVqaUiJ82derC8y62fNGZ7IDWWs+6ICikbl2Qn16TWBM8Sc
-   +KEB19UIBunoqcu3flqRuFeRc4NJkdV852QJ7qcuIDDSVcWquvfBXoyah
-   9MCRFZMjLGtWniXQhgVhGTg2H/hkjcWQlP0edq/LYJ9F0S0ZU2i0jIODi
-   IOLAsFvtOZskJqTeK05rtro5TmTq83ZwHiBzEiOPWdUX5+MgbdRkAP6Og
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="220533439"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="220533439"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 17:19:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="613659873"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Dec 2021 17:19:22 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzqHq-0009kS-5v; Wed, 22 Dec 2021 01:19:22 +0000
-Date:   Wed, 22 Dec 2021 09:19:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        bristot@kernel.org, luto@kernel.org
-Subject: Re: [PATCH] trace: Fix check for trace_percpu_buffer validity in
- get_trace_buf()
-Message-ID: <202112220904.4XhObpcQ-lkp@intel.com>
-References: <20211221162529.1480652-1-naveen.n.rao@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221162529.1480652-1-naveen.n.rao@linux.vnet.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S240691AbhLVBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238386AbhLVBVQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 20:21:16 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33970C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:21:16 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id w9-20020a25c709000000b00608a9489fc1so1145432ybe.20
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=DwpZcxuVvjMBelijxmj7V7prl1AvJJJLN05hWBHgA/4=;
+        b=Yj23OWiqKBvrbnd/TZd2sZhlzi3hGVLhMyJ7iprLLOt4brrPpG+thhJdevr1M/0ZG2
+         zIdXVnMYyq1eRVOq7e/tyLe35Yu8aGzLBOQgtR+zO+PJecaTcV4HiJO1qLBQF1IP7cYF
+         N1eRv4SlqbX9vehtnG0YioYyS1ZDAG2jxbmTgNuefmy4D5TmUIaEQRWfTyaCbYbjG8JL
+         YXfXzB4tw+RXuA9SqgEdr4EXsqBSf9IuN/M9+R0ynUPJVod0gtMcmDG3qFalCYGKc6La
+         q/DS9oMZuSPd7y6RopEwLDCfNvwJPJAnDfDUx/9p+SHUsuJKB/PHdF07hnlgv56eEA1f
+         GL4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=DwpZcxuVvjMBelijxmj7V7prl1AvJJJLN05hWBHgA/4=;
+        b=D3zWHL3IkLhlBnGm3IOxuYIeDFQedlKGYrHa/JklHap7KGez/kmWaCuPW7VDmsys+G
+         CckK+sIOeulCfLt/0EJQRvQLFsClLXEQPO/c/Ff7zAdlep1ohcU2pAAMUEu73ILr2UjD
+         OarQuRCH1shssCoh2Dmik0yxOJROOLXqCj+chfBHTDVrrFJc92ncUdgIKtS504ulWwBl
+         UtOLdjWwdMzADJv8XYft/yJz8KTFKgyOJcnRYMBxp+/Ci3T99K8ejLauXtWpDr1HKK+0
+         jPRc8SWS6ecld8a5c6vF5vG3gSkcj3ZcOsySJmVLF2fX+CsVWkPNKi8MDqmSXsSWbMI/
+         dZeA==
+X-Gm-Message-State: AOAM530LKSLPS+lIdhXKLIjg10gedC2xQh3y6pZfOT19isl/oeBupwsj
+        ZYbId1Qb3A2VJotf09Hav2IYfILf7Gll
+X-Google-Smtp-Source: ABdhPJzCGyz0Ud16ne2hFP17GWS2MfOEfgjKuE2i65+M21EG8Ii4sjCKsWomCl7zypcm8PsHT4lJVr7O4KaH
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:8d27:feea:1b0b:3782])
+ (user=rajatja job=sendgmr) by 2002:a25:ba05:: with SMTP id
+ t5mr1349092ybg.675.1640136075440; Tue, 21 Dec 2021 17:21:15 -0800 (PST)
+Date:   Tue, 21 Dec 2021 17:21:05 -0800
+Message-Id: <20211222012105.3438916-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
+Subject: [PATCH] pci: Make DWORD accesses while saving / restoring LTR state
+From:   Rajat Jain <rajatja@google.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, kw@linux.com,
+        Rajat Jain <rajatja@google.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rajatxjain@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Naveen,
+Some devices have an errata such that they only support DWORD accesses
+to some registers.
 
-I love your patch! Perhaps something to improve:
+For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
+supports DWORD accesses to LTR latency registers and L1 PM substates
+control registers:
+https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
 
-[auto build test WARNING on f7f0bb5eaecb1aff9cc8ab13425d43690b71ec44]
+Since L1 PM substate control registers are DWORD sized, and hence their
+access in the kernel is already DWORD sized, so we don't need to do
+anything for them.
 
-url:    https://github.com/0day-ci/linux/commits/Naveen-N-Rao/trace-Fix-check-for-trace_percpu_buffer-validity-in-get_trace_buf/20211222-002823
-base:   f7f0bb5eaecb1aff9cc8ab13425d43690b71ec44
-config: x86_64-randconfig-s021-20211219 (https://download.01.org/0day-ci/archive/20211222/202112220904.4XhObpcQ-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/95971333cdb4ace06eb41bd7ca1dee65f77487d2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Naveen-N-Rao/trace-Fix-check-for-trace_percpu_buffer-validity-in-get_trace_buf/20211222-002823
-        git checkout 95971333cdb4ace06eb41bd7ca1dee65f77487d2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+However, the LTR registers being WORD sized, are in need of a solution.
+This patch converts the WORD sized accesses to these registers, into
+DWORD sized accesses, while saving and restoring them.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/trace/trace.c:392:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct trace_export **list @@     got struct trace_export [noderef] __rcu ** @@
-   kernel/trace/trace.c:392:28: sparse:     expected struct trace_export **list
-   kernel/trace/trace.c:392:28: sparse:     got struct trace_export [noderef] __rcu **
-   kernel/trace/trace.c:406:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct trace_export **list @@     got struct trace_export [noderef] __rcu ** @@
-   kernel/trace/trace.c:406:33: sparse:     expected struct trace_export **list
-   kernel/trace/trace.c:406:33: sparse:     got struct trace_export [noderef] __rcu **
-   kernel/trace/trace.c:2836:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct event_filter *filter @@     got struct event_filter [noderef] __rcu *filter @@
-   kernel/trace/trace.c:2836:38: sparse:     expected struct event_filter *filter
-   kernel/trace/trace.c:2836:38: sparse:     got struct event_filter [noderef] __rcu *filter
-   kernel/trace/trace.c:3244:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct trace_buffer_struct *buffers @@     got struct trace_buffer_struct [noderef] __percpu * @@
-   kernel/trace/trace.c:3244:17: sparse:     expected struct trace_buffer_struct *buffers
-   kernel/trace/trace.c:3244:17: sparse:     got struct trace_buffer_struct [noderef] __percpu *
->> kernel/trace/trace.c:3248:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct trace_buffer_struct [noderef] __percpu *static [toplevel] trace_percpu_buffer @@     got struct trace_buffer_struct *buffers @@
-   kernel/trace/trace.c:3248:29: sparse:     expected struct trace_buffer_struct [noderef] __percpu *static [toplevel] trace_percpu_buffer
-   kernel/trace/trace.c:3248:29: sparse:     got struct trace_buffer_struct *buffers
-   kernel/trace/trace.c:346:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace.c:346:9: sparse:    struct trace_export [noderef] __rcu *
-   kernel/trace/trace.c:346:9: sparse:    struct trace_export *
-   kernel/trace/trace.c:361:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace.c:361:9: sparse:    struct trace_export [noderef] __rcu *
-   kernel/trace/trace.c:361:9: sparse:    struct trace_export *
-
-vim +3248 kernel/trace/trace.c
-
-07d777fe8c3985 Steven Rostedt          2011-09-22  3236  
-07d777fe8c3985 Steven Rostedt          2011-09-22  3237  static int alloc_percpu_trace_buffer(void)
-07d777fe8c3985 Steven Rostedt          2011-09-22  3238  {
-07d777fe8c3985 Steven Rostedt          2011-09-22  3239  	struct trace_buffer_struct *buffers;
-07d777fe8c3985 Steven Rostedt          2011-09-22  3240  
-38ce2a9e33db61 Steven Rostedt (VMware  2020-08-06  3241) 	if (trace_percpu_buffer)
-38ce2a9e33db61 Steven Rostedt (VMware  2020-08-06  3242) 		return 0;
-38ce2a9e33db61 Steven Rostedt (VMware  2020-08-06  3243) 
-07d777fe8c3985 Steven Rostedt          2011-09-22  3244  	buffers = alloc_percpu(struct trace_buffer_struct);
-24589e3a20876d Steven Rostedt (VMware  2020-01-25  3245) 	if (MEM_FAIL(!buffers, "Could not allocate percpu trace_printk buffer"))
-e2ace001176dc9 Andy Lutomirski         2016-05-26  3246  		return -ENOMEM;
-07d777fe8c3985 Steven Rostedt          2011-09-22  3247  
-07d777fe8c3985 Steven Rostedt          2011-09-22 @3248  	trace_percpu_buffer = buffers;
-07d777fe8c3985 Steven Rostedt          2011-09-22  3249  	return 0;
-07d777fe8c3985 Steven Rostedt          2011-09-22  3250  }
-07d777fe8c3985 Steven Rostedt          2011-09-22  3251  
-
+Signed-off-by: Rajat Jain <rajatja@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/pci/pci.c       | 24 ++++++++++++++++--------
+ drivers/pci/pcie/aspm.c |  1 +
+ 2 files changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 3d2fb394986a..efa8cd16827f 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
+ {
+ 	int ltr;
+ 	struct pci_cap_saved_state *save_state;
+-	u16 *cap;
++	u32 *cap;
+ 
+ 	if (!pci_is_pcie(dev))
+ 		return;
+@@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
+ 		return;
+ 	}
+ 
+-	cap = (u16 *)&save_state->cap.data[0];
+-	pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
+-	pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
++	/*
++	 * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
++	 * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
++	 * dword accesses to these registers.
++	 */
++	cap = &save_state->cap.data[0];
++	pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
+ }
+ 
+ static void pci_restore_ltr_state(struct pci_dev *dev)
+ {
+ 	struct pci_cap_saved_state *save_state;
+ 	int ltr;
+-	u16 *cap;
++	u32 *cap;
+ 
+ 	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
+ 	ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
+ 	if (!save_state || !ltr)
+ 		return;
+ 
+-	cap = (u16 *)&save_state->cap.data[0];
+-	pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
+-	pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
++	/*
++	 * We deliberately do a dword access to restore both
++	 * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
++	 * some devices only support dword accesses to these registers.
++	 */
++	cap = &save_state->cap.data[0];
++	pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
+ }
+ 
+ /**
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 52c74682601a..083f47a7b69b 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+ 	encode_l12_threshold(l1_2_threshold, &scale, &value);
+ 	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+ 
++	/* Always make DWORD sized accesses to these registers */
+ 	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
+ 	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
+ 	pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
+-- 
+2.34.1.307.g9b7440fafd-goog
+

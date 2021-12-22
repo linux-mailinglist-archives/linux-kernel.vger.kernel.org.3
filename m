@@ -2,69 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE3E47D86A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7498047D86C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbhLVU4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 15:56:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50824 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbhLVU4A (ORCPT
+        id S229491AbhLVU4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 15:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237153AbhLVU4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 15:56:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7831B81DA9;
-        Wed, 22 Dec 2021 20:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B894C36AE8;
-        Wed, 22 Dec 2021 20:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640206557;
-        bh=PIW6wwqIOxe4oZtT//vimt3dQLuUmUszra79YvipIKc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=caEy7wNxFUmKoTHPTDG32oHoGU/DhhYcLdFXPWc5gY6hKlDlSIV/TUEbvOIKJjyAr
-         rnKO8dmcAebYMsatl8CkW9tUDAz+ZMaAEGgab+rdtpj0mhbjmfO+EsqhLcXiT6RNVz
-         0YaBXJ6ikGkrADCE1sngt36DzyVdhHbmLuNcdUiIHzQic4j4QS2TnoKe3AhateSny9
-         NVGiRrYh2Xj70sCD8moG3BAff9a2ftPVHSoV0A7R55bbyhr96dG2RTHdfVvD1ykEU1
-         u7n80KIpS5XbdXAiUuFFmw8NvKQhipru6o1u+H/5KCJ7omVdXdk9nrKtr/SXawmhmW
-         pRUpIooyoNNjg==
-Date:   Wed, 22 Dec 2021 12:55:55 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan@vger.kernel.org,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 08/18] net: ieee802154: Add support for internal PAN
- management
-Message-ID: <20211222125555.576e60b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211222155743.256280-9-miquel.raynal@bootlin.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-9-miquel.raynal@bootlin.com>
+        Wed, 22 Dec 2021 15:56:10 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF40C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 12:56:10 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id f5so13324243edq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 12:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZGfnM0NbF6Lnwn+/4v0lYf4UoXf1XyHSPDhBU5PYm+w=;
+        b=ODBWafjTuhxpOyZRsUMimelFOUAdAR18tX5lXt2fWab4ErAM/IpEp08Mt7WuFaiK35
+         V7a7D94j9J8dMmqZWDj+SZwsm8zsI9PAoXvWsXsVx3e9plHG2W9jR5xjWLXTFphrwjHD
+         NKPWM+jGTCd+Ti49LpH0kflkPiyASTBwqfvE4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=ZGfnM0NbF6Lnwn+/4v0lYf4UoXf1XyHSPDhBU5PYm+w=;
+        b=rcFpH2zthkFfelpWN+q08Y2O/1TRpJ55QlVNhnBj5KTQaXwkpqYo7lQU7IFYTW5X51
+         iO6Ye2pwKqPuv0pjmGg62Tg42dpvfJgzF+XxjjYK4ak83MBcOBqysx9XLqTSgTBRPlmP
+         XDAYuHa1rKF1uoWpMEzgYTmkUPE4LGTSEvWZdlTpoG+Yc6ouFIkdqVD/enGNl/arwuN5
+         rL49YqVCLTt6B+exozuM7/L5PB7LbZpq9XfpXnYz4hgpC4f433W4dcRYRbZMqZbx2bB6
+         8oIgTLJiW7a8Y9GAqHkv7zn1JP5cJOPEnwmwodwf62xf852yryb33YFIcfZ85gVCURaq
+         MxOA==
+X-Gm-Message-State: AOAM532cEqBv0UaR6mynQg2h+clo+s4iIWKyAagp290s+HWGJmfRO60E
+        X5BM/HMjVrD/LlqfSkiCdEE8wQ==
+X-Google-Smtp-Source: ABdhPJznl20tGyyVj8H8hiyWICpl1Z3hcWY9+UYEKVr+on/kEg8QKEuVlN3dcT7fJ/ABi0QaMKzDSw==
+X-Received: by 2002:a17:906:b785:: with SMTP id dt5mr3710609ejb.515.1640206568603;
+        Wed, 22 Dec 2021 12:56:08 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id dp6sm1094151ejc.140.2021.12.22.12.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 12:56:08 -0800 (PST)
+Date:   Wed, 22 Dec 2021 21:56:06 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [PATCH] drm/ttm: fix compilation on ARCH=um
+Message-ID: <YcOQ5uMYLuI0/y5v@phenom.ffwll.local>
+Mail-Followup-To: Johannes Berg <johannes@sipsolutions.net>,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+References: <CAMuHMdXTRYjtfyWTVN86pn4STO2EPR1B5+KHj=wAqguXt=hpHg@mail.gmail.com>
+ <20211220111519.a4c8c6eff702.Ie4cf4e68698f6a9f546b83379bc52c266504424f@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220111519.a4c8c6eff702.Ie4cf4e68698f6a9f546b83379bc52c266504424f@changeid>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 16:57:33 +0100 Miquel Raynal wrote:
-> +/* Maximum number of PAN entries to store */
-> +static int max_pan_entries = 100;
-> +module_param(max_pan_entries, uint, 0644);
-> +MODULE_PARM_DESC(max_pan_entries,
-> +		 "Maximum number of PANs to discover per scan (default is 100)");
-> +
-> +static int pan_expiration = 60;
-> +module_param(pan_expiration, uint, 0644);
-> +MODULE_PARM_DESC(pan_expiration,
-> +		 "Expiration of the scan validity in seconds (default is 60s)");
+On Mon, Dec 20, 2021 at 11:15:22AM +0100, Johannes Berg wrote:
+> From: Johannes Berg <johannes.berg@intel.com>
+> 
+> Even if it's probably not really useful, it can get selected
+> by e.g. randconfig builds, and then failing to compile is an
+> annoyance. Unfortunately, it's hard to fix in Kconfig, since
+> DRM_TTM is selected by many things that don't really depend
+> on any specific architecture, and just depend on PCI (which
+> is indeed now available in ARCH=um via simulation/emulation).
+> 
+> Fix this in the code instead by just ifdef'ing the relevant
+> two lines that depend on "real X86".
+> 
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 
-Can these be per-device control knobs? Module params are rarely the
-best answer.
+Probably the last thing before I disappear until 2022 :-)
+
+Merged into drm-misc-fixes, thanks for your patch.
+-Daniel
+
+> ---
+>  drivers/gpu/drm/ttm/ttm_module.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/ttm/ttm_module.c b/drivers/gpu/drm/ttm/ttm_module.c
+> index 0037eefe3239..a3ad7c9736ec 100644
+> --- a/drivers/gpu/drm/ttm/ttm_module.c
+> +++ b/drivers/gpu/drm/ttm/ttm_module.c
+> @@ -68,9 +68,11 @@ pgprot_t ttm_prot_from_caching(enum ttm_caching caching, pgprot_t tmp)
+>  #if defined(__i386__) || defined(__x86_64__)
+>  	if (caching == ttm_write_combined)
+>  		tmp = pgprot_writecombine(tmp);
+> +#ifndef CONFIG_UML
+>  	else if (boot_cpu_data.x86 > 3)
+>  		tmp = pgprot_noncached(tmp);
+> -#endif
+> +#endif /* CONFIG_UML */
+> +#endif /* __i386__ || __x86_64__ */
+>  #if defined(__ia64__) || defined(__arm__) || defined(__aarch64__) || \
+>  	defined(__powerpc__) || defined(__mips__)
+>  	if (caching == ttm_write_combined)
+> -- 
+> 2.33.1
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

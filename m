@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6619247CB83
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F3247CB84
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242039AbhLVDJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S242044AbhLVDKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 22:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbhLVDI7 (ORCPT
+        with ESMTP id S229741AbhLVDKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:08:59 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7D2C061574;
-        Tue, 21 Dec 2021 19:08:59 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so1008232otv.9;
-        Tue, 21 Dec 2021 19:08:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0sZ36XFv1tC6Scd0xjGBrQm0gcAyHl/g9SBMsUgYs3g=;
-        b=FRJRyg2aNtpN2HgtQo9fu28eTTJzPpfE9xMyNKkVTUc8Y/u6DAVWs/CeiUBRoFslQI
-         abs1LRgKTkHxG0rQlyzDWp9IvAn97G4OPq4h9rUEcIYH9yhlSc44VZlJfmAnyvZpbsTF
-         pVp49Ner2R/PsX6hrRhhVASotzthbtuGrIpJXY/g5vK3W/uLAfd2outauhD9QLz/yW0s
-         x+wVdL4i9jF1JGUoFt/gVcOUm1/ScgyKjTOpxwYbCgoxX7rUWX6Bru2AF8XJuXdz4m6Z
-         pcn5ZGCZiwOdNHSvX6TOaQ82qIiAsk0pBPWQGsUK2Wp31Saj1wvxiKHPFXkH6WDQj44U
-         3sPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0sZ36XFv1tC6Scd0xjGBrQm0gcAyHl/g9SBMsUgYs3g=;
-        b=X6q0d+81x9uwj/4hKGtqOuik5P3pJ+m7vg8G6rEwSdVMqTB6RBBzXa1SlnvUFrYdSp
-         1i3Nw9W+dlGw+3EUoYwnaICwVTTC6ljqW2q5PG+beuoqHnxDKmJtunA0jKthJg/MI6Cg
-         Ed7c+AvZZi3WuJkO4u4kusDZcheZ6WKQkXDkaXCj9YxvsAKvFJjeO1Ygzt/wJ0Q3D7tG
-         AWt9Hq4wEK7z6zH5yt2VnKCIT7OT39Z5AN/z08pQjELK3EkBkncHujZBbVOd0TU8vFuB
-         fuJI8Wg0XJcsb/FsQ19Ks8r5C/s5eZe4UaxscCTVM4Ig2eWZg1efT28wFATNl5nCI3qQ
-         3lHg==
-X-Gm-Message-State: AOAM531YzenR3T+wBAVRjGUUsVU+UgURcFjxAaL7Tu56piarIZ5Kn6Re
-        sV2H0aCPcU+ARWMX7kdPLN4nVDyX3k4=
-X-Google-Smtp-Source: ABdhPJw5+fy87s23SsMKufLehyHdHohJIx+VP+fiUI/Ls5j7bOK1W9044U0FxGjWuXhvllyVuG13TA==
-X-Received: by 2002:a05:6830:4d:: with SMTP id d13mr874244otp.45.1640142538209;
-        Tue, 21 Dec 2021 19:08:58 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x4sm161776oiv.35.2021.12.21.19.08.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 19:08:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 3/7] hwmon: (adt7x10) Use
- devm_hwmon_device_register_with_info
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211221215841.2641417-1-demonsingur@gmail.com>
- <20211221215841.2641417-4-demonsingur@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ff8b73b0-0c28-e1f3-d254-ea03fb594ffc@roeck-us.net>
-Date:   Tue, 21 Dec 2021 19:08:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 22:10:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9993BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 19:10:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=/N//Hl0MQgQVCERPieC+DOnf7Id6IS5f33LhshO2Vi4=; b=MtjtpfFQ9n5RIgdVg9cWbV4fND
+        0RirIVTXeIOKjfrGLGuhRUUbt5tqeyg05umhUgw+6/pM5XompMxkZLyUlIB8ZJLh8dufZv5YjPxEE
+        WZmEvWndsxYDG3R5Z1tPXBxUMwXtxIv1YzNNpc0nYE8123AFgSv6FwA2mIpO4glClQsMMkMQbJBI6
+        KQjUkXeXdZpc2IptN9y97puyyWHvC5l/8xXIV/7xjfNDYOdkUKsPU7mG8Jrl+CIwsizP5GGQ2v2SO
+        jkI7fnq1PsI4TcArWYfHl6e1A7PmLTkfkWFrxLGRJUGJAYS9XnWgY3prxX0Apg5EESzjX54nRTk2H
+        iA4GMcjw==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzs1N-0093r0-4h; Wed, 22 Dec 2021 03:10:29 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] signal: clean up kernel-doc comments
+Date:   Tue, 21 Dec 2021 19:10:27 -0800
+Message-Id: <20211222031027.29694-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20211221215841.2641417-4-demonsingur@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/21 1:58 PM, Cosmin Tanislav wrote:
-> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> 
-[ ... ]
+Fix kernel-doc warnings in kernel/signal.c:
 
-> +
-> +static int adt7x10_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct adt7x10_data *data = dev_get_drvdata(dev);
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return adt7x10_temp_read(data, 0, val);
-> +	case hwmon_temp_max:
-> +		return adt7x10_temp_read(data, 1, val);
-> +	case hwmon_temp_min:
-> +		return adt7x10_temp_read(data, 2, val);
-> +	case hwmon_temp_crit:
-> +		return adt7x10_temp_read(data, 3, val);
+kernel/signal.c:1830: warning: Function parameter or member 'force_coredump' not described in 'force_sig_seccomp'
+kernel/signal.c:2873: warning: missing initial short description on line:
+ * signal_delivered -
 
-Ok, so you want to keep using the internal "index" to indicate the
-array position in the register cache. I _did_ specifically ask
-to use defines for index values in this case. You did not explain
-why you ignored this. So now you'll have to explain 1) why you
-ignored my request and 2) why you want to keep the code as is.
+Also add a closing parenthesis to the comments in signal_delivered().
 
-And, _please_, add a To: recipient to your patches. I am getting
-tired having to handle the fallout.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ kernel/signal.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Guenter
+--- linux-next-20211221.orig/kernel/signal.c
++++ linux-next-20211221/kernel/signal.c
+@@ -1823,6 +1823,7 @@ int force_sig_perf(void __user *addr, u3
+  * force_sig_seccomp - signals the task to allow in-process syscall emulation
+  * @syscall: syscall number to send to userland
+  * @reason: filter-supplied reason code to send to userland (via si_errno)
++ * @force_coredump: true to trigger a coredump
+  *
+  * Forces a SIGSYS with a code of SYS_SECCOMP and related sigsys info.
+  */
+@@ -2870,13 +2871,13 @@ out:
+ }
+ 
+ /**
+- * signal_delivered - 
++ * signal_delivered - called after signal delivery to update blocked signals
+  * @ksig:		kernel signal struct
+  * @stepping:		nonzero if debugger single-step or block-step in use
+  *
+  * This function should be called when a signal has successfully been
+  * delivered. It updates the blocked signals accordingly (@ksig->ka.sa.sa_mask
+- * is always blocked, and the signal itself is blocked unless %SA_NODEFER
++ * is always blocked), and the signal itself is blocked unless %SA_NODEFER
+  * is set in @ksig->ka.sa.sa_flags.  Tracing is notified.
+  */
+ static void signal_delivered(struct ksignal *ksig, int stepping)

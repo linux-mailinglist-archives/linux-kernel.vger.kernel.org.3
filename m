@@ -2,207 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F349F47D241
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D4947D1BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245273AbhLVMnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:43:05 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30162 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245133AbhLVMmc (ORCPT
+        id S240578AbhLVMeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:34:17 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4320 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240438AbhLVMeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:42:32 -0500
-Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JJtFj5mbXz8w3c;
-        Wed, 22 Dec 2021 20:40:09 +0800 (CST)
-Received: from kwepemm600002.china.huawei.com (7.193.23.29) by
- kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+        Wed, 22 Dec 2021 07:34:17 -0500
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JJt4n5wLhz67p89;
+        Wed, 22 Dec 2021 20:32:25 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 20:42:30 +0800
-Received: from localhost.localdomain (10.175.101.6) by
- kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ 15.1.2308.20; Wed, 22 Dec 2021 13:34:14 +0100
+Received: from [10.195.32.222] (10.195.32.222) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 20:42:29 +0800
-From:   Peng Liang <liangpeng10@huawei.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <xiexiangyou@huawei.com>, <zhengchuan@huawei.com>,
-        <wanghao232@huawei.com>, <liangpeng10@huawei.com>
-Subject: [RFC 1/1] memfd: Support mapping to zero page on reading
-Date:   Wed, 22 Dec 2021 20:34:00 +0800
-Message-ID: <20211222123400.1659635-2-liangpeng10@huawei.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211222123400.1659635-1-liangpeng10@huawei.com>
-References: <20211222123400.1659635-1-liangpeng10@huawei.com>
+ 15.1.2308.20; Wed, 22 Dec 2021 12:34:14 +0000
+Subject: Re: [PATCH RFT] blk-mq: optimize queue tag busy iter for shared_tags
+To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ming.lei@redhat.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+References: <20211221123157.14052-1-kashyap.desai@broadcom.com>
+ <e9174a89-b3a4-d737-c5a9-ff3969053479@huawei.com>
+ <7028630054e9cd0e8c84670a27c2b164@mail.gmail.com>
+ <e7288bcd-cc4d-8f57-a0c8-eadd53732177@huawei.com>
+ <c26b40bac76ec1bfbab2419aece544ca@mail.gmail.com>
+ <e50cfdcd-110b-d778-6e3f-edfed9b1c5a4@huawei.com>
+ <c3bfc0c83a3a4727b364505e4a4f1332@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <40a72c28-dd49-b1d6-59aa-79399a3d66c9@huawei.com>
+Date:   Wed, 22 Dec 2021 12:34:13 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600002.china.huawei.com (7.193.23.29)
+In-Reply-To: <c3bfc0c83a3a4727b364505e4a4f1332@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.32.222]
+X-ClientProxiedBy: lhreml750-chm.china.huawei.com (10.201.108.200) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mapping to zero page on reading memfd and COWing it when a write occurs.
+On 22/12/2021 12:06, Kashyap Desai wrote:
+>> But I did not think that my patch would help mpi3mr since it does not use
+>> host_tagset.
+> Internally we are testing performance check for mpi3mr. We want to make sure
+> performance is not impacted due to shared host_tagset before we apply the
+> feature.
 
-Signed-off-by: Peng Liang <liangpeng10@huawei.com>
----
- include/linux/fs.h         |  2 ++
- include/uapi/linux/memfd.h |  1 +
- mm/memfd.c                 |  8 ++++++--
- mm/memory.c                | 37 ++++++++++++++++++++++++++++++++++---
- mm/shmem.c                 | 10 ++++++++--
- 5 files changed, 51 insertions(+), 7 deletions(-)
+Hmmm... I thought that you said previously that it was not necessary for 
+this HW. But I am not familiar with the driver or HW.
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index bbf812ce89a8..404c0c26ba98 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2249,6 +2249,7 @@ struct super_operations {
- #define S_ENCRYPTED	(1 << 14) /* Encrypted file (using fs/crypto/) */
- #define S_CASEFOLD	(1 << 15) /* Casefolded file */
- #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
-+#define S_ZEROPAGE	(1 << 17)
- 
- /*
-  * Note that nosuid etc flags are inode-specific: setting some file-system
-@@ -2291,6 +2292,7 @@ static inline bool sb_rdonly(const struct super_block *sb) { return sb->s_flags
- #define IS_ENCRYPTED(inode)	((inode)->i_flags & S_ENCRYPTED)
- #define IS_CASEFOLDED(inode)	((inode)->i_flags & S_CASEFOLD)
- #define IS_VERITY(inode)	((inode)->i_flags & S_VERITY)
-+#define IS_ZEROPAGE(inode)	((inode)->i_flags & S_ZEROPAGE)
- 
- #define IS_WHITEOUT(inode)	(S_ISCHR(inode->i_mode) && \
- 				 (inode)->i_rdev == WHITEOUT_DEV)
-diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
-index 7a8a26751c23..2bfac06f53fb 100644
---- a/include/uapi/linux/memfd.h
-+++ b/include/uapi/linux/memfd.h
-@@ -8,6 +8,7 @@
- #define MFD_CLOEXEC		0x0001U
- #define MFD_ALLOW_SEALING	0x0002U
- #define MFD_HUGETLB		0x0004U
-+#define MFD_ZEROPAGE		0x0008U
- 
- /*
-  * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 9f80f162791a..5c167b2de9ae 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -245,7 +245,7 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
- #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
- #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
- 
--#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-+#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | MFD_ZEROPAGE)
- 
- SYSCALL_DEFINE2(memfd_create,
- 		const char __user *, uname,
-@@ -301,8 +301,12 @@ SYSCALL_DEFINE2(memfd_create,
- 					HUGETLB_ANONHUGE_INODE,
- 					(flags >> MFD_HUGE_SHIFT) &
- 					MFD_HUGE_MASK);
--	} else
-+	} else {
- 		file = shmem_file_setup(name, 0, VM_NORESERVE);
-+		if (flags & MFD_ZEROPAGE) {
-+			file_inode(file)->i_flags |= S_ZEROPAGE;
-+		}
-+	}
- 	if (IS_ERR(file)) {
- 		error = PTR_ERR(file);
- 		goto err_fd;
-diff --git a/mm/memory.c b/mm/memory.c
-index 8f1de811a1dc..360606964a7d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3208,6 +3208,26 @@ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
- 	return ret;
- }
- 
-+static vm_fault_t do_shared_fault(struct vm_fault *vmf);
-+
-+static vm_fault_t wp_zero_shared(struct vm_fault *vmf)
-+{
-+	struct vm_area_struct *vma = vmf->vma;
-+	struct mmu_notifier_range range;
-+	vm_fault_t ret;
-+
-+	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-+				vmf->address & PAGE_MASK,
-+				(vmf->address & PAGE_MASK) + PAGE_SIZE);
-+	mmu_notifier_invalidate_range_start(&range);
-+
-+	ptep_clear_flush_notify(vma, vmf->address, vmf->pte);
-+	pte_unmap_unlock(vmf->pte, vmf->ptl);
-+	ret = do_shared_fault(vmf);
-+	mmu_notifier_invalidate_range_only_end(&range);
-+	return ret;
-+}
-+
- /*
-  * This routine handles present pages, when users try to write
-  * to a shared page. It is done by copying the page to a new address
-@@ -3254,8 +3274,15 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 		 * Just mark the pages writable and/or call ops->pfn_mkwrite.
- 		 */
- 		if ((vma->vm_flags & (VM_WRITE|VM_SHARED)) ==
--				     (VM_WRITE|VM_SHARED))
--			return wp_pfn_shared(vmf);
-+				     (VM_WRITE|VM_SHARED)) {
-+			if (unlikely(vma->vm_file &&
-+			    IS_ZEROPAGE(file_inode(vma->vm_file)) &&
-+			    is_zero_pfn(pte_pfn(*vmf->pte)))) {
-+				return wp_zero_shared(vmf);
-+			} else {
-+				return wp_pfn_shared(vmf);
-+			}
-+		}
- 
- 		pte_unmap_unlock(vmf->pte, vmf->ptl);
- 		return wp_page_copy(vmf);
-@@ -3970,12 +3997,16 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
- 
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-+	else if (unlikely(vma->vm_file && IS_ZEROPAGE(file_inode(vma->vm_file)) &&
-+		 is_zero_pfn(page_to_pfn(page))))
-+		entry = pte_mkspecial(pte_wrprotect(entry));
- 	/* copy-on-write page */
- 	if (write && !(vma->vm_flags & VM_SHARED)) {
- 		inc_mm_counter_fast(vma->vm_mm, MM_ANONPAGES);
- 		page_add_new_anon_rmap(page, vma, addr, false);
- 		lru_cache_add_inactive_or_unevictable(page, vma);
--	} else {
-+	} else if (likely(!vma->vm_file || !IS_ZEROPAGE(file_inode(vma->vm_file)) ||
-+		   !is_zero_pfn(page_to_pfn(page)))) {
- 		inc_mm_counter_fast(vma->vm_mm, mm_counter_file(page));
- 		page_add_file_rmap(page, false);
- 	}
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 18f93c2d68f1..f4b23124826d 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1899,8 +1899,14 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
- 	page = shmem_alloc_and_acct_page(huge_gfp, inode, index, true);
- 	if (IS_ERR(page)) {
- alloc_nohuge:
--		page = shmem_alloc_and_acct_page(gfp, inode,
--						 index, false);
-+		if (IS_ZEROPAGE(inode) && vmf &&
-+		    !(vmf->flags & FAULT_FLAG_WRITE)) {
-+			page = ZERO_PAGE(0);
-+			goto out;
-+		} else {
-+			page = shmem_alloc_and_acct_page(gfp, inode,
-+							 index, false);
-+		}
- 	}
- 	if (IS_ERR(page)) {
- 		int retry = 5;
--- 
-2.33.1
+As an aside, I assume that this driver uses none IO sched by default, 
+but drivers using host_tagset use mq-deadline – I’m not sure if that is 
+what you want.
+
+> 
+>>> We can drop
+>>> request of this RFT since I tested above series and it serve the same
+>>> purpose.
+>> ok, fine.
+>>
+>> And just to confirm, do you now think that we need to fix any older kernel
+>> with some backport of my changes? I think that we would just need to
+>> consider 5.16 (when it becomes stable), 5.15, and and 5.10
+> It need full patch set (below) + associated fixes.
+> [1] " blk-mq: Use shared tags for shared sbitmap support" Commit -
+> e155b0c238b20f0a866f4334d292656665836c8a
+> 
+> Below commit cannot go to stable without [1].
+> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-5.17/block&id=fea9f92f1748083cb82049ed503be30c3d3a9b69
+> 
+> I am not sure if stable requirement fits in this case. I mean large
+> patch-set is OK ?
+
+The two other patches in the series wouldn't need to be backported, so 
+it should be possible. You would just need a very good reason, though. 
+And we would need to know whether 5.10 and 5.15 are required - they use 
+shared sbitmap. As I mentioned a few times, contention in 
+blk_mq_queue_tag_busy_iter() and callees would not be so high as 
+blk_mq_tags.lock and blk_mq_tags.rqs are not shared there.
+
+Thanks,
+John
+
+
 

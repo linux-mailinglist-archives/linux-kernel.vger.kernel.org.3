@@ -2,126 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DC347D89C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D20E47D89F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbhLVVOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 16:14:05 -0500
-Received: from mga05.intel.com ([192.55.52.43]:52017 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237992AbhLVVOE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 16:14:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640207644; x=1671743644;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Qtcuv87VpnAy2VYqaWBjLnjLSv0iDh2WCm4VqWLVPxw=;
-  b=ajeQfHwuhTr8BWiUf34qfTY3cErI5EIoC/sNkskfyZL9X66jMylofN1E
-   5xymABcHLeGBkVOSZzsgPv6wig8eO5NGjEAkp92Gu1nT9ndCcFJ6HT/zm
-   mhR6qBGfIyGJxmnyU0MMrrXclaRbw87qqemS/adJF98XNunVGk5dMMJVn
-   uwjQNB8SmkQY6X/36LDn8USQTsU/h8Q1pcUdTHwXvlE6iYTTyoj3OjHPz
-   1AK3g49Fxr/crGnp3JWJLOW/TTYFTAyGzUe3yhiAkHLMIUWigx0VJBusB
-   BKb2UMrZqmgp7HuVk5jjdkXgZ8pCEV8N+oAai0jsh8s7MADGEKFfORx6F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327015991"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="327015991"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 13:14:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="570692791"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2021 13:14:02 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n08vx-0000y7-P7; Wed, 22 Dec 2021 21:14:01 +0000
-Date:   Thu, 23 Dec 2021 05:13:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v1 8/13]
- include/linux/compiler_types.h:335:45: error: call to
- '__compiletime_assert_340' declared with attribute error: BUILD_BUG_ON
- failed: KASAN_SHADOW_OFFSET != KASAN_SHADOW_END - (1UL << (64 -
- KASAN_SHADOW_SCALE_SHIFT))
-Message-ID: <202112230554.PiBj9UiQ-lkp@intel.com>
+        id S238079AbhLVVPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 16:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233208AbhLVVPg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 16:15:36 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3824C061574;
+        Wed, 22 Dec 2021 13:15:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=JinkcA8eBr/TSVBGiLUkMKqrNJ00IO7KthEpRw1rJs4=; b=iC/OtRboDlGIGXRTlOPBjWUOTl
+        L5DTSvB6FwYv1lMy2d6/jFwImHClHRa4lUXSW3zIMUy9YrjVFUOtZnCc7fYmQN9zxuB3aEqLU2DG4
+        QybynduIvuCQn25iSTmNBkjM/4qL3qsN5DXTgmrZ1Tc7AjxtTJ2vZmRQcd9MPvB+a/8Ww9Y1nWjW2
+        wrJ66ddP9YPaiz3tLtyPrIWCZrlFN2c7TTLRazW8d7Rxz7SsWIMcp969GeMOSnHFYGoTIoTmi2pjC
+        EnCG0LaI3nKZciUdpbyTX803BugB9Gq02ZUDRNXst3biyeMBznC4zFhkxh2PRXdzjhlvSPLlOYvSI
+        hdE9CxWQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n08xR-00BKzB-3x; Wed, 22 Dec 2021 21:15:33 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
+Subject: [PATCH -next] bio.h: fix kernel-doc warnings
+Date:   Wed, 22 Dec 2021 13:15:32 -0800
+Message-Id: <20211222211532.24060-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v1
-head:   60f122c486d0c1c8b30e0b264c215db4a5a0124d
-commit: 4fe3cee132aa8a76e949f7b8feb413776d916672 [8/13] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20211223/202112230554.PiBj9UiQ-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/4fe3cee132aa8a76e949f7b8feb413776d916672
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v1
-        git checkout 4fe3cee132aa8a76e949f7b8feb413776d916672
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+Fix all kernel-doc warnings in <linux/bio.h>:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+include/linux/bio.h:136: warning: Function parameter or member 'nbytes' not described in 'bio_advance'
+include/linux/bio.h:136: warning: Excess function parameter 'bytes' description in 'bio_advance'
+include/linux/bio.h:391: warning: No description found for return value of 'bio_next_split'
 
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   arch/riscv/mm/kasan_init.c: In function 'kasan_early_init':
->> include/linux/compiler_types.h:335:45: error: call to '__compiletime_assert_340' declared with attribute error: BUILD_BUG_ON failed: KASAN_SHADOW_OFFSET != KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCALE_SHIFT))
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:316:25: note: in definition of macro '__compiletime_assert'
-     316 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:335:9: note: in expansion of macro '_compiletime_assert'
-     335 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/riscv/mm/kasan_init.c:20:9: note: in expansion of macro 'BUILD_BUG_ON'
-      20 |         BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_340 +335 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  322  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  324  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  325  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  326   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  327   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  328   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  329   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  330   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  331   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  332   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  333   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  334  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @335  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  336  
-
-:::::: The code at line 335 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Kent Overstreet <kent.overstreet@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/bio.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- linux-next-20211222.orig/include/linux/bio.h
++++ linux-next-20211222/include/linux/bio.h
+@@ -124,7 +124,7 @@ void __bio_advance(struct bio *, unsigne
+ /**
+  * bio_advance - increment/complete a bio by some number of bytes
+  * @bio:	bio to advance
+- * @bytes:	number of bytes to complete
++ * @nbytes:	number of bytes to complete
+  *
+  * This updates bi_sector, bi_size and bi_idx; if the number of bytes to
+  * complete doesn't align with a bvec boundary, then bv_len and bv_offset will
+@@ -383,7 +383,7 @@ extern struct bio *bio_split(struct bio
+  * @gfp:	gfp mask
+  * @bs:		bio set to allocate from
+  *
+- * Returns a bio representing the next @sectors of @bio - if the bio is smaller
++ * Return: a bio representing the next @sectors of @bio - if the bio is smaller
+  * than @sectors, returns the original bio unchanged.
+  */
+ static inline struct bio *bio_next_split(struct bio *bio, int sectors,

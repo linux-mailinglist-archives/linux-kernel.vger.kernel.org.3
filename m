@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE5347CDAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F1847CDAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243071AbhLVHw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbhLVHwz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:52:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711AFC061574;
-        Tue, 21 Dec 2021 23:52:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G/2YVv3eobEHhE9ekDUsUs29N7O2hC1dhrLDdQRGfCA=; b=I4MzcQ8sMbIxJGGDZNIbxftAd6
-        0OWS9+NAZvis9eC3yhPYe+4Ea+cMo7D6ZhPVgOGOfubuQ+/aOnftFLoyDJ2qROnHoeT1+1a0AQhmz
-        y97kH3zoIExLfMeD+csbS2hp7ctfFS32VuOim6z8UetzlelURopkjD/8/NzSWL7/g/uUKvGb8kPPW
-        0Edq3T+AGshHPXRB71mcdD+LI4mmr2v6oTtb9pmDZi3NKoLPBHw8UnBEdaV0SZghqZNLBDDIq3Pa5
-        5z/rKwYWNxDJMx2vnMWgNHQ+BhatMUCTopMdm2VrSW9IeDHiRsF9pyOoJv/JEztkp7JbeyIDc5RRU
-        wiwn+8og==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzwOW-009YG4-09; Wed, 22 Dec 2021 07:50:40 +0000
-Date:   Tue, 21 Dec 2021 23:50:39 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        francisco.munoz.ruiz@linux.intel.com, nirmal.patel@linux.intel.com,
-        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        id S243077AbhLVHyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:54:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:9854 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231422AbhLVHyL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 02:54:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640159651; x=1671695651;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dBSOo+YJyS2n99i1BZV8d32xM02qox78iHX+isbPq18=;
+  b=QVXqBmoIAem5xnsPrvvpm1YkTQ6TG2rrR2Jqs9tgoGvkt+IqXQgPIXG8
+   2tbzA1cHYN/QGsssJGvttaQS01iSof6+SpbNlxSmETE3os/3JT946ZYm7
+   5C7gOAdspInZAlzZ93X4hXrR+3AgxAEilkWOOQMcBwlCE6GB6GXXsdgWT
+   6l9vejUGMO0eAWk/TPZFwsdk/gMHBW5cpWuP6opoahB3T36bEk8z2lJ6k
+   k8v00xkPzQSJTHji9LqqrCB/ScDPpbxOcIsHv3cRABitFxUidgAwDZD3I
+   UztpOtJIkCjAa7CjaPQSHctnL+MBu1cqKnOQAL9zFJ8oc8pwmEi1flCOt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="303939544"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="303939544"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 23:54:11 -0800
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="521579421"
+Received: from unknown (HELO zq-VirtualBox.bj.intel.com) ([10.238.129.32])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 23:54:09 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, ryabinin.a.a@gmail.com
+Cc:     urezki@gmail.com, elver@google.com, jun.miao@intel.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
-Message-ID: <YcLYz0x5oawOEHnI@infradead.org>
-References: <20211220172848.GA1006510@bhelgaas>
- <e87a297cc74cca02fa1a8f5aa9562489a4db26b3.camel@linux.intel.com>
- <CACK8Z6F812_DYVr=sxRXxhtPxyCw206U=jW6CFt6T-MyKJXMgQ@mail.gmail.com>
- <9b540d4f11bb4e2e1422b641df1f5e84aa68602f.camel@linux.intel.com>
+Subject: [PATCH] rcu: record kasan stack before enter local_irq_save()/restore() critical area
+Date:   Wed, 22 Dec 2021 15:54:06 +0800
+Message-Id: <20211222075406.57191-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b540d4f11bb4e2e1422b641df1f5e84aa68602f.camel@linux.intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 01:11:26PM -0800, David E. Box wrote:
-> The reason why BIOS is not programming these values is because when VMD is
-> enabled the ports are not visible to BIOS. This would apply to any BIOS
-> including those used by ChromeOS.
-> And because BIOS doesn't see these ports ...
+The kasan_record_aux_stack_noalloc() only record stack, it doesn't need
+to be called in local_irq_save()/restore() critical area, and the global
+spinlock (depot_lock) will be acquired in this function, When enable
+kasan stack, locking contention may increase the time in the critical area.
 
-Isn't VMD enabled by the BIOS?  The bios should be able see them the
-same way as Linux does.  But given that the whole point of VMD is to hide 
-these ports from Windows it obviously doesn't.  For Linux and thus for
-ChromeOS VMD is completely pointless, so give that the ChromeOS people
-aren't as dumb as some people at Intel I'm pretty sure they won't enable
-it and just use the ports as normal one and avoid this whole
-self-inflicted pain.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If only Intel could give the OS a way to disable VMD at runtime and
-discover the actual ports, then we would not have this whole nightmare
-of having to support it.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 347dae1876a6..5198e44cb124 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3030,8 +3030,8 @@ __call_rcu(struct rcu_head *head, rcu_callback_t func)
+ 	}
+ 	head->func = func;
+ 	head->next = NULL;
+-	local_irq_save(flags);
+ 	kasan_record_aux_stack_noalloc(head);
++	local_irq_save(flags);
+ 	rdp = this_cpu_ptr(&rcu_data);
+ 
+ 	/* Add the callback to our list. */
+-- 
+2.25.1
+

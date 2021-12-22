@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1014347CECD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D1C47CED2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243801AbhLVJGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S238984AbhLVJHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243736AbhLVJGH (ORCPT
+        with ESMTP id S236355AbhLVJHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:06:07 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF670C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:06:06 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id e5so3478049wrc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:06:06 -0800 (PST)
+        Wed, 22 Dec 2021 04:07:06 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078BCC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:06 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o6so5983196edc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:07:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3w0cyRxbnflG1Lzaa+D9LFgBBXj2WLi8B2+0IaB0cco=;
-        b=NEDNLzUZDalAufNqiXzyuBQjnHZxUNBoilJQwQfvSmQgK0oXmC8vKCNkZDGX7QCj8f
-         xtZzyOs2a4ZO48mM3oad8CfwltMMFIcPiw9yaL8xg/9DpqRIV3FNDYB0GPJABPvceZxx
-         kb+Svls2Iyso/lECdtqN+cvpmhawKQYVVZBpiMmFxjnQmU2NcVbyHJ7NupEKBwKFI3ho
-         D613SYOBjc53L3M2O+EvZ0JjMLv4xGMQSBGRP/udeR4ro3C7u0wcSuBmhIeGYE9Ll4AG
-         aluM0K2Z0cWEqEmiUFyd6NsKVRlaxKgjp7izy4Q/4SvDFUhBRVosqYT/SgjFJ8S7hF33
-         7VHw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OH9lUZGvbIYsFS6r93OdVkoyWwer11g866A2zNPeehk=;
+        b=r3WN6KoV0SzdgtxvaGk6qQynqc2rvj3SjmK9MBxRug7Pb+EVJpUK3t+F+yktx2DuJc
+         OBYJ2S/tGlHwp1SwDX3Tk8FzNeauleOXb8tli4nGClkgMNhBrB5Ix0fTy1fZ49TXXAdD
+         2zmt7dP0B7bijNj6jcyR5tlg2IMGqdpZNx90la65lXq+rIS/tpWu1Xm0N3FCPJn1YdV3
+         sVjtI99DrXEc8h+K9oqIjtQ/ZRjSkQmJ/zpQHi4QlRjTedfonW7XGiqlDGfZBk2S4CWi
+         A5DG5wlrtcO62lxYpYfdJNGpLp/TihBJ092A4EYWpnn0zu66tWHrhZlqA6gWE9bQckw8
+         h80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3w0cyRxbnflG1Lzaa+D9LFgBBXj2WLi8B2+0IaB0cco=;
-        b=ds5lGPC5CpyCibyJBl/ewhoUieuWC4xQ/FjtUy5by8b7YwsMkuihQRFtWESL8GgwuR
-         SFcblVeiQqkj6PO6qLtpgrqVmqlCKU3xnaywcnOaUg702iN9CGEc5Sjvg0TvjTQ5X/pm
-         1VEbN5jFgWMNEFEQBnZ+Aqig4avnN+7YJlpVdBVIeMrgXDoMhul5qgnZhIPgzOgpwwAL
-         rAfohps1gr/puHnWarnI39QJfI/mZBYeAUjKg6NXuMIV5v/A2XV771pfZHaUVIPoHO/k
-         CQOgwxl6I9a1ZwbL446sIVXYFKFqsFc23TCcxsgFEFuAjas/PivCFamVTsjBkJJ6KDGa
-         D17g==
-X-Gm-Message-State: AOAM53183q5i4ZjUX50vUA2FXvQgN7/9m6Ji4p1pS1Scq4WPVEggvPUe
-        txet0NDLO0/pVKsQayGxDaM=
-X-Google-Smtp-Source: ABdhPJwXgYqNw9Ycsv3CDZ5xTjRbry7kIK14E/x21CpPObe+VU0LvZpNi+zwa4CuFTHChyhAaxTF8Q==
-X-Received: by 2002:a5d:51c9:: with SMTP id n9mr1419745wrv.694.1640163965465;
-        Wed, 22 Dec 2021 01:06:05 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id a22sm1139775wme.19.2021.12.22.01.06.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 01:06:05 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     contact@emersion.fr
-Cc:     dmitry.baryshkov@linaro.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        marex@denx.de, stefan@agner.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, yannick.fertre@foss.st.com,
-        philippe.cornu@foss.st.com, benjamin.gaignard@linaro.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2 6/6] drm/stm: ltdc: Drop format_mod_supported function
-Date:   Wed, 22 Dec 2021 10:05:52 +0100
-Message-Id: <20211222090552.25972-7-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211222090552.25972-1-jose.exposito89@gmail.com>
-References: <20211222090552.25972-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OH9lUZGvbIYsFS6r93OdVkoyWwer11g866A2zNPeehk=;
+        b=AlrYAI3752Moh17qw3+LzWqekGMwA5+5uVF0JwsObnhocPKBZOAF2AL1Nq4XMVw3uv
+         bhDhKNT03cIhJHoauRLakSbstLM2DUtLT2GjtEa7mIDnnAInTGcopDODlLOC65eXXCd3
+         nW7SA5OUgn9kx3rJL3ZsWqTNuY2/J8omN0UoVzg+ctS7CRhZ0D29whAkQQjgIGzNzcNT
+         oRZDRXwLUJ9okTgK0ufTm4C63xKkaDcgUQqhE+mSZs9drXExT4etl+8lrqLppn9RV3Mx
+         +025YPggBAsbyfBtuf6TVMwCuT+bNaLBvOeLdLpG4kDuCVooM/3NgGT8sAVZ/uwXgimo
+         Ns2Q==
+X-Gm-Message-State: AOAM532HzFQzPgntmraaXR8Z3YZEKetgfii/fWqrvjtAVVbhD+UcaqNn
+        3AXYl0ankChswCfdai5R+nYfCSbcH20mPCkGbON1VQ==
+X-Google-Smtp-Source: ABdhPJwlTOwQkimbTWuIr5y0SujyhX/GH7oxW5rFLOJAM7Fb2ZmmwI2kQCMkhG9muS1yczRmhCgRLzxKggSNitGnEZ0=
+X-Received: by 2002:a17:907:7208:: with SMTP id dr8mr1727842ejc.697.1640164024530;
+ Wed, 22 Dec 2021 01:07:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211220132439.1194-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Md3bpCJe_eFBjiKuhCRO_xqnFxSc1sw100fgNmajy6gaw@mail.gmail.com>
+ <CAHp75VcbaYXfDpc7xE=asSqUspscRoHfqrg-yMtx=uo5UNqxfw@mail.gmail.com>
+ <CAMRc=MfWqV8UFWLaJO7JSo7N6MhYVMWdquMDJU7xR5gu8604AQ@mail.gmail.com> <CAHp75VfhY9zFxC_vDj0OH0Y0ah3RUgEEYO9p_uQsm7Xe63QF8w@mail.gmail.com>
+In-Reply-To: <CAHp75VfhY9zFxC_vDj0OH0Y0ah3RUgEEYO9p_uQsm7Xe63QF8w@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 22 Dec 2021 10:06:53 +0100
+Message-ID: <CAMRc=Mfn9P30niRMNqV4f7VByzV0a+Sf2vS4OcU1qPa4o1O8Lg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: Remove unused local OF node pointers
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        linux-unisoc@lists.infradead.org,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "drm_plane_funcs.format_mod_supported" can be removed in favor of
-the default implementation.
+On Tue, Dec 21, 2021 at 9:21 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Tue, Dec 21, 2021 at 9:13 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > On Mon, Dec 20, 2021 at 4:11 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Mon, Dec 20, 2021 at 5:09 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > > On Mon, Dec 20, 2021 at 2:24 PM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+> > > > > -               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", dev->of_node);
+> > > > > +               gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", np);
+> > > >
+> > > > This is unrelated though. Can you make it a separate patch?
+> > >
+> > > It actually makes use of the local np IIRC.
+> > > It's related, no?
+> >
+> > No, the np pointer is already used elsewhere. You just replace the
+> > dev->of_node here with np. Rightfully so, but it's not part of this
+> > commit logically.
+>
+> I see. Probably I missed that somehow.
+> Nevertheless, do you want a new version or can you just revert that
+> particular change?
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/stm/ltdc.c | 11 -----------
- 1 file changed, 11 deletions(-)
+I removed it and queued the rest.
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index dbdee954692a..ef909e50f0e4 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -925,16 +925,6 @@ static void ltdc_plane_atomic_print_state(struct drm_printer *p,
- 	fpsi->counter = 0;
- }
- 
--static bool ltdc_plane_format_mod_supported(struct drm_plane *plane,
--					    u32 format,
--					    u64 modifier)
--{
--	if (modifier == DRM_FORMAT_MOD_LINEAR)
--		return true;
--
--	return false;
--}
--
- static const struct drm_plane_funcs ltdc_plane_funcs = {
- 	.update_plane = drm_atomic_helper_update_plane,
- 	.disable_plane = drm_atomic_helper_disable_plane,
-@@ -943,7 +933,6 @@ static const struct drm_plane_funcs ltdc_plane_funcs = {
- 	.atomic_duplicate_state = drm_atomic_helper_plane_duplicate_state,
- 	.atomic_destroy_state = drm_atomic_helper_plane_destroy_state,
- 	.atomic_print_state = ltdc_plane_atomic_print_state,
--	.format_mod_supported = ltdc_plane_format_mod_supported,
- };
- 
- static const struct drm_plane_helper_funcs ltdc_plane_helper_funcs = {
--- 
-2.25.1
-
+Bart

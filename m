@@ -2,172 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FF747CAC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569B047CAC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240976AbhLVBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238426AbhLVBYp (ORCPT
+        id S238439AbhLVB06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:26:58 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29278 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233887AbhLVB05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:24:45 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69067C061401
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:24:45 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id k64so824472pfd.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3n4TFzLxFZSVVWqxUwJzmQ/EXNIrk0ZpoC23l/r+OGA=;
-        b=M0fISoDFWSrWWMt3rJCzEbOxsmpRekF3gQ8/lLx9jnMuBVm1pSMsyNP77874kG8wNJ
-         6JP+7VmL9CjwmUjspmrNe/hsNX3enXIInPhyJnasWwHWUxQj1BKtlkZmYK6CxooWrJ/W
-         dpCm5LB3F0UUSykTTiu12TxWSD/lu2LglJ/f69Za3m8ItWlKozMhPgGeKfteiLRsOrQd
-         DseD4YbFvz04ZA2yCqwtGJy92xZeGf+oqYMZEcHS0ZpDjAJ9APpFUP1rTn8c7BA1ksHC
-         sQwVRerJbnVOueRIqZLy0+z7dZS0K330o/0qfpMV+ECd/Ik6CGdkTvtQMaWaudwV/NxC
-         d5uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3n4TFzLxFZSVVWqxUwJzmQ/EXNIrk0ZpoC23l/r+OGA=;
-        b=nC6RS/bsNpG20RWPd3Yh7V1pbBHMlIb7imELigiLbjn+ttomNs+qKdfhWrR5Nv9psN
-         w/aMUAYqBH1YtpJj7SXu9k+gwqTOkLGww7ml4dDUNhi17Jd1gi0HAHtFLfeEnT2WCCmY
-         iVy35WQSiuQhhkCRJSswnVL6T8IJZ33JnCU4guE1P8PjnjgiEM2uOhkahCTFxIfHPMjj
-         OKvLBFSdjrHo5dCsuksh8iJ2pjG40rXSrtTw45oWF8Yc5Gr8hp+Oc2ovfZeBlERHleOp
-         vWf285RWtI8O+DBOiC3ivLBwM2FLzsIMdwHj+iDT7rP25S5QBUgqvBz75BH+EVsN3cui
-         zKLg==
-X-Gm-Message-State: AOAM532MgvMIx6irvY3yiQji81FA9YTYI9TDq9CCclG/4BTFAW1p9HjK
-        HhbUSrAuZ+dH36IZ6+pLbLpEje7l8m3cSVAW12qQsA==
-X-Google-Smtp-Source: ABdhPJwI2hPnv03Us+VBfj2mq1T1RjcEtAWyxwAtRvX707LG4XAGlDixvRAyTu198YsYMpgwMpBdr0Kw6wCfUIntya8=
-X-Received: by 2002:a63:9:: with SMTP id 9mr877407pga.136.1640136284606; Tue,
- 21 Dec 2021 17:24:44 -0800 (PST)
+        Tue, 21 Dec 2021 20:26:57 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJbJS4ZRnzbjXv;
+        Wed, 22 Dec 2021 09:26:32 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 09:26:55 +0800
+Subject: Re: [PATCH -next] sysctl: returns -EINVAL when a negative value is
+ passed to proc_doulongvec_minmax
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <keescook@chromium.org>,
+        <yzaikin@google.com>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <yukuai3@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20211209085635.1288737-1-libaokun1@huawei.com>
+ <Yb+kHuIFnCKcfM5l@bombadil.infradead.org>
+ <4b2cba44-b18a-dd93-b288-c6a487e4857a@huawei.com>
+ <YcDZKxXJKglR6mcO@bombadil.infradead.org>
+ <70910c5b-4681-db00-27ba-715dddd7831a@huawei.com>
+ <YcJO3f8LWvSMWBKz@bombadil.infradead.org>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+Message-ID: <0d2b0af4-b0c0-487d-549b-5817ae75284d@huawei.com>
+Date:   Wed, 22 Dec 2021 09:26:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-References: <20211222012105.3438916-1-rajatja@google.com>
-In-Reply-To: <20211222012105.3438916-1-rajatja@google.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Tue, 21 Dec 2021 17:24:08 -0800
-Message-ID: <CACK8Z6HpoMDQ=9esCFfGiPUww32QrOfDm-RGhdTdWfoV0ipNXA@mail.gmail.com>
-Subject: Re: [PATCH] pci: Make DWORD accesses while saving / restoring LTR state
-To:     Bjorn Helgaas <bhelgaas@google.com>, kw@linux.com,
-        Rajat Jain <rajatja@google.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rajatxjain@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YcJO3f8LWvSMWBKz@bombadil.infradead.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+在 2021/12/22 6:02, Luis Chamberlain 写道:
+> On Tue, Dec 21, 2021 at 09:15:28AM +0800, libaokun (A) wrote:
+>> 在 2021/12/21 3:27, Luis Chamberlain 写道:
+>>> On Mon, Dec 20, 2021 at 04:53:57PM +0800, libaokun (A) wrote:
+>>>> 在 2021/12/20 5:29, Luis Chamberlain 写道:
+>>>>> Curious do you have docs on Hulk Robot?
+>>>> Hulk Robot is Huawei's internal test framework. It contains many things.
+>>> Neat, is the code public?
+>> The code is not public.
+> Why not?
+Because it's currently only used internally, and I don't know much about it.
+>
+>    Luis
+> .
 
-Sorry, I forgot to mention...
+-- 
+With Best Regards,
+Baokun Li
 
-On Tue, Dec 21, 2021 at 5:21 PM Rajat Jain <rajatja@google.com> wrote:
->
-> Some devices have an errata such that they only support DWORD accesses
-> to some registers.
->
-> For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
-> supports DWORD accesses to LTR latency registers and L1 PM substates
-> control registers:
-> https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
->
-> Since L1 PM substate control registers are DWORD sized, and hence their
-> access in the kernel is already DWORD sized, so we don't need to do
-> anything for them.
->
-> However, the LTR registers being WORD sized, are in need of a solution.
-> This patch converts the WORD sized accesses to these registers, into
-> DWORD sized accesses, while saving and restoring them.
->
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-
-... I have made a more generic proposal here:
-https://lore.kernel.org/linux-pci/CACK8Z6GR9pR0Oc_G70q2MxTVgrk+PXWTFbWT1EjARnuYCRavLw@mail.gmail.com/T/#t
-
-However that is a bigger effort in terms of implementation as well as
-reaching an agreement and acceptance with the community. So I'd
-appreciate it if this patch would please be included until a larger
-framework is put in place.
-
-Thanks & Best Regards,
-
-Rajat
-
-> ---
->  drivers/pci/pci.c       | 24 ++++++++++++++++--------
->  drivers/pci/pcie/aspm.c |  1 +
->  2 files changed, 17 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb394986a..efa8cd16827f 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
->  {
->         int ltr;
->         struct pci_cap_saved_state *save_state;
-> -       u16 *cap;
-> +       u32 *cap;
->
->         if (!pci_is_pcie(dev))
->                 return;
-> @@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
->                 return;
->         }
->
-> -       cap = (u16 *)&save_state->cap.data[0];
-> -       pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
-> -       pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
-> +       /*
-> +        * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
-> +        * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
-> +        * dword accesses to these registers.
-> +        */
-> +       cap = &save_state->cap.data[0];
-> +       pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
->  }
->
->  static void pci_restore_ltr_state(struct pci_dev *dev)
->  {
->         struct pci_cap_saved_state *save_state;
->         int ltr;
-> -       u16 *cap;
-> +       u32 *cap;
->
->         save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
->         ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
->         if (!save_state || !ltr)
->                 return;
->
-> -       cap = (u16 *)&save_state->cap.data[0];
-> -       pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
-> -       pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
-> +       /*
-> +        * We deliberately do a dword access to restore both
-> +        * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
-> +        * some devices only support dword accesses to these registers.
-> +        */
-> +       cap = &save_state->cap.data[0];
-> +       pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
->  }
->
->  /**
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 52c74682601a..083f47a7b69b 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->         encode_l12_threshold(l1_2_threshold, &scale, &value);
->         ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->
-> +       /* Always make DWORD sized accesses to these registers */
->         pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
->         pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
->         pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
-> --
-> 2.34.1.307.g9b7440fafd-goog
->

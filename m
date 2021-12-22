@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B10C847CD4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4551F47CD54
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242892AbhLVHIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S237536AbhLVHJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbhLVHIl (ORCPT
+        with ESMTP id S241825AbhLVHJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:08:41 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E11C061574;
-        Tue, 21 Dec 2021 23:08:41 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id a9so1537447qvd.12;
-        Tue, 21 Dec 2021 23:08:41 -0800 (PST)
+        Wed, 22 Dec 2021 02:09:37 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B603CC061574;
+        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so1688074pjp.0;
+        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+4MJW7EYeQHdXBq8fuiaiXyr4Eoc+IH0oj+VCDJk7v4=;
-        b=RdYFOp1H/dzVftbwpZI0Z7aD4Iao8f/aMrVo9kgh7jAe/tfW9IP4rwsG3xez0bOLn7
-         uPxQeapHzHRMOf2NoYMnUdGIE8GTDt2/vNcw40m/Zo1EJ+zUH+p9Ia238STB2n9f7WnG
-         OPpIAXS9rkuqugaaUBmW1B5Uuob4us0p7cNeEAHlj5uk52s4Qqvqey+P6k/uZGfmZFrY
-         fA2BIKhnvTL3Pq9vNq3y9CBl7XqX0XO1NzKPxS2FTWn0nsco0YwR/NNpWn/nQwnsbhHU
-         qlCjfkHBkIkVuOlHE4/dKIDl47wqB5xdORga/RCKzXWQGPL9EOlwt8OEv7zVaRF+T6H7
-         YZZA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=9GdW/41SP4WrMLD62L5i1Oi6nl/ztOuq8F7Z8uPVG5M=;
+        b=d4xX+3wfxCkfdGqTy8rJxAzpQr5osvD4jWUvj06/jX7cTZCMpr9oUsuI6ui82n7U1D
+         sx7f0A2Xg6Z7MN/C/tZTEMzSu6D8BNtjQk3bfYORQFJwPbmUN6Hrz5H49gc7+YxRVZKs
+         plo2+CvVgPK4uj4I3ZPSDoyO3FY8VWde4O/+tT4jbakkywcnra9dPmcD11tVF+0TJ7kZ
+         m9zwbT+CrQMhvsA/FToYb6gXl1aaSHyuQ8Vu8gWJI0wUlfhMlsBH+R0g2lRcK1TlbqtT
+         Ltz+fHUrez6g+FyOtbX2uk9Ja3BIwVvDPuc8cw9wFZ+bq6u4jL4Q+L9ZuQrhMuGY8YgH
+         qCow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+4MJW7EYeQHdXBq8fuiaiXyr4Eoc+IH0oj+VCDJk7v4=;
-        b=RfAstlceABPYdvRlx/o5X+p94rl6Qdwx016UYp6WVvn7pfxFeoIb8+Q5S1Vpjs+7Ep
-         GiIE7GJrWqDMTiHAPHhw3CNoBumKzfhGMXq391xIWlJyyf8/HlFiNO31xiywPxwCZL9N
-         q5nAYyJwlPjsNtmmvuBQOokHjcXpoeQimvsj0JvX2XOXjHnApLmaamONwJCeU/4mI27D
-         vD79nEiI+QTGii2V7jk04RDvv/spNE1fVGVDMbf2OVbgIWChaPo/m+rVWOz43PlVV3Zu
-         ak/tdveld1N8pnvM7O5TowHFBJ+F8UO8WDKW3r5quibnXf44Zii6NqiwBvYLIuSJhLDo
-         iq9A==
-X-Gm-Message-State: AOAM530ukqPOHTBmJxTL+tW2VLDR1oQ9bbQn9fQpAUqQOiazSN3cTC/m
-        /wol2pyhj8m/Nn1Yy0CCuZs=
-X-Google-Smtp-Source: ABdhPJyelLbKC0kyiz9F4RZeKMmEV3QXFd9sVgMH3N4W2+t5Y1UD+x2qQMtMeif1fgxUVcLpcbGuDA==
-X-Received: by 2002:ad4:4027:: with SMTP id q7mr1379019qvp.117.1640156920410;
-        Tue, 21 Dec 2021 23:08:40 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id c1sm1034997qte.79.2021.12.21.23.08.36
+         :references;
+        bh=9GdW/41SP4WrMLD62L5i1Oi6nl/ztOuq8F7Z8uPVG5M=;
+        b=yP3WRmCQTjeu0mNqnLDwEKMwqXpHzF5+b4RmiPA2qihjgz10XQ/UTOUtuStrTh9qnP
+         XuUBT0Lm/J7ZZsPsSesMRaeSqdyIJVQ1nvdUNrX73BBt2qUHKLfhNe+FyfRNidvGzDWd
+         jKLzv53OplRk+r2pXD8jUpIS4N3sw6FJ56iupjXnGDnnDaYn36EOaRM7QdVXTKqEsXXH
+         FPjJk2i+EcHn8edeD/0bK4iQQiK6dGGwqMlA3/YZ8cfQOtmHfqsWB+KwNO1HYl3SAiNb
+         XxRZVKH8xBpgRa8b5A2X+doPIpNZBfTebOD3csJftH8mlGdJsun/ia1hibmMMtwdi0A1
+         IxSA==
+X-Gm-Message-State: AOAM530q1QiArwoHJKmI08WVyyhwOljhToWDpDrKvOnRfYWw6BfPxAzL
+        UzaocV292+9zAGLpuTLon0Y=
+X-Google-Smtp-Source: ABdhPJwZMIWyuezHxoS0eEV1QyePk8qBBpAvONjwkpZ0nJM/hOCtaZAmf0Gi3iURX9rUP4RvQ8bBXw==
+X-Received: by 2002:a17:902:848b:b0:148:a2e8:2c53 with SMTP id c11-20020a170902848b00b00148a2e82c53mr1563940plo.162.1640156977237;
+        Tue, 21 Dec 2021 23:09:37 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q10sm4546268pjd.0.2021.12.21.23.09.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 23:08:39 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     kvalo@kernel.org
-Cc:     ajay.kathat@microchip.com, cgel.zte@gmail.com,
-        claudiu.beznea@microchip.com, davem@davemloft.net,
-        deng.changcheng@zte.com.cn, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, zealci@zte.com.cn
-Subject: [PATCH v2] wilc1000: use min_t() to make code cleaner
-Date:   Wed, 22 Dec 2021 07:08:15 +0000
-Message-Id: <20211222070815.483009-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164011040619.7951.14619016402908057909.kvalo@kernel.org>
-References: <164011040619.7951.14619016402908057909.kvalo@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 21 Dec 2021 23:09:36 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Stanley Chu <stanley.chu@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
+Date:   Wed, 22 Dec 2021 07:09:30 +0000
+Message-Id: <20211222070930.9449-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com>
+References: <CAGXv+5GF1WOeXVtnknAa4GYXE3Hd-UzcCBCyQzT6KY3tJCrVGA@mail.gmail.com>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+The function regulator_get() return error pointer,
+use IS_ERR() to check if has error.
 
-Use min_t() in order to make code cleaner.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+Fixes: cf137b3ea49a ("scsi: ufs-mediatek: Support VA09 regulator operations")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/net/wireless/microchip/wilc1000/spi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/scsi/ufs/ufs-mediatek.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
-index 5ace9e3a56fc..1057573d086b 100644
---- a/drivers/net/wireless/microchip/wilc1000/spi.c
-+++ b/drivers/net/wireless/microchip/wilc1000/spi.c
-@@ -674,10 +674,7 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
- 		int nbytes;
- 		u8 rsp;
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 5393b5c9dd9c..86a938075f30 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -557,7 +557,7 @@ static void ufs_mtk_init_va09_pwr_ctrl(struct ufs_hba *hba)
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
  
--		if (sz <= DATA_PKT_SZ)
--			nbytes = sz;
--		else
--			nbytes = DATA_PKT_SZ;
-+		nbytes = min_t(u32, sz, DATA_PKT_SZ);
- 
- 		/*
- 		 * Data Response header
+ 	host->reg_va09 = regulator_get(hba->dev, "va09");
+-	if (!host->reg_va09)
++	if (IS_ERR(host->reg_va09))
+ 		dev_info(hba->dev, "failed to get va09");
+ 	else
+ 		host->caps |= UFS_MTK_CAP_VA09_PWR_CTRL;
 -- 
-2.25.1
+2.17.1
 

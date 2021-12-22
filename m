@@ -2,217 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F89147D26F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6837047D274
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241106AbhLVMrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240938AbhLVMrh (ORCPT
+        id S241139AbhLVMub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:50:31 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46572 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234840AbhLVMua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:47:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857ABC061574;
-        Wed, 22 Dec 2021 04:47:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23C5661A36;
-        Wed, 22 Dec 2021 12:47:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86F6C36AEB;
-        Wed, 22 Dec 2021 12:47:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640177256;
-        bh=qZ5Me6WI7mkDi0azDBPQq5dSpsFYy5Bph6HB3I2DDz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AcvTYGw/SzfCslxuTb0DnXeiXRptpHokYrNiFvO00bOd87s7zOWmIrZu53i1WWVN5
-         NI8Yo8M3YRytp4C3Bo0sZcBWeaY2GOfSVn8HKiaHKAXVB+OLomcypI4oxR3cvgXRS7
-         JQ7zwu8Uhw7hM6wCp4CIT9Bj8LSOQuda7PHW5Prc=
-Date:   Wed, 22 Dec 2021 13:47:34 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/13] driver core: Set DMA ownership during driver
- bind/unbind
-Message-ID: <YcMeZlN3798noycN@kroah.com>
-References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
- <20211217063708.1740334-3-baolu.lu@linux.intel.com>
+        Wed, 22 Dec 2021 07:50:30 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 8058B1F444B6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1640177428;
+        bh=oDPAxVUQHW58K8EMDXUNFmDEBJmgKlUnF1PgJ0K4Z7s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LrmGl1POZKrfwBgjYJCKJUs4q1GMjrudA4r8tpnyjEBilmndiHek9EvUZXOM1Vm38
+         5/dCWU7d7uDSWAhqpE1tKcecqSzzuHnjQgSlKpNrmx9QldfCzqmgVNSWckyfaBWlzD
+         NFQ7wiXSTtAUgBc3OHHl7WPb4mfK1++09I7YXJQhyzawBkCrfjScnHLxrrXn92eLE7
+         3t/9DYkXFYiRx2oIUBxG8S2IupsjlgDody2ekQO4GlJDGJUzxBPj2o1oK25OobF6Fo
+         bL/KQPnD+Ylxr4rxfawe8Rz4fzYkMKr+XFO74SI8bmqTA7JNWBe3kUEPv9f5IBVmYK
+         QmhWCynIs1WUQ==
+Date:   Wed, 22 Dec 2021 17:50:20 +0500
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     usama.anjum@collabora.com, ellyjones@chromium.org,
+        Kay Sievers <kay@vrfy.org>,
+        Roland Eggner <edvx1@systemanalysen.net>,
+        Kees Cook <keescook@chromium.org>, kernel@collabora.com,
+        krisman@collabora.com
+Subject: [PATCH] devtmpfs: mount with noexec and nosuid
+Message-ID: <YcMfDOyrg647RCmd@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217063708.1740334-3-baolu.lu@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:36:57PM +0800, Lu Baolu wrote:
-> This extends really_probe() to allow checking for dma ownership conflict
-> during the driver binding process. By default, the DMA_OWNER_DMA_API is
-> claimed for the bound driver before calling its .probe() callback. If this
-> operation fails (e.g. the iommu group of the target device already has the
-> DMA_OWNER_USER set), the binding process is aborted to avoid breaking the
-> security contract for devices in the iommu group.
-> 
-> Without this change, the vfio driver has to listen to a bus BOUND_DRIVER
-> event and then BUG_ON() in case of dma ownership conflict. This leads to
-> bad user experience since careless driver binding operation may crash the
-> system if the admin overlooks the group restriction. Aside from bad design,
-> this leads to a security problem as a root user can force the kernel to
-> BUG() even with lockdown=integrity.
-> 
-> Driver may set a new flag (suppress_auto_claim_dma_owner) to disable auto
-> claim in the binding process. Examples include kernel drivers (pci_stub,
-> PCI bridge drivers, etc.) which don't trigger DMA at all thus can be safely
-> exempted in DMA ownership check and userspace framework drivers (vfio/vdpa
-> etc.) which need to manually claim DMA_OWNER_USER when assigning a device
-> to userspace.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Link: https://lore.kernel.org/linux-iommu/20210922123931.GI327412@nvidia.com/
-> Link: https://lore.kernel.org/linux-iommu/20210928115751.GK964074@nvidia.com/
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  include/linux/device/driver.h |  2 ++
->  drivers/base/dd.c             | 37 ++++++++++++++++++++++++++++++-----
->  2 files changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
-> index a498ebcf4993..f5bf7030c416 100644
-> --- a/include/linux/device/driver.h
-> +++ b/include/linux/device/driver.h
-> @@ -54,6 +54,7 @@ enum probe_type {
->   * @owner:	The module owner.
->   * @mod_name:	Used for built-in modules.
->   * @suppress_bind_attrs: Disables bind/unbind via sysfs.
-> + * @suppress_auto_claim_dma_owner: Disable kernel dma auto-claim.
->   * @probe_type:	Type of the probe (synchronous or asynchronous) to use.
->   * @of_match_table: The open firmware table.
->   * @acpi_match_table: The ACPI match table.
-> @@ -100,6 +101,7 @@ struct device_driver {
->  	const char		*mod_name;	/* used for built-in modules */
->  
->  	bool suppress_bind_attrs;	/* disables bind/unbind via sysfs */
-> +	bool suppress_auto_claim_dma_owner;
->  	enum probe_type probe_type;
->  
->  	const struct of_device_id	*of_match_table;
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 68ea1f949daa..b04eec5dcefa 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -28,6 +28,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/pinctrl/devinfo.h>
->  #include <linux/slab.h>
-> +#include <linux/iommu.h>
->  
->  #include "base.h"
->  #include "power/power.h"
-> @@ -538,6 +539,32 @@ static int call_driver_probe(struct device *dev, struct device_driver *drv)
->  	return ret;
->  }
->  
-> +static int device_dma_configure(struct device *dev, struct device_driver *drv)
-> +{
-> +	int ret;
-> +
-> +	if (!dev->bus->dma_configure)
-> +		return 0;
-> +
-> +	ret = dev->bus->dma_configure(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!drv->suppress_auto_claim_dma_owner)
-> +		ret = iommu_device_set_dma_owner(dev, DMA_OWNER_DMA_API, NULL);
+From: Kees Cook <keescook@chromium.org>
 
-Wait, the busses that wanted to configure the device, just did so in
-their dma_configure callback, so why not do this type of
-iommu_device_set_dma_owner() in the few busses that will want this to
-happen?
+devtmpfs is writable. Add the noexec and nosuid as default mount flags
+to prevent code execution from /dev. The systems who don't use systemd
+and who rely on CONFIG_DEVTMPFS_MOUNT=y are the ones to be protected by
+this patch. Other systems are fine with the udev solution.
 
-Right now we only have 4 different "busses" that care about this.  Out
-of the following callbacks:
-	fsl_mc_dma_configure
-	host1x_dma_configure
-	pci_dma_configure
-	platform_dma_configure
+No sane program should be relying on executing from /dev. So this patch
+reduces the attack surface. It doesn't prevent any specific attack, but
+it reduces the possibility that someone can use /dev as a place to put
+executable code. Chrome OS has been carrying this patch for several
+years. It seems trivial and simple solution to improve the protection of
+/dev when CONFIG_DEVTMPFS_MOUNT=y.
 
-Which one will actually care about the iommu_device_set_dma_owner()
-call?  All of them?  None of them?  Some of them?
+Original patch:
+https://lore.kernel.org/lkml/20121120215059.GA1859@www.outflux.net/
 
-Again, why can't this just happen in the (very few) bus callbacks that
-care about this?  In following patches in this series, you turn off this
-for the pci_dma_configure users, so what is left?  3 odd bus types that
-are not used often.  How well did you test devices of those types with
-this patchset?
+Cc: ellyjones@chromium.org
+Cc: Kay Sievers <kay@vrfy.org>
+Cc: Roland Eggner <edvx1@systemanalysen.net>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Co-developed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ drivers/base/Kconfig    | 11 +++++++++++
+ drivers/base/devtmpfs.c | 10 ++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-It's fine to have "suppress" fields when they are the minority, but here
-it's a _very_ tiny tiny number of actual devices in a system that will
-ever get the chance to have this check happen for them and trigger,
-right?
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index ffcbe2bc460e..6f04b831a5c0 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -62,6 +62,17 @@ config DEVTMPFS_MOUNT
+ 	  rescue mode with init=/bin/sh, even when the /dev directory
+ 	  on the rootfs is completely empty.
+ 
++config DEVTMPFS_SAFE
++	bool "Use nosuid,noexec mount options on devtmpfs"
++	depends on DEVTMPFS
++	help
++	  This instructs the kernel to include the MS_NOEXEC and MS_NOSUID mount
++	  flags when mounting devtmpfs.
++
++	  Notice: If enabled, things like /dev/mem cannot be mmapped
++	  with the PROT_EXEC flag. This can break, for example, non-KMS
++	  video drivers.
++
+ config STANDALONE
+ 	bool "Select only drivers that don't need compile-time external firmware"
+ 	default y
+diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
+index 8be352ab4ddb..1e2c2d3882e2 100644
+--- a/drivers/base/devtmpfs.c
++++ b/drivers/base/devtmpfs.c
+@@ -29,6 +29,12 @@
+ #include <uapi/linux/mount.h>
+ #include "base.h"
+ 
++#ifdef CONFIG_DEVTMPFS_SAFE
++#define DEVTMPFS_MFLAGS       (MS_SILENT | MS_NOEXEC | MS_NOSUID)
++#else
++#define DEVTMPFS_MFLAGS       (MS_SILENT)
++#endif
++
+ static struct task_struct *thread;
+ 
+ static int __initdata mount_dev = IS_ENABLED(CONFIG_DEVTMPFS_MOUNT);
+@@ -363,7 +369,7 @@ int __init devtmpfs_mount(void)
+ 	if (!thread)
+ 		return 0;
+ 
+-	err = init_mount("devtmpfs", "dev", "devtmpfs", MS_SILENT, NULL);
++	err = init_mount("devtmpfs", "dev", "devtmpfs", DEVTMPFS_MFLAGS, NULL);
+ 	if (err)
+ 		printk(KERN_INFO "devtmpfs: error mounting %i\n", err);
+ 	else
+@@ -412,7 +418,7 @@ static noinline int __init devtmpfs_setup(void *p)
+ 	err = ksys_unshare(CLONE_NEWNS);
+ 	if (err)
+ 		goto out;
+-	err = init_mount("devtmpfs", "/", "devtmpfs", MS_SILENT, NULL);
++	err = init_mount("devtmpfs", "/", "devtmpfs", DEVTMPFS_MFLAGS, NULL);
+ 	if (err)
+ 		goto out;
+ 	init_chdir("/.."); /* will traverse into overmounted root */
+-- 
+2.30.2
 
-I know others told you to put this in the driver core, but I fail to see
-how adding this call to the 3 busses that care about it is a lot more
-work than this driver core functionality that we all will have to
-maintain for forever?
-
-> +
-> +	return ret;
-> +}
-> +
-> +static void device_dma_cleanup(struct device *dev, struct device_driver *drv)
-> +{
-> +	if (!dev->bus->dma_configure)
-> +		return;
-> +
-> +	if (!drv->suppress_auto_claim_dma_owner)
-> +		iommu_device_release_dma_owner(dev, DMA_OWNER_DMA_API);
-> +}
-> +
->  static int really_probe(struct device *dev, struct device_driver *drv)
->  {
->  	bool test_remove = IS_ENABLED(CONFIG_DEBUG_TEST_DRIVER_REMOVE) &&
-> @@ -574,11 +601,8 @@ static int really_probe(struct device *dev, struct device_driver *drv)
->  	if (ret)
->  		goto pinctrl_bind_failed;
->  
-> -	if (dev->bus->dma_configure) {
-> -		ret = dev->bus->dma_configure(dev);
-> -		if (ret)
-> -			goto probe_failed;
-> -	}
-> +	if (device_dma_configure(dev, drv))
-> +		goto pinctrl_bind_failed;
-
-Are you sure you are jumping to the proper error path here?  It is not
-obvious why you changed this.
-
-thanks,
-
-greg k-h

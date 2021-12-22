@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D62547CF6B
+	by mail.lfdr.de (Postfix) with ESMTP id 5711D47CF6C
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbhLVJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S244016AbhLVJiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239938AbhLVJiL (ORCPT
+        with ESMTP id S243991AbhLVJiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:38:11 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00225C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:38:10 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso910255wmc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:38:10 -0800 (PST)
+        Wed, 22 Dec 2021 04:38:13 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F00AC061401
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:38:12 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso910295wmc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:38:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xYgRf06omlSEbyJ8xFAIaAEi1ubJMvI0YG4FIRkDadY=;
-        b=ymw+Pgnw00Zx+i4K7YnmdJ2aouUNH+Y3jCSxTSWufyHEV7sfkn1EIkXNdCWd7+ESZA
-         huctIxoCqB4gOU55Kt4ntR4+kvzkRiAsEGnXYjJia2yNkPklcdIbXllPYKtjsO86pnmY
-         HY4dP6epdEVicgbTmEG057nT4CzWy5ZRgESIbkojhMkiNoW6EnOgcsQpThy7YJiTPA1r
-         mJYr7N4o7kUM19xnUZ266ExBo08KZm5/SFjIx3p/l1fIgXy8TrAX97ED8AGpASspBE86
-         +CdKG/vTzDKa+HFeN2QU4h2auK841ueUt8EzU/JRfrGX3J6LJ8XiyAiFjM1Vmo/WmPas
-         EPng==
+        bh=Uje+f8nQbSEgXf+lBRY8ONm+ajTteRb//Kh8q+sMpA8=;
+        b=u2ThTkGL5VxWxpEXuHzAEUgyxqxCBZ1aLuZts8Y0JLgxwW2UGc80sKWgrVfQEuZheh
+         kImkXo7zkN9QyA+HuZOKlIinVkUiki6poPsnfbZIon6NK1naXMAb6MbZMZkOKV2EvZpc
+         zjHGTBlGLdm0bCEmepbIMqfJTmyJ0dwvg+eC1Tb2WRaX2Bb4zzDG9ezI3V8cPlsOzwws
+         KorODs2Utbo3QCqpiO+leOSp/k+4YBXtAFZlXksFBNa4o6WSX0dTf5qSpgbLwRQNFYdA
+         X1z05X9f99RSjmd6Gb7XovreNdSTygdeKDY3sgtfcbS9k6ZAFlmQo8k1ryLMJGsB7yWU
+         a5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=xYgRf06omlSEbyJ8xFAIaAEi1ubJMvI0YG4FIRkDadY=;
-        b=MFiQjya8f5Ts9zuuJatM8VlMMz/6oh9H1YuoqBG7oCx/fm9eNt7XLQKG6vXXwHoOtN
-         KVmGyjDbjujRK9MtOtcqW/x2rDDHT54rVIrLdOdX1r5xn8jEo2YPDfe76dxc5bkAE8p6
-         ny0wjL3xuVKT+ndJUmDJPqctzuGrfe7UucR43ZBOGRWx4fXttL+5YESM6p1uD2auWzz+
-         yUI3G/yF1eNM4OU1mGq29LFxgBVPVB215sWrv3U5MkUNRRyBK2zxfpCgdrO5cegGywcd
-         8RMNGJePLG8HvMx7enN1SZ9TZjbx0QlFsgqTxAhkJhpConksWIvRk7Rk0XXrB7G5pH1o
-         4e6w==
-X-Gm-Message-State: AOAM532pfsFUDkGZhWQTt9sRBQnNZzO+onwi/NDKo5kpEDTaz1Nf5Wuw
-        ivgnzemyDmHeTJ5SLZg+iRnn0w==
-X-Google-Smtp-Source: ABdhPJy77aXyjoMQkvcUx+JmSsSWk6mToRso2LAJIlcohxMYZGn7XMjOlmatJxWVJ8QfDdq7Ltgpeg==
-X-Received: by 2002:a7b:c1d5:: with SMTP id a21mr297154wmj.97.1640165889505;
-        Wed, 22 Dec 2021 01:38:09 -0800 (PST)
+        bh=Uje+f8nQbSEgXf+lBRY8ONm+ajTteRb//Kh8q+sMpA8=;
+        b=LOQIbSD0Os1JhqmpuEtNNtE/9URzdXLjEMLynz1OFKWEL+FjBn4uDOkT498yjw+mnv
+         Md+pCCSo3115fS+WiZ9mWDvXf4YfszE+YDytQhrAdHtTLpjWmWg8RPTfYxN4i4XUzi6Z
+         nBuVYYD3FKWTRk7QDyugAi+5LeS70aoacNj2NHe+GSBZY3lZikTv+fKYNSiQtKBO7/x2
+         5jUkaUDDFCcg8AsHwT31mUiBYwC/PVNLbxmwYApGGUnJPq3mgffo7eC1nAkeV7rgqPf6
+         GGQjHjkLmApy/UxJ2TjMg9F7Nr08H5yUm2XC2VSruLXMK1I9sAH5Rg3hd925rDJdl3Jq
+         EScQ==
+X-Gm-Message-State: AOAM533yJ8sZhP52SBXOnZqDzMXjpniCkxwVhbn5HF0IKPQQRhvjToo2
+        vI80BfwaHuwzaQ4mNuwcHGpEHg==
+X-Google-Smtp-Source: ABdhPJyp32KpJJygx4yRx2ScCV3cyw1u+UI0yUHIqPYNcz4wYrFxTwo1YRxntVNnjEkkraxk1Yw9YQ==
+X-Received: by 2002:a05:600c:2059:: with SMTP id p25mr290557wmg.151.1640165891075;
+        Wed, 22 Dec 2021 01:38:11 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e0a:f:6020:917b:d0f8:bb57:d63b])
-        by smtp.gmail.com with ESMTPSA id u19sm1253430wmq.30.2021.12.22.01.38.08
+        by smtp.gmail.com with ESMTPSA id u19sm1253430wmq.30.2021.12.22.01.38.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 01:38:09 -0800 (PST)
+        Wed, 22 Dec 2021 01:38:10 -0800 (PST)
 From:   Vincent Guittot <vincent.guittot@linaro.org>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -54,9 +54,9 @@ To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         rickyiu@google.com, odin@uged.al
 Cc:     sachinp@linux.vnet.ibm.com, naresh.kamboju@linaro.org,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v2 2/3] sched/pelt: Don't sync hardly runnable_sum with runnable_avg
-Date:   Wed, 22 Dec 2021 10:38:01 +0100
-Message-Id: <20211222093802.22357-3-vincent.guittot@linaro.org>
+Subject: [PATCH v2 3/3] sched/pelt: Don't sync hardly load_sum with load_avg
+Date:   Wed, 22 Dec 2021 10:38:02 +0100
+Message-Id: <20211222093802.22357-4-vincent.guittot@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211222093802.22357-1-vincent.guittot@linaro.org>
 References: <20211222093802.22357-1-vincent.guittot@linaro.org>
@@ -64,91 +64,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similarly to util_avg and util_sum, don't sync runnable_sum with the low
-bound of runnable_avg but only ensure that runnable_sum stays in the
-correct range.
+Similarly to util_avg and util_sum, don't sync load_sum with the low
+bound of load_avg but only ensure that load_sum stays in the correct range.
 
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/fair.c | 33 +++++++++++++++++++--------------
- 1 file changed, 19 insertions(+), 14 deletions(-)
+ kernel/sched/fair.c | 41 +++++++++++++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 16 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 9ac28f0f3645..b4c350715c16 100644
+index b4c350715c16..488213d98770 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -3495,11 +3495,11 @@ update_tg_cfs_util(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq
- static inline void
- update_tg_cfs_runnable(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)
- {
--	long delta = gcfs_rq->avg.runnable_avg - se->avg.runnable_avg;
--	u32 divider;
-+	long delta_sum, delta_avg = gcfs_rq->avg.runnable_avg - se->avg.runnable_avg;
-+	u32 new_sum, divider;
+@@ -3025,12 +3025,17 @@ enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ 	cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+ }
  
- 	/* Nothing to update */
++#define MIN_DIVIDER (LOAD_AVG_MAX - 1024)
++
+ static inline void
+ dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+-	u32 divider = get_pelt_divider(&se->avg);
+ 	sub_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+-	cfs_rq->avg.load_sum = cfs_rq->avg.load_avg * divider;
++	sub_positive(&cfs_rq->avg.load_sum, se_weight(se) * se->avg.load_sum);
++	/* See update_tg_cfs_util() */
++	cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
++					  cfs_rq->avg.load_avg * MIN_DIVIDER);
++
+ }
+ #else
+ static inline void
+@@ -3381,8 +3386,6 @@ void set_task_rq_fair(struct sched_entity *se,
+ 	se->avg.last_update_time = n_last_update_time;
+ }
+ 
+-#define MIN_DIVIDER (LOAD_AVG_MAX - 1024)
+-
+ /*
+  * When on migration a sched_entity joins/leaves the PELT hierarchy, we need to
+  * propagate its contribution. The key to this propagation is the invariant
+@@ -3525,9 +3528,10 @@ update_tg_cfs_runnable(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cf
+ static inline void
+ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)
+ {
+-	long delta, running_sum, runnable_sum = gcfs_rq->prop_runnable_sum;
++	long delta_avg, running_sum, runnable_sum = gcfs_rq->prop_runnable_sum;
+ 	unsigned long load_avg;
+ 	u64 load_sum = 0;
++	s64 delta_sum;
+ 	u32 divider;
+ 
+ 	if (!runnable_sum)
+@@ -3554,7 +3558,7 @@ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq
+ 		 * assuming all tasks are equally runnable.
+ 		 */
+ 		if (scale_load_down(gcfs_rq->load.weight)) {
+-			load_sum = div_s64(gcfs_rq->avg.load_sum,
++			load_sum = div_u64(gcfs_rq->avg.load_sum,
+ 				scale_load_down(gcfs_rq->load.weight));
+ 		}
+ 
+@@ -3571,19 +3575,22 @@ update_tg_cfs_load(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq
+ 	running_sum = se->avg.util_sum >> SCHED_CAPACITY_SHIFT;
+ 	runnable_sum = max(runnable_sum, running_sum);
+ 
+-	load_sum = (s64)se_weight(se) * runnable_sum;
+-	load_avg = div_s64(load_sum, divider);
+-
+-	se->avg.load_sum = runnable_sum;
++	load_sum = se_weight(se) * runnable_sum;
++	load_avg = div_u64(load_sum, divider);
+ 
+-	delta = load_avg - se->avg.load_avg;
 -	if (!delta)
++	delta_avg = load_avg - se->avg.load_avg;
 +	if (!delta_avg)
  		return;
  
- 	/*
-@@ -3510,11 +3510,16 @@ update_tg_cfs_runnable(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cf
+-	se->avg.load_avg = load_avg;
++	delta_sum = load_sum - (s64)se_weight(se) * se->avg.load_sum;
  
- 	/* Set new sched_entity's runnable */
- 	se->avg.runnable_avg = gcfs_rq->avg.runnable_avg;
--	se->avg.runnable_sum = se->avg.runnable_avg * divider;
-+	new_sum = se->avg.runnable_avg * divider;
-+	delta_sum = (long)new_sum - (long)se->avg.runnable_sum;
-+	se->avg.runnable_sum = new_sum;
- 
- 	/* Update parent cfs_rq runnable */
--	add_positive(&cfs_rq->avg.runnable_avg, delta);
--	cfs_rq->avg.runnable_sum = cfs_rq->avg.runnable_avg * divider;
-+	add_positive(&cfs_rq->avg.runnable_avg, delta_avg);
-+	add_positive(&cfs_rq->avg.runnable_sum, delta_sum);
+-	add_positive(&cfs_rq->avg.load_avg, delta);
+-	cfs_rq->avg.load_sum = cfs_rq->avg.load_avg * divider;
++	se->avg.load_sum = runnable_sum;
++	se->avg.load_avg = load_avg;
++	add_positive(&cfs_rq->avg.load_avg, delta_avg);
++	add_positive(&cfs_rq->avg.load_sum, delta_sum);
 +	/* See update_tg_cfs_util() */
-+	cfs_rq->avg.runnable_sum = max_t(u32, cfs_rq->avg.runnable_sum,
-+					      cfs_rq->avg.runnable_avg * MIN_DIVIDER);
++	cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
++					  cfs_rq->avg.load_avg * MIN_DIVIDER);
  }
  
- static inline void
-@@ -3704,7 +3709,10 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
+ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum)
+@@ -3699,7 +3706,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
  
- 		r = removed_runnable;
- 		sub_positive(&sa->runnable_avg, r);
--		sa->runnable_sum = sa->runnable_avg * divider;
-+		sub_positive(&sa->runnable_sum, r * divider);
+ 		r = removed_load;
+ 		sub_positive(&sa->load_avg, r);
+-		sa->load_sum = sa->load_avg * divider;
++		sub_positive(&sa->load_sum, r * divider);
 +		/* See update_tg_cfs_util() */
-+		sa->runnable_sum = max_t(u32, sa->runnable_sum,
-+					      sa->runnable_avg * MIN_DIVIDER);
++		sa->load_sum = max_t(u32, sa->load_sum, sa->load_avg * MIN_DIVIDER);
  
- 		/*
- 		 * removed_runnable is the unweighted version of removed_load so we
-@@ -3791,12 +3799,6 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-  */
- static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
- {
--	/*
--	 * cfs_rq->avg.period_contrib can be used for both cfs_rq and se.
--	 * See ___update_load_avg() for details.
--	 */
--	u32 divider = get_pelt_divider(&cfs_rq->avg);
--
- 	dequeue_load_avg(cfs_rq, se);
- 	sub_positive(&cfs_rq->avg.util_avg, se->avg.util_avg);
- 	sub_positive(&cfs_rq->avg.util_sum, se->avg.util_sum);
-@@ -3805,7 +3807,10 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 					  cfs_rq->avg.util_avg * MIN_DIVIDER);
- 
- 	sub_positive(&cfs_rq->avg.runnable_avg, se->avg.runnable_avg);
--	cfs_rq->avg.runnable_sum = cfs_rq->avg.runnable_avg * divider;
-+	sub_positive(&cfs_rq->avg.runnable_sum, se->avg.runnable_sum);
-+	/* See update_tg_cfs_util() */
-+	cfs_rq->avg.runnable_sum = max_t(u32, cfs_rq->avg.runnable_sum,
-+					      cfs_rq->avg.runnable_avg * MIN_DIVIDER);
- 
- 	add_tg_cfs_propagate(cfs_rq, -se->avg.load_sum);
- 
+ 		r = removed_util;
+ 		sub_positive(&sa->util_avg, r);
 -- 
 2.17.1
 

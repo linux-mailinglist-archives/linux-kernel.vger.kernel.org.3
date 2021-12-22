@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF8247D3FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5132A47D405
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343596AbhLVOzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:55:02 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]:37485 "EHLO
-        mail-qk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbhLVOzB (ORCPT
+        id S1343622AbhLVO4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343612AbhLVO4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:55:01 -0500
-Received: by mail-qk1-f182.google.com with SMTP id m186so2519770qkb.4;
-        Wed, 22 Dec 2021 06:55:00 -0800 (PST)
+        Wed, 22 Dec 2021 09:56:36 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8310FC061574;
+        Wed, 22 Dec 2021 06:56:36 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so1636362wme.4;
+        Wed, 22 Dec 2021 06:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sh9539P06l7XfONUhLa5AqK9wy1IglWuxqgYOheM7+c=;
+        b=nK9e9PtR+SMepjeExdMMBWbkn7v6FYva3qNBkzHASjkNgQYY5VirUfErTz0fOxBIlO
+         na3f8iWQZIAopi2wjPn54KgzDimlH3LC9lQe+jK9DSOT09VBO+p6m58X5PoK9ej15uXn
+         ub6/8Oijg/cpoxLLmDkSrxqXtRj8UP0beuVOJ0cgahrfjZ5N4Pi4hz67zmhFr3XwlVWs
+         sV9WcchI+LBGUOGYsGKnV0WslCPhyuVvUJlsIe2/k8DJF7zK7raFKg5mpHfY5gMnNcDA
+         r5eAbYWcDvFaI3LfDeTLDOU3P/3HxyTjzcjZnwSgAFmbkUMVmK61yLCjUs4d3IRAu4g4
+         8ocA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5nzVW9fS8lVq4A7s+LleLBNZjpuppm4Z5+9u/hx4F4M=;
-        b=kwSnQ44f1ozuIEFYOUypgo9Pe+mqqQ1Uo8TJ/cQ0WrsNJZuBmiwphTpMy/Z67K7Ww0
-         Pgtx+eUYiBsX2+GhJSdjyFkrEzq6907AWm+IeQCbqlB1rtWw/K8JlFqKRb7dtyXKEATN
-         2WwuQp8mmfNoIXnPD2Eul7X94KAxc+0yHL5GUq0PBbp9t5dFsy1G0vIS11xJ7MzXCCFL
-         dHKsxUmlo+jBg8S5yhwdxhPaYJVC2Kjr42Jiz9qUrPnZR2SK59KUe9781q9eq5etxrKb
-         5N0eQvFqUTOijb7QVxNt/+awdof6JlWVUbeg86oMq8rnyI2E2uX2jGqtLcyT6SspKxCx
-         MbLA==
-X-Gm-Message-State: AOAM532cf2h+JFH23yf84eoTuPZLKqMcSEST8IIjfgfnGCgLskQis+2k
-        PMVdAeyWBEgDLNoqGzfCEz+bgBZn0xZ8mmJhTGk=
-X-Google-Smtp-Source: ABdhPJxu4y5AWPkYpGQLKns+2Ooj7oRBJ8xa5ngpaxS0tHENl0qV83deqMOYvle2DP4D8tywrxLcdWrtsuYu8Gz4wLM=
-X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2223347qkc.374.1640184900377;
- Wed, 22 Dec 2021 06:55:00 -0800 (PST)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sh9539P06l7XfONUhLa5AqK9wy1IglWuxqgYOheM7+c=;
+        b=ppCqAWUgBiy2y8KsN9AGL/rlLNuax3EirjTl6ypTeJhKXQRsZiugY3WWT3Px+QldDT
+         30LMHEWeZJb5dYWstEr1SjipBOtSI7tLP4ZgqY/RvH4XaKAYn8S18smEEO3t1VVSQ6bD
+         E1hyVgTR2o0QTAKqkjMQ6MwRDCkE/GJGEVttxF7sAFm7BVkt91uGqh3Cae++3e9pbo/S
+         AKHy7M5bYlCiaGFI1Pv5LWrH7H6bt3BPhHI4GqIgJq8QrxRjLaPvTg2VveYexkCeYNmz
+         s2GemsDTEdGBlnaar8xLK2iHZI/ZbpLosJ8R682CW2ZJsfrruYx54jnTEqYdPlrIXXgM
+         OQ/Q==
+X-Gm-Message-State: AOAM5335UWtGyLpDBgPZX3Y45MzGr0VeU4C05ly0ghJCkU2SAku9KD7H
+        i7oeC+miI/Rkxu6beVPPC9Y=
+X-Google-Smtp-Source: ABdhPJwzvdksAs2D82GhoTo13dgnuab1mbKENu8WjkLEJAF/GN3/BB97+dtTEw6SMIyZ96i27SHfWg==
+X-Received: by 2002:a7b:cb98:: with SMTP id m24mr1204568wmi.188.1640184995156;
+        Wed, 22 Dec 2021 06:56:35 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
+        by smtp.googlemail.com with ESMTPSA id z6sm2468781wmp.9.2021.12.22.06.55.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 06:56:34 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <56689a97-79bf-9669-3c78-1704a98ec445@redhat.com>
+Date:   Wed, 22 Dec 2021 15:55:06 +0100
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
-In-Reply-To: <878rwdse9o.fsf@riseup.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Dec 2021 15:54:48 +0100
-Message-ID: <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 08/13] KVM: selftests: add SEV boot tests
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>,
+        Mingwei Zhang <mizhang@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Peter Gonda <pgonda@google.com>
+References: <20211216171358.61140-1-michael.roth@amd.com>
+ <20211216171358.61140-9-michael.roth@amd.com> <Yb/hGzeiRi0AwfV6@google.com>
+ <20211221154036.ivef7wuoblavlmsf@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211221154036.ivef7wuoblavlmsf@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:57 AM Francisco Jerez <currojerez@riseup.net> wrote:
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
-> >>
-> >> Julia Lawall <julia.lawall@inria.fr> writes:
-> >>
-> >> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
-> >
-> > [cut]
-> >
-> >> > I did some experiements with forcing different frequencies.  I haven't
-> >> > finished processing the results, but I notice that as the frequency goes
-> >> > up, the utilization (specifically the value of
-> >> > map_util_perf(sg_cpu->util) at the point of the call to
-> >> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-> >> > Is this expected?
-> >> >
-> >>
-> >> Actually, it *is* expected based on our previous hypothesis that these
-> >> workloads are largely latency-bound: In cases where a given burst of CPU
-> >> work is not parallelizable with any other tasks the thread needs to
-> >> complete subsequently, its overall runtime will decrease monotonically
-> >> with increasing frequency, therefore the number of instructions executed
-> >> per unit of time will increase monotonically with increasing frequency,
-> >> and with it its frequency-invariant utilization.
-> >
-> > But shouldn't these two effects cancel each other if the
-> > frequency-invariance mechanism works well?
->
-> No, they won't cancel each other out under our hypothesis that these
-> workloads are largely latency-bound, since the performance of the
-> application will increase steadily with increasing frequency, and with
-> it the amount of computational resources it utilizes per unit of time on
-> the average, and therefore its frequency-invariant utilization as well.
+On 12/21/21 16:40, Michael Roth wrote:
+>> Probably, you want to use macros to represent those states which should
+>> make it more clear. Otherwise, it is quite cumbersome for readers to
+>> remember the meaning (or state) of 100/101/102.
+> I agree with that approach in general, but in this case it's a bit
+> awkward since, these aren't necessarily similarly grouped tests where each
+> test falls under a certain category of TEST_GROUP_x where a macro would
+> provide additional information about the nature of the tests related to a
+> particular SYNC() call, in some cases it's an aggregate of multiple
+> things, for instance...
 
-OK, so this is a workload in which the maximum performance is only
-achieved at the maximum available frequency.  IOW, there's no
-performance saturation point and increasing the frequency (if
-possible) will always cause more work to be done per unit of time.
+Indeed, these are just numbers that match between guest_test_common and 
+test_common.  It's not too hard to follow if you look at the two 
+functions side-by-side.
 
-For this type of workloads, requirements regarding performance (for
-example, upper bound on the expected time of computations) need to be
-known in order to determine the "most suitable" frequency to run them
-and I agree that schedutil doesn't help much in that respect.
-
-It is probably better to run them with intel_pstate in the active mode
-(ie. "pure HWP") or decrease EPP via sysfs to allow HWP to ramp up
-turbo more aggressively.
+Paolo

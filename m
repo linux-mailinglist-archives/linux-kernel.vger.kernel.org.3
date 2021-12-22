@@ -2,151 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B282D47CAB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D8447CABA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240691AbhLVBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238386AbhLVBVQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:21:16 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33970C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:21:16 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id w9-20020a25c709000000b00608a9489fc1so1145432ybe.20
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 17:21:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=DwpZcxuVvjMBelijxmj7V7prl1AvJJJLN05hWBHgA/4=;
-        b=Yj23OWiqKBvrbnd/TZd2sZhlzi3hGVLhMyJ7iprLLOt4brrPpG+thhJdevr1M/0ZG2
-         zIdXVnMYyq1eRVOq7e/tyLe35Yu8aGzLBOQgtR+zO+PJecaTcV4HiJO1qLBQF1IP7cYF
-         N1eRv4SlqbX9vehtnG0YioYyS1ZDAG2jxbmTgNuefmy4D5TmUIaEQRWfTyaCbYbjG8JL
-         YXfXzB4tw+RXuA9SqgEdr4EXsqBSf9IuN/M9+R0ynUPJVod0gtMcmDG3qFalCYGKc6La
-         q/DS9oMZuSPd7y6RopEwLDCfNvwJPJAnDfDUx/9p+SHUsuJKB/PHdF07hnlgv56eEA1f
-         GL4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=DwpZcxuVvjMBelijxmj7V7prl1AvJJJLN05hWBHgA/4=;
-        b=D3zWHL3IkLhlBnGm3IOxuYIeDFQedlKGYrHa/JklHap7KGez/kmWaCuPW7VDmsys+G
-         CckK+sIOeulCfLt/0EJQRvQLFsClLXEQPO/c/Ff7zAdlep1ohcU2pAAMUEu73ILr2UjD
-         OarQuRCH1shssCoh2Dmik0yxOJROOLXqCj+chfBHTDVrrFJc92ncUdgIKtS504ulWwBl
-         UtOLdjWwdMzADJv8XYft/yJz8KTFKgyOJcnRYMBxp+/Ci3T99K8ejLauXtWpDr1HKK+0
-         jPRc8SWS6ecld8a5c6vF5vG3gSkcj3ZcOsySJmVLF2fX+CsVWkPNKi8MDqmSXsSWbMI/
-         dZeA==
-X-Gm-Message-State: AOAM530LKSLPS+lIdhXKLIjg10gedC2xQh3y6pZfOT19isl/oeBupwsj
-        ZYbId1Qb3A2VJotf09Hav2IYfILf7Gll
-X-Google-Smtp-Source: ABdhPJzCGyz0Ud16ne2hFP17GWS2MfOEfgjKuE2i65+M21EG8Ii4sjCKsWomCl7zypcm8PsHT4lJVr7O4KaH
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:8d27:feea:1b0b:3782])
- (user=rajatja job=sendgmr) by 2002:a25:ba05:: with SMTP id
- t5mr1349092ybg.675.1640136075440; Tue, 21 Dec 2021 17:21:15 -0800 (PST)
-Date:   Tue, 21 Dec 2021 17:21:05 -0800
-Message-Id: <20211222012105.3438916-1-rajatja@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH] pci: Make DWORD accesses while saving / restoring LTR state
-From:   Rajat Jain <rajatja@google.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>, kw@linux.com,
-        Rajat Jain <rajatja@google.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rajatxjain@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S240864AbhLVBXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:23:10 -0500
+Received: from mga18.intel.com ([134.134.136.126]:32526 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234213AbhLVBXJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 20:23:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640136189; x=1671672189;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=soai/pmfaSqocLc0zgIUXqg4L+dRY+Q0ibdRNh+8JpM=;
+  b=MDX1v/gFkcqRXhrIBBknWseLYvpOYRiWsAcnhDaPBejDJQNuKGHAMesf
+   sjsHfFvAH4SLzzQHRLWmxRk9Ey0eFAb48EE00z3neHWBoCJv13l3aVn97
+   U1ByIEliLUYGUdWMhEqMnlssHo+/qiGhlwkgHklJUJBZ6lBydw7vclyB6
+   +kf/Ko+j7ZCQhpaZ0qVBu8/1iDrq5KrpF7/Ggyv4cgfPh/7ihH8j9/Jk3
+   bOAR+pz/bViAi8f6XdPfGf4/zldp8+GBFonPkz1F3s8+nvjPZepAMUg57
+   abgTvo1cNqJ8Umen20kyid4oSAvL60ecsANVjDeSeah2OPZtkBgZjSZcy
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227372590"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="227372590"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 17:23:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="521477368"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2021 17:23:01 -0800
+Date:   Wed, 22 Dec 2021 09:22:23 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 00/15] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20211222012223.GA22448@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20211221151125.19446-1-chao.p.peng@linux.intel.com>
+ <YcH2aGNJn57pLihJ@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcH2aGNJn57pLihJ@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices have an errata such that they only support DWORD accesses
-to some registers.
+On Tue, Dec 21, 2021 at 03:44:40PM +0000, Sean Christopherson wrote:
+> On Tue, Dec 21, 2021, Chao Peng wrote:
+> > This is the third version of this series which try to implement the
+> > fd-based KVM guest private memory.
+> 
+> ...
+> 
+> > Test
+> > ----
+> > This code has been tested with latest TDX code patches hosted at
+> > (https://github.com/intel/tdx/tree/kvm-upstream) with minimal TDX
+> > adaption and QEMU support.
+> > 
+> > Example QEMU command line:
+> > -object tdx-guest,id=tdx \
+> > -object memory-backend-memfd-private,id=ram1,size=2G \
+> > -machine q35,kvm-type=tdx,pic=no,kernel_irqchip=split,memory-encryption=tdx,memory-backend=ram1
+> > 
+> > Changelog
+> > ----------
+> > v3:
+> >   - Added locking protection when calling
+> >     invalidate_page_range/fallocate callbacks.
+> >   - Changed memslot structure to keep use useraddr for shared memory.
+> >   - Re-organized F_SEAL_INACCESSIBLE and MEMFD_OPS.
+> >   - Added MFD_INACCESSIBLE flag to force F_SEAL_INACCESSIBLE.
+> >   - Commit message improvement.
+> >   - Many small fixes for comments from the last version.
+> 
+> Can you rebase on top of kvm/queue and send a new version?  There's a massive
+> overhaul of KVM's memslots code that's queued for 5.17, and the KVM core changes
+> in this series conflict mightily.
 
-For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
-supports DWORD accesses to LTR latency registers and L1 PM substates
-control registers:
-https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
+Sure, will do the rebase and send a new version.
 
-Since L1 PM substate control registers are DWORD sized, and hence their
-access in the kernel is already DWORD sized, so we don't need to do
-anything for them.
+> 
+> It's ok if the private memslot support isn't tested exactly as-is, it's not like
+> any of us reviewers can test it anyways, but I would like to be able to apply
+> cleanly and verify that the series doesn't break existing functionality.
 
-However, the LTR registers being WORD sized, are in need of a solution.
-This patch converts the WORD sized accesses to these registers, into
-DWORD sized accesses, while saving and restoring them.
+Good, it will ease me if that is acceptable (e.g. test on the relative
+new TDX codebase but send out the patch on latest kvm/queue which is not
+verified for the new function). This gets rid of the 'chicken and egg'
+dependency between this series and TDX patchset.
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
----
- drivers/pci/pci.c       | 24 ++++++++++++++++--------
- drivers/pci/pcie/aspm.c |  1 +
- 2 files changed, 17 insertions(+), 8 deletions(-)
+> 
+> This version also appears to be based on an internal development branch, e.g. patch
+> 12/15 has some bits from the TDX series.
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 3d2fb394986a..efa8cd16827f 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
- {
- 	int ltr;
- 	struct pci_cap_saved_state *save_state;
--	u16 *cap;
-+	u32 *cap;
- 
- 	if (!pci_is_pcie(dev))
- 		return;
-@@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
- 		return;
- 	}
- 
--	cap = (u16 *)&save_state->cap.data[0];
--	pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
--	pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
-+	/*
-+	 * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
-+	 * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
-+	 * dword accesses to these registers.
-+	 */
-+	cap = &save_state->cap.data[0];
-+	pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
- }
- 
- static void pci_restore_ltr_state(struct pci_dev *dev)
- {
- 	struct pci_cap_saved_state *save_state;
- 	int ltr;
--	u16 *cap;
-+	u32 *cap;
- 
- 	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
- 	ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
- 	if (!save_state || !ltr)
- 		return;
- 
--	cap = (u16 *)&save_state->cap.data[0];
--	pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
--	pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
-+	/*
-+	 * We deliberately do a dword access to restore both
-+	 * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
-+	 * some devices only support dword accesses to these registers.
-+	 */
-+	cap = &save_state->cap.data[0];
-+	pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
- }
- 
- /**
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 52c74682601a..083f47a7b69b 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- 	encode_l12_threshold(l1_2_threshold, &scale, &value);
- 	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
- 
-+	/* Always make DWORD sized accesses to these registers */
- 	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
- 	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
- 	pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
--- 
-2.34.1.307.g9b7440fafd-goog
+Right, it's based on latest TDX code https://github.com/intel/tdx/tree/kvm-upstream.
+I did this because this is the only way I can test the code. 
 
+Thanks,
+Chao
+> 
+> @@ -336,6 +348,7 @@ struct kvm_tdx_exit {
+>  #define KVM_EXIT_X86_BUS_LOCK     33
+>  #define KVM_EXIT_XEN              34
+>  #define KVM_EXIT_RISCV_SBI        35
+> +#define KVM_EXIT_MEMORY_ERROR     36
+>  #define KVM_EXIT_TDX              50   /* dump number to avoid conflict. */
+> 
+>  /* For KVM_EXIT_INTERNAL_ERROR */
+> @@ -554,6 +567,8 @@ struct kvm_run {
+>                         unsigned long args[6];
+>                         unsigned long ret[2];
+>                 } riscv_sbi;
+> +               /* KVM_EXIT_MEMORY_ERROR */
+> +               struct kvm_memory_exit mem;
+>                 /* KVM_EXIT_TDX_VMCALL */
+>                 struct kvm_tdx_exit tdx;
+>                 /* Fix the size of the union. */

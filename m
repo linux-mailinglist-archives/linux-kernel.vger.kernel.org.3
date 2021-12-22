@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A5547D2C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B07947D2D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 14:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245354AbhLVNMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 08:12:39 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:30163 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245316AbhLVNM0 (ORCPT
+        id S245407AbhLVNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 08:12:42 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33896 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245325AbhLVNM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Dec 2021 08:12:26 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JJtwC0WRgz8vyV;
-        Wed, 22 Dec 2021 21:10:03 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJtyT3TtlzcbyR;
+        Wed, 22 Dec 2021 21:12:01 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:23 +0800
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:24 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 21:12:22 +0800
+ 15.1.2308.20; Wed, 22 Dec 2021 21:12:23 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -44,9 +44,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>
-Subject: [PATCH v18 05/17] x86/setup: Use parse_crashkernel_in_order() to make code logic clear
-Date:   Wed, 22 Dec 2021 21:08:08 +0800
-Message-ID: <20211222130820.1754-6-thunder.leizhen@huawei.com>
+Subject: [PATCH v18 06/17] x86/setup: Update comments in reserve_crashkernel()
+Date:   Wed, 22 Dec 2021 21:08:09 +0800
+Message-ID: <20211222130820.1754-7-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20211222130820.1754-1-thunder.leizhen@huawei.com>
 References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
@@ -61,136 +61,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the parsing of "crashkernel=X,high" and the parsing of
-"crashkernel=X,low" are not in the same function, but they are strongly
-dependent, which affects readability. Use parse_crashkernel_in_order() to
-bring them together.
-
-In addition, the operation to ensure at least 256M low memory is moved out
-of reserve_craskernel_low() so that it only needs to focus on low memory
-allocation.
+Add comments to describe which bootup parameters are processed by the
+code, and make comments close to the code being commented.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- arch/x86/kernel/setup.c | 69 ++++++++++++++++++-----------------------
- 1 file changed, 30 insertions(+), 39 deletions(-)
+ arch/x86/kernel/setup.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index f997074d36f2484..07a58313db5c5f7 100644
+index 07a58313db5c5f7..52aa925877ca787 100644
 --- a/arch/x86/kernel/setup.c
 +++ b/arch/x86/kernel/setup.c
-@@ -393,32 +393,16 @@ static void __init memblock_x86_reserve_range_setup_data(void)
- #ifdef CONFIG_KEXEC_CORE
+@@ -485,20 +485,20 @@ static void __init reserve_crashkernel(void)
+ 	if (flag == CRASHKERNEL_MEM_NONE)
+ 		return;
  
- #ifdef CONFIG_X86_64
--static int __init reserve_crashkernel_low(void)
-+static int __init reserve_crashkernel_low(unsigned long long low_size)
- {
--	unsigned long long base, low_base = 0, low_size = 0;
-+	unsigned long long low_base = 0;
- 	unsigned long low_mem_limit;
--	int ret;
- 
- 	low_mem_limit = min(memblock_phys_mem_size(), CRASH_ADDR_LOW_MAX);
- 
--	/* crashkernel=Y,low */
--	ret = parse_crashkernel_low(boot_command_line, low_mem_limit, &low_size, &base);
--	if (ret) {
--		/*
--		 * two parts from kernel/dma/swiotlb.c:
--		 * -swiotlb size: user-specified with swiotlb= or default.
--		 *
--		 * -swiotlb overflow buffer: now hardcoded to 32k. We round it
--		 * to 8M for other buffers that may need to stay low too. Also
--		 * make sure we allocate enough extra low memory so that we
--		 * don't run out of DMA buffers for 32-bit devices.
--		 */
--		low_size = max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
--	} else {
--		/* passed with crashkernel=0,low ? */
--		if (!low_size)
--			return 0;
--	}
-+	/* passed with crashkernel=0,low ? */
-+	if (!low_size)
-+		return 0;
- 
- 	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
- 	if (!low_base) {
-@@ -457,7 +441,6 @@ static int __init reserve_crashkernel_low(void)
-  * Returns the status flag of the parsing result of "crashkernel=", such as
-  * CRASHKERNEL_MEM_NONE, CRASHKERNEL_MEM_HIGH.
-  */
--__maybe_unused
- static int __init parse_crashkernel_in_order(char *cmdline,
- 					     unsigned long long system_ram,
- 					     unsigned long long *crash_size,
-@@ -492,22 +475,15 @@ static int __init parse_crashkernel_in_order(char *cmdline,
- 
- static void __init reserve_crashkernel(void)
- {
--	unsigned long long crash_size, crash_base, total_mem;
--	bool high = false;
--	int ret;
-+	unsigned long long crash_size, crash_base, total_mem, low_size;
-+	int flag;
- 
- 	total_mem = memblock_phys_mem_size();
- 
--	/* crashkernel=XM */
--	ret = parse_crashkernel(boot_command_line, total_mem, &crash_size, &crash_base);
--	if (ret != 0 || crash_size <= 0) {
--		/* crashkernel=X,high */
--		ret = parse_crashkernel_high(boot_command_line, total_mem,
--					     &crash_size, &crash_base);
--		if (ret != 0 || crash_size <= 0)
--			return;
--		high = true;
--	}
-+	flag = parse_crashkernel_in_order(boot_command_line, total_mem,
-+					  &crash_size, &crash_base, &low_size);
-+	if (flag == CRASHKERNEL_MEM_NONE)
-+		return;
- 
- 	/* 0 means: find the address automatically */
+-	/* 0 means: find the address automatically */
  	if (!crash_base) {
-@@ -519,7 +495,7 @@ static void __init reserve_crashkernel(void)
- 		 * So try low memory first and fall back to high memory
- 		 * unless "crashkernel=size[KMG],high" is specified.
+ 		/*
+-		 * Set CRASH_ADDR_LOW_MAX upper bound for crash memory,
+-		 * crashkernel=x,high reserves memory over 4G, also allocates
+-		 * 256M extra low memory for DMA buffers and swiotlb.
+-		 * But the extra memory is not required for all machines.
+-		 * So try low memory first and fall back to high memory
+-		 * unless "crashkernel=size[KMG],high" is specified.
++		 * For the case of crashkernel=X[@offset] and offset is omitted,
++		 * try the low memory first.
  		 */
--		if (!high)
-+		if (!(flag & CRASHKERNEL_MEM_HIGH))
+ 		if (!(flag & CRASHKERNEL_MEM_HIGH))
  			crash_base = memblock_phys_alloc_range(crash_size,
  						CRASH_ALIGN, CRASH_ALIGN,
  						CRASH_ADDR_LOW_MAX);
-@@ -543,9 +519,24 @@ static void __init reserve_crashkernel(void)
- 	}
++
++		/*
++		 * If low memory allocation failed above, or for the case of
++		 * crashkernel=X,high, try the high memory.
++		 */
+ 		if (!crash_base)
+ 			crash_base = memblock_phys_alloc_range(crash_size,
+ 						CRASH_ALIGN, CRASH_ALIGN,
+@@ -510,6 +510,10 @@ static void __init reserve_crashkernel(void)
+ 	} else {
+ 		unsigned long long start;
+ 
++		/*
++		 * The case of crashkernel=X@offset and offset is specified.
++		 * Only user-specified space can be reserved.
++		 */
+ 		start = memblock_phys_alloc_range(crash_size, SZ_1M, crash_base,
+ 						  crash_base + crash_size);
+ 		if (start != crash_base) {
+@@ -520,6 +524,10 @@ static void __init reserve_crashkernel(void)
  
  #ifdef CONFIG_X86_64
--	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low()) {
--		memblock_phys_free(crash_base, crash_size);
--		return;
-+	if (crash_base >= (1ULL << 32)) {
-+		if (!(flag & CRASHKERNEL_MEM_LOW)) {
-+			/*
-+			 * two parts from kernel/dma/swiotlb.c:
-+			 * -swiotlb size: user-specified with swiotlb= or default.
-+			 *
-+			 * -swiotlb overflow buffer: now hardcoded to 32k. We round it
-+			 * to 8M for other buffers that may need to stay low too. Also
-+			 * make sure we allocate enough extra low memory so that we
-+			 * don't run out of DMA buffers for 32-bit devices.
-+			 */
-+			low_size = max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20);
-+		}
-+
-+		if (reserve_crashkernel_low(low_size)) {
-+			memblock_phys_free(crash_base, crash_size);
-+			return;
-+		}
- 	}
- #endif
- 
+ 	if (crash_base >= (1ULL << 32)) {
++		/*
++		 * Ensure that at least 256M extra low memory is allocated for
++		 * DMA buffers and swiotlb, if low memory size is not specified.
++		 */
+ 		if (!(flag & CRASHKERNEL_MEM_LOW)) {
+ 			/*
+ 			 * two parts from kernel/dma/swiotlb.c:
 -- 
 2.25.1
 

@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4314C47CC49
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2953047CC4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242494AbhLVEsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:48:24 -0500
-Received: from mx.socionext.com ([202.248.49.38]:36866 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235801AbhLVEsW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:48:22 -0500
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 22 Dec 2021 13:48:21 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id A37CD2059054;
-        Wed, 22 Dec 2021 13:48:21 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 22 Dec 2021 13:48:21 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 58EE0B568B;
-        Wed, 22 Dec 2021 13:48:21 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
-Date:   Wed, 22 Dec 2021 13:48:12 +0900
-Message-Id: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+        id S242514AbhLVEu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:50:29 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:50612 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235801AbhLVEu1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:50:27 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V.OKG0g_1640148623;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.OKG0g_1640148623)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 22 Dec 2021 12:50:23 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v2 0/6] Introduce x86 assembly accelerated implementation for SM3 algorithm
+Date:   Wed, 22 Dec 2021 12:50:16 +0800
+Message-Id: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In uniphier_spi_remove(), there is a wrong code to get private data from
-the platform device, so the driver can't be removed properly.
+This series of patches creates an stand-alone library for SM3 hash
+algorithm in the lib/crypto directory, and makes the implementations
+that originally depended on sm3-generic depend on the stand-alone SM3
+library, which also includes sm3-generic itself.
 
-The driver should get spi_master from the platform device and retrieve
-the private data from it.
+On this basis, the AVX assembly acceleration implementation of SM3
+algorithm is introduced, the main algorithm implementation based on
+SM3 AES/BMI2 accelerated work by libgcrypt at:
+https://gnupg.org/software/libgcrypt/index.html
 
-Cc: <stable@vger.kernel.org>
-Fixes: 5ba155a4d4cc ("spi: add SPI controller driver for UniPhier SoC")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From the performance benchmark data, the performance improvement of
+SM3 algorithm after AVX optimization can reach up to 38%.
+
 ---
- drivers/spi/spi-uniphier.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+v2 changes:
+ - x86/sm3: Change K macros to signed decimal and use LEA and 32-bit offset
 
-diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
-index 8900e51e1a1c..342ee8d2c476 100644
---- a/drivers/spi/spi-uniphier.c
-+++ b/drivers/spi/spi-uniphier.c
-@@ -767,12 +767,13 @@ static int uniphier_spi_probe(struct platform_device *pdev)
- 
- static int uniphier_spi_remove(struct platform_device *pdev)
- {
--	struct uniphier_spi_priv *priv = platform_get_drvdata(pdev);
-+	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
- 
--	if (priv->master->dma_tx)
--		dma_release_channel(priv->master->dma_tx);
--	if (priv->master->dma_rx)
--		dma_release_channel(priv->master->dma_rx);
-+	if (master->dma_tx)
-+		dma_release_channel(master->dma_tx);
-+	if (master->dma_rx)
-+		dma_release_channel(master->dma_rx);
- 
- 	clk_disable_unprepare(priv->clk);
- 
+Tianjia Zhang (6):
+  crypto: sm3 - create SM3 stand-alone library
+  crypto: arm64/sm3-ce - make dependent on sm3 library
+  crypto: sm2 - make dependent on sm3 library
+  crypto: sm3 - make dependent on sm3 library
+  crypto: x86/sm3 - add AVX assembly implementation
+  crypto: tcrypt - add asynchronous speed test for SM3
+
+ arch/arm64/crypto/Kconfig        |   2 +-
+ arch/arm64/crypto/sm3-ce-glue.c  |  20 +-
+ arch/x86/crypto/Makefile         |   3 +
+ arch/x86/crypto/sm3-avx-asm_64.S | 517 +++++++++++++++++++++++++++++++
+ arch/x86/crypto/sm3_avx_glue.c   | 134 ++++++++
+ crypto/Kconfig                   |  16 +-
+ crypto/sm2.c                     |  38 +--
+ crypto/sm3_generic.c             | 142 +--------
+ crypto/tcrypt.c                  |  14 +-
+ include/crypto/sm3.h             |  35 ++-
+ lib/crypto/Kconfig               |   3 +
+ lib/crypto/Makefile              |   3 +
+ lib/crypto/sm3.c                 | 246 +++++++++++++++
+ 13 files changed, 1007 insertions(+), 166 deletions(-)
+ create mode 100644 arch/x86/crypto/sm3-avx-asm_64.S
+ create mode 100644 arch/x86/crypto/sm3_avx_glue.c
+ create mode 100644 lib/crypto/sm3.c
+
 -- 
-2.7.4
+2.32.0
 

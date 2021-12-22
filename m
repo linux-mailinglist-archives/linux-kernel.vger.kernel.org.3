@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396F547D905
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9EA47D909
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 22:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235875AbhLVV4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 16:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S241141AbhLVV7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 16:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbhLVV4W (ORCPT
+        with ESMTP id S234030AbhLVV7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 16:56:22 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6DCC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 13:56:21 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id k64so3483471pfd.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 13:56:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=fg3NXf4aMybvSkS7vjMPN+wZx+JFIELE7ph0rrmV6RM=;
-        b=WySwE+D7rji1QAyKHmxqQopkxTr7kevnL5hu+Zf92KAiYD7K4JSL2xQFojKFXRuwpu
-         I/HtTrzwYiyNNL1TDQsloyS6NB86J0erSP3dC2/kYJlxgPXhHxrEMDLO3s8P2ni2vuQk
-         5E5quaR6CjAZHIpm/Z6uO4ugGQFc5Ve4MuBrxeCYX9j2phaFFfS2bP1K8AA6P9RxdQ0n
-         IbCa/pzUJg8AmfKauOOwLoJe96cO1Rx8WaK6eN6fqCmCiZNPyJs3ZdC4tnCJfdKTIqLx
-         9Qeb7wONv7S1Z5doc388huy4STozwUcp/cjCKuf4RsaVwjIltAQLjdI3sJZOGf5l1lT3
-         KtWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=fg3NXf4aMybvSkS7vjMPN+wZx+JFIELE7ph0rrmV6RM=;
-        b=vMNsZS8SfnAKtxK/lvevLsG048gk0WliWFLP2DdgtTvFWUZNInlIGst9TnupnxzLaw
-         es/jHWRpIIv8vfD94IjditKVGr7Cxj7pFrM/8aLVxH3XwzYzTuHkg2dGvm/vCysthFRH
-         s5xhqU+5OpanU0SKEk0zDE6IJUgO6x9w2lltvWDXZt9yaY0d6dWVlYL/LnYegb0k3l6k
-         ZckeD2ZPtqLzi5yRefQouekZwues1dfWPlIY/UIZjKxAonRg851/fJmFgRzz7V1MBAo/
-         UoUzv+KKCbT20I8PKjHHyLpOpXW+PL4VFzct2QdN402NH7IgJx38Aw0RpQIz6rPrG0S+
-         6U0A==
-X-Gm-Message-State: AOAM530FwOCReP5nxlAyCow2O4/l0ewOwmULeasYA0/y9TCe2kWtjMCQ
-        SZPpiz4N+zN+u914+e6amUNpV7bWLFAAMQ==
-X-Google-Smtp-Source: ABdhPJxkzNfh5PA82UTFvidcysmONwwTxue3M8ha9Q7mjXujUtl/IrDgSdGqA+7ekXiRuHC1TfMpgA==
-X-Received: by 2002:a05:6a00:2304:b0:4ba:4cbb:8289 with SMTP id h4-20020a056a00230400b004ba4cbb8289mr4719468pfh.79.1640210181423;
-        Wed, 22 Dec 2021 13:56:21 -0800 (PST)
-Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id g11sm2926130pgn.26.2021.12.22.13.56.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 13:56:20 -0800 (PST)
-Date:   Thu, 23 Dec 2021 10:56:15 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, realwakka@gmail.com,
-        paulo.miguel.almeida.rodenas@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: pi433: add comment to rx_lock mutex definition
-Message-ID: <20211222215615.GA9361@localhost.localdomain>
+        Wed, 22 Dec 2021 16:59:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E040C061574;
+        Wed, 22 Dec 2021 13:59:50 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JK6gR27d7z4xbd;
+        Thu, 23 Dec 2021 08:59:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640210388;
+        bh=TklSx10aW0pHnE233yn87br6m+Ruo2on2shB4yYZkiA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RxLoN727VZsOOkkOpjHaMdnRFwscAhkeoR/5foRtoOwlRYSiC2PDTf/NaBU9Jb5rm
+         w64uM0l9gMvPW3pAGOTsh9YfBlGZOBt1fk8asrsPLWQLbQ94qEPPPIopLjy5+uO6nj
+         eP1sY6farBAbQKnEuSqgC8P/OUweGNHGY/ZEacZ6tgiFJ1J21Zsy8JkDJtyrYLdbXT
+         RDUCk74lUK351PBgWFMnmYcuOTvG2iRxeSVMOIQx+mhd/mXWxI/s24L/09X0AY2RVC
+         kpPwIpzGf9lPuB3oiT6vWXytZN6e0o26kBFSPdVLed4xHz/1NEWgrboDgui26YxNBC
+         OPCd42hPV/JFw==
+Date:   Thu, 23 Dec 2021 08:59:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the arm-soc tree
+Message-ID: <20211223085944.0095eaf5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/4DpgRW6knj1wx2f5p4ku0FS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checkpatch reports: CHECK: struct mutex definition without comment.
-Fix this by documenting what rx_mutex struct is used for in pi433 driver.
+--Sig_/4DpgRW6knj1wx2f5p4ku0FS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-v2: ellaborate on reasons why the mutex lock is used in the driver (Req: Greg k-h)
-v1: https://lore.kernel.org/lkml/20211222093626.GA13332@localhost.localdomain/
----
- drivers/staging/pi433/pi433_if.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi all,
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 29bd37669059..1cd3d5f2df2a 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -92,6 +92,17 @@ struct pi433_device {
- 	u32			rx_bytes_to_drop;
- 	u32			rx_bytes_dropped;
- 	unsigned int		rx_position;
-+	/*
-+	 * rx_lock is used to avoid race-conditions that can be triggered from userspace.
-+	 *
-+	 * For instance, if a program in userspace is reading the char device
-+	 * allocated in this module then another program won't be able to change RX
-+	 * configuration of the RF69 hardware module via ioctl and vice versa.
-+	 *
-+	 * utilization summary:
-+	 *  - pi433_read: blocks are read until rx read something (up to the buffer size)
-+	 *  - pi433_ioctl: during pending read request, change of config not allowed
-+	 */
- 	struct mutex		rx_lock;
- 	wait_queue_head_t	rx_wait_queue;
- 
--- 
-2.25.4
+After merging the arm-soc tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format)=
+: /switch/ports:reg: property has invalid length (4 bytes) (#address-cells =
+=3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Fai=
+led prerequisite 'reg_format'
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num):=
+ Failed prerequisite 'reg_format'
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed=
+ prerequisite 'reg_format'
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed=
+ prerequisite 'reg_format'
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
+fault_addr_size): /switch/ports: Relying on default #address-cells value
+arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
+fault_addr_size): /switch/ports: Relying on default #size-cells value
+
+Maybe introduced by commit
+
+  3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC8=
+8U")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4DpgRW6knj1wx2f5p4ku0FS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHDn9AACgkQAVBC80lX
+0GyaeAf/WPrbTYp0eDL54QOzju9jt121EbbKjsU2jpj2BC3U80Hsed2r66fcmYkJ
+WaUIm0VojkPQXMRD9Zw/4qO58tzFl2oEYPwNA5N+R7cv4Mpm0ysazrkpU0g3IWw4
+TTFMOTAhwvcxKZVjbKHAKre98bQ3VWbmPfCQuhHmXmwaMwZtwnbGdQ+faRJrl71U
+vz7bXDekUwsmqxFAGGpQMOau48oR/TqmPYgk7SieDBHe9k1Xck8ZLry+RMdzV3QA
+9xtH0cOXBYMS9Pw5VYmxA7VFxtxPPAG2ehtlrY76HcNWwVn9fKoNsk04qsgyIyUj
+7QCkOCNY6We4FVk1pH3m+LCUPut+Tw==
+=UBpu
+-----END PGP SIGNATURE-----
+
+--Sig_/4DpgRW6knj1wx2f5p4ku0FS--

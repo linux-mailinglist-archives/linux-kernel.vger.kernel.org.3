@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D1F47CBBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6856647CBBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242151AbhLVDge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:36:34 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:59384 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229997AbhLVDgc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:36:32 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowADnyRYlncJhLv+ABA--.46045S2;
-        Wed, 22 Dec 2021 11:36:05 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        liviu.dudau@arm.com, sudeep.holla@arm.com,
-        lorenzo.pieralisi@arm.com
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] serial: mps2-uart: Check for error irq
-Date:   Wed, 22 Dec 2021 11:36:04 +0800
-Message-Id: <20211222033604.1049339-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S242158AbhLVDjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 22:39:37 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33890 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229997AbhLVDjg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 22:39:36 -0500
+Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJfFW3n0Hzcbxj;
+        Wed, 22 Dec 2021 11:39:11 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 11:39:34 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 11:39:33 +0800
+Subject: Re: [PATCH 4.19 00/56] 4.19.222-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <stable@vger.kernel.org>
+References: <20211220143023.451982183@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <69c4e498-a684-c719-bd27-9123cf3ffee2@huawei.com>
+Date:   Wed, 22 Dec 2021 11:39:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADnyRYlncJhLv+ABA--.46045S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Wr4fXr48WF4DurW3Gr15Arb_yoW8Jry3p3
-        WktrWDury8GFWrtwnrZF4DAF45uwsYqa47W34ag34a9wn5JFnxW34fCr9IkF1kZr4UJFWS
-        yrs8JF4F9a48Xr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjQBMtUUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <20211220143023.451982183@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I find that platform_get_irq() will not always succeed.
-It will return error irq in case there is no suitable irq.
-Therefore, it might be better to check it if order to avoid the use of
-error irq.
 
-Fixes: 041f031def33 ("serial: mps2-uart: add MPS2 UART driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/tty/serial/mps2-uart.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/tty/serial/mps2-uart.c b/drivers/tty/serial/mps2-uart.c
-index 587b42f754cb..117d9896051f 100644
---- a/drivers/tty/serial/mps2-uart.c
-+++ b/drivers/tty/serial/mps2-uart.c
-@@ -585,10 +585,20 @@ static int mps2_init_port(struct platform_device *pdev,
- 
- 	if (mps_port->flags & UART_PORT_COMBINED_IRQ) {
- 		mps_port->port.irq = platform_get_irq(pdev, 0);
-+		if (mps_port->port.irq < 0)
-+			return mps_port->port.irq;
- 	} else {
- 		mps_port->rx_irq = platform_get_irq(pdev, 0);
-+		if (mps_port->rx_irq < 0)
-+			return mps_port->rx_irq;
-+
- 		mps_port->tx_irq = platform_get_irq(pdev, 1);
-+		if (mps_port->tx_irq < 0)
-+			return mps_port->tx_irq;
-+
- 		mps_port->port.irq = platform_get_irq(pdev, 2);
-+		if (mps_port->port.irq < 0)
-+			return mps_port->port.irq;
- 	}
- 
- 	return ret;
--- 
-2.25.1
+On 2021/12/20 22:33, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.222 release.
+> There are 56 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Dec 2021 14:30:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.222-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
+Tested on arm64 and x86 for 4.19.222-rc1,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-4.19.y
+Version: 4.19.222-rc1
+Commit: 2b0e0aea0c2aec46fb5e692e66a67cb1701ee5fd
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8942
+passed: 8942
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8942
+passed: 8942
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

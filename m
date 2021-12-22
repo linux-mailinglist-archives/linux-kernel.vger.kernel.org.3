@@ -2,189 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B65D047D720
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD9247D725
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344877AbhLVSqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:46:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47038 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234898AbhLVSqq (ORCPT
+        id S234898AbhLVSst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236150AbhLVSsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:46:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA0A861C24;
-        Wed, 22 Dec 2021 18:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5AAC36AE8;
-        Wed, 22 Dec 2021 18:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640198805;
-        bh=OPM0F056+Xn6sxVEeahCN38HdV+X1zgC5cxXn0IndFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jho7VzVCY29z5Vt+NoiYwXC7GXLwulpS3griP/I9ZD0rQAonGLR21jatKYOqEY9b6
-         DCsG2v92PGLbBWuy7gGBz0GydSxN6YEtOVK2SnD4Z7/9XOfzXIBXsvdbXSCywu4ItM
-         41yC06zwipuLBi6f4/7nCtoEUFpRcOXEWvNyY40QpoQmg7hVptDjDYKMNRCvy0BUU/
-         yaX+V0k3myBvIsHPYLPr5qTd3uiGpb2sie9dRPQheJ7cVHjomwfbGhg5MZ4S2qTZEG
-         zfzUL/S0FzCza9ONCA9QAoIlHd9hvdsDsouboFQkxD/W3dTeYpzTXP2QeFcYLwanYo
-         naN+Sy9gVZ1Mg==
-Date:   Wed, 22 Dec 2021 11:46:39 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 09/10] kthread: Ensure struct kthread is present for all
- kthreads
-Message-ID: <YcNyjxac3wlKPywk@archlinux-ax161>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-9-ebiederm@xmission.com>
- <YcNsG0Lp94V13whH@archlinux-ax161>
- <87zgoswkym.fsf@email.froward.int.ebiederm.org>
+        Wed, 22 Dec 2021 13:48:43 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB68AC061574;
+        Wed, 22 Dec 2021 10:48:42 -0800 (PST)
+Date:   Wed, 22 Dec 2021 18:48:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1640198920;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fxMxrotv61zOssaXJWYSazH/pl1kalzyCWEhLkweGxY=;
+        b=aexdxzg31YX1G/baGbr9h5p+Ffnwmq2tQjrSGbpFWZ8E0tRNfqHfPlUJbUE/sEmG9XgJDA
+        gaFh71FCdK2w7X3NKdTQ60+G3MKFOeO3P748e1D1OcpgFtuIEKOwYMXH1NjGSs8BQvSMHw
+        YqxkoO0iSzzXonCMNG8utZ79SBvS3WwD1VfutJLdWaAFpKsU/024lST8FEQ/2YFJyzP3eM
+        BDSuIoFOVvXhKzklTjPvlzxDro4jHlQ+ohIvDPAJTfpJCRce8HU87zkm8UH8jBDgSVyDPu
+        /wSC6iHfPLCDEAAXtPwo8/cRbBm7bBqBcA5vFtU5WnHX8+SMl8dOB+Pnf0HwgA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1640198920;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fxMxrotv61zOssaXJWYSazH/pl1kalzyCWEhLkweGxY=;
+        b=XuHjiQ3tXUWCEdt2TGi6dzbs87y1wWXBPxE+ypHq0njLkSBRva6An6tPCbpDwAdtbUcv4I
+        s57PKPmWVeuiDcDQ==
+From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA
+ bank type enumeration
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211216162905.4132657-3-yazen.ghannam@amd.com>
+References: <20211216162905.4132657-3-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zgoswkym.fsf@email.froward.int.ebiederm.org>
+Message-ID: <164019891907.16921.1221908392370822768.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:30:57PM -0600, Eric W. Biederman wrote:
-> Nathan Chancellor <nathan@kernel.org> writes:
-> 
-> > Hi Eric,
-> >
-> > On Wed, Dec 08, 2021 at 02:25:31PM -0600, Eric W. Biederman wrote:
-> >> Today the rules are a bit iffy and arbitrary about which kernel
-> >> threads have struct kthread present.  Both idle threads and thread
-> >> started with create_kthread want struct kthread present so that is
-> >> effectively all kernel threads.  Make the rule that if PF_KTHREAD
-> >> and the task is running then struct kthread is present.
-> >> 
-> >> This will allow the kernel thread code to using tsk->exit_code
-> >> with different semantics from ordinary processes.
-> >> 
-> >> To make ensure that struct kthread is present for all
-> >> kernel threads move it's allocation into copy_process.
-> >> 
-> >> Add a deallocation of struct kthread in exec for processes
-> >> that were kernel threads.
-> >> 
-> >> Move the allocation of struct kthread for the initial thread
-> >> earlier so that it is not repeated for each additional idle
-> >> thread.
-> >> 
-> >> Move the initialization of struct kthread into set_kthread_struct
-> >> so that the structure is always and reliably initailized.
-> >> 
-> >> Clear set_child_tid in free_kthread_struct to ensure the kthread
-> >> struct is reliably freed during exec.  The function
-> >> free_kthread_struct does not need to clear vfork_done during exec as
-> >> exec_mm_release called from exec_mmap has already cleared vfork_done.
-> >> 
-> >> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> >
-> > This patch as commit 40966e316f86 ("kthread: Ensure struct kthread is
-> > present for all kthreads") in -next causes an ARCH=arm
-> > multi_v5_defconfig kernel to fail to boot in QEMU. I had to apply commit
-> > 6692c98c7df5 ("fork: Stop protecting back_fork_cleanup_cgroup_lock with
-> > CONFIG_NUMA") to get it to build and I applied commit dd621ee0cf8e
-> > ("kthread: Warn about failed allocations for the init kthread") to avoid
-> > the known runtime warning.
-> >
-> > $ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- distclean multi_v5_defconfig all
-> >
-> > $ qemu-system-arm \
-> >     -initrd rootfs.cpio \
-> >     -append earlycon \
-> >     -machine palmetto-bmc \
-> >     -no-reboot \
-> >     -dtb arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dtb \
-> >     -display none \
-> >     -kernel arch/arm/boot/zImage \
-> >     -m 512m \
-> >     -nodefaults \
-> >     -serial mon:stdio
-> > qemu-system-arm: warning: nic ftgmac100.0 has no peer
-> > qemu-system-arm: warning: nic ftgmac100.1 has no peer
-> > Booting Linux on physical CPU 0x0
-> > Linux version 5.16.0-rc1-00016-g40966e316f86-dirty (nathan@archlinux-ax161) (arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 PREEMPT Wed Dec 22 18:08:53 UTC 2021
-> > CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00093177
-> > CPU: VIVT data cache, VIVT instruction cache
-> > OF: fdt: Machine model: Palmetto BMC
-> > earlycon: ns16550a0 at MMIO 0x1e784000 (options '')
-> > printk: bootconsole [ns16550a0] enabled
-> > Memory policy: Data cache writethrough
-> > cma: Reserved 16 MiB at 0x5b000000
-> > Zone ranges:
-> >   DMA      [mem 0x0000000040000000-0x000000005edfffff]
-> >   Normal   empty
-> >   HighMem  [mem 0x000000005ee00000-0x000000005fffffff]
-> > Movable zone start for each node
-> > Early memory node ranges
-> >   node   0: [mem 0x0000000040000000-0x000000005bffffff]
-> >   node   0: [mem 0x000000005c000000-0x000000005dffffff]
-> >   node   0: [mem 0x000000005e000000-0x000000005edfffff]
-> >   node   0: [mem 0x000000005ee00000-0x000000005fffffff]
-> > Initmem setup node 0 [mem 0x0000000040000000-0x000000005fffffff]
-> > Built 1 zonelists, mobility grouping on.  Total pages: 130084
-> > Kernel command line: earlycon
-> > Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
-> > Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
-> > mem auto-init: stack:off, heap alloc:off, heap free:off
-> > Memory: 433140K/524288K available (9628K kernel code, 2019K rwdata, 2368K rodata, 340K init, 661K bss, 74764K reserved, 16384K cma-reserved, 0K highmem)
-> > SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-> > rcu: Preemptible hierarchical RCU implementation.
-> > rcu:    RCU event tracing is enabled.
-> >         Trampoline variant of Tasks RCU enabled.
-> > rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-> > NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-> > i2c controller registered, irq 16
-> > random: get_random_bytes called from start_kernel+0x408/0x624 with crng_init=0
-> > clocksource: FTTMR010-TIMER2: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 79635851949 ns
-> > sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
-> > Switching to timer-based delay loop, resolution 41ns
-> > Console: colour dummy device 80x30
-> > printk: console [tty0] enabled
-> > printk: bootconsole [ns16550a0] disabled
-> >
-> > After that, it just hangs.
-> >
-> > The rootfs is available at https://github.com/ClangBuiltLinux/boot-utils
-> > in the images/arm folder.
-> >
-> > If there is any more information that I can provide or changes to test,
-> > please let me know.
-> 
-> Well crap.  I hate to hear my code is causing problems like this.
-> 
-> This is however a very good bug report, which I very much appreciate.
-> 
-> I think I have enough information.  I will see if I can reproduce this
-> and track down what is happening.
-> 
-> Have you by any chance tried linux-next with just these changes backed
-> out? 
+The following commit has been merged into the ras/core branch of tip:
 
-Yes, if I back out of the following commits on top of next-20211222 then
-the kernel boots right up.
+Commit-ID:     91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b
+Gitweb:        https://git.kernel.org/tip/91f75eb481cfaee5c4ed8fb5214bf2fbfa04bd7b
+Author:        Yazen Ghannam <yazen.ghannam@amd.com>
+AuthorDate:    Thu, 16 Dec 2021 16:29:05 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 22 Dec 2021 17:22:09 +01:00
 
-dd621ee0cf8e ("kthread: Warn about failed allocations for the init kthread")
-ff8288ff475e ("fork: Rename bad_fork_cleanup_threadgroup_lock to bad_fork_cleanup_delayacct")
-6692c98c7df5 ("fork: Stop protecting back_fork_cleanup_cgroup_lock with CONFIG_NUMA")
-1fb466dff904 ("objtool: Add a missing comma to avoid string concatenation")
-5eb6f22823e0 ("exit/kthread: Fix the kerneldoc comment for kthread_complete_and_exit")
-6b1248798eb6 ("exit/kthread: Move the exit code for kernel threads into struct kthread")
-40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads")
+x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type enumeration
 
-Cheers,
-Nathan
+AMD systems currently lay out MCA bank types such that the type of bank
+number "i" is either the same across all CPUs or is Reserved/Read-as-Zero.
+
+For example:
+
+  Bank # | CPUx | CPUy
+    0      LS     LS
+    1      RAZ    UMC
+    2      CS     CS
+    3      SMU    RAZ
+
+Future AMD systems will lay out MCA bank types such that the type of
+bank number "i" may be different across CPUs.
+
+For example:
+
+  Bank # | CPUx | CPUy
+    0      LS     LS
+    1      RAZ    UMC
+    2      CS     NBIO
+    3      SMU    RAZ
+
+Change the structures that cache MCA bank types to be per-CPU and update
+smca_get_bank_type() to handle this change.
+
+Move some SMCA-specific structures to amd.c from mce.h, since they no
+longer need to be global.
+
+Break out the "count" for bank types from struct smca_hwid, since this
+should provide a per-CPU count rather than a system-wide count.
+
+Apply the "const" qualifier to the struct smca_hwid_mcatypes array. The
+values in this array should not change at runtime.
+
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211216162905.4132657-3-yazen.ghannam@amd.com
+---
+ arch/x86/include/asm/mce.h              | 18 +-------
+ arch/x86/kernel/cpu/mce/amd.c           | 59 ++++++++++++++----------
+ drivers/edac/mce_amd.c                  | 11 +----
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |  2 +-
+ 4 files changed, 39 insertions(+), 51 deletions(-)
+
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 52d2b35..cc73061 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -329,22 +329,6 @@ enum smca_bank_types {
+ 	N_SMCA_BANK_TYPES
+ };
+ 
+-#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
+-
+-struct smca_hwid {
+-	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
+-	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
+-	u8 count;		/* Number of instances. */
+-};
+-
+-struct smca_bank {
+-	struct smca_hwid *hwid;
+-	u32 id;			/* Value of MCA_IPID[InstanceId]. */
+-	u8 sysfs_id;		/* Value used for sysfs name. */
+-};
+-
+-extern struct smca_bank smca_banks[MAX_NR_BANKS];
+-
+ extern const char *smca_get_long_name(enum smca_bank_types t);
+ extern bool amd_mce_is_memory_error(struct mce *m);
+ 
+@@ -352,7 +336,7 @@ extern int mce_threshold_create_device(unsigned int cpu);
+ extern int mce_threshold_remove_device(unsigned int cpu);
+ 
+ void mce_amd_feature_init(struct cpuinfo_x86 *c);
+-enum smca_bank_types smca_get_bank_type(unsigned int bank);
++enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank);
+ #else
+ 
+ static inline int mce_threshold_create_device(unsigned int cpu)		{ return 0; };
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 9407cdc..a1e2f41 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -71,6 +71,22 @@ static const char * const smca_umc_block_names[] = {
+ 	"misc_umc"
+ };
+ 
++#define HWID_MCATYPE(hwid, mcatype) (((hwid) << 16) | (mcatype))
++
++struct smca_hwid {
++	unsigned int bank_type;	/* Use with smca_bank_types for easy indexing. */
++	u32 hwid_mcatype;	/* (hwid,mcatype) tuple */
++};
++
++struct smca_bank {
++	const struct smca_hwid *hwid;
++	u32 id;			/* Value of MCA_IPID[InstanceId]. */
++	u8 sysfs_id;		/* Value used for sysfs name. */
++};
++
++static DEFINE_PER_CPU_READ_MOSTLY(struct smca_bank[MAX_NR_BANKS], smca_banks);
++static DEFINE_PER_CPU_READ_MOSTLY(u8[N_SMCA_BANK_TYPES], smca_bank_counts);
++
+ struct smca_bank_name {
+ 	const char *name;	/* Short name for sysfs */
+ 	const char *long_name;	/* Long name for pretty-printing */
+@@ -126,14 +142,14 @@ const char *smca_get_long_name(enum smca_bank_types t)
+ }
+ EXPORT_SYMBOL_GPL(smca_get_long_name);
+ 
+-enum smca_bank_types smca_get_bank_type(unsigned int bank)
++enum smca_bank_types smca_get_bank_type(unsigned int cpu, unsigned int bank)
+ {
+ 	struct smca_bank *b;
+ 
+ 	if (bank >= MAX_NR_BANKS)
+ 		return N_SMCA_BANK_TYPES;
+ 
+-	b = &smca_banks[bank];
++	b = &per_cpu(smca_banks, cpu)[bank];
+ 	if (!b->hwid)
+ 		return N_SMCA_BANK_TYPES;
+ 
+@@ -141,7 +157,7 @@ enum smca_bank_types smca_get_bank_type(unsigned int bank)
+ }
+ EXPORT_SYMBOL_GPL(smca_get_bank_type);
+ 
+-static struct smca_hwid smca_hwid_mcatypes[] = {
++static const struct smca_hwid smca_hwid_mcatypes[] = {
+ 	/* { bank_type, hwid_mcatype } */
+ 
+ 	/* Reserved type */
+@@ -202,9 +218,6 @@ static struct smca_hwid smca_hwid_mcatypes[] = {
+ 	{ SMCA_GMI_PHY,	 HWID_MCATYPE(0x269, 0x0)	},
+ };
+ 
+-struct smca_bank smca_banks[MAX_NR_BANKS];
+-EXPORT_SYMBOL_GPL(smca_banks);
+-
+ /*
+  * In SMCA enabled processors, we can have multiple banks for a given IP type.
+  * So to define a unique name for each bank, we use a temp c-string to append
+@@ -260,8 +273,9 @@ static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
+ 
+ static void smca_configure(unsigned int bank, unsigned int cpu)
+ {
++	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
++	const struct smca_hwid *s_hwid;
+ 	unsigned int i, hwid_mcatype;
+-	struct smca_hwid *s_hwid;
+ 	u32 high, low;
+ 	u32 smca_config = MSR_AMD64_SMCA_MCx_CONFIG(bank);
+ 
+@@ -297,10 +311,6 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
+ 
+ 	smca_set_misc_banks_map(bank, cpu);
+ 
+-	/* Return early if this bank was already initialized. */
+-	if (smca_banks[bank].hwid && smca_banks[bank].hwid->hwid_mcatype != 0)
+-		return;
+-
+ 	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
+ 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
+ 		return;
+@@ -311,10 +321,11 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
+ 
+ 	for (i = 0; i < ARRAY_SIZE(smca_hwid_mcatypes); i++) {
+ 		s_hwid = &smca_hwid_mcatypes[i];
++
+ 		if (hwid_mcatype == s_hwid->hwid_mcatype) {
+-			smca_banks[bank].hwid = s_hwid;
+-			smca_banks[bank].id = low;
+-			smca_banks[bank].sysfs_id = s_hwid->count++;
++			this_cpu_ptr(smca_banks)[bank].hwid = s_hwid;
++			this_cpu_ptr(smca_banks)[bank].id = low;
++			this_cpu_ptr(smca_banks)[bank].sysfs_id = bank_counts[s_hwid->bank_type]++;
+ 			break;
+ 		}
+ 	}
+@@ -600,7 +611,7 @@ out:
+ 
+ bool amd_filter_mce(struct mce *m)
+ {
+-	enum smca_bank_types bank_type = smca_get_bank_type(m->bank);
++	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
+ 
+ 	/* See Family 17h Models 10h-2Fh Erratum #1114. */
+@@ -638,7 +649,7 @@ static void disable_err_thresholding(struct cpuinfo_x86 *c, unsigned int bank)
+ 	} else if (c->x86 == 0x17 &&
+ 		   (c->x86_model >= 0x10 && c->x86_model <= 0x2F)) {
+ 
+-		if (smca_get_bank_type(bank) != SMCA_IF)
++		if (smca_get_bank_type(smp_processor_id(), bank) != SMCA_IF)
+ 			return;
+ 
+ 		msrs[0] = MSR_AMD64_SMCA_MCx_MISC(bank);
+@@ -706,7 +717,7 @@ bool amd_mce_is_memory_error(struct mce *m)
+ 	u8 xec = (m->status >> 16) & 0x1f;
+ 
+ 	if (mce_flags.smca)
+-		return smca_get_bank_type(m->bank) == SMCA_UMC && xec == 0x0;
++		return smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC && xec == 0x0;
+ 
+ 	return m->bank == 4 && xec == 0x8;
+ }
+@@ -1022,7 +1033,7 @@ static struct kobj_type threshold_ktype = {
+ 	.release		= threshold_block_release,
+ };
+ 
+-static const char *get_name(unsigned int bank, struct threshold_block *b)
++static const char *get_name(unsigned int cpu, unsigned int bank, struct threshold_block *b)
+ {
+ 	enum smca_bank_types bank_type;
+ 
+@@ -1033,7 +1044,7 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
+ 		return th_names[bank];
+ 	}
+ 
+-	bank_type = smca_get_bank_type(bank);
++	bank_type = smca_get_bank_type(cpu, bank);
+ 	if (bank_type >= N_SMCA_BANK_TYPES)
+ 		return NULL;
+ 
+@@ -1043,12 +1054,12 @@ static const char *get_name(unsigned int bank, struct threshold_block *b)
+ 		return NULL;
+ 	}
+ 
+-	if (smca_banks[bank].hwid->count == 1)
++	if (per_cpu(smca_bank_counts, cpu)[bank_type] == 1)
+ 		return smca_get_name(bank_type);
+ 
+ 	snprintf(buf_mcatype, MAX_MCATYPE_NAME_LEN,
+-		 "%s_%x", smca_get_name(bank_type),
+-			  smca_banks[bank].sysfs_id);
++		 "%s_%u", smca_get_name(bank_type),
++			  per_cpu(smca_banks, cpu)[bank].sysfs_id);
+ 	return buf_mcatype;
+ }
+ 
+@@ -1104,7 +1115,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 	else
+ 		tb->blocks = b;
+ 
+-	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(bank, b));
++	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
+ 	if (err)
+ 		goto out_free;
+ recurse:
+@@ -1159,7 +1170,7 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
+ 	struct device *dev = this_cpu_read(mce_device);
+ 	struct amd_northbridge *nb = NULL;
+ 	struct threshold_bank *b = NULL;
+-	const char *name = get_name(bank, NULL);
++	const char *name = get_name(cpu, bank, NULL);
+ 	int err = 0;
+ 
+ 	if (!dev)
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index cfd3f7a..cc5c63f 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -1166,20 +1166,13 @@ static void decode_mc6_mce(struct mce *m)
+ /* Decode errors according to Scalable MCA specification */
+ static void decode_smca_error(struct mce *m)
+ {
+-	struct smca_hwid *hwid;
+-	enum smca_bank_types bank_type;
++	enum smca_bank_types bank_type = smca_get_bank_type(m->extcpu, m->bank);
+ 	const char *ip_name;
+ 	u8 xec = XEC(m->status, xec_mask);
+ 
+-	if (m->bank >= ARRAY_SIZE(smca_banks))
++	if (bank_type >= N_SMCA_BANK_TYPES)
+ 		return;
+ 
+-	hwid = smca_banks[m->bank].hwid;
+-	if (!hwid)
+-		return;
+-
+-	bank_type = hwid->bank_type;
+-
+ 	if (bank_type == SMCA_RESERVED) {
+ 		pr_emerg(HW_ERR "Bank %d is reserved.\n", m->bank);
+ 		return;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+index 08133de..75dad02 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+@@ -2647,7 +2647,7 @@ static int amdgpu_bad_page_notifier(struct notifier_block *nb,
+ 	 * and error occurred in DramECC (Extended error code = 0) then only
+ 	 * process the error, else bail out.
+ 	 */
+-	if (!m || !((smca_get_bank_type(m->bank) == SMCA_UMC_V2) &&
++	if (!m || !((smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC_V2) &&
+ 		    (XEC(m->status, 0x3f) == 0x0)))
+ 		return NOTIFY_DONE;
+ 

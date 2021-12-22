@@ -2,173 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A362847CF13
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B004547CF16
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243873AbhLVJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:19:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37367 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243856AbhLVJT6 (ORCPT
+        id S243880AbhLVJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:20:17 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:40865 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239569AbhLVJUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:19:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640164798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HW6P5aqMvgJy6ygBO3Phm4zEMTRrHSBikFoLdf1Jgbg=;
-        b=cMzj7gW1NCDqWmQ+gwn3AuLxIyuQmBtB3KbxCcJDsVwoGnU/zQJqkWHIaidwITw/JhZ5Zu
-        hXpjqykClsEhgsetNeQZYZXmR8SFqvK6R2clTIAS5hVvvHeQFLf8Y7uQgC4XWrfjFwXQvV
-        ycoWffII9F/WKwzXy5hYIBDbiMMInrM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-3ZvPHLPpNqSh_bo4KCMVUQ-1; Wed, 22 Dec 2021 04:19:54 -0500
-X-MC-Unique: 3ZvPHLPpNqSh_bo4KCMVUQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 763611800D50;
-        Wed, 22 Dec 2021 09:19:53 +0000 (UTC)
-Received: from work (unknown [10.40.193.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AAC5357BE;
-        Wed, 22 Dec 2021 09:19:51 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 10:19:47 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     yebin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: Fix remount with 'abort' option isn't
- effective
-Message-ID: <20211222091947.chmg6mcetocrmygd@work>
-References: <20211221123214.2410593-1-yebin10@huawei.com>
- <20211221144305.nlryh7q2cgdbpmi5@work>
- <61C27A0E.9050900@huawei.com>
+        Wed, 22 Dec 2021 04:20:16 -0500
+Received: by mail-ua1-f43.google.com with SMTP id y23so3019941uay.7;
+        Wed, 22 Dec 2021 01:20:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a5KXFkJczT+loL4bmBd/xTV7aUTkBhT057Cylmeu8aM=;
+        b=B63M9lnNYHxhCs876fSKbCSpVLD3SfeHDCQ77UUuhAJIjPE0tI/K0QZ/ug73+1jqta
+         lz+bns5TmqLV1byR0NQHxegThxqZFm7zeOyw4s8f0D2I4OFLR067nmkfg8dL9+O8UIqb
+         9EUSrQtkweKOX/0xI25uRnG+RgQew75PkNL6Hd3hRVhp5bkJMySnkLOlCm1ikQjvmJvn
+         gYb1fqB3hss1eLowdUPZIAN+es6xsFyxHQoJPhwzBt63u4jQcdsWWOSVilR/RgXg+OWp
+         jA5ze6crTQxXH5UhafeaF7QpPch9aoiD83x5Mne4OpplJbpItpwm2+PwgAhrYfAjrPxB
+         dROA==
+X-Gm-Message-State: AOAM530RprnitFafJVAQX54NdesjpiBUpGz7g/OwzzjgRZh6wgycFlqz
+        Xx3YztjPSaxiX9b6FrH5RiBZxF8990/y3g==
+X-Google-Smtp-Source: ABdhPJwF9jaHNu77S8dTJ0lF2VMZJwYVQ2Lk62/GUHrzODlWm4y4qhZpM09z2gYL0qwrD/XRcwqQNA==
+X-Received: by 2002:a67:e109:: with SMTP id d9mr631850vsl.11.1640164815641;
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
+        by smtp.gmail.com with ESMTPSA id i123sm281897vkb.20.2021.12.22.01.20.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+Received: by mail-vk1-f170.google.com with SMTP id m185so933582vkm.5;
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+X-Received: by 2002:a05:6122:21a6:: with SMTP id j38mr685592vkd.39.1640164815041;
+ Wed, 22 Dec 2021 01:20:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61C27A0E.9050900@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Dec 2021 10:20:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
+Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakarprabhakar.csengg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 09:06:22AM +0800, yebin wrote:
-> 
-> 
-> On 2021/12/21 22:43, Lukas Czerner wrote:
-> > Hi,
-> > 
-> > nice catch. This is a bug indeed. However I am currently in a process of
-> > changing the ctx_set/clear/test_ helpers because currently it generates
-> > functions that are unused.
-> > 
-> > While I am at it I can just create a custom ctx_set_mount_flags()
-> > helper that would behave as expected so that we won't have to specify
-> > "1 < EXT4_MF_FS_ABORTED" which is not really obvious and hence error
-> > prone.
-> Actually, I fixed the first version as follows:
+On Tue, Dec 21, 2021 at 7:21 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional() for DT users only.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Allright, this looks better.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index b72d989b77fb..199920ffc7d3 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -2049,8 +2049,8 @@ struct ext4_fs_context {
->  	unsigned int	mask_s_mount_opt;
->  	unsigned int	vals_s_mount_opt2;
->  	unsigned int	mask_s_mount_opt2;
-> -	unsigned int	vals_s_mount_flags;
-> -	unsigned int	mask_s_mount_flags;
-> +	unsigned long	vals_s_mount_flags;
-> +	unsigned long	mask_s_mount_flags;
->  	unsigned int	opt_flags;	/* MOPT flags */
->  	unsigned int	spec;
->  	u32		s_max_batch_time;
-> @@ -2166,7 +2166,12 @@ static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
->  EXT4_SET_CTX(flags);
->  EXT4_SET_CTX(mount_opt);
->  EXT4_SET_CTX(mount_opt2);
-> -EXT4_SET_CTX(mount_flags);
-> +
-> +static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int bit)
+Gr{oetje,eeting}s,
 
-Maybe ctx_set_mount_flag since you can't really set more than one this
-way?
+                        Geert
 
-> +{
-> +	set_bit(bit, &ctx->mask_s_mount_flags);
-> +	set_bit(bit, &ctx->vals_s_mount_flags);
-> +}
-> 
-> 
-> I think 'mask_s_mount_flags' is useless now.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-So how would we know what flags have changed ? Sure, there is currently
-no need to clear the flag but that can come in future and once it does
-we'll only need to create a clear helper, the rest will be ready.
-I'd rather keep it.
-
--Lukas
-
-> > 
-> > My plan is to send my patch set including this one tomorrow, will that
-> > be fine with you ?
-> > 
-> > -Lukas
-> > 
-> > On Tue, Dec 21, 2021 at 08:32:14PM +0800, Ye Bin wrote:
-> > > We test remount with 'abort' option as follows:
-> > > [root@localhost home]# mount  /dev/sda test
-> > > [root@localhost home]# mount | grep test
-> > > /dev/sda on /home/test type ext4 (rw,relatime)
-> > > [root@localhost home]# mount -o remount,abort test
-> > > [root@localhost home]# mount | grep test
-> > > /dev/sda on /home/test type ext4 (rw,relatime)
-> > > 
-> > > Obviously, remount 'abort' option isn't effective.
-> > > After 6e47a3cc68fc commit we process abort option with 'ctx_set_mount_flags':
-> > > static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int flag)
-> > > {
-> > > 	ctx->mask_s_mount_flags |= flag;
-> > > 	ctx->vals_s_mount_flags |= flag;
-> > > }
-> > > 
-> > > But we test 'abort' option with 'ext4_test_mount_flag':
-> > > static inline int ext4_test_mount_flag(struct super_block *sb, int bit)
-> > > {
-> > >          return test_bit(bit, &EXT4_SB(sb)->s_mount_flags);
-> > > }
-> > > 
-> > > To solve this issue, pass (1 <<  EXT4_MF_FS_ABORTED) to 'ctx_set_mount_flags'.
-> > > 
-> > > Fixes:6e47a3cc68fc("ext4: get rid of super block and sbi from handle_mount_ops()")
-> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > > ---
-> > >   fs/ext4/super.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> > > index b72d989b77fb..071b7b3c5678 100644
-> > > --- a/fs/ext4/super.c
-> > > +++ b/fs/ext4/super.c
-> > > @@ -2236,7 +2236,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
-> > >   			 param->key);
-> > >   		return 0;
-> > >   	case Opt_abort:
-> > > -		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
-> > > +		ctx_set_mount_flags(ctx, 1 << EXT4_MF_FS_ABORTED);
-> > >   		return 0;
-> > >   	case Opt_i_version:
-> > >   		ctx_set_flags(ctx, SB_I_VERSION);
-> > > -- 
-> > > 2.31.1
-> > > 
-> > .
-> > 
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

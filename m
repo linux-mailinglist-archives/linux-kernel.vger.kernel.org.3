@@ -2,91 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F84847CDCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F48C47CDD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 09:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243161AbhLVICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 03:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239362AbhLVICj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 03:02:39 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5E0C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:02:38 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id a1so1217543qtx.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:02:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eEHO9mF2ihCkk9k6a/idoNBNvOKWMCPKO1yXdk6ABVQ=;
-        b=il3BzMhmlW/d+Rrc5RiG8X7UUWBfNUy3XBoUGUll4924Cdc8tvryQHCH30Fbd2cpGZ
-         Qnjf3QSBnX+9L2aFC5NTHr+3ka9ZQ1p9EsOxWJNoYBpi04vX0kIXevs2zMO0am8iONOC
-         ykNyVKyrdBgweFl392jWl3CYh8XzW/E3jZMzlkB4oO0mB9FlfaH+cN0jVpMuhZdOd44l
-         3UkRpfiUxfUpGiHs5OIEJEM0FP0Adza1HieFis4vYupjKF3QKOLhzXeJGDtKQauluxwj
-         3/I+1FZGQE/M9hmHrVRDmeLgpx9jxkdjdJ0njQEkCmKa+sEut6k6leNkO7mGtwVjm9LA
-         AbFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eEHO9mF2ihCkk9k6a/idoNBNvOKWMCPKO1yXdk6ABVQ=;
-        b=mLHXSH8Y2DFSrmNfV/v7UZjBZxibH/zdYLaXuqyAMPP3e3yWhrZYnUZPXXWVaYj6js
-         rqRc3K4p9e/Saw8HRZg/E8YFNWxY7T3sF8ncu3FLBkyIGha7LgDus9j7D+GY6TRR8vfK
-         qTH1UhHNKJCy6D0V7xvLdIMD/X3FOXPyKPMNQ9Cv31Uw5zgDzdeQ/Y7Xttj8LcBBvoKn
-         ELuKgJUcn0vvbwBAjF9YVfPntUW7hdfuZV7vvnGbhbfEg/fT6q88g6TUCRP/6uVK/EXe
-         2vtx8IvTxa4P6XajzlsAseU8qZ50tL5e/j/hxhfE8gMKHecQTRSIDxPZSWuYhjtuwnjs
-         8FJw==
-X-Gm-Message-State: AOAM530NDb7agzuiEkeNpk9BQcizep9OpyiGUL7jUIqZcndZN9KwQK9d
-        aBAHt1p7FDGjtJ9OI6yzBY0CW+WUdA2okA7P1QB06YucQNJbcw==
-X-Google-Smtp-Source: ABdhPJxE83WxXenOaQLGWEZKR8S/ngERCAo39PxXlPYIFzgmWE6XIX8ED0EEjeGPv4PBFRACkMEpCHVVp18YzJq+fQQ=
-X-Received: by 2002:a05:622a:120b:: with SMTP id y11mr1275305qtx.544.1640160158101;
- Wed, 22 Dec 2021 00:02:38 -0800 (PST)
+        id S239645AbhLVIEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 03:04:41 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21394 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233159AbhLVIEk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 03:04:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640160280; x=1671696280;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y7scDPULWRfWlt9xoVIYTtc4qPgqKGuK4ikeOefHq/Y=;
+  b=FSVuIPCwT6K1paPafzqskJnj6nhoERaz0JtHRIdk21bkkl+70YR6EmlW
+   5rLTklZQAgLqAjCmanGiE8K+C1oWSJzrwszZIh9yXzTWtTOEG+MAvNeFB
+   Fmsq6WQotsZoruvZ2qpMbofHiVGWylgtR7RGmwlcCHTfnGoomeAFqp6KK
+   y+BC893zbA54ZUjNAQIfOnRWl3u7HNFRS2PUkhxNETpVw4nugoL9jctXj
+   pwvAx1Vm4f7zo1nf1pGU6xvBNbLkb+h9kLhytlkEFk48xLh6IRCmMKLEP
+   Hx2QTf+0nYSFWvtgaZ2rXyG6UV6MnEh4r8Zst5yzgye7LRGzUbcjefedK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227866505"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="227866505"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 00:04:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="484679791"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2021 00:04:36 -0800
+Date:   Wed, 22 Dec 2021 16:05:35 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH v6 2/2] selftests/x86: add xsave test related to
+ process switching
+Message-ID: <YcLcT2tOqZS0gGbg@xpf.sh.intel.com>
+References: <cover.1640052713.git.pengfei.xu@intel.com>
+ <153cbbb0279d99d454b06393c19e541fba44d4cd.1640052713.git.pengfei.xu@intel.com>
+ <302d8316-20f4-a18d-ca04-d797b7d8be88@linuxfoundation.org>
 MIME-Version: 1.0
-References: <1638952658-20285-1-git-send-email-huangzhaoyang@gmail.com>
- <2868725.1638995206@warthog.procyon.org.uk> <CAGWkznHcuiwPPMZE95nYG=EFkM8NmLUQZooS5+a+GigP50qksg@mail.gmail.com>
- <73896.1640098820@warthog.procyon.org.uk>
-In-Reply-To: <73896.1640098820@warthog.procyon.org.uk>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 22 Dec 2021 16:02:18 +0800
-Message-ID: <CAGWkznGgyS5VrcuYkWR_7sbDOkr0k2mDNUwF6F6N-Y_3GGtoJA@mail.gmail.com>
-Subject: Re: [PATCH] fs: judging context via current_is_kswapd instead of gfp_flag
-To:     David Howells <dhowells@redhat.com>
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        linux-cachefs@redhat.com, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <302d8316-20f4-a18d-ca04-d797b7d8be88@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 11:01 PM David Howells <dhowells@redhat.com> wrote:
->
-> Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
->
-> > > > -             if (!(gfp_flags & __GFP_DIRECT_RECLAIM) || !(gfp_flags & __GFP_FS))
-> > > > +             if (current_is_kswapd() || !(gfp_flags & __GFP_FS))
-> > > >                       return false;
-> > > >               wait_on_page_fscache(page);
-> > ...
-> > If the gfp flag here is used for judging kswapd context, I think the
-> > answer is yes as kswapd applied __GFP_DIRECT_RECLAIM.
->
-> Now I come to look at applying it, I'm not sure whether this change is right.
->
-> I don't know if kswapd has anything to do with it.  The check is to see if
-> we're allowed to block at this point - and wait is just for the completion of
-> a DIO write to disk.
->
-> It would seem like gfpflags_allow_blocking() is the right thing to call - and
-> that should use current_is_kswapd() if appropriate.
->
-> David
-According to my understanding, this check is redundant according to
-current vmscan logic. For the allocation which deny
-__GFP_DIRECT_RECLAIM could NOT have the context reach here as there is
-no synchronous reclaiming. while kswapd also has __GFP_DIRECT_RECLAIM
-set and would also block on the page's release.
->
+Hi Shuah,
+
+On 2021-12-21 at 11:05:03 -0700, Shuah Khan wrote:
+> On 12/20/21 8:22 PM, Pengfei Xu wrote:
+> > It will change FPU, SSE(XMM), AVX2(YMM), AVX512, PKRU xstates before process
+> > switching test to ensure that these xstates have been tested.
+> > In order to ensure that the content of xstates is not affected across process
+> > switching, this case tests that:
+> > 1. The xstates content of the child process should be the same as that of the
+> >     parent process.
+> > 2. The xstates content of the process should be the same across process
+> >     switching.
+> > 
+> > Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+> > ---
+> >   tools/testing/selftests/x86/Makefile          |   3 +-
+> >   tools/testing/selftests/x86/xsave_fork_test.c | 117 ++++++++++++++++++
+> >   2 files changed, 119 insertions(+), 1 deletion(-)
+> >   create mode 100644 tools/testing/selftests/x86/xsave_fork_test.c
+> > 
+> > diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> > index a9e452b65ba2..049f8ffb2742 100644
+> > --- a/tools/testing/selftests/x86/Makefile
+> > +++ b/tools/testing/selftests/x86/Makefile
+> > @@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+> >   			test_FCMOV test_FCOMI test_FISTTP \
+> >   			vdso_restorer
+> >   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+> > -			corrupt_xstate_header amx xsave_signal_handle
+> > +			corrupt_xstate_header amx xsave_signal_handle xsave_fork_test
+> >   # Some selftests require 32bit support enabled also on 64bit systems
+> >   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+> > @@ -106,3 +106,4 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
+> >   $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
+> >   $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
+> >   $(OUTPUT)/xsave_signal_handle_64: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
+> > +$(OUTPUT)/xsave_fork_test_64: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
+> > diff --git a/tools/testing/selftests/x86/xsave_fork_test.c b/tools/testing/selftests/x86/xsave_fork_test.c
+> > new file mode 100644
+> > index 000000000000..507334e25eba
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/x86/xsave_fork_test.c
+> > @@ -0,0 +1,117 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * It's used for XSAVE test with process switching.
+> 
+> Add text from your change log here - more details on what this test
+> for will be helpful.
+> 
+  Thanks very much for suggestion, I will add detailed description from
+  change log in comments.
+
+> > + */
+> > +
+> > +#define _GNU_SOURCE
+> > +
+> > +#include <stdio.h>
+> > +#include <stdint.h>
+> > +#include <string.h>
+> > +#include <sys/wait.h>
+> > +#include <unistd.h>
+> > +#include <sched.h>
+> > +#include <sys/syscall.h>
+> > +
+> > +#include "xsave_common.h"
+> > +
+> > +void *aligned_alloc(size_t alignment, size_t size);
+> > +static unsigned char *xsave_buf0, *xsave_buf1, *xsave_buf2;
+> > +static int xsave_size;
+> > +
+> > +void prepare_environment(void)
+> > +{
+> > +	xsave_size = get_xsave_size();
+> > +	printf("XSAVE_TEST_MASK:0x%x, xsave size:0x%x\n",
+> > +		XSAVE_TEST_MASK, xsave_size);
+> > +	check_cpu_capability();
+> > +
+> > +	/* SDM XSAVE: misalignment to a 64-byte boundary will result in #GP */
+> > +	xsave_buf0 = aligned_alloc(64, xsave_size);
+> > +	if (!xsave_buf0)
+> > +		execution_failed("aligned_alloc xsave_buf0 failed\n");
+> > +	xsave_buf1 = aligned_alloc(64, xsave_size);
+> > +	if (!xsave_buf1)
+> > +		execution_failed("aligned_alloc xsave_buf1 failed\n");
+> > +	xsave_buf2 = aligned_alloc(64, xsave_size);
+> > +	if (!xsave_buf2)
+> > +		execution_failed("aligned_alloc xsave_buf2 failed\n");
+> > +}
+> > +
+> > +/* Use fork to create pid and trigger process switch test */
+> > +int test_xsave_fork(void)
+> > +{
+> > +	pid_t child, grandchild;
+> > +	int status, result[2];
+> > +	const char *test_xsave_child = "Child xstate was same as parent";
+> > +	const char *test_process_switch = "Xstate after the process switch didn't change";
+> > +	uint32_t ui32_change = 0xffff0000;
+> > +
+> > +	populate_xstate_regs();
+> > +	xsave(xsave_buf0, XSAVE_TEST_MASK);
+> > +	child = syscall(SYS_fork);
+> > +	if (child < 0)
+> > +		execution_failed("fork failed\n");
+> 
+> Please use strerr() instead so we know why fork() failed?
+> Same comment on all other error messages. Use strerror() so
+> we know why syscalls failed.
+> 
+> So this would be the change you would make to execution_failed()
+> and pass in the strerror()
+> 
+> 
+  Thanks very much for suggestion!
+  Yes, I should add  errno, strerror(errno) into failed reason.
+  I will add it like as follows:
+"
+int execution_failed(char *reason, ...)
+{
+	printf("FAIL:errno=%d, %s, %s", errno, strerror(errno), reason);
+	err_num++;
+
+	return 1;
+}
+"
+
+> > +	if (child == 0) {
+> > +		xsave(xsave_buf1, XSAVE_TEST_MASK);
+> > +		result[0] = compare_xsave_buf(xsave_buf0, xsave_buf1, xsave_size,
+> > +			test_xsave_child, NO_CHANGE);
+> > +
+> > +		/*
+> > +		 * If above case is failed and prints some failed reason, in
+> 
+> NIT: "If the above case fails, print reason for failure
+  Thanks, I will fix it as suggestion.
+
+> > +		 * order to avoid libc printf change and clean up some xstates,
+> > +		 * populate xstates again for next test
+> 
+> This is not very clear. Is this for avoiding cleanup? What are "some xstates"?
+> 
+  Yes, it's not very clear, if printf could not use sse(added -mno-sse),
+  printf will clean xmm registers by "vzeroupper(clean YMM,ZMM, XMM is included
+  in YMM)" in function
+  __strlen_avx2:
+"
+...
+   0x00007ffff7f1a810 <+272>:   f3 0f bc c0     tzcnt  %eax,%eax
+   0x00007ffff7f1a814 <+276>:   48 01 f8        add    %rdi,%rax
+   0x00007ffff7f1a817 <+279>:   48 29 d0        sub    %rdx,%rax
+=> 0x00007ffff7f1a81a <+282>:   c5 f8 77        vzeroupper
+"
+
+  I will improve it as follow if there is no comments:
+"
+If the above case fails, print reason for failure, and then xstate like xmm,
+ymm would be cleared by vzeroupper in printf(-mnosse), so populate xstates for
+next test case, otherwise, xmm and ymm xstate is all 0, there is no guarantee
+that xmm, ymm will be restored as expected.
+"
+
+> > +		 */
+> > +		populate_xstate_regs();
+> > +		xsave(xsave_buf1, XSAVE_TEST_MASK);
+> > +
+> > +		/* fork grandchild will trigger process switching in child */
+> > +		grandchild = syscall(SYS_fork);
+> > +		if (grandchild == 0) {
+> > +			printf("Grandchild pid:%d change it's own xstates\n", getpid());
+> > +			change_xstate(ui32_change);
+> > +			return 0;
+> > +		}
+> > +		if (grandchild) {
+> > +			if (waitpid(grandchild, &status, 0) != grandchild || !WIFEXITED(status))
+> > +				printf("[FAIL]:Grandchild exit with error, status:0x%x\n",
+> > +					status);
+> > +		}
+> > +		/* After switch back to child process and check xstate */
+> > +		xsave(xsave_buf2, XSAVE_TEST_MASK);
+> > +		result[1] = compare_xsave_buf(xsave_buf1, xsave_buf2, xsave_size,
+> > +			test_process_switch, NO_CHANGE);
+> > +		printf("Child pid:%d check xstate after swtich back\n",
+> > +			getpid());
+> > +
+> > +		check_result(result[0], test_xsave_child);
+> > +		check_result(result[1], test_process_switch);
+> > +		printf("Xstate in process switch test pass[%d/%d], err_num:%d\n",
+> > +			pass_num, case_num, err_num);
+> > +
+> > +		return 0;
+> > +	}
+> > +
+> > +	if (child) {
+> > +		if (waitpid(child, &status, 0) != child || !WIFEXITED(status))
+> > +			printf("[FAIL]:Child exit with error, status:0x%x\n",
+> > +				status);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +int main(void)
+> > +{
+> > +	cpu_set_t set;
+> > +
+> > +	case_num = 2;
+> > +	CPU_ZERO(&set);
+> > +	CPU_SET(0, &set);
+> > +	sched_setaffinity(getpid(), sizeof(set), &set);
+> > +
+> > +	prepare_environment();
+> > +	test_xsave_fork();
+> > +
+> > +	return 0;
+> > +}
+> > 
+> 
+> thanks,
+> -- Shuah

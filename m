@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435A447D085
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADAF47D08B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244403AbhLVLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbhLVLLO (ORCPT
+        id S244425AbhLVLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:11:45 -0500
+Received: from ivanoab7.miniserver.com ([37.128.132.42]:34678 "EHLO
+        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244418AbhLVLLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:11:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BC2C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:11:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE8B561987
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E0CC36AE5;
-        Wed, 22 Dec 2021 11:11:10 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 11:11:07 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH mm v4 32/39] kasan, arm64: don't tag executable vmalloc
- allocations
-Message-ID: <YcMHyxOIN0LD7Lrt@arm.com>
-References: <cover.1640036051.git.andreyknvl@google.com>
- <85ecef50788a3915a9a8fb52e97207901f27b057.1640036051.git.andreyknvl@google.com>
+        Wed, 22 Dec 2021 06:11:43 -0500
+Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1mzzWz-000AHl-4O; Wed, 22 Dec 2021 11:11:39 +0000
+Received: from madding.kot-begemot.co.uk ([192.168.3.98])
+        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1mzzWu-00AAhH-VX; Wed, 22 Dec 2021 11:11:35 +0000
+Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
+ <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
+ <20211222103417.GB25135@axis.com>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Organization: Cambridge Greys
+Message-ID: <38342157-f9c5-42dd-db04-3a13756bd70b@cambridgegreys.com>
+Date:   Wed, 22 Dec 2021 11:11:32 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85ecef50788a3915a9a8fb52e97207901f27b057.1640036051.git.andreyknvl@google.com>
+In-Reply-To: <20211222103417.GB25135@axis.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:02:04PM +0100, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
+On 22/12/2021 10:34, Vincent Whitchurch wrote:
+> On Tue, Dec 21, 2021 at 09:48:26PM +0100, Johannes Berg wrote:
+>> On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
+>>> Allow the virtio_uml device to be probed from the devicetree so that
+>>> sub-devices can be specified using the standard virtio bindings, for
+>>> example:
+>>>
+>>>    virtio@1 {
+>>>      compatible = "virtio,uml";
+>>>      socket-path = "i2c.sock";
+>>>      virtio-device-id = <0x22>;
+>>>
+>>
+>> Given this, maybe it should modify
+>> Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
+>> add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
+>>
+>> +Rob, because I'm not really into any of this.
+>>
+>> Also, I'm not even sure we should/need to document the DT bits that are
+>> basically only used for testing in the first place?
 > 
-> Besides asking vmalloc memory to be executable via the prot argument
-> of __vmalloc_node_range() (see the previous patch), the kernel can skip
-> that bit and instead mark memory as executable via set_memory_x().
+> I wasn't sure either, but Rob was OK with not documenting some other
+> bindings which are only used for testing[0], so I assumed that that
+> applied here too:
 > 
-> Once tag-based KASAN modes start tagging vmalloc allocations, executing
-> code from such allocations will lead to the PC register getting a tag,
-> which is not tolerated by the kernel.
+>   [0] https://lore.kernel.org/all/5baa1ae6.1c69fb81.847f2.3ab1@mx.google.com/
 > 
-> Generic kernel code typically allocates memory via module_alloc() if
-> it intends to mark memory as executable. (On arm64 module_alloc()
-> uses __vmalloc_node_range() without setting the executable bit).
+> Also, DT bindings are supposed to be generic and based on what the
+> hardware has, but here we have no hardware and something very Linux and
+> UML-specific.
+
+This will probably need to be added to the general UML documentation. I 
+will take care of that once the patches are in the tree.
+
+Brgds,
+
 > 
-> Thus, reset pointer tags of pointers returned from module_alloc().
+>> Code looks good to me.
 > 
-> However, on arm64 there's an exception: the eBPF subsystem. Instead of
-> using module_alloc(), it uses vmalloc() (via bpf_jit_alloc_exec())
-> to allocate its JIT region.
-> 
-> Thus, reset pointer tags of pointers returned from bpf_jit_alloc_exec().
-> 
-> Resetting tags for these pointers results in untagged pointers being
-> passed to set_memory_x(). This causes conflicts in arithmetic checks
-> in change_memory_common(), as vm_struct->addr pointer returned by
-> find_vm_area() is tagged.
-> 
-> Reset pointer tag of find_vm_area(addr)->addr in change_memory_common().
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Thanks!
 > 
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+
+-- 
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/

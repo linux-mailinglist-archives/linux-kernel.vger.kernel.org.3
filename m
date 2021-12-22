@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E01347D1A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6C147D1AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244837AbhLVM1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S244868AbhLVM3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244833AbhLVM1b (ORCPT
+        with ESMTP id S244860AbhLVM3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:27:31 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C49C061574;
-        Wed, 22 Dec 2021 04:27:31 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id o20so7906683eds.10;
-        Wed, 22 Dec 2021 04:27:31 -0800 (PST)
+        Wed, 22 Dec 2021 07:29:01 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541FDC061574;
+        Wed, 22 Dec 2021 04:29:01 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id m21so9300158edc.0;
+        Wed, 22 Dec 2021 04:29:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cAWKXJ03Mjonmea/50HYvG6YASoC2U6OY7b/+8v5Llc=;
-        b=DrrSho4cwCA7Wh/aYnoEyI7aFQf1h3SoF3yI2IYZNrUG9EzEWCMWtkQPgqVwPW5URx
-         vTNna5RbMN/1N+DhEHit42YwyGl/Hr1o0hE1QtTk5FCcO9dUOWe1VV4zuISo4YjO3qpa
-         jEVNpRlgR9K5VfDKJ2BkbT0XywZuM2KbslJ3JyP+n+yYV7ydNSuHt6keY6HctEwzW7h3
-         Q76GZt3ZvcGR5h835vuhIWWYX1CPDWMK3gH6xml7S7LYKUQf8ZTRjn/TAxRXUEKy5dQZ
-         WLcil3svEx1K1cOaLXn75609pJYjBmfTenQ8TheF54MxSPZl2LeMNx/Sdy+ZXGsGyW+o
-         ldlw==
+        bh=iXVh+/KCd78FuQeBsJpAndrv54x5fAs5orWXadX/Xv4=;
+        b=C8E4eGtWdT4CwC6+qigGuNKbnk6811BSLwO/QpCp3L69lzGP4Wu2nhoeZaD73SP+ZD
+         XqWlvs2Ld5H2WdvrZ4PtdZwRrAoyTwkNx8XCAfLKU2snZYoFRnUedd6fwSR6vwpIcnzE
+         Xdo2++1iwFyBMs3qWlSFiAO1jAqKEow0uhtKaKSqAB+iTM6cY+tKj2zGlAe1hcgzkLrl
+         nivOwUKXfQYMDzqebf0yeB3E+cMByDDqPNl5DZL4TuXGFnZmafCwa18+TttM5HeJY0JK
+         3eDhfkf8qUXuILR85/e3TLPT1jKEMB8bwHrjsFFHEbON7/c2+v2RjPbLPxil/IbGN8CJ
+         s4fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cAWKXJ03Mjonmea/50HYvG6YASoC2U6OY7b/+8v5Llc=;
-        b=Z3shStAy0UFH9M6O+dZfk7tRLnx85cMMm5LEFZo97kFC9cd0hgQcHjcWkbG6b9y4nI
-         SWqWIjmiN2BofTnN6kHXQecjbtltxJe6pW/h1iTuGrr9j7n/YBoPHm2ENVjHD+P3Q5CF
-         NSMzQA4HJ1jIih5Cj0+x53Ymk8imk5aC0nshEbMbV0KzbT4r1pY89OBaYYtfWjfyB2Kr
-         irSKn8X6njHQon2CZFL3oCBm8340xI7XZliHrLiLX2t8VKn6yRqOLD1RDFYHuDuf8Hlu
-         T1lVqiWouSTLhVKNw8XVV4SoBCKCpAZPSXWVf3Zd0SezWaDDg5QoQskPMrRqLfNECG7o
-         oLig==
-X-Gm-Message-State: AOAM533hpx3ji1SSMkuyLzPm9EFWn/JSORrTgEoxiZnGuRps6D/eeBHs
-        TO7yuZfCDgF2VPunpEscEK9ZzOEtHJqesa5xwGw=
-X-Google-Smtp-Source: ABdhPJwVgZ8zNhk0qAMMUZ3tp8wUGdltwnAClEChY8v0gwQdT7A0rrnRm5fqDJ8efZ/80CxSwD/lUPgo1DZ/2ktoV80=
-X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr2232477ejb.639.1640176049966;
- Wed, 22 Dec 2021 04:27:29 -0800 (PST)
+        bh=iXVh+/KCd78FuQeBsJpAndrv54x5fAs5orWXadX/Xv4=;
+        b=CkkVYAtFiQGGgvV/BC40Wek8xcpgOPyWxf5ybpgPDszBFJIOQBVpXMrDUkosH0KjNB
+         /Z1cuICycV+HIsQlJq6GKtCEBtpFyOLF6Thy+4YoItx5wmoCRW1aZy8AHRDLUl732owS
+         Q0h9QSgNBu3AMOuiH9U5CvYXDsGwT+EhrwV46/HchnLDzki2gXSEQ4nESkbCp8nCD4A3
+         /Y8EctMcN3uW6ItR24uviwfDlEelOhEJJv36xycFnRwYR7eO9EvC6LbSuvakjk2ksCIF
+         /aXRdkn9OnPCRQ1Us2dQ2O0LAZUkk6Xz3jW92nMsvHgdHeeXdEBipqVy8rwJUqVc3+++
+         NBwA==
+X-Gm-Message-State: AOAM531wKtfNxMGJQ4mMdWyegJkA2ItPB0Fk60iqMp2fRcKmNxxD7uEr
+        aonT19pl3yudvafPKO7dBQC63+7FqKv+22yp83E=
+X-Google-Smtp-Source: ABdhPJwUMRXKueFOj0yXX+rc1dekQSXG0gxC90penDiQclzAdgZIUtmZBajexd5RBV7Glqz3kgT8B/J0HRKN5bJ1osI=
+X-Received: by 2002:a17:906:ced9:: with SMTP id si25mr2418305ejb.77.1640176139942;
+ Wed, 22 Dec 2021 04:28:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-8-liambeguin@gmail.com>
-In-Reply-To: <20211222034646.222189-8-liambeguin@gmail.com>
+References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-9-liambeguin@gmail.com>
+In-Reply-To: <20211222034646.222189-9-liambeguin@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Dec 2021 14:25:31 +0200
-Message-ID: <CAHp75VciEd55KfQQ6VdK84-uufO-N5k0TLrvv9tn7-wj3n=Bug@mail.gmail.com>
-Subject: Re: [PATCH v11 07/15] iio: afe: rescale: use s64 for temporary scale calculations
+Date:   Wed, 22 Dec 2021 14:27:01 +0200
+Message-ID: <CAHp75VdonriGKBQz=pnJboPZ=HPfuYSakEGCorBath5iBxfX_Q@mail.gmail.com>
+Subject: Re: [PATCH v11 08/15] iio: afe: rescale: fix accuracy for small
+ fractional scales
 To:     Liam Beguin <liambeguin@gmail.com>
 Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
@@ -67,13 +68,25 @@ On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
 >
 > From: Liam Beguin <lvb@xiphos.com>
 >
-> All four scaling coefficients can take signed values.
-> Make tmp a signed 64-bit integer and switch to div_s64() to preserve
-> signs during 64-bit divisions.
+> The approximation caused by integer divisions can be costly on smaller
+> scale values since the decimal part is significant compared to the
+> integer part. Switch to an IIO_VAL_INT_PLUS_NANO scale type in such
+> cases to maintain accuracy.
 
-Sounds to me like a fix with all necessary stuff needed about it:
-- Fixes tag
-- moving to the beginning of the series, where other fixes are
+...
+
+> -               tmp = div_s64(tmp, 1000000000LL);
+> +
+> +               tmp = div_s64_rem(tmp, 1000000000LL, &rem);
+>                 *val = tmp;
+
+> -               return scale_type;
+> +
+
+It seems you may add this blank line to one of the previous patches, may you?
+
+> +               if (!rem)
+> +                       return scale_type;
 
 -- 
 With Best Regards,

@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D11F47D148
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A9647D14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 12:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbhLVLuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 06:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbhLVLuP (ORCPT
+        id S230424AbhLVLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 06:50:24 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55180
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238882AbhLVLuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:50:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15B5C061574;
-        Wed, 22 Dec 2021 03:50:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Dec 2021 06:50:21 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A1B6B81B9C;
-        Wed, 22 Dec 2021 11:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5384C36AE5;
-        Wed, 22 Dec 2021 11:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640173812;
-        bh=D9/QMJD0TS6RQjnDBm7/4H3QQSqZqItVjLEOdt11SSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MFzxMQwq1ilB6fbzZykT8agWnHn/vv4yaR4JsPXQG93CbpwcGEFhK/hM1YMssRDK8
-         fanWrqPmuBWk59DvDwp6GS6oRjsCeOzMuz88hNWgZ46r7Ch6m0+wmJY+NCXghVf9Db
-         xOYV17OcbRX91z7SzEUCHL0yOno1IWf2zlQMnkGs4PXJtOLycuDTGv52dWNrYCiyng
-         iL9vrYZYmkXnDgBY1w+A11JdWRzjuxELCNqXtNzs1ZF1dG0zY4b418vjoSF51EXLmJ
-         tRSOiqpwsPpHdYc7kKhB7vyXLRlOXCLi2Noej7i3RaveBXZegzWUXzPp2RSazhptRe
-         Nr7D/cRHMSMOA==
-Date:   Wed, 22 Dec 2021 12:50:08 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Hans Petter Selasky <hps@selasky.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com, pb@linuxtv.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 0/3] Fix streaming on/off logic
-Message-ID: <20211222125008.705ec458@coco.lan>
-In-Reply-To: <ce0bf57c-7d96-5c33-6ab5-a64d772dee21@selasky.org>
-References: <cover.1632689033.git.mchehab+huawei@kernel.org>
-        <ce0bf57c-7d96-5c33-6ab5-a64d772dee21@selasky.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 59BE83F17B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 11:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640173820;
+        bh=IoWj9oNDweMrZAiZnpWJ2M9mqGVrhoH3F2ncAQcZpG8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LqriuYkJoKTW1URXXG/eUf3KB/2NdA0N8HDriO9q1cAbXd0YdX/qFOBMKt0IA4Qvp
+         0DinGl6UUbPg1J2FKhuF9YcsgC8rrsCJsGIUFrTttDdh3ci+iLDs1fSu63+MeGShDd
+         0tJuivKYWpDxBjkEKWLQYMjI9KF3CNxoLwp/GIDeu9JW0MAugdpEmjBEHEaVaCVlpb
+         KzgDG56MuGt/p00Yf3m08vTRg02Y56c78L5BXfxIwh97mXsEZc9aL90ERfOagAygI/
+         au09L22qc9Mtv/pfqF2c6dLtxveFcCWSw77NEDlmksufWGhju24xRfNrlO+Z3ZxG1f
+         Eqpg/5mnj3/VA==
+Received: by mail-lf1-f71.google.com with SMTP id r21-20020ac25f95000000b004259e6ab262so1129839lfe.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 03:50:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IoWj9oNDweMrZAiZnpWJ2M9mqGVrhoH3F2ncAQcZpG8=;
+        b=d9yn42ReY2F5ZpVzJKW/dzl7LmUnlboHmnnfj+GGuej3oBhHAYwBQIewAEhuZt+VLS
+         +PRClCTorJLtmvBZbs4nbK9BNAY36T5S3fwJnmb+xWeV8a8Pxmju19OOc6/EoD0ZjIM7
+         GdmwioOQUJdYHz30g//eAEj3wnYUTM6m8P6pyTtHnQb9Fox0ZQMItQ77a8CzFGW7PWmC
+         8XTp8uePJOcxGOkcMCmX4Gz6JDZ2Se0Yh28AuTcd0ugk4YXowV1okTuVsFRYVLJzDj+P
+         h5UcU4pmb9FDbwNQEl9jheGwMK6+xhqMVtVVe6P3fp05ilPqysxmavKXtcdYX6GnMUip
+         VAZQ==
+X-Gm-Message-State: AOAM532h/AoaVH+CIHje2MRLnAXKfV03IzoSXyTGs+XrIYtBjA+yLDnV
+        Jijt7qEzpJatvApSFrddqM5tBiBUMPVeyDQhu9ZOzd5bIaJa1LB0RXltCFKJh3S+d5sf9btDTr+
+        rq87sLGkcnxXVpQyPgPJmxR7Omhma4haBgFPq1cLoHQ==
+X-Received: by 2002:a2e:bb98:: with SMTP id y24mr1834333lje.315.1640173819744;
+        Wed, 22 Dec 2021 03:50:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyA35gJz13lmXvYXfWrxjhinbcGJguqP+W5VI63zqG4S459hkNVbC2c7iwZdwKh71gviVwf8Q==
+X-Received: by 2002:a2e:bb98:: with SMTP id y24mr1834322lje.315.1640173819594;
+        Wed, 22 Dec 2021 03:50:19 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id bi29sm191325lfb.234.2021.12.22.03.50.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 03:50:18 -0800 (PST)
+Message-ID: <2b4386a4-0acc-5db1-fc55-b57ad8a84be3@canonical.com>
+Date:   Wed, 22 Dec 2021 12:50:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4 4/4] mtd: rawnand: omap2: Select GPMC device driver for
+ ARCH_K3
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Roger Quadros <rogerq@kernel.org>
+Cc:     tony@atomide.com, robh@kernel.org, kishon@ti.com, nm@ti.com,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211221131757.2030-1-rogerq@kernel.org>
+ <20211221131757.2030-5-rogerq@kernel.org> <20211221144917.0a5d8f1a@xps13>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211221144917.0a5d8f1a@xps13>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, 21 Dec 2021 07:34:27 +0100
-Hans Petter Selasky <hps@selasky.org> escreveu:
-
-> On 9/26/21 22:51, Mauro Carvalho Chehab wrote:
-> > As discussed on:
-> > 	https://github.com/hselasky/webcamd/issues/16
-> > 
-> > the dib0700 had a regression on Kernel 2.6.39. Such regression didn't
-> > affect most devices, in practice, as it seems to happen only under
-> > certain circunstances.
-> > 
-> > Michael came up with a solution for the issue (already submitted to
-> > the ML) but let's take the opportunity to do a cleanup, as the resulting
-> > code was still touching both adapters when an stream off command
-> > was issued to one adapter, turning on the other one.
-> > 
-> > After the change, each adapter is idependently controlled by
-> > a separate bit, as can be shown when its debug message
-> > is turned on (tested on a dual-adapter device: Hauppauge
-> > WinTV Nova TD):
-> > 
-> > [608855.124780] adapter 1, streaming ON: 0f 10 12
-> > [608868.189827] adapter 0, streaming ON: 0f 10 13
-> > [608879.584330] adapter 1, streaming OFF: 0f 00 11
-> > [608887.014772] adapter 0, streaming OFF: 0f 00 10
-> > 
-> > Mauro Carvalho Chehab (2):
-> >    media: dib0700: cleanup start/stop streaming logic
-> >    media: dib0700: Only touch one bit when start/stop an adapter
-> > 
-> > Michael Kuron (1):
-> >    media: dib0700: fix undefined behavior in tuner shutdown
-> > 
-> >   drivers/media/usb/dvb-usb/dib0700_core.c | 28 +++++++++++-------------
-> >   1 file changed, 13 insertions(+), 15 deletions(-)
-> >   
+On 21/12/2021 14:49, Miquel Raynal wrote:
+> Hi Roger,
 > 
-> Were these patches upstreamed yet?
-
-Those were merged on media upstream tree. They should likely be
-merged upstream before v5.17-rc1.
-
+> rogerq@kernel.org wrote on Tue, 21 Dec 2021 15:17:57 +0200:
 > 
-> --HPS
+>> The GPMC device driver is required for NAND controller
+>> to work on K3 Architecture. Select it if required.
+>>
+>> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  drivers/mtd/nand/raw/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+>> index 67b7cb67c030..587f20c6184f 100644
+>> --- a/drivers/mtd/nand/raw/Kconfig
+>> +++ b/drivers/mtd/nand/raw/Kconfig
+>> @@ -42,6 +42,7 @@ config MTD_NAND_OMAP2
+>>  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+>>  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || COMPILE_TEST
+>>  	depends on HAS_IOMEM
+>> +	select OMAP_GPMC if ARCH_K3
+> 
+> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> 
+
+This patch looks actually independent. Miquel, do you want me to take it
+via memory controller drivers tree (like three other patches)?
 
 
-
-Thanks,
-Mauro
+Best regards,
+Krzysztof

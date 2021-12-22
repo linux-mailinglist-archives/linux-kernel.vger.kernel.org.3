@@ -2,145 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A8147CAA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDB747CAA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 02:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbhLVBG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 20:06:26 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15958 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbhLVBGZ (ORCPT
+        id S240496AbhLVBKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 20:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230433AbhLVBKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 20:06:25 -0500
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJZnb1JxqzZdkN;
-        Wed, 22 Dec 2021 09:03:15 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 22 Dec 2021 09:06:23 +0800
-Subject: Re: [PATCH -next] ext4: Fix remount with 'abort' option isn't
- effective
-To:     Lukas Czerner <lczerner@redhat.com>
-References: <20211221123214.2410593-1-yebin10@huawei.com>
- <20211221144305.nlryh7q2cgdbpmi5@work>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <61C27A0E.9050900@huawei.com>
-Date:   Wed, 22 Dec 2021 09:06:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Tue, 21 Dec 2021 20:10:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6280C061574;
+        Tue, 21 Dec 2021 17:10:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D2EB617F5;
+        Wed, 22 Dec 2021 01:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ACFA0C36AEA;
+        Wed, 22 Dec 2021 01:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640135409;
+        bh=CecTfUmf8TIQrryKxJvEoixHMdRyA+0xeBp57+KFaYM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Emed/IlBLNFScBYLwNzFiyIu0LObTk+xdkrgkGob6e4XkVZgDFql8q7cz4FX8FoAw
+         fFaJ5OORrvxkPxPz/nBGDcDqqk2Hbs083NsDNttrcwWWvI2CFo5PTBlRy0yzzIMmGL
+         no4HeAxlv+Jsk364IYMEp/u3DIb0Tfv4shELhxFfgVG+zoKo0RgQMI4X1ris80fR2z
+         T2vPPycv3piUeD/FoF7p5CvH2nIDgcW02/wdhWN/vCXn4vWkeSJ6Mhw9w36+bF151h
+         0FKc0PCKIQLNh/PttwfNiXT+f7BHpgZIDUqGoTs/tSpsAwl4eVGIer5MpPqnWbSaXm
+         /k6OPZGaFpKcQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8A0B6609CC;
+        Wed, 22 Dec 2021 01:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211221144305.nlryh7q2cgdbpmi5@work>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next] net: phy: micrel: Adding interrupt support for
+ Link up/Link down in LAN8814 Quad phy
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164013540956.23759.13036546211941665945.git-patchwork-notify@kernel.org>
+Date:   Wed, 22 Dec 2021 01:10:09 +0000
+References: <20211221112217.9502-1-Divya.Koppera@microchip.com>
+In-Reply-To: <20211221112217.9502-1-Divya.Koppera@microchip.com>
+To:     Divya Koppera <Divya.Koppera@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 2021/12/21 22:43, Lukas Czerner wrote:
-> Hi,
->
-> nice catch. This is a bug indeed. However I am currently in a process of
-> changing the ctx_set/clear/test_ helpers because currently it generates
-> functions that are unused.
->
-> While I am at it I can just create a custom ctx_set_mount_flags()
-> helper that would behave as expected so that we won't have to specify
-> "1 < EXT4_MF_FS_ABORTED" which is not really obvious and hence error
-> prone.
-Actually, I fixed the first version as follows:
+On Tue, 21 Dec 2021 16:52:17 +0530 you wrote:
+> This patch add support for Link up or Link down
+> interrupt support in LAN8814 Quad phy
+> 
+> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+> ---
+> v1 -> v2
+> * Defining Common Macro for Control and status bits of
+>   Link up, Link Down and sharing them across Interrupt
+>   control and Interrupt status registers.
+> 
+> [...]
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index b72d989b77fb..199920ffc7d3 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -2049,8 +2049,8 @@ struct ext4_fs_context {
-  	unsigned int	mask_s_mount_opt;
-  	unsigned int	vals_s_mount_opt2;
-  	unsigned int	mask_s_mount_opt2;
--	unsigned int	vals_s_mount_flags;
--	unsigned int	mask_s_mount_flags;
-+	unsigned long	vals_s_mount_flags;
-+	unsigned long	mask_s_mount_flags;
-  	unsigned int	opt_flags;	/* MOPT flags */
-  	unsigned int	spec;
-  	u32		s_max_batch_time;
-@@ -2166,7 +2166,12 @@ static inline bool ctx_test_##name(struct ext4_fs_context *ctx, int flag)\
-  EXT4_SET_CTX(flags);
-  EXT4_SET_CTX(mount_opt);
-  EXT4_SET_CTX(mount_opt2);
--EXT4_SET_CTX(mount_flags);
-+
-+static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int bit)
-+{
-+	set_bit(bit, &ctx->mask_s_mount_flags);
-+	set_bit(bit, &ctx->vals_s_mount_flags);
-+}
+Here is the summary with links:
+  - [v2,net-next] net: phy: micrel: Adding interrupt support for Link up/Link down in LAN8814 Quad phy
+    https://git.kernel.org/netdev/net-next/c/b3ec7248f1f4
 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I think 'mask_s_mount_flags' is useless now.
->
-> My plan is to send my patch set including this one tomorrow, will that
-> be fine with you ?
->
-> -Lukas
->
-> On Tue, Dec 21, 2021 at 08:32:14PM +0800, Ye Bin wrote:
->> We test remount with 'abort' option as follows:
->> [root@localhost home]# mount  /dev/sda test
->> [root@localhost home]# mount | grep test
->> /dev/sda on /home/test type ext4 (rw,relatime)
->> [root@localhost home]# mount -o remount,abort test
->> [root@localhost home]# mount | grep test
->> /dev/sda on /home/test type ext4 (rw,relatime)
->>
->> Obviously, remount 'abort' option isn't effective.
->> After 6e47a3cc68fc commit we process abort option with 'ctx_set_mount_flags':
->> static inline void ctx_set_mount_flags(struct ext4_fs_context *ctx, int flag)
->> {
->> 	ctx->mask_s_mount_flags |= flag;
->> 	ctx->vals_s_mount_flags |= flag;
->> }
->>
->> But we test 'abort' option with 'ext4_test_mount_flag':
->> static inline int ext4_test_mount_flag(struct super_block *sb, int bit)
->> {
->>          return test_bit(bit, &EXT4_SB(sb)->s_mount_flags);
->> }
->>
->> To solve this issue, pass (1 <<  EXT4_MF_FS_ABORTED) to 'ctx_set_mount_flags'.
->>
->> Fixes:6e47a3cc68fc("ext4: get rid of super block and sbi from handle_mount_ops()")
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/super.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->> index b72d989b77fb..071b7b3c5678 100644
->> --- a/fs/ext4/super.c
->> +++ b/fs/ext4/super.c
->> @@ -2236,7 +2236,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
->>   			 param->key);
->>   		return 0;
->>   	case Opt_abort:
->> -		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
->> +		ctx_set_mount_flags(ctx, 1 << EXT4_MF_FS_ABORTED);
->>   		return 0;
->>   	case Opt_i_version:
->>   		ctx_set_flags(ctx, SB_I_VERSION);
->> -- 
->> 2.31.1
->>
-> .
->
 

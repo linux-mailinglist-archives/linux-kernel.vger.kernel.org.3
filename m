@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B2847D6EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9E747D6F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344764AbhLVSge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:36:34 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]:37698 "EHLO
-        mail-qk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbhLVSgd (ORCPT
+        id S1344769AbhLVShm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:37:42 -0500
+Received: from mail-qv1-f47.google.com ([209.85.219.47]:35595 "EHLO
+        mail-qv1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233997AbhLVShl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:36:33 -0500
-Received: by mail-qk1-f182.google.com with SMTP id m186so3198866qkb.4;
-        Wed, 22 Dec 2021 10:36:33 -0800 (PST)
+        Wed, 22 Dec 2021 13:37:41 -0500
+Received: by mail-qv1-f47.google.com with SMTP id kj16so3127964qvb.2;
+        Wed, 22 Dec 2021 10:37:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wDzO3Ad6lSocQgHWVJpmiNVxeeGd17gp3zvJdJeX/e4=;
-        b=M6vPnIA4haXnBpLKtPOuUWcwV/kf9SmcI5LTOE2MaQ+b7Gd+X3HRBg6rU5LNVQ2s6Y
-         PHzf6pCUTWoNhwTNs6v8JNM4bprbum2aOamE14Oqyn0bdrLvsn9KUWqncG2ozANOZPst
-         HvqUiv6Q0/JWZ/l3JIGJv5AR9iDz+DoEOxdY75wxrmaYBIujaNzd8OrReCFiinFVrzTC
-         aSCI/H2CqumlVWomllVsTygoTqs3ovohkp6a6oRgGvvRbHhpUJabhymqPlHiToiyh5KX
-         9N9ns4lI1MhhzacoEIsDvWOwE2QeJhCXJZkQa1oneyfsWlJLP9Z4bh7Y/EkaRdTqTXU+
-         z+TA==
-X-Gm-Message-State: AOAM5338kama3CIQSTamfmrpOQlS5kUXBgOw3zSPI43/kwo3SLbPfd7c
-        s5uePoG9o4BBDUSM/gvtVg==
-X-Google-Smtp-Source: ABdhPJyxpmkjjBfT4ceoTMEnWifcuMUn6R8s3AWzbnMnABxL7BM8/d1xSlbRPS7YeMdTafAGlXwpJA==
-X-Received: by 2002:a37:315:: with SMTP id 21mr2935974qkd.52.1640198193055;
-        Wed, 22 Dec 2021 10:36:33 -0800 (PST)
+        bh=aIRKT6qvOHk7aag891EMXHpwQ/p6OdV9OeP3O+a8GpA=;
+        b=GduGdbee1hPjQboRAoBcoKRpQTcscVW68S/IaVe2FiH2nxnpTzIi2vnrMY6PXCdEtO
+         K8zVap22/PzzstbtpBMm2LAzPNuHWxU884ARcOUpBtghVr7oXbia0DHdRXpHz9gHDgh4
+         ibyJlm6frNuG4C5NYlD8cUsrOh4KCDBW2l9VbH/NAMctHv8NZfHfX2360zdgJZPPMOXj
+         tg+cuePQX+mBQUiJYNdtJXUcQ30ibJxKByaugILFW3WBX+Z9DjTdRBU0OUQb4e2cKDTp
+         JeD2yuJSBcFjwHdZJGtaTDOO+fYU3Ut54yL7pyjpahnOK01yMCQaFj9v78LhEvVfSo9a
+         kgnA==
+X-Gm-Message-State: AOAM532qhEoNP4FP4G882cKClssYrH3Y4Jn1I3B9zM0oz+kP0Fcwv6Bo
+        rnHxvADmcgFZ4qPOJyrGvg==
+X-Google-Smtp-Source: ABdhPJxxzwE2t+X8djCTjOYp+Ub+jmltrInfg6uAhAHBtGJpJWWsDN/UVMD+J4+VI4WjKfhcGSmG2A==
+X-Received: by 2002:a05:6214:1cc3:: with SMTP id g3mr3634417qvd.106.1640198261027;
+        Wed, 22 Dec 2021 10:37:41 -0800 (PST)
 Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id d5sm2363866qte.27.2021.12.22.10.36.31
+        by smtp.gmail.com with ESMTPSA id z4sm2310473qtj.42.2021.12.22.10.37.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:36:32 -0800 (PST)
-Received: (nullmailer pid 2477388 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:36:31 -0000
-Date:   Wed, 22 Dec 2021 14:36:31 -0400
+        Wed, 22 Dec 2021 10:37:40 -0800 (PST)
+Received: (nullmailer pid 2479399 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:37:38 -0000
+Date:   Wed, 22 Dec 2021 14:37:38 -0400
 From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH] dt-bindings: display: novatek,nt36672a: Fix unevaluated
- properties warning
-Message-ID: <YcNwL7lgncq7balH@robh.at.kernel.org>
-References: <20211221125125.1194554-1-robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Jonathan Cameron <jic23@kernel.org>, linux-kernel@vger.kernel.org,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: iio: Document "label" property
+Message-ID: <YcNwciKwuYamRohV@robh.at.kernel.org>
+References: <20211221133339.66766-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221125125.1194554-1-robh@kernel.org>
+In-Reply-To: <20211221133339.66766-1-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 08:51:26 -0400, Rob Herring wrote:
-> With 'unevaluatedProperties' support enabled, the novatek,nt36672a
-> binding has a new warning:
+On Tue, 21 Dec 2021 13:33:39 +0000, Paul Cercueil wrote:
+> Document the "label" property, which can contain a descriptive label
+> that allows to uniquely identify a device within the system.
 > 
-> Documentation/devicetree/bindings/display/panel/novatek,nt36672a.example.dt.yaml: panel@0: Unevaluated properties are not allowed ('vddi0-supply', '#address-cells', '#size-cells' were unexpected)
-> 
-> Based on dts files, 'vddi0-supply' does appear to be the correct name.
-> Drop '#address-cells' and '#size-cells' which aren't needed.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  .../devicetree/bindings/display/panel/novatek,nt36672a.yaml   | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> Notes:
+>     v2: - Reword description and commit message
+>         - Use > instead of | for proper multiline handling
+> 
+>  Documentation/devicetree/bindings/iio/common.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
-Applied, thanks!
+Acked-by: Rob Herring <robh@kernel.org>

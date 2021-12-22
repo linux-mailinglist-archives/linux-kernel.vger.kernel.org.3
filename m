@@ -2,132 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568AD47D5FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E9047D5FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344395AbhLVRqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbhLVRqy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:46:54 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5B2C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:46:54 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id d10so9070816ybn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=iCyIH9qoy4Cuhwyn0qbDTkTmYuaLRWzCBF7+0i4eqwM=;
-        b=RGQE6wrXzYuoCSSzG+rxJHV2rWxpYlO7m/RZ2qhnRo7k/CxL0kMDjuJIOLCpO4X2C4
-         1n22UcdgnTiwOTM8+oLfINvhfLspxOxa+RsQ1gNqnHNmroZmzc/qP1RqqQUMKfDaOACU
-         Y1jWCqrN7brmPXhcGcMOWRrIct2eWrUA0RvMY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=iCyIH9qoy4Cuhwyn0qbDTkTmYuaLRWzCBF7+0i4eqwM=;
-        b=Elu6Gelsc5JkxMWjo5f6C0zQDSgatvdQoqFbw9e4b0V4O7OI9hs3BniHpqVHrEQPPM
-         eWZ8DN48WSU5fbqiXj81hBrWTqmfd7zhfxrA07xNIl3WV5LbkiwaoBFXMHCZ+56J3uNm
-         owSe9wseb4qoiVxpcQtmpVnTeLsbuyO5HaHQhOEhmLBg0+4Lv1qN+ZHjjIi4bm3yafHp
-         6+wOx6o5o+8t//kc/dRyfffVbFGwIzOn9eWFcfmvvndakKALN+/ivt+244gXTIylhb7a
-         BbNARGjzJg374X8KIJ+DvSiph9vm97asI+6NMWqWWoTDrhpjCc63Cqqo7jIkZvAaqgM1
-         UxWA==
-X-Gm-Message-State: AOAM531hPH+5HxXMdZFUmyhQg7CFcuSSt/iZA2bshe5D+i2Mlwm0K+Lq
-        Qj9zhx2xKRZU9R3uu0gGeJifhCZtsV0hCt6VpuHdxw==
-X-Google-Smtp-Source: ABdhPJxpg1aUtwGj8dEDp1MzllQE9q90hddGLnRax4kvn0M9cTeOjSb05+rXbfc3XdGXWOrZi8MLOs/9GRIDTsmPwGk=
-X-Received: by 2002:a25:ae12:: with SMTP id a18mr5674627ybj.286.1640195213649;
- Wed, 22 Dec 2021 09:46:53 -0800 (PST)
+        id S1344405AbhLVRrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:47:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:51080 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234475AbhLVRrN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 12:47:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DAD1F1FB;
+        Wed, 22 Dec 2021 09:47:12 -0800 (PST)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 156063F5A1;
+        Wed, 22 Dec 2021 09:47:10 -0800 (PST)
+Subject: Re: [RT] BUG in sched/cpupri.c
+To:     John Keeping <john@metanate.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <Yb3vXx3DcqVOi+EA@donbot>
+ <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com>
+ <20211221164528.3c84543f.john@metanate.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+Date:   Wed, 22 Dec 2021 18:46:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Wed, 22 Dec 2021 09:46:43 -0800
-Message-ID: <CABWYdi3bzd4P0nsyZe6P6coBCQ2jN=kVOJte62zKj=Q8iJCSOQ@mail.gmail.com>
-Subject: Initial TCP receive window is clamped to 64k by rcv_ssthresh
-To:     Linux Kernel Network Developers <netdev@vger.kernel.org>
-Cc:     kernel-team <kernel-team@cloudflare.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211221164528.3c84543f.john@metanate.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21.12.21 17:45, John Keeping wrote:
+> On Tue, 21 Dec 2021 16:11:34 +0000
+> Valentin Schneider <valentin.schneider@arm.com> wrote:
+> 
+>> On 20/12/21 18:35, Dietmar Eggemann wrote:
 
-I noticed that the advertised TCP receive window in the first ACK from
-the client is clamped at 64k. I'm wondering if this is intentional.
+[...]
 
-We have an environment with many pairs of distant servers connected by
-high BDP links. For the reasons that aren't relevant, we need to
-re-establish connections between those often and expect to have as few
-round trips as possible to get a response after a handshake.
+>> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+>> index fd7c4f972aaf..7d61ceec1a3b 100644
+>> --- a/kernel/sched/deadline.c
+>> +++ b/kernel/sched/deadline.c
+>> @@ -2467,10 +2467,13 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>>  	 * this is the right place to try to pull some other one
+>>  	 * from an overloaded CPU, if any.
+>>  	 */
+>> -	if (!task_on_rq_queued(p) || rq->dl.dl_nr_running)
+>> +	if (!task_on_rq_queued(p))
+>>  		return;
+>>  
+>> -	deadline_queue_pull_task(rq);
+>> +	if (!rq->dl.dl_nr_running)
+>> +		deadline_queue_pull_task(rq);
+>> +	else if (task_current(rq, p) && (p->sched_class < &dl_sched_class))
+>> +		resched_curr(rq);
+>>  }
+>>  
+>>  /*
+>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>> index ef8228d19382..1ea2567612fb 100644
+>> --- a/kernel/sched/rt.c
+>> +++ b/kernel/sched/rt.c
+>> @@ -2322,10 +2322,13 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+>>  	 * we may need to handle the pulling of RT tasks
+>>  	 * now.
+>>  	 */
+>> -	if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
+>> +	if (!task_on_rq_queued(p))
+>>  		return;
+>>  
+>> -	rt_queue_pull_task(rq);
+>> +	if (!rq->rt.rt_nr_running)
+>> +		rt_queue_pull_task(rq);
+>> +	else if (task_current(rq, p) && (p->sched_class < &rt_sched_class))
+>> +		resched_curr(rq);
 
-We have made BBR cooperate on the initcwnd front with TCP_BPF_IW and
-some code that remembers cwnd and lets new connections start with a
-high value. It's safe to assume that we set initcwnd to 250 from the
-server side. I have no issues with the congestion control side of
-things.
+switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
+  pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
+    rto_push_irq_work_func() -> push_rt_task(rq, true)
 
-We also have high rmem and wmem values and plenty of memory.
+seems to be the only way with pull=true.
 
-The problem lies in the fact that no matter how high we crank up the
-initcwnd, the connection will hit the 64k wall of the receive window
-and will have to stall waiting on ACKs from the other side, which take
-a long while to arrive on high latency links. A realistic scenario:
+In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
 
-1. TCP connection established, receive window = 64k.
-2. Client sends a request.
-3. Server userspace program generates a 120k response and writes it to
-the socket. That's T0.
-4. Server sends 64k worth of data in TCP packets to the client.
-5. Client sees the first 64k worth of data T0 + RTT/2 later.
-6. Client sends ACKs to cover for the data it just received.
-7. Server sees the ACKs T0 + 1 RTT later.
-8. Server sends the remaining data.
-9. Client sees the remaining data T0 + RTT + RTT/2 later.
+[   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
+[   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
+[   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
+                                                         ^^^^^^^^^^^^^^^^^^^^^^ 
+[   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
+[   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
+                                                             ^^^^^^^^^^                           ^^^^^^ 
+[   22.288698] CPU: 3 PID: 35 Comm: ksoftirqd/3 Not tainted 5.15.10-rt24-dirty #36
+[   22.288711] Hardware name: ARM Juno development board (r0) (DT)
+[   22.288718] Call trace:
+[   22.288722]  dump_backtrace+0x0/0x1ac
+[   22.288747]  show_stack+0x1c/0x70
+[   22.288763]  dump_stack_lvl+0x68/0x84
+[   22.288777]  dump_stack+0x1c/0x38
+[   22.288788]  push_rt_task.part.0+0x364/0x370
+[   22.288805]  rto_push_irq_work_func+0x180/0x190
+[   22.288821]  irq_work_single+0x34/0xa0
+[   22.288836]  flush_smp_call_function_queue+0x138/0x244
+[   22.288852]  generic_smp_call_function_single_interrupt+0x18/0x24
+[   22.288867]  ipi_handler+0xb0/0x15c
+...
 
-In my mind, on a good network (guarded by the initcwnd) I expect to
-have the whole response to be sent immediately at T0 and received
-RTT/2 later.
+What about slightly changing the layout in switched_from_rt() (only lightly tested):
 
-The current TCP connection establishment code picks two window sizes
-in tcp_select_initial_window() during the SYN packet generation:
 
-* rcv_wnd to advertise (cannot be higher than 64k during SYN, as we
-don't know whether wscale is supported yet)
-* window_clamp (current max memory allowed for the socket, can be large)
-
-You can find these in code here:
-
-* https://elixir.bootlin.com/linux/v5.15.10/source/include/linux/tcp.h#L209
-
-The call into tcp_select_initial_window() is here:
-
-* https://elixir.bootlin.com/linux/v5.15.10/source/net/ipv4/tcp_output.c#L3682
-
-Then immediately after rcv_ssthresh is set to rcv_wnd. This is the
-part that gives me pause.
-
-During the generation of the first ACK after the SYN ACK is received
-on the client, assuming the window scaling is supported, I expect the
-client to advertise the whole buffer as available and let congestion
-control handle whether it can be filled from the sender side. What
-happens in reality is that rcv_ssthresh is sent as the window value.
-Unfortunately, rcv_ssthresh is limited to 64k from rcv_wnd as
-described above.
-
-My question is whether it should be limited to window_clamp in
-tcp_connect_init() instead.
-
-I tried looking through git history and the following line was there
-since Git import in 2005:
-
-  tp->rcv_ssthresh = tp->rcv_wnd;
-
-I made a small patch that toggles rcv_ssthresh between rcv_wnd and
-window_clamp and I'm doing some testing to see if it solves my issue.
-I can see it advertise 512k receive buffer in the first ACK from the
-client, which seems to address my problem. I'm not sure if there's
-some drawback here.
+@@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
+         * we may need to handle the pulling of RT tasks
+         * now.
+         */
+-       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
++       if (!task_on_rq_queued(p))
++               return;
++
++       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
++               resched_curr(rq);
++               return;
++       }
++
++       if (rq->rt.rt_nr_running)
+                return;
+ 
+        rt_queue_pull_task(rq);

@@ -2,305 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2743647CA90
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1421147CA92
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 01:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240191AbhLVAvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 19:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S240269AbhLVAxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 19:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbhLVAvR (ORCPT
+        with ESMTP id S231156AbhLVAxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 19:51:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D827C061574;
-        Tue, 21 Dec 2021 16:51:17 -0800 (PST)
+        Tue, 21 Dec 2021 19:53:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7DBC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Dec 2021 16:53:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFEFB617FB;
-        Wed, 22 Dec 2021 00:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D908BC36AE9;
-        Wed, 22 Dec 2021 00:51:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8822B81A1A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 00:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53259C36AE9;
+        Wed, 22 Dec 2021 00:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640134276;
-        bh=OENk/ZjgaUgMd+liaAby8bsFphHrP7zKgnJsZpoPGYU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aClbUZ3TjkPS1RqlfVC8YNew0gZwXbULPf1uEc8lzWl4qDTE28ouaH30hxU8AGQgP
-         bOlzhdcvDKVJPuCWyaIzVspnKaoKF0/1mDT+aZ0iCpb0LeBKki0Xi09L8TEopo5rlP
-         7jdgDu43/Oj9S+2iSOURr4Q4BMC8ubcRxSHE0+mfb+/rW4W6DzyZt0toNbjwRkSkAC
-         yplFsx9J1Q3JcdhKh5Iz75rNYVeHxxnzaZQ3/5xucSX8ad1r3QC+9rq5jveh6pXfuD
-         lAshXunX81d3ki6SElo+oYwgy9OMHNUjoCB1iON1o5TylOWOCDQ9rtgpPuOjh8VnOb
-         jUxyhtanru5tA==
-Date:   Tue, 21 Dec 2021 16:51:14 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7, 2/2] net: Add dm9051 driver
-Message-ID: <20211221165114.2f4cd148@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211220113342.11437-3-josright123@gmail.com>
-References: <20211220113342.11437-1-josright123@gmail.com>
-        <20211220113342.11437-3-josright123@gmail.com>
+        s=k20201202; t=1640134390;
+        bh=P5+2yc3KCKxVxhRcIuwHjO5vFJ9W3AScc9KUpeZDGDw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sybfz6riq5b75n2hH5ZrRGrZjuzFYwr0uKNRXXm/V7pi8BSVAMTXrCGV8thBqstU1
+         OEAZgOTmw4x/y/GB/xHjHwd7V/n5RsSGWTDm76mv/zlwFa4BSQdVOHLRXpcBdsgxtH
+         aFEoLbTQyiPtnv80aoOJr+OEyETQyMWPqTFEqehFvNAjuLoWiYSO37KTAp2bKF8iwW
+         rkIFfJb6KuVVyIdSUiB6kq/8+nz8FBhvsmwbC6z99EIdrTjofIoCckSza088zKQeDv
+         Xsoam8+xfxRzhtcXifEA2ykhgMPL9nLSG99+RrPbjS9k7ueOldhZkCxPR/U26B8k+Z
+         H8f8+dym+krPQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
+Date:   Tue, 21 Dec 2021 17:52:45 -0700
+Message-Id: <20211222005245.3081136-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Dec 2021 19:33:42 +0800 Joseph CHAMG wrote:
-> +/* set mac permanently
-> + */
-> +static void dm9051_write_mac_lock(struct board_info *db)
-> +{
-> +	struct net_device *ndev = db->ndev;
-> +	int i, oft;
-> +
-> +	netdev_dbg(ndev, "set_mac_address %pM\n", ndev->dev_addr);
-> +
-> +	/* write to net device and chip */
-> +	mutex_lock(&db->addr_lock);
-> +	for (i = 0, oft = DM9051_PAR; i < ETH_ALEN; i++, oft++)
-> +		dm9051_iow(db, oft, ndev->dev_addr[i]);
-> +	mutex_unlock(&db->addr_lock);
-> +
-> +	/* write to EEPROM */
-> +	for (i = 0; i < ETH_ALEN; i += 2)
-> +		dm9051_write_eeprom(db, i / 2, (u8 *)&ndev->dev_addr[i]);
-> +}
+When cross compiling i386_defconfig on an arm64 host with clang, there
+are a few instances of '-Waddress-of-packed-member' and
+'-Wgnu-variable-sized-type-not-at-end' in arch/x86/boot/compressed/,
+which should both be disabled with the cc-disable-warning calls in that
+directory's Makefile, which indicates that cc-disable-warning is failing
+at the point of testing these flags.
 
-Why set the MAC permanently? I don't thin users will expect that.
+The cc-disable-warning calls fail because at the point that the flags
+are tested, KBUILD_CFLAGS has '-march=i386' without $(CLANG_FLAGS),
+which has the '--target=' flag to tell clang what architecture it is
+targeting. Without the '--target=' flag, the host architecture (arm64)
+is used and i386 is not a valid value for '-march=' in that case. This
+error can be seen by adding some logging to try-run:
 
-> +/* reset while rx error found
-> + */
-> +static void dm9051_restart_dm9051(struct board_info *db)
-> +{
-> +	struct net_device *ndev = db->ndev;
-> +	char *sbuff = (char *)db->prxhdr;
-> +	int rxlen = le16_to_cpu(db->prxhdr->rxlen);
-> +
-> +	netdev_dbg(ndev, "dm9-rxhdr, Large-eror (rxhdr %02x %02x %02x %02x)\n",
-> +		   sbuff[0], sbuff[1], sbuff[2], sbuff[3]);
-> +	netdev_dbg(ndev, "dm9-pkt-Wrong, RxLen over-range (%x= %d > %x= %d)\n",
-> +		   rxlen, rxlen, DM9051_PKT_MAX, DM9051_PKT_MAX);
-> +
-> +	dm9051_reset(db);
-> +	dm9051_restart_fifo_rst(db);
-> +
-> +	/* phy mdiobus phy read/write is already enclose with mutex_lock/mutex_unlock */
-> +	mutex_unlock(&db->addr_lock);
-> +	dm9051_restart_phy(db);
-> +	mutex_lock(&db->addr_lock);
-> +
-> +	netdev_dbg(ndev, " RxLenErr&MacOvrSft_Er %d, RST_c %d\n",
-> +		   db->bc.large_err_counter + db->bc.mac_ovrsft_counter,
-> +		   db->bc.DO_FIFO_RST_counter);
-> +}
-> +
-> +static int dm9051_loop_rx(struct board_info *db)
-> +{
-> +	struct net_device *ndev = db->ndev;
-> +	u8 rxbyte;
-> +	int ret, rxlen;
-> +	char sbuff[DM_RXHDR_SIZE];
-> +	struct sk_buff *skb;
-> +	u8 *rdptr;
-> +	int scanrr = 0;
-> +
-> +	while (1) {
-> +		rxbyte = dm9051_ior(db, DM_SPI_MRCMDX); /* Dummy read */
-> +		rxbyte = dm9051_ior(db, DM_SPI_MRCMDX); /* Dummy read */
-> +		if (rxbyte != DM9051_PKT_RDY) {
-> +			dm9051_iow(db, DM9051_ISR, 0xff); /* Clear ISR, clear to stop mrcmd */
+clang-14: error: the clang compiler does not support '-march=i386'
 
-Should you not clear the ISR _before_ checking if there is a packet
-pending? What if a packet arrives between the two, does the HW re-raise
-the IRQ if the fifo is not empty?
+Invoking the compiler has to succeed prior to calling cc-option or
+cc-disable-warning in order to accurately test whether or not the flag
+is supported; if it doesn't, the requested flag can never be added to
+the compiler flags. Move $(CLANG_FLAGS) to the beginning of KBUILD_FLAGS
+so that any new flags that might be added in the future can be
+accurately tested.
 
-> +			break; /* exhaust-empty */
-> +		}
-> +		ret = dm9051_inblk(db, sbuff, DM_RXHDR_SIZE);
+Fixes: d5cbd80e302d ("x86/boot: Add $(CLANG_FLAGS) to compressed KBUILD_CFLAGS")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/boot/compressed/Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-This is not a DMA, right? You can't DMA to a stack buffer, stack may 
-be vmapped.
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 431bf7f846c3..169186dba1d7 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -28,7 +28,7 @@ KCOV_INSTRUMENT		:= n
+ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+ 	vmlinux.bin.xz vmlinux.bin.lzo vmlinux.bin.lz4 vmlinux.bin.zst
+ 
+-KBUILD_CFLAGS := -m$(BITS) -O2
++KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+ KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+ KBUILD_CFLAGS += -Wundef
+ KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+@@ -47,7 +47,6 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+ KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+-KBUILD_CFLAGS += $(CLANG_FLAGS)
+ 
+ # sev.c indirectly inludes inat-table.h which is generated during
+ # compilation and stored in $(objtree). Add the directory to the includes so
 
-> +		if (ret < 0)
-> +			break;
-> +		dm9051_iow(db, DM9051_ISR, 0xff); /* Clear ISR, clear to stop mrcmd */
-> +
-> +		db->prxhdr = (struct dm9051_rxhdr *)sbuff;
-> +		rxlen = le16_to_cpu(db->prxhdr->rxlen);
-> +
-> +		if (db->prxhdr->rxstatus & 0xbf) {
-> +			netdev_dbg(ndev, "warn : rxhdr.status 0x%02x\n",
-> +				   db->prxhdr->rxstatus);
-> +		}
-> +		if (rxlen > DM9051_PKT_MAX) {
-> +			db->bc.large_err_counter++;
-> +			dm9051_restart_dm9051(db);
-> +			return scanrr;
-> +		}
-> +
-> +		skb = dev_alloc_skb(rxlen + 4);
-> +		if (!skb) {
-> +			dm9051_dumpblk(db, rxlen);
-> +			return scanrr;
-> +		}
-> +		skb_reserve(skb, 2);
+base-commit: 2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+-- 
+2.34.1
 
-is the two NET_IP_ALIGN? If so please use __netdev_alloc_skb_ip_align().
-
-> +		rdptr = (u8 *)skb_put(skb, rxlen - 4);
-> +
-> +		ret = dm9051_inblk(db, rdptr, rxlen);
-> +		if (ret < 0)
-> +			break;
-> +
-> +		dm9051_iow(db, DM9051_ISR, 0xff); /* Clear ISR, clear to stop mrcmd */
-> +
-> +		skb->protocol = eth_type_trans(skb, db->ndev);
-> +		if (db->ndev->features & NETIF_F_RXCSUM)
-> +			skb_checksum_none_assert(skb);
-> +		if (in_interrupt())
-
-I don't think it can ever be in_interrupt(), just call netif_rx_ni()
-
-> +			netif_rx(skb);
-> +		else
-> +			netif_rx_ni(skb);
-> +		db->ndev->stats.rx_bytes += rxlen;
-> +		db->ndev->stats.rx_packets++;
-> +		scanrr++;
-> +	}
-> +	return scanrr;
-> +}
-
-> +static void dm9051_stopcode_lock(struct board_info *db)
-> +{
-> +	mutex_lock(&db->addr_lock);
-> +
-> +	dm9051_iow(db, DM9051_GPR, 0x01); /* Power-Down PHY */
-> +	dm9051_iow(db, DM9051_RCR, RCR_RX_DISABLE);	/* Disable RX */
-> +
-> +	mutex_unlock(&db->addr_lock);
-> +}
-> +
-> +/* Open network device
-> + * Called when the network device is marked active, such as a user executing
-> + * 'ifconfig up' on the device
-> + */
-> +static int dm9051_open(struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +	int ret;
-> +
-> +	skb_queue_head_init(&db->txq);
-> +	netif_start_queue(ndev);
-> +	netif_wake_queue(ndev);
-
-Shouldn't you wake the queues _after_ all the init?
-
-Also you don't need both of those, wake_queue() is enough.
-
-> +	ret = dm9051_opencode_receiving(ndev, db);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	dm9051_initcode_lock(ndev, db);
-> +	dm9051_imr_enable_lock_essential(db);
-> +	return 0;
-> +}
-> +
-> +/* Close network device
-> + * Called to close down a network device which has been active. Cancell any
-
-s/cancell/cancel/
-
-> + * work, shutdown the RX and TX process and then place the chip into a low
-> + * power state while it is not being used
-> + */
-> +static int dm9051_stop(struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +
-> +	phy_stop(db->phydev);
-> +	dm9051_stopcode_release(db);
-> +	netif_stop_queue(ndev);
-> +	dm9051_stopcode_lock(db);
-> +	return 0;
-> +}
-> +
-> +/* event: play a schedule starter in condition
-> + */
-> +static netdev_tx_t dm9051_start_xmit(struct sk_buff *skb, struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +
-> +	skb_queue_tail(&db->txq, skb); /* add to skb */
-
-You should probably enforce a limit on this queue size,
-and pause the qdisc once it fills up. This will prevent
-obvious buffer bloat problems.
-
-> +	schedule_delayed_work(&db->tx_work, 0);
-
-Same as below, why is it delayed if you always pass 0?
-
-> +	return NETDEV_TX_OK;
-> +}
-> +
-> +/* event: play with a schedule starter
-> + */
-> +static void dm9051_set_multicast_list_schedule(struct net_device *ndev)
-> +{
-> +	struct board_info *db = to_dm9051_board(ndev);
-> +	u8 rcr = RCR_DIS_LONG | RCR_DIS_CRC | RCR_RXEN;
-> +	struct netdev_hw_addr *ha;
-> +	u32 hash_val;
-> +
-> +	/* rx control */
-> +	if (ndev->flags & IFF_PROMISC) {
-> +		rcr |= RCR_PRMSC;
-> +		netdev_dbg(ndev, "set_multicast rcr |= RCR_PRMSC, rcr= %02x\n", rcr);
-> +	}
-> +
-> +	if (ndev->flags & IFF_ALLMULTI) {
-> +		rcr |= RCR_ALL;
-> +		netdev_dbg(ndev, "set_multicast rcr |= RCR_ALLMULTI, rcr= %02x\n", rcr);
-> +	}
-> +
-> +	db->rcr_all = rcr;
-> +
-> +	/* broadcast address */
-> +	db->hash_table[0] = 0;
-> +	db->hash_table[1] = 0;
-> +	db->hash_table[2] = 0;
-> +	db->hash_table[3] = 0x8000;
-> +
-> +	/* the multicast address in Hash Table : 64 bits */
-> +	netdev_for_each_mc_addr(ha, ndev) {
-> +		hash_val = ether_crc_le(6, ha->addr) & 0x3f;
-> +		db->hash_table[hash_val / 16] |= (u16)1 << (hash_val % 16);
-> +	}
-
-This can theoretically race with the work reading these values, but in
-practice that's probably fine..
-
-> +	schedule_delayed_work(&db->rxctrl_work, 0);
-
-Do you ever schedule this work with a delay? Use a normal work if it
-doesn't need a delay.
-
-> +	u8				cmd[2] ____cacheline_aligned;
-> +	struct spi_transfer		spi_xfer2[2] ____cacheline_aligned;
-> +	struct spi_message		spi_msg2 ____cacheline_aligned;
-> +	struct rx_ctl_mach		bc ____cacheline_aligned;
-> +	struct flow_ctl_tag		fl ____cacheline_aligned;
-> +	struct dm9051_rxhdr		*prxhdr ____cacheline_aligned;
-
-Do you really need all this cache line alignment?
-Isn't it better to group the structures into rx side and tx side
-instead of having each member be its own cache line?

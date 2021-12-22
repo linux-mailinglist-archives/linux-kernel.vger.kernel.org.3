@@ -2,321 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17CC47CC1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F4347CC0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242382AbhLVE1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:27:50 -0500
-Received: from mga11.intel.com ([192.55.52.93]:36003 "EHLO mga11.intel.com"
+        id S242347AbhLVEWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:22:43 -0500
+Received: from mga11.intel.com ([192.55.52.93]:35737 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235909AbhLVE1s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:27:48 -0500
+        id S232658AbhLVEWl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 23:22:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640147268; x=1671683268;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0TIZMez0AaaB4/Y9r+LvL8a6HExbFQe1IDLv+S//Gbg=;
-  b=lDraFwH9ccIwI/9SKrCVE8fYQ6J6IwcXLOsV8rL+grTKcvEhdbH38lgB
-   e2ndC7K+E9Hke9FyVIRZqlr2e+9yfZ8CpvSOQ0LT8O4lGHujHbp2OrhVD
-   8F9kNHpSl9ReWxUbO87htqAmTpvApEwu6G1DFzNoIQ0e6dILdQvjHdjqZ
-   /aqggZPxT7wLSORHA0X059+x2/CuievcJJetSKKXhvbusqV9rGeSVxiAF
-   GZbqjey3Xs68ymQcw4GC/GBaFeAhMY7M9uYVCyemqfDfKb/CAzVi/0F+w
-   JwDTooCWn2u2xJoaa4nxs05etz1Xm92VG+wwiOQ7lVItfunqKiMSXj16c
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238078939"
+  t=1640146961; x=1671682961;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=Cyl3EnNuBUB+YdjCSptEMAFJt9rmebRqepgSebgdx4Q=;
+  b=LtVgxlrocd0EMvyq+oCmRBTDZTP9+aOyjHav4HhYp3VnPIs8MiKtGJWp
+   rLFxhAqqfnpuvnWFAYqn3Z3aR+UXC7mXeQpbS4iQWtVrbk/iEXqMWAmKS
+   DFm0diAF5oj9C0rXxpq1vMZnttTAj+jRQDcwSU90TAIfYuMI3qPwO9oI4
+   PMZfhGTlYIfCjSBGn1ZkgfgW+cv+EOa7V+BAUGVmayd1s4feRarkY5Ej2
+   JpEv8yO7g1g2625OT6uGUaAtCo3EZLfS4dCN0Uho5KYpXCY10PcKzm0JF
+   H46gsMNRgTBjTiHPIstzbzWn3dlLeNejKrW4L70zNa97X1e1VJqEV8uMW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238078551"
 X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="238078939"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:27:48 -0800
+   d="scan'208";a="238078551"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 20:22:41 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="466539802"
-Received: from chenyu-desktop.sh.intel.com ([10.239.158.186])
-  by orsmga003.jf.intel.com with ESMTP; 21 Dec 2021 20:27:45 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v13 0/4] Introduce Platform Firmware Runtime Update and Telemetry drivers
-Date:   Wed, 22 Dec 2021 12:22:07 +0800
-Message-Id: <cover.1640007183.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="664154927"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Dec 2021 20:22:34 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 07/13] iommu: Add iommu_at[de]tach_device_shared() for
+ multi-device groups
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
+ <20211217063708.1740334-8-baolu.lu@linux.intel.com>
+ <dd797dcd-251a-1980-ca64-bb38e67a526f@arm.com>
+ <20211221184609.GF1432915@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <ced7f89a-8857-a8bb-be06-aaaabb4cdf09@linux.intel.com>
+Date:   Wed, 22 Dec 2021 12:22:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211221184609.GF1432915@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PFRUT(Platform Firmware Runtime Update and Telemetry) kernel interface
-is designed to interact with the platform firmware interface defined in the
-`Management Mode Firmware Runtime Update
-<https://uefi.org/sites/default/files/resources/Intel_MM_OS_Interface_Spec_Rev100.pdf>`
-specification. The primary function of PFRUT is to carry out runtime
-updates of the platform firmware, which doesn't require the system to
-be restarted. It also allows telemetry data to be retrieved from the
-platform firmware.
+On 12/22/21 2:46 AM, Jason Gunthorpe wrote:
+>> It's worth taking a step back and realising that overall, this is really
+>> just a more generalised and finer-grained extension of what 426a273834ea
+>> already did for non-group-aware code, so it makes little sense*not*  to
+>> integrate it into the existing interfaces.
+> This is taking 426a to it's logical conclusion and*removing*  the
+> group API from the drivers entirely. This is desirable because drivers
+> cannot do anything sane with the group.
+> 
+> The drivers have struct devices, and so we provide APIs that work in
+> terms of struct devices to cover both driver use cases today, and do
+> so more safely than what is already implemented.
+> 
+> Do not mix up VFIO with the driver interface, these are different
+> things. It is better VFIO stay on its own and not complicate the
+> driver world.
 
-=============
-- Change from v12 to v13:
-  - Print the _DSM failure result if invalid EFI capsule is provided.
-    (Hongyu Ning)
-- Change from v11 to v12:
-  - Rename the driver from pfru_update to pfr_update, and the
-    telemetry part to pfr_telementry for symmetry.
-    (Rafael J. Wysocki)
-  - Rename the "capsule file" to "EFI capsule".
-    (Rafael J. Wysocki)
-  - Revise the commit log. (Rafael J. Wysocki)
-  - Add the reason in the commit log that explains why it is
-    a good idea to add this driver to the kernel.
-    (Rafael J. Wysocki)
-  - Rename pfru.h to pfrut.h (Rafael J. Wysocki)
-  - Rename the CONFIG_ACPI_PFRU to CONFIG_ACPI_PFRUT
-    (Rafael J. Wysocki)
-  - Rename the Kconfig name to "ACPI Platform Firmware Runtime
-    Update and Telemetry"
-    (Rafael J. Wysocki)
-  - Revise the Kconfig help message (Rafael J. Wysocki)
-  - Describe what the driver is for briefly in the beginning of
-    the source code file.
-    (Rafael J. Wysocki)
-  - Add a comment pointing to the definitions of the GUIDs and
-    explain briefly what they are for.
-    (Rafael J. Wysocki)
-  - Reduce redundant memory updates by doing all of the checks
-    upfront. (Rafael J. Wysocki)
-  - Rename valid_version() to applicable_image(), and revise the
-    comment.(Rafael J. Wysocki)
-  - Remove Redundant else in applicable_image().(Rafael J. Wysocki)
-  - Rename dump_update_result() to print_ipdate_debug_info().
-    (Rafael J. Wysocki)
-  - Rename start_acpi_update() to start_update()(Rafael J. Wysocki)
-    Add a blank line before each "case xxx:"(Rafael J. Wysocki)
-  - Move status check into query_capability() and returns -EBUSY if
-    fails(Rafael J. Wysocki)
-  - Rename the device node name from "acpi_pfru%d" to "acpi_pfr_update%d"
-    (Rafael J. Wysocki)
-  - Rename the drive name from "pfru_update" to "pfr_update"
-    (Rafael J. Wysocki)
-  - Rename PFRU_MAGIC_FOR_IOCTL to PFRUT_IOCTL_MAGIC(Rafael J. Wysocki)
-    Fix grammar errors in the comments.(Rafael J. Wysocki)
-- Change from v10 to v11:
-  - Revise the commit log to explain why version check is introduced
-    in kernel rather than letting Management Mode to do it.
-    (Rafael J. Wysocki)
-  - Revise the commit log to better describe the pack attribute.
-    (Rafael J. Wysocki)
-  - Refine the comment for hw_ins and capsule_support.
-    (Rafael J. Wysocki)
-- Change from v9 to v10:
-  - Remove the explicit assignment of the last item of enum.
-    (Andy Shevchenko)
-- Change from v8 to v9:
-  - Use GUID_INIT() instead of guid_parse() during boot up.
-    (Andy Shevchenko)
-  - Drop uuid, code_uuid, drv_uuid in struct pfru_device as they
-    are not needed. (Andy Shevchenko)
-  - Drop type casting from void * in valid_version().
-    (Andy Shevchenko)
-  - Use kfree() instead of ACPI_FREE() in non-ACPICA usage.
-    (Andy Shevchenko)
-  - Use sizeof(rev) instead of sizeof(u32) in copy_from_user().
-    (Andy Shevchenko)
-  - Generate physical address from MSB part to LSB.
-    (Andy Shevchenko)
-  - Use devm_add_action_or_reset() to add ida release into dev resource
-    management. (Andy Shevchenko)
-  - Use devm_kasprintf() instead of kasprintf() to format the
-    pfru_dev name.(Andy Shevchenko)
-  - Remove redundant 0 in acpi_pfru_ids. (Andy Shevchenko)
-  - Adjust the order of included headers in pfru.h.
-    (Andy Shevchenko)
-  - Replace PFRU_MAGIC with PFRU_MAGIC_FOR_IOCTL in uapi file.
-    (Andy Shevchenko)
-    Use devm_kasprintf() instead of kasprintf() to format the
-    pfru_log_dev name.(Andy Shevchenko)
-    Remove redundant 0 in acpi_pfru_log_ids. (Andy Shevchenko)
-- Change from v7 to v8:
-  - Remove the variable-length array in struct pfru_update_cap_info, and
-    copy the non-variable-length struct pfru_update_cap_info to userspace
-    directly. (Greg Kroah-Hartman)
-  - Use efi_guid_t instead of guid_t when parsing capsule file.
-    (Andy Shevchenko)
-  - Change the type of rev_id from int to u32, because this data will
-    be copied between kernel and userspace. (Greg Kroah-Hartman)
-  - Add a prefix for dev in struct pfru_device to parent_dev, so as
-    to indicate that this filed is the parent of the created miscdev.
-    (Greg Kroah-Hartman)
-  - Use blank lines between different macro sections. (Greg Kroah-Hartman)
-    Illusatrate the possible errno for each ioctl interface.
-    (Greg Kroah-Hartman)
-  - Remove pfru_valid_revid() from uapi header to avoid poluting the global
-    namespace.(Greg Kroah-Hartman)
-  - Assign the value to the enum type explicitly.(Greg Kroah-Hartman)
-  - Change the guid_t to efi_guid_t when parsing image header in get_image_type()
-    (Greg Kroah-Hartman)
-  - Remove the void * to other type casting in valid_version(). (Andy Shevchenko)
-  - Combined the assignment of variables with definitions. (Andy Shevchenko)
-  - Define this magic for revision ID. (Andy Shevchenko)
-  - Make the labeling consistent for error handling. (Andy Shevchenko)
-  - Replace the UUID_SIZE in uapi with 16 directly. (Andy Shevchenko)
-  - Add blank line between generic include header and uapi header.
-    (Andy Shevchenko)
-  - Arrange the order between devm_kzalloc() and normal allocation in
-    acpi_pfru_probe() that, the former should always be ahead of the
-    latter. (Andy Shevchenko)
-- Change from v6 to v7:
-  - Use __packed instead of pragma pack(1).
-    (Greg Kroah-Hartman, Ard Biesheuve)
-  - Use ida_alloc() to allocate a ID, and release the ID when
-    device is removed. (Greg Kroah-Hartman)
-  - Check the _DSM method at early stage, before allocate or parse
-    anything in acpi_pfru_[log_]probe(). (Greg Kroah-Hartman)
-  - Set the parent of the misc device. (Greg Kroah-Hartman)
-  - Use module_platform_driver() instead of platform_driver_register()
-    in module_init(). Separate pfru driver and pfru_telemetry driver
-    to two files. (Greg Kroah-Hartman) 
-- Change from v5 to v6:
-  - Use Link: tag to add the specification download address.
-    (Andy Shevchenko)
-  - Drop comma for each terminator entry in the enum structure.
-    (Andy Shevchenko)
-  - Remove redundant 'else' in get_image_type().
-    (Andy Shevchenko)
-  - Directly return results from the switch cases in adjust_efi_size()
-    and pfru_ioctl().(Andy Shevchenko)
-  - Keep comment style consistency by removing the period for
-    one line comment.
-    (Andy Shevchenko)
-  - Remove devm_kfree() if .probe() failed. 
-    (Andy Shevchenko)
-  - Remove linux/uuid.h and use raw buffers to contain uuid.
-    (Andy Shevchenko)
-  - Include types.h in pfru.h. (Andy Shevchenko)
-  - Use __u8[16] instead of uuid_t. (Andy Shevchenko)
-  - Replace enum in pfru.h with __u32 as enum size is not the
-    same size on all possible architectures.
-    (Andy Shevchenko)
-  - Simplify the userspace tool to use while loop for getopt_long().
-    (Andy Shevchenko)
-- Change from v4 to v5:
-  - Remove Documentation/ABI/pfru, and move the content to kernel doc
-    in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
-  - Shrink the range of ioctl numbers declared in
-    Documentation/userspace-api/ioctl/ioctl-number.rst
-    from 16 to 8. (Greg Kroah-Hartman)
-  - Change global variable struct pfru_device *pfru_dev to
-    per PFRU device. (Greg Kroah-Hartman)
-  - Unregister the misc device in acpi_pfru_remove().
-    (Greg Kroah-Hartman)
-  - Convert the kzalloc() to devm_kzalloc() in the driver so
-    as to avoid freeing the memory. (Greg Kroah-Hartman)
-  - Fix the compile warning by declaring the pfru_log_ioctl() as
-    static. (kernel test robot LKP)
-  - Change to global variable misc_device to per PFRU device.
-    (Greg Kroah-Hartman)
-  - Remove the telemetry output in commit log. (Greg Kroah-Hartman)
-  - Add link for corresponding userspace tool in the commit log.
-    (Greg Kroah-Hartman)
-  - Replace the telemetry .read() with .mmap() so that the userspace
-    could mmap once, and read multiple times. (Greg Kroah-Hartman)
-- Change from v3 to v4:
-  - Add Documentation/ABI/testing/pfru to document the ABI and
-    remove Documentation/x86/pfru.rst (Rafael J. Wysocki)
-  - Replace all pr_err() with dev_dbg() (Greg Kroah-Hartman,
-    Rafael J. Wysocki)
-  - returns ENOTTY rather than ENOIOCTLCMD if invalid ioctl command
-    is provided. (Greg Kroah-Hartman)
-  - Remove compat ioctl. (Greg Kroah-Hartman)
-  - Rename /dev/pfru/pfru_update to /dev/acpi_pfru (Greg Kroah-Hartman)
-  - Simplify the check for element of the package in query_capability()
-    (Rafael J. Wysocki)
-  - Remove the loop in query_capability(), query_buffer() and query
-    the package elemenet directly. (Rafael J. Wysocki)
-  - Check the number of elements in case the number of package
-    elements is too small. (Rafael J. Wysocki)
-  - Doing the assignment as initialization in get_image_type().
-    Meanwhile, returns the type or a negative error code in
-    get_image_type(). (Rafael J. Wysocki)
-  - Put the comments inside the function. (Rafael J. Wysocki)
-  - Returns the size or a negative error code in adjust_efi_size()
-    (Rafael J. Wysocki)
-  - Fix the return value from EFAULT to EINVAL if pfru_valid_revid()
-    does not pass. (Rafael J. Wysocki)
-  - Change the write() to be the code injection/update, the read() to
-    be telemetry retrieval and all of the rest to be ioctl()s under
-    one special device file.(Rafael J. Wysocki)
-  - Remove redundant parens. (Rafael J. Wysocki)
-  - Putting empty code lines after an if () statement that is not
-    followed by a block. (Rafael J. Wysocki)
-  - Remove "goto" tags to make the code more readable. (Rafael J. Wysocki)
-- Change from v2 to v3:
-  - Use valid types for structures that cross the user/kernel boundary
-    in the uapi header. (Greg Kroah-Hartman)
-  - Rename the structure in uapi to start with a prefix pfru so as
-    to avoid confusing in the global namespace. (Greg Kroah-Hartman)
-- Change from v1 to v2:
-  - Add a spot in index.rst so it becomes part of the docs build
-    (Jonathan Corbet).
-  - Sticking to the 80-column limit(Jonathan Corbet).
-  - Underline lengths should match the title text(Jonathan Corbet).
-  - Use literal blocks for the code samples(Jonathan Corbet).
-  - Add sanity check for duplicated instance of ACPI device.
-  - Update the driver to work with allocated pfru_device objects.
-    (Mike Rapoport)
-  - For each switch case pair, get rid of the magic case numbers
-    and add a default clause with the error handling.(Mike Rapoport)
-  - Move the obj->type checks outside the switch to reduce redundancy.
-    (Mike Rapoport)
-  - Parse the code_inj_id and drv_update_id at driver initialization time
-    to reduce the re-parsing at runtime. (Mike Rapoport)
-  - Explain in detail how the size needs to be adjusted when doing
-    version check. (Mike Rapoport)
-  - Rename parse_update_result() to dump_update_result()
-    (Mike Rapoport)
-  - Remove redundant return.(Mike Rapoport)
-  - Do not expose struct capsulate_buf_info to uapi, since it is
-    not needed in userspace. (Mike Rapoport)
-  - Do not allow non-root user to run this test.(Shuah Khan)
-  - Test runs on platform without pfru_telemetry should skip
-    instead of reporting failure/error.(Shuah Khan)
-  - Reuse uapi/linux/pfru.h instead of copying it into the test
-    directory. (Mike Rapoport)
+Per Joerg's previous comments:
 
-Chen Yu (4):
-  efi: Introduce EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER and
-    corresponding structures
-  drivers/acpi: Introduce Platform Firmware Runtime Update device driver
-  drivers/acpi: Introduce Platform Firmware Runtime Telemetry
-  tools: Introduce power/acpi/tools/pfrut
+https://lore.kernel.org/linux-iommu/20211119150612.jhsvsbzisvux2lga@8bytes.org/
 
- .../userspace-api/ioctl/ioctl-number.rst      |   1 +
- drivers/acpi/Kconfig                          |  22 +
- drivers/acpi/Makefile                         |   1 +
- drivers/acpi/pfr_telemetry.c                  | 434 +++++++++++++
- drivers/acpi/pfr_update.c                     | 575 ++++++++++++++++++
- include/linux/efi.h                           |  46 ++
- include/uapi/linux/pfrut.h                    | 262 ++++++++
- tools/power/acpi/.gitignore                   |   1 +
- tools/power/acpi/Makefile                     |  16 +-
- tools/power/acpi/Makefile.rules               |   2 +-
- tools/power/acpi/man/pfrut.8                  | 137 +++++
- tools/power/acpi/tools/pfrut/Makefile         |  23 +
- tools/power/acpi/tools/pfrut/pfrut.c          | 424 +++++++++++++
- 13 files changed, 1935 insertions(+), 9 deletions(-)
- create mode 100644 drivers/acpi/pfr_telemetry.c
- create mode 100644 drivers/acpi/pfr_update.c
- create mode 100644 include/uapi/linux/pfrut.h
- create mode 100644 tools/power/acpi/man/pfrut.8
- create mode 100644 tools/power/acpi/tools/pfrut/Makefile
- create mode 100644 tools/power/acpi/tools/pfrut/pfrut.c
+The commit 426a273834ea came only in order to disallow attaching a
+single device within a group to a different iommu_domain. So it's
+reasonable to improve the existing iommu_attach/detach_device() to cover
+all cases. How about below code? Did I miss anything?
 
--- 
-2.25.1
+int iommu_attach_device(struct iommu_domain *domain, struct device *dev)
+{
+         struct iommu_group *group;
+         int ret = 0;
 
+         group = iommu_group_get(dev);
+         if (!group)
+                 return -ENODEV;
+
+         mutex_lock(&group->mutex);
+         if (group->attach_cnt) {
+                 if (group->domain != domain) {
+                         ret = -EBUSY;
+                         goto unlock_out;
+                 }
+         } else {
+                 ret = __iommu_attach_group(domain, group);
+                 if (ret)
+                         goto unlock_out;
+         }
+
+         group->attach_cnt++;
+unlock_out:
+         mutex_unlock(&group->mutex);
+         iommu_group_put(group);
+
+         return ret;
+}
+EXPORT_SYMBOL_GPL(iommu_attach_device);
+
+void iommu_detach_device_shared(struct iommu_domain *domain, struct 
+device *dev)
+{
+         struct iommu_group *group;
+
+         group = iommu_group_get(dev);
+         if (WARN_ON(!group))
+                 return;
+
+         mutex_lock(&group->mutex);
+         if (WARN_ON(!group->attach_cnt || group->domain != domain)
+                 goto unlock_out;
+
+         if (--group->attach_cnt == 0)
+                 __iommu_detach_group(domain, group);
+
+unlock_out:
+         mutex_unlock(&group->mutex);
+         iommu_group_put(group);
+}
+EXPORT_SYMBOL_GPL(iommu_detach_device);
+
+Best regards,
+baolu

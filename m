@@ -2,182 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DBD47CBC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ABB47CBC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbhLVDpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:45:13 -0500
-Received: from mga11.intel.com ([192.55.52.93]:33474 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229997AbhLVDpK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:45:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640144710; x=1671680710;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=saIcUe//lCU1D3gNelxnFcf14O73ngBeHUvXZ7TwtT4=;
-  b=ihwZjgkRt8gxYNCmwc6g/MOP8W4lDlkXWXFc+pHz4B8+g8TwW3Cb+jtV
-   r3lA/zjX944fRBiDf5oT7LyiR/kbmnL13KKYnFmvCWsmvF/bVpnJtSX9F
-   pZUno1DOy4IiN1x3dQG2tXrwfG24vKjQYkKmI1u3sSyucyViK2HV9tRs+
-   l0HqHvveywHDaxUL0+GS1CdTi8zj4jjoMizt5xMINYD0f0cZrt1NwZ36I
-   +USBWbNNVsfNFHJVjqwQzMI7IiFfTRi6/JQ46swwfO6oiMtFrq5LSLgGf
-   bYFZJdjungRmNLOz3bzNq3IzTNI39/9A5UJD6cxpUHahZM8PqhSElzU+G
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238074162"
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="238074162"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 19:45:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="521514438"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2021 19:45:10 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 19:45:09 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 19:45:09 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 21 Dec 2021 19:45:09 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 21 Dec 2021 19:45:09 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JRxT0g96I8fNdmT5hXIEqZQMpH9Pvvsus7pdZm2CTFEQpqid9prQu/x31Xz4EuyzEbt66DKNA72BmfQp9iupfZZ1YJ9yXmdATsP5PayFnXkanbE28EaoTUaQVaM2568Ehaoxb/BtLofRogfetMDkazZnr0EbDGqO/+P4geO3rb0Wqem1lCv37DOmpVRsMLan44Gt8wIwqP/a7wnWPxbEGFwsDLB5uY/GV5FK3PlbWxwkJyojz3qZk60fEzmSw2vbOEamGgO+AOMWn3KRLFlnNtGWvOSYeUq3K2OiW7hafH/2kOCR43BUQDxepnUCsIdZ5ppSBB4y6NNs0Pg3M4TY8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JqP6P9yWEt21CWfKUgQWy4U02ScmywNzQXlbg+zRfCU=;
- b=jSCRGl9Sx/rseCcr92rZpKDvxlJzuyYB/HQHceJuy9H/FpntIMew4FoT7n4Qy0r8ZKdmFV0z5l5j2kiL3Bet6wr1r23hXf+fBzxmPBtAczs3S8QJYd28DHWxieSlbj4a8IHWxCkk7EEwe0E5WJf3WzRFfWjsosxgLqYhNWDyQ7J4dwqA7sK+lXzl+8wcL/aCr39Qh0qD+k5zWuMoZ8hihkfVtXDQ2aBRn2hhgGK8yEmK/zLPL00elO+djh9FzHlx8p+Pfi7PA+M8qW21aklfr+UF57V9S39n4FPde92C0taSRMwTqfXli5Hfg1e8A4eaAgg4JDfnGsUccIqdzVJoTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by BY5PR11MB4133.namprd11.prod.outlook.com (2603:10b6:a03:18f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Wed, 22 Dec
- 2021 03:45:07 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::bc02:db0b:b6b9:4b81]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::bc02:db0b:b6b9:4b81%5]) with mapi id 15.20.4801.020; Wed, 22 Dec 2021
- 03:45:07 +0000
-From:   "G, GurucharanX" <gurucharanx.g@intel.com>
-To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: RE: [Intel-wired-lan] [PATCH net-next 6/9] igb: switch to
- napi_build_skb()
-Thread-Topic: [Intel-wired-lan] [PATCH net-next 6/9] igb: switch to
- napi_build_skb()
-Thread-Index: AQHX4I+aMaLdP+/JLEujuufZFkeKvKw+C0Jg
-Date:   Wed, 22 Dec 2021 03:45:07 +0000
-Message-ID: <BYAPR11MB3367C988566786D2DEBC4A90FC7D9@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <20211123171840.157471-1-alexandr.lobakin@intel.com>
- <20211123171840.157471-7-alexandr.lobakin@intel.com>
-In-Reply-To: <20211123171840.157471-7-alexandr.lobakin@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cdff7033-a282-405b-f0de-08d9c4fd7295
-x-ms-traffictypediagnostic: BY5PR11MB4133:EE_
-x-microsoft-antispam-prvs: <BY5PR11MB413324918D9CBDF7253C660AFC7D9@BY5PR11MB4133.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mOJHucdHQX+0t0gzuWYUZzZ4V7jSnQoTHSkZ39ZoS1SgIO0r2j8HVo2l9tBvPyyg+5QwmuPcSF8/oSsPmvt6VCiQn24lAFUeIo2mPsb8wWg4SHywpln3Y86mHoYCM7OrTJZWl6PrVSlNuu9iLNpwZSG78IkgIumOo2+I1AlMMvQ19742Fv+aVaKXCs61TqmiCspx3TMHfw/Y67sgCfyEt8LJH8pkk5wTIVR0g/VVRkx7t0dD0NQhKi2sQqi8aWdzoo44oro+AcA5uOsFjvMt48XjXZxQuN3/MHaGaXtRZlOgbPozZogFSCjEkD7cCGi21gP7RQoMoCC676FYPR4bVPJ8Z7ON8AkgKAXcRe73Les948ZEoKZbVk9EESVn4IY+MLPo7XIQBjsAWM+oFIpwMS1+TTo5vJJaSk3ZFh1C9QYo77ik/neid9lBX8YxUb8Jy+WPdYtkb2J3gC75yzLsELcY71c6/CYwRszPqsJrG17gErM9SBUBU6lOWn/EMqAhxSJEJDQMFE5wI8v/aXVsjLrBYDSrq7V+UjKQ7cOcrGzDynx23jOpKPyVuVMARWALeG7P7p0WHZg6WQeUqyMob6VqIyaoSlbGBBoq78PCc2QoW70m/e0hOpRpz9Ije/UtFYK581pqvdXa3V8IGnW80vA7+1YRdq03pe+8U4JNrhDFSAxaNFw75U7Ab0wtRiHjszPrNUDlzJX98j9tR/sTTA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(33656002)(316002)(52536014)(66946007)(76116006)(6506007)(66476007)(53546011)(8676002)(64756008)(5660300002)(110136005)(4326008)(7696005)(38070700005)(66446008)(55016003)(9686003)(86362001)(38100700002)(186003)(71200400001)(83380400001)(2906002)(122000001)(82960400001)(8936002)(508600001)(66556008)(54906003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sB1u+eotdvUi+Wr8bn5evjtGP45PWrP+YA+TJLMbbkox2Y2kqi5nCb6uf9D8?=
- =?us-ascii?Q?rYscHeg6JcpUPoXatpI0R6sDtLoOuIdsyMlmGugyU+/EGcO4aYU5M8idANg3?=
- =?us-ascii?Q?FQj4HT5l/K4QNTghCfwKYLqeQ9sB477l1FcT5NrVa2Hf3gr+Juzs/vMcqr3/?=
- =?us-ascii?Q?cqe6lfWI3ZxkybQPdjr1oRsjzprAooWP+aGpiL4s9Kop/13h/AMH6P6HX/JU?=
- =?us-ascii?Q?fd2U5IWCanZh6Uls4ckOc0xj38PZjQLTs/CfVemay7FnZEx03dZNniWIqBJ6?=
- =?us-ascii?Q?NIjbD9LmWSO79tpoQ4R1UmJYC8gGJy3BWv4+MzBS89ARDYRydzwAlc88uWEo?=
- =?us-ascii?Q?C3QXBWKCMC93JFpe0BoWF8T682yGgC07jELvA2Pt5szt9UyRBoFFh52QPBwZ?=
- =?us-ascii?Q?C811VbUXpsroUSKrqI07vkbW7Ng7/vlsJhd7Eo/eqKYFMkr1xzLihJiFgygW?=
- =?us-ascii?Q?WNOqtwwxaQVz5KtnTcNf2McDjMx8SeO7gF/jYNFEzFJIvF6CwUwtq1ivmkQ1?=
- =?us-ascii?Q?R3EE3kghotQava2FJf/Xh6WY97DpxxGWhE6VjkfpZa0JYZ9eMu9cG+VsKj2x?=
- =?us-ascii?Q?9Zzblvq4L3qqDlJgdm4rbTP/YrJvwdKAQfQc9oBl2ExFfb3wFFGo7gCQk1qi?=
- =?us-ascii?Q?PnMpj08KzKOSXuDxwnxjXyePs9PGEOfgB8fX3tctO3zJFsaeK34bQK1BO4Vc?=
- =?us-ascii?Q?ea8szdMXyAPo7EXlJFZ8Rp/G2Lr242WwBBdTBIzXsB4Jq0++uFIc7GTcIk4y?=
- =?us-ascii?Q?kXKoSj5IP9RcxV6gkwDeGECDXzIbs2r1EilTLsy8CS0Fw8vbmCZwAQP06xKn?=
- =?us-ascii?Q?DRlzdVE1KnsNI+lS0Zlw615wHEgaQxuSyRUFAIBhDgh7uQVNwFp3tVQnvmds?=
- =?us-ascii?Q?l5H/bWhFYEmwxX66tIlIBiPLSzVRKggkfeQWjK5tyy8wELotCqEfl8Ow3TAs?=
- =?us-ascii?Q?QrDSoYuJmji34CFLh5DvZLuLHmmKN/xehHq4Al7LA8XtRIrfS9y3jp6ncAMA?=
- =?us-ascii?Q?dsNtlqzmO8GWoBeqLfYCmPKADb7DiMwMlcTd3SU2WOQwavZ0sc+g6SYpCrhf?=
- =?us-ascii?Q?1zjdRAKXjThmTChDLzGBRiQpYCLGbOTLk47q3h24HbMJ1ZweRLhV1hMuczjp?=
- =?us-ascii?Q?AYqNGX7pYeC6MNbiwRxOHHPlHo5sjQ6rjBskgHUPOJ6OSofPIuUnmbqN97QX?=
- =?us-ascii?Q?SLFyRs0kDW96c8l0Q5G+G99iUkyIXwhIF7/vb9/eJYrLkKt1B5NeG2vRuKKC?=
- =?us-ascii?Q?V3gpqtX0mC6faNpDpHitHC3wbsc4cl9P8Lq2j+r4M3mUEDMcbi3VRKY5Fis7?=
- =?us-ascii?Q?jNfYu91TDRsIOaMKBZTVRIuJGxHJrjynJlbMJNS4+2IUmpyx0GuVvL1P2Hra?=
- =?us-ascii?Q?XqfQMT1KfbsNEvQwNt/IgUwkHQKntYrkOjXLU7NS7XLRKsldfu41Ql2lWlXl?=
- =?us-ascii?Q?WsfSZcw7ZaillmAag9Yie8raTP6fqLmCIElnjFhGdPai3zIFtZZPSqIKVQSD?=
- =?us-ascii?Q?Hd1cPQeSdEb6tDAdgTzBl2tunEduatR6q4USTvqUtcCnCDaf0cbLp2saONLB?=
- =?us-ascii?Q?IlB8shqdguLCoPIyYr4SDgJA03oDFZVxIrqbVN/IBrmXrmFHHa5Oiqx1TcF5?=
- =?us-ascii?Q?Aw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S242178AbhLVDq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 22:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242171AbhLVDqy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 22:46:54 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944E2C061574;
+        Tue, 21 Dec 2021 19:46:54 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id a9so1156911qvd.12;
+        Tue, 21 Dec 2021 19:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wSONo8KMvwsaMcqHHccDd/rtCcU965zl2hwexcD83PQ=;
+        b=qAmqev6VherI+L7d/1G0VCDE0c/JRXgulMKsKj0VvMwj69TiG/Q0vSc4+FkAC9F4K2
+         ynze2o4u90J99K8vBOVYVUtny88gd62pjWbp9Q9w9/YpPQwPmakFI0XdBBfC5lEeTEtw
+         Zq/HwXvYljcox6EG0VitSO9fto5iv3Ej64bQRkW0fYBGh8/elERBY7q7aT6+7EFwYpYL
+         RCxuQndQmgdqJoLoqJ0ip1LoJ5DpV2c4cYCcSaQApbq3BLZI11BnpXHR0iclOfVesan+
+         eKlTsLhy1UEKSfaXWOfwixrd76qeB2EvGBrL10IVdZUzBdtjvMYUIw62X06IwvAOUhkO
+         yATA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wSONo8KMvwsaMcqHHccDd/rtCcU965zl2hwexcD83PQ=;
+        b=Fy4sIb2HhlkS87X6wxg6C4s0eiIkcaH6WhEfHgT0DVpxtBBY8Sy7KKbadbwUBhO0eK
+         Un2dH8Fw4rjSOfYIQe6IsSnsgkVgNO6Uut4jOsgREGPxI+1OhNeZuIzSs5rqLnf1Q1mt
+         3+0ygZUCUlHC4G7LvddM55dLjWw3lDHec9oivq4kzYP8KQI7TNVU16HXuQTwmGpK4NIA
+         V5UQPLCNNVTXjE1bxG4qUCPojnLn6u4AG95qpDetwHGHeHF8yU9/PmpNURaeZbeGKTyZ
+         0OU8USeIOxzYAxLUanVFK30u546PaeXJiEc+90lxH4wEkh+YnKpPcKXcFMbtzfEJkjpj
+         pZ9w==
+X-Gm-Message-State: AOAM531bDg1RhNWu9/IMPrXwjWVEZN2LAvR9XWB+4eKHSnZmH93LPvnw
+        Jmmm1WV6boVa874N5Bow47A=
+X-Google-Smtp-Source: ABdhPJyThjuJ6x6sZPVWe44OEpgWieoWlS0t3ouGPwKBqCVGFxXIwZcIeH0u4aXyAJAihxXNcBTQ0A==
+X-Received: by 2002:ad4:4ee3:: with SMTP id dv3mr1120623qvb.8.1640144813732;
+        Tue, 21 Dec 2021 19:46:53 -0800 (PST)
+Received: from shaak.xiphos.ca (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
+        by smtp.gmail.com with ESMTPSA id f18sm918944qko.34.2021.12.21.19.46.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 19:46:53 -0800 (PST)
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     liambeguin@gmail.com, peda@axentia.se, jic23@kernel.org,
+        andy.shevchenko@gmail.com, lars@metafoo.de
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: [PATCH v11 00/15] iio: afe: add temperature rescaling support
+Date:   Tue, 21 Dec 2021 22:46:31 -0500
+Message-Id: <20211222034646.222189-1-liambeguin@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdff7033-a282-405b-f0de-08d9c4fd7295
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2021 03:45:07.7210
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: noCdBx37OqZ9xhuSobldcUCujD/fP4xa5H+EogFFNmmxVJz0JPWs+SNbwIU3ub3kYY0kZ0bSmRXAhDdUjGDomg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4133
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jonathan, Peter, Andy,
 
+I left out IIO_VAL_INT overflows for now, so that I can focus on getting
+the rest of these changes pulled in, but I don't mind adding a patch for
+that later on.
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Alexander Lobakin
-> Sent: Tuesday, November 23, 2021 10:49 PM
-> To: intel-wired-lan@lists.osuosl.org
-> Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jakub Kicinski
-> <kuba@kernel.org>; David S. Miller <davem@davemloft.net>
-> Subject: [Intel-wired-lan] [PATCH net-next 6/9] igb: switch to napi_build=
-_skb()
->=20
-> napi_build_skb() reuses per-cpu NAPI skbuff_head cache in order to save s=
-ome
-> cycles on freeing/allocating skbuff_heads on every new Rx or completed Tx=
-.
-> igb driver runs Tx completion polling cycle right before the Rx one and u=
-ses
-> napi_consume_skb() to feed the cache with skbuff_heads of completed entri=
-es,
-> so it's never empty and always warm at that moment. Switch to the
-> napi_build_skb() to relax mm pressure on heavy Rx.
->=20
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> ---
->  drivers/net/ethernet/intel/igb/igb_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
+This series focuses on adding temperature rescaling support to the IIO
+Analog Front End (AFE) driver.
 
-Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at I=
-ntel)
+The first few patches address minor bugs in IIO inkernel functions, and
+prepare the AFE driver for the additional features.
+
+The main changes to the AFE driver include an initial Kunit test suite,
+support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+and temperature transducer sensors.
+
+I applied Peter's Reviewed-by only on the unchanged commits, I wasn't
+sure it would be okay to do so on the whole series with the few
+changes in v11.
+
+Thanks for your time,
+Liam
+
+Changes since v10:
+- apply Andy's suggestion for offset calculations
+- make use of units.h more consistently
+
+Changes since v9:
+- make use of linux/units.h
+- reorder commits, fix fract_log2 before merging fract
+- keep fractional representation when not overflowing
+
+Changes since v8:
+- reword comment
+- fix erroneous 64-bit division
+- optimize and use 32-bit divisions when values are know to not overflow
+- keep IIO_VAL_FRACTIONAL scale when possible, if not default to fixed
+  point
+- add test cases
+- use nano precision in test cases
+- simplify offset calculation in rtd_props()
+
+Changes since v7:
+- drop gcd() logic in rescale_process_scale()
+- use div_s64() instead of do_div() for signed 64-bit divisions
+- combine IIO_VAL_FRACTIONAL and IIO_VAL_FRACTIONAL_LOG2 scale cases
+- switch to INT_PLUS_NANO when accuracy is lost with FRACTIONAL scales
+- rework test logic to allow for small relative error
+- rename test variables to align error output messages
+
+Changes since v6:
+- rework IIO_VAL_INT_PLUS_{NANO,MICRO} based on Peter's suggestion
+- combine IIO_VAL_INT_PLUS_{NANO,MICRO} cases
+- add test cases for negative IIO_VAL_INT_PLUS_{NANO,MICRO} corner cases
+- force use of positive integers with gcd()
+- reduce risk of integer overflow in IIO_VAL_FRACTIONAL_LOG2
+- fix duplicate symbol build error
+- apply Reviewed-by
+
+Changes since v5:
+- add include/linux/iio/afe/rescale.h
+- expose functions use to process scale and offset
+- add basic iio-rescale kunit test cases
+- fix integer overflow case
+- improve precision for IIO_VAL_FRACTIONAL_LOG2
+
+Changes since v4:
+- only use gcd() when necessary in overflow mitigation
+- fix INT_PLUS_{MICRO,NANO} support
+- apply Reviewed-by
+- fix temperature-transducer bindings
+
+Changes since v3:
+- drop unnecessary fallthrough statements
+- drop redundant local variables in some calculations
+- fix s64 divisions on 32bit platforms by using do_div
+- add comment describing iio-rescaler offset calculation
+- drop unnecessary MAINTAINERS entry
+
+Changes since v2:
+- don't break implicit offset truncations
+- make a best effort to get a valid value for fractional types
+- drop return value change in iio_convert_raw_to_processed_unlocked()
+- don't rely on processed value for offset calculation
+- add INT_PLUS_{MICRO,NANO} support in iio-rescale
+- revert generic implementation in favor of temperature-sense-rtd and
+  temperature-transducer
+- add separate section to MAINTAINERS file
+
+Changes since v1:
+- rebase on latest iio `testing` branch
+- also apply consumer scale on integer channel scale types
+- don't break implicit truncation in processed channel offset
+  calculation
+- drop temperature AFE flavors in favor of a simpler generic
+  implementation
+
+Liam Beguin (15):
+  iio: inkern: apply consumer scale on IIO_VAL_INT cases
+  iio: inkern: apply consumer scale when no channel scale is available
+  iio: inkern: make a best effort on offset calculation
+  iio: afe: rescale: expose scale processing function
+  iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
+  iio: afe: rescale: add offset support
+  iio: afe: rescale: use s64 for temporary scale calculations
+  iio: afe: rescale: fix accuracy for small fractional scales
+  iio: afe: rescale: reduce risk of integer overflow
+  iio: afe: rescale: make use of units.h
+  iio: test: add basic tests for the iio-rescale driver
+  iio: afe: rescale: add RTD temperature sensor support
+  iio: afe: rescale: add temperature transducers
+  dt-bindings: iio: afe: add bindings for temperature-sense-rtd
+  dt-bindings: iio: afe: add bindings for temperature transducers
+
+ .../iio/afe/temperature-sense-rtd.yaml        | 101 +++
+ .../iio/afe/temperature-transducer.yaml       | 114 +++
+ drivers/iio/afe/iio-rescale.c                 | 291 +++++++-
+ drivers/iio/inkern.c                          |  40 +-
+ drivers/iio/test/Kconfig                      |  10 +
+ drivers/iio/test/Makefile                     |   1 +
+ drivers/iio/test/iio-test-rescale.c           | 705 ++++++++++++++++++
+ include/linux/iio/afe/rescale.h               |  34 +
+ 8 files changed, 1248 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-sense-rtd.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
+ create mode 100644 drivers/iio/test/iio-test-rescale.c
+ create mode 100644 include/linux/iio/afe/rescale.h
+
+Range-diff against v10:
+ -:  ------------ >  1:  ae3cc93baee6 iio: inkern: apply consumer scale on IIO_VAL_INT cases
+ -:  ------------ >  2:  06f66e7f7403 iio: inkern: apply consumer scale when no channel scale is available
+ 1:  2dbf6b3bbaeb !  3:  1717b82460c0 iio: inkern: make a best effort on offset calculation
+    @@ drivers/iio/inkern.c: EXPORT_SYMBOL_GPL(iio_read_channel_average_raw);
+     +			offset_val /= offset_val2;
+     +			break;
+     +		case IIO_VAL_FRACTIONAL_LOG2:
+    -+			offset_val /= (1 << offset_val2);
+    ++			offset_val >>= offset_val2;
+     +			break;
+     +		default:
+     +			return -EINVAL;
+ 2:  b083cf307268 =  4:  6fc26588f651 iio: afe: rescale: expose scale processing function
+ 3:  f46b59690e46 =  5:  8e63c4036157 iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
+ 4:  80701b87cdf4 !  6:  eea57faec241 iio: afe: rescale: add offset support
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+     +		*val = div_s64(tmp, scale) + schan_off;
+     +		return IIO_VAL_INT;
+     +	case IIO_VAL_INT_PLUS_NANO:
+    -+		tmp = (s64)rescale->offset * 1000000000;
+    -+		tmp2 = ((s64)scale * 1000000000L) + scale2;
+    ++		tmp = (s64)rescale->offset * NANO;
+    ++		tmp2 = ((s64)scale * NANO) + scale2;
+     +		*val = div64_s64(tmp, tmp2) + schan_off;
+     +		return IIO_VAL_INT;
+     +	case IIO_VAL_INT_PLUS_MICRO:
+    -+		tmp = (s64)rescale->offset * 1000000L;
+    -+		tmp2 = ((s64)scale * 1000000L) + scale2;
+    ++		tmp = (s64)rescale->offset * MICRO;
+    ++		tmp2 = ((s64)scale * MICRO) + scale2;
+     +		*val = div64_s64(tmp, tmp2) + schan_off;
+     +		return IIO_VAL_INT;
+     +	default:
+ 5:  a3d8fb812678 =  7:  6bc5dd8c92ac iio: afe: rescale: use s64 for temporary scale calculations
+ 6:  b83947d96676 =  8:  7d426d67a7fd iio: afe: rescale: fix accuracy for small fractional scales
+ 7:  c42c8121bcdf =  9:  dbea6ae8fec2 iio: afe: rescale: reduce risk of integer overflow
+ -:  ------------ > 10:  9ab1138449d3 iio: afe: rescale: make use of units.h
+ 8:  6c87d491a275 = 11:  3006151cd193 iio: test: add basic tests for the iio-rescale driver
+ 9:  3f3d1939b17c ! 12:  d4229e8d7f24 iio: afe: rescale: add RTD temperature sensor support
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_voltage_divider_props(struct d
+     +		return ret;
+     +	}
+     +
+    -+	tmp = r0 * iexc * alpha / 1000000;
+    -+	factor = gcd(tmp, 1000000);
+    -+	rescale->numerator = 1000000 / factor;
+    ++	tmp = r0 * iexc * alpha / MICRO;
+    ++	factor = gcd(tmp, MICRO);
+    ++	rescale->numerator = MICRO / factor;
+     +	rescale->denominator = tmp / factor;
+     +
+    -+	rescale->offset = -1 * ((r0 * iexc) / 1000);
+    ++	rescale->offset = -1 * ((r0 * iexc) / MICRO * MILLI);
+     +
+     +	return 0;
+     +}
+10:  0c83d15f3b92 ! 13:  b93e303c5e60 iio: afe: rescale: add temperature transducers
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_temp_sense_rtd_props(struct de
+     +		return ret;
+     +	}
+     +
+    -+	rescale->numerator = 1000000;
+    ++	rescale->numerator = MICRO;
+     +	rescale->denominator = alpha * sense;
+     +
+     +	rescale->offset = div_s64((s64)offset * rescale->denominator,
+11:  55af6c9391f8 = 14:  7bdd57435c5c dt-bindings: iio: afe: add bindings for temperature-sense-rtd
+12:  8f9cd46c702e = 15:  604ef3e42c07 dt-bindings: iio: afe: add bindings for temperature transducers
+
+base-commit: 2b6bff0b122785f09cfbdc34b1aa9edceea6e4c1
+-- 
+2.34.0
+

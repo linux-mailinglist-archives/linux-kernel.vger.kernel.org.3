@@ -2,118 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66A147CF36
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A871C47CF38
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243919AbhLVJ1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243882AbhLVJ1K (ORCPT
+        id S243926AbhLVJ2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:28:08 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:39012 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243882AbhLVJ2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:27:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0394FC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:27:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C05ECB81B79
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8577FC36AE8;
-        Wed, 22 Dec 2021 09:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640165227;
-        bh=gBYZtBL6MdmBjQetMWaR8TTPN/kbDOmXqk0iGSTw9/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHC80lJeRkhiXcDSJZoK7xmGfarSNbEBEVVgRju+s2Hy+PjDCSMkfiaFU+wag6WjW
-         d16LbeurhSXU9SyEYOHSpT3axCR4xcUzdURluIOJ8TFY/gRdG4uLJDpGY3M6hOeHmn
-         kZ8WzSqadokbAJ3CDhob2/rm36MfOsAylYqmC6VW2pIsOKW1e7bA/XUy9gAUq/f8rU
-         r57C/ETd1GYLefEgbNPbRcBcOa+Wi4qg+OHvR7vFH0GuYuvcVZpskeI+gE+atNejS0
-         YZGMhyyZnsg04+jz029LIMNN4snLofnFff1xt9/OQAyLyJaAI+yu20qBLIo3UL5IF6
-         vQmErfU2c08PA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mzxtj-0003CQ-LK; Wed, 22 Dec 2021 10:26:59 +0100
-Date:   Wed, 22 Dec 2021 10:26:59 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register()
- error path
-Message-ID: <YcLvY5tJJcxusM0a@hovoldconsulting.com>
-References: <20211221154550.11455-1-zajec5@gmail.com>
- <YcH7fw5S6aSXswvb@kroah.com>
- <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
- <YcLXbPzyhtMnP0YQ@kroah.com>
- <YcLkA0e48+xuGsHk@hovoldconsulting.com>
- <52a2a318-0efe-94af-b8b9-308c2fbb1fab@gmail.com>
- <YcLrHEoOy3iRSkFp@hovoldconsulting.com>
- <c5b76d10-c270-21e5-e528-9aa20b1384ef@milecki.pl>
+        Wed, 22 Dec 2021 04:28:07 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Wed, 22 Dec
+ 2021 17:28:04 +0800
+Message-ID: <eae96731-d231-ab2f-934f-70a9fc3f8409@amlogic.com>
+Date:   Wed, 22 Dec 2021 17:28:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c5b76d10-c270-21e5-e528-9aa20b1384ef@milecki.pl>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 3/3] tty: serial: meson: add UART driver compatible with
+ S4 SoC on-chip
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20211221071634.25980-1-yu.tu@amlogic.com>
+ <20211221071634.25980-4-yu.tu@amlogic.com> <YcGDk3eC3sIstYjs@kroah.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <YcGDk3eC3sIstYjs@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 10:16:20AM +0100, Rafał Miłecki wrote:
-> On 22.12.2021 10:08, Johan Hovold wrote:
-> > On Wed, Dec 22, 2021 at 10:00:03AM +0100, Rafał Miłecki wrote:
-> >> On 22.12.2021 09:38, Johan Hovold wrote:
-> > 
-> >>> It seems Rafał is mistaken here too; you certainly need to call
-> >>> platform_device_put() if platform_device_register() fail, even if many
-> >>> current users do appear to get this wrong.
-> >>
-> >> Yes I was! Gosh I made up that "platform_device_put()" name and only
-> >> now I realized it actually exists!
-> >>
-> >> I stand by saying this design is really misleading. Even though
-> >> platform_device_put() was obviously a bad example.
-> >>
-> >> Please remember I'm just a minor kernel developer however in my humble
-> >> opinion behaviour of device_register() and platform_device_register()
-> >> should be changed.
-> >>
-> >> If any function fails I expect:
-> >> 1. That function to clean up its mess if any
-> >> 2. Me to be responsible to clean up my mess if any
-> >>
-> >> This is how "most" code (whatever it means) works.
-> >> 1. If POSIX snprintf() fails I'm not expected to call *printf_put() sth
-> >> 2. If POSIX bind() fails I'm not expected to call bind_put() sth
-> >> 3. (...)
-> >>
-> >> I'm not sure if those are the best examples but you should get my point.
-> > 
-> > Yes, and we all agree that it's not the best interface. But it exists,
-> > and changing it now risks introducing worse problem than a minor, mostly
-> > theoretical, memleak.
-> 
-> Thanks for confirming that, I was wondering if it's just my mind that
-> doesn't find this design clear enough.
-> 
-> Now, assuming this design isn't perfect and some purists would like it
-> cleaned up:
-> 
-> Would that make sense to introduce something like
-> 1. device_register2() / device_add2()
-> and
-> 2. platform_device_register2() / platform_device_add2()
-> 
-> that would *not* require calling *_put() on failure? Then start
-> converting existing drivers to those new (clearner?) helpers?
 
-Nah, let's not add more helpers. Also see my last reply to Greg about
-why the registration helper cannot free object being registered.
 
-device_initialize() is special, and everyone just needs to learn that.
+On 2021/12/21 15:34, Greg Kroah-Hartman wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On Tue, Dec 21, 2021 at 03:16:34PM +0800, Yu Tu wrote:
+>> The S4 SoC on-chip UART uses a 12M clock as the clock source for
+>> calculating the baud rate of the UART. But previously, chips used 24M or
+>> other clock sources. So add this change. The specific clock source is
+>> determined by chip design.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+>>   drivers/tty/serial/meson_uart.c | 62 +++++++++++++++++++++++++++++----
+>>   1 file changed, 55 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+>> index 69450a461c48..557c24d954a2 100644
+>> --- a/drivers/tty/serial/meson_uart.c
+>> +++ b/drivers/tty/serial/meson_uart.c
+>> @@ -19,6 +19,7 @@
+>>   #include <linux/serial_core.h>
+>>   #include <linux/tty.h>
+>>   #include <linux/tty_flip.h>
+>> +#include <linux/of_device.h>
+>>   
+>>   /* Register offsets */
+>>   #define AML_UART_WFIFO			0x00
+>> @@ -68,6 +69,8 @@
+>>   #define AML_UART_BAUD_MASK		0x7fffff
+>>   #define AML_UART_BAUD_USE		BIT(23)
+>>   #define AML_UART_BAUD_XTAL		BIT(24)
+>> +#define AML_UART_BAUD_XTAL_TICK		BIT(26)
+>> +#define AML_UART_BAUD_XTAL_DIV2		BIT(27)
+>>   
+>>   #define AML_UART_PORT_NUM		12
+>>   #define AML_UART_PORT_OFFSET		6
+>> @@ -80,6 +83,11 @@ static struct uart_driver meson_uart_driver;
+>>   
+>>   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+>>   
+>> +struct meson_uart_data {
+>> +	/*A clock source that calculates baud rates*/
+> 
+> Please use spaces in your comments.
 
-Johan
+I will correct this mistake in the next patch.
+
+> 
+>> +	unsigned int xtal_tick_en;
+> 
+> What is "_en" for?
+> 
+> "enabled"?
+> 
+> Spell it out please.
+You're right.I will correct as you suggested.
+> 
+> And why an unsigned int for a boolean flag?
+It is my thoughtless, I will correct.
+> 
+>> +};
+>> +
+>>   static void meson_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>>   {
+>>   }
+>> @@ -294,16 +302,29 @@ static int meson_uart_startup(struct uart_port *port)
+>>   
+>>   static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
+>>   {
+>> +	struct meson_uart_data *uart_data = port->private_data;
+>>   	u32 val;
+>>   
+>>   	while (!meson_uart_tx_empty(port))
+>>   		cpu_relax();
+>>   
+>> +	val = readl_relaxed(port->membase + AML_UART_REG5);
+>> +	val &= ~AML_UART_BAUD_MASK;
+>> +
+>>   	if (port->uartclk == 24000000) {
+>> -		val = ((port->uartclk / 3) / baud) - 1;
+>> -		val |= AML_UART_BAUD_XTAL;
+>> +		if (uart_data->xtal_tick_en) {
+>> +			val = (port->uartclk / 2 + baud / 2) / baud  - 1;
+>> +			val |= (AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_DIV2);
+>> +		} else {
+>> +			val = ((port->uartclk / 3) + baud / 2) / baud  - 1;
+>> +			val &= (~(AML_UART_BAUD_XTAL_TICK |
+>> +				AML_UART_BAUD_XTAL_DIV2));
+>> +			val |= AML_UART_BAUD_XTAL;
+>> +		}
+>>   	} else {
+>>   		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
+>> +		val &= (~(AML_UART_BAUD_XTAL | AML_UART_BAUD_XTAL_TICK |
+>> +			AML_UART_BAUD_XTAL_DIV2));
+>>   	}
+>>   	val |= AML_UART_BAUD_USE;
+>>   	writel(val, port->membase + AML_UART_REG5);
+>> @@ -714,6 +735,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+>>   {
+>>   	struct resource *res_mem, *res_irq;
+>>   	struct uart_port *port;
+>> +	struct meson_uart_data *uart_data;
+>>   	int ret = 0;
+>>   	int id = -1;
+>>   
+>> @@ -729,6 +751,10 @@ static int meson_uart_probe(struct platform_device *pdev)
+>>   		}
+>>   	}
+>>   
+>> +	uart_data = of_device_get_match_data(&pdev->dev);
+>> +	if (!uart_data)
+>> +		return  -EINVAL;
+> 
+> Wrong spacing.
+> 
+> Always use checkpatch.pl on your patches before sending them out.
+Sorry, this is a rookie mistake.But I did check it locally before 
+sending it. I will follow your advice strictly later.
+> 
+> And did you just break existing systems?  Do you know if all older ones
+> will still work with that call?
+> 
+It does affect older systems, but the new and older baud rates are not 
+the same. I checked the documents before I made any changes. So this 
+change is compatible with the older.
+>> +
+>>   	if (pdev->id < 0 || pdev->id >= AML_UART_PORT_NUM)
+>>   		return -EINVAL;
+>>   
+>> @@ -770,6 +796,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+>>   	port->x_char = 0;
+>>   	port->ops = &meson_uart_ops;
+>>   	port->fifosize = 64;
+>> +	port->private_data = uart_data;
+>>   
+>>   	meson_ports[pdev->id] = port;
+>>   	platform_set_drvdata(pdev, port);
+>> @@ -798,14 +825,35 @@ static int meson_uart_remove(struct platform_device *pdev)
+>>   	return 0;
+>>   }
+>>   
+>> +static const struct meson_uart_data meson_uart_data = {
+>> +	.xtal_tick_en = 0,
+>> +};
+>> +
+>> +static const struct meson_uart_data s4_meson_uart_data = {
+>> +	.xtal_tick_en = 1,
+>> +};
+> 
+> As your whole structure just has one bit, why not just use that as the
+> data value, instead of a structure?  No need to be complex here at all.
+> 
+It is my thoughtless, I will correct.
+> thanks,
+> 
+> greg k-h
+> 

@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C4647CD2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966F347CD2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242842AbhLVG4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:56:38 -0500
-Received: from mout.gmx.net ([212.227.17.20]:57369 "EHLO mout.gmx.net"
+        id S242848AbhLVG4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:56:42 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32311 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235252AbhLVG4h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:56:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640156183;
-        bh=usaE+auloC0pKur1KyeikoeCQuPrvDwpepUfa8MTVBM=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=bfAhe70bDEEZZnFnE7Ox822RAFR0ZxPycmQqYq9kynkvLpT05LL/qs0wgyalyFSxc
-         pP13EnpAs/trPnl0l0ZzrF1XdR48T82Z+jCY6L22iBx3U3Zg0WUW7sQK4VgL0iEzUN
-         uTzG2SkoXFBV1szfheDPjoAY6VANpc1BjxwbfJp0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.70] ([46.223.119.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtwUm-1mCDD111eW-00uHCG; Wed, 22
- Dec 2021 07:56:23 +0100
-Subject: Re: [PATCH v2] tpm: fix potential NULL pointer access in
- tpm_del_char_device
-To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
- <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <926f57a8-81b8-b3a9-8338-71213f1b85ac@gmx.de>
-Date:   Wed, 22 Dec 2021 07:56:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S242846AbhLVG4k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:56:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640156200; x=1671692200;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XWSmsUTqKDWedpZrNjDZUikX/jl3lS2gYyjbsE7ov4A=;
+  b=BLoz5/AtP2Bfz1pKxLGSI9vTROdPJ9Cew+c1lVwJYhaPcW+94ZIT6avh
+   VxnNmP4vecs4Q11Z8qCI2r/bX4f+l56TWyTtS+3J9JmiXZKFDTKkKWk6d
+   ph5aEuF6YBeOB93rqImrxdazvvkU3TVwoXnnbVNDtus2+S2Hl6qpvdKMk
+   XGfq5bvxJTfyu6GWEZr5am8IZHn5B7wgyDQ5j3EkWaFS2B7FKmG/UlNmR
+   BLw3W7j3E6ibN2oV6eJ4pSLKkoO8VtF4tMRt5VrifCCmaUazIpdGS9oNa
+   QLF3BvMckZAowF4q9ndol89T0zAksZJ9xANVZLaY1WrkTGWv5JTJUhflr
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238095855"
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="238095855"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 22:56:40 -0800
+X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
+   d="scan'208";a="521562091"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.155]) ([10.238.4.155])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 22:56:37 -0800
+Message-ID: <70e34e8f-6acb-1406-c67e-20280f9f4946@linux.intel.com>
+Date:   Wed, 22 Dec 2021 14:56:34 +0800
 MIME-Version: 1.0
-In-Reply-To: <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] perf pmu: Fix alias events list
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:drYXROArZ3cwX1WlTQdq2uKpG6SFxH+1Ub6aaSiTYRYnuKz9Qbm
- sTvQtIwb4GPEWvFj4om8LDumN8p/hd2ps4z/5y1kiso7Lm84XM9QCTtZnKWWf4RsqJMgLnh
- fiINh7ajSWGhZPx95inayWuoFH9csLKDZ40sEPdPhm2wXP4zifRnlEgtDLVNcnatfnfSSGw
- Ltd+wexmEJpyy4iOVEQAw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:q5XXRM0EOvE=:dxGm4/HlpZ1+G/pXELQt6g
- rXkhfXj8XkbJOiNKkcqbWAjVQuF+5YckJLzOALfQ4QpDWFWGNzhdh/A8yPDmvrVrorXD6rui8
- YIrd83Usd3R5FzMAJZ8BXzMHHQa7oHH1YVtdLuirupZrEKWQgmBzJ2D4ExORFk855TCH5aO3f
- ZxnnEwLuaCKMRDyDQQn6CQFjiLLcr7qXXcLYHte4iNrnGZOB0VSVwmNcSeXmLN5tgFkT73N98
- FrfYkOAu9zSjy6nbw9hACdOL9DdAP3Tqu1epKZrJY2bfEEjcYtTR+dc8eJg9gweu5iR90ihzP
- H+xUrniG+tL042JFYmmYNYzKf7Mdnmo7wiNkDic3s9PHjyunN9vPSDeeMfJ/o4SZ6VaaYj5E6
- U1LbkYn3rq8CAkjbb1P1UVw5BTjTF3sVMbPVCpf4Ex2HZC4RAY7mb0wV2L7tbDe5CMNC3vjjE
- e51NoEdXaPsXUMwZ5+o9Z8GsaJYOD7z4A9sdgkFiLSD7LJkSTYpzfQke6ZP8Ag9qxtCKZ0Y7B
- /Go+TN1pG8Fhg9qqBvntdXO0nlIS2vdP4j3FxY71omK1oIoykzETER8oLp8lg4VIbqX3N9SfY
- pdL09lySuIW5F2icP908BnRs289gEMGHLNQqFGPHmv02klDsirDAGbCRcd/3AKpooGDCw+Ezh
- bex950zJkFLYhlFoVxOkeurM8q//vdT1BUxjBg+dkQ1rPrT6+q3UclPi0+xccbxiqYhO1Nbtc
- Kks/NCdwX7Xa9sLK4UaTu8LyMZYf5GjQ+brD4eS0sRiuUI6MqWBQ56BDVELel7KccGM97faLO
- o/arbV8Ng5qSzQLGbVT5ZbAb6OHPwCsWp+J5AEM1fMNeHZpa9hPB7KXj8ssl1hVpvd58wHnvU
- F1M5VB6tFt7aNnBh2f3LXHoncMGEpp3cIpgATNL99R7wDUBJcisPh0QhmrwlyRm3l+/EKOeOL
- C24X1gR3w7NzvU0pLFVJkWYwv+iqYaAu+98T+0BNuFq82pDuOS8SEY76WsXsvWpvrTsw/fV+q
- Hgm/gVR1cm730V+4Ehrd3w6slh/xyAf9VNGD9xtlWpBhcdcIZdAHt9ijIYB+JLO7daR0FzYUx
- hQM0rjbCo0l4WY=
+To:     John Garry <john.garry@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, irogers@google.com, kan.liang@linux.intel.com
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1640103090-140490-1-git-send-email-john.garry@huawei.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <1640103090-140490-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Stefan,
 
+On 12/22/2021 12:11 AM, John Garry wrote:
+> Commit 0e0ae8742207 ("perf list: Display hybrid PMU events with cpu type")
+> changes the event list for uncore PMUs or arm64 heterogeneous CPU systems,
+> such that duplicate aliases are incorrectly listed per PMU (which they
+> should not be), like:
+> 
+> ./perf list
+> ...
+> unc_cbo_cache_lookup.any_es
+> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+> line in E or S-state]
+> unc_cbo_cache_lookup.any_es
+> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+> line in E or S-state]
+> unc_cbo_cache_lookup.any_i
+> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+> line in I-state]
+> unc_cbo_cache_lookup.any_i
+> [Unit: uncore_cbox L3 Lookup any request that access cache and found
+> line in I-state]
+> ...
+> 
+> Notice how the events are listed twice.
+> 
+> The named commit changed how we remove duplicate events, in that events
+> for different PMUs are not treated as duplicates. I suppose this is to
+> handle how "Each hybrid pmu event has been assigned with a pmu name".
+> 
+> Fix PMU alias listing by restoring behaviour to remove duplicates for
+> non-hybrid PMUs.
+> 
+> Fixes: 0e0ae8742207 ("perf list: Display hybrid PMU events with cpu type")
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+> 
+> Difference in v2:
+> - Change duplicate check to explicitly check for hybrid PMU
+> 
+> @Zhengjun Xing, Can you please check this new version? Thanks!
 
-On 22.12.21 at 05:53, Stefan Berger wrote:
+Tested this new version patch on both hybrid and non-hybrid PMU x86 
+systems, it works OK with no duplicate events for the uncore.
 
->>
->> =C2=A0 drivers/char/tpm/tpm-chip.c | 16 +++++++++++-----
->> =C2=A0 1 file changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> index ddaeceb7e109..7960da490e72 100644
->> --- a/drivers/char/tpm/tpm-chip.c
->> +++ b/drivers/char/tpm/tpm-chip.c
->> @@ -474,13 +474,19 @@ static void tpm_del_char_device(struct tpm_chip *=
-chip)
->> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Make the driver uncallable. */
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 down_write(&chip->ops_sem);
->> -=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!tpm_chip_start(chip)) =
-{
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
-2_shutdown(chip, TPM2_SU_CLEAR);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
-_chip_stop(chip);
->> +=C2=A0=C2=A0=C2=A0 /* Check if chip->ops is still valid: In case that =
-the controller
->> +=C2=A0=C2=A0=C2=A0=C2=A0 * drivers shutdown handler unregisters the co=
-ntroller in its
->> +=C2=A0=C2=A0=C2=A0=C2=A0 * shutdown handler we are called twice and ch=
-ip->ops to NULL.
->> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->> +=C2=A0=C2=A0=C2=A0 if (chip->ops) {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_=
-FLAG_TPM2) {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if =
-(!tpm_chip_start(chip)) {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 tpm2_shutdown(chip, TPM2_SU_CLEAR);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 tpm_chip_stop(chip);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> -=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 up_write(&chip->ops_sem);
->> =C2=A0 }
->> =C2=A0
->> base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
->
->
-> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and =
-vio_bus")
->
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
->
->
+Tested-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Thanks a lot for testing this.
+> 
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 6ae58406f4fc..8dfbba15aeb8 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -1659,6 +1659,21 @@ bool is_pmu_core(const char *name)
+>   	return !strcmp(name, "cpu") || is_arm_pmu_core(name);
+>   }
+>   
+> +static bool pmu_alias_is_duplicate(struct sevent *alias_a,
+> +				   struct sevent *alias_b)
+> +{
+> +	/* Different names -> never duplicates */
+> +	if (strcmp(alias_a->name, alias_b->name))
+> +		return false;
+> +
+> +	/* Don't remove duplicates for hybrid PMUs */
+> +	if (perf_pmu__is_hybrid(alias_a->pmu) &&
+> +	    perf_pmu__is_hybrid(alias_b->pmu))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>   void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+>   			bool long_desc, bool details_flag, bool deprecated,
+>   			const char *pmu_name)
+> @@ -1744,12 +1759,8 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+>   	qsort(aliases, len, sizeof(struct sevent), cmp_sevent);
+>   	for (j = 0; j < len; j++) {
+>   		/* Skip duplicates */
+> -		if (j > 0 && !strcmp(aliases[j].name, aliases[j - 1].name)) {
+> -			if (!aliases[j].pmu || !aliases[j - 1].pmu ||
+> -			    !strcmp(aliases[j].pmu, aliases[j - 1].pmu)) {
+> -				continue;
+> -			}
+> -		}
+> +		if (j > 0 && pmu_alias_is_duplicate(&aliases[j], &aliases[j - 1]))
+> +			continue;
+>   
+>   		if (name_only) {
+>   			printf("%s ", aliases[j].name);
 
-Best regards,
-Lino
+-- 
+Zhengjun Xing

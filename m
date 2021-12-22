@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6E847D4E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3D347D4EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 17:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbhLVQKf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Dec 2021 11:10:35 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:37997 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbhLVQKe (ORCPT
+        id S237566AbhLVQNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 11:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237326AbhLVQNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:10:34 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id E02E91C0006;
-        Wed, 22 Dec 2021 16:10:30 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 17:10:29 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Han Xu <han.xu@nxp.com>, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [RFC PATCH 3/4] mtd: rawnand: gpmi: fix controller timings
- setting
-Message-ID: <20211222171029.6e39ec4f@xps13>
-In-Reply-To: <20211217155512.1877408-4-dario.binacchi@amarulasolutions.com>
-References: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
-        <20211217155512.1877408-4-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 22 Dec 2021 11:13:53 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A159FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:13:53 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so6324070pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 08:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BFGk+wXY2WG7afvEROgA8Vzr9P5EaP9/8caVFzhLkSA=;
+        b=KPIAxvXG/nK7mtoxHKJtmhxYY1JxI8FZfbXBE5JDarjZjntn99MFPIUMIePJ5fM9l4
+         BIvHhJc+zR1Gmecdm/xoWo2Cj3K5rtCy53e3LQwCw9OGrjfhem3rW0ulCgdb2lPXIk4m
+         57l2A92N59ge18B950cG7ZpU7IGcQZvBoVlQU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BFGk+wXY2WG7afvEROgA8Vzr9P5EaP9/8caVFzhLkSA=;
+        b=Kl22oHlfO+7xZ+EyNBM/hT7xBNNAkEuXQ2B5UfqRL+GTFSjsLZ+1wjF5SAabLfyf3t
+         qJzuQ+pH0ruRBgrhwf2DFv1u2bOdasamEoC6OV8kH3/scaxgccxItaP0HsgQo8fO/AkD
+         x67poquYmXoywjSjdAScf77llUb5AsG4kQoJY0Ii9GN52RG0Doo0X6EPbkxton4FM0Eq
+         eK7Ra2ov4vGx/+Dcb4HtdERo0ZoEoI8cTzflGW0xyBtPGZBbY/7nqHGsktrQ5rrssdaH
+         YDhFPDEGhPXy1fB1xi6w2W1JH8VqmMF7wty3Uj4pORhzWJNKMGdNtNq4Wy/lrhNvjab9
+         0KWw==
+X-Gm-Message-State: AOAM531min1Kx5eJ/iiLBJ5IToLt8n8XbpalVgd/p+LNQtpcDCsAXUEY
+        6CKFsCSL62zeHqOp6OCfAG8s5Q==
+X-Google-Smtp-Source: ABdhPJzJthtDcM8o6fnNwW70a8dUfaT9zNNY93DBwhkMDoA9DeR6kxYIymeQ/Nwv6x/WCNqCtRB2CQ==
+X-Received: by 2002:a17:902:aa8a:b0:148:a2e7:fb62 with SMTP id d10-20020a170902aa8a00b00148a2e7fb62mr3371252plr.163.1640189633147;
+        Wed, 22 Dec 2021 08:13:53 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:474e:891f:9d18:9114])
+        by smtp.gmail.com with UTF8SMTPSA id f124sm2529843pgc.32.2021.12.22.08.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 08:13:52 -0800 (PST)
+Date:   Wed, 22 Dec 2021 08:13:50 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Balakrishna Godavarthi <bgodavar@codeaurora.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Hemantg <hemantg@codeaurora.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rocky Liao <rjliao@codeaurora.org>, hbandi@codeaurora.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        mcchou@chromium.org, saluvala@codeaurora.org
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on
+ SC7280 IDP boards
+Message-ID: <YcNOvlVQaT80qPsx@google.com>
+References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
+ <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <580E8974-EB7F-4493-BECC-4B09765A954D@holtmann.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario,
-
-dario.binacchi@amarulasolutions.com wrote on Fri, 17 Dec 2021 16:55:11
-+0100:
-
-> The controller registers are now set accordling to the real clock rate.
-
-You should use another tense (which I forgot the name) such as:
-
-Set the controller registers according to the real clock rate.
-
-But most importantly, you should explain why and perhaps give examples
-of frequencies on your setup.
-
-> Fixes: b1206122069a ("mtd: rawnand: gpmi: use core timings instead of an empirical derivation")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
+On Wed, Dec 22, 2021 at 08:54:56AM +0100, Marcel Holtmann wrote:
+> Hi Balakrishna,
 > 
->  drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 3 +++
->  1 file changed, 3 insertions(+)
+> > Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
+> > 
+> > Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
+> > ---
+> > v4:
+> >  * updated commit subject
+> >  * Removed drive strength for bt_en
+> >  * updated swctrl_gpio name to sw_ctrl
+> > 
+> > v3:
+> >  * Addressed reviewers comments
+> >  * Added pin config for sw_ctrl line.
+> > v2:
+> >  * merged two patches into one
+> >  * Removed unused comments
+> >  * Removed pinmux & pin conf.
+> >  * Addressed reviewers comments
+> > 
+> > v1: initial patch
+> > ---
+> > arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  4 ++++
+> > arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 36 ++++++++++++++++++++++++++++++++
+> > arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  4 ++++
+> > 3 files changed, 44 insertions(+)
 > 
-> diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-> index fd935e893daf..0517b81bb24c 100644
-> --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-> +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-> @@ -648,6 +648,7 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
->  				     const struct nand_sdr_timings *sdr)
->  {
->  	struct gpmi_nfc_hardware_timing *hw = &this->hw;
-> +	struct resources *r = &this->resources;
->  	unsigned int dll_threshold_ps = this->devdata->max_chain_delay;
->  	unsigned int period_ps, reference_period_ps;
->  	unsigned int data_setup_cycles, data_hold_cycles, addr_setup_cycles;
-> @@ -671,6 +672,8 @@ static void gpmi_nfc_compute_timings(struct gpmi_nand_data *this,
->  		wrn_dly_sel = BV_GPMI_CTRL1_WRN_DLY_SEL_NO_DELAY;
->  	}
->  
-> +	hw->clk_rate = clk_round_rate(r->clock[0], hw->clk_rate);
-> +
->  	/* SDR core timings are given in picoseconds */
->  	period_ps = div_u64((u64)NSEC_PER_SEC * 1000, hw->clk_rate);
->  
+> patch has been applied to bluetooth-next tree.
 
+Thanks!
 
-Thanks,
-Miquèl
+I would have expected though that a device tree change goes through
+the qcom tree. Maybe Bjorn should pick it too to avoid possible
+conflicts?

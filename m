@@ -2,75 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4024E47D857
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757AD47D85A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 21:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbhLVUiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 15:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhLVUiu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 15:38:50 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E14C061574;
-        Wed, 22 Dec 2021 12:38:50 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id j10so1989516vkk.12;
-        Wed, 22 Dec 2021 12:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0KHFHynG/Cv5zTmabkUB5fH/sivVPFmBLyvsRt42No=;
-        b=Ybjbj0UO1bMSxVm24s+VgWqgDQVInB1dFf7a72G3NQHBi25DaAocVC2JDtmy8lX1VZ
-         CNzW22BLdboUkKJk3oIWctUtHYs4zCdzf4mxBRIi1KSpBwypt7ojpL/aFQCve5wFT2u4
-         2iWjQRZpa1eZndK3lyMDvHIR/KKO9NfAL9k1clSdEySqA9S7T9ADRKZ2mrPUqEMBnQC3
-         0aoBPMp32YhNhsYXyQwdeO81D40noGhm192M3etGVF6VU0tqE0OdYkdNyzlo9xKSdNJo
-         x6wCL7SWtafoBjBGTFX9YgD5M2VXBIUC0Ra8FeKgWbMQV7dZGAtuLaSFK4NalLBMXuvL
-         dNjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0KHFHynG/Cv5zTmabkUB5fH/sivVPFmBLyvsRt42No=;
-        b=w5HTJyNX1idKBUjPw1aSo3rjdcylE18gmq52PvEk0Br7/joUfQfnqXSmAhm85+59hS
-         dvOdbjG8ZyGNKf+TdHBdi4T/35vVHnPx0WoDxEQMACFQLtOOmfzqkc9jc+uF3EXSge3l
-         mYte2dtsCFx1/39mDdEWvfiOXusvKKOvz+LeGLLezUMzApbmAh3IoqmxKF+q8rzKfg6D
-         TtM2NncuUEm8dRfb5wN/S8En8OW5ZIMmArcUsO7gdB2tPEgIHxX7EW+kF3kXSVpt8Woq
-         Npf0q5EycjhJszIdUYsWXTZ/PpvzofVaBLzudxTg7JYJ/6P5EGjqjU58XYtTf0lRJaEb
-         BF9g==
-X-Gm-Message-State: AOAM530OMt8ir50mWJmkdaehAigS5MqVjzGvhjI9a9gFr19YlAumalm6
-        Vm3Pd7BW7eMaTj/3g0TLjOihP5q3Fn39YKn9+6g=
-X-Google-Smtp-Source: ABdhPJyhRZ7yQ+kQtC7Eai0wKzixB4C3bCIj6QEUj7+m+Z8K3puQJOAO5xu+EJmR31kQtsDZBXp42BINhE0czYeEILc=
-X-Received: by 2002:a05:6122:912:: with SMTP id j18mr1710393vka.41.1640205529214;
- Wed, 22 Dec 2021 12:38:49 -0800 (PST)
+        id S233886AbhLVUnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 15:43:23 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:45736 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229548AbhLVUnX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 15:43:23 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3C18A1EC04EC;
+        Wed, 22 Dec 2021 21:43:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640205797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=IYOkv/wZNRUq1jFqHRJ8eEFsPFIJMsHiVgTrU4Qn3jE=;
+        b=AdNHqG0gUsIG3OleVyOwpKWaZF+BWvfo7oDTY7Flv5oE833oieZI8yK763E0zBAn7kwP2v
+        vxwARfMnrEUI+3boPNc+2pCmF032MCFqpYL/RT9oszqYwiLYxogzRsG3FiZ7IUeM9oNanJ
+        23K6P1n8ngHQDKH/C/8cFigN0UWHt5o=
+Date:   Wed, 22 Dec 2021 21:43:17 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>
+Subject: Re: [PATCH v18 01/17] x86/setup: Move CRASH_ALIGN and
+ CRASH_ADDR_{LOW|HIGH}_MAX to asm/kexec.h
+Message-ID: <YcON5Y7DKitiQhHu@zn.tnic>
+References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
+ <20211222130820.1754-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-References: <20211222163256.66270-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211222163256.66270-1-andriy.shevchenko@linux.intel.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Wed, 22 Dec 2021 23:38:44 +0300
-Message-ID: <CAHNKnsS_1fQh1UL-VX0kXfDp_umMtfSnDwJXWxiBXFdyrK1pYA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] wwan: Replace kernel.h with the necessary inclusions
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211222130820.1754-2-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 7:32 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> When kernel.h is used in the headers it adds a lot into dependency hell,
-> especially when there are circular dependencies are involved.
->
-> Replace kernel.h inclusion with the list of what is really being used.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed, Dec 22, 2021 at 09:08:04PM +0800, Zhen Lei wrote:
+> From: Chen Zhou <chenzhou10@huawei.com>
+> 
+> We want to make function reserve_crashkernel[_low](), which is implemented
+  ^^
 
-Subject and description do not cover cleanup of includes besides the
-kernel.h. But that does not seem like a big issue, so:
+Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
 
-Reviewed-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Also, pls read section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
+
+Bottom line is: personal pronouns are ambiguous in text, especially with
+so many parties/companies/etc developing the kernel so let's avoid them
+please.
+
+> by X86, available to other architectures. It references macro CRASH_ALIGN
+
+"x86"
+
+> and will be moved to public crash_core.c. But the defined values of
+> CRASH_ALIGN may be different in different architectures. So moving the
+> definition of CRASH_ALIGN to asm/kexec.h is a good choice.
+> 
+> The reason for moving CRASH_ADDR_{LOW|HIGH}_MAX is the same as above.
+
+This commit message needs to say something along the lines of:
+
+"Move CRASH_ALIGN and ... to the arch-specific header in preparation
+of making reserve_crashkernel[_low]() generic, used by other
+architectures."
+
+or so.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

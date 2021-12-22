@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7862C47CCF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9784D47CCF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 07:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242732AbhLVGX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 01:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbhLVGX4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 01:23:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A58C061574;
-        Tue, 21 Dec 2021 22:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=6uUBRMaQ2F0Tqn3TI/wUZCz0ruog1+fYI6j6sOJEHRY=; b=Pn8kTqcpb7rYIJQGVIC/mCO3l9
-        oeio6V2peZ+Ij34Ux4B5PNWn3eqFXtpP8aFIV+Wukvl0GQ3YC1wmxYNPE6Z21NyUNV0FuaPd8WaVt
-        PQGdW71JOeAOIoKJ0JAuN/izN6LAXHQfUFC6v6QrCU2Vq4JMpbz+2d6RvR/sK8jPlSW+wTp1ILdlM
-        DH4k9suFg/C1kanx/6WViIm7/rcM90Z56of6xnNrnsUZHGAAoeDi9+zVw7gQTgf8pNlJ3Yl383SqQ
-        JQMt6fPNzdDLB60l43OpuDBgIK/97YmHSrXpkGRNcAWdt/oblIENXzSxXGlmZSY9XH5JUoUc/w2Ld
-        8PjoTtgg==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzv2Z-009LE4-GZ; Wed, 22 Dec 2021 06:23:55 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH] Documentation/sphinx: fix typos of "its"
-Date:   Tue, 21 Dec 2021 22:23:54 -0800
-Message-Id: <20211222062354.23224-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S242746AbhLVGY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 01:24:28 -0500
+Received: from muru.com ([72.249.23.125]:41156 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233176AbhLVGYZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:24:25 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id D33BB8107;
+        Wed, 22 Dec 2021 06:25:07 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 08:24:22 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-omap@vger.kernel.org,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH] dt-bindings: clock: Add binding for TI clksel
+Message-ID: <YcLElm04V47kP0Z9@atomide.com>
+References: <20211217113640.59840-1-tony@atomide.com>
+ <YcIZNfTn37uNbj0F@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcIZNfTn37uNbj0F@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "its" for possessive form instead of the contraction "it's".
+Hi,
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
- Documentation/sphinx/kernel_abi.py  |    2 +-
- Documentation/sphinx/kernel_feat.py |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+* Rob Herring <robh@kernel.org> [211221 18:13]:
+> On Fri, Dec 17, 2021 at 01:36:40PM +0200, Tony Lindgren wrote:
+> > +additionalProperties: true
+> 
+> Like what properties?
+> 
+> true is only used for common, incomplete schemas referenced by device 
+> schemas.
 
---- linux-next-20211221.orig/Documentation/sphinx/kernel_abi.py
-+++ linux-next-20211221/Documentation/sphinx/kernel_abi.py
-@@ -104,7 +104,7 @@ class KernelCmd(Directive):
-         return nodeList
+There is a collection of the current component clock child nodes for each
+clksel instance. I got warnings with "additionalProperties: false", but
+maybe the child clock nodes need to be somehow specified in the binding?
+
+For example, below is a sample patch for am335x CLKSEL_GFX_FCLK using a
+clksel parent node with the child nodes moved to fix warnings for
+unique_unit_address. It also has clock-output-names property added to
+avoid the node naming warnings. For the other clksel instances, they can
+be a collection of dividers, multipliers, gates and muxes.
+
+Regards,
+
+Tony
+
+8< --------
+diff --git a/arch/arm/boot/dts/am33xx-clocks.dtsi b/arch/arm/boot/dts/am33xx-clocks.dtsi
+--- a/arch/arm/boot/dts/am33xx-clocks.dtsi
++++ b/arch/arm/boot/dts/am33xx-clocks.dtsi
+@@ -494,20 +494,27 @@ mmc_clk: mmc_clk {
+ 		clock-div = <2>;
+ 	};
  
-     def runCmd(self, cmd, **kwargs):
--        u"""Run command ``cmd`` and return it's stdout as unicode."""
-+        u"""Run command ``cmd`` and return its stdout as unicode."""
+-	gfx_fclk_clksel_ck: gfx_fclk_clksel_ck@52c {
+-		#clock-cells = <0>;
+-		compatible = "ti,mux-clock";
+-		clocks = <&dpll_core_m4_ck>, <&dpll_per_m2_ck>;
+-		ti,bit-shift = <1>;
+-		reg = <0x052c>;
+-	};
++	clock@52c {
++		compatible = "ti,clksel";
++		reg = <0x52c>;
++		#clock-cells = <1>;
++		#address-cells = <0>;
++
++		gfx_fclk_clksel_ck: clock-gfx-fclk-clksel {
++			#clock-cells = <0>;
++			compatible = "ti,mux-clock";
++			clock-output-names = "gfx_fclk_clksel_ck";
++			clocks = <&dpll_core_m4_ck>, <&dpll_per_m2_ck>;
++			ti,bit-shift = <1>;
++		};
  
-         try:
-             proc = subprocess.Popen(
---- linux-next-20211221.orig/Documentation/sphinx/kernel_feat.py
-+++ linux-next-20211221/Documentation/sphinx/kernel_feat.py
-@@ -106,7 +106,7 @@ class KernelFeat(Directive):
-         return nodeList
+-	gfx_fck_div_ck: gfx_fck_div_ck@52c {
+-		#clock-cells = <0>;
+-		compatible = "ti,divider-clock";
+-		clocks = <&gfx_fclk_clksel_ck>;
+-		reg = <0x052c>;
+-		ti,max-div = <2>;
++		gfx_fck_div_ck: clock-gfx-fck-div {
++			#clock-cells = <0>;
++			compatible = "ti,divider-clock";
++			clock-output-names = "gfx_fck_div_ck";
++			clocks = <&gfx_fclk_clksel_ck>;
++			ti,max-div = <2>;
++		};
+ 	};
  
-     def runCmd(self, cmd, **kwargs):
--        u"""Run command ``cmd`` and return it's stdout as unicode."""
-+        u"""Run command ``cmd`` and return its stdout as unicode."""
- 
-         try:
-             proc = subprocess.Popen(
+ 	sysclkout_pre_ck: sysclkout_pre_ck@700 {

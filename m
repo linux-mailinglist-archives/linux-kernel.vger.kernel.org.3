@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8353A47CFDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2882747CFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244138AbhLVKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 05:21:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24446 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244126AbhLVKVp (ORCPT
+        id S244130AbhLVKWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:22:38 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33738 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234558AbhLVKWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 05:21:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640168504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 22 Dec 2021 05:22:31 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4DAEA210F7;
+        Wed, 22 Dec 2021 10:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1640168550; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=J3yvO4cXgbZxOlydhSiK2v9Tckc8inZjlFWlSIoyww0=;
-        b=ewT25VXTbIgrEyFXhGyn1QV8Spb0Ul6Ms5B9Rf0o72IMqgbpC3cRVQtu0by9QJ+2rv2hkm
-        2muvuwUBOPshtZvkCN0vi+1/cGaXlhVePJcJwiVlJPFLi+jO8Uu3XBAqNcVuXr1xJmgfO1
-        zBbJg7ObjNKAf2HJutBf2VaZ+EgzSpM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-3KUcni5SOvazGs4afVTvLw-1; Wed, 22 Dec 2021 05:21:39 -0500
-X-MC-Unique: 3KUcni5SOvazGs4afVTvLw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=TbGmZ584pJp0t74feg81gpCTEFAzks8jUbA4KgFmdoY=;
+        b=PJu4FzmjQ64w3ZFD9FnVTJ7X4czGY1qbdNPCNWA7NW25ZnwC27E1crYBvxzKQ6HMYg6iHp
+        EBGnJoWxLSQtvHIPorObLi4wH2esYwF3Njxf4PGJR2vy2N2ps/OG8XtT+eQvrraAPZVzQY
+        efMt9WzH0W1xHt3DNRBYErlzVCkj7rk=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0364A100C612;
-        Wed, 22 Dec 2021 10:21:38 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.193.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F7C94E2CD;
-        Wed, 22 Dec 2021 10:21:37 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 968651800616; Wed, 22 Dec 2021 11:21:35 +0100 (CET)
-Date:   Wed, 22 Dec 2021 11:21:35 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v3 03/10] drm/bochs: Replace module-init boiler-plate
- code with DRM helpers
-Message-ID: <20211222102135.fhtfkinp2u6yjwx3@sirius.home.kraxel.org>
-References: <20211222082831.196562-1-javierm@redhat.com>
- <20211222082831.196562-4-javierm@redhat.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 18333A3B81;
+        Wed, 22 Dec 2021 10:22:30 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 11:22:29 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, corbet@lwn.net
+Subject: Re: [PATCH v3] livepatch: Fix kobject refcount bug on
+ klp_init_patch_early failure path
+Message-ID: <YcL8ZTXyAI8NW+un@alley>
+References: <20211221153930.137579-1-void@manifault.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222082831.196562-4-javierm@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20211221153930.137579-1-void@manifault.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 09:28:24AM +0100, Javier Martinez Canillas wrote:
-> -static int __init bochs_init(void)
-> -{
-> -	if (drm_firmware_drivers_only() && bochs_modeset == -1)
-> -		return -EINVAL;
+On Tue 2021-12-21 07:39:31, David Vernet wrote:
+> When enabling a klp patch with klp_enable_patch(), klp_init_patch_early()
+> is invoked to initialize the kobjects for the patch itself, as well as the
+> 'struct klp_object' and 'struct klp_func' objects that comprise it.
+> However, there are some error paths in klp_enable_patch() where some
+> kobjects may have been initialized with kobject_init(), but an error code
+> is still returned due to e.g. a 'struct klp_object' having a NULL funcs
+> pointer.
+> 
+> In these paths, the initial reference of the kobject of the 'struct
+> klp_patch' may never be released, along with one or more of its objects and
+> their functions, as kobject_put() is not invoked on the cleanup path if
+> klp_init_patch_early() returns an error code.
+> 
+> For example, if an object entry such as the following were added to the
+> sample livepatch module's klp patch, it would cause the vmlinux klp_object,
+> and its klp_func which updates 'cmdline_proc_show', to never be released:
+> 
+> static struct klp_object objs[] = {
+> 	{
+> 		/* name being NULL means vmlinux */
+> 		.funcs = funcs,
+> 	},
+> 	{
+> 		/* NULL funcs -- would cause reference leak */
+> 		.name = "kvm",
+> 	}, { }
+> };
+> 
+> Without this change, if CONFIG_DEBUG_KOBJECT is enabled, and the sample klp
+> patch is loaded, the kobjects (the patch, the vmlinux 'struct klp_object',
+> and its func) are observed as initialized, but never released, in the dmesg
+> log output.  With the change, these kobject references no longer fail to be
+> released as the error case is properly handled before they are initialized.
+> 
+> Signed-off-by: David Vernet <void@manifault.com>
 
-Also cleanup bochs_modeset?  I guess its not used any more after this
-patch ...
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-take care,
-  Gerd
-
+Best Regards,
+Petr

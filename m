@@ -2,115 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A3C47CBA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E4F47CBB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 04:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242096AbhLVDQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 22:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242113AbhLVDQr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 22:16:47 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B997C061574;
-        Tue, 21 Dec 2021 19:16:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJdlc1JGrz4xgt;
-        Wed, 22 Dec 2021 14:16:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640143004;
-        bh=iYgqFIm8ULq1DlSm3akFzLfd8AsyHdppdSnDqF7SclE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ibeCjHwdphoo2ZOxXJ7IWqfqx7dDA4P4rUW110hQBIioNjo9QOMSs1vp09HyP0UKT
-         RHR3J9RV7FEZaktxzqepeVlr78r+so2/Aab25LCnSeGOpE8vvLm0cjwRpzfklN4F+E
-         OozD6oQp752kuIQJ7J/RAUxvqFvBfXXHw/Mh1Q/ss+3Ouim2DofvpII/JUucKvucsf
-         7i6wSUkNvpW3LyT0EOen+oFsSSi/uGLbxtUJpE87QUjB0COLkw2XwnJ3m88IPXZYd+
-         e/929fmAYzhpy5VLtx56gtoGsKFBLBUB0P8QaNi0RN8yIYqJqUC7/OGJF6CILY9IO2
-         Ych9g0oLXo/8w==
-Date:   Wed, 22 Dec 2021 14:16:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20211222141641.0caa0ab3@canb.auug.org.au>
+        id S242097AbhLVD11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 22:27:27 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:27546 "EHLO smtpbg.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234027AbhLVD10 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Dec 2021 22:27:26 -0500
+X-QQ-mid: bizesmtp50t1640143633tc58mi2c
+Received: from localhost.localdomain (unknown [118.121.66.4])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Wed, 22 Dec 2021 11:27:12 +0800 (CST)
+X-QQ-SSF: 01000000008000D0K000B00A0000000
+X-QQ-FEAT: ZHWZeLXy+8e770YOXNoRcis8idCOUq04m9DzcfbEYSd7OLEwyBwlodVcSnAPy
+        syAhQqjIQpB5CngmdBtkfgCdEg4nhzagz2/BIOHAUvYpbHeBPkVZS3FuDuj6DRNsBcw3dnV
+        4Mq2HCasd81NKOz5U+wRW4mihp03dAjWeVXwPA08uh9laQeiWARdRhldPJjH9fwEs7Njymp
+        EibdJFB/W8uouKUaaB+qx1I9O2JO+fHnbybRA5DVZ/Llqk+POsDW/pMiCAxwbHZQtK4aQZ8
+        uklZ6rU9uu7rPecHeuh+1dPshTYGQAw2w1YIzaP9QAatqObnZIMMABmIlS02S0usn2oGmEW
+        twJdAKX
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     minyard@acm.org
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] ipmi: ssif: replace strlcpy with strscpy
+Date:   Wed, 22 Dec 2021 11:27:07 +0800
+Message-Id: <20211222032707.1912186-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eKoLIghqCw2qxAp807NB7qa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/eKoLIghqCw2qxAp807NB7qa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The strlcpy should not be used because it doesn't limit the source
+length. So that it will lead some potential bugs.
 
-Hi all,
+But the strscpy doesn't require reading memory from the src string
+beyond the specified "count" bytes, and since the return value is
+easier to error-check than strlcpy()'s. In addition, the implementation
+is robust to the string changing out from underneath it, unlike the
+current strlcpy() implementation.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Thus, replace strlcpy with strscpy.
 
-  include/net/sock.h
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/char/ipmi/ipmi_ssif.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-between commit:
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index 48aab77abebf..ba779f1abb5b 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -1354,7 +1354,7 @@ static int ssif_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	if (rv)
+ 		rv = -ENODEV;
+ 	else
+-		strlcpy(info->type, DEVICE_NAME, I2C_NAME_SIZE);
++		strscpy(info->type, DEVICE_NAME, I2C_NAME_SIZE);
+ 	kfree(resp);
+ 	return rv;
+ }
+-- 
+2.34.1
 
-  8f905c0e7354 ("inet: fully convert sk->sk_rx_dst to RCU rules")
-
-from the net tree and commit:
-
-  43f51df41729 ("net: move early demux fields close to sk_refcnt")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/net/sock.h
-index d47e9658da28,37f878564d25..000000000000
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@@ -391,6 -392,11 +392,11 @@@ struct sock=20
-  #define sk_flags		__sk_common.skc_flags
-  #define sk_rxhash		__sk_common.skc_rxhash
- =20
-+ 	/* early demux fields */
- -	struct dst_entry	*sk_rx_dst;
-++	struct dst_entry __rcu	*sk_rx_dst;
-+ 	int			sk_rx_dst_ifindex;
-+ 	u32			sk_rx_dst_cookie;
-+=20
-  	socket_lock_t		sk_lock;
-  	atomic_t		sk_drops;
-  	int			sk_rcvlowat;
-
---Sig_/eKoLIghqCw2qxAp807NB7qa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHCmJkACgkQAVBC80lX
-0GzRNQf+I+1qB0F4KqeeUMBCNm+o1GxWTZJJXJ1vfF9ugDV5PmiWgNAXo8lIXeJA
-WqL2InnXBeL44Uhyj5An1/Zlnn90i9VwMrZCGWiAnXRp2wr1kM5fOk+sKHD0UdYV
-JR8V1ktNOLM0Y9MPPpcpfc7u1wbxt3iHh9kfGl+3Q/WFevilpcYpgpDhWLvLZjw/
-j9+jWUkKFzzqKz3Bo4bAMieM0yH6ak1SMXIj9Y8I+QpNcaZ6xLNeETabQa2UgO7t
-gFyu/YlG09BwcHZr4exuim3JlungvKE3WfSMlRZm/3Iiz3fS2dowdBfGtdBK6+bn
-aK0WR3pDq/D9+HdbWR2wQ1e+ul9gaA==
-=WkVm
------END PGP SIGNATURE-----
-
---Sig_/eKoLIghqCw2qxAp807NB7qa--

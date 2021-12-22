@@ -2,202 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6479847D9F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9183A47D9FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Dec 2021 00:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243401AbhLVXRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 18:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243348AbhLVXRs (ORCPT
+        id S243671AbhLVXSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 18:18:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58878 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243558AbhLVXSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 18:17:48 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37A2C061574;
-        Wed, 22 Dec 2021 15:17:47 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id d17so1753237ioz.0;
-        Wed, 22 Dec 2021 15:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dff0r8n45mvWuk2RxTOvZIcrpYTBeLxoIYopzdxipjg=;
-        b=KKigX/AuPLZafbpDh2E0dnoamrw5QHJf07R+fSOOvmMDEle5VXAZKnDBmW2xBYzivl
-         BrxIvV1lCUQtFPiEHmO2Mq6PbOM0ByrdiVRwNO34qmzln/aJQeS+Iaaf1DXmKY2vLyJ9
-         VLkZN+FHdXtaj+k1hIPcAvYhmt901l6ihC2dI++yq2hCLAW2VaU2WpTJHzcX4d5ueZvC
-         oEMSBlG7/SxAl6qUPgfr0tjehr0eQzkcWPfVjTXNoZQTp0jycxLPKwWvVlrNVWToo2Ra
-         5iyG9Ym1EbDmGX8q1wjqIFqaaX1pSB88Xoi6G4KU/qoHca9AKKqCSsG5fYOZQIgUQ94M
-         e51Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dff0r8n45mvWuk2RxTOvZIcrpYTBeLxoIYopzdxipjg=;
-        b=Cjlxz8zm3BCg8/HLD5OuNYCxLG7RceGQZPuoy3UG2LVmrTzh2XxhsjEBPgigV/LTeH
-         1vCZMGqd1Xwch+ymlb5ZVA0bQRGk5lDAI6jWf62anEzzlP7BJAylsEze8NjkIGP+W2ZK
-         8h9Q1MH//wwb54uRVOmEU2+4UZgwrvCqaBpQRVAoVp+AL7OczccXgyIfMffTCU7Ij8Dv
-         Q9u2+3/Er0KZ4PXmSAHzO1qSEdX43gKaSZvo6poAfnjkGY8I+MFIZR3PLE1JszeFbleK
-         8Igix1fevkKmxdGOyNpMCVOHIpttWcHL5g8cisspASTdtSA9LZxbTYb5PaCL160U4WuA
-         VInQ==
-X-Gm-Message-State: AOAM530pkHBkAUyEng/ivxW65VQ9+XO3opX2L6nOkzWBdl/oSekoPvmL
-        oqCnHwYt3T+fdp/GI+FxlOlNfl0DSN49+lnQISQ=
-X-Google-Smtp-Source: ABdhPJw0prn6ou9/leHTPJACoUiainm5HEJjsXH5p3a/CImBJiPEnJadceO9JzUUsESORWWCgPdu/kxeBLZ7ef8Xr/A=
-X-Received: by 2002:a05:6602:1495:: with SMTP id a21mr2517395iow.79.1640215067240;
- Wed, 22 Dec 2021 15:17:47 -0800 (PST)
+        Wed, 22 Dec 2021 18:18:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640215088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kMD1pVvuum2sbNj04GEQDZleN6ktPjsYVnEQfGDuDkU=;
+        b=IwwbQvV05VxS+d4GR3YfP+2ZbOU9ZZCk7G6P5xBX12cwNF8YI7NWIgHkm58qMcVSoE89j1
+        ooMZsnbszKWcdIsViIVl8LcpkGv491phdYFdXsjChpyXbHQ+YVZfdTgwjfCscsMxsTNN3K
+        VOQgsF5l2VXs3bsYfxfqCMRH8OabfLs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-3FZo6O4_Ov-qjahk2_8c_A-1; Wed, 22 Dec 2021 18:18:05 -0500
+X-MC-Unique: 3FZo6O4_Ov-qjahk2_8c_A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2B013801ADB;
+        Wed, 22 Dec 2021 23:18:03 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5451587975;
+        Wed, 22 Dec 2021 23:17:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v4 15/68] fscache: Provide and use cache methods to
+ lookup/create/free a volume
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 22 Dec 2021 23:17:53 +0000
+Message-ID: <164021507345.640689.4073511598838843040.stgit@warthog.procyon.org.uk>
+In-Reply-To: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
+References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-References: <20211214135555.125348-1-pulehui@huawei.com> <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
- <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com> <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
- <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com> <88aa98df-b566-d031-b9f9-2b88a437a810@huawei.com>
- <CAEf4BzbJsmKiZHrnEZUZxCL_7PP2w3K5-VabP1bcsoyKogiypw@mail.gmail.com> <bd0a5dff-7ada-4ff3-8fda-89e69254c2c4@huawei.com>
-In-Reply-To: <bd0a5dff-7ada-4ff3-8fda-89e69254c2c4@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 22 Dec 2021 15:17:35 -0800
-Message-ID: <CAEf4BzZjoDH1ko7-wMPN6kquq-5dAnWAAqLfheRgKdQP8Mg7fQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 5:33 PM Pu Lehui <pulehui@huawei.com> wrote:
->
->
->
-> On 2021/12/22 7:52, Andrii Nakryiko wrote:
-> > On Mon, Dec 20, 2021 at 4:58 PM Pu Lehui <pulehui@huawei.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2021/12/20 22:02, Pu Lehui wrote:
-> >>>
-> >>>
-> >>> On 2021/12/18 0:45, Andrii Nakryiko wrote:
-> >>>> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 2021/12/16 12:06, Andrii Nakryiko wrote:
-> >>>>>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
-> >>>>>>>
-> >>>>>>> When building bpf selftests on arm64, the following error will occur:
-> >>>>>>>
-> >>>>>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> >>>>>>> user_pt_regs'
-> >>>>>>>
-> >>>>>>> Some archs, like arm64 and riscv, use userspace pt_regs in
-> >>>>>>> bpf_tracing.h, which causes build failure when bpf prog use
-> >>>>>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
-> >>>>>>
-> >>>>>> We could probably also extend bpf_tracing.h to work with
-> >>>>>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
-> >>>>>> __VMLINUX_H__ checks). It's more work, but will benefit other end
-> >>>>>> users, not just selftests.
-> >>>>>>
-> >>>>> It might change a lot. We can use header file directory generated by
-> >>>>> "make headers_install" to fix it.
-> >>>>
-> >>>> We don't have dependency on "make headers_install" and I'd rather not
-> >>>> add it.
-> >>>>
-> >>>> What do you mean by "change a lot"?
-> >>>>
-> >>> Maybe I misunderstood your advice. Your suggestion might be to extend
-> >>> bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64,
-> >
-> > yes
-> >
-> >>> only support user-space. So the patch might be like this:
-> >>>
-> >>> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> >>> index db05a5937105..2c3cb8e9ae92 100644
-> >>> --- a/tools/lib/bpf/bpf_tracing.h
-> >>> +++ b/tools/lib/bpf/bpf_tracing.h
-> >>> @@ -195,9 +195,13 @@ struct pt_regs;
-> >>>
-> >>>    #elif defined(bpf_target_arm64)
-> >>>
-> >>> -struct pt_regs;
-> >>> +#if defined(__KERNEL__)
-> >>> +#define PT_REGS_ARM64 const volatile struct pt_regs
-> >>> +#else
-> >>>    /* arm64 provides struct user_pt_regs instead of struct pt_regs to
-> >>> userspace */
-> >>>    #define PT_REGS_ARM64 const volatile struct user_pt_regs
-> >>> +#endif
-> >>> +
-> >>>    #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-> >>>    #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
-> >>>    #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
-> >>>
-> >> Please ignore the last reply. User-space pt_regs of arm64/s390 is the
-> >> first part of the kernel-space's, it should has covered both kernel and
-> >> userspace.
-> >
-> > Alright, so is there still a problem or not? Looking at the definition
-> > of struct pt_regs for arm64, just casting struct pt_regs to struct
-> > user_pt_regs will indeed just work. So in that case, what was your
-> > original issue?
-> >
-> Thanks for your reply. The original issue is, when arm64 bpf selftests
-> cross compiling in x86_64 host, clang cannot find the arch specific uapi
-> ptrace.h, and then the above error occur. Of course it works when
-> compiling in arm64 host for it owns the corresponding uapi ptrace.h. So
-> my suggestion is to add arch specific use header file directory
-> generated by "make headers_install" for the cross compiling issue.
+Add cache methods to lookup, create and remove a volume.
 
-I see. Can you try adding something like:
+Looking up or creating the volume requires the cache pinning for access;
+freeing the volume requires the volume pinning for access.  The
+->acquire_volume() method is used to ask the cache backend to lookup and,
+if necessary, create a volume; the ->free_volume() method is used to free
+the resources for a volume.
 
-ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819597821.215744.5225318658134989949.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906898645.143852.8537799955945956818.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/163967099771.1823006.1455197910571061835.stgit@warthog.procyon.org.uk/ # v3
+---
 
-and then add -I$(ARCH_APIDIR) to BPF_CFLAGS?
+ fs/fscache/volume.c            |   89 +++++++++++++++++++++++++++++++++++++++-
+ include/linux/fscache-cache.h  |    7 +++
+ include/trace/events/fscache.h |   11 ++++-
+ 3 files changed, 103 insertions(+), 4 deletions(-)
 
-Please let me know if that works for your cross-compilation case.
+diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+index 20497f0f10bb..e1a8e92a6adb 100644
+--- a/fs/fscache/volume.c
++++ b/fs/fscache/volume.c
+@@ -15,6 +15,8 @@ static struct hlist_bl_head fscache_volume_hash[1 << fscache_volume_hash_shift];
+ static atomic_t fscache_volume_debug_id;
+ static LIST_HEAD(fscache_volumes);
+ 
++static void fscache_create_volume_work(struct work_struct *work);
++
+ struct fscache_volume *fscache_get_volume(struct fscache_volume *volume,
+ 					  enum fscache_volume_trace where)
+ {
+@@ -213,7 +215,7 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+ 
+ 	volume->cache = cache;
+ 	INIT_LIST_HEAD(&volume->proc_link);
+-	INIT_WORK(&volume->work, NULL /* PLACEHOLDER */);
++	INIT_WORK(&volume->work, fscache_create_volume_work);
+ 	refcount_set(&volume->ref, 1);
+ 	spin_lock_init(&volume->lock);
+ 
+@@ -249,6 +251,58 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
+ 	return NULL;
+ }
+ 
++/*
++ * Create a volume's representation on disk.  Have a volume ref and a cache
++ * access we have to release.
++ */
++static void fscache_create_volume_work(struct work_struct *work)
++{
++	const struct fscache_cache_ops *ops;
++	struct fscache_volume *volume =
++		container_of(work, struct fscache_volume, work);
++
++	fscache_see_volume(volume, fscache_volume_see_create_work);
++
++	ops = volume->cache->ops;
++	if (ops->acquire_volume)
++		ops->acquire_volume(volume);
++	fscache_end_cache_access(volume->cache,
++				 fscache_access_acquire_volume_end);
++
++	clear_bit_unlock(FSCACHE_VOLUME_CREATING, &volume->flags);
++	wake_up_bit(&volume->flags, FSCACHE_VOLUME_CREATING);
++	fscache_put_volume(volume, fscache_volume_put_create_work);
++}
++
++/*
++ * Dispatch a worker thread to create a volume's representation on disk.
++ */
++void fscache_create_volume(struct fscache_volume *volume, bool wait)
++{
++	if (test_and_set_bit(FSCACHE_VOLUME_CREATING, &volume->flags))
++		goto maybe_wait;
++	if (volume->cache_priv)
++		goto no_wait; /* We raced */
++	if (!fscache_begin_cache_access(volume->cache,
++					fscache_access_acquire_volume))
++		goto no_wait;
++
++	fscache_get_volume(volume, fscache_volume_get_create_work);
++	if (!schedule_work(&volume->work))
++		fscache_put_volume(volume, fscache_volume_put_create_work);
++
++maybe_wait:
++	if (wait) {
++		fscache_see_volume(volume, fscache_volume_wait_create_work);
++		wait_on_bit(&volume->flags, FSCACHE_VOLUME_CREATING,
++			    TASK_UNINTERRUPTIBLE);
++	}
++	return;
++no_wait:
++	clear_bit_unlock(FSCACHE_VOLUME_CREATING, &volume->flags);
++	wake_up_bit(&volume->flags, FSCACHE_VOLUME_CREATING);
++}
++
+ /*
+  * Acquire a volume representation cookie and link it to a (proposed) cache.
+  */
+@@ -269,7 +323,7 @@ struct fscache_volume *__fscache_acquire_volume(const char *volume_key,
+ 		return ERR_PTR(-EBUSY);
+ 	}
+ 
+-	// PLACEHOLDER: Create the volume if we have a cache available
++	fscache_create_volume(volume, false);
+ 	return volume;
+ }
+ EXPORT_SYMBOL(__fscache_acquire_volume);
+@@ -316,7 +370,12 @@ static void fscache_free_volume(struct fscache_volume *volume)
+ 	struct fscache_cache *cache = volume->cache;
+ 
+ 	if (volume->cache_priv) {
+-		// PLACEHOLDER: Detach any attached cache
++		__fscache_begin_volume_access(volume, NULL,
++					      fscache_access_relinquish_volume);
++		if (volume->cache_priv)
++			cache->ops->free_volume(volume);
++		fscache_end_volume_access(volume, NULL,
++					  fscache_access_relinquish_volume_end);
+ 	}
+ 
+ 	down_write(&fscache_addremove_sem);
+@@ -369,6 +428,30 @@ void __fscache_relinquish_volume(struct fscache_volume *volume,
+ }
+ EXPORT_SYMBOL(__fscache_relinquish_volume);
+ 
++/**
++ * fscache_withdraw_volume - Withdraw a volume from being cached
++ * @volume: Volume cookie
++ *
++ * Withdraw a cache volume from service, waiting for all accesses to complete
++ * before returning.
++ */
++void fscache_withdraw_volume(struct fscache_volume *volume)
++{
++	int n_accesses;
++
++	_debug("withdraw V=%x", volume->debug_id);
++
++	/* Allow wakeups on dec-to-0 */
++	n_accesses = atomic_dec_return(&volume->n_accesses);
++	trace_fscache_access_volume(volume->debug_id, 0,
++				    refcount_read(&volume->ref),
++				    n_accesses, fscache_access_cache_unpin);
++
++	wait_var_event(&volume->n_accesses,
++		       atomic_read(&volume->n_accesses) == 0);
++}
++EXPORT_SYMBOL(fscache_withdraw_volume);
++
+ #ifdef CONFIG_PROC_FS
+ /*
+  * Generate a list of volumes in /proc/fs/fscache/volumes
+diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
+index f78add6e7823..a10b66ca3544 100644
+--- a/include/linux/fscache-cache.h
++++ b/include/linux/fscache-cache.h
+@@ -51,6 +51,12 @@ struct fscache_cache {
+ struct fscache_cache_ops {
+ 	/* name of cache provider */
+ 	const char *name;
++
++	/* Acquire a volume */
++	void (*acquire_volume)(struct fscache_volume *volume);
++
++	/* Free the cache's data attached to a volume */
++	void (*free_volume)(struct fscache_volume *volume);
+ };
+ 
+ extern struct workqueue_struct *fscache_wq;
+@@ -65,6 +71,7 @@ extern int fscache_add_cache(struct fscache_cache *cache,
+ 			     const struct fscache_cache_ops *ops,
+ 			     void *cache_priv);
+ extern void fscache_withdraw_cache(struct fscache_cache *cache);
++extern void fscache_withdraw_volume(struct fscache_volume *volume);
+ 
+ extern void fscache_end_volume_access(struct fscache_volume *volume,
+ 				      struct fscache_cookie *cookie,
+diff --git a/include/trace/events/fscache.h b/include/trace/events/fscache.h
+index b1a962adfd16..1d576bd8112e 100644
+--- a/include/trace/events/fscache.h
++++ b/include/trace/events/fscache.h
+@@ -64,8 +64,12 @@ enum fscache_cookie_trace {
+ };
+ 
+ enum fscache_access_trace {
++	fscache_access_acquire_volume,
++	fscache_access_acquire_volume_end,
+ 	fscache_access_cache_pin,
+ 	fscache_access_cache_unpin,
++	fscache_access_relinquish_volume,
++	fscache_access_relinquish_volume_end,
+ 	fscache_access_unlive,
+ };
+ 
+@@ -96,7 +100,8 @@ enum fscache_access_trace {
+ 	EM(fscache_volume_put_hash_collision,	"PUT hcoll")		\
+ 	EM(fscache_volume_put_relinquish,	"PUT relnq")		\
+ 	EM(fscache_volume_see_create_work,	"SEE creat")		\
+-	E_(fscache_volume_see_hash_wake,	"SEE hwake")
++	EM(fscache_volume_see_hash_wake,	"SEE hwake")		\
++	E_(fscache_volume_wait_create_work,	"WAIT crea")
+ 
+ #define fscache_cookie_traces						\
+ 	EM(fscache_cookie_collision,		"*COLLIDE*")		\
+@@ -115,8 +120,12 @@ enum fscache_access_trace {
+ 	E_(fscache_cookie_see_work,		"-   work ")
+ 
+ #define fscache_access_traces		\
++	EM(fscache_access_acquire_volume,	"BEGIN acq_vol")	\
++	EM(fscache_access_acquire_volume_end,	"END   acq_vol")	\
+ 	EM(fscache_access_cache_pin,		"PIN   cache  ")	\
+ 	EM(fscache_access_cache_unpin,		"UNPIN cache  ")	\
++	EM(fscache_access_relinquish_volume,	"BEGIN rlq_vol")	\
++	EM(fscache_access_relinquish_volume_end,"END   rlq_vol")	\
+ 	E_(fscache_access_unlive,		"END   unlive ")
+ 
+ /*
 
-> >>>>>
-> >>>>> --- a/tools/testing/selftests/bpf/Makefile
-> >>>>> +++ b/tools/testing/selftests/bpf/Makefile
-> >>>>> @@ -294,7 +294,8 @@ MENDIAN=$(if
-> >>>>> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
-> >>>>>     CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
-> >>>>>     BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
-> >>>>>                -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
-> >>>>> -            -I$(abspath $(OUTPUT)/../usr/include)
-> >>>>> +            -I$(abspath $(OUTPUT)/../usr/include) \
-> >>>>> +            -I../../../../usr/include
-> >>>>>>>
-> >>>>>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> >>>>>>> ---
-> >>>>>>>     tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
-> >>>>>>>     tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
-> >>>>>>>     tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
-> >>>>>>>     tools/testing/selftests/bpf/progs/loop6.c     | 20
-> >>>>>>> ++++++-------------
-> >>>>>>>     .../selftests/bpf/progs/test_overhead.c       |  8 ++------
-> >>>>>>>     .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
-> >>>>>>>     6 files changed, 15 insertions(+), 43 deletions(-)
-> >>>>>>>
-> >>>>>>
-> >>>>>> [...]
-> >>>>>> .
-> >>>>>>
-> >>>> .
-> >>>>
-> >>> .
-> > .
-> >
+

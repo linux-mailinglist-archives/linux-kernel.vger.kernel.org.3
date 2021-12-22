@@ -2,48 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A949C47D35C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BCA47D35F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 15:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245585AbhLVOE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 09:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237349AbhLVOEw (ORCPT
+        id S245604AbhLVOFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 09:05:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45368 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245575AbhLVOEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:04:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1465C061574;
-        Wed, 22 Dec 2021 06:04:51 -0800 (PST)
+        Wed, 22 Dec 2021 09:04:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE38DB81CBC;
-        Wed, 22 Dec 2021 14:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE26C36AE5;
-        Wed, 22 Dec 2021 14:04:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 841D361A51;
+        Wed, 22 Dec 2021 14:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD2DC36AE5;
+        Wed, 22 Dec 2021 14:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640181889;
-        bh=GpuaFsWoFLVuvfhOa8Znb8zkvhgTeFHuqoMq8n5e/SQ=;
+        s=k20201202; t=1640181893;
+        bh=75UqRnXbLJitl8WtJNjYmGOc6EmcXbtKbaBt7Oupp08=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=d0MLLI/QtJJ+B2X932VWsR6XYGD2gMUA7IhzUovdfrHvUBvHzT8va1pyjdB5OM5kD
-         Gzm0lV0cbqLxEd7nnAfqfUelPmifBKp5jjEjFNHW29QIpABMqqVqMIxdc2tbKKxEWC
-         hYVjWbaA/rpXz+QJq5+mCIjBY/IBYnSGIxm82htQZWOra5TMwaCTlpfE4wwGbZ6zYL
-         Tl5lVjwBKsB2gfBOmrNRKSZcxJUOOfQFNSrAvp/Wv10EdPF8AvhS5fwRy7TCNCGpJi
-         epc1Dmc+LJL/1rQqZ9UyvGjfPUek5IjGz0Pao1Rtd7aP6yJ+/dn/mvyru7Cg0E/VGM
-         1DcxWCQECqwIA==
+        b=sV3YLiSjoHeqLL0ckh1isztaGLB9gKFHasRNqEwFMyg0ar9/WmJh4qkN/P5oesGUz
+         LwtnqkCfkzeJdfjeYIDrsgOyXfbE9vg+RkZo2PEOdR0fuuh/XDTIV/wdPLVt+9BsNX
+         hkUdQxXTR2CUnX4pr/1l/q5Y8RwWLdKxT6+Nbwwt/vk/mSWHmqEMvv+f0TUwQbub+G
+         U0t0p2WPdsamcDNDp0cVNWuzEfWjbBZWEojKYi+NheT0J0kajMRBgmZ+RBV4q2f67p
+         crqZtWswU61HImrZVjXYzjBmuxAz612EU5QZh68Vz1YiN4FAkDLX80mLY4jvUVHBeb
+         iCfko6J5IgJlg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     stable@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-spi@vger.kernel.org,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>
-In-Reply-To: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
-Message-Id: <164018188784.2906151.4009933677547937001.b4-ty@kernel.org>
-Date:   Wed, 22 Dec 2021 14:04:47 +0000
+To:     Oskari Lemmela <oskari@lemmela.net>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20211222055958.1383233-1-oskari@lemmela.net>
+References: <20211222055958.1383233-1-oskari@lemmela.net>
+Subject: Re: (subset) [PATCH 0/2] spi: ar934x: fix transfer size and delays
+Message-Id: <164018189202.2906173.12739449799192637785.b4-ty@kernel.org>
+Date:   Wed, 22 Dec 2021 14:04:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -51,24 +44,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 13:48:12 +0900, Kunihiko Hayashi wrote:
-> In uniphier_spi_remove(), there is a wrong code to get private data from
-> the platform device, so the driver can't be removed properly.
+On Wed, 22 Dec 2021 07:59:56 +0200, Oskari Lemmela wrote:
+> Some of slow SPI devices can not handle 32 bits transfers or need
+> delay between words/transfers.
 > 
-> The driver should get spi_master from the platform device and retrieve
-> the private data from it.
-> 
+> Series is tested with ATSAMD20J15 slave device which is running @8Mhz.
+> Limiting bits per word to 16 bits and adding delay between transfers,
+> gives slave device enough extra time to process reply.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: uniphier: Fix a bug that doesn't point to private data correctly
-      commit: 80bb73a9fbcde4ecc55e12f10c73fabbe68a24d1
+[2/2] spi: ar934x: fix transfer and word delays
+      commit: c70282457c380db7deb57c81a6894debc8f88efa
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

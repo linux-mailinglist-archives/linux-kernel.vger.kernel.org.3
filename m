@@ -2,121 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347B747CC5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D74A47CC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 05:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242559AbhLVEwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Dec 2021 23:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242521AbhLVEwA (ORCPT
+        id S242567AbhLVExP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Dec 2021 23:53:15 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9712 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238901AbhLVExO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:52:00 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5352C061574;
-        Tue, 21 Dec 2021 20:51:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJgsT6PL6z4xbd;
-        Wed, 22 Dec 2021 15:51:57 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640148718;
-        bh=5OS+e7d2thNAeS/b3kb+CJImYY495FBhjQj92KeO0uM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kffseq6rEjxpqe7Kkjm9NxOj0Coa7QYiGkJ54Fv58g6DHdLR2kPtRdROEsaLEQmC/
-         Sng/3f/LRFvJ/Bg2RjiSiD7mQTJkGDMjvrs4BKBQiQkRWS3h0e8Gi3qwOw12W+g4y/
-         OGL6iqaXeeWagCr6Txr2Z47C3HASR7y9519Fkf0wga7KpxBmQaTMFzgCPN7QMe3WKD
-         zHr8Sb70zalf2q75j56ih4KXJFJNpcSKPE5UhosMiuKXkdw1Tdfd6eh8MMfVNUgN6r
-         YdAAHqYpDo3xLrgyljroHji9DkDvm1V3ru0E0zm8h2IlKNfEdd2A9E/tOkQZd4q7ID
-         m12SbtPwQjyEw==
-Date:   Wed, 22 Dec 2021 15:51:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the
- devicetree-fixes tree
-Message-ID: <20211222155156.22a172c7@canb.auug.org.au>
+        Tue, 21 Dec 2021 23:53:14 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BM3c9SP023088;
+        Wed, 22 Dec 2021 04:53:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=HMEZx50apQ8KyK9Eph2UXaepMIh1xcQpXKBV7MZuHVw=;
+ b=ngS6lpa+rXWeGpSvVZMnMlONphyh4gDKQc6zb1wpMHGFiBpsV5h2RbWEJjgLBDDCrBDS
+ 9O1l9cY4ays71/joYGWyiUEcPTxWWdXGccOwDXbf9Qp3qr2ylwBmogqXNrdlNOLY2O7q
+ Hq7cI1d/fte2LZlV5GR6Sj/TeyfhrELj1ERa3taP6Llp+kNNbaaJ9M2HVMrmcTdYYF0z
+ aHbrDrmVEP/7q88D/y9lbT/jG3Tx7CK4uAuR/IbvXpHNM8cQDklRxH9DFcmpJ3GVGekx
+ PsGMy+biPYi+ME02jqpg8NhPa4YsJXcIqm/JAPsLMjBpkqwrtbVMx+NG9TGaMkZFi1/d 4Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3asw57st-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 04:53:08 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BM4pQmN014199;
+        Wed, 22 Dec 2021 04:53:07 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3asw57sk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 04:53:07 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BM4qnVt023015;
+        Wed, 22 Dec 2021 04:53:06 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3d179bdvpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 04:53:06 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BM4r5k021692840
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Dec 2021 04:53:06 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A160CAC06C;
+        Wed, 22 Dec 2021 04:53:05 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 800B6AC060;
+        Wed, 22 Dec 2021 04:53:05 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Dec 2021 04:53:05 +0000 (GMT)
+Message-ID: <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
+Date:   Tue, 21 Dec 2021 23:53:05 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2] tpm: fix potential NULL pointer access in
+ tpm_del_char_device
+Content-Language: en-US
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N-oZVJNJQKRdDZiBYWgit4_wwokNBnlE
+X-Proofpoint-GUID: cmrkyqp66uVOjVgGeC79IWzMdcCo6e6j
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1S1LyIj3ECemRvGN5_=7b53";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-22_01,2021-12-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 impostorscore=0 clxscore=1011 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112220028
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/1S1LyIj3ECemRvGN5_=7b53
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 12/20/21 10:06, Lino Sanfilippo wrote:
+> Some SPI controller drivers unregister the controller in the shutdown
+> handler (e.g. BCM2835). If such a controller is used with a TPM 2 slave
+> chip->ops may be accessed when it is already NULL:
+>
+> At system shutdown the pre-shutdown handler tpm_class_shutdown() shuts down
+> TPM 2 and sets chip->ops to NULL. Then at SPI controller unregistration
+> tpm_tis_spi_remove() is called and eventually calls tpm_del_char_device()
+> which tries to shut down TPM 2 again. Thereby it accesses chip->ops again:
+> (tpm_del_char_device calls tpm_chip_start which calls tpm_clk_enable which
+> calls chip->ops->clk_enable).
+>
+> Avoid the NULL pointer access by testing if chip->ops is valid and skipping
+> the TPM 2 shutdown procedure in case it is NULL.
+>
+> Fixes: dcbeab1946454 ("tpm: fix crash in tpm_tis deinitialization")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> ---
+>
+> Changes to v2:
+> - rephrased the commit message to clarify the circumstances under which
+>    this bug triggers (as requested by Jarkko)
+>
+>
+> I was able to reproduce this issue with a SLB 9670 TPM chip controlled by
+> a BCM2835 SPI controller.
+>
+> The approach to fix this issue in the BCM2835 driver was rejected after a
+> discussion on the mailing list:
+>
+> https://marc.info/?l=linux-integrity&m=163285906725367&w=2
+>
+> The reason for the rejection was the realization, that this issue should rather
+> be fixed in the TPM code:
+>
+> https://marc.info/?l=linux-spi&m=163311087423271&w=2
+>
+> So this is the reworked version of a patch that is supposed to do that.
+>
+>
+>   drivers/char/tpm/tpm-chip.c | 16 +++++++++++-----
+>   1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index ddaeceb7e109..7960da490e72 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -474,13 +474,19 @@ static void tpm_del_char_device(struct tpm_chip *chip)
+>   
+>   	/* Make the driver uncallable. */
+>   	down_write(&chip->ops_sem);
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> -		if (!tpm_chip_start(chip)) {
+> -			tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> -			tpm_chip_stop(chip);
+> +	/* Check if chip->ops is still valid: In case that the controller
+> +	 * drivers shutdown handler unregisters the controller in its
+> +	 * shutdown handler we are called twice and chip->ops to NULL.
+> +	 */
+> +	if (chip->ops) {
+> +		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +			if (!tpm_chip_start(chip)) {
+> +				tpm2_shutdown(chip, TPM2_SU_CLEAR);
+> +				tpm_chip_stop(chip);
+> +			}
+>   		}
+> +		chip->ops = NULL;
+>   	}
+> -	chip->ops = NULL;
+>   	up_write(&chip->ops_sem);
+>   }
+>   
+>
+> base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
 
-Today's linux-next merge of the devicetree tree got a conflict in:
 
-  include/linux/of_fdt.h
+Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and 
+vio_bus")
 
-between commit:
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-  7ca964c3978d ("efi: apply memblock cap after memblock_add()")
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 
-from the devicetree-fixes tree and commits:
 
-  60f20d84dc81 ("of/fdt: Rework early_init_dt_scan_chosen() to call directl=
-y")
-  1f012283e936 ("of/fdt: Rework early_init_dt_scan_memory() to call directl=
-y")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/of_fdt.h
-index ad09beb6d13c,914739f3c192..000000000000
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@@ -58,11 -58,8 +58,9 @@@ extern int of_flat_dt_is_compatible(uns
-  extern unsigned long of_get_flat_dt_root(void);
-  extern uint32_t of_get_flat_dt_phandle(unsigned long node);
- =20
-- extern int early_init_dt_scan_chosen(unsigned long node, const char *unam=
-e,
-- 				     int depth, void *data);
-- extern int early_init_dt_scan_memory(unsigned long node, const char *unam=
-e,
-- 				     int depth, void *data);
-+ extern int early_init_dt_scan_chosen(char *cmdline);
-+ extern int early_init_dt_scan_memory(void);
- +extern void early_init_dt_check_for_usable_mem_range(void);
-  extern int early_init_dt_scan_chosen_stdout(void);
-  extern void early_init_fdt_scan_reserved_mem(void);
-  extern void early_init_fdt_reserve_self(void);
-
---Sig_/1S1LyIj3ECemRvGN5_=7b53
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHCruwACgkQAVBC80lX
-0Gynggf/cvvk+oJRN/IsOKYoD9HpxOYI404PzNW6FAFT9okzIc2QuwADwZ7gu0fU
-BOBGm/c4rCEvuC+LxM993dsOHeeUdbavjgoOz+D00LU7evVniVhhh2ET7KVwDO+t
-Ht0ntdIgfNka3fTFl9xTRr5+H5kRfok669nQCo7bBoDf+u29E32L6eZq5+bXiNTz
-bhoP01IYR/yfGXz3Hy9UQ7ZZvtGOiq4Jpjz0NrCwxo4ZM3JPCMJxfGNFZGVu4Xlq
-/Uhd2E9UNx6rhWA7aRL8oaSBO4fZmi/Lz4A4TNMO2JAyRX7OSwsRLPvKfxglqGw4
-TQx8BGu43DPYj5HYKxSkFQe/UJJIRw==
-=w5QR
------END PGP SIGNATURE-----
-
---Sig_/1S1LyIj3ECemRvGN5_=7b53--

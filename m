@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0E747D1D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1762A47D1D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 13:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244891AbhLVMhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 07:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbhLVMhJ (ORCPT
+        id S244906AbhLVMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 07:37:54 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:33770 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233073AbhLVMhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:37:09 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAB4C061401;
-        Wed, 22 Dec 2021 04:37:09 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s1so505830pga.5;
-        Wed, 22 Dec 2021 04:37:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UZz7xhafkkHpJkMgl/kac5c4UCSL804TVcwmmdEcK/0=;
-        b=nsK2TtW3n6e1+xlg1RZyMo4ycIQFl2Xn4YC2120yajzQ6jPjoaIwA6gZz1sGETLPUL
-         Rfa/LfPmrvEWU4Ei7szxx6trUEnm0qqv0dd2AiuW7yC9Q8Kmj65hZzxMmeDD3bHL/spD
-         7R1e6dtfBRTi2XLI4rk8HxD+FiGZii7cJPWWjtz94MCdYnZAByH7nd70yU8pbinerVFe
-         czLvEyE+RXSPw54P41GoQuj/8IBRLGfLgE/5wHW3f/xNdt8UjnFKxL/mLLdLjPFFyQdm
-         00IoO5rCraGZGFjUndcF10Su7RbUd0SQh9K+J3+3MKToFMJm3/n6GSWfk3qCY+FDHmMQ
-         CjxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UZz7xhafkkHpJkMgl/kac5c4UCSL804TVcwmmdEcK/0=;
-        b=iovJylkErsXzynctPTQVjz+IDCGpCA6MPSZeFhoFPb7McpuqV4uaG0fe2kmPbLYLz2
-         1FaSEAzOU6kP15C4YEX7A2LPDUsv+6h2Qje0wwCjMu0a3UABF0+sc1chv4nhRwyOGvXF
-         BaCBy0NiRonJe/5j55dwxc1CaumAvzRkutSF6t6dg+PwzWWuGgWEyuDF/wgD/G5Titw5
-         Z2pruoaiN4p13fuQlSQqx88IREIdL5cChGeKOAddFmdnD0BT2Pc3pCv1UFfY6DnRGsKS
-         dBGZh874wtzXyajhx35KSjBBQ7uP/n47kXG4s1Vc8sKLQzR7rAMw3mNWfQ5wbIkGHrjd
-         y2Hg==
-X-Gm-Message-State: AOAM530KPiwscRhzP4APoFeRXLzqTbc0qxRXtxY3hvi8aWo3tTClewUG
-        K7jRiXzyUGTQtChrj3D496Q=
-X-Google-Smtp-Source: ABdhPJywzhxYDDrq26wikSanWRvBdbTroGbSbcvCsRISQViIDfeWIm5m9pfq2nL//FWIWUPg7CAIoQ==
-X-Received: by 2002:a63:6dc8:: with SMTP id i191mr333146pgc.34.1640176628671;
-        Wed, 22 Dec 2021 04:37:08 -0800 (PST)
-Received: from ip-172-31-30-232.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id om10sm2616130pjb.13.2021.12.22.04.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 04:37:08 -0800 (PST)
-Date:   Wed, 22 Dec 2021 12:37:03 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, cl@linux.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
- pages in DMA zone
-Message-ID: <YcMb7+RESj1nEx9l@ip-172-31-30-232.ap-northeast-1.compute.internal>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-6-bhe@redhat.com>
- <20211213134319.GA997240@odroid>
- <20211214053253.GB2216@MiWiFi-R3L-srv>
- <Ybx2szXEgl1tN4MD@ip-172-31-30-232.ap-northeast-1.compute.internal>
- <20211221085623.GA7733@lst.de>
+        Wed, 22 Dec 2021 07:37:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=8MaPpGxJgEGfhSRIWktUPu8Djx/Jd3vJZEcOcNPLJuQ=; b=iIlX9D5ZmpxcdPauNLWoUmXHzS
+        8vtQjJHZizUdOJ9GIJOBrpuZMTr+W4eLIfSnahX4eM304VvQGMH8NpfidPqxTyZhDaRuGpC83qDGH
+        IW/AMwPg3Hz3HscPK1NBNQSPk83j5X828tLNL/Qd7e23y8H8cnFuQzzY+LXjaCD3179cvkyDDQ9oE
+        wFyWvb8Ej8lHmhRpzJHF0PyRQvNzurq7BvO9v56V0CzeeErVDNRLu0qsVqAi1UjJfVkBLjdveywDk
+        vFD1sKnsJaVfvUDxM1VpFAi+h8Sbdi3FzOIEcO8OTDj3ICHTMWQqSfThWOCev50j+HHT28XHWMtxb
+        g2vyvZCw==;
+Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n00s3-0003eR-DI; Wed, 22 Dec 2021 13:37:27 +0100
+Subject: Re: [PATCH 2/3] panic: Add option to dump all CPUs backtraces in
+ panic_print
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        keescook@chromium.org, yzaikin@google.com, siglesias@igalia.com,
+        kernel@gpiccoli.net
+References: <20211109202848.610874-1-gpiccoli@igalia.com>
+ <20211109202848.610874-3-gpiccoli@igalia.com>
+ <20211130051206.GB89318@shbuild999.sh.intel.com>
+ <6f269857-2cbe-b4dd-714a-82372dc3adfc@igalia.com>
+ <Yb+R/OVeBkdYLWeH@bombadil.infradead.org>
+ <911e81d3-5ffe-b936-f668-bf1f6a9b6cfb@igalia.com>
+ <20211221154816.4a7472c55073d06df0c25f74@linux-foundation.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Message-ID: <1758d4a0-6158-01b1-7460-c8ffd091d3dc@igalia.com>
+Date:   Wed, 22 Dec 2021 09:37:13 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221085623.GA7733@lst.de>
+In-Reply-To: <20211221154816.4a7472c55073d06df0c25f74@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Christoph.
-
-On Tue, Dec 21, 2021 at 09:56:23AM +0100, Christoph Hellwig wrote:
-> On Fri, Dec 17, 2021 at 11:38:27AM +0000, Hyeonggon Yoo wrote:
-> > My understanding is any buffer requested from kmalloc (without
-> > GFP_DMA/DMA32) can be used by device driver because it allocates
-> > continuous physical memory. It doesn't mean that buffer allocated
-> > with kmalloc is free of addressing limitation.
+On 21/12/2021 20:48, Andrew Morton wrote:
+>[...]
 > 
-> Yes.
+> They'll turn up on ozlabs after I've tested it all then uploaded.  I do
+> this a couple of times a week, approx.
 > 
-> > 
-> > the addressing limitation comes from the capability of device, not
-> > allocation size. if you allocate memory using alloc_pages() or kmalloc(),
-> > the device has same limitation. and vmalloc can't be used for
-> > devices because they have no MMU.
-> 
-> vmalloc can be used as well, it just needs to be setup as a scatterlist
-> and needs a little lover for DMA challenged platforms with the
-> invalidate_kernel_vmap_range and flush_kernel_vmap_range helpers.
 
-Oh I misunderstood this. Underlying physical address of vmalloc()-allocated memory
-can be mapped using DMA API, and it needs to be setup as scatterlist because
-the allocated memory is not physically continuous. Right?
+OK, thank you Andrew. Will I get some ping when that happens, through
+some bot or anything? I'm waiting them to show up in linux-next tree so
+to start a backport to an in-house kernel and starting using them.
 
-BTW, looking at the API I think the scsi case can be converted to use
-dma_alloc_pages(). but driver requires 512 bytes of buffer and the API
-supports allocating by at least page size.
+Cheers,
 
-It's not a big problem as it allocates a single buffer but in other
-cases maybe not. Can't we use dma pool for non-coherent pages?
 
-Thanks,
-Hyeonggon.
-
-> > But we can map memory outside DMA zone into bounce buffer (which resides
-> > in DMA zone) using DMA API.
-> 
-> Yes, although in a few specific cases the bounce buffer could also come
-> from somewhere else.
+Guilherme

@@ -2,195 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F79E47CEF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA37847D013
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 11:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbhLVJPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:15:42 -0500
-Received: from mga11.intel.com ([192.55.52.93]:43207 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243817AbhLVJPl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:15:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640164541; x=1671700541;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UtXES2Gwh/4jVPEVGIKKdTXA6w0jbZYfLn/JOqq7F/Y=;
-  b=UfmaSnkiXEwgA1oW/UEB1EnG9kpIYsKpngnjVmHLGWcAJRp76Ks/p8JR
-   znk4vkzpdQYPZlFSUpzYbvE54k7cxF+u8KBqERDkPOj8GkVSsGRk11P5F
-   ifowg30OTvp6jaXxjRCyN7noxfXqHYe8M1rMZvQhZPzJTGPjnG1kXJOWJ
-   gvsQG1NpJCh8fAPL5MlhkpU0ORXbW7PmcNoX+aGyTm5RaO9eoEaTGUojW
-   ZG4vICbykW1vn4d9KDiis8aaqay81LUpZWKKdFCPZK4VIv5PqNObsvhPl
-   DbR8ey9c2548LngiUASo16jiJ/IxgYu+hMzv9tJVMQ1oz6YY+3bpSeybG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="238119781"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="238119781"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 01:15:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="684963827"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2021 01:15:39 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzxik-0000J2-AX; Wed, 22 Dec 2021 09:15:38 +0000
-Date:   Wed, 22 Dec 2021 17:15:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [davidhildenbrand:PageAnonExclusive 1/1] mm/page_alloc.c:1329:25:
- error: implicit declaration of function '__ClearPageAnonExlusive'; did you
- mean '__ClearPageAnonExclusive'?
-Message-ID: <202112221730.DUDs4mUm-lkp@intel.com>
+        id S244197AbhLVKfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 05:35:52 -0500
+Received: from 7.mo550.mail-out.ovh.net ([87.98.158.110]:40931 "EHLO
+        7.mo550.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235010AbhLVKfv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 22 Dec 2021 05:35:51 -0500
+Received: from player776.ha.ovh.net (unknown [10.110.171.173])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 5F93021AC2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 09:16:29 +0000 (UTC)
+Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player776.ha.ovh.net (Postfix) with ESMTPSA id 596812593BD8A;
+        Wed, 22 Dec 2021 09:16:21 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R002d31a7a78-1ef3-4dfe-b0c7-e7c63879d648,
+                    6227138D1A59C2D5CB218EB48BA84448E8ED8D0D) smtp.auth=rafal@milecki.pl
+X-OVh-ClientIp: 194.187.74.233
+Message-ID: <c5b76d10-c270-21e5-e528-9aa20b1384ef@milecki.pl>
+Date:   Wed, 22 Dec 2021 10:16:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH] nvmem: fix unregistering device in nvmem_register() error
+ path
+To:     Johan Hovold <johan@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20211221154550.11455-1-zajec5@gmail.com>
+ <YcH7fw5S6aSXswvb@kroah.com> <9e94f0fd-e2d5-4d9e-5759-a5f591191785@gmail.com>
+ <YcLXbPzyhtMnP0YQ@kroah.com> <YcLkA0e48+xuGsHk@hovoldconsulting.com>
+ <52a2a318-0efe-94af-b8b9-308c2fbb1fab@gmail.com>
+ <YcLrHEoOy3iRSkFp@hovoldconsulting.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+In-Reply-To: <YcLrHEoOy3iRSkFp@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17072301766595554267
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddthedgudefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeejteeludegjedtveehteeiudehgfetvdegffdtvdefvdeiveejgeelffelgedtueenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjeeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/davidhildenbrand/linux PageAnonExclusive
-head:   139b194e6278612218eae13497d76b2605489317
-commit: 139b194e6278612218eae13497d76b2605489317 [1/1] mm/page-flags: Introduce PG_anon_exlusive which overloads PG_swap for !PageAnon()
-config: arc-randconfig-r043-20211222 (https://download.01.org/0day-ci/archive/20211222/202112221730.DUDs4mUm-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/davidhildenbrand/linux/commit/139b194e6278612218eae13497d76b2605489317
-        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
-        git fetch --no-tags davidhildenbrand PageAnonExclusive
-        git checkout 139b194e6278612218eae13497d76b2605489317
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+On 22.12.2021 10:08, Johan Hovold wrote:
+> On Wed, Dec 22, 2021 at 10:00:03AM +0100, Rafał Miłecki wrote:
+>> On 22.12.2021 09:38, Johan Hovold wrote:
+> 
+>>> It seems Rafał is mistaken here too; you certainly need to call
+>>> platform_device_put() if platform_device_register() fail, even if many
+>>> current users do appear to get this wrong.
+>>
+>> Yes I was! Gosh I made up that "platform_device_put()" name and only
+>> now I realized it actually exists!
+>>
+>> I stand by saying this design is really misleading. Even though
+>> platform_device_put() was obviously a bad example.
+>>
+>> Please remember I'm just a minor kernel developer however in my humble
+>> opinion behaviour of device_register() and platform_device_register()
+>> should be changed.
+>>
+>> If any function fails I expect:
+>> 1. That function to clean up its mess if any
+>> 2. Me to be responsible to clean up my mess if any
+>>
+>> This is how "most" code (whatever it means) works.
+>> 1. If POSIX snprintf() fails I'm not expected to call *printf_put() sth
+>> 2. If POSIX bind() fails I'm not expected to call bind_put() sth
+>> 3. (...)
+>>
+>> I'm not sure if those are the best examples but you should get my point.
+> 
+> Yes, and we all agree that it's not the best interface. But it exists,
+> and changing it now risks introducing worse problem than a minor, mostly
+> theoretical, memleak.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for confirming that, I was wondering if it's just my mind that
+doesn't find this design clear enough.
 
-All errors (new ones prefixed by >>):
+Now, assuming this design isn't perfect and some purists would like it
+cleaned up:
 
-   mm/page_alloc.c: In function 'free_pages_prepare':
->> mm/page_alloc.c:1329:25: error: implicit declaration of function '__ClearPageAnonExlusive'; did you mean '__ClearPageAnonExclusive'? [-Werror=implicit-function-declaration]
-    1329 |                         __ClearPageAnonExlusive(page);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~
-         |                         __ClearPageAnonExclusive
-   mm/page_alloc.c: At top level:
-   mm/page_alloc.c:3807:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
-    3807 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-         |               ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Would that make sense to introduce something like
+1. device_register2() / device_add2()
+and
+2. platform_device_register2() / platform_device_add2()
 
-
-vim +1329 mm/page_alloc.c
-
-  1281	
-  1282	static __always_inline bool free_pages_prepare(struct page *page,
-  1283				unsigned int order, bool check_free, fpi_t fpi_flags)
-  1284	{
-  1285		int bad = 0;
-  1286		bool skip_kasan_poison = should_skip_kasan_poison(page, fpi_flags);
-  1287	
-  1288		VM_BUG_ON_PAGE(PageTail(page), page);
-  1289	
-  1290		trace_mm_page_free(page, order);
-  1291	
-  1292		if (unlikely(PageHWPoison(page)) && !order) {
-  1293			/*
-  1294			 * Do not let hwpoison pages hit pcplists/buddy
-  1295			 * Untie memcg state and reset page's owner
-  1296			 */
-  1297			if (memcg_kmem_enabled() && PageMemcgKmem(page))
-  1298				__memcg_kmem_uncharge_page(page, order);
-  1299			reset_page_owner(page, order);
-  1300			return false;
-  1301		}
-  1302	
-  1303		/*
-  1304		 * Check tail pages before head page information is cleared to
-  1305		 * avoid checking PageCompound for order-0 pages.
-  1306		 */
-  1307		if (unlikely(order)) {
-  1308			bool compound = PageCompound(page);
-  1309			int i;
-  1310	
-  1311			VM_BUG_ON_PAGE(compound && compound_order(page) != order, page);
-  1312	
-  1313			if (compound) {
-  1314				ClearPageDoubleMap(page);
-  1315				ClearPageHasHWPoisoned(page);
-  1316			}
-  1317			for (i = 1; i < (1 << order); i++) {
-  1318				if (compound)
-  1319					bad += free_tail_pages_check(page, page + i);
-  1320				if (unlikely(check_free_page(page + i))) {
-  1321					bad++;
-  1322					continue;
-  1323				}
-  1324				(page + i)->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
-  1325			}
-  1326		}
-  1327		if (PageMappingFlags(page)) {
-  1328			if (__PageAnon(page))
-> 1329				__ClearPageAnonExlusive(page);
-  1330			page->mapping = NULL;
-  1331		}
-  1332		if (memcg_kmem_enabled() && PageMemcgKmem(page))
-  1333			__memcg_kmem_uncharge_page(page, order);
-  1334		if (check_free)
-  1335			bad += check_free_page(page);
-  1336		if (bad)
-  1337			return false;
-  1338	
-  1339		page_cpupid_reset_last(page);
-  1340		page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
-  1341		reset_page_owner(page, order);
-  1342	
-  1343		if (!PageHighMem(page)) {
-  1344			debug_check_no_locks_freed(page_address(page),
-  1345						   PAGE_SIZE << order);
-  1346			debug_check_no_obj_freed(page_address(page),
-  1347						   PAGE_SIZE << order);
-  1348		}
-  1349	
-  1350		kernel_poison_pages(page, 1 << order);
-  1351	
-  1352		/*
-  1353		 * As memory initialization might be integrated into KASAN,
-  1354		 * kasan_free_pages and kernel_init_free_pages must be
-  1355		 * kept together to avoid discrepancies in behavior.
-  1356		 *
-  1357		 * With hardware tag-based KASAN, memory tags must be set before the
-  1358		 * page becomes unavailable via debug_pagealloc or arch_free_page.
-  1359		 */
-  1360		if (kasan_has_integrated_init()) {
-  1361			if (!skip_kasan_poison)
-  1362				kasan_free_pages(page, order);
-  1363		} else {
-  1364			bool init = want_init_on_free();
-  1365	
-  1366			if (init)
-  1367				kernel_init_free_pages(page, 1 << order, false);
-  1368			if (!skip_kasan_poison)
-  1369				kasan_poison_pages(page, order, init);
-  1370		}
-  1371	
-  1372		/*
-  1373		 * arch_free_page() can make the page's contents inaccessible.  s390
-  1374		 * does this.  So nothing which can access the page's contents should
-  1375		 * happen after this.
-  1376		 */
-  1377		arch_free_page(page, order);
-  1378	
-  1379		debug_pagealloc_unmap_pages(page, 1 << order);
-  1380	
-  1381		return true;
-  1382	}
-  1383	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+that would *not* require calling *_put() on failure? Then start
+converting existing drivers to those new (clearner?) helpers?

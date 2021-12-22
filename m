@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE3D47CD7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35E447CD7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 08:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbhLVHUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 02:20:00 -0500
-Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:48896
-        "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231422AbhLVHT7 (ORCPT
+        id S242960AbhLVHXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 02:23:37 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33891 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhLVHXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 02:19:59 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(4628:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Wed, 22 Dec 2021 15:20:08 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Wed, 22 Dec 2021 15:20:03 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Wed, 22 Dec 2021 15:20:03 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?utf-8?B?6buD5oe35Y6a?= <tonyhuang.sunplus@gmail.com>
-Subject: RE: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Topic: [PATCH v4 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Index: AQHX8mCd69RkrTnSM0GRURxouCuBCKw1+gLA///W7ICACDps4A==
-Date:   Wed, 22 Dec 2021 07:20:03 +0000
-Message-ID: <a45cf55f836c4befa65510e30440016c@sphcmbx02.sunplus.com.tw>
-References: <cover.1639557112.git.tonyhuang.sunplus@gmail.com>
- <c3a3b64c38807b2f344c3df500eb4c60b885eadf.1639557112.git.tonyhuang.sunplus@gmail.com>
- <CAK8P3a0CnCK-Dfodp-jTzZApM_1NpdY7DV2fRqnO=gaju5xGwg@mail.gmail.com>
- <CAHpW4oQmtd-gG1HYZT-Dk=QAvXKsKebzcOaVtrEeoujwoL9zSg@mail.gmail.com>
- <316c16afbff74160b07bd74444f3b8e1@sphcmbx02.sunplus.com.tw>
- <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a0cA7iL=ug6hiqWAV1-qFSoCN-R7jrXv0cqByUDJV4x0Q@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 22 Dec 2021 02:23:36 -0500
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JJlCz3NgMzcc6Z;
+        Wed, 22 Dec 2021 15:23:11 +0800 (CST)
+Received: from huawei.com (10.67.189.167) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 22 Dec
+ 2021 15:23:34 +0800
+From:   Jiangfeng Xiao <xiaojiangfeng@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@redhat.com>, <namhyung@kernel.org>, <james.clark@arm.com>,
+        <leo.yan@linaro.org>, <shaolexi@huawei.com>, <qiuxi1@huawei.com>,
+        <wangbing6@huawei.com>, <nixiaoming@huawei.com>,
+        <xiaojiangfeng@huawei.com>
+CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] perf dso: Avoid copying redundant kallsyms in th buildid_dir
+Date:   Wed, 22 Dec 2021 15:23:23 +0800
+Message-ID: <1640157803-106978-1-git-send-email-xiaojiangfeng@huawei.com>
+X-Mailer: git-send-email 1.8.5.6
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.67.189.167]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBBcm5kOg0KDQo+ID4gPj4gSU9QIChJTyBQcm9jZXNzb3IpIGVtYmVkZGVkIGluc2lkZSBT
-UDcwMjEgd2hpY2ggaXMgdXNlZCBhcw0KPiA+ID4+IFByb2Nlc3NvciBmb3IgSS9PIGNvbnRyb2ws
-IFJUQyB3YWtlLXVwIGFuZCBjb29wZXJhdGlvbiB3aXRoIENQVSAmDQo+ID4gPj4gUE1DIGluIHBv
-d2VyIG1hbmFnZW1lbnQgcHVycG9zZS4NCj4gPiA+PiBUaGUgSU9QIGNvcmUgaXMgRFE4MDUxLCBz
-byBhbHNvIG5hbWVkIElPUDgwNTEsIGl0IHN1cHBvcnRzDQo+ID4gPj4gZGVkaWNhdGVkIEpUQUcg
-ZGVidWcgcGlucyB3aGljaCBzaGFyZSB3aXRoIFNQNzAyMS4NCj4gPiA+PiBJbiBzdGFuZGJ5IG1v
-ZGUgb3BlcmF0aW9uLCB0aGUgcG93ZXIgc3BlYyByZWFjaCA0MDB1QS4NCj4gPiA+Pg0KPiA+ID4+
-IFNpZ25lZC1vZmYtYnk6IFRvbnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4N
-Cj4gPiA+PiAtLS0NCj4gPiA+PiBDaGFuZ2VzIGluIHY0Og0KPiA+ID4+ICAtIEFkZHJlc3NlZCBj
-b21tZW50cyBmcm9tIEFybmQgQmVyZ21hbm4uDQo+ID4NCj4gPiA+SSBkb24ndCB0aGluayB5b3Ug
-ZGlkOiBJIGFza2VkIHlvdSBzcGVjaWZpY2FsbHkgdG8gYWRkIGNvZGUgdG8NCj4gPiA+aW50ZXJh
-Y3Qgd2l0aCB0aGUgZXhpc3RpbmcgaW4ta2VybmVsIGludGVyZmFjZXMgdG8gdXNlIHRoZQ0KPiA+
-ID5mdW5jdGlvbmFsaXR5IHByb3ZpZGVkIGJ5IHRoZSBkZXZpY2UuIFBpY2sgYW55IChhdCBsZWFz
-dCB0d28pDQo+ID4gPnN1YnN5c3RlbXMgYW5kIGFkZCBzdXBwb3J0LCBidXQgbGVhdmUgb3V0IGFu
-eSBjdXN0b20gdXNlciBzcGFjZQ0KPiA+ID5pbnRlcmZhY2VzIChtaXNjZGV2aWNlLCBkZWJ1Z2Zz
-LCBzeXNmcywgLi4uKSBmb3IgdGhlIG1vbWVudC4NCj4gPg0KPiA+DQo+ID4NCj4gPiAxLiBJT1Ag
-Y2FuIHJ1biBzcF9pb3BfcGxhdGZvcm1fZHJpdmVyX3NodWRvd24oKSB0aHJvdWdoIHRoZSBwb3dl
-cm9mZg0KPiA+IGNvbW1hbmQgYW5kIHRoZSBrZXJuZWwuIFBlcmZvcm0gc3lzdGVtIHBvd2VyLW9m
-ZiBhY3Rpb25zLg0KPiANCj4gRG8geW91IG1lYW4gdGhhdCB0aGlzIG1ldGhvZCBhKSBjbGVhbmx5
-IHNodXRzIGRvd24gdGhlIGlvcCBiZWZvcmUgdGhlIHN5c3RlbQ0KPiBpcyBwb3dlcmVkIGRvd24s
-IG9yIGIpIHRoZSBkcml2ZXJfc2h1dGRvd24oKSBjYWxsYmFjayBpcyB1c2VkIHRvIGluaXRpYXRl
-IHRoZQ0KPiBwb3dlcmRvd24gb2YgdGhlIHN5c3RlbSBpdHNlbGY/DQo+IA0KPiBJbiBjYXNlIG9m
-IGEpIEkgd291bGQgbm90IGNvdW50IHRoYXQgYXMgZXhwb3NpbmcgZnVuY3Rpb25hbGl0eSwgd2hh
-dCB5b3UgZG8gaGVyZQ0KPiBpcyBqdXN0IHBhcnQgb2YgYW55IGRyaXZlci4gSWYgaW5zdGVhZCB5
-b3UgYXJlIHRyeWluZyB0byB1c2UgYiksIHRoaXMgaXMgdGhlIHdyb25nDQo+IHdheSBvZiBkb2lu
-ZyBpdCwgc2VlIGRyaXZlcnMvcG93ZXIvcmVzZXQvIGZvciBleGFtcGxlcyBvZiBob3cgdG8gZG8g
-aXQgcmlnaHQuDQo+IA0KPiA+IDIuIFdha2UgdXAgdGhlIHN5c3RlbSBieSByZWx5aW5nIG9uIHRo
-ZSA4MDUxIGludGVybmFsIFJUQyB3YWtlLXVwDQo+ID4gbWVjaGFuaXNtIGFuZCBleHRlcm5hbCBH
-UElPIGlucHV0IHNpZ25hbHMgdG8gd2FrZSB1cC4NCj4gDQo+IEkgdGhpbmsgdGhvc2Ugc2hvdWxk
-IGJlIGV4cG9zZWQgd2l0aCBkcml2ZXJzL3J0YyBmb3IgdGhlIFJUQyBhbmQgZHJpdmVycy9ncGlv
-Lw0KPiBmb3IgdGhlIEdQSU8gZHJpdmVyLCBhbmQgdGhlbiB5b3UgY2FuIHVzZSB0aGUgZGV2aWNl
-IHRyZWUgdG8gY29uZmlndXJlIHdoaWNoDQo+IEdQSU8gdG8gdXNlIGFzIGEgd2FrZXVwIGFuZCBo
-b3cgaXQncyBjb25uZWN0ZWQgdG8gdGhlIFJUQy4NCj4gDQoNCkkgaGF2ZSBhIHF1ZXN0aW9uIHRv
-IGFzayB5b3U6CQ0KVGhlcmUgYXJlIHR3byB3YXlzIHRvIHdha2UgdXAgdGhlIExpbnV4IGtlcm5l
-bCBzeXN0ZW0gaW4gODA1MS4JCQkJCQkJCQ0KMSlSVEMgd2FrZXVwOgkJCQkJCQkJDQpUaGUgU1A3
-MDIxIHN5c3RlbSBtb3VudHMgdGhlIFJUQyBkZXZpY2UgZHJpdmVyLgkJCQkJCQkJDQpJIHNldCB0
-aGUgUlRDIHdha2UtdXAgdGltZSBieSB0eXBlIGNvbW1hbmRzIGluIGNvbW1hbmQgbGluZS4JCQkJ
-CQkJCQ0KRXhhbXBsZTogDQplY2hvIDAgPiAvc3lzL2NsYXNzL3J0Yy9ydGMwL3dha2VhbGFybSAm
-JiBubm49YGRhdGUgJyslcydgICYmIGVjaG8gJG5ubiAmJiBubm49YGV4cHIgJG5ubiArIDEwYCAm
-JiBlY2hvICRubm4gPiAvc3lzL2NsYXNzL3J0Yy9ydGMwL3dha2VhbGFybQkJCQkJCQkJDQpXaGVu
-IHRoZSBsaW51eCBrZXJuZWwgc3lzdGVtIGhhcyBubyBwb3dlci4gODA1MSBjYW4gcmVhZCBSVEMg
-cmVzZ2lzdGVyIGFuZCByZWNlaXZlIFJUQyB3YWtldXAgaW50ZXJydXB0LgkJCQkJCQkJDQpEbyBJ
-IG5lZWQgdG8gYWRkIFJUQyBzdWJzeXN0ZW0gZnVuY3Rpb25hIHRvIHRoZSBJT1AgY29kZT8JCQkJ
-CQkJCQ0KCQkJCQkJCQkNCjIpR1BJTyB3YWtldXA6CQkJCQkJCQkNCkFjY29yZGluZyB0byB5b3Vy
-IHN1Z2dlc3Rpb24JCQkJCQkJCQ0KSSB1c2Ugb2ZfZ2V0X25hbWVfZ3BpbygpIHRvIGdldCBHUElP
-IG51bWJlciBmcm9tIGRldmljZSB0cmVlIGR1cmluZyB0aGUgSU9QIHByb2JlIHByb2Nlc3MuCQkJ
-CQkJCQkNClBhc3MgaXQgdG8gODA1MSBmb3IgdXNlLgkJCQkJCQkJDQoNClRoYW5rcw0KDQo=
+The issue is occurs in following step:
+(1)copy the kernel module (such as test.ko) to /root directory
+(2)load the kernel module (such as insmod test.ko)
+(3)run perf-record as: perf record sleep 1
+Then /proc/kallsyms will be copied not only to
+/root/.debug/[kernel.kallsyms]/<buildid>/kallsyms,
+but also be copied to
+/root/.debug/[test]/<buildid>/kallsyms(this is redundant).
+
+Say a kallsyms file content takes 5MB memory,
+100 out-of-tree kernel modules will take 500MB,
+which is not bearable on embedded environment.
+
+__cmd_record():
+  __perf_session__new():
+    perf_session__create_kernel_maps():
+      machine__create_kernel_maps():
+        machine__create_modules():
+          machine__set_modules_path(): perf will only search for kernel
+                                      modules in "/lib/modules/`uname -r`/"
+                                      /root/test.ko is not in scope.
+            maps__set_modules_path_dir():
+              maps__set_module_path():
+                dso__set_long_name(): the dso->long_name of test.ko has
+                                      not changed, it is still [test].
+
+record__finish_output():
+  perf_session__write_header():
+    [...]
+      dso__cache_build_id():
+        bool is_kallsyms = dso__is_kallsyms(dso);
+          dso__is_kallsyms(): return dso->kernel&&dso->long_name[0] != '/';
+                              [test] will be wrongly judged as kallsyms,
+                              and then the value of is_kallsyms is true.
+        build_id_cache__add_b(, is_kallsyms,):
+          build_id_cache__add_s(, is_kallsyms,):
+            build_id_cache__add(, is_kallsyms,):
+              if (is_kallsyms)
+                copyfile("/proc/kallsyms", filename): /proc/kallsyms will
+                be copied to /root/.debug/[test]/<buildid>/kallsyms.
+
+Why can this modification can avoid the redundancy of kallsyms:
+  if (dso->kernel == DSO_SPACE__KERNEL) there are only two possibilities,
+  one is dso__is_kallsyms, and the other is dso__is_kmod. After
+  modification, [test] is no longer incorrectly judged as kallsyms.
+Why can dso__is_kmod judge correctly?
+  __cmd_record():
+    __perf_session__new():
+      perf_session__create_kernel_maps():
+        machine__create_kernel_maps():
+          machine__create_modules():
+            modules__parse(): for each line in /proc/modules,
+                              not just in "/lib/modules/`uname -r`/".
+              machine__create_module():
+                machine__addnew_module_map():
+                  machine__findnew_module_dso():
+                    dso__set_module_info(): assign dso->symtab_type to
+                    DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE and so on.
+
+Reported-by: Lexi Shao <shaolexi@huawei.com>
+Signed-off-by: Jiangfeng Xiao <xiaojiangfeng@huawei.com>
+---
+ tools/perf/util/dso.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 011da39..57a6ab5 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -380,9 +380,17 @@ static inline bool dso__is_kcore(struct dso *dso)
+ 	       dso->binary_type == DSO_BINARY_TYPE__GUEST_KCORE;
+ }
+ 
++static inline bool dso__is_kmod(struct dso *dso)
++{
++	return dso->symtab_type == DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE ||
++		dso->symtab_type == DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP ||
++		dso->symtab_type == DSO_BINARY_TYPE__GUEST_KMODULE ||
++		dso->symtab_type == DSO_BINARY_TYPE__GUEST_KMODULE_COMP;
++}
++
+ static inline bool dso__is_kallsyms(struct dso *dso)
+ {
+-	return dso->kernel && dso->long_name[0] != '/';
++	return dso->kernel && !dso__is_kmod(dso);
+ }
+ 
+ void dso__free_a2l(struct dso *dso);
+-- 
+1.8.5.6
+

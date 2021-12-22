@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC3947D617
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E4447D616
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 18:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344452AbhLVRwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 12:52:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58070 "EHLO
+        id S1344438AbhLVRwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 12:52:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58050 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344430AbhLVRwC (ORCPT
+        with ESMTP id S234375AbhLVRwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:52:02 -0500
+        Wed, 22 Dec 2021 12:52:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE5FB81DCB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 17:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2CBEC36AE8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B926B81DCC;
+        Wed, 22 Dec 2021 17:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC77C36AE5;
         Wed, 22 Dec 2021 17:51:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640195520;
-        bh=dhr8vCkRAJIHZ4wScULjxojIk2OzMoX4p5ItMq0Y4dc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nFYRLDeyL5Y9EoFFiengffNL3+Iz3DW9UfdG+tsj4SMpE1y3wcIVxlYvnrMcFNwTA
-         nZxFrkfecP1vT8kd3cnY5YZ7ap9VJaYFSBVjn8btY86AnkC5x+akjMobFxrLYeJ/dw
-         CKf1RMU2+RS2Bo/9LI+QnoMIfxWQ7WTLLF7r9gSnXlyxo4Yj8JYYwRr3qjx9KkwArj
-         UzVxGmPcIqQg+sjIKLZ5SGUqqOcK/8AZSqsEq9pkxkC4zX2zXwa/8cbVrMjPIWPdMp
-         MXvlwbAm+maX9zgvzOGK2RcmNeJ7pKvzDIqaKTwNIqROP7eu3XgPuGpBMEIHgEVnkp
-         +5nhdj6oI4o5Q==
-Date:   Wed, 22 Dec 2021 19:51:50 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jackie Liu <liu.yun@linux.dev>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock: fix memblock_phys_alloc() section mismatch error
-Message-ID: <YcNltr7TxsAe+fzP@kernel.org>
+        s=k20201202; t=1640195519;
+        bh=sx7hXrnqkBfQsuaWS5i96aHg5G2GtdDiKAALnb3Wd+g=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=RTtUDWTwcKlw2xMYW/yYmq/w8VHhu+pJqH3aqYUJtrhXMeWPsOG7xubVmKCLk6ycz
+         2F/eLR8fZr7pTMItLLBrQL9qiFUjXdP8KaLNXsJeWTj8H+hk8Aa7aRAzO6QtNAN5zf
+         a4sxfVNxvR7evy/DBYNkwU44RNE1VU5UzR0RP8qQdD4p113VHTTQUsCQbL0obKVDW7
+         stuKeeF3hWFxEwlRMw5e6/GTltWh3WyZNEwLrByV4zXOfkXUmZEAFIbBlx2NfF/0gE
+         zJeoqHrSSphJB2V5zrOAPabqb35Sje9WVf0TM2k0nTLaX/7Sx/CRZNdvLq1fGCRJlp
+         ZXKC9cnh/1gxw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v7 1/2] wilc1000: Add reset/enable GPIO support to SPI
+ driver
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211221212531.4011609-2-davidm@egauge.net>
+References: <20211221212531.4011609-2-davidm@egauge.net>
+To:     David Mosberger-Tang <davidm@egauge.net>
+Cc:     Ajay Singh <ajay.kathat@microchip.com>,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        David Mosberger-Tang <davidm@egauge.net>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164019551477.12144.8431352283963793868.kvalo@kernel.org>
+Date:   Wed, 22 Dec 2021 17:51:56 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+David Mosberger-Tang <davidm@egauge.net> wrote:
 
-The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+> For the SDIO driver, the RESET/ENABLE pins of WILC1000 are controlled
+> through the SDIO power sequence driver.  This commit adds analogous
+> support for the SPI driver.  Specifically, during initialization, the
+> chip will be ENABLEd and taken out of RESET and during
+> deinitialization, the chip will be placed back into RESET and disabled
+> (both to reduce power consumption and to ensure the WiFi radio is
+> off).
+> 
+> Both RESET and ENABLE GPIOs are optional.  However, if the ENABLE GPIO
+> is specified, then the RESET GPIO should normally also be specified as
+> otherwise there is no way to ensure proper timing of the ENABLE/RESET
+> sequence.
+> 
+> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+2 patches applied to wireless-drivers-next.git, thanks.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock fixes-2021-12-22
-
-for you to fetch changes up to d7f55471db2719629f773c2d6b5742a69595bfd3:
-
-  memblock: fix memblock_phys_alloc() section mismatch error (2021-12-22 19:35:29 +0200)
-
-----------------------------------------------------------------
-memblock: fix memblock_phys_alloc() section mismatch error
-
-There are section mismatch errors when compiler refuses to inline one-line
-wrapper memblock_phys_alloc(). Make memblock_phys_alloc() __always_inline
-to avoid these mismatch issues.
-
-----------------------------------------------------------------
-Jackie Liu (1):
-      memblock: fix memblock_phys_alloc() section mismatch error
-
- include/linux/memblock.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ec031ac4792c wilc1000: Add reset/enable GPIO support to SPI driver
+f31ee3c0a555 wilc1000: Document enable-gpios and reset-gpios properties
 
 -- 
-Sincerely yours,
-Mike.
+https://patchwork.kernel.org/project/linux-wireless/patch/20211221212531.4011609-2-davidm@egauge.net/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

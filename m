@@ -2,116 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4B947CF9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DAE47CFA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 10:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244057AbhLVJ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 04:56:29 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:28031 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231487AbhLVJ42 (ORCPT
+        id S244068AbhLVJ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 04:58:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55200 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231487AbhLVJ6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:56:28 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V.Pf4oC_1640166985;
-Received: from 30.21.164.53(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V.Pf4oC_1640166985)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 22 Dec 2021 17:56:25 +0800
-Message-ID: <f62fa69b-300e-e6f9-e3c0-077243ce654d@linux.alibaba.com>
-Date:   Wed, 22 Dec 2021 17:57:09 +0800
+        Wed, 22 Dec 2021 04:58:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640167121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K5G4EVE4ohJb3tDbOzo24CdbVU9kLTuaVeCzI5YYwUo=;
+        b=gDT2wzaaZPsKRifnrIWNYvTguKtbc769l93fAqvR/OEzNSOM3jhLGBJDelgcYCz1XZ21cN
+        2OAAyKGRm+fmPZbtbR6wyoZPuUaP93wCophrbt2NBWiiAAtbC+hCMVrsc/nTBRL3I0Ns5U
+        NKkw3snVJPcJIiGaxGo4N6q/AK+zGkM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-zxckO843POC59J9gRZmpkg-1; Wed, 22 Dec 2021 04:58:40 -0500
+X-MC-Unique: zxckO843POC59J9gRZmpkg-1
+Received: by mail-wm1-f69.google.com with SMTP id b188-20020a1c80c5000000b00345c1603997so47679wmd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Dec 2021 01:58:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:references:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=K5G4EVE4ohJb3tDbOzo24CdbVU9kLTuaVeCzI5YYwUo=;
+        b=FFE/+1Evjvu/tgiaK4gJ4F3zVDM4EwkyeXK2TPBAl/RYdEZMYoiW3a0MrShuWu8sOr
+         0kvxUTlSsDIp6Ar19HQgP8paFIlDBKZqMUFeQ7Nby6IPrw7LZ5ruOCW5ZCblfoV5EMVL
+         dPd1C7DMeqvcTulzt19Bp4YNYZ0CxcnPSO/Y7yIEq+8rri3MtQlxfktPFDM1Z/oA1RFs
+         YMSnXmh9F7Fwy4RHvVpWOI0i3oYB3l7hZ/Fy534GPdphH6BJdRES7KLWYF7hjNteR+cu
+         L4GrgkckwClvr2BXrSOXZX3MlM9Mdc31q9+pJ92/a3DAX0lcqVP0Uk67HITtjYyTmLRC
+         FxYQ==
+X-Gm-Message-State: AOAM532T5GQrtsRJMCnpn2gxjGOyyrR+pH7HYNZATkbEHRBh7CpQFlGz
+        BFMbkV3mdT6dmAlOOMv2zpyku1M7qY6OSWZFZigjC8XSec/j2NQAj7oT90GOpCSxDMNQrqUdqqE
+        75KBhr3ez1rnNJ+nIWfYvEw4d
+X-Received: by 2002:a05:600c:2242:: with SMTP id a2mr361334wmm.63.1640167119412;
+        Wed, 22 Dec 2021 01:58:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwAcPxZQQUdZzMn38yXVn5CoME1uZa7193DP1I+6cHL0latjqEXQ98ESJ3dAVdMJyoz2zLO5A==
+X-Received: by 2002:a05:600c:2242:: with SMTP id a2mr361317wmm.63.1640167119151;
+        Wed, 22 Dec 2021 01:58:39 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
+        by smtp.gmail.com with ESMTPSA id i12sm1451835wrp.96.2021.12.22.01.58.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 01:58:38 -0800 (PST)
+Message-ID: <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+Date:   Wed, 22 Dec 2021 10:58:36 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH 0/2] Add a new scheme to support demotion on tiered memory
- system
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
-        dave.hansen@linux.intel.com, ziy@nvidia.com, shy828301@gmail.com,
-        zhongjiang-ali@linux.alibaba.com, xlpang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20211222085455.15996-1-sj@kernel.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211222085455.15996-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/22/2021 4:54 PM, SeongJae Park wrote:
-[snip]
-
+On 22.12.21 09:51, David Hildenbrand wrote:
+> On 21.12.21 20:07, Jason Gunthorpe wrote:
+>> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
 >>
->> My machine contains 64G DRAM + 256G AEP(persistent memory), and you
->> should enable the demotion firstly by:
->> echo "true" > /sys/kernel/mm/numa/demotion_enabled
+>>> 2) is certainly the cherry on top. But it just means that R/O pins don't
+>>> have to be the weird kid. And yes, achieving 2) would require
+>>> FAULT_FLAG_EXCLUSIVE / FAULT_FLAG_UNSHARED, but it would really 99% do
+>>> what existing COW logic does, just bypass the "map writable" and
+>>> "trigger write fault" semantics.
 >>
->> Then I just write a simple test case like below to mmap some anon
->> memory, and then just read and write half of the mmap buffer to let
->> another half to be cold enough to demote.
->>
->> int main()
->> {
->>           int len = 50 * 1024 * 1024;
->>           int scan_len = len / 2;
->>           int i, ret, j;
->>           unsigned long *p;
->>
->>           p = mmap(NULL, len, PROT_READ | PROT_WRITE,
->>                    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>           if (p == MAP_FAILED) {
->>                   printf("failed to get memory\n");
->>                   return -1;
->>           }
->>
->>           for (i = 0; i < len / sizeof(*p); i++)
->>                   p[i] = 0x55aa;
->>
->>           /* Let another half of buffer to be cold */
->>           do {
->>                   for (i = 0; i < scan_len / sizeof(*p); i++)
->>                           p[i] = 0x55aa;
->>
->>                   sleep(2);
->>
->>                   for (i = 0; i < scan_len / sizeof(*p); i++)
->>                           j +=  p[i] >> 2;
->>           } while (1);
->>
->>           munmap(p, len);
->>           return 0;
->> }
->>
->> After setting the atts/schemes/target_ids, then start monitoring:
->> echo 100000 1000000 1000000 10 1000 > /sys/kernel/debug/damon/attrs
->> echo 4096 8192000 0 5 10 2000 5 1000 2097152 5000 0 0 0 0 0 3 2 1 >
->> /sys/kernel/debug/damon/schemes
->>
->> After a while, you can check the demote statictics by below command, and
->> you can find the demote scheme is applied by demoting some cold pages to
->> slow memory (AEP) node.
->>
->> cat /proc/vmstat | grep "demote"
->> pgdemote_direct 6881
+>> I still don't agree with this - when you come to patches can you have
+>> this work at the end and under a good cover letter? Maybe it will make
+>> more sense then.
 > 
-> Thank you for sharing this great details!
+> Yes. But really, I think it's the logical consequence of what Linus said
+> [1]:
 > 
-> I was just wondering if you have tested and measured the effects of the memory
-> allocation latency increase during the page demotion, which invoked by
-> shrink_page_list(), and also if you have measured how much improvement can be
-> achieved with DAMON-based demotion in the scenario.  Seems that's not the case,
+>   "And then all GUP-fast would need to do is to refuse to look up a page
+>    that isn't exclusive to that VM. We already have the situation that
+>    GUP-fast can fail for non-writable pages etc, so it's just another
+>    test."
+> 
+> We must not FOLL_PIN a page that is not exclusive (not only on gup-fast,
+> but really, on any gup). If we special case R/O FOLL_PIN, we cannot
+> enable the sanity check on unpin as suggested by Linus [2]:
+> 
+>   "If we only set the exclusive VM bit on pages that get mapped into
+>    user space, and we guarantee that GUP only looks up such pages, then
+>    we can also add a debug test to the "unpin" case that the bit is
+>    still set."
+> 
+> There are really only two feasible options I see when we want to take a
+> R/O FOLL_PIN on a !PageAnonExclusive() anon page
+> 
+> (1) Fail the pinning completely. This implies that we'll have to fail
+>     O_DIRECT once converted to FOLL_PIN.
+> (2) Request to mark the page PageAnonExclusive() via a
+>     FAULT_FLAG_UNSHARE and let it succeed.
+> 
+> 
+> Anything else would require additional accounting that we already
+> discussed in the past is hard -- for example, to differentiate R/O from
+> R/W pins requiring two pin counters.
+> 
+> The only impact would be that FOLL_PIN after fork() has to go via a
+> FAULT_FLAG_UNSHARE once, to turn the page PageAnonExclusive. IMHO this
+> is the right thing to do for FOLL_LONGTERM. For !FOLL_LONGTERM it would
+> be nice to optimize this, to *not* do that, but again ... this would
+> require even more counters I think, for example, to differentiate
+> between "R/W short/long-term or R/O long-term pin" and "R/O short-term pin".
+> 
+> So unless we discover a way to do additional accounting for ordinary 4k
+> pages, I think we really can only do (1) or (2) to make sure we never
+> ever pin a !PageAnonExclusive() page.
 
-Not yet testing on the real workload with DAMON demote scheme now, and I 
-think DAMON is lack of some functions to tune performance on tiered 
-memory system. At least I think we also need add a new promotion scheme 
-for DAMON to promote hot memory from slow memory node to the fast memory 
-node, which is on my TODO list.
+BTW, I just wondered if the optimization should actually be that R/O
+short-term FOLL_PIN users should actually be using FOLL_GET instead. So
+O_DIRECT with R/O would already be doing the right thing.
 
-> and I personally think that information is not essential for this patch, so I
-> see no problem here.  But, if you have tested or have a plan to do that, and if
-> you could, I think sharing the results on this cover letter would make this
-> even greater.
+And it somewhat aligns with what we found: only R/W short-term FOLL_GET
+is problematic, where we can lose writes to the page from the device via
+O_DIRECT.
 
-Sure, will do if we find some funny results with DAMON on tiered memory 
-system in future. Thanks.
+IIUC, our COW logic makes sure that a shared anonymous page that might
+still be used by a R/O FOLL_GET cannot be modified, because any attempt
+to modify it would result in a copy.
+
+But I might be missing something, just an idea.
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

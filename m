@@ -2,98 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802C947D750
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F7147D74A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 20:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbhLVTBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 14:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S236737AbhLVTBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 14:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbhLVTBT (ORCPT
+        with ESMTP id S231511AbhLVTBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:01:19 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C375C061574;
-        Wed, 22 Dec 2021 11:01:18 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o20so12257986eds.10;
-        Wed, 22 Dec 2021 11:01:18 -0800 (PST)
+        Wed, 22 Dec 2021 14:01:07 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9FEC061574;
+        Wed, 22 Dec 2021 11:01:06 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id v15so5526924ljc.0;
+        Wed, 22 Dec 2021 11:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ebMfnC/V0caOay+nHxFuXTzPz0oNSzLMhvwXV9X78Lw=;
-        b=J2RThtJcY2lkrdaELyqc8cJ6+7n0hPxXGITheMhhOSNXzYofmJD3tz3nC0OA6QbNOz
-         l34HE1IB0RdeIQAsuUpUVS2FkVLw1UHWJXVhSCwSwdDDRoRLk61gPM95All/WbZ6chU6
-         Qr6D/9dGh5wPuAxt+ujGXl3OE3UTe25OmsJsZQTpsdxQBL+arzFyMw07avzBpadRqMZX
-         7G6+DQvSp9/3HeS0qu3wkrZ2swFX4HH6J02WRvrvbtuXpEU1IlGyQr6jMkS+hXKkoI6y
-         92WPq6l0hGo+/WiSZI7N8pCfJkZIICHY6YNSV0eztd3q2bGCF/oHZ6uSB2BbODny06rx
-         grOA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5qyDhDUwPSzlKry3WWiQixXU+Cd/VbSsGfSS3pBCnbQ=;
+        b=RQazfz82dLgGWyQnWzFwUJVjtPEbt5YWT/uQVL4cXzIi4bKwZhm62VKgJ1svmH5Oc0
+         F9U/ZS6gqturE3qBxcaLOQ5OUEvO9fwu7aZFr4d08jAL4nGEAQbxVC2NeSw5GGpTKQHI
+         iTJtxnSMZPahl9KKsJAeCOzmeJtXBFwk6XAmkGxh0fJcq+5l1tQPCJV7440mR16rm3aa
+         cthd//CZWZNvdgCV893iMnxac6h2QRQPEN4d1qOItYKhf3PtlcDiOQH7jUmQWgV0Ua/R
+         QZ68nb/kcdUNScJXlTrYR9HMSD0IbbHvfIpWp2hmSEM9oVf5A4t6nshy/8Fx9PU6Ubgu
+         ifXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ebMfnC/V0caOay+nHxFuXTzPz0oNSzLMhvwXV9X78Lw=;
-        b=0Rz+mSJhMN6Jilh5O+sM2o6uB3Zzu8cABGHMJBMeW92+l8Olh7FD+LxKs1WN0M3G4u
-         ZnAaNIofQbHF2HtSPhOLFkfo3psXw+NdxOCTNHiyFRz1kP/+0jr1HOzS/7S+jPDnrXW8
-         yVorQ4F2csqEiQUmQezit950KJXy5KlDdMKqYUwqjaM3SFCL6OZKOHXM7pTDIBGga+h9
-         uT346QWbuJVX0AcfE0FwPniuO8gZVUVpzNvWq07g6iURvP/eq2trFjEpUnPLR5A5+V8H
-         SWMku8yKdbUIdRkjBLZqqmskeEF1kQ0kio2MinJPZ2ywht58tnEvung5kXWva8EPhp1H
-         /TbQ==
-X-Gm-Message-State: AOAM5306nBXoIQxG94PsKL2vRzkr0h8YKXwKcJ5Vvo2DJcv/FUl5gs7h
-        MuY+dp5Jktd1l+v147JkbHsgIWzZQDpMmzDvwZm6MzBGEBc=
-X-Google-Smtp-Source: ABdhPJwH+EIAmTseU+k1GPGYcuzIJevqEO7yJQuz7JQr5du/Kic7kMSMgsyioRH2zdVnPDGdW0WH7I79dEG9NgKcyYs=
-X-Received: by 2002:aa7:cd75:: with SMTP id ca21mr4044255edb.242.1640199677226;
- Wed, 22 Dec 2021 11:01:17 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5qyDhDUwPSzlKry3WWiQixXU+Cd/VbSsGfSS3pBCnbQ=;
+        b=LsyrgY2ZSR03kAK4TRMQ+cmoRf+PKF/1vB0c5WlGi3TMO3szog3xeSE2ibevQO3GZk
+         Ad0k8arQ9xiWhzTXu4FbscrC/2OioapK1zUeMgkOLGraTXAHghEBfoBAIB9xTUyogIWY
+         wxl6+eXzYymm79ff+dBRMJDVw0w6bIf6aw4yEoKed1bkyIlvMn4JNcCoRxXwMSiuJjBZ
+         qHGDrMgUV6+KpflraWg7nk8vHkBBhk240UG/IV3uTlXjp2dF5pAdS/SGPIxanIAKRW8g
+         TzRCvFPWSTLIoepXgr8botp2cbGe0tRdFM5WL8xfTMXdTRyOqz6jTPMzJGOBsoZKkEri
+         NP9w==
+X-Gm-Message-State: AOAM533IehvY43Y8KE/IlG+lwtzpZb9NcEV8wPxb2o9uvfc63ymnzfT4
+        cIa6MzbZFYQgrtFpd49GR/QJBL7s3do=
+X-Google-Smtp-Source: ABdhPJx2bFnl4KwymiZWBgpVgj62KepZK1/+QIA7UfkgYV7U42wp2ZF38bQi8wul84W/UBzbREFafw==
+X-Received: by 2002:a2e:8507:: with SMTP id j7mr2863920lji.307.1640199664643;
+        Wed, 22 Dec 2021 11:01:04 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id a28sm245793ljm.65.2021.12.22.11.01.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 11:01:04 -0800 (PST)
+Subject: Re: [PATCH v16 08/40] gpu: host1x: Add initial runtime PM and OPP
+ support
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <20211130232347.950-1-digetx@gmail.com>
+ <20211130232347.950-9-digetx@gmail.com>
+ <21212ddb-205f-71d6-0199-d75768eaf32c@nvidia.com>
+ <41edc53b-5ed1-d524-2546-c3d1ee6cdea4@gmail.com>
+ <6652ac84-36f5-0e43-65fa-04786f384f21@nvidia.com>
+ <56dce9c7-397d-75b0-b5b8-18ce1084e72b@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6dbc8205-5669-8b08-16b8-fe5e1acdd06f@gmail.com>
+Date:   Wed, 22 Dec 2021 22:01:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-11-liambeguin@gmail.com>
- <CAHp75VeGNuYiqqHzv9cAbHKy-h3dnazf2YEvgJ4fwb88wgY48w@mail.gmail.com> <YcNzkbSsG1wyz2MV@shaak>
-In-Reply-To: <YcNzkbSsG1wyz2MV@shaak>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Dec 2021 20:59:19 +0200
-Message-ID: <CAHp75VfQ0C8uZ0=8U4F1DS0v-DpBnzZM+QCxQG33FMJU2m-dOA@mail.gmail.com>
-Subject: Re: [PATCH v11 10/15] iio: afe: rescale: make use of units.h
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <56dce9c7-397d-75b0-b5b8-18ce1084e72b@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:51 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> On Wed, Dec 22, 2021 at 02:33:52PM +0200, Andy Shevchenko wrote:
-> > On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
+22.12.2021 21:41, Jon Hunter пишет:
+> 
+> On 22/12/2021 09:47, Jon Hunter wrote:
+>>
+>> On 21/12/2021 20:58, Dmitry Osipenko wrote:
+>>> Hi,
+>>>
+>>> Thank you for testing it all.
+>>>
+>>> 21.12.2021 21:55, Jon Hunter пишет:
+>>>> Hi Dmitry, Thierry,
+>>>>
+>>>> On 30/11/2021 23:23, Dmitry Osipenko wrote:
+>>>>> Add runtime PM and OPP support to the Host1x driver. For the
+>>>>> starter we
+>>>>> will keep host1x always-on because dynamic power management require a
+>>>>> major
+>>>>> refactoring of the driver code since lot's of code paths are
+>>>>> missing the
+>>>>> RPM handling and we're going to remove some of these paths in the
+>>>>> future.
+>>>>
+>>>>
+>>>> Unfortunately, this change is breaking boot on Tegra186. Bisect points
+>>>> to this and reverting on top of -next gets the board booting again.
+>>>> Sadly, there is no panic or error reported, it is just a hard hang. I
+>>>> will not have time to look at this this week and so we may need to
+>>>> revert for the moment.
+>>>
+>>> Only T186 broken? What about T194?
+>>
+>> Yes interestingly only Tegra186 and no other board.
+>>
+>>> Which board model fails to boot? Is it running in hypervisor mode?
+>>
+>> This is Jetson TX2. No hypervisor.
+>>
+>>> Do you use any additional patches?
+>>
+>> No just plain -next. The tests run every day on top of tree.
+>>
+>>> Could you please test the below diff? I suspect that
+>>> host1x_syncpt_save/restore may be entirely broken for T186 since we
+>>> never used these funcs before.
+>>>
+>>> --- >8 ---
+>>>
+>>> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+>>> index f5b4dcded088..fd5dfb875422 100644
+>>> --- a/drivers/gpu/host1x/dev.c
+>>> +++ b/drivers/gpu/host1x/dev.c
+>>> @@ -580,7 +580,6 @@ static int __maybe_unused
+>>> host1x_runtime_suspend(struct device *dev)
+>>>       int err;
+>>>
+>>>       host1x_intr_stop(host);
+>>> -    host1x_syncpt_save(host);
+>>>
+>>>       err = reset_control_bulk_assert(host->nresets, host->resets);
+>>>       if (err) {
+>>> @@ -596,9 +595,8 @@ static int __maybe_unused
+>>> host1x_runtime_suspend(struct device *dev)
+>>>       return 0;
+>>>
+>>>   resume_host1x:
+>>> -    host1x_setup_sid_table(host);
+>>> -    host1x_syncpt_restore(host);
+>>>       host1x_intr_start(host);
+>>> +    host1x_setup_sid_table(host);
+>>>
+>>>       return err;
+>>>   }
+>>> @@ -626,9 +624,8 @@ static int __maybe_unused
+>>> host1x_runtime_resume(struct device *dev)
+>>>           goto disable_clk;
+>>>       }
+>>>
+>>> -    host1x_setup_sid_table(host);
+>>> -    host1x_syncpt_restore(host);
+>>>       host1x_intr_start(host);
+>>> +    host1x_setup_sid_table(host);
+>>
+>>
+>> Thanks! Will try this later, once the next bisect is finished :-)
+> 
+> I tested the above, but this did not fix it. It still hangs on boot.
 
-...
+Thank you, now I see where the problem should be. Apparently host1x is
+disabled at a boot time on T186 and we touch h/w before RPM is resumed.
 
-> > Thanks! The important part of this conversion is to get one trick,
-> > i.e. NANO and GIGA are both represented by 10^9. We need to be sure
-> > that here we use the proper sign of the power of these numbers. So
-> > please double check in all cases that the chosen SI prefixes are
-> > correct from the power sign point of view, e.g. it is 10^-9 and not
-> > 10^9 or otherwise.
->
-> I get the difference, but I guess I'm not sure I understand how you want me to
-> use them. I was using NANO here as that made most sense for me.
->
-> If we go by the positive vs. negative powers of ten, I should always use
-> GIGA as we're multiplying by 10^9 and dividing by 10^9. Is that what you
-> expected?
+Could you please revert the above change and try this instead:
 
-You should get the proper power after the operation.
-Write a formula (mathematically speaking) and check each of them for this.
+diff --git a/drivers/gpu/host1x/syncpt.c b/drivers/gpu/host1x/syncpt.c
+index e08e331e46ae..8194826c9ce3 100644
+--- a/drivers/gpu/host1x/syncpt.c
++++ b/drivers/gpu/host1x/syncpt.c
+@@ -137,6 +137,15 @@ void host1x_syncpt_restore(struct host1x *host)
+ 	struct host1x_syncpt *sp_base = host->syncpt;
+ 	unsigned int i;
 
-10^-5/10^-9 == 1*10^4 (Used NANO)
-10^-5/10^9 == 1/10^-14 (Used GIGA)
++	for (i = 0; i < host->info->nb_pts; i++) {
++		/*
++		 * Unassign syncpt from channels for purposes of Tegra186
++		 * syncpoint protection. This prevents any channel from
++		 * accessing it until it is reassigned.
++		 */
++		host1x_hw_syncpt_assign_to_channel(host, sp_base + i, NULL);
++	}
++
+ 	for (i = 0; i < host1x_syncpt_nb_pts(host); i++)
+ 		host1x_hw_syncpt_restore(host, sp_base + i);
 
-See the difference?
+@@ -352,13 +361,6 @@ int host1x_syncpt_init(struct host1x *host)
+ 	for (i = 0; i < host->info->nb_pts; i++) {
+ 		syncpt[i].id = i;
+ 		syncpt[i].host = host;
+-
+-		/*
+-		 * Unassign syncpt from channels for purposes of Tegra186
+-		 * syncpoint protection. This prevents any channel from
+-		 * accessing it until it is reassigned.
+-		 */
+-		host1x_hw_syncpt_assign_to_channel(host, &syncpt[i], NULL);
+ 	}
 
-In the similar way for values of e.g. 10^5.
-
--- 
-With Best Regards,
-Andy Shevchenko
+ 	for (i = 0; i < host->info->nb_bases; i++)

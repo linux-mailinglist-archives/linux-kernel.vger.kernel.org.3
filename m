@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98DF47D652
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4D147D655
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Dec 2021 19:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344542AbhLVSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Dec 2021 13:12:06 -0500
-Received: from mail-qv1-f50.google.com ([209.85.219.50]:45677 "EHLO
-        mail-qv1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344526AbhLVSMD (ORCPT
+        id S1344539AbhLVSMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Dec 2021 13:12:40 -0500
+Received: from mail-qt1-f176.google.com ([209.85.160.176]:34811 "EHLO
+        mail-qt1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234101AbhLVSMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Dec 2021 13:12:03 -0500
-Received: by mail-qv1-f50.google.com with SMTP id a9so3016798qvd.12;
-        Wed, 22 Dec 2021 10:12:03 -0800 (PST)
+        Wed, 22 Dec 2021 13:12:38 -0500
+Received: by mail-qt1-f176.google.com with SMTP id o17so2721907qtk.1;
+        Wed, 22 Dec 2021 10:12:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OFOeNc3Y0ndz/EXm1f7thJms/RZmhtXvY2DccU76yx4=;
-        b=GgSnAlhyu4JEpvff13zkNHym/92t9yqqfJwoEQNph1ZRWGcNYQP/YYTW1mz/OmH/FX
-         nQkJiYVurjjISOlt3AEuL6VzIgRqgiSzr3OYNy7bBDfOdY26SC5RxVcWQA6H/Pc+pxMw
-         ShCjzSAQUwXs+RaooHQ8FBCqHoTEl32gQ3uHxY6/YV1Zp/aBO1DtE69k8wCWxlw0tke2
-         /ZiB4L+Leo30+dtCLiIM0omGF/GqOPM2NdKpt50dZ47qWmlJh5T7L/7ps1xBNGVfoAdK
-         yHaO70Fq6JQ4Br3uwHoSd1SgHdB5+8p7lAVhVZ9WeW8RPE4AWEU5TC9IplA/TJl+sdS0
-         971A==
-X-Gm-Message-State: AOAM531c+jM0jGAwtkklu6soeSeXS8j32BD6k5Iq8enjrj7m6mQlwtTF
-        2UwiOYgCPGy4BH8qUnw+sQ==
-X-Google-Smtp-Source: ABdhPJzGakyluSdij/OLglbf0wU9LSPWCjpmjuvVW4JZ5+JzF9r8FSIgVMpgGjbFF+FN/XQXb/CvnA==
-X-Received: by 2002:a05:6214:529e:: with SMTP id kj30mr3461167qvb.117.1640196723101;
-        Wed, 22 Dec 2021 10:12:03 -0800 (PST)
+        bh=pIn5Bic5ZbGSB9APhGUz4jy4pv35Qb3TTEOzVa4bkls=;
+        b=sIF/loD38IeiiP16ZdJ/A577BPJkckjXp5jo2wXM1fI57/11gY9WoOmxo5h8f7086P
+         chRX6N/E/G90RCe8AB4B0agtz2o5NDbl4tb2oxvSC14MLePFTZNCDlxL13wU6UomqMna
+         EjKP/6NXLQpjr89ZIMqZx60NDNaahXXg+MTJjWu5HZllaDGiswP5+pWVHjW9BkUZCMl1
+         tUT0b0SXWHfDNDsx8os7BM3ecgA1Kdch72qE/hBBZ+PmBrlFPwnVB9yKg3d4whDYUoxE
+         kgw2GDTmepFPajvStwjQ0M/sbQR4ps6XSHvPZFU3W5wEx7cbofnM6HvP1DzywuDiAvC4
+         grWA==
+X-Gm-Message-State: AOAM530RUFGvjwmjr+uQlQUsxKfhmII+1GuidS4lykv8dTsQCVfi1a3x
+        vPeT95tKLr3y8xgPr4Q6857wjG20UEfK
+X-Google-Smtp-Source: ABdhPJw1fD7Aoe6vRDXEtZ30TjpD5hboLxAiT0qLvoQmynw9JfTHn6lnO3BOUX1Xo5oq8dXrcpLOLw==
+X-Received: by 2002:ac8:5404:: with SMTP id b4mr3044585qtq.657.1640196757473;
+        Wed, 22 Dec 2021 10:12:37 -0800 (PST)
 Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id x4sm2313380qtw.44.2021.12.22.10.12.01
+        by smtp.gmail.com with ESMTPSA id e7sm2317876qtx.72.2021.12.22.10.12.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:12:02 -0800 (PST)
-Received: (nullmailer pid 2436857 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:12:00 -0000
-Date:   Wed, 22 Dec 2021 14:12:00 -0400
+        Wed, 22 Dec 2021 10:12:36 -0800 (PST)
+Received: (nullmailer pid 2437831 invoked by uid 1000);
+        Wed, 22 Dec 2021 18:12:35 -0000
+Date:   Wed, 22 Dec 2021 14:12:35 -0400
 From:   Rob Herring <robh@kernel.org>
 To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc:     Vyacheslav Bocharov <adeep@lexina.in>, kelvin.zhang@amlogic.com,
+Cc:     kelvin.zhang@amlogic.com, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         linux-amlogic@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         linux-arm-kernel@lists.infradead.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH V3] dt-bindings: arm: amlogic: add S4 based AQ222 bindings
-Message-ID: <YcNqcKWJrJS02nkL@robh.at.kernel.org>
-References: <20211221030014.434-1-xianwei.zhao@amlogic.com>
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH V2] dt-bindings: serial: amlogic, meson-uart: support S4
+Message-ID: <YcNqk/tHBttSTENO@robh.at.kernel.org>
+References: <20211221030146.522-1-xianwei.zhao@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221030014.434-1-xianwei.zhao@amlogic.com>
+In-Reply-To: <20211221030146.522-1-xianwei.zhao@amlogic.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 11:00:14 +0800, Xianwei Zhao wrote:
-> Add bindings for the new Amlogic S4 SoC family,
-> and add binds the compatible for the Amlogic S4 Based AQ222 board.
-> 
-> S4 is an application processor designed for hybrid OTT/IP Set To
-> Box(STB) and high-end media box applications, with quad core Cortex-A35.
+On Tue, 21 Dec 2021 11:01:45 +0800, Xianwei Zhao wrote:
+> Add serial bindings support menson S4 SoC family.
 > 
 > Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 > ---
-> V2 -> V3 : upate author name
-> V1 -> V2 : modfiy soc name S805X2
+> V1 -> V2 : update author name
 > ---
->  Documentation/devicetree/bindings/arm/amlogic.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml          | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
